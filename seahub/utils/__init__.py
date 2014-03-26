@@ -185,7 +185,7 @@ def get_repo_last_modify(repo):
     consuming.
     """
     if repo.head_cmmt_id is not None:
-        last_cmmt = seafserv_threaded_rpc.get_commit(repo.head_cmmt_id)
+        last_cmmt = seafserv_threaded_rpc.get_commit(repo.id, repo.version, repo.head_cmmt_id)
     else:
         logger.info('[repo %s] head_cmmt_id is missing.' % repo.id)
         last_cmmt = get_commits(repo.id, 0, 1)[0]
@@ -225,7 +225,7 @@ def check_filename_with_rename(repo_id, parent_dir, filename):
     if not latest_commit:
         return ''
     # TODO: what if parrent_dir does not exist?
-    dirents = seafile_api.list_dir_by_commit_and_path(latest_commit.id,
+    dirents = seafile_api.list_dir_by_commit_and_path(repo_id, latest_commit.id,
                                                       parent_dir.encode('utf-8'))
 
     def no_duplicate(name):
@@ -288,17 +288,19 @@ def get_file_type_and_ext(filename):
         return ('Unknown', fileExt)
     
     
-def get_file_revision_id_size (commit_id, path):
+def get_file_revision_id_size (repo_id, commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
     and size of the file blob
 
     """
+    repo = get_repo(repo_id)
     dirname  = os.path.dirname(path)
     filename = os.path.basename(path)
-    seafdir = seafile_api.list_dir_by_commit_and_path (commit_id, dirname)
+    seafdir = seafile_api.list_dir_by_commit_and_path (repo_id, commit_id, dirname)
     for dirent in seafdir:
         if dirent.obj_name == filename:
-            file_size = seafserv_threaded_rpc.get_file_size(dirent.obj_id)
+            file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version,
+                                                            dirent.obj_id)
             return dirent.obj_id, file_size
 
     return None, None
@@ -326,8 +328,8 @@ def get_commit_before_new_merge(commit):
     assert new_merge_with_no_conflict(commit) is True
 
     while(new_merge_with_no_conflict(commit)):
-        p1 = seafserv_threaded_rpc.get_commit(commit.parent_id)
-        p2 = seafserv_threaded_rpc.get_commit(commit.second_parent_id)
+        p1 = seafserv_threaded_rpc.get_commit(commit.repo_id, commit.version, commit.parent_id)
+        p2 = seafserv_threaded_rpc.get_commit(commit.repo_id, commit.version, commit.second_parent_id)
         commit = p1 if p1.ctime > p2.ctime else p2
 
     assert new_merge_with_no_conflict(commit) is False
@@ -526,7 +528,7 @@ if EVENTS_CONFIG_FILE:
                     if repo.encrypted:
                         repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
                     ev.repo = repo
-                    ev.commit = seafserv_threaded_rpc.get_commit(ev.commit_id)
+                    ev.commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, ev.commit_id)
 
                 valid_events.append(ev)
                 if len(valid_events) == limit:

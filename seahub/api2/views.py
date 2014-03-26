@@ -320,7 +320,8 @@ class Search(APIView):
                 path = e['fullpath'].encode('utf-8')
                 file_id = seafile_api.get_file_id_by_path(e['repo_id'], path)
                 e['oid'] = file_id
-                e['size'] = get_file_size(file_id)
+                repo = get_repo(e['repo_id'])
+                e['size'] = get_file_size(repo.store_id, repo.version, file_id)
             except SearpcError, err:
                 pass
 
@@ -344,6 +345,7 @@ def repo_download_info(request, repo_id):
     magic = repo.magic if repo.encrypted else ''
     random_key = repo.random_key if repo.random_key else ''
     enc_version = repo.enc_version
+    repo_version = repo.version
 
     info_json = {
         'relay_id': relay_id,
@@ -356,7 +358,8 @@ def repo_download_info(request, repo_id):
         'encrypted': enc,
         'enc_version': enc_version,
         'magic': magic,
-        'random_key': random_key
+        'random_key': random_key,
+        'repo_version': repo_version,
         }
     return Response(info_json)
 
@@ -752,15 +755,15 @@ class UpdateBlksLinkView(APIView):
 
 
 
-def get_dir_entrys_by_id(request, repo_id, path, dir_id):
+def get_dir_entrys_by_id(request, repo, path, dir_id):
     try:
-        dirs = seafile_api.list_dir_by_dir_id(dir_id)
+        dirs = seafile_api.list_dir_by_dir_id(repo.id, dir_id)
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
     mtimes = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(
-        repo_id, path, dir_id)
+        repo.id, path, dir_id)
 
     dir_list, file_list = [], []
     for dirent in dirs:
@@ -770,7 +773,8 @@ def get_dir_entrys_by_id(request, repo_id, path, dir_id):
             dtype = "dir"
         else:
             try:
-                entry["size"] = get_file_size(dirent.obj_id)
+                entry["size"] = get_file_size(repo.store_id, repo.version,
+                                              dirent.obj_id)
             except Exception, e:
                 entry["size"] = 0
 
@@ -836,7 +840,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
         enc_version = 0
         if file_id != EMPTY_SHA1:
             try:
-                blks = seafile_api.list_file_by_file_id(file_id)
+                blks = seafile_api.list_file_by_file_id(repo_id, file_id)
                 blklist = blks.split('\n')
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
@@ -866,7 +870,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
         return get_shared_link(request, repo_id, path)
 
-def reloaddir(request, repo_id, parent_dir):
+def reloaddir(request, repo, parent_dir):
     try:
         dir_id = seafile_api.get_dir_id_by_path(repo_id,
                                                 parent_dir.encode('utf-8'))
@@ -878,9 +882,9 @@ def reloaddir(request, repo_id, parent_dir):
     if not dir_id:
         return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
-    return get_dir_entrys_by_id(request, repo_id, parent_dir, dir_id)
+    return get_dir_entrys_by_id(request, repo, parent_dir, dir_id)
 
-def reloaddir_if_neccessary (request, repo_id, parent_dir):
+def reloaddir_if_neccessary (request, repo, parent_dir):
 
     reload_dir = False
     s = request.GET.get('reloaddir', None)
@@ -890,7 +894,7 @@ def reloaddir_if_neccessary (request, repo_id, parent_dir):
     if not reload_dir:
         return Response('success')
 
-    return reloaddir(request, repo_id, parent_dir)
+    return reloaddir(request, repo, parent_dir)
 
 # deprecated
 class OpDeleteView(APIView):
@@ -930,7 +934,7 @@ class OpDeleteView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
 
-        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+        return reloaddir_if_neccessary (request, repo, parent_dir)
 
 class OpMoveView(APIView):
     """
@@ -977,7 +981,7 @@ class OpMoveView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
-        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+        return reloaddir_if_neccessary (request, repo, parent_dir)
 
 class OpCopyView(APIView):
     """
@@ -1022,7 +1026,7 @@ class OpCopyView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
-        return reloaddir_if_neccessary (request, repo_id, parent_dir)
+        return reloaddir_if_neccessary (request, repo, parent_dir)
 
 
 class StarredFileView(APIView):
@@ -1162,7 +1166,7 @@ class FileView(APIView):
                                  "Failed to rename file: %s" % e)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                return reloaddir(request, repo_id, parent_dir)
+                return reloaddir(request, repo, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
@@ -1214,8 +1218,12 @@ class FileView(APIView):
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
 
+            dst_repo = get_repo(dst_repo_id)
+            if not dst_repo:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
             if request.GET.get('reloaddir', '').lower() == 'true':
-                return reloaddir(request, dst_repo_id, dst_dir)
+                return reloaddir(request, dst_repo, dst_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
@@ -1241,7 +1249,7 @@ class FileView(APIView):
                                  'Failed to create file.')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                return reloaddir(request, repo_id, parent_dir)
+                return reloaddir(request, repo, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('FileView', args=[repo_id], request=request)
@@ -1288,7 +1296,7 @@ class FileView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_neccessary(request, repo_id, parent_dir)
+        return reloaddir_if_neccessary(request, repo, parent_dir)
 
 class FileRevert(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1325,7 +1333,7 @@ class FileRevision(APIView):
 
         try:
             obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        commit_id, path)
+                                        repo_id, commit_id, path)
         except:
             return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
 
@@ -1485,7 +1493,7 @@ class DirView(APIView):
                                  'Failed to make directory.')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                resp = reloaddir(request, repo_id, parent_dir)
+                resp = reloaddir(request, repo, parent_dir)
             else:
                 resp = Response('success', status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
@@ -1536,7 +1544,7 @@ class DirView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_neccessary(request, repo_id, parent_dir)
+        return reloaddir_if_neccessary(request, repo, parent_dir)
 
 class DirDownloadView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1565,8 +1573,9 @@ class DirDownloadView(APIView):
                          'Failed to get current commit of repo %s.' % repo_id)
 
         try:
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.id,
-                                                         path.encode('utf-8'))
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.repo_id,
+                                                             current_commit.id,
+                                                             path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to get dir id by path")
@@ -1575,7 +1584,8 @@ class DirDownloadView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
         try:
-            total_size = seafserv_threaded_rpc.get_dir_size(dir_id)
+            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, reop.version,
+                                                            dir_id)
         except Exception, e:
             logger.error(str(e))
             return api_error(HTTP_520_OPERATION_FAILED, "Internal error")
@@ -2497,7 +2507,7 @@ def html_repo_history_changes(request, repo_id):
 
     changes = get_diff(repo_id, '', commit_id)
 
-    c = get_commit(commit_id)
+    c = get_commit(repo_id, repo.version, commit_id)
     if c.parent_id is None:
         # A commit is a first commit only if its parent id is None.
         changes['cmt_desc'] = repo.desc
