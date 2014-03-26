@@ -1,5 +1,5 @@
 {% extends "admin_base.html" %}
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags seahub_tags group_avatar_tags %}
 {% load url from future %}
 
 {% block nav_orgadmin_class %}class="cur"{% endblock %}
@@ -16,18 +16,14 @@
 <div class="side-info">
     <h3 class="hd">{{ org.org_name }}</h3>
     <dl>
-        <dt>{% trans "Members" %}</dt>
+        <dt>{% trans "Number of members" %}</dt>
         <dd>{{ users_count }}</dd>
+        <dt>{% trans "Number of groups" %}</dt>
+        <dd>{{ groups_count }}</dd>
     </dl>
 
     <h3 class="hd">{% trans "Space Used" %}</h3>
-    {% if CALC_SHARE_USAGE %}
-    <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    <p>{% trans "Used" %}: {{ my_usage|filesizeformat }}</p>
-    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }}</p>
-    {% else %}
     <p>{{ quota_usage|filesizeformat }} {% if total_quota > 0 %}/ {{ total_quota|filesizeformat }} {% endif %}</p>
-    {% endif %}
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
@@ -41,8 +37,50 @@
 {% endblock %}
 
 {% block right_panel %}
-{% endblock %}
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#members" class="a">{% trans "Members" %}</a></li>
+            <li class="tab"><a href="#grps" class="a">{% trans "Groups" %}</a></li>
+        </ul>
+    </div>
 
+    <div id="members">
+        <ul class="user-list">
+            {% for u in users %}
+            {% with e=u.email id=u.email|id_or_email %}
+            <li class="user ovhd">
+            <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
+            <div class="txt fright">
+                <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
+                <p>{{ e }}</p>
+            </div>
+            </li>
+            {% endwith %}
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div id="grps" class="hide">
+        {% if groups %}
+        <ul class="group-list">
+            {% for grp in groups %}
+            <li class="group ovhd">
+            <a href="{{ SITE_ROOT }}group/{{ grp.id }}/" class="no-deco pic fleft">{% grp_avatar grp.id 48 %}</a>
+            <div class="txt fright">
+                <h4><a href="{{ SITE_ROOT }}group/{{ grp.id }}/">{{ grp.group_name }}</a></h4>
+                <p><span class="item-name">{% trans "Creator: "%}</span>{{ grp.creator_name }}</p>
+                <p><span class="item-name">{% trans "Time: "%}</span>{{ grp.timestamp|tsstr_sec }}</p>
+            </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p>{% trans "None" %}</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
@@ -50,6 +88,5 @@ $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
     return false;
 });
-
 </script>
 {% endblock %}

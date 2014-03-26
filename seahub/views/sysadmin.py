@@ -655,18 +655,25 @@ def sys_org_info(request, org_id):
     org_id = int(org_id)
     org = ccnet_threaded_rpc.get_org_by_id(org_id)
 
-    org_users = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, -1, -1)
-    users_count = len(org_users)
+    users = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, -1, -1)
+    users_count = len(users)
 
     # quota
     total_quota = seafserv_threaded_rpc.get_org_quota(org_id)
     quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org_id)
     
+    # groups
+    groups = ccnet_threaded_rpc.get_org_groups(org_id, -1, -1)
+    groups_count = len(groups)
+    
     return render_to_response('sysadmin/sys_org_info.html', {
             'org': org,
+            'users': users,
             'users_count': users_count,
             'total_quota': total_quota,
             'quota_usage': quota_usage,
+            'groups': groups,
+            'groups_count': groups_count,
             }, context_instance=RequestContext(request))
 
 
