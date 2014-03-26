@@ -599,27 +599,6 @@ def view_shared_file(request, token):
     if fileshare is None:
         raise Http404
 
-    if fileshare.use_passwd:
-        valid_access = cache.get('SharedLink_' + request.user.username + token, False)
-        if not valid_access:
-            d = { 'token': token, 'view_name': 'view_shared_file', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    # set cache for non-anonymous user
-                    if request.user.is_authenticated():
-                        cache.set('SharedLink_' + request.user.username + token, True,
-                                  settings.SHARE_ACCESS_PASSWD_TIMEOUT)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
-
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -631,7 +610,7 @@ def view_shared_file(request, token):
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
-    
+
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
     access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,

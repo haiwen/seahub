@@ -15,16 +15,11 @@ class AnonymousShare(models.Model):
     token = models.CharField(max_length=25, unique=True)
 
 class FileShareManager(models.Manager):
-    def _add_file_share(self, username, repo_id, path, s_type, use_passwd=False,
-                        password=None, expire_date=None):
-        if use_passwd is False:
-            password = None
-
+    def _add_file_share(self, username, repo_id, path, s_type):
         token = gen_token(max_length=10)
         fs = super(FileShareManager, self).create(
             username=username, repo_id=repo_id, path=path, token=token,
-            s_type=s_type, use_passwd=use_passwd, password=password,
-            expire_date=expire_date)
+            s_type=s_type)
         fs.save()
         return fs
 
@@ -44,21 +39,12 @@ class FileShareManager(models.Manager):
         except self.model.DoesNotExist:
             return None
 
-        if fs.expire_date is None:
-            return fs            
-        else:
-            if timezone.now() > fs.expire_date:
-                return None
-            else:
-                return fs
-
+        return fs
 
     ########## public methods ##########
-    def create_file_link(self, username, repo_id, path, use_passwd=False,
-                      password=None, expire_date=None):
+    def create_file_link(self, username, repo_id, path):
         path = normalize_file_path(path)
-        return self._add_file_share(username, repo_id, path, 'f', use_passwd,
-                                    password, expire_date)
+        return self._add_file_share(username, repo_id, path, 'f')
 
     def get_file_link_by_path(self, username, repo_id, path):
         path = normalize_file_path(path)
@@ -67,11 +53,9 @@ class FileShareManager(models.Manager):
     def get_valid_file_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
     
-    def create_dir_link(self, username, repo_id, path, use_passwd=False,
-                      password=None, expire_date=None):
+    def create_dir_link(self, username, repo_id, path):
         path = normalize_dir_path(path)
-        return self._add_file_share(username, repo_id, path, 'd', use_passwd,
-                                    password, expire_date)
+        return self._add_file_share(username, repo_id, path, 'd')
     
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
@@ -79,8 +63,7 @@ class FileShareManager(models.Manager):
     
     def get_valid_dir_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
-        
-        
+
 class FileShare(models.Model):
     """
     Model used for file or dir shared link.
@@ -92,9 +75,6 @@ class FileShare(models.Model):
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
-    use_passwd = models.BooleanField(default=False)
-    password = models.CharField(max_length=128)
-    expire_date = models.DateTimeField(null=True)
 
     objects = FileShareManager()
 
@@ -108,8 +88,6 @@ class UploadLinkShare(models.Model):
     token = models.CharField(max_length=10, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
-    use_passwd = models.BooleanField(default=False)
-    password = models.CharField(max_length=128)
 
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):
@@ -185,8 +163,7 @@ class PrivateFileDirShareManager(models.Manager):
         """
         return super(PrivateFileDirShareManager, self).filter(
             to_user=to_user, repo_id=repo_id, s_type='d')
-        
-        
+
 class PrivateFileDirShare(models.Model):
     from_user = LowerCaseCharField(max_length=255, db_index=True)
     to_user = LowerCaseCharField(max_length=255, db_index=True)
@@ -195,7 +172,4 @@ class PrivateFileDirShare(models.Model):
     token = models.CharField(max_length=10, unique=True)
     permission = models.CharField(max_length=5)           # `r` or `rw`
     s_type = models.CharField(max_length=5, default='f') # `f` or `d`
-    objects = PrivateFileDirShareManager()    
-
-
-    
+    objects = PrivateFileDirShareManager()
