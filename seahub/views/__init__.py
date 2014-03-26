@@ -164,6 +164,7 @@ def get_system_default_repo_id():
     try:
         return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
     except SearpcError as e:
+        logger.error(e)
         return None
 
 def check_repo_access_permission(repo_id, user):
@@ -971,9 +972,8 @@ def modify_token(request, repo_id):
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 def create_default_library(username):
-    """Create a default library for user, and copy all the stuffs from system
-    library into it.
-    
+    """Create a default library for user.
+
     Arguments:
     - `username`:
     """
@@ -985,20 +985,20 @@ def create_default_library(username):
     if sys_repo_id is None:
         return
 
-    try:
-        dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
-        for e in dirents:
-            obj_name = e.obj_name
-            seafile_api.copy_file(sys_repo_id, '/', obj_name,
-                                  default_repo, '/', obj_name, username)
-    except SearpcError as e:
-        logger.error(e)
-        return 
-        
+    # try:
+    #     dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
+    #     for e in dirents:
+    #         obj_name = e.obj_name
+    #         seafile_api.copy_file(sys_repo_id, '/', obj_name,
+    #                               default_repo, '/', obj_name, username)
+    # except SearpcError as e:
+    #     logger.error(e)
+    #     return 
+
     UserOptions.objects.set_default_repo(username, default_repo)
 
     return default_repo
-    
+
 @login_required
 @user_mods_check
 def myhome(request):
