@@ -10,9 +10,11 @@ logger = logging.getLogger(__name__)
 
 def within_ten_min(d1, d2):
     '''Return true if two datetime.datetime object differs less than ten minutes'''
-    delta = d2 - d1
+    delta = d2 - d1 if d2 > d1 else d1 - d2
     interval = 60 * 10
-    return abs(delta.total_seconds()) < interval
+    # delta.total_seconds() is only available in python 2.7+
+    seconds = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
+    return seconds < interval
 
 HEADER_CLIENT_VERSION = 'HTTP_SEAFILE_CLEINT_VERSION'
 HEADER_PLATFORM_VERSION = 'HTTP_SEAFILE_PLATFORM_VERSION'
