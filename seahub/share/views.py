@@ -1,7 +1,6 @@
 # encoding: utf-8
 import os
 import logging
-from dateutil.relativedelta import relativedelta
 import simplejson as json
 
 from django.core.urlresolvers import reverse
@@ -10,12 +9,10 @@ from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils import timezone
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 # from django.contrib.sites.models import RequestSite
-from django.contrib.auth.hashers import make_password
 import seaserv
 from seaserv import seafile_api
 from seaserv import seafserv_threaded_rpc, ccnet_threaded_rpc, \
