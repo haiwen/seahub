@@ -12,6 +12,8 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
+from seahub.avatar.templatetags.avatar_tags import avatar
+from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
@@ -192,6 +194,11 @@ def render_repo(request, repo):
     domain = RequestSite(request).domain
 
     contacts = Contact.objects.get_contacts_by_user(username)
+    for c in contacts:
+        c.avatar = avatar(c.contact_email, 16)
+
+    for g in request.user.joined_groups:
+        g.avatar = grp_avatar(g.id, 20)
 
     head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
     if not head_commit:

@@ -35,6 +35,8 @@ from seaserv import get_repo, web_get_access_token, send_message, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
+from seahub.avatar.templatetags.avatar_tags import avatar
+from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.base.models import FileContributors
@@ -388,6 +390,11 @@ def view_file(request, repo_id):
 
     # my contacts used in shared link autocomplete
     contacts = Contact.objects.filter(user_email=username)
+    for c in contacts:
+        c.avatar = avatar(c.contact_email, 16)
+
+    for g in request.user.joined_groups:
+        g.avatar = grp_avatar(g.id, 20)
 
     """List repo groups"""
     # Get groups this repo is shared.    
