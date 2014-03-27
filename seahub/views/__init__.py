@@ -15,8 +15,9 @@ import datetime as dt
 from datetime import datetime
 from math import ceil
 from urllib import quote
-from django.utils.datastructures import SortedDict
+import posixpath
 
+from django.utils.datastructures import SortedDict
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -252,6 +253,10 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
 
+        view_dir_base = reverse('repo', args=[repo.id])
+        dl_dir_base = reverse('repo_download_dir', args=[repo.id])
+        view_file_base = reverse('repo_view_file', args=[repo.id])
+        file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
             if repo.version == 0:
                 dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
@@ -273,6 +278,9 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                         dirent.uploadlink = gen_shared_upload_link(link.token)
                         dirent.uploadtoken = link.token
                         break
+                p_dpath = posixpath.join(path, dirent.obj_name)
+                dirent.view_link = view_dir_base + '?p=' + urlquote(p_dpath)
+                dirent.dl_link = dl_dir_base + '?p=' + urlquote(p_dpath)
                 dir_list.append(dirent)
             else:
                 file_list.append(dirent)
@@ -282,6 +290,11 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                     dirent.file_size = dirent.size
                 dirent.starred = False
                 fpath = os.path.join(path, dirent.obj_name)
+                p_fpath = posixpath.join(path, dirent.obj_name)
+                dirent.view_link = view_file_base + '?p=' + urlquote(p_fpath)
+                dirent.dl_link = '%srepo/%s/%s/?file_name=%s&op=download' % \
+                    (settings.SITE_ROOT, repo.id, dirent.obj_id, urlquote(dirent.obj_name))
+                dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
                 if fpath in starred_files:
                     dirent.starred = True
                 for share in fileshares:

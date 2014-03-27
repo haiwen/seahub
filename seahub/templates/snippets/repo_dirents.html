@@ -7,7 +7,7 @@
         <td class="star"></td>
         <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
         <td>
-            <span class="dirent-name"><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" class="dir-link">{{ dirent.obj_name }}</a></span>
+            <span class="dirent-name"><a href="{{dirent.view_link}}" class="dir-link">{{ dirent.obj_name }}</a></span>
         </td>
 
         <td class="dirent-size"></td>
@@ -21,7 +21,7 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op dir-download" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans 'Download' %}</a>
+                    <a class="op dir-download" href="{{dirent.dl_link}}">{% trans 'Download' %}</a>
                     {% if not repo.encrypted %}
                     <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-upload-link="{{ dirent.uploadlink }}" data-upload-token="{{ dirent.uploadtoken }}">{% trans "Share" %}</a>
                     {% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
@@ -59,7 +59,7 @@
             {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
             <span class="dirent-name">{{ dirent.obj_name }}</span>
             {% else %}
-            <span class="dirent-name"><a class="normal" href="{% url 'repo_view_file' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></span>
+            <span class="dirent-name"><a class="normal" href="{{dirent.view_link}}">{{ dirent.obj_name }}</a></span>
             {% endif %}
         </td>
 
@@ -74,7 +74,7 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op file-download" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name|urlencode }}&op=download" data-fileid="{{ dirent.props.obj_id }}">{% trans "Download"%}</a>
+                    <a class="op file-download" href="{{dirent.dl_link}}" data-fileid="{{ dirent.props.obj_id }}">{% trans "Download"%}</a>
                     {% if user_perm == 'rw' %}
                     <a class="op file-update" href="#">{% trans "Update"%}</a>
                     {% endif %}
@@ -90,7 +90,7 @@
                     <li><a class="op file-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op file-mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op file-cp" href="#">{% trans "Copy" %}</a></li>
-                    <li><a class="op file-history" href="{% url 'file_revisions' repo.props.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{% trans "History" %}</a></li>
+                    <li><a class="op file-history" href="{{dirent.history_link}}">{% trans "History" %}</a></li>
                 </ul>
                 {% endif %}
             </div>
