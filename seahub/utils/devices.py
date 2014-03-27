@@ -61,8 +61,13 @@ def get_user_synced_repo_infos(username):
 def do_unlink_device(username, platform, device_id):
     if platform in DESKTOP_PLATFORMS:
         # For desktop client, we also remove the sync tokens
-        if seafile_api.delete_repo_tokens_by_peer_id(username, device_id) < 0:
-            logger.warning('failed to delete_repo_tokens_by_peer_id')
-            raise Exception('failed to delete_repo_tokens_by_peer_id')
+        msg = 'failed to delete_repo_tokens_by_peer_id' 
+        try:
+            if seafile_api.delete_repo_tokens_by_peer_id(username, device_id) < 0:
+                logger.warning(msg)
+                raise Exception(msg)
+        except:
+            logger.exception(msg)
+            raise
 
     TokenV2.objects.delete_device_token(username, platform, device_id)

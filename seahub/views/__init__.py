@@ -1090,16 +1090,21 @@ def unlink_device(request):
         raise Http404
         
     content_type = 'application/json; charset=utf-8'
+
     platform = request.POST.get('platform', '')
     device_id = request.POST.get('device_id', '')
     
     if not platform or not device_id:
-        return HttpResponseBadRequest(content_type=content_type)
+        return HttpResponseBadRequest(json.dumps({'error': _(u'Argument missing')}),
+                content_type=content_type)
         
-    do_unlink_device(request.user.username, platform, device_id)
+    try:
+        do_unlink_device(request.user.username, platform, device_id)
+    except:
+        return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
+                status=500, content_type=content_type)
     
-    return HttpResponse(json.dumps({'success': True}),
-            content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
 @user_mods_check

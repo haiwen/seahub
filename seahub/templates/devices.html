@@ -10,44 +10,45 @@
 {% if devices %}
 <table class="client-list">
     <tr>
-        <th width="10%">{% trans "Platform" %}</th>
+        <th width="13%">{% trans "Platform" %}</th>
         <th width="25%">{% trans "Device Name" %}</th>
         <th width="20%">{% trans "IP" %}</th>
-        <th width="15%">{% trans "Last Access" %}</th>
-        <th width="20%">{% trans "Libraries" %}</th>
+        <th width="17%">{% trans "Last Access" %}</th>
+        <th width="15%">{% trans "# Libraries" %}</th>
         <th width="10%">{% trans "Operation" %}</th>
     </tr>
     {% for device in devices %}
-    <tr data-platform="{{ device.platform }}" data-device-id="{{ device.device_id }}">
-      <td>{{ device.platform }}</td>
-      <td>{{ device.device_name }}</td>
-      <!-- <td>{{ device.client_version }}</td> -->
-      <td>{{ device.last_login_ip }}</td>
-      <td>{{ device.last_accessed | translate_seahub_time }}</td>
-      <td>
-        <ul>
-          {% for repo in device.synced_repos %}
-          <li>
-            <a name="{{ repo.sync_time }}" href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a>
-          </li>
-          {% endfor %}
-        </ul>
-      </td>
-      <td>
-        <div><a href="#" class="unlink-device op vh">{% trans "Unlink" %}</a></div>
-      </td>
+    <tr data-platform="{{ device.platform }}" data-name="{{ device.device_name }}" data-device-id="{{ device.device_id }}">
+        <td>{{ device.platform }}</td>
+        <td>{{ device.device_name }}</td>
+        <td>{{ device.last_login_ip }}</td>
+        <td>{{ device.last_accessed | translate_seahub_time }}</td>
+        <td>
+            <span class="lib-num">{{ device.synced_repos|length }}{% if device.synced_repos %} <span class="dir-icon icon-caret-down"></span>{% endif %}</span>
+            {% if device.synced_repos %}
+            <ul class="lib-list hide">
+                {% for repo in device.synced_repos %}
+                <li><a href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </td>
+        <td>
+            <div><a href="#" class="unlink-device op vh">{% trans "Unlink" %}</a></div>
+        </td>
     </tr>
     {% endfor %}
 </table>
-<div id="unlink-device-confirm" class="hide">
-    <p>{% trans "Really want to unlink this device? It will immediately stop syncing." %}</p>
+<div class="op-confirm unsync-confirm hide" id="unsync-cfm-popup">
+    <p class="details">{% trans "Really want to unlink %s?" %}</p>
+    <p>{% trans "It will immediately stop syncing." %}</p>
     <button class="yes">{% trans "Yes" %}</button>
-    <button class="no simplemodal-close">{% trans "No" %}</button>
+    <button class="no">{% trans "No" %}</button>
 </div>
 {% else %}
 <div class="empty-tips">
     <h2 class="alc">{% trans "You do not have connected devices" %}</h2>
-    <p>{% trans "Your clients (Desktop/Anroid/iOS) would be listed here." %}</p>
+    <p>{% trans "Your clients (Desktop/Anroid/iOS) will be listed here." %}</p>
 </div>
 {% endif %}
 
@@ -55,41 +56,63 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-function send_unlink_request(tr) {
-    var post_data = {
-        'platform': tr.data('platform'),
-        'device_id': tr.data('device-id')
-    };
-    console.log('send_unlink_request called, ' + post_data);
-    $.ajax({
-        url: '{% url 'unlink_device' %}',
-        type: 'POST',
-        dataType: 'json',
-        beforeSend: prepareCSRFToken,
-        data: post_data,
-        success: function(data) {
-            $.modal.close();
-            tr.remove();
-            feedback("{% trans "Successfully unlinked." %}", 'success');
-        },
-        error: function(xhr, textStatus, errorThrown) {
-            $.modal.close();
-            var error = $.parseJSON(xhr.responseText).error;
-            feedback("{% trans "Failed to unlink the device." %}", 'error');
+$('.lib-num').click(function(){
+    var lib_list = $(this).next('.lib-list');
+    var dir_icon = $(this).children('.dir-icon');
+    if (lib_list.length > 0) {
+        lib_list.toggleClass('hide');
+        if (lib_list.hasClass('hide')) {
+            dir_icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+        } else {
+            dir_icon.removeClass('icon-caret-down').addClass('icon-caret-up');
         }
-    });
-}
-  
+    }
+    return false;
+});
+$('#main-panel').removeClass('ovhd');
 $('.unlink-device').click(function() {
     var op = $(this);
+    var cont = op.parent().css({'position': 'relative'}),
+        cfm;
     var tr = op.parents('tr');
-    var form = $('#unlink-device-confirm');
-    form.modal({appendTo: "#main", focus:false});
-    $($('.yes', form)).click(function() {
-        send_unlink_request(tr);
-        return false;
+
+    // only show 1 popup each time.
+    $('.unsync-confirm', op.parents('table')).addClass('hide');
+
+    if (cont.find('.unsync-confirm').length == 1) {
+        cfm = cont.find('.unsync-confirm');
+    } else {
+        cfm = $('#unsync-cfm-popup').clone().removeAttr('id'); 
+        cont.append(cfm);
+        cfm.css({'right':0, 'top': op.position().top + op.height() + 3, 'white-space':'nowrap'});
+    }
+    cfm.removeClass('hide');
+
+    var details = $('.details', cfm); 
+    details.html(details.html().replace('%s', tr.attr('data-name')));
+
+    $('.no',cfm).unbind().click(function() {
+        cfm.addClass('hide');
     });
+    $('.yes',cfm).unbind().click(function() {
+        cfm.addClass('hide');
+        $.ajax({
+            url: '{% url 'unlink_device' %}',
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: prepareCSRFToken,
+            data: {
+                'platform': tr.data('platform'),
+                'device_id': tr.data('device-id')
+            },
+            success: function() {
+                tr.remove();
+                feedback("{% trans "Successfully unlinked." %}", 'success');
+            },
+            error: ajaxErrorHandler
+        });
+    });
+    return false;
 });
-  
 </script>
 {% endblock %}
