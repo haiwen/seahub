@@ -514,7 +514,7 @@ def repo_settings(request, repo_id):
     is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
     if not is_owner:
         raise Http404
-    
+
     if request.method == 'POST':
         content_type = 'application/json; charset=utf-8'
 
@@ -523,7 +523,7 @@ def repo_settings(request, repo_id):
             return HttpResponse(json.dumps({
                         'error': str(form.errors.values()[0])
                         }), status=400, content_type=content_type)
-            
+
         repo_name = form.cleaned_data['repo_name']
         repo_desc = form.cleaned_data['repo_desc']
         days = form.cleaned_data['days']
@@ -536,7 +536,7 @@ def repo_settings(request, repo_id):
                                     status=500, content_type=content_type)
 
         # set library history
-        if days != None and ENABLE_REPO_HISTORY_SETTING:
+        if days is not None and ENABLE_REPO_HISTORY_SETTING:
             res = set_repo_history_limit(repo_id, days)
             if res != 0:
                 return HttpResponse(json.dumps({
@@ -564,14 +564,14 @@ def repo_settings(request, repo_id):
     if not ENABLE_REPO_HISTORY_SETTING:
         full_history_enabled = no_history_enabled = partial_history_enabled = False
         days_enabled = False
-    
+
     if history_limit <= 0:
         days_enabled = False
-        
+
     return render_to_response('repo_settings.html', {
             'repo': repo,
             'repo_owner': repo_owner,
-            'history_limit': history_limit,
+            'history_limit': history_limit if history_limit > 0 else '',
             'full_history_checked': full_history_checked,
             'no_history_checked': no_history_checked,
             'partial_history_checked': partial_history_checked,
