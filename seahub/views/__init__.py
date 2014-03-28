@@ -1995,6 +1995,7 @@ def repo_download_dir(request, repo_id):
     return redirect(url)
 
 @login_required
+@user_mods_check
 def activities(request):
     if not EVENTS_ENABLED:
         raise Http404
@@ -2011,9 +2012,9 @@ def activities(request):
     events_more = True if len(events) == events_count else False
 
     event_groups = group_events_data(events)
-    
+
     return render_to_response('activities.html', {
-        'event_groups':event_groups,
+        'event_groups': event_groups,
         'events_more': events_more,
         'new_start': start,
             }, context_instance=RequestContext(request))
