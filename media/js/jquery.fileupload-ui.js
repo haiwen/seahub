@@ -181,6 +181,7 @@
             },
             // Callback for failed (abort or error) uploads:
             fail: function (e, data) {
+                $('.saving-tip', $(this)).addClass('hide');
                 var that = $(this).data('fileupload'),
                     template;
                 that._adjustMaxNumberOfFiles(data.files.length);
@@ -190,7 +191,11 @@
                             var file = data.files[index];
                             var r_error;
                             if (data.jqXHR.responseText) {
-                                r_error = $.parseJSON(data.jqXHR.responseText).error;
+                                try { // not all responseText can be parsed as JSON, e.g, '413' returns a HTML str.
+                                    r_error = $.parseJSON(data.jqXHR.responseText).error;
+                                } catch(e) {
+                                    r_error = '';
+                                }
                             }
                             if (data.dataType == 'iframe json') { // for browsers which use iframe
                                 data.errorThrown = '';
