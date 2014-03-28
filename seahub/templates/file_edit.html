@@ -264,7 +264,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
             try {
                 localStorage.setItem(key, value + "");
             } catch (e) {
-                feedback('{% trans "Failed to save draft, exceeded max quota" %}', 'error');
+                feedback("{% trans "Failed to save draft, exceeded max quota" %}", 'error');
             }
         },
         get : function(key) {
@@ -363,7 +363,7 @@ if ('localStorage' in window && window['localStorage'] !== null) {
         {% if filetype == 'Markdown' %}
         $('#wmd-input').val(saved_draft);
         {% endif %}
-        feedback('{% trans "Draft successfully loaded" %}', 'success', 1000);
+        feedback("{% trans "Draft successfully loaded" %}", 'success', 1000);
     });
 
     $('#discard-draft-btn, #file-edit-cancel').click(function() {

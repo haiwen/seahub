@@ -135,8 +135,8 @@ $('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outer
 $('#user-basic-info .submit').css({'margin-left': $('#user-basic-info label').outerWidth(true)});
 changeAvatar($('#user-avatar-chg-btn'), $('#user-avatar-input'), $('#user-avatar-form'));
 addConfirmTo($('#account-delete-btn'), {
-    'title' : '{% trans "Delete Account" %}',
-    'con' : '{% trans "Really want to delete your account?" %}'
+    'title' : "{% trans "Delete Account" %}",
+    'con' : "{% trans "Really want to delete your account?" %}"
 });
 
 var all_repos = [];

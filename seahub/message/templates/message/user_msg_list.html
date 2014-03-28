@@ -268,13 +268,13 @@ $('.msg-del', context).click(function() {
             success: function(data) {
                 if (data['success']) {
                     msg.remove();
-                    feedback('{% trans "Successfully deleted" %}', 'success');
+                    feedback("{% trans "Successfully deleted" %}", 'success');
                 } else {
-                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
+                    feedback("{% trans "Failed to delete: " %}" + data['err_msg'], 'error');
                 }
             },
             error: function() {
-                feedback('{% trans "Failed." %}', 'error');
+                feedback("{% trans "Failed." %}", 'error');
             }
         });
     });

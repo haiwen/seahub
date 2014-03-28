@@ -23,7 +23,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     if (!$.trim(grp_options_ct.html())) {
         var grp_options = '<ul class="option-list">';
         {% for group in request.user.joined_groups %}
-        grp_options += '<li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span> {{group.avatar|safe}} <span class="checkbox-option">{{ group.group_name }}</span> </label> </li>';
+        grp_options += '<li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span> {{group.avatar|safe}} <span class="checkbox-option">' + "{{ group.group_name }}" + '</span> </label> </li>';
         {% endfor %}
         grp_options += '</ul>';
         grp_options_ct.html(grp_options);
@@ -161,7 +161,7 @@ $("#link-send-form").submit(function(event) {
         submit_btn = form.children('input[type="submit"]');
     
     if (!email) {
-        apply_form_error('link-send-form', '{% trans "Please input at least an email." %}');
+        apply_form_error('link-send-form', "{% trans "Please input at least an email." %}");
         return false;
     }
 
@@ -194,7 +194,7 @@ $("#link-send-form").submit(function(event) {
                     }
                 }
             } else {
-                err_str = '{% trans "Failed. Please check the network." %}';
+                err_str = "{% trans "Failed. Please check the network." %}";
             }
             apply_form_error('link-send-form', err_str);
         }
@@ -335,7 +335,7 @@ $("#upload-link-send-form").submit(function(event) {
         submit_btn = form.children('input[type="submit"]');
 
     if (!email) {
-        apply_form_error('upload-link-send-form', '{% trans "Please input at least an email." %}');
+        apply_form_error('upload-link-send-form', "{% trans "Please input at least an email." %}");
         return false;
     }
 
@@ -368,7 +368,7 @@ $("#upload-link-send-form").submit(function(event) {
                     }
                 }
             } else {
-                err_str = '{% trans "Failed. Please check the network." %}';
+                err_str = "{% trans "Failed. Please check the network." %}";
             }
             apply_form_error('upload-link-send-form', err_str);
         }

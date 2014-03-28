@@ -8,7 +8,7 @@ $('#repo-decrypt-form').submit(function() {
     var password = input_password.val();
     var cur_data = form.data();
     if (!password) {
-        apply_form_error(form_id, '{% trans "Password is required." %}');
+        apply_form_error(form_id, "{% trans "Password is required." %}");
     } else {
         apply_form_error(form_id, '');
         $.ajax({
@@ -32,7 +32,7 @@ $('#repo-decrypt-form').submit(function() {
                 if (jqXHR.responseText) {
                     err = $.parseJSON(jqXHR.responseText).error;
                 } else {
-                    err = '{% trans "Failed. Please check the network." %}';
+                    err = "{% trans "Failed. Please check the network." %}";
                 }
                 apply_form_error(form_id, err);
                 input_password.val('');

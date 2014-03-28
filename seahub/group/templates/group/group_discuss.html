@@ -245,7 +245,7 @@ $('.msg-del').click(function() {
     if (msg.find('.msg-del-confirm').length > 0) {
         cfm = msg.find('.msg-del-confirm');
     } else {
-        cfm = '<div class="op-confirm msg-del-confirm hide"><p>{% trans "Really want to delete this discussion?" %}</p><button class="yes">{% trans "Yes" %}</button><button class="no">{% trans "No" %}</button></div>';
+        cfm = '<div class="op-confirm msg-del-confirm hide"><p>' + "{% trans "Really want to delete this discussion?" %}" + '</p><button class="yes">' + "{% trans "Yes" %}" + '</button><button class="no">' + "{% trans "No" %}" + '</button></div>';
         var msg_main = msg.find('.msg-main');
         var msg_hd = msg.find('.msg-hd');
         cfm = msg_main.append(cfm).children(':last');
@@ -260,13 +260,13 @@ $('.msg-del').click(function() {
             success: function(data) {
                 if (data['success']) {
                     msg.remove();
-                    feedback('{% trans "Successfully deleted" %}', 'success');
+                    feedback("{% trans "Successfully deleted" %}", 'success');
                 } else {
-                    feedback('{% trans "Failed to delete: " %}' + data['err_msg'], 'error');
+                    feedback("{% trans "Failed to delete: " %}" + data['err_msg'], 'error');
                 }
             },
             error: function() {
-                feedback('{% trans "Failed." %}', 'error');
+                feedback("{% trans "Failed." %}", 'error');
             }
         });
     });

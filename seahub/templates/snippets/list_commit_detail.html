@@ -1,6 +1,6 @@
 {% load i18n %}
 function listCommitDetails(url, t) {
-    $.modal('<div id="ls-ch"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" style="margin-top:30px;" /></div>', {autoResize:true});
+    $.modal('<div id="ls-ch"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-top:30px;" /></div>', {autoResize:true});
     $('#ls-ch').css('text-align', 'center');
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $.ajax({
@@ -8,7 +8,7 @@ function listCommitDetails(url, t) {
         dataType: 'json',
         cache: false,
         success: function(data) {
-            var heading = '<h3>{% trans "Modification Details" %}</h3>';
+            var heading = '<h3>' + "{% trans "Modification Details" %}" + '</h3>';
             var time = '<p class="commit-time">' + t + '</p>';
             var con = '';
             function show(data_, hd) {
@@ -21,12 +21,12 @@ function listCommitDetails(url, t) {
                     con += '</ul>';
                 }
             }
-            show(data['new'], '{% trans "New files" %}');
-            show(data['removed'], '{% trans "Deleted files" %}');
-            show(data['renamed'], '{% trans "Renamed or Moved files" %}');
-            show(data['modified'], '{% trans "Modified files" %}');
-            show(data['newdir'], '{% trans "New directories" %}');
-            show(data['deldir'], '{% trans "Deleted directories" %}');
+            show(data['new'], "{% trans "New files" %}");
+            show(data['removed'], "{% trans "Deleted files" %}");
+            show(data['renamed'], "{% trans "Renamed or Moved files" %}");
+            show(data['modified'], "{% trans "Modified files" %}");
+            show(data['newdir'], "{% trans "New directories" %}");
+            show(data['deldir'], "{% trans "Deleted directories" %}");
             if (!con) {
                 if (data['cmt_desc']) {
                     con = '<p>' + data['cmt_desc'] + '</p>';
@@ -36,7 +36,7 @@ function listCommitDetails(url, t) {
             $(window).resize();
         },
         error: function() {
-            $('#ls-ch').html('{% trans "Unknown error." %}');
+            $('#ls-ch').html("{% trans "Unknown error." %}");
             setTimeout(function() { $.modal.close(); }, 2500);
         }
     });

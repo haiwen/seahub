@@ -28,12 +28,12 @@
     <tr>
         <td>
           {% if repo.encrypted %}
-            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
           {% else%}
             {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
             {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
             {% endif %}
           {% endif %}
         </td>
@@ -143,8 +143,8 @@ $('.cancel-share').click(function() {
     $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}').attr('data-target', repo_name);
 });
 addConfirmTo($('.cancel-share'), {
-        'title':'{% trans "Unshare Library" %}',
-        'con':'{% trans "Are you sure you want to unshare %s ?" %}'
+    'title': "{% trans "Unshare Library" %}",
+    'con': "{% trans "Are you sure you want to unshare %s ?" %}"
 });
 
 $('.download').click(function() {

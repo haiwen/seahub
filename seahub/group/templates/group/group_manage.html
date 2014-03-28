@@ -137,12 +137,12 @@ $('#settings-tab').click(function() {
     admin_add_btn.addClass('hide');
 });
 addConfirmTo($("#group-dismiss"), {
-        'title':'{% trans "Dismiss Group" %}',
-        'con':'{% trans "Really want to dismiss this group?" %}'
+        'title':"{% trans "Dismiss Group" %}",
+        'con':"{% trans "Really want to dismiss this group?" %}"
 });
 addConfirmTo($(".member-remove-btn"), {
-        'title':'{% trans "Delete Member" %}',
-        'con':'{% trans "Really want to delete %s ?" %}'
+        'title':"{% trans "Delete Member" %}",
+        'con':"{% trans "Really want to delete %s ?" %}"
 });
 var contact_list = [], contact_email;
 {% for contact in contacts %}

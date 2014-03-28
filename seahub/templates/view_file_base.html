@@ -135,11 +135,11 @@ $('#star').click(function() {
         success:function(data) {
             if (data['success']) {
                 if (status == 'starred') {
-                    feedback('{% trans "Unstarred successfully" %}', 'success');
+                    feedback("{% trans "Unstarred successfully" %}", 'success');
                     star_btn.data('status', 'unstarred');
                     star_btn.children('.text').html("{% trans "Star" %}");
                 } else {
-                    feedback('{% trans "Starred successfully" %}', 'success');
+                    feedback("{% trans "Starred successfully" %}", 'success');
                     star_btn.data('status', 'starred');
                     star_btn.children('.text').html("{% trans "Unstar" %}");
                 }
@@ -150,7 +150,7 @@ $('#star').click(function() {
             if (xhr.responseText) {
                 feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
             } else {
-                feedback('{% trans "Failed. Please check the network." %}', 'error');
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
             }
             enable(star_btn);
         }

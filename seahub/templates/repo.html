@@ -744,7 +744,7 @@ function encAndSubmitFile(file, fd, submit_url) {
             },
             error: function () {
                 $.modal.close();
-                feedback('{% trans "Failed." %}', 'error');
+                feedback("{% trans "Failed." %}", 'error');
             }
         });
     }
@@ -958,7 +958,7 @@ function sortDirent() {
     other.removeClass('hide');
 }
 
-var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="vam" />';
+var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="vam" />';
 // cur_path: will be updated after reqDirdata
 var cur_path = "{{ path|safe }}"; {# safe is for ''', '&' included in path #}
 
@@ -1796,7 +1796,7 @@ function updateCmt() {
                 input.val(post_data);
         }   
         if (!post_data) {
-            apply_form_error(form.attr('id'), '{% trans "Please enter emails or groups, or select some." %}');
+            apply_form_error(form.attr('id'), "{% trans "Please enter emails or groups, or select some." %}");
             return false;
         }
 

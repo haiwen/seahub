@@ -30,7 +30,7 @@ $('#member-add-form').submit(function() {
                 input.val(post_data);
         }    
         if (!post_data) {
-            apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
+            apply_form_error(form.attr('id'), "{% trans "Please enter emails, or select some." %}");
             return false;
         }    
 
