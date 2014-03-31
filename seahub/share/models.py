@@ -1,6 +1,5 @@
 import datetime
 from django.db import models
-from django.utils import timezone
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
@@ -80,7 +79,7 @@ class FileShare(models.Model):
     def is_file_share_link(self):
         return True if self.s_type == 'f' else False
 
-    def is_dir_share_link():
+    def is_dir_share_link(self):
         return False if self.is_file_link() else True
         
 class OrgFileShareManager(models.Manager):
@@ -103,7 +102,7 @@ class OrgFileShare(models.Model):
     file_share = models.OneToOneField(FileShare)
     objects = OrgFileShareManager()
 
-    objects = FileShareManager()
+    objects = OrgFileShareManager()
 
 class UploadLinkShare(models.Model):
     """
