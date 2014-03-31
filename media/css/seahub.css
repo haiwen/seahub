@@ -2007,6 +2007,10 @@ textarea:-moz-placeholder {/* for FF */
     width:640px;
     margin-top:10px;
 }
+.msg-form .avatar,
+.msg .avatar {
+    border-radius:1000px;
+}
 #personal-msg-panel {
     margin-top:22px;
 }
@@ -2015,11 +2019,10 @@ textarea:-moz-placeholder {/* for FF */
     color:#333;
 }
 .msg-form {
-    padding:6px;
-    background:#f9f9f9;
-    border:1px solid #c4c4c4;
-    border-radius:5px;
-    margin-left:64px;
+    padding:10px;
+    background:#f2f2f2;
+    border-radius:3px;
+    margin:0 0 22px 64px;
     position:relative;
 }
 .msg-form .avatar {
@@ -2027,8 +2030,26 @@ textarea:-moz-placeholder {/* for FF */
     left:-64px;
     top:-1px;
 }
+.msg-form .ops {
+    text-align:right;
+    margin-top:6px;
+}
+.msg-form .add-file {
+    margin:9px 10px 0 3px;
+}
+#selected-files .item {
+    text-align:left;
+    padding:2px 3px;
+}
+#selected-files .rm {
+    margin-right:3px;
+}
+#selected-files .rm,
+.msg-form .add-file {
+    cursor:pointer;
+}
 .msg-input {
-    width:550px;
+    width:544px;
     padding:3px 5px;
     height:25px;
     vertical-align:top;
@@ -2179,7 +2200,10 @@ textarea:-moz-placeholder {/* for FF */
 .reply-submit,
 .reply-cancel {
     margin-top:6px;
-    margin-right:2px;
+    background:#fff;
+}
+.msg-form .cancel {
+    margin-left:6px;
 }
 #msg-upward {
     position:fixed;

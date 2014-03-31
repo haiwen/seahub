@@ -4,18 +4,6 @@
 {% block sub_title %}{% trans "Messages" %} - {% endblock %}
 
 {% block extra_style %}
-<style type="text/css">
-#selected-files .item {
-    padding:2px 3px;
-}
-#selected-files .item.hl {
-    background:#e8e8e8;
-}
-#selected-files .icon-remove,
-.add-file {
-    cursor:pointer;
-}
-</style>
 {% endblock %}
 
 {% block cur_messages %}tab-cur{% endblock %}
@@ -32,10 +20,12 @@
         {% for error in form.message.errors %}
         <p class="error">{{ error|escape }}</p>
         {% endfor %}
-        <ul class="hide" id="selected-files"></ul>
-        <button type="submit" class="submit hide">{% trans "Submit" %}</button>
-        <button type="button" class="cancel hide">{% trans "Cancel" %}</button>
-        <img src="{{ MEDIA_URL }}img/file/file.png" alt="" title="{% trans "Add files" %}" class="add-file vam hide" />
+        <div class="ops hide">
+            <button type="submit" class="submit">{% trans "Submit" %}</button>
+            <button type="button" class="cancel">{% trans "Cancel" %}</button>
+            <img src="{{ MEDIA_URL }}img/clip.png" alt="" title="{% trans "Add files" %}" class="add-file fleft" />
+            <ul class="hide" id="selected-files"></ul>
+        </div>
         <span class="say"></span>
     </form>
     <div id="add-file-popup" class="file-choose-form hide">
@@ -113,7 +103,6 @@
 {% include 'snippets/add_to_contacts_form.html' %}
 {% endblock %}
 
-
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 {% if person_msgs.object_list|length > 5 %}
@@ -139,69 +128,9 @@ $(window).scroll(function() {
 });
 {% endif %}
 
-$('#message').focus(function() {
-    $(this).height(75);
-    $('#personal-message-form').find('.submit, .cancel, .add-file').removeClass('hide');
-});
-$('#personal-message-form .cancel').click(function() {
-    $(this).addClass('hide');
-    $('.submit, .add-file', $('#personal-message-form')).addClass('hide');
-    $('#selected-files').data('files', '').html('').addClass('hide');
-    $('#message').val('').height(25);
-});
-
-$('#personal-message-form .add-file').click(function(){
-    $('#add-file-popup').modal();    
-    $.ajax({
-        'url': '{% url 'get_my_unenc_repos' %}',
-        'cache': false,
-        'dataType': 'json',
-        'success': function(data) {
-            var file_tree = new FileTree();
-            var repos = file_tree.format_repo_data(data);
-            if (repos.length > 0) {
-                file_tree.renderFileTree($('#file-tree').data('site_root', '{{SITE_ROOT}}'), repos, {'two_state': true});
-            } else {
-                $('#file-tree').html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>');
-            }
-        },
-        'error': function(jqXHR, textStatus, errorThrown) {
-            if (!jqXHR.responseText) {
-                $('#file-tree').html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
-            }
-        }
-    });
-});
-$('#add-file-popup .submit').click(function() {
-    var files_ct = $('#selected-files');
-    var selected = files_ct.data('files') || [];
-    $('[name="selected"][checked="checked"]', $('#file-tree')).each(function() {
-        var val =  $(this).val();
-        if (val.charAt(val.length - 1) != '/') { // only submit file
-            selected.push($(this).val());
-        }
-    });
-    $.modal.close();
-    var files = '';
-    for (var i = 0, len = selected.length; i < len; i++) {
-        files += '<li class="item">' + selected[i].substr(selected[i].lastIndexOf('/') + 1) + '<span class="icon-remove vh fright" data-index="' + i + '"></span></li>';
-    }
-    files_ct.data('files', selected).html(files).removeClass('hide');
-    $('.item', files_ct).hover(
-        function() {
-            $(this).addClass('hl').children('.icon-remove').removeClass('vh');
-        },
-        function() {
-            $(this).removeClass('hl').children('.icon-remove').addClass('vh');
-        }
-    );
-    $('.icon-remove', files_ct).click(function() {
-        var selected_f = files_ct.data('files');
-        selected_f.splice($(this).data('index'), 1);
-        $(this).parent().remove();
-        files_ct.data('files', selected_f);
-    });
-});
+var msg_form = $('#personal-message-form');
+var repos_get_url = '{% url 'get_my_unenc_repos' %}';
+{% include 'snippets/msg_form_js.html' %} 
 
 $('#personal-message-form').submit(function() {
     var form = $(this),
