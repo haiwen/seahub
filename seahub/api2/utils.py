@@ -67,8 +67,8 @@ def calculate_repo_info(repo_list, username):
         repo.root = commit.root_id
         repo.size = server_repo_size(repo.id)
 
-def get_file_size (fid):
-    size = seafile_api.get_file_size(fid)
+def get_file_size(store_id, repo_version, file_id):
+    size = seafile_api.get_file_size(store_id, repo_version, file_id)
     return size if size else 0
 
 def prepare_starred_files(files):
@@ -84,7 +84,7 @@ def prepare_starred_files(files):
             try:
                 file_id = seafile_api.get_file_id_by_path(f.repo.id, f.path)
                 sfile['oid'] = file_id
-                sfile['size'] = get_file_size(file_id)
+                sfile['size'] = get_file_size(f.repo.store_id, f.repo.version, file_id)
             except SearpcError, e:
                 pass
 

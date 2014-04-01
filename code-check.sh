@@ -55,4 +55,4 @@ if ! [[ -f ${pylintrc} ]]; then
     exit 1
 fi
 
-pylint --rcfile=${pylintrc} $@
+pylint --rcfile=${pylintrc} -E $@

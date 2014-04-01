@@ -872,7 +872,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
 
 def reloaddir(request, repo, parent_dir):
     try:
-        dir_id = seafile_api.get_dir_id_by_path(repo_id,
+        dir_id = seafile_api.get_dir_id_by_path(repo.id,
                                                 parent_dir.encode('utf-8'))
     except SearpcError, e:
         logger.error(e)
@@ -1451,7 +1451,7 @@ class DirView(APIView):
             response["oid"] = dir_id
             return response
         else:
-            return get_dir_entrys_by_id(request, repo_id, path, dir_id)
+            return get_dir_entrys_by_id(request, repo, path, dir_id)
 
     def post(self, request, repo_id, format=None):
         # new dir
@@ -1584,7 +1584,7 @@ class DirDownloadView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
         try:
-            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, reop.version,
+            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, repo.version,
                                                             dir_id)
         except Exception, e:
             logger.error(str(e))
@@ -2190,6 +2190,7 @@ class UserMsgsView(APIView):
         UserMessage.objects.update_unread_messages(to_email, username)
         page = get_page_index(request, 1)
 
+        next_page = -1
         person_msgs = get_person_msgs(to_email, page, username)
         if not person_msgs:
             Response({
@@ -2197,7 +2198,6 @@ class UserMsgsView(APIView):
                     'next_page' : next_page,
                     'msgs' : [],})
 
-        next_page = -1
         if person_msgs.has_next():
             next_page = person_msgs.next_page_number()
 
