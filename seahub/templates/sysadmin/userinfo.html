@@ -2,16 +2,9 @@
 {% load i18n avatar_tags %}
 {% load url from future %}
 
-{% block extra_style %}
-<style type="text/css">
-#set-quota-form {
-    min-width:255px;
-}
-</style>
-{% endblock %}
-
 {% block left_panel %}
 <div class="side-info">
+    <a class="go-back" title="{% trans "Back to user list" %}"  href="{% url 'sys_useradmin' %}"><span class="icon-chevron-left"></span></a>
     <h3 class="hd">{% trans "Profile" %}</h3>
     {% avatar email 48 %}
     <dl>

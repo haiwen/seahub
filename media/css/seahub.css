@@ -43,6 +43,7 @@
 .icon-move:before                 { content: "\f047"; }
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
+.icon-chevron-left:before         { content: "\f053"; }
 
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
@@ -2870,4 +2871,23 @@ textarea:-moz-placeholder {/* for FF */
 }
 .client-list .dir-icon {
     color:#666;
+}
+/* side-info */
+.side-info {
+    position: relative;
+}
+.go-back {
+    position: absolute;
+    left: -41px;
+    top: -15px;
+    padding: 0 5px;
+    font-size: 25px;
+    color:#ccc;
+}
+.go-back:hover {
+    color:#f93;
+    text-decoration: none;
+}
+#set-quota-form {
+    min-width:255px;
 }
