@@ -29,15 +29,6 @@ from django.conf.urls.defaults import *
 from seahub.auth import views as auth_views
 
 urlpatterns = patterns('',
-                       url(r'^login/$',
-                           auth_views.login,
-                           {'template_name': 'registration/login.html',
-                            'redirect_if_logged_in': 'myhome'},
-                           name='auth_login'),
-                       url(r'^logout/$',
-                           auth_views.logout,
-                           {'template_name': 'registration/logout.html'},
-                           name='auth_logout'),
                        url(r'^password/change/$',
                            auth_views.password_change,
                            name='auth_password_change'),
@@ -62,4 +53,22 @@ if getattr(settings, 'ENABLE_LOGIN_SIMPLE_CHECK', False):
     urlpatterns += patterns('',
                             (r'^login/simple_check/$',
                              auth_views.login_simple_check),
+                            )
+
+if getattr(settings, 'ENABLE_SSO', False):
+    urlpatterns += patterns('',
+                            url(r'^login/$', 'django_cas.views.login'),
+                            url(r'^logout/$', 'django_cas.views.logout'),
+                            )
+else:
+    urlpatterns += patterns('',
+                            url(r'^login/$',
+                                auth_views.login,
+                                {'template_name': 'registration/login.html',
+                                 'redirect_if_logged_in': 'myhome'},
+                                name='auth_login'),
+                            url(r'^logout/$',
+                                auth_views.logout,
+                                {'template_name': 'registration/logout.html'},
+                                name='auth_logout'),
                             )
