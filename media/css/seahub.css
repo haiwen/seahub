@@ -2055,7 +2055,7 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align:top;
 }
 .personal-msg-panel .msg-input {
-    width:486px;
+    width:480px;
 }
 .say {
     position:absolute;
@@ -2063,7 +2063,7 @@ textarea:-moz-placeholder {/* for FF */
     height:21px;
     background:transparent url('../img/say.png') no-repeat scroll left top;
     left:-10px;
-    top:13px;
+    top:20px;
 }
 .msg {
     word-wrap: break-word;
