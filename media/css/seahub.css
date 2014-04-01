@@ -2891,3 +2891,12 @@ textarea:-moz-placeholder {/* for FF */
 #set-quota-form {
     min-width:255px;
 }
+/* lib setting */
+.lib-setting .input,
+.lib-setting .textarea {
+    width:320px;
+}
+.lib-setting .form {
+    margin-bottom:30px;
+}
+

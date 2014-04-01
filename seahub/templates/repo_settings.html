@@ -5,32 +5,34 @@
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block left_panel %}
+<a href="{% url 'repo' repo.id %}" title="{% trans "Back to Library" %}"><span class="icon-chevron-left"></span> {% trans "Back to Library" %}</a>
 {% endblock %}
 
 {% block right_panel %}
+<div class="lib-setting">
 <h2>{% trans "Library Settings" %}</h2>
 
 <h3>{% trans "Basic Info" %}</h3>
-<form id="repo-setting-form" action="" method="post" style="margin-bottom:30px;">{% csrf_token %}
+<form id="repo-setting-form" action="" method="post" class="form">{% csrf_token %}
     <label>{% trans "Name" %}</label><br />
     <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
     <label>{% trans "Description" %}</label></br />
     <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
 
-{% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
+    {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
     <label>{% trans "History" %}</label><br />
     <input type="radio" name="history" value="full_history" {% if full_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Keep full history" %}</span><br />
     <input type="radio" name="history" value="no_history" {% if no_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Don't keep history" %}</span><br />
     <input type="radio" name="history" value="partial_history" {% if partial_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span calss="vam">{% trans "Only keep a period of history:" %}
     <input type="text" name="days" size="4" {% if not days_enabled %} disabled="disabled" class="input-disabled"{% endif %} value="{{history_limit}}" /> {% trans "days" %}</span><br />
-{% endif %}
+    {% endif %}
     
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
 <h3>{% trans "Transfer Ownership" %}</h3>
-<form id="repo-owner-form" action="" method="post">{% csrf_token %}
+<form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
     <p>{% trans "Transfer this library to another user:" %}</p>
     <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
     <p class="error hide"></p>
@@ -39,7 +41,7 @@
 
 {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
 <h3>{% trans "Change Password" %}</h3>
-<form id="repo-change-passwd-form" action="" method="post">{% csrf_token %}
+<form id="repo-change-passwd-form" action="" method="post" class="form">{% csrf_token %}
     <p>{% trans "Change the password of this library:" %}</p>
     <label>{% trans "Old Password" %}</label><br />
     <input type="password" name="old_passwd" class="input" /><br />
@@ -51,6 +53,7 @@
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 {% endif %}
+</div>
 {% endblock %}
 
 {% block extra_script %}
