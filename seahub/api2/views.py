@@ -682,6 +682,41 @@ class DownloadRepo(APIView):
 
         return repo_download_info(request, repo_id)
 
+class RepoPublic(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        if check_permission(repo_id, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
+
+        try:
+            seafile_api.add_inner_pub_repo(repo_id, "r")
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make repo public')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
+    def delete(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        if check_permission(repo_id, request.user.username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
+
+        try:
+            seafile_api.remove_inner_pub_repo(repo_id)
+        except:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Unable to make repo private')
+
+        return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
+
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
