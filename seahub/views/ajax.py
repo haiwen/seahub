@@ -95,6 +95,7 @@ def get_dirents(request, repo_id):
             for d in ele_path_dirents:
                 if stat.S_ISDIR(d.mode):
                     ds.append(d.obj_name)
+            ds.sort(lambda x, y : cmp(x.lower(), y.lower()))
             all_dirents.append(ds)
         return HttpResponse(json.dumps(all_dirents), content_type=content_type)
 
@@ -104,7 +105,9 @@ def get_dirents(request, repo_id):
     except SearpcError, e:
         return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
                             content_type=content_type)
-    dirent_list = []
+
+    d_list = []
+    f_list = []
     for dirent in dirents:
         if stat.S_ISDIR(dirent.mode):
             dirent.has_subdir = False
@@ -125,20 +128,20 @@ def get_dirents(request, repo_id):
                 'id': dirent.obj_id,
                 'type': 'dir',
                 'has_subdir': dirent.has_subdir, # to decide node 'state' ('closed' or not) in jstree
-                'repo_id': repo_id,
             }
-            dirent_list.append(subdir)
+            d_list.append(subdir)
         else:
             if not dir_only:
                 f = {
-                    'repo_id': repo_id,
                     'id': dirent.obj_id,
                     'name': dirent.obj_name,
                     'type': 'file',
                     }
-                dirent_list.append(f)
+                f_list.append(f)
 
-    return HttpResponse(json.dumps(dirent_list), content_type=content_type)
+    d_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    f_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    return HttpResponse(json.dumps(d_list + f_list), content_type=content_type)
 
 @login_required
 def get_unenc_group_repos(request, group_id):
