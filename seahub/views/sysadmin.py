@@ -718,17 +718,23 @@ def batch_user_make_admin(request):
     set_admin_emails = request.POST.get('set_admin_emails')
     set_admin_emails = string2list(set_admin_emails)
 
-    try:
-        for email in set_admin_emails:
-            print email
+    success = []
+    failed = []
+
+    for email in set_admin_emails:
+        try:
             user = User.objects.get(email=email)
             user.is_staff = True
             user.save()
-        result['success'] = True
-        messages.success(request, _(u'Successfully patch set admin'))
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    except Exception, e:
-        result['success'] = False
-        messages.error(request, _(e))
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+            success.append(email)
+        except User.DoesNotExist:
+            failed.append(email)
+
+    for item in success:
+        messages.success(request, _(u'Successfully set %s as admin') % item)
+    for item in failed:
+        messages.error(request, _(u'Failed set %s as admin') % item)
+
+    result['success'] = True
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
