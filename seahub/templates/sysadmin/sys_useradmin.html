@@ -9,38 +9,65 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+    <ul class="tab-tabs-nav fleft">
+        <li class="tab"><a href="#user" class="a" id="user-tab">{% trans "User" %}</a></li>
+        <li class="tab"><a href="#admin" class="a" id="admin-tab">{% trans "Admin" %}</a></li>
         {% if have_ldap %}
-        <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
+        <li class="tab"><a href="{% url 'sys_ldap_useradmin' %}" class="a" id="ldap-tab">{% trans "LDAP" %}</a></li>
         {% endif %}
     </ul>
-    <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
-</div>
+    <div class="fright">
+        <button id="add-user-btn" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user"%}</span></button>
+        <button id="add-admin-btn" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add admin"%}</span></button>
+    </div>
+    </div>
 
-<form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
-    <h3>{% trans "Add user" %}</h3>
-    <label for="id_email">{% trans "Email" %}</label><br />
-    <input type="text" name="email" id="id_email" class="input" /><br />
-    <label for="id_password1">{% trans "Password" %}</label><br />
-    <input type="password" name="password1" id="id_password1" class="input" /><br />    
-    <label for="id_password2">{% trans "Confirm Password" %}</label><br />
-    <input type="password" name="password2" id="id_password2" class="input" /><br />    
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
+    <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3>{% trans "Add user" %}</h3>
+        <label for="id_email">{% trans "Email" %}</label><br />
+        <input type="text" name="email" id="id_email" class="input" /><br />
+        <label for="id_password1">{% trans "Password" %}</label><br />
+        <input type="password" name="password1" id="id_password1" class="input" /><br />    
+        <label for="id_password2">{% trans "Confirm Password" %}</label><br />
+        <input type="password" name="password2" id="id_password2" class="input" /><br />    
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
 
-{% include "sysadmin/useradmin_table.html"%}
-{% include "sysadmin/useradmin_paginator.html" %}
+    {% include "sysadmin/useradmin_table.html"%}
+    {% include "sysadmin/useradmin_add_form.html" %}
 
-<div id="activate-msg" class="hide">
-    <p>{% trans "Activating..., please wait" %}</p>
+    <div id="activate-msg" class="hide">
+        <p>{% trans "Activating..., please wait" %}</p>
+    </div>
 </div>
 {% endblock %}
 
-{% block extra_script %}
+{% block extra_script %}{{block.super}}
 <script type="text/javascript">
+
+var cur_tab = $('.ui-tabs-selected .a');    
+var add_user_btn = $('#add-user-btn'),
+    add_admin_btn = $('#add-admin-btn');
+if (cur_tab.attr('id') == 'user-tab') {
+    add_user_btn.removeClass('hide');
+}
+if (cur_tab.attr('id') == 'admin-tab') {
+    add_admin_btn.removeClass('hide');
+}
+$('#user-tab').click(function() {
+    add_user_btn.removeClass('hide');
+    add_admin_btn.addClass('hide');
+});
+$('#admin-tab').click(function() {
+    add_admin_btn.removeClass('hide');
+    add_user_btn.addClass('hide');
+});
+
+
+
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
@@ -96,5 +123,6 @@ $('#add-user-form').submit(function() {
 });
 
 {% include "sysadmin/useradmin_js.html" %}
+{% include "sysadmin/useradmin_add_js.html" %}
 </script>
 {% endblock %}

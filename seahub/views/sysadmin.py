@@ -23,7 +23,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
-from seahub.utils import IS_EMAIL_CONFIGURED
+from seahub.utils import IS_EMAIL_CONFIGURED, string2list
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -708,3 +708,27 @@ def sys_traffic_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def batch_user_make_admin(request):
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    set_admin_emails = request.POST.get('set_admin_emails')
+    set_admin_emails = string2list(set_admin_emails)
+
+    try:
+        for email in set_admin_emails:
+            print email
+            user = User.objects.get(email=email)
+            user.is_staff = True
+            user.save()
+        result['success'] = True
+        messages.success(request, _(u'Successfully patch set admin'))
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    except Exception, e:
+        result['success'] = False
+        messages.error(request, _(e))
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
