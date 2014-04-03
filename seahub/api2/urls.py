@@ -41,6 +41,8 @@ urlpatterns = patterns('',
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/detail/$', PrivateSharedFileDetailView.as_view()),
+
     url(r'^groups/$', Groups.as_view()),
     url(r'^events/$', EventsView.as_view()),
     url(r'^unseen_messages/$', UnseenMessagesCountView.as_view()),
