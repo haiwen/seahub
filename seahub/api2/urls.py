@@ -37,6 +37,9 @@ urlpatterns = patterns('',
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),
+    url(r'^f/(?P<token>[a-f0-9]{10})/$', SharedFileView.as_view()),
+
     url(r'^groups/$', Groups.as_view()),
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
 

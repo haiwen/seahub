@@ -66,11 +66,12 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, list_personal_shared_repos, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
-    list_inner_pub_repos,remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
+    list_inner_pub_repos, remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc
 from seaserv import seafile_api, check_group_staff
+from django.db.models import F
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -1683,7 +1684,87 @@ class VirtualRepos(APIView):
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
         return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
-    
+
+class PrivateSharedFileView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = PrivateFileDirShare.objects.get(token=token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_to = fileshare.to_user
+
+        if shared_to != request.user.username:
+            return api_error(status.HTTP_403_FORBIDDEN, "You don't have permission to view this file")
+
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path 
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                                path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)
+
+class SharedFileView(APIView):
+# Anyone should be able to access a Shared File assuming they have the token
+#    authentication_classes = (TokenAuthentication, )
+#    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path 
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                                path.encode('utf-8'))
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        # Increase file shared link view_cnt, this operation should be atomic
+        fileshare.view_cnt = F('view_cnt') + 1
+        fileshare.save()
+
+        op = request.GET.get('op', 'download')
+        return get_repo_file(request, repo_id, file_id, file_name, op)
+
 class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, FileShare):
