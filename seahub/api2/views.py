@@ -19,6 +19,7 @@ from rest_framework.views import APIView
 from django.contrib.sites.models import RequestSite
 from django.core.paginator import EmptyPage, InvalidPage
 from django.db import IntegrityError
+from django.db.models import F
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -62,7 +63,7 @@ from seahub.message.models import UserMessage, UserMsgAttachment
 from seahub.utils import EVENTS_ENABLED, \
     api_convert_desc_link, get_file_type_and_ext, \
     HAS_FILE_SEARCH, gen_file_share_link, gen_dir_share_link
-from seahub.utils.file_types import IMAGE
+from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.options.models import UserOptions
 from seahub.shortcuts import get_first_object_or_none
 if HAS_FILE_SEARCH:
@@ -78,9 +79,12 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_inner_pub_repos, remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups
-from seaserv import seafile_api, check_group_staff
-from django.db.models import F
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
+from seahub.views.file import get_file_view_path_and_perm
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import query_office_convert_status, query_office_file_pages, \
+        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -713,6 +717,20 @@ class DownloadRepo(APIView):
 
         return repo_download_info(request, repo_id)
 
+class RepoOwner(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+
+        return HttpResponse(json.dumps({ "owner": repo_owner}), status=200, content_type=json_content_type)
+
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
@@ -1326,6 +1344,53 @@ class FileView(APIView):
 
         return reloaddir_if_neccessary(request, repo, parent_dir)
 
+class FileDetailView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        path = request.GET.get('p', None)
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        file_name = os.path.basename(path)
+        commit_id = request.GET.get('commit_id', None)
+
+        if commit_id:
+            try:
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                             commit_id, path)
+                c = get_commit(commit_id)
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+        else:
+            try:
+                obj_id = seafile_api.get_file_id_by_path(repo_id,
+                                                      path.encode('utf-8'))
+                commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                            -1, -1)
+                c = commits[0]
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        if not obj_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        entry = {}
+        try:
+            entry["size"] = get_file_size(obj_id)
+        except Exception, e:
+            entry["size"] = 0
+
+        entry["type"] = "file"
+        entry["name"] = os.path.basename(path)
+        entry["id"] = obj_id
+        entry["mtime"] = c.ctime
+
+        return HttpResponse(json.dumps(entry), status=200,
+                            content_type=json_content_type)
+
 class FileRevert(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1910,6 +1975,117 @@ class SharedFileView(APIView):
 
         op = request.GET.get('op', 'download')
         return get_repo_file(request, repo_id, file_id, file_name, op)
+
+class SharedFileDetailView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_by = fileshare.username
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                                path.encode('utf-8'))
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                                -1, -1)
+            c = commits[0]
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        entry = {}
+        try:
+            entry["size"] = get_file_size(file_id)
+        except Exception, e:
+            entry["size"] = 0
+
+        entry["type"] = "file"
+        entry["name"] = file_name
+        entry["id"] = file_id
+        entry["mtime"] = c.ctime
+        entry["repo_id"] = repo_id
+        entry["path"] = path
+
+        return HttpResponse(json.dumps(entry), status=200,
+                            content_type=json_content_type)
+
+class PrivateSharedFileDetailView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = PrivateFileDirShare.objects.get(token=token)
+        except PrivateFileDirShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_by = fileshare.from_user
+        shared_to = fileshare.to_user
+
+        if shared_to != request.user.username:
+            return api_error(status.HTTP_403_FORBIDDEN, "You don't have permission to view this file")
+
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path 
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                                path.encode('utf-8'))
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                                -1, -1)
+            c = commits[0]
+
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        entry = {}
+        try:
+            entry["size"] = get_file_size(file_id)
+        except Exception, e:
+            entry["size"] = 0
+
+        entry["type"] = "file"
+        entry["name"] = file_name
+        entry["id"] = file_id
+        entry["mtime"] = c.ctime
+        entry["repo_id"] = repo_id
+        entry["path"] = path
+        entry["shared_by"] = shared_by
+
+        return HttpResponse(json.dumps(entry), status=200,
+                            content_type=json_content_type)
 
 class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -2863,6 +3039,126 @@ class RepoHistoryChangeHtml(APIView):
     def get(self, request, repo_id, format=None):
         return html_repo_history_changes(request, repo_id)
 
+# based on views/file.py::office_convert_query_status
+class OfficeConvertQueryStatus(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_OFFICE_CONVERTER:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
+
+        content_type = 'application/json; charset=utf-8'
+
+        ret = {'success': False}
+
+        file_id = request.GET.get('file_id', '')
+        if len(file_id) != 40:
+            ret['error'] = 'invalid param'
+        else:
+            try:
+                d = query_office_convert_status(file_id)
+                if d.error:
+                    ret['error'] = d.error
+                else:
+                    ret['success'] = True
+                    ret['status'] = d.status
+            except Exception, e:
+                logging.exception('failed to call query_office_convert_status')
+                ret['error'] = str(e)
+
+        return HttpResponse(json.dumps(ret), content_type=content_type)
+
+# based on views/file.py::office_convert_query_page_num
+class OfficeConvertQueryPageNum(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_OFFICE_CONVERTER:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
+
+        content_type = 'application/json; charset=utf-8'
+
+        ret = {'success': False}
+
+        file_id = request.GET.get('file_id', '')
+        if len(file_id) != 40:
+            ret['error'] = 'invalid param'
+        else:
+            try:
+                d = query_office_file_pages(file_id)
+                if d.error:
+                    ret['error'] = d.error
+                else:
+                    ret['success'] = True
+                    ret['count'] = d.count
+            except Exception, e:
+                logging.exception('failed to call query_office_file_pages')
+                ret['error'] = str(e)
+
+        return HttpResponse(json.dumps(ret), content_type=content_type)
+
+# based on views/file.py::view_file and views/file.py::handle_document
+class OfficeGenerateView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        username = request.user.username
+        # check arguments
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+
+        path = request.GET.get('p', '/').rstrip('/')
+        commit_id = request.GET.get('commit_id', None)
+
+        if commit_id:
+            try:
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
+                             commit_id, path)
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+        else:
+            try:
+                obj_id = seafile_api.get_file_id_by_path(repo_id,
+                                                      path.encode('utf-8'))
+            except:
+                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        if not obj_id:
+            return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        # Check whether user has permission to view file and get file raw path,
+        # render error page if permission deny.
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                      repo_id,
+                                                                      obj_id, path)
+
+        if not user_perm:
+            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to view this file.')
+
+        u_filename = os.path.basename(path)
+        filetype, fileext = get_file_type_and_ext(u_filename)
+        if filetype != DOCUMENT:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'File is not a convertable document')
+
+        ret_dict = {}
+        if HAS_OFFICE_CONVERTER:
+            err, html_exists = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
+            # populate return value dict
+            ret_dict['err'] = err
+            ret_dict['html_exists'] = html_exists
+            ret_dict['obj_id'] = obj_id
+        else:
+            ret_dict['filetype'] = 'Unknown'
+
+        return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 #Following is only for debug
 from seahub.auth.decorators import login_required

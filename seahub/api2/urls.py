@@ -18,11 +18,13 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/history/$', RepoHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-info/$', DownloadRepo.as_view()),
+    url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/owner/$', RepoOwner.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-link/$', UploadLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-link/$', UpdateLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-blks-link/$', UploadBlksLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-blks-link/$', UpdateBlksLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='FileView'),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revert/$', FileRevert.as_view()),
@@ -40,8 +42,11 @@ urlpatterns = patterns('',
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
+
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/detail/$', PrivateSharedFileDetailView.as_view()),
     url(r'^f/(?P<token>[a-f0-9]{10})/$', SharedFileView.as_view()),
+    url(r'^f/(?P<token>[a-f0-9]{10})/detail/$', SharedFileDetailView.as_view()),
 
     url(r'^groupandcontacts/$', GroupAndContacts.as_view()),
     url(r'^events/$', EventsView.as_view()),
@@ -84,3 +89,18 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view()),
 )
+
+# serve office converter static files
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import OFFICE_HTML_DIR
+    urlpatterns += patterns('',
+        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='api_office_convert_static'),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
+        url(r'^office-convert/page-num/$', OfficeConvertQueryPageNum.as_view()),
+    )
+    urlpatterns += patterns('',
+        url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
+    )
