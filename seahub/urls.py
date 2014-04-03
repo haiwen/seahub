@@ -20,7 +20,8 @@ from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     sys_group_admin, user_info, user_add, user_remove, user_make_admin, \
     user_remove_admin, user_reset, user_activate, sys_publink_admin, \
     sys_repo_search, sys_repo_transfer, sys_list_orphan, user_deactivate, \
-    user_toggle_status, user_set_quota, sys_ldap_user_admin, sys_list_system
+    user_toggle_status, user_set_quota, sys_ldap_user_admin, sys_list_system, \
+    batch_user_make_admin
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -194,6 +195,9 @@ urlpatterns = patterns('',
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
                        
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
+
+    url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
+
 )
 
 if settings.SERVE_STATIC:

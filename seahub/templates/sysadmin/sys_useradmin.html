@@ -9,15 +9,20 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+    <ul class="tab-tabs-nav fleft">
+        <li class="tab"><a href="#user" class="a" id="user-tab">{% trans "User" %}</a></li>
+        <li class="tab"><a href="#admin" class="a" id="admin-tab">{% trans "Admin" %}</a></li>
         {% if have_ldap %}
-        <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
+        <li class="tab"><a href="{% url 'sys_ldap_useradmin' %}" class="a" id="ldap-tab">{% trans "LDAP" %}</a></li>
         {% endif %}
     </ul>
-    <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
-</div>
+    <div class="fright">
+        <button id="add-user-btn" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user"%}</span></button>
+        <button id="add-admin-btn" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add admin"%}</span></button>
+    </div>
+    </div>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Add user" %}</h3>
@@ -30,17 +35,54 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
+<form id="add-admin-form"  method="post" name="add-admin-form" class="tab-popup hide">{% csrf_token %}
+    <h3 class="hd">{% trans "Add admins"%}</h3>
+    <div id="add-admin-tabs" class="tab-popup-tabs">
+        <ul class="tab-popup-tabs-nav">
+            <li class="tab"><a href="#enter" class="a">{% trans 'Enter' %}</a></li>
+        </ul>
+        <div id="enter">
+            <textarea id="added-member-name" name="user_email" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
+            <p class="tip">{% trans "Tip: the emails should be the users already added."%}</p>
+        </div>
+    </div>
+    <div class="bot">
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" />
+    </div>
+</form>
 
-{% include "sysadmin/useradmin_table.html"%}
-{% include "sysadmin/useradmin_paginator.html" %}
+    {% include "sysadmin/useradmin_table.html"%}
 
-<div id="activate-msg" class="hide">
-    <p>{% trans "Activating..., please wait" %}</p>
+    <div id="activate-msg" class="hide">
+        <p>{% trans "Activating..., please wait" %}</p>
+    </div>
 </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+
+var cur_tab = $('.ui-tabs-selected .a');    
+var add_user_btn = $('#add-user-btn'),
+    add_admin_btn = $('#add-admin-btn');
+if (cur_tab.attr('id') == 'user-tab') {
+    add_user_btn.removeClass('hide');
+}
+if (cur_tab.attr('id') == 'admin-tab') {
+    add_admin_btn.removeClass('hide');
+}
+$('#user-tab').click(function() {
+    add_user_btn.removeClass('hide');
+    add_admin_btn.addClass('hide');
+});
+$('#admin-tab').click(function() {
+    add_admin_btn.removeClass('hide');
+    add_user_btn.addClass('hide');
+});
+
+
+
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
@@ -92,6 +134,63 @@ $('#add-user-form').submit(function() {
             enable(submit_btn);
         }
     });
+    return false;
+});
+
+var user_list = [], user_email;
+{% for user in users %}
+{% if not user.is_self %}
+{% if not user.is_staff %}
+user_email = '{{ user.email }}';
+user_list.push({value:user_email, label:user_email});
+{% endif %}
+{% endif %}
+{% endfor %}
+
+$('#add-admin-btn').click(function() {
+    var form = $("#add-admin-form");
+    form.modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'height':'auto', 'padding':0});
+    $('#add-admin-tabs').tabs();
+
+    addAutocomplete('#added-member-name', '#enter', user_list);
+});
+
+$('#add-admin-form').submit(function() {
+    var form = $(this),
+        cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
+        post_data = '',
+        input = $('[name="user_email"]', form); 
+        post_data = input.val();
+
+    if (!post_data) {
+        apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
+        return false;
+    }    
+
+    var submit_btn = $('[type="submit"]', form);
+    disable(submit_btn);
+    $.ajax({
+    url: '{% url 'batch_user_make_admin' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'set_admin_emails': post_data
+        },
+        success: function(data) {
+            location.reload('true');
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error(form.attr('id'), value);
+            });
+            enable(submit_btn);
+        }
+    });
+
     return false;
 });
 
