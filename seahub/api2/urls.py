@@ -38,6 +38,8 @@ urlpatterns = patterns('',
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
+    url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
+
     url(r'^html/events/$', ActivityHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
     url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
