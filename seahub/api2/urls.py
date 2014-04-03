@@ -40,7 +40,9 @@ urlpatterns = patterns('',
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
 
-    url(r'^groups/$', Groups.as_view()),
+    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),
+    url(r'^f/(?P<token>[a-f0-9]{10})/$', SharedFileView.as_view()),
+
     url(r'^groupandcontacts/$', GroupAndContacts.as_view()),
     url(r'^events/$', EventsView.as_view()),
     url(r'^unseen_messages/$', UnseenMessagesCountView.as_view()),
@@ -50,6 +52,10 @@ urlpatterns = patterns('',
     url(r'^new_replies/$', NewRepliesView.as_view()),
 
     url(r'^avatars/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', AvatarView.as_view()),
+
+    url(r'^groups/$', Groups.as_view()),
+    url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
+
     url(r'^html/events/$', EventsHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
     url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
