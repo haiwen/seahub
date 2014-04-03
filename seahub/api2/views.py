@@ -682,6 +682,20 @@ class DownloadRepo(APIView):
 
         return repo_download_info(request, repo_id)
 
+class RepoOwner(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+
+        return HttpResponse(json.dumps({ "owner": repo_owner}), status=200, content_type=json_content_type)
+
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
