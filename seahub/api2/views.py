@@ -1890,6 +1890,58 @@ class VirtualRepos(APIView):
 
         return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=content_type)
 
+class SharedFileDetailView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        assert token is not None    # Checked by URLconf
+
+        try:
+            fileshare = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
+
+        shared_by = fileshare.username
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
+
+        path = fileshare.path.rstrip('/') # Normalize file path
+        file_name = os.path.basename(path)
+
+        file_id = None
+        try:
+            file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
+                                                                path.encode('utf-8'))
+            commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
+                                                                -1, -1)
+            c = commits[0]
+        except SearpcError, e:
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             "Failed to get file id by path.")
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
+
+        entry = {}
+        try:
+            entry["size"] = get_file_size(file_id)
+        except Exception, e:
+            entry["size"] = 0
+
+        entry["type"] = "file"
+        entry["name"] = file_name
+        entry["id"] = file_id
+        entry["mtime"] = c.ctime
+        entry["repo_id"] = repo_id
+        entry["path"] = path
+
+        return HttpResponse(json.dumps(entry), status=200,
+                            content_type=json_content_type)
+
 class PrivateSharedFileDetailView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -1920,9 +1972,9 @@ class PrivateSharedFileDetailView(APIView):
         file_id = None
         try:
             file_id = seafserv_threaded_rpc.get_file_id_by_path(repo_id,
-                                                             path.encode('utf-8'))
+                                                                path.encode('utf-8'))
             commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                            -1, -1)
+                                                                -1, -1)
             c = commits[0]
 
         except SearpcError, e:
@@ -1948,7 +2000,7 @@ class PrivateSharedFileDetailView(APIView):
 
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
-    
+
 class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, FileShare):
