@@ -2660,6 +2660,7 @@ class EventsView(APIView):
                 d['desc'] = e.commit.desc
                 d['repo_id'] = e.repo.id
                 d['repo_name'] = e.repo.name
+                d['commit_id'] = e.commit.id
             else:
                 d['repo_id'] = e.repo_id
                 d['repo_name'] = e.repo_name
