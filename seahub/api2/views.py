@@ -2,7 +2,6 @@
 import logging
 import os
 import stat
-import time
 import simplejson as json
 import datetime
 from urllib2 import unquote, quote
@@ -17,7 +16,6 @@ from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 
 from django.contrib.sites.models import RequestSite
-from django.core.paginator import EmptyPage, InvalidPage
 from django.db import IntegrityError
 from django.db.models import F
 from django.http import HttpResponse, Http404
@@ -32,42 +30,43 @@ from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timetamp, \
-    get_group_message_json, get_group_msgs, get_group_msgs_json, get_client_ip
+    get_group_message_json, get_group_msgs, get_group_msgs_json
+from seahub.avatar.templatetags.avatar_tags import avatar_url
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo, DeviceToken
-from seahub.share.models import FileShare
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
+from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.group.views import group_check
+from seahub.message.models import UserMessage
+from seahub.notifications.models import UserNotification
+from seahub.options.models import UserOptions
+from seahub.profile.models import Profile
+from seahub.shortcuts import get_first_object_or_none
+from seahub.signals import repo_created, share_file_to_user_successful
+from seahub.share.models import PrivateFileDirShare, FileShare
+from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
+    check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
+    get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
+    gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
+    gen_file_share_link, gen_dir_share_link
+from seahub.utils.star import star_file, unstar_file
+from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.views import access_to_repo, validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library
-from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
-    check_filename_with_rename, is_valid_username, \
-    get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
-    gen_block_get_url
-from seahub.utils.star import star_file, unstar_file
-from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.avatar.templatetags.avatar_tags import avatar_url
+from seahub.views.file import get_file_view_path_and_perm
+if HAS_FILE_SEARCH:
+    from seahub_extra.search.views import search_keyword
+from seahub.utils import HAS_OFFICE_CONVERTER
+if HAS_OFFICE_CONVERTER:
+    from seahub.utils import query_office_convert_status, \
+        query_office_file_pages, prepare_converted_html
 import seahub.settings as settings
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-from seahub.notifications.models import UserNotification
-from seahub.utils.paginator import Paginator
-from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
-from seahub.group.signals import grpmsg_added, grpmsg_reply_added
-from seahub.group.views import group_check
-from seahub.contacts.models import Contact
-from seahub.signals import repo_created, share_file_to_user_successful
-from seahub.share.models import PrivateFileDirShare
-from seahub.message.models import UserMessage, UserMsgAttachment
-from seahub.utils import EVENTS_ENABLED, \
-    api_convert_desc_link, get_file_type_and_ext, \
-    HAS_FILE_SEARCH, gen_file_share_link, gen_dir_share_link
-from seahub.utils.file_types import IMAGE, DOCUMENT
-from seahub.options.models import UserOptions
-from seahub.shortcuts import get_first_object_or_none
-if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search_keyword
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
@@ -75,16 +74,14 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, check_quota, \
-    list_share_repos, get_group_repos_by_owner, get_group_repoids, list_inner_pub_repos_by_owner,\
-    list_inner_pub_repos, remove_share, unshare_group_repo, unset_inner_pub_repo, get_user_quota, \
+    list_share_repos, get_group_repos_by_owner, get_group_repoids, \
+    list_inner_pub_repos_by_owner, \
+    list_inner_pub_repos, remove_share, unshare_group_repo, \
+    unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
-from seahub.views.file import get_file_view_path_and_perm
-from seahub.utils import HAS_OFFICE_CONVERTER
-if HAS_OFFICE_CONVERTER:
-    from seahub.utils import query_office_convert_status, query_office_file_pages, \
-        prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES
+
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -94,13 +91,7 @@ HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
 HTTP_520_OPERATION_FAILED = 520
 
-def get_page_index(request, default=1):
-    try:
-        page = int(request.GET.get('page', default))
-    except ValueError:
-        page = default
-    return page
-
+########## Test
 class Ping(APIView):
     """
     Returns a simple `pong` message when client calls `api2/ping/`.
@@ -125,6 +116,7 @@ class AuthPing(APIView):
     def get(self, request, format=None):
         return Response('pong')
 
+########## Token
 class ObtainAuthToken(APIView):
     """
     Returns auth token if username and password are valid.
@@ -145,6 +137,7 @@ class ObtainAuthToken(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+########## Accounts    
 class Accounts(APIView):
     """List all accounts.
     Administator permission is required.
@@ -226,9 +219,9 @@ class Account(APIView):
             note = request.DATA.get("note", None)
             if name or note:
                 try:
-                   profile = Profile.objects.get(user=user.username)
+                    profile = Profile.objects.get(user=user.username)
                 except Profile.DoesNotExist:
-                   profile = Profile()
+                    profile = Profile()
 
                 profile.user = user.username
                 profile.nickname = name
@@ -347,7 +340,7 @@ class Search(APIView):
         res = { "total":total, "results":results, "has_more":has_more }
         return Response(res)
 
-
+########## Repo related
 def repo_download_info(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -394,7 +387,7 @@ class Repos(APIView):
         calculate_repo_info(owned_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
         sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
-                          and UserOptions.objects.is_sub_lib_enabled(email)
+            and UserOptions.objects.is_sub_lib_enabled(email)
 
         for r in owned_repos:
             if r.is_virtual and not sub_lib_enabled:
@@ -449,7 +442,7 @@ class Repos(APIView):
         groups = get_personal_groups_by_user(email)
         for group in groups:
             g_repos = get_group_repos(group.id, email)
-            calculate_repo_info (g_repos, email)
+            calculate_repo_info(g_repos, email)
             g_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
             for r in g_repos:
                 repo = {
@@ -506,7 +499,7 @@ class Repos(APIView):
         passwd = request.POST.get("passwd")
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST, \
-                    'Library name is required.')
+                                 'Library name is required.')
 
         # create a repo
         try:
@@ -770,6 +763,7 @@ class RepoOwner(APIView):
         return HttpResponse(json.dumps({"owner": repo_owner}), status=200,
                             content_type=json_content_type)
 
+########## File related
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
@@ -838,8 +832,6 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-
-
 def get_dir_entrys_by_id(request, repo, path, dir_id):
     try:
         dirs = seafile_api.list_dir_by_dir_id(repo.id, dir_id)
@@ -872,9 +864,8 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         else:
             file_list.append(entry)
 
-
-    dir_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
-    file_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+    file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     dentrys = dir_list + file_list
 
     response = HttpResponse(json.dumps(dentrys), status=200,
@@ -883,7 +874,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
     return response
 
 def get_shared_link(request, repo_id, path):
-    l = FileShare.objects.filter(repo_id=repo_id).filter(\
+    l = FileShare.objects.filter(repo_id=repo_id).filter(
         username=request.user.username).filter(path=path)
     token = None
     if len(l) > 0:
@@ -1243,9 +1234,8 @@ class FileView(APIView):
             newname = check_filename_with_rename(repo_id, parent_dir, newname)
             newname_utf8 = newname.encode('utf-8')
             try:
-                seafile_api.rename_file (repo_id, parent_dir,
-                                         oldname, newname,
-                                         username)
+                seafile_api.rename_file(repo_id, parent_dir, oldname, newname,
+                                        username)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to rename file: %s" % e)
@@ -1393,22 +1383,22 @@ class FileDetailView(APIView):
         if path is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        file_name = os.path.basename(path)
         commit_id = request.GET.get('commit_id', None)
 
         if commit_id:
             try:
-                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                             commit_id, path)
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
+                    commit_id, path)
                 c = get_commit(commit_id)
             except:
                 return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
         else:
             try:
                 obj_id = seafile_api.get_file_id_by_path(repo_id,
-                                                      path.encode('utf-8'))
-                commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                            -1, -1)
+                                                         path.encode('utf-8'))
+                commits = seafserv_threaded_rpc.list_file_revisions(repo_id,
+                                                                    path,
+                                                                    -1, -1)
                 c = commits[0]
             except:
                 return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
@@ -1483,7 +1473,7 @@ class FileHistory(APIView):
 
         try:
             commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                            -1, -1)
+                                                                -1, -1)
         except SearpcError, e:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
 
@@ -1542,6 +1532,7 @@ class FileSharedLinkView(APIView):
         resp['Location'] = file_shared_link
         return resp
 
+########## Directory related
 class DirView(APIView):
     """
     Support uniform interface for directory operations, including
@@ -1577,7 +1568,7 @@ class DirView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
 
         old_oid = request.GET.get('oid', None)
-        if old_oid and old_oid == dir_id :
+        if old_oid and old_oid == dir_id:
             response = HttpResponse(json.dumps("uptodate"), status=200,
                                     content_type=json_content_type)
             response["oid"] = dir_id
@@ -1807,6 +1798,7 @@ class DirSubRepoView(APIView):
 
         return HttpResponse(json.dumps(result), content_type=json_content_type)
 
+########## Sharing    
 class SharedRepos(APIView):
     """
     List repos that a user share to others/groups/public.
@@ -2402,6 +2394,7 @@ class UnseenMessagesCountView(APIView):
                 }
         return Response(ret)
 
+########## Groups related
 class Groups(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -2515,6 +2508,13 @@ def is_group_staff(group, user):
     if user.is_anonymous():
         return False
     return check_group_staff(group.id, user.username)
+
+def get_page_index(request, default=1):
+    try:
+        page = int(request.GET.get('page', default))
+    except ValueError:
+        page = default
+    return page
 
 class GroupMsgsView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -3200,43 +3200,43 @@ class OfficeGenerateView(APIView):
         return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 #Following is only for debug
-from seahub.auth.decorators import login_required
-@login_required
-def activity2(request):
-    return html_events(request)
+# from seahub.auth.decorators import login_required
+# @login_required
+# def activity2(request):
+#     return html_events(request)
 
-@login_required
-def discussions2(request, group_id):
-    return html_group_discussions(request, group_id)
+# @login_required
+# def discussions2(request, group_id):
+#     return html_group_discussions(request, group_id)
 
-@login_required
-def more_discussions2(request, group_id):
-    return ajax_discussions(request, group_id)
+# @login_required
+# def more_discussions2(request, group_id):
+#     return ajax_discussions(request, group_id)
 
-@login_required
-def discussion2(request, msg_id):
-    return html_get_group_discussion(request, msg_id)
+# @login_required
+# def discussion2(request, msg_id):
+#     return html_get_group_discussion(request, msg_id)
 
-@login_required
-def events2(request):
-    return ajax_events(request)
+# @login_required
+# def events2(request):
+#     return ajax_events(request)
 
-@login_required
-def api_repo_history_changes(request, repo_id):
-    return html_repo_history_changes(request, repo_id)
+# @login_required
+# def api_repo_history_changes(request, repo_id):
+#     return html_repo_history_changes(request, repo_id)
 
-@login_required
-def api_msg_reply(request, msg_id):
-    return html_msg_reply(request, msg_id)
+# @login_required
+# def api_msg_reply(request, msg_id):
+#     return html_msg_reply(request, msg_id)
 
-@login_required
-def api_new_replies(request):
-    return html_new_replies(request)
+# @login_required
+# def api_new_replies(request):
+#     return html_new_replies(request)
 
-@login_required
-def api_usermsgs(request, id_or_email):
-    return html_user_messages(request, id_or_email)
+# @login_required
+# def api_usermsgs(request, id_or_email):
+#     return html_user_messages(request, id_or_email)
 
-@login_required
-def api_more_usermsgs(request, id_or_email):
-    return ajax_usermsgs(request, id_or_email)
+# @login_required
+# def api_more_usermsgs(request, id_or_email):
+#     return ajax_usermsgs(request, id_or_email)
