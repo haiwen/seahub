@@ -88,7 +88,8 @@ class AuthTokenSerializer(serializers.Serializer):
             if len(device_id) != 16:
                 raise serializers.ValidationError('invalid device id')
         elif platform == 'ios':
-            pass
+             if len(device_id) != 36:
+                raise serializers.ValidationError('invalid device id')
         else:
             raise serializers.ValidationError('invalid platform')
 
