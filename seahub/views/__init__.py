@@ -998,15 +998,15 @@ def create_default_library(username):
     if sys_repo_id is None:
         return
 
-    # try:
-    #     dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
-    #     for e in dirents:
-    #         obj_name = e.obj_name
-    #         seafile_api.copy_file(sys_repo_id, '/', obj_name,
-    #                               default_repo, '/', obj_name, username)
-    # except SearpcError as e:
-    #     logger.error(e)
-    #     return 
+    try:
+        dirents = seafile_api.list_dir_by_path(sys_repo_id, '/')
+        for e in dirents:
+            obj_name = e.obj_name
+            seafile_api.copy_file(sys_repo_id, '/', obj_name,
+                                  default_repo, '/', obj_name, username, 0)
+    except SearpcError as e:
+        logger.error(e)
+        return 
 
     UserOptions.objects.set_default_repo(username, default_repo)
 
