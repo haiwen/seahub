@@ -1798,6 +1798,7 @@ textarea:-moz-placeholder {/* for FF */
 .fileupload-progress {
     margin-top:10px;
 }
+.ui-progressbar,
 .progress {
     background-color: #F7F7F7;
     background-image: linear-gradient(to bottom, #F5F5F5, #F9F9F9);
@@ -1807,9 +1808,13 @@ textarea:-moz-placeholder {/* for FF */
     height: 1em;
     overflow: hidden;
 }
+#mv-progress {
+    margin:10px 0;
+}
 .template-upload .progress {
     width:90%;
 }
+.ui-progressbar-value,
 .progress .bar {
     background:#e83;
     height:100%;

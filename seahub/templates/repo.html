@@ -189,6 +189,13 @@
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
+    <div id="mv-progress-popup" class="alc hide">
+        <p id="mv-details"></p>
+        <div id="mv-progress"></div>
+        <p id="mv-other-info" class="hide"></p>
+        <button id="cancel-mv">{% trans "Cancel" %}</button>
+    </div>
+
     <form id="rename-form" action="" method="post" class="hide">{% csrf_token %}
         <p class="detail">{% trans "Rename %(name)s as:" %}</p>
         <input type="hidden" name="oldname" value="" />
@@ -1610,11 +1617,107 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         };
         after_op_success = function(data) {
             $.modal.close();
-            if (op=='mv') {
-                op_obj.remove();
+            msg = data['msg'];
+            if (!data['task_id']) { // don not show progress
+                if (op=='mv') {
+                    op_obj.remove();
+                }
+                updateCmt();
+                feedback(msg, 'success');
+            } else {
+                var details = $('#mv-details'), 
+                    cancel_btn = $('#cancel-mv'),
+                    other_info = $('#mv-other-info');
+                setTimeout(function () {
+                    $('#mv-progress-popup').modal({containerCss: {
+                        width: 300,
+                        height: 150,
+                        paddingTop: 50
+                    }, focus:false});
+                    if (op == 'mv') {
+                        details.html("{% trans "Moving..." %}");
+                    } else {
+                        details.html("{% trans "Copying..." %}");
+                    }
+                    $('#mv-progress').progressbar();
+                    req_progress();
+                }, 100);
+                var req_progress = function () {
+                    $.ajax({
+                        url: '{% url "get_cp_progress" %}?task_id=' + e(data['task_id']),
+                        dataType: 'json',
+                        success: function(data) {
+                            var bar = $('.ui-progressbar-value', $('#mv-progress'));
+                            if (!data['failed'] && !data['canceled'] && !data['successful']) {
+                                bar.show();
+                                if (data['done'] == data['total']) {
+                                    bar.width('100%');
+                                    details.addClass('vh');
+                                    cancel_btn.addClass('hide');
+                                    other_info.html("{% trans "Saving..." %}").removeClass('hide');
+                                    setTimeout(req_progress, 1000);
+                                } else {
+                                    bar.css('width', parseInt(data['done']/data['total']*100, 10)); 
+                                    setTimeout(req_progress, 1000);
+                                }
+                            } else if (data['successful']) {
+                                $.modal.close(); 
+                                if (op=='mv') {
+                                    op_obj.remove();
+                                }
+                                updateCmt();
+                                feedback(msg, 'success');
+                            } else { // failed or canceled
+                                var other_msg;
+                                details.addClass('vh');
+                                if (data['failed']) {
+                                    other_msg = "{% trans "Failed." %}";
+                                } else {
+                                    other_msg = "{% trans "Canceled." %}";
+                                }
+                                other_info.html(other_msg).removeClass('hide');
+                                cancel_btn.addClass('hide');
+                                setTimeout(function () {$.modal.close();}, 1000); 
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            var error;
+                            if (xhr.responseText) {
+                                error = $.parseJSON(xhr.responseText).error;
+                            } else {
+                                error = "{% trans "Failed. Please check the network." %}";
+                            }
+                            details.addClass('vh')
+                            other_info.html(error).removeClass('hide');
+                            cancel_btn.addClass('hide');
+                            setTimeout(function () {$.modal.close();}, 1000); 
+                        }
+                    });
+                };
+                cancel_btn.click(function() {
+                    disable(cancel_btn);
+                    $.ajax({
+                        url: '{% url "cancel_cp" %}?task_id=' + e(data['task_id']),
+                        dataType: 'json',
+                        success: function(data) {
+                            details.addClass('vh')
+                            other_info.html("{% trans "Canceled." %}").removeClass('hide');
+                            cancel_btn.addClass('hide');
+                            setTimeout(function () {$.modal.close();}, 1000);
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            var error;
+                            if (xhr.responseText) {
+                                error = $.parseJSON(xhr.responseText).error;
+                            } else {
+                                error = "{% trans "Failed. Please check the network." %}";
+                            }
+                            other_info.html(error).removeClass('hide');
+                            enable(cancel_btn);
+                        }
+                    });
+                });
             }
-            feedback(data['msg'], 'success');
-            updateCmt();
         }
     }
 

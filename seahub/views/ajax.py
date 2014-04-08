@@ -666,18 +666,26 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-        seafile_api.move_file(src_repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
-        msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-            {"name":obj_name, "url":msg_url}
-        result['msg'] = msg
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        res = seafile_api.move_file(src_repo_id, src_path, obj_name,
+                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
     except SearpcError, e:
-        result['error'] = str(e)
+        res = None
+
+    # res can be None or an object
+    if not res:
+        result['error'] = _(u'Internal server error')
         return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
+                        content_type=content_type)
+
+    result['success'] = True
+    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
+        {"name":obj_name, "url":msg_url}
+    result['msg'] = msg
+    if res.background:
+        result['task_id'] = res.task_id
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 @copy_move_common
@@ -688,18 +696,26 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-        seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
-        msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-            {"name":obj_name, "url":msg_url}
-        result['msg'] = msg
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
+                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
     except SearpcError, e:
-        result['error'] = str(e)
+        res = None
+
+    if not res:
+        result['error'] = _(u'Internal server error')
         return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
+                        content_type=content_type)
+
+    result['success'] = True
+    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
+        {"name":obj_name, "url":msg_url}
+    result['msg'] = msg
+
+    if res.background:
+        result['task_id'] = res.task_id     
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 @copy_move_common
@@ -714,23 +730,30 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-        seafile_api.move_file(src_repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
-        msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-            {"name":obj_name, "url":msg_url}
-        result['msg'] = msg
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        res = seafile_api.move_file(src_repo_id, src_path, obj_name,
+                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
     except SearpcError, e:
-        result['error'] = str(e)
+        res = None
+
+    # res can be None or an object
+    if not res:
+        result['error'] = _(u'Internal server error')
         return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
+                        content_type=content_type)
     
+    result['success'] = True
+    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
+        {"name":obj_name, "url":msg_url}
+    result['msg'] = msg
+    if res.background:
+        result['task_id'] = res.task_id     
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
 @login_required
 @copy_move_common
 def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
@@ -747,18 +770,26 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
-        msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-        seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
-        msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-            {"name":obj_name, "url":msg_url}
-        result['msg'] = msg
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
+                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
     except SearpcError, e:
-        result['error'] = str(e)
+        res = None
+
+    # res can be None or an object
+    if not res:
+        result['error'] = _(u'Internal server error')
         return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
+                        content_type=content_type)
+
+    result['success'] = True
+    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
+        {"name":obj_name, "url":msg_url}
+    result['msg'] = msg
+    if res.background:
+        result['task_id'] = res.task_id     
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 
 def dirents_copy_move_common(func):
@@ -840,7 +871,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             seafile_api.move_file(src_repo_id, src_path, obj_name,
-                                  dst_repo_id, dst_path, new_obj_name, username)
+                                  dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
             success.append(obj_name)
         except SearpcError, e:
             failed.append(obj_name)
@@ -870,7 +901,7 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                                  dst_repo_id, dst_path, new_obj_name, username)
+                                  dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
             success.append(obj_name)
         except SearpcError, e:
             failed.append(obj_name)
@@ -878,6 +909,65 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     if len(success) > 0:   
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     return HttpResponse(json.dumps({'success': success, 'failed': failed, 'url': url}), content_type=content_type)
+
+@login_required
+def get_cp_progress(request):
+    '''
+        Fetch progress of file/dir mv/cp.
+    '''
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    task_id = request.GET.get('task_id')
+    if not task_id:
+        result['error'] = _(u'Argument missing')
+        return HttpResponse(json.dumps(result), status=400,
+                    content_type=content_type)
+    
+    res = seafile_api.get_copy_task(task_id) 
+
+    # res can be None
+    if not res:
+        result['error'] = _(u'Error')
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+    result['done'] = res.done
+    result['total'] = res.total
+    result['canceled'] = res.canceled
+    result['failed'] = res.failed
+    result['successful'] = res.successful
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+def cancel_cp(request):
+    '''
+        cancel file/dir mv/cp.
+    '''
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    task_id = request.GET.get('task_id')
+    if not task_id:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400,
+                    content_type=content_type)
+    
+    res = seafile_api.cancel_copy_task(task_id) # returns 0 or -1
+    
+    if res == 0:
+        result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
+    else:
+        result['error'] = _('Failed')
+        return HttpResponse(json.dumps(result), status=400,
+                    content_type=content_type)
 
 @login_required
 def repo_star_file(request, repo_id):
