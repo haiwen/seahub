@@ -867,18 +867,27 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     success = []
     failed = []
     url = None
+    task_ids = []
     for obj_name in obj_file_names + obj_dir_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
-            seafile_api.move_file(src_repo_id, src_path, obj_name,
+            res = seafile_api.move_file(src_repo_id, src_path, obj_name,
                                   dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
-            success.append(obj_name)
         except SearpcError, e:
+            res = None
+
+        if not res:
             failed.append(obj_name)
+        else:
+            success.append(obj_name)
+            if res.background:
+                task_ids.append(res.task_id)
 
     if len(success) > 0:   
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    return HttpResponse(json.dumps({'success': success, 'failed': failed, 'url': url}), content_type=content_type)
+
+    result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 @dirents_copy_move_common
@@ -897,18 +906,27 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     success = []
     failed = []
     url = None
+    task_ids = []
     for obj_name in obj_file_names + obj_dir_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
-            seafile_api.copy_file(src_repo_id, src_path, obj_name,
+            res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
                                   dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
-            success.append(obj_name)
         except SearpcError, e:
+            res = None
+
+        if not res:
             failed.append(obj_name)
+        else:
+            success.append(obj_name)
+            if res.background:
+                task_ids.append(res.task_id)
 
     if len(success) > 0:   
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    return HttpResponse(json.dumps({'success': success, 'failed': failed, 'url': url}), content_type=content_type)
+
+    result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 def get_cp_progress(request):
@@ -940,6 +958,39 @@ def get_cp_progress(request):
     result['failed'] = res.failed
     result['successful'] = res.successful
 
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+def get_multi_cp_progress(request):
+    '''
+        Fetch progress of multi files/dirs mv/cp.
+    '''
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    task_ids = request.GET.getlist('task_ids')
+    if not task_ids:
+        result['error'] = _(u'Argument missing')
+        return HttpResponse(json.dumps(result), status=400,
+                    content_type=content_type)
+    
+    success = 0
+    fail = 0
+    for task_id in task_ids:
+        res = seafile_api.get_copy_task(task_id) 
+        if not res:
+            fail += 1
+        else:
+            if res.failed:
+                fail += 1
+            elif res.successful:
+                success += 1
+    
+    result['success'] = success
+    result['fail'] = fail
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required

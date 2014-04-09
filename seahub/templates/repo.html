@@ -576,12 +576,17 @@ $('#mv-dirents, #cp-dirents').click(function() {
             },
             success: function(data) {
                 var success_len = data['success'].length,
-                    msg_s, msg_f;
+                    msg_s, msg_f,
+                    view_url = data['url'];
+
+                var task_ids = data['task_ids'],
+                    task_ids_len = task_ids.length;
 
                 $.modal.close();
                 $('#dirents-op').addClass('hide');
                 $('th.select .checkbox').removeClass('checkbox-checked');
 
+                var success_without_tasks = function() {
                 if (success_len > 0) {
                     if (op == 'mv') {
                         if (success_len == files.length + dirs.length) {
@@ -613,7 +618,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                         }
                     }
                     msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', data['success'].length - 1);
-                    msg_s += ' <a href="' + data['url'] + '">' + "{% trans "View" %}" + '</a>';
+                    msg_s += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
                     feedback(msg_s, 'success'); 
                     updateCmt();
                 }
@@ -635,6 +640,87 @@ $('#mv-dirents, #cp-dirents').click(function() {
                     msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
                     feedback(msg_f, 'error'); 
                 }
+                }; // 'success_without_tasks' ends
+
+                if (task_ids_len == 0) {
+                    success_without_tasks();
+                } else {
+                    var details = $('#mv-details'), 
+                        other_info = $('#mv-other-info');
+                    $('#cancel-mv').addClass('hide');
+                    setTimeout(function () {
+                        $('#mv-progress-popup').modal({containerCss: {
+                            width: 300,
+                            height: 150,
+                            paddingTop: 50
+                        }, focus:false});
+                        if (op == 'mv') {
+                            details.html("{% trans "Moving..." %}");
+                        } else {
+                            details.html("{% trans "Copying..." %}");
+                        }
+                        $('#mv-progress').progressbar();
+                        req_progress();
+                    }, 100);
+                    var req_progress = function() {
+                        $.ajax({
+                            url: '{% url 'get_multi_cp_progress' %}',
+                            dataType: 'json',
+                            data: { task_ids: task_ids },
+                            traditional: true, 
+                            success: function(data) {
+                                var success_num = data['success'],
+                                    fail_num = data['fail'];
+                                var bar = $('.ui-progressbar-value', $('#mv-progress')).show();
+                                bar.css('width', parseInt(success_num/task_ids_len*100, 10) + '%'); 
+                                if (task_ids_len == success_num + fail_num) {
+                                    setTimeout(function() {$.modal.close();}, 100);
+                                    var msg;
+                                    if (success_num > 0) {
+                                        if (op == 'mv') {
+                                            if (success_num == files.length + dirs.length) {
+                                                files.remove();
+                                                dirs.remove();
+                                            } else {
+                                                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                                            }
+                                            msg = "{% trans "Successfully moved %(s_num)s items." %}";
+                                            if (fail_num > 0) {
+                                                msg += "{% trans "Failed to move %(f_num)s items." %}";
+                                            }
+                                        } else {
+                                            msg = "{% trans "Successfully copied %(s_num)s items." %}";
+                                            if (fail_num > 0) {
+                                                msg += "{% trans "Failed to move %(f_num)s items." %}";
+                                            }
+                                            $('.checkbox').removeClass('checkbox-checked');
+                                        }
+                                        msg = msg.replace('%(s_num)s', success_num).replace('%(f_num)s', fail_num);
+                                        msg += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
+                                        feedback(msg, 'success');
+                                        updateCmt();
+                                    } else {
+                                        feedback("{% trans "Failed" %}", 'error');
+                                    }
+                                } else {
+                                    setTimeout(req_progress, 1000);
+                                }
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                var error;
+                                if (xhr.responseText) {
+                                    error = $.parseJSON(xhr.responseText).error;
+                                } else {
+                                    error = "{% trans "Failed. Please check the network." %}";
+                                }
+                                details.addClass('vh')
+                                other_info.html(error).removeClass('hide');
+                                setTimeout(function () {$.modal.close();}, 1000); 
+                            }
+                        });
+                    }
+                }
+
             },
             error: function(xhr, textStatus, errorThrown) {
                 $.modal.close();
@@ -762,9 +848,9 @@ function encAndSubmitFile(file, fd, submit_url) {
 var no_file_op_popup = true;
 
 function setPathWidth() {
-    $('.path').width($('.repo-file-list-topbar').width() - $('.repo-op').width() - 10);
+    $('.path').width($('.repo-file-list-topbar').width() - $('.repo-op').width() - 20);
 }
-setPathWidth();
+$(function () { setPathWidth(); });
 
 function dirOP() {
 
@@ -1628,6 +1714,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 var details = $('#mv-details'), 
                     cancel_btn = $('#cancel-mv'),
                     other_info = $('#mv-other-info');
+                cancel_btn.removeClass('hide');
                 setTimeout(function () {
                     $('#mv-progress-popup').modal({containerCss: {
                         width: 300,
@@ -1657,7 +1744,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                                     other_info.html("{% trans "Saving..." %}").removeClass('hide');
                                     setTimeout(req_progress, 1000);
                                 } else {
-                                    bar.css('width', parseInt(data['done']/data['total']*100, 10)); 
+                                    bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%'); 
                                     setTimeout(req_progress, 1000);
                                 }
                             } else if (data['successful']) {
