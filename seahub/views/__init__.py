@@ -110,11 +110,7 @@ def root(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect(reverse(myhome))
     else:
-        if hasattr(settings, 'SEACLOUD_MODE'):
-            return render_to_response('seacloud/home.html', {},
-                                      context_instance=RequestContext(request))
-        else:
-            return HttpResponseRedirect(settings.LOGIN_URL)
+        return HttpResponseRedirect(settings.LOGIN_URL)
 
 def validate_owner(request, repo_id):
     """
