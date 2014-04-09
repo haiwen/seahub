@@ -328,7 +328,7 @@ def view_file(request, repo_id):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    
+
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
 
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)

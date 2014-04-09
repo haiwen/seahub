@@ -1379,17 +1379,20 @@ class FileDetailView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        repo = seafile_api.get_repo(repo_id)
+        if repo is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Library not found.')
+
         path = request.GET.get('p', None)
         if path is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         commit_id = request.GET.get('commit_id', None)
-
         if commit_id:
             try:
                 obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
-                    commit_id, path)
-                c = get_commit(commit_id)
+                    repo.id, commit_id, path)
+                c = get_commit(repo.id, repo.version, commit_id)
             except:
                 return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
         else:
@@ -1408,7 +1411,7 @@ class FileDetailView(APIView):
 
         entry = {}
         try:
-            entry["size"] = get_file_size(obj_id)
+            entry["size"] = get_file_size(repo.store_id, repo.version, obj_id)
         except Exception, e:
             entry["size"] = 0
 
@@ -1454,8 +1457,8 @@ class FileRevision(APIView):
         commit_id = request.GET.get('commit_id', None)
 
         try:
-            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        repo_id, commit_id, path)
+            obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
+                repo_id, commit_id, path)
         except:
             return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
 
@@ -2045,7 +2048,7 @@ class SharedFileDetailView(APIView):
 
         entry = {}
         try:
-            entry["size"] = get_file_size(file_id)
+            entry["size"] = get_file_size(repo.store_id, repo.version, file_id)
         except Exception, e:
             entry["size"] = 0
 
@@ -2103,7 +2106,7 @@ class PrivateSharedFileDetailView(APIView):
 
         entry = {}
         try:
-            entry["size"] = get_file_size(file_id)
+            entry["size"] = get_file_size(repo.store_id, repo.version, file_id)
         except Exception, e:
             entry["size"] = 0
 
@@ -3159,8 +3162,8 @@ class OfficeGenerateView(APIView):
 
         if commit_id:
             try:
-                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                             commit_id, path)
+                obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
+                    repo.id, commit_id, path)
             except:
                 return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
         else:

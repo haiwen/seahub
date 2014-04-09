@@ -19,7 +19,7 @@ from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, UploadLinkShare
 from seahub.views import gen_path_link, get_repo_dirents, \
-    get_unencry_rw_repos_by_user, check_repo_access_permission
+    check_repo_access_permission
 
 from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
@@ -38,9 +38,6 @@ def get_commit(repo_id, repo_version, commit_id):
 
 def get_repo_size(repo_id):
     return seafile_api.get_repo_size(repo_id)
-
-def list_dir_by_commit_and_path(commit, path):
-    return seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path)
 
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
