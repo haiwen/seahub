@@ -20,6 +20,7 @@
   speak: none;
 }
 .icon-cloud-download:before       { content: "\f0ed"; }
+.icon-download:before             { content: "\f01a"; }
 .icon-trash:before                { content: "\f014"; }
 .icon-plus:before                 { content: "\f067"; }
 .icon-minus:before                { content: "\f068"; }
@@ -34,6 +35,8 @@
 .icon-plus-sign-alt:before        { content: "\f0fe"; }
 .icon-double-angle-left:before    { content: "\f100"; }
 .icon-double-angle-right:before   { content: "\f101"; }
+.icon-double-angle-up:before      { content: "\f102"; }
+.icon-double-angle-down:before    { content: "\f103"; }
 .icon-zoom-in:before              { content: "\f00e"; }
 .icon-zoom-out:before             { content: "\f010"; }
 .icon-caret-down:before           { content: "\f0d7"; }
