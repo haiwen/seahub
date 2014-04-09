@@ -2056,6 +2056,11 @@ textarea:-moz-placeholder {/* for FF */
 #selected-files .rm,
 .msg-form .add-file {
     cursor:pointer;
+    opacity:0.8;
+}
+#selected-files .rm:hover,
+.msg-form .add-file:hover {
+    opacity:1;
 }
 .msg-input {
     width:544px;
