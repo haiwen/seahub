@@ -172,7 +172,8 @@ def get_unenc_group_repos(request, group_id):
     for repo in repos:
         if not repo.encrypted:
             repo_list.append({"name": repo.props.name, "id": repo.props.id})
-    
+
+    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
