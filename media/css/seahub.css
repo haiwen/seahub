@@ -427,8 +427,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0.5em;
 }
 .side-tabnav h3.hd,
-.side-tabnav .hd h3,
-.wiki-index h3 {
+.side-tabnav .hd h3 {
     color:#f7941d;
 }
 .side-tabnav .hd h3 {
@@ -2871,13 +2870,26 @@ textarea:-moz-placeholder {/* for FF */
 .wiki-index {
     margin-top:25px;
 }
+.grp-wiki-index {
+    margin-left:12px;
+}
+.wiki-index h3 {
+    color:#6b6b6b;
+}
 #wiki-index-con {
     padding-left:12px;
+    color:#8c8c8c;
+}
+.grp-wiki-index #wiki-index-con {
+    padding:0;
 }
 .wiki-index ul {
     list-style-type: square;
     padding-left: 1.5em;
     margin-bottom:5px;
+}
+.wiki-index a {
+    font-weight:normal;
 }
 .client-list .lib-num {
     cursor:pointer;
