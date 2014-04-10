@@ -192,6 +192,7 @@ def get_my_unenc_repos(request):
             continue
         repo_list.append({"name": repo.name, "id": repo.id})
     
+    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
@@ -211,6 +212,8 @@ def unenc_rw_repos(request):
     repo_list = []
     for repo in acc_repos:
         repo_list.append({"name": repo.name, "id": repo.id})
+
+    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
     
 @login_required        
