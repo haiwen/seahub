@@ -1052,7 +1052,7 @@ class OpMoveView(APIView):
             try:
                 seafile_api.move_file(repo_id, parent_dir, file_name,
                                       dst_repo, dst_dir, new_filename,
-                                      username)
+                                      username, 0, synchronous=1)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
@@ -1097,7 +1097,7 @@ class OpCopyView(APIView):
             try:
                 seafile_api.copy_file(repo_id, parent_dir, file_name,
                                       dst_repo, dst_dir, new_filename,
-                                      username)
+                                      username, 0, synchronous=1)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
@@ -1288,7 +1288,7 @@ class FileView(APIView):
                 seafile_api.move_file(src_repo_id, src_dir_utf8,
                                       filename_utf8, dst_repo_id,
                                       dst_dir_utf8, new_filename_utf8,
-                                      username)
+                                      username, 0, synchronous=1)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
