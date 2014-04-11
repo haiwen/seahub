@@ -188,7 +188,7 @@ def get_my_unenc_repos(request):
     repos = seafile_api.get_owned_repo_list(request.user.username)
     repo_list = []
     for repo in repos:
-        if repo.encrypted:
+        if repo.encrypted or repo.is_virtual:
             continue
         repo_list.append({"name": repo.name, "id": repo.id})
     
@@ -1140,10 +1140,10 @@ def sub_repo(request, repo_id):
     result = {}
 
     path = request.GET.get('p') 
-    name = request.GET.get('name')
-    if not (path and name):
+    if not path:
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+    name = os.path.basename(path)
 
     username = request.user.username
 

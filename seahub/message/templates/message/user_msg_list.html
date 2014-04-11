@@ -152,7 +152,7 @@ $('#personal-message-form').submit(function() {
             var new_msg = $(data['html']);
             if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
                 form.after('<ul class="msg-list"></ul>');    
-            }   
+            }
             $('.msg-list').prepend(new_msg);
             bind_del(new_msg);
             new_msg.slideDown(400);

@@ -43,6 +43,21 @@
     </div>
 </div>
 {% endif %}
+
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+<form id="sublib-create-form" class="file-choose-form hide">
+    <h3>{% trans "Choose a directory:" %}</h3>
+    <div class="dir-tree-cont">
+        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+    </div>
+    <input type="hidden" name="dst_repo" value="" />
+    <input type="hidden" name="dst_path" value="" />
+    <p class="error hide"></p>
+    <input type="button" value="{% trans "Submit" %}" class="submit" />
+    <button class="simplemodal-close">{% trans "Cancel"%}</button>
+</form>
+{% endif %}
+
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
@@ -51,6 +66,83 @@
 $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
 {% endif %}
 {% include "snippets/myhome_extra_script.html" %}
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+var cur_tab = $('.ui-tabs-selected .a');    
+var lib_create_btn = $('#repo-create'),
+    sublib_create_btn = $('#sub-lib-create');
+// for initial state
+if (cur_tab.attr('id') == 'mylib-tab') {
+    lib_create_btn.removeClass('hide');
+}
+if (cur_tab.attr('id') == 'sublib-tab') {
+    sublib_create_btn.removeClass('hide');
+}
+$('#mylib-tab').click(function() {
+    lib_create_btn.removeClass('hide');
+    sublib_create_btn.addClass('hide');
+});
+$('#sublib-tab').click(function() {
+    lib_create_btn.addClass('hide');
+    sublib_create_btn.removeClass('hide');
+});
+$('#shared-lib-tab, #grp-lib-tab').click(function() {
+    lib_create_btn.addClass('hide');
+    sublib_create_btn.addClass('hide');
+});
+var sublib_create_form = $('#sublib-create-form');
+sublib_create_btn.click(function() {
+    var dir_tree_cont = $('.dir-tree-cont', sublib_create_form);
+    sublib_create_form.modal();
+    $.ajax({
+        url: '{% url 'get_my_unenc_repos' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var file_tree = new FileTree();
+            var repos = file_tree.format_repo_data(data);
+            if (repos.length > 0) {
+                file_tree.renderDirTree(dir_tree_cont.data('site_root', '{{SITE_ROOT}}'), sublib_create_form, repos);
+            } else {
+                dir_tree_cont.html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>');
+            }   
+        },  
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (!jqXHR.responseText) {
+                dir_tree_cont.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
+            }
+        }   
+    }); 
+});
+$('.submit', sublib_create_form).click(function() {
+    var ori_repo_id = $('[name="dst_repo"]', sublib_create_form).val();    
+    var path = $('[name="dst_path"]', sublib_create_form).val();    
+    
+    if (!path || path == '/') {
+        $('.error', sublib_create_form).html("{% trans "Please choose a directory" %}").removeClass('hide');
+        return false;
+    } 
+    
+    // path ends with '/', rm it here 
+    path = path.substr(0, path.length - 1); 
+    $.ajax({
+        url: '{{SITE_ROOT}}ajax/repo/' + ori_repo_id + '/dir/sub_repo/?p=' + e(path),
+        dataType: 'json',
+        success: function(data) {
+            location.reload();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err;
+            if (xhr.responseText) {
+                err = jQuery.parseJSON(xhr.responseText).error;
+            } else {
+                err = "{% trans "Failed. Please check the network." %}";
+            }
+            $('.error', sublib_create_form).html(err).removeClass('hide');
+        }
+    });
+    return false;
+});
+{% endif %}
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
 </script>
 {% endblock %}

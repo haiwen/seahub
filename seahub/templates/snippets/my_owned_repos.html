@@ -3,14 +3,21 @@
 <div id="tabs" class="tab-tabs">
 <div class="hd ovhd">
     <ul class="tab-tabs-nav fleft">
-        <li class="tab"><a href="#my-own-repos" class="a">{% trans "Mine" %}</a></li>
+        <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
         {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
-        <li class="tab"><a href="#my-sub-repos" class="a">{% trans "Sub-libraries" %}</a></li>
+        <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
         {% endif %}
-        <li class="tab"><a href="#repos-shared-to-me" class="a">{% trans "Shared" %}</a></li>
-        <li class="tab"><a href="#group-repos" class="a">{% trans "Group" %}</a></li>
+        <li class="tab"><a href="#repos-shared-to-me" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
+        <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
     </ul>
-    <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+    <div class="fright">
+        {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+        <button id="repo-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        <button id="sub-lib-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
+        {% else %}
+        <button id="repo-create"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        {% endif %}
+    </div>
 </div>
 <div id="my-own-repos" class="hide">
 {% if owned_repos %}

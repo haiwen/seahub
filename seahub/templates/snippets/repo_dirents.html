@@ -24,9 +24,6 @@
                     <a class="op dir-download" href="{{dirent.dl_link}}">{% trans 'Download' %}</a>
                     {% if not repo.encrypted %}
                     <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-upload-link="{{ dirent.uploadlink }}" data-upload-token="{{ dirent.uploadtoken }}">{% trans "Share" %}</a>
-                    {% if ENABLE_SUB_LIBRARY and sub_lib_enabled and not repo.is_virtual %}
-                    <a class="op dir-sync" href="#">{% trans "Sync" %}</a>
-                    {% endif %}
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
