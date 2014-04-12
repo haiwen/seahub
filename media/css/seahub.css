@@ -2904,11 +2904,10 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:12px;
 }
 .wiki-index h3 {
-    color:#6b6b6b;
+    color:#333;
 }
 #wiki-index-con {
     padding-left:12px;
-    color:#8c8c8c;
 }
 .grp-wiki-index #wiki-index-con {
     padding:0;
@@ -2917,6 +2916,7 @@ textarea:-moz-placeholder {/* for FF */
     list-style-type: square;
     padding-left: 1.5em;
     margin-bottom:5px;
+    color:#8c8c8c;
 }
 .wiki-index a {
     font-weight:normal;
