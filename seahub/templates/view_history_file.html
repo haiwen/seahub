@@ -31,7 +31,7 @@
               {% endblock %}
             </p>
 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data-url="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
@@ -40,8 +40,12 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-$('#view-original, #download').click(function() {
-    window.open($(this).attr('data'));
+$('#download').click(function() {
+    window.open($(this).data('url'));
+});
+$(function() {
+    var dld_url = $('#download').data('url');
+    $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
 });
 
 {% include "snippets/file_content_js.html" %}

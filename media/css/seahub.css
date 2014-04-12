@@ -974,7 +974,8 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #ccc;
 }
 /**** obvious btn ****/ /* e.g. download btn in shared file/dir */
-.obv-btn {
+.obv-btn, .big-obv-btn {
+    display:inline-block;
     color:#fff;
     padding:4px 10px;
     background-color: #60b044;
@@ -987,6 +988,20 @@ textarea:-moz-placeholder {/* for FF */
 }
 .obv-btn:hover {
     color:#fff;
+    text-decoration:none;  
+}
+.big-obv-btn {
+    font-size:14px;
+    padding:6px 20px;
+    font-weight:normal;
+    background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
+    background:-moz-linear-gradient(top, #fafafb, #eeeeee);
+    background:linear-gradient(top, #fafafb, #eeeeee);
+    border: 1px solid #c5c5c5;
+    color:#333;
+}
+.big-obv-btn:hover {
+    color:#333;
     text-decoration:none;  
 }
 /********** container ***********/
@@ -1286,6 +1301,7 @@ textarea:-moz-placeholder {/* for FF */
     color:#8A948F;
     font-weight:bold;
     text-decoration:none;
+    white-space:nowrap;/* for ipad */
 }
 #header .nav .a.cur {
     color:#000;
@@ -2366,6 +2382,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:10px;
     width:930px;
     background:#fff;
+    text-align:center;
 }
 #docu-view {
     font-size:14px;/*override .ace_editor*/

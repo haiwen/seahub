@@ -72,7 +72,7 @@
                 {% endblock %}
             {% endif %}
 
-            <button data="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename|urlencode }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data-url="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename|urlencode }}&op=download" id="download">{% trans "Download"%}</button>
         </div>
 
         <div id="file-view">
@@ -97,6 +97,10 @@
 {% block extra_script %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 <script type="text/javascript">
+$(function() {
+    var dld_url = $('#download').data('url');
+    $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
+});
 $('#share').click(function() {
     var op = $(this), name = '{{ filename }}',
         aj_urls = { 'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}' },
@@ -104,8 +108,8 @@ $('#share').click(function() {
     showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
-$('#view-original, #download').click(function() {
-    window.open($(this).attr('data'));
+$('#download').click(function() {
+    window.open($(this).data('url'));
 });
 
 $('#edit').click(function() {

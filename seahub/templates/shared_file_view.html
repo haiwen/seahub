@@ -56,6 +56,11 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
+$(function() {
+    var dld_btn = $('.obv-btn').clone();
+    dld_btn.html("{% trans "Download" %}").attr('class', 'big-obv-btn');
+    $('#file-view-tip').append(dld_btn);
+});
 var all_repos = [];
 {% for a_repo in accessible_repos %}
     all_repos.push({
