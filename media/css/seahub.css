@@ -1673,8 +1673,12 @@ textarea:-moz-placeholder {/* for FF */
 .jstree.file-tree-cont [type="dir"]  > a > .jstree-checkbox {
     display:none;
 }
+.jstree [root_node] > a > .jstree-icon,
+.jstree .jstree-open[root_node] > a > .jstree-icon {
+    background: transparent url('../img/lib-16.png') no-repeat scroll left center;
+}
 .jstree .jstree-leaf[type=file] a ins.jstree-icon {
-    background: transparent url('../img/file-icon-16.png') no-repeat left center;
+    background: transparent url('../img/file-icon-16.png') no-repeat scroll left center;
     vertical-align:top;
 }
 .jstree-classic .jstree-leaf[type=dir] a ins.jstree-icon {
@@ -2212,8 +2216,17 @@ textarea:-moz-placeholder {/* for FF */
 .msg-form .cancel,
 .reply-submit,
 .reply-cancel {
-    margin-top:6px;
+    padding:5px 15px;
     background:#fff;
+    margin-top:6px;
+}
+.msg-form .submit {
+    color:#fff;
+    background:#4abb49;
+    border:1px solid #5cb25b;
+}
+.msg-form .submit:hover {
+    background:#3eab36;
 }
 .msg-form .cancel {
     margin-left:6px;
@@ -2890,6 +2903,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 .wiki-index a {
     font-weight:normal;
+    color:#8c8c8c;
+}
+.wiki-index a:hover {
+    color:#f93;
+    text-decoration:underline;
 }
 .client-list .lib-num {
     cursor:pointer;
