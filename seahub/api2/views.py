@@ -29,9 +29,10 @@ from serializers import AuthTokenSerializer, AccountSerializer
 from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
-    get_person_msgs, api_group_check, get_email, get_timetamp, \
+    get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json
-from seahub.avatar.templatetags.avatar_tags import avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, \
     DirFilesLastModifiedInfo, DeviceToken
@@ -137,7 +138,7 @@ class ObtainAuthToken(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-########## Accounts    
+########## Accounts
 class Accounts(APIView):
     """List all accounts.
     Administator permission is required.
@@ -1801,7 +1802,7 @@ class DirSubRepoView(APIView):
 
         return HttpResponse(json.dumps(result), content_type=json_content_type)
 
-########## Sharing    
+########## Sharing
 class SharedRepos(APIView):
     """
     List repos that a user share to others/groups/public.
@@ -1953,7 +1954,7 @@ class PrivateSharedFileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
 
-        path = fileshare.path.rstrip('/') # Normalize file path 
+        path = fileshare.path.rstrip('/') # Normalize file path
         file_name = os.path.basename(path)
 
         file_id = None
@@ -1989,7 +1990,7 @@ class SharedFileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
 
-        path = fileshare.path.rstrip('/') # Normalize file path 
+        path = fileshare.path.rstrip('/') # Normalize file path
         file_name = os.path.basename(path)
 
         file_id = None
@@ -2086,7 +2087,7 @@ class PrivateSharedFileDetailView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Repo not found")
 
-        path = fileshare.path.rstrip('/') # Normalize file path 
+        path = fileshare.path.rstrip('/') # Normalize file path
         file_name = os.path.basename(path)
 
         file_id = None
@@ -2642,7 +2643,7 @@ class UserMsgsView(APIView):
             m = {
                 'from_email' : msg.from_email,
                 'nickname' : email2nickname(msg.from_email),
-                'timestamp' : get_timetamp(msg.timestamp),
+                'timestamp' : get_timestamp(msg.timestamp),
                 'msg' : msg.message,
                 'attachments' : atts,
                 'msgid' : msg.message_id,
@@ -2688,16 +2689,31 @@ class NewRepliesView(APIView):
         UserNotification.objects.seen_group_msg_reply_notice(request.user.username)
         return Response(group_msgs)
 
-class AvatarView(APIView):
+class UserAvatarView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, user, size, format=None):
-        url = avatar_url(user, int(size))
-        ret = { 'url': url }
+        url, is_default, date_uploaded = api_avatar_url(user, int(size))
+        ret = {
+            "url" : request.build_absolute_uri(url),
+            "is_default" : is_default,
+            "mtime": get_timestamp(date_uploaded) }
         return Response(ret)
 
+class GroupAvatarView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, size, format=None):
+        url, is_default, date_uploaded = api_grp_avatar_url(group_id, int(size))
+        ret = {
+            "url" : request.build_absolute_uri(url),
+            "is_default" : is_default,
+            "mtime": get_timestamp(date_uploaded)}
+        return Response(ret)
 
 # Html related code
 def html_events(request):

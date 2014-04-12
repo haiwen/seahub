@@ -283,7 +283,9 @@ def get_group_msgs(groupid, page, username):
 
     return group_msgs
 
-def get_timetamp(msgtimestamp):
+def get_timestamp(msgtimestamp):
+    if not msgtimestamp:
+        return 0
     timestamp = int(time.mktime(msgtimestamp.timetuple()))
     return timestamp
 

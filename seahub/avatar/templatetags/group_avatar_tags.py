@@ -26,6 +26,29 @@ def get_default_group_avatar_url():
     return '%s%s' % (base_url, GROUP_AVATAR_DEFAULT_URL)
 
 @register.simple_tag
+def api_grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
+    url = None
+    key = get_grp_cache_key(group_id, size)
+    val = cache.get(key)
+    if val:
+        return val.avatar_url(size), False, val.date_uploaded
+
+    # Get from DB, and refresh cache
+    grp_avatars = GroupAvatar.objects.filter(group_id=group_id)
+    if grp_avatars:
+        avatar = grp_avatars.order_by('-date_uploaded')[0]
+    else:
+        avatar = None
+
+    if avatar:
+        if not avatar.thumbnail_exists(size):
+            avatar.create_thumbnail(size)
+        return avatar.avatar_url(size), False, avatar.date_uploaded
+    else:
+        return get_default_group_avatar_url(), True, None
+
+
+@register.simple_tag
 def grp_avatar(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
     # Get from cache
     key = get_grp_cache_key(group_id, size)

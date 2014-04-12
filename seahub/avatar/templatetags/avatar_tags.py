@@ -36,6 +36,17 @@ def avatar_url(user, size=AVATAR_DEFAULT_SIZE):
 
 @cache_result
 @register.simple_tag
+def api_avatar_url(user, size=AVATAR_DEFAULT_SIZE):
+    avatar = get_primary_avatar(user, size=size)
+    if avatar:
+        url = avatar.avatar_url(size)
+        date_uploaded = avatar.date_uploaded
+        return url, False, date_uploaded
+    else:
+        return get_default_avatar_url(), True, None
+
+@cache_result
+@register.simple_tag
 def avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:

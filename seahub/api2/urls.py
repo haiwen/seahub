@@ -57,7 +57,8 @@ urlpatterns = patterns('',
     url(r'^user/msgs/(?P<id_or_email>[^/]+)/$', UserMsgsView.as_view()),
     url(r'^new_replies/$', NewRepliesView.as_view()),
 
-    url(r'^avatars/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', AvatarView.as_view()),
+    url(r'^avatars/user/(?P<user>\S+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/resized/(?P<size>[0-9]+)/$', UserAvatarView.as_view()),
+    url(r'^avatars/group/(?P<group_id>\d+)/resized/(?P<size>[0-9]+)/$', GroupAvatarView.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
