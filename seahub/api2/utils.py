@@ -293,7 +293,7 @@ def group_msg_to_json(msg, get_all_replies):
     ret = {
         'from_email' : msg.from_email,
         'nickname' : email2nickname(msg.from_email),
-        'timestamp' : get_timetamp(msg.timestamp),
+        'timestamp' : get_timestamp(msg.timestamp),
         'msg' : msg.message,
         'msgid' : msg.id,
         }
@@ -323,7 +323,7 @@ def group_msg_to_json(msg, get_all_replies):
         r = {
             'from_email' : reply.from_email,
             'nickname' : email2nickname(reply.from_email),
-            'timestamp' : get_timetamp(reply.timestamp),
+            'timestamp' : get_timestamp(reply.timestamp),
             'msg' : reply.message,
             'msgid' : reply.id,
             }
