@@ -126,8 +126,18 @@ $(window).scroll(function() {
 {% endif %}
 
 var msg_form = $('#personal-message-form');
+$('#message').focus(function() {
+    $(this).height(75);
+    $('.ops', msg_form).removeClass('hide');
+});
+$('.cancel', msg_form).click(function() {
+    $('.ops', msg_form).addClass('hide');
+    $('#selected-files').data('files', '').html('');
+    $('#message').val('').height(25);
+});
+
 var repos_get_url = '{% url 'get_my_unenc_repos' %}';
-{% include 'snippets/msg_form_js.html' %} 
+{% include 'snippets/add_file_js.html' %} 
 
 $('#personal-message-form').submit(function() {
     var form = $(this),

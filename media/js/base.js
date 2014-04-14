@@ -461,6 +461,9 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
             container.jstree('open_node', $(this));
             $(this).find('a').removeClass('jstree-clicked');
         })
+        .bind('select_node.jstree', function(e, data) {
+            $('.jstree-clicked').removeClass('jstree-clicked'); // do not show selected item
+        })
         .jstree({
             'json_data': {
                 'data': repo_data,
@@ -510,7 +513,8 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
             },
             'checkbox':{
                 'two_state': opts.two_state, // default: false. when 'true', dir can be checked separately with file
-                'override_ui':true, // nodes can be checked, or selected to be checked
+                // make dir can only be selected
+                //'override_ui':true, // nodes can be checked, or selected to be checked
                 'real_checkboxes': true,
                 'real_checkboxes_names': function(node) {
                     // get the path array consisting of nodes starting from the root node

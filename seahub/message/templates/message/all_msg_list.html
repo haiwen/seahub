@@ -39,18 +39,25 @@
 
 <div id="send-msg-popup" class="hide">
     <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
-    <form id="send-msg-form" action="{% url 'message_send' %}?from=all" method="post" name="send-msg-form" class="hide">{% csrf_token %}
+    <form id="send-msg-form" action="{% url 'message_send' %}?from=all" method="post" name="send-msg-form" class="msg-form hide">{% csrf_token %}
         <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
         <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
-        <div id="msg-file-share">
-            <button type="button" id="msg-file-share-btn"><span class="icon-plus-sign-alt"></span> {% trans "Add files" %}</button>
-            <div id="msg-file-tree" class="hide"></div>
-            <span class="icon-remove hide"></span>
-        </div>
         <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit"%}" />
-        <input type="button" value="{% trans "Cancel"%}" class="cancel" />
+        <div class="ops">
+            <button type="submit" class="submit">{% trans "Submit" %}</button>
+            <button type="button" class="cancel">{% trans "Cancel" %}</button>
+            <img src="{{ MEDIA_URL }}img/clip.png" alt="" title="{% trans "Add files" %}" class="add-file fleft" />
+            <ul class="hide" id="selected-files"></ul>
+        </div>
     </form>
+</div>
+<div id="add-file-popup" class="file-choose-form hide">
+    <h3>{% trans "Choose a file or files:" %}</h3>
+    <div class="file-tree-cont" id="file-tree">
+        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+    </div>
+    <button class="submit">{% trans "Submit" %}</button>
+    <button class="simplemodal-close">{% trans "Cancel"%}</button>
 </div>
 
 {% endblock %}
@@ -115,44 +122,20 @@ $(document).click(function(e) {
     var target = e.target || event.srcElement,
         popup = $('#send-msg-popup'),
         popup_switch = $('#add-msg');
-    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target)) {
+    var add_file_popup = $('#add-file-popup');
+/*
+    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !add_file_popup.is(target) && !add_file_popup.find('*').is(target)) {
         popup.addClass('hide');
     }    
+*/
 });
-$('#msg-file-share-btn').click(function() {
-    var msg_file_share = $('#msg-file-share'),
-        btn = $(this);
-    $.ajax({
-        'url': '{% url 'get_my_unenc_repos' %}',
-        'cache': false,
-        'dataType': 'json',
-        'success': function(data) {
-            btn.addClass('hide');
-            var file_tree = new FileTree();
-            var repos = file_tree.format_repo_data(data);
-            if (repos.length > 0) {
-                file_tree.renderFileTree($('#msg-file-tree').css({'max-height':$(window).height() - $('#title-panel').offset().top - $('#title-panel').height() - $('#send-msg-popup').outerHeight(), 'overflow':'auto'}).data('site_root', '{{SITE_ROOT}}'), repos, {'two_state': true});
-                $('#msg-file-tree').fadeIn(600);
-                msg_file_share.find('.icon-remove').removeClass('hide');
-            } else {
-                msg_file_share.html('<p class="error">' + "{% trans "You don't have any library at present" %}" + '</p>');
-            }
-        },
-        'error': function(jqXHR, textStatus, errorThrown) {
-            if (!jqXHR.responseText) {
-                msg_file_share.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
-            }
-        }
-    });
-});
-$('#msg-file-share .icon-remove').click(function() {
-        $(this).addClass('hide');
-        $('#msg-file-tree').fadeOut(200);
-        $('#msg-file-share-btn').removeClass('hide');
-});
+
+var repos_get_url = '{% url 'get_my_unenc_repos' %}';
+{% include 'snippets/add_file_js.html' %}
+
 $('#send-msg-form .cancel').click(function() {
-        $('#send-msg-popup').addClass('hide');
-        $('#add-msg').removeClass('add-msg-hl');
+    $('#send-msg-popup').addClass('hide');
+    $('#selected-files').data('files','').html('').addClass('hide');
 });
 
 $('#send-msg-form').submit(function() {
@@ -160,7 +143,8 @@ $('#send-msg-form').submit(function() {
         form_id = form.attr('id'),
         msg_input = $('[name="mass_msg"]', form),
         msg = $.trim(msg_input.val()),
-        emails = $('[name="mass_email"]', form).val();
+        emails = $('[name="mass_email"]', form).val(),
+        files_ct = $('#selected-files');
 
     if (!msg) {
         apply_form_error(form_id, "{% trans "message is required" %}");
@@ -174,23 +158,16 @@ $('#send-msg-form').submit(function() {
     var sb_btn = $('.submit', form);
     disable(sb_btn);
 
-    var selected = [];
-    $('[name="selected"][checked="checked"]', form).each(function() {
-        var val =  $(this).val();
-        if (val.charAt(val.length - 1) != '/') { // only submit file
-            selected.push($(this).val());
-        }
-    });
-
     $.ajax({
         url: form.attr('action'),
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: { 'mass_msg': msg, 'mass_email': emails, 'selected': selected },
+        data: { 'mass_msg': msg, 'mass_email': emails, 'selected': files_ct.data('files') || [] },
         traditional: true,
         success: function(data) {
             msg_input.val('');
+            files_ct.data('files','').html('').addClass('hide');
             enable(sb_btn);
             $('#send-msg-popup').addClass('hide');
             var new_trs = $(data['html']);

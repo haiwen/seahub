@@ -2053,6 +2053,11 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 0 22px 64px;
     position:relative;
 }
+#send-msg-form {
+    padding:0;
+    background:transparent;
+    margin:0;
+}
 .msg-form .avatar {
     position:absolute;
     left:-64px;
@@ -2242,7 +2247,7 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #5cb25b;
 }
 .msg-form .submit:hover {
-    background:#3eab36;
+    background:#55ab22;
 }
 .msg-form .cancel {
     margin-left:6px;
