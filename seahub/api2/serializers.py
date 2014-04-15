@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from seahub.auth import authenticate
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
-from seahub.api2.utils import get_client_ip
+from seahub.api2.utils import get_client_ip, is_valid_username
 
 def all_none(values):
     for value in values:
@@ -51,7 +51,11 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        # first check password
+        # first check username and password
+        if username:
+            if not is_valid_username(username):
+                raise serializers.ValidationError('username is not valid.')
+
         if username and password:
             user = authenticate(username=username, password=password)
             if user:
@@ -88,7 +92,7 @@ class AuthTokenSerializer(serializers.Serializer):
             if len(device_id) != 16:
                 raise serializers.ValidationError('invalid device id')
         elif platform == 'ios':
-             if len(device_id) != 36:
+            if len(device_id) != 36:
                 raise serializers.ValidationError('invalid device id')
         else:
             raise serializers.ValidationError('invalid platform')
