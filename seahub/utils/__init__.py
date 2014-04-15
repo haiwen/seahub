@@ -13,7 +13,6 @@ from urlparse import urlparse
 
 import ccnet
 
-from django.core.validators import email_re
 from django.core.urlresolvers import reverse
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
@@ -207,6 +206,15 @@ def normalize_file_path(path):
     """
     return path.rstrip('/')
 
+# modified from django1.5:/core/validators, and remove the support for single
+# quote in email address
+email_re = re.compile(
+    r"(^[-!#$%&*+/=?^_`{}|~0-9A-Z]+(\.[-!#$%&*+/=?^_`{}|~0-9A-Z]+)*"  # dot-atom
+    # quoted-string, see also http://tools.ietf.org/html/rfc2822#section-3.2.5
+    r'|^"([\001-\010\013\014\016-\037!#-\[\]-\177]|\\[\001-\011\013\014\016-\177])*"'
+    r')@((?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)$)'  # domain
+    r'|\[(25[0-5]|2[0-4]\d|[0-1]?\d?\d)(\.(25[0-5]|2[0-4]\d|[0-1]?\d?\d)){3}\]$', re.IGNORECASE)  # literal form, ipv4 address (SMTP 4.1.3)
+
 def is_valid_email(email):
     """A heavy email format validation.
     """
@@ -216,7 +224,7 @@ def is_valid_username(username):
     """Check whether username is valid, currently only email can be a username.
     """
     return is_valid_email(username)
-    
+
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None

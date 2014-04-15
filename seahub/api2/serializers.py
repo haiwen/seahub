@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from seahub.auth import authenticate
+from seahub.utils import is_valid_username
 
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
@@ -9,6 +10,10 @@ class AuthTokenSerializer(serializers.Serializer):
     def validate(self, attrs):
         username = attrs.get('username')
         password = attrs.get('password')
+
+        if username:
+            if not is_valid_username(username):
+                raise serializers.ValidationError('username is not valid.')
 
         if username and password:
             user = authenticate(username=username, password=password)

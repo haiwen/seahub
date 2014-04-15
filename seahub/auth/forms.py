@@ -7,7 +7,7 @@ from django.utils.http import int_to_base36
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
-from seahub.utils import IS_EMAIL_CONFIGURED
+from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username
 
 from captcha.fields import CaptchaField
 
@@ -16,7 +16,7 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    username = forms.EmailField(label=_("Username"), max_length=255)
+    username = forms.CharField(label=_("Username"), max_length=255)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
@@ -29,6 +29,12 @@ class AuthenticationForm(forms.Form):
         self.request = request
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
+
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if not is_valid_username(username):
+            raise forms.ValidationError(_("Enter a valid email address."))
+        return self.cleaned_data['username']
 
     def clean(self):
         username = self.cleaned_data.get('username')

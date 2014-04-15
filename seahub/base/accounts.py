@@ -13,6 +13,7 @@ from registration import signals
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.utils import is_valid_username
 
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
@@ -386,7 +387,7 @@ class RegistrationForm(forms.Form):
     """
     attrs_dict = { 'class': 'required' }
 
-    email = forms.EmailField(widget=forms.TextInput(attrs=dict(attrs_dict,
+    email = forms.CharField(widget=forms.TextInput(attrs=dict(attrs_dict,
                                                                maxlength=75)),
                              label=_("Email address"))
     userid = forms.RegexField(regex=r'^\w+$',
@@ -403,6 +404,9 @@ class RegistrationForm(forms.Form):
 
     def clean_email(self):
         email = self.cleaned_data['email']
+        if not is_valid_username(email):
+            raise forms.ValidationError(_("Enter a valid email address."))
+
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if not emailuser:
             return self.cleaned_data['email']
