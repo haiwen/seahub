@@ -2901,6 +2901,10 @@ textarea:-moz-placeholder {/* for FF */
 .help-con {
 	padding:0 0 0 30px;
 }
+#right-panel .help-con .hd {
+    font-weight:normal;
+    margin-bottom:15px;
+}
 /* wiki index */
 .wiki-index {
     margin-top:25px;
