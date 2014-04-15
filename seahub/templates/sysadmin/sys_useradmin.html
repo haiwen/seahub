@@ -12,6 +12,7 @@
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_db_useradmin' %}">{% trans "Admin" %}</a></li>
         {% if have_ldap %}
         <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
@@ -94,7 +95,6 @@ $('#add-user-form').submit(function() {
     });
     return false;
 });
-
 {% include "sysadmin/useradmin_js.html" %}
 </script>
 {% endblock %}
