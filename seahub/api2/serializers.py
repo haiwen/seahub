@@ -2,7 +2,8 @@ from rest_framework import serializers
 
 from seahub.auth import authenticate
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
-from seahub.api2.utils import get_client_ip, is_valid_username
+from seahub.api2.utils import get_client_ip
+from seahub.utils import is_valid_username
 
 def all_none(values):
     for value in values:
