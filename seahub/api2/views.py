@@ -1961,18 +1961,22 @@ class SharedRepo(APIView):
         group_id = request.GET.get('group_id')
         permission = request.GET.get('permission')
 
-        if permission !='rw' and permission != "r":
+        if permission != 'rw' and permission != "r":
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Permission need to be rw or r.')
 
         if share_type == 'personal':
-            if not is_registered_user(user) :
+            if not is_valid_username(user):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'User is not valid')
+
+            if not is_registered_user(user):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'User does not exist')
-            try :
+            try:
                 from_email = seafile_api.get_repo_owner(repo_id)
                 seafile_api.share_repo(repo_id, from_email, user,
-                                      permission)
+                                       permission)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)
@@ -2003,7 +2007,7 @@ class SharedRepo(APIView):
                 except SearpcError, e:
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                      "Searpc Error: " + e.msg)
-        else :
+        else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                     'share_type can only be personal or group or public.')
 
@@ -2078,7 +2082,7 @@ def group_discuss(request, group):
 
         # send signal
         grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                              from_email=username)
+                          from_email=username)
 
         repo_id = request.POST.get('repo_id', None)
         path = request.POST.get('path', None)
