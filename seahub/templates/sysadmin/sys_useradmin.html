@@ -12,8 +12,8 @@
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">
     <ul class="tab-tabs-nav fleft">
-        <li class="tab"><a href="#user" class="a" id="user-tab">{% trans "User" %}</a></li>
-        <li class="tab"><a href="#admin" class="a" id="admin-tab">{% trans "Admin" %}</a></li>
+        <li class="tab"><a href="#user" class="a" id="user-tab">{% trans "Users" %}</a></li>
+        <li class="tab"><a href="#admin" class="a" id="admin-tab">{% trans "Admins" %}</a></li>
         {% if have_ldap %}
         <li class="tab"><a href="{% url 'sys_ldap_useradmin' %}" class="a" id="ldap-tab">{% trans "LDAP" %}</a></li>
         {% endif %}
@@ -80,8 +80,6 @@ $('#admin-tab').click(function() {
     add_admin_btn.removeClass('hide');
     add_user_btn.addClass('hide');
 });
-
-
 
 $('#add-user-form').submit(function() {
     var form = $(this),

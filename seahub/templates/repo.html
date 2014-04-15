@@ -681,7 +681,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                         } else {
                                             msg = "{% trans "Successfully copied %(s_num)s items." %}";
                                             if (fail_num > 0) {
-                                                msg += "{% trans "Failed to move %(f_num)s items." %}";
+                                                msg += "{% trans "Failed to copy %(f_num)s items." %}";
                                             }
                                             $('.checkbox').removeClass('checkbox-checked');
                                         }

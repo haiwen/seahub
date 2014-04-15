@@ -45,7 +45,7 @@
     <p>{% trans "Change the password of this library:" %}</p>
     <label>{% trans "Old Password" %}</label><br />
     <input type="password" name="old_passwd" class="input" /><br />
-    <label>{% trans "New Password(at least 6 characters)" %}</label><br />
+    <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
     <input type="password" name="new_passwd" class="input" /><br />
     <label>{% trans "New Password Again" %}</label><br />
     <input type="password" name="new_passwd_again" class="input" /><br />
