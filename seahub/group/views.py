@@ -818,7 +818,11 @@ def group_remove_member(request, group_id, user_name):
         raise Http404
 
     if not is_group_staff(group, request.user):
-        raise Http404    
+        raise Http404
+
+    if not is_valid_username(user_name):
+        messages.error(request, _(u'%s is not a valid email.') % user_name)
+        return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
     try:
         ccnet_threaded_rpc.group_remove_member(group.id,
@@ -846,8 +850,9 @@ def group_remove_member(request, group_id, user_name):
 
 def group_unshare_repo(request, repo_id, group_id, from_email):
     """
-    Unshare a repo in group.
+    Unshare a repo in group. Used in share/views.
     
+    TODO: move to share views.
     """
     # Check whether group exists
     group = get_group(group_id)
