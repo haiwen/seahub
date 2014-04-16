@@ -14,7 +14,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
-import seaserv
 from seaserv import ccnet_threaded_rpc, get_emailusers, CALC_SHARE_USAGE
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -201,7 +200,7 @@ def sys_user_admin(request):
 
 @login_required
 @sys_staff_required
-def sys_ldap_user_admin(request):
+def sys_user_admin_ldap(request):
     """List all users from LDAP.
     """
     # Make sure page request is an int. If not, deliver first page.
@@ -239,7 +238,7 @@ def sys_ldap_user_admin(request):
             
             
     return render_to_response(
-        'sysadmin/sys_ldap_useradmin.html', {
+        'sysadmin/sys_useradmin_ldap.html', {
             'users': users,
             'current_page': current_page,
             'prev_page': current_page-1,
@@ -247,6 +246,51 @@ def sys_ldap_user_admin(request):
             'per_page': per_page,
             'page_next': page_next,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_user_admin_admins(request):
+    """List all admins from database.
+    """
+    users = get_emailusers('DB', -1, -1)
+
+    admin_users = []
+    not_admin_users = []
+    for user in users:
+        if user.is_staff is True:
+            admin_users.append(user)
+        else:
+            not_admin_users.append(user)
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admin_users])
+
+    for user in admin_users:
+        if user.props.id == request.user.id:
+            user.is_self = True
+        try:
+            user.self_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.quota = seafile_api.get_user_quota(user.email)
+        except:
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+
+    return render_to_response(
+        'sysadmin/sys_useradmin_admins.html', {
+            'admin_users': admin_users,
+            'not_admin_users': not_admin_users,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'have_ldap': have_ldap,
         },
         context_instance=RequestContext(request))
 
@@ -514,8 +558,6 @@ def user_add(request):
     if not request.user.is_staff and not request.user.org['is_staff']:
         raise Http404
 
-    base_template = 'org_admin_base.html' if request.user.org else 'admin_base.html'
-    
     content_type = 'application/json; charset=utf-8'
     if request.method == 'POST':
         post_values = request.POST.copy()
@@ -635,6 +677,14 @@ def user_search(request):
     users  = ccnet_threaded_rpc.search_emailusers(email_patt, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
+        try:
+            user.self_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.quota = seafile_api.get_user_quota(user.email)
+        except:
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -711,55 +761,9 @@ def sys_traffic_admin(request):
 
 @login_required
 @sys_staff_required
-def sys_db_user_admin(request):
-    """List all admins from database.
-    """
-    users = get_emailusers('DB', -1, -1)
-
-    admin_users = []
-    not_admin_users = []
-    for user in users:
-        if user.is_staff == True:
-            admin_users.append(user)
-        else:
-            not_admin_users.append(user)
-
-    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admin_users])
-
-    for user in admin_users:
-        if user.props.id == request.user.id:
-            user.is_self = True
-        try:
-            user.self_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
-            user.quota = seafile_api.get_user_quota(user.email)
-        except:
-            user.self_usage = -1
-            user.share_usage = -1
-            user.quota = -1
-        # populate user last login time
-        user.last_login = None
-        for last_login in last_logins:
-            if last_login.username == user.email:
-                user.last_login = last_login.last_login
-
-    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
-
-    return render_to_response(
-        'sysadmin/sys_db_useradmin.html', {
-            'admin_users': admin_users,
-            'not_admin_users': not_admin_users,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
-            'have_ldap': have_ldap,
-        },
-        context_instance=RequestContext(request))
-
-@login_required
-@sys_staff_required
 def batch_user_make_admin(request):
-
-    if not request.user.is_staff and not request.user.org['is_staff']:
-        raise Http404
+    """Batch make users as admins.
+    """
     if not request.is_ajax() or request.method != 'POST':
         raise Http404
 
@@ -774,14 +778,14 @@ def batch_user_make_admin(request):
     already_admin = []
 
     if len(get_emailusers('LDAP', 0, 1)) > 0:
-        messages.error(request, _(u'Using LDAP now, can not set admin'))
+        messages.error(request, _(u'Using LDAP now, can not add admin.'))
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     for email in set_admin_emails:
         try:
             user = User.objects.get(email=email)
-            if user.is_staff == True:
+            if user.is_staff is True:
                 already_admin.append(email)
             else:
                 user.is_staff = True
@@ -790,12 +794,10 @@ def batch_user_make_admin(request):
         except User.DoesNotExist:
             failed.append(email)
 
-    for item in success:
-        messages.success(request, _(u'Successfully set %s as admin') % item)
+    for item in success + already_admin:
+        messages.success(request, _(u'Successfully set %s as admin.') % item)
     for item in failed:
-        messages.error(request, _(u'Failed set %s as admin: not exist or invalid email') % item)
-    for item in already_admin:
-        messages.error(request, _(u'Failed set %s as admin: already admin user') % item)
+        messages.error(request, _(u'Failed to set %s as admin: user does not exist.') % item)
 
     result['success'] = True
     return HttpResponse(json.dumps(result), content_type=content_type)

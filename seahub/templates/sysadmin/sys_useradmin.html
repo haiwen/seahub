@@ -12,10 +12,10 @@
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
-        <li class="tabnav-tab"><a href="{% url 'sys_db_useradmin' %}">{% trans "DataBaseAdmin" %}</a></li>
         {% if have_ldap %}
-        <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admin" %}</a></li>
     </ul>
     <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
 </div>

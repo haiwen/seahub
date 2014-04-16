@@ -12,10 +12,10 @@
 <div class="tabnav ovhd">
     <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_db_useradmin' %}">{% trans "DataBaseAdmin" %}</a></li>
         {% if have_ldap %}
-        <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admin" %}</a></li>
     </ul>
     <button id="add-admin-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add admin" %}</span></button>
 </div>
@@ -81,7 +81,6 @@
             {% endif %}
         </td>
         <td>
-          {% if user.source != 'LDAP' %}
           {% if not user.is_self %}
           <a href="#" class="remove-user-btn op vh" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
           <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
@@ -89,7 +88,6 @@
           <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op vh">{% trans "Revoke Admin" %}</a>
           {% else %}
           <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op vh">{% trans "Set Admin" %}</a>
-          {% endif %}
           {% endif %}
           {% endif %}
         </td>

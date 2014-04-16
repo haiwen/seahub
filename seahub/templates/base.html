@@ -70,7 +70,7 @@
                     </div>
                     {% if request.user.is_staff %}
                     <div class="manage">
-                        {% block sys_admin %}<a href="{{ SITE_ROOT }}sys/useradmin/" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
+                        {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
                     </div>
                     {% endif %}
                 </div>
