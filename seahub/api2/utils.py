@@ -118,7 +118,7 @@ def get_groups(email):
         msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
         mtime = 0
         if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+            mtime = get_timestamp(msg[0].timestamp)
         group = {
             "id":g.id,
             "name":g.group_name,
@@ -128,6 +128,7 @@ def get_groups(email):
             "msgnum":grpmsgs[g.id],
             }
         group_json.append(group)
+
     return group_json, replynum
 
 def get_msg_group_id(msg_id):
@@ -165,7 +166,7 @@ def get_group_and_contacts(email):
                 replies[msg_id] = replies[msg_id] + 1
             else:
                 replies[msg_id] = 1
-                d['mtime'] = n.timestamp
+                d['mtime'] = get_timestamp(n.timestamp)
                 d['name'] = email2nickname(d['reply_from'])
                 d['group_id'] = get_msg_group_id(msg_id)
                 replies_json.append(d)
@@ -182,7 +183,7 @@ def get_group_and_contacts(email):
         msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
         mtime = 0
         if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+            mtime = get_timestamp(msg[0].timestamp)
         group = {
             "id":g.id,
             "name":g.group_name,
@@ -200,7 +201,7 @@ def get_group_and_contacts(email):
             contact).order_by('-timestamp')[:1]
         mtime = 0
         if len(msg) >= 1:
-            mtime = int(time.mktime(msg[0].timestamp.timetuple()))
+            mtime = get_timestamp(msg[0].timestamp)
         c = {
             'email' : contact,
             'name' : email2nickname(contact),
