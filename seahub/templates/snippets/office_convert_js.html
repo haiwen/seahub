@@ -27,7 +27,7 @@
             has_outline = $.trim(outline);
         }
         
-        $('#converted-html').append('<div id="pdf2html-toolbar-1" class="pdf2html-toolbar"></div>');
+        $('#converted-html').append('<div id="pdf2html-toolbar-1"></div>');
         if (has_outline) {
             var sidebar = $('#sidebar'),
                 page_container = $('#page-container'),
@@ -37,24 +37,25 @@
             sidebar.removeClass('hide');
 
             var toolbar = $('#pdf2html-toolbar-1');
-            toolbar.append('<span class="icon-double-angle-left" title="{% trans "hide outline" %}" id="hide-outline"></span>');
-            toolbar.append('<span class="icon-double-angle-right hide" title="{% trans "show outline" %}" id="show-outline"></span>');
+            toolbar.append('<span class="icon-caret-left" title="{% trans "hide outline" %}" id="hide-outline"></span>');
+            toolbar.append('<span class="icon-caret-right hide" title="{% trans "show outline" %}" id="show-outline"></span>');
 
             hide_outline = $('#hide-outline');
             show_outline = $('#show-outline');
 
-            toolbar.css({'left':250});
-            hide_outline.click(function() {
-                sidebar.addClass('hide').removeClass('opened');
-                $(this).addClass('hide');
-                show_outline.removeClass('hide');
-                toolbar.css({'left':0});
-            });
-            show_outline.click(function() {
-                sidebar.removeClass('hide').addClass('opened');
-                $(this).addClass('hide');
-                hide_outline.removeClass('hide');
-                toolbar.css({'left':250});
+            toolbar.css({'left':250, 'bottom': ($(window).height() + $(window).scrollTop() - $('#file-view').offset().top)/2 - toolbar.height()/2});
+            toolbar.click(function() {
+                if (show_outline.hasClass('hide')) {
+                    sidebar.addClass('hide').removeClass('opened');
+                    hide_outline.addClass('hide');
+                    show_outline.removeClass('hide');
+                    toolbar.css({'left':0});
+                } else {
+                    sidebar.removeClass('hide').addClass('opened');
+                    show_outline.addClass('hide');
+                    hide_outline.removeClass('hide');
+                    toolbar.css({'left':250});
+                }
             });
         }
 
@@ -128,10 +129,13 @@
         if (!$.trim(outline.html())) {
             return;
         }
+        var toolbar1 = $('#pdf2html-toolbar-1');
         if ($(window).scrollTop() > $('#page-container').offset().top) {
             outline.addClass('fixed-outline').css({'height':$(window).height() - parseInt(outline.css('padding-top')) - parseInt(outline.css('padding-bottom'))});
+            toolbar1.css({'bottom':'50%'});
         } else {
             outline.removeClass('fixed-outline').removeAttr('style');
+            toolbar1.css({'bottom':($(window).height() + $(window).scrollTop() - $('#file-view').offset().top)/2 - toolbar1.height()/2});
         }
     });
 

@@ -248,11 +248,12 @@
     margin: 0 0.3em;
 }
 #pdf2html-toolbar-1 {
-    border-top-left-radius:0;       
-    border-bottom-left-radius:0;    
-    padding:2px 0;
-}
-#pdf2html-toolbar-1 span {
-    padding:2px 12px;
-    margin:0;
+    position:fixed;
+    bottom:0;
+    padding:30px 8px;
+    color:#333;
+    cursor:pointer;
+    background:#fff;
+    border:1px solid #e8e8e8;
+    border-radius:0 3px 3px 0;
 }

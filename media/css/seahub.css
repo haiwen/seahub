@@ -26,7 +26,6 @@
 .icon-minus:before                { content: "\f068"; }
 .icon-pencil:before               { content: "\f040"; }
 .icon-remove:before               { content: "\f00d"; }
-.icon-caret-down:before           { content: "\f0d7"; }
 .icon-star:before                 { content: "\f005"; }
 .icon-star-empty:before           { content: "\f006"; }
 .icon-upload:before               { content: "\f01b"; }
@@ -41,6 +40,7 @@
 .icon-zoom-out:before             { content: "\f010"; }
 .icon-caret-down:before           { content: "\f0d7"; }
 .icon-caret-up:before             { content: "\f0d8"; }
+.icon-caret-left:before           { content: "\f0d9"; }
 .icon-caret-right:before          { content: "\f0da"; }
 .icon-search:before               { content: "\f002"; }
 .icon-move:before                 { content: "\f047"; }
