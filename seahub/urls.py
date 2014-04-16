@@ -21,7 +21,7 @@ from seahub.views.sysadmin import sys_repo_admin, sys_user_admin, user_search,\
     user_remove_admin, user_reset, user_activate, sys_publink_admin, \
     sys_repo_search, sys_repo_transfer, sys_list_orphan, user_deactivate, \
     user_toggle_status, user_set_quota, sys_ldap_user_admin, sys_list_system, \
-    batch_user_make_admin
+    batch_user_make_admin, sys_db_user_admin
 from seahub.views.ajax import *
 
 # Uncomment the next two lines to enable the admin:
@@ -184,6 +184,7 @@ urlpatterns = patterns('',
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/ldapuseradmin/$', sys_ldap_user_admin, name='sys_ldap_useradmin'),
+    url(r'^sys/dbuseradmin/$', sys_db_user_admin, name='sys_db_useradmin'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/notificationadmin/', notification_list, name='notification_list'),

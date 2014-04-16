@@ -1,0 +1,159 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n %}
+{% block cur_users %}tab-cur{% endblock %}
+
+{% block left_panel %}{{block.super}}
+<form action="{% url 'user_search' %}" method="get" class="side-search-form">
+    <input type="text" name="email" class="input" value="" placeholder="{% trans "Search users..." %}" />
+</form>
+{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_db_useradmin' %}">{% trans "DataBaseAdmin" %}</a></li>
+        {% if have_ldap %}
+        <li class="tabnav-tab"><a href="{% url 'sys_ldap_useradmin' %}">{% trans "LDAP" %}</a></li>
+        {% endif %}
+    </ul>
+    <button id="add-admin-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add admin" %}</span></button>
+</div>
+
+<form id="add-admin-form"  method="post" name="add-admin-form" class="tab-popup hide">{% csrf_token %}
+    <h3 class="hd">{% trans "Add admins"%}</h3>
+    <div id="add-admin-tabs" class="tab-popup-tabs">
+        <ul class="tab-popup-tabs-nav">
+            <li class="tab"><a href="#enter" class="a">{% trans 'Enter' %}</a></li>
+        </ul>
+        <div id="enter">
+            <textarea id="added-member-name" name="user_email" placeholder="{% trans "emails, separated by ','" %}"></textarea><br />
+            <p class="tip">{% trans "Tip: the emails should be the users already added."%}</p>
+        </div>
+    </div>
+    <div class="bot">
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" />
+    </div>
+</form>
+
+<table>
+    <tr>
+        <th width="25%">{% trans "Email" %}</th>
+        <th width="15%">{% trans "Status" %}</th>
+        <th width="15%">{% trans "Space Used" %}</th>
+        <th width="22%">{% trans "Create At / Last Login" %}</th>
+        <th width="23%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in admin_users %}
+    <tr>
+        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+
+        <td>
+          {% if user.source != 'LDAP' %}
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+            </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+            </select>
+          {% endif %}
+        </td>
+        
+        <td>
+            {% if CALC_SHARE_USAGE %}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% else %}
+            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% endif %}
+        </td>
+        <td>
+            {% if user.source != 'LDAP' %}
+            {{ user.ctime|tsstr_sec }} /<br />
+            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            {% endif %}
+        </td>
+        <td>
+          {% if user.source != 'LDAP' %}
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op vh" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          {% if user.is_staff %}
+          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op vh">{% trans "Revoke Admin" %}</a>
+          {% else %}
+          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op vh">{% trans "Set Admin" %}</a>
+          {% endif %}
+          {% endif %}
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+var user_list = [], user_email;
+{% for user in not_admin_users %}
+user_email = '{{ user.email }}';
+user_list.push({value:user_email, label:user_email});
+{% endfor %}
+$('#add-admin-btn').click(function() {
+    var form = $("#add-admin-form");
+    form.modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'height':'auto', 'padding':0});
+    $('#add-admin-tabs').tabs();
+    addAutocomplete('#added-member-name', '#enter', user_list);
+
+});
+$('#add-admin-form').submit(function() {
+    var form = $(this),
+        cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
+        post_data = '',
+        input = $('[name="user_email"]', form); 
+        post_data = input.val();
+
+    if (!post_data) {
+        apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
+        return false;
+    }    
+
+    var submit_btn = $('[type="submit"]', form);
+    disable(submit_btn);
+    $.ajax({
+    url: '{% url 'batch_user_make_admin' %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'set_admin_emails': post_data
+        },
+        success: function(data) {
+            location.reload('true');
+        },
+        error: function(data, textStatus, jqXHR) {
+            var errors = $.parseJSON(data.responseText);
+            $.each(errors, function(index, value) {
+                apply_form_error(form.attr('id'), value);
+            });
+            enable(submit_btn);
+        }
+    });
+
+    return false;
+});
+{% include "sysadmin/useradmin_js.html" %}
+</script>
+{% endblock %}

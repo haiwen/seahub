@@ -711,7 +711,58 @@ def sys_traffic_admin(request):
 
 @login_required
 @sys_staff_required
+def sys_db_user_admin(request):
+    """List all admins from database.
+    """
+    users = get_emailusers('DB', -1, -1)
+
+    admin_users = []
+    not_admin_users = []
+    for user in users:
+        if user.is_staff == True:
+            admin_users.append(user)
+        else:
+            not_admin_users.append(user)
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admin_users])
+
+    for user in admin_users:
+        if user.props.id == request.user.id:
+            user.is_self = True
+        try:
+            user.self_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.quota = seafile_api.get_user_quota(user.email)
+        except:
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+
+    return render_to_response(
+        'sysadmin/sys_db_useradmin.html', {
+            'admin_users': admin_users,
+            'not_admin_users': not_admin_users,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'have_ldap': have_ldap,
+        },
+        context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
 def batch_user_make_admin(request):
+
+    if not request.user.is_staff and not request.user.org['is_staff']:
+        raise Http404
+    if not request.is_ajax() or request.method != 'POST':
+        raise Http404
+
     result = {}
     content_type = 'application/json; charset=utf-8'
 
@@ -720,21 +771,31 @@ def batch_user_make_admin(request):
 
     success = []
     failed = []
+    already_admin = []
+
+    if len(get_emailusers('LDAP', 0, 1)) > 0:
+        messages.error(request, _(u'Using LDAP now, can not set admin'))
+        result['success'] = True
+        return HttpResponse(json.dumps(result), content_type=content_type)
 
     for email in set_admin_emails:
         try:
             user = User.objects.get(email=email)
-            user.is_staff = True
-            user.save()
-            success.append(email)
+            if user.is_staff == True:
+                already_admin.append(email)
+            else:
+                user.is_staff = True
+                user.save()
+                success.append(email)
         except User.DoesNotExist:
             failed.append(email)
 
     for item in success:
         messages.success(request, _(u'Successfully set %s as admin') % item)
     for item in failed:
-        messages.error(request, _(u'Failed set %s as admin') % item)
+        messages.error(request, _(u'Failed set %s as admin: not exist or invalid email') % item)
+    for item in already_admin:
+        messages.error(request, _(u'Failed set %s as admin: already admin user') % item)
 
     result['success'] = True
     return HttpResponse(json.dumps(result), content_type=content_type)
-
