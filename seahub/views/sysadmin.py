@@ -185,6 +185,9 @@ def sys_user_admin(request):
 
     have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
 
+    from seahub.utils.sysinfo import get_platform_name
+    platform = get_platform_name()
+
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
             'users': users,
@@ -195,6 +198,7 @@ def sys_user_admin(request):
             'page_next': page_next,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
+            'platform': platform,
         },
         context_instance=RequestContext(request))
 
