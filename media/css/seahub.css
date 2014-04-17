@@ -1101,13 +1101,10 @@ textarea:-moz-placeholder {/* for FF */
     line-height:17px;
 }
 /* info-bar */
-#info-bar,
-#sharelink-infobar {
-    color: #fff;
-    padding:1px 25px 1px 10px;
-    background: #f70;
-}
 #info-bar {
+    color: #1f0600;
+    padding:1px 25px 1px 10px;
+    background: #fddaa4;
     position:relative;
 }
 #info-bar .close {
@@ -1120,7 +1117,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:3px 0;
 }
 #info-bar-info a {
-    color:#fff;
+    color:#a68558;
     text-decoration:underline;
 }
 /* top-bar */
