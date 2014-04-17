@@ -197,8 +197,8 @@ def get_group_and_contacts(email):
         group_json.append(group)
 
     for contact in contacts:
-        msg = UserMessage.objects.get_messages_related_to_user(
-            contact).order_by('-timestamp')[:1]
+        msg = UserMessage.objects.get_messages_between_users(
+            contact, email).order_by('-timestamp')[:1]
         mtime = 0
         if len(msg) >= 1:
             mtime = get_timestamp(msg[0].timestamp)

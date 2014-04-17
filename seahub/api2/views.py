@@ -2632,8 +2632,7 @@ class UserMsgsView(APIView):
                     'to_email' : to_email,
                     'next_page' : next_page,
                     'msgs' : [],})
-
-        if person_msgs.has_next():
+        elif person_msgs.has_next():
             next_page = person_msgs.next_page_number()
 
         msgs = []
