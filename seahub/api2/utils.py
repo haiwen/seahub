@@ -139,6 +139,19 @@ def get_msg_group_id(msg_id):
 
     return msg.group_id
 
+def get_msg_group_id_and_last_reply(msg_id):
+    lastreply = None
+    try:
+        msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        return None, none
+
+    replies = MessageReply.objects.filter(reply_to=msg).order_by('-timestamp')[:1]
+    if len(replies) >= 1:
+        lastreply = replies[0].message
+
+    return msg.group_id, lastreply
+
 def get_group_and_contacts(email):
     group_json = []
     contacts_json = []
@@ -168,7 +181,7 @@ def get_group_and_contacts(email):
                 replies[msg_id] = 1
                 d['mtime'] = get_timestamp(n.timestamp)
                 d['name'] = email2nickname(d['reply_from'])
-                d['group_id'] = get_msg_group_id(msg_id)
+                d['group_id'],  d['lastmsg'] = get_msg_group_id_and_last_reply(msg_id)
                 replies_json.append(d)
             replynum = replynum + 1
         elif n.is_user_message():
@@ -182,14 +195,17 @@ def get_group_and_contacts(email):
     for g in joined_groups:
         msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
         mtime = 0
+        lastmsg = None
         if len(msg) >= 1:
             mtime = get_timestamp(msg[0].timestamp)
+            lastmsg = msg[0].message
         group = {
             "id":g.id,
             "name":g.group_name,
             "creator":g.creator_name,
             "ctime":g.timestamp,
             "mtime":mtime,
+            "lastmsg":lastmsg,
             "msgnum":gmsgnums.get(g.id, 0),
             }
 
@@ -200,13 +216,16 @@ def get_group_and_contacts(email):
         msg = UserMessage.objects.get_messages_between_users(
             contact, email).order_by('-timestamp')[:1]
         mtime = 0
+        lastmsg = None
         if len(msg) >= 1:
             mtime = get_timestamp(msg[0].timestamp)
+            lastmsg = msg[0].message
         c = {
             'email' : contact,
             'name' : email2nickname(contact),
-            "msgnum" : umsgnums.get(contact, 0),
             "mtime" : mtime,
+            "lastmsg":lastmsg,
+            "msgnum" : umsgnums.get(contact, 0),
             }
         umsgnum = umsgnum + umsgnums.get(contact, 0)
         contacts_json.append(c)
