@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.core.cache import cache
 from django import template
@@ -6,6 +8,9 @@ from seahub.avatar.settings import (GROUP_AVATAR_DEFAULT_SIZE, AVATAR_CACHE_TIME
                              GROUP_AVATAR_DEFAULT_URL)
 from seahub.avatar.models import GroupAvatar
 from seahub.avatar.util import get_grp_cache_key
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 register = template.Library()
 
@@ -64,9 +69,14 @@ def grp_avatar(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
         avatar = None
 
     if avatar:
-        if not avatar.thumbnail_exists(size):
-            avatar.create_thumbnail(size)
-        url = avatar.avatar_url(size)
+        try:
+            if not avatar.thumbnail_exists(size):
+                avatar.create_thumbnail(size)
+            url = avatar.avatar_url(size)
+        except Exception as e:
+            # Catch exceptions to avoid 500 errors.
+            logger.error(e)
+            url = get_default_group_avatar_url()
     else:
         url = get_default_group_avatar_url()
 

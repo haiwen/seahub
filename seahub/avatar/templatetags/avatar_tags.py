@@ -1,3 +1,4 @@
+import logging
 import urllib
 import hashlib
 
@@ -14,8 +15,10 @@ from seahub.avatar.settings import (AVATAR_GRAVATAR_BACKUP, AVATAR_GRAVATAR_DEFA
 from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
     cache_result, get_default_avatar_non_registered_url
 
-register = template.Library()
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
+register = template.Library()
 
 @cache_result
 @register.simple_tag
@@ -56,9 +59,19 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
         except User.DoesNotExist:
             url = get_default_avatar_non_registered_url()
             alt = _("Default Avatar")
+        except Exception as e:
+            # Catch exceptions to avoid 500 errors.
+            logger.error(e)
+            url = get_default_avatar_non_registered_url()
+            alt = _("Default Avatar")
     else:
         alt = email2nickname(user.username)
-        url = avatar_url(user, size)
+        try:
+            url = avatar_url(user, size)
+        except Exception as e:
+            # Catch exceptions to avoid 500 errors.
+            logger.error(e)
+            url = get_default_avatar_non_registered_url()
 
     return """<img src="%s" alt="%s" width="%s" height="%s" class="avatar" />""" % (url, alt,
         size, size)
