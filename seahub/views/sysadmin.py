@@ -200,7 +200,7 @@ def sys_user_admin(request):
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
             'platform': platform,
-            'server_id': server_id,
+            'server_id': server_id[:8],
         },
         context_instance=RequestContext(request))
 
