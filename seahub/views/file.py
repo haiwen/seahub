@@ -632,7 +632,7 @@ def view_shared_file(request, token):
                 'filetype': filetype}
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
-        err = err_msg
+        ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
 
