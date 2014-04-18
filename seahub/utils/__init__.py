@@ -582,6 +582,11 @@ def get_service_url():
     """
     return SERVICE_URL
 
+def get_server_id():
+    """Get server id from seaserv.
+    """
+    return getattr(seaserv, 'SERVER_ID', '-')
+
 def get_site_scheme_and_netloc():
     """Return a string contains site scheme and network location part from
     service url.

@@ -15,7 +15,7 @@
         {% if have_ldap %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
         {% endif %}
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admin" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <button id="add-admin-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add admin" %}</span></button>
 </div>

@@ -31,7 +31,8 @@ from seahub.share.models import FileShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
-from seahub.utils import send_html_email, get_user_traffic_list
+from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
+from seahub.utils.sysinfo import get_platform_name
 
 logger = logging.getLogger(__name__)
 
@@ -185,6 +186,9 @@ def sys_user_admin(request):
 
     have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
 
+    platform = get_platform_name()
+    server_id = get_server_id()
+
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
             'users': users,
@@ -195,6 +199,8 @@ def sys_user_admin(request):
             'page_next': page_next,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
+            'platform': platform,
+            'server_id': server_id,
         },
         context_instance=RequestContext(request))
 
