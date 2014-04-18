@@ -229,7 +229,7 @@
                     </div>
                 </div>
 
-                <div id="sf" class="article">{{ file_content|safe }}</div>
+                <div id="sf" class="article"></div>
                 {% endif %}
             {% endif %}
         {% endif %}
@@ -471,6 +471,8 @@ function mdEditHelp() {
 {% endif %}
 
 {% if filetype == 'Sf' %}
+{% include 'snippets/xss.html' %}
+$('#sf').html(cleanHtmlForXss('{{file_content|escapejs}}'));
 $(function() {
     function initToolbarBootstrapBindings() {
       var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 

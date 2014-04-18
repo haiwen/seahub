@@ -1,0 +1,20 @@
+function cleanHtmlForXss(html) {
+    var tag_whitelist = /^(<\/?(h1|h2|h3|h4|h5|h6|p|ul|ol|li|dl|dt|dd|pre|blockquote|code|q|table|thead|tbody|tfoot|tr|th|td|em|strong|del|ins|sup|sub|s)>|<a\s+.*>|<\/a>|<img\s+.*\/?>|<td\s+.*>|<(br|hr)\s?\/?>)$/i; //<td\s+.*> is for <td> with alignment in md extra syntax
+
+    var str = html.replace(/<[^>]*>?/gim, function(tag){
+        var s;
+        if (!tag.match(tag_whitelist)) {
+            return '';
+        }
+
+        // rm attributes start with 'on'
+        s = tag.replace(/on\w+\s*=.*(?=\s+|>)/gi, '');
+
+        // rm attributes of which the values start with 'javascript:'
+        s = s.replace(/\w+\s*=.*javascript\:.*(?=\s+|>)/gi, '');
+
+        return s;
+    });
+
+    return str;
+}

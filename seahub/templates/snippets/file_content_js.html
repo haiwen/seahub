@@ -75,6 +75,13 @@ window.onload = function () {
     {% endifnotequal %}
 {% endif %}
 
+{% if filetype == 'Sf' %}
+    {% ifnotequal file_content None %}
+    {% include 'snippets/xss.html' %}
+    $('#sf').html(cleanHtmlForXss('{{file_content|escapejs}}'));
+    {% endifnotequal %}
+{% endif %}
+
 {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
     {% include 'snippets/office_convert_js.html' %}
 {% endif %}

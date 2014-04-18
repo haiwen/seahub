@@ -20,6 +20,15 @@
     {% endif %}
 
     {% ifnotequal file_content None %}
-    <div id="sf" class="article">{{ file_content|safe }}</div>
+    <div id="sf" class="article"></div>
     {% endifnotequal %}
 {% endblock %}
+
+{% block extra_script %}{{ block.super }}
+<script type="text/javascript">
+{% ifnotequal file_content None %}
+{% include 'snippets/xss.html' %}
+$('#sf').html(cleanHtmlForXss('{{file_content|escapejs}}'));
+{% endifnotequal %}
+</script>
+{% endblock%}
