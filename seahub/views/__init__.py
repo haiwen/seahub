@@ -85,7 +85,8 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     gen_file_upload_url, check_and_get_org_by_repo, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
-    TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict
+    TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
+    user_traffic_over_limit
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, \
@@ -1324,6 +1325,9 @@ def repo_del_file(request, repo_id):
     return HttpResponseRedirect(url)
    
 def repo_access_file(request, repo_id, obj_id):
+    """Delete or download file.
+    TODO: need to be rewrite.
+    """
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -1356,6 +1360,12 @@ def repo_access_file(request, repo_id, obj_id):
         shared_by = fileshare.username
     else:
         from_shared_link = False
+
+    if from_shared_link:
+        # check whether owner's traffic over the limit
+        if user_traffic_over_limit(fileshare.username):
+            return render_permission_error(request,
+                                           _(u'Unable to access file: share link traffic is used up.'))
 
     username = request.user.username
     path = request.GET.get('p', '')
@@ -1750,7 +1760,9 @@ def view_shared_dir(request, token):
         fileshare = FileShare.objects.get(token=token)
         fileshare.view_cnt = F('view_cnt') + 1
         fileshare.save()
-    
+
+    traffic_over_limit = user_traffic_over_limit(fileshare.username)
+        
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
             'token': token,
@@ -1760,6 +1772,7 @@ def view_shared_dir(request, token):
             'file_list': file_list,
             'dir_list': dir_list,
             'zipped': zipped,
+            'traffic_over_limit': traffic_over_limit,
             }, context_instance=RequestContext(request))
 
 def view_shared_upload_link(request, token):
@@ -1956,6 +1969,12 @@ def repo_download_dir(request, repo_id):
     else:
         allow_download = True if check_repo_access_permission(
             repo_id, request.user) else False
+
+    if from_shared_link:
+        # check whether owner's traffic over the limit
+        if user_traffic_over_limit(fileshare.username):
+            return render_permission_error(request,
+                                           _(u'Unable to access file: share link traffic is used up.'))
 
     if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.id,

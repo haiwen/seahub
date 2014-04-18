@@ -19,7 +19,9 @@
                 {% endif %}
                 {% endfor %}
                 </p>
+                {% if not traffic_over_limit %}
                 <a href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" class="obv-btn fright">{% trans "ZIP"%}</a>
+                {% endif %}
             </div>
             <table class="repo-file-list">
                 <tr>
@@ -38,7 +40,9 @@
 
                     <td></td>
                     <td>
+                      {% if not traffic_over_limit %}
                         <a class="op vh" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}">{% trans 'Download' %}</a>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}
@@ -52,7 +56,9 @@
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
+                      {% if not traffic_over_limit %}
                         <a class="op vh" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download&t={{token}}">{% trans "Download"%}</a>
+                      {% endif %}
                     </td>
                 </tr>
                 {% endfor %}

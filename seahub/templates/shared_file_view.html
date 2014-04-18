@@ -32,7 +32,9 @@
               <button data="{{save_to_link}}" id="save">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
+            {% if not traffic_over_limit %}
             <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+            {% endif %}
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
