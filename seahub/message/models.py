@@ -17,14 +17,15 @@ class UserMessageManager(models.Manager):
         others and others send to he/she.
         """
         return super(UserMessageManager, self).filter(
-            Q(to_email=username)|Q(from_email=username)).order_by('to_email')
+            (Q(to_email=username)&Q(recipient_deleted_at__isnull=True)) |
+            (Q(from_email=username)&Q(sender_deleted_at__isnull=True))).order_by('to_email')
 
     def get_messages_between_users(self, user1, user2):
         """List messages between two users.
         """
         return super(UserMessageManager, self).filter(
-            (Q(from_email=user1)&Q(to_email=user2)) |
-            (Q(from_email=user2)&Q(to_email=user1))).order_by('-timestamp')
+            (Q(from_email=user1)&Q(to_email=user2)&Q(sender_deleted_at__isnull=True)) |
+            (Q(from_email=user2)&Q(to_email=user1)&Q(recipient_deleted_at__isnull=True))).order_by('-timestamp')
 
     def add_unread_message(self, user1, user2, msg):
         """Add a new message sent from ``user1`` to ``user2``.
@@ -56,6 +57,8 @@ class UserMessage(models.Model):
     to_email   = LowerCaseCharField(max_length=255, db_index=True)
     timestamp  = models.DateTimeField(default=datetime.datetime.now)
     ifread     = models.BooleanField()
+    sender_deleted_at    = models.DateTimeField(null=True, blank=True)
+    recipient_deleted_at = models.DateTimeField(null=True, blank=True)
     objects = UserMessageManager()
 
     def __unicode__(self):
