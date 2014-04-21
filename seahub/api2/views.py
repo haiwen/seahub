@@ -2700,8 +2700,8 @@ class UserAvatarView(APIView):
     def get(self, request, user, size, format=None):
         url, is_default, date_uploaded = api_avatar_url(user, int(size))
         ret = {
-            "url" : request.build_absolute_uri(url),
-            "is_default" : is_default,
+            "url": request.build_absolute_uri(url),
+            "is_default": is_default,
             "mtime": get_timestamp(date_uploaded) }
         return Response(ret)
 
@@ -2713,8 +2713,8 @@ class GroupAvatarView(APIView):
     def get(self, request, group_id, size, format=None):
         url, is_default, date_uploaded = api_grp_avatar_url(group_id, int(size))
         ret = {
-            "url" : request.build_absolute_uri(url),
-            "is_default" : is_default,
+            "url": request.build_absolute_uri(url),
+            "is_default": is_default,
             "mtime": get_timestamp(date_uploaded)}
         return Response(ret)
 

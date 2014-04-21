@@ -30,9 +30,7 @@ def get_default_group_avatar_url():
         return '%s/%s' % (base_url, GROUP_AVATAR_DEFAULT_URL)
     return '%s%s' % (base_url, GROUP_AVATAR_DEFAULT_URL)
 
-@register.simple_tag
 def api_grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
-    url = None
     key = get_grp_cache_key(group_id, size)
     val = cache.get(key)
     if val:
