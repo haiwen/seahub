@@ -48,7 +48,8 @@ from seahub.utils import show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     get_ccnetapplet_root, render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
-    check_filename_with_rename, gen_inner_file_get_url, normalize_file_path
+    check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
+    user_traffic_over_limit
 from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, SPREADSHEET, MARKDOWN, \
                                          TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
@@ -631,7 +632,7 @@ def view_shared_file(request, token):
                 'filetype': filetype}
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
-        err = err_msg
+        ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
 
@@ -661,7 +662,8 @@ def view_shared_file(request, token):
 
     accessible_repos = get_unencry_rw_repos_by_user(request.user.username)
     save_to_link = reverse('save_shared_link') + '?t=' + token
-            
+    traffic_over_limit = user_traffic_over_limit(shared_by)
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -683,6 +685,7 @@ def view_shared_file(request, token):
             'use_pdfjs':USE_PDFJS,
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
+            'traffic_over_limit': traffic_over_limit,
             }, context_instance=RequestContext(request))
 
 def view_file_via_shared_dir(request, token):
@@ -768,7 +771,9 @@ def view_file_via_shared_dir(request, token):
                              (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
-        
+
+    traffic_over_limit = user_traffic_over_limit(shared_by)
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -792,6 +797,7 @@ def view_file_via_shared_dir(request, token):
             'zipped': zipped,
             'img_prev': img_prev,
             'img_next': img_next,
+            'traffic_over_limit': traffic_over_limit,
             }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
