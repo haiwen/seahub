@@ -211,6 +211,10 @@ def render_repo(request, repo):
     search_repo_id = None if repo.encrypted else repo.id
     repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
+    if is_repo_owner and not repo.is_virtual:
+        show_repo_settings = True
+    else:
+        show_repo_settings = False
 
     more_start = None
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo, head_commit, path, offset=0, limit=100)
@@ -235,6 +239,7 @@ def render_repo(request, repo):
             'user_perm': user_perm,
             'repo_owner': repo_owner,
             'is_repo_owner': is_repo_owner,
+            'show_repo_settings': show_repo_settings,
             'current_commit': head_commit,
             'info_commit': info_commit,
             'password_set': True,
