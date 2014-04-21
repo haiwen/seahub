@@ -144,7 +144,7 @@ def get_msg_group_id_and_last_reply(msg_id):
     try:
         msg = GroupMessage.objects.get(id=msg_id)
     except GroupMessage.DoesNotExist:
-        return None, none
+        return None, None
 
     replies = MessageReply.objects.filter(reply_to=msg).order_by('-timestamp')[:1]
     if len(replies) >= 1:
