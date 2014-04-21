@@ -11,11 +11,9 @@
         <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
     </ul>
     <div class="fright">
-        {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <button id="repo-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <button id="sub-lib-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
-        {% else %}
-        <button id="repo-create"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
 </div>

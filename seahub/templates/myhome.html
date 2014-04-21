@@ -66,7 +66,6 @@
 $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
 {% endif %}
 {% include "snippets/myhome_extra_script.html" %}
-{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
 var cur_tab = $('.ui-tabs-selected .a');    
 var lib_create_btn = $('#repo-create'),
     sublib_create_btn = $('#sub-lib-create');
@@ -89,6 +88,7 @@ $('#shared-lib-tab, #grp-lib-tab').click(function() {
     lib_create_btn.addClass('hide');
     sublib_create_btn.addClass('hide');
 });
+{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
 var sublib_create_form = $('#sublib-create-form');
 sublib_create_btn.click(function() {
     var dir_tree_cont = $('.dir-tree-cont', sublib_create_form);
