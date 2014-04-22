@@ -181,10 +181,6 @@ $('#repo-change-passwd-form').submit(function() {
         apply_form_error(form_id, "{% trans "New password is too short" %}");
         return false;
     }
-    if ($.trim(new_passwd).length > 35) {
-        apply_form_error(form_id, "{% trans "New password is too long (maximum is 35 characters)" %}");
-        return false;
-    }
     if (!$.trim(new_passwd_again)) {
         apply_form_error(form_id, "{% trans "Please enter the new password again" %}");
         return false;

@@ -45,10 +45,6 @@ $('#repo-create-form').submit(function() {
         apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
-        if ($.trim(passwd).length > 35) {
-            apply_form_error(form_id, "{% trans "Password is too long (maximum is 35 characters)" %}");
-            return false;
-        }
         if (!$.trim(passwd_again)) {
             apply_form_error(form_id, "{% trans "Please enter the password again" %}");
             return false;
