@@ -39,7 +39,7 @@
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
-{% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
+{% if repo.encrypted and repo.enc_version == 2 %}
 <h3>{% trans "Change Password" %}</h3>
 <form id="repo-change-passwd-form" action="" method="post" class="form">{% csrf_token %}
     <p>{% trans "Change the password of this library:" %}</p>
@@ -159,7 +159,7 @@ $('#repo-owner-form').submit(function() {
     return false;
 });
 
-{% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
+{% if repo.encrypted and repo.enc_version == 2 %}
 $('#repo-change-passwd-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
