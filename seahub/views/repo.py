@@ -21,7 +21,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_repo_access_permission
 
-from seahub.utils import get_ccnetapplet_root, gen_file_upload_url, \
+from seahub.utils import gen_file_upload_url, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
     get_commit_before_new_merge
@@ -183,7 +183,6 @@ def render_repo(request, repo):
                     }, context_instance=RequestContext(request))
 
     # query context args
-    applet_root = get_ccnetapplet_root()
     httpserver_root = get_httpserver_root()
     max_upload_file_size = get_max_upload_file_size()
 
@@ -250,7 +249,6 @@ def render_repo(request, repo):
             'more_start': more_start,
             'path': path,
             'zipped': zipped,
-            'applet_root': applet_root,
             'groups': repo_groups,
             'repo_group_str': repo_group_str,
             'no_quota': no_quota,

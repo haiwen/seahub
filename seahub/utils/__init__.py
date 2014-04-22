@@ -153,14 +153,6 @@ def get_inner_httpserver_root():
 
     return seahub.settings.INNER_HTTP_SERVER_ROOT
 
-def get_ccnetapplet_root():
-    """
-    Get ccnet applet address and port from settings.py,
-    and cut out last '/'.
-
-    """
-    return seahub.settings.CCNET_APPLET_ROOT.strip('/')
-
 def gen_token(max_length=5):
     """
     Generate a random token.

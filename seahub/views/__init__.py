@@ -77,7 +77,7 @@ from seahub.forms import AddUserForm, RepoCreateForm, \
     SetUserQuotaForm, RepoSettingForm, SharedLinkPasswordForm
 from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, get_ccnetapplet_root, gen_shared_upload_link, \
+    get_httpserver_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
     EMPTY_SHA1, normalize_file_path, is_valid_username, \
@@ -1388,81 +1388,6 @@ def repo_access_file(request, repo_id, obj_id):
             logger.error('Error when sending file-download message: %s' % str(e))
 
     return HttpResponseRedirect(redirect_url)
-
-def get_repo_download_url(request, repo_id):
-    repo = seafserv_threaded_rpc.get_repo(repo_id)    
-    repo_name = repo.props.name
-    quote_repo_name = quote(repo_name.encode('utf-8'))
-    encrypted = repo.props.encrypted
-    if encrypted:
-        enc = '1'
-    else:
-        enc = ''
-    relay_id = get_session_info().id
-    if not relay_id:
-        return '', _(u"Failed to download library, unable to find server")
-
-    try:
-        token = seafserv_threaded_rpc.generate_repo_token \
-                (repo_id, request.user.username)
-    except Exception, e:
-        return '', str(e)
-
-    addr, port = get_ccnet_server_addr_port ()
-
-    if not (addr and port):
-        return '', _(u"Invalid server setting")
-
-    ccnet_applet_root = get_ccnetapplet_root()
-    email = urllib2.quote(request.user.username.encode('utf-8'))
-
-    url = ccnet_applet_root + "/repo/download/"
-    
-    url += "?relay_id=%s&relay_addr=%s&relay_port=%s" % (relay_id, addr, port)
-    url += "&email=%s&token=%s" % (email, token)
-    url += "&repo_id=%s&repo_name=%s" % (repo_id, quote_repo_name)
-    if enc:
-        url += "&encrypted=1&magic=%s&enc_ver=%s" % (repo.magic, repo.enc_version)
-        if repo.enc_version == 2 and repo.random_key:
-            url += "&key=%s" % repo.random_key
-
-    return url, ''
- 
-@login_required
-def repo_download(request):
-    repo_id = request.GET.get('repo_id', '')
-    repo = get_repo(repo_id)
-    if repo is None:
-        raise Http404
-    
-    download_url, err = get_repo_download_url(request, repo_id)
-    if err:
-        return render_to_response('error.html', {
-            "error_msg": err
-        }, context_instance=RequestContext(request))
-
-    return HttpResponseRedirect(download_url)
-
-@login_required
-def seafile_access_check(request):
-    repo_id = request.GET.get('repo_id', '')
-    repo = get_repo(repo_id)
-    if repo is None:
-        raise Http404
-
-    applet_root = get_ccnetapplet_root()
-    download_url, err = get_repo_download_url (request, repo_id)
-    if err:
-        return render_to_response('error.html', {
-                "error_msg": err
-                }, context_instance=RequestContext(request))
-    
-    return render_to_response('seafile_access_check.html', {
-            'repo_id': repo_id,
-            'applet_root': applet_root,
-            'download_url': download_url,
-            }, context_instance=RequestContext(request))
-
 
 @login_required
 def file_upload_progress_page(request):

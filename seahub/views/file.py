@@ -46,7 +46,7 @@ from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
-    get_ccnetapplet_root, render_permission_error, \
+    render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit
@@ -456,7 +456,6 @@ def view_file(request, repo_id):
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
-            "applet_root": get_ccnetapplet_root(),
             'groups': groups,
             'use_pdfjs':USE_PDFJS,
             'contributors': contributors,

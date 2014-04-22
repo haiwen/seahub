@@ -286,9 +286,6 @@ REGISTRATION_SEND_MAIL = False
 
 REQUIRE_DETAIL_ON_REGISTRATION = False
 
-# Seafile-applet address and port, used in repo download
-CCNET_APPLET_ROOT = "http://127.0.0.1:13420"
-
 # Account initial password, for password resetting.
 # INIT_PASSWD can either be a string, or a function (function has to be set without the brackets)
 def genpassword():

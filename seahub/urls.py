@@ -103,8 +103,6 @@ urlpatterns = patterns('',
     (r'^events/$', events), # ajax
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^i18n/$', i18n, name='i18n'),
-    (r'^download/repo/$', repo_download),                       
-    (r'^seafile_access_check/$', seafile_access_check),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
     url(r'^user/(?P<msg_id>\d+)/msgdel/$', user_msg_remove, name='user_msg_remove'),
