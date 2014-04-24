@@ -1,7 +1,6 @@
 from django.core.cache import cache
 
 import seaserv
-from seaserv import get_binding_peerids
 
 from seahub.notifications.models import Notification
 from seahub.notifications.utils import refresh_cache
@@ -18,12 +17,11 @@ class BaseMiddleware(object):
     """
     Middleware that add organization, group info to user.
     """
-    
+
     def process_request(self, request):
-        username = request.user.username        
+        username = request.user.username
         request.user.org = None
-        request.user.orgs = None
-        
+
         if CLOUD_MODE:
             request.cloud_mode = True
 
@@ -34,15 +32,21 @@ class BaseMiddleware(object):
         else:
             request.cloud_mode = False
 
-        request.user.joined_groups = seaserv.get_personal_groups_by_user(username)
-            
+        if CLOUD_MODE and request.user.org is not None:
+            org_id = request.user.org.org_id
+            request.user.joined_groups = seaserv.get_org_groups_by_user(
+                org_id, username)
+        else:
+            request.user.joined_groups = seaserv.get_personal_groups_by_user(
+                username)
+
         return None
 
     def process_response(self, request, response):
         return response
-    
+
 class InfobarMiddleware(object):
-    """Query info bar close status, and store into reqeust."""
+    """Query info bar close status, and store into request."""
 
     def get_from_db(self):
         ret = Notification.objects.all().filter(primary=1)
@@ -63,6 +67,6 @@ class InfobarMiddleware(object):
                 request.cur_note = cur_note[0]
 
         return None
-            
+
     def process_response(self, request, response):
         return response

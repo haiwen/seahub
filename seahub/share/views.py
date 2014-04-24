@@ -31,7 +31,6 @@ from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
-from seahub.group.views import get_user_groups
 from seahub.signals import share_file_to_user_successful
 from seahub.views import is_registered_user
 from seahub.utils import render_permission_error, string2list, render_error, \
@@ -211,7 +210,7 @@ def share_repo(request):
 
     # Parsing input values.
     share_to_all, share_to_groups, share_to_users = False, [], []
-    user_groups = get_user_groups(request)
+    user_groups = request.user.joined_groups
     share_to_list = string2list(email_or_group)
     for share_to in share_to_list:
         if share_to == 'all':

@@ -141,15 +141,6 @@ def group_check(func):
 
     return _decorated
 
-def get_user_groups(request):
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        user_groups = seaserv.get_org_groups_by_user(org_id, username)
-    else:
-        user_groups = seaserv.get_personal_groups_by_user(username)
-    return user_groups
-    
 ########## views
 @login_required
 def group_add(request):
