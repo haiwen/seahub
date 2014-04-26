@@ -319,18 +319,21 @@ def group_msg_to_json(msg, get_all_replies):
         }
 
     try:
-        att = MessageAttachment.objects.get(group_message_id=msg.id)
+        atts = MessageAttachment.objects.filter(group_message_id=msg.id)
     except MessageAttachment.DoesNotExist:
-        att = None
+        atts = []
 
-    if att:
+    atts_json = []
+    for att in atts:
         att_json = {
             'path' : att.path,
             'repo' : att.repo_id,
             'type' : att.attach_type,
             'src'  : att.src,
             }
-        ret['att'] = att_json
+        atts_json.append(att_json)
+    if len(atts_json) > 0:
+        ret['atts'] = atts_json
 
     reply_list = MessageReply.objects.filter(reply_to=msg)
     msg.reply_cnt = reply_list.count()
