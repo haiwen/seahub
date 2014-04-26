@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.forms import ModelForm, Textarea
 from django.utils.http import urlquote
+from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
 import seaserv
@@ -471,7 +472,7 @@ class UserNotification(models.Model):
             return None
 
         msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
-            'user': share_from,
+            'user': escape(share_from),
             'href': reverse('repo', args=[repo.id]),
             'repo_name': repo.name
             }
@@ -489,7 +490,7 @@ class UserNotification(models.Model):
         priv_share_token = d['priv_share_token']
 
         msg = _(u"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % {
-            'user': share_from,
+            'user': escape(share_from),
             'href': reverse('view_priv_shared_file', args=[priv_share_token]),
             'file_name': file_name
             }
@@ -505,7 +506,7 @@ class UserNotification(models.Model):
         nickname = email2nickname(msg_from)
 
         msg = _(u"You have received a <a href='%(href)s'>new message</a> from %(user)s.") % {
-            'user': nickname,
+            'user': escape(nickname),
             'href': reverse('user_msg_list', args=[msg_from]),
             }
         return msg
@@ -536,7 +537,7 @@ class UserNotification(models.Model):
         else:
             msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>") % {
                 'href': reverse('group_discuss', args=[group.id]),
-                'user': msg_from,
+                'user': escape(msg_from),
                 'group_name': group.group_name}
 
         return msg
@@ -561,7 +562,7 @@ class UserNotification(models.Model):
                 }
         else:
             msg = _(u"%(user)s replied your <a href='%(href)s'>group discussion</a>") % {
-                'user': reply_from,
+                'user': escape(reply_from),
                 'href': reverse('msg_reply_new')
                 }
         return msg
@@ -588,7 +589,7 @@ class UserNotification(models.Model):
             'username': username,
             'href': reverse('group_members', args=[group_id]),
             'group_name': group.group_name,
-            'join_request_msg': join_request_msg,
+            'join_request_msg': escape(join_request_msg),
             }
         return msg
 
