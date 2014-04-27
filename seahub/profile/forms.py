@@ -1,6 +1,5 @@
 # encoding: utf-8
 from django import forms
-from django.utils.html import escape
 
 from seahub.profile.models import Profile, DetailedProfile
 
@@ -9,8 +8,8 @@ class ProfileForm(forms.Form):
     intro = forms.CharField(max_length=256, required=False)
 
     def save(self, username):
-        nickname = escape(self.cleaned_data['nickname'])
-        intro = escape(self.cleaned_data['intro'])
+        nickname = self.cleaned_data['nickname']
+        intro = self.cleaned_data['intro']
         Profile.objects.add_or_update(username, nickname, intro)
 
 class DetailedProfileForm(ProfileForm):
@@ -19,6 +18,6 @@ class DetailedProfileForm(ProfileForm):
 
     def save(self, username):
         super(DetailedProfileForm, self).save(username)
-        department = escape(self.cleaned_data['department'])
-        telephone = escape(self.cleaned_data['telephone'])
+        department = self.cleaned_data['department']
+        telephone = self.cleaned_data['telephone']
         DetailedProfile.objects.add_or_update(username, department, telephone)
