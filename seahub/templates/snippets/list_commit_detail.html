@@ -29,7 +29,7 @@ function listCommitDetails(url, t) {
             show(data['deldir'], "{% trans "Deleted directories" %}");
             if (!con) {
                 if (data['cmt_desc']) {
-                    con = '<p>' + data['cmt_desc'] + '</p>';
+                    con = '<p>' + HTMLescape(data['cmt_desc']) + '</p>';
                 }
             }
             $('#ls-ch').css('text-align','left').html(heading + time + con);

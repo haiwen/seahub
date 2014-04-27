@@ -652,3 +652,10 @@ function addAnchorsToHeaders(html) {
     });
     return tree.html();
 }
+
+function HTMLescape(html){
+    return document.createElement('div')
+        .appendChild(document.createTextNode(html))
+        .parentNode
+        .innerHTML;
+}
