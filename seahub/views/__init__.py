@@ -436,64 +436,6 @@ def repo_recycle_view(request, repo_id):
         return render_recycle_dir(request, repo_id, commit_id)
 
 @login_required
-def repo_save_settings(request):
-    if request.method != 'POST':
-        raise Http404
-
-    username = request.user.username
-    content_type = 'application/json; charset=utf-8'
-
-    form = RepoSettingForm(request.POST)
-    if form.is_valid():
-        repo_id = form.cleaned_data['repo_id']
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        days = form.cleaned_data['days']
-        repo_owner = form.cleaned_data['repo_owner']
-        
-        repo = get_repo(repo_id)
-        if not repo:
-            err_msg = _(u'Library does not exist.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=400, content_type=content_type)
-
-        # check permission
-        if request.user.org:
-            is_owner = True if is_org_repo_owner(
-                request.user.org['org_id'], repo_id, username) else False
-        else:
-            is_owner = True if is_repo_owner(username, repo_id) else False
-        if not is_owner:
-            err_msg = _(u'You do not have permission to perform this action.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=403, content_type=content_type)
-
-        # Edit library info (name, descryption).
-        if repo.name != repo_name or repo.desc != repo_desc:
-            if not edit_repo(repo_id, repo_name, repo_desc, username):
-                err_msg = _(u'Failed to edit library information.')
-                return HttpResponse(json.dumps({'error': err_msg}),
-                                    status=500, content_type=content_type)
-
-        # set library history
-        if days != None:
-            res = set_repo_history_limit(repo_id, days)
-            if res != 0:
-                return HttpResponse(json.dumps({'error': _(u'Failed to save settings on server')}),
-                                    status=400, content_type=content_type)
-
-        # set library owner
-        if repo_owner is not None and repo_owner != username:
-            seafile_api.set_repo_owner(repo_id, repo_owner)
-
-        messages.success(request, _(u'Settings saved.'))
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-    else:
-        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
-                            status=400, content_type=content_type)
-
-@login_required
 def repo_settings(request, repo_id):
     """List and change library settings.
     """

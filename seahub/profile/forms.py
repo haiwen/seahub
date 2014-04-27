@@ -1,6 +1,6 @@
 # encoding: utf-8
 from django import forms
-from django.utils.translation import ugettext_lazy as _
+from django.utils.html import escape
 
 from seahub.profile.models import Profile, DetailedProfile
 
@@ -9,18 +9,16 @@ class ProfileForm(forms.Form):
     intro = forms.CharField(max_length=256, required=False)
 
     def save(self, username):
-        nickname = self.cleaned_data['nickname']
-        intro = self.cleaned_data['intro']
+        nickname = escape(self.cleaned_data['nickname'])
+        intro = escape(self.cleaned_data['intro'])
         Profile.objects.add_or_update(username, nickname, intro)
-        
-        
+
 class DetailedProfileForm(ProfileForm):
     department = forms.CharField(max_length=512, required=False)
     telephone = forms.CharField(max_length=100, required=False)
 
     def save(self, username):
         super(DetailedProfileForm, self).save(username)
-        department = self.cleaned_data['department']
-        telephone = self.cleaned_data['telephone']
+        department = escape(self.cleaned_data['department'])
+        telephone = escape(self.cleaned_data['telephone'])
         DetailedProfile.objects.add_or_update(username, department, telephone)
-        
