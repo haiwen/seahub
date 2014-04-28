@@ -311,25 +311,21 @@ def get_timestamp(msgtimestamp):
 
 def group_msg_to_json(msg, get_all_replies):
     ret = {
-        'from_email' : msg.from_email,
-        'nickname' : email2nickname(msg.from_email),
-        'timestamp' : get_timestamp(msg.timestamp),
-        'msg' : msg.message,
-        'msgid' : msg.id,
+        'from_email': msg.from_email,
+        'nickname': email2nickname(msg.from_email),
+        'timestamp': get_timestamp(msg.timestamp),
+        'msg': msg.message,
+        'msgid': msg.id,
         }
 
-    try:
-        atts = MessageAttachment.objects.filter(group_message_id=msg.id)
-    except MessageAttachment.DoesNotExist:
-        atts = []
-
     atts_json = []
+    atts = MessageAttachment.objects.filter(group_message_id=msg.id)
     for att in atts:
         att_json = {
-            'path' : att.path,
-            'repo' : att.repo_id,
-            'type' : att.attach_type,
-            'src'  : att.src,
+            'path': att.path,
+            'repo': att.repo_id,
+            'type': att.attach_type,
+            'src': att.src,
             }
         atts_json.append(att_json)
     if len(atts_json) > 0:
