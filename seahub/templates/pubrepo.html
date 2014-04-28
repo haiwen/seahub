@@ -69,7 +69,7 @@ $(".cancel-share").click(function() {
 function repoCreateSuccessCallback() {
     location.reload();
 }
-{% url 'seahub.views.public_repo_create' as repo_create_url %}
+{% url 'public_repo_create' as repo_create_url %}
 {% with post_url=repo_create_url %}
     {% include "snippets/repo_create_js.html" %}
 {% endwith %}
