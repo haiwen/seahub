@@ -1,5 +1,5 @@
 {% extends "admin_base.html" %}
-{% load i18n avatar_tags %}
+{% load i18n avatar_tags seahub_tags %}
 {% load url from future %}
 
 {% block extra_style %}
@@ -63,8 +63,9 @@
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
-            <li class="tab"><a href="#owned" class="a">{% trans "Owned" %}</a></li>
-            <li class="tab"><a href="#shared" class="a">{% trans "Shared" %}</a></li>
+            <li class="tab"><a href="#owned" class="a">{% trans "Owned Repos" %}</a></li>
+            <li class="tab"><a href="#shared" class="a">{% trans "Shared Repos" %}</a></li>
+            <li class="tab"><a href="#shared-links" class="a">{% trans "Shared Links" %}</a></li>
         </ul>
     </div>
 
@@ -115,6 +116,55 @@
         </table>
         {% else %}
         <p>{% trans "None" %}</p>
+        {% endif %}
+    </div>
+
+    <div id="shared-links">
+        {% if user_shared_links%}
+        <table class="sharelink-list">
+            <tr>
+                <th width="5%"><!--icon--></th>
+                <th width="30%">{% trans "Name"%}</th>
+                <th width="20%">{% trans "Size"%}</th>
+                <th width="20%">{% trans "Type"%}</th>
+                <th width="10%">{% trans "Visits"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
+            </tr>
+            {% for link in user_shared_links %}
+            <tr>
+                {% if link.s_type%}
+                    {% if link.s_type == 'f' %}
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                    <td><a href="{% url 'repo_view_file' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                    <td>{{ link.file_size|filesizeformat}}</td>
+                    {% else %}
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                    <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                    <td>{{ link.dir_size|filesizeformat}}</td>
+                    {% endif %}
+                    <td>DownLoad</td>
+                    <td>{{ link.view_cnt }}</td>
+                    <td>
+                        <a class="op vh" href="{% url 'remove_shared_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                    </td>
+                {% else %}
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                    <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+                    <td>//</td>
+                    <td>Upload</td>
+                    <td>{{ link.view_cnt }}</td>
+                    <td>
+                        <a class="op vh" href="{% url 'remove_shared_upload_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                    </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "You don't have any shared link"%}</h2>
+            <p>{% trans "You can generate an share link from any dir/file. People receive this link can download/upload zipped dir or files." %}</p>
+        </div>
         {% endif %}
     </div>
 </div>
