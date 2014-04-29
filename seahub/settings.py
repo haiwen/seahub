@@ -314,7 +314,7 @@ BRANDING_CSS = ''
 SERVE_STATIC = True
 
 # Enalbe or disalbe registration on web.
-ENABLE_SIGNUP = False
+ENABLE_SIGNUP = True#False
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
 # Please refer https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts for details.
