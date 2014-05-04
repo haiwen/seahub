@@ -714,7 +714,7 @@ def convert_cmmt_desc_link(commit):
         file_or_dir = matchobj.group(2)
         remaining = matchobj.group(3)
 
-        tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s">%s</a>"'
+        tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s" class="normal">%s</a>"'
         if remaining:
             return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir),
                                         file_or_dir, remaining)
