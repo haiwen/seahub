@@ -174,6 +174,14 @@ class RepoSettingForm(forms.Form):
     days = forms.IntegerField(required=False,
                               error_messages={'invalid': _('Please enter a number')})
 
+    def clean_repo_name(self):
+        repo_name = self.cleaned_data['repo_name']
+        if not is_valid_filename(repo_name):
+            error_msg = _(u"Name %s is not valid") % repo_name
+            raise forms.ValidationError(error_msg)
+        else:
+            return repo_name
+
 class SharedLinkPasswordForm(forms.Form):
     """
     Form for user to access shared files/directory.

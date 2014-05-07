@@ -52,7 +52,12 @@ try:
     from seahub.settings import ENABLE_INNER_HTTPSERVER
 except ImportError:
     ENABLE_INNER_HTTPSERVER = True
-    
+
+try:
+    from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
+except ImportError:
+    CHECK_SHARE_LINK_TRAFFIC = False
+
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff
 
@@ -889,30 +894,32 @@ if EVENTS_CONFIG_FILE and hasattr(seafevents, 'get_user_traffic_stat'):
             session.close()
         return stat
 
-    def user_traffic_over_limit(username):
-        """Return ``True`` if user traffic over the limit, otherwise ``False``.
-        """
-        from seahub_extra.plan.models import UserPlan
-        from seahub_extra.plan.settings import PLAN
-        up = UserPlan.objects.get_valid_plan_by_user(username)
-        plan = 'Free' if up is None else up.plan_type
-        traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
-
-        try:
-            stat = get_user_traffic_stat(username)
-        except Exception as e:
-            logger.error(e)
-            stat = None
-
-        if stat is None:
-            return True
-
-        month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
-        return True if month_traffic >= traffic_limit else False
 else:
     def get_user_traffic_stat(username):
         pass
     def get_user_traffic_list():
         pass
-    def user_traffic_over_limit(request):
+
+def user_traffic_over_limit(username):
+    """Return ``True`` if user traffic over the limit, otherwise ``False``.
+    """
+    if not CHECK_SHARE_LINK_TRAFFIC:
         return False
+
+    from seahub_extra.plan.models import UserPlan
+    from seahub_extra.plan.settings import PLAN
+    up = UserPlan.objects.get_valid_plan_by_user(username)
+    plan = 'Free' if up is None else up.plan_type
+    traffic_limit = int(PLAN[plan]['share_link_traffic']) * 1024 * 1024 * 1024
+
+    try:
+        stat = get_user_traffic_stat(username)
+    except Exception as e:
+        logger.error(e)
+        stat = None
+
+    if stat is None:
+        return True
+
+    month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
+    return True if month_traffic >= traffic_limit else False

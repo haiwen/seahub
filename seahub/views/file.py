@@ -282,7 +282,8 @@ def file_size_exceeds_preview_limit(file_size, file_type):
             return True, err
         else:
             return False, ''
-    
+
+@login_required
 @repo_passwd_set_required
 def view_file(request, repo_id):
     """
@@ -367,7 +368,7 @@ def view_file(request, repo_id):
 
             if len(img_list) > 1:
                 img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
-                cur_img_index = img_list.index(u_filename) 
+                cur_img_index = img_list.index(u_filename)
                 if cur_img_index != 0:
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
@@ -389,11 +390,6 @@ def view_file(request, repo_id):
     else:
         file_shared_link = ''
 
-    # my contacts used in shared link autocomplete
-    contacts = Contact.objects.filter(user_email=username)
-    for c in contacts:
-        c.avatar = avatar(c.contact_email, 16)
-
     for g in request.user.joined_groups:
         g.avatar = grp_avatar(g.id, 20)
 
@@ -405,15 +401,15 @@ def view_file(request, repo_id):
     else:
         repo_shared_groups = get_shared_groups_by_repo(repo_id)
     # Filter out groups that user in joined.
-    groups = [ x for x in repo_shared_groups if is_group_user(x.id, username)]
+    groups = [x for x in repo_shared_groups if is_group_user(x.id, username)]
     if len(groups) > 1:
         ctx = {}
         ctx['groups'] = groups
         repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
     else:
-        repogrp_str = '' 
-    
-    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
+        repogrp_str = ''
+
+    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
 
     # fetch file contributors and latest contributor
     contributors, last_modified, last_commit_id = \
@@ -429,7 +425,7 @@ def view_file(request, repo_id):
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
 
     template = 'view_file_%s.html' % ret_dict['filetype'].lower()
-        
+
     search_repo_id = None
     if not repo.encrypted:
         search_repo_id = repo.id
@@ -447,17 +443,16 @@ def view_file(request, repo_id):
             'protocol': http_or_https,
             'domain': domain,
             'file_shared_link': file_shared_link,
-            'contacts': contacts,
             'err': ret_dict['err'],
             'file_content': ret_dict['file_content'],
             'file_enc': ret_dict['file_enc'],
             'encoding': ret_dict['encoding'],
-            'file_encoding_list':ret_dict['file_encoding_list'],
+            'file_encoding_list': ret_dict['file_encoding_list'],
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
             'groups': groups,
-            'use_pdfjs':USE_PDFJS,
+            'use_pdfjs': USE_PDFJS,
             'contributors': contributors,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,

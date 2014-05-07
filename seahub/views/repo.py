@@ -189,10 +189,6 @@ def render_repo(request, repo):
     protocol = request.is_secure() and 'https' or 'http'
     domain = RequestSite(request).domain
 
-    contacts = Contact.objects.get_contacts_by_user(username)
-    for c in contacts:
-        c.avatar = avatar(c.contact_email, 16)
-
     for g in request.user.joined_groups:
         g.avatar = grp_avatar(g.id, 20)
 
@@ -257,7 +253,6 @@ def render_repo(request, repo):
             'httpserver_root': httpserver_root,
             'protocol': protocol,
             'domain': domain,
-            'contacts': contacts,
             'fileshare': fileshare,
             'dir_shared_link': dir_shared_link,
             'uploadlink': uploadlink,

@@ -57,7 +57,6 @@ urlpatterns = patterns('',
     # url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
     # url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
-    (r'^repo/create/$', repo_create),
     (r'^repo/upload_check/$', validate_filename),
     url(r'^repo/unsetinnerpub/(?P<repo_id>[-0-9a-f]{36})/$', unsetinnerpub, name='unsetinnerpub'),
     url(r'^repo/set_password/$', repo_set_password, name="repo_set_password"),
@@ -74,7 +73,6 @@ urlpatterns = patterns('',
     url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^repo/snapshot/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_view_snapshot, name='repo_view_snapshot'),
-    url(r'^repo/history/changes/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_changes, name='repo_history_changes'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
@@ -100,7 +98,6 @@ urlpatterns = patterns('',
    (r'^file_upload_progress_page/$', file_upload_progress_page),
     url(r'^activities/$', activities, name='activities'),
     url(r'^starred/$', starred, name='starred'),
-    (r'^events/$', events), # ajax
     (r'^pdf_full_view/$', pdf_full_view),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
@@ -112,13 +109,12 @@ urlpatterns = patterns('',
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
 
     ### Ajax ###
+    url(r'^ajax/repo/create/$', repo_create, name="repo_create"),
     (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/remove/$', repo_remove),
-
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/delete/$', delete_dirents, name='delete_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/move/$', mv_dirents, name='mv_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/copy/$', cp_dirents, name='cp_dirents'),
-
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_dir, name='repo_dir_data'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/more/$', list_dir_more, name='list_dir_more'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/new/$', new_dir, name='new_dir'),
@@ -127,11 +123,9 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/sub_repo/$', sub_repo, name='sub_repo'),
-
     url(r'^ajax/cp_progress/$', get_cp_progress, name='get_cp_progress'),
     url(r'^ajax/multi_cp_progress/$', get_multi_cp_progress, name='get_multi_cp_progress'),
     url(r'^ajax/cancel_cp/$', cancel_cp, name='cancel_cp'),
-
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/new/$', new_file, name='new_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
@@ -139,29 +133,26 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/star/$', repo_star_file, name='repo_star_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/unstar/$', repo_unstar_file, name='repo_unstar_file'),
-
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
-
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
-
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file_op_url/$', get_file_op_url, name='get_file_op_url'),
-
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
     url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
-                       
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
     url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
     url(r'^ajax/my-shared-and-group-repos/$', my_shared_and_group_repos, name='my_shared_and_group_repos'),
+    url(r'^ajax/events/$', events, name="events"),
 
-    ### organizaion ###                      
+    ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
-    (r'^publicrepo/create/$', public_repo_create),
+    url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
     url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
     url(r'^pubinfo/users/$', pubuser, name='pubuser'),
-                       
+
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
     (r'^avatar/', include('seahub.avatar.urls')),

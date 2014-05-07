@@ -89,8 +89,10 @@ class AuthTokenSerializer(serializers.Serializer):
                 raise serializers.ValidationError('invalid device id')
 
         elif platform == 'android':
+            # See http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID
             # android device id is the 64bit secure id, so it must be 16 chars in hex representation
-            if len(device_id) != 16:
+            # but some user reports their device ids are 15 chars
+            if len(device_id) != 16 and len(device_id) != 15:
                 raise serializers.ValidationError('invalid device id')
         elif platform == 'ios':
             if len(device_id) != 36:

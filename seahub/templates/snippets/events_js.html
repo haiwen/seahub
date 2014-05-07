@@ -4,7 +4,7 @@
 function reqEvents(start) {
     $('#events-loading').removeClass('hide');
     $.ajax({
-        url:'{{SITE_ROOT}}events/?start=' + start,
+        url:'{% url 'events' %}?start=' + start,
         dataType: 'json',
         cache: false,
         success: function(data) {

@@ -53,18 +53,14 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:
             user = User.objects.get(email=user)
-            alt = email2nickname(user.username)
             url = avatar_url(user, size)
         except User.DoesNotExist:
             url = get_default_avatar_non_registered_url()
-            alt = _("Default Avatar")
         except Exception as e:
             # Catch exceptions to avoid 500 errors.
             logger.error(e)
             url = get_default_avatar_non_registered_url()
-            alt = _("Default Avatar")
     else:
-        alt = email2nickname(user.username)
         try:
             url = avatar_url(user, size)
         except Exception as e:
@@ -72,8 +68,7 @@ def avatar(user, size=AVATAR_DEFAULT_SIZE):
             logger.error(e)
             url = get_default_avatar_non_registered_url()
 
-    return """<img src="%s" alt="%s" width="%s" height="%s" class="avatar" />""" % (url, alt,
-        size, size)
+    return """<img src="%s" width="%s" height="%s" class="avatar" />""" % (url, size, size)
 
 @cache_result
 @register.simple_tag
@@ -84,15 +79,13 @@ def primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
     work for us. If that special view is then cached by a CDN for instance,
     we will avoid many db calls.
     """
-    alt = unicode(user)
     url = reverse('avatar_render_primary', kwargs={'user' : user, 'size' : size})
-    return """<img src="%s" alt="%s" width="%s" height="%s" />""" % (url, alt,
-        size, size)
+    return """<img src="%s" width="%s" height="%s" />""" % (url, size, size)
 
 @cache_result
 @register.simple_tag
 def render_avatar(avatar, size=AVATAR_DEFAULT_SIZE):
     if not avatar.thumbnail_exists(size):
         avatar.create_thumbnail(size)
-    return """<img src="%s" alt="%s" width="%s" height="%s" />""" % (
-        avatar.avatar_url(size), str(avatar), size, size)
+    return """<img src="%s" width="%s" height="%s" />""" % (
+        avatar.avatar_url(size), size, size)

@@ -2060,6 +2060,10 @@ textarea:-moz-placeholder {/* for FF */
     left:-64px;
     top:-1px;
 }
+#send-msg-form .avatar {
+    border-radius:3px;
+    position:static;
+}
 .msg-form .ops {
     text-align:right;
     margin-top:6px;

@@ -5,14 +5,14 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api, seafserv_rpc, \
+from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, \
     get_user_quota_usage, get_user_share_usage
@@ -20,21 +20,22 @@ from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.contacts.models import Contact
-from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm
+from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
+    RepoCreateForm, SharedRepoCreateForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
-from seahub.signals import upload_file_successful
+from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id
+    get_system_default_repo_id, access_to_repo, get_diff, group_events_data
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
-from seahub.signals import repo_deleted
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
-    get_repo_last_modify, gen_file_upload_url, is_org_context
+    get_repo_last_modify, gen_file_upload_url, is_org_context, \
+    get_org_user_events, get_user_events
 from seahub.utils.star import star_file, unstar_file
 
 # Get an instance of a logger
@@ -63,8 +64,6 @@ def get_dirents(request, repo_id):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
-
-    username = request.user.username
 
     # permission checking
     user_perm = check_repo_access_permission(repo_id, request.user)
@@ -1272,7 +1271,7 @@ def repo_remove(request, repo_id):
 
     if get_system_default_repo_id() == repo_id:
         result['error'] = _(u'System library can not be deleted.')
-        return HttpResponse(json.dumps(result), status=403, content_type=content_type)
+        return HttpResponse(json.dumps(result), status=403, content_type=ct)
         
     repo = get_repo(repo_id)
     if not repo:
@@ -1327,7 +1326,6 @@ def space_and_traffic(request):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
-    result = {}  
 
     username = request.user.username
 
@@ -1480,3 +1478,195 @@ def get_file_op_url(request, repo_id):
         url = gen_file_upload_url(token, op_type + '-aj')
     
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
+
+@login_required
+def repo_history_changes(request, repo_id):
+    if not request.is_ajax():
+        return Http404
+
+    changes = {} 
+    content_type = 'application/json; charset=utf-8'
+
+    if not access_to_repo(request, repo_id, ''): 
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    username = request.user.username
+    try: 
+        server_crypto = UserOptions.objects.is_server_crypto(username)
+    except CryptoOptionNotSetError:
+        # Assume server_crypto is ``False`` if this option is not set.
+        server_crypto = False   
+    
+    if repo.encrypted and \
+            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
+            and not is_passwd_set(repo_id, username):
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    changes = get_diff(repo_id, '', commit_id)
+
+    c = get_commit(repo.id, repo.version, commit_id)
+    if c.parent_id is None:
+        # A commit is a first commit only if it's parent id is None.
+        changes['cmt_desc'] = repo.desc
+    elif c.second_parent_id is None:
+        # Normal commit only has one parent.
+        if c.desc.startswith('Changed library'):
+            changes['cmt_desc'] = _('Changed library name or description')
+    else:
+        # A commit is a merge only if it has two parents.
+        changes['cmt_desc'] = _('No conflict in the merge.')
+
+    return HttpResponse(json.dumps(changes), content_type=content_type)
+
+@login_required    
+def repo_create(request):
+    '''  
+    Handle ajax post to create a library.
+    
+    '''
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {} 
+    content_type = 'application/json; charset=utf-8'
+
+    form = RepoCreateForm(request.POST)
+    if not form.is_valid():
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponseBadRequest(json.dumps(result),
+                                      content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    encryption = int(form.cleaned_data['encryption'])
+
+    uuid = form.cleaned_data['uuid']
+    magic_str = form.cleaned_data['magic_str']
+    encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
+    username = request.user.username
+
+    try: 
+        if not encryption:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, username,
+                                              None)
+        else:
+            repo_id = seafile_api.create_enc_repo(
+                uuid, repo_name, repo_desc, username,
+                magic_str, encrypted_file_key, enc_version=2)
+    except SearpcError, e:
+        repo_id = None
+
+    if not repo_id:
+        result['error'] = _(u"Internal Server Error")
+        return HttpResponse(json.dumps(result), status=500,
+                            content_type=content_type)
+
+    try:
+        default_lib = (int(request.GET.get('default_lib', 0)) == 1)
+    except ValueError:
+        default_lib = False
+    if default_lib:
+        UserOptions.objects.set_default_repo(username, repo_id)
+
+    result = {
+        'repo_id': repo_id,
+        'repo_name': repo_name,
+        'repo_desc': repo_desc,
+        'repo_enc': encryption,
+    }
+    repo_created.send(sender=None,
+                      org_id=-1,
+                      creator=username,
+                      repo_id=repo_id,
+                      repo_name=repo_name)
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required    
+def public_repo_create(request):
+    '''  
+    Handle ajax post to create public repo.
+    
+    '''
+    if not request.is_ajax() or request.method != 'POST':
+        return Http404
+
+    result = {} 
+    content_type = 'application/json; charset=utf-8'
+    
+    form = SharedRepoCreateForm(request.POST)
+    if not form.is_valid():
+        result['error'] = str(form.errors.values()[0])
+        return HttpResponseBadRequest(json.dumps(result),
+                                      content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    permission = form.cleaned_data['permission']
+    encryption = int(form.cleaned_data['encryption'])
+
+    uuid = form.cleaned_data['uuid']
+    magic_str = form.cleaned_data['magic_str']
+    encrypted_file_key = form.cleaned_data['encrypted_file_key']
+
+    user = request.user.username
+
+    try: 
+        if not encryption:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
+        else:
+            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
+
+        # set this repo as inner pub
+        seafile_api.add_inner_pub_repo(repo_id, permission)
+        #seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
+    except SearpcError as e:
+        repo_id = None
+        logger.error(e)
+
+    if not repo_id:
+        result['error'] = _(u'Internal Server Error')
+        return HttpResponse(json.dumps(result), status=500,
+                                      content_type=content_type)
+
+    result['success'] = True
+    repo_created.send(sender=None,
+                      org_id=-1,
+                      creator=user,
+                      repo_id=repo_id,
+                      repo_name=repo_name)
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+def events(request):
+    if not request.is_ajax():
+        raise Http404
+
+    events_count = 15
+    username = request.user.username
+    start = int(request.GET.get('start'))
+
+    # if request.cloud_mode:
+    #     org_id = request.GET.get('org_id')
+    #     events, start = get_org_user_events(org_id, username, start, events_count)
+    # else:
+    #     events, start = get_user_events(username, start, events_count)
+    events, start = get_user_events(username, start, events_count)
+    events_more = True if len(events) == events_count else False
+
+    event_groups = group_events_data(events)
+    ctx = {'event_groups': event_groups}
+    html = render_to_string("snippets/events_body.html", ctx)
+
+    return HttpResponse(json.dumps({'html': html,
+                                    'events_more': events_more,
+                                    'new_start': start}),
+                        content_type='application/json; charset=utf-8')

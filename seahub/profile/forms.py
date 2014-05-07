@@ -1,6 +1,5 @@
 # encoding: utf-8
 from django import forms
-from django.utils.translation import ugettext_lazy as _
 
 from seahub.profile.models import Profile, DetailedProfile
 
@@ -12,8 +11,7 @@ class ProfileForm(forms.Form):
         nickname = self.cleaned_data['nickname']
         intro = self.cleaned_data['intro']
         Profile.objects.add_or_update(username, nickname, intro)
-        
-        
+
 class DetailedProfileForm(ProfileForm):
     department = forms.CharField(max_length=512, required=False)
     telephone = forms.CharField(max_length=100, required=False)
@@ -23,4 +21,3 @@ class DetailedProfileForm(ProfileForm):
         department = self.cleaned_data['department']
         telephone = self.cleaned_data['telephone']
         DetailedProfile.objects.add_or_update(username, department, telephone)
-        
