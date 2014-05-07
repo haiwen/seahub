@@ -844,13 +844,15 @@ function setPathWidth() {
 }
 $(function () { setPathWidth(); });
 
+{% include "snippets/list_commit_detail.html" %}
+
 function dirOP() {
 
 setPathWidth();
 
 $('.path .dir-link').click(dirlinkClick);
 
-$('.lsch').click(function() {
+$('.lsch').unbind().click(function() {
     listCommitDetails($(this).data('url'), $(this).data('time'));
     return false;
 }); 
@@ -1971,7 +1973,6 @@ function updateCmt() {
         return false;
     });
 {% endif %}
-{% include "snippets/list_commit_detail.html" %}
 {% include "snippets/shared_link_js.html" %}
 {% include "snippets/bottom_bar.html" %}
 </script>
