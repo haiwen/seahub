@@ -5,14 +5,14 @@ import logging
 import simplejson as json
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api, seafserv_rpc, \
+from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     is_org_repo_owner, CALC_SHARE_USAGE, seafserv_threaded_rpc, \
     get_user_quota_usage, get_user_share_usage
@@ -1555,6 +1555,7 @@ def repo_create(request):
         result['error'] = _(u"Internal Server Error")
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
+
     try:
         default_lib = (int(request.GET.get('default_lib', 0)) == 1)
     except ValueError:
@@ -1650,7 +1651,7 @@ def events(request):
     ctx = {'event_groups': event_groups}
     html = render_to_string("snippets/events_body.html", ctx)
 
-    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
+    return HttpResponse(json.dumps({'html': html,
+                                    'events_more': events_more,
                                     'new_start': start}),
-                            content_type='application/json; charset=utf-8')
-
+                        content_type='application/json; charset=utf-8')
