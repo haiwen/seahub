@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response
 from django.contrib.sites.models import Site, RequestSite
 from django.http import HttpResponseRedirect, Http404
 from django.template import RequestContext
@@ -22,7 +22,6 @@ from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
 from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seahub.auth.tokens import default_token_generator
-
 from seahub.base.accounts import User
 
 # Get an instance of a logger
@@ -105,13 +104,24 @@ def login(request, template_name='registration/login.html',
         current_site = Site.objects.get_current()
     else:
         current_site = RequestSite(request)
-    
+
+    enable_signup = getattr(settings, 'ENABLE_SIGNUP', False)
+    multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
+    if enable_signup:
+        if multi_tenancy:
+            signup_url = reverse('choose_register')
+        else:
+            signup_url = reverse('registration_register')
+    else:
+        signup_url = ''
+
     return render_to_response(template_name, {
             'form': form,
             redirect_field_name: redirect_to,
             'site': current_site,
             'site_name': current_site.name,
             'remember_days': settings.LOGIN_REMEMBER_DAYS,
+            'signup_url': signup_url,
             }, context_instance=RequestContext(request))
 
 def login_simple_check(request):
