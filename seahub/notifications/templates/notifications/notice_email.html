@@ -1,24 +1,71 @@
 {% extends 'email_base.html' %}
 
-{% load i18n seahub_tags %}
+{% load i18n seahub_tags avatar_tags%}
 
 {% block email_con %}
 {% autoescape off %}
 
-<p style="color:#121214;font-size:14px;">{% blocktrans with name=to_user|email2nickname %}Hi {{ name }},{% endblocktrans %}</p>
+<p style="color:#121214;font-size:14px;">Hi, <img src="{{ url_base }}{{ avatar_url }}" alt="" />{% blocktrans with name=to_user|email2nickname %}{{ name }}{% endblocktrans %}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans count num=notice_count %}
-You've got 1 new notice on {{ site_name }}.
+You've got 1 new notice on {{ site_name }}:
 {% plural %}
-You've got {{num}} new notices on {{ site_name }}.
+You've got {{num}} new notices on {{ site_name }}:
 {% endblocktrans %}
 </p>
+
+<div id="notices" style="background-color:#f2f2f2;">
+    <table id="notices-table">
+        <tr>
+            <th width="70%">{% trans "Message"%}</th>
+            <th width="30%">{% trans "Time"%}</th>
+        </tr>
+
+        {% for notice in notices %}
+            {% if notice.is_group_msg %}
+                <tr >
+                    <td><img src="{{ url_base }}{{notice.group_msg_from_avatar_url}}" alt="" />{{notice.group_msg_from|email2nickname}} posted a new discussion in <a href='{{url_base}}{{notice.group_url}}'>{{notice.group_name}}</a></td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_grpmsg_reply %}
+                <tr >
+                    <td><img src="{{ url_base }}{{notice.group_msg_reply_from_avatar_url}}" alt="" />{{notice.group_msg_reply_from|email2nickname}} replied your<a href='{{url_base}}{{notice.group_msg_reply_url}}'>group discussion</a></td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_repo_share_msg %}
+                <tr >
+                    <td><img src="{{ url_base }}{{notice.repo_share_from_avatar_url}}" alt="" />{{notice.repo_share_from|email2nickname}} has shared a library named <a href='{{url_base}}{{notice.repo_url}}'>{{notice.repo_name}}</a> to you.</td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_priv_file_share_msg %}
+                <tr >
+                    <td><img src="{{ url_base }}{{notice.priv_shared_file_from_avatar_url}}" alt="" />{{notice.priv_shared_file_from|email2nickname}} has shared a file named <a href='{{url_base}}{{notice.priv_shared_file_url}}'>{{notice.priv_shared_file_name}}</a> to you.</td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_user_message %}
+                <tr >
+                    <td> You have received a <a href='{{ url_base }}/user/{{notice.detail}}/msgs/'>new message</a> from <img src="{{ url_base }}{{notice.user_msg_from_avatar_url}}" alt="" />{{notice.detail|email2nickname}}.</td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_file_uploaded_msg %}
+                <tr >
+                    <td>A file named <a href='{{url_base}}{{notice.uploaded_file_link}}'>{{notice.uploaded_file_name}}</a> is uploaded to your folder <a href='{{url_base}}{{notice.uploaded_folder_link}}'>{{notice.uploaded_folder_name}}</a></td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+            {% elif notice.is_group_join_request %}
+                <tr >
+                    <td>User <a href='{{url_base}}{{notice.grpjoin_user_profile_url}}'>{{notice.grpjoin_username}}</a> has asked to join group <a href='{{url_base}}{{notice.grpjoin_group_url}}'>{{notice.grpjoin_group_name}}</a>, verification message: {{notice.grpjoin_request_msg}}</td>
+                    <td>{{ notice.timestamp }}</td>
+                </tr>
+          {% endif %}
+        {% endfor %}
+    </table>
+</div>
 
 <p style="font-size:14px;color:#434144;">
 {% trans "Go check out at the following page:" %}<br />
 {{ url_base }}{% url 'user_notification_list' %}
 </p>
-
 {% endautoescape %}
 {% endblock %}
