@@ -1,12 +1,22 @@
 {% load i18n %}
 {% load url from future %}
 
-var share_list = [], contacts = [], contact_email;    
-{% for contact in contacts %}
-contact_email = '{{ contact.contact_email }}';
-share_list.push({value: contact_email, label: contact_email});
-contacts.push({value:contact_email, avatar:'{{contact.avatar|safe}}'});
-{% endfor %}
+var share_list = [], contacts = [];
+$(function () {
+    $.ajax({
+        url:'{% url 'get_contacts' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var contact_list = data['contacts'], contact_email;
+            for (var i = 0, len = contact_list.length; i < len; i++) {
+                contact_email = contact_list[i].email;
+                share_list.push({value: contact_email, label: contact_email});
+                contacts.push({value:contact_email, avatar:contact_list[i].avatar});
+            }
+        }
+    });
+});
 
 function showSharePopup(op, name, aj_urls, type, cur_path) {
     var path;

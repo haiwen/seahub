@@ -389,11 +389,6 @@ def view_file(request, repo_id):
     else:
         file_shared_link = ''
 
-    # my contacts used in shared link autocomplete
-    contacts = Contact.objects.filter(user_email=username)
-    for c in contacts:
-        c.avatar = avatar(c.contact_email, 16)
-
     for g in request.user.joined_groups:
         g.avatar = grp_avatar(g.id, 20)
 
@@ -447,7 +442,6 @@ def view_file(request, repo_id):
             'protocol': http_or_https,
             'domain': domain,
             'file_shared_link': file_shared_link,
-            'contacts': contacts,
             'err': ret_dict['err'],
             'file_content': ret_dict['file_content'],
             'file_enc': ret_dict['file_enc'],
