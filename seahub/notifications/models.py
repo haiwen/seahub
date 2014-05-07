@@ -463,6 +463,7 @@ class UserNotification(models.Model):
         """
         d = json.loads(self.detail)
         share_from = d['share_from']
+        share_from = email2nickname(share_from)
         repo_id = d['repo_id']
 
         repo = seafile_api.get_repo(repo_id)
@@ -485,6 +486,7 @@ class UserNotification(models.Model):
         """
         d = json.loads(self.detail)
         share_from = d['share_from']
+        share_from = email2nickname(share_from)
         file_name = d['file_name']
         priv_share_token = d['priv_share_token']
 
@@ -528,6 +530,7 @@ class UserNotification(models.Model):
             return None
 
         msg_from = d.get('msg_from')
+        msg_from = email2nickname(msg_from)
 
         if msg_from is None:
             msg = _(u"<a href='%(href)s'>%(group_name)s</a> has new discussion") % {
@@ -554,6 +557,7 @@ class UserNotification(models.Model):
 
         msg_id = d.get('msg_id')
         reply_from = d.get('reply_from')
+        reply_from = email2nickname(reply_from)
 
         if reply_from is None:
             msg = _(u"One <a href='%(href)s'>group discussion</a> has new reply") % {
@@ -606,7 +610,7 @@ from seahub.message.models import UserMessage
     
 @receiver(upload_file_successful)        
 def add_upload_file_msg_cb(sender, **kwargs):
-    """Notify repo owner when others upload files to his/her share folder.
+    """Notify repo owner when others upload files to his/her folder from shared link.
     """
     repo_id = kwargs.get('repo_id', None)
     file_path = kwargs.get('file_path', None)
@@ -631,9 +635,7 @@ def add_share_repo_msg_cb(sender, **kwargs):
     
     assert from_user and to_user and repo is not None, 'Arguments error'
 
-    nickname = email2nickname(from_user)
-
-    detail = repo_share_msg_to_json(nickname, repo.id)
+    detail = repo_share_msg_to_json(from_user, repo.id)
     UserNotification.objects.add_repo_share_msg(to_user, detail)
 
 @receiver(share_file_to_user_successful)
@@ -645,9 +647,7 @@ def add_share_file_msg_cb(sender, **kwargs):
 
     assert priv_share is not None, 'Argument error'
 
-    nickname = email2nickname(priv_share.from_user)
-
-    detail = priv_file_share_msg_to_json(nickname, file_name, priv_share.token)
+    detail = priv_file_share_msg_to_json(priv_share.from_user, file_name, priv_share.token)
     UserNotification.objects.add_priv_file_share_msg(priv_share.to_user, detail)
     
 @receiver(post_save, sender=UserMessage)
@@ -667,7 +667,7 @@ def grpmsg_added_cb(sender, **kwargs):
 
     notify_members = [ x.user_name for x in group_members if x.user_name != from_email ]
 
-    detail = group_msg_to_json(group_id, email2nickname(from_email))
+    detail = group_msg_to_json(group_id, from_email)
     UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
 
 @receiver(grpmsg_reply_added)    
@@ -687,7 +687,7 @@ def grpmsg_reply_added_cb(sender, **kwargs):
                              if x.from_email != reply_from_email])
     notice_users.add(group_msg.from_email)
 
-    detail = grpmsg_reply_to_json(msg_id, email2nickname(reply_from_email))
+    detail = grpmsg_reply_to_json(msg_id, reply_from_email)
 
     for user in notice_users:
         UserNotification.objects.add_group_msg_reply_notice(to_user=user,
