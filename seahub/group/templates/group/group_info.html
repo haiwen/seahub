@@ -15,17 +15,17 @@
     </div>
     <div id="grp-repos" class="hide">
     {% if repos %}
-    <table>
+    <table class="group-repo-list">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name" %}</th>
+        <th width="20%">{% trans "Name " %}<span id="group-repo-name-down" class="icon-caret-up cspt"></span> <span id="group-repo-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="33%">{% trans "Description" %}</th>
         <th width="16%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Shared By" %}</th>
         <th width="13%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
-    <tr>
+    <tr class="group-repo-item" data-reponame="{{repo.props.name}}">
         <td>
           {% if repo.encrypted %}
             <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
@@ -177,5 +177,38 @@ $('.lsch-encrypted').click(function() {
 }); 
 {% include 'snippets/repo_decrypt_js.html' %}
 {% endif %}
+$('#group-repo-name-down, #group-repo-name-up').click(function() {
+    var id= $(this).attr('id'), by,
+        dir_list = [],
+        table = $('.group-repo-list'),
+        repo_item = $('.group-repo-item');
+    
+    switch (id) {
+        case 'group-repo-name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 }; break;
+        case 'group-repo-name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 }; break;
+    }
+
+    // when 'name' is like '123', `data('name')` return number 123 
+    repo_item.each(function() {
+        dir_list.push({'name':$(this).attr('data-reponame'), 'element':this});
+    });
+
+    dir_list.sort(by);
+
+    repo_item.detach();
+
+    $(dir_list).each(function(index, item) {
+        table.append(item.element);
+    });
+  
+    $(this).addClass('hide');
+    var other;
+    if (id.indexOf('up') != -1) {
+        other = $('#' + id.replace('up', 'down'));
+    } else {
+        other = $('#' + id.replace('down', 'up'));
+    }
+    other.removeClass('hide');
+});
 </script>
 {% endblock %}
