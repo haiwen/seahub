@@ -762,7 +762,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 /**** tab-popup ****/ /* e.g repo-share */
 .tab-popup {
-    width:400px;
+    min-width:400px;
+    width:auto; /*for 'long' lang*/
     padding-top:10px;
 }
 .tab-popup .hd {
