@@ -34,8 +34,7 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_GUEST
-from seahub.utils import send_html_email, get_user_traffic_list, get_server_id, \
-        gen_file_share_link, gen_dir_share_link, gen_shared_upload_link
+from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 
 logger = logging.getLogger(__name__)
@@ -364,48 +363,44 @@ def user_info(request, email):
 
     user_shared_links = []
     # download links
-    fileshares = FileShare.objects.filter(username=email)
-
+    fileshares = list(FileShare.objects.filter(username=email))
     for fs in fileshares:
         r = seafile_api.get_repo(fs.repo_id)
         if not r:
             fs.delete()
             continue
 
-        if fs.s_type == 'f':
+        if fs.is_file_share_link():
             if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path)
-            fs.shared_link = gen_file_share_link(fs.token)
-
             path = fs.path.rstrip('/') # Normalize file path 
             obj_id = seafile_api.get_file_id_by_path(r.id, path)
-            file_size = seafile_api.get_file_size(r.store_id, r.version, obj_id)
-            fs.file_size = file_size
+            fs.file_size = seafile_api.get_file_size(r.store_id, r.version,
+                                                     obj_id)
         else:
             if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path.rstrip('/'))
-            fs.shared_link = gen_dir_share_link(fs.token)
-
             path = fs.path
             if path[-1] != '/':         # Normalize dir path
                 path += '/'
-            #get dir size
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path (r.id,
-                                                              r.head_cmmt_id,
-                                                              path.encode('utf-8'))
-            dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id, r.version,
-                                                            dir_id)
-            fs.dir_size = dir_size
+            # get dir size
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(r.id,
+                                                             r.head_cmmt_id,
+                                                             path)
+            fs.dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id,
+                                                             r.version,
+                                                             dir_id)
 
-        fs.repo = r
-        user_shared_links.append(fs)
+        fs.is_download = True
+    fileshares.sort(key=lambda x: x.view_cnt, reverse=True)
+    user_shared_links += fileshares
 
     # upload links
-    uploadlinks = UploadLinkShare.objects.filter(username=email)
+    uploadlinks = list(UploadLinkShare.objects.filter(username=email))
     for link in uploadlinks:
         r = seafile_api.get_repo(link.repo_id)
         if not r:
@@ -415,9 +410,9 @@ def user_info(request, email):
             link.delete()
             continue
         link.dir_name = os.path.basename(link.path.rstrip('/'))
-        link.shared_link = gen_shared_upload_link(link.token)
-        link.repo = r
-        user_shared_links.append(link)
+        link.is_upload = True
+    uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
+    user_shared_links += uploadlinks
 
     return render_to_response(
         'sysadmin/userinfo.html', {
