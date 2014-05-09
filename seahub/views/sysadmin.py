@@ -6,6 +6,7 @@ import logging
 import simplejson as json
 import re
 import datetime
+import csv, chardet, StringIO
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -22,7 +23,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required
-from seahub.utils import IS_EMAIL_CONFIGURED, string2list
+from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_email
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -849,3 +850,71 @@ def batch_user_make_admin(request):
 
     result['success'] = True
     return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+@sys_staff_required
+def batch_add_user(request):
+    
+    if request.method != 'POST':
+        raise Http404
+
+    if request.FILES.has_key('file'):
+        f = request.FILES['file']
+
+        if f.name[-3:] != "csv":
+            messages.error(request, _(u'Failed! Please upload a csv format file.'))
+            next = request.META.get('HTTP_REFERER', None)
+            if not next:
+                next = reverse(sys_user_admin)
+            return HttpResponseRedirect(next)
+
+        content = f.read()
+        encoding = chardet.detect(content)['encoding']
+        if encoding != 'utf-8':
+            content = content.decode(encoding, 'replace').encode('utf-8')
+
+        filestream = StringIO.StringIO(content)
+
+        lines_of_csv = filestream.read().splitlines()
+        dialect = csv.Sniffer().sniff(content)
+        reader = csv.DictReader(lines_of_csv, dialect=dialect)
+
+        username_title = lines_of_csv[0].split(',')[0]
+        password_title = lines_of_csv[0].split(',')[1]
+
+        if username_title == password_title or username_title == "" or password_title == "":
+            messages.error(request, _(u'Failed! wrong csv format.'))
+            next = request.META.get('HTTP_REFERER', None)
+            if not next:
+                next = reverse(sys_user_admin)
+            return HttpResponseRedirect(next)
+
+        failed = {}
+
+        for row in reader:
+            email = row[username_title]
+            password = row[password_title]
+            if is_valid_email(email):
+                try:
+                    User.objects.get(email=email)
+                    failed[email] = 'Already exist'
+                    continue
+                except User.DoesNotExist:
+                    if password != '':
+                        User.objects.create_user(email, password, is_staff=False,
+                                                    is_active=True)
+                    else:
+                        failed[email] = 'Has no password'
+            else:
+                failed[email] = 'Unvalid email address'
+
+        failed = sorted(failed.items(),key=lambda e:e[1],reverse=True)
+        for item in failed:
+            messages.error(request, _(u"%s: add '%s' failed.") % (item[1], item[0]))
+    else:
+        messages.error(request, _(u'Please select a csv file first.'))
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse(sys_user_admin)
+    return HttpResponseRedirect(next)

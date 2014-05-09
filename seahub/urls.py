@@ -195,7 +195,7 @@ urlpatterns = patterns('',
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
-
+    url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
 )
 
 if settings.SERVE_STATIC:
