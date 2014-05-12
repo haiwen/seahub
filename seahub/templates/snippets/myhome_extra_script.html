@@ -120,14 +120,20 @@ function repoCreateSuccessCallback(data) {
         $('tr:first', my_own_repos).after(new_repo_item);
     }
 }
-
+{% include "snippets/sort_lib_by_name_and_time_js.html" %}
 $(function() {
     $.ajax({
         url:'{% url 'my_shared_and_group_repos' %}',
         cache: false,
         dataType: 'json',
         success: function(data) {
-            $('#repos-shared-to-me').html(data['shared']); 
+            var shared_ct = $('#repos-shared-to-me');
+            if (data.shared.return_shared_repos) {
+                $('.loading-tip', shared_ct).hide();
+                $('table', shared_ct).append(data.shared.html).removeClass('hide');
+            } else {
+                shared_ct.html(data.shared.html); 
+            }
             $('#group-repos').html(data['group']);
             $('.unshare-btn').click(function() {
                 location.href = $(this).data('url');

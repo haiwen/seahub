@@ -1509,18 +1509,27 @@ def my_shared_and_group_repos(request):
             if repo.group.group_name != group_repos[i-1].group.group_name:
                 repo.show_group_name = True
 
-    ctx_shared = {"shared_repos": shared_repos}
-    ctx_group = {"group_repos": group_repos}
-    shared_repos_html = render_to_string(
-        'snippets/my_shared_repos.html', ctx_shared,
-        context_instance=RequestContext(request))
-    group_repos_html = render_to_string(
-        'snippets/my_group_repos.html', ctx_group,
-        context_instance=RequestContext(request))
+    ctx_shared = {
+        "shared_repos": shared_repos,
+        }
+    ctx_group = {
+        "group_repos": group_repos,
+        }
+    shared_repos_html = render_to_string('snippets/my_shared_repos.html', ctx_shared,
+                            context_instance=RequestContext(request))
+    group_repos_html = render_to_string('snippets/my_group_repos.html', ctx_group,
+                            context_instance=RequestContext(request))
 
-    return HttpResponse(json.dumps({"shared": shared_repos_html,
-                                    "group": group_repos_html}),
-                        content_type=content_type)
+    return_shared_repos = True if shared_repos else False
+
+    ret = {
+        "shared": {
+            "html": shared_repos_html,
+            "return_shared_repos": return_shared_repos
+        },
+        "group": group_repos_html
+    }
+    return HttpResponse(json.dumps(ret), content_type=content_type)
 
 @login_required
 def get_file_op_url(request, repo_id):

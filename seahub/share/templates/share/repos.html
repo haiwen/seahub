@@ -12,14 +12,14 @@
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name"%}</th>
+        <th width="20%">{% trans "Name"%} <span id="shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="21%">{% trans "Share To"%}</th>
         <th width="15%">{% trans "Permission"%}</th>
         <th width="27%">{% trans "Description"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in out_repos %}
-    <tr data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
+    <tr data-repo_name="{{repo.props.repo_name}}" data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
         {% if repo.encrypted %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
         {% else %}
@@ -119,6 +119,6 @@ $(document).click(function(e) {
     }
 });
 {% endif %}                     // shared_repos
-
+{% include "snippets/sort_lib_by_name_and_time_js.html" %}
 </script>
 {% endblock %}

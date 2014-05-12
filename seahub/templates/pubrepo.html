@@ -13,14 +13,14 @@
 <table>
     <tr>
         <th width="4%"></th>
-        <th width="20%">{% trans "Name"%}</th>
+        <th width="20%">{% trans "Name"%} <span id="pub-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="pub-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="30%">{% trans "Description"%}</th>
-        <th width="18%">{% trans "Last Update"%}</th>
+        <th width="18%">{% trans "Last Update"%} <span id="pub-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="pub-repo-list-time-down" class="icon-caret-down cspt"></span></th>
         <th width="15%">{% trans "Share From"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in public_repos %}
-    <tr>
+    <tr data-repo_name="{{repo.props.repo_name}}" data-time="{% if repo.props.last_modified %}{{ repo.props.last_modified }}{% else %}0{% endif %}">
         <td>
           {% if repo.encrypted %}
             <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "Directory icon"%}" />
@@ -73,5 +73,6 @@ function repoCreateSuccessCallback() {
 {% with post_url=repo_create_url %}
     {% include "snippets/repo_create_js.html" %}
 {% endwith %}
+{% include "snippets/sort_lib_by_name_and_time_js.html" %}
 </script>
 {% endblock %}
