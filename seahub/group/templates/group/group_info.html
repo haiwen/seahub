@@ -18,14 +18,14 @@
     <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name" %}</th>
+        <th width="20%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="33%">{% trans "Description" %}</th>
         <th width="16%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Shared By" %}</th>
         <th width="13%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
-    <tr>
+    <tr id="{{repo.props.name}}-group-repo-item" data-repo_name="{{repo.props.name}}">
         <td>
           {% if repo.encrypted %}
             <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
@@ -177,5 +177,6 @@ $('.lsch-encrypted').click(function() {
 }); 
 {% include 'snippets/repo_decrypt_js.html' %}
 {% endif %}
+{% include 'snippets/strChineseFirstPY_js.html' %}
 </script>
 {% endblock %}
