@@ -659,3 +659,72 @@ function HTMLescape(html){
         .parentNode
         .innerHTML;
 }
+
+sort_repo_list()
+function sort_repo_list(){
+    //all span-id endwith 'repo-list-name-down/up' 
+    $("span[id$='repo-list-name-down'], span[id$='repo-list-name-up']").off().on('click',function(){
+        var id= $(this).attr('id'), by, other,
+            table = $(this).parents('table'),
+            repo_item = table.children('tbody').children("tr[id$='repo-item']");
+
+        if (id.indexOf('up') != -1) {
+            by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 };
+            other = $('#' + id.replace('up', 'down'));
+        } else {
+            by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 };
+            other = $('#' + id.replace('down', 'up'));
+        }
+        //if LANGUAGE_CODE != ZH_CN, snippets/strChineseFirstPY_js.html 
+        //will not be included, so strChineseFirstPY undifined.
+        if (typeof(strChineseFirstPY) == "undefined") {
+            var en_list = [];
+            // when 'name' is like '123', `data('name')` return number 123 
+            repo_item.each(function() {
+                en_list.push({'name': $(this).attr('data-repo_name'), 'element': this});
+            });
+
+            en_list.sort(by);
+            repo_item.detach();
+            $(en_list).each(function(index, item) {
+                table.append(item.element);
+            });
+        } else {
+            var en_list = [], cn_list = [];
+            repo_item.each(function() {
+                var name = $(this).attr('data-repo_name');
+                //get unicode
+                var uni = name.charCodeAt(0);
+                //not a Chinese character
+                if (uni > 40869 || uni < 19968) {
+                    en_list.push({'name': name, 'element': this});
+                } else {
+                    //get Chinese character's PinYin
+                    cn_list.push({'name': strChineseFirstPY.charAt(uni - 19968), 'element': this});
+                }
+            });
+
+            en_list.sort(by);
+            cn_list.sort(by);
+            repo_item.detach();
+
+            if (id.indexOf('up') != -1) {
+                $(en_list).each(function(index, item) {
+                    table.append(item.element);
+                });
+                $(cn_list).each(function(index, item) {
+                    table.append(item.element);
+                });
+            } else {
+                $(cn_list).each(function(index, item) {
+                    table.append(item.element);
+                });
+                $(en_list).each(function(index, item) {
+                    table.append(item.element);
+                });
+            }
+        }
+        $(this).addClass('hide');
+        other.removeClass('hide');
+    })
+ }

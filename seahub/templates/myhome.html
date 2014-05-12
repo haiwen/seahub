@@ -144,5 +144,8 @@ $('.submit', sublib_create_form).click(function() {
 });
 {% endif %}
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
+{% if LANGUAGE_CODE == 'zh-cn' %}
+    {% include 'snippets/strChineseFirstPY_js.html' %}
+{% endif %}
 </script>
 {% endblock %}
