@@ -223,6 +223,7 @@ AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png', '.jpeg', '.gif')
 # Avatar
 AVATAR_STORAGE_DIR = 'avatars'
 AVATAR_HASH_USERDIRNAMES = True
+AVATAR_HASH_FILENAMES = True
 AVATAR_GRAVATAR_BACKUP = False
 AVATAR_DEFAULT_URL = '/avatars/default.png'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
