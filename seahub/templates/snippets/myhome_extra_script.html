@@ -143,6 +143,39 @@ $(function() {
                 }   
             );
             $('#tabs').unbind().tabs({cookie:{expires:1}});
+
+            $('#shared-to-me-repo-name-down, #shared-to-me-repo-name-up').click(function() {
+                var id= $(this).attr('id'), by,
+                    dir_list = [],
+                    repo_item = $('.shared-to-me-repo-item'),
+                    table=$('.shared-to-me-repo-list');
+                switch (id) {
+                    case 'shared-to-me-repo-name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 }; break;
+                    case 'shared-to-me-repo-name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 }; break;
+                }
+
+                // when 'name' is like '123', `data('name')` return number 123 
+                repo_item.each(function() {
+                    dir_list.push({'name':$(this).attr('data-reponame'), 'element':this});
+                });
+
+                dir_list.sort(by);
+
+                repo_item.detach();
+
+                $(dir_list).each(function(index, item) {
+                    table.append(item.element);
+                });
+              
+                $(this).addClass('hide');
+                var other;
+                if (id.indexOf('up') != -1) {
+                    other = $('#' + id.replace('up', 'down'));
+                } else {
+                    other = $('#' + id.replace('down', 'up'));
+                }
+                other.removeClass('hide');
+            });
         }
     });
 });

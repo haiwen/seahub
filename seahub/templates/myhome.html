@@ -144,5 +144,41 @@ $('.submit', sublib_create_form).click(function() {
 });
 {% endif %}
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
+
+
+$('#my-own-repo-name-down, #my-own-repo-name-up').click(function() {
+    var id= $(this).attr('id'), by,
+        dir_list = [],
+        table = $('.repo-list'),
+        repo_item = $('.my-own-repo-item');
+    
+    switch (id) {
+        case 'my-own-repo-name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 }; break;
+        case 'my-own-repo-name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 }; break;
+    }
+
+    // when 'name' is like '123', `data('name')` return number 123 
+    repo_item.each(function() {
+        dir_list.push({'name':$(this).attr('data-reponame'), 'element':this});
+    });
+
+    dir_list.sort(by);
+
+    repo_item.detach();
+
+    $(dir_list).each(function(index, item) {
+        table.append(item.element);
+    });
+  
+    $(this).addClass('hide');
+    var other;
+    if (id.indexOf('up') != -1) {
+        other = $('#' + id.replace('up', 'down'));
+    } else {
+        other = $('#' + id.replace('down', 'up'));
+    }
+    other.removeClass('hide');
+});
+
 </script>
 {% endblock %}

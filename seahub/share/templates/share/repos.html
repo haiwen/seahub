@@ -9,17 +9,17 @@
 {% block right_panel %}
 <h3 class="hd">{% trans "Libraries" %}</h3>
 {% if out_repos %}
-<table>
+<table class="shared-repo-list">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name"%}</th>
+        <th width="20%">{% trans "Name "%}<span id="shared-repo-name-down" class="icon-caret-up cspt"></span> <span id="shared-repo-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="21%">{% trans "Share To"%}</th>
         <th width="15%">{% trans "Permission"%}</th>
         <th width="27%">{% trans "Description"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in out_repos %}
-    <tr data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
+    <tr class="shared-repo-item" data-reponame="{{repo.props.repo_name}}" data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
         {% if repo.encrypted %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
         {% else %}
@@ -120,5 +120,38 @@ $(document).click(function(e) {
 });
 {% endif %}                     // shared_repos
 
+$('#shared-repo-name-down, #shared-repo-name-up').click(function() {
+    var id= $(this).attr('id'), by,
+        dir_list = [],
+        table = $('.shared-repo-list'),
+        repo_item = $('.shared-repo-item');
+    
+    switch (id) {
+        case 'shared-repo-name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 }; break;
+        case 'shared-repo-name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 }; break;
+    }
+
+    // when 'name' is like '123', `data('name')` return number 123 
+    repo_item.each(function() {
+        dir_list.push({'name':$(this).attr('data-reponame'), 'element':this});
+    });
+
+    dir_list.sort(by);
+
+    repo_item.detach();
+
+    $(dir_list).each(function(index, item) {
+        table.append(item.element);
+    });
+  
+    $(this).addClass('hide');
+    var other;
+    if (id.indexOf('up') != -1) {
+        other = $('#' + id.replace('up', 'down'));
+    } else {
+        other = $('#' + id.replace('down', 'up'));
+    }
+    other.removeClass('hide');
+});
 </script>
 {% endblock %}
