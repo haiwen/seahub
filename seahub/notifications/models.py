@@ -463,8 +463,7 @@ class UserNotification(models.Model):
         - `self`:
         """
         d = json.loads(self.detail)
-        share_from = d['share_from']
-        share_from = email2nickname(share_from)
+        share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
 
         repo = seafile_api.get_repo(repo_id)
@@ -486,8 +485,7 @@ class UserNotification(models.Model):
         - `self`:
         """
         d = json.loads(self.detail)
-        share_from = d['share_from']
-        share_from = email2nickname(share_from)
+        share_from = email2nickname(d['share_from'])
         file_name = d['file_name']
         priv_share_token = d['priv_share_token']
 
@@ -531,7 +529,6 @@ class UserNotification(models.Model):
             return None
 
         msg_from = d.get('msg_from')
-        msg_from = email2nickname(msg_from)
 
         if msg_from is None:
             msg = _(u"<a href='%(href)s'>%(group_name)s</a> has new discussion") % {
@@ -540,7 +537,7 @@ class UserNotification(models.Model):
         else:
             msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>") % {
                 'href': reverse('group_discuss', args=[group.id]),
-                'user': escape(msg_from),
+                'user': escape(email2nickname(msg_from)),
                 'group_name': group.group_name}
 
         return msg
@@ -558,7 +555,6 @@ class UserNotification(models.Model):
 
         msg_id = d.get('msg_id')
         reply_from = d.get('reply_from')
-        reply_from = email2nickname(reply_from)
 
         if reply_from is None:
             msg = _(u"One <a href='%(href)s'>group discussion</a> has new reply") % {
@@ -566,7 +562,7 @@ class UserNotification(models.Model):
                 }
         else:
             msg = _(u"%(user)s replied your <a href='%(href)s'>group discussion</a>") % {
-                'user': escape(reply_from),
+                'user': escape(email2nickname(reply_from)),
                 'href': reverse('msg_reply_new')
                 }
         return msg
