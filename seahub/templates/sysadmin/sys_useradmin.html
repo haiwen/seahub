@@ -18,6 +18,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
+    <button id="upload-file-btn" class="fright"><span class="icon-upload-alt"></span>{% trans "Upload csv file"%}</button>
 </div>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
@@ -29,6 +30,13 @@
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
     <input type="password" name="password2" id="id_password2" class="input" /><br />    
     <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+
+<form id="upload-csv-form" class="hide" enctype= "multipart/form-data" method = "post" action = "{% url 'batch_add_user' %}">{% csrf_token %}
+    <h3>{% trans "Import user from CSV file" %}</h3><br />
+    <input type = "file" name = "file" /><br />
+    <p class="tip">{% trans "CSV file format: user@mail.com, password"%}</p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
@@ -110,6 +118,9 @@ $('#add-user-form').submit(function() {
         }
     });
     return false;
+});
+$('#upload-file-btn').click(function () {
+    $('#upload-csv-form').modal();
 });
 {% include "sysadmin/useradmin_js.html" %}
 </script>

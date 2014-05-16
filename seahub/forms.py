@@ -197,3 +197,8 @@ class SharedLinkPasswordForm(forms.Form):
 
         return self.cleaned_data
 
+class BatchAddUserForm(forms.Form):
+    """
+    Form for importing users from CSV file.
+    """
+    file = forms.FileField()
