@@ -2846,6 +2846,10 @@ textarea:-moz-placeholder {/* for FF */
 #search-results a {
     font-weight: normal;
 }
+#search-results b {
+    font-weight: bold;
+    background:#ffe761;
+}
 .search-results-item {
     margin-top:15px;
 }

@@ -181,6 +181,9 @@ var pdf2htmlEX = (function(){
           _.find_pages();
           _.schedule_render();
           _.load_page(idx+1);
+          if (highlight_kw) {
+            highlight_kw($('#file-view'));
+          }
         });
       }
     },

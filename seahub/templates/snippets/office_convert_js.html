@@ -27,7 +27,6 @@
             has_outline = $.trim(outline);
         }
         
-        $('#converted-html').append('<div id="pdf2html-toolbar-1"></div>');
         if (has_outline) {
             var sidebar = $('#sidebar'),
                 page_container = $('#page-container'),
@@ -36,6 +35,11 @@
             $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
             sidebar.removeClass('hide');
 
+            if (highlight_kw) {
+                highlight_kw(sidebar);
+            }
+
+            $('#converted-html').append('<div id="pdf2html-toolbar-1"></div>');
             var toolbar = $('#pdf2html-toolbar-1');
             toolbar.append('<span class="icon-caret-left" title="{% trans "hide outline" %}" id="hide-outline"></span>');
             toolbar.append('<span class="icon-caret-right hide" title="{% trans "show outline" %}" id="show-outline"></span>');
@@ -85,6 +89,7 @@
 
         var file_cont = $('#file-view'), //file container
             orig_pg_total_h; 
+
         $('#zoom-in, #zoom-out').click(function() {
             // get orig data before zoom in/out
             var op = $(this).attr('id'),
