@@ -18,6 +18,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
+    <button id="upload-file-btn" class="fright"><span class="icon-upload-alt"></span>{% trans "Upload csv file"%}</button>
 </div>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
@@ -30,6 +31,15 @@
     <input type="password" name="password2" id="id_password2" class="input" /><br />    
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+
+<form id="upload-file-form" class="hide" enctype= "multipart/form-data" method = "post" action = "{{ SITE_ROOT }}useradmin/batchadduser/">{% csrf_token %}
+    <h3>{% trans "Add user from local file" %}</h3><br />
+    <input type = "file" name = "file" /><br />
+    <p class="tip">{% trans "1. please upload a 'csv' format file;"%}</p>
+    <p class="tip">{% trans "2. row 1, column 1 for username title;"%}</p>
+    <p class="tip">{% trans "3. row 1, column 2 for password title;"%}</p>
+    <input type = "submit"  value = "submit"/>
 </form>
 
 {% include "sysadmin/useradmin_table.html"%}
@@ -110,6 +120,9 @@ $('#add-user-form').submit(function() {
         }
     });
     return false;
+});
+$('#upload-file-btn').click(function () {
+    $('#upload-file-form').modal();
 });
 {% include "sysadmin/useradmin_js.html" %}
 </script>
