@@ -886,25 +886,6 @@ def group_remove_member(request, group_id, user_name):
 
     return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
-def group_unshare_repo(request, repo_id, group_id, from_email):
-    """
-    Unshare a repo in group. Used in share/views.
-    
-    TODO: move to share views.
-    """
-    # Check whether group exists
-    group = get_group(group_id)
-    if not group:
-        return render_error(request, _(u"Failed to unshare: the group doesn't exist."))
-
-    # Check whether user is group staff or the one share the repo
-    if not seaserv.check_group_staff(group_id, from_email) and \
-            seafserv_threaded_rpc.get_group_repo_owner(repo_id) != from_email:
-        return render_permission_error(request, _(u"Operation failed: only administrators and the owner of the library can unshare it."))
-        
-    if unshare_group_repo(repo_id, group_id, from_email) != 0:
-        return render_error(request, _(u"Failed to unshare: internal error."))
-
 @login_required
 def group_recommend(request):
     """
@@ -1083,7 +1064,7 @@ def create_group_repo(request, group_id):
             return json_error(_(u'Failed to create'))
 
         try:
-            seafile_api.add_group_repo(repo_id, group.id, username, permission)
+            seafile_api.set_group_repo(repo_id, group.id, username, permission)
         except SearpcError, e:
             logger.error(e)
             return json_error(_(u'Failed to create: internal error.'))
@@ -1487,13 +1468,10 @@ def group_wiki_create(request, group):
     repo_id = create_repo(repo_name, repo_desc, user, passwd)
     if not repo_id:
         return json_error(_(u'Failed to create'), 500)
-    
+
     try:
-        status = seafserv_threaded_rpc.group_share_repo(repo_id,
-                                                        group.id,
-                                                        user,
-                                                        permission)
-    except SearpcError, e:
+        seafile_api.set_group_repo(repo_id, group.id, user, permission)
+    except SearpcError as e:
         remove_repo(repo_id)
         return json_error(_(u'Failed to create: internal error.'), 500)
 

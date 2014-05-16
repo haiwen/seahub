@@ -2293,8 +2293,8 @@ class SharedRepo(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'Group does not exist .')
             try:
-                seafile_api.group_share_repo(repo_id, int(group_id),
-                                             from_email, permission)
+                seafile_api.set_group_repo(repo_id, int(group_id),
+                                           from_email, permission)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "Searpc Error: " + e.msg)

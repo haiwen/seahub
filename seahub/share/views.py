@@ -15,7 +15,7 @@ from django.contrib import messages
 # from django.contrib.sites.models import RequestSite
 import seaserv
 from seaserv import seafile_api
-from seaserv import ccnet_threaded_rpc, check_group_staff, is_org_group, \
+from seaserv import ccnet_threaded_rpc, is_org_group, \
     get_org_id_by_group, del_org_group_repo, get_group_repos_by_owner, \
     remove_share
 
@@ -104,7 +104,7 @@ def share_to_group(request, repo, group, permission):
             seafile_api.add_org_group_repo(repo_id, org_id, group_id,
                                            from_user, permission)
         else:
-            seafile_api.add_group_repo(repo_id, group_id, from_user,
+            seafile_api.set_group_repo(repo_id, group_id, from_user,
                                        permission)
     except Exception, e:
         logger.error(e)
@@ -255,6 +255,7 @@ def repo_remove_share(request):
     from_email = request.GET.get('from', '')
     if not is_valid_username(from_email):
         return render_error(request, _(u'Argument is not valid'))
+    username = request.user.username
 
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
@@ -263,33 +264,32 @@ def repo_remove_share(request):
         if not is_valid_username(to_email):
             return render_error(request, _(u'Argument is not valid'))
 
-        if request.user.username != from_email and \
-                request.user.username != to_email:
+        if username != from_email and username != to_email:
             return render_permission_error(request, _(u'Failed to remove share'))
         remove_share(repo_id, from_email, to_email)
     else:
         try:
-            group_id_int = int(group_id)
+            group_id = int(group_id)
         except:
             return render_error(request, _(u'group id is not valid'))
 
-        if not check_group_staff(group_id_int, request.user.username) \
-                and request.user.username != from_email:
+        group = seaserv.get_group(group_id)
+        if not group:
+            return render_error(request, _(u"Failed to unshare: the group doesn't exist."))
+
+        if not seaserv.check_group_staff(group_id, username) \
+                and username != from_email:
             return render_permission_error(request, _(u'Failed to remove share'))
 
-        if is_org_group(group_id_int):
-            org_id = get_org_id_by_group(group_id_int)
-            del_org_group_repo(repo_id, org_id, group_id_int)
+        if is_org_group(group_id):
+            org_id = get_org_id_by_group(group_id)
+            del_org_group_repo(repo_id, org_id, group_id)
         else:
-            from seahub.group.views import group_unshare_repo
-            group_unshare_repo(request, repo_id, group_id_int, from_email)
+            seafile_api.unset_group_repo(repo_id, group_id, from_email)
 
     messages.success(request, _('Successfully removed share'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
-
+    next = request.META.get('HTTP_REFERER', SITE_ROOT)
     return HttpResponseRedirect(next)
 
 # @login_required
