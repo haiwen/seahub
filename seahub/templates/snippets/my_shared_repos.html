@@ -3,7 +3,7 @@
     <table>
         <tr>
             <th width="4%"><!--icon--></th>
-            <th width="20%">{% trans "Name" %}</th>
+            <th width="20%">{% trans "Name" %} <span id="be-shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="be-shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
             <th width="33%">{% trans "Description" %}</th>
             <th width="15%">{% trans "Last Update" %}</th>
             <th width="15%">{% trans "Shared By" %}</th>
@@ -11,7 +11,7 @@
         </tr>
 
         {% for repo in shared_repos %}
-        <tr>
+        <tr id="{{repo.repo_name}}-be-shared-repo-item" data-repo_name="{{repo.repo_name}}">
             <td>
               {% if repo.encrypted %}
                 <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
