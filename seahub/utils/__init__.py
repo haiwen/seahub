@@ -232,6 +232,11 @@ def is_valid_username(username):
     """
     return is_valid_email(username)
 
+def is_ldap_user(user):
+    """Check whether user is a LDAP user.
+    """
+    return user.source == 'LDAP'
+
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None

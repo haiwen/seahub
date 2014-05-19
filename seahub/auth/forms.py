@@ -7,7 +7,7 @@ from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_valid_username
+    is_valid_username, is_ldap_user
 
 from captcha.fields import CaptchaField
 
@@ -75,14 +75,17 @@ class PasswordResetForm(forms.Form):
         if not IS_EMAIL_CONFIGURED:
             raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
         
-        email = self.cleaned_data["email"].lower()
+        email = self.cleaned_data["email"].lower().strip()
 
         # TODO: add filter method to UserManager
         try:
             self.users_cache = User.objects.get(email=email)
         except User.DoesNotExist:
             raise forms.ValidationError(_("That e-mail address doesn't have an associated user account. Are you sure you've registered?"))
-        
+
+        if is_ldap_user(self.users_cache):
+            raise forms.ValidationError(_("Can not reset password, please contact LDAP admin."))
+
         return email
 
     def save(self, domain_override=None, email_template_name='registration/password_reset_email.html',

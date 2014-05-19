@@ -22,8 +22,8 @@ from seahub.auth.decorators import login_required
 from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
 from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seahub.auth.tokens import default_token_generator
-
 from seahub.base.accounts import User
+from seahub.utils import is_ldap_user
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -261,6 +261,10 @@ def password_change(request, template_name='registration/password_change_form.ht
                     post_change_redirect=None, password_change_form=PasswordChangeForm):
     if post_change_redirect is None:
         post_change_redirect = reverse('auth_password_change_done')
+
+    if is_ldap_user(request.user):
+        messages.error(request, _("Can not update password, please contact LDAP admin."))
+
     if request.method == "POST":
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():

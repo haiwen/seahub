@@ -71,6 +71,7 @@ class UserManager(object):
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime
         user.org = emailuser.org
+        user.source = emailuser.source
 
         return user
 
