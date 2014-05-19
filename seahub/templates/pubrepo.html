@@ -13,14 +13,14 @@
 <table>
     <tr>
         <th width="4%"></th>
-        <th width="20%">{% trans "Name"%}</th>
+        <th width="20%">{% trans "Name "%}<span id="pub-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="pub-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="30%">{% trans "Description"%}</th>
         <th width="18%">{% trans "Last Update"%}</th>
         <th width="15%">{% trans "Share From"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in public_repos %}
-    <tr>
+    <tr id="pub-repo-item" data-repo_name="{{repo.props.repo_name}}">
         <td>
           {% if repo.encrypted %}
             <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "Directory icon"%}" />
@@ -73,5 +73,8 @@ function repoCreateSuccessCallback() {
 {% with post_url=repo_create_url %}
     {% include "snippets/repo_create_js.html" %}
 {% endwith %}
+{% if LANGUAGE_CODE == 'zh-cn' %}
+    {% include 'snippets/strChineseFirstPY_js.html' %}
+{% endif %}
 </script>
 {% endblock %}

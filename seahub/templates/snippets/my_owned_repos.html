@@ -22,14 +22,14 @@
 <table class="repo-list">{# 'repo-list': for repo which has 'repo-delete-btn' #}
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="24%">{% trans "Name" %}</th>
+        <th width="24%">{% trans "Name " %}<span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="40%">{% trans "Description" %}</th>
         <th width="18%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in owned_repos %}
     {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
-    <tr>
+    <tr id="my-owned-repo-item" data-repo_name="{{repo.props.name}}">
         {% if repo.encrypted %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         {% else %}
@@ -69,13 +69,13 @@
 <table class="repo-list">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="24%">{% trans "Name" %}</th>
+        <th width="24%">{% trans "Name " %}<span id="my-sub-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-sub-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="40%">{% trans "Origin" %}</th>
         <th width="18%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in sub_repos %}
-    <tr>
+    <tr id="my-sub-repo-item" data-repo_name="{{repo.props.name}}">
         {% if repo.encrypted %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         {% else %}
@@ -123,12 +123,12 @@
 <table id="new-repo" class="hide">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="24%">{% trans "Name" %}</th>
+        <th width="24%">{% trans "Name " %}<span id="my-new-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-new-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
         <th width="40%">{% trans "Description" %}</th>
         <th width="18%">{% trans "Last Update" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
-    <tr class="repo-item">
+    <tr id="my-new-repo-item" data-repo_name="{{repo.props.name}}" class="repo-item">
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
         <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
