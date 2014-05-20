@@ -168,7 +168,8 @@ $("#link-send-form").submit(function(event) {
     var form = $(this), 
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
         email = $.trim(form.children('textarea[name="email"]').val()),
-        submit_btn = form.children('input[type="submit"]');
+        submit_btn = form.children('input[type="submit"]'),
+        extra_msg = form.children('input[name="extra_msg"]').val();
     
     if (!email) {
         apply_form_error('link-send-form', "{% trans "Please input at least an email." %}");
@@ -185,7 +186,7 @@ $("#link-send-form").submit(function(event) {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {file_shared_link: file_shared_link, email: email},
+        data: {file_shared_link: file_shared_link, email: email, extra_msg: extra_msg},
         success: function(data) {
             $.modal.close();
             feedback(data['msg'], "success");
@@ -338,7 +339,8 @@ $("#upload-link-send-form").submit(function(event) {
     var form = $(this),
         shared_upload_link = form.children('input[name="shared_upload_link"]').val(),
         email = $.trim(form.children('textarea[name="email"]').val()),
-        submit_btn = form.children('input[type="submit"]');
+        submit_btn = form.children('input[type="submit"]'),
+        extra_msg = form.children('input[name="extra_msg"]').val();
 
     if (!email) {
         apply_form_error('upload-link-send-form', "{% trans "Please input at least an email." %}");
@@ -355,7 +357,7 @@ $("#upload-link-send-form").submit(function(event) {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {shared_upload_link: shared_upload_link, email: email},
+        data: {shared_upload_link: shared_upload_link, email: email, extra_msg: extra_msg},
         success: function(data) {
             $.modal.close();
             feedback(data['msg'], "success");
