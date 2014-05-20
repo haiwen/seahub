@@ -13,6 +13,12 @@
 {{ file_shared_link }}
 </p>
 
+{% if extra_msg %}
+<p style="font-size:14px;color:#434144;">{% trans "With an extra message:" %}<br />
+{{ extra_msg }}
+</p>
+{% endif %}
+
 {% endautoescape %}
 
 {% endblock %}

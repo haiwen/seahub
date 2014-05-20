@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.utils.html import escape
 # from django.contrib.sites.models import RequestSite
 import seaserv
 from seaserv import seafile_api
@@ -818,6 +819,7 @@ def send_shared_link(request):
     if form.is_valid():
         email = form.cleaned_data['email']
         file_shared_link = form.cleaned_data['file_shared_link']
+        extra_msg = escape(form.cleaned_data['extra_msg'])
 
         to_email_list = string2list(email)
         for to_email in to_email_list:
@@ -830,6 +832,9 @@ def send_shared_link(request):
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
             }
+
+            if extra_msg:
+                c['extra_msg'] = extra_msg
 
             try:
                 send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
@@ -1087,6 +1092,7 @@ def send_shared_upload_link(request):
     if form.is_valid():
         email = form.cleaned_data['email']
         shared_upload_link = form.cleaned_data['shared_upload_link']
+        extra_msg = escape(form.cleaned_data['extra_msg'])
 
         to_email_list = string2list(email)
         for to_email in to_email_list:
@@ -1099,6 +1105,9 @@ def send_shared_upload_link(request):
                 'to_email': to_email,
                 'shared_upload_link': shared_upload_link,
                 }
+
+            if extra_msg:
+                c['extra_msg'] = extra_msg
 
             try:
                 send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
