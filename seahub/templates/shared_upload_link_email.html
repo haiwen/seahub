@@ -16,5 +16,9 @@
 {{ shared_upload_link }}
 </p>
 
+{% if extra_msg %}
+<p>" {{ extra_msg }} "</p>
+{% endif %}
+
 {% endautoescape %}
 {% endblock %}

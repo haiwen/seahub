@@ -1852,8 +1852,6 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
 }
 /*repo-share-form*/
-#link-send-input,
-#upload-link-send-input,
 #email_or_group,
 #share-link,
 #added-member-name {
@@ -1864,7 +1862,9 @@ textarea:-moz-placeholder {/* for FF */
 #mods-enable-form {
     width:266px;
 }
-
+#file-share .tip {
+    max-width: 364px;
+}
 #email_or_group,
 #added-member-name {
     width:98.5%;
