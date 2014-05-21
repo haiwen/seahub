@@ -21,6 +21,7 @@ class FileLinkShareForm(forms.Form):
             })
     file_shared_link = forms.CharField()
     extra_msg = forms.CharField(required=False)
+    file_shared_name = forms.CharField()
     
 class UploadLinkShareForm(forms.Form):
     """
@@ -32,3 +33,4 @@ class UploadLinkShareForm(forms.Form):
             })
     shared_upload_link = forms.CharField()
     extra_msg = forms.CharField(required=False)
+    shared_upload_dir_name = forms.CharField()

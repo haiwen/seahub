@@ -56,10 +56,11 @@
 
                     <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
                         <label>{% trans "Send to:"%}</label><br />
-                        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="text" class="input" id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></input><br />
                         <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
-                        <label>{% trans "Extra message (optional):"%}</label><br />
-                        <input type="text" name="extra_msg"/><br />
+                        <input type="" name="file_shared_name" value="" />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" />
@@ -69,7 +70,8 @@
             </div>
 
             <div id="upload-link-share">
-                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
+                <p class="tip">{% trans "You can share the generated link to others" %}</p>
+                <p class="tip">{% trans "then, they can upload files to this directory via the link." %}</p>
                 <form id="upload-link-passwd-form" action="" method="post">{% csrf_token %}
                     <div class="passwd hide">
                         <label class="checkbox-label">
@@ -91,10 +93,11 @@
 
                     <form id="upload-link-send-form" action="" method="post" class="hide">{% csrf_token %}
                         <label>{% trans "Send to:"%}</label><br />
-                        <textarea id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="text" class="input" id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></input><br />
                         <input type="hidden" name="shared_upload_link" value="{{ dir_shared_upload_link }}" />
-                        <label>{% trans "Extra message (optional):"%}</label><br />
-                        <input type="text" name="extra_msg"/><br />
+                        <input type="" name="shared_upload_dir_name" value="" />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" />

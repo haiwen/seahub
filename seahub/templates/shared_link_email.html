@@ -1,6 +1,6 @@
 {% extends 'email_base.html' %}
 
-{% load i18n %}
+{% load i18n seahub_tags%}
 
 {% block email_con %}
 
@@ -9,12 +9,13 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ email }} shared a file to you on {{ site_name }}:{% endblocktrans%} <br />
+{% blocktrans %}{{ email }} shared {% endblocktrans%}
+<img src="{{url_base}}{{ MEDIA_URL }}img/file/{{ file_shared_name|file_icon_filter }}" />
+{% blocktrans %}{{ file_shared_name}} to you on {{ site_name }}:{% endblocktrans%} <br />
 {{ file_shared_link }}
 </p>
 
 {% if extra_msg %}
-<p style="font-size:14px;color:#434144;">{% trans "With an extra message:" %}<br />
 {{ extra_msg }}
 </p>
 {% endif %}
