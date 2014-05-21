@@ -1553,16 +1553,28 @@ def repo_create(request):
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
     username = request.user.username
-
-    try: 
+    org_id = -1
+    try:
         if not encryption:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc, username,
-                                              None)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, None, org_id)
+            else:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                  username, None)
         else:
-            repo_id = seafile_api.create_enc_repo(
-                uuid, repo_name, repo_desc, username,
-                magic_str, encrypted_file_key, enc_version=2)
-    except SearpcError, e:
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_enc_repo(
+                    uuid, repo_name, repo_desc, username, magic_str,
+                    encrypted_file_key, enc_version=2, org_id=org_id)
+            else:
+                repo_id = seafile_api.create_enc_repo(
+                    uuid, repo_name, repo_desc, username,
+                    magic_str, encrypted_file_key, enc_version=2)
+    except SearpcError as e:
+        logger.error(e)
         repo_id = None
 
     if not repo_id:
@@ -1584,7 +1596,7 @@ def repo_create(request):
         'repo_enc': encryption,
     }
     repo_created.send(sender=None,
-                      org_id=-1,
+                      org_id=org_id,
                       creator=username,
                       repo_id=repo_id,
                       repo_name=repo_name)
