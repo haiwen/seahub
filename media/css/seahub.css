@@ -1852,8 +1852,6 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
 }
 /*repo-share-form*/
-#link-send-input,
-#upload-link-send-input,
 #email_or_group,
 #share-link,
 #added-member-name {

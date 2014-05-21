@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.utils.html import escape
 # from django.contrib.sites.models import RequestSite
 import seaserv
 from seaserv import seafile_api
@@ -38,7 +39,7 @@ from seahub.utils import render_permission_error, string2list, render_error, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, send_html_email, is_org_context, \
     normalize_file_path, normalize_dir_path
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, MEDIA_URL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -818,6 +819,8 @@ def send_shared_link(request):
     if form.is_valid():
         email = form.cleaned_data['email']
         file_shared_link = form.cleaned_data['file_shared_link']
+        extra_msg = escape(form.cleaned_data['extra_msg'])
+        file_shared_name = escape(form.cleaned_data['file_shared_name'])
 
         to_email_list = string2list(email)
         for to_email in to_email_list:
@@ -829,7 +832,12 @@ def send_shared_link(request):
                 'email': request.user.username,
                 'to_email': to_email,
                 'file_shared_link': file_shared_link,
+                'MEDIA_URL': MEDIA_URL,
+                'file_shared_name': file_shared_name,
             }
+
+            if extra_msg:
+                c['extra_msg'] = extra_msg
 
             try:
                 send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
@@ -1087,6 +1095,8 @@ def send_shared_upload_link(request):
     if form.is_valid():
         email = form.cleaned_data['email']
         shared_upload_link = form.cleaned_data['shared_upload_link']
+        extra_msg = escape(form.cleaned_data['extra_msg'])
+        shared_upload_dir_name = escape(form.cleaned_data['shared_upload_dir_name'])
 
         to_email_list = string2list(email)
         for to_email in to_email_list:
@@ -1098,7 +1108,12 @@ def send_shared_upload_link(request):
                 'email': request.user.username,
                 'to_email': to_email,
                 'shared_upload_link': shared_upload_link,
+                'MEDIA_URL': MEDIA_URL,
+                'shared_upload_dir_name': shared_upload_dir_name,
                 }
+
+            if extra_msg:
+                c['extra_msg'] = extra_msg
 
             try:
                 send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
