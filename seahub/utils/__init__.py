@@ -56,8 +56,6 @@ except ImportError:
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
 
-# Get an instance of a logger
-logger = logging.getLogger(__name__)
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
@@ -178,6 +176,7 @@ def get_repo_last_modify(repo):
     if repo.head_cmmt_id is not None:
         last_cmmt = seafserv_threaded_rpc.get_commit(repo.id, repo.version, repo.head_cmmt_id)
     else:
+        logger = logging.getLogger(__name__)
         logger.info('[repo %s] head_cmmt_id is missing.' % repo.id)
         last_cmmt = get_commits(repo.id, 0, 1)[0]
     return last_cmmt.ctime if last_cmmt else 0
@@ -914,7 +913,9 @@ def user_traffic_over_limit(username):
     try:
         stat = get_user_traffic_stat(username)
     except Exception as e:
-        logger.error(e)
+        logger = logging.getLogger(__name__)
+        logger.error('Failed to get user traffic stat: %s' % username,
+                     exc_info=True)
         return True
 
     if stat is None:            # No traffic record yet
