@@ -1,3 +1,5 @@
+import re
+
 from rest_framework import serializers
 
 from seahub.auth import authenticate
@@ -19,6 +21,7 @@ def all_not_none(values):
 
     return True
 
+_ANDROID_DEVICE_ID_PATTERN = re.compile('^[a-f0-9]{1,16}$')
 class AuthTokenSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
@@ -91,8 +94,8 @@ class AuthTokenSerializer(serializers.Serializer):
         elif platform == 'android':
             # See http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID
             # android device id is the 64bit secure id, so it must be 16 chars in hex representation
-            # but some user reports their device ids are 15 chars
-            if len(device_id) != 16 and len(device_id) != 15:
+            # but some user reports their device ids are 14 or 15 chars long. So we relax the validation.
+            if not _ANDROID_DEVICE_ID_PATTERN.match(device_id.lower()):
                 raise serializers.ValidationError('invalid device id')
         elif platform == 'ios':
             if len(device_id) != 36:

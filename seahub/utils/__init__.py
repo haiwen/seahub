@@ -224,6 +224,11 @@ def is_valid_username(username):
     """
     return is_valid_email(username)
 
+def is_ldap_user(user):
+    """Check whether user is a LDAP user.
+    """
+    return user.source == 'LDAP'
+
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None
@@ -916,10 +921,10 @@ def user_traffic_over_limit(username):
         stat = get_user_traffic_stat(username)
     except Exception as e:
         logger.error(e)
-        stat = None
-
-    if stat is None:
         return True
+
+    if stat is None:            # No traffic record yet
+        return False
 
     month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
     return True if month_traffic >= traffic_limit else False

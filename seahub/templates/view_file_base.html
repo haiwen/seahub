@@ -177,6 +177,42 @@ $('#file-op .history').click(function () {
     location.href = $(this).data('url');
 });
 
+// if referrer is 'search result' page, define function highlight_kw
+var ref_list = document.referrer.split('?');
+if (ref_list.length > 1 && ref_list[0].indexOf('search') > 0) {
+    var search_params = ref_list[1].split('&');
+    var search_keyword = search_params[0].substr(2); // get 'xx' from 'q=xx'
+
+    var highlight_kw = function(hl_area) {
+        if (window.find && window.getSelection) {
+            hl_area.attr('contenteditable', true).attr('spellcheck', false);
+            var sel = window.getSelection();
+            sel.collapse(document.body, 0);
+
+            while (window.find(search_keyword)) {
+                document.execCommand("HiliteColor", false, "yellow");
+                sel.collapseToEnd();
+            }
+            hl_area.attr('contenteditable', false);
+        } else if (document.body.createTextRange) {
+            var textRange = document.body.createTextRange();
+            while (textRange.findText(search_keyword)) {
+                textRange.execCommand("BackColor", false, "yellow");
+                textRange.collapse(false);
+            }
+        }
+    };
+}
+
+$(window).load(function() {
+    if (highlight_kw) {
+        // hl kw in file title
+        highlight_kw($('#view-hd'));
+        // hl kw in file content
+        setTimeout(function(){ highlight_kw($('#file-view')); }, 100); // delay 100ms for 'text' file
+    }
+});
+
 //bottom bar
 {% include "snippets/bottom_bar.html" %}
 $('#main-panel').css('margin-bottom',0);
