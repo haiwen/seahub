@@ -15,24 +15,19 @@ import ccnet
 
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
-from django.contrib.sites.models import RequestSite
-from django.db import IntegrityError
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Context, loader
 from django.utils.translation import ugettext as _
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.utils.http import urlquote
 
-from pysearpc import SearpcError
 import seaserv
 from seaserv import seafile_api
-from seaserv import seafserv_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    get_repo, get_commits, get_group_repoids, CCNET_SERVER_ADDR, \
-    CCNET_SERVER_PORT, get_org_id_by_repo_id, get_org_by_id, is_org_staff, \
-    get_org_id_by_group, list_share_repos, get_org_group_repos, \
-    get_personal_groups_by_user, list_personal_repos_by_owner, get_group_repos, \
-    list_org_repos_by_owner, get_org_groups_by_user, check_permission, \
-    list_inner_pub_repos, list_org_inner_pub_repos, CCNET_CONF_PATH, SERVICE_URL
+from seaserv import seafserv_rpc, seafserv_threaded_rpc, get_repo, get_commits,\
+    CCNET_SERVER_ADDR, CCNET_SERVER_PORT, get_org_by_id, is_org_staff, \
+    get_org_id_by_group, get_personal_groups_by_user, \
+    list_personal_repos_by_owner, get_group_repos, \
+    list_inner_pub_repos, CCNET_CONF_PATH, SERVICE_URL
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
 try:
@@ -59,13 +54,13 @@ except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
 
 from seahub.utils.file_types import *
-from seahub.utils.htmldiff import HtmlDiff
+from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
-MAX_INT = 2147483647 
+MAX_INT = 2147483647
 
 PREVIEW_FILEEXT = {
     TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
@@ -296,9 +291,8 @@ def get_file_type_and_ext(filename):
         return (filetype, fileExt)
     else:
         return ('Unknown', fileExt)
-    
-    
-def get_file_revision_id_size (repo_id, commit_id, path):
+
+def get_file_revision_id_size(repo_id, commit_id, path):
     """Given a commit and a file path in that commit, return the seafile id
     and size of the file blob
 
@@ -306,7 +300,7 @@ def get_file_revision_id_size (repo_id, commit_id, path):
     repo = get_repo(repo_id)
     dirname  = os.path.dirname(path)
     filename = os.path.basename(path)
-    seafdir = seafile_api.list_dir_by_commit_and_path (repo_id, commit_id, dirname)
+    seafdir = seafile_api.list_dir_by_commit_and_path(repo_id, commit_id, dirname)
     for dirent in seafdir:
         if dirent.obj_name == filename:
             file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version,
@@ -466,7 +460,7 @@ def check_and_get_org_by_group(group_id, user):
     
     return org, base_template
     
-# events related    
+# events related
 if EVENTS_CONFIG_FILE:
     import seafevents
 
