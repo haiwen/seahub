@@ -920,10 +920,10 @@ def user_traffic_over_limit(username):
         stat = get_user_traffic_stat(username)
     except Exception as e:
         logger.error(e)
-        stat = None
-
-    if stat is None:
         return True
+
+    if stat is None:            # No traffic record yet
+        return False
 
     month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
     return True if month_traffic >= traffic_limit else False
