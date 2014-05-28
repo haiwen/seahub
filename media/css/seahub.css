@@ -158,6 +158,35 @@ button::-moz-focus-inner {/*Remove button padding in FF*/
     border: 0;
     padding: 0;
 }
+::-webkit-scrollbar {
+    height: 9px;
+    width: 9px;
+}
+::-webkit-scrollbar-button {
+    display: block;
+    height: 4px;
+}
+::-webkit-scrollbar-track-piece {
+    background: #e9e9eb;
+}
+::-webkit-scrollbar-track-piece:vertical:start {
+    border-radius:5px 5px 0 0;
+}
+::-webkit-scrollbar-track-piece:vertical:end {
+    border-radius:0 0 5px 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:start {
+    border-radius:5px 0 0 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:end {
+    border-radius:0 5px 5px 0;
+}
+::-webkit-scrollbar-thumb:vertical,
+::-webkit-scrollbar-thumb:horizontal {
+    background: #ccc;
+    border-radius: 5px;
+    display: block;
+}
 input[type=submit],
 input.submit {
     margin-top:8px;
@@ -1125,7 +1154,6 @@ textarea:-moz-placeholder {/* for FF */
 #msg-count {
     position:relative; 
     margin:10px 32px 0 25px;
-    cursor:pointer;
 }
 #msg-count .num {
     position:absolute;
@@ -1137,6 +1165,62 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #cb8a5d;
     top:0;
     left:15px;
+}
+#notice-popup {
+    position:absolute;
+    top:38px;
+    right:-80px;
+    width:240px;
+    background:#fff;
+    border:1px solid #c9c9c9;
+    border-radius:3px;
+    box-shadow:0 0 1px #f3f3f3;
+    z-index:20;
+}
+#notice-popup .hd {
+    text-align:center;
+    padding:5px 0 3px;
+    border-bottom:1px solid #dfdfe1;
+    margin:0 10px;
+}
+#notice-popup .con {
+    padding:0 10px;
+    overflow:auto;
+}
+#notice-popup a {
+    font-weight:normal;
+}
+#notice-popup .close {
+    position:absolute;
+    top:.5em;
+    right:10px;
+}
+#notice-popup li {
+    padding:9px 0 3px;
+    border-bottom:1px solid #dfdfe1;
+}
+#notice-popup .unread {
+    background:#f5f5f7;
+    border-left:2px solid #feac74;
+    margin:0 -10px;
+    padding-left:8px;
+    padding-right:10px;
+}
+#notice-popup .avatar {
+    border-radius:1000px;
+    float:left;
+}
+#notice-popup .brief {
+    margin-left:40px;
+    margin-top:0;
+}
+#notice-popup .time {
+    color:#999;
+    text-align:right;
+    margin:0;
+}
+#notice-popup .all {
+    color:#a4a4a4;
 }
 #account {
     position:relative;

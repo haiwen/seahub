@@ -29,8 +29,22 @@ $(function(){
         }
     });
 
-$('#msg-count').click(function() {
-    location.href = $(this).data('pgurl');
+$('#notice-icon').click(function() {
+    var popup = $('#notice-popup');
+    popup.toggleClass('hide');
+    if (!popup.hasClass('hide')) {
+        $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+    }
+});
+$(window).resize(function() {
+    var popup = $('#notice-popup');
+    if (!popup.hasClass('hide')) {
+        $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+    }
+});
+
+$('#notice-popup .close').click(function() {
+    $('#notice-popup').addClass('hide');   
 });
 
 (function () {
@@ -68,6 +82,7 @@ $(document).click(function(e) {
     };
     closePopup($('#user-info-popup'), $('#my-info'));
     closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
+    closePopup($('#notice-popup'), $('#notice-icon'));
 });
 
 // search: disable submit when input nothing
