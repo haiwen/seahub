@@ -76,11 +76,8 @@ $('.share-permission-select').change(function() {
         select_cont = $(this).parent(),
         user = select_cont.prev(),
         share_type = select_cont.parent().attr('data');
-        {% if org %}
-        var url = '{% url 'org_share_permission_admin' org.url_prefix %}?org_id={{ org.org_id }}&share_type=' + share_type;
-        {% else %}
-        var url = '{% url 'share_permission_admin' %}?share_type=' + share_type;
-        {% endif %}
+    var url = '{% url 'share_permission_admin' %}?share_type=' + share_type;
+
     $.ajax({
         url: url,
         type: 'POST',

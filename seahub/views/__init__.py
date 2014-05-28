@@ -891,80 +891,20 @@ def get_owned_repo_list(request):
     else:
         return seafile_api.get_owned_repo_list(username)
 
-def get_share_in_repo_list(request, start, limit):
-    """List share in repos;
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return seafile_api.get_org_share_in_repo_list(org_id, username, -1, -1)
-    else:
-        return seafile_api.get_share_in_repo_list(username, -1, -1)
+def get_virtual_repos_by_owner(request):
+    """List virtual repos.
 
-def get_groups_by_user(request):
-    """List user groups.
+    Arguments:
+    - `request`:
     """
     username = request.user.username
     if is_org_context(request):
         org_id = request.user.org.org_id
-        return seaserv.get_org_groups_by_user(org_id, username)
+        return seaserv.seafserv_threaded_rpc.get_org_virtual_repos_by_owner(
+            org_id, username)
     else:
-        return seaserv.get_personal_groups_by_user(username)
-        
-def get_group_repos(request, groups):
-    """Get repos shared to groups.
-    """
-    username = request.user.username
-    group_repos = []
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        # For each group I joined... 
-        for grp in groups:
-            # Get group repos, and for each group repos...
-            for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
-                # No need to list my own repo
-                repo_owner = seafile_api.get_org_repo_owner(r_id)
-                if repo_owner == username:
-                    continue
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                r.last_modified = get_repo_last_modify(r)
-                r.share_type = 'group'
-                r.user = repo_owner
-                r.user_perm = check_permission(r_id, username)
-                r.group = grp
-                group_repos.append(r)
-    else:
-        # For each group I joined... 
-        for grp in groups:
-            # Get group repos, and for each group repos...
-            for r_id in seafile_api.get_group_repoids(grp.id):
-                # No need to list my own repo
-                repo_owner = seafile_api.get_repo_owner(r_id)
-                if repo_owner == username:
-                    continue
-                # Convert repo properties due to the different collumns in Repo
-                # and SharedRepo
-                r = get_repo(r_id)
-                if not r:
-                    continue
-                r.repo_id = r.id
-                r.repo_name = r.name
-                r.repo_desc = r.desc
-                r.last_modified = get_repo_last_modify(r)
-                r.share_type = 'group'
-                r.user = repo_owner
-                r.user_perm = check_permission(r_id, username)
-                r.group = grp
-                group_repos.append(r)
-    return group_repos
-    
+        return seafile_api.get_virtual_repos_by_owner(username)
+
 @login_required
 @user_mods_check
 def myhome(request):
@@ -981,7 +921,7 @@ def myhome(request):
     sub_repos = []
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
     if ENABLE_SUB_LIBRARY and sub_lib_enabled:
-        sub_repos = seafile_api.get_virtual_repos_by_owner(username)
+        sub_repos = get_virtual_repos_by_owner(request)
         for repo in sub_repos:
             repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
                                                              repo.origin_path)
@@ -1127,55 +1067,30 @@ def client_unsync(request):
         return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
                 status=500, content_type=content_type)
 
-# @login_required
-# def innerpub_msg_reply(request, msg_id):
-#     """Show inner pub message replies, and process message reply in ajax"""
-    
-#     content_type = 'application/json; charset=utf-8'
-#     if request.is_ajax():
-#         ctx = {}
-#         if request.method == 'POST':
-#             form = MessageReplyForm(request.POST)
-
-#             # TODO: invalid form
-#             if form.is_valid():
-#                 msg = form.cleaned_data['message']
-#                 try:
-#                     innerpub_msg = InnerPubMsg.objects.get(id=msg_id)
-#                 except InnerPubMsg.DoesNotExist:
-#                     return HttpResponseBadRequest(content_type=content_type)
-            
-#                 msg_reply = InnerPubMsgReply()
-#                 msg_reply.reply_to = innerpub_msg
-#                 msg_reply.from_email = request.user.username
-#                 msg_reply.message = msg
-#                 msg_reply.save()
-
-#                 ctx['reply'] = msg_reply
-#                 html = render_to_string("group/group_reply_new.html", ctx)
-
-#         else:
-#             try:
-#                 msg = InnerPubMsg.objects.get(id=msg_id)
-#             except InnerPubMsg.DoesNotExist:
-#                 raise HttpResponse(status=400)
-
-#             replies = InnerPubMsgReply.objects.filter(reply_to=msg)
-#             ctx['replies'] = replies
-#             html = render_to_string("group/group_reply_list.html", ctx)
-
-#         serialized_data = json.dumps({"html": html})
-#         return HttpResponse(serialized_data, content_type=content_type)
-#     else:
-#         return HttpResponseBadRequest(content_type=content_type)
 @login_required
 def unsetinnerpub(request, repo_id):
+    """Unshare repos in organization or in share admin page.
+
+    Only system admin, organization admin or repo owner can perform this op.
+    """
     repo = get_repo(repo_id)
     if not repo:
         messages.error(request, _('Failed to unshare the library, as it does not exist.'))
         return HttpResponseRedirect(reverse('share_admin'))
 
-    # TODO: permission check
+    # permission check
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        is_repo_owner = True if repo_owner == username else False
+        if not (request.user.org.is_staff or is_repo_owner):
+            raise Http404
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+        is_repo_owner = True if repo_owner == username else False
+        if not (request.user.is_staff or is_repo_owner):
+            raise Http404
 
     try:
         if is_org_context(request):

@@ -50,7 +50,7 @@
             <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            <a href="#" data="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op vh">{% trans "Unshare"%}</a>
+            <a href="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op vh">{% trans "Unshare"%}</a>
             {% endif %}
         </td>
     </tr>

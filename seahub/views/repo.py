@@ -21,7 +21,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_repo_access_permission
 
-from seahub.utils import gen_file_upload_url, \
+from seahub.utils import gen_file_upload_url, is_org_context, \
     get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
     get_commit_before_new_merge
@@ -204,7 +204,10 @@ def render_repo(request, repo):
     repo_size = get_repo_size(repo.id)
     no_quota = is_no_quota(repo.id)
     search_repo_id = None if repo.encrypted else repo.id
-    repo_owner = seafile_api.get_repo_owner(repo.id)
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
     if is_repo_owner and not repo.is_virtual:
         show_repo_settings = True
@@ -212,7 +215,9 @@ def render_repo(request, repo):
         show_repo_settings = False
 
     more_start = None
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, head_commit, path, offset=0, limit=100)
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
+                                                        head_commit, path,
+                                                        offset=0, limit=100)
     if dirent_more:
         more_start = 100
     zipped = get_nav_path(path, repo.name)

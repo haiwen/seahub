@@ -1148,8 +1148,13 @@ def sub_repo(request, repo_id):
 
     # check if the sub-lib exist
     try:
-        sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
-    except SearpcError, e:
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            sub_repo = seaserv.seafserv_threaded_rpc.get_org_virtual_repo(
+                org_id, repo_id, path, username)
+        else:
+            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
+    except SearpcError as e:
         result['error'] = e.msg
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
     
@@ -1159,7 +1164,14 @@ def sub_repo(request, repo_id):
         # create a sub-lib
         try:
             # use name as 'repo_name' & 'repo_desc' for sub_repo
-            sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                sub_repo_id = seaserv.seafserv_threaded_rpc.create_org_virtual_repo(
+                    org_id, repo_id, path, name, name, username)
+            else:
+                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path,
+                                                              name, name,
+                                                              username)
             result['sub_repo_id'] = sub_repo_id
         except SearpcError, e:
             result['error'] = e.msg
@@ -1388,10 +1400,92 @@ def space_and_traffic(request):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({"html": html}), content_type=content_type)
 
+def get_share_in_repo_list(request, start, limit):
+    """List share in repos.
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        repo_list = seafile_api.get_org_share_in_repo_list(org_id, username,
+                                                           -1, -1)
+    else:
+        repo_list = seafile_api.get_share_in_repo_list(username, -1, -1)
+
+    for repo in repo_list:
+        repo.user_perm = seafile_api.check_repo_access_permission(repo.repo_id,
+                                                                  username)
+    return repo_list
+
+def get_groups_by_user(request):
+    """List user groups.
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        return seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        return seaserv.get_personal_groups_by_user(username)
+
+def get_group_repos(request, groups):
+    """Get repos shared to groups.
+    """
+    username = request.user.username
+    group_repos = []
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        # For each group I joined... 
+        for grp in groups:
+            # Get group repos, and for each group repos...
+            for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
+                # No need to list my own repo
+                repo_owner = seafile_api.get_org_repo_owner(r_id)
+                if repo_owner == username:
+                    continue
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
+                r = get_repo(r_id)
+                if not r:
+                    continue
+                r.repo_id = r.id
+                r.repo_name = r.name
+                r.repo_desc = r.desc
+                r.last_modified = get_repo_last_modify(r)
+                r.share_type = 'group'
+                r.user = repo_owner
+                r.user_perm = seafile_api.check_repo_access_permission(
+                    r_id, username)
+                r.group = grp
+                group_repos.append(r)
+    else:
+        # For each group I joined... 
+        for grp in groups:
+            # Get group repos, and for each group repos...
+            for r_id in seafile_api.get_group_repoids(grp.id):
+                # No need to list my own repo
+                repo_owner = seafile_api.get_repo_owner(r_id)
+                if repo_owner == username:
+                    continue
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
+                r = get_repo(r_id)
+                if not r:
+                    continue
+                r.repo_id = r.id
+                r.repo_name = r.name
+                r.repo_desc = r.desc
+                r.last_modified = get_repo_last_modify(r)
+                r.share_type = 'group'
+                r.user = repo_owner
+                r.user_perm = seafile_api.check_repo_access_permission(
+                    r_id, username)
+                r.group = grp
+                group_repos.append(r)
+    return group_repos
+
 @login_required
 def my_shared_and_group_repos(request):
     """Return html snippet of repos that shared to user and group repos.
-    
+
     Arguments:
     - `request`:
     """
@@ -1400,39 +1494,13 @@ def my_shared_and_group_repos(request):
 
     content_type = 'application/json; charset=utf-8'
 
-    username = request.user.username
-    
-    shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
-    for repo in shared_repos:
-        repo.user_perm = seafile_api.check_repo_access_permission(repo.repo_id, username)
-
+    # shared
+    shared_repos = get_share_in_repo_list(request, -1, -1)
     shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
 
-    group_repos = []
-    # Get all personal groups I joined.
-    joined_groups = request.user.joined_groups
-    # For each group I joined... 
-    for grp in joined_groups:
-        # Get group repos, and for each group repos...
-        for r_id in seaserv.get_group_repoids(grp.id):
-            # No need to list my own repo
-            repo_owner = seafile_api.get_repo_owner(r_id)
-            if repo_owner == username:
-                continue
-            # Convert repo properties due to the different collumns in Repo
-            # and SharedRepo
-            r = seaserv.get_repo(r_id)
-            if not r:
-                continue
-            r.repo_id = r.id
-            r.repo_name = r.name
-            r.repo_desc = r.desc
-            r.last_modified = get_repo_last_modify(r)
-            r.share_type = 'group'
-            r.user = repo_owner
-            r.user_perm = seaserv.check_permission(r_id, username)
-            r.group = grp
-            group_repos.append(r)
+    # group repos
+    joined_groups = get_groups_by_user(request)
+    group_repos = get_group_repos(request, joined_groups)
     group_repos.sort(key=lambda x: x.group.group_name)
     for i, repo in enumerate(group_repos):
         if i == 0:
@@ -1441,19 +1509,18 @@ def my_shared_and_group_repos(request):
             if repo.group.group_name != group_repos[i-1].group.group_name:
                 repo.show_group_name = True
 
-    ctx_shared = {
-        "shared_repos": shared_repos,
-        }
-    ctx_group = {
-        "group_repos": group_repos,
-        }
-    shared_repos_html = render_to_string('snippets/my_shared_repos.html', ctx_shared,
-                            context_instance=RequestContext(request))
-    group_repos_html = render_to_string('snippets/my_group_repos.html', ctx_group,
-                            context_instance=RequestContext(request))
+    ctx_shared = {"shared_repos": shared_repos}
+    ctx_group = {"group_repos": group_repos}
+    shared_repos_html = render_to_string(
+        'snippets/my_shared_repos.html', ctx_shared,
+        context_instance=RequestContext(request))
+    group_repos_html = render_to_string(
+        'snippets/my_group_repos.html', ctx_group,
+        context_instance=RequestContext(request))
 
-    return HttpResponse(json.dumps({"shared": shared_repos_html, "group": group_repos_html}),
-            content_type=content_type)
+    return HttpResponse(json.dumps({"shared": shared_repos_html,
+                                    "group": group_repos_html}),
+                        content_type=content_type)
 
 @login_required
 def get_file_op_url(request, repo_id):

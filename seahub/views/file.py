@@ -44,7 +44,7 @@ from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
-from seahub.utils import show_delete_days, render_error, \
+from seahub.utils import show_delete_days, render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, \
     is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
@@ -318,9 +318,13 @@ def view_file(request, repo_id):
                                                                   obj_id, path)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
-    
+
     # check if the user is the owner or not, for 'private share'
-    is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        is_repo_owner = True if repo_owner == username else False
+    else:
+        is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
 
     # get file type and extension
     filetype, fileext = get_file_type_and_ext(u_filename)
