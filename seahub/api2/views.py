@@ -92,6 +92,16 @@ HTTP_440_REPO_PASSWD_REQUIRED = 440
 HTTP_441_REPO_PASSWD_MAGIC_REQUIRED = 441
 HTTP_520_OPERATION_FAILED = 520
 
+def UTF8Encode(s):
+    if isinstance(s, unicode):
+        return s.encode('utf-8')
+    else:
+        return s
+
+def check_filename_with_rename_utf8(repo_id, parent_dir, filename):
+    newname = check_filename_with_rename(repo_id, parent_dir, filename)
+    return UTF8Encode(newname)
+
 ########## Test
 class Ping(APIView):
     """
@@ -949,8 +959,7 @@ def get_repo_file(request, repo_id, file_id, file_name, op):
 
 def reloaddir(request, repo, parent_dir):
     try:
-        dir_id = seafile_api.get_dir_id_by_path(repo.id,
-                                                parent_dir.encode('utf-8'))
+        dir_id = seafile_api.get_dir_id_by_path(repo.id, parent_dir)
     except SearpcError, e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
@@ -961,7 +970,7 @@ def reloaddir(request, repo, parent_dir):
 
     return get_dir_entrys_by_id(request, repo, parent_dir, dir_id)
 
-def reloaddir_if_neccessary (request, repo, parent_dir):
+def reloaddir_if_necessary (request, repo, parent_dir):
 
     reload_dir = False
     s = request.GET.get('reloaddir', None)
@@ -995,23 +1004,24 @@ class OpDeleteView(APIView):
         if resp:
             return resp
 
-        parent_dir = request.GET.get('p', '/')
+        parent_dir = request.GET.get('p')
         file_names = request.POST.get("file_names")
 
         if not parent_dir or not file_names:
             return api_error(status.HTTP_404_NOT_FOUND,
                              'File or directory not found.')
 
+        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
             try:
-                seafile_api.del_file(repo_id, parent_dir,
+                seafile_api.del_file(repo_id, parent_dir_utf8,
                                      file_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to delete file.")
 
-        return reloaddir_if_neccessary (request, repo, parent_dir)
+        return reloaddir_if_necessary (request, repo, parent_dir_utf8)
 
 class OpMoveView(APIView):
     """
@@ -1034,7 +1044,7 @@ class OpMoveView(APIView):
         if resp:
             return resp
 
-        parent_dir = request.GET.get('p', '/')
+        parent_dir = request.GET.get('p', None)
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
@@ -1046,19 +1056,20 @@ class OpMoveView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'The destination directory is the same as the source.')
 
+        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename(dst_repo, dst_dir,
-                                                      file_name)
+            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
+                                                           file_name)
             try:
-                seafile_api.move_file(repo_id, parent_dir, file_name,
+                seafile_api.move_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       username, 0, synchronous=1)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
-        return reloaddir_if_neccessary (request, repo, parent_dir)
+        return reloaddir_if_neccessary (request, repo, parent_dir_utf8)
 
 class OpCopyView(APIView):
     """
@@ -1082,7 +1093,7 @@ class OpCopyView(APIView):
         if resp:
             return resp
 
-        parent_dir = request.GET.get('p', '/').encode('utf-8')
+        parent_dir = request.GET.get('p', None)
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
@@ -1091,19 +1102,20 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
 
+        parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
-            new_filename = check_filename_with_rename(dst_repo, dst_dir,
-                                                      file_name)
+            new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
+                                                           file_name)
             try:
-                seafile_api.copy_file(repo_id, parent_dir, file_name,
+                seafile_api.copy_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       username, 0, synchronous=1)
             except SearpcError,e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
-        return reloaddir_if_neccessary (request, repo, parent_dir)
+        return reloaddir_if_neccessary (request, repo, parent_dir_utf8)
 
 
 class StarredFileView(APIView):
@@ -1232,8 +1244,8 @@ class FileView(APIView):
                 return api_error(status.HTTP_409_CONFLICT,
                                  'The new name is the same to the old')
 
-            newname = check_filename_with_rename(repo_id, parent_dir, newname)
-            newname_utf8 = newname.encode('utf-8')
+            newname = check_filename_with_rename_utf8(repo_id, parent_dir,
+                                                      newname)
             try:
                 seafile_api.rename_file(repo_id, parent_dir, oldname, newname,
                                         username)
@@ -1242,7 +1254,7 @@ class FileView(APIView):
                                  "Failed to rename file: %s" % e)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
-                return reloaddir(request, repo, parent_dir)
+                return reloaddir(request, repo, parent_dir_utf8)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
@@ -1281,10 +1293,9 @@ class FileView(APIView):
 
             filename = os.path.basename(path)
             filename_utf8 = filename.encode('utf-8')
-            new_filename = check_filename_with_rename(dst_repo_id, dst_dir,
-                                                      filename)
-            new_filename_utf8 = new_filename.encode('utf-8')
-
+            new_filename_utf8 = check_filename_with_rename_utf8(dst_repo_id,
+                                                                dst_dir,
+                                                                filename)
             try:
                 seafile_api.move_file(src_repo_id, src_dir_utf8,
                                       filename_utf8, dst_repo_id,
@@ -1313,13 +1324,13 @@ class FileView(APIView):
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
-            new_file_name = check_filename_with_rename(repo_id, parent_dir,
-                                                       new_file_name)
-            new_file_name_utf8 = new_file_name.encode('utf-8')
+            new_file_name_utf8 = check_filename_with_rename_utf8(repo_id,
+                                                                 parent_dir,
+                                                                 new_file_name)
 
             try:
                 seafile_api.post_empty_file(repo_id, parent_dir,
-                                            new_file_name, username)
+                                            new_file_name_utf8, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
@@ -1360,7 +1371,6 @@ class FileView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        parent_dir = os.path.dirname(path)
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')
 
@@ -1372,7 +1382,7 @@ class FileView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_neccessary(request, repo, parent_dir)
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
 
 class FileDetailView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1608,13 +1618,13 @@ class DirView(APIView):
             parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_dir_name = os.path.basename(path)
-            new_dir_name = check_filename_with_rename(repo_id, parent_dir,
-                                                      new_dir_name)
-            new_dir_name_utf8 = new_dir_name.encode('utf-8')
+            new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
+                                                                parent_dir,
+                                                                new_dir_name)
 
             try:
                 seafile_api.post_dir(repo_id, parent_dir,
-                                     new_dir_name, username)
+                                     new_dir_name_utf8, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to make directory.')
@@ -1671,7 +1681,7 @@ class DirView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_neccessary(request, repo, parent_dir)
+        return reloaddir_if_neccessary(request, repo, parent_dir_utf8)
 
 class DirDownloadView(APIView):
     authentication_classes = (TokenAuthentication, )
