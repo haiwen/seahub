@@ -1491,7 +1491,7 @@ msgstr "Membri"
 
 #: seahub/group/templates/group/group_base.html:40
 msgid "Admin"
-msgstr "Amministratore"
+msgstr "Amministrazione"
 
 #: seahub/group/templates/group/group_discuss.html:12
 msgid "Add a discussion..."
@@ -5564,12 +5564,12 @@ msgstr "Ripristina Password"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:88
 #: seahub/templates/sysadmin/useradmin_js.html:11
 msgid "Revoke Admin"
-msgstr "Revoca l'amministratore"
+msgstr "Revoca l'amministrazione"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:90
 #: seahub/templates/sysadmin/useradmin_js.html:15
 msgid "Set Admin"
-msgstr "Imposta amministratore"
+msgstr "Imposta amministrazione"
 
 #: seahub/templates/sysadmin/user_activation_email.html:12
 #, python-format
