@@ -100,7 +100,7 @@ msgstr "Password sbagliata"
 #: seahub/views/__init__.py:1168 seahub/views/ajax.py:680
 #: seahub/views/ajax.py:709 seahub/views/ajax.py:747 seahub/views/ajax.py:784
 msgid "Internal server error"
-msgstr ""
+msgstr "Errore interno del server"
 
 #: seahub/forms.py:157
 msgid "Decrypt library error"
@@ -132,11 +132,11 @@ msgstr "Prego inserisci un numero"
 
 #: seahub/forms.py:188
 msgid "Please enter a correct password."
-msgstr ""
+msgstr "Prego inserisci la password corretta."
 
 #: seahub/settings.py:133
 msgid "català"
-msgstr ""
+msgstr "Catalano"
 
 #: seahub/settings.py:134
 msgid "Deutsch"
@@ -152,27 +152,27 @@ msgstr "Spagnolo"
 
 #: seahub/settings.py:137
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Spagnolo Argentino"
 
 #: seahub/settings.py:138
 msgid "Mexican Spanish"
-msgstr ""
+msgstr "Spagnolo Messicano"
 
 #: seahub/settings.py:139
 msgid "français"
-msgstr ""
+msgstr "Francese"
 
 #: seahub/settings.py:140
 msgid "עברית"
-msgstr ""
+msgstr "Ebraico"
 
 #: seahub/settings.py:141
 msgid "Magyar"
-msgstr ""
+msgstr "Ungherese"
 
 #: seahub/settings.py:142
 msgid "Íslenska"
-msgstr ""
+msgstr "Islandese"
 
 #: seahub/settings.py:143
 msgid "Italiano"
@@ -180,43 +180,43 @@ msgstr "Italiano"
 
 #: seahub/settings.py:144
 msgid "한국어"
-msgstr ""
+msgstr "Coreano"
 
 #: seahub/settings.py:145
 msgid "Latvian"
-msgstr ""
+msgstr "Lettone"
 
 #: seahub/settings.py:146
 msgid "Nederlands"
-msgstr ""
+msgstr "Olandese"
 
 #: seahub/settings.py:147
 msgid "Polski"
-msgstr ""
+msgstr "Polacco"
 
 #: seahub/settings.py:148
 msgid "Portuguese, Brazil"
-msgstr ""
+msgstr "Portoghese"
 
 #: seahub/settings.py:149
 msgid "Русский"
-msgstr ""
+msgstr "Russo"
 
 #: seahub/settings.py:150
 msgid "Slovak"
-msgstr ""
+msgstr "Slovacco"
 
 #: seahub/settings.py:151
 msgid "Svenska"
-msgstr ""
+msgstr "Svedese"
 
 #: seahub/settings.py:152
 msgid "Thai"
-msgstr ""
+msgstr "Tailandese"
 
 #: seahub/settings.py:153
 msgid "українська мова"
-msgstr ""
+msgstr "Ucraino"
 
 #: seahub/settings.py:154
 msgid "简体中文"
@@ -224,11 +224,11 @@ msgstr "Cinese"
 
 #: seahub/settings.py:155
 msgid "繁體中文"
-msgstr ""
+msgstr "Cinese Tradizionale"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
 msgid "File Collaboration Team Organization"
-msgstr ""
+msgstr "File Collaborazione Gruppo dell'Organizzazione"
 
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
@@ -396,11 +396,11 @@ msgstr "Messaggi"
 #: seahub/message/templates/message/user_msg_list.html:9
 #, python-format
 msgid "Messages with %(name)s"
-msgstr ""
+msgstr "Messaggi con %(name)s"
 
 #: seahub/api2/templates/api2/user_msg_list.html:19
 msgid "No messages."
-msgstr ""
+msgstr "Nessun messaggio."
 
 #: seahub/auth/admin.py:29
 msgid "Personal info"
@@ -448,7 +448,7 @@ msgstr "Password"
 
 #: seahub/auth/forms.py:36 seahub/base/accounts.py:408
 msgid "Enter a valid email address."
-msgstr ""
+msgstr "Inserisci un indirizzo email valido."
 
 #: seahub/auth/forms.py:46
 msgid ""
@@ -485,7 +485,7 @@ msgstr "Questo indirizzo email non ha un profilo associato. Sei sicuro di volerl
 #: seahub/auth/forms.py:108
 #, python-format
 msgid "Reset Password on %s"
-msgstr ""
+msgstr "Reimposta la Password su %s"
 
 #: seahub/auth/forms.py:116
 msgid "New password"
@@ -701,19 +701,19 @@ msgstr "Id utente non valido."
 
 #: seahub/base/accounts.py:438
 msgid "name"
-msgstr ""
+msgstr "nome"
 
 #: seahub/base/accounts.py:440
 msgid "department"
-msgstr ""
+msgstr "dipartimento"
 
 #: seahub/base/accounts.py:442
 msgid "telephone"
-msgstr ""
+msgstr "telefono"
 
 #: seahub/base/accounts.py:444
 msgid "note"
-msgstr ""
+msgstr "note"
 
 #: seahub/base/decorators.py:102
 msgid "Files in this library can not be viewed online."
@@ -761,12 +761,12 @@ msgstr "Cartella spostata"
 
 #: seahub/base/templatetags/seahub_tags.py:111
 msgid "Reverted library to status at"
-msgstr ""
+msgstr "Riporta la libreria allo stato"
 
 #: seahub/base/templatetags/seahub_tags.py:114
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
-msgstr ""
+msgstr "Riporta il file \"%(file)s\" allo stato di %(time)s."
 
 #: seahub/base/templatetags/seahub_tags.py:118
 msgid "Recovered deleted directory"
@@ -778,7 +778,7 @@ msgstr "Cambia il nome della libreria o della descrizione"
 
 #: seahub/base/templatetags/seahub_tags.py:122
 msgid "Auto merge by seafile system"
-msgstr ""
+msgstr "Auto unisci dal sistema seafile"
 
 #: seahub/base/templatetags/seahub_tags.py:179
 #: seahub/base/templatetags/seahub_tags.py:213
@@ -874,17 +874,17 @@ msgstr "L'email è richiesta."
 #: seahub/group/views.py:796 seahub/group/views.py:824
 #, python-format
 msgid "%s is not a valid email."
-msgstr ""
+msgstr "%s non è un indirizzo email valido."
 
 #: seahub/contacts/views.py:69 seahub/contacts/views.py:105
 #, python-format
 msgid "%s is already in your contacts."
-msgstr ""
+msgstr "%s è già presente nei tuoi contatti."
 
 #: seahub/contacts/views.py:78 seahub/contacts/views.py:113
 #, python-format
 msgid "Successfully added %s to contacts."
-msgstr ""
+msgstr "%s è stato aggiunto correttamente ai contatti."
 
 #: seahub/contacts/views.py:83 seahub/contacts/views.py:116
 #, python-format
@@ -1096,11 +1096,11 @@ msgstr "Cancella contatto"
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "Sei sicuro di voler cancellare %s ?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:129
 msgid "You cannot add yourself."
-msgstr ""
+msgstr "Non puoi aggiungere te stesso."
 
 #: seahub/group/error_msg.py:7
 msgid "The group has already created"
@@ -1152,7 +1152,7 @@ msgstr "Il nome del gruppo è troppo lungo (massimo 255 caratteri)"
 
 #: seahub/group/forms.py:36
 msgid "Group name can only contain letters, numbers or underscore"
-msgstr ""
+msgstr "Il nome del gruppo può contenere solamente lettere, numeri o _"
 
 #: seahub/group/forms.py:46
 msgid "Verification message can't be empty"
@@ -1172,7 +1172,8 @@ msgstr "\"%s\" non è un nome valido"
 msgid ""
 "You can only create %d groups.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
-msgstr ""
+msgstr "Puoi solamente create %d gruppi.<a href=\"http://seafile.com/\">Fai l'Upgrade "
+"del tuo account.</a>"
 
 #: seahub/group/views.py:155
 msgid "There is already a group with that name."
@@ -1181,18 +1182,18 @@ msgstr "Nome gruppo già esistente."
 #: seahub/group/views.py:259
 #, python-format
 msgid "Successfully renamed group to \"%s\"."
-msgstr ""
+msgstr "Gruppo rinominato correttamente a \"%s\"."
 
 #: seahub/group/views.py:261
 msgid ""
 "Failed to rename group, group name can only contain letters, numbers or "
 "underscore"
-msgstr ""
+msgstr "Problemi nel cambio nome del gruppo, il nome del gruppo può contenere solamente lettere, numeri o _"
 
 #: seahub/group/views.py:280
 #, python-format
 msgid "Email %s is not valid."
-msgstr ""
+msgstr "L'email %s non è valida."
 
 #: seahub/group/views.py:309 seahub/group/views.py:331
 msgid "Only administrators can make the group public"
@@ -1211,12 +1212,13 @@ msgstr "Non hai i permessi."
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
-msgstr ""
+msgstr "Puoi invitare solamente %d membri.<a href=\"http://seafile.com/\">Fai l'Upgrade "
+"del tuo account.</a>"
 
 #: seahub/group/views.py:645
 #, python-format
 msgid "You are invited to join a group on %s"
-msgstr ""
+msgstr "Sei stato invitato a partecipare al gruppi %s"
 
 #: seahub/group/views.py:671
 #, python-format
@@ -1237,7 +1239,7 @@ msgstr "Aggiunto."
 #: seahub/group/views.py:742
 #, python-format
 msgid "Failed to add, %s is not a valid email."
-msgstr ""
+msgstr "Impossibile aggiungere, %s non è un indirizzo email valido."
 
 #: seahub/group/views.py:752
 #, python-format
@@ -1279,7 +1281,7 @@ msgstr "Errore: il gruppo non esiste."
 #: seahub/group/views.py:934
 #, python-format
 msgid "Successfully posted to %(groups)s."
-msgstr ""
+msgstr "Inviato correttamente a %(groups)s."
 
 #: seahub/group/views.py:937
 #, python-format
@@ -1322,7 +1324,7 @@ msgstr "Invio completato, il gruppo admin gestirà la richiesta."
 
 #: seahub/group/views.py:1179
 msgid "Discussion is required."
-msgstr ""
+msgstr "La discussione è richiesta."
 
 #: seahub/group/views.py:1282 seahub/views/__init__.py:660
 #: seahub/views/ajax.py:1236 seahub/views/file.py:307 seahub/views/file.py:619
@@ -1332,11 +1334,11 @@ msgstr "Il file non esiste."
 
 #: seahub/group/views.py:1318
 msgid "Successfully enable \"Wiki\"."
-msgstr ""
+msgstr "\"Wiki\" abilitato correttamente."
 
 #: seahub/group/views.py:1323
 msgid "Successfully disable \"Wiki\"."
-msgstr ""
+msgstr "\"Wiki\" disabilitato correttamente."
 
 #: seahub/group/views.py:1362 seahub/group/views.py:1536
 #: seahub/views/wiki.py:60 seahub/views/wiki.py:202
@@ -1360,7 +1362,7 @@ msgstr "Impossibile creare la home page. Prego riprovare più tardi."
 
 #: seahub/group/views.py:1497 seahub/views/wiki.py:167
 msgid "Failed to set wiki library."
-msgstr ""
+msgstr "Impossibile impostare il wiki per la libreria."
 
 #: seahub/group/views.py:1526 seahub/group/views.py:1552
 #: seahub/group/views.py:1570 seahub/views/wiki.py:192
@@ -1376,21 +1378,21 @@ msgstr "La pagina \"%s\" è già esistente."
 #: seahub/group/views.py:1575
 #, python-format
 msgid "Successfully deleted \"%s\"."
-msgstr ""
+msgstr "\"%s\" correttamente cancellato."
 
 #: seahub/group/views.py:1577
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
-msgstr ""
+msgstr "Impossibile cancella \"%s\". Per favore riprova più tardi."
 
 #: seahub/group/templates/group/add_member_email.html:8
 msgid "Hi, "
-msgstr ""
+msgstr "Ciao, "
 
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
 msgid "%(email)s invited you to join group %(grp_name)s on %(site_name)s: "
-msgstr ""
+msgstr "%(email)s ti ha invitato a partecipare al gruppo %(grp_name)s su %(site_name)s: "
 
 #: seahub/group/templates/group/discussion_list.html:18
 #: seahub/group/templates/group/group_discuss.html:86
@@ -1505,7 +1507,7 @@ msgstr "Aggiungi file"
 #: seahub/message/templates/message/all_msg_list.html:55
 #: seahub/message/templates/message/user_msg_list.html:29
 msgid "Choose a file or files:"
-msgstr ""
+msgstr "Scegli un file o i file:"
 
 #: seahub/group/templates/group/group_discuss.html:33
 msgid "After login, you can post discussions and add replies."
@@ -1682,7 +1684,10 @@ msgid ""
 "Libraries shared as writable can be downloaded and synced by other group "
 "members. Read only libraries can only be downloaded, updates by others will "
 "not be uploaded."
-msgstr ""
+msgstr "Le librerie condivise in scrittura possono essere scaricate e "
+"sincronizzate dagli altri membri del gruppo. Le librerie in sola lettura "
+"possono essere scaricate, gli aggiornamenti fatti da altri non verranno "
+"caricati."
 
 #: seahub/group/templates/group/group_info.html:75
 #: seahub/group/templates/group/group_info.html:124
@@ -1760,7 +1765,7 @@ msgstr "Togli condivisione alla libreria"
 #: seahub/group/templates/group/group_info.html:147
 #, python-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "Sei sicuro di voler rimuovere la condivisione per %s ?"
 
 #: seahub/group/templates/group/group_info_for_pub.html:24
 #: seahub/group/templates/group/group_info_for_pub.html:26
@@ -1798,6 +1803,9 @@ msgstr "Nessuna libreria pubblica in questo gruppo"
 msgid ""
 "A library can be made public in its settings page.(Not implemented yet)"
 msgstr ""
+"Una libreria può essere resa pubblica nella pagina delle impostazioni. "
+"(Non ancora implementata)"
+
 
 #: seahub/group/templates/group/group_join_email.html:2
 #, python-format
@@ -1822,14 +1830,14 @@ msgstr "Il team di %(site_name)s"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:18
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 msgid "Admins"
-msgstr ""
+msgstr "Amministratori"
 
 #: seahub/group/templates/group/group_manage.html:12
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:23
 #: seahub/templates/base.html:68 seahub/templates/repo.html:29
 msgid "Settings"
-msgstr ""
+msgstr "Impostazioni"
 
 #: seahub/group/templates/group/group_manage.html:15
 msgid "Add Members"
@@ -1837,11 +1845,11 @@ msgstr "Aggiungi membri"
 
 #: seahub/group/templates/group/group_manage.html:16
 msgid "Add Admins"
-msgstr ""
+msgstr "Aggiungi Amministratori"
 
 #: seahub/group/templates/group/group_manage.html:69
 msgid "Avatar"
-msgstr ""
+msgstr "Avatar"
 
 #: seahub/group/templates/group/group_manage.html:73
 #: seahub/profile/templates/profile/set_profile.html:30
@@ -1869,7 +1877,7 @@ msgstr "Trasferisci"
 
 #: seahub/group/templates/group/group_manage.html:88
 msgid "Dismiss"
-msgstr "Respingere"
+msgstr "Rimuovere"
 
 #: seahub/group/templates/group/group_manage.html:96
 msgid "Transfer Group To"
@@ -1881,15 +1889,15 @@ msgstr "email"
 
 #: seahub/group/templates/group/group_manage.html:98
 msgid "Tip: the email should be already registered."
-msgstr ""
+msgstr "Suggerimento: l'email deve essere già registrata."
 
 #: seahub/group/templates/group/group_manage.html:104
 msgid "Rename Group To"
-msgstr ""
+msgstr "Rinomina il Gruppo A"
 
 #: seahub/group/templates/group/group_manage.html:140
 msgid "Dismiss Group"
-msgstr "Respingi Gruppo"
+msgstr "Rimuovi Gruppo"
 
 #: seahub/group/templates/group/group_manage.html:141
 msgid "Really want to dismiss this group?"
@@ -1902,11 +1910,11 @@ msgstr "Cancella il membro"
 #: seahub/group/templates/group/group_manage.html:145
 #, python-format
 msgid "Really want to delete %s ?"
-msgstr ""
+msgstr "Sei sicuro di voler cancellare %s ?"
 
 #: seahub/group/templates/group/group_members.html:10
 msgid "Quit"
-msgstr ""
+msgstr "Chiudi"
 
 #: seahub/group/templates/group/group_members.html:22
 #: seahub/profile/templates/profile/user_profile.html:28
@@ -1953,17 +1961,17 @@ msgstr "Messaggio di verifica"
 #: seahub/templates/wiki/personal_wiki.html:15
 #: seahub/templates/wiki/personal_wiki.html:20
 msgid "Wiki Index"
-msgstr ""
+msgstr "Indice Wiki"
 
 #: seahub/group/templates/group/group_wiki.html:14
 #: seahub/templates/wiki/personal_wiki.html:16
 msgid "No index now."
-msgstr ""
+msgstr "Nessun indice ancora."
 
 #: seahub/group/templates/group/group_wiki.html:16
 #: seahub/templates/wiki/personal_wiki.html:17
 msgid "Create"
-msgstr ""
+msgstr "Crea"
 
 #: seahub/group/templates/group/group_wiki.html:35
 msgid "This group currently has no wiki"
@@ -1977,6 +1985,10 @@ msgid ""
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
 msgstr ""
+"Seafile wiki ti permette di organizzare le tue informazioni in modo semplice. "
+"Il contenuto del wiki è memorizzato in una libreria normale con una struttura "
+"di file e cartelle predefinita. Questo ti permette di modificare il wiki nel "
+"desktop e quindi sincronizzare verso il server."
 
 #: seahub/group/templates/group/group_wiki.html:38
 #: seahub/templates/wiki/personal_wiki.html:34
@@ -1986,7 +1998,7 @@ msgstr "Crea un Wiki ora"
 #: seahub/group/templates/group/group_wiki.html:40
 #: seahub/templates/wiki/personal_wiki.html:36
 msgid "Choose a library as wiki"
-msgstr ""
+msgstr "Scegli una libreria come wiki"
 
 #: seahub/group/templates/group/group_wiki.html:45
 #: seahub/templates/wiki/personal_wiki.html:40
@@ -2000,13 +2012,13 @@ msgstr "Wiki pagine"
 #: seahub/group/templates/group/group_wiki.html:55
 #: seahub/templates/wiki/personal_wiki.html:50
 msgid "Choose a library as wiki:"
-msgstr ""
+msgstr "Scegli una libreria come wiki:"
 
 #: seahub/group/templates/group/group_wiki.html:60
 #: seahub/profile/templates/profile/set_profile.html:122
 #: seahub/templates/wiki/personal_wiki.html:55
 msgid "Please click and choose a library."
-msgstr ""
+msgstr "Prego clicca e scegli una libreria."
 
 #: seahub/group/templates/group/group_wiki.html:68
 #: seahub/group/templates/group/group_wiki_pages.html:11
@@ -2066,19 +2078,19 @@ msgstr "Ultima modifica da %(modifier)s, %(modify_time)s"
 #: seahub/group/templates/group/group_wiki.html:137
 #: seahub/templates/wiki/personal_wiki.html:128
 msgid "Are you sure you want to delete this page?"
-msgstr ""
+msgstr "Sei sicuro di voler cancellare questa pagina?"
 
 #: seahub/group/templates/group/group_wiki.html:158
 #: seahub/templates/repo_settings.html:78
 #: seahub/templates/wiki/personal_wiki.html:149
 msgid "Name is required."
-msgstr ""
+msgstr "Il nome è richiesto."
 
 #: seahub/group/templates/group/group_wiki.html:162
 #: seahub/templates/repo_settings.html:82
 #: seahub/templates/wiki/personal_wiki.html:153
 msgid "Description is required."
-msgstr ""
+msgstr La descrizione è richiesta.""
 
 #: seahub/group/templates/group/groups_left_panel.html:3
 msgid "Tips"
@@ -2147,11 +2159,11 @@ msgstr "Aggiungi amministratori"
 #: seahub/group/templates/group/grpmember_add_js.html:33
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:126
 msgid "Please enter emails, or select some."
-msgstr ""
+msgstr "Prego inserisci le email, o scegli qualcuno."
 
 #: seahub/group/templates/group/msg_js.html:157
 msgid "Failed to post reply."
-msgstr ""
+msgstr "Impossibile inviare risposta."
 
 #: seahub/group/templates/group/new_msg_reply.html:18
 msgid "Group: "
@@ -2160,36 +2172,36 @@ msgstr "Gruppo: "
 #: seahub/help/templates/help/help_base.html:7
 msgctxt "help"
 msgid "Client"
-msgstr ""
+msgstr "Client"
 
 #: seahub/help/templates/help/help_base.html:9
 msgid "Install and Sync Files"
-msgstr ""
+msgstr "Installa e Sincronizza i File"
 
 #: seahub/help/templates/help/help_base.html:10
 msgid "Deleting a library"
-msgstr ""
+msgstr "Sto cancellando la libreria"
 
 #: seahub/help/templates/help/help_base.html:11
 msgid "Encrypting a library"
-msgstr ""
+msgstr "Sto criptando la libreria"
 
 #: seahub/help/templates/help/help_base.html:12
 #: seahub/help/templates/help/help_colab.html:7
 msgid "File conflicts"
-msgstr ""
+msgstr "Conflitti file"
 
 #: seahub/help/templates/help/help_base.html:13
 msgid "Excluding files"
-msgstr ""
+msgstr "File esclusi"
 
 #: seahub/help/templates/help/help_base.html:15
 msgid "Web Site"
-msgstr ""
+msgstr "Sito Web"
 
 #: seahub/help/templates/help/help_base.html:17
 msgid "Sharing to a group"
-msgstr ""
+msgstr "Sto condividendo al gruppo"
 
 #: seahub/help/templates/help/help_base.html:18
 #: seahub/help/templates/help/help_view_encrypted.html:8
