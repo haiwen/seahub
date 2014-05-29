@@ -658,7 +658,7 @@ def view_shared_file(request, token):
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
 
-    accessible_repos = get_unencry_rw_repos_by_user(request.user.username)
+    accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
@@ -727,7 +727,7 @@ def view_file_via_shared_dir(request, token):
                 'filetype': filetype}
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
-        err = err_msg
+        ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
 
@@ -1149,7 +1149,7 @@ def view_priv_shared_file(request, token):
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
     if exceeds_limit:
-        err = err_msg
+        ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
 
@@ -1162,7 +1162,7 @@ def view_priv_shared_file(request, token):
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
-    accessible_repos = get_unencry_rw_repos_by_user(username)
+    accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_private_file_share', args=[pfs.token])
 
     return render_to_response('shared_file_view.html', {

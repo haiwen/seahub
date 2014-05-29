@@ -5,6 +5,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.utils.importlib import import_module
 
 from seahub.auth.signals import user_logged_in
+from seahub.utils import is_org_context
 
 SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
@@ -95,10 +96,13 @@ def logout(request):
     """
     request.session.flush()
     if hasattr(request, 'user'):
-        # NOTE: must include `seahub` before `base`        
         from seahub.base.accounts import User 
         if isinstance(request.user, User):
-            request.user.remove_repo_passwds()
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                request.user.remove_org_repo_passwds(org_id)
+            else:
+                request.user.remove_repo_passwds()
         from seahub.auth.models import AnonymousUser
         request.user = AnonymousUser()
 

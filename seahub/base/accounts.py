@@ -176,17 +176,29 @@ class User(object):
             return False
 
         passwd_setted_repos = []
-        for r in owned_repos + groups_repos:
+        for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
                     is_passwd_set(r.id, self.email):
                 passwd_setted_repos.append(r)
-        for r in shared_repos + public_repos:
-            # For compatibility with diffrent fields names in Repo and
-            # SharedRepo objects.
-            r.id = r.repo_id
-            r.name = r.repo_name
-            r.desc = r.repo_desc
 
+        for r in passwd_setted_repos:
+            unset_repo_passwd(r.id, self.email)
+
+    def remove_org_repo_passwds(self, org_id):
+        """
+        Remove all org repo decryption passwords stored on server.
+        """
+        from seahub.utils import get_user_repos
+        owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(self.email, org_id=org_id)
+
+        def has_repo(repos, repo):
+            for r in repos:
+                if repo.id == r.id:
+                    return True
+            return False
+
+        passwd_setted_repos = []
+        for r in owned_repos + shared_repos + groups_repos + public_repos:
             if not has_repo(passwd_setted_repos, r) and r.encrypted and \
                     is_passwd_set(r.id, self.email):
                 passwd_setted_repos.append(r)

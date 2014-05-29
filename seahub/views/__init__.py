@@ -276,16 +276,20 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         else:
             return (file_list, dir_list, dirent_more)
 
-def get_unencry_rw_repos_by_user(username):
+def get_unencry_rw_repos_by_user(request):
     """Get all unencrypted repos the user can read and write.
     """
+    username = request.user.username
+
     def has_repo(repos, repo):
         for r in repos:
             if repo.id == r.id:
                 return True
         return False
-    
-    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(username)
+
+    org_id = request.user.org.org_id if is_org_context(request) else None
+    owned_repos, shared_repos, groups_repos, public_repos = get_user_repos(
+        username, org_id=org_id)
 
     accessible_repos = []
 
@@ -293,24 +297,12 @@ def get_unencry_rw_repos_by_user(username):
         if not has_repo(accessible_repos, r) and not r.encrypted:
             accessible_repos.append(r)
 
-    for r in shared_repos + public_repos:
-        # For compatibility with diffrent fields names in Repo and
-        # SharedRepo objects.
-        r.id = r.repo_id
-        r.name = r.repo_name
-        r.desc = r.repo_desc
-
+    for r in shared_repos + groups_repos + public_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
             if seafile_api.check_repo_access_permission(r.id, username) == 'rw':
                 accessible_repos.append(r)
 
-    for r in groups_repos:
-        if not has_repo(accessible_repos, r) and not r.encrypted :
-            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':            
-                accessible_repos.append(r)
-
     return accessible_repos
-
 
 def render_recycle_root(request, repo_id):
     repo = get_repo(repo_id)

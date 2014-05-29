@@ -27,7 +27,9 @@ from seahub.notifications.models import UserNotification
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id, access_to_repo, get_diff, group_events_data
+    get_system_default_repo_id, access_to_repo, get_diff, group_events_data, \
+    get_owned_repo_list
+
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
@@ -181,17 +183,17 @@ def get_my_unenc_repos(request):
     """
     if not request.is_ajax():
         raise Http404
-    
+
     content_type = 'application/json; charset=utf-8'
 
-    repos = seafile_api.get_owned_repo_list(request.user.username)
+    repos = get_owned_repo_list(request)
     repo_list = []
     for repo in repos:
         if repo.encrypted or repo.is_virtual:
             continue
         repo_list.append({"name": repo.name, "id": repo.id})
-    
-    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+
+    repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required
@@ -203,18 +205,17 @@ def unenc_rw_repos(request):
     """
     if not request.is_ajax():
         raise Http404
-    
+
     content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-    acc_repos = get_unencry_rw_repos_by_user(username)
+    acc_repos = get_unencry_rw_repos_by_user(request)
 
     repo_list = []
     for repo in acc_repos:
         repo_list.append({"name": repo.name, "id": repo.id})
 
-    repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+    repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
-    
+
 @login_required        
 def list_dir(request, repo_id):
     """
