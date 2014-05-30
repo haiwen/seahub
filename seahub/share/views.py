@@ -720,14 +720,16 @@ def get_shared_link(request):
         fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
         if fs is None:
             fs = FileShare.objects.create_file_link(username, repo_id, path)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                OrgFileShare.objects.set_org_file_share(org_id, fs)
     else:
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
         if fs is None:
             fs = FileShare.objects.create_dir_link(username, repo_id, path)
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        OrgFileShare.objects.set_org_file_share(org_id, fs)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                OrgFileShare.objects.set_org_file_share(org_id, fs)
 
     token = fs.token
     shared_link = gen_shared_link(token, fs.s_type)

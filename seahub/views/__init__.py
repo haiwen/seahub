@@ -27,7 +27,7 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
-    list_inner_pub_repos, is_passwd_set, get_file_size, edit_repo, \
+    is_passwd_set, get_file_size, edit_repo, \
     get_session_info, set_repo_history_limit, get_commit, \
     MAX_DOWNLOAD_DIR_SIZE, send_message, MAX_UPLOAD_FILE_SIZE
 from seaserv import seafile_api
@@ -410,7 +410,11 @@ def repo_settings(request, repo_id):
         raise Http404
 
     # check permission
-    is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
     if not is_owner:
         raise Http404
 
@@ -447,9 +451,7 @@ def repo_settings(request, repo_id):
                             content_type=content_type)
 
     ### handle get request
-    repo_owner = seafile_api.get_repo_owner(repo.id)
     history_limit = seaserv.get_repo_history_limit(repo.id)
-
     full_history_checked = no_history_checked = partial_history_checked = False
     if history_limit > 0:
         partial_history_checked = True
@@ -488,6 +490,7 @@ def repo_owner(request, repo_id):
     if request.method != 'POST':
         raise Http404
 
+    content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
     repo = seafile_api.get_repo(repo_id)
@@ -495,17 +498,21 @@ def repo_owner(request, repo_id):
         raise Http404
 
     # check permission
-    is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
     if not is_owner:
         raise Http404
 
-    content_type = 'application/json; charset=utf-8'
+    # check POST arg
     repo_owner = request.POST.get('repo_owner', '').lower()
     if not is_valid_username(repo_owner):
         return HttpResponse(json.dumps({
                         'error': _('Username %s is not valid.') % repo_owner,
                         }), status=400, content_type=content_type)
-        
+
     try:
         User.objects.get(email=repo_owner)
     except User.DoesNotExist:
@@ -513,20 +520,34 @@ def repo_owner(request, repo_id):
                         'error': _('User %s is not found.') % repo_owner,
                         }), status=400, content_type=content_type)
 
-    if repo_owner and repo_owner != username:
-        seafile_api.set_repo_owner(repo_id, repo_owner)
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, repo_owner):
+            return HttpResponse(json.dumps({
+                        'error': _('User %s is not in current organization.') %
+                        repo_owner,}), status=400, content_type=content_type)
 
-    messages.success(request, _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') % {'repo_name':repo.name, 'new_owner':repo_owner})
+    if repo_owner and repo_owner != username:
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
+        else:
+            seafile_api.set_repo_owner(repo_id, repo_owner)
+
+    messages.success(request,
+                     _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
+                     {'repo_name': repo.name, 'new_owner': repo_owner})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
-        
+
 @login_required
 def repo_change_passwd(request, repo_id):
-    """Handle post request to change library password.
+    """Handle ajax post request to change library password.
     """
     if request.method != 'POST':
         raise Http404
 
+    content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
     repo = seafile_api.get_repo(repo_id)
@@ -534,11 +555,16 @@ def repo_change_passwd(request, repo_id):
         raise Http404
 
     # check permission
-    is_owner = True if seafile_api.is_repo_owner(username, repo_id) else False
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
     if not is_owner:
-        raise Http404
+        return HttpResponse(json.dumps({
+                    'error': _('Faied to change password, you are not owner.')}),
+                    status=400, content_type=content_type)
 
-    content_type = 'application/json; charset=utf-8'
     old_passwd = request.POST.get('old_passwd', '')
     new_passwd = request.POST.get('new_passwd', '')
     try:
@@ -548,7 +574,8 @@ def repo_change_passwd(request, repo_id):
                     'error': e.msg,
                     }), status=400, content_type=content_type)
 
-    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') % {'repo_name': repo.name})
+    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
+                     {'repo_name': repo.name})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
     
@@ -1505,6 +1532,19 @@ def demo(request):
     redirect_to = settings.SITE_ROOT
     return HttpResponseRedirect(redirect_to)
 
+def list_inner_pub_repos(request):
+    """List inner pub repos.
+    """
+    username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        return seaserv.list_org_inner_pub_repos(org_id, username)
+
+    if not request.cloud_mode:
+        return seaserv.list_inner_pub_repos(username)
+
+    return []
+
 @login_required
 def pubrepo(request):
     """
@@ -1524,7 +1564,7 @@ def pubrepo(request):
                 }, context_instance=RequestContext(request))
         
     if not request.cloud_mode:
-        public_repos = list_inner_pub_repos(username)
+        public_repos = seaserv.list_inner_pub_repos(username)
         for r in public_repos:
             if r.user == username:
                 r.share_from_me = True

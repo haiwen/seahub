@@ -2,9 +2,14 @@ import datetime
 import logging
 from rest_framework.authentication import BaseAuthentication
 
+import seaserv
 from seahub.base.accounts import User
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
 
@@ -60,6 +65,11 @@ class TokenAuthentication(BaseAuthentication):
         except User.DoesNotExist:
             return None
 
+        if MULTI_TENANCY:
+            orgs = seaserv.get_orgs_by_user(token.user)
+            if orgs:
+                user.org = orgs[0]
+
         if user.is_active:
             return (user, token)
 
@@ -73,6 +83,11 @@ class TokenAuthentication(BaseAuthentication):
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
             return None
+
+        if MULTI_TENANCY:
+            orgs = seaserv.get_orgs_by_user(token.user)
+            if orgs:
+                user.org = orgs[0]
 
         if user.is_active:
             need_save = False
@@ -102,4 +117,5 @@ class TokenAuthentication(BaseAuthentication):
                     token.save()
                 except:
                     logger.exception('error when save token v2:')
+
             return (user, token)

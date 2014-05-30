@@ -46,16 +46,20 @@ from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
 from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import repo_created, share_file_to_user_successful
-from seahub.share.models import PrivateFileDirShare, FileShare
+from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare
+from seahub.share.views import list_shared_repos
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
-    gen_file_share_link, gen_dir_share_link
+    gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.views import access_to_repo, validate_owner, is_registered_user, \
-    group_events_data, get_diff, create_default_library
+    group_events_data, get_diff, create_default_library, get_owned_repo_list, \
+    list_inner_pub_repos, get_virtual_repos_by_owner
+from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
+    get_group_repos
 from seahub.views.file import get_file_view_path_and_perm
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
@@ -73,11 +77,11 @@ from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
-    get_group_repos, get_repo, check_permission, get_commits, is_passwd_set,\
+    get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     list_inner_pub_repos_by_owner, \
-    list_inner_pub_repos, remove_share, unshare_group_repo, \
+    remove_share, unshare_group_repo, \
     unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
@@ -384,7 +388,7 @@ class Repos(APIView):
         email = request.user.username
         repos_json = []
 
-        owned_repos = list_personal_repos_by_owner(email)
+        owned_repos = get_owned_repo_list(request)
         calculate_repo_info(owned_repos, email)
         owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
         sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
@@ -412,7 +416,7 @@ class Repos(APIView):
                 repo["random_key"] = r.random_key
             repos_json.append(repo)
 
-        shared_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
+        shared_repos = get_share_in_repo_list(request, -1, -1)
         for r in shared_repos:
             commit = get_commits(r.repo_id, 0, 1)[0]
             if not commit:
@@ -421,7 +425,6 @@ class Repos(APIView):
             r.root = commit.root_id
             r.size = server_repo_size(r.repo_id)
             r.password_need = is_passwd_set(r.repo_id, email)
-            r.permission = check_permission(r.repo_id, email)
             repo = {
                 "type":"srepo",
                 "id":r.repo_id,
@@ -432,7 +435,7 @@ class Repos(APIView):
                 "root":r.root,
                 "size":r.size,
                 "encrypted":r.encrypted,
-                "permission": r.permission,
+                "permission": r.user_perm,
                 }
             if r.encrypted:
                 repo["enc_version"] = r.enc_version
@@ -440,56 +443,54 @@ class Repos(APIView):
                 repo["random_key"] = r.random_key
             repos_json.append(repo)
 
-        groups = get_personal_groups_by_user(email)
-        for group in groups:
-            g_repos = get_group_repos(group.id, email)
-            calculate_repo_info(g_repos, email)
-            g_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-            for r in g_repos:
-                repo = {
-                    "type":"grepo",
-                    "id":r.id,
-                    "owner":group.group_name,
-                    "groupid":group.id,
-                    "name":r.name,
-                    "desc":r.desc,
-                    "mtime":r.latest_modify,
-                    "root":r.root,
-                    "size":r.size,
-                    "encrypted":r.encrypted,
-                    "permission": check_permission(r.id, email),
-                    }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
-                repos_json.append(repo)
+        groups = get_groups_by_user(request)
+        group_repos = get_group_repos(request, groups)
+        calculate_repo_info(group_repos, email)
+        group_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+        for r in group_repos:
+            repo = {
+                "type":"grepo",
+                "id":r.id,
+                "owner":r.group.group_name,
+                "groupid":r.group.id,
+                "name":r.name,
+                "desc":r.desc,
+                "mtime":r.latest_modify,
+                "root":r.root,
+                "size":r.size,
+                "encrypted":r.encrypted,
+                "permission": check_permission(r.id, email),
+                }
+            if r.encrypted:
+                repo["enc_version"] = r.enc_version
+                repo["magic"] = r.magic
+                repo["random_key"] = r.random_key
+            repos_json.append(repo)
 
-        if not CLOUD_MODE:
-            public_repos = list_inner_pub_repos(email)
-            for r in public_repos:
-                commit = get_commits(r.repo_id, 0, 1)[0]
-                if not commit:
-                    continue
-                r.root = commit.root_id
-                r.size = server_repo_size(r.repo_id)
-                repo = {
-                    "type": "grepo",
-                    "id": r.repo_id,
-                    "name": r.repo_name,
-                    "desc": r.repo_desc,
-                    "owner": "Organization",
-                    "mtime": r.last_modified,
-                    "root": r.root,
-                    "size": r.size,
-                    "encrypted": r.encrypted,
-                    "permission": r.permission,
-                    }
-                if r.encrypted:
-                    repo["enc_version"] = commit.enc_version
-                    repo["magic"] = commit.magic
-                    repo["random_key"] = commit.random_key
-                repos_json.append(repo)
+        public_repos = list_inner_pub_repos(request)
+        for r in public_repos:
+            commit = get_commits(r.repo_id, 0, 1)[0]
+            if not commit:
+                continue
+            r.root = commit.root_id
+            r.size = server_repo_size(r.repo_id)
+            repo = {
+                "type": "grepo",
+                "id": r.repo_id,
+                "name": r.repo_name,
+                "desc": r.repo_desc,
+                "owner": "Organization",
+                "mtime": r.last_modified,
+                "root": r.root,
+                "size": r.size,
+                "encrypted": r.encrypted,
+                "permission": r.permission,
+                }
+            if r.encrypted:
+                repo["enc_version"] = commit.enc_version
+                repo["magic"] = commit.magic
+                repo["random_key"] = commit.random_key
+            repos_json.append(repo)
 
         return Response(repos_json)
 
@@ -499,34 +500,37 @@ class Repos(APIView):
         repo_desc = request.POST.get("desc", 'new repo')
         passwd = request.POST.get("passwd")
         if not repo_name:
-            return api_error(status.HTTP_400_BAD_REQUEST, \
-                                 'Library name is required.')
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Library name is required.')
 
         # create a repo
+        org_id = -1
         try:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                              username, passwd)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, passwd, org_id)
+            else:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                  username, passwd)
         except:
-            return api_error(HTTP_520_OPERATION_FAILED, \
-                    'Failed to create library.')
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             'Failed to create library.')
         if not repo_id:
-            return api_error(HTTP_520_OPERATION_FAILED, \
-                    'Failed to create library.')
+            return api_error(HTTP_520_OPERATION_FAILED,
+                             'Failed to create library.')
         else:
             repo_created.send(sender=None,
-                              org_id=-1,
+                              org_id=org_id,
                               creator=username,
                               repo_id=repo_id,
                               repo_name=repo_name)
             resp = repo_download_info(request, repo_id)
 
-
             # FIXME: according to the HTTP spec, need to return 201 code and
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
-
             return resp
-
 
 def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
@@ -587,10 +591,11 @@ class Repo(APIView):
                              'You do not have permission to get repo.')
 
         # check whether user is repo owner
-        if validate_owner(request, repo_id):
-            owner = "self"
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo.id)
         else:
-            owner = "share"
+            repo_owner = seafile_api.get_repo_owner(repo.id)
+        owner = "self" if username == repo_owner else "share"
 
         last_commit = get_commits(repo.id, 0, 1)[0]
         repo.latest_modify = last_commit.ctime if last_commit else None
@@ -649,9 +654,15 @@ class Repo(APIView):
             repo_name = request.POST.get('repo_name')
             repo_desc = request.POST.get('repo_desc')
 
-            if not seafile_api.is_repo_owner(username, repo_id):
-                return api_error(status.HTTP_403_FORBIDDEN, \
-                    'Only library owner can perform this operation.')
+            # check permission
+            if is_org_context(request):
+                repo_owner = seafile_api.get_org_repo_owner(repo.id)
+            else:
+                repo_owner = seafile_api.get_repo_owner(repo.id)
+            is_owner = True if username == repo_owner else False
+            if not is_owner:
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'Only library owner can perform this operation.')
 
             if edit_repo(repo_id, repo_name, repo_desc, username):
                 return Response("success")
@@ -668,9 +679,15 @@ class Repo(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, \
                     'Library does not exist.')
 
-        if not seafile_api.is_repo_owner(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN, \
-                    'Only library owner can perform this operation.')
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo.id)
+        is_owner = True if username == repo_owner else False
+        if not is_owner:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Only library owner can perform this operation.')
 
         seafile_api.remove_repo(repo_id)
         return Response('success', status=status.HTTP_200_OK)
@@ -688,7 +705,8 @@ class RepoHistory(APIView):
             current_page = 1
             per_page = 25
 
-        commits_all = get_commits(repo_id, per_page * (current_page -1), per_page + 1)
+        commits_all = get_commits(repo_id, per_page * (current_page - 1),
+                                  per_page + 1)
         commits = commits_all[:per_page]
 
         if len(commits_all) == per_page + 1:
@@ -696,7 +714,10 @@ class RepoHistory(APIView):
         else:
             page_next = False
 
-        return HttpResponse(json.dumps({"commits": commits, "page_next": page_next}, cls=SearpcObjEncoder), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps({"commits": commits,
+                                        "page_next": page_next},
+                                       cls=SearpcObjEncoder),
+                            status=200, content_type=json_content_type)
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -759,7 +780,10 @@ class RepoOwner(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
-        repo_owner = seafile_api.get_repo_owner(repo.id)
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo.id)
 
         return HttpResponse(json.dumps({"owner": repo_owner}), status=200,
                             content_type=json_content_type)
@@ -1496,6 +1520,7 @@ class FileSharedLinkView(APIView):
 
     def put(self, request, repo_id, format=None):
         # generate file shared link
+        username = request.user.username
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
         type = unquote(request.DATA.get('type', 'f').encode('utf-8'))
 
@@ -1507,33 +1532,31 @@ class FileSharedLinkView(APIView):
 
         if path[-1] == '/':
             path = path[:-1]
-        l = FileShare.objects.filter(repo_id=repo_id).filter(
-            username=request.user.username).filter(path=path)
-        if len(l) > 0:
-            fileshare = l[0]
-            token = fileshare.token
-            type = fileshare.s_type
+
+        if type == 'f':
+            fs = FileShare.objects.get_file_link_by_path(username, repo_id,
+                                                         path)
+            if fs is None:
+                fs = FileShare.objects.create_file_link(username, repo_id,
+                                                        path)
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    OrgFileShare.objects.set_org_file_share(org_id, fs)
         else:
-            token = gen_token(max_length=10)
+            fs = FileShare.objects.get_dir_link_by_path(username, repo_id,
+                                                        path)
+            if fs is None:
+                fs = FileShare.objects.create_dir_link(username, repo_id,
+                                                       path)
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    OrgFileShare.objects.set_org_file_share(org_id, fs)
 
-            fs = FileShare()
-            fs.username = request.user.username
-            fs.repo_id = repo_id
-            fs.path = path
-            fs.token = token
-            fs.s_type = type
+        token = fs.token
+        shared_link = gen_shared_link(token, fs.s_type)
 
-            try:
-                fs.save()
-            except IntegrityError, e:
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, e.msg)
-
-        http_or_https = request.is_secure() and 'https' or 'http'
-        domain = RequestSite(request).domain
-        file_shared_link = '%s://%s%s%s/%s/' % (http_or_https, domain,
-                                               settings.SITE_ROOT, type, token)
         resp = Response(status=status.HTTP_201_CREATED)
-        resp['Location'] = file_shared_link
+        resp['Location'] = shared_link
         return resp
 
 ########## Directory related
@@ -1690,14 +1713,14 @@ class DirDownloadView(APIView):
             path += '/'
 
         if len(path) > 1:
-            dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
+            dirname = os.path.basename(path.rstrip('/'))
         else:
             dirname = repo.name
 
         current_commit = get_commits(repo_id, 0, 1)[0]
         if not current_commit:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                         'Failed to get current commit of repo %s.' % repo_id)
+                             'Failed to get current commit of repo %s.' % repo_id)
 
         try:
             dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.repo_id,
@@ -1705,7 +1728,7 @@ class DirDownloadView(APIView):
                                                              path.encode('utf-8'))
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
-                         "Failed to get dir id by path")
+                             "Failed to get dir id by path")
 
         if not dir_id:
             return api_error(status.HTTP_404_NOT_FOUND, "Path does not exist")
@@ -1718,7 +1741,8 @@ class DirDownloadView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, "Internal error")
 
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Unable to download directory "%s": size is too large.' % dirname)
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Unable to download directory "%s": size is too large.' % dirname)
 
         token = seafserv_rpc.web_get_access_token(repo_id,
                                                   dir_id,
@@ -1726,7 +1750,8 @@ class DirDownloadView(APIView):
                                                   request.user.username)
 
         redirect_url = gen_file_get_url(token, dirname)
-        return HttpResponse(json.dumps(redirect_url), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps(redirect_url), status=200,
+                            content_type=json_content_type)
 
 class DirShareView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -1860,7 +1885,7 @@ class BeShared(APIView):
                 shared_repos.append(r)
 
         if not CLOUD_MODE:
-            shared_repos += list_inner_pub_repos(username)
+            shared_repos += seaserv.list_inner_pub_repos(username)
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
@@ -1869,7 +1894,8 @@ class PrivateFileDirShareEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, PrivateFileDirShare):
             return None
-        return {'from_user':obj.from_user, 'to_user':obj.to_user, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
+        return {'from_user':obj.from_user, 'to_user':obj.to_user,
+                'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
                 'permission':obj.permission, 's_type':obj.s_type}
 
 class SharedFilesView(APIView):
@@ -1922,14 +1948,15 @@ class VirtualRepos(APIView):
     def get(self, request, format=None):
         result = {}
 
-        username = request.user.username
         try:
-            result['virtual-repos'] = seafile_api.get_virtual_repos_by_owner(username)
+            virtual_repos = get_virtual_repos_by_owner(request)
         except SearpcError, e:
-            result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             "error:" + e.msg)
 
-        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder), content_type=json_content_type)
+        result['virtual-repos'] = virtual_repos
+        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder),
+                            content_type=json_content_type)
 
 class PrivateSharedFileView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2126,8 +2153,10 @@ class FileShareEncoder(json.JSONEncoder):
     def default(self, obj):
         if not isinstance(obj, FileShare):
             return None
-        return {'username':obj.username, 'repo_id':obj.repo_id, 'path':obj.path, 'token':obj.token,
-                'ctime':obj.ctime, 'view_cnt':obj.view_cnt, 's_type':obj.s_type}
+        return {'username':obj.username, 'repo_id':obj.repo_id,
+                'path':obj.path, 'token':obj.token,
+                'ctime':obj.ctime, 'view_cnt':obj.view_cnt,
+                's_type':obj.s_type}
 
 class SharedLinksView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2199,10 +2228,10 @@ class DefaultRepoView(APIView):
         username = request.user.username
 
         repo_id = UserOptions.objects.get_default_repo(username)
-        if repo_id and (get_repo(repo_id) != None):
+        if repo_id and (get_repo(repo_id) is not None):
             return self.default_repo_info(repo_id)
 
-        repo_id = create_default_library(username)
+        repo_id = create_default_library(request)
 
         return self.default_repo_info(repo_id)
 

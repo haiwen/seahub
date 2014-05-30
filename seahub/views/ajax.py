@@ -1229,7 +1229,7 @@ def upload_file_done(request):
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=ct)
     path = request.GET.get('p', '')
-    if not path:  
+    if not path:
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=ct)
 
@@ -1239,9 +1239,8 @@ def upload_file_done(request):
         return HttpResponse(json.dumps(result), status=400, content_type=ct)
 
     owner = seafile_api.get_repo_owner(repo_id)
-    if not owner:
-        result['error'] = _('Wrong repo id')
-        return HttpResponse(json.dumps(result), status=400, content_type=ct)
+    if not owner:               # this is an org repo, get org repo owner
+        owner = seafile_api.get_org_repo_owner(repo_id)
 
     file_path = path.rstrip('/') + '/' + filename
     if seafile_api.get_file_id_by_path(repo_id, file_path) is None:
