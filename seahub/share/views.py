@@ -826,7 +826,8 @@ def save_shared_link(request):
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username)
+                          dst_repo_id, dst_path, new_obj_name, username,
+                          need_progress=0)
 
     messages.success(request, _(u'Successfully saved.'))
 
@@ -918,7 +919,8 @@ def save_private_file_share(request, token):
 
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         seafile_api.copy_file(repo_id, src_path, obj_name,
-                              dst_repo_id, dst_path, new_obj_name, username)
+                              dst_repo_id, dst_path, new_obj_name, username,
+                              need_progress=0)
 
         messages.success(request, _(u'Successfully saved.'))
 
