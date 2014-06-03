@@ -5,7 +5,7 @@
 {% block email_con %}
 {% autoescape off %}
 
-<p style="color:#121214;font-size:14px;">Hi, {{ avatar_url }} {% blocktrans with name=to_user|email2nickname %}{{ name }}{% endblocktrans %}</p>
+<p style="color:#121214;font-size:14px;">Hi, {% blocktrans with name=to_user|email2nickname %}{{ name }}{% endblocktrans %}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans count num=notice_count %}
@@ -25,27 +25,27 @@ You've got {{num}} new notices on {{ site_name }}:
         {% for notice in notices %}
             {% if notice.is_group_msg %}
                 <tr >
-                    <td>{{notice.group_msg_from_avatar_url}} {{notice.group_msg_from}} posted a new discussion in <a href='{{url_base}}{{notice.group_url}}'>{{notice.group_name}}</a>.</td>
+                    <td>{{notice.group_msg_from}} posted a new discussion in <a href='{{url_base}}{{notice.group_url}}'>{{notice.group_name}}</a></td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_grpmsg_reply %}
                 <tr >
-                    <td>{{notice.group_msg_reply_from_avatar_url}} {{notice.group_msg_reply_from}} replied your<a href='{{url_base}}{{notice.group_msg_reply_url}}'>group discussion</a>.</td>
+                    <td>{{notice.group_msg_reply_from}} replied your<a href='{{url_base}}{{notice.group_msg_reply_url}}'>group discussion</a></td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_repo_share_msg %}
                 <tr >
-                    <td>{{notice.repo_share_from_avatar_url}} {{notice.repo_share_from}} has shared a library named <a href='{{url_base}}{{notice.repo_url}}'>{{notice.repo_name}}</a> to you.</td>
+                    <td>{{notice.repo_share_from}} has shared a library named <a href='{{url_base}}{{notice.repo_url}}'>{{notice.repo_name}}</a> to you.</td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_priv_file_share_msg %}
                 <tr >
-                    <td>{{notice.priv_shared_file_from_avatar_url}} {{notice.priv_shared_file_from}} has shared a file named <a href='{{url_base}}{{notice.priv_shared_file_url}}'>{{notice.priv_shared_file_name}}</a> to you.</td>
+                    <td>{{notice.priv_shared_file_from}} has shared a file named <a href='{{url_base}}{{notice.priv_shared_file_url}}'>{{notice.priv_shared_file_name}}</a> to you.</td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_user_message %}
                 <tr >
-                    <td> You have received a <a href='{{ url_base }}{{notice.user_msg_url}}'>new message</a> from {{notice.user_msg_from_avatar_url}} {{notice.user_msg_from}}.</td>
+                    <td> You have received a <a href='{{ url_base }}{{notice.user_msg_url}}'>new message</a> from {{notice.user_msg_from}}</td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_file_uploaded_msg %}

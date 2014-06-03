@@ -48,28 +48,10 @@
                 <div data-cturl="{% url 'unseen_notices_count' %}" id="msg-count" class="fleft">
                     <div id="notice-icon" class="cspt" title="{% trans "Notifications" %}">
                         <img src="{{ MEDIA_URL }}img/bell.png" alt="" />
-                        <span class="num hide">0</span>
+                        <span class="num hide" data-count="">0</span>
                     </div>
-                    <div id="notice-popup" class="hide">
-                        <h3 class="hd">{% trans "Notifications" %}</h3>
-                        <div class="con">
-                            <ul>
-                                <li class="unread">
-                                {% avatar request.user 32 %}
-                                <p class="brief">{% blocktrans with author=request.user.username %}<a href="#">{{author}}</a> posted a new discussion in <a href="#">seafile</a>{% endblocktrans %}</p>
-                                <p class="clear detail">@lj 这个是德文站点 http://www.seafile-server.de 看看怎么在我们的 seafile.com 页面上加个链接</p>
-                                <p class="time">10 hours ago</p>
-                                </li>
-                                <li class="read">
-                                {% avatar request.user 32 %}
-                                <p class="brief">{% blocktrans with author=request.user.username %}<a href="#">{{author}}</a> posted a new discussion in <a href="#">seafile</a>{% endblocktrans %}</p>
-                                <p class="clear detail">@lj 这个是德文站点 http://www.seafile-server.de 看看怎么在我们的 seafile.com 页面上加个链接</p>
-                                <p class="time">10 hours ago</p>
-                                </li>
-                            </ul>
-                            <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
-                        </div>
-                        <img src="{{ MEDIA_URL }}img/del.png" class="close" />
+                    <div data-pop_url="{% url 'get_popup_notices' %}" data-seen_url="{% url 'set_notices_seen' %}" data-seen_by_id_url="{% url 'set_notice_seen_by_id' %}" data-ajax="" id="notice-popup" class="hide">
+                        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
                     </div>
                 </div>
 

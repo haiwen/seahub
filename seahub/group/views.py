@@ -442,7 +442,8 @@ def msg_reply(request, msg_id):
                 if group_msg.from_email != request.user.username:
                     grpmsg_reply_added.send(sender=MessageReply,
                                             msg_id=msg_id,
-                                            from_email=request.user.username)
+                                            from_email=request.user.username,
+                                            reply_msg=msg)
                 replies = MessageReply.objects.filter(reply_to=group_msg)
                 r_num = len(replies)
                 if r_num < 4 or r_status == 'show':
@@ -1192,7 +1193,7 @@ def group_add_discussion(request, group):
 
     # send signal
     grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                      from_email=username)
+                      from_email=username, message=msg)
 
     gm.attachments = []
     if selected:

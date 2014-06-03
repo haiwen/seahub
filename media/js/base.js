@@ -17,6 +17,7 @@ if ($('.messages')[0]) {
 }
 
 $(function(){
+
     var msg_ct = $("#msg-count"); 
     $.ajax({
         url: msg_ct.data('cturl'),
@@ -25,52 +26,105 @@ $(function(){
         success: function(data) {
             if (data['count'] > 0) {
                 $('.num', msg_ct).html(data['count']).removeClass('hide');
+                $('.num').data('count', data['count']);
             }
         }
     });
 
-$('#notice-icon').click(function() {
-    var popup = $('#notice-popup');
-    popup.toggleClass('hide');
-    if (!popup.hasClass('hide')) {
-        $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
-    }
-});
-$(window).resize(function() {
-    var popup = $('#notice-popup');
-    if (!popup.hasClass('hide')) {
-        $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
-    }
-});
+    $('#notice-icon').click(function() {
+        var popup = $('#notice-popup');
+        popup.toggleClass('hide');
 
-$('#notice-popup .close').click(function() {
-    $('#notice-popup').addClass('hide');   
-});
-
-(function () {
-    var my_info = $('#my-info');
-    var popup = $('#user-info-popup');
-    my_info.click(function() {
-        var loading_tip = $('.loading-tip', popup);
-        if (popup.hasClass('hide')) {
-            popup.removeClass('hide');
-            loading_tip.removeClass('hide');
+        //to prevent duplicately send ajax
+        if ($('#notice-icon').data('ajax') != 1){
             $.ajax({
-                url: my_info.data('url'),
+                url: popup.data('pop_url'),
                 dataType: 'json',
                 cache: false,
                 success: function(data) {
-                    loading_tip.addClass('hide');
-                    $('#space-traffic').html(data['html']);
+                    popup.find('.loading-tip').remove();
+                    popup.html(data['notifications_popup_html']);
+                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+                    $('#notice-icon').data('ajax', 1);
+
+
+                    $('#notice-popup .close').click(function() {
+                        if ($('.num').data('count') > 0){
+                            $.ajax({
+                                url: popup.data('seen_url'),
+                                dataType: 'json',
+                                cache: false,
+                                success: function() {
+                                    popup.addClass('hide');
+                                    $('.num').data('count', 0);
+                                    $('.num').addClass('hide');
+                                    $('li').each(function() {
+                                        if ($(this).hasClass('unread')){
+                                            $(this).removeClass('unread');
+                                            $(this).addClass('read');
+                                        }
+                                    });
+                                }
+                            });
+                        }else{
+                            popup.addClass('hide');
+                        }
+                    });
+
+                    $("a[id$='-notice']").click(function() {
+                        var notice_id = $(this).data('notice_id');
+                        var url = popup.data('seen_by_id_url');
+                        var href = $(this).data('href');
+
+                        if ($(this).parent().parent().hasClass('unread')){
+                            $.ajax({
+                                url: url + '?notice_id=' + notice_id,
+                                type: 'GET',
+                                dataType: 'json',
+                                cache: false,
+                                success: function() {
+                                    location.href = href;
+                                }
+                            });
+                        }else{
+                            location.href = href;
+                        }
+                    });
                 }
             });
-        } else {
-            popup.addClass('hide');
         }
-        return false;
     });
-})();
 
+    $(window).resize(function() {
+        var popup = $('#notice-popup');
+        if (!popup.hasClass('hide')) {
+            $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+        }
+    });
+
+    (function () {
+        var my_info = $('#my-info');
+        var popup = $('#user-info-popup');
+        my_info.click(function() {
+            var loading_tip = $('.loading-tip', popup);
+            if (popup.hasClass('hide')) {
+                popup.removeClass('hide');
+                loading_tip.removeClass('hide');
+                $.ajax({
+                    url: my_info.data('url'),
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        loading_tip.addClass('hide');
+                        $('#space-traffic').html(data['html']);
+                    }
+                });
+            } else {
+                popup.addClass('hide');
+            }
+            return false;
+        });
+    })();
 });
 
 $(document).click(function(e) {
@@ -83,6 +137,15 @@ $(document).click(function(e) {
     closePopup($('#user-info-popup'), $('#my-info'));
     closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
     closePopup($('#notice-popup'), $('#notice-icon'));
+
+    var closeNum = function(num, num_switch) {
+        if (num.hasClass('hide') && !num.is(target) && !num_switch.is(target) && !num_switch.find('*').is(target) ) {
+            if ($('.num').data('count') > 0){
+                num.removeClass('hide');
+            }
+        }
+    };
+    closeNum($('.num'), $('#msg-count'));
 });
 
 // search: disable submit when input nothing

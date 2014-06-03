@@ -69,5 +69,8 @@ $('#notices-more-btn').click(function() {
     });
 });
 
+$("a[id$='-notice']").click(function() {
+    window.location = $(this).data('href');
+});
 </script>
 {% endblock %}

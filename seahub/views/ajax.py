@@ -39,6 +39,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_org_user_events, get_user_events
 from seahub.utils.star import star_file, unstar_file
+from seahub.avatar.util import get_default_avatar_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -1272,6 +1273,126 @@ def unseen_notices_count(request):
     result = {}
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+def get_popup_notices(request):
+    """Get user's unseen notices:
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    count = UserNotification.objects.count_unseen_user_notifications(username)
+    result_notices = []
+    unseen_notices = []
+    seen_notices = []
+    list_num = 5
+
+    if count == 0:
+        seen_notices = UserNotification.objects.filter(to_user = username)[:list_num]
+    elif count > list_num:
+        unseen_notices = UserNotification.objects.filter(to_user = username, seen = False)
+    else:
+        unseen_notices = UserNotification.objects.filter(to_user = username, seen = False)
+        seen_notices = UserNotification.objects.filter(
+                                        to_user = username,
+                                        seen = True)[:list_num-count]
+
+    result_notices += unseen_notices
+    result_notices += seen_notices
+
+    for notice in result_notices:
+        if notice.is_user_message():
+            d = notice.user_message_detail_to_dict()
+            notice.msg_from = d.get('msg_from')
+            continue
+
+        elif notice.is_group_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['msg_from']
+            continue
+
+        elif notice.is_grpmsg_reply():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['reply_from']
+            continue
+
+        elif notice.is_file_uploaded_msg():
+            d = json.loads(notice.detail)
+            notice.default_avatar_url = get_default_avatar_url()
+            continue
+
+        elif notice.is_repo_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+            continue
+
+        elif notice.is_priv_file_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+            continue
+
+        elif notice.is_group_join_request():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['username']
+            continue
+
+        else:
+            pass
+
+    ctx_notices = {"notices": result_notices}
+
+    notifications_popup_html = render_to_string(
+            'snippets/notifications_popup.html', ctx_notices,
+            context_instance=RequestContext(request))
+
+    return HttpResponse(json.dumps({"notifications_popup_html": notifications_popup_html}),
+                        content_type=content_type)
+
+@login_required
+def set_notices_seen(request):
+    """Set user's notices seen:
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    unseen_notices = UserNotification.objects.filter(to_user = username, seen = False)
+    for notice in unseen_notices:
+        notice.seen = True
+        notice.save()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+@login_required
+def set_notice_seen_by_id(request):
+    """
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    notice_id = request.GET.get('notice_id')
+
+    notice = UserNotification.objects.get(id=notice_id)
+    if notice.seen == False:
+        notice.seen = True
+        notice.save()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
 def repo_remove(request, repo_id):

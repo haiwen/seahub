@@ -20,6 +20,7 @@ from seahub.views import is_registered_user
 from seahub.share.models import PrivateFileDirShare
 from seahub.utils import is_valid_username
 from seahub.utils.paginator import Paginator
+from seahub.notifications.models import UserNotification
 
 @login_required
 @user_mods_check
@@ -101,6 +102,7 @@ def user_msg_list(request, id_or_email):
     person_msgs.page_range = paginator.get_page_range(person_msgs.number)
     person_msgs.object_list = list(person_msgs.object_list)
 
+    UserNotification.objects.seen_user_msg_notices(username, to_email)
     return render_to_response("message/user_msg_list.html", {
             "person_msgs": person_msgs,
             "to_email": to_email,
