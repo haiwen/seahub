@@ -1,4 +1,3 @@
-<!-- <script type="text/javascript"> -->
 {% load i18n %}
     /**
      * @param {boolean} html_exists True if the html has already been converted.
@@ -35,8 +34,13 @@
             $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
             sidebar.removeClass('hide');
 
-            if (highlight_kw) {
-                highlight_kw(sidebar);
+            try {
+                if (highlight_kw) {
+                    highlight_kw(sidebar[0]);
+                }
+            } catch (e) {
+                // cases: 'highlight_keyword' in file view is False, history file view
+                // there can be an ReferenceError 'highlight_kw is not defined'
             }
 
             $('#converted-html').append('<div id="pdf2html-toolbar-1"></div>');
@@ -216,5 +220,3 @@
   }
   check_status();
   {% endif %}
-
-// </script>

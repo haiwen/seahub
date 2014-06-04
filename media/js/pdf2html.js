@@ -181,8 +181,13 @@ var pdf2htmlEX = (function(){
           _.find_pages();
           _.schedule_render();
           _.load_page(idx+1);
-          if (highlight_kw) {
-            highlight_kw($('#file-view'));
+          try {
+            if (highlight_kw) {
+                highlight_kw($('#pf' + parseInt(idx + 1).toString(16))[0]);
+            }
+          } catch (e) {
+              // cases: 'highlight_keyword' in file view is False, history file view
+              // there can be an ReferenceError 'highlight_kw is not defined'
           }
         });
       }
