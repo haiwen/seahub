@@ -1069,7 +1069,7 @@ class OpMoveView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
-        return reloaddir_if_neccessary (request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary (request, repo, parent_dir_utf8)
 
 class OpCopyView(APIView):
     """
@@ -1115,7 +1115,7 @@ class OpCopyView(APIView):
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
-        return reloaddir_if_neccessary (request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
 
 
 class StarredFileView(APIView):
@@ -1258,7 +1258,7 @@ class FileView(APIView):
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname_utf8)
+                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + quote(newname)
                 return resp
 
         elif operation.lower() == 'move':
@@ -1681,7 +1681,7 @@ class DirView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
-        return reloaddir_if_neccessary(request, repo, parent_dir_utf8)
+        return reloaddir_if_necessary(request, repo, parent_dir_utf8)
 
 class DirDownloadView(APIView):
     authentication_classes = (TokenAuthentication, )
