@@ -1933,3 +1933,40 @@ def image_view(request, filename):
     if content_encoding:
         response['Content-Encoding'] = content_encoding
     return response
+
+@login_required
+def pubgrp_search(request):
+
+    grpname = request.GET.get('search', '')
+    result_groups = []
+    is_search = True
+
+    if request.cloud_mode and request.user.org is not None:
+        pass
+#TODO: add result html code to organizations/pubgrp.html
+
+#        org_id = request.user.org.org_id
+#        groups = seaserv.get_org_groups(org_id, -1, -1)
+#
+#        for grp in groups:
+#            if grpname in grp.group_name:
+#                result_groups.append(grp)
+#
+#        return render_to_response('organizations/pubgrp.html', {
+#                'groups': result_groups,
+#                'is_search': is_search,
+#                }, context_instance=RequestContext(request))
+
+    if not request.cloud_mode:
+        groups = seaserv.get_personal_groups(-1, -1)
+
+        for grp in groups:
+            if grpname in grp.group_name:
+                result_groups.append(grp)
+
+        return render_to_response('pubgrp.html', {
+                'groups': result_groups,
+                'is_search': is_search,
+                }, context_instance=RequestContext(request))
+
+    raise Http404
