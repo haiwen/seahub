@@ -59,6 +59,12 @@ FILEEXT_ICON_MAP = {
     'fodp' : 'ppt.png',
     # music file
     'mp3' : 'music.png',
+    'oga' : 'music.png',
+    'ogg' : 'music.png',
+    'flac' : 'music.png',
+    'aac' : 'music.png',
+    'ac3' : 'music.png',
+    'wma' : 'music.png',
     # picture file
     'jpg' : 'pic.png',
     'jpeg' : 'pic.png',
