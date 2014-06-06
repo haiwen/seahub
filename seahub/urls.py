@@ -152,6 +152,7 @@ urlpatterns = patterns('',
     url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
     url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
     url(r'^pubinfo/users/$', pubuser, name='pubuser'),
+    url(r'^pubinfo/groups/search/$', pubgrp_search, name='pubgrp_search'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

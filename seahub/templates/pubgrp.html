@@ -6,10 +6,10 @@
 
 {% block left_panel %}{{block.super}}
 {% if has_file_search %}
+{% endif %}
 <form action="{% url "pubgrp_search" %}" method="get" class="side-search-form">
     <input type="text" name="search" value="{{search}}" placeholder="{% trans "Search groups..." %}" class="input" />
 </form>
-{% endif %}
 {% endblock %}
 
 {% block right_panel %}
