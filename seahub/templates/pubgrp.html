@@ -4,6 +4,14 @@
 
 {% block cur_grp %}tab-cur{% endblock %}
 
+{% block left_panel %}{{block.super}}
+{% if has_file_search %}
+<form action="{% url "pubgrp_search" %}" method="get" class="side-search-form">
+    <input type="text" name="search" value="{{search}}" placeholder="{% trans "Search groups..." %}" class="input" />
+</form>
+{% endif %}
+{% endblock %}
+
 {% block right_panel %}
 <h3 class="hd">{% trans "Groups" %}</h3>
 {% if groups %}
@@ -19,6 +27,12 @@
     </li>
     {% endfor %}
 </ul>
+
+{% elif is_search %}
+<div class="empty-tips">
+    <h2 class="alc">{% trans "No group found" %}</h2>
+</div>
+
 {% else %}
 <div class="empty-tips">
     <h2 class="alc">{% trans "No one has created any groups yet" %}</h2>
