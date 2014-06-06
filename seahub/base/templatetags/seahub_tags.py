@@ -72,7 +72,7 @@ FILEEXT_ICON_MAP = {
     'svg' : 'pic.png',
     'gif' : 'pic.png',
     'bmp' : 'pic.png',
-    # normal file and unkown file
+    # normal file and unknown file
     'default' : 'file.png',
 }
 @register.filter(name='file_icon_filter')
