@@ -35,7 +35,7 @@
 	<input type="text" name="username" value="" class="input" />
 	<label for="password">{% trans "Password" %}</label>
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "(forgot password)" %}</a>
-	<input type="password" name="password" value="" class="input" />
+	<input type="password" name="password" value="" class="input" autocomplete="off" />
     {% if form.captcha %}
     <label>{% trans "CAPTCHA" %}</label><br />
     {{ form.captcha }}
