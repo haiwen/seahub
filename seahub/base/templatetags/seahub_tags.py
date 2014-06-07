@@ -59,6 +59,12 @@ FILEEXT_ICON_MAP = {
     'fodp' : 'ppt.png',
     # music file
     'mp3' : 'music.png',
+    'oga' : 'music.png',
+    'ogg' : 'music.png',
+    'flac' : 'music.png',
+    'aac' : 'music.png',
+    'ac3' : 'music.png',
+    'wma' : 'music.png',
     # picture file
     'jpg' : 'pic.png',
     'jpeg' : 'pic.png',
@@ -66,7 +72,7 @@ FILEEXT_ICON_MAP = {
     'svg' : 'pic.png',
     'gif' : 'pic.png',
     'bmp' : 'pic.png',
-    # normal file and unkown file
+    # normal file and unknown file
     'default' : 'file.png',
 }
 @register.filter(name='file_icon_filter')

@@ -71,7 +71,7 @@ PREVIEW_FILEEXT = {
     MARKDOWN: ('markdown', 'md'),
     SF: ('seaf',),
     VIDEO: ('mp4', 'ogv', 'webm', 'flv', 'wmv'),
-    AUDIO: ('mp3',),
+    AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
 }
 
