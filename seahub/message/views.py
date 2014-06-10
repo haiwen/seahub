@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import datetime
 import simplejson as json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect , Http404
@@ -123,7 +124,28 @@ def user_msg_remove(request, msg_id):
     else:
         # Test whether user is admin or message owner.
         if msg.from_email == request.user.username:
-            msg.delete()
+            msg.sender_deleted_at = datetime.datetime.now()
+            msg.save()
+            return HttpResponse(json.dumps({'success': True}),
+                                        content_type='application/json; charset=utf-8')
+        else:
+            return HttpResponse(json.dumps({'success': False, 'err_msg': _(u"You don't have the permission.")}),
+                                        content_type='application/json; charset=utf-8')
+
+@login_required
+def user_received_msg_remove(request, msg_id):
+    """Remove received message.
+    """
+    try:
+        msg = UserMessage.objects.get(message_id=msg_id)
+    except UserMessage.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False, 'err_msg':_(u"The message doesn't exist")}),
+                                   content_type='application/json; charset=utf-8')
+    else:
+        # Test whether current user is the recipient of this msg.
+        if msg.to_email == request.user.username:
+            msg.recipient_deleted_at = datetime.datetime.now()
+            msg.save()
             return HttpResponse(json.dumps({'success': True}),
                                         content_type='application/json; charset=utf-8')
         else:

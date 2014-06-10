@@ -10,7 +10,7 @@ from seahub.views.file import view_file, view_history_file, view_trash_file,\
 from seahub.views.repo import repo, repo_history_view
 from notifications.views import notification_list
 from group.views import group_list
-from message.views import user_msg_list, user_msg_remove
+from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
 from share.views import user_share_list, gen_private_file_share, \
     rm_private_file_share, save_private_file_share
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
@@ -103,6 +103,7 @@ urlpatterns = patterns('',
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
     url(r'^user/(?P<msg_id>\d+)/msgdel/$', user_msg_remove, name='user_msg_remove'),
+    url(r'^user/(?P<msg_id>\d+)/remsgdel/$', user_received_msg_remove, name='user_received_msg_remove'),
     url(r'^user/(?P<id_or_email>[^/]+)/shares/$', user_share_list, name='user_share_list'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
