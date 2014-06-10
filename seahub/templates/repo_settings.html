@@ -86,10 +86,10 @@
     <tr class="repo-shared-link">
         {% if not link.s_type %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-            <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
             <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
             <td>--</td>
-            <td>Upload</td>
+            <td>{% trans "Upload" %}</td>
             <td>{{ link.view_cnt }}</td>
             <td>
                 <a class="op vh" href="#" id="remove-repo-shared-upload-link" data-token={{ link.token }}>{% trans "Remove"%}</a>
@@ -97,15 +97,15 @@
         {% else %}
             {% if link.s_type == 'd'%}
             <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-            <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
             <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
             {% else %}
             <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            <td><a href="{% url 'repo_view_file' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+            <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
             <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
             {% endif %}
             <td>{{ link.size|filesizeformat}}</td>
-            <td>DownLoad</td>
+            <td>{% trans "Download" %}</td>
             <td>{{ link.view_cnt }}</td>
             <td>
                 <a class="op vh" href="#" id="remove-repo-shared-download-link" data-token={{ link.token }}>{% trans "Remove"%}</a>

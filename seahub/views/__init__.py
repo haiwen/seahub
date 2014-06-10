@@ -473,26 +473,20 @@ def repo_settings(request, repo_id):
     # download links
     fileshares = FileShare.objects.filter(repo_id=repo_id)
     for fs in fileshares:
-        r = seafile_api.get_repo(fs.repo_id)
-        if not r:
-            fs.delete()
-            continue
-
-        fs.repo = r
-        if fs.s_type == 'f':
-            if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+        if fs.is_file_share_link():
+            if seafile_api.get_file_id_by_path(repo.id, fs.path) is None:
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path)
             fs.shared_link = gen_file_share_link(fs.token)
 
-            path = fs.path.rstrip('/') # Normalize file path 
-            obj_id = seafile_api.get_file_id_by_path(r.id, path)
-            file_size = seafile_api.get_file_size(r.store_id, r.version, obj_id)
-            fs.size = file_size
+            path = fs.path.rstrip('/')  # Normalize file path
+            obj_id = seafile_api.get_file_id_by_path(repo.id, path)
+            fs.size = seafile_api.get_file_size(repo.store_id, repo.version,
+                                                obj_id)
             repo_shared_links.append(fs)
         else:
-            if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+            if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path.rstrip('/'))
@@ -502,26 +496,20 @@ def repo_settings(request, repo_id):
             if path[-1] != '/':         # Normalize dir path
                 path += '/'
             #get dir size
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path (r.id,
-                                                              r.head_cmmt_id,
-                                                              path.encode('utf-8'))
-            dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id, r.version, dir_id)
-            fs.size = dir_size
+            dir_id = seafserv_threaded_rpc.get_dirid_by_path(
+                repo.id, repo.head_cmmt_id, path)
+            fs.size = seafserv_threaded_rpc.get_dir_size(repo.store_id,
+                                                         repo.version, dir_id)
             repo_shared_links.insert(0, fs)
 
     # upload links
     uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id)
     for link in uploadlinks:
-        r = seafile_api.get_repo(link.repo_id)
-        if not r:
-            link.delete()
-            continue
-        if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
+        if seafile_api.get_dir_id_by_path(repo.id, link.path) is None:
             link.delete()
             continue
         link.dir_name = os.path.basename(link.path.rstrip('/'))
         link.shared_link = gen_shared_upload_link(link.token)
-        link.repo = r
         repo_shared_links.insert(0, link)
 
     return render_to_response('repo_settings.html', {
