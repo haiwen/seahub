@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import Q
 
 from seahub.base.fields import LowerCaseCharField
+from seahub.message.signals import user_message_sent
 
 class UserMessageManager(models.Manager):
     def get_messages_related_to_user(self, username):
@@ -34,6 +35,7 @@ class UserMessageManager(models.Manager):
         new_msg = self.model(from_email=user1, to_email=user2, message=msg,
                              ifread=0)
         new_msg.save(using=self._db)
+        user_message_sent.send(sender=None, msg=new_msg)
         return new_msg
     
     def update_unread_messages(self, user1, user2):

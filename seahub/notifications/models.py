@@ -601,11 +601,11 @@ from seahub.signals import share_file_to_user_successful, upload_file_successful
 from seahub.group.models import GroupMessage, MessageReply
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added, \
     group_join_request
-    
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.message.models import UserMessage
-    
-@receiver(upload_file_successful)        
+from seahub.message.signals import user_message_sent
+
+@receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
     """Notify repo owner when others upload files to his/her folder from shared link.
     """
@@ -646,13 +646,14 @@ def add_share_file_msg_cb(sender, **kwargs):
 
     detail = priv_file_share_msg_to_json(priv_share.from_user, file_name, priv_share.token)
     UserNotification.objects.add_priv_file_share_msg(priv_share.to_user, detail)
-    
-@receiver(post_save, sender=UserMessage)
-def add_user_message_cb(sender, instance, **kwargs):
+
+@receiver(user_message_sent)
+def add_user_message_cb(sender, **kwargs):
     """Notify user when he/she got a new mesaage.
     """
-    msg_from = instance.from_email
-    msg_to = instance.to_email
+    msg = kwargs.get('msg')
+    msg_from = msg.from_email
+    msg_to = msg.to_email
 
     UserNotification.objects.add_user_message(msg_to, detail=msg_from)
 
@@ -667,7 +668,7 @@ def grpmsg_added_cb(sender, **kwargs):
     detail = group_msg_to_json(group_id, from_email)
     UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
 
-@receiver(grpmsg_reply_added)    
+@receiver(grpmsg_reply_added)
 def grpmsg_reply_added_cb(sender, **kwargs):
     msg_id = kwargs['msg_id']
     reply_from_email = kwargs['from_email']
@@ -702,5 +703,3 @@ def group_join_request_cb(sender, **kwargs):
     for staff in staffs:
         UserNotification.objects.add_group_join_request_notice(to_user=staff,
                                                                detail=detail)
-
-
