@@ -1,13 +1,8 @@
 # -*- coding: utf-8 -*-
-import os
 import datetime
 
-from django import forms
 from django.db import models
 from django.db.models import Q
-from django.forms import ModelForm
-from django.utils.translation import ugettext as _
-from django.utils.http import urlquote
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -17,15 +12,21 @@ class UserMessageManager(models.Manager):
         others and others send to he/she.
         """
         return super(UserMessageManager, self).filter(
-            (Q(to_email=username)&Q(recipient_deleted_at__isnull=True)) |
-            (Q(from_email=username)&Q(sender_deleted_at__isnull=True))).order_by('to_email')
+            (Q(to_email=username) & Q(recipient_deleted_at__isnull=True)) |
+            (Q(from_email=username) & Q(sender_deleted_at__isnull=True))
+            ).order_by('to_email')
 
     def get_messages_between_users(self, user1, user2):
         """List messages between two users.
+        If a msg is sent from ``user1`` to ``user2``, and deleted by ``user1``,
+        the msg should be hide to ``user1``, otherwise showed.
+        If a msg is send from ``user2`` to ``user1``, and deleted by ``user1``,
+        the msg should be hide to ``user1``, otherwise showed.
         """
         return super(UserMessageManager, self).filter(
             (Q(from_email=user1)&Q(to_email=user2)&Q(sender_deleted_at__isnull=True)) |
-            (Q(from_email=user2)&Q(to_email=user1)&Q(recipient_deleted_at__isnull=True))).order_by('-timestamp')
+            (Q(from_email=user2)&Q(to_email=user1)&Q(recipient_deleted_at__isnull=True))
+            ).order_by('-timestamp')
 
     def add_unread_message(self, user1, user2, msg):
         """Add a new message sent from ``user1`` to ``user2``.
