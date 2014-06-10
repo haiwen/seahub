@@ -1518,9 +1518,16 @@ def my_shared_and_group_repos(request):
         'snippets/my_group_repos.html', ctx_group,
         context_instance=RequestContext(request))
 
-    return HttpResponse(json.dumps({"shared": shared_repos_html,
-                                    "group": group_repos_html}),
-                        content_type=content_type)
+    return_shared_repos = True if shared_repos else False
+
+    ret = {
+        "shared": {
+            "html": shared_repos_html,
+            "return_shared_repos": return_shared_repos
+        },
+        "group": group_repos_html
+    }
+    return HttpResponse(json.dumps(ret), content_type=content_type)
 
 @login_required
 def get_file_op_url(request, repo_id):

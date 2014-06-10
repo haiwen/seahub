@@ -47,7 +47,7 @@ $('#repo-create-form').submit(function() {
             return false;
         }
         if ($.trim(passwd).length < {{repo_password_min_length}}) {
-        apply_form_error(form_id, "{% trans "Password is too short" %}");
+            apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
         if (!$.trim(passwd_again)) {

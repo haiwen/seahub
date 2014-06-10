@@ -40,7 +40,7 @@
     </tr>
     {% endfor %}
     {% for dirent in file_list %}
-    <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }} {%else %}0{% endif %}">
+    <tr class="file-item" data-name="{{dirent.obj_name}}" data-time="{% if dirent.last_modified %}{{ dirent.last_modified }}{% else %}0{% endif %}">
         <td class="select">
             <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
         </td>
