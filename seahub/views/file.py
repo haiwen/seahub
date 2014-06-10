@@ -467,6 +467,7 @@ def view_file(request, repo_id):
             'img_prev': img_prev,
             'img_next': img_next,
             'search_repo_id': search_repo_id,
+            'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
             }, context_instance=RequestContext(request))
 
 def view_history_file_common(request, repo_id, ret_dict):

@@ -96,6 +96,9 @@
 
 {% block extra_script %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
+{% if highlight_keyword %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
+{% endif %}
 <script type="text/javascript">
 $(function() {
     var dld_url = $('#download').data('url');
@@ -177,41 +180,41 @@ $('#file-op .history').click(function () {
     location.href = $(this).data('url');
 });
 
-// if referrer is 'search result' page, define function highlight_kw
+{% if highlight_keyword %}
 var ref_list = document.referrer.split('?');
+// referrer is 'search result' page, i.e, '{{SITE_ROOT}}search/?q=xx..'
 if (ref_list.length > 1 && ref_list[0].indexOf('search') > 0) {
     var search_params = ref_list[1].split('&');
     var search_keyword = search_params[0].substr(2); // get 'xx' from 'q=xx'
 
-    var highlight_kw = function(hl_area) {
-        if (window.find && window.getSelection) {
-            hl_area.attr('contenteditable', true).attr('spellcheck', false);
-            var sel = window.getSelection();
-            sel.collapse(document.body, 0);
-
-            while (window.find(search_keyword)) {
-                document.execCommand("HiliteColor", false, "yellow");
-                sel.collapseToEnd();
+    var highlight_kw = function(hl_area) { // 'hl_area': a node
+        findAndReplaceDOMText(hl_area, {
+            find: new RegExp(search_keyword, 'gim'),
+            replace: function(portion, match) { // portion is a part of a match
+                var node = document.createElement('span');
+                node.style.background = '#ffe761';
+                node.innerHTML = portion.text; // portion is an object
+                return node;
             }
-            hl_area.attr('contenteditable', false);
-        } else if (document.body.createTextRange) {
-            var textRange = document.body.createTextRange();
-            while (textRange.findText(search_keyword)) {
-                textRange.execCommand("BackColor", false, "yellow");
-                textRange.collapse(false);
-            }
-        }
+        });
     };
 }
 
 $(window).load(function() {
     if (highlight_kw) {
         // hl kw in file title
-        highlight_kw($('#view-hd'));
+        highlight_kw($('#view-hd')[0]);
+
         // hl kw in file content
-        setTimeout(function(){ highlight_kw($('#file-view')); }, 100); // delay 100ms for 'text' file
+        if ('{{filetype}}' == 'Markdown') {
+            highlight_kw($('#file-view')[0]);
+        }
+        if ('{{fileext}}' == 'text' || '{{fileext}}' == 'txt') {
+            setTimeout(function(){ highlight_kw($('.CodeMirror')[0]); }, 500);
+        }
     }
 });
+{% endif %}
 
 //bottom bar
 {% include "snippets/bottom_bar.html" %}

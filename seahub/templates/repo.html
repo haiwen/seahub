@@ -1059,7 +1059,7 @@ function dirlinkClick() {
         link.parents('.dir-item').children('.dirent-icon').html(loading_icon);
     } else {
         // link is in '.path'
-        $('#cur-dir-name').after(' ' + loading_icon);
+        $('.path').append(' ' + loading_icon);
     }
     var url_search = link.attr('href').substr(link.attr('href').indexOf('?'));
     reqDirData('{% url 'repo_dir_data' repo.id %}' + url_search, changeLocation);
