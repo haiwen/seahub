@@ -51,6 +51,7 @@ urlpatterns = patterns('',
 
     url(r'^groupandcontacts/$', GroupAndContacts.as_view()),
     url(r'^events/$', EventsView.as_view()),
+    url(r'^repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChange.as_view()),
     url(r'^unseen_messages/$', UnseenMessagesCountView.as_view()),
     url(r'^group/msgs/(?P<group_id>\d+)/$', GroupMsgsView.as_view()),
     url(r'^group/(?P<group_id>\d+)/msg/(?P<msg_id>\d+)/$', GroupMsgView.as_view()),
