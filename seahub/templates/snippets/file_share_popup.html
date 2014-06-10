@@ -56,8 +56,12 @@
 
                     <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
                         <label>{% trans "Send to:"%}</label><br />
-                        <textarea id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="text" class="input" id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
                         <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
+                        <input type="hidden" name="file_shared_name" value="" />
+                        <input type="hidden" name="file_shared_type" value="" />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="download-extra-msg-text"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" />
@@ -89,8 +93,10 @@
 
                     <form id="upload-link-send-form" action="" method="post" class="hide">{% csrf_token %}
                         <label>{% trans "Send to:"%}</label><br />
-                        <textarea id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}"></textarea><br />
+                        <input type="text" class="input" id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
                         <input type="hidden" name="shared_upload_link" value="{{ dir_shared_upload_link }}" />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="upload-extra-msg-text"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" />

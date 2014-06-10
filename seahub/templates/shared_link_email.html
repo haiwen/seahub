@@ -9,9 +9,13 @@
 <p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
 
 <p style="font-size:14px;color:#434144;">
-{% blocktrans %}{{ email }} shared a file to you on {{ site_name }}:{% endblocktrans%} <br />
+{% blocktrans %}{{ email }} shared a {{ file_shared_type }} <span style="font-weight:bold;">{{ file_shared_name}}</span> to you on {{ site_name }}:{% endblocktrans%} <br />
 {{ file_shared_link }}
 </p>
+
+{% if extra_msg %}
+<p>" {{ extra_msg }} "</p>
+{% endif %}
 
 {% endautoescape %}
 

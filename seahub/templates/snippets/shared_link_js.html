@@ -91,6 +91,8 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     }
     $('#gen-link-btn').data('url', aj_urls['link']).data('obj', op);
     $('#rm-shared-link').data('obj', op);
+    $('input[name="file_shared_name"]').val(name);
+    $('input[name="file_shared_type"]').val(type);
 
     // share upload link
     $('#upload-link-share-tab .a').click(function() {
@@ -156,6 +158,8 @@ $('#send-link').click(function() {
     $('#rm-shared-link').addClass('hide');
     var input = $('#link-send-input');
     input.css({'width': $('#link-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
+    var text = $('#download-extra-msg-text');
+    text.css({'width': $('#link-share').width() - parseInt(text.css('padding-left')) - parseInt(text.css('padding-right')) - parseInt(text.css('border-left-width')) - parseInt(text.css('border-right-width'))});
     $('#link-send-form').removeClass('hide');
     addAutocomplete('#link-send-input', '#link-send-form', share_list);
 });
@@ -167,8 +171,11 @@ $("#link-send-form .cancel").click(function() {
 $("#link-send-form").submit(function(event) {
     var form = $(this), 
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
-        email = $.trim(form.children('textarea[name="email"]').val()),
-        submit_btn = form.children('input[type="submit"]');
+        email = $.trim(form.children('input[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]'),
+        extra_msg = form.children('textarea[name="extra_msg"]').val(),
+        file_shared_name = form.children('input[name="file_shared_name"]').val(),
+        file_shared_type = form.children('input[name="file_shared_type"]').val();
     
     if (!email) {
         apply_form_error('link-send-form', "{% trans "Please input at least an email." %}");
@@ -185,7 +192,13 @@ $("#link-send-form").submit(function(event) {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {file_shared_link: file_shared_link, email: email},
+        data: {
+                file_shared_link: file_shared_link,
+                email: email,
+                extra_msg: extra_msg,
+                file_shared_name: file_shared_name,
+                file_shared_type: file_shared_type
+              },
         success: function(data) {
             $.modal.close();
             feedback(data['msg'], "success");
@@ -326,6 +339,8 @@ $('#send-upload-link').click(function() {
     $('#rm-shared-upload-link').addClass('hide');
     var input = $('#upload-link-send-input');
     input.css({'width': $('#upload-link-share').width() - parseInt(input.css('padding-left')) - parseInt(input.css('padding-right')) - parseInt(input.css('border-left-width')) - parseInt(input.css('border-right-width'))});
+    var text = $('#upload-extra-msg-text');
+    text.css({'width': $('#upload-link-share').width() - parseInt(text.css('padding-left')) - parseInt(text.css('padding-right')) - parseInt(text.css('border-left-width')) - parseInt(text.css('border-right-width'))});
     $('#upload-link-send-form').removeClass('hide');
     addAutocomplete('#upload-link-send-input', '#upload-link-send-form', share_list);
 });
@@ -337,8 +352,9 @@ $("#upload-link-send-form .cancel").click(function() {
 $("#upload-link-send-form").submit(function(event) {
     var form = $(this),
         shared_upload_link = form.children('input[name="shared_upload_link"]').val(),
-        email = $.trim(form.children('textarea[name="email"]').val()),
-        submit_btn = form.children('input[type="submit"]');
+        email = $.trim(form.children('input[name="email"]').val()),
+        submit_btn = form.children('input[type="submit"]'),
+        extra_msg = form.children('textarea[name="extra_msg"]').val();
 
     if (!email) {
         apply_form_error('upload-link-send-form', "{% trans "Please input at least an email." %}");
@@ -355,7 +371,11 @@ $("#upload-link-send-form").submit(function(event) {
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {shared_upload_link: shared_upload_link, email: email},
+        data: {
+                shared_upload_link: shared_upload_link,
+                email: email,
+                extra_msg: extra_msg
+              },
         success: function(data) {
             $.modal.close();
             feedback(data['msg'], "success");
