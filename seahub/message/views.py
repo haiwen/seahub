@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
 import os
+import datetime
 import simplejson as json
-from django.http import HttpResponse, HttpResponseBadRequest, \
-    HttpResponseRedirect , Http404
-from django.shortcuts import render_to_response, Http404
+from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.shortcuts import render_to_response
 from django.template.loader import render_to_string
 from django.core.urlresolvers import reverse
 from django.template import RequestContext
 from django.core.paginator import EmptyPage, InvalidPage
-from django.contrib import messages
-from django.db.models import Q
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 
 from models import UserMessage, UserMsgAttachment
 from message import msg_info_list
-from seaserv import get_repo
 from seahub.auth.decorators import login_required
 from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check
 from seahub.views import is_registered_user
-from seahub.contacts.models import Contact
 from seahub.share.models import PrivateFileDirShare
 from seahub.utils import is_valid_username
 from seahub.utils.paginator import Paginator
-from seahub.settings import SITE_ROOT
 
 @login_required
 @user_mods_check
@@ -113,22 +108,55 @@ def user_msg_list(request, id_or_email):
 
 @login_required
 def user_msg_remove(request, msg_id):
-    """Remove message.
+    """Remove sent message.
     """
+    json_ct = 'application/json; charset=utf-8'
+
     try:
         msg = UserMessage.objects.get(message_id=msg_id)
     except UserMessage.DoesNotExist:
-        return HttpResponse(json.dumps({'success': False, 'err_msg':_(u"The message doesn't exist")}),
-                                   content_type='application/json; charset=utf-8')
+        return HttpResponse(json.dumps({
+                    'success': False,
+                    'err_msg': _(u"The message doesn't exist")
+                    }), content_type=json_ct)
     else:
         # Test whether user is admin or message owner.
         if msg.from_email == request.user.username:
-            msg.delete()
+            msg.sender_deleted_at = datetime.datetime.now()
+            msg.save()
             return HttpResponse(json.dumps({'success': True}),
-                                        content_type='application/json; charset=utf-8')
+                                content_type=json_ct)
         else:
-            return HttpResponse(json.dumps({'success': False, 'err_msg': _(u"You don't have the permission.")}),
-                                        content_type='application/json; charset=utf-8')
+            return HttpResponse(json.dumps({
+                        'success': False,
+                        'err_msg': _(u"You don't have the permission.")
+                        }), content_type=json_ct)
+
+@login_required
+def user_received_msg_remove(request, msg_id):
+    """Remove received message.
+    """
+    json_ct = 'application/json; charset=utf-8'
+
+    try:
+        msg = UserMessage.objects.get(message_id=msg_id)
+    except UserMessage.DoesNotExist:
+        return HttpResponse(json.dumps({
+                    'success': False,
+                    'err_msg': _(u"The message doesn't exist"),
+                    }), content_type=json_ct)
+    else:
+        # Test whether current user is the recipient of this msg.
+        if msg.to_email == request.user.username:
+            msg.recipient_deleted_at = datetime.datetime.now()
+            msg.save()
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=json_ct)
+        else:
+            return HttpResponse(json.dumps({
+                        'success': False,
+                        'err_msg': _(u"You don't have the permission."),
+                        }), content_type=json_ct)
 
 @login_required
 @require_POST
