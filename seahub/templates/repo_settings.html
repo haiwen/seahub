@@ -1,18 +1,31 @@
 {% extends "myhome_base.html" %}
 
-{% load i18n %}
+{% load i18n avatar_tags seahub_tags %}
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block left_panel %}
-<a href="{% url 'repo' repo.id %}" title="{% trans "Back to Library" %}"><span class="icon-chevron-left"></span> {% trans "Back to Library" %}</a>
+<h3><a href="{% url 'repo' repo.id %}" title="{% trans "Back to " %}{{ repo.name }}"><span class="icon-chevron-left"></span> {{repo.name}}</a></h3>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab tab-cur" id="lib-setting-basic-info-tab"><a href="#">{% trans "Basic Info" %}</a></li>
+        <li class="tab" id="lib-setting-transfer-ownership-tab"><a href="#">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab" id="lib-setting-change-password-tab"><a href="#">{% trans "Change Password" %}</a></li>
+        {% else %}
+        <li class="tab" id="lib-setting-shared-links-tab"><a href="#">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
 {% endblock %}
 
 {% block right_panel %}
 <div class="lib-setting">
-<h2>{% trans "Library Settings" %}</h2>
+<div class="hd ovhd">
+    <h3>{% trans "Library Settings" %}</h3>
+</div>
 
-<h3>{% trans "Basic Info" %}</h3>
+<div id="lib-setting-basic-info">
 <form id="repo-setting-form" action="" method="post" class="form">{% csrf_token %}
     <label>{% trans "Name" %}</label><br />
     <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
@@ -30,17 +43,19 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
+</div>
 
-<h3>{% trans "Transfer Ownership" %}</h3>
+<div id="lib-setting-transfer-ownership" class="hide">
 <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
     <p>{% trans "Transfer this library to another user:" %}</p>
     <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
+</div>
 
 {% if repo.encrypted and repo.enc_version == 2 %}
-<h3>{% trans "Change Password" %}</h3>
+<div id="lib-setting-change-password" class="hide">
 <form id="repo-change-passwd-form" action="" method="post" class="form">{% csrf_token %}
     <p>{% trans "Change the password of this library:" %}</p>
     <label>{% trans "Old Password" %}</label><br />
@@ -52,7 +67,60 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
+</div>
 {% endif %}
+
+<div id="lib-setting-shared-links" class="hide">
+{% if repo_shared_links%}
+<table class="sharelink-list">
+    <tr>
+        <th width="5%"><!--icon--></th>
+        <th width="25%">{% trans "Name"%}</th>
+        <th width="15%">{% trans "Created By"%}</th>
+        <th width="15%">{% trans "Size"%}</th>
+        <th width="15%">{% trans "Type"%}</th>
+        <th width="10%">{% trans "Visits"%}</th>
+        <th width="15%">{% trans "Operations"%}</th>
+    </tr>
+    {% for link in repo_shared_links %}
+    <tr class="repo-shared-link">
+        {% if not link.s_type %}
+            <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+            <td>--</td>
+            <td>{% trans "Upload" %}</td>
+            <td>{{ link.view_cnt }}</td>
+            <td>
+                <a class="op vh" href="#" id="remove-repo-shared-upload-link" data-token={{ link.token }}>{% trans "Remove"%}</a>
+            </td>
+        {% else %}
+            {% if link.s_type == 'd'%}
+            <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+            {% else %}
+            <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+            <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+            {% endif %}
+            <td>{{ link.size|filesizeformat}}</td>
+            <td>{% trans "Download" %}</td>
+            <td>{{ link.view_cnt }}</td>
+            <td>
+                <a class="op vh" href="#" id="remove-repo-shared-download-link" data-token={{ link.token }}>{% trans "Remove"%}</a>
+            </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+    <h2 class="alc">{% trans "This repo doesn't have any shared link" %}</h2>
+    <p>{% trans "You can generate a share link from any dir/file. People receive this link can download/upload zipped dir or files." %}</p>
+</div>
+{% endif %}
+</div>
 </div>
 {% endblock %}
 
@@ -220,5 +288,51 @@ $('#repo-change-passwd-form').submit(function() {
     return false;
 });
 {% endif %}
+
+$('li[id^="lib-setting-"]').click(function() {
+    var id = $(this).attr('id'), lib_setting_div;
+    lib_setting_div = $('#' + id.replace('-tab', ''));
+
+    $('div[id^="lib-setting-"]').addClass('hide');
+    $('li[id^="lib-setting-"]').removeClass('tab-cur');
+
+    lib_setting_div.removeClass('hide');
+    $(this).addClass('tab-cur');
+})
+
+$('#remove-repo-shared-download-link, #remove-repo-shared-upload-link').click(function() {
+    var link_token = $(this).data('token'),
+        link_item = $(this).parents('.repo-shared-link'),
+        id = $(this).attr('id'),
+        ajax_url;
+
+    if (id.indexOf('upload') != -1) {
+        ajax_url = '{% url 'remove_shared_upload_link' %}';
+    } else {
+        ajax_url = '{% url 'remove_shared_link' %}';
+    }
+
+    $.ajax({
+        url: ajax_url,
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            't': link_token,
+        },
+        success: function(data) {
+            if (data['success']) {
+                link_item.remove();
+                feedback("{% trans "Removed successfully." %}", 'success');
+            } 
+        },
+        error:function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
+            }
+        }
+    });
+});
 </script>
 {% endblock %}
