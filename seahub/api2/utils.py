@@ -4,11 +4,13 @@
 import os
 import time
 
+from collections import defaultdict
+
 from django.core.paginator import EmptyPage, InvalidPage
 from rest_framework.response import Response
 from rest_framework import status
 from seaserv import seafile_api, get_commits, server_repo_size, \
-    get_personal_groups_by_user, is_group_user, get_group
+    get_personal_groups_by_user, is_group_user, get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -479,3 +481,26 @@ def get_client_ip(request):
         ip = request.META.get('REMOTE_ADDR', '')
 
     return ip
+
+def get_diff_details(repo_id, commit1, commit2):
+    result = defaultdict(list)
+
+    diff_result = seafserv_threaded_rpc.get_diff(repo_id, commit1, commit2)
+    if not diff_result:
+        return result
+
+    for d in diff_result:
+        if d.status == 'add':
+            result['added_files'].append(d.name)
+        elif d.status == 'del':
+            result['deleted_files'].append(d.name)
+        elif d.status == 'mov':
+            result['renamed_files'].extend((d.name, d.new_name))
+        elif d.status == 'mod':
+            result['modified_files'].append(d.name)
+        elif d.status == 'newdir':
+            result['added_dirs'].append(d.name)
+        elif d.status == 'deldir':
+            result['deleted_dirs'].append(d.name)
+
+    return result

@@ -30,7 +30,7 @@ from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
-    get_group_message_json, get_group_msgs, get_group_msgs_json
+    get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
@@ -2403,6 +2403,7 @@ class EventsView(APIView):
                 d['desc'] = e.commit.desc
                 d['repo_id'] = e.repo.id
                 d['repo_name'] = e.repo.name
+                d['commit_id'] = e.commit.id
             else:
                 d['repo_id'] = e.repo_id
                 d['repo_name'] = e.repo_name
@@ -3130,6 +3131,39 @@ class DiscussionHtml(APIView):
 
     def post(self, request, msg_id, format=None):
         return html_msg_reply(request, msg_id)
+
+class RepoHistoryChange(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        if not access_to_repo(request, repo_id, ''):
+            return HttpResponse(json.dumps({"err": 'Permission denied'}),
+                                status=400,
+                                content_type=json_content_type)
+
+        repo = get_repo(repo_id)
+        if not repo:
+            return HttpResponse(json.dumps({"err": 'Library does not exist'}),
+                                status=400,
+                                content_type=json_content_type)
+
+        if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
+            return HttpResponse(json.dumps({"err": 'Library is encrypted'}),
+                                status=400,
+                                content_type=json_content_type)
+
+        commit_id = request.GET.get('commit_id', '')
+        if not commit_id:
+            return HttpResponse(json.dumps({"err": 'Invalid argument'}),
+                                status=400,
+                                content_type=json_content_type)
+
+        details = get_diff_details(repo_id, '', commit_id)
+
+        return HttpResponse(json.dumps(details),
+                            content_type=json_content_type)
 
 class RepoHistoryChangeHtml(APIView):
     authentication_classes = (TokenAuthentication, )
