@@ -1,6 +1,14 @@
 {% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 {% block cur_users %}tab-cur{% endblock %}
+{% block extra_style %}
+<style type="text/css">
+#upload-file-btn .icon-upload-alt {
+    color:#777;
+    margin-right:3px;
+}
+</style>
+{% endblock %}
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'user_search' %}" method="get" class="side-search-form">
@@ -17,8 +25,11 @@
         {% endif %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
-    <button id="add-user-btn" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
-    <button id="upload-file-btn" class="fright"><span class="icon-upload-alt"></span>{% trans "Upload csv file"%}</button>
+    <div class="fright">
+        <!--button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Upload csv file"%}</button-->
+        <button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
+        <button id="add-user-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
+    </div>
 </div>
 
 <form id="add-user-form" action="" method="post" class="hide">{% csrf_token %}
@@ -33,10 +44,11 @@
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
-<form id="upload-csv-form" class="hide" enctype= "multipart/form-data" method = "post" action = "{% url 'batch_add_user' %}">{% csrf_token %}
-    <h3>{% trans "Import user from CSV file" %}</h3><br />
-    <input type = "file" name = "file" /><br />
-    <p class="tip">{% trans "CSV file format: user@mail.com, password"%}</p>
+<form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
+    <h3>{% trans "Import users from a CSV file" %}</h3>
+    <input type="file" name="file" />
+    <p class="tip">{% trans "File format: user@mail.com,password"%}</p>
+    <p class="error hide">{% trans "Please choose a CSV file" %}</p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
 
@@ -121,6 +133,14 @@ $('#add-user-form').submit(function() {
 });
 $('#upload-file-btn').click(function () {
     $('#upload-csv-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#upload-csv-form').submit(function() {
+    var form = $(this);
+    if (!$('[name=file]', form).val()) {
+        $('.error', form).removeClass('hide');
+        return false;
+    }
 });
 {% include "sysadmin/useradmin_js.html" %}
 </script>

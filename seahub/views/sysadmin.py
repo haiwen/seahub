@@ -888,7 +888,7 @@ def batch_add_user(request):
             except User.DoesNotExist:
                 User.objects.create_user(username, password, is_staff=False,
                                          is_active=True)
-        messages.success(request, _('Success'))
+        messages.success(request, _('Import succeeded'))
     else:
         messages.error(request, _(u'Please select a csv file first.'))
 
