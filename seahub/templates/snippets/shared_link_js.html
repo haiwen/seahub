@@ -49,10 +49,10 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         contact_options_ct.html(contact_options);
     }
 
-    $('.checkbox-orig', form).unbind().click(function() {
+    $('.checkbox-orig', $('#share-grp-options, #share-contact-options')).click(function() {
         $(this).parent().toggleClass('checkbox-checked');
     });
-    $(".checkbox-label", form).unbind().hover(
+    $(".checkbox-label", $('#share-grp-options, #share-contact-options')).hover(
         function() {
             $(this).addClass('hl');
         },  

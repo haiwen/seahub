@@ -2,6 +2,7 @@
 import os
 import logging
 import simplejson as json
+from dateutil.relativedelta import relativedelta
 
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
@@ -12,6 +13,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.utils import timezone
 from django.utils.html import escape
 # from django.contrib.sites.models import RequestSite
 import seaserv
@@ -702,6 +704,17 @@ def get_shared_link(request):
     repo_id = request.GET.get('repo_id', '')
     share_type = request.GET.get('type', 'f')  # `f` or `d`
     path = request.GET.get('p', '')
+    use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
+    passwd = request.POST.get('passwd') if use_passwd else None
+
+    try:
+        expire_days = int(request.POST.get('expire_days', 0))
+    except ValueError:
+        expire_days = 0
+    if expire_days <= 0:
+        expire_date = None
+    else:
+        expire_date = timezone.now() + relativedelta(days=expire_days)
 
     if not (repo_id and path):
         err = _('Invalid arguments')
@@ -717,14 +730,16 @@ def get_shared_link(request):
     if share_type == 'f':
         fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
         if fs is None:
-            fs = FileShare.objects.create_file_link(username, repo_id, path)
+            fs = FileShare.objects.create_file_link(username, repo_id, path,
+                                                    passwd, expire_date)
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 OrgFileShare.objects.set_org_file_share(org_id, fs)
     else:
         fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
         if fs is None:
-            fs = FileShare.objects.create_dir_link(username, repo_id, path)
+            fs = FileShare.objects.create_dir_link(username, repo_id, path,
+                                                   passwd, expire_date)
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 OrgFileShare.objects.set_org_file_share(org_id, fs)
@@ -1052,6 +1067,8 @@ def get_shared_upload_link(request):
 
     repo_id = request.GET.get('repo_id', '')
     path = request.GET.get('p', '')
+    use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
+    passwd = request.POST.get('passwd') if use_passwd else None
 
     if not (repo_id and path):
         err = _('Invalid arguments')
@@ -1071,20 +1088,10 @@ def get_shared_upload_link(request):
         upload_link = l[0]
         token = upload_link.token
     else:
-        token = gen_token(max_length=10)
-
-        upload_link = UploadLinkShare()
-        upload_link.username = request.user.username
-        upload_link.repo_id = repo_id
-        upload_link.path = path
-        upload_link.token = token
-
-        try:
-            upload_link.save()
-        except IntegrityError, e:
-            err = _('Failed to get the link, please retry later.')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=500, content_type=content_type)
+        username = request.user.username
+        uls = UploadLinkShare.objects.create_upload_link_share(
+            username, repo_id, path, passwd)
+        token = uls.token
 
     shared_upload_link = gen_shared_upload_link(token)
 

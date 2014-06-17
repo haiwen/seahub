@@ -1,8 +1,12 @@
 import datetime
+from django.core.cache import cache
 from django.db import models
+from django.utils import timezone
+from django.contrib.auth.hashers import make_password
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
+from seahub.settings import SHARE_ACCESS_PASSWD_TIMEOUT
 
 class AnonymousShare(models.Model):
     """
@@ -13,12 +17,30 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
+def set_share_link_access(username, token):
+    """Remember which share download/upload links user can access without
+    providing password.
+    """
+    cache.set('SharedLink_' + username + token, True,
+              SHARE_ACCESS_PASSWD_TIMEOUT)
+
+def check_share_link_access(username, token):
+    """Check whether user can access share link without providing password.
+    """
+    cache.get('SharedLink_' + username + token, False)
+
 class FileShareManager(models.Manager):
-    def _add_file_share(self, username, repo_id, path, s_type):
+    def _add_file_share(self, username, repo_id, path, s_type,
+                        password=None, expire_date=None):
+        if password is not None:
+            password_enc = make_password(password)
+        else:
+            password_enc = None
+
         token = gen_token(max_length=10)
         fs = super(FileShareManager, self).create(
             username=username, repo_id=repo_id, path=path, token=token,
-            s_type=s_type)
+            s_type=s_type, password=password_enc, expire_date=expire_date)
         fs.save()
         return fs
 
@@ -31,19 +53,29 @@ class FileShareManager(models.Manager):
             return None
 
     def _get_valid_file_share_by_token(self, token):
-        """Check whether token exists and not expire.
+        """Return share link that exists and not expire, otherwise none.
         """
         try:
             fs = self.get(token=token)
         except self.model.DoesNotExist:
             return None
 
-        return fs
+        if fs.expire_date is None:
+            return fs
+        else:
+            if timezone.now() > fs.expire_date:
+                return None
+            else:
+                return fs
 
     ########## public methods ##########
-    def create_file_link(self, username, repo_id, path):
+    def create_file_link(self, username, repo_id, path, password=None,
+                         expire_date=None):
+        """Create download link for file.
+        """
         path = normalize_file_path(path)
-        return self._add_file_share(username, repo_id, path, 'f')
+        return self._add_file_share(username, repo_id, path, 'f', password,
+                                    expire_date)
 
     def get_file_link_by_path(self, username, repo_id, path):
         path = normalize_file_path(path)
@@ -51,11 +83,15 @@ class FileShareManager(models.Manager):
 
     def get_valid_file_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
-    
-    def create_dir_link(self, username, repo_id, path):
+
+    def create_dir_link(self, username, repo_id, path, password=None,
+                        expire_date=None):
+        """Create download link for directory.
+        """
         path = normalize_dir_path(path)
-        return self._add_file_share(username, repo_id, path, 'd')
-    
+        return self._add_file_share(username, repo_id, path, 'd', password,
+                                    expire_date)
+
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
         return self._get_file_share_by_path(username, repo_id, path)
@@ -74,6 +110,8 @@ class FileShare(models.Model):
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
     s_type = models.CharField(max_length=2, db_index=True, default='f') # `f` or `d`
+    password = models.CharField(max_length=128, null=True)
+    expire_date = models.DateTimeField(null=True)
     objects = FileShareManager()
 
     def is_file_share_link(self):
@@ -81,7 +119,10 @@ class FileShare(models.Model):
 
     def is_dir_share_link(self):
         return False if self.is_file_link() else True
-        
+
+    def is_encrypted(self):
+        return True if self.password is not None else False
+
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
         """Set a share link as org share link.
@@ -104,6 +145,37 @@ class OrgFileShare(models.Model):
 
     objects = OrgFileShareManager()
 
+class UploadLinkShareManager(models.Manager):
+    def create_upload_link_share(self, username, repo_id, path,
+                                 password=None, expire_date=None):
+        path = normalize_dir_path(path)
+        token = gen_token(max_length=10)
+        if password is not None:
+            password_enc = make_password(password)
+        else:
+            password_enc = None
+        uls = super(UploadLinkShareManager, self).create(
+            username=username, repo_id=repo_id, path=path, token=token,
+            password=password_enc, expire_date=expire_date)
+        uls.save()
+        return uls
+
+    def get_valid_upload_link_by_token(self, token):
+        """Return upload link that exists and not expire, otherwise none.
+        """
+        try:
+            fs = self.get(token=token)
+        except self.model.DoesNotExist:
+            return None
+
+        if fs.expire_date is None:
+            return fs
+        else:
+            if timezone.now() > fs.expire_date:
+                return None
+            else:
+                return fs
+
 class UploadLinkShare(models.Model):
     """
     Model used for shared upload link.
@@ -114,6 +186,12 @@ class UploadLinkShare(models.Model):
     token = models.CharField(max_length=10, unique=True)
     ctime = models.DateTimeField(default=datetime.datetime.now)
     view_cnt = models.IntegerField(default=0)
+    password = models.CharField(max_length=128, null=True)
+    expire_date = models.DateTimeField(null=True)
+    objects = UploadLinkShareManager()
+
+    def is_encrypted(self):
+        return True if self.password is not None else False
 
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):

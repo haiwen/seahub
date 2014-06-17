@@ -41,7 +41,9 @@ from seahub.base.models import UserStarredFiles, DirFilesLastModifiedInfo
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
+from seahub.share.models import FileShare, PrivateFileDirShare, \
+    UploadLinkShare, check_share_link_access, set_share_link_access
+from seahub.share.forms import SharedLinkPasswordForm
 from seahub.forms import RepoPassowrdForm, RepoSettingForm
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_fileserver_root, gen_shared_upload_link, \
@@ -1444,6 +1446,25 @@ def view_shared_dir(request, token):
     if fileshare is None:
         raise Http404
 
+    if fileshare.is_encrypted():
+        if not check_share_link_access(request.user.username, token):
+            d = {'token': token, 'view_name': 'view_shared_dir', }
+            if request.method == 'POST':
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
+                d['form'] = form
+                if form.is_valid():
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        set_share_link_access(request.user.username, token)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+
     username = fileshare.username
     repo_id = fileshare.repo_id
     path = request.GET.get('p', '')
@@ -1487,11 +1508,29 @@ def view_shared_dir(request, token):
 def view_shared_upload_link(request, token):
     assert token is not None    # Checked by URLconf
 
-    try:
-        uploadlink = UploadLinkShare.objects.get(token=token)
-    except UploadLinkShare.DoesNotExist:
+    uploadlink = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+    if uploadlink is None:
         raise Http404
 
+    if uploadlink.is_encrypted():
+        if not check_share_link_access(request.user.username, token):
+            d = {'token': token, 'view_name': 'view_shared_upload_link', }
+            if request.method == 'POST':
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
+                d['form'] = form
+                if form.is_valid():
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        set_share_link_access(request.user.username, token)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+    
     username = uploadlink.username
     repo_id = uploadlink.repo_id
     path = uploadlink.path

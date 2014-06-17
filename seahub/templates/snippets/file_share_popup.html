@@ -28,7 +28,7 @@
 
             <div id="link-share">
                 <form id="link-passwd-form" action="" method="post">{% csrf_token %}
-                    <div class="passwd hide">
+                    <div class="passwd">
                         <label class="checkbox-label">
                             <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
                             <span class="checkbox-option">{% trans "Use Password"%}</span>
@@ -73,7 +73,7 @@
             <div id="upload-link-share">
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <form id="upload-link-passwd-form" action="" method="post">{% csrf_token %}
-                    <div class="passwd hide">
+                    <div class="passwd">
                         <label class="checkbox-label">
                             <span class="checkbox"><input type="checkbox" name="use-passwd" id="upload-link-passwd-switch" class="checkbox-orig" /></span>
                             <span class="checkbox-option">{% trans "Use Password"%}</span>
