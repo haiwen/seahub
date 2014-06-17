@@ -3988,7 +3988,7 @@ msgstr "%(file_name)s aktualisieren "
 
 #: seahub/templates/repo.html:118
 msgid "Choose a file"
-msgstr "Datei  auswähleen"
+msgstr "Datei  auswählen"
 
 #: seahub/templates/repo.html:122
 #, python-format
