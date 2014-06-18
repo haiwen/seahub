@@ -120,7 +120,7 @@ function repoCreateSuccessCallback(data) {
         $('tr:first', my_own_repos).after(new_repo_item);
     }
 }
-{% include "snippets/sort_lib_by_name_and_time_js.html" %}
+{% include "snippets/sort_lib_js.html" %}
 $(function() {
     $.ajax({
         url:'{% url 'my_shared_and_group_repos' %}',
