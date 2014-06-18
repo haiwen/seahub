@@ -1222,7 +1222,7 @@ msgstr "Vous pouvez seulement inviter %d membres.<a href=\"http://seafile.com/\"
 #: seahub/group/views.py:645
 #, python-format
 msgid "You are invited to join a group on %s"
-msgstr "Vous este invité à joindre le groupe sur %s"
+msgstr "Vous êtes invité à joindre le groupe sur %s"
 
 #: seahub/group/views.py:671
 #, python-format
@@ -6093,7 +6093,7 @@ msgstr "Impossible de réinitialiser le mot de passe : l'utilisateur n'existe pa
 #: seahub/views/sysadmin.py:557
 #, python-format
 msgid "You are invited to join %s"
-msgstr "Vous été invité à joindre %s"
+msgstr "Vous avez été invité à joindre %s"
 
 #: seahub/views/sysadmin.py:594
 #, python-format
