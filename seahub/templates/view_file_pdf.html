@@ -26,7 +26,7 @@
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 <script type="text/javascript">
 if (!($.browser.msie && parseInt($.browser.version) < 10)) {
-    PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.js';
+    PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
     $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">{% trans "Previous" %}</button></span>{% blocktrans %}<span id="pdf-page"><label for="page-number">Page</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span></span>{% endblocktrans %}<span id="pdf-page-right"><button id="next" style="margin-right:15px;">{% trans "Next" %}</button><button id="full-screen">{% trans "Full Screen" %}</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="{% trans "loading..." %}" id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
     $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
     $('#pdf-page-left').css({'text-align':'right', 'width': $('#pdf-page-right').width()});
