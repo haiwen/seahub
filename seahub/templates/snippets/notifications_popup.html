@@ -18,15 +18,15 @@
 
             {% if notice.is_group_msg %}
                 <p class="brief">{{ notice.format_group_message_title|safe }}
-                {% if notice.format_group_message_detail %}
-                {{ notice.format_group_message_detail|safe }}
+                {% if notice.format_group_message_detail %}<br>
+                {{ notice.format_group_message_detail }}
                 {% endif %}
                 </p>
 
             {% elif notice.is_grpmsg_reply %}
                 <p class="brief">{{ notice.format_grpmsg_reply_title|safe }}
-                {% if notice.format_grpmsg_reply_detail %}
-                {{ notice.format_grpmsg_reply_detail|safe }}
+                {% if notice.format_grpmsg_reply_detail %}<br>
+                {{ notice.format_grpmsg_reply_detail}}
                 {% endif %}
                 </p>
 
@@ -41,8 +41,8 @@
 
             {% elif notice.is_user_message %}
                 <p class="brief">{{ notice.format_user_message_title|safe }}
-                {% if notice.format_user_message_detail %}
-                {{ notice.format_user_message_detail|safe }}
+                {% if notice.format_user_message_detail %}<br>
+                {{ notice.format_user_message_detail }}
                 {% endif %}
                 </p>
 

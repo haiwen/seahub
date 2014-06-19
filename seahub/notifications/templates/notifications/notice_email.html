@@ -5,7 +5,7 @@
 {% block email_con %}
 {% autoescape off %}
 
-<p style="color:#121214;font-size:14px;">Hi, {% blocktrans with name=to_user|email2nickname %}{{ name }}{% endblocktrans %}</p>
+<p style="color:#121214;font-size:14px;">Hi, {{ name|email2nickname }}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans count num=notice_count %}

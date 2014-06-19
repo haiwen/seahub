@@ -56,7 +56,8 @@ def priv_file_share_msg_to_json(share_from, file_name, priv_share_token):
                        'priv_share_token': priv_share_token})
 
 def group_msg_to_json(group_id, msg_from, message):
-    return json.dumps({'group_id': group_id, 'msg_from': msg_from, 'message': message})
+    return json.dumps({'group_id': group_id, 'msg_from': msg_from,
+                       'message': message})
 
 def grpmsg_reply_to_json(msg_id, reply_from, reply_msg):
     return json.dumps({'msg_id': msg_id, 'reply_from': reply_from, 'reply_msg': reply_msg})
@@ -158,7 +159,7 @@ class UserNotificationManager(models.Manager):
                         notice.save()
             except UserNotification.InvalidDetailError:
                 continue
-                
+
     def seen_group_msg_reply_notice(self, to_user, msg_id=None):
         """Mark all group message replies of a user as seen.
 
@@ -187,14 +188,11 @@ class UserNotificationManager(models.Manager):
         user_notices = super(UserNotificationManager, self).filter(
             to_user=to_user, seen=False, msg_type=MSG_TYPE_USER_MESSAGE)
         for notice in user_notices:
-            try:
-                notice_from_user = notice.user_message_detail_to_dict().get('msg_from')
-                if from_user == notice_from_user:
-                    if notice.seen is False:
-                        notice.seen = True
-                        notice.save()
-            except UserNotification.InvalidDetailError:
-                continue
+            notice_from_user = notice.user_message_detail_to_dict().get('msg_from')
+            if from_user == notice_from_user:
+                if notice.seen is False:
+                    notice.seen = True
+                    notice.save()
 
     def remove_group_msg_notices(self, to_user, group_id):
         """Remove group message notices of a user.
@@ -456,7 +454,6 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
 
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
         """
         assert self.is_user_message()
 
@@ -571,11 +568,8 @@ class UserNotification(models.Model):
             return _(u"Internal error")
 
         message = d.get('message')
-        if message:
-            msg = _(u"<br>%(message)s") % {
-                'message': message,
-                }
-            return msg
+        if message is not None:
+            return message
         else:
             return None
 
@@ -621,11 +615,8 @@ class UserNotification(models.Model):
             return _(u"Internal error")
 
         message = d.get('message')
-
-        if message:
-            msg = _(u"<br>%(message)s") % {
-                'message': message}
-            return msg
+        if message is not None:
+            return message
         else:
             return None
 
@@ -665,11 +656,8 @@ class UserNotification(models.Model):
             return _(u"Internal error")
 
         reply_msg = d.get('reply_msg')
-
-        if reply_msg:
-            msg = _(u"<br>%(reply_msg)s") % {
-                'reply_msg': reply_msg}
-            return msg
+        if reply_msg is not None:
+            return reply_msg
         else:
             return None
 
@@ -772,7 +760,7 @@ def grpmsg_added_cb(sender, **kwargs):
     message = kwargs['message']
     group_members = seaserv.get_group_members(int(group_id))
 
-    notify_members = [ x.user_name for x in group_members if x.user_name != from_email ]
+    notify_members = [x.user_name for x in group_members if x.user_name != from_email]
 
     detail = group_msg_to_json(group_id, from_email, message)
     UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
