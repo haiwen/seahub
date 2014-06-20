@@ -62,6 +62,7 @@ urlpatterns = patterns('',
     url(r'^avatars/group/(?P<group_id>\d+)/resized/(?P<size>[0-9]+)/$', GroupAvatarView.as_view()),
 
     url(r'^groups/$', Groups.as_view()),
+    url(r'^groups/(?P<group_id>\d+)/$', Groups.as_view()),
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
 
     url(r'^html/events/$', EventsHtml.as_view()),

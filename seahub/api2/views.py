@@ -85,7 +85,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
+    get_group
 
 
 logger = logging.getLogger(__name__)
@@ -2491,6 +2492,23 @@ class Groups(APIView):
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
         except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+            
+    def delete(self, request, group_id, format=None):
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        
+        try:
+            username = request.user.username
+            group_id_int = int(group_id)
+            
+            # delete group
+            ccnet_threaded_rpc.remove_group(group_id_int, username)
+        
+            return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+        except Exception, e:
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
