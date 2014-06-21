@@ -85,7 +85,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     unset_inner_pub_repo, get_user_quota, \
     get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
+    get_group
 
 
 logger = logging.getLogger(__name__)
@@ -2452,7 +2453,7 @@ class Groups(APIView):
         group_json, replynum = get_groups(request.user.username)
         res = {"groups": group_json, "replynum": replynum}
         return Response(res)
-
+    
     def put(self, request, format=None):
         # modified slightly from groups/views.py::group_list
         """
@@ -2491,6 +2492,69 @@ class Groups(APIView):
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
         except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+            
+    def delete(self, request, group_id, format=None):
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        
+        try:
+            username = request.user.username
+            group_id_int = int(group_id)
+            
+            # delete group
+            ccnet_threaded_rpc.remove_group(group_id_int, username)
+        
+            return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+        except Exception, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+            
+    def post(self, request, group_id, format=None):
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        
+        try:
+            username = request.user.username
+            operation = request.POST.get('operation', '')
+            
+            if operation.lower() == 'rename':
+                newname = request.POST.get('newname', '')
+                if not newname:
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     'Newname is missing')
+                newname = unquote(newname.encode('utf-8'))
+    #             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
+    #                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
+    
+                group_id_int = int(group_id)
+                group = get_group(group_id_int);
+    
+                if group.group_name == newname:
+                    return api_error(status.HTTP_409_CONFLICT,
+                                     'The new name is the same to the old')
+                
+                # Check whether group name is duplicated.
+                if request.cloud_mode:
+                    checked_groups = get_personal_groups_by_user(username)
+                else:
+                    checked_groups = get_personal_groups(-1, -1)
+                for g in checked_groups:
+                    if g.group_name == newname:
+                        result['error'] = 'There is already a group with that name.'
+                        return HttpResponse(json.dumps(result), status=400,
+                                            content_type=content_type)
+                # rename group
+                ccnet_threaded_rpc.set_group_name(group_id_int, newname)      
+                        
+                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+            else:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 "Operation can only be rename.")
+        except Exception, e:
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500,
                                 content_type=content_type)
