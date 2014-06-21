@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
 
+class BadGroupNameError(Exception):
+    pass
+
+class ConflictGroupNameError(Exception):
+    pass
+
 def validate_group_name(group_name):
     """
     Check whether group name is valid.

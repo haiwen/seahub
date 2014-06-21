@@ -36,7 +36,8 @@ from seahub.base.decorators import sys_staff_required
 from seahub.base.models import FileDiscuss, FileContributors
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
-from seahub.group.utils import validate_group_name
+from seahub.group.utils import validate_group_name, BadGroupNameError, \
+    ConflictGroupNameError
 from seahub.notifications.models import UserNotification
 from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
@@ -79,14 +80,17 @@ def is_group_staff(group, user):
         return False
     return seaserv.check_group_staff(group.id, user.username)
 
-def remove_group_common(group_id, username):
+def remove_group_common(group_id, username, org_id=None):
     """Common function to remove a group, and it's repos,
+    If ``org_id`` is provided, also remove org group.
     
     Arguments:
     - `group_id`:
     """
     seaserv.ccnet_threaded_rpc.remove_group(group_id, username)
     seaserv.seafserv_threaded_rpc.remove_repo_group(group_id)
+    if org_id is not None and org_id > 0:
+        seaserv.ccnet_threaded_rpc.remove_org_group(org_id, group_id)
     
 def group_check(func):
     """
@@ -252,21 +256,53 @@ def group_dismiss(request, group_id):
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
     username = request.user.username
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+    else:
+        org_id = None
+
     try:
-        ccnet_threaded_rpc.remove_group(group.id, username)
-        seafserv_threaded_rpc.remove_repo_group(group.id, None)
-
-        if request.user.org:
-            org_id = request.user.org['org_id']
-            url_prefix = request.user.org['url_prefix']
-            ccnet_threaded_rpc.remove_org_group(org_id, group_id_int)
-            return HttpResponseRedirect(reverse('org_groups',
-                                                args=[url_prefix]))
-
+        remove_group_common(group.id, username, org_id=org_id)
     except SearpcError, e:
-        return render_error(request, _(e.msg))
-    
+        logger.error(e)
+        messages.error(request, _('Failed to dismiss group, pleaes retry later.'))
+    else:
+        messages.success(request, _('Successfully dismissed group.'))
+
     return HttpResponseRedirect(reverse('group_list'))
+
+def rename_group_with_new_name(request, group_id, new_group_name):
+    """Rename a group with new name.
+
+    Arguments:
+    - `request`:
+    - `group_id`:
+    - `new_group_name`:
+
+    Raises:
+        BadGroupNameError: New group name format is not valid.
+        ConflictGroupNameError: New group name confilicts with existing name.
+    """
+    if not validate_group_name(new_group_name):
+        raise BadGroupNameError
+
+    # Check whether group name is duplicated.
+    username = request.user.username
+    org_id = -1
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        checked_groups = seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        if request.cloud_mode:
+            checked_groups = seaserv.get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_all_groups(-1, -1)
+
+    for g in checked_groups:
+        if g.group_name == new_group_name:
+            raise ConflictGroupNameError
+
+    ccnet_threaded_rpc.set_group_name(group_id, new_group_name)
 
 @login_required
 @group_staff_required
@@ -277,17 +313,21 @@ def group_rename(request, group_id):
         raise Http404
 
     new_name = request.POST.get('new_name', '')
-    if validate_group_name(new_name):
-        ccnet_threaded_rpc.set_group_name(int(group_id), new_name)
-        messages.success(request, _('Successfully renamed group to "%s".') % new_name)
-    else:
-        messages.error(request, _('Failed to rename group, group name can only contain letters, numbers or underscore'))
+    next = request.META.get('HTTP_REFERER', SITE_ROOT)
+    group_id = int(group_id)
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
+    try:
+        rename_group_with_new_name(request, group_id, new_name)
+    except BadGroupNameError:
+        messages.error(request, _('Failed to rename group, group name can only contain letters, numbers or underscore'))
+    except ConflictGroupNameError:
+        messages.error(request, _('There is already a group with that name.'))
+    else:
+        messages.success(request, _('Successfully renamed group to "%s".') %
+                         new_name)
+
     return HttpResponseRedirect(next)
-    
+
 @login_required
 @group_staff_required
 def group_transfer(request, group_id):
