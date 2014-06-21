@@ -122,7 +122,7 @@ def share_to_group(request, repo, group, permission):
             {'repo': repo.name, 'group': group_name}
         messages.error(request, msg)
     else:
-        msg = _(u'Shared to %(group)s successfully，go check it at <a href="%(share)s">Shares</a>.') % \
+        msg = _(u'Shared to %(group)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
             {'group': group_name, 'share': reverse('share_admin')}
         messages.success(request, msg)
 
