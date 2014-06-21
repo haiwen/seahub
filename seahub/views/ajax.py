@@ -1279,7 +1279,7 @@ def get_popup_notices(request):
 
     If unseen notices > 5, return all unseen notices.
     If unseen notices = 0, return last 5 notices.
-    Otherwise return all unseen notices, pluse some seen notices to make the
+    Otherwise return all unseen notices, plus some seen notices to make the
     sum equal to 5.
 
     Arguments:
@@ -1296,18 +1296,18 @@ def get_popup_notices(request):
     seen_notices = []
 
     list_num = 5
-    count = UserNotification.objects.count_unseen_user_notifications(username)
-    if count == 0:
+    unseen_num = UserNotification.objects.count_unseen_user_notifications(username)
+    if unseen_num == 0:
         seen_notices = UserNotification.objects.get_user_notifications(
             username)[:list_num]
-    elif count > list_num:
+    elif unseen_num > list_num:
         unseen_notices = UserNotification.objects.get_user_notifications(
             username, seen=False)
     else:
         unseen_notices = UserNotification.objects.get_user_notifications(
             username, seen=False)
         seen_notices = UserNotification.objects.get_user_notifications(
-            username, seen=True)[:list_num - count]
+            username, seen=True)[:list_num - unseen_num]
 
     result_notices += unseen_notices
     result_notices += seen_notices
@@ -1345,12 +1345,12 @@ def get_popup_notices(request):
             pass
 
     ctx_notices = {"notices": result_notices}
-    notifications_popup_html = render_to_string(
-            'snippets/notifications_popup.html', ctx_notices,
+    notice_html = render_to_string(
+            'snippets/notice_html.html', ctx_notices,
             context_instance=RequestContext(request))
 
     return HttpResponse(json.dumps({
-                "notifications_popup_html": notifications_popup_html,
+                "notice_html": notice_html,
                 }), content_type=content_type)
 
 @login_required

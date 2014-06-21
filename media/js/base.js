@@ -16,89 +16,82 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
-$(function(){
+$(function() {
 
     var msg_ct = $("#msg-count"); 
-    $.ajax({
-        url: msg_ct.data('cturl'),
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            if (data['count'] > 0) {
-                $('.num', msg_ct).html(data['count']).removeClass('hide');
-                $('.num').data('count', data['count']);
+    // original title
+    var orig_doc_title = document.title;
+    var reqUnreadNum = function() {
+        $.ajax({
+            url: msg_ct.data('url'),
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                var count = data['count'],
+                    num = $('.num', msg_ct);
+                num.html(count);
+                if (count > 0) {
+                    num.removeClass('hide');
+                    document.title = '(' + count + ')' + orig_doc_title;
+                } else {
+                    num.addClass('hide');
+                    document.title = orig_doc_title;
+                }
             }
-        }
-    });
+        });
+    };
+    reqUnreadNum();
+    // request every 30s
+    setInterval(reqUnreadNum, 30*1000);
 
     $('#notice-icon').click(function() {
         var popup = $('#notice-popup');
         popup.toggleClass('hide');
-
-        //to prevent duplicately send ajax
-        if ($('#notice-icon').data('ajax') != 1){
+        if (!popup.hasClass('hide')) {
+            $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+            var loading_tip = $('.loading-tip', popup);
+            loading_tip.show();
             $.ajax({
-                url: popup.data('pop_url'),
-                dataType: 'json',
-                cache: false,
+                url: popup.data('url'),
+                dataType: 'json', 
                 success: function(data) {
-                    popup.find('.loading-tip').remove();
-                    popup.html(data['notifications_popup_html']);
-                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
-                    $('#notice-icon').data('ajax', 1);
+                    loading_tip.hide();
 
+                    var notice_list = $('#notice-list');
+                    notice_list.html(data['notice_html']).removeClass('hide');
 
-                    $('#notice-popup .close').click(function() {
-                        if ($('.num').data('count') > 0){
-                            $.ajax({
-                                url: popup.data('seen_url'),
-                                dataType: 'json',
-                                cache: false,
-                                success: function() {
-                                    popup.addClass('hide');
-                                    $('.num').data('count', 0);
-                                    $('.num').addClass('hide');
-                                    $('li').each(function() {
-                                        if ($(this).hasClass('unread')){
-                                            $(this).removeClass('unread');
-                                            $(this).addClass('read');
-                                        }
-                                    });
-                                }
-                            });
-                        }else{
-                            popup.addClass('hide');
-                        }
-                    });
-
-                    $("a[id$='-notice']").click(function() {
-                        var notice_id = $(this).data('notice_id');
-                        var url = popup.data('seen_by_id_url');
-                        var href = $(this).data('href');
-
-                        if ($(this).parent().parent().hasClass('unread')){
-                            $.ajax({
-                                url: url + '?notice_id=' + notice_id,
-                                type: 'GET',
-                                dataType: 'json',
-                                cache: false,
-                                success: function() {
-                                    location.href = href;
-                                }
-                            });
-                        }else{
-                            location.href = href;
-                        }
+                    // set a notice to be read when <a> in it is clicked
+                    $('.unread a', notice_list).click(function() {
+                        var notice_id = $(this).parents('.unread').data('id');
+                        $.ajax({
+                            url: notice_list.data('url') + '?notice_id=' + e(notice_id),
+                            dataType:'json'
+                        });
                     });
                 }
             });
         }
     });
-
     $(window).resize(function() {
         var popup = $('#notice-popup');
         if (!popup.hasClass('hide')) {
             $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+        }
+    });
+
+    $('#notice-popup .close').click(function() {
+        $('#notice-popup').addClass('hide');   
+        if ($('#notice-list .unread').length > 0) {
+            // set all unread notice to be read
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function() {
+                    $('.num', msg_ct).html(0).addClass('hide');
+                    document.title = orig_doc_title;
+                }
+            });
         }
     });
 
@@ -125,6 +118,7 @@ $(function(){
             return false;
         });
     })();
+
 });
 
 $(document).click(function(e) {
@@ -137,15 +131,6 @@ $(document).click(function(e) {
     closePopup($('#user-info-popup'), $('#my-info'));
     closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
     closePopup($('#notice-popup'), $('#notice-icon'));
-
-    var closeNum = function(num, num_switch) {
-        if (num.hasClass('hide') && !num.is(target) && !num_switch.is(target) && !num_switch.find('*').is(target) ) {
-            if ($('.num').data('count') > 0){
-                num.removeClass('hide');
-            }
-        }
-    };
-    closeNum($('.num'), $('#msg-count'));
 });
 
 // search: disable submit when input nothing

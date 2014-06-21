@@ -486,12 +486,11 @@ class UserNotification(models.Model):
         folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(uploaded_to)
         folder_name = os.path.basename(uploaded_to)
 
-        msg = _(u"A file named <a id='file-upload-notice' data-notice_id='%(notice_id)s' href='#' data-href='%(file_link)s'>%(file_name)s</a> is uploaded to your folder <a href='%(folder_link)s'>%(folder)s</a>") % {
+        msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your folder <a href='%(folder_link)s'>%(folder)s</a>") % {
             'file_link': file_link,
             'file_name': filename,
             'folder_link': folder_link,
             'folder': folder_name,
-            'notice_id': self.id,
             }
         return msg
 
@@ -510,11 +509,10 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"%(user)s has shared a library named <a id='repo-share-notice' data-notice_id='%(notice_id)s' href='#' data-href='%(href)s'>%(repo_name)s</a> to you.") %  {
+        msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
             'user': escape(share_from),
             'href': reverse('repo', args=[repo.id]),
             'repo_name': repo.name,
-            'notice_id': self.id,
             }
         return msg
         
@@ -529,11 +527,10 @@ class UserNotification(models.Model):
         file_name = d['file_name']
         priv_share_token = d['priv_share_token']
 
-        msg = _(u"%(user)s has shared a file named <a id='priv-file-share-notice' data-notice_id='%(notice_id)s' href='#' data-href='%(href)s'>%(file_name)s</a> to you.") % {
+        msg = _(u"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % {
             'user': escape(share_from),
             'href': reverse('view_priv_shared_file', args=[priv_share_token]),
             'file_name': file_name,
-            'notice_id': self.id,
             }
         return msg
     def format_user_message_title(self):
@@ -550,7 +547,7 @@ class UserNotification(models.Model):
         msg_from = d.get('msg_from')
         nickname = email2nickname(msg_from)
 
-        msg = _(u"You have received a <a id='file-upload-notice' href='%(href)s'>new message</a> from %(user)s.") % {
+        msg = _(u"You have received a <a href='%(href)s'>new message</a> from %(user)s.") % {
             'user': escape(nickname),
             'href': reverse('user_msg_list', args=[msg_from]),
             }
@@ -593,11 +590,11 @@ class UserNotification(models.Model):
         msg_from = d.get('msg_from')
 
         if msg_from is None:
-            msg = _(u"<a id='grpmsg-notice' href='%(href)s'>%(group_name)s</a> has new discussion.") % {
+            msg = _(u"<a href='%(href)s'>%(group_name)s</a> has a new discussion.") % {
                 'href': reverse('group_discuss', args=[group.id]),
                 'group_name': group.group_name}
         else:
-            msg = _(u"%(user)s posted a new discussion in <a id='grpmsg-notice' href='%(href)s'>%(group_name)s</a>.") % {
+            msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
                 'href': reverse('group_discuss', args=[group.id]),
                 'user': escape(email2nickname(msg_from)),
                 'group_name': group.group_name}
@@ -634,11 +631,11 @@ class UserNotification(models.Model):
         reply_from = d.get('reply_from')
 
         if reply_from is None:
-            msg = _(u"One <a id='grpmsg-reply-notice' href='%(href)s'>group discussion</a> has new reply.") % {
+            msg = _(u"One <a href='%(href)s'>group discussion</a> has a new reply.") % {
                 'href': reverse('msg_reply_new'),
                 }
         else:
-            msg = _(u"%(user)s replied your <a id='grpmsg-reply-notice' href='%(href)s'>group discussion</a>.") % {
+            msg = _(u"%(user)s replied your <a href='%(href)s'>group discussion</a>.") % {
                 'user': escape(email2nickname(reply_from)),
                 'href': reverse('msg_reply_new'),
                 }
@@ -677,13 +674,12 @@ class UserNotification(models.Model):
             self.delete()
             return None
 
-        msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a id='grp-join-request-notice' data-notice_id='%(notice_id)s' href='#' data-href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
+        msg = _(u"User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a href='%(href)s'>%(group_name)s</a>, verification message: %(join_request_msg)s") % {
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
             'href': reverse('group_members', args=[group_id]),
             'group_name': group.group_name,
             'join_request_msg': escape(join_request_msg),
-            'notice_id': self.id,
             }
         return msg
 

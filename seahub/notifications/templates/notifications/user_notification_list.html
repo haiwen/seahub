@@ -33,12 +33,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$(function(){       
-    $('tr[data-href]').click(function() {
-        location.href = $(this).data('href');
-    });
-});
-
 $('#clear').click(function() {
     location.href = "{% url 'user_notification_remove' %}";
 });
@@ -69,8 +63,5 @@ $('#notices-more-btn').click(function() {
     });
 });
 
-$("a[id$='-notice']").click(function() {
-    window.location = $(this).data('href');
-});
 </script>
 {% endblock %}
