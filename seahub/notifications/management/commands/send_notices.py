@@ -53,14 +53,20 @@ class Command(BaseCommand):
         return notice
 
     def format_user_message(self, notice):
-        notice.user_msg_from = escape(email2nickname(notice.detail))
-        notice.user_msg_from_avatar_url = self.get_avatar_url(notice.detail)
+        d = notice.user_message_detail_to_dict()
+        user_msg_from = d['msg_from']
+        message = d.get('message')
+
+        notice.user_msg_from = escape(email2nickname(user_msg_from))
+        notice.user_msg_from_avatar_url = self.get_avatar_url(user_msg_from)
         notice.user_msg_url = reverse('user_msg_list', args=[notice.detail])
+        notice.user_msg = message
         return notice
 
     def format_group_message(self, notice):
-        d = json.loads(notice.detail)
+        d = notice.group_message_detail_to_dict()
         group_id = d['group_id']
+        message = d['message']
         group = seaserv.get_group(int(group_id))
         if group is None:
             notice.delete()
@@ -69,14 +75,17 @@ class Command(BaseCommand):
         notice.group_msg_from = escape(email2nickname(d['msg_from']))
         notice.group_name = group.group_name
         notice.group_msg_from_avatar_url = self.get_avatar_url(d['msg_from'])
+        notice.grp_msg = message
         return notice
 
     def format_grpmsg_reply(self, notice):
-        d = json.loads(notice.detail)
+        d = notice.grpmsg_reply_detail_to_dict()
+        message = d.get['reply_msg']
 
         notice.group_msg_reply_url = reverse('msg_reply_new')
         notice.group_msg_reply_from = escape(email2nickname(d['reply_from']))
         notice.group_msg_reply_from_avatar_url = self.get_avatar_url(d['reply_from'])
+        notice.grp_reply_msg = message
         return notice
 
     def format_repo_share_msg(self, notice):

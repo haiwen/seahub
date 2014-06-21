@@ -1274,6 +1274,127 @@ def unseen_notices_count(request):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
+def get_popup_notices(request):
+    """Get user's notifications.
+
+    If unseen notices > 5, return all unseen notices.
+    If unseen notices = 0, return last 5 notices.
+    Otherwise return all unseen notices, plus some seen notices to make the
+    sum equal to 5.
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    result_notices = []
+    unseen_notices = []
+    seen_notices = []
+
+    list_num = 5
+    unseen_num = UserNotification.objects.count_unseen_user_notifications(username)
+    if unseen_num == 0:
+        seen_notices = UserNotification.objects.get_user_notifications(
+            username)[:list_num]
+    elif unseen_num > list_num:
+        unseen_notices = UserNotification.objects.get_user_notifications(
+            username, seen=False)
+    else:
+        unseen_notices = UserNotification.objects.get_user_notifications(
+            username, seen=False)
+        seen_notices = UserNotification.objects.get_user_notifications(
+            username, seen=True)[:list_num - unseen_num]
+
+    result_notices += unseen_notices
+    result_notices += seen_notices
+
+    for notice in result_notices:
+        if notice.is_user_message():
+            d = notice.user_message_detail_to_dict()
+            notice.msg_from = d.get('msg_from')
+
+        elif notice.is_group_msg():
+            d = notice.group_message_detail_to_dict()
+            notice.msg_from = d.get('msg_from')
+
+        elif notice.is_grpmsg_reply():
+            d = notice.grpmsg_reply_detail_to_dict()
+            notice.msg_from = d.get('reply_from')
+
+        elif notice.is_file_uploaded_msg():
+            from seahub.avatar.util import get_default_avatar_url
+            notice.default_avatar_url = get_default_avatar_url()
+
+        elif notice.is_repo_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+
+        elif notice.is_priv_file_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+
+        elif notice.is_group_join_request():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['username']
+
+        else:
+            pass
+
+    ctx_notices = {"notices": result_notices}
+    notice_html = render_to_string(
+            'snippets/notice_html.html', ctx_notices,
+            context_instance=RequestContext(request))
+
+    return HttpResponse(json.dumps({
+                "notice_html": notice_html,
+                }), content_type=content_type)
+
+@login_required
+def set_notices_seen(request):
+    """Set user's notices seen:
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    unseen_notices = UserNotification.objects.get_user_notifications(username,
+                                                                     seen=False)
+    for notice in unseen_notices:
+        notice.seen = True
+        notice.save()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+@login_required
+def set_notice_seen_by_id(request):
+    """
+
+    Arguments:
+    - `request`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    notice_id = request.GET.get('notice_id')
+
+    notice = UserNotification.objects.get(id=notice_id)
+    if notice.seen == False:
+        notice.seen = True
+        notice.save()
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+@login_required
 def repo_remove(request, repo_id):
     if not request.is_ajax():
         raise Http404

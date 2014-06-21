@@ -16,46 +16,108 @@ if ($('.messages')[0]) {
     setTimeout(function() { $('.messages').addClass('hide'); }, 10000);
 }
 
-$(function(){
+$(function() {
+
     var msg_ct = $("#msg-count"); 
-    $.ajax({
-        url: msg_ct.data('cturl'),
-        dataType: 'json',
-        cache: false,
-        success: function(data) {
-            if (data['count'] > 0) {
-                $('.num', msg_ct).html(data['count']).removeClass('hide');
+    // original title
+    var orig_doc_title = document.title;
+    var reqUnreadNum = function() {
+        $.ajax({
+            url: msg_ct.data('url'),
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                var count = data['count'],
+                    num = $('.num', msg_ct);
+                num.html(count);
+                if (count > 0) {
+                    num.removeClass('hide');
+                    document.title = '(' + count + ')' + orig_doc_title;
+                } else {
+                    num.addClass('hide');
+                    document.title = orig_doc_title;
+                }
             }
-        }
-    });
+        });
+    };
+    reqUnreadNum();
+    // request every 30s
+    setInterval(reqUnreadNum, 30*1000);
 
-$('#msg-count').click(function() {
-    location.href = $(this).data('pgurl');
-});
-
-(function () {
-    var my_info = $('#my-info');
-    var popup = $('#user-info-popup');
-    my_info.click(function() {
-        var loading_tip = $('.loading-tip', popup);
-        if (popup.hasClass('hide')) {
-            popup.removeClass('hide');
-            loading_tip.removeClass('hide');
+    $('#notice-icon').click(function() {
+        var popup = $('#notice-popup');
+        popup.toggleClass('hide');
+        if (!popup.hasClass('hide')) {
+            $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+            var loading_tip = $('.loading-tip', popup);
+            loading_tip.show();
             $.ajax({
-                url: my_info.data('url'),
-                dataType: 'json',
-                cache: false,
+                url: popup.data('url'),
+                dataType: 'json', 
                 success: function(data) {
-                    loading_tip.addClass('hide');
-                    $('#space-traffic').html(data['html']);
+                    loading_tip.hide();
+
+                    var notice_list = $('#notice-list');
+                    notice_list.html(data['notice_html']).removeClass('hide');
+
+                    // set a notice to be read when <a> in it is clicked
+                    $('.unread a', notice_list).click(function() {
+                        var notice_id = $(this).parents('.unread').data('id');
+                        $.ajax({
+                            url: notice_list.data('url') + '?notice_id=' + e(notice_id),
+                            dataType:'json'
+                        });
+                    });
                 }
             });
-        } else {
-            popup.addClass('hide');
         }
-        return false;
     });
-})();
+    $(window).resize(function() {
+        var popup = $('#notice-popup');
+        if (!popup.hasClass('hide')) {
+            $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
+        }
+    });
+
+    $('#notice-popup .close').click(function() {
+        $('#notice-popup').addClass('hide');   
+        if ($('#notice-list .unread').length > 0) {
+            // set all unread notice to be read
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function() {
+                    $('.num', msg_ct).html(0).addClass('hide');
+                    document.title = orig_doc_title;
+                }
+            });
+        }
+    });
+
+    (function () {
+        var my_info = $('#my-info');
+        var popup = $('#user-info-popup');
+        my_info.click(function() {
+            var loading_tip = $('.loading-tip', popup);
+            if (popup.hasClass('hide')) {
+                popup.removeClass('hide');
+                loading_tip.removeClass('hide');
+                $.ajax({
+                    url: my_info.data('url'),
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        loading_tip.addClass('hide');
+                        $('#space-traffic').html(data['html']);
+                    }
+                });
+            } else {
+                popup.addClass('hide');
+            }
+            return false;
+        });
+    })();
 
 });
 
@@ -68,6 +130,7 @@ $(document).click(function(e) {
     };
     closePopup($('#user-info-popup'), $('#my-info'));
     closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
+    closePopup($('#notice-popup'), $('#notice-icon'));
 });
 
 // search: disable submit when input nothing
