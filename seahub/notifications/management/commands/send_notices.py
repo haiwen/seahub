@@ -59,7 +59,7 @@ class Command(BaseCommand):
 
         notice.user_msg_from = escape(email2nickname(user_msg_from))
         notice.user_msg_from_avatar_url = self.get_avatar_url(user_msg_from)
-        notice.user_msg_url = reverse('user_msg_list', args=[notice.detail])
+        notice.user_msg_url = reverse('user_msg_list', args=[user_msg_from])
         notice.user_msg = message
         return notice
 
@@ -80,7 +80,7 @@ class Command(BaseCommand):
 
     def format_grpmsg_reply(self, notice):
         d = notice.grpmsg_reply_detail_to_dict()
-        message = d.get['reply_msg']
+        message = d.get('reply_msg')
 
         notice.group_msg_reply_url = reverse('msg_reply_new')
         notice.group_msg_reply_from = escape(email2nickname(d['reply_from']))
@@ -133,8 +133,8 @@ class Command(BaseCommand):
                                                   args=[username])
         notice.grpjoin_group_url = reverse('group_members', args=[group_id])
         notice.grpjoin_username = username
-        notice.grpjoin_group_name = group.group_name,
-        notice.grpjoin_request_msg = join_request_msg,
+        notice.grpjoin_group_name = group.group_name
+        notice.grpjoin_request_msg = join_request_msg
         return notice
 
     def do_action(self):

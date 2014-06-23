@@ -1319,11 +1319,19 @@ def get_popup_notices(request):
 
         elif notice.is_group_msg():
             d = notice.group_message_detail_to_dict()
-            notice.msg_from = d.get('msg_from')
+            if d.get('msg_from') is not None:
+                notice.msg_from = d.get('msg_from')
+            else:
+                from seahub.avatar.util import get_default_avatar_url
+                notice.default_avatar_url = get_default_avatar_url()
 
         elif notice.is_grpmsg_reply():
             d = notice.grpmsg_reply_detail_to_dict()
-            notice.msg_from = d.get('reply_from')
+            if d.get('reply_from') is not None:
+                notice.msg_from = d.get('reply_from')
+            else:
+                from seahub.avatar.util import get_default_avatar_url
+                notice.default_avatar_url = get_default_avatar_url()
 
         elif notice.is_file_uploaded_msg():
             from seahub.avatar.util import get_default_avatar_url

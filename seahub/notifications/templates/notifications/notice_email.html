@@ -5,7 +5,7 @@
 {% block email_con %}
 {% autoescape off %}
 
-<p style="color:#121214;font-size:14px;">{% blocktrans with name=to_user|email2nickname %}Hi {{ name }},{% endblocktrans %}</p>
+<p style="color:#121214;font-size:14px;">{% blocktrans with name=to_user|email2nickname %}Hi, {{ name }}{% endblocktrans %}</p>
 
 <p style="font-size:14px;color:#434144;">
 {% blocktrans count num=notice_count %}
@@ -30,7 +30,7 @@ You've got {{num}} new notices on {{ site_name }}:
                 </tr>
             {% elif notice.is_grpmsg_reply %}
                 <tr>
-                    <td>{% blocktrans with user=notice.group_msg_reply_from reply_url=notice.group_msg_reply_url%}{{user}} replied your<a href="{{url_base}}{{reply_url}}">group discussion</a>{% endblocktrans %}</td>
+                    <td>{% blocktrans with user=notice.group_msg_reply_from reply_url=notice.group_msg_reply_url%}{{user}} replied your <a href="{{url_base}}{{reply_url}}">group discussion</a>{% endblocktrans %}</td>
                     <td>{{ notice.timestamp }}</td>
                 </tr>
             {% elif notice.is_repo_share_msg %}

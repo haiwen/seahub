@@ -416,9 +416,9 @@ class UserNotification(models.Model):
 
     def grpmsg_reply_detail_to_dict(self):
         """Parse group message reply detail, returns dict contains
-        ``msg_id`` and ``reply_from``.
+        ``msg_id``, ``reply_from`` and ``reply_msg``.
 
-        NOTE: ``reply_from`` may be ``None``.
+        NOTE: ``reply_from`` and ``reply_msg`` may be ``None``.
         
         Arguments:
         - `self`:
@@ -435,15 +435,15 @@ class UserNotification(models.Model):
             if isinstance(detail, int): # Compatible with existing records
                 msg_id = detail
                 reply_from = None
-                return {'msg_id': msg_id, 'reply_from': reply_from}
+                reply_msg = None
+                return {'msg_id': msg_id, 'reply_from': reply_from,
+                        'reply_msg': reply_msg}
             elif isinstance(detail, dict):
                 msg_id = detail['msg_id']
                 reply_from = detail['reply_from']
-                if 'reply_msg' in detail:
-                    reply_msg = detail['reply_msg']
-                    return {'msg_id': msg_id, 'reply_from': reply_from, 'reply_msg': reply_msg}
-                else:
-                    return {'msg_id': msg_id, 'reply_from': reply_from}
+                reply_msg = detail.get('reply_msg')
+                return {'msg_id': msg_id, 'reply_from': reply_from,
+                        'reply_msg': reply_msg}
             else:
                 raise self.InvalidDetailError, 'Wrong detail format of group message reply'
 
