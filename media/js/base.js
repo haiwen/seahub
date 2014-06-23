@@ -49,15 +49,15 @@ $(function() {
         popup.toggleClass('hide');
         if (!popup.hasClass('hide')) {
             $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('#notice-popup .hd').outerHeight() - 3});
-            var loading_tip = $('.loading-tip', popup);
+            var loading_tip = $('.loading-tip', popup),
+                notice_list = $('#notice-list');
+            notice_list.addClass('hide');
             loading_tip.show();
             $.ajax({
                 url: popup.data('url'),
                 dataType: 'json', 
                 success: function(data) {
                     loading_tip.hide();
-
-                    var notice_list = $('#notice-list');
                     notice_list.html(data['notice_html']).removeClass('hide');
 
                     // set a notice to be read when <a> in it is clicked
