@@ -27,27 +27,27 @@
             {% endif %}
 
             <div id="link-share">
-                <form id="link-passwd-form" action="" method="post">{% csrf_token %}
-                    <div class="passwd">
-                        <label class="checkbox-label">
-                            <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
-                            <span class="checkbox-option">{% trans "Use Password"%}</span>
-                        </label>
+                <div id="link-options">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div id="link-passwd" class="hide">
                         <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
                         <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
-
-                        <label class="checkbox-label">
-                            <span class="checkbox"><input type="checkbox" name="set-expiration" id="link-expire-switch" class="checkbox-orig" /></span>
-                            <span class="checkbox-option">{% trans "Set Expiration"%}</span>
-                        </label>
-                        <label>{% trans "Days"%}</label><br />
-                        <input type="text" name="expire-days" disabled="disabled" class="input input-disabled" />
-                        
-                        <p class="error hide"></p>
                     </div>
-                </form>
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="set-expiration" id="link-expire-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                    </label>
+                    <div id="link-expire" class="hide">
+                        <label>{% trans "Days" %}</label><br />
+                        <input type="text" name="expire-days" disabled="disabled" class="input input-disabled" />
+                    </div>
+                    <p class="error hide"></p>
+                </div>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-link-body" class="hide">
                     <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
@@ -72,19 +72,19 @@
 
             <div id="upload-link-share">
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
-                <form id="upload-link-passwd-form" action="" method="post">{% csrf_token %}
-                    <div class="passwd">
-                        <label class="checkbox-label">
-                            <span class="checkbox"><input type="checkbox" name="use-passwd" id="upload-link-passwd-switch" class="checkbox-orig" /></span>
-                            <span class="checkbox-option">{% trans "Use Password"%}</span>
-                        </label>
+                <div id="upload-link-options">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use-passwd" id="upload-link-passwd-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div id="upload-link-passwd" class="hide">
                         <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
                         <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
-                        <p class="error hide"></p>
                     </div>
-                </form>
+                    <p class="error hide"></p>
+                </div>
                 <button id="gen-upload-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-upload-link-body" class="hide">
                     <p><span class="vam">{% trans 'Upload Link: ' %}</span><input type="text" readonly="readonly" id="shared-upload-link-text" class="vam" /></p>

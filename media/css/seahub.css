@@ -2408,6 +2408,9 @@ textarea:-moz-placeholder {/* for FF */
     background:transparent;
     height:auto;
 }
+#link-options {
+    margin-bottom:10px;
+}
 #gen-upload-link-btn {
     margin-top: 0.5em;
 }
