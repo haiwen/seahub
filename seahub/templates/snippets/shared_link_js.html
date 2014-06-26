@@ -246,7 +246,7 @@ $('#gen-link-btn').click(function() {
             apply_form_error(form_id, "{% trans "Please enter password" %}");
             return false;
         }
-        if ($.trim(passwd).length < 6) {
+        if ($.trim(passwd).length < {{repo_password_min_length}}) {
             apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
