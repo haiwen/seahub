@@ -62,7 +62,7 @@
                 </div>
 
                 <div id="account" class="fright">
-                    <div id="my-info" data-url="{% url 'space_and_traffic' %}">
+                    <div id="my-info">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </div>
                     <div id="user-info-popup" class="top-info-popup hide">
@@ -73,9 +73,8 @@
                                 {{ request.user.username}}
                             </div>
                         </div>
-                        <div id="space-traffic">
-                            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
-                        </div>
+                        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+                        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>

@@ -1255,7 +1255,6 @@ def upload_file_done(request):
 
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
-@login_required
 def unseen_notices_count(request):
     """Count user's unseen notices.
     
@@ -1266,6 +1265,12 @@ def unseen_notices_count(request):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
+
+    if not request.user.is_authenticated():
+        return HttpResponse(json.dumps({
+            'error': _('Please log in.')
+            }), status=400, content_type=content_type)
+
     username = request.user.username
 
     count = UserNotification.objects.count_unseen_user_notifications(username)
@@ -1273,7 +1278,6 @@ def unseen_notices_count(request):
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
 def get_popup_notices(request):
     """Get user's notifications.
 
@@ -1289,6 +1293,12 @@ def get_popup_notices(request):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
+
+    if not request.user.is_authenticated():
+        return HttpResponse(json.dumps({
+            'error': _('Please log in.')
+            }), status=400, content_type=content_type)
+
     username = request.user.username
 
     result_notices = []
@@ -1461,12 +1471,16 @@ def repo_remove(request, repo_id):
             result['error'] = _(u'Permission denied.')
             return HttpResponse(json.dumps(result), status=403, content_type=ct)
 
-@login_required
 def space_and_traffic(request):
     if not request.is_ajax():
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
+
+    if not request.user.is_authenticated():
+        return HttpResponse(json.dumps({
+            'error': _('Please log in.')
+            }), status=400, content_type=content_type)
 
     username = request.user.username
 
