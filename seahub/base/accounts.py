@@ -319,7 +319,7 @@ class RegistrationBackend(object):
             department = kwargs['department']
             telephone = kwargs['telephone']
             note = kwargs['note']
-            Profile.objects.add_profile(new_user.username, name, note)
+            Profile.objects.add_or_update(new_user.username, name, note)
             DetailedProfile.objects.add_detailed_profile(new_user.username,
                                                          department,
                                                          telephone)

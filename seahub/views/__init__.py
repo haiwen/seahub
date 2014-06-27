@@ -1724,15 +1724,21 @@ def i18n(request):
 
     """
     from django.conf import settings
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = settings.SITE_ROOT
-    
-    lang = request.GET.get('lang', 'en')
+    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
+    lang = request.GET.get('lang', settings.LANGUAGE_CODE)
+    if lang not in [e[0] for e in settings.LANGUAGES]:
+        # language code is not supported, use default.
+        lang = settings.LANGUAGE_CODE
+
+    # set language code to user profile
+    p = Profile.objects.get_profile_by_user(request.user.username)
+    if p is not None:
+        p.set_lang_code(lang)
+
+    # set language code to client
     res = HttpResponseRedirect(next)
     res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
-
     return res
 
 def repo_download_dir(request, repo_id):

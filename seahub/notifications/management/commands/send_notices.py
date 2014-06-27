@@ -9,6 +9,8 @@ from django.utils.http import urlquote
 from django.core.management.base import BaseCommand
 from django.core.urlresolvers import reverse
 from django.utils.html import escape
+from django.utils import translation
+from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import seafile_api
@@ -19,12 +21,12 @@ from seahub.utils import send_html_email, get_service_url, \
 import seahub.settings as settings
 from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.profile.models import Profile
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-site_name = settings.SITE_NAME
-subjects = (u'New notice on %s' % site_name, u'New notices on %s' % site_name)
+subject = _('New notice on %s') % settings.SITE_NAME
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has an unread notices every period of seconds .'
@@ -137,6 +139,9 @@ class Command(BaseCommand):
         notice.grpjoin_request_msg = join_request_msg
         return notice
 
+    def get_user_language(self, username):
+        return Profile.objects.get_user_language(username)
+
     def do_action(self):
         now = datetime.datetime.now()
 
@@ -166,6 +171,14 @@ class Command(BaseCommand):
                 email_ctx[notice.to_user] = 1
 
         for to_user, count in email_ctx.items():
+            # save current language
+            cur_language = translation.get_language()
+
+            # get and active user language
+            user_language = self.get_user_language(to_user)
+            translation.activate(user_language)
+            logger.info('Set language code to %s', user_language)
+
             notices = []
             for notice in unseen_notices:
                 if notice.to_user != to_user:
@@ -197,7 +210,6 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
-            subject = subjects[1] if count > 1 else subjects[0]
             c = { 
                 'to_user': to_user,
                 'notice_count': count,
@@ -207,9 +219,13 @@ class Command(BaseCommand):
                 }   
 
             try:
-                send_html_email(subject, 'notifications/notice_email.html', c,
+                send_html_email(_('New notice on %s') % settings.SITE_NAME,
+                                'notifications/notice_email.html', c,
                                 None, [to_user])
 
                 logger.info('Successfully sent email to %s' % to_user)
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' % (to_user, e))
+
+            # restore current language
+            translation.activate(cur_language)
