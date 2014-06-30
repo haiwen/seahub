@@ -2264,19 +2264,29 @@ class SharedRepo(APIView):
                              'You do not have permission to unshare library.')
 
         share_type = request.GET.get('share_type', '')
-        user = request.GET.get('user', '')
-        if not is_valid_username(user):
+        if not share_type:
             return api_error(status.HTTP_400_BAD_REQUEST,
-                             'User is not valid')
-
-        group_id = request.GET.get('group_id', '')
-        if not (share_type and user and group_id):
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'share_type and user and group_id is required.')
+                             'share_type is required.')
 
         if share_type == 'personal':
+            user = request.GET.get('user', '')
+            
+            if not user:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'user is required.')
+            
+            if not is_valid_username(user):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'User is not valid')
+                
             remove_share(repo_id, username, user)
         elif share_type == 'group':
+            group_id = request.GET.get('group_id', '')
+            
+            if not group_id:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'group_id is required.')
+            
             unshare_group_repo(repo_id, group_id, user)
         elif share_type == 'public':
             unset_inner_pub_repo(repo_id)
