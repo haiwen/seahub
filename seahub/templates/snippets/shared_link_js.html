@@ -311,7 +311,7 @@ $('#rm-shared-link').click(function() {
         token = obj.data('token');
 
     $.ajax({
-        url: '{% url 'remove_shared_link' %}?t=' + token,
+        url: '{% url 'ajax_remove_shared_link' %}?t=' + token,
         dataType: 'json',
         cache: false,
         success: function(data) {
@@ -468,7 +468,7 @@ $('#rm-shared-upload-link').click(function() {
         token = obj.data('upload-token');
 
     $.ajax({
-        url: '{% url 'remove_shared_upload_link' %}?t=' + token,
+        url: '{% url 'ajax_remove_shared_upload_link' %}?t=' + token,
         dataType: 'json',
         cache: false,
         success: function(data) {

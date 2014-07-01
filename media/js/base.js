@@ -72,7 +72,7 @@ $(function() {
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     if (xhr.responseText) {
-                        var error = jQuery.parseJSON(xhr.responseText).error;
+                        var error = $.parseJSON(xhr.responseText).error;
                         loading_tip.hide();
                         if ($('.error', popup).length == 0) {
                             loading_tip.after('<p class="error alc">' + error + '</p>'); 
@@ -126,7 +126,7 @@ $(function() {
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     if (xhr.responseText) {
-                        var error = jQuery.parseJSON(xhr.responseText).error;
+                        var error = $.parseJSON(xhr.responseText).error;
                         loading_tip.hide();
                         if ($('.error', popup).length == 0) {
                             loading_tip.after('<p class="error alc">' + error + '</p>'); 

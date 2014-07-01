@@ -307,9 +307,9 @@ $('#remove-repo-shared-download-link, #remove-repo-shared-upload-link').click(fu
         ajax_url;
 
     if (id.indexOf('upload') != -1) {
-        ajax_url = '{% url 'remove_shared_upload_link' %}';
+        ajax_url = '{% url 'ajax_remove_shared_upload_link' %}';
     } else {
-        ajax_url = '{% url 'remove_shared_link' %}';
+        ajax_url = '{% url 'ajax_remove_shared_link' %}';
     }
 
     $.ajax({

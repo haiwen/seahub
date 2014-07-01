@@ -18,7 +18,7 @@ from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_user_quota_usage, get_user_share_usage
 from pysearpc import SearpcError
 
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required_ajax
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
     RepoCreateForm, SharedRepoCreateForm
@@ -57,14 +57,11 @@ def is_group_user(gid, username):
     return seaserv.is_group_user(gid, username)
     
 ########## repo related
-@login_required
+@login_required_ajax
 def get_dirents(request, repo_id):
     """
     Get dirents in a dir for file tree
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     # permission checking
@@ -79,7 +76,7 @@ def get_dirents(request, repo_id):
     all_dir = request.GET.get('all_dir', False)
     if not path:
         err_msg = _(u"No path.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     # get dirents for every path element
@@ -104,7 +101,7 @@ def get_dirents(request, repo_id):
     try:
         dirents = seafile_api.list_dir_by_path(repo_id, path.encode('utf-8'))
     except SearpcError, e:
-        return HttpResponse(json.dumps({"err_msg": e.msg}), status=500,
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
 
     d_list = []
@@ -144,28 +141,24 @@ def get_dirents(request, repo_id):
     f_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(d_list + f_list), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_unenc_group_repos(request, group_id):
     '''
     Get unenc repos in a group. 
     '''
-
-    if not request.is_ajax():
-        raise Http404
-    
     content_type = 'application/json; charset=utf-8'
 
     group_id_int = int(group_id) 
     group = get_group(group_id_int)    
     if not group:
         err_msg = _(u"The group doesn't exist") 
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=400,
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
     joined = is_group_user(group_id_int, request.user.username)
     if not joined and not request.user.is_staff:
         err_msg = _(u"Permission denied")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+        return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
     repos = seafile_api.get_group_repo_list(group_id_int)    
@@ -177,13 +170,10 @@ def get_unenc_group_repos(request, group_id):
     repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_my_unenc_repos(request):
     """Get my owned and unencrypted repos.
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     repos = get_owned_repo_list(request)
@@ -196,16 +186,13 @@ def get_my_unenc_repos(request):
     repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def unenc_rw_repos(request):
     """Get a user's unencrypt repos that he/she can read-write.
     
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     acc_repos = get_unencry_rw_repos_by_user(request)
 
@@ -216,14 +203,11 @@ def unenc_rw_repos(request):
     repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
-@login_required        
+@login_required_ajax        
 def list_dir(request, repo_id):
     """
     List directory entries in AJAX.
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -303,14 +287,11 @@ def list_dir(request, repo_id):
     return HttpResponse(json.dumps({'html': html, 'path': path}),
                         content_type=content_type)
 
-@login_required        
+@login_required_ajax        
 def list_dir_more(request, repo_id):
     """
     List 'more' entries in a directory with AJAX.
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -381,7 +362,7 @@ def new_dirent_common(func):
     """Decorator for common logic in creating directory and file.
     """
     def _decorated(request, repo_id, *args, **kwargs):
-        if request.method != 'POST' or not request.is_ajax():
+        if request.method != 'POST':
             raise Http404
 
         result = {}
@@ -422,7 +403,7 @@ def new_dirent_common(func):
         return func(repo.id, parent_dir, dirent_name, username)
     return _decorated
     
-@login_required
+@login_required_ajax
 @new_dirent_common
 def new_dir(repo_id, parent_dir, dirent_name, username):
     """
@@ -442,7 +423,7 @@ def new_dir(repo_id, parent_dir, dirent_name, username):
     return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
                         content_type=content_type)
 
-@login_required
+@login_required_ajax
 @new_dirent_common
 def new_file(repo_id, parent_dir, dirent_name, username):
     """
@@ -462,12 +443,12 @@ def new_file(repo_id, parent_dir, dirent_name, username):
     return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
                         content_type=content_type)
 
-@login_required    
+@login_required_ajax    
 def rename_dirent(request, repo_id):
     """
     Rename a file/dir in a repo, with ajax    
     """
-    if request.method != 'POST' or not request.is_ajax():
+    if request.method != 'POST':
         raise Http404
 
     result = {}    
@@ -521,14 +502,11 @@ def rename_dirent(request, repo_id):
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
 
-@login_required    
+@login_required_ajax    
 def delete_dirent(request, repo_id):
     """
     Delete a file/dir with ajax.    
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -563,14 +541,11 @@ def delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
-@login_required    
+@login_required_ajax    
 def delete_dirents(request, repo_id):
     """
     Delete multi files/dirs with ajax.    
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -611,7 +586,7 @@ def copy_move_common(func):
     """Decorator for common logic in copying/moving dir/file.
     """
     def _decorated(request, repo_id, *args, **kwargs):
-        if request.method != 'POST' or not request.is_ajax():
+        if request.method != 'POST':
             raise Http404
 
         result = {}
@@ -661,7 +636,7 @@ def copy_move_common(func):
         return func(repo_id, path, dst_repo_id, dst_path, obj_name, username)
     return _decorated
 
-@login_required
+@login_required_ajax
 @copy_move_common
 def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
@@ -691,7 +666,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 @copy_move_common
 def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
@@ -721,7 +696,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 @copy_move_common
 def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
@@ -758,7 +733,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 @copy_move_common
 def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
@@ -802,7 +777,7 @@ def dirents_copy_move_common(func):
     """
     def _decorated(request, repo_id, *args, **kwargs):
 
-        if request.method != 'POST' or not request.is_ajax():
+        if request.method != 'POST':
             raise Http404
 
         result = {}
@@ -854,7 +829,7 @@ def dirents_copy_move_common(func):
         return func(repo_id, parent_dir, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username)
     return _decorated
 
-@login_required
+@login_required_ajax
 @dirents_copy_move_common
 def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
     result = {}
@@ -893,7 +868,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 @dirents_copy_move_common
 def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
     result = {}
@@ -932,14 +907,11 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_cp_progress(request):
     '''
         Fetch progress of file/dir mv/cp.
     '''
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     result = {}
 
@@ -964,14 +936,11 @@ def get_cp_progress(request):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_multi_cp_progress(request):
     '''
         Fetch progress of multi files/dirs mv/cp.
     '''
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     result = {}
 
@@ -997,14 +966,11 @@ def get_multi_cp_progress(request):
     result['fail'] = fail
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def cancel_cp(request):
     '''
         cancel file/dir mv/cp.
     '''
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     result = {}
 
@@ -1024,11 +990,8 @@ def cancel_cp(request):
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
 
-@login_required
+@login_required_ajax
 def repo_star_file(request, repo_id):
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     path = request.GET.get('file', '')
@@ -1041,11 +1004,8 @@ def repo_star_file(request, repo_id):
 
     return HttpResponse(json.dumps({'success':True}), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def repo_unstar_file(request, repo_id):
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     path = request.GET.get('file', '')
@@ -1058,11 +1018,8 @@ def repo_unstar_file(request, repo_id):
     return HttpResponse(json.dumps({'success':True}), content_type=content_type)
 
 ########## contacts related
-@login_required
+@login_required_ajax
 def get_contacts(request):
-    if not request.is_ajax():
-        raise Http404
-    
     content_type = 'application/json; charset=utf-8'
 
     username = request.user.username
@@ -1074,11 +1031,8 @@ def get_contacts(request):
     
     return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_current_commit(request, repo_id):
-    if not request.is_ajax():
-        raise Http404
-    
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -1127,15 +1081,12 @@ def get_current_commit(request, repo_id):
     return HttpResponse(json.dumps({'html': html}),
                         content_type=content_type)
 
-@login_required
+@login_required_ajax
 def sub_repo(request, repo_id): 
     '''
     check if a dir has a corresponding sub_repo
     if it does not have, create one
     '''
-    if not request.is_ajax():
-        raise Http404
-    
     content_type = 'application/json; charset=utf-8'
     result = {}
 
@@ -1180,10 +1131,8 @@ def sub_repo(request, repo_id):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
+@login_required_ajax
 def download_enc_file(request, repo_id, file_id):
-    if not request.is_ajax(): 
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     result = {}  
 
@@ -1255,22 +1204,14 @@ def upload_file_done(request):
 
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
+@login_required_ajax
 def unseen_notices_count(request):
     """Count user's unseen notices.
     
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
-
-    if not request.user.is_authenticated():
-        return HttpResponse(json.dumps({
-            'error': _('Please log in.')
-            }), status=400, content_type=content_type)
-
     username = request.user.username
 
     count = UserNotification.objects.count_unseen_user_notifications(username)
@@ -1278,6 +1219,7 @@ def unseen_notices_count(request):
     result['count'] = count
     return HttpResponse(json.dumps(result), content_type=content_type)
 
+@login_required_ajax
 def get_popup_notices(request):
     """Get user's notifications.
 
@@ -1289,16 +1231,7 @@ def get_popup_notices(request):
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
-
-    if not request.user.is_authenticated():
-        return HttpResponse(json.dumps({
-            'error': _('Please log in.')
-            }), status=400, content_type=content_type)
-
     username = request.user.username
 
     result_notices = []
@@ -1371,16 +1304,13 @@ def get_popup_notices(request):
                 "notice_html": notice_html,
                 }), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def set_notices_seen(request):
     """Set user's notices seen:
 
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
@@ -1392,16 +1322,13 @@ def set_notices_seen(request):
 
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def set_notice_seen_by_id(request):
     """
 
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
     notice_id = request.GET.get('notice_id')
 
@@ -1412,14 +1339,8 @@ def set_notice_seen_by_id(request):
 
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def repo_remove(request, repo_id):
-    if not request.is_ajax():
-        raise Http404
-
-    ct = 'application/json; charset=utf-8'
-    result = {}  
-
     if get_system_default_repo_id() == repo_id:
         result['error'] = _(u'System library can not be deleted.')
         return HttpResponse(json.dumps(result), status=403, content_type=ct)
@@ -1471,16 +1392,9 @@ def repo_remove(request, repo_id):
             result['error'] = _(u'Permission denied.')
             return HttpResponse(json.dumps(result), status=403, content_type=ct)
 
+@login_required_ajax
 def space_and_traffic(request):
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
-
-    if not request.user.is_authenticated():
-        return HttpResponse(json.dumps({
-            'error': _('Please log in.')
-            }), status=400, content_type=content_type)
 
     username = request.user.username
 
@@ -1625,16 +1539,13 @@ def get_group_repos(request, groups):
                 group_repos.append(r)
     return group_repos
 
-@login_required
+@login_required_ajax
 def my_shared_and_group_repos(request):
     """Return html snippet of repos that shared to user and group repos.
 
     Arguments:
     - `request`:
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     # shared
@@ -1672,13 +1583,10 @@ def my_shared_and_group_repos(request):
     }
     return HttpResponse(json.dumps(ret), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def get_file_op_url(request, repo_id):
     """Get file upload/update url for AJAX.
     """
-    if not request.is_ajax():
-        raise Http404
-
     content_type = 'application/json; charset=utf-8'
 
     op_type = request.GET.get('op_type') # value can be 'upload', 'update', 'upload-blks', 'update-blks'
@@ -1696,11 +1604,8 @@ def get_file_op_url(request, repo_id):
     
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def repo_history_changes(request, repo_id):
-    if not request.is_ajax():
-        return Http404
-
     changes = {} 
     content_type = 'application/json; charset=utf-8'
 
@@ -1743,13 +1648,13 @@ def repo_history_changes(request, repo_id):
 
     return HttpResponse(json.dumps(changes), content_type=content_type)
 
-@login_required    
+@login_required_ajax    
 def repo_create(request):
     '''  
     Handle ajax post to create a library.
     
     '''
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         return Http404
 
     result = {} 
@@ -1819,13 +1724,13 @@ def repo_create(request):
                       repo_name=repo_name)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required    
+@login_required_ajax    
 def public_repo_create(request):
     '''  
     Handle ajax post to create public repo.
     
     '''
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         return Http404
 
     result = {} 
@@ -1874,11 +1779,8 @@ def public_repo_create(request):
                       repo_name=repo_name)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required
+@login_required_ajax
 def events(request):
-    if not request.is_ajax():
-        raise Http404
-
     events_count = 15
     username = request.user.username
     start = int(request.GET.get('start'))

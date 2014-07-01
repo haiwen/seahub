@@ -9,7 +9,7 @@ $("#group-member-add, #group-admin-add").click(function() {
         $('#enter .tip').addClass('hide');
         form.data('post_url', '{% url 'group_add_admin' group.id %}');
     } else {
-        form.data('post_url', '{% url 'group_manage' group.id %}');
+        form.data('post_url', '{% url 'group_add_member' group.id %}');
     }
     addAutocomplete('#added-member-name', '#enter', contact_list);
 });

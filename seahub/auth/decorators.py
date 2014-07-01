@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.utils.decorators import available_attrs
 from django.utils.http import urlquote
 import simplejson as json
+from django.utils.translation import ugettext as _
 
 def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
     """
@@ -50,3 +51,31 @@ def permission_required(perm, login_url=None):
     enabled, redirecting to the log-in page if necessary.
     """
     return user_passes_test(lambda u: u.has_perm(perm), login_url=login_url)
+
+
+def login_required_ajax(function=None,redirect_field_name=None):
+    """
+    Just make sure the user is authenticated to access a certain ajax view
+
+    Otherwise return a HttpResponse 401 - authentication required
+    instead of the 302 redirect of the original Django decorator
+    """
+    def _decorator(view_func):
+        def _wrapped_view(request, *args, **kwargs):
+            if not request.is_ajax():
+                raise Http404
+
+            if request.user.is_authenticated():
+                return view_func(request, *args, **kwargs)
+            else:
+                content_type = 'application/json; charset=utf-8'
+                return HttpResponse(json.dumps({
+                    'error': _('Please log in.')
+                    }), status=401, content_type=content_type)
+
+        return _wrapped_view
+
+    if function is None:
+        return _decorator
+    else:
+        return _decorator(function)

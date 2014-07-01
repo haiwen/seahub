@@ -14,11 +14,17 @@ urlpatterns = patterns('',
 
     url(r'^link/get/$', get_shared_link, name='get_shared_link'),
     url(r'^link/remove/$', remove_shared_link, name='remove_shared_link'),
+
+    url(r'^ajax/link/remove/$', ajax_remove_shared_link, name='ajax_remove_shared_link'),
+
     url(r'^link/send/$', send_shared_link, name='send_shared_link'),
     url(r'^link/save/$', save_shared_link, name='save_shared_link'),
 
     url(r'^upload_link/get/$', get_shared_upload_link, name='get_shared_upload_link'),
     url(r'^upload_link/remove/$', remove_shared_upload_link, name='remove_shared_upload_link'),
+
+    url(r'^ajax/upload_link/remove/$', ajax_remove_shared_upload_link, name='ajax_remove_shared_upload_link'),
+
     url(r'^upload_link/send/$', send_shared_upload_link, name='send_shared_upload_link'),
 
     url(r'^permission_admin/$', share_permission_admin, name='share_permission_admin'),

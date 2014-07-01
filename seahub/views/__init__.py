@@ -34,7 +34,7 @@ from seaserv import seafile_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.auth import login as auth_login
 from seahub.auth import authenticate, get_backends
 from seahub.base.accounts import User
@@ -527,7 +527,7 @@ def repo_settings(request, repo_id):
             'repo_shared_links': repo_shared_links,
             }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 def repo_owner(request, repo_id):
     """Handle post request to transfer library owner.
     """
@@ -584,7 +584,7 @@ def repo_owner(request, repo_id):
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
 
-@login_required
+@login_required_ajax
 def repo_change_passwd(request, repo_id):
     """Handle ajax post request to change library password.
     """
@@ -1056,11 +1056,8 @@ def devices(request):
             "devices": user_devices,
             }, context_instance=RequestContext(request))
     
-@login_required
+@login_required_ajax
 def unlink_device(request):
-    if not request.is_ajax():
-        raise Http404
-        
     content_type = 'application/json; charset=utf-8'
 
     platform = request.POST.get('platform', '')
@@ -1077,58 +1074,6 @@ def unlink_device(request):
                 status=500, content_type=content_type)
     
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-
-@login_required
-@user_mods_check
-def client_mgmt(request):
-    username = request.user.username
-
-    clients = []
-    try:
-        clients = seafile_api.list_repo_tokens_by_email(username)
-    except:
-        pass
-
-    filter_clients = []
-    for c in clients:
-        if c.peer_name is not None:
-            filter_clients.append(c)
-
-    if filter_clients:
-        filter_clients.sort(key=lambda client: client.peer_name)
-        for i, client in enumerate(filter_clients):
-            if i == 0:
-                client.show_peer_name = True
-            else:
-                if client.peer_name != filter_clients[i-1].peer_name:
-                    client.show_peer_name = True
-
-    return render_to_response('client_mgmt.html', {
-            'clients': filter_clients,
-            }, context_instance=RequestContext(request))
-
-@login_required
-def client_unsync(request):
-    if not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    repo_id = request.GET.get('repo_id', '')
-    token = request.GET.get('token', '')
-
-    if not (repo_id and token):
-        return HttpResponse(json.dumps({'error': _(u'Argument missing')}),
-                status=400, content_type=content_type)
-
-    username = request.user.username
-    try:
-        seafile_api.delete_repo_token(repo_id, token, username)
-        return HttpResponse(json.dumps({'success': True}),
-                content_type=content_type)
-    except:
-        return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
-                status=500, content_type=content_type)
 
 @login_required
 def unsetinnerpub(request, repo_id):
@@ -1708,6 +1653,7 @@ def pubuser(request):
                 'page_range': page_range, 
                 }, context_instance=RequestContext(request))
 
+@login_required_ajax
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
 

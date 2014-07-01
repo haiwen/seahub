@@ -17,7 +17,7 @@ from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
     web_get_access_token, seafile_api, get_repo, get_group_repos, get_commits, \
@@ -146,10 +146,10 @@ def group_check(func):
     return _decorated
 
 ########## views
-@login_required
+@login_required_ajax
 def group_add(request):
     """Add a new group"""
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         raise Http404
 
     username = request.user.username
@@ -453,56 +453,56 @@ def group_message_remove(request, group_id, msg_id):
 def msg_reply(request, msg_id):
     """Show group message replies, and process message reply in ajax"""
     
+    if not request.is_ajax():
+        raise Http404
+
     content_type = 'application/json; charset=utf-8'
-    if request.is_ajax():
-        ctx = {}
-        try:
-            group_msg = GroupMessage.objects.get(id=msg_id)
-        except GroupMessage.DoesNotExist:
-            return HttpResponseBadRequest(content_type=content_type)
+    ctx = {}
+    try:
+        group_msg = GroupMessage.objects.get(id=msg_id)
+    except GroupMessage.DoesNotExist:
+        return HttpResponseBadRequest(content_type=content_type)
 
-        if request.method == 'POST':
-            if not request.user.is_authenticated():
-                return HttpResponseBadRequest(json.dumps({
-                        "error": "login required"}), content_type=content_type)
+    if request.method == 'POST':
+        if not request.user.is_authenticated():
+            return HttpResponseBadRequest(json.dumps({
+                    "error": "login required"}), content_type=content_type)
 
-            form = MessageReplyForm(request.POST)
-            r_status = request.GET.get('r_status')
-            # TODO: invalid form
-            if form.is_valid():
-                msg = form.cleaned_data['message']
+        form = MessageReplyForm(request.POST)
+        r_status = request.GET.get('r_status')
+        # TODO: invalid form
+        if form.is_valid():
+            msg = form.cleaned_data['message']
 
-                msg_reply = MessageReply()
-                msg_reply.reply_to = group_msg
-                msg_reply.from_email = request.user.username
-                msg_reply.message = msg
-                msg_reply.save()
+            msg_reply = MessageReply()
+            msg_reply.reply_to = group_msg
+            msg_reply.from_email = request.user.username
+            msg_reply.message = msg
+            msg_reply.save()
 
-                # send signal if reply other's message
-                if group_msg.from_email != request.user.username:
-                    grpmsg_reply_added.send(sender=MessageReply,
-                                            msg_id=msg_id,
-                                            from_email=request.user.username,
-                                            reply_msg=msg)
-                replies = MessageReply.objects.filter(reply_to=group_msg)
-                r_num = len(replies)
-                if r_num < 4 or r_status == 'show':
-                    ctx['replies'] = replies
-                else:
-                    ctx['replies'] = replies[r_num - 3:]
-                html = render_to_string("group/group_reply_list.html", ctx)
-                serialized_data = json.dumps({"r_num": r_num, "html": html})
-                return HttpResponse(serialized_data, content_type=content_type)
-
-        else:
+            # send signal if reply other's message
+            if group_msg.from_email != request.user.username:
+                grpmsg_reply_added.send(sender=MessageReply,
+                                        msg_id=msg_id,
+                                        from_email=request.user.username,
+                                        reply_msg=msg)
             replies = MessageReply.objects.filter(reply_to=group_msg)
             r_num = len(replies)
-            ctx['replies'] = replies
+            if r_num < 4 or r_status == 'show':
+                ctx['replies'] = replies
+            else:
+                ctx['replies'] = replies[r_num - 3:]
             html = render_to_string("group/group_reply_list.html", ctx)
             serialized_data = json.dumps({"r_num": r_num, "html": html})
             return HttpResponse(serialized_data, content_type=content_type)
+
     else:
-        return HttpResponseBadRequest(content_type=content_type)
+        replies = MessageReply.objects.filter(reply_to=group_msg)
+        r_num = len(replies)
+        ctx['replies'] = replies
+        html = render_to_string("group/group_reply_list.html", ctx)
+        serialized_data = json.dumps({"r_num": r_num, "html": html})
+        return HttpResponse(serialized_data, content_type=content_type)
 
 @login_required
 def msg_reply_new(request):
@@ -662,11 +662,20 @@ def send_group_member_add_mail(request, group, from_user, to_user):
     subject = _(u'You are invited to join a group on %s') % SITE_NAME
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
-def ajax_add_group_member(request, group):
+@login_required_ajax
+@group_staff_required
+def ajax_add_group_member(request, group_id):
     """Add user to group in ajax.
     """
     result = {}
     content_type = 'application/json; charset=utf-8'
+
+    group = get_group(group_id)
+    if not group:
+        result['error'] = _(u'The group does not exist.') 
+        return HttpResponse(json.dumps(result), status=400,
+                        content_type=content_type)
+
     username = request.user.username
 
     member_name_str = request.POST.get('user_name', '')
@@ -780,13 +789,6 @@ def group_manage(request, group_id):
     if not group:
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
-    if request.method == 'POST':
-        """
-        Add group members.
-        """
-        return ajax_add_group_member(request, group)
-
-    ### GET ###
     members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [ m for m in members_all if m.is_staff ]    
 
@@ -811,7 +813,7 @@ def group_manage(request, group_id):
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 @group_staff_required
 def group_add_admin(request, group_id):
     """
@@ -819,7 +821,7 @@ def group_add_admin(request, group_id):
     """
     group_id = int(group_id)    # Checked by URL Conf
     
-    if request.method != 'POST' or not request.is_ajax():
+    if request.method != 'POST':
         raise Http404
 
     result = {}
@@ -927,7 +929,7 @@ def group_remove_member(request, group_id, user_name):
 
     return HttpResponseRedirect(reverse('group_manage', args=[group_id]))
 
-@login_required
+@login_required_ajax
 def group_recommend(request):
     """
     Recommend a file or directory to a group.
@@ -954,12 +956,12 @@ def group_recommend(request):
                 try:
                     group_id = int(group_id)
                 except ValueError:
-                    result['err'] = _(u'Error: wrong group id')
+                    result['error'] = _(u'Error: wrong group id')
                     return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
                 group = get_group(group_id)
                 if not group:
-                    result['err'] = _(u'Error: the group does not exist.')
+                    result['error'] = _(u'Error: the group does not exist.')
                     return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
                 # TODO: Check whether repo is in the group and Im in the group
@@ -994,10 +996,10 @@ def group_recommend(request):
                 result['success'] = _(u'Successfully posted to %(groups)s.') % {'groups': ', '.join(groups_posted_to)}
 
             if len(groups_not_in) > 0:
-                result['err'] = _(u'Error: you are not in group %s.') % (', '.join(groups_not_in))
+                result['error'] = _(u'Error: you are not in group %s.') % (', '.join(groups_not_in))
 
         else:
-            result['err'] = str(form.errors)
+            result['error'] = str(form.errors)
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     
     # request.method == 'GET'
@@ -1006,10 +1008,10 @@ def group_recommend(request):
         path = request.GET.get('path', None)
         repo = get_repo(repo_id)
         if not repo:
-            result['err'] = _(u'Error: the library does not exist.')
+            result['error'] = _(u'Error: the library does not exist.')
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
         if path is None:
-            result['err'] = _(u'Error: no path.')
+            result['error'] = _(u'Error: no path.')
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     
     # get discussions & replies
@@ -1034,7 +1036,7 @@ def group_recommend(request):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 
-@login_required
+@login_required_ajax
 def create_group_repo(request, group_id):
     """Create a repo and share it to current group"""
 
@@ -1113,12 +1115,12 @@ def create_group_repo(request, group_id):
             return HttpResponse(json.dumps({'success': True}),
                                 content_type=content_type)
                 
-@login_required
+@login_required_ajax
 def group_joinrequest(request, group_id):
     """
     Handle post request to join a group.
     """
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         raise Http404
 
     result = {}
@@ -1152,14 +1154,12 @@ def group_joinrequest(request, group_id):
         else:
             return HttpResponseBadRequest(json.dumps(form.errors),
                                           content_type=content_type)
-        
+
+@login_required_ajax        
 def attention(request):
     """
     Handle ajax request to query group members used in autocomplete.
     """
-    if not request.is_ajax():
-        raise Http404
-
     user = request.user.username
     name_str =  request.GET.get('name_startsWith')
     gids = request.GET.get('gids', '')
@@ -1201,7 +1201,6 @@ def attention(request):
     content_type = 'application/json; charset=utf-8'
     
     return HttpResponse(json.dumps(result), content_type=content_type)
-    
 
 @group_check
 def group_add_discussion(request, group):
@@ -1480,6 +1479,7 @@ def group_wiki_pages(request, group):
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))
 
+@login_required_ajax
 @group_check
 def group_wiki_create(request, group):
     if group.view_perm == "pub":

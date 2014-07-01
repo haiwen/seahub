@@ -107,9 +107,13 @@ sublib_create_btn.click(function() {
             }   
         },  
         error: function(jqXHR, textStatus, errorThrown) {
-            if (!jqXHR.responseText) {
-                dir_tree_cont.html('<p class="error">' + "{% trans "Failed. Please check the network." %}" + '</p>');
+            var error;
+            if (jqXHR.responseText) {
+                error = $.parseJSON(jqXHR.responseText).error;
+            } else {
+                error = "{% trans "Failed. Please check the network." %}";
             }
+            dir_tree_cont.html('<p class="error">' + error + '</p>');
         }   
     }); 
 });

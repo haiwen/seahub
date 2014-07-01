@@ -110,8 +110,14 @@ $('#add-msg').click(function() {
                 popup.html('<p>' + "{% trans "please add contacts at first" %}" + '</p>');
             }
         },
-        error: function() {
-            popup.html('<p class="error">' + "{% trans "Failed to get your contacts for sending a message." %}" + '</p>');
+        error: function(jqXHR, textStatus, errorThrown) {
+            var error;
+            if (jqXHR.responseText) {
+                error = $.parseJSON(jqXHR.responseText).error;
+            } else {
+                error = "{% trans "Please check the network." %}";
+            }
+            popup.html('<p class="error alc">' + error + '</p>');
         }
     });
 });

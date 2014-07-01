@@ -22,7 +22,7 @@ from pysearpc import SearpcError
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
@@ -343,10 +343,10 @@ def user_info(request, email):
             'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 @sys_staff_required
 def user_set_quota(request, email):
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
@@ -361,7 +361,7 @@ def user_set_quota(request, email):
         try:
             seafile_api.set_user_quota(email, quota)
         except:
-            result['error'] = _(u'Failed to set quota: internal error')
+            result['error'] = _(u'Failed to set quota: internal server error')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
         result['success'] = True
@@ -463,7 +463,7 @@ def email_user_on_activation(user):
     send_html_email(_(u'Your account on %s is activated') % SITE_NAME,
             'sysadmin/user_activation_email.html', c, None, [user.email])
     
-@login_required
+@login_required_ajax
 @sys_staff_required
 def user_toggle_status(request, user_id):
     content_type = 'application/json; charset=utf-8'
@@ -558,31 +558,44 @@ def send_user_add_mail(request, email, password):
     send_html_email(_(u'You are invited to join %s') % SITE_NAME,
             'sysadmin/user_add_email.html', c, None, [email])
 
-@login_required
+@login_required_ajax
 def user_add(request):
     """Add a user"""
 
-    if not request.user.is_staff:
+    if not request.user.is_staff or request.method != 'POST':
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
-    if request.method == 'POST':
-        post_values = request.POST.copy()
-        post_email = request.POST.get('email', '')
-        post_values.update({'email': post_email.lower()})
 
-        form = AddUserForm(post_values)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password1']
+    post_values = request.POST.copy()
+    post_email = request.POST.get('email', '')
+    post_values.update({'email': post_email.lower()})
 
-            user = User.objects.create_user(email, password, is_staff=False,
-                                            is_active=True)
-            if request.user.org:
-                org_id = request.user.org.org_id
-                url_prefix = request.user.org.url_prefix
-                ccnet_threaded_rpc.add_org_user(org_id, email, 0)
-                if IS_EMAIL_CONFIGURED:
+    form = AddUserForm(post_values)
+    if form.is_valid():
+        email = form.cleaned_data['email']
+        password = form.cleaned_data['password1']
+
+        user = User.objects.create_user(email, password, is_staff=False,
+                                        is_active=True)
+        if request.user.org:
+            org_id = request.user.org.org_id
+            url_prefix = request.user.org.url_prefix
+            ccnet_threaded_rpc.add_org_user(org_id, email, 0)
+            if IS_EMAIL_CONFIGURED:
+                try:
+                    send_user_add_mail(request, email, password)
+                    messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
+                except Exception, e:
+                    logger.error(str(e))
+                    messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
+            else:
+                messages.success(request, _(u'Successfully added user %s.') % email)
+
+            return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+        else:
+            if IS_EMAIL_CONFIGURED:
+                if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
                     try:
                         send_user_add_mail(request, email, password)
                         messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
@@ -591,25 +604,12 @@ def user_add(request):
                         messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
                 else:
                     messages.success(request, _(u'Successfully added user %s.') % email)
-
-                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
             else:
-                if IS_EMAIL_CONFIGURED:
-                    if SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER:
-                        try:
-                            send_user_add_mail(request, email, password)
-                            messages.success(request, _(u'Successfully added user %s. An email notification has been sent.') % email)
-                        except Exception, e:
-                            logger.error(str(e))
-                            messages.success(request, _(u'Successfully added user %s. An error accurs when sending email notification, please check your email configuration.') % email)
-                    else:
-                        messages.success(request, _(u'Successfully added user %s.') % email)
-                else:
-                    messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.') % email)
+                messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.') % email)
 
-                return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-        else:
-            return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
+            return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+    else:
+        return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required
@@ -808,12 +808,12 @@ def sys_traffic_admin(request):
         },
         context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 @sys_staff_required
 def batch_user_make_admin(request):
     """Batch make users as admins.
     """
-    if not request.is_ajax() or request.method != 'POST':
+    if request.method != 'POST':
         raise Http404
 
     result = {}

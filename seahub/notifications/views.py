@@ -10,7 +10,7 @@ from django.utils.translation import ugettext as _
 
 import seaserv
 
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.notifications.models import Notification, NotificationForm, \
     UserNotification
 from seahub.notifications.utils import refresh_cache
@@ -78,7 +78,7 @@ def user_notification_list(request):
             'notices_more': notices_more,
             }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 def user_notification_more(request):
     """Fetch next ``limit`` notifications starts from ``start``.
     
@@ -87,9 +87,6 @@ def user_notification_more(request):
     - `start`:
     - `limit`:
     """
-    if not request.is_ajax():
-        return Http404
-    
     username = request.user.username
     start = int(request.GET.get('start', 0))
     limit = int(request.GET.get('limit', 0))

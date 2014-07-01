@@ -7,7 +7,7 @@ from views import group_info, group_members, group_member_operations, group_add_
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_wiki_use_lib, group_remove, group_dismiss, group_quit, \
     group_make_public, group_revoke_public, group_transfer, group_toggle_modules, \
-    group_add_discussion, group_rename, group_add
+    group_add_discussion, group_rename, group_add, ajax_add_group_member
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
@@ -37,11 +37,13 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/admin/add/$', group_add_admin, name='group_add_admin'),
     url(r'^(?P<group_id>\d+)/admin/remove/$', group_remove_admin, name='group_remove_admin'),
     url(r'^recommend/$', group_recommend, name='group_recommend'),
-    url(r'^attention/$', attention, name='group_attention'),
+    #url(r'^attention/$', attention, name='group_attention'),
     url(r'^joinrequest/(?P<group_id>[\d]+)/$', group_joinrequest, name='group_joinrequest'),
     url(r'^(?P<group_id>\d+)/modules/toggle/$', group_toggle_modules, name='group_toggle_modules'),
     url(r'^(?P<group_id>\d+)/discussion/add/$', group_add_discussion, name='group_add_discussion'),
     url(r'^add/$', group_add, name='group_add'),
+
+    url(r'^ajax/(?P<group_id>\d+)/member/add/$', ajax_add_group_member, name='group_add_member'),
 )
 
 import seahub.settings as settings

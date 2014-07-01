@@ -40,7 +40,7 @@ $('#discuss').click(function() {
             error: function(jqXHR, textStatus, errorThrown) {
                 var err_str = ''; 
                 if (jqXHR.responseText) {
-                    err_str = $.parseJSON(jqXHR.responseText).err;
+                    err_str = $.parseJSON(jqXHR.responseText).error;
                     feedback(err_str, 'error');
                 }
             }   
@@ -98,13 +98,13 @@ $('#discuss-submit').click(function() {
                 form.find('.input').val('');
             }
             if(data['err']) {
-                feedback(data['err'], 'error');
+                feedback(data['error'], 'error');
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             var err_str = ''; 
             if (jqXHR.responseText) {
-                err_str = $.parseJSON(jqXHR.responseText).err;
+                err_str = $.parseJSON(jqXHR.responseText).error;
             } else {
                 err_str = "{% trans "Failed. Please check the network." %}";
             }   
