@@ -1627,13 +1627,14 @@ class DirView(APIView):
         path = request.GET.get('p', '')
         if not path or path[0] != '/':
             return api_error(status.HTTP_400_BAD_REQUEST, "Path is missing.")
-        if path == '/':         # Can not make root dir.
+        if path == '/':         # Can not make or rename root dir.
             return api_error(status.HTTP_400_BAD_REQUEST, "Path is invalid.")
         if path[-1] == '/':     # Cut out last '/' if possible.
             path = path[:-1]
 
         username = request.user.username
         operation = request.POST.get('operation', '')
+        
         if operation.lower() == 'mkdir':
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
@@ -1661,8 +1662,37 @@ class DirView(APIView):
                 resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
                     quote(new_dir_name_utf8)
             return resp
-        # elif operation.lower() == 'rename':
-        #     pass
+        elif operation.lower() == 'rename':
+            if not is_repo_writable(repo.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to rename a folder.')
+
+            parent_dir = os.path.dirname(path)
+            parent_dir_utf8 = parent_dir.encode('utf-8')
+            
+            old_dir_name = os.path.basename(path)
+            old_dir_name_utf8 = old_dir_name.encode('utf-8')
+            
+            newname = request.POST.get('newname', '')
+            if not newname:
+                return api_error(status.HTTP_400_BAD_REQUEST, "newname is mandatory.")
+            newname_utf8 = newname.encode('utf-8')
+            
+            if newname_utf8 == old_dir_name_utf8:
+                return Response('success', status=status.HTTP_200_OK)
+
+            try:
+                # rename duplicate name
+                checked_newname_utf8 = check_filename_with_rename_utf8(repo_id, parent_dir, newname_utf8)
+                
+                # rename dir
+                seafile_api.rename_file(repo_id, parent_dir, old_dir_name_utf8, checked_newname_utf8, username)
+                
+                return Response('success', status=status.HTTP_200_OK)
+            
+            except SearpcError, e:
+                return api_error(HTTP_520_OPERATION_FAILED,
+                                 'Failed to rename directory.')
         # elif operation.lower() == 'move':
         #     pass
         else:
