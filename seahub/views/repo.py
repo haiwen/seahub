@@ -22,7 +22,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
     check_repo_access_permission
 
 from seahub.utils import gen_file_upload_url, is_org_context, \
-    get_httpserver_root, gen_dir_share_link, gen_shared_upload_link, \
+    get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
     get_commit_before_new_merge
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO
@@ -87,7 +87,7 @@ def is_no_quota(repo_id):
 def get_upload_url(request, repo_id):
     username = request.user.username
     if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                         'upload', username)
         return gen_file_upload_url(token, 'upload')
     else:
@@ -98,7 +98,7 @@ def get_upload_url(request, repo_id):
 #     """
 #     username = request.user.username
 #     if check_repo_access_permission(repo_id, request.user) == 'rw':
-#         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+#         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
 #                                                         'upload', username)
 #         return gen_file_upload_url(token, 'upload-api')
 #     else:
@@ -107,7 +107,7 @@ def get_upload_url(request, repo_id):
 # def get_api_update_url(request, repo_id):
 #     username = request.user.username
 #     if check_repo_access_permission(repo_id, request.user) == 'rw':
-#         token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+#         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
 #                                                         'update', username)
 #         return gen_file_upload_url(token, 'update-api')
 #     else:
@@ -183,7 +183,7 @@ def render_repo(request, repo):
                     }, context_instance=RequestContext(request))
 
     # query context args
-    httpserver_root = get_httpserver_root()
+    fileserver_root = get_fileserver_root()
     max_upload_file_size = get_max_upload_file_size()
 
     protocol = request.is_secure() and 'https' or 'http'
@@ -255,7 +255,7 @@ def render_repo(request, repo):
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,
             'upload_url': upload_url,
-            'httpserver_root': httpserver_root,
+            'fileserver_root': fileserver_root,
             'protocol': protocol,
             'domain': domain,
             'fileshare': fileshare,

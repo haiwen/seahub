@@ -158,7 +158,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """ Get path and the permission to view file.
 
     Returns:
-    	outer httpserver file url, inner httpserver file url, permission
+    	outer fileserver file url, inner fileserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -988,7 +988,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
         try:
             err, file_content, encoding = repo_file_get(inner_path, file_enc)
         except Exception, e:
-            return None, 'error when read file from httpserver: %s' % e
+            return None, 'error when read file from fileserver: %s' % e
         return file_content, err
 
 @login_required    
@@ -1138,7 +1138,7 @@ def view_priv_shared_file(request, token):
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
     
-    access_token = seafile_api.get_httpserver_access_token(repo.id, obj_id,
+    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
                                                            'view', username)
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
