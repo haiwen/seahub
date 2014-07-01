@@ -2345,20 +2345,53 @@ class SharedRepo(APIView):
                              'Permission need to be rw or r.')
 
         if share_type == 'personal':
-            if not is_valid_username(user):
+            if not user:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'User is not valid')
-
-            if not is_registered_user(user):
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'User does not exist')
-            try:
+                                 'user or users (comma separated are mandatory')
+            else:
+                users = user.split(",")
+                
                 from_email = seafile_api.get_repo_owner(repo_id)
-                seafile_api.share_repo(repo_id, from_email, user,
-                                       permission)
-            except SearpcError, e:
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                 "Searpc Error: " + e.msg)
+                
+                shared_users = []
+                invalid_users = []
+                notexistent_users = []
+                notsharable_errors = []
+                for u in users:
+                    
+                    if not is_valid_username(u): 
+                        invalid_users.append(u)
+                        continue
+                    if not is_registered_user(u): 
+                        notexistent_users.append(u)
+                        continue
+                        
+                    try:
+                        seafile_api.share_repo(repo_id, from_email, u,
+                                               permission)
+                        shared_users.append(u)
+                    except SearpcError, e:
+                        notsharable_errors.append(e)
+                        
+                if invalid_users or notexistent_users or notsharable_errors:
+                    # removing already created share
+                    for s_user in shared_users:
+                        try:
+                            remove_share(repo_id, from_email, s_user)
+                        except SearpcError, e:
+                            # ignoring this error, go to next unsharing
+                            continue
+                
+                if invalid_users:
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                            'Some users are not valid, sharing rolled back')
+                if notexistent_users:
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                            'Some users are not existent, sharing rolled back')
+                if notsharable_errors:
+                    # show the first sharing error
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                         "Searpc Error: " + notsharable_errors[0].msg)
 
         elif share_type == 'group':
             try:
