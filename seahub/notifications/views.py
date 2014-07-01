@@ -1,5 +1,5 @@
-import datetime
 import simplejson as json
+from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404, HttpResponse
@@ -7,8 +7,6 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
-
-import seaserv
 
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.notifications.models import Notification, NotificationForm, \

@@ -1341,6 +1341,9 @@ def set_notice_seen_by_id(request):
 
 @login_required_ajax
 def repo_remove(request, repo_id):
+    ct = 'application/json; charset=utf-8'
+    result = {}
+
     if get_system_default_repo_id() == repo_id:
         result['error'] = _(u'System library can not be deleted.')
         return HttpResponse(json.dumps(result), status=403, content_type=ct)
