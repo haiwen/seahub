@@ -932,9 +932,7 @@ def group_remove_member(request, group_id, user_name):
 @login_required_ajax
 def group_recommend(request):
     """
-    Recommend a file or directory to a group.
-    now changed to 'Discuss'
-    for ajax post/get
+    Get or post file/directory discussions to a group.
     """
     content_type = 'application/json; charset=utf-8'
     result = {}
@@ -946,7 +944,8 @@ def group_recommend(request):
             attach_type = form.cleaned_data['attach_type']
             path = form.cleaned_data['path']
             message = form.cleaned_data['message']
-            groups = request.POST.getlist('groups') # groups is a group_id list, e.g. [u'1', u'7']
+            # groups is a group_id list, e.g. [u'1', u'7']
+            groups = request.POST.getlist('groups')
             username = request.user.username
 
             groups_not_in = []
@@ -957,12 +956,14 @@ def group_recommend(request):
                     group_id = int(group_id)
                 except ValueError:
                     result['error'] = _(u'Error: wrong group id')
-                    return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+                    return HttpResponse(json.dumps(result), status=400,
+                                        content_type=content_type)
 
                 group = get_group(group_id)
                 if not group:
                     result['error'] = _(u'Error: the group does not exist.')
-                    return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+                    return HttpResponse(json.dumps(result), status=400,
+                                        content_type=content_type)
 
                 # TODO: Check whether repo is in the group and Im in the group
                 if not is_group_user(group_id, username):
@@ -971,17 +972,17 @@ def group_recommend(request):
 
                 # save message to group
                 gm = GroupMessage(group_id=group_id, from_email=username,
-                              message=message)
+                                  message=message)
                 gm.save()
 
                 # send signal
                 grpmsg_added.send(sender=GroupMessage, group_id=group_id,
-                              from_email=request.user.username)
-                    
+                                  from_email=username, message=message)
+
                 # save attachment
                 ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                   attach_type=attach_type, path=path,
-                                   src='recommend')
+                                       attach_type=attach_type, path=path,
+                                       src='recommend')
                 ma.save()
 
                 # save discussion

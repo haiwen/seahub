@@ -7,7 +7,6 @@ import mimetypes
 import urllib2
 import logging
 from math import ceil
-from urllib import quote
 import posixpath
 
 from django.core.cache import cache
@@ -18,7 +17,6 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote
@@ -36,22 +34,15 @@ from pysearpc import SearpcError
 from seahub.avatar.util import get_avatar_file_storage
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.auth import login as auth_login
-from seahub.auth import authenticate, get_backends
+from seahub.auth import get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import sys_staff_required, user_mods_check
-from seahub.base.models import UuidObjidMap, InnerPubMsg, InnerPubMsgReply, \
-    UserStarredFiles, DirFilesLastModifiedInfo
+from seahub.base.decorators import user_mods_check
+from seahub.base.models import UserStarredFiles, DirFilesLastModifiedInfo
 from seahub.contacts.models import Contact
-from seahub.contacts.signals import mail_sended
-from seahub.group.forms import MessageForm, MessageReplyForm
-from seahub.group.models import GroupMessage, MessageAttachment
-from seahub.group.signals import grpmsg_added
-from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import RepoPassowrdForm, RepoSettingForm
-from seahub.signals import repo_created, repo_deleted
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_httpserver_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \

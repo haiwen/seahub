@@ -2708,7 +2708,8 @@ class GroupMsgView(APIView):
         if group_msg.from_email != request.user.username:
             grpmsg_reply_added.send(sender=MessageReply,
                                     msg_id=msg_id,
-                                    from_email=request.user.username)
+                                    from_email=request.user.username,
+                                    reply_msg=msg)
         ret = { "msgid" : msg_reply.id }
         return Response(ret)
 
