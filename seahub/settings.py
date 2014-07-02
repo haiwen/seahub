@@ -202,7 +202,7 @@ ACCOUNT_ACTIVATION_DAYS = 7
 SHOW_REPO_DOWNLOAD_BUTTON = False
 
 # mininum length for password of encrypted library
-REPO_PASSWORD_MIN_LENGTH = 6
+REPO_PASSWORD_MIN_LENGTH = 8
 
 # Using server side crypto by default, otherwise, let user choose crypto method.
 FORCE_SERVER_CRYPTO = True
