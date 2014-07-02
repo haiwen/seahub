@@ -2658,7 +2658,7 @@ class GroupMsgsView(APIView):
 
         # send signal
         grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                              from_email=username)
+                          from_email=username, message=msg)
 
         repo_id = request.POST.get('repo_id', None)
         path = request.POST.get('path', None)
@@ -2878,7 +2878,7 @@ def html_group_discussions(request, group):
 
         # send signal
         grpmsg_added.send(sender=GroupMessage, group_id=group.id,
-                          from_email=username)
+                          from_email=username, message=msg)
 
         repo_id = request.POST.get('repo_id', None)
         path = request.POST.get('path', None)
@@ -2987,7 +2987,8 @@ def html_msg_reply(request, msg_id):
     if group_msg.from_email != request.user.username:
         grpmsg_reply_added.send(sender=MessageReply,
                                 msg_id=msg_id,
-                                from_email=request.user.username)
+                                from_email=request.user.username,
+                                reply_msg=msg)
     ctx['r'] = msg_reply
     html = render_to_string("api2/reply.html", ctx)
     serialized_data = json.dumps({"html": html})
