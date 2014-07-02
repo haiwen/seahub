@@ -320,13 +320,7 @@ $('#rm-shared-link').click(function() {
             $('#link-passwd-form').removeClass('hide');
             obj.data('link', '').data('token', '');
         },
-        error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }   
-        }
+        error: ajaxErrorHandler
     });
 });
 

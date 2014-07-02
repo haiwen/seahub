@@ -5,15 +5,16 @@
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block left_panel %}
-<h3><a href="{% url 'repo' repo.id %}" title="{% trans "Back to " %}{{ repo.name }}"><span class="icon-chevron-left"></span> {{repo.name}}</a></h3>
+<a href="{% url 'repo' repo.id %}" title="{% trans "Back to Library" %}"><span class="icon-chevron-left"></span> {% trans "Back to Library" %}</a>
 <div class="side-textnav">
     <ul class="side-textnav-tabs">
-        <li class="tab tab-cur" id="lib-setting-basic-info-tab"><a href="#">{% trans "Basic Info" %}</a></li>
-        <li class="tab" id="lib-setting-transfer-ownership-tab"><a href="#">{% trans "Transfer Ownership" %}</a></li>
+        <li class="tab tab-cur"><a href="#basic-info">{% trans "Basic Info" %}</a></li>
+        <li class="tab"><a href="#transfer-ownership">{% trans "Transfer Ownership" %}</a></li>
         {% if repo.encrypted and repo.enc_version == 2 %}
-        <li class="tab" id="lib-setting-change-password-tab"><a href="#">{% trans "Change Password" %}</a></li>
-        {% else %}
-        <li class="tab" id="lib-setting-shared-links-tab"><a href="#">{% trans "Shared Links" %}</a></li>
+        <li class="tab"><a href="#change-password">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab"><a href="#shared-links">{% trans "Shared Links" %}</a></li>
         {% endif %}
     </ul>
 </div>
@@ -21,114 +22,115 @@
 
 {% block right_panel %}
 <div class="lib-setting">
-<div class="hd ovhd">
-    <h3>{% trans "Library Settings" %}</h3>
-</div>
+    <h2>{% trans "Library Settings" %}</h2>
 
-<div id="lib-setting-basic-info">
-<form id="repo-setting-form" action="" method="post" class="form">{% csrf_token %}
-    <label>{% trans "Name" %}</label><br />
-    <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
-    <label>{% trans "Description" %}</label></br />
-    <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
+    <div id="basic-info" class="setting-item">
+        <h3>{% trans "Basic Info" %}</h3>
+        <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
+            <label>{% trans "Name" %}</label><br />
+            <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
+            <label>{% trans "Description" %}</label></br />
+            <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
 
-    {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
-    <label>{% trans "History" %}</label><br />
-    <input type="radio" name="history" value="full_history" {% if full_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Keep full history" %}</span><br />
-    <input type="radio" name="history" value="no_history" {% if no_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Don't keep history" %}</span><br />
-    <input type="radio" name="history" value="partial_history" {% if partial_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span calss="vam">{% trans "Only keep a period of history:" %}
-    <input type="text" name="days" size="4" {% if not days_enabled %} disabled="disabled" class="input-disabled"{% endif %} value="{{history_limit}}" /> {% trans "days" %}</span><br />
-    {% endif %}
-    
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-</div>
-
-<div id="lib-setting-transfer-ownership" class="hide">
-<form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
-    <p>{% trans "Transfer this library to another user:" %}</p>
-    <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-</div>
-
-{% if repo.encrypted and repo.enc_version == 2 %}
-<div id="lib-setting-change-password" class="hide">
-<form id="repo-change-passwd-form" action="" method="post" class="form">{% csrf_token %}
-    <p>{% trans "Change the password of this library:" %}</p>
-    <label>{% trans "Old Password" %}</label><br />
-    <input type="password" name="old_passwd" class="input" /><br />
-    <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
-    <input type="password" name="new_passwd" class="input" /><br />
-    <label>{% trans "New Password Again" %}</label><br />
-    <input type="password" name="new_passwd_again" class="input" /><br />
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-</div>
-{% endif %}
-
-<div id="lib-setting-shared-links" class="hide">
-{% if repo_shared_links%}
-<table class="sharelink-list">
-    <tr>
-        <th width="5%"><!--icon--></th>
-        <th width="25%">{% trans "Name"%}</th>
-        <th width="15%">{% trans "Created By"%}</th>
-        <th width="15%">{% trans "Size"%}</th>
-        <th width="15%">{% trans "Type"%}</th>
-        <th width="10%">{% trans "Visits"%}</th>
-        <th width="15%">{% trans "Operations"%}</th>
-    </tr>
-    {% for link in repo_shared_links %}
-    <tr class="repo-shared-link">
-        {% if not link.s_type %}
-            <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
-            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
-            <td>--</td>
-            <td>{% trans "Upload" %}</td>
-            <td>{{ link.view_cnt }}</td>
-            <td>
-                <a class="op vh" href="#" id="remove-repo-shared-upload-link" data-token={{ link.token }}>{% trans "Remove"%}</a>
-            </td>
-        {% else %}
-            {% if link.s_type == 'd'%}
-            <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-            <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
-            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
-            {% else %}
-            <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
-            <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+            {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
+            <label>{% trans "History" %}</label><br />
+            <input type="radio" name="history" value="full_history" {% if full_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Keep full history" %}</span><br />
+            <input type="radio" name="history" value="no_history" {% if no_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Don't keep history" %}</span><br />
+            <input type="radio" name="history" value="partial_history" {% if partial_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span calss="vam">{% trans "Only keep a period of history:" %}
+                <input type="text" name="days" size="4" {% if not days_enabled %} disabled="disabled" class="input-disabled"{% endif %} value="{{history_limit}}" /> {% trans "days" %}</span><br />
             {% endif %}
-            <td>{{ link.size|filesizeformat}}</td>
-            <td>{% trans "Download" %}</td>
-            <td>{{ link.view_cnt }}</td>
-            <td>
-                <a class="op vh" href="#" id="remove-repo-shared-download-link" data-token={{ link.token }}>{% trans "Remove"%}</a>
-            </td>
-        {% endif %}
-    </tr>
-    {% endfor %}
-</table>
-{% else %}
-<div class="empty-tips">
-    <h2 class="alc">{% trans "This repo doesn't have any shared link" %}</h2>
-    <p>{% trans "You can generate a share link from any dir/file. People receive this link can download/upload zipped dir or files." %}</p>
-</div>
-{% endif %}
-</div>
+
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+    </div>
+
+    <div id="transfer-ownership" class="setting-item hide">
+        <h3>{% trans "Transfer Ownership" %}</h3>
+        <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
+            <p>{% trans "Transfer this library to another user:" %}</p>
+            <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+    </div>
+
+    {% if repo.encrypted and repo.enc_version == 2 %}
+    <div id="change-password" class="setting-item hide">
+        <h3>{% trans "Change Password" %}</h3>
+        <form id="repo-change-passwd-form" action="" method="post" class="form">{% csrf_token %}
+            <p>{% trans "Change the password of this library:" %}</p>
+            <label>{% trans "Old Password" %}</label><br />
+            <input type="password" name="old_passwd" class="input" /><br />
+            <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
+            <input type="password" name="new_passwd" class="input" /><br />
+            <label>{% trans "New Password Again" %}</label><br />
+            <input type="password" name="new_passwd_again" class="input" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+    </div>
+    {% endif %}
+
+    {% if not repo.encrypted %}
+    <div id="shared-links" class="setting-item hide">
+        <h3>{% trans "Shared Links" %}</h3>
+        <p>{% trans "View and manage all the shared links in this library." %}</p>
+        <table>
+            <tr>
+                <th width="5%"><!--icon--></th>
+                <th width="25%">{% trans "Name"%}</th>
+                <th width="15%">{% trans "Created By"%}</th>
+                <th width="15%">{% trans "Size"%}</th>
+                <th width="15%">{% trans "Type"%}</th>
+                <th width="10%">{% trans "Visits"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
+            </tr>
+            {% if repo_shared_links %}
+            {% for link in repo_shared_links %}
+            <tr>
+                {% if not link.s_type %}
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                <td>--</td>
+                <td>{% trans "Upload" %}</td>
+                <td>{{ link.view_cnt }}</td>
+                <td>
+                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="upload">{% trans "Remove"%}</a>
+                </td>
+                {% else %}
+                {% if link.s_type == 'd'%}
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                {% else %}
+                <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                {% endif %}
+                <td>{{ link.size|filesizeformat}}</td>
+                <td>{% trans "Download" %}</td>
+                <td>{{ link.view_cnt }}</td>
+                <td>
+                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="download">{% trans "Remove"%}</a>
+                </td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+    </div>
+    {% endif %}
+
 </div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#repo-setting-form input[name="history"]').change(function() {
+$('#repo-basic-info-form input[name="history"]').change(function() {
     var value = $(this).attr('value'),
-        days_input = $('#repo-setting-form input[name="days"]');
+        days_input = $('#repo-basic-info-form input[name="days"]');
     if (value == 'full_history' || value == 'no_history') {
         days_input.attr('disabled', true).addClass('input-disabled');
     } else {
@@ -136,7 +138,7 @@ $('#repo-setting-form input[name="history"]').change(function() {
     }
 });
 
-$('#repo-setting-form').submit(function() {
+$('#repo-basic-info-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id');        
     var repo_name = $('[name="repo_name"]', form).val(),
@@ -165,7 +167,7 @@ $('#repo-setting-form').submit(function() {
     var submit_btn = $(this).children('input[type="submit"]');  
     disable(submit_btn);
     $.ajax({
-        url: '{% url 'repo_settings' repo.id %}',
+        url: '{% url 'repo_change_basic_info' repo.id %}',
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
@@ -203,7 +205,7 @@ $('#repo-owner-form').submit(function() {
 
     disable(submit_btn);
     $.ajax({
-        url: '{% url 'repo_owner' repo.id %}',
+        url: '{% url 'repo_transfer_owner' repo.id %}',
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
@@ -289,50 +291,42 @@ $('#repo-change-passwd-form').submit(function() {
 });
 {% endif %}
 
-$('li[id^="lib-setting-"]').click(function() {
-    var id = $(this).attr('id'), lib_setting_div;
-    lib_setting_div = $('#' + id.replace('-tab', ''));
+$('.side-textnav-tabs .tab').click(function() {
+    var cur_tab = $(this),
+        cur_tab_con = $($('a', cur_tab).attr('href'));
 
-    $('div[id^="lib-setting-"]').addClass('hide');
-    $('li[id^="lib-setting-"]').removeClass('tab-cur');
+    $('.side-textnav-tabs .tab').removeClass('tab-cur');
+    $('.lib-setting .setting-item').addClass('hide');
+    cur_tab.addClass('tab-cur');
+    cur_tab_con.removeClass('hide')
+    return false;
+});
 
-    lib_setting_div.removeClass('hide');
-    $(this).addClass('tab-cur');
-})
-
-$('#remove-repo-shared-download-link, #remove-repo-shared-upload-link').click(function() {
-    var link_token = $(this).data('token'),
-        link_item = $(this).parents('.repo-shared-link'),
-        id = $(this).attr('id'),
+{% if not repo.encrypted %}
+$('.lib-setting .rm-link').click(function() {
+    var op = $(this), 
+        link_token = op.data('token'),
+        link_type = op.data('type'), 
         ajax_url;
 
-    if (id.indexOf('upload') != -1) {
+    if (link_type == 'upload') {
         ajax_url = '{% url 'ajax_remove_shared_upload_link' %}';
     } else {
         ajax_url = '{% url 'ajax_remove_shared_link' %}';
     }
 
     $.ajax({
-        url: ajax_url,
-        type: 'GET',
+        url: ajax_url + '?t=' + e(link_token),
         dataType: 'json',
-        data: {
-            't': link_token,
-        },
         success: function(data) {
-            if (data['success']) {
-                link_item.remove();
-                feedback("{% trans "Removed successfully." %}", 'success');
-            } 
+            op.parents('tr').remove();
+            feedback("{% trans "Removed successfully." %}", 'success');
         },
-        error:function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-        }
+        error: ajaxErrorHandler
     });
+
+    return false;
 });
+{% endif %}
 </script>
 {% endblock %}
