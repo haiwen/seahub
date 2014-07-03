@@ -24,6 +24,7 @@ from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChange
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.utils import is_ldap_user
+from seahub.utils.ip import get_remote_ip
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -48,10 +49,55 @@ def log_user_in(request, user, redirect_to):
     if request.session.test_cookie_worked():
         request.session.delete_test_cookie()
 
-    cache.delete(LOGIN_ATTEMPT_PREFIX+user.username)
+    _clear_login_failed_attempts(request)
 
     return HttpResponseRedirect(redirect_to)
+
+def _get_login_failed_attempts(username=None, ip=None):
+    """Get login failed attempts base on username and ip.
+    If both username and ip are provided, return the max value.
+
+    Arguments:
+    - `username`:
+    - `ip`:
+    """
+    if username is None and ip is None:
+        return 0
+
+    username_attempts = ip_attempts = 0
+
+    if username:
+        username_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + username, 1)
+
+    if ip:
+        ip_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + ip, 1)
+
+    return max(username_attempts, ip_attempts)
+
+def _set_login_failed_attempts(count, username=None, ip=None):
+    """Set login failed attempts for both username and ip.
     
+    Arguments:
+    - `username`:
+    - `ip`:
+    """
+    timeout = settings.LOGIN_ATTEMPT_TIMEOUT
+    if username:
+        cache.set(LOGIN_ATTEMPT_PREFIX + username, count, timeout)
+    if ip:
+        cache.set(LOGIN_ATTEMPT_PREFIX + ip, count, timeout)
+
+def _clear_login_failed_attempts(request):
+    """Clear login failed attempts records.
+    
+    Arguments:
+    - `request`:
+    """
+    username = request.user.username
+    ip = get_remote_ip(request)
+    cache.delete(LOGIN_ATTEMPT_PREFIX + username)
+    cache.delete(LOGIN_ATTEMPT_PREFIX + ip)
+
 @csrf_protect
 @never_cache
 def login(request, template_name='registration/login.html',
@@ -64,6 +110,7 @@ def login(request, template_name='registration/login.html',
         return HttpResponseRedirect(reverse(redirect_if_logged_in))
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
+    ip = get_remote_ip(request)
 
     if request.method == "POST":
         if request.REQUEST.get('captcha_0', '') != '':
@@ -87,17 +134,23 @@ def login(request, template_name='registration/login.html',
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
                 username = urlquote(request.REQUEST.get('username', '').strip())
-                failed_attempt = cache.get(LOGIN_ATTEMPT_PREFIX+username, 1)
+                failed_attempt = _get_login_failed_attempts(username=username,
+                                                            ip=ip)
                 if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
+                    logger.warn('Login attempt limit reached, username: %s, ip: %s' % (username, ip))
                     form = CaptchaAuthenticationForm()
                 else:
                     failed_attempt += 1
-                    cache.set(LOGIN_ATTEMPT_PREFIX+username, failed_attempt,
-                              settings.LOGIN_ATTEMPT_TIMEOUT)
+                    _set_login_failed_attempts(failed_attempt, username, ip)
                     form = authentication_form(data=request.POST)
     else:
         ### GET
-        form = authentication_form(request)
+        failed_attempt = _get_login_failed_attempts(ip=ip)
+        if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
+            logger.warn('Login attempt limit reached, ip: %s' % ip)
+            form = CaptchaAuthenticationForm(request)
+        else:
+            form = authentication_form(request)
     
     request.session.set_test_cookie()
     
