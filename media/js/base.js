@@ -19,6 +19,11 @@ if ($('.messages')[0]) {
 $(function() {
 
     var msg_ct = $("#msg-count"); 
+
+    // for login page
+    if (msg_ct.length == 0) {
+        return false;
+    }
     // original title
     var orig_doc_title = document.title;
     var reqUnreadNum = function() {
