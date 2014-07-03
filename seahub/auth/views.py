@@ -67,25 +67,38 @@ def _get_login_failed_attempts(username=None, ip=None):
     username_attempts = ip_attempts = 0
 
     if username:
-        username_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + username, 1)
+        username_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + username, 0)
 
     if ip:
-        ip_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + ip, 1)
+        ip_attempts = cache.get(LOGIN_ATTEMPT_PREFIX + ip, 0)
 
     return max(username_attempts, ip_attempts)
 
-def _set_login_failed_attempts(count, username=None, ip=None):
-    """Set login failed attempts for both username and ip.
-    
+def _incr_login_faied_attempts(username=None, ip=None):
+    """Increase login failed attempts by 1 for both username and ip.
+
     Arguments:
     - `username`:
     - `ip`:
+
+    Returns new value of failed attempts.
     """
     timeout = settings.LOGIN_ATTEMPT_TIMEOUT
     if username:
-        cache.set(LOGIN_ATTEMPT_PREFIX + username, count, timeout)
+        try:
+            username_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + username)
+        except ValueError:
+            username_attempts = 0
+            cache.set(LOGIN_ATTEMPT_PREFIX + username, 0, timeout)
+
     if ip:
-        cache.set(LOGIN_ATTEMPT_PREFIX + ip, count, timeout)
+        try:
+            ip_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + ip)
+        except ValueError:
+            ip_attempts = 0
+            cache.set(LOGIN_ATTEMPT_PREFIX + ip, 0, timeout)
+
+    return max(username_attempts, ip_attempts)
 
 def _clear_login_failed_attempts(request):
     """Clear login failed attempts records.
@@ -122,8 +135,9 @@ def login(request, template_name='registration/login.html',
                     'remember_me', '') == 'on' else False
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
-            # else:
-            # show page with captcha
+            else:
+                # show page with captcha and increase failed login attempts
+                _incr_login_faied_attempts(ip=ip)
         else:
             form = authentication_form(data=request.POST)
             if form.is_valid():
@@ -134,20 +148,21 @@ def login(request, template_name='registration/login.html',
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
                 username = urlquote(request.REQUEST.get('username', '').strip())
-                failed_attempt = _get_login_failed_attempts(username=username,
+                failed_attempt = _incr_login_faied_attempts(username=username,
                                                             ip=ip)
+
                 if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
-                    logger.warn('Login attempt limit reached, username: %s, ip: %s' % (username, ip))
+                    logger.warn('Login attempt limit reached, username: %s, ip: %s, attemps: %d' %
+                                (username, ip, failed_attempt))
                     form = CaptchaAuthenticationForm()
                 else:
-                    failed_attempt += 1
-                    _set_login_failed_attempts(failed_attempt, username, ip)
                     form = authentication_form(data=request.POST)
     else:
         ### GET
         failed_attempt = _get_login_failed_attempts(ip=ip)
         if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
-            logger.warn('Login attempt limit reached, ip: %s' % ip)
+            logger.warn('Login attempt limit reached, ip: %s, attempts: %d' %
+                        (ip, failed_attempt))
             form = CaptchaAuthenticationForm(request)
         else:
             form = authentication_form(request)
