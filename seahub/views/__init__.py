@@ -409,39 +409,6 @@ def repo_settings(request, repo_id):
     if not is_owner:
         raise Http404
 
-    if request.method == 'POST':
-        content_type = 'application/json; charset=utf-8'
-
-        form = RepoSettingForm(request.POST)
-        if not form.is_valid():
-            return HttpResponse(json.dumps({
-                        'error': str(form.errors.values()[0])
-                        }), status=400, content_type=content_type)
-
-        repo_name = form.cleaned_data['repo_name']
-        repo_desc = form.cleaned_data['repo_desc']
-        days = form.cleaned_data['days']
-
-        # Edit library info (name, descryption).
-        if repo.name != repo_name or repo.desc != repo_desc:
-            if not edit_repo(repo_id, repo_name, repo_desc, username):
-                err_msg = _(u'Failed to edit library information.')
-                return HttpResponse(json.dumps({'error': err_msg}),
-                                    status=500, content_type=content_type)
-
-        # set library history
-        if days is not None and ENABLE_REPO_HISTORY_SETTING:
-            res = set_repo_history_limit(repo_id, days)
-            if res != 0:
-                return HttpResponse(json.dumps({
-                            'error': _(u'Failed to save settings on server')
-                            }), status=400, content_type=content_type)
-
-        messages.success(request, _(u'Settings saved.'))
-        return HttpResponse(json.dumps({'success': True}),
-                            content_type=content_type)
-
-    ### handle get request
     history_limit = seaserv.get_repo_history_limit(repo.id)
     full_history_checked = no_history_checked = partial_history_checked = False
     if history_limit > 0:
@@ -519,7 +486,63 @@ def repo_settings(request, repo_id):
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
-def repo_owner(request, repo_id):
+def repo_change_basic_info(request, repo_id):
+    """Handle post request to change library basic info.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # no settings for virtual repo
+    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        raise Http404
+
+    form = RepoSettingForm(request.POST)
+    if not form.is_valid():
+        return HttpResponse(json.dumps({
+                    'error': str(form.errors.values()[0])
+                    }), status=400, content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    days = form.cleaned_data['days']
+
+    # Edit library info (name, descryption).
+    if repo.name != repo_name or repo.desc != repo_desc:
+        if not edit_repo(repo_id, repo_name, repo_desc, username):
+            err_msg = _(u'Failed to edit library information.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=500, content_type=content_type)
+
+    # set library history
+    if days is not None and ENABLE_REPO_HISTORY_SETTING:
+        res = set_repo_history_limit(repo_id, days)
+        if res != 0:
+            return HttpResponse(json.dumps({
+                        'error': _(u'Failed to save settings on server')
+                        }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Settings saved.'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def repo_transfer_owner(request, repo_id):
     """Handle post request to transfer library owner.
     """
     if request.method != 'POST':
