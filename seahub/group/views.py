@@ -802,7 +802,10 @@ def group_manage(request, group_id):
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
-        
+
+    ENABLE_MAKE_GROUP_PUBLIC = getattr(settings, \
+                        'ENABLE_MAKE_GROUP_PUBLIC', False)
+
     return render_to_response('group/group_manage.html', {
             'group' : group,
             'members': members_all,
@@ -811,6 +814,7 @@ def group_manage(request, group_id):
             'is_staff': True,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
+            'enable_make_group_public': ENABLE_MAKE_GROUP_PUBLIC,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax

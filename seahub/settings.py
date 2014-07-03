@@ -198,6 +198,9 @@ AUTHENTICATION_BACKENDS = (
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+# Enable or disable make group public
+ENABLE_MAKE_GROUP_PUBLIC = False
+
 # show or hide library 'download' button
 SHOW_REPO_DOWNLOAD_BUTTON = False
 
