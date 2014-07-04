@@ -5977,7 +5977,7 @@ msgstr "Unbekannte Datenkodierung"
 #: seahub/views/file.py:515
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
-msgstr "Für Dateien größer als %sM ist keine Onlinevorschau möglich."
+msgstr "Für Dateien größer als %s ist keine Onlinevorschau möglich."
 
 #: seahub/views/file.py:319 seahub/views/file.py:553 seahub/views/file.py:568
 #: seahub/views/file.py:590
