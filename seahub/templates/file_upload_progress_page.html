@@ -5,7 +5,7 @@
     // Update progress bar
     function updateProgress() {
         $.ajax({
-            url: '{{ httpserver_root }}/upload_progress/?X-Progress-ID=' + '{{ uuid }}' + '&callback=?', 
+            url: '{{ fileserver_root }}/upload_progress/?X-Progress-ID=' + '{{ uuid }}' + '&callback=?', 
             dataType: 'jsonp',
             cache: false,
             success: function(data) {

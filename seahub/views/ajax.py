@@ -1601,7 +1601,7 @@ def get_file_op_url(request, repo_id):
     username = request.user.username
     url = ''
     if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                         op_type, username)
         url = gen_file_upload_url(token, op_type + '-aj')
     

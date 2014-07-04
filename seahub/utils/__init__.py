@@ -44,9 +44,9 @@ try:
 except ImportError:
     CLOUD_MODE = False
 try:
-    from seahub.settings import ENABLE_INNER_HTTPSERVER
+    from seahub.settings import ENABLE_INNER_FILESERVER
 except ImportError:
-    ENABLE_INNER_HTTPSERVER = True
+    ENABLE_INNER_FILESERVER = True
 
 try:
     from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
@@ -125,23 +125,23 @@ def list_to_string(l):
     """
     return ','.join(l)
 
-def get_httpserver_root():
-    """ Construct seafile httpserver address and port.
+def get_fileserver_root():
+    """ Construct seafile fileserver address and port.
 
     Returns:
-    	Constructed httpserver root.
+    	Constructed fileserver root.
     """
 
-    from seahub.settings import HTTP_SERVER_ROOT
+    from seahub.settings import FILE_SERVER_ROOT
 
-    assert HTTP_SERVER_ROOT is not None, "SERVICE_URL is not set in ccnet.conf."
+    assert FILE_SERVER_ROOT is not None, "SERVICE_URL is not set in ccnet.conf."
 
-    return HTTP_SERVER_ROOT
+    return FILE_SERVER_ROOT
 
-def get_inner_httpserver_root():
-    """Construct inner seafile httpserver address and port.
+def get_inner_fileserver_root():
+    """Construct inner seafile fileserver address and port.
 
-    Inner httpserver root allows Seahub access httpserver through local
+    Inner fileserver root allows Seahub access fileserver through local
     address, thus avoiding the overhead of DNS queries, as well as other
     related issues, for example, the server can not ping itself, etc.
 
@@ -149,7 +149,7 @@ def get_inner_httpserver_root():
     	http://127.0.0.1:<port>
     """
 
-    return seahub.settings.INNER_HTTP_SERVER_ROOT
+    return seahub.settings.INNER_FILE_SERVER_ROOT
 
 def gen_token(max_length=5):
     """
@@ -362,10 +362,10 @@ def get_commit_before_new_merge(commit):
     return commit
 
 def gen_inner_file_get_url(token, filename):
-    """Generate inner httpserver file url.
+    """Generate inner fileserver file url.
 
-    If ``ENABLE_INNER_HTTPSERVER`` set to False(defaults to True), will
-    returns outer httpserver file url.
+    If ``ENABLE_INNER_FILESERVER`` set to False(defaults to True), will
+    returns outer fileserver file url.
 
     Arguments:
     - `token`:
@@ -374,8 +374,8 @@ def gen_inner_file_get_url(token, filename):
     Returns:
     	e.g., http://127.0.0.1:<port>/files/<token>/<filename>
     """
-    if ENABLE_INNER_HTTPSERVER:
-        return '%s/files/%s/%s' % (get_inner_httpserver_root(), token,
+    if ENABLE_INNER_FILESERVER:
+        return '%s/files/%s/%s' % (get_inner_fileserver_root(), token,
                                    urlquote(filename))
     else:
         return gen_file_get_url(token, filename)
@@ -389,23 +389,23 @@ def get_max_upload_file_size():
     
 def gen_block_get_url(token, blkid):
     """
-    Generate httpserver block url.
+    Generate fileserver block url.
     Format: http://<domain:port>/blks/<token>/<blkid>
     """
     if blkid:
-        return '%s/blks/%s/%s' % (get_httpserver_root(), token, blkid)
+        return '%s/blks/%s/%s' % (get_fileserver_root(), token, blkid)
     else:
-        return '%s/blks/%s/' % (get_httpserver_root(), token)
+        return '%s/blks/%s/' % (get_fileserver_root(), token)
 
 def gen_file_get_url(token, filename):
     """
-    Generate httpserver file url.
+    Generate fileserver file url.
     Format: http://<domain:port>/files/<token>/<filename>
     """
-    return '%s/files/%s/%s' % (get_httpserver_root(), token, urlquote(filename))
+    return '%s/files/%s/%s' % (get_fileserver_root(), token, urlquote(filename))
 
 def gen_file_upload_url(token, op):
-    return '%s/%s/%s' % (get_httpserver_root(), op, token)
+    return '%s/%s/%s' % (get_fileserver_root(), op, token)
 
 def get_ccnet_server_addr_port():
     """get ccnet server host and port"""

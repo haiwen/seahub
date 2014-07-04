@@ -44,7 +44,7 @@ from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, UploadLinkShare
 from seahub.forms import RepoPassowrdForm, RepoSettingForm
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_httpserver_root, gen_shared_upload_link, \
+    get_fileserver_root, gen_shared_upload_link, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
     EMPTY_SHA1, normalize_file_path, is_valid_username, \
@@ -1244,11 +1244,11 @@ def file_upload_progress_page(request):
 
     '''
     uuid = request.GET.get('uuid', '')
-    httpserver_root = get_httpserver_root()
+    fileserver_root = get_fileserver_root()
     upload_progress_con_id = request.GET.get('upload_progress_con_id', '')
     return render_to_response('file_upload_progress_page.html', {
             'uuid': uuid,
-            'httpserver_root': httpserver_root,
+            'fileserver_root': fileserver_root,
             'upload_progress_con_id': upload_progress_con_id,
             }, context_instance=RequestContext(request))
 
@@ -1507,7 +1507,7 @@ def view_shared_upload_link(request, token):
     max_upload_file_size = MAX_UPLOAD_FILE_SIZE
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
-    token = seafile_api.get_httpserver_access_token(repo_id, 'dummy',
+    token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                     'upload', request.user.username)
     ajax_upload_url = gen_file_upload_url(token, 'upload-api').replace('api', 'aj')
 

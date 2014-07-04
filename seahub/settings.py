@@ -7,7 +7,7 @@ import re
 import random
 import string
 
-from seaserv import HTTP_SERVER_ROOT, HTTP_SERVER_PORT, HTTP_SERVER_HTTPS
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -431,6 +431,10 @@ def load_local_settings(module):
     that begin with "EXTRA_".
 
     '''
+    if hasattr(module, 'HTTP_SERVER_ROOT'):
+        if not hasattr(module, 'FILE_SERVER_ROOT'):
+            module.FILE_SERVER_ROOT = module.HTTP_SERVER_ROOT
+        del module.HTTP_SERVER_ROOT
     for attr in dir(module):
         match = re.search('^EXTRA_(\w+)', attr)
         if match:
@@ -491,8 +495,4 @@ if 'win32' in sys.platform:
 # other settings files.
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
-if HTTP_SERVER_HTTPS:
-    INNER_HTTP_SERVER_ROOT = 'https://127.0.0.1:' + HTTP_SERVER_PORT
-else:
-    INNER_HTTP_SERVER_ROOT = 'http://127.0.0.1:' + HTTP_SERVER_PORT
-    
+INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
