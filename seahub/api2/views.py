@@ -1668,29 +1668,25 @@ class DirView(APIView):
                                  'You do not have permission to rename a folder.')
 
             parent_dir = os.path.dirname(path)
-            parent_dir_utf8 = parent_dir.encode('utf-8')
-            
             old_dir_name = os.path.basename(path)
-            old_dir_name_utf8 = old_dir_name.encode('utf-8')
-            
+
             newname = request.POST.get('newname', '')
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST, "newname is mandatory.")
-            newname_utf8 = newname.encode('utf-8')
-            
-            if newname_utf8 == old_dir_name_utf8:
+
+            if newname == old_dir_name:
                 return Response('success', status=status.HTTP_200_OK)
 
             try:
                 # rename duplicate name
-                checked_newname_utf8 = check_filename_with_rename_utf8(repo_id, parent_dir, newname_utf8)
-                
+                checked_newname = check_filename_with_rename(
+                    repo_id, parent_dir, newname)
                 # rename dir
-                seafile_api.rename_file(repo_id, parent_dir, old_dir_name_utf8, checked_newname_utf8, username)
-                
+                seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
+                                        checked_newname, username)
                 return Response('success', status=status.HTTP_200_OK)
-            
             except SearpcError, e:
+                logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to rename directory.')
         # elif operation.lower() == 'move':
@@ -2300,24 +2296,28 @@ class SharedRepo(APIView):
 
         if share_type == 'personal':
             user = request.GET.get('user', '')
-            
             if not user:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'user is required.')
-            
+
             if not is_valid_username(user):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'User is not valid')
-                
+
             remove_share(repo_id, username, user)
         elif share_type == 'group':
             group_id = request.GET.get('group_id', '')
-            
             if not group_id:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'group_id is required.')
-            
-            unshare_group_repo(repo_id, group_id, user)
+
+            try:
+                group_id = int(group_id)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'group_id is not valid.')
+
+            seafile_api.unset_group_repo(repo_id, int(group_id), username)
         elif share_type == 'public':
             unset_inner_pub_repo(repo_id)
         else:
@@ -2337,6 +2337,7 @@ class SharedRepo(APIView):
 
         share_type = request.GET.get('share_type')
         user = request.GET.get('user')
+        users = request.GET.get('users')
         group_id = request.GET.get('group_id')
         permission = request.GET.get('permission')
 
@@ -2345,53 +2346,58 @@ class SharedRepo(APIView):
                              'Permission need to be rw or r.')
 
         if share_type == 'personal':
-            if not user:
+            from_email = seafile_api.get_repo_owner(repo_id)
+            shared_users = []
+            invalid_users = []
+            notexistent_users = []
+            notsharable_errors = []
+
+            usernames = []
+            if user:
+                usernames += user.split(",")
+            if users:
+                usernames += users.split(",")
+            if not user and not users:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 'user or users (comma separated are mandatory')
-            else:
-                users = user.split(",")
-                
-                from_email = seafile_api.get_repo_owner(repo_id)
-                
-                shared_users = []
-                invalid_users = []
-                notexistent_users = []
-                notsharable_errors = []
-                for u in users:
-                    
-                    if not is_valid_username(u): 
-                        invalid_users.append(u)
-                        continue
-                    if not is_registered_user(u): 
-                        notexistent_users.append(u)
-                        continue
-                        
+                                 'user or users (comma separated are mandatory) are not provided')
+            for u in usernames:
+                if not u:
+                    continue
+
+                if not is_valid_username(u):
+                    invalid_users.append(u)
+                    continue
+
+                if not is_registered_user(u):
+                    notexistent_users.append(u)
+                    continue
+
+                try:
+                    seafile_api.share_repo(repo_id, from_email, u, permission)
+                    shared_users.append(u)
+                except SearpcError, e:
+                    logger.error(e)
+                    notsharable_errors.append(e)
+
+            if invalid_users or notexistent_users or notsharable_errors:
+                # removing already created share
+                for s_user in shared_users:
                     try:
-                        seafile_api.share_repo(repo_id, from_email, u,
-                                               permission)
-                        shared_users.append(u)
+                        remove_share(repo_id, from_email, s_user)
                     except SearpcError, e:
-                        notsharable_errors.append(e)
-                        
-                if invalid_users or notexistent_users or notsharable_errors:
-                    # removing already created share
-                    for s_user in shared_users:
-                        try:
-                            remove_share(repo_id, from_email, s_user)
-                        except SearpcError, e:
-                            # ignoring this error, go to next unsharing
-                            continue
-                
-                if invalid_users:
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                            'Some users are not valid, sharing rolled back')
-                if notexistent_users:
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                            'Some users are not existent, sharing rolled back')
-                if notsharable_errors:
-                    # show the first sharing error
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                         "Searpc Error: " + notsharable_errors[0].msg)
+                        # ignoring this error, go to next unsharing
+                        continue
+
+            if invalid_users:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'Some users are not valid, sharing rolled back')
+            if notexistent_users:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 'Some users are not existent, sharing rolled back')
+            if notsharable_errors:
+                # show the first sharing error
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 'Internal error occurs, sharing rolled back')
 
         elif share_type == 'group':
             try:
