@@ -24,6 +24,7 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
     RepoCreateForm, SharedRepoCreateForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
+from seahub.message.models import UserMessage
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
@@ -1319,6 +1320,12 @@ def set_notices_seen(request):
     for notice in unseen_notices:
         notice.seen = True
         notice.save()
+
+        # mark related user msg as read
+        if notice.is_user_message():
+            d = notice.user_message_detail_to_dict()
+            msg_from = d.get('msg_from')
+            UserMessage.objects.update_unread_messages(msg_from, username)
 
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
