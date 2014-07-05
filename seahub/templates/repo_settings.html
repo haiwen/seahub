@@ -21,9 +21,6 @@
         {% if repo.encrypted and repo.enc_version == 2 %}
         <li class="tab"><a href="#change-password">{% trans "Change Password" %}</a></li>
         {% endif %}
-        {% if not repo.encrypted %}
-        <li class="tab"><a href="#shared-links">{% trans "Shared Links" %}</a></li>
-        {% endif %}
     </ul>
 </div>
 {% endblock %}
@@ -77,70 +74,6 @@
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
-    </div>
-    {% endif %}
-
-    {% if not repo.encrypted %}
-    <div id="shared-links" class="setting-item hide">
-        <h3>{% trans "Shared Links" %}</h3>
-        <p>{% trans "View and manage all the shared links in this library." %}</p>
-        <table>
-            <caption>{% trans "Upload links" %}</caption>
-            <tr>
-                <th width="5%"><!--icon--></th>
-                <th width="42%">{% trans "Name"%}</th>
-                <th width="15%">{% trans "Created By"%}</th>
-                <th width="15%">{% trans "Size"%}</th>
-                <th width="8%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
-            </tr>
-            {% if uploadlinks %}
-            {% for link in uploadlinks %}
-            <tr>
-                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
-                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
-                <td>--</td>
-                <td>{{ link.view_cnt }}</td>
-                <td>
-                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="upload">{% trans "Remove"%}</a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% endif %}
-        </table>
-
-        <table>
-            <caption>{% trans "Download links" %}</caption>
-            <tr>
-                <th width="5%"><!--icon--></th>
-                <th width="42%">{% trans "Name"%}</th>
-                <th width="15%">{% trans "Created By"%}</th>
-                <th width="15%">{% trans "Size"%}</th>
-                <th width="8%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
-            </tr>
-            {% if fileshares %}
-            {% for link in fileshares %}
-            <tr>
-                {% if link.s_type == 'd'%}
-                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
-                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
-                {% else %}
-                <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-                <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
-                <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
-                {% endif %}
-                <td>{{ link.filesize|filesizeformat}}</td>
-                <td>{{ link.view_cnt }}</td>
-                <td>
-                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="download">{% trans "Remove"%}</a>
-                </td>
-            </tr>
-            {% endfor %}
-            {% endif %}
-        </table>
     </div>
     {% endif %}
 
@@ -322,32 +255,5 @@ $('.side-textnav-tabs .tab').click(function() {
     cur_tab_con.removeClass('hide')
     return false;
 });
-
-{% if not repo.encrypted %}
-$('.lib-setting .rm-link').click(function() {
-    var op = $(this), 
-        link_token = op.data('token'),
-        link_type = op.data('type'), 
-        ajax_url;
-
-    if (link_type == 'upload') {
-        ajax_url = '{% url 'ajax_remove_shared_upload_link' %}';
-    } else {
-        ajax_url = '{% url 'ajax_remove_shared_link' %}';
-    }
-
-    $.ajax({
-        url: ajax_url + '?t=' + e(link_token),
-        dataType: 'json',
-        success: function(data) {
-            op.parents('tr').remove();
-            feedback("{% trans "Removed successfully." %}", 'success');
-        },
-        error: ajaxErrorHandler
-    });
-
-    return false;
-});
-{% endif %}
 </script>
 {% endblock %}

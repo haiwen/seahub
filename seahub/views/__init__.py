@@ -429,45 +429,6 @@ def repo_settings(request, repo_id):
     if history_limit <= 0:
         days_enabled = False
 
-    # download links
-    fileshares = FileShare.objects.filter(repo_id=repo_id)
-    for fs in fileshares:
-        if fs.is_file_share_link():
-            if seafile_api.get_file_id_by_path(repo.id, fs.path) is None:
-                fs.delete()
-                continue
-            fs.filename = os.path.basename(fs.path)
-            fs.shared_link = gen_file_share_link(fs.token)
-
-            path = fs.path.rstrip('/')  # Normalize file path
-            obj_id = seafile_api.get_file_id_by_path(repo.id, path)
-            fs.filesize = seafile_api.get_file_size(repo.store_id, repo.version,
-                                                obj_id)
-        else:
-            if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
-                fs.delete()
-                continue
-            fs.filename = os.path.basename(fs.path.rstrip('/'))
-            fs.shared_link = gen_dir_share_link(fs.token)
-
-            path = fs.path
-            if path[-1] != '/':         # Normalize dir path
-                path += '/'
-            #get dir size
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(
-                repo.id, repo.head_cmmt_id, path)
-            fs.filesize = seafserv_threaded_rpc.get_dir_size(repo.store_id,
-                                                         repo.version, dir_id)
-
-    # upload links
-    uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id)
-    for link in uploadlinks:
-        if seafile_api.get_dir_id_by_path(repo.id, link.path) is None:
-            link.delete()
-            continue
-        link.dir_name = os.path.basename(link.path.rstrip('/'))
-        link.shared_link = gen_shared_upload_link(link.token)
-
     return render_to_response('repo_settings.html', {
             'repo': repo,
             'repo_owner': repo_owner,
@@ -480,8 +441,6 @@ def repo_settings(request, repo_id):
             'partial_history_enabled': partial_history_enabled,
             'days_enabled': days_enabled,
             'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
-            'fileshares': fileshares,
-            'uploadlinks': uploadlinks,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
