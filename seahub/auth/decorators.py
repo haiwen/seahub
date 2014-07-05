@@ -4,7 +4,7 @@ except ImportError:
     from django.utils.functional import update_wrapper, wraps  # Python 2.4 fallback.
 
 from seahub.auth import REDIRECT_FIELD_NAME
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.utils.decorators import available_attrs
 from django.utils.http import urlquote
 import simplejson as json

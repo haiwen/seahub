@@ -38,14 +38,6 @@
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
                     </div>
-                    <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="set-expiration" id="link-expire-switch" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
-                    </label>
-                    <div id="link-expire" class="hide">
-                        <label>{% trans "Days" %}</label><br />
-                        <input type="text" name="expire-days" disabled="disabled" class="input input-disabled" />
-                    </div>
                     <p class="error hide"></p>
                 </div>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
