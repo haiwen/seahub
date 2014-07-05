@@ -429,7 +429,6 @@ def repo_settings(request, repo_id):
     if history_limit <= 0:
         days_enabled = False
 
-    repo_shared_links = []
     # download links
     fileshares = FileShare.objects.filter(repo_id=repo_id)
     for fs in fileshares:
@@ -442,9 +441,8 @@ def repo_settings(request, repo_id):
 
             path = fs.path.rstrip('/')  # Normalize file path
             obj_id = seafile_api.get_file_id_by_path(repo.id, path)
-            fs.size = seafile_api.get_file_size(repo.store_id, repo.version,
+            fs.filesize = seafile_api.get_file_size(repo.store_id, repo.version,
                                                 obj_id)
-            repo_shared_links.append(fs)
         else:
             if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
                 fs.delete()
@@ -458,9 +456,8 @@ def repo_settings(request, repo_id):
             #get dir size
             dir_id = seafserv_threaded_rpc.get_dirid_by_path(
                 repo.id, repo.head_cmmt_id, path)
-            fs.size = seafserv_threaded_rpc.get_dir_size(repo.store_id,
+            fs.filesize = seafserv_threaded_rpc.get_dir_size(repo.store_id,
                                                          repo.version, dir_id)
-            repo_shared_links.insert(0, fs)
 
     # upload links
     uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id)
@@ -470,7 +467,6 @@ def repo_settings(request, repo_id):
             continue
         link.dir_name = os.path.basename(link.path.rstrip('/'))
         link.shared_link = gen_shared_upload_link(link.token)
-        repo_shared_links.insert(0, link)
 
     return render_to_response('repo_settings.html', {
             'repo': repo,
@@ -484,7 +480,8 @@ def repo_settings(request, repo_id):
             'partial_history_enabled': partial_history_enabled,
             'days_enabled': days_enabled,
             'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
-            'repo_shared_links': repo_shared_links,
+            'fileshares': fileshares,
+            'uploadlinks': uploadlinks,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax

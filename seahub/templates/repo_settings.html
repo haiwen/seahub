@@ -4,6 +4,14 @@
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+.side-textnav {
+    margin-top:10px;
+}
+</style>
+{% endblock %}
+
 {% block left_panel %}
 <a href="{% url 'repo' repo.id %}" title="{% trans "Back to Library" %}"><span class="icon-chevron-left"></span> {% trans "Back to Library" %}</a>
 <div class="side-textnav">
@@ -77,29 +85,44 @@
         <h3>{% trans "Shared Links" %}</h3>
         <p>{% trans "View and manage all the shared links in this library." %}</p>
         <table>
+            <caption>{% trans "Upload links" %}</caption>
             <tr>
                 <th width="5%"><!--icon--></th>
-                <th width="25%">{% trans "Name"%}</th>
+                <th width="42%">{% trans "Name"%}</th>
                 <th width="15%">{% trans "Created By"%}</th>
                 <th width="15%">{% trans "Size"%}</th>
-                <th width="15%">{% trans "Type"%}</th>
-                <th width="10%">{% trans "Visits"%}</th>
+                <th width="8%">{% trans "Visits"%}</th>
                 <th width="15%">{% trans "Operations"%}</th>
             </tr>
-            {% if repo_shared_links %}
-            {% for link in repo_shared_links %}
+            {% if uploadlinks %}
+            {% for link in uploadlinks %}
             <tr>
-                {% if not link.s_type %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
                 <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                 <td>--</td>
-                <td>{% trans "Upload" %}</td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
                     <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="upload">{% trans "Remove"%}</a>
                 </td>
-                {% else %}
+            </tr>
+            {% endfor %}
+            {% endif %}
+        </table>
+
+        <table>
+            <caption>{% trans "Download links" %}</caption>
+            <tr>
+                <th width="5%"><!--icon--></th>
+                <th width="42%">{% trans "Name"%}</th>
+                <th width="15%">{% trans "Created By"%}</th>
+                <th width="15%">{% trans "Size"%}</th>
+                <th width="8%">{% trans "Visits"%}</th>
+                <th width="15%">{% trans "Operations"%}</th>
+            </tr>
+            {% if fileshares %}
+            {% for link in fileshares %}
+            <tr>
                 {% if link.s_type == 'd'%}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
@@ -109,13 +132,11 @@
                 <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
                 <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                 {% endif %}
-                <td>{{ link.size|filesizeformat}}</td>
-                <td>{% trans "Download" %}</td>
+                <td>{{ link.filesize|filesizeformat}}</td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
                     <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="download">{% trans "Remove"%}</a>
                 </td>
-                {% endif %}
             </tr>
             {% endfor %}
             {% endif %}
