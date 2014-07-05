@@ -232,7 +232,8 @@ $('#gen-link-btn').click(function() {
         form = $('#link-options'),
         form_id = form.attr('id'),
         use_passwd = $('#link-passwd-switch').attr('checked'),
-        passwd, passwd_again, post_data;
+        set_expiration = $('#link-expire-switch').attr('checked'),
+        passwd, passwd_again, expire_days, post_data;
 
     if (use_passwd) {
         passwd = $('input[name="passwd"]', form).val();
@@ -259,6 +260,20 @@ $('#gen-link-btn').click(function() {
         post_data = {'use_passwd': 0};
     }
 
+    if (set_expiration) {
+        expire_days = $('input[name="expire-days"]', form).val();
+        if (!$.trim(expire_days)) {
+            apply_form_error(form_id, "{% trans "Please enter days" %}");
+            return false;
+        }
+        if (Math.floor(expire_days) == expire_days && $.isNumeric(expire_days)) {
+            post_data["expire_days"] = expire_days;
+        } else {
+            apply_form_error(form_id, "{% trans "Please enter valid days" %}");
+            return false;
+        }
+    }
+
     $.ajax({
             url: gen_link_btn.data('url'),
             type: 'POST',
@@ -271,9 +286,9 @@ $('#gen-link-btn').click(function() {
                 gen_link_btn.addClass('hide');
 
                 $('#link-options, #link-options .error').addClass('hide');
-                $('#link-passwd').hide(); // slideDown use 'show()'
-                $('#link-passwd-switch').attr('checked', false).parent().removeClass('checkbox-checked');
-                $('[type="password"]', form).val('').attr('disabled', false).removeClass('input-disabled');
+                $('#link-passwd, #link-expire').hide(); // slideDown use 'show()'
+                $('#link-passwd-switch, #link-expire-switch').attr('checked', false).parent().removeClass('checkbox-checked');
+                $('[type="password"], [name="expire-days"]', form).val('').attr('disabled', false).removeClass('input-disabled');
 
                 $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
                 $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
@@ -287,7 +302,7 @@ $('#gen-link-btn').click(function() {
                     feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
                 } else {
                     feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }
+                }   
             }
     });
     return false;
@@ -495,5 +510,19 @@ $('#link-passwd-switch').click(function () {
     } else {
         link_passwd.slideUp(100);
         pwd_input.attr('disabled', true).addClass('input-disabled');
+    }
+});
+
+$('#link-expire-switch').click(function () {
+    var form = $('#link-options'),
+        days_input = $('input[name="expire-days"]', form);
+    var link_expire = $('#link-expire'); 
+
+    if ($(this).attr('checked')) {
+        link_expire.slideDown(100);
+        days_input.attr('disabled', false).removeClass('input-disabled');
+    } else {
+        link_expire.slideUp(100);
+        days_input.attr('disabled', true).addClass('input-disabled');
     }
 });
