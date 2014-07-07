@@ -358,6 +358,9 @@ def group_make_public(request, group_id):
     """
     Make a group public, only group staff can perform this operation.
     """
+    if not getattr(settings, 'ENABLE_MAKE_GROUP_PUBLIC', False):
+        raise Http404
+
     try:
         group_id_int = int(group_id)
     except ValueError:
@@ -790,7 +793,7 @@ def group_manage(request, group_id):
         return HttpResponseRedirect(reverse('group_list', args=[]))
 
     members_all = ccnet_threaded_rpc.get_group_members(group.id)
-    admins = [ m for m in members_all if m.is_staff ]    
+    admins = [m for m in members_all if m.is_staff]
 
     contacts = Contact.objects.get_contacts_by_user(request.user.username)
 
@@ -803,18 +806,22 @@ def group_manage(request, group_id):
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
 
-    ENABLE_MAKE_GROUP_PUBLIC = getattr(settings, \
-                        'ENABLE_MAKE_GROUP_PUBLIC', False)
+    ENABLE_MAKE_GROUP_PUBLIC = getattr(settings,
+                                       'ENABLE_MAKE_GROUP_PUBLIC', False)
+    if ENABLE_MAKE_GROUP_PUBLIC and not request.user.org:
+        can_make_group_public = True
+    else:
+        can_make_group_public = False
 
     return render_to_response('group/group_manage.html', {
-            'group' : group,
+            'group': group,
             'members': members_all,
             'admins': admins,
             'contacts': contacts,
             'is_staff': True,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
-            'enable_make_group_public': ENABLE_MAKE_GROUP_PUBLIC,
+            "can_make_group_public": can_make_group_public,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
