@@ -6,7 +6,9 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
+        {% if request.user.role == default_user or request.user.role == None %}
         <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+        {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>

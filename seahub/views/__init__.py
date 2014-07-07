@@ -975,17 +975,20 @@ def myhome(request):
         allow_public_share = True
 
     # user guide
+    from seahub import constants
+    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
     need_guide = False
     if len(owned_repos) == 0:
         need_guide = UserOptions.objects.is_user_guide_enabled(username)
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
             # create a default library for user
-            create_default_library(request)
 
-            # refetch owned repos
-            owned_repos = get_owned_repo_list(request)
-            calculate_repos_last_modify(owned_repos)
+            if request.user.role == DEFAULT_USER or request.user.role == None:
+                create_default_library(request)
+                # refetch owned repos
+                owned_repos = get_owned_repo_list(request)
+                calculate_repos_last_modify(owned_repos)
 
     repo_create_url = reverse("repo_create")
 

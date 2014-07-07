@@ -2,10 +2,11 @@
 <table>
     <tr>
         <th width="25%">{% trans "Email" %}</th>
-        <th width="15%">{% trans "Status" %}</th>
+        <th width="12%">{% trans "Status" %}</th>
+        <th width="11%">{% trans "Role" %}</th>
         <th width="15%">{% trans "Space Used" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="23%">{% trans "Operations" %}</th>
+        <th width="15%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in users %}
@@ -28,7 +29,23 @@
             </select>
           {% endif %}
         </td>
-        
+        <td>
+          {% if user.source != 'LDAP' %}
+            <div class="user-role">
+                {% if user.role == default_user or user.role == None %}
+                    <span class="user-role-cur-value">{% trans "Default" %}</span>
+                {% else %}
+                    <span class="user-role-cur-value">{% trans "Guest" %}</span>
+                {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
+            </div>
+            <select name="role" class="user-role-select hide">
+                <option value={{default_user}} {%if user.role == default_user or user.role == None %}selected="selected"{% endif %}>{% trans "Default" %}</option>
+                <option value={{guest_user}} {%if user.role == guest_user %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
+            </select>
+          {% endif %}
+        </td>
+
         <td>
             {% if CALC_SHARE_USAGE %}
             {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}

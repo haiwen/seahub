@@ -9,11 +9,13 @@
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
+        {% if request.user.role == default_user or request.user.role == None %}
         {% if not force_server_crypto %}
         <li class="tab"><a href="#enc-lib-setting">{% trans "Encrypted Libraries" %}</a></li>
         {% endif %}
         <li class="tab"><a href="#sub-lib-setting">{% trans "Sub-library" %}</a></li>
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
+        {% endif %}
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
     </ul>
 </div>
@@ -72,6 +74,7 @@
     </ul>
 </div>
 
+{% if request.user.role == default_user or request.user.role == None %}
 {% if not force_server_crypto %}
 <div class="setting-item" id="enc-lib-setting">
 <h3>{% trans "Encrypted Libraries Setting" %}</h3>
@@ -106,6 +109,7 @@
     <p>{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
+{% endif %}
 
 <div class="setting-item" id="del-account">
 <h3>{% trans "Delete Account" %}</h3>

@@ -2,7 +2,9 @@
 {% load url from future %}
 
 <h3>{% trans "My Groups" %}</h3>
+{% if request.user.role == default_user or request.user.role == None %}
 <button id="group-add"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Group" %}</span></button>
+{% endif %}
 {% if joined_groups %}
 <ul class="group-list w100 ovhd">
     {% for group in joined_groups %}
@@ -24,10 +26,17 @@
     {% endfor %}
 </ul>
 {% else %}
+{% if request.user.role == default_user or request.user.role == None %}
 <div class="empty-tips">
   <h2 class="alc">{% trans "You are not in any groups" %}</h2>
   <p>{% blocktrans %}You can create a group by clicking "New Group" button. Group is a place for you and your friends leaving messages and collaborating on libraries.{% endblocktrans %}</p>
 </div>
+{% else %}
+<div class="empty-tips">
+  <h2 class="alc">{% trans "You are a guest user" %}</h2>
+  <p class="not-last">{% trans "You are a guest user now, can not create group.  But group(s) you have joined in will be list here." %}</p>
+</div>
+{% endif %}
 {% endif %}
 <form id="group-add-form" action="" method="post" name="group-add-form" class="hide">{% csrf_token %}
     <h3>{% trans "New Group" %}</h3>

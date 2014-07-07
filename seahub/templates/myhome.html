@@ -6,14 +6,17 @@
 {% block extra_style %}
 {% if need_guide %}
 <style type="text/css">
+#guide-for-guest,
 #guide-for-new {
     padding: 0 20px;
     width: 450px;
 }
+#guide-for-guest .icon-lightbulb,
 #guide-for-new .icon-lightbulb {
     font-size:6em;
     color:#feac74;
 }
+#guide-for-guest .txt,
 #guide-for-new .txt {
     margin-left:6.4em;
 }
@@ -33,15 +36,28 @@
 
 {% include "snippets/repo_create_form.html" %}
 
-{% if need_guide %}
-<div id="guide-for-new" class="hide">
-    <span class="icon-lightbulb fleft"></span>
-    <div class="txt">
-        <h3>{% trans "Welcome to Seafile!" %}</h3>
-        <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later." %}</p>
-        <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
+{% if request.user.role == default_user or request.user.role == None %}
+    {% if need_guide %}
+    <div id="guide-for-new" class="hide">
+        <span class="icon-lightbulb fleft"></span>
+        <div class="txt">
+            <h3>{% trans "Welcome to Seafile!" %}</h3>
+            <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later." %}</p>
+            <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
+        </div>
     </div>
-</div>
+    {% endif %}
+{% else %}
+    {% if need_guide %}
+    <div id="guide-for-guest" class="hide">
+        <span class="icon-lightbulb fleft"></span>
+        <div class="txt">
+            <h3>{% trans "Welcome to Seafile!" %}</h3>
+            <p>{% trans "You are a guest user, some operations are limited, you can ask system administrator to change you to commom user for full operations." %}</p>
+            <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
+        </div>
+    </div>
+    {% endif %}
 {% endif %}
 
 {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
@@ -62,9 +78,16 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-{% if need_guide %}
-$(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
+{% if request.user.role == default_user or request.user.role == None %}
+    {% if need_guide %}
+    $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
+    {% endif %}
+{% else %}
+    {% if need_guide %}
+    $(function() {$('#guide-for-guest').modal({appendTo: '#main', focus:false});});
+    {% endif %}
 {% endif %}
+
 {% include "snippets/myhome_extra_script.html" %}
 var cur_tab = $('.ui-tabs-selected .a');    
 var lib_create_btn = $('#repo-create'),

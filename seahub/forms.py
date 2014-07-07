@@ -14,8 +14,13 @@ class AddUserForm(forms.Form):
     """
     Form for adding a user.
     """
+    from seahub import constants
+    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
+    GUEST_USER = getattr(constants, 'GUEST_USER', 'guest')
 
     email = forms.EmailField()
+    role = forms.ChoiceField( \
+            choices=[(DEFAULT_USER, DEFAULT_USER), (GUEST_USER,GUEST_USER)])
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 

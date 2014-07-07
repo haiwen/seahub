@@ -40,6 +40,11 @@
     <input type="password" name="password1" id="id_password1" class="input" /><br />    
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
     <input type="password" name="password2" id="id_password2" class="input" /><br />    
+    <label>{% trans "Role:"%} </label>
+    <select name="role">
+      <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
+      <option value={{guest_user}}>{% trans "Guest"%}</option>
+    </select><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
 </form>
@@ -83,7 +88,8 @@ $('#add-user-form').submit(function() {
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
         pwd1 = $.trim(form.children('[name="password1"]').val()),
-        pwd2 = $.trim(form.children('[name="password2"]').val());
+        pwd2 = $.trim(form.children('[name="password2"]').val()),
+        role = $('select[name="role"]', form).val();
 
     if (!email) {
         apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
@@ -113,7 +119,8 @@ $('#add-user-form').submit(function() {
         data: {
             'email': email,
             'password1': pwd1,
-            'password2': pwd2
+            'password2': pwd2,
+            'role': role
         },
         success: function(data) {
             if (data['success']) {
