@@ -74,6 +74,10 @@ $(function() {
                             dataType:'json'
                         });
                     });
+
+                    $('.detail', notice_list).click(function() {
+                        location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+                    });
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     if (xhr.responseText) {
