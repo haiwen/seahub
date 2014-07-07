@@ -34,6 +34,13 @@ class UserManager(object):
 
         return self.get(email=email)
 
+    def update_role(self, email, role):
+        """
+        If user has a role, update it; or create a role for user.
+        """
+        ccnet_threaded_rpc.update_role_emailuser(email, role)
+        return self.get(email=email)
+
     def create_superuser(self, email, password):
         u = self.create_user(email, password, is_staff=True, is_active=True)
         return u
@@ -72,6 +79,7 @@ class UserManager(object):
         user.ctime = emailuser.ctime
         user.org = emailuser.org
         user.source = emailuser.source
+        user.role = emailuser.role
 
         return user
 

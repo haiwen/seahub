@@ -2591,6 +2591,7 @@ textarea:-moz-placeholder {/* for FF */
     display: inline-block;
 }
 .share-permission-select,
+.user-role-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     padding:3px 2px;
