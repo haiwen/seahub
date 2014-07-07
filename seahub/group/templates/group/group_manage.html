@@ -79,10 +79,10 @@
             <h3>{% trans "Operations" %}</h3>
             <ul class="op-list">
                 <li><a id="group-rename" href="#" data-url="{% url 'group_rename' group.id %}">{% trans "Rename" %}</a></li>
-                {% if can_make_group_public %}
-                  {% if group.is_pub %}
-                  <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
-                  {% else %}
+                {% if group.is_pub %}
+                <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
+                {% else %}
+                  {% if can_make_group_public %}                  
                   <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
                   {% endif %}
                 {% endif %}
