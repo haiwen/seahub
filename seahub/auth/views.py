@@ -84,18 +84,19 @@ def _incr_login_faied_attempts(username=None, ip=None):
     Returns new value of failed attempts.
     """
     timeout = settings.LOGIN_ATTEMPT_TIMEOUT
+    username_attempts = 0
+    ip_attempts = 0
+
     if username:
         try:
             username_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + username)
         except ValueError:
-            username_attempts = 0
             cache.set(LOGIN_ATTEMPT_PREFIX + username, 0, timeout)
 
     if ip:
         try:
             ip_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + ip)
         except ValueError:
-            ip_attempts = 0
             cache.set(LOGIN_ATTEMPT_PREFIX + ip, 0, timeout)
 
     return max(username_attempts, ip_attempts)
