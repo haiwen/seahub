@@ -440,6 +440,16 @@ ENABLE_SUB_LIBRARY = True
 
 ENABLE_GUEST = False
 
+############################
+# Settings for Seahub Priv #
+############################
+
+# Replace from email to current user instead of email sender.
+REPLACE_FROM_EMAIL = False
+
+# Add ``Reply-to`` header, see RFC #822.
+ADD_REPLY_TO_HEADER = False
+
 #####################
 # External settings #
 #####################

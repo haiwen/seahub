@@ -41,7 +41,7 @@ from seahub.utils import render_permission_error, string2list, render_error, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, send_html_email, is_org_context, \
     normalize_file_path, normalize_dir_path
-from seahub.settings import SITE_ROOT
+from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -866,13 +866,30 @@ def send_shared_link(request):
             if extra_msg:
                 c['extra_msg'] = extra_msg
 
+            if REPLACE_FROM_EMAIL:
+                from_email = request.user.username
+            else:
+                from_email = None  # use default from email
+
+            if ADD_REPLY_TO_HEADER:
+                reply_to = request.user.username
+            else:
+                reply_to = None
+
             try:
                 if file_shared_type == 'f':
                     c['file_shared_type'] = "file"
-                    send_html_email(_(u'A file is shared to you on %s') % SITE_NAME, 'shared_link_email.html', c, None, [to_email])
+                    send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
+                                    'shared_link_email.html',
+                                    c, from_email, [to_email],
+                                    reply_to=reply_to
+                                    )
                 else:
                     c['file_shared_type'] = "directory"
-                    send_html_email(_(u'A directory is shared to you on %s') % SITE_NAME, 'shared_link_email.html', c, None, [to_email])
+                    send_html_email(_(u'A directory is shared to you on %s') % SITE_NAME,
+                                    'shared_link_email.html',
+                                    c, from_email, [to_email],
+                                    reply_to=reply_to)
 
             except Exception, e:
                 logger.error(str(e))
@@ -1147,9 +1164,21 @@ def send_shared_upload_link(request):
             if extra_msg:
                 c['extra_msg'] = extra_msg
 
+            if REPLACE_FROM_EMAIL:
+                from_email = request.user.username
+            else:
+                from_email = None  # use default from email
+
+            if ADD_REPLY_TO_HEADER:
+                reply_to = request.user.username
+            else:
+                reply_to = None
+
             try:
                 send_html_email(_(u'An upload link is shared to you on %s') % SITE_NAME,
-                                'shared_upload_link_email.html', c, None, [to_email])
+                                'shared_upload_link_email.html',
+                                c, from_email, [to_email],
+                                reply_to=reply_to)
             except Exception, e:
                 logger.error(str(e))
                 data = json.dumps({'error':_(u'Internal server error. Send failed.')})
