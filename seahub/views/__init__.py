@@ -961,9 +961,8 @@ def myhome(request):
         need_guide = UserOptions.objects.is_user_guide_enabled(username)
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
-            # create a default library for user
-
             if request.user.role == DEFAULT_USER or request.user.role == None:
+                # create a default library for user
                 create_default_library(request)
                 # refetch owned repos
                 owned_repos = get_owned_repo_list(request)

@@ -75,6 +75,7 @@
 </div>
 
 {% if request.user.role == default_user or request.user.role == None %}
+
 {% if not force_server_crypto %}
 <div class="setting-item" id="enc-lib-setting">
 <h3>{% trans "Encrypted Libraries Setting" %}</h3>
@@ -109,6 +110,7 @@
     <p>{% trans "Default library is the default place to store your personal documents and pictures." %}</p>
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
+
 {% endif %}
 
 <div class="setting-item" id="del-account">
@@ -143,6 +145,7 @@ addConfirmTo($('#account-delete-btn'), {
     'con' : "{% trans "Really want to delete your account?" %}"
 });
 
+{% if request.user.role == default_user or request.user.role == None %}
 var all_repos = [];
 {% for a_repo in owned_repos %}
     all_repos.push({
@@ -156,7 +159,6 @@ $('#default-lib').click(function() {
     form.modal({appendTo:'#main', autoResize:true, focus:false});
     file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
 });
-
 $('#default-lib-form').submit(function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
     if (!$.trim(dst_repo)) {
@@ -164,6 +166,7 @@ $('#default-lib-form').submit(function() {
         return false;
     }
 });
+{% endif %}
 
 (function() {
     var lang_context = $('#lang-context'),

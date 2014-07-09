@@ -28,8 +28,10 @@
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
+        {% if request.user.role == default_user or request.user.role == None %}
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
+        {% endif %}
         <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>        
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
     </ul>
@@ -37,6 +39,7 @@
 {% endblock %}
 
 {% block main_panel %}
+{% if request.user.role == default_user or request.user.role == None %}
 <form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
     <ul>
@@ -53,14 +56,17 @@
     </ul>
     <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit"/>
 </form>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
+{% if request.user.role == default_user or request.user.role == None %}
 $('#enable-mods').click(function() {
     $('#mods-enable-form').modal({appendTo: "#main"});
     $('#simplemodal-container').css('height', 'auto');
     return false;
 });
+{% endif %}
 </script>
 {% endblock %}

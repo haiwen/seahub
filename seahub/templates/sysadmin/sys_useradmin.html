@@ -26,7 +26,6 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <div class="fright">
-        <!--button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Upload csv file"%}</button-->
         <button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
         <button id="add-user-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
     </div>
@@ -36,17 +35,17 @@
     <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />
+    <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
+    <select name="role" class="w100">
+      <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
+      <option value={{guest_user}}>{% trans "Guest"%}</option>
+    </select><br />
     <label for="id_password1">{% trans "Password" %}</label><br />
     <input type="password" name="password1" id="id_password1" class="input" /><br />    
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
     <input type="password" name="password2" id="id_password2" class="input" /><br />    
-    <label>{% trans "Role:"%} </label>
-    <select name="role">
-      <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
-      <option value={{guest_user}}>{% trans "Guest"%}</option>
-    </select><br />
     <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
 <form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_user' %}">{% csrf_token %}
@@ -54,7 +53,7 @@
     <input type="file" name="file" />
     <p class="tip">{% trans "File format: user@mail.com,password"%}</p>
     <p class="error hide">{% trans "Please choose a CSV file" %}</p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
 {% include "sysadmin/useradmin_table.html"%}
@@ -108,7 +107,7 @@ $('#add-user-form').submit(function() {
         return false;
     } 
 
-    var submit_btn = $(this).find('input[type="submit"]');
+    var submit_btn = $(this).find('[type="submit"]');
     disable(submit_btn);
     $.ajax({
         url: '{% url 'user_add' %}',
@@ -129,7 +128,7 @@ $('#add-user-form').submit(function() {
         },  
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
-                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).err);
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }

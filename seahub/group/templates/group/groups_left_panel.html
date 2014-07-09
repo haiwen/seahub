@@ -1,16 +1,12 @@
 {% load i18n %}
-{% if request.user.role == default_user or request.user.role == None %}
 <div class="info-item">
     <h3 class="info-item-top">{% trans "Tips" %}</h3>
     <div class="info-item-bottom">
+        {% if request.user.role == default_user or request.user.role == None %}
         <p class="not-last">{% trans "After creating a group, you can add members and share libraries into it." %}</p>
+        {% else %}
+        <p class="not-last">{% trans "Since you are a guest user now, you can not create groups." %}</p>
+        {% endif %}
     </div>
 </div>
-{% else %}
-<div class="info-item">
-    <h3 class="info-item-top">{% trans "Tips" %}</h3>
-    <div class="info-item-bottom">
-        <p class="not-last">{% trans "You are a guest user now, can not create group. But group(s) you have joined in will be list right." %}</p>
-    </div>
-</div>
-{% endif %}
+
