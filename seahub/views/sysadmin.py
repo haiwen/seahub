@@ -640,7 +640,7 @@ def user_add(request):
 
             return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
-        return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required

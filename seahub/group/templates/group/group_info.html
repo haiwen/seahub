@@ -121,7 +121,10 @@
     </div>
 </div>
 
+{% if request.user.role == default_user or request.user.role == None %}
 {% include "snippets/repo_create_form.html" %}
+{% endif %}
+
 <form id="repo-decrypt-form" class="hide">
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />
@@ -154,6 +157,7 @@ $('.download').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
+{% if request.user.role == default_user or request.user.role == None %}
 function repoCreateSuccessCallback() {
     location.reload();
 }
@@ -161,6 +165,7 @@ function repoCreateSuccessCallback() {
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
+{% endif %}
 
 {% if recent_commits %}
 {% include 'snippets/list_commit_detail.html' %}

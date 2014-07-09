@@ -28,22 +28,20 @@ $('tr:gt(0)').hover(
         $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
     }
 );
-// show 'user-status(role)-select'
 $('.user-status-edit-icon, .user-role-edit-icon').click(function() {
     $(this).parent().addClass('hide');
-    $(this).parent().next().removeClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'select'
 });
 $('.user-status-select, .user-role-select').change(function() {
     var select = $(this),
         select_val = select.val(),
-        class_val = $(this).attr('class');
+        uid = select.parents('tr').attr('data-userid'),
+        url;
 
-    if (class_val.indexOf('status') != -1) {
-        var uid = $(this).parent().prev().attr('data'),
-            url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
+    if (select.hasClass('user-status-select')) {
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
     } else {
-        var uid = $(this).parent().prev().prev().attr('data'),
-            url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/?r=" + select_val;
+        url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/?r=" + select_val;
     }
 
     $.ajax({
@@ -61,16 +59,12 @@ $('.user-status-select, .user-role-select').change(function() {
         success: function(data) {
             if (data['email_sent']) {
                 feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
-                select.prev().children(select).html(select.children('option[value="' +select.val() + '"]').text());
-            
             } else if (data['email_sent'] === false) {
                 feedback("{% trans "Edit succeeded, but failed to send email, please check your email configuration." %}", 'success');
-                select.prev().children(select).html(select.children('option[value="' +select.val() + '"]').text());
             } else {
                 feedback("{% trans "Edit succeeded" %}", 'success');
-                select.prev().children(select).html(select.children('option[value="' +select.val() + '"]').text());
             }
-            
+            select.prev().children('span').html(select.children('option[value="' +select.val() + '"]').text());
             select.addClass('hide');
             select.prev().removeClass('hide');
             $.modal.close();
@@ -87,8 +81,12 @@ $('.user-status-select, .user-role-select').change(function() {
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
     // target can't be edit-icon
-    if (!$('.user-status-edit-icon, .user-status-select, .user-role-edit-icon, .user-role-select').is(target)) {
-        $('.user-status, .user-role').removeClass('hide');
-        $('.user-status-select, .user-role-select').addClass('hide');
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
+    if (!$('.user-role-edit-icon, .user-role-select').is(target)) {
+        $('.user-role').removeClass('hide');
+        $('.user-role-select').addClass('hide');
     }
 });

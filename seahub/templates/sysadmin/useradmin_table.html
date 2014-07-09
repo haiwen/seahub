@@ -10,9 +10,8 @@
     </tr>
 
     {% for user in users %}
-    <tr>
-        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
-
+    <tr data-userid="{{user.id}}">
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
         <td>
           {% if user.source != 'LDAP' %}
             <div class="user-status">
