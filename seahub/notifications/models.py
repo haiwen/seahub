@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import datetime
 import os
-import simplejson as json
+import json
 
 from django.db import models
 from django.db.models.signals import post_save

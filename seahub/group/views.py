@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import os
-import simplejson as json
+import json
 import urllib2
 
 from django.conf import settings

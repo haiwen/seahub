@@ -2,7 +2,7 @@
 import logging
 import os
 import stat
-import simplejson as json
+import json
 import datetime
 from urllib2 import unquote, quote
 

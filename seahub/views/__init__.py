@@ -2,7 +2,7 @@
 import hashlib
 import os
 import stat
-import simplejson as json
+import json
 import mimetypes
 import urllib2
 import logging

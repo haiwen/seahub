@@ -3,7 +3,7 @@
 import os
 from types import FunctionType
 import logging
-import simplejson as json
+import json
 import re
 import datetime
 import csv, chardet, StringIO

@@ -1,7 +1,7 @@
 # encoding: utf-8
 import os
 import logging
-import simplejson as json
+import json
 from dateutil.relativedelta import relativedelta
 
 from django.core.urlresolvers import reverse

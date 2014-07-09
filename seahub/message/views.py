@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 import datetime
-import simplejson as json
+import json
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.shortcuts import render_to_response
 from django.template.loader import render_to_string

@@ -7,7 +7,7 @@ from seahub.auth import REDIRECT_FIELD_NAME
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.utils.decorators import available_attrs
 from django.utils.http import urlquote
-import simplejson as json
+import json
 from django.utils.translation import ugettext as _
 
 def user_passes_test(test_func, login_url=None, redirect_field_name=REDIRECT_FIELD_NAME):
