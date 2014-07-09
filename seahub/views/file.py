@@ -49,11 +49,11 @@ from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, \
-    is_textual_file, show_delete_days, mkstemp, EMPTY_SHA1, HtmlDiff, \
+    is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit
-from seahub.utils.file_types import (IMAGE, PDF, IMAGE, DOCUMENT, SPREADSHEET, MARKDOWN, \
-                                         TEXT, SF, OPENDOCUMENT)
+from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
+                                     MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER
 
@@ -431,9 +431,6 @@ def view_file(request, repo_id):
 
     template = 'view_file_%s.html' % ret_dict['filetype'].lower()
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
     return render_to_response(template, {
             'repo': repo,
             'is_repo_owner': is_repo_owner,
@@ -467,7 +464,6 @@ def view_file(request, repo_id):
             'user_perm': user_perm,
             'img_prev': img_prev,
             'img_next': img_next,
-            'search_repo_id': search_repo_id,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
             }, context_instance=RequestContext(request))
 
@@ -541,9 +537,6 @@ def view_history_file_common(request, repo_id, ret_dict):
     if not ret_dict.has_key('filetype'):    
         ret_dict['filetype'] = filetype 
     ret_dict['use_pdfjs'] = USE_PDFJS
-
-    if not repo.encrypted:
-        ret_dict['search_repo_id'] = repo.id
 
 @repo_passwd_set_required
 def view_history_file(request, repo_id):
@@ -957,10 +950,6 @@ def file_edit(request, repo_id):
     elif page_from == 'personal_wiki_page_edit' or page_from == 'personal_wiki_page_new':
         cancel_url = reverse('personal_wiki', args=[wiki_name])
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('file_edit.html', {
         'repo':repo,
         'u_filename':u_filename,
@@ -978,7 +967,6 @@ def file_edit(request, repo_id):
         'from': page_from,
         'gid': gid,
         'cancel_url': cancel_url,
-        'search_repo_id': search_repo_id,
     }, context_instance=RequestContext(request))
 
 ########## text diff
@@ -1058,10 +1046,6 @@ def text_diff(request, repo_id):
 
     zipped = gen_path_link(path, repo.name)
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-    
     return render_to_response('text_diff.html', {
         'u_filename':u_filename,
         'repo': repo,
@@ -1071,7 +1055,6 @@ def text_diff(request, repo_id):
         'prev_commit': prev_commit,
         'diff_result_table': diff_result_table,
         'is_new_file': is_new_file,
-        'search_repo_id': search_repo_id,
     }, context_instance=RequestContext(request))
 
 ########## office related

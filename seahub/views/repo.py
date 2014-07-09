@@ -203,7 +203,6 @@ def render_repo(request, repo):
 
     repo_size = get_repo_size(repo.id)
     no_quota = is_no_quota(repo.id)
-    search_repo_id = None if repo.encrypted else repo.id
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo.id)
     else:
@@ -262,7 +261,6 @@ def render_repo(request, repo):
             'dir_shared_link': dir_shared_link,
             'uploadlink': uploadlink,
             'dir_shared_upload_link': dir_shared_upload_link,
-            'search_repo_id': search_repo_id,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
@@ -334,7 +332,6 @@ def repo_history_view(request, repo_id):
 
     file_list, dir_list = get_repo_dirents(request, repo, current_commit, path)
     zipped = get_nav_path(path, repo.name)
-    search_repo_id = None if repo.encrypted else repo.id
 
     return render_to_response('repo_history_view.html', {
             'repo': repo,
@@ -344,6 +341,5 @@ def repo_history_view(request, repo_id):
             'file_list': file_list,
             'path': path,
             'zipped': zipped,
-            'search_repo_id': search_repo_id,
             }, context_instance=RequestContext(request))
     

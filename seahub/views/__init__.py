@@ -323,17 +323,12 @@ def render_recycle_root(request, repo_id):
     file_list.sort(lambda x, y : cmp(y.delete_time,
                                      x.delete_time))
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'dir_list': dir_list,
             'file_list': file_list,
             'days': days,
-            'search_repo_id': search_repo_id,
             }, context_instance=RequestContext(request))
 
 def render_recycle_dir(request, repo_id, commit_id):
@@ -360,10 +355,6 @@ def render_recycle_dir(request, repo_id, commit_id):
 
     days = show_delete_days(request)
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
@@ -374,7 +365,6 @@ def render_recycle_dir(request, repo_id, commit_id):
             'basedir': basedir,
             'path': path,
             'days': days,
-            'search_repo_id': search_repo_id,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -706,11 +696,6 @@ def repo_history(request, repo_id):
     else:
         page_next = False
 
-        
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('repo_history.html', {
             "repo": repo,
             "commits": commits,
@@ -720,7 +705,6 @@ def repo_history(request, repo_id):
             'per_page': per_page,
             'page_next': page_next,
             'user_perm': user_perm,
-            'search_repo_id': search_repo_id,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -771,10 +755,6 @@ def repo_view_snapshot(request, repo_id):
     else:
         page_next = False
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('repo_view_snapshot.html', {
             "repo": repo,
             "commits": commits,
@@ -783,7 +763,6 @@ def repo_view_snapshot(request, repo_id):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'search_repo_id': search_repo_id,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1275,10 +1254,6 @@ def render_file_revisions (request, repo_id):
 
     zipped = gen_path_link(path, repo.name)
 
-    search_repo_id = None
-    if not repo.encrypted:
-        search_repo_id = repo.id
-
     return render_to_response('file_revisions.html', {
         'repo': repo,
         'path': path,
@@ -1287,7 +1262,6 @@ def render_file_revisions (request, repo_id):
         'commits': commits,
         'is_owner': is_owner,
         'can_compare': can_compare,
-        'search_repo_id': search_repo_id,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -1473,7 +1447,7 @@ def view_shared_upload_link(request, token):
             d = {'token': token, 'view_name': 'view_shared_upload_link', }
             if request.method == 'POST':
                 post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
+                post_values['enc_password'] = uploadlink.password
                 form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
                 if form.is_valid():
