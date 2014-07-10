@@ -1,7 +1,7 @@
 # encoding: utf-8
 import datetime
 import logging
-import simplejson as json
+import json
 import os
 import re
 

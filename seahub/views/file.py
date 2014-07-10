@@ -6,7 +6,7 @@ view_snapshot_file, view_shared_file, file_edit, etc.
 
 import os
 import hashlib
-import simplejson as json
+import json
 import stat
 import urllib2
 import chardet

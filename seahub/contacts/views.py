@@ -1,6 +1,6 @@
 # encoding: utf-8
 import logging
-import simplejson as json
+import json
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, Http404

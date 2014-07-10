@@ -1,6 +1,6 @@
 import datetime
 import logging
-import simplejson as json
+import json
 from django.db import models, IntegrityError
 from django.utils import timezone
 

@@ -6,7 +6,7 @@ view_trash_file, view_snapshot_file
 
 import os
 import hashlib
-import simplejson as json
+import json
 import stat
 import tempfile
 import urllib
