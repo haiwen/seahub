@@ -35,7 +35,7 @@ from seahub.base.decorators import user_mods_check
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
-from seahub.views import is_registered_user
+from seahub.views import is_registered_user, check_repo_access_permission
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
@@ -1082,21 +1082,33 @@ def get_shared_upload_link(request):
     else:
         if path[-1] != '/': # append '/' at end of path
             path += '/'
-    l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
-        username=request.user.username).filter(path=path)
-    if len(l) > 0:
-        upload_link = l[0]
-        token = upload_link.token
+
+    repo = seaserv.get_repo(repo_id)
+    user_perm = check_repo_access_permission(repo.id, request.user)
+
+    if user_perm == 'r':
+        messages.error(request, _(u'Permission denied'))
+        return HttpResponse(status=403, content_type=content_type)
+    elif user_perm == 'rw':
+        l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
+            username=request.user.username).filter(path=path)
+        if len(l) > 0:
+            upload_link = l[0]
+            token = upload_link.token
+        else:
+            username = request.user.username
+            uls = UploadLinkShare.objects.create_upload_link_share(
+                username, repo_id, path, passwd)
+            token = uls.token
+
+        shared_upload_link = gen_shared_upload_link(token)
+
+        data = json.dumps({'token': token, 'shared_upload_link': shared_upload_link})
+        return HttpResponse(data, status=200, content_type=content_type)
     else:
-        username = request.user.username
-        uls = UploadLinkShare.objects.create_upload_link_share(
-            username, repo_id, path, passwd)
-        token = uls.token
+        messages.error(request, _(u'Operation failed'))
+        return HttpResponse(json.dumps(), status=500, content_type=content_type)
 
-    shared_upload_link = gen_shared_upload_link(token)
-
-    data = json.dumps({'token': token, 'shared_upload_link': shared_upload_link})
-    return HttpResponse(data, status=200, content_type=content_type)
 
 @login_required_ajax
 def send_shared_upload_link(request):
