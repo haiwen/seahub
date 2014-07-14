@@ -66,6 +66,8 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -954,14 +956,12 @@ def myhome(request):
         allow_public_share = True
 
     # user guide
-    from seahub import constants
-    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
     need_guide = False
     if len(owned_repos) == 0:
         need_guide = UserOptions.objects.is_user_guide_enabled(username)
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
-            if request.user.role == DEFAULT_USER or request.user.role == None:
+            if request.user.role == DEFAULT_USER:
                 # create a default library for user
                 create_default_library(request)
                 # refetch owned repos

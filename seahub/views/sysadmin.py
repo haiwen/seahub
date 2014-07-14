@@ -35,6 +35,9 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
+
 logger = logging.getLogger(__name__)
 
 @login_required
@@ -499,9 +502,6 @@ def user_toggle_status(request, user_id):
 @sys_staff_required
 def user_toggle_role(request, user_id):
     content_type = 'application/json; charset=utf-8'
-
-    from seahub import constants
-    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
 
     try:
         user_role = request.GET.get('r', DEFAULT_USER)

@@ -9,7 +9,7 @@
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if request.user.role == default_user %}
         {% if not force_server_crypto %}
         <li class="tab"><a href="#enc-lib-setting">{% trans "Encrypted Libraries" %}</a></li>
         {% endif %}
@@ -74,7 +74,7 @@
     </ul>
 </div>
 
-{% if request.user.role == default_user or request.user.role == None %}
+{% if request.user.role == default_user %}
 
 {% if not force_server_crypto %}
 <div class="setting-item" id="enc-lib-setting">
@@ -145,7 +145,7 @@ addConfirmTo($('#account-delete-btn'), {
     'con' : "{% trans "Really want to delete your account?" %}"
 });
 
-{% if request.user.role == default_user or request.user.role == None %}
+{% if request.user.role == default_user %}
 var all_repos = [];
 {% for a_repo in owned_repos %}
     all_repos.push({

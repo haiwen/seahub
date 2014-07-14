@@ -15,6 +15,8 @@ from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username
 
+from seahub import constants
+DEFAULT_USER =  constants.DEFUALT_USER
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -79,7 +81,11 @@ class UserManager(object):
         user.ctime = emailuser.ctime
         user.org = emailuser.org
         user.source = emailuser.source
-        user.role = emailuser.role
+
+        if emailuser.role is None:
+            user.role = DEFAULT_USER
+        else:
+            user.role = emailuser.role
 
         return user
 

@@ -33,15 +33,9 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 
-try:
-    from seahub.constants import DEFAULT_USER
-except ImportError:
-    DEFAULT_USER = 'default'
-
-try:
-    from seahub.constants import GUEST_USER
-except ImportError:
-    GUEST_USER= 'guest'
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
+GUEST_USER = constants.GUEST_USER
 
 def base(request):
     """

@@ -3,7 +3,7 @@
 <div id="tabs" class="tab-tabs">
 <div class="hd ovhd">
     <ul class="tab-tabs-nav fleft">
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if request.user.role == default_user %}
         <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
         {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
         <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>

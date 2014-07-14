@@ -11,7 +11,7 @@
             <li class="tab"><a href="#grp-repos" class="a">{% trans "Libraries" %}</a></li>
             <li class="tab long-tab"><a href="#grp-repos-commits" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if request.user.role == default_user %}
         <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
@@ -121,7 +121,7 @@
     </div>
 </div>
 
-{% if request.user.role == default_user or request.user.role == None %}
+{% if request.user.role == default_user %}
 {% include "snippets/repo_create_form.html" %}
 {% endif %}
 
@@ -157,7 +157,7 @@ $('.download').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
-{% if request.user.role == default_user or request.user.role == None %}
+{% if request.user.role == default_user %}
 function repoCreateSuccessCallback() {
     location.reload();
 }
