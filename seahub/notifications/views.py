@@ -12,6 +12,7 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.notifications.models import Notification, NotificationForm, \
     UserNotification
 from seahub.notifications.utils import refresh_cache
+from seahub.avatar.util import get_default_avatar_url
 
 @login_required
 def notification_list(request):
@@ -67,6 +68,10 @@ def user_notification_list(request):
     limit = 25                   # next a mount of notifications fetched by AJAX
     
     notices = UserNotification.objects.get_user_notifications(username)[:count]
+
+    # Add 'msg_from' or 'default_avatar_url' to notice.
+    notices = add_notice_from_info(notices)
+
     notices_more = True if len(notices) == count else False
 
     return render_to_response("notifications/user_notification_list.html", {
@@ -91,6 +96,10 @@ def user_notification_more(request):
 
     notices = UserNotification.objects.get_user_notifications(username)[
         start: start+limit]
+
+    # Add 'msg_from' or 'default_avatar_url' to notice.
+    notices = add_notice_from_info(notices)
+
     notices_more = True if len(notices) == limit else False
     new_start = start+limit
 
@@ -118,5 +127,46 @@ def user_notification_remove(request):
         next = settings.SITE_ROOT
     return HttpResponseRedirect(next)
 
+def add_notice_from_info(notices):
+    '''Add 'msg_from' or 'default_avatar_url' to notice.
         
-    
+    '''
+    default_avatar_url = get_default_avatar_url()
+    for notice in notices:
+        if notice.is_user_message():
+            d = notice.user_message_detail_to_dict()
+            notice.msg_from = d.get('msg_from')
+
+        elif notice.is_group_msg():
+            d = notice.group_message_detail_to_dict()
+            if d.get('msg_from') is not None:
+                notice.msg_from = d.get('msg_from')
+            else:
+                notice.default_avatar_url = default_avatar_url
+
+        elif notice.is_grpmsg_reply():
+            d = notice.grpmsg_reply_detail_to_dict()
+            if d.get('reply_from') is not None:
+                notice.msg_from = d.get('reply_from')
+            else:
+                notice.default_avatar_url = default_avatar_url
+
+        elif notice.is_file_uploaded_msg():
+            notice.default_avatar_url = default_avatar_url
+
+        elif notice.is_repo_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+
+        elif notice.is_priv_file_share_msg():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['share_from']
+
+        elif notice.is_group_join_request():
+            d = json.loads(notice.detail)
+            notice.msg_from = d['username']
+
+        else:
+            pass
+
+    return notices

@@ -24,6 +24,7 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
     RepoCreateForm, SharedRepoCreateForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
+from seahub.notifications.views import add_notice_from_info
 from seahub.message.models import UserMessage
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
@@ -1256,45 +1257,8 @@ def get_popup_notices(request):
     result_notices += unseen_notices
     result_notices += seen_notices
 
-    for notice in result_notices:
-        if notice.is_user_message():
-            d = notice.user_message_detail_to_dict()
-            notice.msg_from = d.get('msg_from')
-
-        elif notice.is_group_msg():
-            d = notice.group_message_detail_to_dict()
-            if d.get('msg_from') is not None:
-                notice.msg_from = d.get('msg_from')
-            else:
-                from seahub.avatar.util import get_default_avatar_url
-                notice.default_avatar_url = get_default_avatar_url()
-
-        elif notice.is_grpmsg_reply():
-            d = notice.grpmsg_reply_detail_to_dict()
-            if d.get('reply_from') is not None:
-                notice.msg_from = d.get('reply_from')
-            else:
-                from seahub.avatar.util import get_default_avatar_url
-                notice.default_avatar_url = get_default_avatar_url()
-
-        elif notice.is_file_uploaded_msg():
-            from seahub.avatar.util import get_default_avatar_url
-            notice.default_avatar_url = get_default_avatar_url()
-
-        elif notice.is_repo_share_msg():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['share_from']
-
-        elif notice.is_priv_file_share_msg():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['share_from']
-
-        elif notice.is_group_join_request():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['username']
-
-        else:
-            pass
+    # Add 'msg_from' or 'default_avatar_url' to notice.
+    result_notices = add_notice_from_info(result_notices)
 
     ctx_notices = {"notices": result_notices}
     notice_html = render_to_string(

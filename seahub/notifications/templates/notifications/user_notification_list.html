@@ -8,8 +8,10 @@
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_notification_list' %}">{% trans "Notices" %}</a></li>
     </ul>
-    <button id="clear" class="fright">{% trans "Clear" %}</button>
-
+    <div class="fright">
+        <button id="mark-all-read">{% trans "Mark all read" %}</button>
+        <button id="clear">{% trans "Clear" %}</button>
+    </div>
 </div>
 {% endblock %}
 
@@ -17,7 +19,8 @@
 {% if notices %}
 <table id="notices-table">
     <tr>
-        <th width="80%">{% trans "Message"%}</th>
+        <th width="7%"></th>
+        <th width="73%">{% trans "Message"%}</th>
         <th width="20%">{% trans "Time"%}</th>
     </tr>
     {% include "notifications/user_notification_tr.html" %}
@@ -37,6 +40,27 @@ $('#clear').click(function() {
     location.href = "{% url 'user_notification_remove' %}";
 });
 
+$('#mark-all-read').click(function() {
+    var unread_items = $('#notices-table .unread');
+    if (unread_items.length > 0) {
+        $.ajax({
+            url: '{% url 'set_notices_seen' %}',
+            dataType: 'json',
+            success: function() {
+                var msg_ct = $("#msg-count");
+                $('.num', msg_ct).html(0).addClass('hide');
+                document.title = msg_ct.data('orig_doc_title');
+                unread_items.removeClass('unread').addClass('read');
+            },
+            error: ajaxErrorHandler
+        });
+    }
+});
+
+$('.detail', $('#notices-table')).click(function() {
+    location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+});
+
 var start = {{start}}, limit = {{limit}};
 $('#notices-more-btn').click(function() {
     $(this).addClass('hide');
@@ -48,6 +72,11 @@ $('#notices-more-btn').click(function() {
         success: function(data) {
             $('#notices-loading').addClass('hide');
             $('#notices-table').append(data['html']);
+
+            $('.detail', $('#notices-table')).unbind().click(function() {
+                location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+            });
+
             start = data['new_start'];
 
             if (data['notices_more']) {

@@ -3088,3 +3088,28 @@ textarea:-moz-placeholder {/* for FF */
 #url_prefix {
     width: 100px;
 }
+
+/* notice page */
+#notices-table .unread {
+    font-weight:bold;
+}
+#notices-table .avatar-cell {
+    vertical-align:top;
+    text-align:center;
+    padding-top:8px;
+}
+#notices-table .avatar {
+    border-radius:1000px;
+}
+#notices-table .brief,
+#notices-table .detail {
+    margin:0.2em 0;
+}
+#notices-table .detail {
+    color:#9d9b9c;
+    cursor:pointer;
+    font-weight:normal;
+}
+#notices-table a {
+    font-weight:normal;
+}

@@ -26,6 +26,7 @@ $(function() {
     }
     // original title
     var orig_doc_title = document.title;
+    msg_ct.data('orig_doc_title', orig_doc_title); // for 'mark all read' in 'notice list' page
     var reqUnreadNum = function() {
         $.ajax({
             url: msg_ct.data('url'),
