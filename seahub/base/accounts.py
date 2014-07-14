@@ -14,6 +14,10 @@ from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
@@ -83,6 +87,22 @@ class UserManager(object):
 
         return user
 
+class UserPermissions(object):
+    def can_add_repo(self):
+        """
+        """
+        return True
+
+    def can_add_group(self):
+        """
+        """
+        return True
+
+    def can_view_org(self):
+        """
+        """
+        return False if CLOUD_MODE else True
+
 class User(object):
     is_staff = False
     is_active = False
@@ -97,6 +117,7 @@ class User(object):
     def __init__(self, email):
         self.username = email
         self.email = email
+        self.permissions = UserPermissions()
 
     def __unicode__(self):
         return self.username

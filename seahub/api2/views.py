@@ -478,34 +478,39 @@ class Repos(APIView):
                 repo["random_key"] = r.random_key
             repos_json.append(repo)
 
-        public_repos = list_inner_pub_repos(request)
-        for r in public_repos:
-            commit = get_commits(r.repo_id, 0, 1)[0]
-            if not commit:
-                continue
-            r.root = commit.root_id
-            r.size = server_repo_size(r.repo_id)
-            repo = {
-                "type": "grepo",
-                "id": r.repo_id,
-                "name": r.repo_name,
-                "desc": r.repo_desc,
-                "owner": "Organization",
-                "mtime": r.last_modified,
-                "root": r.root,
-                "size": r.size,
-                "encrypted": r.encrypted,
-                "permission": r.permission,
+        if request.user.permissions.can_view_org():
+            public_repos = list_inner_pub_repos(request)
+            for r in public_repos:
+                commit = get_commits(r.repo_id, 0, 1)[0]
+                if not commit:
+                    continue
+                r.root = commit.root_id
+                r.size = server_repo_size(r.repo_id)
+                repo = {
+                    "type": "grepo",
+                    "id": r.repo_id,
+                    "name": r.repo_name,
+                    "desc": r.repo_desc,
+                    "owner": "Organization",
+                    "mtime": r.last_modified,
+                    "root": r.root,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": r.permission,
                 }
-            if r.encrypted:
-                repo["enc_version"] = commit.enc_version
-                repo["magic"] = commit.magic
-                repo["random_key"] = commit.random_key
-            repos_json.append(repo)
+                if r.encrypted:
+                    repo["enc_version"] = commit.enc_version
+                    repo["magic"] = commit.magic
+                    repo["random_key"] = commit.random_key
+                repos_json.append(repo)
 
         return Response(repos_json)
 
     def post(self, request, format=None):
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+
         username = request.user.username
         repo_name = request.POST.get("name", None)
         repo_desc = request.POST.get("desc", 'new repo')
@@ -1853,6 +1858,10 @@ class DirSubRepoView(APIView):
         if sub_repo:
             result['sub_repo_id'] = sub_repo.id
         else:
+            if not request.user.permissions.can_add_repo():
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to create library.')
+
             # create a sub-lib
             try:
                 # use name as 'repo_name' & 'repo_desc' for sub_repo
@@ -2262,6 +2271,10 @@ class DefaultRepoView(APIView):
         return Response(repo_json)
 
     def post(self, request):
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+
         username = request.user.username
 
         repo_id = UserOptions.objects.get_default_repo(username)
@@ -2540,6 +2553,10 @@ class Groups(APIView):
         """
         result = {}
         content_type = 'application/json; charset=utf-8'
+
+        if not request.user.permissions.can_add_group():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create group.')
 
         # check plan
         num_of_groups = getattr(request.user, 'num_of_groups', -1)

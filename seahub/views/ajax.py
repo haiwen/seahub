@@ -1658,7 +1658,7 @@ def repo_history_changes(request, repo_id):
 
     return HttpResponse(json.dumps(changes), content_type=content_type)
 
-@login_required_ajax    
+@login_required_ajax
 def repo_create(request):
     '''  
     Handle ajax post to create a library.
@@ -1667,8 +1667,13 @@ def repo_create(request):
     if request.method != 'POST':
         return Http404
 
-    result = {} 
+    result = {}
     content_type = 'application/json; charset=utf-8'
+
+    if not request.user.permissions.can_add_repo():
+        result['error'] = _(u"You do not have permission to create library")
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
     form = RepoCreateForm(request.POST)
     if not form.is_valid():
@@ -1734,7 +1739,7 @@ def repo_create(request):
                       repo_name=repo_name)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required_ajax    
+@login_required_ajax
 def public_repo_create(request):
     '''  
     Handle ajax post to create public repo.
@@ -1743,9 +1748,14 @@ def public_repo_create(request):
     if request.method != 'POST':
         return Http404
 
-    result = {} 
+    result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
+    if not request.user.permissions.can_add_repo():
+        result['error'] = _(u"You do not have permission to create library")
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
     form = SharedRepoCreateForm(request.POST)
     if not form.is_valid():
         result['error'] = str(form.errors.values()[0])

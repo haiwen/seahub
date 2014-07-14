@@ -6,7 +6,7 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if user.permissions.can_add_repo %}
         <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
         {% endif %}
     </div>
@@ -28,7 +28,7 @@
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if user.permissions.can_add_repo %}
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
         {% endif %}
@@ -39,7 +39,7 @@
 {% endblock %}
 
 {% block main_panel %}
-{% if request.user.role == default_user or request.user.role == None %}
+{% if user.permissions.can_add_repo %}
 <form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
     <ul>
@@ -61,7 +61,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-{% if request.user.role == default_user or request.user.role == None %}
+{% if user.permissions.can_add_repo %}
 $('#enable-mods').click(function() {
     $('#mods-enable-form').modal({appendTo: "#main"});
     $('#simplemodal-container').css('height', 'auto');

@@ -8,12 +8,10 @@
     <li class="nav-item" {% if grps %}style="position:relative;"{% endif %}>
         <a href="{% url 'group_list' %}" class="a {% block cur_group %}{% endblock %}" {% if grps %}id="top-nav-grp"{% endif %}>{% trans "Groups" %}{% if grps %} <span class="icon-caret-down"></span>{% endif %}</a>
     </li>
-    {% if request.user.role == default_user or request.user.role == None %}
-    {% if request.user.org or not cloud_mode %}    
+    {% if user.permissions.can_view_org %}
     <li class="nav-item">
         <a href="{% url 'pubrepo' %}" class="a {% block cur_pubinfo %}{% endblock %}">{% trans "Organization" %}</a>
     </li>
-    {% endif %}
     {% endif %}
     <li class="nav-item">
         <a href="{{ SITE_ROOT }}help/" class="a {% block cur_help %}{% endblock %}">{% trans "Help" %}</a>

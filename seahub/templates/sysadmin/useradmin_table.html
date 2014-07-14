@@ -10,7 +10,7 @@
     </tr>
 
     {% for user in users %}
-    <tr data-userid="{{user.id}}">
+    <tr data-userid="{{user.email}}">
         <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
         <td>
           {% if user.source != 'LDAP' %}
@@ -31,16 +31,16 @@
         <td>
           {% if user.source != 'LDAP' %}
             <div class="user-role">
-                {% if user.role == default_user or user.role == None %}
-                    <span class="user-role-cur-value">{% trans "Default" %}</span>
-                {% else %}
+                {% if user.is_guest %}
                     <span class="user-role-cur-value">{% trans "Guest" %}</span>
+                {% else %}
+                    <span class="user-role-cur-value">{% trans "Default" %}</span>
                 {% endif %}
                 <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
             </div>
             <select name="role" class="user-role-select hide">
-                <option value={{default_user}} {%if user.role == default_user or user.role == None %}selected="selected"{% endif %}>{% trans "Default" %}</option>
-                <option value={{guest_user}} {%if user.role == guest_user %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
+                <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
+                <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
             </select>
           {% endif %}
         </td>

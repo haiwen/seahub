@@ -10,7 +10,7 @@
 <div id="tabs" class="tab-tabs">
     <ul class="tab-tabs-nav hd w100 ovhd">
         <li class="tab"><a href="#priv-share-in" class="a">{% trans "From Others" %}</a></li>
-        {% if request.user.role == default_user or request.user.role == None %}
+        {% if user.permissions.can_add_repo %}
         <li class="tab long-tab"><a href="#priv-share-out" class="a">{% trans "To Others" %}</a></li>
         {% endif %}
     </ul>
@@ -47,7 +47,7 @@
         {% endif %}
     </div>
 
-    {% if request.user.role == default_user or request.user.role == None %}
+    {% if user.permissions.can_add_repo %}
     <div id="priv-share-out" class="hide">
         {% if priv_share_out %}
         <table>

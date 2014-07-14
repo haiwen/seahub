@@ -975,14 +975,13 @@ def myhome(request):
         allow_public_share = True
 
     # user guide
-    from seahub import constants
-    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
+    user_can_add_repo = request.user.permissions.can_add_repo()
     need_guide = False
     if len(owned_repos) == 0:
         need_guide = UserOptions.objects.is_user_guide_enabled(username)
         if need_guide:
             UserOptions.objects.disable_user_guide(username)
-            if request.user.role == DEFAULT_USER or request.user.role == None:
+            if user_can_add_repo:
                 # create a default library for user
                 create_default_library(request)
                 # refetch owned repos
@@ -1550,6 +1549,9 @@ def pubrepo(request):
     """
     Show public libraries.
     """
+    if not request.user.permissions.can_view_org():
+        raise Http404
+    
     username = request.user.username
     
     if request.cloud_mode and request.user.org is not None:
@@ -1580,6 +1582,9 @@ def pubgrp(request):
     """
     Show public groups.
     """
+    if not request.user.permissions.can_view_org():
+        raise Http404
+    
     if request.cloud_mode and request.user.org is not None:
         org_id = request.user.org.org_id
         groups = seaserv.get_org_groups(org_id, -1, -1)
@@ -1627,6 +1632,9 @@ def pubuser(request):
     """
     Show public users.
     """
+    if not request.user.permissions.can_view_org():
+        raise Http404
+    
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
