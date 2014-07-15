@@ -193,6 +193,7 @@ urlpatterns = patterns('',
     url(r'^useradmin/activate/(?P<user_id>[^/]+)/$', user_activate, name='user_activate'),
     url(r'^useradmin/deactivate/(?P<user_id>[^/]+)/$', user_deactivate, name='user_deactivate'),
     url(r'^useradmin/toggle_status/(?P<user_id>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
+    url(r'^useradmin/toggle_role/(?P<user_id>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
                        
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),

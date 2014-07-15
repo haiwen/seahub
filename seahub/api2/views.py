@@ -74,6 +74,9 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
+GUEST_USER = constants.GUEST_USER
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
@@ -233,6 +236,8 @@ class Account(APIView):
 
             name = request.DATA.get("name", None)
             note = request.DATA.get("note", None)
+            role= request.DATA.get("role", None)
+
             if name or note:
                 try:
                     profile = Profile.objects.get(user=user.username)
@@ -243,6 +248,9 @@ class Account(APIView):
                 profile.nickname = name
                 profile.intro = note
                 profile.save()
+
+            if role and (role == DEFAULT_USER or role == GUEST_USER):
+                User.objects.update_role(email, role)
 
             if update:
                 resp = Response('success')
@@ -279,6 +287,11 @@ class AccountInfo(APIView):
         info['email'] = email
         info['total'] = get_user_quota(email)
         info['nickname'] = email2nickname(email)
+
+        if request.user.role is None:
+            info['role'] = DEFAULT_USER
+        else:
+            info['role'] = request.user.role
 
         if CALC_SHARE_USAGE:
             my_usage = get_user_quota_usage(email)

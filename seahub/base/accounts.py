@@ -15,6 +15,8 @@ from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username
 
+from seahub import constants
+DEFAULT_USER =  constants.DEFUALT_USER
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -32,6 +34,13 @@ class UserManager(object):
         user.set_password(password)
         user.save()
 
+        return self.get(email=email)
+
+    def update_role(self, email, role):
+        """
+        If user has a role, update it; or create a role for user.
+        """
+        ccnet_threaded_rpc.update_role_emailuser(email, role)
         return self.get(email=email)
 
     def create_superuser(self, email, password):
@@ -72,6 +81,11 @@ class UserManager(object):
         user.ctime = emailuser.ctime
         user.org = emailuser.org
         user.source = emailuser.source
+
+        if emailuser.role is None:
+            user.role = DEFAULT_USER
+        else:
+            user.role = emailuser.role
 
         return user
 

@@ -35,6 +35,9 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
+
 logger = logging.getLogger(__name__)
 
 @login_required
@@ -495,6 +498,26 @@ def user_toggle_status(request, user_id):
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
 
+@login_required_ajax
+@sys_staff_required
+def user_toggle_role(request, user_id):
+    content_type = 'application/json; charset=utf-8'
+
+    try:
+        user_role = request.GET.get('r', DEFAULT_USER)
+    except ValueError:
+        user_role = DEFAULT_USER
+
+    try:
+        user = User.objects.get(id=int(user_id))
+        User.objects.update_role(user.email, user_role)
+
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False}), status=500,
+                            content_type=content_type)
+
 def send_user_reset_email(request, email, password):
     """
     Send email when reset user password.
@@ -569,15 +592,23 @@ def user_add(request):
 
     post_values = request.POST.copy()
     post_email = request.POST.get('email', '')
-    post_values.update({'email': post_email.lower()})
+    post_role = request.POST.get('role', '')
+    post_values.update({
+                        'email': post_email.lower(),
+                        'role': post_role,
+                      })
 
     form = AddUserForm(post_values)
     if form.is_valid():
         email = form.cleaned_data['email']
+        role = form.cleaned_data['role']
         password = form.cleaned_data['password1']
 
         user = User.objects.create_user(email, password, is_staff=False,
                                         is_active=True)
+        if user:
+            User.objects.update_role(email, role)
+
         if request.user.org:
             org_id = request.user.org.org_id
             url_prefix = request.user.org.url_prefix
@@ -609,7 +640,7 @@ def user_add(request):
 
             return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
-        return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required

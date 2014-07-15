@@ -68,6 +68,7 @@
 .icon-picture:before              { content: "\f03e"; }
 .icon-undo:before                 { content: "\f0e2"; }
 .icon-repeat:before               { content: "\f01e"; }
+.icon-question-sign:before        { content: "\f059"; }
 
 /****** sf-icon-xx ********/
 @font-face {
@@ -124,7 +125,7 @@ textarea {
     resize: vertical; /* for drag */
     outline:0;
 }
-textarea, select, input { border: 1px solid #ddd; }
+textarea, input { border: 1px solid #ddd; }
 input { height:22px; margin:3px 0; outline:0; }
 input, button { display:inline-block;/*for ie*/ }
 input[type=submit],
@@ -136,13 +137,17 @@ button,
 input[type=submit],
 input[type=button],
 input.submit,
-.fileinput-button { 
+.fileinput-button,
+select { 
     padding:5px 6px;
     background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
     background:-moz-linear-gradient(top, #fafafb, #eeeeee);
     background:linear-gradient(top, #fafafb, #eeeeee);
     border: 1px solid #c5c5c5;
     border-radius: 2px;
+}
+select {
+    outline:none;
 }
 input[type=radio] {
     height:auto;
@@ -188,7 +193,8 @@ button::-moz-focus-inner {/*Remove button padding in FF*/
     display: block;
 }
 input[type=submit],
-input.submit {
+input.submit,
+button.submit {
     margin-top:8px;
 }
 input[type=submit]:hover,
@@ -1476,7 +1482,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #repo-create-form .perm {
     width:268px;
-    height:22px;
     margin-bottom:10px;
 }
 .event-group-hd {
@@ -2454,8 +2459,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #file-enc {
     border:1px solid #ddd;
-    border-radius:2px;
-    background:#efefef;
+    padding:0;
 }
 #file-view-tip {
     height: 150px;
@@ -2591,6 +2595,7 @@ textarea:-moz-placeholder {/* for FF */
     display: inline-block;
 }
 .share-permission-select,
+.user-role-select,
 .user-status-select {
     position:relative;/*for long text in other lang in 'share admin'*/
     padding:3px 2px;
@@ -2947,6 +2952,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #mass-email {
     width:432px;
+    padding:0;
 }
 /* payments */
 #plans {

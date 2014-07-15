@@ -32,7 +32,11 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-    
+
+from seahub import constants
+DEFAULT_USER = constants.DEFUALT_USER
+GUEST_USER = constants.GUEST_USER
+
 def base(request):
     """
     Add seahub base configure to the context.
@@ -82,4 +86,6 @@ def base(request):
         'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
         'search_repo_id': search_repo_id,
+        'default_user': DEFAULT_USER,
+        'guest_user': GUEST_USER,
         }
