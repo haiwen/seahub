@@ -14,6 +14,10 @@ from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
@@ -32,6 +36,13 @@ class UserManager(object):
         user.set_password(password)
         user.save()
 
+        return self.get(email=email)
+
+    def update_role(self, email, role):
+        """
+        If user has a role, update it; or create a role for user.
+        """
+        ccnet_threaded_rpc.update_role_emailuser(email, role)
         return self.get(email=email)
 
     def create_superuser(self, email, password):
@@ -72,8 +83,25 @@ class UserManager(object):
         user.ctime = emailuser.ctime
         user.org = emailuser.org
         user.source = emailuser.source
+        user.role = emailuser.role
 
         return user
+
+class UserPermissions(object):
+    def can_add_repo(self):
+        """
+        """
+        return True
+
+    def can_add_group(self):
+        """
+        """
+        return True
+
+    def can_view_org(self):
+        """
+        """
+        return False if CLOUD_MODE else True
 
 class User(object):
     is_staff = False
@@ -89,6 +117,7 @@ class User(object):
     def __init__(self, email):
         self.username = email
         self.email = email
+        self.permissions = UserPermissions()
 
     def __unicode__(self):
         return self.username

@@ -9,11 +9,13 @@
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
+        {% if user.permissions.can_add_repo %}
         {% if not force_server_crypto %}
         <li class="tab"><a href="#enc-lib-setting">{% trans "Encrypted Libraries" %}</a></li>
         {% endif %}
         <li class="tab"><a href="#sub-lib-setting">{% trans "Sub-library" %}</a></li>
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
+        {% endif %}
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
     </ul>
 </div>
@@ -72,6 +74,8 @@
     </ul>
 </div>
 
+{% if user.permissions.can_add_repo %}
+
 {% if not force_server_crypto %}
 <div class="setting-item" id="enc-lib-setting">
 <h3>{% trans "Encrypted Libraries Setting" %}</h3>
@@ -107,6 +111,8 @@
     <button id="default-lib">{% trans "Choose Default Library" %}</button>
 </div>
 
+{% endif %}
+
 <div class="setting-item" id="del-account">
 <h3>{% trans "Delete Account" %}</h3>
 <p>{% trans "This operation will not be reverted. Please think twice!" %}</p>
@@ -139,6 +145,7 @@ addConfirmTo($('#account-delete-btn'), {
     'con' : "{% trans "Really want to delete your account?" %}"
 });
 
+{% if user.permissions.can_add_repo %}
 var all_repos = [];
 {% for a_repo in owned_repos %}
     all_repos.push({
@@ -152,7 +159,6 @@ $('#default-lib').click(function() {
     form.modal({appendTo:'#main', autoResize:true, focus:false});
     file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
 });
-
 $('#default-lib-form').submit(function() {
     var dst_repo = $('[name="dst_repo"]', $(this)).val();
     if (!$.trim(dst_repo)) {
@@ -160,6 +166,7 @@ $('#default-lib-form').submit(function() {
         return false;
     }
 });
+{% endif %}
 
 (function() {
     var lang_context = $('#lang-context'),

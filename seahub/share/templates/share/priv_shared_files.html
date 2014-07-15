@@ -10,17 +10,19 @@
 <div id="tabs" class="tab-tabs">
     <ul class="tab-tabs-nav hd w100 ovhd">
         <li class="tab"><a href="#priv-share-in" class="a">{% trans "From Others" %}</a></li>
+        {% if user.permissions.can_add_repo %}
         <li class="tab long-tab"><a href="#priv-share-out" class="a">{% trans "To Others" %}</a></li>
+        {% endif %}
     </ul>
     <div id="priv-share-in">
         {% if priv_share_in %}
         <table>
             <tr>
                 <th width="5%"><!--icon--></th>
-                <th width="40%">{% trans "Name"%}</th>
-                <th width="25%">{% trans "Library"%}</th>
-                <th width="18%">{% trans "From"%}</th>
-                <th width="12%">{% trans "Operations"%}</th>
+                <th width="40%">{% trans "Name" %}</th>
+                <th width="25%">{% trans "Library" %}</th>
+                <th width="18%">{% trans "From" %}</th>
+                <th width="12%">{% trans "Operations" %}</th>
             </tr>
             {% for e in priv_share_in %}
             <tr>
@@ -45,6 +47,7 @@
         {% endif %}
     </div>
 
+    {% if user.permissions.can_add_repo %}
     <div id="priv-share-out" class="hide">
         {% if priv_share_out %}
         <table>
@@ -77,5 +80,6 @@
         </div>
         {% endif %}
     </div>
+    {% endif %}
 </div>
 {% endblock %}

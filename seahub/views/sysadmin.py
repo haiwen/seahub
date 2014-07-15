@@ -23,6 +23,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required, login_required_ajax
+from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
@@ -31,7 +32,8 @@ from seahub.share.models import FileShare
 
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
-    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
+    ENABLE_GUEST
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 
@@ -179,6 +181,11 @@ def sys_user_admin(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+        # check user's role
+        if user.role == GUEST_USER:
+            user.is_guest = True
+        else:
+            user.is_guest = False
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -202,8 +209,10 @@ def sys_user_admin(request):
             'have_ldap': have_ldap,
             'platform': platform,
             'server_id': server_id[:8],
-        },
-        context_instance=RequestContext(request))
+            'default_user': DEFAULT_USER,
+            'guest_user': GUEST_USER,
+            'enable_guest': ENABLE_GUEST,
+        }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -242,7 +251,6 @@ def sys_user_admin_ldap(request):
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
-            
             
     return render_to_response(
         'sysadmin/sys_useradmin_ldap.html', {
@@ -284,6 +292,11 @@ def sys_user_admin_admins(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+        # check user's role
+        if user.role == GUEST_USER:
+            user.is_guest = True
+        else:
+            user.is_guest = False
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -298,8 +311,9 @@ def sys_user_admin_admins(request):
             'not_admin_users': not_admin_users,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
-        },
-        context_instance=RequestContext(request))
+            'default_user': DEFAULT_USER,
+            'guest_user': GUEST_USER,
+            }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -495,6 +509,34 @@ def user_toggle_status(request, user_id):
         return HttpResponse(json.dumps({'success': False}), status=500,
                             content_type=content_type)
 
+@login_required_ajax
+@sys_staff_required
+def user_toggle_role(request, email):
+    content_type = 'application/json; charset=utf-8'
+
+    if not is_valid_username(email):
+        return HttpResponse(json.dumps({'success': False}), status=400,
+                            content_type=content_type)
+
+    if not ENABLE_GUEST:
+        return HttpResponse(json.dumps({'success': False}), status=403,
+                            content_type=content_type)
+
+    try:
+        user_role = request.GET.get('r', DEFAULT_USER)
+    except ValueError:
+        user_role = DEFAULT_USER
+
+    try:
+        user = User.objects.get(email)
+        User.objects.update_role(user.email, user_role)
+
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False}), status=500,
+                            content_type=content_type)
+
 def send_user_reset_email(request, email, password):
     """
     Send email when reset user password.
@@ -569,15 +611,23 @@ def user_add(request):
 
     post_values = request.POST.copy()
     post_email = request.POST.get('email', '')
-    post_values.update({'email': post_email.lower()})
+    post_role = request.POST.get('role', '')
+    post_values.update({
+                        'email': post_email.lower(),
+                        'role': post_role,
+                      })
 
     form = AddUserForm(post_values)
     if form.is_valid():
         email = form.cleaned_data['email']
+        role = form.cleaned_data['role']
         password = form.cleaned_data['password1']
 
         user = User.objects.create_user(email, password, is_staff=False,
                                         is_active=True)
+        if user:
+            User.objects.update_role(email, role)
+
         if request.user.org:
             org_id = request.user.org.org_id
             url_prefix = request.user.org.url_prefix
@@ -609,7 +659,7 @@ def user_add(request):
 
             return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
-        return HttpResponse(json.dumps({'err': str(form.errors)}), status=400, content_type=content_type)
+        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}), status=400, content_type=content_type)
 
 @login_required
 @sys_staff_required

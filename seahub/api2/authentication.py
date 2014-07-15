@@ -4,6 +4,7 @@ from rest_framework.authentication import BaseAuthentication
 
 import seaserv
 from seahub.base.accounts import User
+from seahub.constants import GUEST_USER
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 try:
@@ -54,6 +55,14 @@ class TokenAuthentication(BaseAuthentication):
 
         return self.authenticate_v1(request, key)
 
+    def _populate_user_permissions(self, user):
+        """Disable some operations if ``user`` is a guest.
+        """
+        if user.role == GUEST_USER:
+            user.permissions.can_add_repo = lambda: False
+            user.permissions.can_add_group = lambda: False
+            user.permissions.can_view_org = lambda: False
+
     def authenticate_v1(self, request, key):
         try:
             token = Token.objects.get(key=key)
@@ -69,6 +78,8 @@ class TokenAuthentication(BaseAuthentication):
             orgs = seaserv.get_orgs_by_user(token.user)
             if orgs:
                 user.org = orgs[0]
+
+        self._populate_user_permissions(user)
 
         if user.is_active:
             return (user, token)
@@ -88,6 +99,8 @@ class TokenAuthentication(BaseAuthentication):
             orgs = seaserv.get_orgs_by_user(token.user)
             if orgs:
                 user.org = orgs[0]
+
+        self._populate_user_permissions(user)
 
         if user.is_active:
             need_save = False

@@ -15,10 +15,12 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+{% if user.permissions.can_add_group %}
 {% url 'group_add' as group_add_url %}
 {% with post_url=group_add_url %}
 {% include "snippets/group_add_js.html" %}
 {% endwith %}
+{% endif %}
 
 $('.group').hover(
 	function() {

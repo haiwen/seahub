@@ -11,7 +11,9 @@
             <li class="tab"><a href="#grp-repos" class="a">{% trans "Libraries" %}</a></li>
             <li class="tab long-tab"><a href="#grp-repos-commits" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
+        {% if user.permissions.can_add_repo %}
         <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        {% endif %}
     </div>
     <div id="grp-repos" class="hide">
     {% if repos %}
@@ -119,7 +121,10 @@
     </div>
 </div>
 
+{% if user.permissions.can_add_repo %}
 {% include "snippets/repo_create_form.html" %}
+{% endif %}
+
 <form id="repo-decrypt-form" class="hide">
     <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
     <input type="hidden" name="repo_id" value="" />
@@ -152,6 +157,7 @@ $('.download').click(function() {
     window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
+{% if user.permissions.can_add_repo %}
 function repoCreateSuccessCallback() {
     location.reload();
 }
@@ -159,6 +165,7 @@ function repoCreateSuccessCallback() {
 {% with post_url=repo_create_url %}
     {% include 'snippets/repo_create_js.html' %}
 {% endwith %}
+{% endif %}
 
 {% if recent_commits %}
 {% include 'snippets/list_commit_detail.html' %}

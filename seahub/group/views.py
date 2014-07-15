@@ -156,6 +156,12 @@ def group_add(request):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
+    user_can_add_group = request.user.permissions.can_add_group()
+    if not user_can_add_group:
+            result['error'] = _(u'You do not have permission to create group.')
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
+        
     # check plan
     num_of_groups = getattr(request.user, 'num_of_groups', -1)
     if num_of_groups > 0:

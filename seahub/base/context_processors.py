@@ -32,7 +32,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-    
+
 def base(request):
     """
     Add seahub base configure to the context.

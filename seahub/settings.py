@@ -425,6 +425,8 @@ ENABLE_PUBFILE = False
 
 ENABLE_SUB_LIBRARY = True
 
+ENABLE_GUEST = False
+
 #####################
 # External settings #
 #####################

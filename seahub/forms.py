@@ -14,8 +14,13 @@ class AddUserForm(forms.Form):
     """
     Form for adding a user.
     """
+    from seahub import constants
+    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
+    GUEST_USER = getattr(constants, 'GUEST_USER', 'guest')
 
     email = forms.EmailField()
+    role = forms.ChoiceField( \
+            choices=[(DEFAULT_USER, DEFAULT_USER), (GUEST_USER,GUEST_USER)])
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 
@@ -23,7 +28,7 @@ class AddUserForm(forms.Form):
         email = self.cleaned_data['email']
         try:
             user = User.objects.get(email=email)
-            raise forms.ValidationError(_("A user with this email already"))
+            raise forms.ValidationError(_("A user with this email already exists."))
         except User.DoesNotExist:
             return self.cleaned_data['email']            
 
@@ -37,7 +42,7 @@ class AddUserForm(forms.Form):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields didn't match."))
+                raise forms.ValidationError(_("The two passwords didn't match."))
         return self.cleaned_data
 
 class RepoCreateForm(forms.Form):

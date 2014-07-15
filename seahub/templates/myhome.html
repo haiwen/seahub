@@ -38,7 +38,11 @@
     <span class="icon-lightbulb fleft"></span>
     <div class="txt">
         <h3>{% trans "Welcome to Seafile!" %}</h3>
+        {% if user.permissions.can_add_repo %}
         <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later." %}</p>
+        {% else %}
+        <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. Howerver, since you are a guest user now, you can not create libraries." %}</p>
+        {% endif %}
         <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
     </div>
 </div>
