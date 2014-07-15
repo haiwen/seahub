@@ -396,7 +396,7 @@ class UserNotification(models.Model):
 
         try:
             detail = json.loads(self.detail)
-        except json.JSONDecodeError:
+        except ValueError:
             raise self.InvalidDetailError, 'Wrong detail format of group message'
         else:
             if isinstance(detail, int): # Compatible with existing records
@@ -429,7 +429,7 @@ class UserNotification(models.Model):
 
         try:
             detail = json.loads(self.detail)
-        except json.JSONDecodeError:
+        except ValueError:
             raise self.InvalidDetailError, 'Wrong detail format of group message reply'
         else:
             if isinstance(detail, int): # Compatible with existing records
@@ -459,7 +459,7 @@ class UserNotification(models.Model):
 
         try:
             detail = json.loads(self.detail)
-        except json.JSONDecodeError:
+        except ValueError:
             msg_from = self.detail
             message = None
             return {'message': message, 'msg_from': msg_from}
