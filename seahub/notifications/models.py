@@ -635,7 +635,7 @@ class UserNotification(models.Model):
                 'href': reverse('msg_reply_new'),
                 }
         else:
-            msg = _(u"%(user)s replied your <a href='%(href)s'>group discussion</a>.") % {
+            msg = _(u"%(user)s replied the <a href='%(href)s'>group discussion</a>.") % {
                 'user': escape(email2nickname(reply_from)),
                 'href': reverse('msg_reply_new'),
                 }
@@ -775,9 +775,13 @@ def grpmsg_reply_added_cb(sender, **kwargs):
         return
 
     msg_replies = MessageReply.objects.filter(reply_to=group_msg)
+    # notify all people replied this group message
     notice_users = set([ x.from_email for x in msg_replies \
                              if x.from_email != reply_from_email])
-    notice_users.add(group_msg.from_email)
+
+    if group_msg.from_email != reply_from_email:
+        # also notify the person who posts the group message
+        notice_users.add(group_msg.from_email)
 
     detail = grpmsg_reply_to_json(msg_id, reply_from_email, reply_msg)
 

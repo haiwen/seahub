@@ -489,12 +489,11 @@ def msg_reply(request, msg_id):
             msg_reply.message = msg
             msg_reply.save()
 
-            # send signal if reply other's message
-            if group_msg.from_email != request.user.username:
-                grpmsg_reply_added.send(sender=MessageReply,
-                                        msg_id=msg_id,
-                                        from_email=request.user.username,
-                                        reply_msg=msg)
+            grpmsg_reply_added.send(sender=MessageReply,
+                                    msg_id=msg_id,
+                                    from_email=request.user.username,
+                                    reply_msg=msg)
+
             replies = MessageReply.objects.filter(reply_to=group_msg)
             r_num = len(replies)
             if r_num < 4 or r_status == 'show':

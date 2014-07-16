@@ -2800,12 +2800,10 @@ class GroupMsgView(APIView):
         msg_reply.message = msg
         msg_reply.save()
 
-        # send signal if reply other's message
-        if group_msg.from_email != request.user.username:
-            grpmsg_reply_added.send(sender=MessageReply,
-                                    msg_id=msg_id,
-                                    from_email=request.user.username,
-                                    reply_msg=msg)
+        grpmsg_reply_added.send(sender=MessageReply,
+                                msg_id=msg_id,
+                                from_email=request.user.username,
+                                reply_msg=msg)
         ret = { "msgid" : msg_reply.id }
         return Response(ret)
 
@@ -3080,12 +3078,10 @@ def html_msg_reply(request, msg_id):
     msg_reply.message = msg
     msg_reply.save()
 
-    # send signal if reply other's message
-    if group_msg.from_email != request.user.username:
-        grpmsg_reply_added.send(sender=MessageReply,
-                                msg_id=msg_id,
-                                from_email=request.user.username,
-                                reply_msg=msg)
+    grpmsg_reply_added.send(sender=MessageReply,
+                            msg_id=msg_id,
+                            from_email=request.user.username,
+                            reply_msg=msg)
     ctx['r'] = msg_reply
     html = render_to_string("api2/reply.html", ctx)
     serialized_data = json.dumps({"html": html})
