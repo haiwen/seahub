@@ -240,8 +240,12 @@ class Account(APIView):
                     profile = Profile()
 
                 profile.user = user.username
-                profile.nickname = name
-                profile.intro = note
+
+                if name:
+                    profile.nickname = name
+                if note:
+                    profile.intro = note
+
                 profile.save()
 
             if update:
