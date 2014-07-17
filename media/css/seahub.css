@@ -1,23 +1,23 @@
 /****** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
 @font-face {
-  font-family: 'FontAwesome';
-  src: url('font/fontawesome-webfont.eot?v=3.0.1');
-  src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
+    font-family: 'FontAwesome';
+    src: url('font/fontawesome-webfont.eot?v=3.0.1');
+    src: url('font/fontawesome-webfont.eot?#iefix&v=3.0.1') format('embedded-opentype'),
     url('font/fontawesome-webfont.woff?v=3.0.1') format('woff'),
     url('font/fontawesome-webfont.ttf?v=3.0.1') format('truetype');
-  font-weight: normal;
-  font-style: normal;
+    font-weight: normal;
+    font-style: normal;
 }
 [class^="icon-"],
 [class*=" icon-"] {
-  font-family: FontAwesome;
-  font-weight: normal;
-  font-style: normal;
-  text-decoration: inherit;
-  -webkit-font-smoothing: antialiased;
-  vertical-align: baseline;
-  speak: none;
+    font-family: FontAwesome;
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: inherit;
+    -webkit-font-smoothing: antialiased;
+    vertical-align: baseline;
+    speak: none;
 }
 .icon-cloud-download:before       { content: "\f0ed"; }
 .icon-download:before             { content: "\f01a"; }
@@ -269,7 +269,8 @@ p { margin:0.5em 0; }
     margin:1em auto;
 }
 .icon-plus, .icon-minus, .icon-pencil,
-.icon-star-empty, .icon-star {
+.file-item .icon-star-empty,
+.file-item .icon-star {
     font-size:16px;
     line-height:1;
 }
@@ -277,8 +278,8 @@ p { margin:0.5em 0; }
     color:#444;
     margin-left:3px;
 }
-.icon-star-empty { color:#d0d0d0; }
-.icon-star { color:#505050; }
+.file-item .icon-star-empty { color:#d0d0d0; }
+.file-item .icon-star { color:#505050; }
 .op,
 .more {
     font-weight:normal;
@@ -1196,10 +1197,12 @@ textarea:-moz-placeholder {/* for FF */
 #notice-popup a {
     font-weight:normal;
 }
-#notice-popup .close {
+#notice-popup .close,
+#discuss-to-group .close {
     position:absolute;
     top:.5em;
     right:10px;
+    cursor:pointer;
 }
 #notice-popup li {
     padding:9px 0 3px;
@@ -2589,6 +2592,28 @@ textarea:-moz-placeholder {/* for FF */
 }
 #md-edit-help {
     width:550px;
+}
+#fileview-toolbar {
+    position:fixed;
+    right:0;
+}
+#fileview-toolbar .item {
+    width:59px;
+    height:40px;
+    padding-top:18px;
+    background:#fff;
+    text-align:center;
+    cursor:pointer;
+    border:1px solid #c0c0c0;
+    border-right:0;
+    border-top:0;
+}
+#fileview-toolbar .item:first-child {
+    border-top:1px solid #c0c0c0;
+    border-top-left-radius:3px;
+}
+#fileview-toolbar .item:last-child {
+    border-bottom-left-radius:3px;
 }
 /* shareadmin & useradmin */
 .view-link-alert p {

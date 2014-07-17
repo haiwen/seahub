@@ -8,17 +8,60 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">                                                
-#footer { display:none; }                                              
+#header, #footer { display:none; }
+#star {
+    vertical-align:middle;
+    margin-left:3px;
+    color:#a4a4a4;
+}
+.path { margin: 0 0 -3px;}
+#file-op .avatar {
+    border-radius:1000px;
+}
+#discuss-to-group,
+#to-group {
+    right:0;
+    border-radius:5px 0 0 5px;
+}
+#to-group {
+    min-width:250px;
+    padding:0 12px 10px;
+    right:78px;
+}
+#to-group .outer-caret {
+    position:absolute;
+    top: 15px;
+    right: -15px;
+}
+#to-group .outer-caret,
+#to-group .inner-caret {
+    border-color:transparent #cbcbcb;
+    border-right-width:0;
+}
+#to-group .inner-caret {
+    border-left-color:#fff;
+    top:-15px;
+    left:-16px;
+}
+#to-group ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+#to-group a {
+    padding:1px 3px;
+}
 </style>
 {% endblock %}
 
 {% block main_panel %}
     <div id="view-hd">
-        <h2>{{ filename }}</h2>
+        <h2>{{ filename }}
+            <span id="star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
+        </h2>
     </div>
 
-    <div id="view-path-op" class="w100 ovhd">
-        <p class="path fleft">
+    <div id="view-path-op">
+        <p class="path">
         {% trans "Current Path: "%}
         {% for name, link in zipped %}
             {% if not forloop.last %}
@@ -28,24 +71,13 @@
             {% endif %}
         {% endfor %}
         </p>
-
-        <div class="file-op fright">
-            {% if not repo.encrypted %}
-            <button data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" id="share"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
-            {% endif %}
-            {% if is_starred %}
-            <button id="star" data-status="starred"><span class="icon-star"></span><span class="text">{% trans "Unstar"%}</span></button>
-            {% else %}
-            <button id="star" data-status="unstarred"><span class="icon-star"></span><span class="text">{% trans "Star"%}</span></button>
-            {% endif %}
-        </div>
     </div>
 
     <div id="file">
         <div id="file-op">
             <div class="commit fleft">
                 {% if latest_contributor %}
-                {% avatar latest_contributor 20 %} <a href="{% url 'user_profile' latest_contributor|id_or_email %}" class="name">{{ latest_contributor|email2nickname }}</a>
+                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor|id_or_email %}" class="name">{{ latest_contributor|email2nickname }}</a>
                 {% endif %}
                 {% if last_modified %}
                 <span class="time">{{ last_modified|translate_seahub_time}}</span>
@@ -59,13 +91,9 @@
 
                 <span class="contributors">{% blocktrans count counter=contributors|length %}one contributor{% plural %} {{ counter }} contributors {% endblocktrans %}</span>
                 {% for user in contributors|slice:":6" %}
-                <a href="{% url 'user_profile' user|id_or_email %}" title="{{ user|email2nickname}}">{% avatar user 16 %}</a>
+                <a href="{% url 'user_profile' user|id_or_email %}" title="{{ user|email2nickname}}">{% avatar user 20 %}</a>
                 {% endfor %}
             </div>
-
-            {% if user_perm == 'rw' %}
-            <button data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" class="history">{% trans "History"%}</button>
-            {% endif %}
 
             {% if request.user.is_authenticated %}
                 {% block edit_file %}
@@ -88,9 +116,59 @@
 
     {% include "snippets/file_share_popup.html" %} 
 
-    {% with attach_type='file' %}
-    {% include "snippets/group_recommend_form.html" %}
-    {% endwith %}
+    <ul id="fileview-toolbar">
+        {% if groups %}
+        <li class="item" id="file-discuss-icon"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
+        <li id="file-group-icon" class="item"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li id="share" class="item" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
+        {% endif %}
+        {% if user_perm == 'rw' %}
+        <li id="history" class="item" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
+        {% endif %}
+    </ul>
+
+    {% if groups %}
+    <div id="discuss-to-group" class="hide">
+        <form action="{% url 'group_recommend' %}" method="post" id="discuss-to-group-form">{% csrf_token %}
+            <h3>{% trans "Post a discussion to group" %}</h3>
+            <div class="groups">
+                {% for group in groups %}
+                <label for="{{ group.id }}" class="checkbox-label">
+                    <span class="checkbox{% if forloop.first and forloop.last %} checkbox-checked{% endif %}"><input type="checkbox" name="groups" value="{{ group.id }}" id="{{ group.id }}" {% if forloop.first and forloop.last %}checked="checked"{% endif %} class="checkbox-orig"></span>
+                    <span class="checkbox-option">{{ group.group_name }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <textarea name="message" placeholder="{% trans 'discussion' %}" class="input"></textarea>
+            <input type="hidden" name="repo_id" value="{{ repo.id }}" />
+            <input type="hidden" name="path" value="{{ path }}" />
+            <input type="hidden" name="attach_type" value="file" />
+            <p class="error hide"></p>
+            <input type="submit" id="discuss-submit" class="submit" value="{% trans "Submit"%}" />
+            <span class="attachment">
+                {% for name,link in zipped %}
+                {% if forloop.last %}
+                <img src="{{ MEDIA_URL }}img/file/{{ name|file_icon_filter }}" alt="{% trans 'File' %}" height="18" class="vam" />
+                <span class="att-name vam">{{ name }}</span>
+                {% endif %}
+                {% endfor %}
+            </span>
+        </form>
+        <ul id="discussions-to-grp" class="hide"></ul>
+        <img src="{{MEDIA_URL}}img/del.png" alt="{% trans "close" %}" class="close" />
+    </div>
+
+    {% if groups|length > 1 %}
+    <div id="to-group" class="hide">
+        <h3>{% trans "Groups" %}</h3>
+        {{ repo_group_str }}
+        <div class="outer-caret"><div class="inner-caret"></div></div>
+    </div>
+    {% endif %}
+
+    {% endif %}
 
 {% endblock %}
 
@@ -104,6 +182,12 @@ $(function() {
     var dld_url = $('#download').data('url');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
 });
+$('#download').click(function() {
+    location.href = $(this).data('url');
+});
+
+// share link
+{% include "snippets/shared_link_js.html" %}
 $('#share').click(function() {
     var op = $(this), name = '{{ filename }}',
         aj_urls = { 'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{path|urlencode}}' },
@@ -111,73 +195,157 @@ $('#share').click(function() {
     showSharePopup(op, name, aj_urls, type, cur_path);
     return false;
 });
-$('#download').click(function() {
-    window.open($(this).data('url'));
-});
 
 $('#edit').click(function() {
     location.href = $(this).attr('data');
 });
 
-//share link
-{% include "snippets/shared_link_js.html" %}
-
-//star
+// star file
 $('#star').click(function() {
-    var star_btn = $(this);
-    disable(star_btn);
+    var op_icon = $(this), url_base;
 
-    var path = '{{path}}';
-    var status = star_btn.data('status'), ajax_url;
-    if (status == 'unstarred') {
-        ajax_url = '{% url 'repo_star_file' repo.id %}?file=' + e(path);
+    if (op_icon.hasClass('icon-star-empty')) {
+        url_base = '{% url 'repo_star_file' repo.id %}';
     } else {
-        ajax_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(path);
+        url_base = '{% url 'repo_unstar_file' repo.id %}';
     }
     
     $.ajax({
-        url: ajax_url,
+        url: url_base + '?file=' + e("{{path}}"),
         cache: false,
         dataType: 'json',
         success:function(data) {
-            if (data['success']) {
-                if (status == 'starred') {
-                    feedback("{% trans "Unstarred successfully" %}", 'success');
-                    star_btn.data('status', 'unstarred');
-                    star_btn.children('.text').html("{% trans "Star" %}");
-                } else {
-                    feedback("{% trans "Starred successfully" %}", 'success');
-                    star_btn.data('status', 'starred');
-                    star_btn.children('.text').html("{% trans "Unstar" %}");
-                }
-                enable(star_btn);
-            }
+            op_icon.toggleClass('icon-star-empty icon-star');
         },
-        error:function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-            enable(star_btn);
-        }
+        error: ajaxErrorHandler
    });
-})
-.hover(
-    function() {
-        $(this).css('background-color', '#fff');
-    },
-    function() {
-        $(this).css('background-color', '#efefef');
-    }
-);
-
-$('#download-repo').click(function() {
-    location.href = $(this).attr('data');
 });
 
-$('#file-op .history').click(function () {
-    location.href = $(this).data('url');
+// set 'side toolbar' & 'groups' popup position
+function setToolbarPos() {
+    var toolbar = $('#fileview-toolbar');
+    toolbar.css({'top': ($(window).height() - toolbar.outerHeight())/2});
+
+    // set 'groups' popup position
+    $('#to-group').css({'top': parseInt(toolbar.css('top')) + 59});
+}
+$(window).load(setToolbarPos).resize(setToolbarPos);
+
+// handle discussions after fetch them
+function handleDiscussions(html) {
+    $('#discussions-to-grp').html(html)
+    .css({'max-height': parseInt($(window).height() * 0.8 - $('#discuss-to-group-form').outerHeight())})
+    .removeClass('hide');
+    var popup = $('#discuss-to-group');
+    popup.css({'top':($(window).height() - popup.outerHeight())/2});
+    {% include 'group/msg_js.html' %}
+}
+// show discuss popup
+$('#file-discuss-icon').click(function() {
+    var popup = $('#discuss-to-group');
+    popup.toggleClass('hide');
+
+    // get discussions
+    if (!popup.hasClass('hide')) {
+        $.ajax({
+            url: $('#discuss-to-group-form').attr('action'),
+            dataType: 'json',
+            data: {
+                'repo_id': '{{ repo.id }}',
+                'path': '{{ path }}'
+            },
+            success: function(data) {
+                handleDiscussions(data['html']);
+            },
+            error: ajaxErrorHandler
+        });
+    }
+});
+// click 'close' to close discuss popup
+$('#discuss-to-group .close').click(function () {
+    $('#discuss-to-group').addClass('hide');
+});
+// submit discussion
+$('#discuss-submit').click(function() {
+    var form = $('#discuss-to-group-form'),
+        form_id = form.attr('id');
+
+    if (form.find('.checkbox-checked').length == 0) {
+        apply_form_error(form_id, "{% trans "Please select at least 1 group." %}");
+        return false;
+    }
+    if (!$.trim($('.input', form).val())) {
+        apply_form_error(form_id, "{% trans "Please input a discussion." %}");
+        return false;
+    }
+
+    $('.error', form).addClass('hide');
+    var groups = [];
+    $('.checkbox-checked .checkbox-orig', form).each(function() {
+        groups.push($(this).val());
+    });
+
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        traditional: true,
+        data: {
+            'groups': groups,
+            'message': $('[name="message"]', form).val(),
+            'repo_id': '{{ repo.id }}',
+            'path': $('[name="path"]', form).val(),
+            'attach_type': $('[name="attach_type"]', form).val()
+        },
+        success: function(data) {
+            if (data['success']) {
+                feedback(data['success'], 'success');
+                handleDiscussions(data['html']);
+                $('.input', form).val('');
+            }
+            if (data['error']) {
+                feedback(data['error'], 'error');
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            var err_str = '';
+            if (jqXHR.responseText) {
+                err_str = $.parseJSON(jqXHR.responseText).error;
+            } else {
+                err_str = "{% trans "Failed. Please check the network." %}";
+            }
+            apply_form_error(form_id, err_str);
+        }
+    });
+    return false;
+});
+
+// click group icon
+$('#file-group-icon').click(function() {
+    {% if groups|length == 1 %}
+    {% for group in groups %}
+    location.href= "{% url 'group_info' group.id %}";
+    {% endfor %}
+
+    {% else %}
+    $('#to-group').toggleClass('hide');
+    {% endif %}
+});
+
+// click other place to close popup
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    if (!$('#file-discuss-icon, #discuss-to-group').is(target) && !($('#file-discuss-icon, #discuss-to-group').find('*').is(target))) {
+        $('#discuss-to-group').addClass('hide');
+    }
+    if (!$('#file-group-icon, #to-group').is(target) && !($('#file-group-icon, #to-group').find('*').is(target))) {
+        $('#to-group').addClass('hide');
+    }
+});
+
+$('#history').click(function () {
+    window.open($(this).data('url'));
 });
 
 {% if highlight_keyword %}
@@ -216,8 +384,6 @@ $(window).load(function() {
 });
 {% endif %}
 
-//bottom bar
-{% include "snippets/bottom_bar.html" %}
 $('#main-panel').css('margin-bottom',0);
 </script>
 {% endblock %}

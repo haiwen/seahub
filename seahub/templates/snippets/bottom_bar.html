@@ -97,7 +97,7 @@ $('#discuss-submit').click(function() {
                 getAndHandleDiscussions(data['html']);
                 form.find('.input').val('');
             }
-            if(data['err']) {
+            if(data['error']) {
                 feedback(data['error'], 'error');
             }
         },
