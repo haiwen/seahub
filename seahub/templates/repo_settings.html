@@ -94,7 +94,7 @@ $('#repo-basic-info-form input[name="history"]').change(function() {
 
 $('#repo-basic-info-form').submit(function() {
     var form = $(this),
-        form_id = form.attr('id');        
+        form_id = form.attr('id');
     var repo_name = $('[name="repo_name"]', form).val(),
         repo_desc = $('[name="repo_desc"]', form).val();
 
@@ -118,7 +118,7 @@ $('#repo-basic-info-form').submit(function() {
         days = 0;
     }
 
-    var submit_btn = $(this).children('input[type="submit"]');  
+    var submit_btn = $(this).children('input[type="submit"]');
     disable(submit_btn);
     $.ajax({
         url: '{% url 'repo_change_basic_info' repo.id %}',
@@ -126,9 +126,9 @@ $('#repo-basic-info-form').submit(function() {
         dataType: 'json',
         beforeSend: prepareCSRFToken,
         data: {
-            'repo_name': repo_name, 
+            'repo_name': repo_name,
             'repo_desc': repo_desc,
-            'days': days 
+            'days': days
         },
         success: function(data) {
             if (data['success']) {
@@ -151,8 +151,8 @@ $('#repo-owner-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
         new_owner = $('[name="repo_owner"]', form).val(),
-        submit_btn = $('input[type="submit"]', form);  
-    
+        submit_btn = $('input[type="submit"]', form);
+
     if (!$.trim(new_owner)) {
         return false;
     }

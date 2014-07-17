@@ -64,18 +64,18 @@ class UserManager(object):
             user_list.append(user)
 
         return user_list
-        
+
     def get(self, email=None, id=None):
         if not email and not id:
             raise User.DoesNotExist, 'User matching query does not exits.'
-            
+
         if email:
             emailuser = ccnet_threaded_rpc.get_emailuser(email)
         if id:
             emailuser = ccnet_threaded_rpc.get_emailuser_by_id(id)
         if not emailuser:
             raise User.DoesNotExist, 'User matching query does not exits.'
-    
+
         user = User(emailuser.email)
         user.id = emailuser.id
         user.is_staff = emailuser.is_staff
@@ -113,7 +113,7 @@ class User(object):
 
     class DoesNotExist(Exception):
         pass
-    
+
     def __init__(self, email):
         self.username = email
         self.email = email
@@ -128,7 +128,7 @@ class User(object):
         anonymous users.
         """
         return False
-    
+
     def is_authenticated(self):
         """
         Always return True. This is a way to tell if the user has been
@@ -161,13 +161,13 @@ class User(object):
     def get_and_delete_messages(self):
         messages = []
         return messages
-    
+
     def set_password(self, raw_password):
         if raw_password is None:
             self.set_unusable_password()
         else:
             self.password = '%s' % raw_password
-    
+
     def check_password(self, raw_password):
         """
         Returns a boolean of whether the raw_password was correct. Handles
@@ -185,7 +185,7 @@ class User(object):
     def set_unusable_password(self):
         # Sets a value that will never be a valid hash
         self.password = UNUSABLE_PASSWORD
-    
+
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
         from django.core.mail import send_mail
@@ -251,7 +251,7 @@ class AuthBackend(object):
         except User.DoesNotExist:
             return None
 
-########## Register related        
+########## Register related
 class RegistrationBackend(object):
     """
     A registration backend which follows a simple workflow:
@@ -289,7 +289,7 @@ class RegistrationBackend(object):
     an instance of ``registration.models.RegistrationProfile``. See
     that model and its custom manager for full documentation of its
     fields and supported operations.
-    
+
     """
     def register(self, request, **kwargs):
         """
@@ -331,7 +331,7 @@ class RegistrationBackend(object):
                                                                         send_email=False)
             # login the user
             new_user.backend=settings.AUTHENTICATION_BACKENDS[0]
-            
+
             login(request, new_user)
         else:
             # create inactive user, user can be activated by admin, or through activated email
@@ -367,7 +367,7 @@ class RegistrationBackend(object):
         ``registration.signals.user_activated`` will be sent, with the
         newly activated ``User`` as the keyword argument ``user`` and
         the class of this backend as the sender.
-        
+
         """
         from registration.models import RegistrationProfile
         activated = RegistrationProfile.objects.activate_user(activation_key)
@@ -392,14 +392,14 @@ class RegistrationBackend(object):
 
         * If ``REGISTRATION_OPEN`` is both specified and set to
           ``False``, registration is not permitted.
-        
+
         """
         return getattr(settings, 'REGISTRATION_OPEN', True)
 
     def get_form_class(self, request):
         """
         Return the default form class used for user registration.
-        
+
         """
         return RegistrationForm
 
@@ -407,7 +407,7 @@ class RegistrationBackend(object):
         """
         Return the name of the URL to redirect to after successful
         user registration.
-        
+
         """
         return ('registration_complete', (), {})
 
@@ -415,7 +415,7 @@ class RegistrationBackend(object):
         """
         Return the name of the URL to redirect to after successful
         account activation.
-        
+
         """
         return ('myhome', (), {})
 
@@ -423,9 +423,9 @@ class RegistrationBackend(object):
 class RegistrationForm(forms.Form):
     """
     Form for registering a new user account.
-    
+
     Validates that the requested email is not already in use, and
-    requires the password to be entered twice to catch typos.    
+    requires the password to be entered twice to catch typos.
     """
     attrs_dict = { 'class': 'input' }
 
@@ -460,13 +460,51 @@ class RegistrationForm(forms.Form):
             raise forms.ValidationError(_("Invalid user id."))
         return self.cleaned_data['userid']
 
-    def clean(self):
+    def clean_password1(self):
+        if 'password1' in self.cleaned_data:
+            pwd = self.cleaned_data['password1']
+            if len(pwd) < 6:
+                raise forms.ValidationError(
+                        _("Passwords must have at least 6 characters."))
+            else:
+                num = 0
+                for letter in pwd:
+                    # get ascii dec
+                    # bitwise OR
+                    num |= self.get_char_mode(ord(letter))
+                level = self.caculate_bitwise(num)
+                if level == 1:
+                    raise forms.ValidationError(_("Passwords must contain at least 2 types: uppercase letters, lowercase letters, numbers, and symbols"))
+
+        return self.cleaned_data['password1']
+
+    def get_char_mode(self, n):
+        if (n >= 48 and n <= 57): #nums
+            return 1;
+        if (n >= 65 and n <= 90): #uppers
+            return 2;
+        if (n >= 97 and n <= 122): #lowers
+            return 4;
+        else:
+            return 8;
+
+    def caculate_bitwise(self, num):
+        level = 0
+        for i in range(4):
+            # bitwise AND
+            if (num&1):
+                level += 1
+            # Right logical shift
+            num = num >> 1
+        return level
+
+    def clean_password2(self):
         """
         Verifiy that the values entered into the two password fields
         match. Note that an error here will end up in
         ``non_field_errors()`` because it doesn't apply to a single
         field.
-        
+
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
@@ -475,7 +513,7 @@ class RegistrationForm(forms.Form):
 
 class DetailedRegistrationForm(RegistrationForm):
     attrs_dict = { 'class': 'input' }
-    
+
     name = forms.CharField(widget=forms.TextInput(
             attrs=dict(attrs_dict, maxlength=64)), label=_("name"))
     department = forms.CharField(widget=forms.TextInput(

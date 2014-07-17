@@ -16,16 +16,20 @@
 
         <label for="id_email">{% trans "Email" %}</label>
         {{ form.email }}            {{ form.email.errors }}
-        <label for="id_password1">{% trans "Password" %}</label>
+        <label for="id_password1">{% trans "Password" %}</label> <font id="pwd_strength"></font>
         {{ form.password1 }}        {{ form.password1.errors }}
+        <input class="input hide" id="id_password1_show" name="password1_show" type="text">
+        <div id="pwd_tips" class="hide">{% trans "Passwords must have at least 6 characters and contain at least two of the following: uppercase letters, lowercase letters, numbers, and symbols" %}</div>
         <label for="id_password2">{% trans "Confirm Password" %}</label>
         {{ form.password2 }}        {{ form.password2.errors }}
-
+        <input class="input hide" id="id_password2_show" name="password2_show" type="text">
+        <span class="checkbox"><input type="checkbox" name="show-passwd" id="show-passwd-switch" class="checkbox-orig" /></span>
+        <span class="checkbox-option">{% trans "Show password"%}</span><br />
         {% if form.department and form.telephone %}
         <label for="id_department">{% trans "Department" %}</label>
-        {{ form.department }}             {{ form.department.errors }}
+        {{ form.department }}       {{ form.department.errors }}
         <label for="id_telephone">{% trans "Telephone" %}</label>
-        {{ form.telephone }}             {{ form.telephone.errors }}
+        {{ form.telephone }}        {{ form.telephone.errors }}
         <label for="id_note">{% trans "Note" %}</label>
         {{ form.note }}             {{ form.note.errors }}
         {% endif %}
@@ -40,10 +44,119 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+
+$('#show-passwd-switch').click(function () {
+    var pwd_hide_1 = $('#id_password1'),
+        pwd_show_1 = $('#id_password1_show'),
+        pwd_hide_2 = $('#id_password2'),
+        pwd_show_2 = $('#id_password2_show');
+
+    if ($(this).attr('checked')) {
+        pwd_hide_1.addClass('hide');
+        pwd_show_1.removeClass('hide');
+        pwd_show_1.attr('value', pwd_hide_1.attr('value'));
+        pwd_hide_2.addClass('hide');
+        pwd_show_2.removeClass('hide');
+        pwd_show_2.attr('value', pwd_hide_2.attr('value'));
+    } else {
+        pwd_hide_1.removeClass('hide');
+        pwd_show_1.addClass('hide');
+        pwd_hide_1.attr('value', pwd_show_1.attr('value'));
+        pwd_hide_2.removeClass('hide');
+        pwd_show_2.addClass('hide');
+        pwd_hide_2.attr('value', pwd_show_2.attr('value'));
+    }
+});
+
+$("#id_password1_show").keyup(function() {
+    $('#id_password1').attr('value', $(this).attr('value'));
+});
+$("#id_password2_show").keyup(function() {
+    $('#id_password2').attr('value', $(this).attr('value'));
+});
+
+$("#id_password1, #id_password1_show").click(function() {
+    $("#pwd_tips").removeClass("hide");
+});
+
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    if (!$("#id_password1, #id_password1_show").is(target)) {
+        $("#pwd_tips").addClass("hide");
+    }
+});
+
+$("#id_password1, #id_password1_show").keyup(function() {
+    var pwd = $(this),
+        pwd_string = pwd.attr('value');
+
+    var level = getStrengthLevel(pwd_string);
+    showStrength(level);
+});
+
+function getStrengthLevel(pwd_string) {
+    var num = 0, min_passwd_len = 6;
+
+    if (pwd_string.length < min_passwd_len) {
+        return 0;
+    } else {
+        for (i = 0; i < pwd_string.length; i++) {
+            // return the unicode
+            // bitwise OR
+            num |= getCharMode(pwd_string.charCodeAt(i));
+        };
+        return caculateBitwise(num);
+    };
+}
+
+function getCharMode(n) {
+    if (n >= 48 && n <= 57) //nums
+        return 1;
+    if (n >= 65 && n <= 90) //uppers
+        return 2;
+    if (n >= 97 && n <= 122) //lowers
+        return 4;
+    else
+        return 8;
+}
+
+function caculateBitwise(num) {
+    level = 0;
+    for (i = 0; i < 4; i++){
+        // bitwise AND
+        if (num&1) level++;
+        // Right logical shift
+        num>>>=1;
+    }
+    return level;
+}
+
+function showStrength(level) {
+    var color= new Array(5),
+        strength= new Array(5);
+
+    color[0] = "#F00000";
+    color[1] = "#aa0033";
+    color[2] = "#ffcc33";
+    color[3] = "#6699cc";
+    color[4] = "#008000";
+    color[5] = "#676767";
+
+    strength[0] = "Too Short";
+    strength[1] = "Weak";
+    strength[2] = "Medium";
+    strength[3] = "Strong";
+    strength[4] = "Very Strong";
+
+    $("#pwd_strength").html(strength[level]);
+    $("#pwd_strength").css("color", color[level]);
+}
+
 $('form').submit(function(){
     var email = $.trim($('input[name="email"]').val()),
         pwd1 = $.trim($('input[name="password1"]').val()),
         pwd2 = $.trim($('input[name="password2"]').val());
+        level = getStrengthLevel(pwd1);
 
         if (!email) {
             $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
@@ -59,6 +172,14 @@ $('form').submit(function(){
         }
         if (pwd1 != pwd2) {
             $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
+            return false;
+        }
+        if (pwd1.length < 6) {
+            $('.error').removeClass('hide').html("{% trans "Passwords must have at least 6 characters" %}");
+            return false;
+        }
+        if (level <= 2) {
+            $('.error').removeClass('hide').html("{% trans "Passwords contain at least 2 types: uppercase letters, lowercase letters, numbers, and symbols" %}");
             return false;
         }
    });
