@@ -476,11 +476,15 @@ def email_user_on_activation(user):
         }
     send_html_email(_(u'Your account on %s is activated') % SITE_NAME,
             'sysadmin/user_activation_email.html', c, None, [user.email])
-    
+
 @login_required_ajax
 @sys_staff_required
-def user_toggle_status(request, user_id):
+def user_toggle_status(request, email):
     content_type = 'application/json; charset=utf-8'
+
+    if not is_valid_username(email):
+        return HttpResponse(json.dumps({'success': False}), status=400,
+                            content_type=content_type)
 
     try:
         user_status = int(request.GET.get('s', 0))
@@ -488,7 +492,7 @@ def user_toggle_status(request, user_id):
         user_status = 0
 
     try:
-        user = User.objects.get(id=int(user_id))
+        user = User.objects.get(email)
         user.is_active = bool(user_status)
         user.save()
 
