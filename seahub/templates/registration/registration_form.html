@@ -95,17 +95,17 @@ $("#id_password1, #id_password1_show").keyup(function() {
 });
 
 function getStrengthLevel(pwd_string) {
-    var num = 0, min_passwd_len = 6;
+    var num = 0;
 
-    if (pwd_string.length < min_passwd_len) {
+    if (pwd_string.length < {{signup_pwd_min_len}}) {
         return 0;
     } else {
-        for (i = 0; i < pwd_string.length; i++) {
+        for (var i = 0; i < pwd_string.length; i++) {
             // return the unicode
             // bitwise OR
             num |= getCharMode(pwd_string.charCodeAt(i));
         };
-        return caculateBitwise(num);
+        return calculateBitwise(num);
     };
 }
 
@@ -120,9 +120,9 @@ function getCharMode(n) {
         return 8;
 }
 
-function caculateBitwise(num) {
+function calculateBitwise(num) {
     level = 0;
-    for (i = 0; i < 4; i++){
+    for (var i = 0; i < 4; i++){
         // bitwise AND
         if (num&1) level++;
         // Right logical shift
@@ -174,7 +174,7 @@ $('form').submit(function(){
             $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
             return false;
         }
-        if (pwd1.length < 6) {
+        if (pwd1.length < {{signup_pwd_min_len}}) {
             $('.error').removeClass('hide').html("{% trans "Passwords must have at least 6 characters" %}");
             return false;
         }

@@ -7,9 +7,30 @@ from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_valid_username, is_ldap_user
+    is_valid_username, is_ldap_user, get_char_mode, calculate_bitwise
 
 from captcha.fields import CaptchaField
+
+try:
+    from seahub.settings import SIGNUP_PASSWORD_MIN_LENGTH
+except ImportError:
+    SIGNUP_PASSWORD_MIN_LENGTH = 6
+
+try:
+    from seahub.settings import SIGNUP_PASSWORD_STRENGTH_ALLOWED
+except ImportError:
+    SIGNUP_PASSWORD_STRENGTH_ALLOWED = 'STRONG'
+
+try:
+    from seahub.settings import SIGNUP_PASSWORD_STRENGTH_LEVEL
+except ImportError:
+    SIGNUP_PASSWORD_STRENGTH_LEVEL = {
+        'TOO_SHORT': 0,
+        'WEAK': 1,
+        'MEDIUM': 2,
+        'STRONG': 3,
+        'VERY_STRONG': 4,
+    }
 
 class AuthenticationForm(forms.Form):
     """
@@ -64,7 +85,7 @@ class AuthenticationForm(forms.Form):
 
 class CaptchaAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField()
-    
+
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label=_("E-mail"), max_length=255)
 
@@ -74,7 +95,7 @@ class PasswordResetForm(forms.Form):
         """
         if not IS_EMAIL_CONFIGURED:
             raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
-        
+
         email = self.cleaned_data["email"].lower().strip()
 
         # TODO: add filter method to UserManager
@@ -121,8 +142,30 @@ class SetPasswordForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
-        
+
         super(SetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password1(self):
+        if 'new_password1' in self.cleaned_data:
+            pwd = self.cleaned_data['new_password1']
+            if len(pwd) < SIGNUP_PASSORD_MIN_LENGTH:
+                raise forms.ValidationError(
+                        _("Passwords must have at least 6 characters."))
+            else:
+                num = 0
+                level = SIGNUP_PASSWORD_STRENGTH_LEVEL
+                allowed = SIGNUP_PASSWORD_STRENGTH_ALLOWED
+
+                for letter in pwd:
+                    # get ascii dec
+                    # bitwise OR
+                    num |= get_char_mode(ord(letter))
+
+                strength = calculate_bitwise(num)
+                if strength < level[allowed]:
+                    raise forms.ValidationError(_("Passwords too weak, must contain at least 3 of the followings: uppercase letters, lowercase letters, numbers, and symbols"))
+
+        return self.cleaned_data['new_password1']
 
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')

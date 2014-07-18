@@ -78,7 +78,7 @@ PREVIEW_FILEEXT = {
 def gen_fileext_type_map():
     """
     Generate previewed file extension and file type relation map.
-    
+
     """
     d = {}
     for filetype in PREVIEW_FILEEXT.keys():
@@ -156,7 +156,7 @@ def gen_token(max_length=5):
     Generate a random token.
 
     """
-    
+
     return uuid.uuid4().hex[:max_length]
 
 def normalize_cache_key(value, prefix=None):
@@ -165,7 +165,7 @@ def normalize_cache_key(value, prefix=None):
     """
     key = value if prefix is None else prefix + value
     return urlquote(key)
-    
+
 def get_repo_last_modify(repo):
     """ Get last modification time for a repo.
 
@@ -332,7 +332,7 @@ def get_file_revision_id_size(repo_id, commit_id, path):
 
 def new_merge_with_no_conflict(commit):
     """Check whether a commit is a new merge, and no conflict.
-    
+
     Arguments:
     - `commit`:
     """
@@ -358,7 +358,7 @@ def get_commit_before_new_merge(commit):
         commit = p1 if p1.ctime > p2.ctime else p2
 
     assert new_merge_with_no_conflict(commit) is False
-        
+
     return commit
 
 def gen_inner_file_get_url(token, filename):
@@ -386,7 +386,7 @@ def get_max_upload_file_size():
     Returns ``None`` if this value is not set.
     """
     return seaserv.MAX_UPLOAD_FILE_SIZE
-    
+
 def gen_block_get_url(token, blkid):
     """
     Generate fileserver block url.
@@ -425,7 +425,7 @@ def string2list(string):
             continue
         s.add(e)
     return [ x for x in s ]
-        
+
 # def get_cur_ctx(request):
 #     ctx_dict = request.session.get('current_context', {
 #             'base_template': 'myhome_base.html',
@@ -439,12 +439,12 @@ def string2list(string):
 def is_org_context(request):
     """An organization context is a virtual private Seafile instance on cloud
     service.
-    
+
     Arguments:
     - `request`:
     """
     return request.cloud_mode and request.user.org is not None
-    
+
 # def check_and_get_org_by_repo(repo_id, user):
 #     """
 #     Check whether repo is org repo, get org info if it is, and set
@@ -460,7 +460,7 @@ def is_org_context(request):
 #     else:
 #         org = None
 #         base_template = 'myhome_base.html'
-    
+
 #     return org, base_template
 
 def check_and_get_org_by_group(group_id, user):
@@ -478,9 +478,9 @@ def check_and_get_org_by_group(group_id, user):
     else:
         org = None
         base_template = 'myhome_base.html'
-    
+
     return org, base_template
-    
+
 # events related
 if EVENTS_CONFIG_FILE:
     import seafevents
@@ -510,7 +510,7 @@ if EVENTS_CONFIG_FILE:
                 events = _get_events_inner(ev_session, username, next_start, count)
                 if not events:
                     break
-                
+
                 for e1 in events:
                     duplicate = False
                     for e2 in valid_events:
@@ -519,13 +519,13 @@ if EVENTS_CONFIG_FILE:
                     new_merge = False
                     if hasattr(e1, 'commit') and new_merge_with_no_conflict(e1.commit):
                         new_merge = True
-                        
+
                     if not duplicate and not new_merge:
                         valid_events.append(e1)
                     total_used = total_used + 1
                     if len(valid_events) == count:
                         break
-                
+
                 if len(valid_events) == count:
                     break
                 next_start = next_start + len(events)
@@ -569,14 +569,14 @@ if EVENTS_CONFIG_FILE:
                     break
 
             if len(valid_events) == limit:
-                break            
+                break
             next_start = next_start + len(valid_events)
 
         return valid_events
 
     def get_user_events(username, start, count):
         """Return user events list and a new start.
-        
+
         For example:
         ``get_user_events('foo@example.com', 0, 10)`` returns the first 10
         events.
@@ -584,7 +584,7 @@ if EVENTS_CONFIG_FILE:
         15th events.
         """
         return _get_events(username, start, count)
-        
+
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
@@ -600,7 +600,7 @@ def calc_file_path_hash(path, bits=12):
         path = path.encode('UTF-8')
 
     path_hash = hashlib.md5(urllib2.quote(path)).hexdigest()[:bits]
-    
+
     return path_hash
 
 def get_service_url():
@@ -616,7 +616,7 @@ def get_server_id():
 def get_site_scheme_and_netloc():
     """Return a string contains site scheme and network location part from
     service url.
-    
+
     For example:
     >>> get_site_scheme_and_netloc("https://example.com:8000/seafile/")
     https://example.com:8000
@@ -629,7 +629,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email):
     """Send HTML email
     """
     base_context = {
-        'url_base': get_site_scheme_and_netloc(),  
+        'url_base': get_site_scheme_and_netloc(),
         'site_name': SITE_NAME,
         'media_url': MEDIA_URL,
         'logo_path': LOGO_PATH,
@@ -639,7 +639,7 @@ def send_html_email(subject, con_template, con_context, from_email, to_email):
     msg = EmailMessage(subject, t.render(Context(con_context)), from_email, to_email)
     msg.content_subtype = "html"
     msg.send()
- 
+
 def gen_dir_share_link(token):
     """Generate directory share link.
     """
@@ -727,7 +727,7 @@ def convert_cmmt_desc_link(commit):
     """
     repo_id = commit.repo_id
     cmmt_id = commit.id
-    conv_link_url = reverse('convert_cmmt_desc_link')    
+    conv_link_url = reverse('convert_cmmt_desc_link')
 
     def link_repl(matchobj):
         op = matchobj.group(1)
@@ -776,7 +776,7 @@ def api_convert_desc_link(e):
                     if file_or_dir not in d.name:
                         # skip to next diff_result if file/folder user clicked does not
                         # match the diff_result
-                        continue            
+                        continue
 
                     if d.status == 'add' or d.status == 'mod':
                         e.link = "api://repo/%s/files/?p=/%s" % (repo_id, d.name)
@@ -820,7 +820,7 @@ if EVENTS_CONFIG_FILE:
         return seafevents.get_office_converter_limit(config)
 
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
-    
+
 if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()
@@ -849,7 +849,7 @@ if HAS_OFFICE_CONVERTER:
         rpc = _get_office_converter_rpc()
         return rpc.query_file_pages(file_id)
 
-    def get_converted_html_detail(file_id):    
+    def get_converted_html_detail(file_id):
         d = {}
         outline_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.outline')
 
@@ -945,3 +945,31 @@ def user_traffic_over_limit(username):
 
     month_traffic = stat['file_view'] + stat['file_download'] + stat['dir_download']
     return True if month_traffic >= traffic_limit else False
+
+def get_char_mode(n):
+    """Return different num according to the type of given letter:
+       '1': num,
+       '2': upper_letter,
+       '4': lower_letter,
+       '8': other symbols
+    """
+    if (n >= 48 and n <= 57): #nums
+        return 1;
+    if (n >= 65 and n <= 90): #uppers
+        return 2;
+    if (n >= 97 and n <= 122): #lowers
+        return 4;
+    else:
+        return 8;
+
+def calculate_bitwise(num):
+    """Return different level according to the given num:
+    """
+    level = 0
+    for i in range(4):
+        # bitwise AND
+        if (num&1):
+            level += 1
+        # Right logical shift
+        num = num >> 1
+    return level

@@ -104,10 +104,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',    
-    'django.contrib.messages.middleware.MessageMiddleware',    
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
     'seahub.auth.middleware.AuthenticationMiddleware',
-    'seahub.base.middleware.BaseMiddleware',    
+    'seahub.base.middleware.BaseMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
 )
 
@@ -161,7 +161,7 @@ LOCALE_PATHS = (
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.debug',
-    'django.core.context_processors.i18n', 
+    'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'djblets.util.context_processors.siteRoot',
     'django.core.context_processors.request',
@@ -207,6 +207,19 @@ SHOW_REPO_DOWNLOAD_BUTTON = False
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 8
 
+# mininum length for password of sign up
+SIGNUP_PASSWORD_MIN_LENGTH = 6
+
+SIGNUP_PASSWORD_STRENGTH_LEVEL = {
+    'TOO_SHORT': 0,
+    'WEAK': 1,
+    'MEDIUM': 2,
+    'STRONG': 3,
+    'VERY_STRONG': 4,
+}
+
+SIGNUP_PASSWORD_STRENGTH_ALLOWED = 'STRONG'
+
 # Using server side crypto by default, otherwise, let user choose crypto method.
 FORCE_SERVER_CRYPTO = True
 
@@ -219,7 +232,7 @@ OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
 USE_PDFJS = True
 FILE_ENCODING_LIST = ['auto', 'utf-8', 'gbk', 'ISO-8859-1', 'ISO-8859-5']
 FILE_ENCODING_TRY_LIST = ['utf-8', 'gbk']
-HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page. 
+HIGHLIGHT_KEYWORD = False # If True, highlight the keywords in the file when the visit is via clicking a link in 'search result' page.
 
 # Common settings(file extension, storage) for avatar and group avatar.
 AVATAR_FILE_STORAGE = '' # Replace with 'seahub.base.database_storage.DatabaseStorage' if save avatar files to database
@@ -346,7 +359,7 @@ LOGGING = {
             'filename': os.path.join(LOG_DIR, 'seahub.log'),
             'maxBytes': 1024*1024*10, # 10 MB
             'formatter':'standard',
-        },  
+        },
         'request_handler': {
                 'level':'WARN',
                 'class':'logging.handlers.RotatingFileHandler',
@@ -452,7 +465,7 @@ def load_local_settings(module):
         elif re.search('^[A-Z]', attr):
             globals()[attr] = getattr(module, attr)
 
-            
+
 # Load seahub_extra_settings.py
 try:
     from seahub_extra import seahub_extra_settings
@@ -478,7 +491,7 @@ try:
 except ImportError:
     pass
 else:
-    # In server release, sqlite3 db file is <topdir>/seahub.db 
+    # In server release, sqlite3 db file is <topdir>/seahub.db
     DATABASES['default']['NAME'] = os.path.join(install_topdir, 'seahub.db')
     if 'win32' not in sys.platform:
         # In server release, gunicorn is used to deploy seahub
