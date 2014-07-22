@@ -4,7 +4,9 @@
         <div id="file-share-tabs" class="tab-popup-tabs">
             <ul class="tab-popup-tabs-nav">
                 <li class="tab"><a href="#link-share" class="a">{% trans "Download Link" %}</a></li>
+                {% if user_perm == 'rw' %}
                 <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Upload Link" %}</a></li>{# for dir #}
+                {% endif %}
                 {% if is_repo_owner %}
                 <li class="tab" id="private-share-tab"><a href="#private-share" class="a">{% trans "Private Share" %}</a></li> {# for file #}
                 {% endif %}
@@ -62,6 +64,7 @@
                 </div>
             </div>
 
+            {% if user_perm == 'rw' %}
             <div id="upload-link-share">
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <div id="upload-link-options">
@@ -96,6 +99,7 @@
                     </form>
                 </div>
             </div>
+            {% endif %}
 
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
             <div id="syncable-share">

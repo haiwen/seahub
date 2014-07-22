@@ -92,6 +92,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     $('input[name="file_shared_name"]').val(name);
     $('input[name="file_shared_type"]').val(type);
 
+    {% if user_perm == 'rw' %}
     // share upload link
     $('#upload-link-share-tab .a').click(function() {
         if (op.data('upload-link')) {
@@ -109,6 +110,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         $('#gen-upload-link-btn').data('url', aj_urls['upload-link']).data('obj', op);
         $('#rm-shared-upload-link').data('obj', op);
     });
+    {% endif %}
 
     // 'private share' for file
     $('#private-share-tab a').click(function() {
@@ -309,6 +311,7 @@ $('#rm-shared-link').click(function() {
     });
 });
 
+{% if user_perm == 'rw' %}
 $('#shared-upload-link-text').click(function() {
     $(this).select();
 });
@@ -438,11 +441,7 @@ $('#gen-upload-link-btn').click(function() {
             obj.data('upload-link', upload_link).data('upload-token', data['token']);
         },
         error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
+            location.reload(true);
         }
     });
     return false;
@@ -484,6 +483,7 @@ $('#upload-link-passwd-switch').click(function () {
         pwd_input.attr('disabled', true).addClass('input-disabled');
     }
 });
+{% endif %}
 
 $('#link-passwd-switch').click(function () {
     var form = $('#link-options'),
