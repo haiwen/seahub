@@ -615,7 +615,7 @@ def user_add(request):
 
     post_values = request.POST.copy()
     post_email = request.POST.get('email', '')
-    post_role = request.POST.get('role', '')
+    post_role = request.POST.get('role', DEFAULT_USER)
     post_values.update({
                         'email': post_email.lower(),
                         'role': post_role,
@@ -788,6 +788,13 @@ def user_search(request):
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+
+        # check user's role
+        if user.role == GUEST_USER:
+            user.is_guest = True
+        else:
+            user.is_guest = False
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -797,6 +804,9 @@ def user_search(request):
     return render_to_response('sysadmin/user_search.html', {
             'users': users,
             'email': email,
+            'default_user': DEFAULT_USER,
+            'guest_user': GUEST_USER,
+            'enable_guest': ENABLE_GUEST,
             }, context_instance=RequestContext(request))
     
 @login_required

@@ -35,11 +35,13 @@
     <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />
+    {% if enable_guest %}
     <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
     <select name="role" class="w100">
-      <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
-      <option value={{guest_user}}>{% trans "Guest"%}</option>
+        <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
+        <option value={{guest_user}}>{% trans "Guest"%}</option>
     </select><br />
+    {% endif %}
     <label for="id_password1">{% trans "Password" %}</label><br />
     <input type="password" name="password1" id="id_password1" class="input" /><br />    
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
@@ -86,9 +88,11 @@ $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
+        {% if enable_guest %}
+        role = $('select[name="role"]', form).val(),
+        {% endif %}
         pwd1 = $.trim(form.children('[name="password1"]').val()),
-        pwd2 = $.trim(form.children('[name="password2"]').val()),
-        role = $('select[name="role"]', form).val();
+        pwd2 = $.trim(form.children('[name="password2"]').val());
 
     if (!email) {
         apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
@@ -117,9 +121,11 @@ $('#add-user-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,
+            {% if enable_guest %}
+            'role': role,
+            {% endif %}
             'password1': pwd1,
-            'password2': pwd2,
-            'role': role
+            'password2': pwd2
         },
         success: function(data) {
             if (data['success']) {
