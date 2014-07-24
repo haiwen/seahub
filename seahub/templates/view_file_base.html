@@ -178,6 +178,10 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
 <script type="text/javascript">
+// rm 'header', so request for unread notices' num won't be sent
+$('#header').remove();
+
+// download
 $(function() {
     var dld_url = $('#download').data('url');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');

@@ -20,7 +20,7 @@ $(function() {
 
     var msg_ct = $("#msg-count"); 
 
-    // for login page
+    // for login page, and pages without 'header' such as 'file view' page.
     if (msg_ct.length == 0) {
         return false;
     }
