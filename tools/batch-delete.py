@@ -12,12 +12,12 @@ try:
     dbuser = os.environ['DBUSER']
     dbpasswd = os.environ['DBPASSWD']
 except:
-    sys.stderr.write('Environment not set! Exit\n')
+    sys.stderr.write('Environment not set! Exiting...\n')
     sys.exit(1)
 
 def check_settings():
     if settings.DATABASE_ENGINE == 'mysql':
-        sys.stderr.write('[ERROR] Current settings is mysql, need sqlite settings\n')
+        sys.stderr.write('[ERROR] The current settings are for MySQL, however SQLite settings are needed here\n')
         sys.exit(1)
         
 def do_create():
