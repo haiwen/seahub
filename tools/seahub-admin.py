@@ -34,7 +34,7 @@ sql = "SELECT email FROM EmailUser WHERE is_staff = 1"
 try:
     c.execute(sql)
 except sqlite3.Error, e:
-    print "An error orrured:", e.args[0]
+    print "An error occured:", e.args[0]
     sys.exit(1)
 
 staff_list = c.fetchall()
@@ -44,16 +44,16 @@ if staff_list:
     for e in staff_list:
         print e[0]
     print '--------------------'
-    choice = raw_input('Previous admin would be deleted, would you like to continue?[y/n] ')
+    choice = raw_input('The previous admin will be deleted, are you sure you want to do this?[y/n] ')
     if choice == 'y':
         sql = "DELETE FROM EmailUser WHERE is_staff = 1"
         try:
             c.execute(sql)
         except sqlite3.Error, e:
-            print "An error orrured:", e.args[0]
+            print "An error occured:", e.args[0]
             sys.exit(1)
         else:
-            print 'Previous admin is deleted.'
+            print 'Previous admin has been deleted.'
     else:
         conn.close()
         sys.exit(0)
@@ -68,7 +68,7 @@ username = raw_input('E-mail address:')
 passwd = getpass.getpass('Password:')
 passwd2 = getpass.getpass('Password (again):')
 if passwd != passwd2:
-    print "Two passwords NOT same."
+    print "Passwords did not match."
     sys.exit(1)
     
 mySha1 = hashlib.sha1()
