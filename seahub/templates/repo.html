@@ -1122,7 +1122,7 @@ $('.select', context).click(function() {
     $(this).find('.checkbox').toggleClass('checkbox-checked');
 
     // show buttons or not
-    if ($('.checkbox-checked', context).length > 0) {
+    if ($('.checkbox-checked', $('.dir-item, .file-item')).length > 0) {
         dirents_op.removeClass('hide');
         setDirentsOpPos();
     } else {
