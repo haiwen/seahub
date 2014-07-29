@@ -9,6 +9,8 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from registration.backends import get_backend
+from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
+    USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -204,5 +206,8 @@ def register(request, backend, success_url=None, form_class=None,
         form = form_class(initial={'email': src})
 
     return render_to_response(template_name,
-                              { 'form': form },
-                              context_instance=context)
+              { 'form': form,
+                'min_len': USER_PASSWORD_MIN_LENGTH,
+                'strong_pwd_required': USER_STRONG_PASSWORD_REQUIRED,
+                'level': USER_PASSWORD_STRENGTH_LEVEL,
+              }, context_instance=context)

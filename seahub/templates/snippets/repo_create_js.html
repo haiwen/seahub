@@ -15,7 +15,7 @@ $(function() {
 $('#encrypt-switch').click(function () {
     var form = $('#repo-create-form'),
         pwd_input = $('input[type="password"]', form);
-    
+
     if ($(this).attr('checked')) {
         pwd_input.attr('disabled', false).removeClass('input-disabled');
     } else {
@@ -23,7 +23,7 @@ $('#encrypt-switch').click(function () {
     }
 });
 $('#repo-create-form').submit(function() {
-    var form = $(this), 
+    var form = $(this),
         form_id = form.attr('id'),
         name = $('[name="repo_name"]', form).val(),
         desc = $('[name="repo_desc"]', form).val(),

@@ -13,12 +13,14 @@ from registration import signals
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
 
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.utils import is_valid_username
+from seahub.utils import is_valid_username, is_user_password_strong
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
 
+from seahub.settings import USER_STRONG_PASSWORD_REQUIRED, \
+    USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -463,40 +465,14 @@ class RegistrationForm(forms.Form):
     def clean_password1(self):
         if 'password1' in self.cleaned_data:
             pwd = self.cleaned_data['password1']
-            if len(pwd) < 6:
-                raise forms.ValidationError(
-                        _("Passwords must have at least 6 characters."))
+
+            if USER_STRONG_PASSWORD_REQUIRED is True:
+                if is_user_password_strong(pwd) is True:
+                    return pwd
+                else:
+                    raise forms.ValidationError(_("%s characters or more, include %s types or more of these: letters(case sensitive), numbers, and symbols") % (USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL))
             else:
-                num = 0
-                for letter in pwd:
-                    # get ascii dec
-                    # bitwise OR
-                    num |= self.get_char_mode(ord(letter))
-                level = self.caculate_bitwise(num)
-                if level == 1:
-                    raise forms.ValidationError(_("Passwords must contain at least 2 types: uppercase letters, lowercase letters, numbers, and symbols"))
-
-        return self.cleaned_data['password1']
-
-    def get_char_mode(self, n):
-        if (n >= 48 and n <= 57): #nums
-            return 1;
-        if (n >= 65 and n <= 90): #uppers
-            return 2;
-        if (n >= 97 and n <= 122): #lowers
-            return 4;
-        else:
-            return 8;
-
-    def caculate_bitwise(self, num):
-        level = 0
-        for i in range(4):
-            # bitwise AND
-            if (num&1):
-                level += 1
-            # Right logical shift
-            num = num >> 1
-        return level
+                return pwd
 
     def clean_password2(self):
         """

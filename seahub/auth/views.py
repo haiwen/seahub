@@ -25,6 +25,8 @@ from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.utils import is_ldap_user
 from seahub.utils.ip import get_remote_ip
+from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
+    USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -35,9 +37,9 @@ def log_user_in(request, user, redirect_to):
     # Light security check -- make sure redirect_to isn't garbage.
     if not redirect_to or ' ' in redirect_to:
         redirect_to = settings.LOGIN_REDIRECT_URL
-            
-    # Heavier security check -- redirects to http://example.com should 
-    # not be allowed, but things like /view/?param=http://example.com 
+
+    # Heavier security check -- redirects to http://example.com should
+    # not be allowed, but things like /view/?param=http://example.com
     # should be allowed. This regex checks if there is a '//' *before* a
     # question mark.
     elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
@@ -103,7 +105,7 @@ def _incr_login_faied_attempts(username=None, ip=None):
 
 def _clear_login_failed_attempts(request):
     """Clear login failed attempts records.
-    
+
     Arguments:
     - `request`:
     """
@@ -167,9 +169,9 @@ def login(request, template_name='registration/login.html',
             form = CaptchaAuthenticationForm(request)
         else:
             form = authentication_form(request)
-    
+
     request.session.set_test_cookie()
-    
+
     if Site._meta.installed:
         current_site = Site.objects.get_current()
     else:
@@ -213,7 +215,7 @@ def login_simple_check(request):
             user = User.objects.get(email=username)
         except User.DoesNotExist:
             raise Http404
-        
+
         for backend in get_backends():
             user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
 
@@ -223,7 +225,7 @@ def login_simple_check(request):
     else:
         raise Http404
 
-    
+
 def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
     from seahub.auth import logout
@@ -255,7 +257,7 @@ def redirect_to_login(next, login_url=None, redirect_field_name=REDIRECT_FIELD_N
 # 4 views for password reset:
 # - password_reset sends the mail
 # - password_reset_done shows a success message for the above
-# - password_reset_confirm checks the link the user clicked and 
+# - password_reset_confirm checks the link the user clicked and
 #   prompts for a new password
 # - password_reset_complete shows a success message for the above
 
@@ -352,8 +354,12 @@ def password_change(request, template_name='registration/password_change_form.ht
             return HttpResponseRedirect(post_change_redirect)
     else:
         form = password_change_form(user=request.user)
+
     return render_to_response(template_name, {
         'form': form,
+        'min_len': USER_PASSWORD_MIN_LENGTH,
+        'strong_pwd_required': USER_STRONG_PASSWORD_REQUIRED,
+        'level': USER_PASSWORD_STRENGTH_LEVEL,
     }, context_instance=RequestContext(request))
 
 def password_change_done(request, template_name='registration/password_change_done.html'):

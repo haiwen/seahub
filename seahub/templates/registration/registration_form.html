@@ -16,7 +16,10 @@
 
         <label for="id_email">{% trans "Email" %}</label>
         {{ form.email }}            {{ form.email.errors }}
-        <label for="id_password1">{% trans "Password" %}</label> <span class="icon-question-sign" title="{% trans "6 characters or more, include 2 types or more of these: letters(case sensitive), numbers, and symbols" %}"></span>
+        <label for="id_password1">{% trans "Password" %}</label>
+            {% if strong_pwd_required %}
+                <span class="icon-question-sign" title="{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols"{% endblocktrans%}></span>
+            {% endif %}
         {{ form.password1 }}        {{ form.password1.errors }}
         <div id="pwd_strength"></div>
         <label for="id_password2">{% trans "Confirm Password" %}</label>
@@ -40,73 +43,17 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+
+{% include "snippets/password_strength_js.html" %}
+
 $("#id_password1").keyup(function() {
-    var level = getStrengthLevel($(this).val());
-    showStrength(level);
-});
+    var pwd = $(this).val(),
+        level = getStrengthLevel(pwd);
 
-function getStrengthLevel(pwd) {
-    var num = 0,
-        min_passwd_len = 6;
-
-    if (pwd.length < min_passwd_len) {
-        return 0;
-    } else {
-        for (var i = 0; i < pwd.length; i++) {
-            // return the unicode
-            // bitwise OR
-            num |= getCharMode(pwd.charCodeAt(i));
-        };
-        return calculateBitwise(num);
+    if (pwd.length > 0) {
+        showStrength(level);
     };
-}
-
-function getCharMode(n) {
-    if (n >= 48 && n <= 57) // nums
-        return 1;
-    if (n >= 65 && n <= 90) // uppers
-        return 2;
-    if (n >= 97 && n <= 122) // lowers
-        return 4;
-    else
-        return 8;
-}
-
-function calculateBitwise(num) {
-    var level = 0;
-    for (var i = 0; i < 4; i++){
-        // bitwise AND
-        if (num&1) level++;
-        // Right logical shift
-        num>>>=1;
-    }
-    return level;
-}
-
-function showStrength(level) {
-    var strength_ct = $("#pwd_strength");
-    var strength = [
-        "{% trans "too weak" %}",
-        "{% trans "weak" %}",
-        "{% trans "medium" %}",
-        "{% trans "strong" %}"
-    ];
-    switch (level) {
-        case 0:
-            strength_ct.html(strength[0]).css("color", '#F00000');
-            break;
-        case 1:
-            strength_ct.html('<span style="background:#db4747;">' + strength[1] + '</span><span>' + strength[2] + '</span><span>' + strength[3] + '</span>');
-            break;
-        case 2:
-            strength_ct.html('<span>' + strength[1] + '</span><span style="background:#fdd64d;">' + strength[2] + '</span><span>' + strength[3] + '</span>');
-            break;
-        case 3:
-        case 4:
-            strength_ct.html('<span>' + strength[1] + '</span><span>' + strength[2] + '</span><span style="background:#4aa323;">' + strength[3] + '</span>');
-            break;
-    }
-}
+});
 
 $('form').submit(function(){
     var email = $.trim($('input[name="email"]').val()),
@@ -130,14 +77,12 @@ $('form').submit(function(){
             $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
             return false;
         }
-        if (pwd1.length < 6) {
-            $('.error').removeClass('hide').html("{% trans "Passwords must have at least 6 characters" %}");
-            return false;
-        }
-        if (level <= 2) {
-            $('.error').removeClass('hide').html("{% trans "Passwords contain at least 2 types: uppercase letters, lowercase letters, numbers, and symbols" %}");
-            return false;
-        }
+        {% if strong_pwd_required %}
+            if (level < {{level}}) {
+                $('.error').removeClass('hide').html("{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols{% endblocktrans %}");
+                return false;
+            }
+        {% endif %}
    });
 </script>
 {% endblock %}

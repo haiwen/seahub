@@ -79,7 +79,7 @@ def root(request):
 def validate_owner(request, repo_id):
     """
     Check whether user in the request owns the repo.
-    
+
     """
     ret = is_repo_owner(request.user.username, repo_id)
 
@@ -131,7 +131,7 @@ def get_system_default_repo_id():
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
     system repo and user is admin.
-    
+
     Arguments:
     - `repo_id`:
     - `user`:
@@ -140,13 +140,13 @@ def check_repo_access_permission(repo_id, user):
         return 'rw'
     else:
         return seafile_api.check_repo_access_permission(repo_id, user.username)
-    
+
 def get_file_access_permission(repo_id, path, username):
     """Check user has permission to view the file.
     1. check whether this file is private shared.
     2. if failed, check whether the parent of this directory is private shared.
     """
-     
+
     pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
                                                                repo_id, path)
     if pfs is None:
@@ -157,11 +157,11 @@ def get_file_access_permission(repo_id, path, username):
         return None
     else:
         return pfs.permission
-    
+
 def gen_path_link(path, repo_name):
     """
     Generate navigate paths and links in repo page.
-    
+
     """
     if path and path[-1] != '/':
         path += '/'
@@ -178,9 +178,9 @@ def gen_path_link(path, repo_name):
     if repo_name:
         paths.insert(0, repo_name)
         links.insert(0, '/')
-        
+
     zipped = zip(paths, links)
-    
+
     return zipped
 
 def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
@@ -584,7 +584,7 @@ def repo_change_passwd(request, repo_id):
                      {'repo_name': repo.name})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
-    
+
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
     if (code == 0):
@@ -644,7 +644,7 @@ def update_file_error(request, repo_id):
                 'zipped': zipped,
                 'err_msg': err_msg,
                 }, context_instance=RequestContext(request))
-    
+
 @login_required
 def repo_history(request, repo_id):
     """
@@ -663,8 +663,8 @@ def repo_history(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     password_set = False
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
@@ -723,8 +723,8 @@ def repo_view_snapshot(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     password_set = False
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
@@ -779,8 +779,8 @@ def repo_history_revert(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     password_set = False
     if repo.props.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)):
@@ -889,7 +889,7 @@ def create_default_library(request):
                                   default_repo, '/', obj_name, username, 0)
     except SearpcError as e:
         logger.error(e)
-        return 
+        return
 
     UserOptions.objects.set_default_repo(username, default_repo)
 
@@ -984,7 +984,7 @@ def myhome(request):
 @user_mods_check
 def starred(request):
     """List starred files.
-    
+
     Arguments:
     - `request`:
     """
@@ -995,7 +995,7 @@ def starred(request):
     return render_to_response('starred.html', {
             "starred_files": starred_files,
             }, context_instance=RequestContext(request))
-    
+
 
 @login_required
 @user_mods_check
@@ -1007,24 +1007,24 @@ def devices(request):
     return render_to_response('devices.html', {
             "devices": user_devices,
             }, context_instance=RequestContext(request))
-    
+
 @login_required_ajax
 def unlink_device(request):
     content_type = 'application/json; charset=utf-8'
 
     platform = request.POST.get('platform', '')
     device_id = request.POST.get('device_id', '')
-    
+
     if not platform or not device_id:
         return HttpResponseBadRequest(json.dumps({'error': _(u'Argument missing')}),
                 content_type=content_type)
-        
+
     try:
         do_unlink_device(request.user.username, platform, device_id)
     except:
         return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
                 status=500, content_type=content_type)
-    
+
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
@@ -1078,7 +1078,7 @@ def unsetinnerpub(request, repo_id):
 #     quota_usage = seafserv_threaded_rpc.get_user_quota_usage(owner_name)
 
 #     user_dict = user_info(request, owner_name)
-    
+
 #     return render_to_response('ownerhome.html', {
 #             "owned_repos": owned_repos,
 #             "quota_usage": quota_usage,
@@ -1090,10 +1090,10 @@ def unsetinnerpub(request, repo_id):
 def repo_set_access_property(request, repo_id):
     ap = request.GET.get('ap', '')
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
-        
+
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
-@login_required    
+@login_required
 def repo_del_file(request, repo_id):
     if check_repo_access_permission(repo_id, request.user) != 'rw':
         return render_permission_error(request, _('Failed to delete file.'))
@@ -1109,7 +1109,7 @@ def repo_del_file(request, repo_id):
 
     url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
     return HttpResponseRedirect(url)
-   
+
 def repo_access_file(request, repo_id, obj_id):
     """Delete or download file.
     TODO: need to be rewrite.
@@ -1190,7 +1190,7 @@ def file_upload_progress_page(request):
             'upload_progress_con_id': upload_progress_con_id,
             }, context_instance=RequestContext(request))
 
-@login_required    
+@login_required
 def validate_filename(request):
     repo_id     = request.GET.get('repo_id')
     filename    = request.GET.get('filename')
@@ -1240,7 +1240,7 @@ def render_file_revisions (request, repo_id):
 
     if not commits:
         return render_error(request)
-        
+
     # Check whether user is repo owner
     if validate_owner(request, repo_id):
         is_owner = True
@@ -1400,10 +1400,10 @@ def view_shared_dir(request, token):
     repo_id = fileshare.repo_id
     path = request.GET.get('p', '')
     path = fileshare.path if not path else path
-    if path[-1] != '/':         # Normalize dir path 
+    if path[-1] != '/':         # Normalize dir path
         path += '/'
-    
-    if not path.startswith(fileshare.path): 
+
+    if not path.startswith(fileshare.path):
         path = fileshare.path   # Can not view upper dir of shared dir
 
     repo = get_repo(repo_id)
@@ -1417,13 +1417,13 @@ def view_shared_dir(request, token):
     zipped = gen_path_link(path, '')
 
     if path == fileshare.path:  # When user view the shared dir..
-        # increase shared link view_cnt, 
+        # increase shared link view_cnt,
         fileshare = FileShare.objects.get(token=token)
         fileshare.view_cnt = F('view_cnt') + 1
         fileshare.save()
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
-        
+
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
             'token': token,
@@ -1461,7 +1461,7 @@ def view_shared_upload_link(request, token):
             else:
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
-    
+
     username = uploadlink.username
     repo_id = uploadlink.repo_id
     path = uploadlink.path
@@ -1525,9 +1525,9 @@ def pubrepo(request):
     """
     if not request.user.permissions.can_view_org():
         raise Http404
-    
+
     username = request.user.username
-    
+
     if request.cloud_mode and request.user.org is not None:
         org_id = request.user.org.org_id
         public_repos = seaserv.list_org_inner_pub_repos(org_id, username)
@@ -1538,7 +1538,7 @@ def pubrepo(request):
                 'public_repos': public_repos,
                 'create_shared_repo': True,
                 }, context_instance=RequestContext(request))
-        
+
     if not request.cloud_mode:
         public_repos = seaserv.list_inner_pub_repos(username)
         for r in public_repos:
@@ -1558,14 +1558,14 @@ def pubgrp(request):
     """
     if not request.user.permissions.can_view_org():
         raise Http404
-    
+
     if request.cloud_mode and request.user.org is not None:
         org_id = request.user.org.org_id
         groups = seaserv.get_org_groups(org_id, -1, -1)
         return render_to_response('organizations/pubgrp.html', {
                 'groups': groups,
                 }, context_instance=RequestContext(request))
-    
+
     if not request.cloud_mode:
         groups = seaserv.get_personal_groups(-1, -1)
         return render_to_response('pubgrp.html', {
@@ -1579,7 +1579,7 @@ def get_pub_users(request, start, limit):
         url_prefix = request.user.org.url_prefix
         users_plus_one = seaserv.get_org_users_by_url_prefix(url_prefix,
                                                              start, limit)
-    
+
     elif request.cloud_mode:
         raise Http404           # no pubuser in cloud mode
 
@@ -1608,7 +1608,7 @@ def pubuser(request):
     """
     if not request.user.permissions.can_view_org():
         raise Http404
-    
+
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -1629,21 +1629,21 @@ def pubuser(request):
     users = users_plus_one[:per_page]
     username = request.user.username
     contacts = Contact.objects.get_contacts_by_user(username)
-    contact_emails = [] 
+    contact_emails = []
     for c in contacts:
         contact_emails.append(c.contact_email)
     for u in users:
         if u.email == username or u.email in contact_emails:
             u.can_be_contact = False
         else:
-            u.can_be_contact = True 
+            u.can_be_contact = True
 
     return render_to_response('pubuser.html', {
                 'users': users,
                 'current_page': current_page,
                 'has_prev': has_prev,
                 'has_next': has_next,
-                'page_range': page_range, 
+                'page_range': page_range,
                 }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -1693,7 +1693,7 @@ def repo_download_dir(request, repo_id):
         dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
     else:
         dirname = repo.name
-        
+
     allow_download = False
     fileshare_token = request.GET.get('t', '')
     from_shared_link = False
@@ -1789,18 +1789,18 @@ def group_events_data(events):
         utc = dt.replace(tzinfo=timezone.utc)
         local = timezone.make_naive(utc, tz)
         return local
-    
+
     event_groups = []
     for e in events:
         e.time = utc_to_local(e.timestamp)
-        e.date = e.time.strftime("%Y-%m-%d")        
+        e.date = e.time.strftime("%Y-%m-%d")
         if e.etype == 'repo-update':
             e.author = e.commit.creator_name
         elif e.etype == 'repo-create':
             e.author = e.creator
         else:
             e.author = e.repo_owner
-        
+
         if len(event_groups) == 0 or \
             len(event_groups) > 0 and e.date != event_groups[-1]['date']:
             event_group = {}
@@ -1814,7 +1814,7 @@ def group_events_data(events):
 
 def pdf_full_view(request):
     '''For pdf view with pdf.js.'''
-    
+
     repo_id = request.GET.get('repo_id', '')
     obj_id = request.GET.get('obj_id', '')
     file_name = request.GET.get('file_name', '')
@@ -1840,7 +1840,7 @@ def convert_cmmt_desc_link(request):
     # perm check
     if check_repo_access_permission(repo_id, request.user) is None:
         raise Http404
-    
+
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)
     if not diff_result:
         raise Http404
@@ -1849,7 +1849,7 @@ def convert_cmmt_desc_link(request):
         if name not in d.name:
             # skip to next diff_result if file/folder user clicked does not
             # match the diff_result
-            continue            
+            continue
 
         if d.status == 'add' or d.status == 'mod': # Add or modify file
             return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
@@ -1879,7 +1879,7 @@ def toggle_modules(request):
 
     referer = request.META.get('HTTP_REFERER', None)
     next = settings.SITE_ROOT if referer is None else referer
-    
+
     username = request.user.username
     personal_wiki = request.POST.get('personal_wiki', 'off')
     if personal_wiki == 'on':
