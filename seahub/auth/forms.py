@@ -7,9 +7,12 @@ from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_valid_username, is_ldap_user
+    is_valid_username, is_ldap_user, is_user_password_strong
 
 from captcha.fields import CaptchaField
+
+from seahub.settings import USER_STRONG_PASSWORD_REQUIRED, \
+    USER_PASSWORD_STRENGTH_LEVEL, USER_PASSWORD_MIN_LENGTH
 
 class AuthenticationForm(forms.Form):
     """
@@ -64,7 +67,7 @@ class AuthenticationForm(forms.Form):
 
 class CaptchaAuthenticationForm(AuthenticationForm):
     captcha = CaptchaField()
-    
+
 class PasswordResetForm(forms.Form):
     email = forms.EmailField(label=_("E-mail"), max_length=255)
 
@@ -74,7 +77,7 @@ class PasswordResetForm(forms.Form):
         """
         if not IS_EMAIL_CONFIGURED:
             raise forms.ValidationError(_(u'Failed to send email, email service is not properly configured, please contact administrator.'))
-        
+
         email = self.cleaned_data["email"].lower().strip()
 
         # TODO: add filter method to UserManager
@@ -121,8 +124,20 @@ class SetPasswordForm(forms.Form):
 
     def __init__(self, user, *args, **kwargs):
         self.user = user
-        
+
         super(SetPasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_new_password1(self):
+        if 'new_password1' in self.cleaned_data:
+            pwd = self.cleaned_data['new_password1']
+
+            if USER_STRONG_PASSWORD_REQUIRED is True:
+                if is_user_password_strong(pwd) is True:
+                    return pwd
+                else:
+                    raise forms.ValidationError(_("%s characters or more, include %s types or more of these: letters(case sensitive), numbers, and symbols") % (USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL))
+            else:
+                return pwd
 
     def clean_new_password2(self):
         password1 = self.cleaned_data.get('new_password1')

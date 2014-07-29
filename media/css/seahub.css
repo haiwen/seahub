@@ -3144,3 +3144,19 @@ textarea:-moz-placeholder {/* for FF */
 #notices-table a {
     font-weight:normal;
 }
+
+/* pwd strength */
+#pwd_strength {
+    margin:-15px 0 20px;
+}
+#pwd_strength span {
+    display:inline-block;
+    width:70px;
+    height:16px;
+    border:1px solid #fff;
+    background:#e4e4e4;
+    color:#cecece;
+    text-align:center;
+    vertical-align:middle;
+    line-height:16px;
+}

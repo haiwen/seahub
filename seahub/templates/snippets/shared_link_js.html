@@ -55,10 +55,10 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     $(".checkbox-label", $('#share-grp-options, #share-contact-options')).hover(
         function() {
             $(this).addClass('hl');
-        },  
+        },
         function() {
             $(this).removeClass('hl');
-        }   
+        }
     );
     {% endif %}
 
@@ -167,14 +167,14 @@ $("#link-send-form .cancel").click(function() {
 });
 
 $("#link-send-form").submit(function(event) {
-    var form = $(this), 
+    var form = $(this),
         file_shared_link = form.children('input[name="file_shared_link"]').val(),
         email = $.trim(form.children('input[name="email"]').val()),
         submit_btn = form.children('input[type="submit"]'),
         extra_msg = form.children('textarea[name="extra_msg"]').val(),
         file_shared_name = form.children('input[name="file_shared_name"]').val(),
         file_shared_type = form.children('input[name="file_shared_type"]').val();
-    
+
     if (!email) {
         apply_form_error('link-send-form', "{% trans "Please input at least an email." %}");
         return false;

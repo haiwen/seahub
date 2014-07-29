@@ -17,15 +17,18 @@
         <label for="id_email">{% trans "Email" %}</label>
         {{ form.email }}            {{ form.email.errors }}
         <label for="id_password1">{% trans "Password" %}</label>
+            {% if strong_pwd_required %}
+                <span class="icon-question-sign" title="{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols"{% endblocktrans%}></span>
+            {% endif %}
         {{ form.password1 }}        {{ form.password1.errors }}
+        <div id="pwd_strength"></div>
         <label for="id_password2">{% trans "Confirm Password" %}</label>
         {{ form.password2 }}        {{ form.password2.errors }}
-
         {% if form.department and form.telephone %}
         <label for="id_department">{% trans "Department" %}</label>
-        {{ form.department }}             {{ form.department.errors }}
+        {{ form.department }}       {{ form.department.errors }}
         <label for="id_telephone">{% trans "Telephone" %}</label>
-        {{ form.telephone }}             {{ form.telephone.errors }}
+        {{ form.telephone }}        {{ form.telephone.errors }}
         <label for="id_note">{% trans "Note" %}</label>
         {{ form.note }}             {{ form.note.errors }}
         {% endif %}
@@ -40,10 +43,24 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+
+{% include "snippets/password_strength_js.html" %}
+
+$("#id_password1").keyup(function() {
+    var pwd = $(this).val();
+    if ($.trim(pwd)) {
+        var level = getStrengthLevel(pwd);
+        showStrength(level);
+    } else {
+        $("#pwd_strength").html("");
+    }
+});
+
 $('form').submit(function(){
     var email = $.trim($('input[name="email"]').val()),
         pwd1 = $.trim($('input[name="password1"]').val()),
         pwd2 = $.trim($('input[name="password2"]').val());
+        level = getStrengthLevel(pwd1);
 
         if (!email) {
             $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
@@ -61,6 +78,12 @@ $('form').submit(function(){
             $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
             return false;
         }
+        {% if strong_pwd_required %}
+            if (level < {{level}}) {
+                $('.error').removeClass('hide').html("{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols{% endblocktrans %}");
+                return false;
+            }
+        {% endif %}
    });
 </script>
 {% endblock %}

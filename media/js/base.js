@@ -18,7 +18,7 @@ if ($('.messages')[0]) {
 
 $(function() {
 
-    var msg_ct = $("#msg-count"); 
+    var msg_ct = $("#msg-count");
 
     // for login page, and pages without 'header' such as 'file view' page.
     if (msg_ct.length == 0) {
@@ -62,7 +62,7 @@ $(function() {
             $('.error', popup).addClass('hide');
             $.ajax({
                 url: popup.data('url'),
-                dataType: 'json', 
+                dataType: 'json',
                 success: function(data) {
                     loading_tip.hide();
                     notice_list.html(data['notice_html']).removeClass('hide');
@@ -85,11 +85,11 @@ $(function() {
                         var error = $.parseJSON(xhr.responseText).error;
                         loading_tip.hide();
                         if ($('.error', popup).length == 0) {
-                            loading_tip.after('<p class="error alc">' + error + '</p>'); 
+                            loading_tip.after('<p class="error alc">' + error + '</p>');
                         } else {
                             $('.error', popup).removeClass('hide');
                         }
-                    }    
+                    }
                 }
             });
         }
@@ -102,7 +102,7 @@ $(function() {
     });
 
     $('#notice-popup .close').click(function() {
-        $('#notice-popup').addClass('hide');   
+        $('#notice-popup').addClass('hide');
         if ($('#notice-list .unread').length > 0) {
             // set all unread notice to be read
             var url = $(this).data('url');
@@ -139,11 +139,11 @@ $(function() {
                         var error = $.parseJSON(xhr.responseText).error;
                         loading_tip.hide();
                         if ($('.error', popup).length == 0) {
-                            loading_tip.after('<p class="error alc">' + error + '</p>'); 
+                            loading_tip.after('<p class="error alc">' + error + '</p>');
                         } else {
                             $('.error', popup).removeClass('hide');
                         }
-                    }    
+                    }
                 }
             });
         }
@@ -156,7 +156,7 @@ $(document).click(function(e) {
     var closePopup = function(popup, popup_switch) {
         if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
             popup.addClass('hide');
-        }    
+        }
     };
     closePopup($('#user-info-popup'), $('#my-info'));
     closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
@@ -183,11 +183,11 @@ $("tr:gt(0)", $('table')).hover(
     function() {
 		$(this).addClass('hl');
         $(this).find('.op-icon, .op').removeClass('vh');
-    },  
+    },
     function() {
         $(this).find('.op-icon, .op').addClass('vh');
 		$(this).removeClass('hl');
-    }   
+    }
 );
 
 $('input, textarea').placeholder();
@@ -434,32 +434,32 @@ function setCaretPos(inputor, pos) {
         return range.select();
     } else {
         return inputor.setSelectionRange(pos, pos);
-    }   
+    }
 }
 
-function filesizeformat(bytes, precision) {  
+function filesizeformat(bytes, precision) {
     var kilobyte = 1024;
     var megabyte = kilobyte * 1024;
     var gigabyte = megabyte * 1024;
     var terabyte = gigabyte * 1024;
 
     var precision = precision || 0;
-   
+
     if ((bytes >= 0) && (bytes < kilobyte)) {
         return bytes + ' B';
- 
+
     } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
         return (bytes / kilobyte).toFixed(precision) + ' KB';
- 
+
     } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
         return (bytes / megabyte).toFixed(precision) + ' MB';
- 
+
     } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
         return (bytes / gigabyte).toFixed(precision) + ' GB';
- 
+
     } else if (bytes >= terabyte) {
         return (bytes / terabyte).toFixed(precision) + ' TB';
- 
+
     } else {
         return bytes + ' B';
     }
@@ -581,14 +581,14 @@ FileTree.prototype.renderFileTree = function(container, repo_data, options) {
                         for (var i = 0, len = data.length; i < len; i++) {
                             o = data[i];
                             if (o.type == 'dir') {
-                                item = { 
-                                    'data': o.name, 
+                                item = {
+                                    'data': o.name,
                                     'attr': { 'type': o.type },
                                     'state': 'closed'
                                 };
                             } else {
                                 item = {
-                                    'data': o.name, 
+                                    'data': o.name,
                                     'attr': {'type': o.type }
                                 };
                             }
@@ -681,14 +681,14 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
                         for (var i = 0, len = data.length; i < len; i++) {
                             o = data[i];
                             if (o.has_subdir) {
-                                item = { 
-                                    'data': o.name, 
+                                item = {
+                                    'data': o.name,
                                     'attr': { 'type': o.type },
                                     'state': 'closed'
                                 };
                             } else {
                                 item = {
-                                    'data': o.name, 
+                                    'data': o.name,
                                     'attr': {'type': o.type }
                                 };
                             }
