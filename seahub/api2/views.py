@@ -156,7 +156,7 @@ class ObtainAuthToken(APIView):
 ########## Accounts
 class Accounts(APIView):
     """List all accounts.
-    Administator permission is required.
+    Administrator permission is required.
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAdminUser, )
@@ -166,13 +166,28 @@ class Accounts(APIView):
         # list accounts
         start = int(request.GET.get('start', '0'))
         limit = int(request.GET.get('limit', '100'))
-        accounts = seaserv.get_emailusers('LDAP', start, limit)
-        if len(accounts) == 0:
-            accounts = seaserv.get_emailusers('DB', start, limit)
-
+        # reading scope user list
+        scope = request.GET.get('scope', None)
+        
+        accounts_ldap = None
+        accounts_db = None
+        if scope:
+            scope = scope.upper()
+            if scope == 'LDAP':
+                accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
+            if scope == 'DB':
+                accounts_db = seaserv.get_emailusers('DB', start, limit)
+        else:
+            # old way - search first in LDAP if available then DB if no one found
+            accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
+            if len(accounts_ldap) == 0:
+                accounts_db = seaserv.get_emailusers('DB', start, limit)
+                
         accounts_json = []
-        for account in accounts:
-            accounts_json.append({'email': account.email})
+        for account in accounts_ldap:
+            accounts_json.append({'email': account.email, 'source' : 'LDAP'})
+        for account in accounts_db:
+            accounts_db.append({'email': account.email, 'source' : 'DB'})
 
         return Response(accounts_json)
 
