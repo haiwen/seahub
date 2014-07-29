@@ -2597,7 +2597,7 @@ textarea:-moz-placeholder {/* for FF */
     position:fixed;
     right:0;
 }
-#fileview-toolbar .item {
+.fileview-toolbar .item {
     width:59px;
     height:40px;
     padding-top:18px;
@@ -2608,11 +2608,11 @@ textarea:-moz-placeholder {/* for FF */
     border-right:0;
     border-top:0;
 }
-#fileview-toolbar .item:first-child {
+.fileview-toolbar .item:first-child {
     border-top:1px solid #c0c0c0;
     border-top-left-radius:3px;
 }
-#fileview-toolbar .item:last-child {
+.fileview-toolbar .item:last-child {
     border-bottom-left-radius:3px;
 }
 /* shareadmin & useradmin */

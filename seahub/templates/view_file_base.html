@@ -9,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">                                                
 #header, #footer { display:none; }
+#view-hd { margin-top: 4px; }
 #star {
     vertical-align:middle;
     margin-left:3px;
@@ -116,18 +117,20 @@
 
     {% include "snippets/file_share_popup.html" %} 
 
-    <ul id="fileview-toolbar">
-        {% if groups %}
-        <li class="item" id="file-discuss-icon"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
-        <li id="file-group-icon" class="item"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
-        {% endif %}
-        {% if not repo.encrypted %}
-        <li id="share" class="item" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
-        {% endif %}
-        {% if user_perm == 'rw' %}
-        <li id="history" class="item" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
-        {% endif %}
-    </ul>
+    <div id="fileview-toolbar">
+        <ul class="fileview-toolbar">
+            {% if groups %}
+            <li class="item" id="file-discuss-icon"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
+            <li id="file-group-icon" class="item"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
+            {% endif %}
+            {% if not repo.encrypted %}
+            <li id="share" class="item" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
+            {% endif %}
+            {% if user_perm == 'rw' %}
+            <li id="history" class="item" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
+            {% endif %}
+        </ul>
+    <div>
 
     {% if groups %}
     <div id="discuss-to-group" class="hide">
@@ -228,12 +231,30 @@ $('#star').click(function() {
 // set 'side toolbar' & 'groups' popup position
 function setToolbarPos() {
     var toolbar = $('#fileview-toolbar');
+
+    // set toolbar pos
     toolbar.css({'top': ($(window).height() - toolbar.outerHeight())/2});
 
     // set 'groups' popup position
     $('#to-group').css({'top': parseInt(toolbar.css('top')) + 59});
 }
-$(window).load(setToolbarPos).resize(setToolbarPos);
+$(window).load(function() {
+    // if page needs scroll, show 'back-to-top' icon
+    if ($(document).height() > $(window).height()) {
+        var to_top = $('<ul class="fileview-toolbar hide" style="margin-top:3px;"><li class="item"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
+        to_top.click(function() {
+            $(window).scrollTop(0);
+        }).appendTo($('#fileview-toolbar'));
+        $(window).scroll(function() {
+            if ($(window).scrollTop() > 0) {
+                to_top.show();
+            } else {
+                to_top.hide();
+            }
+        });
+    }
+    setToolbarPos();
+}).resize(setToolbarPos);
 
 // handle discussions after fetch them
 function handleDiscussions(html) {
