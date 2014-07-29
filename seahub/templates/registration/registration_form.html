@@ -47,12 +47,13 @@
 {% include "snippets/password_strength_js.html" %}
 
 $("#id_password1").keyup(function() {
-    var pwd = $(this).val(),
-        level = getStrengthLevel(pwd);
-
-    if (pwd.length > 0) {
+    var pwd = $(this).val();
+    if ($.trim(pwd)) {
+        var level = getStrengthLevel(pwd);
         showStrength(level);
-    };
+    } else {
+        $("#pwd_strength").html("");
+    }
 });
 
 $('form').submit(function(){
