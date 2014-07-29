@@ -169,14 +169,16 @@ class Accounts(APIView):
         # reading scope user list
         scope = request.GET.get('scope', None)
         
-        accounts_ldap = None
-        accounts_db = None
+        accounts_ldap = []
+        accounts_db = []
         if scope:
             scope = scope.upper()
             if scope == 'LDAP':
                 accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
-            if scope == 'DB':
+            elif scope == 'DB':
                 accounts_db = seaserv.get_emailusers('DB', start, limit)
+            else:
+                return api_error(status.HTTP_400_BAD_REQUEST, "%s is not a valid scope value" % scope)
         else:
             # old way - search first in LDAP if available then DB if no one found
             accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
