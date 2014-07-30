@@ -135,7 +135,12 @@ class SetPasswordForm(forms.Form):
                 if is_user_password_strong(pwd) is True:
                     return pwd
                 else:
-                    raise forms.ValidationError(_("%s characters or more, include %s types or more of these: letters(case sensitive), numbers, and symbols") % (USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL))
+                    raise forms.ValidationError(
+                        _(("%(pwd_len)s characters or more, include "
+                           "%(num_types)s types or more of these: "
+                           "letters(case sensitive), numbers, and symbols")) %
+                        {'pwd_len': USER_PASSWORD_MIN_LENGTH,
+                         'num_types': USER_PASSWORD_STRENGTH_LEVEL})
             else:
                 return pwd
 
