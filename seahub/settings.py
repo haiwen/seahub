@@ -148,6 +148,7 @@ LANGUAGES = (
     ('pt-br', gettext_noop('Portuguese, Brazil')),
     ('ru', gettext_noop(u'Русский')),
     ('sk', gettext_noop('Slovak')),
+    ('sl', gettext_noop('Slovenian')),
     ('sv', gettext_noop('Svenska')),
     ('th', gettext_noop('Thai')),
     ('uk', gettext_noop('українська мова')),
