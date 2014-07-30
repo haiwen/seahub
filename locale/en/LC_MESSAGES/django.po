@@ -1112,7 +1112,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_admin.html:39
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #, python-format
-msgid "Are you sure you want to delete %%s ?"
+msgid "Are you sure you want to delete %s ?"
 msgstr ""
 
 #: seahub/contacts/templates/contacts/contact_list.html:129
@@ -1785,7 +1785,7 @@ msgstr ""
 
 #: seahub/group/templates/group/group_info.html:152
 #, python-format
-msgid "Are you sure you want to unshare %%s ?"
+msgid "Are you sure you want to unshare %s ?"
 msgstr ""
 
 #: seahub/group/templates/group/group_info_for_pub.html:24
@@ -1926,7 +1926,7 @@ msgstr ""
 
 #: seahub/group/templates/group/group_manage.html:147
 #, python-format
-msgid "Really want to delete %%s ?"
+msgid "Really want to delete %s ?"
 msgstr ""
 
 #: seahub/group/templates/group/group_members.html:10
@@ -3388,7 +3388,7 @@ msgstr ""
 
 #: seahub/templates/devices.html:43
 #, python-format
-msgid "Really want to unlink %%s?"
+msgid "Really want to unlink %s?"
 msgstr ""
 
 #: seahub/templates/devices.html:44
@@ -4051,7 +4051,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:105
 #, python-format
-msgid "Update %%(file_name)s"
+msgid "Update %(file_name)s"
 msgstr ""
 
 #: seahub/templates/repo.html:120
@@ -4111,7 +4111,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:202
 #, python-format
-msgid "Rename %%(name)s as:"
+msgid "Rename %(name)s as:"
 msgstr ""
 
 #: seahub/templates/repo.html:218
@@ -4174,22 +4174,22 @@ msgstr ""
 
 #: seahub/templates/repo.html:403
 #, python-format
-msgid "Successfully deleted %%(name)s and %%(amount)s other items."
+msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:405
 #, python-format
-msgid "Successfully deleted %%(name)s."
+msgid "Successfully deleted %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:414
 #, python-format
-msgid "Internal error. Failed to delete %%(name)s and %%(amount)s other items."
+msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:416
 #, python-format
-msgid "Internal error. Failed to delete %%(name)s."
+msgid "Internal error. Failed to delete %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:516
@@ -4207,42 +4207,42 @@ msgstr ""
 
 #: seahub/templates/repo.html:600
 #, python-format
-msgid "Successfully moved %%(name)s and %%(amount)s other items."
+msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:602
 #, python-format
-msgid "Successfully moved %%(name)s."
+msgid "Successfully moved %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:607
 #, python-format
-msgid "Successfully copied %%(name)s and %%(amount)s other items."
+msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:609
 #, python-format
-msgid "Successfully copied %%(name)s."
+msgid "Successfully copied %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:621
 #, python-format
-msgid "Internal error. Failed to move %%(name)s and %%(amount)s other items."
+msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:623
 #, python-format
-msgid "Internal error. Failed to move %%(name)s."
+msgid "Internal error. Failed to move %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:627
 #, python-format
-msgid "Internal error. Failed to copy %%(name)s and %%(amount)s other items."
+msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr ""
 
 #: seahub/templates/repo.html:629
 #, python-format
-msgid "Internal error. Failed to copy %%(name)s."
+msgid "Internal error. Failed to copy %(name)s."
 msgstr ""
 
 #: seahub/templates/repo.html:650 seahub/templates/repo.html.py:1718
@@ -4255,22 +4255,22 @@ msgstr ""
 
 #: seahub/templates/repo.html:679
 #, python-format
-msgid "Successfully moved %%(s_num)s items."
+msgid "Successfully moved %(s_num)s items."
 msgstr ""
 
 #: seahub/templates/repo.html:681
 #, python-format
-msgid "Failed to move %%(f_num)s items."
+msgid "Failed to move %(f_num)s items."
 msgstr ""
 
 #: seahub/templates/repo.html:684
 #, python-format
-msgid "Successfully copied %%(s_num)s items."
+msgid "Successfully copied %(s_num)s items."
 msgstr ""
 
 #: seahub/templates/repo.html:686
 #, python-format
-msgid "Failed to copy %%(f_num)s items."
+msgid "Failed to copy %(f_num)s items."
 msgstr ""
 
 #: seahub/templates/repo.html:695 seahub/views/ajax.py:991
@@ -4287,7 +4287,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:798
 #, python-format
-msgid "Encrypting, %%(num)s%% complete."
+msgid "Encrypting, %(num)s% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:815
@@ -4310,7 +4310,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:1191
 #, python-format
-msgid "Downloading, %%(num)s%% complete."
+msgid "Downloading, %(num)s% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:1212
@@ -4319,12 +4319,12 @@ msgstr ""
 
 #: seahub/templates/repo.html:1229
 #, python-format
-msgid "Decrypting, %%(num)s%% complete."
+msgid "Decrypting, %(num)s% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:1332
 #, python-format
-msgid "Successfully deleted %%(name)s"
+msgid "Successfully deleted %(name)s"
 msgstr ""
 
 #: seahub/templates/repo.html:1354
@@ -4353,12 +4353,12 @@ msgstr ""
 
 #: seahub/templates/repo.html:1385
 #, python-format
-msgid "Copy %%(name)s to:"
+msgid "Copy %(name)s to:"
 msgstr ""
 
 #: seahub/templates/repo.html:1388
 #, python-format
-msgid "Move %%(name)s to:"
+msgid "Move %(name)s to:"
 msgstr ""
 
 #: seahub/templates/repo.html:1411
@@ -4388,7 +4388,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:1656
 #, python-format
-msgid "Successfully renamed %%(old_name)s to %%(new_name)s"
+msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr ""
 
 #: seahub/templates/repo.html:1756 seahub/templates/repo.html.py:1784
@@ -5039,7 +5039,7 @@ msgstr ""
 
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
-msgid "Share %%(name)s"
+msgid "Share %(name)s"
 msgstr ""
 
 #: seahub/templates/snippets/file_share_popup.html:6
@@ -5272,7 +5272,7 @@ msgstr ""
 
 #: seahub/templates/snippets/repo_del_popup.html:3
 #, python-format
-msgid "Really want to delete %%(lib_name)s ?"
+msgid "Really want to delete %(lib_name)s ?"
 msgstr ""
 
 #: seahub/templates/snippets/repo_dir_data.html:14
@@ -5294,7 +5294,7 @@ msgstr ""
 
 #: seahub/templates/snippets/repo_share_form.html:3
 #, python-format
-msgid "Share %%(lib_name)s"
+msgid "Share %(lib_name)s"
 msgstr ""
 
 #: seahub/templates/snippets/repo_share_form.html:11
@@ -5453,7 +5453,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
-msgid "Transfer %%(lib_name)s to:"
+msgid "Transfer %(lib_name)s to:"
 msgstr ""
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
@@ -5667,7 +5667,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:80
 #, python-format
-msgid "A new server version %%(v)s is available."
+msgid "A new server version %(v)s is available."
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:110
@@ -5777,17 +5777,17 @@ msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:8
 #, python-format
-msgid "Are you sure you want to reset the password of %%s ?"
+msgid "Are you sure you want to reset the password of %s ?"
 msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:12
 #, python-format
-msgid "Are you sure you want to revoke the admin permission of %%s ?"
+msgid "Are you sure you want to revoke the admin permission of %s ?"
 msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:16
 #, python-format
-msgid "Are you sure you want to set %%s as admin?"
+msgid "Are you sure you want to set %s as admin?"
 msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:61
