@@ -189,7 +189,7 @@ class Accounts(APIView):
         for account in accounts_ldap:
             accounts_json.append({'email': account.email, 'source' : 'LDAP'})
         for account in accounts_db:
-            accounts_db.append({'email': account.email, 'source' : 'DB'})
+            accounts_json.append({'email': account.email, 'source' : 'DB'})
 
         return Response(accounts_json)
 
