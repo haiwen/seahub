@@ -187,9 +187,10 @@ def get_group_and_contacts(email):
                 replies_json.append(d)
             replynum = replynum + 1
         elif n.is_user_message():
-            if n.detail not in contacts:
-                contacts.append(n.detail)
-            umsgnums[n.detail] = umsgnums.get(n.detail, 0) + 1
+            msg_from = n.user_message_detail_to_dict()['msg_from']
+            if msg_from not in contacts:
+                contacts.append(msg_from)
+            umsgnums[n.detail] = umsgnums.get(msg_from, 0) + 1
 
     for r in replies_json:
         r['msgnum'] = replies[r['msg_id']]
