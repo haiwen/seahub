@@ -12,6 +12,7 @@ import json
 import re
 import six
 import os
+from six import u
 
 
 class CaptchaCase(TestCase):
@@ -41,7 +42,6 @@ class CaptchaCase(TestCase):
         settings.CAPTCHA_OUTPUT_FORMAT = self.__current_settings_output_format
         settings.CAPTCHA_WORDS_DICTIONARY = self.__current_settings_dictionary
         settings.CAPTCHA_PUNCTUATION = self.__current_settings_punctuation
-
 
     def __extract_hash_and_response(self, r):
         hash_ = re.findall(r'value="([0-9a-f]+)"', str(r.content))[0]
@@ -175,7 +175,7 @@ class CaptchaCase(TestCase):
 
     def testOutputFormat(self):
         for urlname in ('captcha-test', 'captcha-test-model-form'):
-            settings.CAPTCHA_OUTPUT_FORMAT = u'%(image)s<p>Hello, captcha world</p>%(hidden_field)s%(text_field)s'
+            settings.CAPTCHA_OUTPUT_FORMAT = u('%(image)s<p>Hello, captcha world</p>%(hidden_field)s%(text_field)s')
             r = self.client.get(reverse(urlname))
             self.assertEqual(r.status_code, 200)
             self.assertTrue('<p>Hello, captcha world</p>' in str(r.content))
@@ -186,7 +186,7 @@ class CaptchaCase(TestCase):
             # we turn on DEBUG because CAPTCHA_OUTPUT_FORMAT is only checked debug
 
             django_settings.DEBUG = True
-            settings.CAPTCHA_OUTPUT_FORMAT = u'%(image)s'
+            settings.CAPTCHA_OUTPUT_FORMAT = u('%(image)s')
             try:
                 self.client.get(reverse(urlname))
                 self.fail()
@@ -195,14 +195,14 @@ class CaptchaCase(TestCase):
         django_settings.DEBUG = __current_settings_debug
 
     def testPerFormFormat(self):
-        settings.CAPTCHA_OUTPUT_FORMAT = u'%(image)s testCustomFormatString %(hidden_field)s %(text_field)s'
+        settings.CAPTCHA_OUTPUT_FORMAT = u('%(image)s testCustomFormatString %(hidden_field)s %(text_field)s')
         r = self.client.get(reverse('captcha-test'))
         self.assertTrue('testCustomFormatString' in str(r.content))
         r = self.client.get(reverse('test_per_form_format'))
         self.assertTrue('testPerFieldCustomFormatString' in str(r.content))
 
     def testIssue31ProperLabel(self):
-        settings.CAPTCHA_OUTPUT_FORMAT = u'%(image)s %(hidden_field)s %(text_field)s'
+        settings.CAPTCHA_OUTPUT_FORMAT = u('%(image)s %(hidden_field)s %(text_field)s')
         r = self.client.get(reverse('captcha-test'))
         self.assertTrue('<label for="id_captcha_1"' in str(r.content))
 
@@ -226,12 +226,12 @@ class CaptchaCase(TestCase):
         This test covers a default django field and widget behavior
         It not assert anything. If something is wrong it will raise a error!
         """
-        settings.CAPTCHA_OUTPUT_FORMAT = u'%(image)s %(hidden_field)s %(text_field)s'
+        settings.CAPTCHA_OUTPUT_FORMAT = u('%(image)s %(hidden_field)s %(text_field)s')
         widget = CaptchaTextInput(attrs={'class': 'required'})
         CaptchaField(widget=widget)
 
     def testTestMode_Issue15(self):
-        __current_test_mode_setting  = settings.CAPTCHA_TEST_MODE
+        __current_test_mode_setting = settings.CAPTCHA_TEST_MODE
         settings.CAPTCHA_TEST_MODE = False
         r = self.client.get(reverse('captcha-test'))
         self.assertEqual(r.status_code, 200)
@@ -270,10 +270,29 @@ class CaptchaCase(TestCase):
         self.assertEqual(r.status_code, 200)
         hash_, response = self.__extract_hash_and_response(r)
 
-
         r = self.client.post(reverse('captcha-test-non-required'), dict(captcha_0=hash_, captcha_1=response, subject='xxx', sender='asasd@asdasd.com'))
         self.assertEqual(r.status_code, 200)
         self.assertTrue(str(r.content).find('Form validated') > 0)
+
+    def test_autocomplete_off(self):
+        r = self.client.get(reverse('captcha-test'))
+        self.assertTrue('<input autocomplete="off" ' in six.text_type(r.content))
+
+    def test_autocomplete_not_on_hidden_input(self):
+        r = self.client.get(reverse('captcha-test'))
+        self.assertFalse('autocomplete="off" type="hidden" name="captcha_0"' in six.text_type(r.content))
+        self.assertFalse('autocomplete="off" id="id_captcha_0" name="captcha_0" type="hidden"' in six.text_type(r.content))
+
+    def test_transparent_background(self):
+        __current_test_mode_setting = settings.CAPTCHA_BACKGROUND_COLOR
+        settings.CAPTCHA_BACKGROUND_COLOR = "transparent"
+        for key in [store.hashkey for store in six.itervalues(self.stores)]:
+            response = self.client.get(reverse('captcha-image', kwargs=dict(key=key)))
+            self.assertEqual(response.status_code, 200)
+            self.assertTrue(response.has_header('content-type'))
+            self.assertEqual(response._headers.get('content-type'), ('Content-Type', 'image/png'))
+
+        settings.CAPTCHA_BACKGROUND_COLOR = __current_test_mode_setting
 
 
 def trivial_challenge():

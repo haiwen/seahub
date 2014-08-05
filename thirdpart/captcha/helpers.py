@@ -2,6 +2,7 @@
 import random
 from captcha.conf import settings
 from django.core.urlresolvers import reverse
+from six import u
 
 
 def math_challenge():
@@ -15,14 +16,14 @@ def math_challenge():
 
 
 def random_char_challenge():
-    chars, ret = u'abcdefghijklmnopqrstuvwxyz', u''
+    chars, ret = u('abcdefghijklmnopqrstuvwxyz'), u('')
     for i in range(settings.CAPTCHA_LENGTH):
         ret += random.choice(chars)
     return ret.upper(), ret
 
 
 def unicode_challenge():
-    chars, ret = u'äàáëéèïíîöóòüúù', u''
+    chars, ret = u('äàáëéèïíîöóòüúù'), u('')
     for i in range(settings.CAPTCHA_LENGTH):
         ret += random.choice(chars)
     return ret.upper(), ret
@@ -67,6 +68,10 @@ def noise_dots(draw, image):
     size = image.size
     for p in range(int(size[0] * size[1] * 0.1)):
         draw.point((random.randint(0, size[0]), random.randint(0, size[1])), fill=settings.CAPTCHA_FOREGROUND_COLOR)
+    return draw
+
+
+def noise_null(draw, image):
     return draw
 
 

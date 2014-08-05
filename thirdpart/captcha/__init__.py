@@ -1,6 +1,6 @@
 import re
 
-VERSION = (0, 4, 0)
+VERSION = (0, 4, 3)
 
 
 def get_version(svn=False):
@@ -20,8 +20,8 @@ def pillow_required():
     except ImportError:
         try:
             import Image
-            import ImageDraw
-            import ImageFont
+            import ImageDraw  # NOQA
+            import ImageFont  # NOQA
         except ImportError:
             return True
 

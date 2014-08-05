@@ -1,6 +1,5 @@
 ﻿import os
 from django.conf import settings
-from django.core.exceptions import ImproperlyConfigured
 
 CAPTCHA_FONT_PATH = getattr(settings, 'CAPTCHA_FONT_PATH', os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'fonts/Vera.ttf')))
 CAPTCHA_FONT_SIZE = getattr(settings, 'CAPTCHA_FONT_SIZE', 22)
@@ -19,9 +18,9 @@ CAPTCHA_IMAGE_BEFORE_FIELD = getattr(settings, 'CAPTCHA_IMAGE_BEFORE_FIELD', Tru
 CAPTCHA_DICTIONARY_MIN_LENGTH = getattr(settings, 'CAPTCHA_DICTIONARY_MIN_LENGTH', 0)
 CAPTCHA_DICTIONARY_MAX_LENGTH = getattr(settings, 'CAPTCHA_DICTIONARY_MAX_LENGTH', 99)
 if CAPTCHA_IMAGE_BEFORE_FIELD:
-    CAPTCHA_OUTPUT_FORMAT = getattr(settings, 'CAPTCHA_OUTPUT_FORMAT', u'%(image)s %(hidden_field)s %(text_field)s')
+    CAPTCHA_OUTPUT_FORMAT = getattr(settings, 'CAPTCHA_OUTPUT_FORMAT', '%(image)s %(hidden_field)s %(text_field)s')
 else:
-    CAPTCHA_OUTPUT_FORMAT = getattr(settings, 'CAPTCHA_OUTPUT_FORMAT', u'%(hidden_field)s %(text_field)s %(image)s')
+    CAPTCHA_OUTPUT_FORMAT = getattr(settings, 'CAPTCHA_OUTPUT_FORMAT', '%(hidden_field)s %(text_field)s %(image)s')
 
 CAPTCHA_TEST_MODE = getattr(settings, 'CAPTCHA_TEST_MODE', getattr(settings, 'CATPCHA_TEST_MODE', False))
 

@@ -1,12 +1,12 @@
 ﻿from captcha.conf import settings
-from django.conf import settings as django_settings
 from captcha.models import CaptchaStore, get_safe_now
 from django.core.exceptions import ImproperlyConfigured
-from django.core.urlresolvers import reverse,  NoReverseMatch
+from django.core.urlresolvers import reverse, NoReverseMatch
 from django.forms import ValidationError
 from django.forms.fields import CharField, MultiValueField
 from django.forms.widgets import TextInput, MultiWidget, HiddenInput
 from django.utils.translation import ugettext, ugettext_lazy
+from six import u
 
 
 class BaseCaptchaTextInput(MultiWidget):
@@ -38,13 +38,9 @@ class BaseCaptchaTextInput(MultiWidget):
         key = CaptchaStore.generate_key()
 
         # these can be used by format_output and render
-        self._value = [key, u'']
+        self._value = [key, u('')]
         self._key = key
         self.id_ = self.build_attrs(attrs).get('id', None)
-
-    def render(self, name, value, attrs=None):
-        #self.fetch_captcha_store(name, value, attrs)
-        return super(BaseCaptchaTextInput, self).render(name, self._value, attrs=attrs)
 
     def id_for_label(self, id_):
         if id_:
@@ -76,6 +72,7 @@ class CaptchaTextInput(BaseCaptchaTextInput):
 
     def format_output(self, rendered_widgets):
         hidden_field, text_field = rendered_widgets
+        text_field = text_field.replace('<input', '<input autocomplete="off"')
         return self._args['output_format'] % {
             'image': self.image_and_audio,
             'hidden_field': hidden_field,
@@ -88,8 +85,6 @@ class CaptchaTextInput(BaseCaptchaTextInput):
         self.image_and_audio = '<img src="%s" alt="captcha" class="captcha" />' % self.image_url()
         if settings.CAPTCHA_FLITE_PATH:
             self.image_and_audio = '<a href="%s" title="%s">%s</a>' % (self.audio_url(), ugettext('Play CAPTCHA as audio file'), self.image_and_audio)
-
-
         return super(CaptchaTextInput, self).render(name, self._value, attrs=attrs)
 
 

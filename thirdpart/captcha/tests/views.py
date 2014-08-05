@@ -3,7 +3,7 @@ from captcha.fields import CaptchaField
 from django.template import RequestContext, loader
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-
+from six import u
 
 TEST_TEMPLATE = r'''
 {% load url from future %}
@@ -29,6 +29,7 @@ TEST_TEMPLATE = r'''
     </body>
 </html>
 '''
+
 
 def _test(request, form_class):
     passed = False
@@ -80,8 +81,10 @@ def test_per_form_format(request):
             help_text='asdasd',
             error_messages=dict(invalid='TEST CUSTOM ERROR MESSAGE'),
             output_format=(
-                u'%(image)s testPerFieldCustomFormatString '
-                u'%(hidden_field)s %(text_field)s'
+                u(
+                    '%(image)s testPerFieldCustomFormatString '
+                    '%(hidden_field)s %(text_field)s'
+                )
             )
         )
     return _test(request, CaptchaTestFormatForm)
