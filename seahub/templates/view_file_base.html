@@ -120,14 +120,14 @@
     <div id="fileview-toolbar">
         <ul class="fileview-toolbar">
             {% if groups %}
-            <li class="item" id="file-discuss-icon"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
-            <li id="file-group-icon" class="item"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
+            <li class="item" id="file-discuss-icon" title="{% trans "Discussion" %}"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
+            <li id="file-group-icon" class="item" title="{% trans "Go to a group" %}"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
             {% endif %}
             {% if not repo.encrypted %}
-            <li id="share" class="item" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
+            <li id="share" class="item" title="{% trans "Share" %}" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
             {% endif %}
             {% if user_perm == 'rw' %}
-            <li id="history" class="item" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
+            <li id="history" class="item" title="{% trans "History" %}" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
             {% endif %}
         </ul>
     <div>
@@ -241,7 +241,7 @@ function setToolbarPos() {
 $(window).load(function() {
     // if page needs scroll, show 'back-to-top' icon
     if ($(document).height() > $(window).height()) {
-        var to_top = $('<ul class="fileview-toolbar hide" style="margin-top:3px;"><li class="item"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
+        var to_top = $('<ul class="fileview-toolbar hide" style="margin-top:3px;"><li class="item" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
         to_top.click(function() {
             $(window).scrollTop(0);
         }).appendTo($('#fileview-toolbar'));

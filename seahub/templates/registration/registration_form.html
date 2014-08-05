@@ -1,6 +1,11 @@
 {% extends "myhome_base.html" %}
 {% load i18n %}
 {% block title %}{% trans "Register" %}{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
+{% endblock %}
+
 {% block main_panel %}
 <div class="new-narrow-panel">
     <h2 class="hd">{% trans "Signup" %}</h2>
@@ -17,9 +22,6 @@
         <label for="id_email">{% trans "Email" %}</label>
         {{ form.email }}            {{ form.email.errors }}
         <label for="id_password1">{% trans "Password" %}</label>
-            {% if strong_pwd_required %}
-                <span class="icon-question-sign" title="{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols"{% endblocktrans%}></span>
-            {% endif %}
         {{ form.password1 }}        {{ form.password1.errors }}
         <div id="pwd_strength"></div>
         <label for="id_password2">{% trans "Confirm Password" %}</label>
@@ -42,11 +44,19 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
 <script type="text/javascript">
-
+{% if strong_pwd_required %}
 {% include "snippets/password_strength_js.html" %}
-
-$("#id_password1").keyup(function() {
+var passwd_tip = "{% blocktrans %}Passwords must have at least {{min_len}} characters and contain {{level}} of the following: uppercase letters, lowercase letters, numbers, and symbols.{% endblocktrans%}";
+$("#id_password1")
+.popover({ // bootstrap plugin 'popover'
+    container: 'body',
+    content: passwd_tip,
+    template: '<div class="popover" role="tooltip"><div class="arrow"></div><div class="popover-content"></div></div>',
+    trigger: 'focus'
+})
+.keyup(function() {
     var pwd = $(this).val();
     if ($.trim(pwd)) {
         var level = getStrengthLevel(pwd);
@@ -55,6 +65,7 @@ $("#id_password1").keyup(function() {
         $("#pwd_strength").html("");
     }
 });
+{% endif %}
 
 $('form').submit(function(){
     var email = $.trim($('input[name="email"]').val()),
@@ -63,24 +74,24 @@ $('form').submit(function(){
         level = getStrengthLevel(pwd1);
 
         if (!email) {
-            $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
+            $('.error').html("{% trans "Email cannot be blank" %}").removeClass('hide');
             return false;
         }
         if (!pwd1) {
-            $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
+            $('.error').html("{% trans "Password cannot be blank" %}").removeClass('hide');
             return false;
         }
         if (!pwd2) {
-            $('.error').removeClass('hide').html("{% trans "Please enter the password again" %}");
+            $('.error').html("{% trans "Please enter the password again" %}").removeClass('hide');
             return false;
         }
         if (pwd1 != pwd2) {
-            $('.error').removeClass('hide').html("{% trans "Passwords don't match" %}");
+            $('.error').html("{% trans "Passwords don't match" %}").removeClass('hide');
             return false;
         }
         {% if strong_pwd_required %}
             if (level < {{level}}) {
-                $('.error').removeClass('hide').html("{% blocktrans %}{{min_len}} characters or more, include {{level}} types or more of these: letters(case sensitive), numbers, and symbols{% endblocktrans %}");
+                $('.error').html(passwd_tip).removeClass('hide');
                 return false;
             }
         {% endif %}
