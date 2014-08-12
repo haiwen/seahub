@@ -1,6 +1,7 @@
 {% extends base_template %}
 {% load seahub_tags i18n %}
 {% load url from future %}
+{% block sub_title %}{{u_filename}} - {% endblock %}
 
 {% block extra_style %}
 {% if filetype == 'Sf' %}
