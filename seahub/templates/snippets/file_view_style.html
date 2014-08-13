@@ -27,3 +27,7 @@
 {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
     {% include 'snippets/office_convert_style.html' %}
 {% endif %}
+
+{% if filetype == 'SpreadSheet' %}
+    {% include 'snippets/spreadsheet_convert_style.html' %}
+{% endif %}
