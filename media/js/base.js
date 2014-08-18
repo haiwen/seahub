@@ -77,7 +77,12 @@ $(function() {
                     });
 
                     $('.detail', notice_list).click(function() {
-                        location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+                        var url = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+                        if (typeof(url) != "undefined") {
+                            location.href = url;
+                        } else {
+                            location.href = $('a', $(this).prev().prev()).attr('href');
+                        }
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {

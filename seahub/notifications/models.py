@@ -59,8 +59,9 @@ def group_msg_to_json(group_id, msg_from, message):
     return json.dumps({'group_id': group_id, 'msg_from': msg_from,
                        'message': message})
 
-def grpmsg_reply_to_json(msg_id, reply_from, reply_msg):
-    return json.dumps({'msg_id': msg_id, 'reply_from': reply_from, 'reply_msg': reply_msg})
+def grpmsg_reply_to_json(msg_id, reply_from, grpmsg_topic, reply_msg):
+    return json.dumps({'msg_id': msg_id, 'reply_from': reply_from,
+                       'grpmsg_topic': grpmsg_topic, 'reply_msg': reply_msg})
 
 def user_msg_to_json(message, msg_from):
     return json.dumps({'message': message, 'msg_from': msg_from})
@@ -442,8 +443,9 @@ class UserNotification(models.Model):
                 msg_id = detail['msg_id']
                 reply_from = detail['reply_from']
                 reply_msg = detail.get('reply_msg')
+                grpmsg_topic = detail.get('grpmsg_topic')
                 return {'msg_id': msg_id, 'reply_from': reply_from,
-                        'reply_msg': reply_msg}
+                        'grpmsg_topic': grpmsg_topic, 'reply_msg': reply_msg}
             else:
                 raise self.InvalidDetailError, 'Wrong detail format of group message reply'
 
@@ -641,6 +643,23 @@ class UserNotification(models.Model):
                 }
         return msg
 
+    def format_grpmsg_reply_topic(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        try:
+            d = self.grpmsg_reply_detail_to_dict()
+        except self.InvalidDetailError:
+            return _(u"Internal error")
+
+        grpmsg_topic = d.get('grpmsg_topic')
+        if grpmsg_topic is not None:
+            return grpmsg_topic
+        else:
+            return None
+
     def format_grpmsg_reply_detail(self):
         """
 
@@ -649,7 +668,7 @@ class UserNotification(models.Model):
         """
         try:
             d = self.grpmsg_reply_detail_to_dict()
-        except self.InvalidDetailError as e:
+        except self.InvalidDetailError:
             return _(u"Internal error")
 
         reply_msg = d.get('reply_msg')
@@ -766,6 +785,7 @@ def grpmsg_reply_added_cb(sender, **kwargs):
     msg_id = kwargs['msg_id']
     reply_from_email = kwargs['from_email']
     reply_msg = kwargs['reply_msg']
+    grpmsg_topic = kwargs['grpmsg_topic']
     try:
         group_msg = GroupMessage.objects.get(id=msg_id)
     except GroupMessage.DoesNotExist:
@@ -783,7 +803,24 @@ def grpmsg_reply_added_cb(sender, **kwargs):
         # also notify the person who posts the group message
         notice_users.add(group_msg.from_email)
 
-    detail = grpmsg_reply_to_json(msg_id, reply_from_email, reply_msg)
+    total_len = 24
+    en_char_num = 0
+    cn_char_num = 0
+    for char in grpmsg_topic:
+        if total_len - (en_char_num + cn_char_num * 2) < 0:
+            break
+        elif char >= u'\u4e00' and char <= u'\u9fa5': # writen by Chinese
+            cn_char_num += 1
+        else:
+            en_char_num += 1
+
+    if total_len - (en_char_num + cn_char_num * 2) < 0:
+        grpmsg_topic = grpmsg_topic[0:(en_char_num + cn_char_num)] + " ..."
+    else:
+        grpmsg_topic = grpmsg_topic[0:(en_char_num + cn_char_num)]
+
+    detail = grpmsg_reply_to_json(msg_id, reply_from_email,
+                                  grpmsg_topic, reply_msg)
 
     for user in notice_users:
         UserNotification.objects.add_group_msg_reply_notice(to_user=user,

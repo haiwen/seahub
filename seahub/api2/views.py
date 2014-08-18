@@ -2824,6 +2824,7 @@ class GroupMsgView(APIView):
         grpmsg_reply_added.send(sender=MessageReply,
                                 msg_id=msg_id,
                                 from_email=request.user.username,
+                                grpmsg_topic=group_msg.message,
                                 reply_msg=msg)
         ret = { "msgid" : msg_reply.id }
         return Response(ret)
