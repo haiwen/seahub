@@ -8,7 +8,9 @@
 #
 
 set -e
-set -x
+if [[ ${TRAVIS} != "" ]]; then
+    set -x
+fi
 
 SCRIPT=$(readlink -f "$0")
 SEAHUB_TESTSDIR=$(dirname "${SCRIPT}")
