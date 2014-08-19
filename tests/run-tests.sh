@@ -29,9 +29,9 @@ function start_seahub() {
     ./manage.py runserver &
 }
 
-function run_test() {
+function run_tests() {
     pushd tests/casper
-    casperjs test
+    casperjs test .
     popd
 }
 
@@ -41,7 +41,7 @@ case $1 in
         ;;
     "run")
         start_seahub
-        run_test
+        run_tests
         ;;
     *)
         echo "unknow command \"$1\""
