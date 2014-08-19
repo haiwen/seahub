@@ -40,6 +40,7 @@ casper.test.begin('Add Library and remove library well', 7, function suite(test)
   });
   casper.then(function() {
     test.assertSelectorDoesntHaveText('table.repo-list tr:nth-child(2) td:nth-child(2) a', 'Test Repo');
+    this.click('a#logout');
   });
   casper.run(function() {
     test.done();

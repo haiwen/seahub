@@ -1,5 +1,4 @@
 casper.test.begin('Log in and out function well', 5, function suite(test) {
-
   casper.start('http://127.0.0.1:8000/accounts/login', function() {
     test.assertExists('form', 'login form is found');
     this.fill('form', {
@@ -15,7 +14,7 @@ casper.test.begin('Log in and out function well', 5, function suite(test) {
     test.assertVisible('#user-info-popup');
     this.click('a#logout');
   });
-  // redirect
+  // logout
   casper.run(function() {
     test.assertUrlMatch(/accounts\/logout\/$/, 'redirect url is at logout page');
     test.done();
