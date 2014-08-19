@@ -77,12 +77,7 @@ $(function() {
                     });
 
                     $('.detail', notice_list).click(function() {
-                        var url = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
-                        if (typeof(url) != "undefined") {
-                            location.href = url;
-                        } else {
-                            location.href = $('a', $(this).prev().prev()).attr('href');
-                        }
+                        location.href = $('.brief a', $(this).parent()).attr('href');
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {

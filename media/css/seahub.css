@@ -3133,9 +3133,8 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:1000px;
 }
 #notices-table .brief,
-#notices-table .topic,
 #notices-table .detail {
-    margin:0.2em 0;
+    margin:0.2em 2em .2em 0;
 }
 #notices-table .detail {
     color:#9d9b9c;
@@ -3144,8 +3143,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 #notice-list .topic,
 #notices-table .topic {
-    padding:2px 4px;
+    padding:5px 8px;
     background:#e5e5e5;
+    border-radius:5px;
 }
 #notices-table a {
     font-weight:normal;
