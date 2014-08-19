@@ -31,4 +31,3 @@ shutdown.sh
 cscope*
 docs/_build/*
 deps
-tests/basic/seafile-data
