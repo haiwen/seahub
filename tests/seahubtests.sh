@@ -39,8 +39,10 @@ case $1 in
     "init")
         init
         ;;
-    "run")
+    "runserver")
         start_seahub
+        ;;
+    "test")
         run_tests
         ;;
     *)
