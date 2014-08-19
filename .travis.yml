@@ -6,7 +6,7 @@ before_install:
   # install phantomjs/casperjs
   - ./tests/install-deps.sh
 script:
-  - ./tests/run-tests.sh init && ./tests/run-tests.sh run
+  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
 env:
   - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
 install:
