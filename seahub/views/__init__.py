@@ -455,6 +455,7 @@ def repo_settings(request, repo_id):
 
     # download links
     fileshares = FileShare.objects.filter(repo_id=repo_id)
+    p_fileshares = []
     for fs in fileshares:
         if fs.is_file_share_link():
             if seafile_api.get_file_id_by_path(repo.id, fs.path) is None:
@@ -482,15 +483,18 @@ def repo_settings(request, repo_id):
                 repo.id, repo.head_cmmt_id, path)
             fs.filesize = seafserv_threaded_rpc.get_dir_size(repo.store_id,
                                                          repo.version, dir_id)
+        p_fileshares.append(fs)
 
     # upload links
     uploadlinks = UploadLinkShare.objects.filter(repo_id=repo_id)
+    p_uploadlinks = []
     for link in uploadlinks:
         if seafile_api.get_dir_id_by_path(repo.id, link.path) is None:
             link.delete()
             continue
         link.dir_name = os.path.basename(link.path.rstrip('/'))
         link.shared_link = gen_shared_upload_link(link.token)
+        p_uploadlinks.append(link)
 
     return render_to_response('repo_settings.html', {
             'repo': repo,
@@ -504,8 +508,8 @@ def repo_settings(request, repo_id):
             'partial_history_enabled': partial_history_enabled,
             'days_enabled': days_enabled,
             'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
-            'fileshares': fileshares,
-            'uploadlinks': uploadlinks,
+            'fileshares': p_fileshares,
+            'uploadlinks': p_uploadlinks,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
