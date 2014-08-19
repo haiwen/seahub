@@ -1,6 +1,6 @@
 casper.test.begin('Log in and out function well', 5, function suite(test) {
 
-  casper.start('http://127.0.0.1L:8000/accounts/login', function() {
+  casper.start('http://127.0.0.1:8000/accounts/login', function() {
     test.assertExists('form', 'login form is found');
     this.fill('form', {
       username: 'test@test.com',

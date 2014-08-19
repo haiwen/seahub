@@ -26,7 +26,7 @@ function init() {
 }
 
 function start_seahub() {
-    ./manage.py runserver &
+    ./manage.py runserver 1>/dev/null &
 }
 
 function run_tests() {
