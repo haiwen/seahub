@@ -363,6 +363,7 @@ def user_info(request, email):
 
     user_shared_links = []
     # download links
+    p_fileshares = []
     fileshares = list(FileShare.objects.filter(username=email))
     for fs in fileshares:
         r = seafile_api.get_repo(fs.repo_id)
@@ -396,11 +397,13 @@ def user_info(request, email):
                                                              dir_id)
 
         fs.is_download = True
-    fileshares.sort(key=lambda x: x.view_cnt, reverse=True)
-    user_shared_links += fileshares
+        p_fileshares.append(fs)
+    p_fileshares.sort(key=lambda x: x.view_cnt, reverse=True)
+    user_shared_links += p_fileshares
 
     # upload links
     uploadlinks = list(UploadLinkShare.objects.filter(username=email))
+    p_uploadlinks = []
     for link in uploadlinks:
         r = seafile_api.get_repo(link.repo_id)
         if not r:
@@ -411,8 +414,9 @@ def user_info(request, email):
             continue
         link.dir_name = os.path.basename(link.path.rstrip('/'))
         link.is_upload = True
-    uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
-    user_shared_links += uploadlinks
+        p_uploadlinks.append(link)
+    p_uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
+    user_shared_links += p_uploadlinks
 
     return render_to_response(
         'sysadmin/userinfo.html', {
