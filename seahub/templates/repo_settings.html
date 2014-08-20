@@ -83,15 +83,20 @@
     <div id="shared-links" class="setting-item hide">
         <h3>{% trans "Shared Links" %}</h3>
         <p>{% trans "View and manage all the shared links in this library." %}</p>
+        <div id="tabs" class="tab-tabs">
+            <ul class="tab-tabs-nav hd ovhd">
+                <li class="tab"><a href="#upload-links" class="a">{% trans "Upload Links" %}</a></li>
+                <li class="tab"><a href="#download-links" class="a">{% trans "Download Links" %}</a></li>
+            </ul>
+        <div id="upload-links">
         <table>
-            <caption>{% trans "Upload links" %}</caption>
             <tr>
                 <th width="5%"><!--icon--></th>
-                <th width="42%">{% trans "Name"%}</th>
+                <th width="40%">{% trans "Name"%}</th>
                 <th width="15%">{% trans "Created By"%}</th>
                 <th width="15%">{% trans "Size"%}</th>
-                <th width="8%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
+                <th width="12%">{% trans "Visits"%}</th>
+                <th width="13%">{% trans "Operations"%}</th>
             </tr>
             {% if uploadlinks %}
             {% for link in uploadlinks %}
@@ -102,22 +107,22 @@
                 <td>--</td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
-                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="upload">{% trans "Remove"%}</a>
+                    <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="upload" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}
             {% endif %}
         </table>
-
+        </div>
+        <div id="download-links" class="hide">
         <table>
-            <caption>{% trans "Download links" %}</caption>
             <tr>
                 <th width="5%"><!--icon--></th>
-                <th width="42%">{% trans "Name"%}</th>
+                <th width="40%">{% trans "Name"%}</th>
                 <th width="15%">{% trans "Created By"%}</th>
                 <th width="15%">{% trans "Size"%}</th>
-                <th width="8%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
+                <th width="12%">{% trans "Visits"%}</th>
+                <th width="13%">{% trans "Operations"%}</th>
             </tr>
             {% if fileshares %}
             {% for link in fileshares %}
@@ -134,12 +139,14 @@
                 <td>{{ link.filesize|filesizeformat}}</td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
-                    <a class="rm-link op vh" href="#" data-token={{ link.token }} data-type="download">{% trans "Remove"%}</a>
+                    <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="download" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}
             {% endif %}
         </table>
+        </div>
+        </div>
     </div>
     {% endif %}
 
@@ -324,9 +331,9 @@ $('.side-textnav-tabs .tab').click(function() {
 
 {% if not repo.encrypted %}
 $('#shared-links .rm-link').click(function() {
-    var op = $(this), 
+    var op = $(this),
         link_token = op.data('token'),
-        link_type = op.data('type'), 
+        link_type = op.data('type'),
         ajax_url;
 
     if (link_type == 'upload') {
