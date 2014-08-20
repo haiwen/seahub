@@ -43,14 +43,16 @@
     <form id="file-save-form" action="{{save_to_link}}" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3>{% trans "Save To:" %}</h3>
         <div class="dir-tree-cont">
-            <div id="repos-dirs"></div>
+            <div id="repos-dirs">
+                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            </div>
         </div>
         <input type="hidden" name="s_token" value="{{shared_token}}" />
         <input type="hidden" name="dst_repo" value="" />
         <input type="hidden" name="dst_path" value="" />
-        <p class="error hide">{% trans "Please click and choose a directory."%}</p>
-        <input type="submit" value="{% trans "Submit"%}" class="submit" />
-        <button class="simplemodal-close">{% trans "Cancel"%}</button>
+        <p class="error hide">{% trans "Please click and choose a directory." %}</p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
     
 {% endblock %}
@@ -68,20 +70,29 @@ $(function() {
     $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
     {% endif %}
 });
-var all_repos = [];
-{% for a_repo in accessible_repos %}
-    all_repos.push({
-        'data': '{{ a_repo.props.name }}',
-        'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
-        'state': 'closed'
-    });  
-{% endfor %}
 
+{% if request.user.is_authenticated and request.user.username != shared_by %}
 $('#save').click(function() {
     var form = $('#file-save-form'),
         file_tree = new FileTree();
     form.modal({appendTo:'#main', autoResize:true, focus:false});
-    file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+    $.ajax({
+        url: '{% url 'unenc_rw_repos' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var all_repos = [], repo;
+            for (var i = 0, len = data.length; i < len; i++) {
+                repo = data[i];
+                all_repos.push({
+                    'data': repo.name,
+                    'attr': {'repo_id': repo.id, 'root_node': true},
+                    'state': 'closed'
+                });
+            }
+            file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+        }
+    });
 });
 $('#file-save-form').submit(function() {
     var form = $(this),
@@ -93,6 +104,7 @@ $('#file-save-form').submit(function() {
         return false;
     }
 });
+{% endif %}
 {% include "snippets/file_content_js.html" %}
 </script>
 {% endblock %}
