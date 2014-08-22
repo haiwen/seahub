@@ -20,6 +20,7 @@ from seahub.utils import send_html_email, get_service_url, \
     get_site_scheme_and_netloc
 import seahub.settings as settings
 from seahub.avatar.templatetags.avatar_tags import avatar
+from seahub.avatar.util import get_default_avatar_url
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile
 
@@ -37,8 +38,16 @@ class Command(BaseCommand):
         self.do_action()
         logger.debug('Finish sending user notices.\n')
 
-    def get_avatar_url(self, username, default_size=20):
+    def get_avatar_url(self, username, default_size=32):
         img_tag = avatar(username, default_size)
+        pattern = r'src="(.*)"'
+        repl = r'src="%s\1"' % get_site_scheme_and_netloc()
+        return re.sub(pattern, repl, img_tag)
+
+    def get_file_upload_avatar_url(self, default_size=32):
+        # user default avatar
+        img_tag = """<img src="%s" width="%s" height="%s" class="avatar"/>""" % \
+                (get_default_avatar_url(), default_size, default_size)
         pattern = r'src="(.*)"'
         repl = r'src="%s\1"' % get_site_scheme_and_netloc()
         return re.sub(pattern, repl, img_tag)
@@ -48,20 +57,19 @@ class Command(BaseCommand):
         priv_share_token = d['priv_share_token']
         notice.priv_shared_file_url = reverse('view_priv_shared_file',
                                               args=[priv_share_token])
-        notice.priv_shared_file_from = escape(email2nickname(d['share_from']))
+        notice.notice_from = escape(email2nickname(d['share_from']))
         notice.priv_shared_file_name = d['file_name']
-        notice.priv_shared_file_from_avatar_url = self.get_avatar_url(d['share_from'])
-
+        notice.avatar_url = self.get_avatar_url(d['share_from'])
         return notice
 
     def format_user_message(self, notice):
         d = notice.user_message_detail_to_dict()
-        user_msg_from = d['msg_from']
+        msg_from = d['msg_from']
         message = d.get('message')
 
-        notice.user_msg_from = escape(email2nickname(user_msg_from))
-        notice.user_msg_from_avatar_url = self.get_avatar_url(user_msg_from)
-        notice.user_msg_url = reverse('user_msg_list', args=[user_msg_from])
+        notice.notice_from = escape(email2nickname(msg_from))
+        notice.avatar_url = self.get_avatar_url(msg_from)
+        notice.user_msg_url = reverse('user_msg_list', args=[msg_from])
         notice.user_msg = message
         return notice
 
@@ -74,20 +82,22 @@ class Command(BaseCommand):
             notice.delete()
 
         notice.group_url = reverse('group_discuss', args=[group.id])
-        notice.group_msg_from = escape(email2nickname(d['msg_from']))
+        notice.notice_from = escape(email2nickname(d['msg_from']))
         notice.group_name = group.group_name
-        notice.group_msg_from_avatar_url = self.get_avatar_url(d['msg_from'])
+        notice.avatar_url = self.get_avatar_url(d['msg_from'])
         notice.grp_msg = message
         return notice
 
     def format_grpmsg_reply(self, notice):
         d = notice.grpmsg_reply_detail_to_dict()
         message = d.get('reply_msg')
+        grpmsg_topic = d.get('grpmsg_topic')
 
         notice.group_msg_reply_url = reverse('msg_reply_new')
-        notice.group_msg_reply_from = escape(email2nickname(d['reply_from']))
-        notice.group_msg_reply_from_avatar_url = self.get_avatar_url(d['reply_from'])
+        notice.notice_from = escape(email2nickname(d['reply_from']))
+        notice.avatar_url = self.get_avatar_url(d['reply_from'])
         notice.grp_reply_msg = message
+        notice.grpmsg_topic = grpmsg_topic
         return notice
 
     def format_repo_share_msg(self, notice):
@@ -99,9 +109,9 @@ class Command(BaseCommand):
             notice.delete()
 
         notice.repo_url = reverse('repo', args=[repo.id])
-        notice.repo_share_from = escape(email2nickname(d['share_from']))
+        notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
-        notice.repo_share_from_avatar_url = self.get_avatar_url(d['share_from'])
+        notice.avatar_url = self.get_avatar_url(d['share_from'])
         return notice
 
     def format_file_uploaded_msg(self, notice):
@@ -115,10 +125,11 @@ class Command(BaseCommand):
         folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(uploaded_to)
         folder_name = os.path.basename(uploaded_to)
 
-        notice.uploaded_file_link = file_link
-        notice.uploaded_file_name = file_name
-        notice.uploaded_folder_link = folder_link
-        notice.uploaded_folder_name = folder_name
+        notice.file_link = file_link
+        notice.file_name = file_name
+        notice.folder_link = folder_link
+        notice.folder_name = folder_name
+        notice.avatar_url = self.get_file_upload_avatar_url()
         return notice
 
     def format_group_join_request(self, notice):
@@ -134,9 +145,10 @@ class Command(BaseCommand):
         notice.grpjoin_user_profile_url = reverse('user_profile',
                                                   args=[username])
         notice.grpjoin_group_url = reverse('group_members', args=[group_id])
-        notice.grpjoin_username = username
+        notice.notice_from = username
         notice.grpjoin_group_name = group.group_name
         notice.grpjoin_request_msg = join_request_msg
+        notice.avatar_url = self.get_avatar_url(username)
         return notice
 
     def get_user_language(self, username):
@@ -210,13 +222,13 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
-            c = { 
+            c = {
                 'to_user': to_user,
                 'notice_count': count,
                 'notices': notices,
                 'avatar_url': self.get_avatar_url(to_user),
                 'service_url': get_service_url(),
-                }   
+                }
 
             try:
                 send_html_email(_('New notice on %s') % settings.SITE_NAME,
