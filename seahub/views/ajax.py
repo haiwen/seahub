@@ -952,7 +952,7 @@ def cancel_cp(request):
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
-        result['error'] = _('Failed')
+        result['error'] = _('Cancel failed')
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
 

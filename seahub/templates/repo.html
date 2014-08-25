@@ -187,7 +187,7 @@
         <input type="hidden" name="dst_repo" value="" />
         <input type="hidden" name="dst_path" value="" />
         <p class="error hide">{% trans "Please click and choose a directory."%}</p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
@@ -662,12 +662,11 @@ $('#mv-dirents, #cp-dirents').click(function() {
                     'dst_path': dst_path
                 };
                 var after_op_success = function (data) {
+                    var det_text = op == 'mv' ? "{% trans "Moving file %(index)s of %(total)s" %}": "{% trans "Copying file %(index)s of %(total)s" %}";
+                    details.html(det_text.replace('%(index)s', i + 1).replace('%(total)s', op_objs.length)).removeClass('vh');
                     cancel_btn.removeClass('hide');
-                    var det_text = op == 'mv' ? "{% trans "Moving %(name)s" %}": "{% trans "Copying %(name)s" %}";
-                    details.html(det_text.replace('%(name)s', trimFilename(obj_name, 20)));
                     var req_progress = function () {
                         var task_id = data['task_id'];
-                        var msg = data['msg'];
                         cancel_btn.data('task_id', task_id);
                         $.ajax({
                             url: '{% url "get_cp_progress" %}?task_id=' + e(task_id),
@@ -675,29 +674,22 @@ $('#mv-dirents, #cp-dirents').click(function() {
                             success: function(data) {
                                 var bar = $('.ui-progressbar-value', $('#mv-progress'));
                                 if (!data['failed'] && !data['canceled'] && !data['successful']) {
-                                    bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%').show();
-                                    if (data['done'] == data['total']) {
-                                        details.addClass('vh');
-                                        cancel_btn.addClass('hide');
-                                        other_info.html("{% trans "Saving..." %}").removeClass('hide');
-                                    }
                                     setTimeout(req_progress, 1000);
                                 } else {
                                     if (data['successful']) {
+                                        bar.css('width', parseInt((i + 1)/op_objs.length*100, 10) + '%').show();
                                         if (op=='mv') {
                                             op_obj.remove();
                                             updateCmt();
-                                        } else {
-                                            $('.checkbox', op_obj).removeClass('checkbox-checked');
                                         }
-                                        feedback(msg, 'success');
+                                        endOrContinue();
                                     } else { // failed or canceled
-                                        details.addClass('vh');
-                                        var other_msg = data['failed'] ? "{% trans "Failed." %}" : "{% trans "Canceled." %}";
-                                        other_info.html(other_msg).removeClass('hide');
-                                        cancel_btn.addClass('hide');
+                                        if (data['failed']) {
+                                            var error_msg = op == 'mv' ? 'Failed to move %(name)s':'Failed to copy %(name)s';
+                                            cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');    
+                                            end();
+                                        }
                                     }
-                                    endOrContinue();
                                 }
                             },
                             error: function(xhr, textStatus, errorThrown) {
@@ -707,17 +699,14 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                 } else {
                                     error = "{% trans "Failed. Please check the network." %}";
                                 }
-                                details.addClass('vh')
-                                other_info.html(error).removeClass('hide');
-                                cancel_btn.addClass('hide');
-                                endOrContinue();
+                                cancel_btn.after('<p class="error">' + error + '</p>');    
+                                end();
                             }
                         });
                     }; // 'req_progress' ends
                     if (i == 0) {
                         $.modal.close();
                         $('#dirents-op').addClass('hide');
-                        $('th.select .checkbox').removeClass('checkbox-checked');
                         setTimeout(function () {
                             $('#mv-progress-popup').modal({containerCss: {
                                 width: 300,
@@ -746,6 +735,9 @@ $('#mv-dirents, #cp-dirents').click(function() {
                     mvcpDirent(++i);
                 }
             };
+            var end = function () {
+                setTimeout(function () { $.modal.close(); }, 500);
+            };
             mvcpDirent();
             cancel_btn.click(function() {
                 disable(cancel_btn);
@@ -754,10 +746,9 @@ $('#mv-dirents, #cp-dirents').click(function() {
                     url: '{% url "cancel_cp" %}?task_id=' + e(task_id),
                     dataType: 'json',
                     success: function(data) {
-                        details.addClass('vh')
                         other_info.html("{% trans "Canceled." %}").removeClass('hide');
                         cancel_btn.addClass('hide');
-                        endOrContinue();
+                        end();
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         var error;
@@ -1772,12 +1763,15 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                         success: function(data) {
                             var bar = $('.ui-progressbar-value', $('#mv-progress'));
                             if (!data['failed'] && !data['canceled'] && !data['successful']) {
-                                bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%').show();
                                 if (data['done'] == data['total']) {
+                                    bar.css('width', '100%'); // 'done' and 'total' can be both 0
                                     details.addClass('vh');
                                     cancel_btn.addClass('hide');
                                     other_info.html("{% trans "Saving..." %}").removeClass('hide');
+                                } else {
+                                    bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%');
                                 }
+                                bar.show();
                                 setTimeout(req_progress, 1000);
                             } else if (data['successful']) {
                                 $.modal.close(); 
