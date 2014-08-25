@@ -803,22 +803,6 @@ def grpmsg_reply_added_cb(sender, **kwargs):
         # also notify the person who posts the group message
         notice_users.add(group_msg.from_email)
 
-    total_len = 24
-    en_char_num = 0
-    cn_char_num = 0
-    for char in grpmsg_topic:
-        if total_len - (en_char_num + cn_char_num * 2) < 0:
-            break
-        elif char >= u'\u4e00' and char <= u'\u9fa5': # writen by Chinese
-            cn_char_num += 1
-        else:
-            en_char_num += 1
-
-    if total_len - (en_char_num + cn_char_num * 2) < 0:
-        grpmsg_topic = grpmsg_topic[0:(en_char_num + cn_char_num)] + " ..."
-    else:
-        grpmsg_topic = grpmsg_topic[0:(en_char_num + cn_char_num)]
-
     detail = grpmsg_reply_to_json(msg_id, reply_from_email,
                                   grpmsg_topic, reply_msg)
 

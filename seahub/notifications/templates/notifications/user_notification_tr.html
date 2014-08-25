@@ -25,9 +25,9 @@
                     {% if notice.format_grpmsg_reply_detail %}
                 <div class="detail">
                     {% if notice.format_grpmsg_reply_topic %}
-                    <p class="topic">{{ notice.format_grpmsg_reply_topic }}</p>
+                    <p class="topic">{{ notice.format_grpmsg_reply_topic|truncatechars:45 }}</p>
                     {% endif %}
-                    <p class="reply">{{ notice.format_grpmsg_reply_detail }}</p>
+                    <p>{{ notice.format_grpmsg_reply_detail }}</p>
                 </div>
                     {% endif %}
 

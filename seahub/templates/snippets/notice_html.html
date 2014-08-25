@@ -22,10 +22,10 @@
         <p class="brief">{{ notice.format_grpmsg_reply_title|safe }}</p>
         {% if notice.format_grpmsg_reply_detail %}
         <div class="clear cspt detail">
-        {% if notice.format_grpmsg_reply_topic %}
-        <p class="topic">{{ notice.format_grpmsg_reply_topic }}</p>
-        {% endif %}
-        <p>{{ notice.format_grpmsg_reply_detail }}</p>
+            {% if notice.format_grpmsg_reply_topic %}
+            <p class="topic">{{ notice.format_grpmsg_reply_topic|truncatechars:25 }}</p>
+            {% endif %}
+            <p>{{ notice.format_grpmsg_reply_detail }}</p>
         </div>
         {% endif %}
     {% elif notice.is_user_message %}
