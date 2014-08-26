@@ -1816,6 +1816,14 @@ def pdf_full_view(request):
     '''For pdf view with pdf.js.'''
 
     repo_id = request.GET.get('repo_id', '')
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
+        raise Http404
+
     obj_id = request.GET.get('obj_id', '')
     file_name = request.GET.get('file_name', '')
     token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
