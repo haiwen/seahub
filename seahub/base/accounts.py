@@ -18,6 +18,10 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 from seahub.settings import USER_STRONG_PASSWORD_REQUIRED, \
     USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL
@@ -103,6 +107,9 @@ class UserPermissions(object):
     def can_view_org(self):
         """
         """
+        if MULTI_TENANCY:
+            return True
+
         return False if CLOUD_MODE else True
 
 class User(object):

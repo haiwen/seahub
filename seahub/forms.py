@@ -1,26 +1,21 @@
 # encoding: utf-8
+from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import ccnet_rpc, ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    is_valid_filename
-
-from base.accounts import User
+from seaserv import seafserv_threaded_rpc, is_valid_filename
 from pysearpc import SearpcError
 
-import settings
+from seahub.base.accounts import User
+from seahub.constants import DEFAULT_USER, GUEST_USER
 
 class AddUserForm(forms.Form):
     """
     Form for adding a user.
     """
-    from seahub import constants
-    DEFAULT_USER = getattr(constants, 'DEFAULT_USER', 'default')
-    GUEST_USER = getattr(constants, 'GUEST_USER', 'guest')
-
     email = forms.EmailField()
-    role = forms.ChoiceField( \
-            choices=[(DEFAULT_USER, DEFAULT_USER), (GUEST_USER,GUEST_USER)])
+    role = forms.ChoiceField(choices=[(DEFAULT_USER, DEFAULT_USER),
+                                      (GUEST_USER, GUEST_USER)])
     password1 = forms.CharField(widget=forms.PasswordInput())
     password2 = forms.CharField(widget=forms.PasswordInput())
 
@@ -30,7 +25,7 @@ class AddUserForm(forms.Form):
             user = User.objects.get(email=email)
             raise forms.ValidationError(_("A user with this email already exists."))
         except User.DoesNotExist:
-            return self.cleaned_data['email']            
+            return self.cleaned_data['email']
 
     def clean(self):
         """
@@ -62,6 +57,7 @@ class RepoCreateForm(forms.Form):
     uuid = forms.CharField(required=False)
     magic_str = forms.CharField(required=False)
     encrypted_file_key = forms.CharField(required=False)
+
     def clean_repo_name(self):
         repo_name = self.cleaned_data['repo_name']
         if not is_valid_filename(repo_name):

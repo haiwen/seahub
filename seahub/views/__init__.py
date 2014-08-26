@@ -1625,6 +1625,7 @@ def pubuser(request):
     emailusers_count = count_pub_users(request)
     num_pages = int(ceil(emailusers_count / float(per_page)))
     page_range = get_page_range(current_page, num_pages)
+    show_paginator = True if len(page_range) > 1 else False
 
     users = users_plus_one[:per_page]
     username = request.user.username
@@ -1644,6 +1645,7 @@ def pubuser(request):
                 'has_prev': has_prev,
                 'has_next': has_next,
                 'page_range': page_range,
+                'show_paginator': show_paginator,
                 }, context_instance=RequestContext(request))
 
 @login_required_ajax

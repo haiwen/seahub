@@ -3116,8 +3116,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* org reg */
-#url_prefix {
-    width: 100px;
+#url-prefix {
+    display: inline-block;
+}
+#url-prefix input {
+    width: 90px;
 }
 
 /* notice page */
