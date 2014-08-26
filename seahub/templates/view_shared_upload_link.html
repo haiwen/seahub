@@ -63,12 +63,7 @@
 {% block extra_script %}
 {% if not no_quota %}
 {% upload_js %}
-<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
-<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.fileupload.min.js"></script>
 <script type="text/javascript">
 // for file upload
 window.locale = { 

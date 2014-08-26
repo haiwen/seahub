@@ -228,18 +228,14 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/repo_crypto.js"></script>
 {% else %}
 {% upload_js %}
-<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
-<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
 <script type="text/javascript">
+$(function() {
+    $.getScript('{{ MEDIA_URL }}js/jquery.fileupload.min.js');
+});
 window.locale = { 
     "fileupload": {
         "errors": {
@@ -259,6 +255,10 @@ window.locale = {
 </script>
 {% endif %}
 <script type="text/javascript">
+$(function() {
+    // for file private share
+    $.getScript('{{ MEDIA_URL }}js/select2.min.js');
+});
 // refresh #repo-file-list, and do things needed to do after that.
 function reqDirData(url, func) {
     var orig_wtop = $(window).scrollTop();
@@ -992,6 +992,7 @@ $('#upload-file').click(function () {
         success: function(data) {
             form.attr('action', data['url']);
 
+            try {
             // Initialize the jQuery File Upload widget, which needs to use form action
             form.fileupload({
                 //singleFileUploads: false // using 1 request to upload all files of a selection
@@ -1010,6 +1011,10 @@ $('#upload-file').click(function () {
                 'redirect',
                 window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
             );
+            } catch(e) { // in case the fileupload js file has not been loaded
+                form.append('<p class="error">' + "{% trans "Error. Please try later." %}" + '</p>');
+                setTimeout(function() { $.modal.close(); }, 1600);
+            }
         },
         error: ajaxErrorHandler
     });
