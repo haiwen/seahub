@@ -960,6 +960,12 @@ def cancel_cp(request):
 def repo_star_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
+    user_perm = check_repo_access_permission(repo_id, request.user)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
     path = request.GET.get('file', '')
     if not path:
         return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
@@ -973,6 +979,12 @@ def repo_star_file(request, repo_id):
 @login_required_ajax
 def repo_unstar_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
+
+    user_perm = check_repo_access_permission(repo_id, request.user)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
 
     path = request.GET.get('file', '')
     if not path:

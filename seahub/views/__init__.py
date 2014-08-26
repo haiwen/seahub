@@ -1267,6 +1267,14 @@ def render_file_revisions (request, repo_id):
 
 @login_required
 def repo_revert_file (request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
+        raise Http404
+    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
     from_page = request.GET.get('from')
@@ -1303,6 +1311,14 @@ def repo_revert_file (request, repo_id):
 
 @login_required
 def repo_revert_dir (request, repo_id):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
+        raise Http404
+    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
 
@@ -1331,6 +1347,14 @@ def repo_revert_dir (request, repo_id):
 def file_revisions(request, repo_id):
     if request.method != 'GET':
         return render_error(request)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
+        raise Http404
 
     op = request.GET.get('op')
     if not op:
