@@ -20,7 +20,15 @@ TOKEN_URL = BASE_URL + u'/api2/auth-token/'
 AUTH_PING_URL = BASE_URL + u'/api2/auth/ping/'
 
 ACCOUNTS_URL = BASE_URL + u'/api2/accounts/'
-ACCOUNT_INFO_URL = BASE_URL + u'/api2/account/info'
+ACCOUNT_INFO_URL = BASE_URL + u'/api2/account/info/'
+USERMSGS_URL = BASE_URL + u'/api2/user/msgs/' + USERNAME + u'/'
+USERMSGS_COUNT_URL = BASE_URL + u'/api2/unseen_messages/'
+GROUP_URL = BASE_URL + u'/api2/group/'
+GROUPS_URL = BASE_URL + u'/api2/groups/'
+GROUPMSGS_URL = BASE_URL + u'/api2/group/msgs/'
+GROUPMSGS_NREPLY_URL = BASE_URL + u'/api2/new_replies/'
+
+STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
 
 META_AUTH = {'username': USERNAME, 'password': PASSWORD}
 
