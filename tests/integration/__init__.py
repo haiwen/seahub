@@ -11,18 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from common import common
+from common.common import BASE_URL, USERNAME, PASSWORD
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 
-LOGIN_URL = common.getBaseUrl() + u'/accounts/login/'
-HOME_URL = common.getBaseUrl() + u'/home/my/'
-LOGOUT_URL = common.getBaseUrl() + u'/accounts/logout/'
+LOGIN_URL = BASE_URL + u'/accounts/login/'
+HOME_URL = BASE_URL + u'/home/my/'
+LOGOUT_URL = BASE_URL + u'/accounts/logout/'
 
-USERNAME = common.getUserName()
-PASSWORD = common.getPassword()
-
-def getLoggedInstance():
+def get_logged_instance():
   browser = webdriver.PhantomJS()
   browser.get(LOGIN_URL)
   username_input = browser.find_element_by_name('username')

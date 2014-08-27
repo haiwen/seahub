@@ -1,14 +1,14 @@
-import integration_api as common
+from integration_api import AUTH_PING_URL, get_authed_instance
 import unittest
 
 class AuthPingApiTestCase(unittest.TestCase):
 
   def setUp(self):
-    self.requests = common.getAuthedInstance()
+    self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
   def testAuthPingApi(self):
-    res = self.requests.get(common.AUTH_PING_URL)
+    res = self.requests.get(AUTH_PING_URL)
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, u'"pong"')
 

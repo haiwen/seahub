@@ -11,18 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from common import common
+from common.common import BASE_URL, USERNAME, PASSWORD
 import requests, re
 
-PING_URL = common.getBaseUrl() + u'/api2/ping/'
-TOKEN_URL = common.getBaseUrl() + u'/api2/auth-token/'
-AUTH_PING_URL = common.getBaseUrl() + u'/api2/auth/ping/'
+PING_URL = BASE_URL + u'/api2/ping/'
+TOKEN_URL = BASE_URL + u'/api2/auth-token/'
+AUTH_PING_URL = BASE_URL + u'/api2/auth/ping/'
 
-USERNAME = common.getUserName()
-PASSWORD = common.getPassword()
 META_AUTH = {'username': USERNAME, 'password': PASSWORD}
 
-def getAuthToken():
+def get_auth_token():
   res = requests.post(TOKEN_URL, data=META_AUTH)
   if (res.status_code != 200):
     return None
@@ -31,8 +29,8 @@ def getAuthToken():
     return None
   return token
 
-def getAuthedInstance():
-  token = getAuthToken()
+def get_authed_instance():
+  token = get_auth_token()
   if (token == None):
     return None
   s = requests.Session()
