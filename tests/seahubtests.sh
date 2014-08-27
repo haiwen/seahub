@@ -1,4 +1,8 @@
 #!/bin/bash
+: ${PYTHON=python}
+# Change these if you run on local machine
+export CI_USERNAME="test@test.com"
+export CI_PASSWORD="testtest"
 
 # If you run this script on your local machine, you must set CCNET_CONF_DIR
 # and SEAFILE_CONF_DIR like this:
@@ -23,17 +27,18 @@ function init() {
     ###############################
     # create database and a new user
     ###############################
-    ./manage.py syncdb
-    python -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('test@test.com', 'testtest', 1, 1);"
+    $PYTHON ./manage.py syncdb
+    $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${CI_USERNAME}', '${CI_PASSWORD}', 1, 1);"
 }
 
 function start_seahub() {
-    ./manage.py runserver 1>/dev/null &
+    $PYTHON ./manage.py runserver 1>/dev/null &
+    sleep 5
 }
 
 function run_tests() {
-    pushd tests/casper
-    casperjs test .
+    pushd tests
+    $PYTHON integration_suite.py
     popd
 }
 
