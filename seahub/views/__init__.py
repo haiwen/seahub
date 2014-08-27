@@ -97,30 +97,6 @@ def is_registered_user(email):
 
     return True if user else False
 
-def access_to_repo(request, repo_id, repo_ap=None):
-    """
-    Check whether user in the request can access to repo, which means user can
-    view directory entries on repo page. Only repo owner or person who is shared
-    can access to repo.
-
-    NOTE: This function is deprecated, use `get_user_permission`.
-    """
-    if not request.user.is_authenticated():
-        token = request.COOKIES.get('anontoken', None)
-        return True if token else False
-    else:
-        return True if check_permission(repo_id, request.user.username) else False
-
-def get_user_permission(request, repo_id):
-    """
-    NOTE: This function is deprecated, use `check_repo_access_permission`.
-    """
-    if request.user.is_authenticated():
-        return check_permission(repo_id, request.user.username)
-    else:
-        token = request.COOKIES.get('anontoken', None)
-        return 'r' if token else ''
-
 def get_system_default_repo_id():
     try:
         return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
@@ -711,11 +687,12 @@ def repo_history(request, repo_id):
 def repo_view_snapshot(request, repo_id):
     """List repo snapshots.
     """
-    if not access_to_repo(request, repo_id, ''):
-        return render_permission_error(request, _(u'Unable to view library snapshots'))
-
     repo = get_repo(repo_id)
     if not repo:
+        raise Http404
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
         raise Http404
 
     username = request.user.username
@@ -771,8 +748,9 @@ def repo_history_revert(request, repo_id):
     if not repo:
         raise Http404
 
-    if not access_to_repo(request, repo_id):
-        return render_permission_error(request, _(u'You have no permission to restore library'))
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
+        raise Http404
 
     username = request.user.username
     try:
@@ -846,17 +824,6 @@ def get_diff(repo_id, arg1, arg2):
             lists['deldir'].append(d.name)
 
     return lists
-
-@login_required
-def modify_token(request, repo_id):
-    if not validate_owner(request, repo_id):
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-    token = request.POST.get('token', '')
-    if token:
-        seafserv_threaded_rpc.set_repo_token(repo_id, token)
-
-    return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 def create_default_library(request):
     """Create a default library for user.

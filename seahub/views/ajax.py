@@ -29,7 +29,7 @@ from seahub.message.models import UserMessage
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id, access_to_repo, get_diff, group_events_data, \
+    get_system_default_repo_id, get_diff, group_events_data, \
     get_owned_repo_list
 
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
@@ -1559,11 +1559,12 @@ def repo_history_changes(request, repo_id):
     changes = {} 
     content_type = 'application/json; charset=utf-8'
 
-    if not access_to_repo(request, repo_id, ''): 
-        return HttpResponse(json.dumps(changes), content_type=content_type)
-
     repo = get_repo(repo_id)
     if not repo:
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     username = request.user.username
