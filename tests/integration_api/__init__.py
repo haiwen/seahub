@@ -14,9 +14,13 @@
 from common.common import BASE_URL, USERNAME, PASSWORD
 import requests, re
 
+BASE_URL = BASE_URL
 PING_URL = BASE_URL + u'/api2/ping/'
 TOKEN_URL = BASE_URL + u'/api2/auth-token/'
 AUTH_PING_URL = BASE_URL + u'/api2/auth/ping/'
+
+ACCOUNTS_URL = BASE_URL + u'/api2/accounts/'
+ACCOUNT_INFO_URL = BASE_URL + u'/api2/account/info'
 
 META_AUTH = {'username': USERNAME, 'password': PASSWORD}
 
@@ -29,10 +33,13 @@ def get_auth_token():
     return None
   return token
 
+_token = get_auth_token()
+if (_token != None):
+  _instance = requests.Session()
+  _instance.headers.update({'Authorization': 'Token ' + _token})
+else:
+  _instance = None
+
 def get_authed_instance():
-  token = get_auth_token()
-  if (token == None):
-    return None
-  s = requests.Session()
-  s.headers.update({'Authorization': 'Token ' + token})
-  return s
+  return _instance
+

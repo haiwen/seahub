@@ -8,10 +8,12 @@ def suite():
     ))
 
   from integration_api.ping import PingApiTestCase
-  from integration_api.authping import AuthPingApiTestCase 
+  from integration_api.authping import AuthPingApiTestCase
+  from integration_api.account import AccountApiTestCase 
   integration_api_suite = unittest.TestSuite((\
     unittest.makeSuite(PingApiTestCase),
     unittest.makeSuite(AuthPingApiTestCase),
+    unittest.makeSuite(AccountApiTestCase),
     ))
 
   return unittest.TestSuite([integration_api_suite, integration_suite])
