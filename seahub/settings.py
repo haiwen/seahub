@@ -246,7 +246,7 @@ AVATAR_DEFAULT_URL = '/avatars/default.png'
 AVATAR_DEFAULT_NON_REGISTERED_URL = '/avatars/default-non-register.jpg'
 AVATAR_MAX_AVATARS_PER_USER = 1
 AVATAR_CACHE_TIMEOUT = 14 * 24 * 60 * 60
-AUTO_GENERATE_AVATAR_SIZES = (16, 20, 24, 28, 36, 40, 48, 60, 80)
+AUTO_GENERATE_AVATAR_SIZES = (16, 20, 24, 28, 32, 36, 40, 48, 60, 80)
 # Group avatar
 GROUP_AVATAR_STORAGE_DIR = 'avatars/groups'
 GROUP_AVATAR_DEFAULT_URL = 'avatars/groups/default.png'
