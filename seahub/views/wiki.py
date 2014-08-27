@@ -130,7 +130,7 @@ def personal_wiki_create(request):
         return HttpResponse(json.dumps(result), status=status,
                             content_type=content_type)
 
-    if not request.user.permissons.can_add_repo():
+    if not request.user.permissions.can_add_repo():
         return json_error(_('You do not have permission to create wiki'), 403)
 
     form = WikiCreateForm(request.POST)

@@ -187,7 +187,7 @@
         <input type="hidden" name="dst_repo" value="" />
         <input type="hidden" name="dst_path" value="" />
         <p class="error hide">{% trans "Please click and choose a directory."%}</p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
 
@@ -228,18 +228,14 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/repo_crypto.js"></script>
 {% else %}
 {% upload_js %}
-<script src="{{ MEDIA_URL}}js/jquery.ui.widget.js"></script>
-<script src="{{ MEDIA_URL}}js/tmpl.min.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.iframe-transport.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-fp.js"></script>
-<script src="{{ MEDIA_URL }}js/jquery.fileupload-ui.js"></script>
 <script type="text/javascript">
+$(function() {
+    $.getScript('{{ MEDIA_URL }}js/jquery.fileupload.min.js');
+});
 window.locale = { 
     "fileupload": {
         "errors": {
@@ -259,6 +255,10 @@ window.locale = {
 </script>
 {% endif %}
 <script type="text/javascript">
+$(function() {
+    // for file private share
+    $.getScript('{{ MEDIA_URL }}js/select2.min.js');
+});
 // refresh #repo-file-list, and do things needed to do after that.
 function reqDirData(url, func) {
     var orig_wtop = $(window).scrollTop();
@@ -546,156 +546,150 @@ $('#mv-dirents, #cp-dirents').click(function() {
             return false;
         }
 
-        if (op == 'mv') {
-            url_main = '{% url 'mv_dirents' repo.id %}';
-        } else {
-            url_main = '{% url 'cp_dirents' repo.id %}';
-        }
-
         disable($('[type="submit"]', form));
         form.append('<p style="color:red;">' + "{% trans "Processing..." %}" + '</p>');
-        $.ajax({
-            url: url_main + '?parent_dir=' + e(cur_path),
-            type: 'POST',
-            dataType: 'json',
-            beforeSend: prepareCSRFToken,
-            traditional: true,
-            data: {
-                'file_names': file_names,
-                'dir_names': dir_names,
-                'dst_repo': dst_repo,
-                'dst_path': dst_path
-            },
-            success: function(data) {
-                var success_len = data['success'].length,
-                    msg_s, msg_f,
-                    view_url = data['url'];
 
-                var task_ids = data['task_ids'],
-                    task_ids_len = task_ids.length;
+        if (dst_repo == '{{repo.id }}') {
+            // when mv/cp in current lib, files/dirs can be handled in batch, and no need to show progress
+            url_main = op == 'mv' ? '{% url 'mv_dirents' repo.id %}':'{% url 'cp_dirents' repo.id %}';
+            $.ajax({
+                url: url_main + '?parent_dir=' + e(cur_path),
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: prepareCSRFToken,
+                traditional: true,
+                data: {
+                    'file_names': file_names,
+                    'dir_names': dir_names,
+                    'dst_repo': dst_repo,
+                    'dst_path': dst_path
+                },
+                success: function(data) {
+                    var success_len = data['success'].length,
+                        msg_s, msg_f,
+                        view_url = data['url'];
 
-                $.modal.close();
-                $('#dirents-op').addClass('hide');
-                $('th.select .checkbox').removeClass('checkbox-checked');
+                    $.modal.close();
+                    $('#dirents-op').addClass('hide');
+                    $('th.select .checkbox').removeClass('checkbox-checked');
 
-                var success_without_tasks = function() {
-                if (success_len > 0) {
-                    if (op == 'mv') {
-                        if (success_len == files.length + dirs.length) {
-                            files.remove();
-                            dirs.remove();
-                        } else {
-                            files.each(function() {
-                                if ($(this).data('name') in data['success']) {
-                                    $(this).remove();
-                                }
-                            }); 
-                            dirs.each(function() {
-                                if ($(this).data('name') in data['success']) {
-                                    $(this).remove();
-                                }
-                            }); 
-                        }
-                        if (data['success'].length > 1) {
-                            msg_s = "{% trans "Successfully moved %(name)s and %(amount)s other items." %}";
-                        } else {
-                            msg_s = "{% trans "Successfully moved %(name)s." %}";
-                        }
-                    } else {
-                        $('.checkbox').removeClass('checkbox-checked');
-                        if (data['success'].length > 1) {
-                            msg_s = "{% trans "Successfully copied %(name)s and %(amount)s other items." %}";
-                        } else {
-                            msg_s = "{% trans "Successfully copied %(name)s." %}";
-                        }
-                    }
-                    msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', data['success'].length - 1);
-                    msg_s += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
-                    feedback(msg_s, 'success'); 
-                    updateCmt();
-                }
-
-                if (data['failed'].length > 0) {
-                    if (op == 'mv') {
-                        if (data['failed'].length > 1) {
-                            msg_f = "{% trans "Internal error. Failed to move %(name)s and %(amount)s other items." %}";
-                        } else {
-                            msg_f = "{% trans "Internal error. Failed to move %(name)s." %}";
-                        }
-                    } else {
-                        if (data['failed'].length > 1) {
-                            msg_f = "{% trans "Internal error. Failed to copy %(name)s and %(amount)s other items." %}";
-                        } else {
-                            msg_f = "{% trans "Internal error. Failed to copy %(name)s." %}";
-                        }
-                    }
-                    msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
-                    feedback(msg_f, 'error'); 
-                }
-                }; // 'success_without_tasks' ends
-
-                if (task_ids_len == 0) {
-                    success_without_tasks();
-                } else {
-                    var details = $('#mv-details'), 
-                        other_info = $('#mv-other-info');
-                    $('#cancel-mv').addClass('hide');
-                    setTimeout(function () {
-                        $('#mv-progress-popup').modal({containerCss: {
-                            width: 300,
-                            height: 150,
-                            paddingTop: 50
-                        }, focus:false});
+                    if (success_len > 0) {
                         if (op == 'mv') {
-                            details.html("{% trans "Moving..." %}");
-                        } else {
-                            details.html("{% trans "Copying..." %}");
-                        }
-                        $('#mv-progress').progressbar();
-                        req_progress();
-                    }, 100);
-                    var req_progress = function() {
-                        $.ajax({
-                            url: '{% url 'get_multi_cp_progress' %}',
-                            dataType: 'json',
-                            data: { task_ids: task_ids },
-                            traditional: true, 
-                            success: function(data) {
-                                var success_num = data['success'],
-                                    fail_num = data['fail'];
-                                var bar = $('.ui-progressbar-value', $('#mv-progress')).show();
-                                bar.css('width', parseInt(success_num/task_ids_len*100, 10) + '%'); 
-                                if (task_ids_len == success_num + fail_num) {
-                                    setTimeout(function() {$.modal.close();}, 100);
-                                    var msg;
-                                    if (success_num > 0) {
-                                        if (op == 'mv') {
-                                            if (success_num == files.length + dirs.length) {
-                                                files.remove();
-                                                dirs.remove();
-                                            } else {
-                                                reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
-                                            }
-                                            msg = "{% trans "Successfully moved %(s_num)s items." %}";
-                                            if (fail_num > 0) {
-                                                msg += "{% trans "Failed to move %(f_num)s items." %}";
-                                            }
-                                        } else {
-                                            msg = "{% trans "Successfully copied %(s_num)s items." %}";
-                                            if (fail_num > 0) {
-                                                msg += "{% trans "Failed to copy %(f_num)s items." %}";
-                                            }
-                                            $('.checkbox').removeClass('checkbox-checked');
-                                        }
-                                        msg = msg.replace('%(s_num)s', success_num).replace('%(f_num)s', fail_num);
-                                        msg += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
-                                        feedback(msg, 'success');
-                                        updateCmt();
-                                    } else {
-                                        feedback("{% trans "Failed" %}", 'error');
+                            if (success_len == files.length + dirs.length) {
+                                files.remove();
+                                dirs.remove();
+                            } else {
+                                files.each(function() {
+                                    if ($(this).data('name') in data['success']) {
+                                        $(this).remove();
                                     }
-                                } else {
+                                });
+                                dirs.each(function() {
+                                    if ($(this).data('name') in data['success']) {
+                                        $(this).remove();
+                                    }
+                                });
+                            }
+                            if (success_len == 1) {
+                                msg_s = "{% trans "Successfully moved %(name)s." %}";
+                            } else if (success_len == 2) {
+                                msg_s = "{% trans "Successfully moved %(name)s and 1 other item." %}";
+                            } else {
+                                msg_s = "{% trans "Successfully moved %(name)s and %(amount)s other items." %}";
+                            }
+                        } else { // cp
+                            $('.checkbox').removeClass('checkbox-checked');
+                            if (success_len == 1) {
+                                msg_s = "{% trans "Successfully copied %(name)s." %}";
+                            } else if (success_len == 2) {
+                                msg_s = "{% trans "Successfully copied %(name)s and 1 other item." %}";
+                            } else {
+                                msg_s = "{% trans "Successfully copied %(name)s and %(amount)s other items." %}";
+                            }
+                        }
+                        msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', data['success'].length - 1);
+                        msg_s += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
+                        feedback(msg_s, 'success');
+                        updateCmt();
+                    }
+
+                    if (data['failed'].length > 0) {
+                        if (op == 'mv') {
+                            if (data['failed'].length > 1) {
+                                msg_f = "{% trans "Internal error. Failed to move %(name)s and %(amount)s other items." %}";
+                            } else {
+                                msg_f = "{% trans "Internal error. Failed to move %(name)s." %}";
+                            }
+                        } else {
+                            if (data['failed'].length > 1) {
+                                msg_f = "{% trans "Internal error. Failed to copy %(name)s and %(amount)s other items." %}";
+                            } else {
+                                msg_f = "{% trans "Internal error. Failed to copy %(name)s." %}";
+                            }
+                        }
+                        msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
+                        feedback(msg_f, 'error');
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    $.modal.close();
+                    ajaxErrorHandler(xhr, textStatus, errorThrown);
+                }
+            });
+        } else {
+            // when mv/cp to another lib, files/dirs should be handled one by one, and need to show progress
+            var op_objs = $('.checkbox-checked').parents('tr'),
+                i = 0;
+            // progress popup
+            var details = $('#mv-details'),
+                cancel_btn = $('#cancel-mv'),
+                other_info = $('#mv-other-info');
+
+            var mvcpDirent = function () {
+                var op_obj = $(op_objs[i]),
+                    obj_type = op_obj.hasClass('dir-item') ? 'dir':'file',
+                    obj_name = op_obj.attr('data-name'),
+                    post_url;
+
+                if (op == 'mv') {
+                    post_url = obj_type == 'dir' ? '{% url 'mv_dir' repo.id %}':'{% url 'mv_file' repo.id %}';
+                } else {
+                    post_url = obj_type == 'dir' ? '{% url 'cp_dir' repo.id %}':'{% url 'cp_file' repo.id %}';
+                }
+                post_url += '?path=' + e(cur_path) + '&obj_name=' + e(obj_name);
+                post_data = {
+                    'dst_repo': dst_repo,
+                    'dst_path': dst_path
+                };
+                var after_op_success = function (data) {
+                    var det_text = op == 'mv' ? "{% trans "Moving file %(index)s of %(total)s" %}": "{% trans "Copying file %(index)s of %(total)s" %}";
+                    details.html(det_text.replace('%(index)s', i + 1).replace('%(total)s', op_objs.length)).removeClass('vh');
+                    cancel_btn.removeClass('hide');
+                    var req_progress = function () {
+                        var task_id = data['task_id'];
+                        cancel_btn.data('task_id', task_id);
+                        $.ajax({
+                            url: '{% url "get_cp_progress" %}?task_id=' + e(task_id),
+                            dataType: 'json',
+                            success: function(data) {
+                                var bar = $('.ui-progressbar-value', $('#mv-progress'));
+                                if (!data['failed'] && !data['canceled'] && !data['successful']) {
                                     setTimeout(req_progress, 1000);
+                                } else {
+                                    if (data['successful']) {
+                                        bar.css('width', parseInt((i + 1)/op_objs.length*100, 10) + '%').show();
+                                        if (op=='mv') {
+                                            op_obj.remove();
+                                            updateCmt();
+                                        }
+                                        endOrContinue();
+                                    } else { // failed or canceled
+                                        if (data['failed']) {
+                                            var error_msg = op == 'mv' ? 'Failed to move %(name)s':'Failed to copy %(name)s';
+                                            cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');    
+                                            end();
+                                        }
+                                    }
                                 }
                             },
                             error: function(xhr, textStatus, errorThrown) {
@@ -705,20 +699,70 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                 } else {
                                     error = "{% trans "Failed. Please check the network." %}";
                                 }
-                                details.addClass('vh')
-                                other_info.html(error).removeClass('hide');
-                                setTimeout(function () {$.modal.close();}, 1000); 
+                                cancel_btn.after('<p class="error">' + error + '</p>');    
+                                end();
                             }
                         });
+                    }; // 'req_progress' ends
+                    if (i == 0) {
+                        $.modal.close();
+                        $('#dirents-op').addClass('hide');
+                        setTimeout(function () {
+                            $('#mv-progress-popup').modal({containerCss: {
+                                width: 300,
+                                height: 150,
+                                paddingTop: 50
+                            }, focus:false});
+                            $('#mv-progress').progressbar();
+                            req_progress();
+                        }, 100);
+                    } else {
+                        req_progress();
                     }
+                }; // 'after_op_success' ends
+                ajaxPost({
+                    'form': form,
+                    'post_url': post_url,
+                    'post_data': post_data,
+                    'after_op_success': after_op_success,
+                    'form_id': form.attr('id')
+                });
+            }; // 'mvcpDirent' ends
+            var endOrContinue = function () {
+                if (i == op_objs.length - 1) {
+                    setTimeout(function () { $.modal.close(); }, 500);
+                } else {
+                    mvcpDirent(++i);
                 }
-
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                $.modal.close();
-                ajaxErrorHandler(xhr, textStatus, errorThrown);
-            }
-        });
+            };
+            var end = function () {
+                setTimeout(function () { $.modal.close(); }, 500);
+            };
+            mvcpDirent();
+            cancel_btn.click(function() {
+                disable(cancel_btn);
+                var task_id = $(this).data('task_id');
+                $.ajax({
+                    url: '{% url "cancel_cp" %}?task_id=' + e(task_id),
+                    dataType: 'json',
+                    success: function(data) {
+                        other_info.html("{% trans "Canceled." %}").removeClass('hide');
+                        cancel_btn.addClass('hide');
+                        end();
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        var error;
+                        if (xhr.responseText) {
+                            error = $.parseJSON(xhr.responseText).error;
+                        } else {
+                            error = "{% trans "Failed. Please check the network." %}";
+                        }
+                        other_info.html(error).removeClass('hide');
+                        enable(cancel_btn);
+                    }
+                });
+            });
+        }
         return false;
     });
 });
@@ -948,6 +992,7 @@ $('#upload-file').click(function () {
         success: function(data) {
             form.attr('action', data['url']);
 
+            try {
             // Initialize the jQuery File Upload widget, which needs to use form action
             form.fileupload({
                 //singleFileUploads: false // using 1 request to upload all files of a selection
@@ -966,6 +1011,10 @@ $('#upload-file').click(function () {
                 'redirect',
                 window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
             );
+            } catch(e) { // in case the fileupload js file has not been loaded
+                form.append('<p class="error">' + "{% trans "Error. Please try later." %}" + '</p>');
+                setTimeout(function() { $.modal.close(); }, 1600);
+            }
         },
         error: ajaxErrorHandler
     });
@@ -1678,18 +1727,11 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             return false;
         }
         if (op == 'mv') {
-            if (obj_type == 'dir') { // move dir
-                post_url = '{% url 'mv_dir' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
-            } else {                 // move file
-                post_url = '{% url 'mv_file' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
-            }
+            post_url = obj_type == 'dir' ? '{% url 'mv_dir' repo.id %}':'{% url 'mv_file' repo.id %}';
         } else {
-            if (obj_type == 'dir') { // copy dir
-                post_url = '{% url 'cp_dir' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
-            } else {                 // copy file
-                post_url = '{% url 'cp_file' repo.id%}?path=' + e(path) + '&obj_name=' + e(obj_name);
-            }
+            post_url = obj_type == 'dir' ? '{% url 'cp_dir' repo.id %}':'{% url 'cp_file' repo.id %}';
         }
+        post_url += '?path=' + e(path) + '&obj_name=' + e(obj_name);
         post_data = {
             'dst_repo': dst_repo,
             'dst_path': dst_path
@@ -1697,7 +1739,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         after_op_success = function(data) {
             $.modal.close();
             msg = data['msg'];
-            if (!data['task_id']) { // don not show progress
+            if (!data['task_id']) { // no progress
                 if (op=='mv') {
                     op_obj.remove();
                 }
@@ -1714,11 +1756,8 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                         height: 150,
                         paddingTop: 50
                     }, focus:false});
-                    if (op == 'mv') {
-                        details.html("{% trans "Moving..." %}");
-                    } else {
-                        details.html("{% trans "Copying..." %}");
-                    }
+                    var det_text = op == 'mv' ? "{% trans "Moving %(name)s" %}": "{% trans "Copying %(name)s" %}";
+                    details.html(det_text.replace('%(name)s', trimFilename(obj_name, 20)));
                     $('#mv-progress').progressbar();
                     req_progress();
                 }, 100);
@@ -1729,35 +1768,29 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                         success: function(data) {
                             var bar = $('.ui-progressbar-value', $('#mv-progress'));
                             if (!data['failed'] && !data['canceled'] && !data['successful']) {
-                                bar.show();
                                 if (data['done'] == data['total']) {
-                                    bar.width('100%');
+                                    bar.css('width', '100%'); // 'done' and 'total' can be both 0
                                     details.addClass('vh');
                                     cancel_btn.addClass('hide');
                                     other_info.html("{% trans "Saving..." %}").removeClass('hide');
-                                    setTimeout(req_progress, 1000);
                                 } else {
-                                    bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%'); 
-                                    setTimeout(req_progress, 1000);
+                                    bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%');
                                 }
+                                bar.show();
+                                setTimeout(req_progress, 1000);
                             } else if (data['successful']) {
                                 $.modal.close(); 
                                 if (op=='mv') {
                                     op_obj.remove();
+                                    updateCmt();
                                 }
-                                updateCmt();
                                 feedback(msg, 'success');
                             } else { // failed or canceled
-                                var other_msg;
                                 details.addClass('vh');
-                                if (data['failed']) {
-                                    other_msg = "{% trans "Failed." %}";
-                                } else {
-                                    other_msg = "{% trans "Canceled." %}";
-                                }
+                                var other_msg = data['failed'] ? "{% trans "Failed." %}" : "{% trans "Canceled." %}";
                                 other_info.html(other_msg).removeClass('hide');
                                 cancel_btn.addClass('hide');
-                                setTimeout(function () {$.modal.close();}, 1000); 
+                                setTimeout(function () { $.modal.close(); }, 1000);
                             }
                         },
                         error: function(xhr, textStatus, errorThrown) {
@@ -1770,7 +1803,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                             details.addClass('vh')
                             other_info.html(error).removeClass('hide');
                             cancel_btn.addClass('hide');
-                            setTimeout(function () {$.modal.close();}, 1000); 
+                            setTimeout(function () { $.modal.close(); }, 1000); 
                         }
                     });
                 };
@@ -1801,6 +1834,22 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         }
     }
 
+    ajaxPost({
+        'form': form,
+        'post_url': post_url,
+        'post_data': post_data,
+        'after_op_success': after_op_success,
+        'form_id': form_id
+    });
+    return false;
+});
+
+function ajaxPost(params) { // params: {}
+    var form = params.form,
+        post_url = params.post_url,
+        post_data = params.post_data,
+        after_op_success = params.after_op_success,
+        form_id = params.form_id;
     var submit_btn = form.children('input[type="submit"]');  
     disable(submit_btn);
     $.ajax({
@@ -1825,8 +1874,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             enable(submit_btn);
         }
     });
-    return false;
-});
+}
 
 $('#mv-dir-list .hd').click(function() {
     var span = $('span', $(this)),

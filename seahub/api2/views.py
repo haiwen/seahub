@@ -57,7 +57,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
-from seahub.views import access_to_repo, validate_owner, is_registered_user, \
+from seahub.views import validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
     list_inner_pub_repos, get_virtual_repos_by_owner
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
@@ -609,7 +609,8 @@ def check_set_repo_password(request, repo):
             return set_repo_password(request, repo, password)
 
 def check_repo_access_permission(request, repo):
-    if not check_permission(repo.id, request.user.username):
+    if not seafile_api.check_repo_access_permission(repo.id,
+                                                    request.user.username):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
 class Repo(APIView):
@@ -2824,6 +2825,7 @@ class GroupMsgView(APIView):
         grpmsg_reply_added.send(sender=MessageReply,
                                 msg_id=msg_id,
                                 from_email=request.user.username,
+                                grpmsg_topic=group_msg.message,
                                 reply_msg=msg)
         ret = { "msgid" : msg_reply.id }
         return Response(ret)
@@ -3157,12 +3159,13 @@ def ajax_usermsgs(request, id_or_email):
 def html_repo_history_changes(request, repo_id):
     changes = {}
 
-    if not access_to_repo(request, repo_id, ''):
-        return HttpResponse(json.dumps({"err": 'Permission denied'}), status=400, content_type=json_content_type)
-
     repo = get_repo(repo_id)
     if not repo:
         return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
+
+    resp = check_repo_access_permission(request, repo)
+    if resp:
+        return resp
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
@@ -3315,16 +3318,15 @@ class RepoHistoryChange(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        if not access_to_repo(request, repo_id, ''):
-            return HttpResponse(json.dumps({"err": 'Permission denied'}),
-                                status=400,
-                                content_type=json_content_type)
-
         repo = get_repo(repo_id)
         if not repo:
             return HttpResponse(json.dumps({"err": 'Library does not exist'}),
                                 status=400,
                                 content_type=json_content_type)
+
+        resp = check_repo_access_permission(request, repo)
+        if resp:
+            return resp
 
         if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
             return HttpResponse(json.dumps({"err": 'Library is encrypted'}),

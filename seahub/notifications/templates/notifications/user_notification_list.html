@@ -58,7 +58,7 @@ $('#mark-all-read').click(function() {
 });
 
 $('.detail', $('#notices-table')).click(function() {
-    location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+    location.href = $('.brief a', $(this).parent()).attr('href');
 });
 
 var start = {{start}}, limit = {{limit}};
@@ -74,7 +74,7 @@ $('#notices-more-btn').click(function() {
             $('#notices-table').append(data['html']);
 
             $('.detail', $('#notices-table')).unbind().click(function() {
-                location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+                location.href = $('.brief a', $(this).parent()).attr('href');
             });
 
             start = data['new_start'];

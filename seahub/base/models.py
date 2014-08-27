@@ -245,7 +245,7 @@ class UserStarredFiles(models.Model):
     home page.
 
     """
-    email = models.EmailField()
+    email = models.EmailField(db_index=True)
     org_id = models.IntegerField()
     repo_id = models.CharField(max_length=36, db_index=True)
     path = models.TextField()

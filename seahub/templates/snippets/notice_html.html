@@ -21,7 +21,12 @@
     {% elif notice.is_grpmsg_reply %}
         <p class="brief">{{ notice.format_grpmsg_reply_title|safe }}</p>
         {% if notice.format_grpmsg_reply_detail %}
-        <p class="clear cspt detail">{{ notice.format_grpmsg_reply_detail }}</p>
+        <div class="clear cspt detail">
+            {% if notice.format_grpmsg_reply_topic %}
+            <p class="topic">{{ notice.format_grpmsg_reply_topic|truncatechars:25 }}</p>
+            {% endif %}
+            <p>{{ notice.format_grpmsg_reply_detail }}</p>
+        </div>
         {% endif %}
     {% elif notice.is_user_message %}
         <p class="brief">{{ notice.format_user_message_title|safe }}</p>

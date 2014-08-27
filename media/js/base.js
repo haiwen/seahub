@@ -77,7 +77,7 @@ $(function() {
                     });
 
                     $('.detail', notice_list).click(function() {
-                        location.href = $('a', $(this).prev()).attr('href'); // <a> in '.brief'
+                        location.href = $('.brief a', $(this).parent()).attr('href');
                     });
                 },
                 error: function (xhr, textStatus, errorThrown) {

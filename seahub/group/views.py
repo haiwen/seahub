@@ -492,6 +492,7 @@ def msg_reply(request, msg_id):
             grpmsg_reply_added.send(sender=MessageReply,
                                     msg_id=msg_id,
                                     from_email=request.user.username,
+                                    grpmsg_topic=group_msg.message,
                                     reply_msg=msg)
 
             replies = MessageReply.objects.filter(reply_to=group_msg)

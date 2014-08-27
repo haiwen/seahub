@@ -29,7 +29,7 @@ from seahub.message.models import UserMessage
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id, access_to_repo, get_diff, group_events_data, \
+    get_system_default_repo_id, get_diff, group_events_data, \
     get_owned_repo_list
 
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
@@ -848,7 +848,6 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     success = []
     failed = []
     url = None
-    task_ids = []
     for obj_name in obj_file_names + obj_dir_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
@@ -861,13 +860,11 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
             failed.append(obj_name)
         else:
             success.append(obj_name)
-            if res.background:
-                task_ids.append(res.task_id)
 
     if len(success) > 0:   
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
 
-    result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
+    result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
@@ -887,7 +884,6 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     success = []
     failed = []
     url = None
-    task_ids = []
     for obj_name in obj_file_names + obj_dir_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
@@ -900,13 +896,11 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
             failed.append(obj_name)
         else:
             success.append(obj_name)
-            if res.background:
-                task_ids.append(res.task_id)
 
     if len(success) > 0:   
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
 
-    result = {'success': success, 'failed': failed, 'url': url, 'task_ids': task_ids}
+    result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
@@ -939,36 +933,6 @@ def get_cp_progress(request):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-def get_multi_cp_progress(request):
-    '''
-        Fetch progress of multi files/dirs mv/cp.
-    '''
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    task_ids = request.GET.getlist('task_ids')
-    if not task_ids:
-        result['error'] = _(u'Argument missing')
-        return HttpResponse(json.dumps(result), status=400,
-                    content_type=content_type)
-    
-    success = 0
-    fail = 0
-    for task_id in task_ids:
-        res = seafile_api.get_copy_task(task_id) 
-        if not res:
-            fail += 1
-        else:
-            if res.failed:
-                fail += 1
-            elif res.successful:
-                success += 1
-    
-    result['success'] = success
-    result['fail'] = fail
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-@login_required_ajax
 def cancel_cp(request):
     '''
         cancel file/dir mv/cp.
@@ -988,13 +952,19 @@ def cancel_cp(request):
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
     else:
-        result['error'] = _('Failed')
+        result['error'] = _('Cancel failed')
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
 
 @login_required_ajax
 def repo_star_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
+
+    user_perm = check_repo_access_permission(repo_id, request.user)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
 
     path = request.GET.get('file', '')
     if not path:
@@ -1009,6 +979,12 @@ def repo_star_file(request, repo_id):
 @login_required_ajax
 def repo_unstar_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
+
+    user_perm = check_repo_access_permission(repo_id, request.user)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
 
     path = request.GET.get('file', '')
     if not path:
@@ -1583,11 +1559,12 @@ def repo_history_changes(request, repo_id):
     changes = {} 
     content_type = 'application/json; charset=utf-8'
 
-    if not access_to_repo(request, repo_id, ''): 
-        return HttpResponse(json.dumps(changes), content_type=content_type)
-
     repo = get_repo(repo_id)
     if not repo:
+        return HttpResponse(json.dumps(changes), content_type=content_type)
+
+    # perm check
+    if check_repo_access_permission(repo.id, request.user) is None:
         return HttpResponse(json.dumps(changes), content_type=content_type)
 
     username = request.user.username
