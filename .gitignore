@@ -31,3 +31,4 @@ shutdown.sh
 cscope*
 docs/_build/*
 deps
+ghostdriver.log
