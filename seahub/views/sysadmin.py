@@ -698,10 +698,30 @@ def sys_group_admin(request):
 @login_required
 @sys_staff_required
 def sys_org_admin(request):
-    orgs = ccnet_threaded_rpc.get_all_orgs(-1, -1)
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    orgs_plus_one = ccnet_threaded_rpc.get_all_orgs(per_page * (current_page - 1),
+                                                    per_page + 1)
+    orgs = orgs_plus_one[:per_page]
+
+    if len(orgs_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
 
     return render_to_response('sysadmin/sys_org_admin.html', {
             'orgs': orgs,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -94,21 +94,18 @@ class UserManager(object):
         return user
 
 class UserPermissions(object):
+    def __init__(self, user):
+        self.user = user
+
     def can_add_repo(self):
-        """
-        """
         return True
 
     def can_add_group(self):
-        """
-        """
         return True
 
     def can_view_org(self):
-        """
-        """
         if MULTI_TENANCY:
-            return True
+            return True if self.user.org is not None else False
 
         return False if CLOUD_MODE else True
 
@@ -126,7 +123,7 @@ class User(object):
     def __init__(self, email):
         self.username = email
         self.email = email
-        self.permissions = UserPermissions()
+        self.permissions = UserPermissions(self)
 
     def __unicode__(self):
         return self.username
