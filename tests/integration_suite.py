@@ -19,7 +19,9 @@ def suite():
   from integration_api.library import LibraryApiTestCase
   from integration_api.files import FilesApiTestCase
   from integration_api.starredfiles import StarredFilesApiTestCase
+  from integration_api.directories import DirectoriesApiTestCase 
   from integration_api.misc import MiscApiTestCase
+
   integration_api_suite = unittest.TestSuite((\
     unittest.makeSuite(PingApiTestCase),
     unittest.makeSuite(AuthPingApiTestCase),
@@ -32,6 +34,7 @@ def suite():
     unittest.makeSuite(LibraryApiTestCase),
     unittest.makeSuite(FilesApiTestCase),
     unittest.makeSuite(StarredFilesApiTestCase),
+    unittest.makeSuite(DirectoriesApiTestCase),
     unittest.makeSuite(MiscApiTestCase),
     ))
 
