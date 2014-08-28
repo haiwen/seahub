@@ -27,6 +27,7 @@ GROUP_URL = BASE_URL + u'/api2/group/'
 GROUPS_URL = BASE_URL + u'/api2/groups/'
 GROUPMSGS_URL = BASE_URL + u'/api2/group/msgs/'
 GROUPMSGS_NREPLY_URL = BASE_URL + u'/api2/new_replies/'
+AVATAR_BASE_URL = BASE_URL + u'/api2/avatars/'
 
 STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
 
