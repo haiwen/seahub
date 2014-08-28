@@ -7,7 +7,7 @@ ACCOUNT_PASSWORD = r'test_test'
 ACCOUNT_PASSWORD2 = r'test_test2'
 ACCOUNT_URL = ACCOUNTS_URL + ACCOUNT_USERNAME + u'/'
 
-class AccountApiTestCase(unittest.TestCase):
+class AccountsApiTestCase(unittest.TestCase):
 
   def setUp(self):
     self.requests = get_authed_instance()
