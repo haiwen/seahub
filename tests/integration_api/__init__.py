@@ -32,8 +32,13 @@ AVATAR_BASE_URL = BASE_URL + u'/api2/avatars/'
 DEFAULT_LIBRARY_URL = BASE_URL + u'/api2/default-repo/'
 LIBRARIES_URL = BASE_URL + u'/api2/repos/'
 VIRTUAL_LIBRARIES_URL = BASE_URL + u'/api2/virtual-repos/'
-
 STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
+SHARED_LINKS_URL = BASE_URL + u'/api2/shared-links/'
+SHARED_LIBRARIES_URL = BASE_URL + u'/api2/shared-repos/'
+BESHARED_LIBRARIES_URL = BASE_URL + u'/api2/beshared-repos/'
+SHARED_FILES_URL = BASE_URL + u'/api2/shared-files/'
+F_URL = BASE_URL + u'/api2/f/'
+S_F_URL = BASE_URL + u'/api2/s/f/'
 
 MISC_SEARCH_URL = BASE_URL + u'/api2/search/'
 MISC_LIST_GROUP_AND_CONTACTS_URL = BASE_URL + u'/api2/groupandcontacts/'
@@ -57,6 +62,10 @@ if (_token != None):
 else:
   _instance = None
 
+_nuked_instance = requests.Session()
+
 def get_authed_instance():
   return _instance
 
+def get_anonymous_instance():
+  return _nuked_instance

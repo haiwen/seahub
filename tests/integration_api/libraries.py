@@ -2,7 +2,7 @@ from integration_api import LIBRARIES_URL, DEFAULT_LIBRARY_URL
 from integration_api import VIRTUAL_LIBRARIES_URL, get_authed_instance
 import unittest
 
-class LibraryApiTestCase(unittest.TestCase):
+class LibrariesApiTestCase(unittest.TestCase):
 
   def setUp(self):
     self.requests = get_authed_instance()
