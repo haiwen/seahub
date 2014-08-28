@@ -48,7 +48,7 @@ You've got {{num}} new notices on {{ site_name }}:
                     {% if notice.grp_reply_msg %}
                     <div class="detail">
                         {% if notice.grpmsg_topic %}
-                        <p class="topic">{{notice.grpmsg_topic}}</p>
+                        <p class="topic">{{notice.grpmsg_topic|truncatechars:45}}</p>
                         {% endif %}
                         <p>{{notice.grp_reply_msg}}</p>
                     </div>
