@@ -17,6 +17,7 @@ def suite():
   from integration_api.avatar import AvatarApiTestCase
 
   from integration_api.library import LibraryApiTestCase
+  from integration_api.files import FilesApiTestCase
   from integration_api.starredfiles import StarredFilesApiTestCase
   from integration_api.misc import MiscApiTestCase
   integration_api_suite = unittest.TestSuite((\
@@ -29,7 +30,8 @@ def suite():
     unittest.makeSuite(GroupMsgsApiTestCase),
     unittest.makeSuite(AvatarApiTestCase),
     unittest.makeSuite(LibraryApiTestCase),
-    #unittest.makeSuite(StarredFilesApiTestCase),
+    unittest.makeSuite(FilesApiTestCase),
+    unittest.makeSuite(StarredFilesApiTestCase),
     unittest.makeSuite(MiscApiTestCase),
     ))
 
