@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from common.common import BASE_URL, USERNAME, PASSWORD
+from common.common import BASE_URL, USERNAME, PASSWORD, IS_PRO
 import requests, re
 
 BASE_URL = BASE_URL
@@ -30,6 +30,9 @@ GROUPMSGS_NREPLY_URL = BASE_URL + u'/api2/new_replies/'
 AVATAR_BASE_URL = BASE_URL + u'/api2/avatars/'
 
 STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
+
+MISC_LIST_GROUP_AND_CONTACTS_URL = BASE_URL + u'/api2/groupandcontacts/'
+MISC_LIST_EVENTS_URL = BASE_URL + u'/api2/events/'
 
 META_AUTH = {'username': USERNAME, 'password': PASSWORD}
 
