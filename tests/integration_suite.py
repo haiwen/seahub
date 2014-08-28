@@ -14,6 +14,7 @@ def suite():
   from integration_api.groups import GroupsApiTestCase
   from integration_api.gmembers import GroupMemeberApiTestCase
   from integration_api.groupmsgs import GroupMsgsApiTestCase
+  from integration_api.avatar import AvatarApiTestCase
 
   from integration_api.starredfiles import StarredFilesApiTestCase
   integration_api_suite = unittest.TestSuite((\
@@ -24,6 +25,7 @@ def suite():
     unittest.makeSuite(GroupsApiTestCase),
     unittest.makeSuite(GroupMemeberApiTestCase),
     unittest.makeSuite(GroupMsgsApiTestCase),
+    unittest.makeSuite(AvatarApiTestCase),
     #unittest.makeSuite(StarredFilesApiTestCase),
     ))
 
