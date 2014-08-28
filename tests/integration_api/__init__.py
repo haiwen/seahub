@@ -29,8 +29,13 @@ GROUPMSGS_URL = BASE_URL + u'/api2/group/msgs/'
 GROUPMSGS_NREPLY_URL = BASE_URL + u'/api2/new_replies/'
 AVATAR_BASE_URL = BASE_URL + u'/api2/avatars/'
 
+DEFAULT_LIBRARY_URL = BASE_URL + u'/api2/default-repo/'
+LIBRARIES_URL = BASE_URL + u'/api2/repos/'
+VIRTUAL_LIBRARIES_URL = BASE_URL + u'/api2/virtual-repos/'
+
 STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
 
+MISC_SEARCH_URL = BASE_URL + u'/api2/search/'
 MISC_LIST_GROUP_AND_CONTACTS_URL = BASE_URL + u'/api2/groupandcontacts/'
 MISC_LIST_EVENTS_URL = BASE_URL + u'/api2/events/'
 
