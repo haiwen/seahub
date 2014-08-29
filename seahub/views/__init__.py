@@ -1475,6 +1475,7 @@ def view_shared_upload_link(request, token):
     return render_to_response('view_shared_upload_link.html', {
             'repo': repo,
             'token': token,
+            'uploadlink': uploadlink,
             'path': path,
             'username': username,
             'dir_name': dir_name,
