@@ -6,7 +6,7 @@ class PingApiTestCase(unittest.TestCase):
   def setUp(self):
     self.res = requests.get(PING_URL)
 
-  def testPingApi(self):
+  def test_ping_api(self):
     self.assertEqual(self.res.status_code, 200)
     self.assertRegexpMatches(self.res.text, u'"pong"')
 

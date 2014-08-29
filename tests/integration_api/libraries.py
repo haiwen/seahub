@@ -8,7 +8,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testGetDefaultLibraryApi(self):
+  def test_get_default_library_api(self):
     res = self.requests.get(DEFAULT_LIBRARY_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -16,7 +16,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['repo_id'])
     self.assertIsNotNone(json['exists'])
 
-  def testCreateDefaultLibraryApi(self):
+  def test_create_default_library_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -26,7 +26,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     res = self.requests.get(DEFAULT_LIBRARY_URL)
     self.assertEqual(res.json()['exists'], True)
 
-  def testListLibrariesApi(self):
+  def test_list_libraries_api(self):
     res = self.requests.get(LIBRARIES_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -45,7 +45,7 @@ class LibrariesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(repo['desc'])
       self.assertIsNotNone(repo['root'])
 
-  def testGetLibraryInfoApi(self):
+  def test_get_library_info_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     repo_url = LIBRARIES_URL + repo_id + u'/'
@@ -64,7 +64,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(repo['type'])
     #self.assertIsNotNone(repo['password_need']) #allow null here
 
-  def testGetLibraryOwnerApi(self):
+  def test_get_library_owner_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     repo_owner_url = LIBRARIES_URL + repo_id + u'/owner/'
@@ -74,7 +74,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json)
     self.assertIsNotNone(json['owner'])
 
-  def testGetLibraryHistoryApi(self):
+  def test_get_library_history_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     repo_history_url = LIBRARIES_URL + repo_id + u'/history/'
@@ -99,7 +99,7 @@ class LibrariesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(commit['conflict'])
       #self.assertIsNotNone(commit['second_parent_id']) #allow null
 
-  def testCreateLibraryApi(self):
+  def test_create_library_api(self):
     data = { 'name': 'test' }
     res = self.requests.post(LIBRARIES_URL, data=data)
     self.assertEqual(res.status_code, 200)
@@ -118,7 +118,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['email'])
     self.assertIsNotNone(json['repo_name'])
 
-  def testRemoveLibraryApi(self):
+  def test_remove_library_api(self):
     data = { 'name': 'test' }
     res = self.requests.post(LIBRARIES_URL, data=data)
     repo_id = res.json()['repo_id']
@@ -127,7 +127,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, '"success"')
 
-  def testCheckOrCreateSubLibraryApi(self):
+  def test_check_or_create_sub_library_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     params = { 'p': '/', 'name': 'sub_lib' }
@@ -138,7 +138,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json)
     self.assertIsNotNone(json['sub_repo_id'])
 
-  def testEncrptyOrDecrypyLibraryApi(self):
+  def test_encrpty_or_decrypy_library_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     repo_url = LIBRARIES_URL + repo_id + u'/'
@@ -147,7 +147,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, '"success"')
 
-  def testPublicizeLibraryApi(self):
+  def test_publicize_library_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     publicize_repo_url = LIBRARIES_URL + repo_id + u'/public/'
@@ -156,7 +156,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(res.json())
     self.assertEqual(res.json()['success'], True)
 
-  def testDepublicizeLibraryApi(self):
+  def test_depublicize_library_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     publicize_repo_url = LIBRARIES_URL + repo_id + u'/public/'
@@ -166,7 +166,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(res.json())
     self.assertEqual(res.json()['success'], True)
 
-  def testFetchLibraryDownloadInfoApi(self):
+  def test_fetch_library_download_info_api(self):
     res = self.requests.post(DEFAULT_LIBRARY_URL)
     repo_id = res.json()['repo_id']
     download_info_repo_url = LIBRARIES_URL + repo_id + u'/download-info/'
@@ -184,7 +184,7 @@ class LibrariesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['relay_id'])
     self.assertIsNotNone(json['email'])
 
-  def testListVirtualLibrariesApi(self):
+  def test_list_virtual_libraries_api(self):
     res = self.requests.get(VIRTUAL_LIBRARIES_URL)
     json = res.json()
     self.assertIsNotNone(json)

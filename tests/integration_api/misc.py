@@ -8,7 +8,7 @@ class MiscApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testListGroupAndContactsApi(self):
+  def test_list_group_and_contacts_api(self):
     res = self.requests.get(MISC_LIST_GROUP_AND_CONTACTS_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -20,7 +20,7 @@ class MiscApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['gmsgnum'])
     self.assertIsNotNone(json['newreplies'])
 
-  def testSearchApi(self):
+  def test_search_api(self):
     # if not pro, skip this
     if (IS_PRO == False):
       return
@@ -39,7 +39,7 @@ class MiscApiTestCase(unittest.TestCase):
       self.assertIsNotNone(result['fullpath'])
       self.assertIsNotNone(result['size'])
 
-  def testListEventsApi(self):
+  def test_list_events_api(self):
     # if not pro, skip this
     if (IS_PRO == False):
       return

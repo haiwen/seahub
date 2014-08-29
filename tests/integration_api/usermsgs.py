@@ -8,7 +8,7 @@ class UserMsgsApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testListUserMsgsApi(self):
+  def test_list_user_msgs_api(self):
     res = self.requests.get(USERMSGS_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -17,7 +17,7 @@ class UserMsgsApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['next_page'])
     self.assertIsNotNone(json['msgs'])
 
-  def testReplyUserMsgApi(self):
+  def test_reply_user_msg_api(self):
     data = { 'id': '0', 'message': 'test' }
     res = self.requests.post(USERMSGS_URL, data=data)
     self.assertEqual(res.status_code, 200)
@@ -25,7 +25,7 @@ class UserMsgsApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json)
     self.assertIsNotNone(json['msgid'])
 
-  def testCountUnseenMsgsApi(self):
+  def test_count_unseen_msgs_api(self):
     data = { 'id': '0', 'message': 'test' }
     self.requests.post(USERMSGS_URL, data=data)
     res = self.requests.get(USERMSGS_COUNT_URL, data=data)

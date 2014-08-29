@@ -15,7 +15,7 @@ class GroupMsgsApiTestCase(unittest.TestCase):
     self.gmurl = GROUPMSGS_URL + str(self.gid) + u'/'
     self.gmurl_ = GROUP_URL + str(self.gid) + u'/msg/'
 
-  def testListGroupMsgsApi(self):
+  def test_list_group_msgs_api(self):
     res = self.requests.get(self.gmurl)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -23,14 +23,14 @@ class GroupMsgsApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['next_page'])
     self.assertIsNotNone(json['msgs'])
 
-  def testPostGroupMsgApi(self):
+  def test_post_group_msg_api(self):
     #repo_id and path is not tested
     data = { 'message': 'test message' }
     res = self.requests.post(self.gmurl, data=data)
     self.assertEqual(res.status_code, 200)
     self.assertIsNotNone(res.json()['msgid'])
 
-  def testReplyGroupMsgApi(self):
+  def test_reply_group_msg_api(self):
     data = { 'message': 'test message' }
     res = self.requests.post(self.gmurl, data=data)
     msgid = res.json()['msgid']
@@ -38,7 +38,7 @@ class GroupMsgsApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertIsNotNone(res.json()['msgid'])
 
-  def testGetGroupMsgDetailApi(self):
+  def test_get_group_msg_detail_api(self):
     data = { 'message': 'test message' }
     res = self.requests.post(self.gmurl, data=data)
     msgid = res.json()['msgid']
@@ -54,7 +54,7 @@ class GroupMsgsApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['msg'])
     self.assertIsNotNone(json['nickname'])
 
-  def testNewRepliesGroupMsgApi(self):
+  def test_new_replies_group_msg_api(self):
     data = { 'message': 'test message' }
     res = self.requests.post(self.gmurl, data=data)
     res = self.requests.get(GROUPMSGS_NREPLY_URL)

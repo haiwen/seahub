@@ -19,14 +19,14 @@ class GroupMemeberApiTestCase(unittest.TestCase):
   def tearDown(self):
     self.requests.delete(ACCOUNTS_URL + self.name + u'/')
 
-  def testAddGroupMemberApi(self):
+  def test_add_group_member_api(self):
     data = { 'user_name': self.name }
     res = self.requests.put(self.gurl, data=data)
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.json()['success'], True)
     self.requests.delete(self.gurl, data=data)
 
-  def testRemoveGroupMemberApi(self):
+  def test_remove_group_member_api(self):
     data = { 'user_name': self.name }
     self.requests.put(self.gurl, data=data)
     res = self.requests.delete(self.gurl, data=data)
