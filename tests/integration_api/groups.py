@@ -8,7 +8,7 @@ class GroupsApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testListGroupsApi(self):
+  def test_list_groups_api(self):
     data = { 'group_name': 'demo group' }
     self.requests.put(GROUPS_URL, data=data)
     res = self.requests.get(GROUPS_URL)
@@ -26,7 +26,7 @@ class GroupsApiTestCase(unittest.TestCase):
       self.assertIsNotNone(group['id'])
       self.assertIsNotNone(group['name'])
 
-  def testAddGroupApi(self):
+  def test_add_group_api(self):
     # We cannot create two groups which have the same group name or delete group
     # Hack it by creating group with a random name, hope it won't break ci
     data = { 'group_name': randomword(16) }

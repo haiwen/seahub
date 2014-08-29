@@ -7,7 +7,7 @@ class AuthPingApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testAuthPingApi(self):
+  def test_auth_ping_api(self):
     res = self.requests.get(AUTH_PING_URL)
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, u'"pong"')

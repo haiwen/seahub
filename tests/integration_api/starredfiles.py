@@ -12,13 +12,13 @@ class StarredFilesApiTestCase(unittest.TestCase):
     self.rurl = LIBRARIES_URL + str(self.rid) + u'/'
     self.furl = self.rurl + u'file/'
 
-  def testListStarredFilesApi(self):
+  def test_list_starred_files_api(self):
     res = self.requests.get(STARREDFILES_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
     self.assertIsNotNone(json)
 
-  def testStarFileApi(self):
+  def test_star_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + '?p=/test.c'
     self.requests.post(furl, data=data)
@@ -27,7 +27,7 @@ class StarredFilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 201)
     self.assertEqual(res.text, u'"success"')
 
-  def testUnStarFileApi(self):
+  def test_un_star_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + '?p=/test.c'
     self.requests.post(furl, data=data)

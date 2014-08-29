@@ -21,7 +21,7 @@ class SharesApiTestCase(unittest.TestCase):
     res = self.requests.put(GROUPS_URL, data=data)
     self.gid = res.json()['group_id']
 
-  def testListFileSharedLinksApi(self):
+  def test_list_file_shared_links_api(self):
     res = self.requests.get(SHARED_LINKS_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -35,7 +35,7 @@ class SharesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(fileshare['view_cnt'])
       self.assertIsNotNone(fileshare['path'])
 
-  def testCreateFileSharedLinkApi(self):
+  def test_create_file_shared_link_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test_create_shared_link_f'
     self.requests.post(furl, data=data)
@@ -46,7 +46,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertRegexpMatches(res.headers['Location'], \
             r'http(.*)/f/(\w{10,10})/')
 
-  def testCreateDirectorySharedLinkApi(self):
+  def test_create_directory_shared_link_api(self):
     data = { 'operation': 'mkdir' }
     durl = self.durl + u'?p=/test_create_shared_link_d'
     self.requests.post(durl, data=data)
@@ -58,7 +58,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertRegexpMatches(res.headers['Location'], \
             r'http(.*)/d/(\w{10,10})/')
 
-  def testRemoveSharedLinkApi(self):
+  def test_remove_shared_link_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test_remove_shared_link_f'
     self.requests.post(furl, data=data)
@@ -72,7 +72,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, u'{}')
 
-  def testGetSharedFileUrlApi(self):
+  def test_get_shared_file_url_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test_visit_shared_link_f'
     self.requests.post(furl, data=data)
@@ -86,7 +86,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/files/\w{8,8}/(.*)"')
 
-  def testGetSharedFileDetailApi(self):
+  def test_get_shared_file_detail_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test_visitd_shared_link_f'
     self.requests.post(furl, data=data)
@@ -108,7 +108,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['mtime'])
     self.assertIsNotNone(json['id'])
 
-  def testGetPrivateSharedFileUrlApi(self):
+  def test_get_private_shared_file_url_api(self):
     if True: #todo: override this
       return
     data = { 'operation': 'create' }
@@ -124,7 +124,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/files/\w{8,8}/(.*)"')
 
-  def testGetPrivateSharedFileDetailApi(self):
+  def test_get_private_shared_file_detail_api(self):
     if True: #todo: override this
       return
     data = { 'operation': 'create' }
@@ -148,7 +148,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['mtime'])
     self.assertIsNotNone(json['id'])
 
-  def testRemoveSharedFileApi(self):
+  def test_remove_shared_file_api(self):
     if True: #todo: override this
       return
     data = { 'operation': 'create' }
@@ -164,7 +164,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, u'{}')
 
-  def testListSharedLibrariesApi(self):
+  def test_list_shared_libraries_api(self):
     res = self.requests.get(SHARED_LIBRARIES_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -180,7 +180,7 @@ class SharesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(repo['group_id'])
       self.assertIsNotNone(repo['repo_name'])
 
-  def testListBesharedLibrariesApi(self):
+  def test_list_beshared_libraries_api(self):
     res = self.requests.get(BESHARED_LIBRARIES_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -197,7 +197,7 @@ class SharesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(repo['repo_name'])
       self.assertIsNotNone(repo['is_virtual'])
 
-  def testShareLibraryApi(self):
+  def test_share_library_api(self):
     data = { 'share_type': 'group', 'user': USERNAME, 'group_id': self.gid , \
             'permission': 'rw' }
     slurl = SHARED_LIBRARIES_URL + str(self.rid) + u'/'
@@ -205,7 +205,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, u'"success"')
 
-  def testUnShareLibraryApi(self):
+  def test_un_share_library_api(self):
     data = { 'share_type': 'group', 'user': USERNAME, 'group_id': self.gid , \
             'permission': 'rw' }
     slurl = SHARED_LIBRARIES_URL + str(self.rid) + u'/'
@@ -215,7 +215,7 @@ class SharesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, u'"success"')
 
-  def testListSharedFilesApi(self):
+  def test_list_shared_files_api(self):
     res = self.requests.get(SHARED_FILES_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()

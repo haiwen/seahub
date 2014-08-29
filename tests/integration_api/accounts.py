@@ -13,7 +13,7 @@ class AccountsApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testCheckAccountInfoApi(self):
+  def test_check_account_info_api(self):
     res = self.requests.get(ACCOUNT_INFO_URL)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -22,7 +22,7 @@ class AccountsApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['total'])
     self.assertIsNotNone(json['usage'])
 
-  def testListAccountsApi(self):
+  def test_list_accounts_api(self):
     res = self.requests.get(ACCOUNTS_URL)
     self.assertEqual(res.status_code, 200)
     self.assertIsNotNone(res.json())
@@ -32,14 +32,14 @@ class AccountsApiTestCase(unittest.TestCase):
         found = True
     self.assertEqual(found, True)
 
-  def testCreateAccountApi(self):
+  def test_create_account_api(self):
     data = { 'password': ACCOUNT_PASSWORD }
     res = self.requests.put(ACCOUNT_URL, data=data)
     self.assertEqual(res.status_code, 201)
     self.assertEqual(res.text, u'"success"')
     self.requests.delete(ACCOUNT_URL)
 
-  def testUpdateAccountApi(self):
+  def test_update_account_api(self):
     data = { 'password': ACCOUNT_PASSWORD }
     self.requests.put(ACCOUNT_URL, data=data)
     data = { 'password': ACCOUNT_PASSWORD2, 'is_staff': 1,
@@ -50,7 +50,7 @@ class AccountsApiTestCase(unittest.TestCase):
     self.requests.delete(ACCOUNT_URL)
     #TODO: verify updated account
 
-  def testDeleteAccountApi(self):
+  def test_delete_account_api(self):
     data = { 'password': ACCOUNT_PASSWORD }
     res = self.requests.put(ACCOUNT_URL, data=data)
     res = self.requests.delete(ACCOUNT_URL)

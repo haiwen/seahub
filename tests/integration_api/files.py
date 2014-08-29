@@ -12,14 +12,14 @@ class FilesApiTestCase(unittest.TestCase):
     self.rurl = LIBRARIES_URL + str(self.rid) + u'/'
     self.furl = self.rurl + u'file/'
 
-  def testCreateFileApi(self):
+  def test_create_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test.c'
     res = self.requests.post(furl, data=data)
     self.assertEqual(res.status_code, 201)
     self.assertEqual(res.text, '"success"')
 
-  def testRenameFileApi(self):
+  def test_rename_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test2.c'
     res = self.requests.post(furl, data=data)
@@ -28,7 +28,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)"')
 
-  def testRemoveFileApi(self):
+  def test_remove_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test2.c'
     res = self.requests.post(furl, data=data)
@@ -36,7 +36,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, '"success"')
 
-  def testMoveFileApi(self):
+  def test_move_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test2.c'
     res = self.requests.post(furl, data=data)
@@ -46,7 +46,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, '"success"')
 
-  def testCopyFileApi(self):
+  def test_copy_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test2.c'
     res = self.requests.post(furl, data=data)
@@ -58,7 +58,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, '"success"')
 
-  def testDownloadFileApi(self):
+  def test_download_file_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test.c'
     self.requests.post(furl, data=data)
@@ -66,7 +66,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/test.c"')
 
-  def testDownloadFileFromHistoryApi(self):
+  def test_download_file_from_history_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + '?p=/test.c'
     self.requests.post(furl, data=data)
@@ -81,7 +81,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/test.c"')
 
-  def testGetFileDetailApi(self):
+  def test_get_file_detail_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + '?p=/test.c'
     self.requests.post(furl, data=data)
@@ -96,7 +96,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['name'])
     self.assertIsNotNone(json['size'])
 
-  def testGetFileHistoryApi(self):
+  def test_get_file_history_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + '?p=/test.c'
     self.requests.post(furl, data=data)
@@ -122,19 +122,19 @@ class FilesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(commit['conflict'])
       #self.assertIsNotNone(commit['second_parent_id']) #allow null
 
-  def testGetUploadLinkApi(self):
+  def test_get_upload_link_api(self):
     upload_url = self.rurl + u'upload-link/'
     res = self.requests.get(upload_url)
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/\w{8,8}"')
 
-  def testGetUpdatainkApi(self):
+  def test_get_updataink_api(self):
     update_url = self.rurl + u'update-link/'
     res = self.requests.get(update_url)
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/update-api/\w{8,8}"')
 
-  def testUploadApi(self):
+  def test_upload_api(self):
     furl = self.furl + u'?p=/test_upload.c'
     res = self.requests.delete(furl)
     upload_url = self.rurl + u'upload-link/'
@@ -148,7 +148,7 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'\w{40,40}')
 
-  def testUpdateApi(self):
+  def test_update_api(self):
     data = { 'operation': 'create' }
     furl = self.furl + u'?p=/test_update.c'
     res = self.requests.post(furl, data=data)
@@ -164,13 +164,13 @@ class FilesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'\w{40,40}')
 
-  def testGetUploadBlocksLinkApi(self):
+  def test_get_upload_blocks_link_api(self):
     upload_blks_url = self.rurl + u'upload-blks-link/'
     res = self.requests.get(upload_blks_url)
     self.assertEqual(res.status_code, 200)
     self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/\w{8,8}"')
 
-  def testGetUpdateBlocksLinkApi(self):
+  def test_get_update_blocks_link_api(self):
     update_blks_url = self.rurl + u'update-blks-link/'
     res = self.requests.get(update_blks_url)
     self.assertEqual(res.status_code, 200)

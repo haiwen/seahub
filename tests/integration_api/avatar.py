@@ -9,7 +9,7 @@ class AvatarApiTestCase(unittest.TestCase):
     self.requests = get_authed_instance()
     self.assertIsNotNone(self.requests)
 
-  def testUserAvatarApi(self):
+  def test_user_avatar_api(self):
     res = self.requests.get(AVATAR_BASE_URL + u'user/' + USERNAME + u'/resized/80/')
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -18,7 +18,7 @@ class AvatarApiTestCase(unittest.TestCase):
     self.assertIsNotNone(json['is_default'])
     self.assertIsNotNone(json['mtime'])
 
-  def testGroupAvatarApi(self):
+  def test_group_avatar_api(self):
     gname = randomword(16)
     data = { 'group_name': gname }
     res = self.requests.put(GROUPS_URL, data=data)

@@ -8,10 +8,10 @@ class LoginTestCase(unittest.TestCase):
     self.assertIsNotNone(self.browser)
     self.addCleanup(self.browser.quit)
 
-  def testLogin(self):
+  def test_login(self):
     self.assertRegexpMatches(self.browser.current_url, HOME_URL)
 
-  def testLogout(self):
+  def test_logout(self):
     myinfo_bar = self.browser.find_element_by_css_selector('#my-info')
     logout_input = self.browser.find_element_by_css_selector('a#logout')
     myinfo_bar.click()
