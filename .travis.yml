@@ -3,7 +3,7 @@ before_install:
   # build/init/start ccnet-server/seafile-server
   - git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
   - cd /tmp/seafile-test-deploy && ./bootstrap.sh && cd -
-  # install phantomjs/casperjs
+  # install phantomjs
   - ./tests/install-deps.sh
 script:
   - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
@@ -11,5 +11,6 @@ env:
   - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
 install:
   - pip install -r requirements.txt --allow-all-external --allow-unverified Djblets --allow-unverified PIL
+  - pip install -r test-requirements.txt
 notifications:
   email: false

@@ -1,5 +1,5 @@
-from integration_api import MISC_LIST_EVENTS_URL, MISC_LIST_GROUP_AND_CONTACTS_URL
-from integration_api import get_authed_instance, IS_PRO, MISC_SEARCH_URL
+from apitestbase import MISC_LIST_EVENTS_URL, MISC_LIST_GROUP_AND_CONTACTS_URL
+from apitestbase import get_authed_instance, IS_PRO, MISC_SEARCH_URL
 import unittest
 
 class MiscApiTestCase(unittest.TestCase):

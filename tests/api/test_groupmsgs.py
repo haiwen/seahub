@@ -1,5 +1,5 @@
-from integration_api import GROUPS_URL, GROUPMSGS_URL, GROUPMSGS_NREPLY_URL
-from integration_api import GROUP_URL, get_authed_instance
+from apitestbase import GROUPS_URL, GROUPMSGS_URL, GROUPMSGS_NREPLY_URL
+from apitestbase import GROUP_URL, get_authed_instance
 from common.utils import randomword
 import unittest
 

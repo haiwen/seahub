@@ -1,5 +1,5 @@
 from common.utils import randomword
-from integration_api import SHARED_LINKS_URL, LIBRARIES_URL, \
+from apitestbase import SHARED_LINKS_URL, LIBRARIES_URL, \
         DEFAULT_LIBRARY_URL, SHARED_LIBRARIES_URL, BESHARED_LIBRARIES_URL, \
         USERNAME, SHARED_FILES_URL, GROUPS_URL, F_URL, S_F_URL, \
         get_authed_instance, get_anonymous_instance

@@ -32,13 +32,13 @@ function init() {
 }
 
 function start_seahub() {
-    $PYTHON ./manage.py runserver 1>/dev/null &
+    $PYTHON ./manage.py runserver 1>/dev/null 2>&1 &
     sleep 5
 }
 
 function run_tests() {
     pushd tests
-    $PYTHON integration_suite.py
+    nosetests
     popd
 }
 

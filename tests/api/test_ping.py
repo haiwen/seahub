@@ -1,4 +1,4 @@
-from integration_api import PING_URL
+from apitestbase import PING_URL
 import requests, unittest
 
 class PingApiTestCase(unittest.TestCase):

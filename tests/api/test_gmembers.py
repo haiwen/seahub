@@ -1,4 +1,4 @@
-from integration_api import ACCOUNTS_URL, GROUPS_URL, get_authed_instance
+from apitestbase import ACCOUNTS_URL, GROUPS_URL, get_authed_instance
 from common.utils import randomword
 import unittest
 

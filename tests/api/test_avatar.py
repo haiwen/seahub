@@ -1,5 +1,5 @@
-from integration_api import AVATAR_BASE_URL, get_authed_instance
-from integration_api import GROUPS_URL, USERNAME
+from apitestbase import AVATAR_BASE_URL, get_authed_instance
+from apitestbase import GROUPS_URL, USERNAME
 from common.utils import randomword
 import unittest
 

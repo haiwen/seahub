@@ -1,5 +1,5 @@
-from integration_api import STARREDFILES_URL, get_authed_instance
-from integration_api import DEFAULT_LIBRARY_URL, LIBRARIES_URL
+from apitestbase import STARREDFILES_URL, get_authed_instance
+from apitestbase import DEFAULT_LIBRARY_URL, LIBRARIES_URL
 import unittest
 
 class StarredFilesApiTestCase(unittest.TestCase):

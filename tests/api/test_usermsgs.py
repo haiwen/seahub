@@ -1,5 +1,5 @@
-from integration_api import USERNAME, get_authed_instance
-from integration_api import USERMSGS_URL, USERMSGS_COUNT_URL
+from apitestbase import USERNAME, get_authed_instance
+from apitestbase import USERMSGS_URL, USERMSGS_COUNT_URL
 import unittest
 
 class UserMsgsApiTestCase(unittest.TestCase):

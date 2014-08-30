@@ -1,5 +1,5 @@
-from integration_api import ACCOUNTS_URL, ACCOUNT_INFO_URL, get_authed_instance
-from integration_api import USERNAME
+from apitestbase import ACCOUNTS_URL, ACCOUNT_INFO_URL, get_authed_instance
+from apitestbase import USERNAME
 import unittest
 
 ACCOUNT_USERNAME = u'test_tmp@test.com'

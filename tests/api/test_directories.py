@@ -1,4 +1,4 @@
-from integration_api import DEFAULT_LIBRARY_URL, get_authed_instance, \
+from apitestbase import DEFAULT_LIBRARY_URL, get_authed_instance, \
         LIBRARIES_URL, USERNAME
 import unittest
 

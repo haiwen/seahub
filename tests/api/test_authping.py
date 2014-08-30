@@ -1,4 +1,4 @@
-from integration_api import AUTH_PING_URL, get_authed_instance
+from apitestbase import AUTH_PING_URL, get_authed_instance
 import unittest
 
 class AuthPingApiTestCase(unittest.TestCase):

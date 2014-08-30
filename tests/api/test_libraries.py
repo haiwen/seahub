@@ -1,5 +1,5 @@
-from integration_api import LIBRARIES_URL, DEFAULT_LIBRARY_URL
-from integration_api import VIRTUAL_LIBRARIES_URL, get_authed_instance
+from apitestbase import LIBRARIES_URL, DEFAULT_LIBRARY_URL
+from apitestbase import VIRTUAL_LIBRARIES_URL, get_authed_instance
 import unittest
 
 class LibrariesApiTestCase(unittest.TestCase):
