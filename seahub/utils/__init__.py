@@ -508,7 +508,8 @@ if EVENTS_CONFIG_FILE:
         try:
             next_start = start
             while True:
-                events = _get_events_inner(ev_session, username, next_start, count)
+                events = _get_events_inner(ev_session, username, next_start,
+                                           count, org_id)
                 if not events:
                     break
 
@@ -539,7 +540,7 @@ if EVENTS_CONFIG_FILE:
                 e.commit.more_files = more_files_in_commit(e.commit)
         return valid_events, start + total_used
 
-    def _get_events_inner(ev_session, username, start, limit):
+    def _get_events_inner(ev_session, username, start, limit, org_id=None):
         '''Read events from seafevents database, and remove events that are
         no longer valid
 
@@ -548,8 +549,13 @@ if EVENTS_CONFIG_FILE:
         valid_events = []
         next_start = start
         while True:
-            events = seafevents.get_user_events(ev_session, username,
-                                                next_start, limit)
+            if org_id > 0:
+                events = seafevents.get_org_user_events(ev_session, org_id,
+                                                        username, next_start,
+                                                        limit)
+            else:
+                events = seafevents.get_user_events(ev_session, username,
+                                                    next_start, limit)
             if not events:
                 break
 
