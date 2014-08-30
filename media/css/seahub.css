@@ -572,6 +572,12 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur .traffic {
     background-position: 13px -1091px;
 }
+.side-tabnav-tabs .tab .org {
+    background-position: 11px -1209px;
+}
+.side-tabnav-tabs .tab-cur .org {
+    background-position: 11px -1247px;
+}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;
@@ -3116,11 +3122,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* org reg */
-#url-prefix {
-    display: inline-block;
+#org-url {
+    white-space: nowrap;
 }
-#url-prefix input {
-    width: 90px;
+#org-url-prefix {
+    width: 50px;
 }
 
 /* notice page */
