@@ -1,8 +1,8 @@
 {% load i18n %} {# for file/dir share #}
-    <div id="file-share" class="tab-popup hide">
+    <div id="file-share" class="hide">
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
-        <div id="file-share-tabs" class="tab-popup-tabs">
-            <ul class="tab-popup-tabs-nav">
+        <div id="file-share-tabs" class="left-right-tabs ovhd">
+            <ul class="left-right-tabs-nav fleft">
                 <li class="tab"><a href="#link-share" class="a">{% trans "Download Link" %}</a></li>
                 {% if user_perm == 'rw' %}
                 <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Upload Link" %}</a></li>{# for dir #}
@@ -15,8 +15,9 @@
                 {% endif %}
             </ul>
 
+            <div class="fright">
             {% if is_repo_owner %}
-            <div id="private-share">
+            <div id="private-share" class="tabs-panel">
                 <form id="private-share-form" method="post" action="{% url 'gen_private_file_share' repo.id %}">{% csrf_token %}
                     <select name="emails" class="w100" multiple="multiple"></select><br />
                     <input type="hidden" name="repo_id" value="" />
@@ -28,7 +29,7 @@
             </div>
             {% endif %}
 
-            <div id="link-share">
+            <div id="link-share" class="tabs-panel">
                 <div id="link-options">
                     <label class="checkbox-label">
                         <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
@@ -44,7 +45,7 @@
                 </div>
                 <button id="gen-link-btn" class="hide">{% trans "Generate"%}</button>
                 <div id="share-link-body" class="hide">
-                    <p><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
+                    <p style="margin-top:3px;"><span class="vam">{% trans 'Link: ' %}</span><input type="text" readonly="readonly" id="shared-link-text" class="vam" /></p>
                     <button id="send-link">{% trans 'Send' %}</button>
                     <button id="rm-shared-link">{% trans 'Delete' %}</button>
 
@@ -65,7 +66,7 @@
             </div>
 
             {% if user_perm == 'rw' %}
-            <div id="upload-link-share">
+            <div id="upload-link-share" class="tabs-panel">
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <div id="upload-link-options">
                     <label class="checkbox-label">
@@ -102,13 +103,14 @@
             {% endif %}
 
             {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-            <div id="syncable-share">
+            <div id="syncable-share" class="tabs-panel">
                 {% url 'share_repo' as repo_share_url %}
                 {% with post_url=repo_share_url %}
                 {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}
                 {% endwith %} 
             </div>
             {% endif %}
+        </div>
 
         </div>
     </div>

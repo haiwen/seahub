@@ -144,7 +144,6 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         form.data('dir-path', path).attr('data-name', name);
         $("#repo-share-tabs").tabs();
         $('#repo-share-tabs .ui-tabs-nav').css({'padding-left': '1.4em'});
-        $(window).resize(); // to reposition the popup, as this panel is 'taller'
     });
     {% endif %}
 

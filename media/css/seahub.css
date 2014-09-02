@@ -452,6 +452,34 @@ textarea:-moz-placeholder {/* for FF */
 .ui-tabs { position: relative; padding: .2em; zoom: 1; }
 .ui-tabs .ui-tabs-panel { display:block; padding: 1em 1.4em; }
 .ui-tabs .ui-tabs-hide { display:none; }
+
+/**** left-right-tabs ****/
+.left-right-tabs {
+    padding:0;
+}
+.left-right-tabs-nav {
+    margin-right:15px;
+}
+.left-right-tabs-nav a {
+    display:block;
+    padding:5px 4px;
+    border-radius:3px;
+    color:#747476;
+    font-size:14px;
+}
+.left-right-tabs-nav a:hover {
+    text-decoration:none;
+    background:#feefb8;
+}
+.left-right-tabs-nav .ui-state-active a,
+.left-right-tabs-nav .ui-state-active a:hover {
+    background:#feac74;
+    color:#fff;
+}
+.left-right-tabs .tabs-panel {
+    padding-top:0;
+    min-width:400px;
+}
 /**** side-tabnav ****/
 .side-textnav .hd,
 .side-info .hd {
@@ -1960,9 +1988,6 @@ textarea:-moz-placeholder {/* for FF */
 #mods-enable-form {
     width:266px;
 }
-#file-share .tip {
-    max-width: 364px;
-}
 #email_or_group,
 #added-member-name {
     width:98.5%;
@@ -1971,6 +1996,17 @@ textarea:-moz-placeholder {/* for FF */
     width:98.5%;
     height:80px;
     padding:2px;
+}
+/* file/dir share popup */
+#file-share {
+    padding:15px;
+    min-height:200px;
+}
+#file-share .hd {
+    margin:0 0 8px 4px;
+}
+#file-share .tip {
+    max-width:400px;
 }
 /* group-join-form */
 #id_group_join_msg {
