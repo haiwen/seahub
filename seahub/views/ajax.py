@@ -501,7 +501,7 @@ def rename_dirent(request, repo_id):
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
 
-    return HttpResponse(json.dumps({'success': True}),
+    return HttpResponse(json.dumps({'success': True, 'newname': newname}),
                         content_type=content_type)
 
 @login_required_ajax    

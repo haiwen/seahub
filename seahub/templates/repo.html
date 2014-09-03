@@ -1677,6 +1677,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         post_data['newname'] = new_name;
         after_op_success = function(data) {
             $.modal.close();
+            new_name = data['newname'];
             op_obj.attr('data-name', new_name).data('time', new Date().getTime()/1000);
             updateCmt();
 
@@ -1691,13 +1692,21 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             if (op_obj.attr('class') == 'dir-item') {
                 dld_link = $('.dir-download', op_obj), dld_href = dld_link.attr('href'); 
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(path+new_name));
-                $('.dir-share', op_obj).data('link', '').data('token', '');
+                $('.dir-share', op_obj).attr({
+                        'data-link':'',
+                        'data-token':'',
+                        'data-upload-link':'',
+                        'data-upload-token':''
+                        });
             } else {
-                $('.file-star', op_obj).attr('title', "{% trans "unstarred" %}").attr('class', 'icon-star-empty file-star').attr('data-status', 'unstarred');
+                $('.file-star', op_obj).attr({
+                    'title': "{% trans "unstarred" %}",
+                    'class': 'icon-star-empty file-star',
+                    'data-status': 'unstarred'
+                    });
                 dld_link = $('.file-download', op_obj), dld_href = dld_link.attr('href'); 
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?file_name=' + e(new_name) + '&op=download');
-                $('.file-share', op_obj).data('link', '').data('token', '');
-
+                $('.file-share', op_obj).attr({'data-link':'', 'data-token':''});
                 var file_history = $('.file-history', op_obj), fh_href = file_history.attr('href');
                 file_history.attr('href', fh_href.substr(0, fh_href.indexOf('?')) + '?p=' + e(path+new_name));
             }
@@ -1985,7 +1994,7 @@ window.onload = function() {
     setTimeout(function () {
         if (window.history.pushState) {
             window.onpopstate = function(event) {
-                $('#cur-dir-name').after(' ' + loading_icon);
+                $('.path').append(' ' + loading_icon);
                 reqDirData('{% url 'repo_dir_data' repo.id %}' + location.search);
             }
         }
