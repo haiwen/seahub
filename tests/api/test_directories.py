@@ -12,7 +12,7 @@ class DirectoriesApiTestCase(unittest.TestCase):
     self.rurl = LIBRARIES_URL + str(self.rid) + u'/'
     self.durl = self.rurl + u'dir/'
 
-  def test_list_directory_api(self):
+  def test_list_directory(self):
     res = self.requests.get(self.durl)
     self.assertEqual(res.status_code, 200)
     json = res.json()
@@ -23,14 +23,14 @@ class DirectoriesApiTestCase(unittest.TestCase):
       self.assertIsNotNone(directory['name'])
       #self.assertIsNotNone(directory['size']) #allow null
 
-  def test_create_directory_api(self):
+  def test_create_directory(self):
     data = { 'operation': 'mkdir' }
     durl = self.durl + u'?p=/test'
     res = self.requests.post(durl, data=data)
     self.assertEqual(res.status_code, 201)
     self.assertEqual(res.text, u'"success"')
 
-  def test_remove_directory_api(self):
+  def test_remove_directory(self):
     data = { 'operation': 'mkdir' }
     durl = self.durl + u'?p=/test_dir_remove'
     res = self.requests.post(durl, data=data)
@@ -38,7 +38,7 @@ class DirectoriesApiTestCase(unittest.TestCase):
     self.assertEqual(res.status_code, 200)
     self.assertEqual(res.text, u'"success"')
 
-  def test_download_directory_api(self):
+  def test_download_directory(self):
     data = { 'operation': 'mkdir' }
     durl = self.durl + u'?p=/test_dir_download'
     self.requests.post(durl, data=data)
@@ -48,7 +48,7 @@ class DirectoriesApiTestCase(unittest.TestCase):
     self.assertRegexpMatches(res.text,  \
             r'"http(.*)/files/\w{8,8}/test_dir_download"')
 
-  def test_share_directory_api(self):
+  def test_share_directory(self):
     data = { 'operation': 'mkdir' }
     durl = self.durl + u'?p=/test_dir_share'
     self.requests.post(durl, data=data)

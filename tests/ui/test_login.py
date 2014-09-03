@@ -1,8 +1,7 @@
+import unittest
 from common.common import BASE_URL, USERNAME, PASSWORD
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
-
-import unittest
 
 LOGIN_URL = BASE_URL + u'/accounts/login/'
 HOME_URL = BASE_URL + u'/home/my/'
@@ -37,6 +36,3 @@ class LoginTestCase(unittest.TestCase):
     myinfo_bar.click()
     logout_input.click()
     self.assertRegexpMatches(self.browser.current_url, LOGOUT_URL)
-
-if __name__ == '__main__':
-  unittest.main(verbosity=2)

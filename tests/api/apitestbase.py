@@ -1,9 +1,14 @@
+import requests
+import re
+import unittest
+from nose.tools import assert_equal # pylint: disable=E0611
+
 from common.common import BASE_URL, USERNAME, PASSWORD, IS_PRO
-import requests, re
+from common.utils import apiurl
 
 BASE_URL = BASE_URL
-PING_URL = BASE_URL + u'/api2/ping/'
-TOKEN_URL = BASE_URL + u'/api2/auth-token/'
+PING_URL = apiurl('/api2/ping/')
+TOKEN_URL = apiurl('/api2/auth-token/')
 AUTH_PING_URL = BASE_URL + u'/api2/auth/ping/'
 
 ACCOUNTS_URL = BASE_URL + u'/api2/accounts/'
@@ -31,28 +36,46 @@ MISC_SEARCH_URL = BASE_URL + u'/api2/search/'
 MISC_LIST_GROUP_AND_CONTACTS_URL = BASE_URL + u'/api2/groupandcontacts/'
 MISC_LIST_EVENTS_URL = BASE_URL + u'/api2/events/'
 
-META_AUTH = {'username': USERNAME, 'password': PASSWORD}
+class ApiTestCase(unittest.TestCase):
+    _token = None
+
+    def get(self, *args, **kwargs):
+        self._req('GET', *args, **kwargs)
+
+    def post(self, *args, **kwargs):
+        self._req('POST', *args, **kwargs)
+
+    def put(self, *args, **kwargs):
+        self._req('PUT', *args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        self._req('DELETE', *args, **kwargs)
+
+    def _req(self, method, *args, **kwargs):
+        if self._token is None:
+            self._token = get_auth_token()
+
+        headers = kwargs.pop('headers', {})
+        headers.setdefault('Authorization', 'Token ' + self._token)
+        kwargs['headers'] = headers
+
+        resp = requests.request(method, *args, **kwargs)
+        expected = kwargs.pop('expected', 200)
+        if expected is not None:
+            if hasattr(expected, '__iter__'):
+                self.assertIn(resp.status_code, expected,
+                    "Expected http status in %s, received %s" % (expected,
+                        resp.status_code))
+            else:
+                self.assertEqual(resp.status_code, expected,
+                    "Expected http status %s, received %s" % (expected,
+                        resp.status_code))
+        return resp
 
 def get_auth_token():
-  res = requests.post(TOKEN_URL, data=META_AUTH)
-  if (res.status_code != 200):
-    return None
-  token = res.json()['token']
-  if (re.match(r'(\w){40,40}', token) == None):
-    return None
-  return token
-
-_token = get_auth_token()
-if (_token != None):
-  _instance = requests.Session()
-  _instance.headers.update({'Authorization': 'Token ' + _token})
-else:
-  _instance = None
-
-_nuked_instance = requests.Session()
-
-def get_authed_instance():
-  return _instance
-
-def get_anonymous_instance():
-  return _nuked_instance
+    res = requests.post(TOKEN_URL,
+        data=dict(username=USERNAME, password=PASSWORD))
+    assert_equal(res.status_code, 200)
+    token = res.json()['token']
+    assert_equal(len(token), 40)
+    return token

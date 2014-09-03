@@ -1,180 +1,168 @@
-from apitestbase import DEFAULT_LIBRARY_URL, get_authed_instance
-from apitestbase import LIBRARIES_URL
-import unittest
+#coding: UTF-8
 
-class FilesApiTestCase(unittest.TestCase):
+import random
+import re
+from urllib import urlencode, quote
 
-  def setUp(self):
-    self.requests = get_authed_instance()
-    self.assertIsNotNone(self.requests)
-    res = self.requests.post(DEFAULT_LIBRARY_URL)
-    self.rid = res.json()['repo_id']
-    self.rurl = LIBRARIES_URL + str(self.rid) + u'/'
-    self.furl = self.rurl + u'file/'
+from apitestbase import ApiTestCase, DEFAULT_LIBRARY_URL, apiurl
 
-  def test_create_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test.c'
-    res = self.requests.post(furl, data=data)
-    self.assertEqual(res.status_code, 201)
-    self.assertEqual(res.text, '"success"')
+DEFAULT_REPO_URL = '/api2/default-repo/'
+REPO_URL = '/api2/repos/%s/'
 
-  def test_rename_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test2.c'
-    res = self.requests.post(furl, data=data)
-    data = { 'operation': 'rename', 'newname': 'test.c' }
-    res = self.requests.post(furl, data=data)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)"')
+class FilesApiTestCase(ApiTestCase):
+    def setUp(self):
+        res = self.post(apiurl(DEFAULT_REPO_URL)).json()
+        self.repo_id = res['repo_id']
+        self.repo_url = apiurl(REPO_URL % self.repo_id)
+        self.file_url = self.repo_url + u'file/'
 
-  def test_remove_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test2.c'
-    res = self.requests.post(furl, data=data)
-    res = self.requests.delete(furl)
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(res.text, '"success"')
+    def create_file(self):
+        data = {'operation': 'create'}
+        name = '文件%s.txt' % random.randint(1, 10000)
+        query = '?p=/%s' % quote(name)
+        furl = self.file_url + query
+        res = self.post(furl, data=data, expected=201)
+        self.assertEqual(res.text, '"success"')
+        return name, furl
 
-  def test_move_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test2.c'
-    res = self.requests.post(furl, data=data)
-    #todo: create another repo here, and use is as dst_repo
-    data = { 'operation': 'move', 'dst_repo': self.rid, 'dst_dir': '/'}
-    res = self.requests.post(furl, data=data)
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(res.text, '"success"')
+    def test_create_file(self):
+        self.create_file()
 
-  def test_copy_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test2.c'
-    res = self.requests.post(furl, data=data)
-    #todo: create another repo here, and use is as dst_repo
-    fopurl = self.rurl + u'fileops/copy/?p=/'
-    data = { 'file_names': 'test2.c', 'dst_repo': self.rid, 'dst_dir': '/'}
-    res = self.requests.post(fopurl, data=data)
-    self.assertEqual(res.text, '"success"')
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(res.text, '"success"')
+    # def test_rename_file(self):
+    #     name, furl = self.create_file()
+    #     data = {
+    #         'operation': 'rename',
+    #         'newname': name + str(random.randint(1, 10000)),
+    #     }
+    #     res = self.post(furl, data=data)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)"')
 
-  def test_download_file_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test.c'
-    self.requests.post(furl, data=data)
-    res = self.requests.get(furl)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/test.c"')
+    # def test_remove_file(self):
+    #     _, furl = self.create_file()
+    #     res = self.delete(furl)
+    #     self.assertEqual(res.text, '"success"')
 
-  def test_download_file_from_history_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + '?p=/test.c'
-    self.requests.post(furl, data=data)
-    fhurl = self.furl + u'history/?p=/test.c'
-    res = self.requests.get(fhurl)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    commit_id = json['commits'][0]['id']
-    self.assertIsNotNone(commit_id)
-    fcurl = self.furl + u'revision/?p=/test.c&commit_id=' + commit_id
-    res = self.requests.get(fcurl)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/test.c"')
+    # def test_move_file(self):
+    #     _, furl = self.create_file()
+    #     # TODO: create another repo here, and use it as dst_repo
+    #     data = {
+    #         'operation': 'move',
+    #         'dst_repo': self.repo_id,
+    #         'dst_dir': '/'
+    #     }
+    #     res = self.post(furl, data=data)
+    #     self.assertEqual(res.text, '"success"')
 
-  def test_get_file_detail_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + '?p=/test.c'
-    self.requests.post(furl, data=data)
-    fdurl = self.furl + u'detail/?p=/test.c'
-    res = self.requests.get(fdurl)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['id'])
-    self.assertIsNotNone(json['mtime'])
-    self.assertIsNotNone(json['type'])
-    self.assertIsNotNone(json['name'])
-    self.assertIsNotNone(json['size'])
+    # def test_copy_file(self):
+    #     fname, _ = self.create_file()
+    #     # TODO: create another repo here, and use it as dst_repo
+    #     fopurl = self.repo_url + u'fileops/copy/?p=/'
+    #     data = {
+    #         'file_names': fname,
+    #         'dst_repo': self.repo_id,
+    #         'dst_dir': '/'
+    #     }
+    #     res = self.post(fopurl, data=data)
+    #     self.assertEqual(res.text, '"success"')
 
-  def test_get_file_history_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + '?p=/test.c'
-    self.requests.post(furl, data=data)
-    fhurl = self.furl + u'history/?p=/test.c'
-    res = self.requests.get(fhurl)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['commits'])
-    for commit in json['commits']:
-      self.assertIsNotNone(commit['rev_file_size'])
-      #self.assertIsNotNone(commit['rev_file_id']) #allow null
-      self.assertIsNotNone(commit['ctime'])
-      self.assertIsNotNone(commit['creator_name'])
-      self.assertIsNotNone(commit['creator'])
-      self.assertIsNotNone(commit['root_id'])
-      #self.assertIsNotNone(commit['rev_renamed_old_path']) #allow null
-      #self.assertIsNotNone(commit['parent_id']) #allow null
-      self.assertIsNotNone(commit['new_merge'])
-      self.assertIsNotNone(commit['repo_id'])
-      self.assertIsNotNone(commit['desc'])
-      self.assertIsNotNone(commit['id'])
-      self.assertIsNotNone(commit['conflict'])
-      #self.assertIsNotNone(commit['second_parent_id']) #allow null
+    # def test_download_file(self):
+    #     fname, furl = self.create_file()
+    #     res = self.get(furl)
+    #     self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
 
-  def test_get_upload_link_api(self):
-    upload_url = self.rurl + u'upload-link/'
-    res = self.requests.get(upload_url)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/\w{8,8}"')
+    # def test_download_file_from_history(self):
+    #     fname, _ = self.create_file()
+    #     file_history_url = self.file_url + u'history/?p=/%s' % quote(fname)
+    #     res = self.get(file_history_url).json()
+    #     commit_id = res['commits'][0]['id']
+    #     self.assertEqual(len(commit_id), 40)
+    #     data = {
+    #         'p': fname,
+    #         'commit_id': commit_id,
+    #     }
+    #     query = '?' + urlencode(data)
+    #     res = self.get(self.file_url + query)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)/%s"' % quote(fname))
 
-  def test_get_updataink_api(self):
-    update_url = self.rurl + u'update-link/'
-    res = self.requests.get(update_url)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/update-api/\w{8,8}"')
+    # def test_get_file_detail(self):
+    #     fname, _ = self.create_file()
+    #     fdurl = self.file_url + u'detail/?p=/%s' % quote(fname)
+    #     detail = self.get(fdurl).json()
+    #     self.assertIsNotNone(detail)
+    #     self.assertIsNotNone(detail['id'])
+    #     self.assertIsNotNone(detail['mtime'])
+    #     self.assertIsNotNone(detail['type'])
+    #     self.assertIsNotNone(detail['name'])
+    #     self.assertIsNotNone(detail['size'])
 
-  def test_upload_api(self):
-    furl = self.furl + u'?p=/test_upload.c'
-    res = self.requests.delete(furl)
-    upload_url = self.rurl + u'upload-link/'
-    res = self.requests.get(upload_url)
-    import re
-    upload_api_url = re.match(r'"(.*)"', res.text).group(1)
-    #target_file must contains its parent dir path
-    files = { 'file': ('test_upload'+'.c', 'int main(){return0;}\n'), \
-            'parent_dir': '/' }
-    res = self.requests.post(upload_api_url, files=files)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'\w{40,40}')
+    # def test_get_file_history(self):
+    #     self.create_file()
+    #     fhurl = self.file_url + u'history/?p=/test.c'
+    #     history = self.get(fhurl).json()
+    #     for commit in history['commits']:
+    #         self.assertIsNotNone(commit['rev_file_size'])
+    #         #self.assertIsNotNone(commit['rev_file_id']) #allow null
+    #         self.assertIsNotNone(commit['ctime'])
+    #         self.assertIsNotNone(commit['creator_name'])
+    #         self.assertIsNotNone(commit['creator'])
+    #         self.assertIsNotNone(commit['root_id'])
+    #         #self.assertIsNotNone(commit['rev_renamed_old_path']) #allow null
+    #         #self.assertIsNotNone(commit['parent_id']) #allow null
+    #         self.assertIsNotNone(commit['new_merge'])
+    #         self.assertIsNotNone(commit['repo_id'])
+    #         self.assertIsNotNone(commit['desc'])
+    #         self.assertIsNotNone(commit['id'])
+    #         self.assertIsNotNone(commit['conflict'])
+    #         #self.assertIsNotNone(commit['second_parent_id']) #allow null
 
-  def test_update_api(self):
-    data = { 'operation': 'create' }
-    furl = self.furl + u'?p=/test_update.c'
-    res = self.requests.post(furl, data=data)
-    # call update-link
-    update_url = self.rurl + u'update-link/'
-    res = self.requests.get(update_url)
-    import re
-    update_api_url = re.match(r'"(.*)"', res.text).group(1)
-    #target_file must contains its parent dir path
-    files = { 'file': ('test_update.c', 'int main(){return0;}\n'), \
-            'target_file': '/test_update.c' }
-    res = self.requests.post(update_api_url, files=files)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'\w{40,40}')
+    # def test_get_upload_link(self):
+    #     upload_url = self.repo_url + u'upload-link/'
+    #     res = self.get(upload_url)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/\w{8,8}"')
 
-  def test_get_upload_blocks_link_api(self):
-    upload_blks_url = self.rurl + u'upload-blks-link/'
-    res = self.requests.get(upload_blks_url)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/\w{8,8}"')
+    # def test_get_update_link(self):
+    #     update_url = self.repo_url + u'update-link/'
+    #     res = self.get(update_url)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)/update-api/\w{8,8}"')
 
-  def test_get_update_blocks_link_api(self):
-    update_blks_url = self.rurl + u'update-blks-link/'
-    res = self.requests.get(update_blks_url)
-    self.assertEqual(res.status_code, 200)
-    self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/\w{8,8}"')
+    # def test_upload(self):
+    #     furl = self.file_url + u'?p=/test_upload.c'
+    #     res = self.delete(furl)
+    #     upload_url = self.repo_url + u'upload-link/'
+    #     res = self.get(upload_url)
+    #     upload_api_url = re.match(r'"(.*)"', res.text).group(1)
+    #     #target_file must contains its parent dir path
+    #     files = { 'file': ('test_upload'+'.c', 'int main(){return0;}\n'), \
+    #                     'parent_dir': '/' }
+    #     res = self.post(upload_api_url, files=files)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'\w{40,40}')
 
-if __name__ == '__main__':
-  unittest.main(verbosity=2)
+    # def test_update(self):
+    #     data = { 'operation': 'create' }
+    #     furl = self.file_url + u'?p=/test_update.c'
+    #     res = self.post(furl, data=data)
+    #     # call update-link
+    #     update_url = self.repo_url + u'update-link/'
+    #     res = self.get(update_url)
+    #     update_api_url = re.match(r'"(.*)"', res.text).group(1)
+    #     #target_file must contains its parent dir path
+    #     files = { 'file': ('test_update.c', 'int main(){return0;}\n'), \
+    #                     'target_file': '/test_update.c' }
+    #     res = self.post(update_api_url, files=files)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'\w{40,40}')
+
+    # def test_get_upload_blocks_link(self):
+    #     upload_blks_url = self.repo_url + u'upload-blks-link/'
+    #     res = self.get(upload_blks_url)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/\w{8,8}"')
+
+    # def test_get_update_blocks_link(self):
+    #     update_blks_url = self.repo_url + u'update-blks-link/'
+    #     res = self.get(update_blks_url)
+    #     self.assertEqual(res.status_code, 200)
+    #     self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/\w{8,8}"')
