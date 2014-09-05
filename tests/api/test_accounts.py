@@ -1,18 +1,17 @@
+import requests
 import unittest
 
-from tests.common.utils import apiurl, urljoin
+from tests.common.utils import apiurl, urljoin, randstring
 from tests.api.apitestbase import USERNAME, ApiTestBase
 from tests.api.urls import ACCOUNTS_URL, ACCOUNT_INFO_URL, PING_URL, \
     AUTH_PING_URL
 
-test_account_username = u'test_tmp@test.com'
-test_account_password = r'test_test'
-test_account_password2 = r'test_test2'
+test_account_username = 'test_%s@test.com' % randstring(10)
+test_account_password = randstring(20)
+test_account_password2 = randstring(20)
 test_account_url = urljoin(ACCOUNTS_URL, test_account_username)
 
 class AccountsApiTest(ApiTestBase):
-    use_test_uesr = True
-
     def test_check_account_info(self):
         info = self.get(ACCOUNT_INFO_URL).json()
         self.assertIsNotNone(info)
@@ -21,47 +20,34 @@ class AccountsApiTest(ApiTestBase):
         self.assertIsNotNone(info['usage'])
 
     def test_list_accounts(self):
-        accounts = self.get(ACCOUNTS_URL).json()
-        found = False
-        for account in accounts:
-            if account['email'] == USERNAME:
-                found = True
-        self.assertTrue(found)
+        # Normal user can not list accounts
+        self.get(ACCOUNTS_URL, expected=403)
+        accounts = self.admin_get(ACCOUNTS_URL).json()
+        self.assertGreaterEqual(accounts, 2)
+        # TODO: check returned json, test start/limit param
 
-    def test_create_account(self):
+    def test_create_delete_account(self):
         data = {'password': test_account_password}
-        res = self.put(test_account_url, data=data, expected=201)
-        self.assertEqual(res.text, u'"success"')
-        self.delete(test_account_url)
+        # non-admin user can not create new user
+        self.put(test_account_url, data=data, expected=403)
 
-    def test_update_account(self):
-        data = {'password': test_account_password}
-        self.put(test_account_url, data=data, expected=201)
-        data = {
-            'password': test_account_password2,
-            'is_staff': 1,
-            'is_active': 1,
-        }
-        res = self.put(test_account_url, data=data)
+        res = self.admin_put(test_account_url, data=data, expected=201)
         self.assertEqual(res.text, u'"success"')
-        self.delete(test_account_url)
 
-    def test_delete_account(self):
-        data = {'password': test_account_password}
-        self.put(test_account_url, data=data, expected=201)
-        res = self.delete(test_account_url)
-        self.assertEqual(res.text, u'"success"')
-        accounts = self.get(ACCOUNTS_URL).json()
-        found = False
-        for account in accounts:
-            if account['email'] == test_account_username:
-                found = True
-        self.assertFalse(found)
+        # non-admin user can not delete a user
+        self.delete(test_account_url, expected=403)
+
+        self.admin_delete(test_account_url)
+        # check the user is really deleted
+        self.admin_get(test_account_url, expected=404)
 
     def test_auth_ping(self):
         res = self.get(AUTH_PING_URL)
         self.assertRegexpMatches(res.text, u'"pong"')
+        res = requests.get(AUTH_PING_URL)
+        self.assertEqual(res.status_code, 403)
 
     def test_ping(self):
-        res = self.get(PING_URL, auth=False)
+        res = requests.get(PING_URL)
         self.assertRegexpMatches(res.text, u'"pong"')
+        self.assertEqual(res.status_code, 200)

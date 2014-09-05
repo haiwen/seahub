@@ -5,12 +5,15 @@ import requests
 import unittest
 from nose.tools import assert_equal, assert_in # pylint: disable=E0611
 
-from tests.common.common import USERNAME, PASSWORD, IS_PRO
+from tests.common.common import USERNAME, PASSWORD, IS_PRO, \
+    ADMIN_USERNAME, ADMIN_PASSWORD
+
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.api.urls import TOKEN_URL, GROUPS_URL, ACCOUNTS_URL, REPOS_URL
 
 class ApiTestBase(unittest.TestCase):
     _token = None
+    _admin_token = None
 
     use_test_user = False
     use_test_group = False
@@ -98,14 +101,40 @@ class ApiTestBase(unittest.TestCase):
         return cls._req('DELETE', *args, **kwargs)
 
     @classmethod
-    def _req(cls, method, *args, **kwargs):
-        auth = kwargs.pop('auth', True)
-        if auth:
-            if cls._token is None:
-                cls._token = get_auth_token()
+    def admin_get(cls, *args, **kwargs):
+        kwargs['admin'] = True
+        return cls.get(*args, **kwargs)
 
-        headers = kwargs.pop('headers', {})
-        headers.setdefault('Authorization', 'Token ' + cls._token)
+    @classmethod
+    def admin_post(cls, *args, **kwargs):
+        kwargs['admin'] = True
+        return cls.post(*args, **kwargs)
+
+    @classmethod
+    def admin_put(cls, *args, **kwargs):
+        kwargs['admin'] = True
+        return cls.put(*args, **kwargs)
+
+    @classmethod
+    def admin_delete(cls, *args, **kwargs):
+        kwargs['admin'] = True
+        return cls.delete(*args, **kwargs)
+
+    @classmethod
+    def _req(cls, method, *args, **kwargs):
+        admin = kwargs.pop('admin', False)
+        if admin:
+            if cls._admin_token is None:
+                cls._admin_token = get_auth_token(ADMIN_USERNAME,
+                    ADMIN_PASSWORD)
+            token = cls._admin_token
+        else:
+            if cls._token is None:
+                cls._token = get_auth_token(USERNAME, PASSWORD)
+            token = cls._token
+
+        headers = kwargs.get('headers', {})
+        headers.setdefault('Authorization', 'Token ' + token)
         kwargs['headers'] = headers
 
         expected = kwargs.pop('expected', 200)
@@ -136,9 +165,9 @@ class ApiTestBase(unittest.TestCase):
         msg = 'Expected not empty, but it is'
         self.assertGreater(len(lst), 0, msg)
 
-def get_auth_token():
+def get_auth_token(username, password):
     res = requests.post(TOKEN_URL,
-        data=dict(username=USERNAME, password=PASSWORD))
+        data=dict(username=username, password=password))
     assert_equal(res.status_code, 200)
     token = res.json()['token']
     assert_equal(len(token), 40)

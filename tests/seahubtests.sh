@@ -1,8 +1,9 @@
 #!/bin/bash
 : ${PYTHON=python}
-# Change these if you run on local machine
-export CI_USERNAME="test@test.com"
-export CI_PASSWORD="testtest"
+export TEST_USERNAME="test@seahubtest.com"
+export TEST_PASSWORD="testtest"
+export TEST_ADMIN_USERNAME="admin@seahubtest.com"
+export TEST_ADMIN_PASSWORD="adminadmin"
 
 # If you run this script on your local machine, you must set CCNET_CONF_DIR
 # and SEAFILE_CONF_DIR like this:
@@ -25,10 +26,14 @@ cd "$SEAHUB_SRCDIR"
 
 function init() {
     ###############################
-    # create database and a new user
+    # create database and two new users: an admin, and a normal user
     ###############################
     $PYTHON ./manage.py syncdb
-    $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${CI_USERNAME}', '${CI_PASSWORD}', 1, 1);"
+
+    # create normal user
+    $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${TEST_USERNAME}', '${TEST_PASSWORD}', 0, 1);"
+    # create admin
+    $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${TEST_ADMIN_USERNAME}', '${TEST_ADMIN_PASSWORD}', 1, 1);"
 }
 
 function start_seahub() {
