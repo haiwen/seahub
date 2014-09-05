@@ -1,76 +1,140 @@
-import requests
+#coding: UTF-8
+
 import re
+import requests
 import unittest
-from nose.tools import assert_equal # pylint: disable=E0611
+from nose.tools import assert_equal, assert_in # pylint: disable=E0611
 
-from common.common import BASE_URL, USERNAME, PASSWORD, IS_PRO
-from common.utils import apiurl
+from tests.common.common import USERNAME, PASSWORD, IS_PRO
+from tests.common.utils import apiurl, urljoin, randstring
+from tests.api.urls import TOKEN_URL, GROUPS_URL, ACCOUNTS_URL, REPOS_URL
 
-BASE_URL = BASE_URL
-PING_URL = apiurl('/api2/ping/')
-TOKEN_URL = apiurl('/api2/auth-token/')
-AUTH_PING_URL = BASE_URL + u'/api2/auth/ping/'
-
-ACCOUNTS_URL = BASE_URL + u'/api2/accounts/'
-ACCOUNT_INFO_URL = BASE_URL + u'/api2/account/info/'
-USERMSGS_URL = BASE_URL + u'/api2/user/msgs/' + USERNAME + u'/'
-USERMSGS_COUNT_URL = BASE_URL + u'/api2/unseen_messages/'
-GROUP_URL = BASE_URL + u'/api2/group/'
-GROUPS_URL = BASE_URL + u'/api2/groups/'
-GROUPMSGS_URL = BASE_URL + u'/api2/group/msgs/'
-GROUPMSGS_NREPLY_URL = BASE_URL + u'/api2/new_replies/'
-AVATAR_BASE_URL = BASE_URL + u'/api2/avatars/'
-
-DEFAULT_LIBRARY_URL = BASE_URL + u'/api2/default-repo/'
-LIBRARIES_URL = BASE_URL + u'/api2/repos/'
-VIRTUAL_LIBRARIES_URL = BASE_URL + u'/api2/virtual-repos/'
-STARREDFILES_URL = BASE_URL + u'/api2/starredfiles/'
-SHARED_LINKS_URL = BASE_URL + u'/api2/shared-links/'
-SHARED_LIBRARIES_URL = BASE_URL + u'/api2/shared-repos/'
-BESHARED_LIBRARIES_URL = BASE_URL + u'/api2/beshared-repos/'
-SHARED_FILES_URL = BASE_URL + u'/api2/shared-files/'
-F_URL = BASE_URL + u'/api2/f/'
-S_F_URL = BASE_URL + u'/api2/s/f/'
-
-MISC_SEARCH_URL = BASE_URL + u'/api2/search/'
-MISC_LIST_GROUP_AND_CONTACTS_URL = BASE_URL + u'/api2/groupandcontacts/'
-MISC_LIST_EVENTS_URL = BASE_URL + u'/api2/events/'
-
-class ApiTestCase(unittest.TestCase):
+class ApiTestBase(unittest.TestCase):
     _token = None
 
-    def get(self, *args, **kwargs):
-        self._req('GET', *args, **kwargs)
+    use_test_user = False
+    use_test_group = False
+    use_test_repo = False
 
-    def post(self, *args, **kwargs):
-        self._req('POST', *args, **kwargs)
+    test_user_name = None
+    test_user_url = None
 
-    def put(self, *args, **kwargs):
-        self._req('PUT', *args, **kwargs)
+    test_group_name = None
+    test_group_id = None
+    test_group_url = None
 
-    def delete(self, *args, **kwargs):
-        self._req('DELETE', *args, **kwargs)
+    test_repo_id = None
+    test_repo_url = None
+    test_file_url = None
+    test_dir_url = None
 
-    def _req(self, method, *args, **kwargs):
-        if self._token is None:
-            self._token = get_auth_token()
+    def setUp(self):
+        if self.use_test_user:
+            self.create_tmp_user()
+        if self.use_test_group:
+            self.create_tmp_group()
+        if self.use_test_repo:
+            self.create_tmp_repo()
+
+    def tearDown(self):
+        if self.use_test_user:
+            self.remove_tmp_user()
+        if self.use_test_group:
+            self.remove_tmp_group()
+        if self.use_test_repo:
+            self.remove_tmp_repo()
+
+    def create_tmp_repo(self):
+        repo_name = '测试-test-repo-%s' % randstring(6)
+        data = {
+            'name': repo_name,
+            'desc': 'just for test - 测试用资料库',
+        }
+        repo = self.post(REPOS_URL, data=data).json()
+        self.test_repo_id = repo['repo_id']
+        self.test_repo_url = urljoin(REPOS_URL, self.test_repo_id)
+        self.test_file_url = urljoin(self.test_repo_url, 'file')
+        self.test_dir_url = urljoin(self.test_repo_url, 'dir')
+
+    def remove_tmp_repo(self):
+        if self.test_repo_id:
+            self.delete(self.test_repo_url)
+
+    def create_tmp_group(self):
+        self.test_group_name = '测试群组-%s' % randstring(16)
+        data = {'group_name': self.test_group_name}
+        self.test_group_id = self.put(GROUPS_URL, data=data).json()['group_id']
+        self.test_group_url = urljoin(GROUPS_URL, str(self.test_group_id))
+
+    def remove_tmp_group(self):
+        if self.test_group_id:
+            self.delete(self.test_group_url)
+
+    def create_tmp_user(self):
+        data = {'password': 'testtest'}
+        username = '%s@test.com' % randstring(20)
+        self.put(urljoin(ACCOUNTS_URL, username), data=data, expected=201)
+        self.test_user_name = username
+        self.test_user_url = urljoin(ACCOUNTS_URL, username)
+
+    def remove_tmp_user(self):
+        if self.test_user_name:
+            self.delete(self.test_user_url)
+
+    @classmethod
+    def get(cls, *args, **kwargs):
+        return cls._req('GET', *args, **kwargs)
+
+    @classmethod
+    def post(cls, *args, **kwargs):
+        return cls._req('POST', *args, **kwargs)
+
+    @classmethod
+    def put(cls, *args, **kwargs):
+        return cls._req('PUT', *args, **kwargs)
+
+    @classmethod
+    def delete(cls, *args, **kwargs):
+        return cls._req('DELETE', *args, **kwargs)
+
+    @classmethod
+    def _req(cls, method, *args, **kwargs):
+        auth = kwargs.pop('auth', True)
+        if auth:
+            if cls._token is None:
+                cls._token = get_auth_token()
 
         headers = kwargs.pop('headers', {})
-        headers.setdefault('Authorization', 'Token ' + self._token)
+        headers.setdefault('Authorization', 'Token ' + cls._token)
         kwargs['headers'] = headers
 
-        resp = requests.request(method, *args, **kwargs)
         expected = kwargs.pop('expected', 200)
+        resp = requests.request(method, *args, **kwargs)
         if expected is not None:
             if hasattr(expected, '__iter__'):
-                self.assertIn(resp.status_code, expected,
+                assert_in(resp.status_code, expected,
                     "Expected http status in %s, received %s" % (expected,
                         resp.status_code))
             else:
-                self.assertEqual(resp.status_code, expected,
+                assert_equal(resp.status_code, expected,
                     "Expected http status %s, received %s" % (expected,
                         resp.status_code))
         return resp
+
+    def assertHasLen(self, lst, length):
+        """
+        Assert a list/tuple/string has exact `length`
+        """
+        msg = 'Expected to have length %s, but length is %s' \
+              % (length, len(lst))
+        self.assertEqual(len(lst), length, msg)
+
+    def assertNotEmpty(self, lst):
+        """
+        Assert a list/tuple/string is not empty
+        """
+        msg = 'Expected not empty, but it is'
+        self.assertGreater(len(lst), 0, msg)
 
 def get_auth_token():
     res = requests.post(TOKEN_URL,

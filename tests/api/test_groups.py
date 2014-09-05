@@ -1,41 +1,48 @@
-from apitestbase import GROUPS_URL, get_authed_instance
-from common.utils import randomword
+#coding: UTF-8
+"""
+Test groups api.
+"""
+
 import unittest
 
-class GroupsApiTestCase(unittest.TestCase):
+from tests.api.apitestbase import ApiTestBase
+from tests.api.urls import GROUPS_URL
+from tests.common.utils import apiurl, urljoin, randstring
 
-  def setUp(self):
-    self.requests = get_authed_instance()
-    self.assertIsNotNone(self.requests)
+class GroupsApiTest(ApiTestBase):
+    use_test_user = True
+    use_test_group = True
 
-  def test_list_groups_api(self):
-    data = { 'group_name': 'demo group' }
-    self.requests.put(GROUPS_URL, data=data)
-    res = self.requests.get(GROUPS_URL)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['replynum'])
-    self.assertIsNotNone(json['groups'])
-    self.assertGreater(len(json['groups']), 0)
-    for group in json['groups']:
-      self.assertIsNotNone(group['ctime'])
-      self.assertIsNotNone(group['creator'])
-      self.assertIsNotNone(group['msgnum'])
-      self.assertIsNotNone(group['mtime'])
-      self.assertIsNotNone(group['id'])
-      self.assertIsNotNone(group['name'])
+    def test_add_remove_group_member(self):
+        test_group_members_url = urljoin(self.test_group_url, '/members/')
+        data = {'user_name': self.test_user_name}
+        res = self.put(test_group_members_url, data=data).json()
+        self.assertTrue(res['success'])
+        res = self.delete(test_group_members_url, data=data).json()
+        self.assertTrue(res['success'])
 
-  def test_add_group_api(self):
-    # We cannot create two groups which have the same group name or delete group
-    # Hack it by creating group with a random name, hope it won't break ci
-    data = { 'group_name': randomword(16) }
-    res = self.requests.put(GROUPS_URL, data=data)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['group_id'])
-    self.assertEqual(json['success'], True)
+    def test_list_groups(self):
+        groups = self.get(GROUPS_URL).json()
+        self.assertGreaterEqual(groups['replynum'], 0)
+        self.assertNotEmpty(groups['groups'])
+        for group in groups['groups']:
+            self.assertIsNotNone(group['ctime'])
+            self.assertIsNotNone(group['creator'])
+            self.assertIsNotNone(group['msgnum'])
+            self.assertIsNotNone(group['mtime'])
+            self.assertIsNotNone(group['id'])
+            self.assertIsNotNone(group['name'])
 
-if __name__ == '__main__':
-  unittest.main(verbosity=2)
+    def test_add_group(self):
+        data = {'group_name': randstring(16)}
+        info = self.put(GROUPS_URL, data=data).json()
+        self.assertTrue(info['success'])
+        group_id = info['group_id']
+        self.assertGreater(group_id, 0)
+        url = urljoin(GROUPS_URL, str(group_id))
+        self.delete(url)
+
+        # check group is really removed
+        groups = self.get(GROUPS_URL).json()['groups']
+        for group in groups:
+            self.assertNotEqual(group['id'], group_id)

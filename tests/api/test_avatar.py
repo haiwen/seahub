@@ -1,35 +1,25 @@
-from apitestbase import AVATAR_BASE_URL, get_authed_instance
-from apitestbase import GROUPS_URL, USERNAME
-from common.utils import randomword
 import unittest
 
-class AvatarApiTestCase(unittest.TestCase):
+from tests.api.apitestbase import ApiTestBase, USERNAME
+from tests.api.urls import AVATAR_BASE_URL, GROUPS_URL
+from tests.common.utils import randstring, apiurl, urljoin
 
-  def setUp(self):
-    self.requests = get_authed_instance()
-    self.assertIsNotNone(self.requests)
+class AvatarApiTest(ApiTestBase):
+    def test_user_avatar(self):
+        avatar_url = urljoin(AVATAR_BASE_URL, 'user', USERNAME, '/resized/80/')
+        info = self.get(avatar_url).json()
+        self.assertIsNotNone(info['url'])
+        self.assertIsNotNone(info['is_default'])
+        self.assertIsNotNone(info['mtime'])
 
-  def test_user_avatar_api(self):
-    res = self.requests.get(AVATAR_BASE_URL + u'user/' + USERNAME + u'/resized/80/')
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['url'])
-    self.assertIsNotNone(json['is_default'])
-    self.assertIsNotNone(json['mtime'])
-
-  def test_group_avatar_api(self):
-    gname = randomword(16)
-    data = { 'group_name': gname }
-    res = self.requests.put(GROUPS_URL, data=data)
-    gid = res.json()['group_id']
-    res = self.requests.get(AVATAR_BASE_URL + u'group/' + str(gid) + u'/resized/80/')
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertIsNotNone(json['url'])
-    self.assertIsNotNone(json['is_default'])
-    self.assertIsNotNone(json['mtime'])
-
-if __name__ == '__main__':
-  unittest.main(verbosity=2)
+    def test_group_avatar(self):
+        gname = randstring(16)
+        data = {'group_name': gname}
+        res = self.put(GROUPS_URL, data=data)
+        gid = res.json()['group_id']
+        avatar_url = urljoin(AVATAR_BASE_URL, 'group', str(gid), '/resized/80/')
+        info = self.get(avatar_url).json()
+        self.assertIsNotNone(info)
+        self.assertIsNotNone(info['url'])
+        self.assertIsNotNone(info['is_default'])
+        self.assertIsNotNone(info['mtime'])

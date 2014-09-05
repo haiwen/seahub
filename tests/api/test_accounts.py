@@ -1,67 +1,67 @@
-from apitestbase import ACCOUNTS_URL, ACCOUNT_INFO_URL, get_authed_instance
-from apitestbase import USERNAME
 import unittest
 
-ACCOUNT_USERNAME = u'test_tmp@test.com'
-ACCOUNT_PASSWORD = r'test_test'
-ACCOUNT_PASSWORD2 = r'test_test2'
-ACCOUNT_URL = ACCOUNTS_URL + ACCOUNT_USERNAME + u'/'
+from tests.common.utils import apiurl, urljoin
+from tests.api.apitestbase import USERNAME, ApiTestBase
+from tests.api.urls import ACCOUNTS_URL, ACCOUNT_INFO_URL, PING_URL, \
+    AUTH_PING_URL
 
-class AccountsApiTestCase(unittest.TestCase):
+test_account_username = u'test_tmp@test.com'
+test_account_password = r'test_test'
+test_account_password2 = r'test_test2'
+test_account_url = urljoin(ACCOUNTS_URL, test_account_username)
 
-  def setUp(self):
-    self.requests = get_authed_instance()
-    self.assertIsNotNone(self.requests)
+class AccountsApiTest(ApiTestBase):
+    use_test_uesr = True
 
-  def test_check_account_info_api(self):
-    res = self.requests.get(ACCOUNT_INFO_URL)
-    self.assertEqual(res.status_code, 200)
-    json = res.json()
-    self.assertIsNotNone(json)
-    self.assertEqual(json['email'], USERNAME)
-    self.assertIsNotNone(json['total'])
-    self.assertIsNotNone(json['usage'])
+    def test_check_account_info(self):
+        info = self.get(ACCOUNT_INFO_URL).json()
+        self.assertIsNotNone(info)
+        self.assertEqual(info['email'], USERNAME)
+        self.assertIsNotNone(info['total'])
+        self.assertIsNotNone(info['usage'])
 
-  def test_list_accounts_api(self):
-    res = self.requests.get(ACCOUNTS_URL)
-    self.assertEqual(res.status_code, 200)
-    self.assertIsNotNone(res.json())
-    found = False
-    for i in res.json():
-      if (i['email'] == USERNAME):
-        found = True
-    self.assertEqual(found, True)
+    def test_list_accounts(self):
+        accounts = self.get(ACCOUNTS_URL).json()
+        found = False
+        for account in accounts:
+            if account['email'] == USERNAME:
+                found = True
+        self.assertTrue(found)
 
-  def test_create_account_api(self):
-    data = { 'password': ACCOUNT_PASSWORD }
-    res = self.requests.put(ACCOUNT_URL, data=data)
-    self.assertEqual(res.status_code, 201)
-    self.assertEqual(res.text, u'"success"')
-    self.requests.delete(ACCOUNT_URL)
+    def test_create_account(self):
+        data = {'password': test_account_password}
+        res = self.put(test_account_url, data=data, expected=201)
+        self.assertEqual(res.text, u'"success"')
+        self.delete(test_account_url)
 
-  def test_update_account_api(self):
-    data = { 'password': ACCOUNT_PASSWORD }
-    self.requests.put(ACCOUNT_URL, data=data)
-    data = { 'password': ACCOUNT_PASSWORD2, 'is_staff': 1,
-              'is_active': 1 }
-    res = self.requests.put(ACCOUNT_URL, data=data)
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(res.text, u'"success"')
-    self.requests.delete(ACCOUNT_URL)
-    #TODO: verify updated account
+    def test_update_account(self):
+        data = {'password': test_account_password}
+        self.put(test_account_url, data=data, expected=201)
+        data = {
+            'password': test_account_password2,
+            'is_staff': 1,
+            'is_active': 1,
+        }
+        res = self.put(test_account_url, data=data)
+        self.assertEqual(res.text, u'"success"')
+        self.delete(test_account_url)
 
-  def test_delete_account_api(self):
-    data = { 'password': ACCOUNT_PASSWORD }
-    res = self.requests.put(ACCOUNT_URL, data=data)
-    res = self.requests.delete(ACCOUNT_URL)
-    self.assertEqual(res.status_code, 200)
-    self.assertEqual(res.text, u'"success"')
-    res = self.requests.get(ACCOUNTS_URL)
-    found = False
-    for i in res.json():
-      if (i['email'] == ACCOUNT_USERNAME):
-        found = True
-    self.assertEqual(found, False)
+    def test_delete_account(self):
+        data = {'password': test_account_password}
+        self.put(test_account_url, data=data, expected=201)
+        res = self.delete(test_account_url)
+        self.assertEqual(res.text, u'"success"')
+        accounts = self.get(ACCOUNTS_URL).json()
+        found = False
+        for account in accounts:
+            if account['email'] == test_account_username:
+                found = True
+        self.assertFalse(found)
 
-if __name__ == '__main__':
-  unittest.main(verbosity=2)
+    def test_auth_ping(self):
+        res = self.get(AUTH_PING_URL)
+        self.assertRegexpMatches(res.text, u'"pong"')
+
+    def test_ping(self):
+        res = self.get(PING_URL, auth=False)
+        self.assertRegexpMatches(res.text, u'"pong"')
