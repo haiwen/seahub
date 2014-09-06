@@ -47,15 +47,25 @@ function init() {
 }
 
 function start_seahub() {
-    # $PYTHON ./manage.py runserver 1>/dev/null 2>&1 &
-    $PYTHON ./manage.py runserver 2>&1 &
+    $PYTHON ./manage.py runserver 1>/tmp/seahub.access.log 2>&1 &
     sleep 5
 }
 
 function run_tests() {
-    pushd tests
-    nosetests "$nose_opts"
-    popd
+    set +e
+    cd tests
+    nosetests $nose_opts
+    rvalue=$?
+    cd -
+    if [[ ${TRAVIS} != "" ]]; then
+        # On travis-ci, dump seahub logs when test finished
+        for logfile in /tmp/seahub*.log; do
+            echo -e "\nLog file $logfile:\n"
+            cat "${logfile}"
+            echo
+        done
+    fi
+    exit $rvalue
 }
 
 case $1 in
@@ -67,7 +77,7 @@ case $1 in
         ;;
     "test")
         shift
-        nose_opts=$@
+        nose_opts=$*
         run_tests
         ;;
     *)
