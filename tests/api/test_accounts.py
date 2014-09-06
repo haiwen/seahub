@@ -2,7 +2,7 @@ import requests
 import unittest
 
 from tests.common.utils import apiurl, urljoin, randstring
-from tests.api.apitestbase import USERNAME, ApiTestBase
+from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import ACCOUNTS_URL, ACCOUNT_INFO_URL, PING_URL, \
     AUTH_PING_URL
 
@@ -15,7 +15,7 @@ class AccountsApiTest(ApiTestBase):
     def test_check_account_info(self):
         info = self.get(ACCOUNT_INFO_URL).json()
         self.assertIsNotNone(info)
-        self.assertEqual(info['email'], USERNAME)
+        self.assertEqual(info['email'], self.username)
         self.assertIsNotNone(info['total'])
         self.assertIsNotNone(info['usage'])
 
