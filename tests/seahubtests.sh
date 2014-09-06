@@ -26,6 +26,7 @@ fi
 SCRIPT=$(readlink -f "$0")
 SEAHUB_TESTSDIR=$(dirname "${SCRIPT}")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
+local_settings_py=${SEAHUB_SRCDIR}/seahub/local_settings.py
 
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/lib/python2.7/site-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
 cd "$SEAHUB_SRCDIR"
@@ -40,6 +41,9 @@ function init() {
     $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${SEAHUB_TEST_USERNAME}', '${SEAHUB_TEST_PASSWORD}', 0, 1);"
     # create admin
     $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${SEAHUB_TEST_ADMIN_USERNAME}', '${SEAHUB_TEST_ADMIN_PASSWORD}', 1, 1);"
+
+    # overwrite api throttling settings in settings.py
+    echo "REST_FRAMEWORK = {}" >> "${local_settings_py}"
 }
 
 function start_seahub() {
