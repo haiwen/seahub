@@ -1599,6 +1599,39 @@ def repo_history_changes(request, repo_id):
 
     return HttpResponse(json.dumps(changes), content_type=content_type)
 
+def _create_repo_common(request, repo_name, repo_desc, encryption,
+                        uuid, magic_str, encrypted_file_key):
+    """Common logic for creating repo.
+
+    Returns:
+        newly created repo id. Or ``None`` if error raised.
+    """
+    username = request.user.username
+    try:
+        if not encryption:
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                      username, None, org_id)
+            else:
+                repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                  username, None)
+        else:
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                repo_id = seafile_api.create_org_enc_repo(
+                    uuid, repo_name, repo_desc, username, magic_str,
+                    encrypted_file_key, enc_version=2, org_id=org_id)
+            else:
+                repo_id = seafile_api.create_enc_repo(
+                    uuid, repo_name, repo_desc, username,
+                    magic_str, encrypted_file_key, enc_version=2)
+    except SearpcError as e:
+        logger.error(e)
+        repo_id = None
+
+    return repo_id
+
 @login_required_ajax
 def repo_create(request):
     '''  
@@ -1630,36 +1663,14 @@ def repo_create(request):
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
-    username = request.user.username
-    org_id = -1
-    try:
-        if not encryption:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                      username, None, org_id)
-            else:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                                  username, None)
-        else:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                repo_id = seafile_api.create_org_enc_repo(
-                    uuid, repo_name, repo_desc, username, magic_str,
-                    encrypted_file_key, enc_version=2, org_id=org_id)
-            else:
-                repo_id = seafile_api.create_enc_repo(
-                    uuid, repo_name, repo_desc, username,
-                    magic_str, encrypted_file_key, enc_version=2)
-    except SearpcError as e:
-        logger.error(e)
-        repo_id = None
-
-    if not repo_id:
+    repo_id = _create_repo_common(request, repo_name, repo_desc, encryption,
+                                  uuid, magic_str, encrypted_file_key)
+    if repo_id is None:
         result['error'] = _(u"Internal Server Error")
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
 
+    username = request.user.username
     try:
         default_lib = (int(request.GET.get('default_lib', 0)) == 1)
     except ValueError:
@@ -1667,17 +1678,21 @@ def repo_create(request):
     if default_lib:
         UserOptions.objects.set_default_repo(username, repo_id)
 
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+    else:
+        org_id = -1
+    repo_created.send(sender=None,
+                      org_id=org_id,
+                      creator=username,
+                      repo_id=repo_id,
+                      repo_name=repo_name)
     result = {
         'repo_id': repo_id,
         'repo_name': repo_name,
         'repo_desc': repo_desc,
         'repo_enc': encryption,
     }
-    repo_created.send(sender=None,
-                      org_id=org_id,
-                      creator=username,
-                      repo_id=repo_id,
-                      repo_name=repo_name)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
@@ -1712,32 +1727,29 @@ def public_repo_create(request):
     magic_str = form.cleaned_data['magic_str']
     encrypted_file_key = form.cleaned_data['encrypted_file_key']
 
-    user = request.user.username
-
-    try: 
-        if not encryption:
-            repo_id = seafile_api.create_repo(repo_name, repo_desc, user, None)
-        else:
-            repo_id = seafile_api.create_enc_repo(uuid, repo_name, repo_desc, user, magic_str, encrypted_file_key, enc_version=2)
-
-        # set this repo as inner pub
-        seafile_api.add_inner_pub_repo(repo_id, permission)
-        #seafserv_threaded_rpc.set_inner_pub_repo(repo_id, permission)
-    except SearpcError as e:
-        repo_id = None
-        logger.error(e)
-
-    if not repo_id:
+    repo_id = _create_repo_common(request, repo_name, repo_desc, encryption,
+                                  uuid, magic_str, encrypted_file_key)
+    if repo_id is None:
         result['error'] = _(u'Internal Server Error')
         return HttpResponse(json.dumps(result), status=500,
-                                      content_type=content_type)
+                            content_type=content_type)
 
-    result['success'] = True
+    org_id = -1
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
+            org_id, repo_id, permission)
+    else:
+        seafile_api.add_inner_pub_repo(repo_id, permission)
+
+    username = request.user.username
     repo_created.send(sender=None,
-                      org_id=-1,
-                      creator=user,
+                      org_id=org_id,
+                      creator=username,
                       repo_id=repo_id,
                       repo_name=repo_name)
+
+    result['success'] = True
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
