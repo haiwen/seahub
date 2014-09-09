@@ -4,7 +4,7 @@
 
 {% block file_view %}
 {% if not err %}
- <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{{ raw_path }}" style="width:95%;height:600px;border:0;margin:0 auto;" allowfullscreen webkitallowfullscreen></iframe>
+ <iframe id="viewer" src="{{MEDIA_URL}}js/Viewer.js/index.html#{% url 'view_raw_file' repo.id path|urlencode%}" style="width:95%;height:600px;border:0;margin:0 auto;" allowfullscreen webkitallowfullscreen></iframe>
 {% endif %}
 {% endblock %}
 

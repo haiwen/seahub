@@ -70,10 +70,18 @@ $(function() {
                     // set a notice to be read when <a> in it is clicked
                     $('.unread a', notice_list).click(function() {
                         var notice_id = $(this).parents('.unread').data('id');
+                        var link_href = $(this).attr('href');
                         $.ajax({
                             url: notice_list.data('url') + '?notice_id=' + e(notice_id),
-                            dataType:'json'
+                            dataType:'json',
+                            success: function(data) {
+                                location.href = link_href;
+                            },
+                            error: function() {
+                                location.href = link_href;
+                            }
                         });
+                        return false;
                     });
 
                     $('.detail', notice_list).click(function() {

@@ -44,13 +44,29 @@ class Command(BaseCommand):
         repl = r'src="%s\1"' % get_site_scheme_and_netloc()
         return re.sub(pattern, repl, img_tag)
 
-    def get_file_upload_avatar_url(self, default_size=32):
+    def get_avatar_src(self, username, default_size=32):
+        avatar_img = self.get_avatar(username, default_size)
+        m = re.search('<img src="(.*?)".*', avatar_img)
+        if m:
+            return m.group(1)
+        else:
+            return ''
+
+    def get_default_avatar(self, default_size=32):
         # user default avatar
         img_tag = """<img src="%s" width="%s" height="%s" class="avatar" alt="" />""" % \
                 (get_default_avatar_url(), default_size, default_size)
         pattern = r'src="(.*)"'
         repl = r'src="%s\1"' % get_site_scheme_and_netloc()
         return re.sub(pattern, repl, img_tag)
+
+    def get_default_avatar_src(self, default_size=32):
+        avatar_img = self.get_default_avatar(default_size)
+        m = re.search('<img src="(.*?)".*', avatar_img)
+        if m:
+            return m.group(1)
+        else:
+            return ''
 
     def format_priv_file_share_msg(self, notice):
         d = json.loads(notice.detail)
@@ -59,7 +75,7 @@ class Command(BaseCommand):
                                               args=[priv_share_token])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.priv_shared_file_name = d['file_name']
-        notice.avatar = self.get_avatar(d['share_from'])
+        notice.avatar_src = self.get_avatar_src(d['share_from'])
         return notice
 
     def format_user_message(self, notice):
@@ -68,7 +84,7 @@ class Command(BaseCommand):
         message = d.get('message')
 
         notice.notice_from = escape(email2nickname(msg_from))
-        notice.avatar = self.get_avatar(msg_from)
+        notice.avatar_src = self.get_avatar_src(msg_from)
         notice.user_msg_url = reverse('user_msg_list', args=[msg_from])
         notice.user_msg = message
         return notice
@@ -84,7 +100,7 @@ class Command(BaseCommand):
         notice.group_url = reverse('group_discuss', args=[group.id])
         notice.notice_from = escape(email2nickname(d['msg_from']))
         notice.group_name = group.group_name
-        notice.avatar = self.get_avatar(d['msg_from'])
+        notice.avatar_src = self.get_avatar_src(d['msg_from'])
         notice.grp_msg = message
         return notice
 
@@ -95,7 +111,7 @@ class Command(BaseCommand):
 
         notice.group_msg_reply_url = reverse('msg_reply_new')
         notice.notice_from = escape(email2nickname(d['reply_from']))
-        notice.avatar = self.get_avatar(d['reply_from'])
+        notice.avatar_src = self.get_avatar_src(d['reply_from'])
         notice.grp_reply_msg = message
         notice.grpmsg_topic = grpmsg_topic
         return notice
@@ -111,7 +127,7 @@ class Command(BaseCommand):
         notice.repo_url = reverse('repo', args=[repo.id])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
-        notice.avatar = self.get_avatar(d['share_from'])
+        notice.avatar_src = self.get_avatar_src(d['share_from'])
         return notice
 
     def format_file_uploaded_msg(self, notice):
@@ -129,7 +145,7 @@ class Command(BaseCommand):
         notice.file_name = file_name
         notice.folder_link = folder_link
         notice.folder_name = folder_name
-        notice.avatar = self.get_file_upload_avatar_url()
+        notice.avatar_src = self.get_default_avatar_src()
         return notice
 
     def format_group_join_request(self, notice):
@@ -148,7 +164,7 @@ class Command(BaseCommand):
         notice.notice_from = username
         notice.grpjoin_group_name = group.group_name
         notice.grpjoin_request_msg = join_request_msg
-        notice.avatar = self.get_avatar(username)
+        notice.avatar_src = self.get_avatar_src(username)
         return notice
 
     def get_user_language(self, username):

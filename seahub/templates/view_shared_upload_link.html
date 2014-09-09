@@ -23,7 +23,7 @@
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}
-        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="{{ajax_upload_url}}">{% csrf_token %}
+        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <input type="hidden" name="parent_dir" value="{{ path }}" />
             <div class="row fileupload-buttonbar">
                 <div>
@@ -89,6 +89,17 @@ var form = $('#upload-file-form');
 form.fileupload({
     //singleFileUploads: false // using 1 request to upload all files of a selection
     sequentialUploads: true
+})
+.bind('fileuploadadd', function(e, data) {
+    // get url(token) for every file
+    $.ajax({
+        url: '{% url 'get_file_upload_url_ul' uploadlink.token %}?&r={{uploadlink.repo_id }}',
+        cache: false,
+        dataType: 'json',
+        success: function(ret) {
+            data.url = ret['url'];
+        }
+    });
 })
 .bind('fileuploaddone', function(e, data) {
     if (data.textStatus == 'success') {

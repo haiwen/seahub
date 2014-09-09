@@ -73,6 +73,11 @@ $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
 var cur_tab = $('.ui-tabs-selected .a');    
 var lib_create_btn = $('#repo-create'),
     sublib_create_btn = $('#sub-lib-create');
+// for 'long language' such as german
+if (sublib_create_btn.text().length > 15) { // 'new Sub-library'.length is 15
+    $('span', sublib_create_btn).text(trimFilename(sublib_create_btn.text(),14));;
+}
+
 // for initial state
 if (cur_tab.attr('id') == 'mylib-tab') {
     lib_create_btn.removeClass('hide');

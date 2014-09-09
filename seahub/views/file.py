@@ -700,6 +700,43 @@ def view_shared_file(request, token):
             'traffic_over_limit': traffic_over_limit,
             }, context_instance=RequestContext(request))
 
+def view_raw_shared_file(request, token, obj_id, file_name):
+    """Returns raw content of a shared file.
+    
+    Arguments:
+    - `request`:
+    - `token`:
+    - `obj_id`:
+    - `file_name`:
+    """
+    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+    if fileshare is None:
+        raise Http404
+
+    repo_id = fileshare.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # Normalize file path based on file or dir share link
+    if fileshare.is_file_share_link():
+        file_path = fileshare.path.rstrip('/')
+    else:
+        file_path = fileshare.path.rstrip('/') + '/' + file_name
+
+    real_obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
+    if not real_obj_id:
+        raise Http404
+
+    if real_obj_id != obj_id:   # perm check
+        raise Http404
+
+    filename = os.path.basename(file_path)
+    username = request.user.username
+    token = web_get_access_token(repo_id, real_obj_id, 'view', username)
+    outer_url = gen_file_get_url(token, filename)
+    return HttpResponseRedirect(outer_url)
+
 def view_file_via_shared_dir(request, token):
     assert token is not None    # Checked by URLconf
 
@@ -969,6 +1006,33 @@ def file_edit(request, repo_id):
         'cancel_url': cancel_url,
     }, context_instance=RequestContext(request))
 
+@login_required
+def view_raw_file(request, repo_id, file_path):
+    """Returns raw content of a file.
+    
+    Arguments:
+    - `request`:
+    - `repo_id`:
+    """
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    file_path = file_path.rstrip('/')
+    if file_path[0] != '/':
+        file_path = '/' + file_path
+
+    obj_id = get_file_id_by_path(repo_id, file_path)
+    if not obj_id:
+        raise Http404
+
+    raw_path, inner_path, user_perm = get_file_view_path_and_perm(
+        request, repo.id, obj_id, file_path)
+    if user_perm is None:
+        raise Http404
+
+    return HttpResponseRedirect(raw_path)
+    
 ########## text diff
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:

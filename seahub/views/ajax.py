@@ -26,6 +26,7 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
 from seahub.message.models import UserMessage
+from seahub.share.models import UploadLinkShare
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
@@ -1559,6 +1560,35 @@ def get_file_op_url(request, repo_id):
                                                         op_type, username)
         url = gen_file_upload_url(token, op_type + '-aj')
     
+    return HttpResponse(json.dumps({"url": url}), content_type=content_type)
+
+def get_file_upload_url_ul(request, token):
+    """Get file upload url in dir upload link.
+    
+    Arguments:
+    - `request`:
+    - `token`:
+    """
+    if not request.is_ajax():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    uls = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+    if uls is None:
+        return HttpResponse(json.dumps({"error": _("Bad upload link token.")}),
+                            status=400, content_type=content_type)
+
+    repo_id = uls.repo_id
+    r = request.GET.get('r', '')
+    if repo_id != r:            # perm check
+        return HttpResponse(json.dumps({"error": _("Bad repo id in upload link.")}),
+                            status=403, content_type=content_type)
+
+    acc_token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
+                                                        'upload',
+                                                        request.user.username)
+    url = gen_file_upload_url(acc_token, 'upload-aj')
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
 @login_required_ajax

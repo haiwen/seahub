@@ -10,7 +10,7 @@
                 {% if notice.msg_from %}
                 <a href="{% url 'user_profile' notice.msg_from %}">{% avatar notice.msg_from 32 %}</a>
                 {% else %}
-                <img src={{notice.default_avatar_url}} width="32" height="32" class="avatar" />
+                <img src={{notice.default_avatar_url}} width="32" height="32" class="avatar" alt="" />
                 {% endif %}
             </td>
             <td>
@@ -25,7 +25,7 @@
                     {% if notice.format_grpmsg_reply_detail %}
                 <div class="detail">
                     {% if notice.format_grpmsg_reply_topic %}
-                    <p class="topic">{{ notice.format_grpmsg_reply_topic|truncatechars:45 }}</p>
+                    <p class="topic">{{ notice.format_grpmsg_reply_topic|truncatechars:60 }}</p>
                     {% endif %}
                     <p>{{ notice.format_grpmsg_reply_detail }}</p>
                 </div>
