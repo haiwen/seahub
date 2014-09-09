@@ -163,11 +163,18 @@ def get_unenc_group_repos(request, group_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
-    repos = seafile_api.get_group_repo_list(group_id_int)    
     repo_list = []
-    for repo in repos:
-        if not repo.encrypted:
-            repo_list.append({"name": repo.props.name, "id": repo.props.id})
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        repos = seafile_api.get_org_group_repos(org_id, group_id_int)
+        for repo in repos:
+            if not repo.encrypted:
+                repo_list.append({"name": repo.repo_name, "id": repo.repo_id})
+    else:
+        repos = seafile_api.get_group_repo_list(group_id_int)
+        for repo in repos:
+            if not repo.encrypted:
+                repo_list.append({"name": repo.name, "id": repo.id})
 
     repo_list.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
