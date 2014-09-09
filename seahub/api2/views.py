@@ -54,7 +54,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
-    gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link
+    gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
+    get_org_user_events
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.views import validate_owner, is_registered_user, \
@@ -2505,7 +2506,13 @@ class EventsView(APIView):
 
         email = request.user.username
         events_count = 15
-        events, events_more_offset = get_user_events(email, start, events_count)
+
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            events, start = get_org_user_events(org_id, email, start,
+                                                events_count)
+        else:
+            events, events_more_offset = get_user_events(email, start, events_count)
         events_more = True if len(events) == events_count else False
 
         l = []
