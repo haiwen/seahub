@@ -7,7 +7,8 @@ from seahub.views import *
 from seahub.views.file import view_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_priv_shared_file, view_raw_file, view_raw_shared_file
-from seahub.views.repo import repo, repo_history_view
+from seahub.views.repo import repo, repo_history_view, view_shared_dir, \
+    view_shared_upload_link
 from notifications.views import notification_list
 from group.views import group_list
 from message.views import user_msg_list, user_msg_remove, user_received_msg_remove

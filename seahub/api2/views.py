@@ -2582,6 +2582,7 @@ class Groups(APIView):
         """
         result = {}
         content_type = 'application/json; charset=utf-8'
+        username = request.user.username
 
         if not request.user.permissions.can_add_group():
             return api_error(status.HTTP_403_FORBIDDEN,
@@ -2590,7 +2591,6 @@ class Groups(APIView):
         # check plan
         num_of_groups = getattr(request.user, 'num_of_groups', -1)
         if num_of_groups > 0:
-            username = request.user.username
             current_groups = len(get_personal_groups_by_user(username))
             if current_groups > num_of_groups:
                 result['error'] = 'You can only create %d groups.' % num_of_groups
@@ -2613,7 +2613,7 @@ class Groups(APIView):
         # Group name is valid, create that group.
         try:
             group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
-                                                       request.user.username)
+                                                       username)
             return HttpResponse(json.dumps({'success': True, 'group_id': group_id}),
                                 content_type=content_type)
         except SearpcError, e:

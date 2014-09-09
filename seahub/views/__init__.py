@@ -12,7 +12,6 @@ import posixpath
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.db.models import F
 from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
@@ -27,7 +26,7 @@ from seaserv import get_repo, get_commits, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
     is_passwd_set, get_file_size, edit_repo, \
     get_session_info, set_repo_history_limit, get_commit, \
-    MAX_DOWNLOAD_DIR_SIZE, send_message, MAX_UPLOAD_FILE_SIZE
+    MAX_DOWNLOAD_DIR_SIZE, send_message
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -42,8 +41,7 @@ from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, \
-    UploadLinkShare, check_share_link_access, set_share_link_access
-from seahub.share.forms import SharedLinkPasswordForm
+    UploadLinkShare
 from seahub.forms import RepoPassowrdForm, RepoSettingForm
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_fileserver_root, gen_shared_upload_link, \
@@ -1360,129 +1358,6 @@ def file_revisions(request, repo_id):
             return handle_download()
         except Exception, e:
             return render_error(request, str(e))
-
-def view_shared_dir(request, token):
-    assert token is not None    # Checked by URLconf
-
-    fileshare = FileShare.objects.get_valid_dir_link_by_token(token)
-    if fileshare is None:
-        raise Http404
-
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request.user.username, token):
-            d = {'token': token, 'view_name': 'view_shared_dir', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    # set cache for non-anonymous user
-                    if request.user.is_authenticated():
-                        set_share_link_access(request.user.username, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
-
-    username = fileshare.username
-    repo_id = fileshare.repo_id
-    path = request.GET.get('p', '')
-    path = fileshare.path if not path else path
-    if path[-1] != '/':         # Normalize dir path
-        path += '/'
-
-    if not path.startswith(fileshare.path):
-        path = fileshare.path   # Can not view upper dir of shared dir
-
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    dir_name = os.path.basename(path[:-1])
-    current_commit = get_commits(repo_id, 0, 1)[0]
-    file_list, dir_list = get_repo_dirents(request, repo, current_commit,
-                                           path)
-    zipped = gen_path_link(path, '')
-
-    if path == fileshare.path:  # When user view the shared dir..
-        # increase shared link view_cnt,
-        fileshare = FileShare.objects.get(token=token)
-        fileshare.view_cnt = F('view_cnt') + 1
-        fileshare.save()
-
-    traffic_over_limit = user_traffic_over_limit(fileshare.username)
-
-    return render_to_response('view_shared_dir.html', {
-            'repo': repo,
-            'token': token,
-            'path': path,
-            'username': username,
-            'dir_name': dir_name,
-            'file_list': file_list,
-            'dir_list': dir_list,
-            'zipped': zipped,
-            'traffic_over_limit': traffic_over_limit,
-            }, context_instance=RequestContext(request))
-
-def view_shared_upload_link(request, token):
-    assert token is not None    # Checked by URLconf
-
-    uploadlink = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
-    if uploadlink is None:
-        raise Http404
-
-    if uploadlink.is_encrypted():
-        if not check_share_link_access(request.user.username, token):
-            d = {'token': token, 'view_name': 'view_shared_upload_link', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = uploadlink.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    # set cache for non-anonymous user
-                    if request.user.is_authenticated():
-                        set_share_link_access(request.user.username, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
-
-    username = uploadlink.username
-    repo_id = uploadlink.repo_id
-    path = uploadlink.path
-    dir_name = os.path.basename(path[:-1])
-
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    uploadlink.view_cnt = F('view_cnt') + 1
-    uploadlink.save()
-
-    max_upload_file_size = MAX_UPLOAD_FILE_SIZE
-    no_quota = True if seaserv.check_quota(repo_id) < 0 else False
-
-    token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                    'upload', request.user.username)
-    ajax_upload_url = gen_file_upload_url(token, 'upload-api').replace('api', 'aj')
-
-    return render_to_response('view_shared_upload_link.html', {
-            'repo': repo,
-            'token': token,
-            'uploadlink': uploadlink,
-            'path': path,
-            'username': username,
-            'dir_name': dir_name,
-            'max_upload_file_size': max_upload_file_size,
-            'no_quota': no_quota,
-            'ajax_upload_url': ajax_upload_url
-            }, context_instance=RequestContext(request))
 
 def demo(request):
     """
