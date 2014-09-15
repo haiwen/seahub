@@ -713,7 +713,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     content_type = 'application/json; charset=utf-8'
     
     src_dir = os.path.join(src_path, obj_name)
-    if dst_path.startswith(src_dir):
+    if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
             % {'src': src_dir, 'des': dst_path}
         result['error'] = error_msg
@@ -847,7 +847,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
 
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
-        if dst_path.startswith(src_dir):
+        if dst_path.startswith(src_dir + '/'):
             error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
                 % {'src': src_dir, 'des': dst_path}
             result['error'] = error_msg
