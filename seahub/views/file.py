@@ -1047,10 +1047,12 @@ def send_file_download_msg(request, repo, path, dl_type):
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
 
+    msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s\t%s' % \
+        (dl_type, username, ip, user_agent, repo.id, repo.name, path)
+    msg_utf8 = msg.encode('utf-8')
+
     try:
-        send_message('seahub.stats', 'file-download-%s\t%s\t%s\t%s\t%s\t%s\t%s' %
-                     (dl_type, username, ip, user_agent, repo.id, repo.name,
-                      path))
+        send_message('seahub.stats', msg_utf8)
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
                      (dl_type, str(e)))
