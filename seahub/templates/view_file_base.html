@@ -101,7 +101,7 @@
                 {% endblock %}
             {% endif %}
 
-            <button data-url="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ filename|urlencode }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data-url="{% url 'download_file' repo.id obj_id%}?p={{path|urlencode}}" id="download">{% trans "Download"%}</button>
         </div>
 
         <div id="file-view">

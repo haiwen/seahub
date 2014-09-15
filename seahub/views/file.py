@@ -52,6 +52,7 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit
+from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
@@ -65,7 +66,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
 from seahub.views import is_registered_user, check_repo_access_permission, \
-    get_unencry_rw_repos_by_user
+    get_unencry_rw_repos_by_user, get_file_access_permission
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -1032,7 +1033,91 @@ def view_raw_file(request, repo_id, file_path):
         raise Http404
 
     return HttpResponseRedirect(raw_path)
+
+def send_file_download_msg(request, repo, path, dl_type):
+    """Send file downlaod msg.
     
+    Arguments:
+    - `request`:
+    - `repo`:
+    - `obj_id`:
+    - `dl_type`: web or api
+    """
+    username = request.user.username
+    ip = get_remote_ip(request)
+    user_agent = request.META.get("HTTP_USER_AGENT")
+
+    try:
+        send_message('seahub.stats', 'file-download-%s\t%s\t%s\t%s\t%s\t%s\t%s' %
+                     (dl_type, username, ip, user_agent, repo.id, repo.name,
+                      path))
+    except Exception as e:
+        logger.error("Error when sending file-download-%s message: %s" %
+                     (dl_type, str(e)))
+
+def download_file(request, repo_id, obj_id):
+    """Download file.
+
+    Arguments:
+    - `request`:
+    - `repo_id`:
+    - `obj_id`:
+    """
+    username = request.user.username
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
+        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+
+    # If vistor's file shared token in url params matches the token in db,
+    # then we know the vistor is from file shared link.
+    share_token = request.GET.get('t', '')
+    fileshare = FileShare.objects.get(token=share_token) if share_token else None
+    shared_by = None
+    if fileshare:
+        from_shared_link = True
+        shared_by = fileshare.username
+    else:
+        from_shared_link = False
+
+    if from_shared_link:
+        # check whether owner's traffic over the limit
+        if user_traffic_over_limit(fileshare.username):
+            messages.error(request, _(u'Unable to access file: share link traffic is used up.'))
+            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next)
+
+    # Permission check and generate download link
+    path = request.GET.get('p', '')
+    if check_repo_access_permission(repo_id, request.user) or \
+            get_file_access_permission(repo_id, path, username) or from_shared_link:
+        # Get a token to access file
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id, 'download',
+                                                  username)
+    else:
+        messages.error(request, _(u'Unable to download file'))
+        next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+        return HttpResponseRedirect(next)
+
+    # send stats message
+    if from_shared_link:
+        try:
+            file_size = seafile_api.get_file_size(repo.store_id, repo.version,
+                                                  obj_id)
+            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
+                         (repo.id, shared_by, obj_id, file_size))
+        except Exception, e:
+            logger.error('Error when sending file-download message: %s' % str(e))
+    else:
+        # send stats message
+        send_file_download_msg(request, repo, path, 'web')
+
+    file_name = os.path.basename(path.rstrip('/'))
+    redirect_url = gen_file_get_url(token, file_name)
+    return HttpResponseRedirect(redirect_url)
+
 ########## text diff
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:

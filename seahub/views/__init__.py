@@ -157,6 +157,17 @@ def gen_path_link(path, repo_name):
 
     return zipped
 
+def get_file_download_link(repo_id, obj_id, path):
+    """Generate file download link.
+    
+    Arguments:
+    - `repo_id`:
+    - `obj_id`:
+    - `filename`:
+    """
+    return reverse('download_file', args=[repo_id, obj_id]) + '?p=' + \
+        urlquote(path)
+
 def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
     dir_list = []
     file_list = []
@@ -224,8 +235,8 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 fpath = os.path.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
                 dirent.view_link = view_file_base + '?p=' + urlquote(p_fpath)
-                dirent.dl_link = '%srepo/%s/%s/?file_name=%s&op=download' % \
-                    (settings.SITE_ROOT, repo.id, dirent.obj_id, urlquote(dirent.obj_name))
+                dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
+                                                        p_fpath)
                 dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
                 if fpath in starred_files:
                     dirent.starred = True
@@ -1078,6 +1089,8 @@ def repo_del_file(request, repo_id):
 def repo_access_file(request, repo_id, obj_id):
     """Delete or download file.
     TODO: need to be rewrite.
+
+    **NOTE**: download file is moved to file.py::download_file
     """
     repo = get_repo(repo_id)
     if not repo:
