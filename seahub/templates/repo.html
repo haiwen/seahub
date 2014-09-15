@@ -1704,7 +1704,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                     'data-status': 'unstarred'
                     });
                 dld_link = $('.file-download', op_obj), dld_href = dld_link.attr('href'); 
-                dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?file_name=' + e(new_name) + '&op=download');
+                dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(cur_path + new_name));
                 $('.file-share', op_obj).attr({'data-link':'', 'data-token':''});
                 var file_history = $('.file-history', op_obj), fh_href = file_history.attr('href');
                 file_history.attr('href', fh_href.substr(0, fh_href.indexOf('?')) + '?p=' + e(path+new_name));
