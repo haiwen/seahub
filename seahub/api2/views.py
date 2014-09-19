@@ -260,7 +260,10 @@ class Account(APIView):
                 profile.user = user.username
 
                 if name:
-                    profile.nickname = name
+                    if '/' in name:
+                        return api_error(status.HTTP_400_BAD_REQUEST, "Nickname should not include '/'")
+                    else:
+                        profile.nickname = name
                 if note:
                     profile.intro = note
 
