@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/haiwen/seahub.svg?branch=master)](http://travis-ci.org/haiwen/seahub)
+
 Introduction
 ==========
 
