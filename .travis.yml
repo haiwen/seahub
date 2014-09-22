@@ -13,4 +13,8 @@ install:
   - pip install -r requirements.txt --allow-all-external --allow-unverified Djblets --allow-unverified PIL
   - pip install -r test-requirements.txt
 notifications:
-  email: false
+  email:
+    recipients:
+      - xiez1989@gmail.com
+      - imwhatiam123@gmail.com
+      - linshuai2012@gmail.com
