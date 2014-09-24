@@ -68,12 +68,6 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-def root(request):
-    if request.user.is_authenticated():
-        return HttpResponseRedirect(reverse(myhome))
-    else:
-        return HttpResponseRedirect(settings.LOGIN_URL)
-
 def validate_owner(request, repo_id):
     """
     Check whether user in the request owns the repo.

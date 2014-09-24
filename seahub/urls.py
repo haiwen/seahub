@@ -38,7 +38,7 @@ urlpatterns = patterns('',
 
     (r'^accounts/', include('seahub.base.registration_urls')),
 
-    (r'^$', root),
+    (r'^$', myhome),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
