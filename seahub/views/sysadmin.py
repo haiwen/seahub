@@ -384,6 +384,30 @@ def user_set_quota(request, email):
         result['error'] = str(f.errors.values()[0])
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
+
+@login_required_ajax
+@sys_staff_required
+def sys_org_set_quota(request, org_id):
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    org_id = int(org_id)
+    quota_mb = int(request.POST.get('quota', 0))
+    quota = quota_mb * (1 << 20)
+
+    try:
+        seafserv_threaded_rpc.set_org_quota(org_id, quota)
+    except SearpcError as e:
+        logger.error(e)
+        result['error'] = _(u'Failed to set quota: internal server error')
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+    result['success'] = True
+    return HttpResponse(json.dumps(result), content_type=content_type)
+
 @login_required
 @sys_staff_required
 def user_remove(request, user_id):
@@ -709,6 +733,9 @@ def sys_org_admin(request):
     orgs_plus_one = ccnet_threaded_rpc.get_all_orgs(per_page * (current_page - 1),
                                                     per_page + 1)
     orgs = orgs_plus_one[:per_page]
+    for org in orgs:
+        org.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
+        org.total_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
 
     if len(orgs_plus_one) == per_page + 1:
         page_next = True

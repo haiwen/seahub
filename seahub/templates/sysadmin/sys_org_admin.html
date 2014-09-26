@@ -4,23 +4,49 @@
 {% block cur_org %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<h3>{% trans "All Organizations" %}</h3>
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "All Organizations" %}</h3>
+    <button id="add-btn" class="fright">{% trans "Add organization" %}</button>
+</div>
+
+<form id="add-org-form" action="" method="post" class="hide">{% csrf_token %}
+    <h3>{% trans "Add organization" %}</h3>
+    <label for="id_name">{% trans "Name" %}</label><br />
+    <input type="text" name="name" id="id_name" class="input" /><br />
+
+    <label for="id_url">{% trans "Url Prefix" %}</label><br />
+    <input type="text" name="url" id="id_url" class="input" /><br />
+
+    <label for="id_owner">{% trans "Owner" %}</label><span class="icon-question-sign" title="{% trans "Owner can use admin panel in an organization, must be a new account." %}" style="color:#666; margin-left:3px;"></span><br />
+    <input type="text" name="owner" id="id_owner" class="input" /><br />
+    <label for="id_password1">{% trans "Password" %}</label><br />
+    <input type="password" name="password1" id="id_password1" class="input" /><br />    
+    <label for="id_password2">{% trans "Confirm Password" %}</label><br />
+    <input type="password" name="password2" id="id_password2" class="input" /><br />    
+
+    <p class="error hide"></p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+
 {% if orgs %}
 <table>
     <tr>
         <th width="20%">{% trans "Name" %}</th>
         <th width="18%">{% trans "Url Prefix" %}</th>
-        <th width="27%">{% trans "Creator" %}</th>
-        <th width="23%">{% trans "Created At" %}</th>
-        <th width="12%">{% trans "Operations" %}</th>
+        <th width="25%">{% trans "Creator" %}</th>
+        <th width="17%">{% trans "Space Used" %}</th>
+        <th width="20%">{% trans "Created At" %}</th>
     </tr>
     {% for org in orgs %}
     <tr>
         <td><a href="{% url 'sys_org_info' org.org_id %}">{{ org.org_name }}</a></td>
         <td>{{ org.url_prefix }}</td>
-        <td>{{ org.creator }}</td>
+        <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
+        <td>
+            {{ org.quota_usage|filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|filesizeformat }} {% endif %}
+        </td>
         <td>{{ org.ctime|tsstr_sec }}</td>
-        <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td>
+        <!-- <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td> -->
     </tr>
     {% endfor %}
 </table>
@@ -34,9 +60,77 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.remove-btn'), {
-        'title':'{% trans "Delete Organization" %}',
-        'con':'{% trans "Are you sure you want to delete %s ?" %}'
+$('#add-btn').click(function() {
+        $('#add-org-form').modal();
+        $('#simplemodal-container').css({'width':'auto'});
+});
+
+$('#add-org-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        submit_btn = form.find('[type="submit"]'),
+        name = $.trim(form.children('[name="name"]').val()),
+        url_prefix = $.trim(form.children('[name="url"]').val()),
+        owner = $.trim(form.children('[name="owner"]').val()),
+        pwd1 = $.trim(form.children('[name="password1"]').val()),
+        pwd2 = $.trim(form.children('[name="password2"]').val());
+
+    if (!name) {
+        apply_form_error(form_id, "{% trans "Name can not be blank"%}");
+        return false;
+    }
+    if (!url_prefix) {
+        apply_form_error(form_id, "{% trans "Url can not be blank"%}");
+        return false;
+    }
+    if (!owner) {
+        apply_form_error(form_id, "{% trans "Owner can not be blank"%}");
+        return false;
+    }
+    if (!pwd1) {
+        apply_form_error(form_id, "{% trans "Password can not be blank" %}");
+        return false;
+    } 
+    if (!pwd2) {
+        apply_form_error(form_id, "{% trans "Please enter the password again" %}");
+        return false;
+    } 
+    if (pwd1 != pwd2) {
+        apply_form_error(form_id, "{% trans "Passwords do not match" %}");
+        return false;
+    } 
+
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'org_add' %}',
+        type: 'POST',
+        datatype: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'org_name': name,
+            'url_prefix': url_prefix,
+            'email': owner,
+            'password1': pwd1,
+            'password2': pwd2
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            }   
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+        }
+    }).complete(function() {
+        enable(submit_btn);
+    });
+
+    return false;
 });
 </script>
 {% endblock %}
