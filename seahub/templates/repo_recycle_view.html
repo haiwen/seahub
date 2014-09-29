@@ -6,7 +6,12 @@
 {% block main_panel %}
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
-        <button data="{% url 'repo' repo.id %}" class="fright" id="back">{% trans "Back to Library" %}</button>
+        <div class="fright">
+            {% if is_repo_owner and not use_sqlite %}
+            <button data="{% url 'repo' repo.id %}" id="online-gc">{% trans "Clean" %}</button>
+            {% endif %}
+            <button data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library" %}</button>
+        </div>
     </div>
 
     <div class="repo-file-list-outer-container">
@@ -92,6 +97,17 @@
             </table>
         </div>
     </div>
+
+    {% if is_repo_owner and not use_sqlite %}
+    <form id="gc-form" class="hide">
+        <h3>{% trans "Clean" %}</h3>
+        <p>{% trans "Clean items deleted before the following days:" %}</p>
+        <input type="text" name="day" class="input" value="" placeholder="{% trans "please input an integer greater than 0" %}" /><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button type="button" class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+    {% endif %}
     {% endblock %}
 
 {% block extra_script %}
@@ -99,5 +115,35 @@
 $('#back').click(function() {
     location.href = $(this).attr('data');
 });
+
+{% if is_repo_owner and not use_sqlite %}
+$('#online-gc').click(function() {
+    $('#gc-form').modal();
+});
+$('#gc-form').submit(function () {
+    var form = $(this);
+    var day = parseInt($.trim($('[name="day"]', form).val())); // turn the string into int
+    if (!day || day < 0) { // day can be NaN, 0, -n
+        apply_form_error(form.attr('id'), "{% trans "Please input a valid number" %}");
+        return false;
+    }
+    disable($('[type="submit"]', form));
+    form.append('<p style="color:#222;">' + "{% trans "It could take a while, you can close this popup now." %}" + '</p>');
+    $.ajax({
+        url: '{% url "repo_online_gc" repo.id %}?day=' + parseInt(day),
+        dataType: 'json',
+        cache: false,
+        success: function () {
+            $.modal.close();
+            feedback("{% trans "Clean is done." %}", 'success');
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            $.modal.close();
+            ajaxErrorHandler(xhr, textStatus, errorThrown);
+        }
+    });
+    return false;
+});
+{% endif %}
 </script>
 {% endblock %}

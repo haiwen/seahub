@@ -1819,3 +1819,49 @@ def events(request):
                                     'events_more': events_more,
                                     'new_start': start}),
                         content_type='application/json; charset=utf-8')
+
+@login_required_ajax
+def repo_online_gc(request, repo_id):
+
+    content_type='application/json; charset=utf-8'
+
+    repo = get_repo(repo_id)
+    if not repo:
+        error = _(u'Library does not exist.')
+        return HttpResponse(json.dumps({'error': error}), status=400,
+                        content_type=content_type)
+
+    day = int(request.GET.get('day'))
+    if not day:
+        error = _('Argument missing')
+        return HttpResponse(json.dumps({'error': error}), status=400,
+                        content_type=content_type)
+
+    username = request.user.username
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if repo_owner == username else False
+    if not is_repo_owner:
+        error = _('Permission denied')
+        return HttpResponse(json.dumps({'error': error}), status=400,
+                        content_type=content_type)
+
+    use_sqlite = False
+    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
+    if 'sqlite' in db_backend:
+        use_sqlite = True
+    if use_sqlite:
+        error = _('It is not supported for SQLite')
+        return HttpResponse(json.dumps({'error': error}), status=400,
+                        content_type=content_type)
+
+    try:
+        seafile_api.clean_up_repo_history(repo.id, day)
+    except SearpcError, e:
+        error =  _('Internal server error')
+        return HttpResponse(json.dumps({'error': error}), status=500,
+                        content_type=content_type)
+
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)

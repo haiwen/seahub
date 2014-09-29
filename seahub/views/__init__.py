@@ -302,12 +302,26 @@ def render_recycle_root(request, repo_id):
     file_list.sort(lambda x, y : cmp(y.delete_time,
                                      x.delete_time))
 
+    username = request.user.username
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if repo_owner == username else False
+
+    use_sqlite = False
+    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
+    if 'sqlite' in db_backend:
+        use_sqlite = True
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'dir_list': dir_list,
             'file_list': file_list,
             'days': days,
+            'is_repo_owner': is_repo_owner,
+            'use_sqlite': use_sqlite,
             }, context_instance=RequestContext(request))
 
 def render_recycle_dir(request, repo_id, commit_id):
@@ -334,6 +348,18 @@ def render_recycle_dir(request, repo_id, commit_id):
 
     days = show_delete_days(request)
 
+    username = request.user.username
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if repo_owner == username else False
+
+    use_sqlite = False
+    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
+    if 'sqlite' in db_backend:
+        use_sqlite = True
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
@@ -344,6 +370,8 @@ def render_recycle_dir(request, repo_id, commit_id):
             'basedir': basedir,
             'path': path,
             'days': days,
+            'is_repo_owner': is_repo_owner,
+            'use_sqlite': use_sqlite,
             }, context_instance=RequestContext(request))
 
 @login_required
