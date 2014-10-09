@@ -63,7 +63,8 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH
+    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH, \
+    ENABLE_USER_CLEAN_HISTORY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -314,14 +315,17 @@ def render_recycle_root(request, repo_id):
     if 'sqlite' in db_backend:
         use_sqlite = True
 
+    enable_clean = False
+    if is_repo_owner and not use_sqlite and ENABLE_USER_CLEAN_HISTORY:
+        enable_clean = True
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
             'dir_list': dir_list,
             'file_list': file_list,
             'days': days,
-            'is_repo_owner': is_repo_owner,
-            'use_sqlite': use_sqlite,
+            'enable_clean': enable_clean,
             }, context_instance=RequestContext(request))
 
 def render_recycle_dir(request, repo_id, commit_id):
@@ -360,6 +364,10 @@ def render_recycle_dir(request, repo_id, commit_id):
     if 'sqlite' in db_backend:
         use_sqlite = True
 
+    enable_clean = False
+    if is_repo_owner and not use_sqlite and ENABLE_USER_CLEAN_HISTORY:
+        enable_clean = True
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
@@ -370,8 +378,7 @@ def render_recycle_dir(request, repo_id, commit_id):
             'basedir': basedir,
             'path': path,
             'days': days,
-            'is_repo_owner': is_repo_owner,
-            'use_sqlite': use_sqlite,
+            'enable_clean': enable_clean,
             }, context_instance=RequestContext(request))
 
 @login_required

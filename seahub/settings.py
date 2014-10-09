@@ -226,6 +226,9 @@ FORCE_SERVER_CRYPTO = True
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
+# Enable or disable online GC for user, i.e., show 'clean' in repo trash page or not.
+ENABLE_USER_CLEAN_HISTORY = False
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024

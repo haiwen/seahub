@@ -1832,8 +1832,9 @@ def repo_online_gc(request, repo_id):
                         content_type=content_type)
 
     day = int(request.GET.get('day'))
-    if not day:
-        error = _('Argument missing')
+
+    if not settings.ENABLE_USER_CLEAN_HISTORY:
+        error = _('Not supported.')
         return HttpResponse(json.dumps({'error': error}), status=400,
                         content_type=content_type)
 
