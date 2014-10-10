@@ -1464,10 +1464,7 @@ def get_pub_users(request, start, limit):
         raise Http404           # no pubuser in cloud mode
 
     else:
-        # Get ldap users first, if no users found, use database.
-        users_plus_one = seaserv.get_emailusers('LDAP', start, limit)
-        if len(users_plus_one) == 0:
-            users_plus_one = seaserv.get_emailusers('DB', start, limit)
+        users_plus_one = seaserv.get_emailusers('DB', start, limit)
     return users_plus_one
 
 def count_pub_users(request):
@@ -1479,12 +1476,12 @@ def count_pub_users(request):
     elif request.cloud_mode:
         return 0
     else:
-        return seaserv.count_emailusers()
+        return seaserv.ccnet_threaded_rpc.count_emailusers('DB')
 
 @login_required
 def pubuser(request):
     """
-    Show public users.
+    Show public users in database or ldap depending on request arg ``ldap``.
     """
     if not request.user.permissions.can_view_org():
         raise Http404
@@ -1496,13 +1493,30 @@ def pubuser(request):
         current_page = 1
     per_page = 20           # show 20 users per-page
 
-    users_plus_one = get_pub_users(request, per_page * (current_page - 1),
-                                  per_page + 1)
+    # Show LDAP users or Database users.
+    have_ldap_user = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
+
+    try:
+        ldap = True if int(request.GET.get('ldap', 0)) == 1 else False
+    except ValueError:
+        ldap = False
+
+    if ldap and have_ldap_user:
+        users_plus_one = seaserv.get_emailusers('LDAP',
+                                                per_page * (current_page - 1),
+                                                per_page + 1)
+    else:
+        users_plus_one = get_pub_users(request, per_page * (current_page - 1),
+                                       per_page + 1)
 
     has_prev = False if current_page == 1 else True
     has_next = True if len(users_plus_one) == per_page + 1 else False
 
-    emailusers_count = count_pub_users(request)
+    if ldap and have_ldap_user:
+        emailusers_count = seaserv.ccnet_threaded_rpc.count_emailusers('LDAP')
+    else:
+        emailusers_count = count_pub_users(request)
+
     num_pages = int(ceil(emailusers_count / float(per_page)))
     page_range = get_page_range(current_page, num_pages)
     show_paginator = True if len(page_range) > 1 else False
@@ -1526,6 +1540,8 @@ def pubuser(request):
                 'has_next': has_next,
                 'page_range': page_range,
                 'show_paginator': show_paginator,
+                'have_ldap_user': have_ldap_user,
+                'ldap': ldap,
                 }, context_instance=RequestContext(request))
 
 @login_required_ajax
