@@ -15,7 +15,7 @@
 {% block left_panel %}
 <div class="side-info">
     <a class="go-back" title="{% trans "Back to organization list" %}"  href="{% url 'sys_org_admin' %}"><span class="icon-chevron-left"></span></a>
-  
+
     <h3 class="hd">{{ org.org_name }}</h3>
     <dl>
         <dt>{% trans "Number of members" %}</dt>
@@ -48,39 +48,78 @@
     </div>
 
     <div id="members">
-        <ul class="user-list">
-            {% for u in users %}
-            {% with e=u.email id=u.email|id_or_email %}
-            <li class="user ovhd">
-            <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
-            <div class="txt fright">
-                <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
-                <p>{{ e }}</p>
-            </div>
-            </li>
-            {% endwith %}
-            {% endfor %}
-        </ul>
+    <table>
+        <tr>
+            <th width="25%">{% trans "Email" %}</th>
+            <th width="10%">{% trans "Status" %}</th>
+            <th width="20%">{% trans "Space Used" %}</th>
+            <th width="25%">{% trans "Create At / Last Login" %}</th>
+            <th width="20%">{% trans "Operations" %}</th>
+        </tr>
+
+        {% for user in users %}
+        <tr data-userid="{{user.email}}">
+            <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a></td>
+            <td>
+                <div class="user-status">
+                  {% if user.is_active %}
+                    <span class="user-status-cur-value">{% trans "Active" %}</span>
+                  {% else %}
+                    <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+                  {% endif %}
+                    <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+                </div>
+                <select name="permission" class="user-status-select hide">
+                    <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                    <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+                </select>
+            </td>
+            <td>
+                {% if CALC_SHARE_USAGE %}
+                {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+                {% else %}
+                {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+                {% endif %}
+            </td>
+            <td style="font-size:11px;">
+            {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            </td>
+            <td>
+              {% if not user.is_self %}
+              <a href="#" class="remove-user-btn op vh" data-url="{% url 'user_remove' user.id %}" data-target="{{ user.email }}">{% trans "Delete" %}</a>
+              <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.email }}">{% trans "ResetPwd" %}</a>
+              {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
     </div>
 
     <div id="grps" class="hide">
         {% if groups %}
-        <ul class="group-list">
-            {% for grp in groups %}
-            <li class="group ovhd">
-            <a href="{{ SITE_ROOT }}group/{{ grp.id }}/" class="no-deco pic fleft">{% grp_avatar grp.id 48 %}</a>
-            <div class="txt fright">
-                <h4><a href="{{ SITE_ROOT }}group/{{ grp.id }}/">{{ grp.group_name }}</a></h4>
-                <p><span class="item-name">{% trans "Creator: "%}</span>{{ grp.creator_name }}</p>
-                <p><span class="item-name">{% trans "Time: "%}</span>{{ grp.timestamp|tsstr_sec }}</p>
-            </div>
-            </li>
+        <table>
+            <tr>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Creator" %}</th>
+                <th width="25%">{% trans "Create At" %}</th>
+                <th width="15%">{% trans "Operations" %}</th>
+            </tr>
+            {% for group in groups %}
+            <tr>
+                <td><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a></td>
+                <td>{{ group.creator_name }}</td>
+                <td>{{ group.timestamp|tsstr_sec }}</td>
+                <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="group-remove-btn op vh">{% trans "Delete" %}</a></td>
+            </tr>
             {% endfor %}
-        </ul>
+        </table>
         {% else %}
         <p>{% trans "None" %}</p>
         {% endif %}
     </div>
+</div>
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
 </div>
 {% endblock %}
 
@@ -126,6 +165,76 @@ $('#set-quota-form .submit').click(function() {
     });
     return false;
 });
+addConfirmTo($('.group-remove-btn'), {
+    'title': "{% trans "Delete Group" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}"
+});
+addConfirmTo($('.remove-user-btn'), {
+        'title':"{% trans "Delete User" %}",
+        'con':"{% trans "Are you sure you want to delete %s ?" %}"
+});
+addConfirmTo($('.reset-user-btn'), {
+        'title':"{% trans "Password Reset" %}",
+        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
+});
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.user-status-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.user-status-edit-icon').addClass('vh');
+    }
+);
+$('.user-status-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'select'
+});
+$('.user-status-select').change(function() {
+    var select = $(this),
+        select_val = select.val(),
+        uid = select.parents('tr').attr('data-userid'),
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
 
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        beforeSend: function() {
+            if (select_val == 1) {
+                // show activating popup
+                $('#activate-msg').modal();
+                $('#simplemodal-container').css({'height':'auto'});
+            }
+        },
+        success: function(data) {
+            if (data['email_sent']) {
+                feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
+            } else if (data['email_sent'] === false) {
+                feedback("{% trans "Edit succeeded, but failed to send email, please check your email configuration." %}", 'success');
+            } else {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+            }
+            select.prev().children('span').html(select.children('option[value="' +select.val() + '"]').text());
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+            $.modal.close();
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+            $.modal.close();
+        }
+    });
+});
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
+});
 </script>
 {% endblock %}

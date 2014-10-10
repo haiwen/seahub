@@ -173,14 +173,23 @@ def sys_user_admin(request):
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
+
+        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
         try:
-            user.self_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
-            user.quota = seafile_api.get_user_quota(user.email)
+            if not org:
+                user.self_usage = seafile_api.get_user_self_usage(user.email)
+                user.share_usage = seafile_api.get_user_share_usage(user.email)
+                user.quota = seafile_api.get_user_quota(user.email)
+            else:
+                org_id = org[0].org_id
+                user.self_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
+                user.share_usage = 0 #seafile_api.get_user_share_usage(user.email)
+                user.quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
         except:
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1
+
         # check user's role
         if user.role == GUEST_USER:
             user.is_guest = True
@@ -320,11 +329,17 @@ def sys_user_admin_admins(request):
 def user_info(request, email):
     owned_repos = seafile_api.get_owned_repo_list(email)
 
-    quota = seafile_api.get_user_quota(email)
-    quota_usage = 0
-    share_usage = 0
-    my_usage = 0
-    my_usage = seafile_api.get_user_self_usage(email)
+    org = ccnet_threaded_rpc.get_orgs_by_user(email)
+    if not org:
+        my_usage = seafile_api.get_user_self_usage(email)
+        quota = seafile_api.get_user_quota(email)
+    else:
+        org_id = org[0].org_id
+        my_usage =seafserv_threaded_rpc. \
+                get_org_user_quota_usage(org_id, email)
+        quota = seafserv_threaded_rpc. \
+                get_org_user_quota(org_id, email)
+
     if CALC_SHARE_USAGE:
         try:
             share_usage = seafile_api.get_user_share_usage(email)
@@ -333,6 +348,7 @@ def user_info(request, email):
             share_usage = 0
         quota_usage = my_usage + share_usage
     else:
+        share_usage = 0
         quota_usage = my_usage
 
     # Repos that are share to user
@@ -371,8 +387,13 @@ def user_set_quota(request, email):
         quota_mb = f.cleaned_data['quota']
         quota = quota_mb * (1 << 20)
 
+        org = ccnet_threaded_rpc.get_orgs_by_user(email)
         try:
-            seafile_api.set_user_quota(email, quota)
+            if not org:
+                seafile_api.set_user_quota(email, quota)
+            else:
+                org_id = org[0].org_id
+                seafserv_threaded_rpc.set_org_user_quota(org_id, email, quota)
         except:
             result['error'] = _(u'Failed to set quota: internal server error')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
@@ -382,7 +403,6 @@ def user_set_quota(request, email):
     else:
         result['error'] = str(f.errors.values()[0])
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
 
 @login_required_ajax
 @sys_staff_required
@@ -413,6 +433,12 @@ def user_remove(request, user_id):
     """Remove user, also remove group relationship."""
     try:
         user = User.objects.get(id=int(user_id))
+        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
+        if org:
+            org_id = org[0].org_id
+            org_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
+            for repo in org_repos:
+                seafile_api.remove_repo(repo.id)
         user.delete()
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
@@ -420,7 +446,7 @@ def user_remove(request, user_id):
 
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
-        
+
     return HttpResponseRedirect(next)
 
 @login_required
@@ -753,6 +779,7 @@ def sys_org_admin(request):
 @login_required
 @sys_staff_required
 def sys_org_info(request, org_id):
+
     org_id = int(org_id)
     org = ccnet_threaded_rpc.get_org_by_id(org_id)
 
@@ -762,11 +789,33 @@ def sys_org_info(request, org_id):
     # quota
     total_quota = seafserv_threaded_rpc.get_org_quota(org_id)
     quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org_id)
-    
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        if user.id == request.user.id:
+            user.is_self = True
+        try:
+            user.self_usage =seafserv_threaded_rpc. \
+                    get_org_user_quota_usage(org_id, user.email)
+            user.share_usage = 0 #seafile_api.get_user_share_usage(user.email)
+            user.quota = seafserv_threaded_rpc. \
+                    get_org_user_quota(org_id, user.email)
+        except SearpcError as e:
+            logger.error(e)
+            user.self_usage = -1
+            user.share_usage = -1
+            user.quota = -1
+
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
     # groups
     groups = ccnet_threaded_rpc.get_org_groups(org_id, -1, -1)
     groups_count = len(groups)
-    
+
     return render_to_response('sysadmin/sys_org_info.html', {
             'org': org,
             'users': users,

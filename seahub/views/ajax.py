@@ -14,7 +14,7 @@ from django.utils.translation import ugettext as _
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
-    CALC_SHARE_USAGE, seafserv_threaded_rpc, \
+    CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
     get_user_quota_usage, get_user_share_usage
 from pysearpc import SearpcError
 
@@ -1356,10 +1356,17 @@ def space_and_traffic(request):
 
     username = request.user.username
 
-    quota = seafserv_threaded_rpc.get_user_quota(username)
-    quota_usage = 0
-    share_usage = 0
-    my_usage = get_user_quota_usage(username)
+    org = ccnet_threaded_rpc.get_orgs_by_user(username)
+    if not org:
+        quota = seafserv_threaded_rpc.get_user_quota(username)
+        my_usage = get_user_quota_usage(username)
+    else:
+        org_id = org[0].org_id
+        quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
+                                                         username)
+        my_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
+                                                                 username)
+
     rates = {}
     if CALC_SHARE_USAGE:
         share_usage = get_user_share_usage(username)
@@ -1369,6 +1376,7 @@ def space_and_traffic(request):
             rates['share_usage'] = str(float(share_usage)/quota * 100) + '%'
     else:
         quota_usage = my_usage
+        share_usage = 0
         if quota > 0:
             rates['quota_usage'] = str(float(my_usage)/quota * 100) + '%'
 
