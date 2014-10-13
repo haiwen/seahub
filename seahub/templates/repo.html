@@ -991,15 +991,21 @@ $('#upload-file').click(function () {
             sequentialUploads: true
         })
         .bind('fileuploadadd', function(e, data) {
+            var file = data.files[0];
             // get url(token) for every file
-            $.ajax({
-                url: '{% url 'get_file_op_url' repo.id %}?op_type=upload',
-                cache: false,
-                dataType: 'json',
-                success: function(ret) {
-                    data.url = ret['url'];
-                }
-            });
+            if (!file.error) {
+                $.ajax({
+                    url: '{% url 'get_file_op_url' repo.id %}?op_type=upload',
+                    cache: false,
+                    dataType: 'json',
+                    success: function(ret) {
+                        data.url = ret['url'];
+                    },
+                    error: function() {
+                        file.error = "{% trans "Failed to get upload url" %}";
+                    }
+                });
+            }
         })
         .bind('fileuploaddone', function(e, data) {
             if (data.textStatus == 'success') {
