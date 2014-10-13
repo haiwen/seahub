@@ -318,7 +318,6 @@ def sys_user_admin_admins(request):
 @login_required
 @sys_staff_required
 def user_info(request, email):
-
     owned_repos = seafile_api.get_owned_repo_list(email)
 
     quota = seafile_api.get_user_quota(email)
@@ -822,16 +821,16 @@ def user_search(request):
     """Search a user.
     """
     email = request.GET.get('email', '')
-    email_patt = email.replace('*', '%')
-    
-    users  = ccnet_threaded_rpc.search_emailusers(email_patt, -1, -1)
+
+    users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
         try:
             user.self_usage = seafile_api.get_user_self_usage(user.email)
             user.share_usage = seafile_api.get_user_share_usage(user.email)
             user.quota = seafile_api.get_user_quota(user.email)
-        except:
+        except SearpcError as e:
+            logger.error(e)
             user.self_usage = -1
             user.share_usage = -1
             user.quota = -1

@@ -13,7 +13,19 @@
 {% endblock %}
 
 {% block right_panel %}
-<h3 class="hd">{% trans "Members" %}</h3>
+{% if search %}
+<h3 class="hd">{% trans "Search Results" %}</h3>
+{% else %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab {% if not ldap %}tabnav-tab-cur{%endif%}"><a href="{% url 'pubuser' %}">{% trans "Database" %}</a></li>
+        {% if have_ldap_user %}
+        <li class="tabnav-tab {% if ldap %}tabnav-tab-cur{%endif%}"><a href="{% url 'pubuser' %}?ldap=1">{% trans "LDAP" %}</a></li>
+        {% endif %}
+    </ul>
+</div>
+{% endif %}
+
 {% if users %}
 <ul class="user-list">
     {% for u in users %}
@@ -34,17 +46,17 @@
 {% if show_paginator %}
 <div id="paginator">
     {% if has_prev %}
-    <a href="?page={{ current_page|add:"-1" }}">{% trans "Previous" %}</a>
+    <a href="?page={{ current_page|add:"-1" }}{% if ldap %}&ldap=1{%endif%}">{% trans "Previous" %}</a>
     {% endif %}
     {% for pr in page_range %}
       {% if pr == current_page %}
       <span class="cur">{{ pr }}</span>
       {% else %}
-      <a href="?page={{ pr }}" class="pg">{{ pr }}</a>
+      <a href="?page={{ pr }}{% if ldap %}&ldap=1{%endif%}" class="pg">{{ pr }}</a>
       {% endif %}
     {% endfor %}
     {% if has_next %}
-    <a href="?page={{ current_page|add:"1" }}">{% trans "Next" %}</a>
+    <a href="?page={{ current_page|add:"1" }}{% if ldap %}&ldap=1{%endif%}">{% trans "Next" %}</a>
     {% endif %}
 </div>
 {% endif %}
