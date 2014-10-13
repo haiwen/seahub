@@ -990,7 +990,8 @@ $('#upload-file').click(function () {
             //singleFileUploads: false // using 1 request to upload all files of a selection
             sequentialUploads: true
         })
-        .bind('fileuploadadd', function(e, data) {
+        .bind('fileuploadsubmit', function(e, data) {
+            var _this = $(this);
             var file = data.files[0];
             // get url(token) for every file
             if (!file.error) {
@@ -999,12 +1000,14 @@ $('#upload-file').click(function () {
                     cache: false,
                     dataType: 'json',
                     success: function(ret) {
-                        data.url = ret['url'];
+                        form.attr('action', ret['url']);
+                        data.jqXHR = _this.fileupload('send', data);
                     },
                     error: function() {
                         file.error = "{% trans "Failed to get upload url" %}";
                     }
                 });
+                return false;
             }
         })
         .bind('fileuploaddone', function(e, data) {
