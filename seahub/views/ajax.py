@@ -1849,15 +1849,6 @@ def repo_online_gc(request, repo_id):
         return HttpResponse(json.dumps({'error': error}), status=400,
                         content_type=content_type)
 
-    use_sqlite = False
-    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
-    if 'sqlite' in db_backend:
-        use_sqlite = True
-    if use_sqlite:
-        error = _('It is not supported for SQLite')
-        return HttpResponse(json.dumps({'error': error}), status=400,
-                        content_type=content_type)
-
     try:
         seafile_api.clean_up_repo_history(repo.id, day)
     except SearpcError, e:

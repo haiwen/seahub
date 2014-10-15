@@ -310,13 +310,8 @@ def render_recycle_root(request, repo_id):
         repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
 
-    use_sqlite = False
-    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
-    if 'sqlite' in db_backend:
-        use_sqlite = True
-
     enable_clean = False
-    if is_repo_owner and not use_sqlite and ENABLE_USER_CLEAN_HISTORY:
+    if is_repo_owner and ENABLE_USER_CLEAN_HISTORY:
         enable_clean = True
 
     return render_to_response('repo_recycle_view.html', {
@@ -359,13 +354,8 @@ def render_recycle_dir(request, repo_id, commit_id):
         repo_owner = seafile_api.get_repo_owner(repo.id)
     is_repo_owner = True if repo_owner == username else False
 
-    use_sqlite = False
-    db_backend = settings.DATABASES['default']['ENGINE'].split('.')[-1]
-    if 'sqlite' in db_backend:
-        use_sqlite = True
-
     enable_clean = False
-    if is_repo_owner and not use_sqlite and ENABLE_USER_CLEAN_HISTORY:
+    if is_repo_owner and ENABLE_USER_CLEAN_HISTORY:
         enable_clean = True
 
     return render_to_response('repo_recycle_view.html', {

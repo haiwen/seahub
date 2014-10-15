@@ -129,14 +129,13 @@ $('#gc-form').submit(function () {
     var form = $(this);
     var day = $('[name="day"]', form).val();
     disable($('[type="submit"]', form));
-    form.append('<p style="color:#222;">' + "{% trans "It could take a while, you can close this popup now." %}" + '</p>');
     $.ajax({
         url: '{% url "repo_online_gc" repo.id %}?day=' + day,
         dataType: 'json',
         cache: false,
         success: function () {
             $.modal.close();
-            location.reload();
+            location.reload(true);
         },
         error: function (xhr, textStatus, errorThrown) {
             $.modal.close();
