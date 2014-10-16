@@ -65,12 +65,18 @@
             <input type="button" value="{% trans "Submit" %}" />
             {% else %}
             <input type="hidden" name="parent_dir" value="{{ path }}" />
+            <input type="hidden" name="relative_path" value="" />
             <div class="row fileupload-buttonbar">
                 <div>
-                    <span class="fileinput-button vam">
+                    <span class="fileinput-button vam" id="add-file">
                         <span class="icon-plus"></span>
                         <span>{% trans "Add Files" %}</span>
                         <input type="file" name="file" multiple />
+                    </span>
+                    <span class="fileinput-button vam" id="add-folder" style="display:none;">
+                        <span class="icon-plus"></span>
+                        <span>{% trans "Add folder" %}</span>
+                        <input type="file" name="file" multiple directory webkitdirectory />
                     </span>
                     <button type="reset" class="cancel vam">
                         <span class="icon-ban-circle"></span>
@@ -934,12 +940,59 @@ $('#upload-file').click(function () {
 {% else %}
 $('#upload-file').click(function () {
     var uploaded_files = [];
+
+    // for 'add folder'
+    var cur_dirs = $('.dir-item');
+    var cur_dir_names = [];
+    cur_dirs.each(function() {
+        cur_dir_names.push($(this).attr('data-name'));
+    });
+    var update_dir_names = []; // dirs with 'time' to be updated
+    var new_dir_names = [];
     $('#upload-file-dialog').modal({
         focus:false,
         containerCss: {width:600, height:$(window).height()/1.5},
         onClose: function() {
             $.modal.close();
             var now = parseInt(new Date().getTime()/1000);
+            if (new_dir_names.length > 0) {
+                if (cur_dirs.length == 0) {
+                    reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                    return;
+                } else {
+                    var dir_tpl = $(cur_dirs[0]);
+                    var path = cur_path;
+                    $(new_dir_names).each(function(index, new_dir_name) {
+                        var new_dir = dir_tpl.clone(true);
+
+                        new_dir.attr({
+                            'data-name': new_dir_name,
+                            'data-time': now
+                        });
+                        $('.dirent-name a', new_dir).html(new_dir_name).attr('href', '{% url 'repo' repo.id %}?p=' + e(path+new_dir_name));
+                        $('.dirent-update', new_dir).html("{% trans "Just now" %}");
+                        $('.dir-download', new_dir).attr('href', '{% url 'repo_download_dir' repo.id %}?p=' + e(path+new_dir_name));
+                        $('.dir-share', new_dir).attr({
+                            'data-link':'',
+                            'data-token':'',
+                            'data-upload-link':'',
+                            'data-upload-token':''
+                        });
+                        dir_tpl.before(new_dir);
+                    });
+                    updateCmt();
+                }
+            }
+            if (update_dir_names.length > 0) {
+                cur_dirs.each(function() {
+                    var dir = $(this);
+                    if (update_dir_names.indexOf(dir.attr('data-name')) != -1) {
+                        dir.attr('data-time', now);
+                        $('.dirent-update', dir).html("{% trans "Just now" %}");
+                    }
+                });
+                updateCmt();
+            }
             if (uploaded_files.length > 0) {
                 var cur_files = $('.file-item');
                 if (cur_files.length == 0) { // there is no file before this upload
@@ -991,8 +1044,17 @@ $('#upload-file').click(function () {
             autoUpload: true,
             sequentialUploads: true
         })
+        .bind('fileuploadadd', function(e, data) {
+            var file = data.files[0];
+            if (file.name == '.') { // when 'add folder', a subdirectory is shown as '.'
+                data.files.shift(); // rm the file
+                return;
+            }
+        })
         .bind('fileuploadsubmit', function(e, data) {
             var file = data.files[0];
+            var file_path = file.webkitRelativePath, // can be undefined, '', or a valid path
+                r_path;
             // get url(token) for every file
             if (!file.error) {
                 $.ajax({
@@ -1000,6 +1062,13 @@ $('#upload-file').click(function () {
                     cache: false,
                     dataType: 'json',
                     success: function(ret) {
+                        if (file_path) { // 'add folder'
+                            r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
+                        } else {
+                            r_path = '';
+                        }
+                        $('input[name="relative_path"]', form).val(r_path);
+
                         form.attr('action', ret['url']);
                         data.jqXHR = form.fileupload('send', data);
                     },
@@ -1012,10 +1081,36 @@ $('#upload-file').click(function () {
         })
         .bind('fileuploaddone', function(e, data) {
             if (data.textStatus == 'success') {
-                uploaded_files.push(data.result[0]);
+                var file = data.files[0];
+                var file_path = file.webkitRelativePath;
+                if (file_path) { // 'add folder'
+                    var new_dir_name = file_path.substring(0, file_path.indexOf('/'));
+                    if (cur_dir_names.indexOf(new_dir_name) == -1) {
+                        if (new_dir_names.indexOf(new_dir_name) == -1) {
+                            new_dir_names.push(new_dir_name);
+                        }
+                    } else {
+                        if (update_dir_names.indexOf(new_dir_name) == -1) {
+                            update_dir_names.push(new_dir_name);
+                        }
+                    }
+                    data.result[0].r_path = file_path; // to show in 'template_download'
+                } else {
+                    uploaded_files.push(data.result[0]);
+                }
             }
         });
 
+        if ('webkitdirectory' in $('input[type="file"]', $('#add-file'))[0]) {
+            $('#add-folder').show();
+            $('#add-file, #add-folder').click(function() {
+                form.fileupload(
+                    'option',
+                    'fileInput',
+                    $('input[type="file"]', $(this))
+                );
+            });
+        }
         // Enable iframe cross-domain access via redirect option:
         form.fileupload(
             'option',
