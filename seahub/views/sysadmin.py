@@ -181,7 +181,8 @@ def sys_user_admin(request):
                 user.share_usage = seafile_api.get_user_share_usage(user.email)
                 user.quota = seafile_api.get_user_quota(user.email)
             else:
-                org_id = org[0].org_id
+                user.org = org[0]
+                org_id = user.org.org_id
                 user.self_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
                 user.share_usage = 0 #seafile_api.get_user_share_usage(user.email)
                 user.quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
@@ -879,10 +880,18 @@ def user_search(request):
     users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
+        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
         try:
-            user.self_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
-            user.quota = seafile_api.get_user_quota(user.email)
+            if not org:
+                user.self_usage = seafile_api.get_user_self_usage(user.email)
+                user.share_usage = seafile_api.get_user_share_usage(user.email)
+                user.quota = seafile_api.get_user_quota(user.email)
+            else:
+                user.org = org[0]
+                org_id = user.org.org_id
+                user.self_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
+                user.share_usage = 0
+                user.quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
         except SearpcError as e:
             logger.error(e)
             user.self_usage = -1

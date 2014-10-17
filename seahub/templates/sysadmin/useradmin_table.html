@@ -11,7 +11,11 @@
 
     {% for user in users %}
     <tr data-userid="{{user.email}}">
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
+        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a>
+        {% if user.org %}
+        <p style="font-size:11px;"><a href="{% url 'sys_org_info' user.org.org_id %}">({{user.org.org_name}})</a></p>
+        {% endif %}
+        </td>
         <td>
           {% if user.source != 'LDAP' %}
             <div class="user-status">
