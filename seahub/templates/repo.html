@@ -638,7 +638,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
             });
         } else {
             // when mv/cp to another lib, files/dirs should be handled one by one, and need to show progress
-            var op_objs = $('.checkbox-checked').parents('tr'),
+            var op_objs = $('.checkbox-checked').parents('.dir-item, .file-item'),
                 i = 0;
             // progress popup
             var details = $('#mv-details'),
