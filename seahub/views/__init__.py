@@ -63,8 +63,7 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH, \
-    ENABLE_USER_CLEAN_HISTORY
+    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -311,7 +310,7 @@ def render_recycle_root(request, repo_id):
     is_repo_owner = True if repo_owner == username else False
 
     enable_clean = False
-    if is_repo_owner and ENABLE_USER_CLEAN_HISTORY:
+    if is_repo_owner:
         enable_clean = True
 
     return render_to_response('repo_recycle_view.html', {
@@ -355,7 +354,7 @@ def render_recycle_dir(request, repo_id, commit_id):
     is_repo_owner = True if repo_owner == username else False
 
     enable_clean = False
-    if is_repo_owner and ENABLE_USER_CLEAN_HISTORY:
+    if is_repo_owner:
         enable_clean = True
 
     return render_to_response('repo_recycle_view.html', {
@@ -381,6 +380,37 @@ def repo_recycle_view(request, repo_id):
         return render_recycle_root(request, repo_id)
     else:
         return render_recycle_dir(request, repo_id, commit_id)
+
+@login_required
+def repo_online_gc(request, repo_id):
+    if request.method != 'POST':
+        raise Http404
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    username = request.user.username
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if repo_owner == username else False
+    if not is_repo_owner:
+        messages.error(request, _('Permission denied'))
+        return HttpResponseRedirect(next)
+
+    day = int(request.POST.get('day'))
+    try:
+        seafile_api.clean_up_repo_history(repo.id, day)
+    except SearpcError, e:
+        messages.error(request, _('Internal server error'))
+        return HttpResponseRedirect(next)
+
+    return HttpResponseRedirect(next)
 
 @login_required
 def repo_settings(request, repo_id):

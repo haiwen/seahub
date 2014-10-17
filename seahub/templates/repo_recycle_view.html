@@ -99,7 +99,7 @@
     </div>
 
     {% if enable_clean %}
-    <form id="gc-form" class="hide">
+    <form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
         <h3>{% trans "Clean" %}</h3>
         <p>{% trans "Clear files in trash and history：" %}</p>
         <select name="day" class="w100" style="margin-bottom:5px;">
@@ -124,25 +124,6 @@ $('#back').click(function() {
 $('#online-gc').click(function() {
     $('#gc-form').modal({focus:false});
     $("#simplemodal-container").css({'height':'auto'});
-});
-$('#gc-form').submit(function () {
-    var form = $(this);
-    var day = $('[name="day"]', form).val();
-    disable($('[type="submit"]', form));
-    $.ajax({
-        url: '{% url "repo_online_gc" repo.id %}?day=' + day,
-        dataType: 'json',
-        cache: false,
-        success: function () {
-            $.modal.close();
-            location.reload(true);
-        },
-        error: function (xhr, textStatus, errorThrown) {
-            $.modal.close();
-            ajaxErrorHandler(xhr, textStatus, errorThrown);
-        }
-    });
-    return false;
 });
 {% endif %}
 </script>
