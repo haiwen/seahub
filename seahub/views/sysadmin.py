@@ -430,22 +430,27 @@ def sys_org_set_quota(request, org_id):
 @login_required
 @sys_staff_required
 def user_remove(request, user_id):
-    """Remove user, also remove group relationship."""
+    """Remove user"""
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+
     try:
         user = User.objects.get(id=int(user_id))
         org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
         if org:
+            if org[0].creator == user.email:
+                messages.error(request, _(u'Failed to delete: the user is an organization creator'))
+                return HttpResponseRedirect(next)
+
             org_id = org[0].org_id
             org_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
             for repo in org_repos:
                 seafile_api.remove_repo(repo.id)
+
         user.delete()
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
 
     return HttpResponseRedirect(next)
 
