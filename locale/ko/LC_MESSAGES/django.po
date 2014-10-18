@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 11:15+0800\n"
-"PO-Revision-Date: 2014-07-30 03:20+0000\n"
+"POT-Creation-Date: 2014-10-18 11:03+0800\n"
+"PO-Revision-Date: 2014-10-18 03:05+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
@@ -20,112 +20,113 @@ msgstr ""
 "Language: ko\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: seahub/forms.py:31
+#: seahub/forms.py:26
 msgid "A user with this email already exists."
-msgstr ""
+msgstr "이 전자메일 사용자가 이미 있습니다."
 
-#: seahub/forms.py:45
+#: seahub/forms.py:40
 msgid "The two passwords didn't match."
-msgstr ""
+msgstr "두 암호가 일치하지 않습니다."
 
-#: seahub/forms.py:54 seahub/group/forms.py:56 seahub/wiki/forms.py:16
+#: seahub/forms.py:49 seahub/group/forms.py:56 seahub/wiki/forms.py:16
 msgid "Name can't be empty"
 msgstr "이름은 비워둘 수 없습니다"
 
-#: seahub/forms.py:55 seahub/group/forms.py:57 seahub/wiki/forms.py:17
+#: seahub/forms.py:50 seahub/group/forms.py:57 seahub/wiki/forms.py:17
 msgid "Name is too long (maximum is 255 characters)"
 msgstr "이름이 너무 깁니다(최대 255 글자)"
 
-#: seahub/forms.py:58 seahub/group/forms.py:60 seahub/wiki/forms.py:20
+#: seahub/forms.py:53 seahub/group/forms.py:60 seahub/wiki/forms.py:20
 msgid "Description can't be empty"
 msgstr "설명은 비워둘 수 없습니다"
 
-#: seahub/forms.py:59 seahub/group/forms.py:61 seahub/wiki/forms.py:21
+#: seahub/forms.py:54 seahub/group/forms.py:61 seahub/wiki/forms.py:21
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "설명이 너무 깁니다(최대 100글자)"
 
-#: seahub/forms.py:68 seahub/forms.py:184
+#: seahub/forms.py:64 seahub/forms.py:180
 #, python-format
 msgid "Name %s is not valid"
 msgstr "%s 이름이 잘못되었습니다"
 
-#: seahub/forms.py:82 seahub/message/views.py:177 seahub/share/views.py:778
-#: seahub/share/views.py:816 seahub/views/__init__.py:1019
-#: seahub/views/ajax.py:339 seahub/views/ajax.py:398 seahub/views/ajax.py:489
-#: seahub/views/ajax.py:618 seahub/views/ajax.py:809 seahub/views/ajax.py:922
-#: seahub/views/ajax.py:951 seahub/views/ajax.py:981 seahub/views/ajax.py:1097
-#: seahub/views/ajax.py:1176 seahub/views/ajax.py:1180
-#: seahub/views/ajax.py:1184 seahub/views/ajax.py:1568
+#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:778
+#: seahub/share/views.py:816 seahub/views/__init__.py:1044
+#: seahub/views/ajax.py:347 seahub/views/ajax.py:406 seahub/views/ajax.py:497
+#: seahub/views/ajax.py:626 seahub/views/ajax.py:817 seahub/views/ajax.py:924
+#: seahub/views/ajax.py:953 seahub/views/ajax.py:1081
+#: seahub/views/ajax.py:1160 seahub/views/ajax.py:1164
+#: seahub/views/ajax.py:1168 seahub/views/ajax.py:1560
 msgid "Argument missing"
 msgstr "인자가 빠졌습니다"
 
-#: seahub/forms.py:96
+#: seahub/forms.py:92
 msgid "Oldname is required"
 msgstr "이전 이름이 필요합니다"
 
-#: seahub/forms.py:99 seahub/forms.py:120
+#: seahub/forms.py:95 seahub/forms.py:116
 msgid "It's too long."
 msgstr "너무 깁니다."
 
-#: seahub/forms.py:100 seahub/forms.py:121
+#: seahub/forms.py:96 seahub/forms.py:117
 msgid "It's required."
 msgstr "필수입니다."
 
-#: seahub/forms.py:107 seahub/forms.py:128
+#: seahub/forms.py:103 seahub/forms.py:124
 #, python-format
 msgid "Name \"%s\" is not valid"
 msgstr "\"%s\" 이름이 잘못되었습니다"
 
-#: seahub/forms.py:139
+#: seahub/forms.py:135
 msgid "Repo id is required"
 msgstr "저장소 ID가 필요합니다"
 
-#: seahub/forms.py:140
+#: seahub/forms.py:136
 msgid "Username is required"
 msgstr "사용자 이름이 필요합니다"
 
-#: seahub/forms.py:141 seahub/share/forms.py:43
+#: seahub/forms.py:137 seahub/share/forms.py:43
 msgid "Password can't be empty"
 msgstr "암호를 비워둘 수 없습니다"
 
-#: seahub/forms.py:152
+#: seahub/forms.py:148
 msgid "Bad url format"
 msgstr "잘못된 URI 형식입니다"
 
-#: seahub/forms.py:157 seahub/templates/repo.html:350
+#: seahub/forms.py:153 seahub/templates/repo.html:350
 msgid "Wrong password"
 msgstr "잘못된 암호입니다"
 
-#: seahub/forms.py:159 seahub/views/__init__.py:1025 seahub/views/ajax.py:657
-#: seahub/views/ajax.py:686 seahub/views/ajax.py:724 seahub/views/ajax.py:761
+#: seahub/forms.py:155 seahub/views/__init__.py:410
+#: seahub/views/__init__.py:1050 seahub/views/ajax.py:665
+#: seahub/views/ajax.py:694 seahub/views/ajax.py:732 seahub/views/ajax.py:769
 msgid "Internal server error"
 msgstr "내부 서버 오류"
 
-#: seahub/forms.py:161
+#: seahub/forms.py:157
 msgid "Decrypt library error"
 msgstr "해독 라이브러리 오류"
 
-#: seahub/forms.py:167 seahub/share/forms.py:20 seahub/share/forms.py:33
+#: seahub/forms.py:163 seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
 msgstr "전자메일 주소가 필요합니다"
 
-#: seahub/forms.py:169 seahub/templates/sysadmin/userinfo.html:129
+#: seahub/forms.py:165 seahub/templates/sysadmin/userinfo.html:129
 msgid "Quota can't be empty"
 msgstr "제한 용량을 비워둘 수 없습니다"
 
-#: seahub/forms.py:170
+#: seahub/forms.py:166
 msgid "Quota is too low (minimum value is 0)"
 msgstr "제한 용량이 너무 적습니다(최소 값은 0)"
 
-#: seahub/forms.py:176
+#: seahub/forms.py:172
 msgid "Library name is required"
 msgstr "라이브러리 이름이 필요합니다"
 
-#: seahub/forms.py:177
+#: seahub/forms.py:173
 msgid "Library description is required"
 msgstr "라이브러리 설명이 필요합니다"
 
-#: seahub/forms.py:179
+#: seahub/forms.py:175
 msgid "Please enter a number"
 msgstr "숫자를 입력하세요"
 
@@ -203,7 +204,7 @@ msgstr "슬로바키아어"
 
 #: seahub/settings.py:151
 msgid "Slovenian"
-msgstr ""
+msgstr "슬로베니아어"
 
 #: seahub/settings.py:152
 msgid "Svenska"
@@ -232,7 +233,7 @@ msgstr "파일 협업 팀 조직"
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:175
+#: seahub/templates/base.html:175 seahub/templates/view_file_base.html:123
 msgid "Discussion"
 msgstr "토론"
 
@@ -253,7 +254,7 @@ msgstr "토론"
 #: seahub/share/templates/share/links.html:28
 #: seahub/share/templates/share/priv_shared_files.html:64
 #: seahub/templates/repo_history_view.html:66
-#: seahub/templates/repo_recycle_view.html:78
+#: seahub/templates/repo_recycle_view.html:83
 #: seahub/templates/view_file_base.html:156
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/snippets/group_recommend_form.html:28
@@ -275,7 +276,7 @@ msgstr "파일"
 #: seahub/templates/snippets/group_recommend_form.html:22
 #: seahub/templates/snippets/repo_dirents.html:8
 msgid "Directory icon"
-msgstr "디렉토리 아이콘"
+msgstr "디렉터리 아이콘"
 
 #: seahub/api2/templates/api2/discussion_posted.html:46
 #: seahub/api2/templates/api2/discussions_body.html:48
@@ -310,27 +311,29 @@ msgstr "불러오는 중..."
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:180
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
-#: seahub/templates/base.html:138 seahub/templates/file_edit.html:594
-#: seahub/templates/myhome.html:118 seahub/templates/myhome.html.py:146
-#: seahub/templates/repo.html:291 seahub/templates/repo.html.py:706
-#: seahub/templates/repo.html:1537 seahub/templates/repo.html.py:1768
-#: seahub/templates/repo.html:1793 seahub/templates/repo.html.py:1822
-#: seahub/templates/repo.html:1928 seahub/templates/repo.html.py:2000
-#: seahub/templates/repo_settings.html:142
+#: seahub/templates/base.html:138 seahub/templates/file_edit.html:595
+#: seahub/templates/myhome.html:123 seahub/templates/myhome.html.py:151
+#: seahub/templates/repo.html:291 seahub/templates/repo.html.py:700
+#: seahub/templates/repo.html:758 seahub/templates/repo.html.py:1596
+#: seahub/templates/repo.html:1820 seahub/templates/repo.html.py:1845
+#: seahub/templates/repo.html:1890 seahub/templates/repo.html.py:1995
+#: seahub/templates/repo.html:2067 seahub/templates/repo_settings.html:142
 #: seahub/templates/repo_settings.html:178
 #: seahub/templates/repo_settings.html:239
-#: seahub/templates/view_file_base.html:341
+#: seahub/templates/view_file_base.html:338
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:109
 #: seahub/templates/snippets/events_js.html:56
 #: seahub/templates/snippets/office_convert_js.html:190
 #: seahub/templates/snippets/office_convert_js.html:215
 #: seahub/templates/snippets/repo_decrypt_js.html:35
-#: seahub/templates/snippets/shared_link_js.html:218
-#: seahub/templates/snippets/shared_link_js.html:290
-#: seahub/templates/snippets/shared_link_js.html:379
-#: seahub/templates/snippets/shared_link_js.html:467
-#: seahub/templates/snippets/spreadsheet_convert_js.html:32
+#: seahub/templates/snippets/shared_link_js.html:217
+#: seahub/templates/snippets/shared_link_js.html:289
+#: seahub/templates/snippets/shared_link_js.html:378
+#: seahub/templates/snippets/shared_link_js.html:466
+#: seahub/templates/snippets/spreadsheet_convert_js.html:31
+#: seahub/templates/sysadmin/sys_org_admin.html:126
+#: seahub/templates/sysadmin/sys_org_info.html:161
 #: seahub/templates/sysadmin/sys_useradmin.html:139
 #: seahub/templates/sysadmin/userinfo.html:152
 msgid "Failed. Please check the network."
@@ -418,7 +421,7 @@ msgstr "중요한 날짜"
 #: seahub/templates/pubgrp.html:16 seahub/templates/view_file_base.html:168
 #: seahub/templates/snippets/repo_share_form.html:7
 #: seahub/templates/sysadmin/base.html:15
-#: seahub/templates/sysadmin/sys_org_info.html:44
+#: seahub/templates/sysadmin/sys_org_info.html:46
 msgid "Groups"
 msgstr "그룹"
 
@@ -433,23 +436,24 @@ msgstr "암호 바꾸기: %s"
 
 #: seahub/auth/decorators.py:73
 msgid "Please log in."
-msgstr ""
+msgstr "로그인하세요."
 
-#: seahub/auth/forms.py:22 seahub/base/accounts.py:441
+#: seahub/auth/forms.py:22 seahub/base/accounts.py:445
 msgid "Username"
 msgstr "사용자 이름"
 
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:182
-#: seahub/base/accounts.py:445 seahub/templates/registration/login.html:36
-#: seahub/templates/registration/registration_form.html:19
-#: seahub/templates/snippets/file_share_popup.html:38
-#: seahub/templates/snippets/file_share_popup.html:76
+#: seahub/base/accounts.py:449 seahub/templates/registration/login.html:36
+#: seahub/templates/registration/registration_form.html:24
+#: seahub/templates/snippets/file_share_popup.html:39
+#: seahub/templates/snippets/file_share_popup.html:77
 #: seahub/templates/snippets/repo_create_form.html:20
+#: seahub/templates/sysadmin/sys_org_admin.html:22
 #: seahub/templates/sysadmin/sys_useradmin.html:45
 msgid "Password"
 msgstr "암호"
 
-#: seahub/auth/forms.py:39 seahub/base/accounts.py:452
+#: seahub/auth/forms.py:39 seahub/base/accounts.py:456
 msgid "Enter a valid email address."
 msgstr "올바른 전자메일 주소를 입력하세요."
 
@@ -487,12 +491,12 @@ msgstr "관련 사용자 계정에 전자메일 주소가 없습니다. 정말 �
 
 #: seahub/auth/forms.py:90
 msgid "Can not reset password, please contact LDAP admin."
-msgstr ""
+msgstr "암호를 재설정할 수 없습니다. LDAP 관리자에게 문의하세요."
 
 #: seahub/auth/forms.py:114
 #, python-format
 msgid "Reset Password on %s"
-msgstr "%s의 암호 재설정"
+msgstr "%s 암호 재설정"
 
 #: seahub/auth/forms.py:122
 msgid "New password"
@@ -503,7 +507,7 @@ msgid "New password confirmation"
 msgstr "새 암호 확인"
 
 #: seahub/auth/forms.py:152 seahub/auth/forms.py:194
-#: seahub/base/accounts.py:492
+#: seahub/base/accounts.py:496
 msgid "The two password fields didn't match."
 msgstr "두 개의 암호 입력창의 입력이 일치하지 않습니다"
 
@@ -515,7 +519,7 @@ msgstr "이전 암호"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "입력하신 이전 암호가 틀립니다. 다시 입력하세요."
 
-#: seahub/auth/forms.py:183 seahub/base/accounts.py:447
+#: seahub/auth/forms.py:183 seahub/base/accounts.py:451
 msgid "Password (again)"
 msgstr "암호(다시 입력)"
 
@@ -529,7 +533,7 @@ msgstr "전자메일 보내기에 실패했습니다. 관리자에게 알려주�
 
 #: seahub/auth/views.py:348
 msgid "Can not update password, please contact LDAP admin."
-msgstr ""
+msgstr "암호를 업데이트할 수 없습니다. LDAP 관리자에게 문의하세요."
 
 #: seahub/auth/management/commands/createsuperuser.py:24
 #: seahub/base/management/commands/createsuperuser.py:25
@@ -652,35 +656,37 @@ msgstr "현재 아바타:"
 #: seahub/profile/templates/profile/set_profile.html:129
 #: seahub/templates/activities.html:25
 #: seahub/templates/decrypt_repo_form.html:13
-#: seahub/templates/file_edit.html:98 seahub/templates/file_edit.html:245
+#: seahub/templates/file_edit.html:99 seahub/templates/file_edit.html:246
 #: seahub/templates/home_base.html:57 seahub/templates/myhome.html:60
 #: seahub/templates/repo.html:65 seahub/templates/repo.html.py:115
 #: seahub/templates/repo.html:145 seahub/templates/repo.html.py:169
 #: seahub/templates/repo.html:190 seahub/templates/repo.html.py:206
-#: seahub/templates/repo.html:221 seahub/templates/repo_settings.html:49
+#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:111
+#: seahub/templates/repo_settings.html:49
 #: seahub/templates/repo_settings.html:59
 #: seahub/templates/repo_settings.html:75
 #: seahub/templates/share_access_validation.html:10
-#: seahub/templates/shared_file_view.html:52
+#: seahub/templates/shared_file_view.html:54
 #: seahub/templates/view_file_base.html:152
-#: seahub/templates/registration/password_change_form.html:22
+#: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/snippets/add_to_contacts_form.html:8
-#: seahub/templates/snippets/file_share_popup.html:26
-#: seahub/templates/snippets/file_share_popup.html:60
-#: seahub/templates/snippets/file_share_popup.html:96
+#: seahub/templates/snippets/file_share_popup.html:27
+#: seahub/templates/snippets/file_share_popup.html:61
+#: seahub/templates/snippets/file_share_popup.html:97
 #: seahub/templates/snippets/group_recommend_form.html:19
 #: seahub/templates/snippets/repo_create_form.html:26
 #: seahub/templates/snippets/repo_share_form.html:30
 #: seahub/templates/snippets/search_form.html:57
 #: seahub/templates/sysadmin/repo_transfer_form.html:8
-#: seahub/templates/sysadmin/sys_org_info.html:35
+#: seahub/templates/sysadmin/sys_org_admin.html:28
+#: seahub/templates/sysadmin/sys_org_info.html:37
 #: seahub/templates/sysadmin/sys_repo_search.html:13
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 #: seahub/templates/sysadmin/sys_useradmin.html:58
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:36
-#: seahub/templates/sysadmin/user_search.html:12
+#: seahub/templates/sysadmin/user_search.html:11
 #: seahub/templates/sysadmin/userinfo.html:47
 #: seahub/templates/wiki/personal_wiki.html:46
 #: seahub/templates/wiki/personal_wiki.html:56
@@ -701,35 +707,35 @@ msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a>님이 <a href=\"%(avatar
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr "<a href=\"%(avatar_url)s\">%(avatar)s</a> 아바타를 업데이트했습니다."
 
-#: seahub/base/accounts.py:436
+#: seahub/base/accounts.py:440
 msgid "Email address"
 msgstr "전자메일 주소"
 
-#: seahub/base/accounts.py:442
+#: seahub/base/accounts.py:446
 msgid "This value must be of length 40"
 msgstr "이 값의 길이는 40이어야 합니다"
 
-#: seahub/base/accounts.py:458
+#: seahub/base/accounts.py:462
 msgid "A user with this email already"
 msgstr "이 전자메일 주소 사용자가 이미 있습니다"
 
-#: seahub/base/accounts.py:462
+#: seahub/base/accounts.py:466
 msgid "Invalid user id."
 msgstr "잘못된 사용자 ID 입니다."
 
-#: seahub/base/accounts.py:499
+#: seahub/base/accounts.py:503
 msgid "name"
 msgstr "이름"
 
-#: seahub/base/accounts.py:501
+#: seahub/base/accounts.py:505
 msgid "department"
 msgstr "부서"
 
-#: seahub/base/accounts.py:503
+#: seahub/base/accounts.py:507
 msgid "telephone"
 msgstr "전화"
 
-#: seahub/base/accounts.py:505
+#: seahub/base/accounts.py:509
 msgid "note"
 msgstr "참고"
 
@@ -763,19 +769,19 @@ msgstr "이동함"
 
 #: seahub/base/templatetags/seahub_tags.py:99
 msgid "Added directory"
-msgstr "디렉토리를 추가했습니다"
+msgstr "디렉터리를 추가했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:100
 msgid "Removed directory"
-msgstr "디렉토리를 제거했습니다"
+msgstr "디렉터리를 제거했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:101
 msgid "Renamed directory"
-msgstr "디렉토리의 이름을 바꾸었습니다"
+msgstr "디렉터리의 이름을 바꾸었습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:102
 msgid "Moved directory"
-msgstr "디렉토리를 이동했습니다"
+msgstr "디렉터리를 이동했습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:117
 msgid "Reverted library to status at"
@@ -790,18 +796,18 @@ msgstr "%(time)s의 상태로 \"%(file)s\" 파일을 되돌렸습니다."
 msgid "Recovered deleted directory"
 msgstr "삭제한 디렉터리를 복원했습니다"
 
-#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1618
+#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1640
 msgid "Changed library name or description"
 msgstr "라이브러리 이름 또는 설명이 바뀌었습니다"
 
 #: seahub/base/templatetags/seahub_tags.py:128
 msgid "Auto merge by seafile system"
-msgstr "시파일 시스템에서 자동으로 병합"
+msgstr "Seafile 시스템에서 자동으로 병합"
 
 #: seahub/base/templatetags/seahub_tags.py:188
 #: seahub/base/templatetags/seahub_tags.py:222
 #: seahub/group/templates/group/group_discuss.html:154
-#: seahub/templates/repo.html:924 seahub/templates/repo.html.py:1640
+#: seahub/templates/repo.html:969 seahub/templates/repo.html.py:1700
 #: seahub/templates/snippets/my_owned_repos.html:148
 msgid "Just now"
 msgstr "지금"
@@ -885,7 +891,7 @@ msgid "Email is required."
 msgstr "전자메일 주소가 필요합니다."
 
 #: seahub/contacts/views.py:64 seahub/contacts/views.py:101
-#: seahub/group/views.py:906 seahub/group/views.py:934
+#: seahub/group/views.py:907 seahub/group/views.py:935
 #, python-format
 msgid "%s is not a valid email."
 msgstr "%s은(는) 올바른 전자메일 주소가 아닙니다"
@@ -949,10 +955,10 @@ msgstr "연락처"
 #: seahub/templates/my_group_repos.html:8
 #: seahub/templates/my_shared_repos.html:7 seahub/templates/pubrepo.html:16
 #: seahub/templates/repo_history_view.html:52
-#: seahub/templates/repo_recycle_view.html:53
+#: seahub/templates/repo_recycle_view.html:58
 #: seahub/templates/repo_settings.html:35
 #: seahub/templates/view_shared_dir.html:29
-#: seahub/templates/registration/registration_form.html:13
+#: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
 #: seahub/templates/snippets/my_owned_repos.html:27
 #: seahub/templates/snippets/my_owned_repos.html:74
@@ -963,7 +969,9 @@ msgstr "연락처"
 #: seahub/templates/sysadmin/repoadmin_table.html:4
 #: seahub/templates/sysadmin/sys_group_admin.html:12
 #: seahub/templates/sysadmin/sys_list_system.html:23
-#: seahub/templates/sysadmin/sys_org_admin.html:11
+#: seahub/templates/sysadmin/sys_org_admin.html:14
+#: seahub/templates/sysadmin/sys_org_admin.html:34
+#: seahub/templates/sysadmin/sys_org_info.html:102
 #: seahub/templates/sysadmin/sys_publink_admin.html:12
 #: seahub/templates/sysadmin/sys_repo_search.html:11
 #: seahub/templates/sysadmin/userinfo.html:65
@@ -975,7 +983,7 @@ msgid "Name"
 msgstr "이름"
 
 #: seahub/contacts/templates/contacts/contact_list.html:19
-#: seahub/templates/registration/registration_form.html:32
+#: seahub/templates/registration/registration_form.html:34
 msgid "Note"
 msgstr "참고"
 
@@ -995,7 +1003,7 @@ msgstr "참고"
 #: seahub/share/templates/share/user_share_list.html:36
 #: seahub/templates/file_revisions.html:28
 #: seahub/templates/my_shared_repos.html:11 seahub/templates/pubrepo.html:20
-#: seahub/templates/repo_recycle_view.html:56
+#: seahub/templates/repo_recycle_view.html:61
 #: seahub/templates/repo_view_snapshot.html:18
 #: seahub/templates/view_shared_dir.html:31
 #: seahub/templates/snippets/my_owned_repos.html:30
@@ -1005,22 +1013,24 @@ msgstr "참고"
 #: seahub/templates/snippets/repo_dir_data.html:43
 #: seahub/templates/sysadmin/repoadmin_table.html:8
 #: seahub/templates/sysadmin/sys_group_admin.html:15
-#: seahub/templates/sysadmin/sys_org_admin.html:15
+#: seahub/templates/sysadmin/sys_org_info.html:57
+#: seahub/templates/sysadmin/sys_org_info.html:105
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:47
 #: seahub/templates/sysadmin/useradmin_table.html:9
 #: seahub/templates/sysadmin/userinfo.html:67
 msgid "Operations"
-msgstr "처리"
+msgstr "작업"
 
 #: seahub/contacts/templates/contacts/contact_list.html:29
 #: seahub/group/templates/group/group_wiki.html:22
 #: seahub/share/templates/share/list_priv_shared_folders.html:29
 #: seahub/share/templates/share/repos.html:33
-#: seahub/templates/file_edit.html:80
+#: seahub/templates/file_edit.html:81
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_sf.html:6
 #: seahub/templates/view_file_text.html:24
+#: seahub/templates/sysadmin/sys_org_info.html:70
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:62
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:79
 #: seahub/templates/sysadmin/useradmin_table.html:23
@@ -1039,10 +1049,10 @@ msgstr "편집"
 #: seahub/message/templates/message/user_msg_list.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:119
-#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:256
-#: seahub/templates/view_shared_upload_link.html:87
-#: seahub/templates/snippets/file_share_popup.html:49
-#: seahub/templates/snippets/file_share_popup.html:87
+#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:252
+#: seahub/templates/view_shared_upload_link.html:82
+#: seahub/templates/snippets/file_share_popup.html:50
+#: seahub/templates/snippets/file_share_popup.html:88
 #: seahub/templates/snippets/my_owned_repos.html:53
 #: seahub/templates/snippets/my_owned_repos.html:101
 #: seahub/templates/snippets/my_owned_repos.html:154
@@ -1050,7 +1060,9 @@ msgstr "편집"
 #: seahub/templates/snippets/repo_dirents.html:86
 #: seahub/templates/sysadmin/repoadmin_table.html:24
 #: seahub/templates/sysadmin/sys_group_admin.html:22
-#: seahub/templates/sysadmin/sys_org_admin.html:23
+#: seahub/templates/sysadmin/sys_org_admin.html:49
+#: seahub/templates/sysadmin/sys_org_info.html:89
+#: seahub/templates/sysadmin/sys_org_info.html:112
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:103
 #: seahub/templates/sysadmin/useradmin_table.html:68
 #: seahub/templates/sysadmin/userinfo.html:76
@@ -1065,7 +1077,7 @@ msgstr "어떤 연락처도 없습니다"
 msgid ""
 "Add your contacts so you can quickly share libraries and send file shared "
 "link."
-msgstr "연락처를 추가하면 라이브러리를 빠르게 공유하고 파일 공유 연결을 빨리 보낼 수 있습니다."
+msgstr "연락처를 추가하면 라이브러리를 빠르게 공유하고 파일 공유 링크를 빨리 보낼 수 있습니다."
 
 #: seahub/contacts/templates/contacts/contact_list.html:44
 #: seahub/contacts/templates/contacts/contact_list.html:55
@@ -1073,13 +1085,14 @@ msgstr "연락처를 추가하면 라이브러리를 빠르게 공유하고 파�
 #: seahub/group/templates/group/group_manage.html:48
 #: seahub/templates/repo_settings.html:57
 #: seahub/templates/registration/login.html:34
-#: seahub/templates/registration/registration_form.html:17
+#: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/snippets/add_to_contacts_form.html:2
 #: seahub/templates/sysadmin/repo_transfer_form.html:5
+#: seahub/templates/sysadmin/sys_org_info.html:53
 #: seahub/templates/sysadmin/sys_useradmin.html:36
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:42
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:23
-#: seahub/templates/sysadmin/user_search.html:11
+#: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:4
 #: seahub/templates/sysadmin/userinfo.html:11
 msgid "Email"
@@ -1108,11 +1121,12 @@ msgstr "연락처 삭제"
 #: seahub/contacts/templates/contacts/contact_list.html:115
 #: seahub/notifications/templates/notifications/notification_list.html:52
 #: seahub/templates/sysadmin/sys_group_admin.html:38
-#: seahub/templates/sysadmin/sys_org_admin.html:39
+#: seahub/templates/sysadmin/sys_org_info.html:170
+#: seahub/templates/sysadmin/sys_org_info.html:174
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #, python-format
 msgid "Are you sure you want to delete %s ?"
-msgstr ""
+msgstr "정말로 %s을(를) 삭제할까요?"
 
 #: seahub/contacts/templates/contacts/contact_list.html:129
 msgid "You cannot add yourself."
@@ -1185,7 +1199,7 @@ msgstr "\"%s\" 이름은 올바르지 않습니다"
 
 #: seahub/group/views.py:161
 msgid "You do not have permission to create group."
-msgstr ""
+msgstr "그룹을 만들 권한이 없습니다."
 
 #: seahub/group/views.py:170
 #, python-format
@@ -1200,11 +1214,11 @@ msgstr "해당 이름의 그룹이 이미 있습니다."
 
 #: seahub/group/views.py:274
 msgid "Failed to dismiss group, pleaes retry later."
-msgstr ""
+msgstr "그룹 제거에 실패했습니다. 나중에 다시 시도하세요."
 
 #: seahub/group/views.py:276
 msgid "Successfully dismissed group."
-msgstr ""
+msgstr "그룹을 성공적으로 제거했습니다."
 
 #: seahub/group/views.py:328
 msgid ""
@@ -1236,173 +1250,173 @@ msgstr "메시지가 없습니다"
 msgid "You don't have the permission."
 msgstr "권한이 없습니다."
 
-#: seahub/group/views.py:670
+#: seahub/group/views.py:671
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "%s에서 그룹 참여를 초대받았습니다"
 
-#: seahub/group/views.py:683
+#: seahub/group/views.py:684
 msgid "The group does not exist."
-msgstr ""
+msgstr "그룹이 없습니다."
 
-#: seahub/group/views.py:711
+#: seahub/group/views.py:712
 #, python-format
 msgid "Failed to add, %s is not in current organization."
-msgstr ""
+msgstr "추가에 실패했습니다. %s은(는) 현재 조직에 없습니다."
 
-#: seahub/group/views.py:729 seahub/group/views.py:881
+#: seahub/group/views.py:730 seahub/group/views.py:882
 #, python-format
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr "구성원 %d명만 초대할 수 있습니다. <a href=\"http://seafile.com/\">계정을 업그레이드하세요.</a>"
 
-#: seahub/group/views.py:767
+#: seahub/group/views.py:768
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "추가에 실패하여 %s은(는) 등록되지 않았습니다."
 
-#: seahub/group/views.py:782
+#: seahub/group/views.py:783
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
 msgstr[0] "성공적으로 추가했습니다. 전자메일 %(count)s건을 보냈습니다."
 
-#: seahub/group/views.py:789
+#: seahub/group/views.py:790
 msgid "Successfully added."
 msgstr "성공적으로 추가했습니다."
 
-#: seahub/group/views.py:852
+#: seahub/group/views.py:853
 #, python-format
 msgid "Failed to add, %s is not a valid email."
 msgstr "%s이(가) 잘못된 전자메일 주소여서 추가에 실패했습니다."
 
-#: seahub/group/views.py:862
+#: seahub/group/views.py:863
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "추가에 실패하여 %s은(는) 등록되지 않았습니다."
 
-#: seahub/group/views.py:894 seahub/group/views.py:911
-#: seahub/group/views.py:942
+#: seahub/group/views.py:895 seahub/group/views.py:912
+#: seahub/group/views.py:943
 msgid "Operation succeeded."
 msgstr "처리에 성공했습니다."
 
-#: seahub/group/views.py:944
+#: seahub/group/views.py:945
 #, python-format
 msgid "Failed：%s"
 msgstr "실패: %s"
 
-#: seahub/group/views.py:974
+#: seahub/group/views.py:975
 msgid "Error: wrong group id"
 msgstr "오류: 잘못된 그룹 아이디"
 
-#: seahub/group/views.py:980
+#: seahub/group/views.py:981
 msgid "Error: the group does not exist."
 msgstr "오류: 그룹이 존재하지 않습니다."
 
-#: seahub/group/views.py:1013
+#: seahub/group/views.py:1014
 #, python-format
 msgid "Successfully posted to %(groups)s."
 msgstr "%(groups)s에 성공적으로 게시했습니다."
 
-#: seahub/group/views.py:1016
+#: seahub/group/views.py:1017
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "오류: %s 그룹에 속해 있지 않습니다."
 
-#: seahub/group/views.py:1028
+#: seahub/group/views.py:1029
 msgid "Error: the library does not exist."
 msgstr "오류: 라이브러리가 없습니다."
 
-#: seahub/group/views.py:1031
+#: seahub/group/views.py:1032
 msgid "Error: no path."
 msgstr "오류: 경로 없음."
 
-#: seahub/group/views.py:1069
+#: seahub/group/views.py:1070
 msgid "Failed to create: the group does not exist."
 msgstr "만들기 실패: 그룹이 없습니다."
 
-#: seahub/group/views.py:1074
+#: seahub/group/views.py:1075
 msgid "Failed to create: you are not in the group."
 msgstr "만들기 실패: 그룹에 속해 있지 않습니다."
 
-#: seahub/group/views.py:1102 seahub/group/views.py:1124
-#: seahub/group/views.py:1528 seahub/views/wiki.py:149
+#: seahub/group/views.py:1103 seahub/group/views.py:1125
+#: seahub/group/views.py:1529 seahub/views/wiki.py:149
 msgid "Failed to create"
 msgstr "만들기 실패"
 
-#: seahub/group/views.py:1109 seahub/group/views.py:1130
-#: seahub/group/views.py:1534
+#: seahub/group/views.py:1110 seahub/group/views.py:1131
+#: seahub/group/views.py:1535
 msgid "Failed to create: internal error."
 msgstr "만들기 실패: 내부 오류."
 
-#: seahub/group/views.py:1153
+#: seahub/group/views.py:1154
 msgid "You are already in the group."
 msgstr "이미 그룹에 속해 있습니다."
 
-#: seahub/group/views.py:1168
+#: seahub/group/views.py:1169
 msgid "Sent successfully, the group admin will handle it."
 msgstr "성공적으로 보냈습니다. 그룹 관리자가 처리할 것입니다."
 
-#: seahub/group/views.py:1241
+#: seahub/group/views.py:1242
 msgid "Discussion is required."
 msgstr "토론이 필요합니다."
 
-#: seahub/group/views.py:1344 seahub/views/__init__.py:595
-#: seahub/views/ajax.py:1198 seahub/views/file.py:309 seahub/views/file.py:631
-#: seahub/views/file.py:725
+#: seahub/group/views.py:1345 seahub/views/__init__.py:629
+#: seahub/views/ajax.py:1182 seahub/views/file.py:310 seahub/views/file.py:632
+#: seahub/views/file.py:763
 msgid "File does not exist"
 msgstr "파일이 없습니다"
 
-#: seahub/group/views.py:1380
+#: seahub/group/views.py:1381
 msgid "Successfully enable \"Wiki\"."
 msgstr "성공적으로 \"위키\"를 활성화했습니다."
 
-#: seahub/group/views.py:1385
+#: seahub/group/views.py:1386
 msgid "Successfully disable \"Wiki\"."
 msgstr "성공적으로 \"위키\"를 비활성화했습니다."
 
-#: seahub/group/views.py:1424 seahub/group/views.py:1596
+#: seahub/group/views.py:1425 seahub/group/views.py:1597
 #: seahub/views/wiki.py:60 seahub/views/wiki.py:205
 msgid "Failed to create wiki page. Please retry later."
 msgstr "위키 페이지를 만드는데 실패했습니다. 다음에 다시 시도하세요."
 
-#: seahub/group/views.py:1479 seahub/views/__init__.py:589
-#: seahub/views/ajax.py:1682 seahub/views/ajax.py:1754
+#: seahub/group/views.py:1480 seahub/views/__init__.py:623
+#: seahub/views/ajax.py:1714 seahub/views/ajax.py:1778
 #: seahub/views/wiki.py:109
 msgid "Internal Server Error"
 msgstr "내부 서버 오류"
 
-#: seahub/group/views.py:1481 seahub/views/wiki.py:111
+#: seahub/group/views.py:1482 seahub/views/wiki.py:111
 msgid "Wiki does not exists."
 msgstr "위키가 없습니다."
 
-#: seahub/group/views.py:1541 seahub/group/views.py:1566
+#: seahub/group/views.py:1542 seahub/group/views.py:1567
 #: seahub/views/wiki.py:156 seahub/views/wiki.py:179
 msgid "Failed to create home page. Please retry later"
 msgstr "홈 페이지 만들기에 실패했습니다. 다음에 다시 시도하세요."
 
-#: seahub/group/views.py:1557 seahub/views/wiki.py:170
+#: seahub/group/views.py:1558 seahub/views/wiki.py:170
 msgid "Failed to set wiki library."
 msgstr "위키 라이브러리 설정에 실패했습니다."
 
-#: seahub/group/views.py:1586 seahub/group/views.py:1612
-#: seahub/group/views.py:1630 seahub/views/wiki.py:195
+#: seahub/group/views.py:1587 seahub/group/views.py:1613
+#: seahub/group/views.py:1631 seahub/views/wiki.py:195
 #: seahub/views/wiki.py:218 seahub/views/wiki.py:233
 msgid "Wiki is not found."
 msgstr "위키가 없습니다."
 
-#: seahub/group/views.py:1593 seahub/views/wiki.py:202
+#: seahub/group/views.py:1594 seahub/views/wiki.py:202
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "\"%s\" 페이지가 이미 있습니다."
 
-#: seahub/group/views.py:1635
+#: seahub/group/views.py:1636
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "\"%s\"을(를)t성공적으로 삭제했습니다."
 
-#: seahub/group/views.py:1637
+#: seahub/group/views.py:1638
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "\"%s\" 삭제에 실패했습니다. 다시 시도해주세요."
@@ -1414,7 +1428,7 @@ msgstr "안녕하세요,"
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
 msgid "%(email)s invited you to join group %(grp_name)s on %(site_name)s: "
-msgstr ""
+msgstr "%(email)s님이 %(site_name)s의 %(grp_name)s 그룹에 초대했습니다:"
 
 #: seahub/group/templates/group/discussion_list.html:18
 #: seahub/group/templates/group/group_discuss.html:86
@@ -1457,15 +1471,16 @@ msgstr "비워둘 수 없으며 문자 갯수가 2048개를 넘어서면 안됩�
 #: seahub/message/templates/message/user_msg_list.html:22
 #: seahub/message/templates/message/user_msg_list.html:34
 #: seahub/profile/templates/profile/set_profile.html:130
-#: seahub/templates/activities.html:26 seahub/templates/file_edit.html:99
-#: seahub/templates/file_edit.html:246 seahub/templates/myhome.html:61
+#: seahub/templates/activities.html:26 seahub/templates/file_edit.html:100
+#: seahub/templates/file_edit.html:247 seahub/templates/myhome.html:61
 #: seahub/templates/repo.html:146 seahub/templates/repo.html.py:170
 #: seahub/templates/repo.html:191 seahub/templates/repo.html.py:198
-#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:255
-#: seahub/templates/shared_file_view.html:53
-#: seahub/templates/view_shared_upload_link.html:86
-#: seahub/templates/snippets/file_share_popup.html:61
-#: seahub/templates/snippets/file_share_popup.html:97
+#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:251
+#: seahub/templates/repo_recycle_view.html:112
+#: seahub/templates/shared_file_view.html:55
+#: seahub/templates/view_shared_upload_link.html:81
+#: seahub/templates/snippets/file_share_popup.html:62
+#: seahub/templates/snippets/file_share_popup.html:98
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Cancel"
@@ -1506,8 +1521,8 @@ msgstr "파일"
 #: seahub/group/templates/group/group_base.html:36
 #: seahub/group/templates/group/group_manage.html:10
 #: seahub/group/templates/group/group_members.html:8
-#: seahub/templates/pub_base.html:14 seahub/templates/pubuser.html:16
-#: seahub/templates/sysadmin/sys_org_info.html:43
+#: seahub/templates/pub_base.html:14
+#: seahub/templates/sysadmin/sys_org_info.html:45
 msgid "Members"
 msgstr "구성원"
 
@@ -1530,7 +1545,7 @@ msgstr "파일 추가"
 #: seahub/message/templates/message/all_msg_list.html:55
 #: seahub/message/templates/message/user_msg_list.html:29
 msgid "Choose a file or files:"
-msgstr ""
+msgstr "파일을 선택하세요:"
 
 #: seahub/group/templates/group/group_discuss.html:33
 msgid "After login, you can post discussions and add replies."
@@ -1538,7 +1553,7 @@ msgstr "로그인한 후, 토론 글을 게시하고 답글을 추가할 수 있
 
 #: seahub/group/templates/group/group_discuss.html:126
 #: seahub/message/templates/message/user_msg_list.html:82
-#: seahub/templates/pubuser.html:36 seahub/templates/repo_history.html:54
+#: seahub/templates/pubuser.html:49 seahub/templates/repo_history.html:54
 #: seahub/templates/repo_view_snapshot.html:51
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/admin_paginator.html:3
@@ -1550,7 +1565,7 @@ msgstr "이전"
 
 #: seahub/group/templates/group/group_discuss.html:136
 #: seahub/message/templates/message/user_msg_list.html:92
-#: seahub/templates/pubuser.html:46 seahub/templates/repo_history.html:57
+#: seahub/templates/pubuser.html:59 seahub/templates/repo_history.html:57
 #: seahub/templates/repo_view_snapshot.html:54
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/admin_paginator.html:6
@@ -1602,7 +1617,7 @@ msgstr "삭제에 실패했습니다:"
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:216
 #: seahub/message/templates/message/user_msg_list.html:252
-#: seahub/templates/repo.html:832 seahub/templates/repo.html.py:1754
+#: seahub/templates/repo.html:876 seahub/templates/repo.html.py:1809
 msgid "Failed."
 msgstr "실패했습니다."
 
@@ -1698,7 +1713,7 @@ msgstr "이 그룹에서 공유하는 라이브러리 없음"
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
 "\"Share\" icon on your libraries list."
-msgstr "상단의 \"새 라이브러리\" 버튼을 클릭하거나 라이브러리 목록에서 \"공유\" 아이콘\"을 클릭하면 라이브러리를 공유할 수 있습니다."
+msgstr "상단의 \"새 라이브러리\" 버튼을 누르거나 라이브러리 목록에서 \"공유\" 아이콘\"을 누르면 라이브러리를 공유할 수 있습니다."
 
 #: seahub/group/templates/group/group_info.html:67
 msgid ""
@@ -1713,7 +1728,7 @@ msgstr "기록 가능하게 공유한 라이브러리는 다른 그룹 구성원
 #: seahub/share/templates/share/links.html:57
 #: seahub/share/templates/share/priv_shared_files.html:23
 #: seahub/share/templates/share/priv_shared_files.html:57
-#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:240
+#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:241
 #: seahub/templates/starred.html:14
 msgid "Library"
 msgstr "라이브러리"
@@ -1742,11 +1757,11 @@ msgstr "상세"
 
 #: seahub/group/templates/group/group_info.html:109
 #: seahub/group/templates/group/new_msg_reply.html:76
-#: seahub/templates/pubuser.html:51 seahub/templates/repo_history.html:36
+#: seahub/templates/pubuser.html:65 seahub/templates/repo_history.html:36
 #: seahub/templates/repo_view_snapshot.html:29
 #: seahub/templates/sysadmin/sys_list_orphan.html:23
 #: seahub/templates/sysadmin/sys_list_system.html:36
-#: seahub/templates/sysadmin/sys_org_info.html:79
+#: seahub/templates/sysadmin/sys_org_info.html:117
 #: seahub/templates/sysadmin/sys_repo_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:82
 #: seahub/templates/sysadmin/userinfo.html:106
@@ -1763,17 +1778,17 @@ msgid "Unknown"
 msgstr "알 수 없음"
 
 #: seahub/group/templates/group/group_info.html:129
-#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:240
+#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:241
 msgid "is encrypted"
 msgstr "암호화함"
 
 #: seahub/group/templates/group/group_info.html:131
-#: seahub/templates/activities.html:21 seahub/templates/file_edit.html:241
+#: seahub/templates/activities.html:21 seahub/templates/file_edit.html:242
 msgid "Password："
 msgstr "암호:"
 
 #: seahub/group/templates/group/group_info.html:133
-#: seahub/templates/activities.html:23 seahub/templates/file_edit.html:243
+#: seahub/templates/activities.html:23 seahub/templates/file_edit.html:244
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "암호는 한 시간동안만 서버에서 유지합니다."
 
@@ -1784,7 +1799,7 @@ msgstr "라이브러리 공유 해제"
 #: seahub/group/templates/group/group_info.html:152
 #, python-format
 msgid "Are you sure you want to unshare %s ?"
-msgstr ""
+msgstr "정말로 %s 공유를 취소할까요?"
 
 #: seahub/group/templates/group/group_info_for_pub.html:24
 #: seahub/group/templates/group/group_info_for_pub.html:26
@@ -1812,7 +1827,7 @@ msgstr ""
 #: seahub/templates/snippets/my_shared_repos.html:12
 #: seahub/templates/sysadmin/userinfo.html:72
 msgid "directory icon"
-msgstr "디렉토리 아이콘"
+msgstr "디렉터리 아이콘"
 
 #: seahub/group/templates/group/group_info_for_pub.html:46
 msgid "No public library is in this group"
@@ -1876,7 +1891,7 @@ msgstr "바꾸기"
 #: seahub/templates/snippets/repo_dirents.html:33
 #: seahub/templates/snippets/repo_dirents.html:87
 msgid "Rename"
-msgstr "이름 변경"
+msgstr "이름 바꾸기"
 
 #: seahub/group/templates/group/group_manage.html:83
 msgid "Revoke Public"
@@ -1893,7 +1908,7 @@ msgstr "보내기"
 
 #: seahub/group/templates/group/group_manage.html:90
 msgid "Dismiss"
-msgstr "무시"
+msgstr "탈퇴"
 
 #: seahub/group/templates/group/group_manage.html:98
 msgid "Transfer Group To"
@@ -1913,11 +1928,11 @@ msgstr "그룹 이름을 다음으로 바꾸기"
 
 #: seahub/group/templates/group/group_manage.html:142
 msgid "Dismiss Group"
-msgstr "그룹 없애기"
+msgstr "그룹 제거"
 
 #: seahub/group/templates/group/group_manage.html:143
 msgid "Really want to dismiss this group?"
-msgstr "이 그룹을 진짜 없앨까요?"
+msgstr "이 그룹을 진짜 제거할까요?"
 
 #: seahub/group/templates/group/group_manage.html:146
 msgid "Delete Member"
@@ -1926,7 +1941,7 @@ msgstr "구성원 삭제"
 #: seahub/group/templates/group/group_manage.html:147
 #, python-format
 msgid "Really want to delete %s ?"
-msgstr ""
+msgstr "정말로 %s을(를) 삭제할까요?"
 
 #: seahub/group/templates/group/group_members.html:10
 msgid "Quit"
@@ -1934,7 +1949,7 @@ msgstr "끝내기"
 
 #: seahub/group/templates/group/group_members.html:22
 #: seahub/profile/templates/profile/user_profile.html:28
-#: seahub/templates/pubuser.html:27
+#: seahub/templates/pubuser.html:39
 msgid "Add to Contacts"
 msgstr "연락처에 추가 "
 
@@ -1957,7 +1972,6 @@ msgstr "이름: "
 #: seahub/group/templates/group/group_pubinfo.html:14
 #: seahub/group/templates/group/groups_right_panel.html:15
 #: seahub/templates/pubgrp.html:24
-#: seahub/templates/sysadmin/sys_org_info.html:72
 msgid "Creator: "
 msgstr "생성자:"
 
@@ -2001,7 +2015,7 @@ msgid ""
 "contents of wiki is stored in a normal library with pre-defined file/folder "
 "structure. This enables you to edit your wiki in your desktop and then sync "
 "back to the server."
-msgstr "시파일 위키는 여러분의 지식을 간단한 방식으로 조직화할 수 있습니다. 위키의 내용은 선정의 파일/폴더 구조의 일반 라이버리에 저장합니다. 이를 통해 테스크톱의 위키를 편집하고 서버로 다시 동기화 할 수 있게 합니다."
+msgstr "Seafile 위키는 여러분의 지식을 간단한 방식으로 조직화할 수 있습니다. 위키의 내용은 선정의 파일/폴더 구조의 일반 라이버리에 저장합니다. 이를 통해 데스크톱의 위키를 편집하고 서버로 다시 동기화할 수 있게 합니다."
 
 #: seahub/group/templates/group/group_wiki.html:38
 #: seahub/templates/wiki/personal_wiki.html:34
@@ -2116,7 +2130,7 @@ msgstr "그룹을 만들고 나면 구성원을 추가할 수 있고 라이브�
 
 #: seahub/group/templates/group/groups_left_panel.html:8
 msgid "Since you are a guest user now, you can not create groups."
-msgstr ""
+msgstr "현재 손님 사용자이기 때문에 그룹을 만들 수 없습니다."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
 msgid "My Groups"
@@ -2129,7 +2143,6 @@ msgstr "새 그룹"
 
 #: seahub/group/templates/group/groups_right_panel.html:16
 #: seahub/templates/pubgrp.html:25
-#: seahub/templates/sysadmin/sys_org_info.html:73
 msgid "Time: "
 msgstr "시간: "
 
@@ -2141,13 +2154,13 @@ msgstr "어떤 그룹에도 속하지 않았습니다"
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. You can create a group by clicking \"New Group\" button."
-msgstr ""
+msgstr "그룹은 여러분과 친구가 메시지를 남기고 라이브러리를 통해 공동 작업을 하는 공간입니다. \"새 그룹\" 버튼을 눌러 그룹을 만들 수 있습니다."
 
 #: seahub/group/templates/group/groups_right_panel.html:34
 msgid ""
 "Group is a place for you and your friends leaving messages and collaborating"
 " on libraries. Groups you join will be listed here."
-msgstr ""
+msgstr "그룹은 여러분과 친구가 메시지를 남기고 라이브러리를 통해 공동 작업을 하는 공간입니다. 여러분이 참여한 그룹은 아래에 있습니다."
 
 #: seahub/group/templates/group/groups_right_panel.html:41
 msgid "Group Name"
@@ -2204,11 +2217,11 @@ msgstr "파일 설치 및 동기화"
 
 #: seahub/help/templates/help/help_base.html:10
 msgid "Deleting a library"
-msgstr "라이브러리 삭제 중"
+msgstr "라이브러리 삭제"
 
 #: seahub/help/templates/help/help_base.html:11
 msgid "Encrypting a library"
-msgstr "라이브러리 암호화 중"
+msgstr "라이브러리 암호화"
 
 #: seahub/help/templates/help/help_base.html:12
 #: seahub/help/templates/help/help_colab.html:7
@@ -2217,7 +2230,7 @@ msgstr "파일 충돌"
 
 #: seahub/help/templates/help/help_base.html:13
 msgid "Excluding files"
-msgstr "파일 제외 중"
+msgstr "파일 제외"
 
 #: seahub/help/templates/help/help_base.html:15
 msgid "Web Site"
@@ -2225,26 +2238,26 @@ msgstr "웹사이트"
 
 #: seahub/help/templates/help/help_base.html:17
 msgid "Sharing to a group"
-msgstr "그룹에 공유 중"
+msgstr "그룹에 공유"
 
 #: seahub/help/templates/help/help_base.html:18
 #: seahub/help/templates/help/help_view_encrypted.html:8
 msgid "Viewing an encrypted library"
-msgstr "암호화한 라이브러리 보는 중"
+msgstr "암호화한 라이브러리 보기"
 
 #: seahub/help/templates/help/help_colab.html:8
 msgid ""
 "Once you and your friends sync a shared library onto your computers, you may"
 " add, delete or edit files in the library together.  Every change you make "
 "to the library will be automatically synced to others' computers."
-msgstr ""
+msgstr "여러분과 친구가 라이브러리를 컴퓨터와 한번 동기화하고 나면, 함께 보유한 파일에 대해 추가, 삭제, 편집할 수 있습니다. 여러분이 라이브러리에 행하는 모든 변화 작업은 다른 사람의 컴퓨터와 자동으로 동기화됩니다."
 
 #: seahub/help/templates/help/help_colab.html:10
 msgid ""
 "\n"
 "    Sometimes you and your friends may edit the same file at the same time. Your changes may conflict with each other's. In this case, Seafile would keep your version unchanged, while save your friends' versions as \"conflict files\". A conflict file's name ends with its author's email address, plus the current time, e.g. test.txt (name@example.com 2013-10-01-00-12-24).\n"
 "\t"
-msgstr ""
+msgstr "\n가끔은 친구와 동시에 파일을 편집할 수도 있습니다. 이렇게 하면 다른 사람이 편집한 내용과 충돌이 납니다. 이 경우, Seafile은 친구가 편집한 버전이 \"충돌 파일\"로 저장해놓고, 바뀌지 않은 버전을 유지합니다. 충돌 파일의 이름은 저작자의 전자메일 주소와 현재 시간으로 끝납니다.\n예: test.txt (name@example.com 2013-10-01-00-12-24).\n\t"
 
 #: seahub/help/templates/help/help_delete.html:7
 msgid "Deleting a file library"
@@ -2254,7 +2267,7 @@ msgstr "파일 라이브러리 삭제"
 msgid ""
 "To maximize your data security, deletion of file libraries on the website "
 "and on your computer are not \"synced\" automatically. "
-msgstr ""
+msgstr "데이터 보안성을 최대화하려면, 웹 사이트와 컴퓨터에서의 파일 라이브러리 삭제를 자동으로 \"동기화\" 하지 않아야 합니다."
 
 #: seahub/help/templates/help/help_delete.html:11
 msgid ""
@@ -2296,7 +2309,7 @@ msgid ""
 "folder of this library. In this special file, you specify the files and "
 "folders that Seafile should not sync. Each line in this file specifies a "
 "pattern. The following pattern format are supported."
-msgstr "때로는 라이브러리에 일부 파일 또는 폴더의 동기화를 원치 않을 수도 있습니다. 이를 해결하기 위해 루트 폴더에 seafile-ignore.txt 파일을 만들 수 있습니다. 이 특별한 파일에는 시파일이 동기화 하지 못하도록 파일과 폴더를 지정할 수 있스비다. 이 파일의 각 줄에 규칙(패턴)을 지정합니다. 다음 패턴 형식을 지원합니다."
+msgstr "때로는 라이브러리에 일부 파일 또는 폴더의 동기화를 원치 않을 수도 있습니다. 이를 해결하려면 루트 폴더에 seafile-ignore.txt 파일을 만들 수 있습니다. 이 특별한 파일에는 Seafile이 동기화 하지 못하도록 파일과 폴더를 지정할 수 있습니다. 이 파일의 각 줄에 규칙(패턴)을 지정합니다. 다음 패턴 형식을 지원합니다."
 
 #: seahub/help/templates/help/help_ignore.html:13
 msgid "A blank line matches no files."
@@ -2313,7 +2326,7 @@ msgid ""
 "\"foo/hello\". Note that the wildcard character * recursively matches all "
 "the paths under a folder. For instance, \"foo/*.html\" matches "
 "\"foo/a.html\" and \"foo/templates/b.html\"."
-msgstr "시파일에는 패턴에 와일드카드 문자를 지원합니다. 예를 들어 \"foo/*\"는 \"foo/1\", \"foo/hello\"와 일치합니다. \"foo/?\"는 \"foo/1\"와 일치하지만 \"foo/hello\"와 일치하지는 않습니다. 참고로 * 와일드카드 문자는 폴더 아래 모든 경로와 재귀적으로 일치합니다. 예를 들어 \"foo/*.html\"은 \"foo/a.html\", \"foo/templates/b.html\"과 일치합니다."
+msgstr "Seafile에는 패턴에 와일드카드 문자를 지원합니다. 예를 들어 \"foo/*\"는 \"foo/1\", \"foo/hello\"와 일치합니다. \"foo/?\"는 \"foo/1\"와 일치하지만 \"foo/hello\"와 일치하지는 않습니다. 참고로 * 와일드카드 문자는 폴더 아래 모든 경로와 재귀적으로 일치합니다. 예를 들어 \"foo/*.html\"은 \"foo/a.html\", \"foo/templates/b.html\"과 일치합니다."
 
 #: seahub/help/templates/help/help_ignore.html:16
 msgid ""
@@ -2328,7 +2341,7 @@ msgid ""
 "folder. For example, \"foo\" can only match regular file \"foo\" or a "
 "symbolic link; while \"foo/\" and \"foo*\" match a folder and paths under "
 "it."
-msgstr ""
+msgstr "패턴이 슬래시 또는 와일드카드 문자로 안끝나면, 폴더와 일치하지 않습니다. 예를 들어, \"foo/\"와 \"foo*\"는 폴더와 폴더 아래의 경로가 일치하지만, \"foo\"는 일반 파일 \"foo\"와 심볼릭 링크하고만 일치합니다. "
 
 #: seahub/help/templates/help/help_ignore.html:20
 msgid "Example"
@@ -2343,7 +2356,7 @@ msgid ""
 "The seafile-ignore.txt file only controls which files to exclude on the "
 "client side. You can still create a file from seahub web interface that's "
 "excluded on the client. In this case,"
-msgstr "seafile-ignore.txt 파일은 클라이언트 측에서 제외할 파일을 다룰 목적으로 존재합니다. 클라이언트에서 파일을 제외하더라도 시허브 웹 인터페이스에서 파일을 만들 수 있습니다. 이 경우,"
+msgstr "seafile-ignore.txt 파일은 클라이언트 측에서 제외할 파일을 다룰 목적으로 존재합니다. 클라이언트에서 파일을 제외하더라도 Seahub 웹 인터페이스에서 파일을 만들 수 있습니다. 이 경우,"
 
 #: seahub/help/templates/help/help_ignore.html:43
 msgid ""
@@ -2356,7 +2369,7 @@ msgid ""
 "If the file is modified on seahub, the new version will also be synced back "
 "to clients; If the file on the client is also modified, a conflict file will"
 " be generated on the client."
-msgstr "시허브에서 파일을 수정하면, 새 버전을 클라이언트로 동기화합니다. 클라이언트에서도 파일을 수정하면, 충돌 파일을 클라이언트에 만듭니다."
+msgstr "Seahub에서 파일을 수정하면, 새 버전을 클라이언트로 동기화합니다. 클라이언트에서도 파일을 수정하면, 충돌 파일을 클라이언트에 만듭니다."
 
 #: seahub/help/templates/help/help_ignore.html:47
 msgid ""
@@ -2367,17 +2380,17 @@ msgstr "seafile-ignore.txt는 아직 동기화하지 않은 파일만 무시합�
 
 #: seahub/help/templates/help/help_install_v2.html:8
 msgid "Installing and Using Seafile Client"
-msgstr "시파일 클라이언트 설치 및 활용"
+msgstr "Seafile 클라이언트 설치 및 활용"
 
 #: seahub/help/templates/help/help_install_v2.html:10
 msgid ""
 "After downloading Seafile client program, you have 3 steps left to get it up"
 " and running."
-msgstr "시파일 클라이언트 프로그램을 다운로드 하고 난 후, 설정하고 동작하는데 3단계를 거쳐야 합니다."
+msgstr "Seafile 클라이언트 프로그램을 다운로드 하고 난 후, 설정하고 동작하는데 3단계를 거쳐야 합니다."
 
 #: seahub/help/templates/help/help_install_v2.html:12
 msgid "1. Select a disk partition to store local Seafile data"
-msgstr "1. 로컬 시파일 데이터를 저장할 디스크 파티션을 선택하세요"
+msgstr "1. 로컬 Seafile 데이터를 저장할 디스크 파티션을 선택하세요"
 
 #: seahub/help/templates/help/help_install_v2.html:16
 msgid "2. Add an account"
@@ -2385,7 +2398,7 @@ msgstr "2. 계정을 추가하세요"
 
 #: seahub/help/templates/help/help_install_v2.html:17
 msgid "Add an account on your private Seafile server or our public server."
-msgstr "개인 시파일 서버 또는 저희 공개 서버에 계정을 만드세요."
+msgstr "개인 Seafile 서버 또는 저희 공개 서버에 계정을 만드세요."
 
 #: seahub/help/templates/help/help_install_v2.html:22
 msgid "3. Sync a library"
@@ -2418,11 +2431,11 @@ msgid ""
 "Seafile supports encryption of file libraries to strengthen your data "
 "security. To encrypt a file library, you need to set a password when you "
 "create a library."
-msgstr "시파일에서는 데이터 보안 강화를 목적으로 라이브러리 암호화를 지원합니다. 파일 라이브러리를 암호화하려면, 라이브러리를 만들 때 암호를 지정해야 합니다."
+msgstr "Seafile에서는 데이터 보안 강화를 목적으로 라이브러리 암호화를 지원합니다. 파일 라이브러리를 암호화하려면, 라이브러리를 만들 때 암호를 지정해야 합니다."
 
 #: seahub/help/templates/help/help_security.html:10
 msgid "The password won't be stored on Seafile cloud platform."
-msgstr "암호는 시파일 클라우드 플랫폼에 저장하지 않습니다."
+msgstr "암호는 Seafile 클라우드 플랫폼에 저장하지 않습니다."
 
 #: seahub/help/templates/help/help_security.html:10
 msgid ""
@@ -2435,7 +2448,7 @@ msgid ""
 "To download and sync an encrypted library to your computer, you need to "
 "provide the password.  Seafile client program will download the encrypted "
 "data and decrypt it on your computer."
-msgstr "암호화 라이브러리를 컴퓨터에 다운로드하고 동기화하려면, 암호를 입력해야 합니다. 시파일 클라이언트 프로그램에서는 암호화 데이터를 다운로드 하고 컴퓨터에서 해독합니다."
+msgstr "암호화 라이브러리를 컴퓨터에 다운로드하고 동기화하려면, 암호를 입력해야 합니다. Seafile 클라이언트 프로그램에서는 암호화 데이터를 다운로드 하고 컴퓨터에서 해독합니다."
 
 #: seahub/help/templates/help/help_security.html:13
 msgid "The password can only be set when you create the library."
@@ -2458,7 +2471,7 @@ msgid ""
 "library. Your password is only stored in the server's encrypted memory. It "
 "would be cleared from the memory in an hour. After that, if you want to view"
 " the library, you'll have to enter password again."
-msgstr "시파일 서버는 암호화 라이브러리의 암호를 저장하지 않습니다. 암호화 라이브러리를 온라인에서 보려면, 라이브러리 암호를 입력해야 합니다. 암호는 서버의 암호화 저장공간에만 저장합니다. 한시간이 지나면 메모리에서 암호가 지워집니다. 그 이후 라이브러리를 보려면 암호를 다시 입력해야 합니다."
+msgstr "Seafile 서버는 암호화 라이브러리의 암호를 저장하지 않습니다. 암호화 라이브러리를 온라인에서 보려면, 라이브러리 암호를 입력해야 합니다. 암호는 서버의 암호화 저장공간에만 저장합니다. 한시간이 지나면 메모리에서 암호가 지워집니다. 그 이후 라이브러리를 보려면 암호를 다시 입력해야 합니다."
 
 #: seahub/message/views.py:184
 #: seahub/message/templates/message/all_msg_list.html:156
@@ -2484,13 +2497,13 @@ msgid "New Message"
 msgstr "새 메시지"
 
 #: seahub/message/templates/message/all_msg_list.html:23
-#: seahub/notifications/templates/notifications/notice_email.html:21
+#: seahub/notifications/templates/notifications/notice_email.html:19
 #: seahub/notifications/templates/notifications/user_notification_list.html:23
 msgid "Message"
 msgstr "메시지"
 
 #: seahub/message/templates/message/all_msg_list.html:24
-#: seahub/notifications/templates/notifications/notice_email.html:22
+#: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:24
 #: seahub/templates/file_revisions.html:25
 #: seahub/templates/repo_history.html:21
@@ -2513,84 +2526,85 @@ msgstr "먼저 연락처를 추가하세요"
 msgid "Send a message..."
 msgstr "메시지 보내기..."
 
-#: seahub/notifications/models.py:489
+#: seahub/notifications/models.py:491
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your "
 "folder <a href='%(folder_link)s'>%(folder)s</a>"
 msgstr "<a href='%(folder_link)s'>%(folder)s</a> 폴더에 <a href='%(file_link)s'>%(file_name)s</a> 파일을 업로드했습니다"
 
-#: seahub/notifications/models.py:512
+#: seahub/notifications/models.py:514
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
 msgstr "%(user)s님께서 <a href='%(href)s'>%(repo_name)s</a> 라이브러리를 공유해주셨습니다."
 
-#: seahub/notifications/models.py:530
+#: seahub/notifications/models.py:532
 #, python-format
 msgid ""
 "%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to "
 "you."
 msgstr "%(user)s님께서 <a href='%(href)s'>%(file_name)s</a> 파일을 공유해주셨습니다."
 
-#: seahub/notifications/models.py:545 seahub/notifications/models.py:565
-#: seahub/notifications/models.py:582 seahub/notifications/models.py:612
-#: seahub/notifications/models.py:629 seahub/notifications/models.py:653
-#: seahub/utils/__init__.py:113 seahub/utils/__init__.py:872
+#: seahub/notifications/models.py:547 seahub/notifications/models.py:567
+#: seahub/notifications/models.py:584 seahub/notifications/models.py:614
+#: seahub/notifications/models.py:631 seahub/notifications/models.py:655
+#: seahub/notifications/models.py:672 seahub/utils/__init__.py:113
+#: seahub/utils/__init__.py:878
 msgid "Internal error"
 msgstr "내부 오류"
 
-#: seahub/notifications/models.py:550
+#: seahub/notifications/models.py:552
 #, python-format
 msgid "You have received a <a href='%(href)s'>new message</a> from %(user)s."
 msgstr "%(user)s님께 <a href='%(href)s'>새 메시지</a> 를 받았습니다."
 
-#: seahub/notifications/models.py:593
+#: seahub/notifications/models.py:595
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has a new discussion."
-msgstr ""
+msgstr "<a href='%(href)s'>%(group_name)s</a>에 새 토론 내용이 있습니다."
 
-#: seahub/notifications/models.py:597
+#: seahub/notifications/models.py:599
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>."
-msgstr ""
+msgstr "%(user)s 님이 <a href='%(href)s'>%(group_name)s</a> 그룹에 새 토론 내용을 올렸습니다."
 
-#: seahub/notifications/models.py:634
+#: seahub/notifications/models.py:636
 #, python-format
 msgid "One <a href='%(href)s'>group discussion</a> has a new reply."
-msgstr ""
+msgstr "<a href='%(href)s'>그룹 토론</a>에 새 답글이 있습니다."
 
-#: seahub/notifications/models.py:638
+#: seahub/notifications/models.py:640
 #, python-format
 msgid "%(user)s replied the <a href='%(href)s'>group discussion</a>."
-msgstr ""
+msgstr "%(user)s님이 <a href='%(href)s'>그룹 토론</a>에 답글을 남겼습니다."
 
-#: seahub/notifications/models.py:677
+#: seahub/notifications/models.py:696
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
 "href='%(href)s'>%(group_name)s</a>, verification message: "
 "%(join_request_msg)s"
-msgstr ""
+msgstr "<a href='%(user_profile)s'>%(username)s</a>님이 <a href='%(href)s'>%(group_name)s</a> 그룹 참여를 요청했습니다, 확인 메시지: %(join_request_msg)s"
 
 #: seahub/notifications/views.py:124
 msgid "Successfully cleared all notices."
 msgstr "모든 알림을 성공적으로 지웠습니다."
 
-#: seahub/notifications/management/commands/send_notices.py:29
-#: seahub/notifications/management/commands/send_notices.py:222
+#: seahub/notifications/management/commands/send_notices.py:30
+#: seahub/notifications/management/commands/send_notices.py:248
 #, python-format
 msgid "New notice on %s"
-msgstr ""
+msgstr "%s에 새 공지가 있습니다"
 
-#: seahub/notifications/templates/notifications/notice_email.html:8
+#: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
-msgstr ""
+msgstr "안녕하세요, %(name)s님"
 
-#: seahub/notifications/templates/notifications/notice_email.html:11
+#: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
 msgid ""
 "\n"
@@ -2598,60 +2612,60 @@ msgid ""
 msgid_plural ""
 "\n"
 "You've got %(num)s new notices on %(site_name)s:\n"
-msgstr[0] ""
+msgstr[0] "\n%(site_name)s에 새 공지 %(num)s개가 있습니다:\n"
 
-#: seahub/notifications/templates/notifications/notice_email.html:28
+#: seahub/notifications/templates/notifications/notice_email.html:27
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a "
 "href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
-msgstr ""
+msgstr " %(user)s님이 <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>에 새 토론 내용을 올렸습니다"
 
 #: seahub/notifications/templates/notifications/notice_email.html:33
 #, python-format
 msgid ""
 "%(user)s replied your <a href=\"%(url_base)s%(reply_url)s\">group "
 "discussion</a>"
-msgstr ""
+msgstr "%(user)s님이 <a href=\"%(url_base)s%(reply_url)s\">그룹 토론</a>에 답글을 남겼습니다."
 
-#: seahub/notifications/templates/notifications/notice_email.html:38
+#: seahub/notifications/templates/notifications/notice_email.html:44
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s님이 <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> 라이브러리를 공유했습니다."
 
-#: seahub/notifications/templates/notifications/notice_email.html:43
+#: seahub/notifications/templates/notifications/notice_email.html:47
 #, python-format
 msgid ""
 "%(user)s has shared a file named <a "
 "href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> to you."
-msgstr ""
+msgstr "%(user)s님이 <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> 파일을 공유했습니다."
 
-#: seahub/notifications/templates/notifications/notice_email.html:48
+#: seahub/notifications/templates/notifications/notice_email.html:50
 #, python-format
 msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
-msgstr ""
+msgstr "%(user)s님의 <a href=\"%(url_base)s%(msg_url)s\">새 메시지</a>가 있습니다."
 
-#: seahub/notifications/templates/notifications/notice_email.html:53
+#: seahub/notifications/templates/notifications/notice_email.html:56
 #, python-format
 msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
-"href=\"%(url_base)s%(folder_link)s\">%(folder_name)s</a>."
+"href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 msgstr ""
 
-#: seahub/notifications/templates/notifications/notice_email.html:58
+#: seahub/notifications/templates/notifications/notice_email.html:59
 #, python-format
 msgid ""
-"User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> has asked to "
-"join group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, "
-"verification message: %(msg)s."
+"User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
+"group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
+"message: %(msg)s"
 msgstr ""
 
-#: seahub/notifications/templates/notifications/notice_email.html:67
+#: seahub/notifications/templates/notifications/notice_email.html:68
 msgid "Go check out at the following page:"
 msgstr "다음 페이지에서 확인하세요:"
 
@@ -2693,7 +2707,7 @@ msgstr "알림"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:12
 msgid "Mark all read"
-msgstr ""
+msgstr "모두 읽음으로 표시"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:13
 msgid "Clear"
@@ -2735,27 +2749,31 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "요령: 후자가 더 안전하지만 모든 브라우저에서 지원하지는 않습니다. 크롬 또는 파이어폭스 최신버전 사용을 권장합니다."
 
-#: seahub/profile/views.py:36
+#: seahub/profile/forms.py:16
+msgid "Nickname should not include ' / '"
+msgstr ""
+
+#: seahub/profile/views.py:37
 msgid "Successfully edited profile."
 msgstr "프로파일을 성공적으로 편집했습니다."
 
-#: seahub/profile/views.py:42
+#: seahub/profile/views.py:43
 msgid "Failed to edit profile"
 msgstr "프로파일 편집에 실패했습니다"
 
-#: seahub/profile/views.py:113 seahub/profile/views.py:149
+#: seahub/profile/views.py:115 seahub/profile/views.py:151
 msgid "Has not accepted invitation yet"
 msgstr "아직 초대를 수락하지 않았습니다"
 
-#: seahub/profile/views.py:165
+#: seahub/profile/views.py:167
 msgid "Demo account can not be deleted."
 msgstr "데모 계정은 삭제할 수 없습니다."
 
-#: seahub/profile/views.py:191
+#: seahub/profile/views.py:193
 msgid "Failed to set default library."
 msgstr "기본 라이브러리 설정에 실패했습니다."
 
-#: seahub/profile/views.py:196
+#: seahub/profile/views.py:198
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\"을(를) 성공적으로 기본 라이브러리로 설정했습니다."
@@ -2776,7 +2794,7 @@ msgstr "언어"
 
 #: seahub/profile/templates/profile/set_profile.html:14
 msgid "Encrypted Libraries"
-msgstr "암호화 된 라이브러리"
+msgstr "암호화된 라이브러리"
 
 #: seahub/profile/templates/profile/set_profile.html:16
 msgid "Sub-library"
@@ -2849,7 +2867,7 @@ msgid ""
 "listed in your desktop client, and you can download it just like downloading"
 " a normal library. It will be automatically kept in sync with its origin "
 "library."
-msgstr "이 기능은 라이브러리의 폴더를 부분적으로 동기화 할 수 있게 합니다. 하위 라이브러리는 폴더에 만들 수 있습니다. 만든 다음에는 데스크탑 클라이언트에 나타나며, 다운로드하는 보통의 라이브러리처럼 다운로드할 수 있습니다. 원본 라이브러리와 동기화 상태를 자동으로 유지합니다."
+msgstr "이 기능은 라이브러리의 폴더를 부분적으로 동기화할 수 있게 합니다. 하위 라이브러리는 폴더에 만들 수 있습니다. 만든 다음에는 데스크탑 클라이언트에 나타나며, 다운로드하는 보통의 라이브러리처럼 다운로드할 수 있습니다. 원본 라이브러리와 동기화 상태를 자동으로 유지합니다."
 
 #: seahub/profile/templates/profile/set_profile.html:100
 msgid ""
@@ -2909,13 +2927,13 @@ msgid "Self-introduction"
 msgstr "자기 소개"
 
 #: seahub/profile/templates/profile/user_profile.html:48
-#: seahub/templates/registration/registration_form.html:28
+#: seahub/templates/registration/registration_form.html:30
 #: seahub/templates/sysadmin/userinfo.html:23
 msgid "Department"
 msgstr "부서"
 
 #: seahub/profile/templates/profile/user_profile.html:51
-#: seahub/templates/registration/registration_form.html:30
+#: seahub/templates/registration/registration_form.html:32
 #: seahub/templates/sysadmin/userinfo.html:26
 msgid "Telephone"
 msgstr "전화"
@@ -2954,7 +2972,7 @@ msgstr "%(repo)s 저장소를 %(group)s 그룹에 공유하는데 실패했습�
 msgid ""
 "Shared to %(group)s successfully, go check it at <a "
 "href=\"%(share)s\">Shares</a>."
-msgstr ""
+msgstr "%(group)s 그룹에 성공적으로 공유했습니다. <a href=\"%(share)s\">공유</a> 항목에서 확인하세요."
 
 #: seahub/share/views.py:138
 msgid "You can not share libray to yourself."
@@ -2963,7 +2981,7 @@ msgstr "자신에게 라이브러리를 공유할 수 없습니다."
 #: seahub/share/views.py:146
 #, python-format
 msgid "Failed to share to %s, user is not found."
-msgstr ""
+msgstr "존재하지 않는 %s 대상의 공유를 실패했습니다."
 
 #: seahub/share/views.py:151
 #, python-format
@@ -2980,7 +2998,7 @@ msgstr "%s님께 공유를 실패했습니다. 다시 시도해보세요."
 msgid ""
 "Shared to %(email)s successfully, go check it at <a "
 "href=\"%(share)s\">Shares</a>."
-msgstr ""
+msgstr "%(email)s님께 성공적으로 공유했습니다. <a href=\"%(share)s\">공유</a> 항목에서 확인하세요."
 
 #: seahub/share/views.py:232
 msgid "Only the owner of the library has permission to share it."
@@ -3018,9 +3036,9 @@ msgid "all members"
 msgstr "모든 구성원"
 
 #: seahub/share/views.py:720 seahub/share/views.py:1074
-#: seahub/views/__init__.py:805 seahub/views/__init__.py:1275
-#: seahub/views/__init__.py:1310 seahub/views/ajax.py:1001
-#: seahub/views/ajax.py:1015 seahub/views/file.py:839
+#: seahub/views/__init__.py:841 seahub/views/__init__.py:1310
+#: seahub/views/__init__.py:1353 seahub/views/ajax.py:979
+#: seahub/views/ajax.py:999 seahub/views/file.py:877
 msgid "Invalid arguments"
 msgstr "잘못된 인자"
 
@@ -3050,7 +3068,7 @@ msgstr "%s에서 파일을 공유했습니다"
 #: seahub/share/views.py:875
 #, python-format
 msgid "A directory is shared to you on %s"
-msgstr ""
+msgstr "%s에서 디렉터리를 공유했습니다"
 
 #: seahub/share/views.py:879 seahub/share/views.py:1155
 msgid "Internal server error. Send failed."
@@ -3062,7 +3080,7 @@ msgstr "성공적으로 보냈습니다."
 
 #: seahub/share/views.py:902
 msgid "Please choose a directory."
-msgstr "디렉토리를 선택해주세요."
+msgstr "디렉터리를 선택해주세요."
 
 #: seahub/share/views.py:920 seahub/share/views.py:1012
 msgid "Successfully saved."
@@ -3093,16 +3111,16 @@ msgstr "%s을(를) 공유 해제할 권한이 없습니다."
 msgid "You don't have permission to save %s."
 msgstr "%s을(를) 저장할 권한이 없습니다."
 
-#: seahub/share/views.py:1090 seahub/views/ajax.py:162
-#: seahub/views/ajax.py:382 seahub/views/ajax.py:468 seahub/views/ajax.py:606
-#: seahub/views/ajax.py:630 seahub/views/ajax.py:797 seahub/views/ajax.py:822
-#: seahub/views/file.py:824
+#: seahub/share/views.py:1090 seahub/views/__init__.py:403
+#: seahub/views/ajax.py:163 seahub/views/ajax.py:390 seahub/views/ajax.py:476
+#: seahub/views/ajax.py:614 seahub/views/ajax.py:638 seahub/views/ajax.py:805
+#: seahub/views/ajax.py:830 seahub/views/file.py:862
 msgid "Permission denied"
 msgstr "권한이 거부되었습니다"
 
 #: seahub/share/views.py:1109
 msgid "Operation failed"
-msgstr ""
+msgstr "처리에 실패했습니다."
 
 #: seahub/share/views.py:1124
 msgid ""
@@ -3121,11 +3139,11 @@ msgstr "링크 - 공유"
 
 #: seahub/share/templates/share/links.html:12
 msgid "Download Links"
-msgstr "링크 다운로드"
+msgstr "다운로드 링크"
 
 #: seahub/share/templates/share/links.html:13
 msgid "Upload Links"
-msgstr "링크 업로드"
+msgstr "업로드 링크"
 
 #: seahub/share/templates/share/links.html:22
 #: seahub/share/templates/share/links.html:58
@@ -3134,8 +3152,7 @@ msgstr "방문"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:613
-#: seahub/templates/repo.html.py:691
+#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:611
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "보기"
@@ -3148,7 +3165,7 @@ msgstr "제거"
 
 #: seahub/share/templates/share/links.html:45
 msgid "You don't have any download link"
-msgstr "다운로드한 링크가 없습니다"
+msgstr "다운로드 링크가 없습니다"
 
 #: seahub/share/templates/share/links.html:46
 msgid ""
@@ -3158,13 +3175,13 @@ msgstr "폴더 또는 파일에 대한 다운로드 링크를 만들 수 있습�
 
 #: seahub/share/templates/share/links.html:76
 msgid "You don't have any upload link"
-msgstr "업로드한 링크가 없습니다"
+msgstr "업로드 링크가 없습니다"
 
 #: seahub/share/templates/share/links.html:77
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
-msgstr "어떤 폴더에든 업로드 링크를 만들 수 있습니다. 다른 사람들은 이 폴더에 파일을 업로드 할 수 있는 링크를 받습니다."
+msgstr "어떤 폴더에든 업로드 링크를 만들 수 있습니다. 다른 사람들은 이 폴더에 파일을 업로드할 수 있는 링크를 받습니다."
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:5
 msgid "Folders - Share"
@@ -3193,16 +3210,18 @@ msgstr "공유한 폴더가 없습니다"
 msgid ""
 "You can share a single folder with a registered user if you don't want to "
 "share a whole library."
-msgstr "전체 라이브러리를 공유하지 않으려면 등록 사용자에게 단일 폴더만을 공유할 수 있습니다."
+msgstr "전체 라이브러리를 공유하지 않는다면 등록 사용자에게 단일 폴더만을 공유할 수 있습니다."
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:94
 #: seahub/share/templates/share/repos.html:99
+#: seahub/templates/sysadmin/sys_org_info.html:216
 #: seahub/templates/sysadmin/useradmin_js.html:65
 msgid "Edit succeeded"
 msgstr "편집 성공"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:101
 #: seahub/share/templates/share/repos.html:106
+#: seahub/templates/sysadmin/sys_org_info.html:224
 #: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit failed."
 msgstr "편집에 실패했습니다."
@@ -3231,7 +3250,7 @@ msgstr "다른 사람이 공유한 파일이 없습니다"
 msgid ""
 "Single files shared to you will be listed here, and you can download them or"
 " save them to some libraries."
-msgstr "여기에 나타난 단일 파일을 공유했으며, 이 파일을 다운로드 하거나 일부 라이브러리에 저장할 수 있습니다."
+msgstr "여기에 나타난 단일 파일을 공유했으며, 이 파일을 다운로드하거나 일부 라이브러리에 저장할 수 있습니다."
 
 #: seahub/share/templates/share/priv_shared_files.html:58
 msgid "To"
@@ -3311,7 +3330,7 @@ msgstr "알림"
 
 #: seahub/templates/base.html:58
 msgid "See All Notifications"
-msgstr ""
+msgstr "모든 알림 보기"
 
 #: seahub/templates/base.html:79
 msgid "Log out"
@@ -3342,7 +3361,7 @@ msgstr "암호:"
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
-msgstr ""
+msgstr " <a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">여기</a>서 암호화 라이브러리를 온라인에서 보는 방법을 바꿀 수 있습니다."
 
 #: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:326
 #: seahub/templates/share_access_validation.html:25
@@ -3352,7 +3371,7 @@ msgstr "암호를 입력하세요."
 #: seahub/templates/devices.html:5 seahub/templates/devices.html.py:9
 #: seahub/templates/home_base.html:25
 msgid "Devices"
-msgstr "기기"
+msgstr "장치"
 
 #: seahub/templates/devices.html:13
 msgid "Platform"
@@ -3360,7 +3379,7 @@ msgstr "플랫폼"
 
 #: seahub/templates/devices.html:14
 msgid "Device Name"
-msgstr "기기 이름"
+msgstr "장치 이름"
 
 #: seahub/templates/devices.html:15
 msgid "IP"
@@ -3372,7 +3391,7 @@ msgstr "최근 접근"
 
 #: seahub/templates/devices.html:17
 msgid "# Libraries"
-msgstr "개 라이브러리"
+msgstr "라이브러리 갯수"
 
 #: seahub/templates/devices.html:18
 msgid "Operation"
@@ -3385,7 +3404,7 @@ msgstr "링크 끊기"
 #: seahub/templates/devices.html:43
 #, python-format
 msgid "Really want to unlink %s?"
-msgstr ""
+msgstr "정말로 %s 링크를 끊을까요?"
 
 #: seahub/templates/devices.html:44
 msgid "It will immediately stop syncing."
@@ -3393,7 +3412,7 @@ msgstr "바로 동기화를 멈출 것입니다."
 
 #: seahub/templates/devices.html:50
 msgid "You do not have connected devices"
-msgstr "연결된 기기가 없습니다"
+msgstr "연결한 장치가 없습니다"
 
 #: seahub/templates/devices.html:51
 msgid "Your clients (Desktop/Android/iOS) will be listed here."
@@ -3407,7 +3426,7 @@ msgstr "성공적으로 링크를 끊었습니다."
 #: seahub/templates/history_file_view.html:63
 #: seahub/templates/history_file_view.html:77 seahub/templates/repo.html:27
 #: seahub/templates/shared_file_view.html:36
-#: seahub/templates/shared_file_view.html:63
+#: seahub/templates/shared_file_view.html:65
 #: seahub/templates/view_file_base.html:104
 #: seahub/templates/view_file_base.html:190
 #: seahub/templates/view_history_file.html:34
@@ -3419,326 +3438,327 @@ msgstr "성공적으로 링크를 끊었습니다."
 msgid "Download"
 msgstr "다운로드"
 
-#: seahub/templates/file_edit.html:83
+#: seahub/templates/file_edit.html:84
 #: seahub/templates/repo_history_view.html:38
-#: seahub/templates/repo_recycle_view.html:16
+#: seahub/templates/repo_recycle_view.html:21
 #: seahub/templates/shared_file_view.html:17
 #: seahub/templates/view_shared_dir.html:13
 msgid "Current path: "
 msgstr "현재 경로: "
 
-#: seahub/templates/file_edit.html:93
+#: seahub/templates/file_edit.html:94
 msgid "Draft saved."
 msgstr "초안을 저장했습니다."
 
-#: seahub/templates/file_edit.html:95
+#: seahub/templates/file_edit.html:96
 msgid "Continue editing"
 msgstr "편집 계속하기"
 
-#: seahub/templates/file_edit.html:96
+#: seahub/templates/file_edit.html:97
 msgid "Preview"
 msgstr "미리 보기"
 
-#: seahub/templates/file_edit.html:122
+#: seahub/templates/file_edit.html:123
 msgid "Standard Syntax"
 msgstr "표준 문법"
 
-#: seahub/templates/file_edit.html:126
-msgid "Enter this"
-msgstr ""
-
 #: seahub/templates/file_edit.html:127
-msgid "To see this"
-msgstr ""
+msgid "Enter this"
+msgstr "이 내용 입력"
 
-#: seahub/templates/file_edit.html:130 seahub/templates/file_edit.html:131
+#: seahub/templates/file_edit.html:128
+msgid "To see this"
+msgstr "이 내용을 보려면"
+
+#: seahub/templates/file_edit.html:131 seahub/templates/file_edit.html:132
 msgid "bold"
 msgstr "굵게"
 
-#: seahub/templates/file_edit.html:130 seahub/templates/file_edit.html:131
-#: seahub/templates/file_edit.html:134 seahub/templates/file_edit.html:135
+#: seahub/templates/file_edit.html:131 seahub/templates/file_edit.html:132
+#: seahub/templates/file_edit.html:135 seahub/templates/file_edit.html:136
 msgid "text"
 msgstr "텍스트"
 
-#: seahub/templates/file_edit.html:134 seahub/templates/file_edit.html:135
+#: seahub/templates/file_edit.html:135 seahub/templates/file_edit.html:136
 msgid "italics"
 msgstr "기울기"
 
-#: seahub/templates/file_edit.html:138 seahub/templates/file_edit.html:141
+#: seahub/templates/file_edit.html:139 seahub/templates/file_edit.html:142
 msgid "Header"
 msgstr "머릿말"
 
-#: seahub/templates/file_edit.html:145 seahub/templates/file_edit.html:147
+#: seahub/templates/file_edit.html:146 seahub/templates/file_edit.html:148
 msgid "Smaller header"
 msgstr "작은 머릿말"
 
-#: seahub/templates/file_edit.html:150 seahub/templates/file_edit.html:151
+#: seahub/templates/file_edit.html:151 seahub/templates/file_edit.html:152
 msgid "Link something"
 msgstr "링크하기"
 
-#: seahub/templates/file_edit.html:154
+#: seahub/templates/file_edit.html:155
 msgid "alt text"
 msgstr "대체 텍스트"
 
-#: seahub/templates/file_edit.html:158
+#: seahub/templates/file_edit.html:159
 msgid "Extended Syntax for Wiki"
 msgstr "확장 위키 문법"
 
-#: seahub/templates/file_edit.html:160
+#: seahub/templates/file_edit.html:161
 msgid "or"
 msgstr "또는"
 
-#: seahub/templates/file_edit.html:160
+#: seahub/templates/file_edit.html:161
 msgid "internal link to another wiki page."
 msgstr "다른 내부 위키 페이지 링크."
 
-#: seahub/templates/file_edit.html:161
+#: seahub/templates/file_edit.html:162
 msgid "internal link to a picture at this-library/images/pic.jpg."
 msgstr "내부 this-library/images/pic.jpg 그림에 링크."
 
-#: seahub/templates/file_edit.html:162
+#: seahub/templates/file_edit.html:163
 msgid "internal link to a file at this-library/folder/file.doc."
 msgstr "내부 this-library/folder/file.doc 파일에 링크."
 
-#: seahub/templates/file_edit.html:170
+#: seahub/templates/file_edit.html:171
 msgid "Font"
 msgstr "서체"
 
-#: seahub/templates/file_edit.html:174
+#: seahub/templates/file_edit.html:175
 msgid "Font Size"
 msgstr "글자 크기"
 
-#: seahub/templates/file_edit.html:176
+#: seahub/templates/file_edit.html:177
 msgid "Huge"
 msgstr "크게"
 
-#: seahub/templates/file_edit.html:177
+#: seahub/templates/file_edit.html:178
 msgid "Normal"
 msgstr "보통"
 
-#: seahub/templates/file_edit.html:178
+#: seahub/templates/file_edit.html:179
 msgid "Small"
 msgstr "작게"
 
-#: seahub/templates/file_edit.html:182
+#: seahub/templates/file_edit.html:183
 msgid "Font Color"
 msgstr "글자 색"
 
-#: seahub/templates/file_edit.html:184
+#: seahub/templates/file_edit.html:185
 msgid "defaut color"
 msgstr "기본 색"
 
-#: seahub/templates/file_edit.html:196
+#: seahub/templates/file_edit.html:197
 msgid "Bold (Ctrl/Cmd+B)"
 msgstr "굵게(Ctrl/Cmd+B)"
 
-#: seahub/templates/file_edit.html:197
+#: seahub/templates/file_edit.html:198
 msgid "Italic (Ctrl/Cmd+I)"
 msgstr "기울임(Ctrl/Cmd+I)"
 
-#: seahub/templates/file_edit.html:198
+#: seahub/templates/file_edit.html:199
 msgid "Strikethrough"
 msgstr "취소선"
 
-#: seahub/templates/file_edit.html:199
+#: seahub/templates/file_edit.html:200
 msgid "Underline (Ctrl/Cmd+U)"
 msgstr "밑줄(Ctrl/Cmd+U)"
 
-#: seahub/templates/file_edit.html:200
+#: seahub/templates/file_edit.html:201
 msgid "Remove format"
 msgstr "형식 제거"
 
-#: seahub/templates/file_edit.html:203
+#: seahub/templates/file_edit.html:204
 msgid "Bullet list"
 msgstr "점 목록"
 
-#: seahub/templates/file_edit.html:204
+#: seahub/templates/file_edit.html:205
 msgid "Number list"
 msgstr "숫자 목록"
 
-#: seahub/templates/file_edit.html:205
+#: seahub/templates/file_edit.html:206
 msgid "Reduce indent (Shift+Tab)"
 msgstr "들여쓰기 감소(Shift+Tab)"
 
-#: seahub/templates/file_edit.html:206
+#: seahub/templates/file_edit.html:207
 msgid "Indent (Tab)"
 msgstr "들여 쓰기(Tab)"
 
-#: seahub/templates/file_edit.html:209
+#: seahub/templates/file_edit.html:210
 msgid "Align Left (Ctrl/Cmd+L)"
 msgstr "왼쪽 맞춤(Ctrl/Cmd+L)"
 
-#: seahub/templates/file_edit.html:210
+#: seahub/templates/file_edit.html:211
 msgid "Center (Ctrl/Cmd+E)"
 msgstr "가운데로 맞춤(Ctrl/Cmd+E)"
 
-#: seahub/templates/file_edit.html:211
+#: seahub/templates/file_edit.html:212
 msgid "Align Right (Ctrl/Cmd+R)"
 msgstr "오른쪽 맞춤(Ctrl/Cmd+R)"
 
-#: seahub/templates/file_edit.html:212
+#: seahub/templates/file_edit.html:213
 msgid "Justify (Ctrl/Cmd+J)"
 msgstr "양쪽 배분(Ctrl/Cmd+J)"
 
-#: seahub/templates/file_edit.html:215
+#: seahub/templates/file_edit.html:216
 msgid "Hyperlink"
 msgstr "하이퍼링크"
 
-#: seahub/templates/file_edit.html:218
+#: seahub/templates/file_edit.html:219
 msgid "Add"
 msgstr "추가"
 
-#: seahub/templates/file_edit.html:220
+#: seahub/templates/file_edit.html:221
 msgid "Remove Hyperlink"
 msgstr "하이퍼링크 제거"
 
-#: seahub/templates/file_edit.html:224
+#: seahub/templates/file_edit.html:225
 msgid "Insert picture (or just drag & drop)"
 msgstr "그림 추가(또는 그냥 끌어다 놓기)"
 
-#: seahub/templates/file_edit.html:227
+#: seahub/templates/file_edit.html:228
 msgid "Undo (Ctrl/Cmd+Z)"
 msgstr "실행 취소(Ctrl/Cmd+Z)"
 
-#: seahub/templates/file_edit.html:228
+#: seahub/templates/file_edit.html:229
 msgid "Redo (Ctrl/Cmd+Y)"
 msgstr "다시 실행(Ctrl/Cmd+Y)"
 
-#: seahub/templates/file_edit.html:251
+#: seahub/templates/file_edit.html:252
 msgid "Draft Available"
 msgstr "초안 있음"
 
-#: seahub/templates/file_edit.html:252
+#: seahub/templates/file_edit.html:253
 msgid "There's a saved draft for this file, would you like to load it?"
 msgstr "이 파일에 대해 저장한 초안이 있습니다. 불러올까요?"
 
-#: seahub/templates/file_edit.html:253
+#: seahub/templates/file_edit.html:254
 msgid "Load"
 msgstr "불러오기"
 
-#: seahub/templates/file_edit.html:254
+#: seahub/templates/file_edit.html:255
 msgid "Discard"
 msgstr "무시"
 
-#: seahub/templates/file_edit.html:267
+#: seahub/templates/file_edit.html:268
 msgid "Failed to save draft, exceeded max quota"
 msgstr "초안 저장에 실패했습니다. 제한 용량을 넘었습니다"
 
-#: seahub/templates/file_edit.html:366
+#: seahub/templates/file_edit.html:367
 msgid "Draft successfully loaded"
 msgstr "초안을 성공적으로 불러왔습니다"
 
-#: seahub/templates/file_edit.html:414
+#: seahub/templates/file_edit.html:415
 msgid "Strong <strong> Ctrl+B"
 msgstr "굵게 <strong> Ctrl+B"
 
-#: seahub/templates/file_edit.html:415
+#: seahub/templates/file_edit.html:416
 msgid "strong text"
 msgstr "텍스트를 굵게합니다"
 
-#: seahub/templates/file_edit.html:417
+#: seahub/templates/file_edit.html:418
 msgid "Emphasis <em> Ctrl+I"
 msgstr "강조 <em> Ctrl+I"
 
-#: seahub/templates/file_edit.html:418
+#: seahub/templates/file_edit.html:419
 msgid "emphasized text"
 msgstr "텍스트를 강조합니다"
 
-#: seahub/templates/file_edit.html:420
+#: seahub/templates/file_edit.html:421
 msgid "Hyperlink <a> Ctrl+L"
 msgstr "하이퍼링크 <a> Ctrl+L"
 
-#: seahub/templates/file_edit.html:421
+#: seahub/templates/file_edit.html:422
 msgid "enter link description here"
 msgstr "링크 설명을 입력하세요"
 
-#: seahub/templates/file_edit.html:422
+#: seahub/templates/file_edit.html:423
 msgid "Insert Hyperlink"
 msgstr "하이퍼링크 삽입"
 
-#: seahub/templates/file_edit.html:422 seahub/templates/file_edit.html:432
+#: seahub/templates/file_edit.html:423 seahub/templates/file_edit.html:433
 msgid "optional title"
 msgstr "추가 제목"
 
-#: seahub/templates/file_edit.html:424
+#: seahub/templates/file_edit.html:425
 msgid "Blockquote <blockquote> Ctrl+Q"
 msgstr "블록 인용 <blockquote> Ctrl+Q"
 
-#: seahub/templates/file_edit.html:425
+#: seahub/templates/file_edit.html:426
 msgid "Blockquote"
 msgstr "블록 인용"
 
-#: seahub/templates/file_edit.html:427
+#: seahub/templates/file_edit.html:428
 msgid "Code Sample <pre><code> Ctrl+K"
 msgstr "코드 예제 <pre><code> Ctrl+K"
 
-#: seahub/templates/file_edit.html:428
+#: seahub/templates/file_edit.html:429
 msgid "enter code here"
 msgstr "코드를 입력하세요"
 
-#: seahub/templates/file_edit.html:430
+#: seahub/templates/file_edit.html:431
 msgid "Image <img> Ctrl+G"
 msgstr "그림 <img> Ctrl+G"
 
-#: seahub/templates/file_edit.html:431
+#: seahub/templates/file_edit.html:432
 msgid "enter image description here"
 msgstr "그림 설명을 입력하세요"
 
-#: seahub/templates/file_edit.html:432
+#: seahub/templates/file_edit.html:433
 msgid "Insert Image"
 msgstr "그림 추가"
 
-#: seahub/templates/file_edit.html:434
+#: seahub/templates/file_edit.html:435
 msgid "Numbered List <ol> Ctrl+O"
 msgstr "번호 목록 <ol> Ctrl+O"
 
-#: seahub/templates/file_edit.html:435
+#: seahub/templates/file_edit.html:436
 msgid "Bulleted List <ul> Ctrl+U"
 msgstr "점 목록 <ul> Ctrl+U"
 
-#: seahub/templates/file_edit.html:436
+#: seahub/templates/file_edit.html:437
 msgid "List item"
 msgstr "목록 항목"
 
-#: seahub/templates/file_edit.html:438
+#: seahub/templates/file_edit.html:439
 msgid "Heading <h1>/<h2> Ctrl+H"
 msgstr "제목 <h1>/<h2> Ctrl+H"
 
-#: seahub/templates/file_edit.html:439
+#: seahub/templates/file_edit.html:440
 msgid "Heading"
 msgstr "제목"
 
-#: seahub/templates/file_edit.html:441
+#: seahub/templates/file_edit.html:442
 msgid "Horizontal Rule <hr> Ctrl+R"
 msgstr "수평선 <hr> Ctrl+R"
 
-#: seahub/templates/file_edit.html:442
+#: seahub/templates/file_edit.html:443
 msgid "Undo - Ctrl+Z"
 msgstr "실행 취소 - Ctrl+Z"
 
-#: seahub/templates/file_edit.html:443
+#: seahub/templates/file_edit.html:444
 msgid "Redo - Ctrl+Y"
 msgstr "다시 실행 - Ctrl+Y"
 
-#: seahub/templates/file_edit.html:444
+#: seahub/templates/file_edit.html:445
 msgid "Redo - Ctrl+Shift+Z"
 msgstr "다시 실행 - Ctrl+Shift+Z"
 
-#: seahub/templates/file_edit.html:446
+#: seahub/templates/file_edit.html:447
 msgid "Editing Help"
 msgstr "편집 도움말"
 
-#: seahub/templates/file_edit.html:547
+#: seahub/templates/file_edit.html:548
 msgid "Submit failed. Please check the network."
 msgstr "제출에 실패했습니다. 네트워크를 확인해주세요."
 
-#: seahub/templates/file_edit.html:565
+#: seahub/templates/file_edit.html:566
 #: seahub/templates/snippets/repo_decrypt_js.html:11
 msgid "Password is required."
 msgstr "암호가 필요합니다."
 
 #: seahub/templates/file_revisions.html:5 seahub/templates/repo_history.html:5
 #: seahub/templates/repo_settings.html:41
+#: seahub/templates/view_file_base.html:130
 #: seahub/templates/snippets/current_commit.html:15
 #: seahub/templates/snippets/repo_dirents.html:90
 msgid "History"
@@ -3760,7 +3780,7 @@ msgstr "현재 경로:"
 
 #: seahub/templates/file_revisions.html:27
 #: seahub/templates/repo_history_view.html:53
-#: seahub/templates/repo_recycle_view.html:55
+#: seahub/templates/repo_recycle_view.html:60
 #: seahub/templates/view_shared_dir.html:30
 #: seahub/templates/snippets/repo_dir_data.html:41
 msgid "Size"
@@ -3776,8 +3796,8 @@ msgid "(Renamed or moved from %(old_path)s)"
 msgstr "(%(old_path)s에서 이름 바꾸거나 이동함)"
 
 #: seahub/templates/file_revisions.html:55
-#: seahub/templates/repo_recycle_view.html:66
-#: seahub/templates/repo_recycle_view.html:83
+#: seahub/templates/repo_recycle_view.html:71
+#: seahub/templates/repo_recycle_view.html:88
 #: seahub/templates/repo_view_snapshot.html:43
 msgid "Restore"
 msgstr "복원"
@@ -3805,7 +3825,7 @@ msgstr "클라이언트"
 
 #: seahub/templates/footer.html:14
 msgid "Seafile for Windows, Mac and Linux"
-msgstr "윈도우, 맥, 리눅스용 시파일"
+msgstr "윈도우, 맥, 리눅스용 Seafile"
 
 #: seahub/templates/footer.html:19
 msgid "Server Version: "
@@ -3813,11 +3833,11 @@ msgstr "서버 버전: "
 
 #: seahub/templates/footer.html:20
 msgid "Seafile"
-msgstr "시파일"
+msgstr "Seafile"
 
 #: seahub/templates/footer.html:21
-msgid "Contact Us"
-msgstr "문의"
+msgid "About Us"
+msgstr ""
 
 #: seahub/templates/history_file_view.html:16
 #: seahub/templates/repo_view_snapshot.html:7
@@ -3840,14 +3860,14 @@ msgstr "파일 버전으로 돌아가기"
 #: seahub/templates/history_file_view.html:30
 #: seahub/templates/history_file_view.html:41
 #: seahub/templates/repo_recycle_view.html:8
-#: seahub/templates/repo_recycle_view.html:17
+#: seahub/templates/repo_recycle_view.html:22
 #: seahub/templates/view_trash_file.html:6
 msgid "'s trash"
 msgstr "의 휴지통"
 
 #: seahub/templates/history_file_view.html:31
 #: seahub/templates/repo_history.html:10
-#: seahub/templates/repo_recycle_view.html:9
+#: seahub/templates/repo_recycle_view.html:13
 #: seahub/templates/repo_settings.html:16
 #: seahub/templates/view_trash_file.html:7
 msgid "Back to Library"
@@ -3877,11 +3897,15 @@ msgstr "개인 위키"
 
 #: seahub/templates/home_base.html:29
 msgid "Share Admin"
-msgstr ""
+msgstr "공유 관리"
 
 #: seahub/templates/home_base.html:36 seahub/templates/sysadmin/base.html:26
 msgid "Links"
-msgstr "연결"
+msgstr "링크"
+
+#: seahub/templates/i18n.html:6
+msgid "Add folder"
+msgstr ""
 
 #: seahub/templates/my_group_repos.html:6
 #: seahub/templates/snippets/bottom_bar.html:3
@@ -3902,21 +3926,21 @@ msgstr "다른 사람이 공유한 라이브러리가 없습니다"
 
 #: seahub/templates/myhome.html:40
 msgid "Welcome to Seafile!"
-msgstr "환영합니다! 시파일입니다."
+msgstr "환영합니다! Seafile입니다."
 
 #: seahub/templates/myhome.html:42
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. We have created a personal library for you. You can "
 "create more libraries later."
-msgstr ""
+msgstr "Seafile은 파일을 라이브러리에 정리해줍니다. 각각의 라이브러리는 따로 동기화 하고 공유됩니다. 개인 라이브러리를 만들었습니다. 더 많은 라이브러리는 나중에 만들 수 있습니다."
 
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
-msgstr ""
+msgstr "Seafile은 파일을 라이브러리에 정리해줍니다. 각각의 라이브러리는 따로 동기화하고 공유됩니다. 방문객이기 때문에 라이브러리를 만들 수 없습니다."
 
 #: seahub/templates/myhome.html:46
 msgid "Close"
@@ -3924,16 +3948,16 @@ msgstr "닫기"
 
 #: seahub/templates/myhome.html:53
 msgid "Choose a directory:"
-msgstr "디렉토리 선택:"
+msgstr "디렉터리 선택:"
 
-#: seahub/templates/myhome.html:110
+#: seahub/templates/myhome.html:115
 #: seahub/templates/snippets/add_file_js.html:15
 msgid "You don't have any library at present"
 msgstr "현재 라이브러리가 없습니다"
 
-#: seahub/templates/myhome.html:129
+#: seahub/templates/myhome.html:134
 msgid "Please choose a directory"
-msgstr "디렉토리를 선택해주세요"
+msgstr "디렉터리를 선택해주세요"
 
 #: seahub/templates/myhome_base.html:6
 msgid "My Home"
@@ -3946,11 +3970,11 @@ msgstr "조직"
 
 #: seahub/templates/pubgrp.html:10
 msgid "Search groups..."
-msgstr ""
+msgstr "그룹 검색..."
 
 #: seahub/templates/pubgrp.html:33
 msgid "No group found"
-msgstr ""
+msgstr "그룹 없음"
 
 #: seahub/templates/pubgrp.html:38
 msgid "No one has created any groups yet"
@@ -3958,7 +3982,7 @@ msgstr "그룹을 만든 구성원이 없습니다"
 
 #: seahub/templates/pubgrp.html:39
 msgid "You can click \"Add Group\" button under \"Group\" label to create a group. "
-msgstr "\"그룹\" 레이블의 \"그룹 추가\" 버튼을 클릭하여 그룹을 만들 수 있습니다."
+msgstr "\"그룹\" 레이블의 \"그룹 추가\" 버튼을 눌러 그룹을 만들 수 있습니다."
 
 #: seahub/templates/pubrepo.html:19 seahub/templates/sysadmin/userinfo.html:92
 msgid "Share From"
@@ -3966,17 +3990,35 @@ msgstr "다음이 공유함"
 
 #: seahub/templates/pubrepo.html:53
 msgid "No public library"
-msgstr "공개 라이브러리 아님"
+msgstr "공개 라이브러리가 없습니다"
 
 #: seahub/templates/pubrepo.html:54
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
-msgstr "\"새 라이브러리\" 버튼을 클릭하면 공개 라이브러리를 만들 수 있으며, 다른 구성원이 이 라이브러리를 보고 다운로드 할 수 있습니다."
+msgstr "\"새 라이브러리\" 버튼을 누르면 공개 라이브러리를 만들 수 있으며, 다른 구성원이 이 라이브러리를 보고 다운로드할 수 있습니다."
 
 #: seahub/templates/pubuser.html:10
 msgid "Search members..."
 msgstr "구성원 검색..."
+
+#: seahub/templates/pubuser.html:17
+msgid "Search Results"
+msgstr ""
+
+#: seahub/templates/pubuser.html:21
+#: seahub/templates/sysadmin/sys_useradmin.html:22
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:14
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
+msgid "Database"
+msgstr "데이터베이스"
+
+#: seahub/templates/pubuser.html:23
+#: seahub/templates/sysadmin/sys_useradmin.html:24
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:16
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
+msgid "LDAP"
+msgstr "LDAP"
 
 #: seahub/templates/repo.html:23
 msgid "Size: "
@@ -4039,7 +4081,7 @@ msgid "File size should be smaller than %(max_file_size)s"
 msgstr "파일 크기는 %(max_file_size)s보다 작아야 합니다"
 
 #: seahub/templates/repo.html:96 seahub/templates/repo.html.py:132
-#: seahub/templates/repo.html:1737
+#: seahub/templates/repo.html:1794
 #: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "저장 중..."
@@ -4047,7 +4089,7 @@ msgstr "저장 중..."
 #: seahub/templates/repo.html:105
 #, python-format
 msgid "Update %(file_name)s"
-msgstr ""
+msgstr "%(file_name)s 업데이트"
 
 #: seahub/templates/repo.html:120
 msgid "Choose a file"
@@ -4061,11 +4103,11 @@ msgstr "%(max_file_size)s 보다 작음"
 #: seahub/templates/repo.html:141
 #: seahub/templates/snippets/repo_dir_data.html:15
 msgid "New Directory"
-msgstr "새 디렉토리"
+msgstr "새 디렉터리"
 
 #: seahub/templates/repo.html:142
 msgid "Directory Name"
-msgstr "디렉토리 이름"
+msgstr "디렉터리 이름"
 
 #: seahub/templates/repo.html:150
 #: seahub/templates/snippets/repo_dir_data.html:18
@@ -4100,14 +4142,14 @@ msgstr "현재 라이브러리"
 msgid "Other Libraries"
 msgstr "다른 라이브러리"
 
-#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:51
+#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:53
 msgid "Please click and choose a directory."
 msgstr "디렉터리를 클릭하여 선택하세요."
 
 #: seahub/templates/repo.html:202
 #, python-format
 msgid "Rename %(name)s as:"
-msgstr ""
+msgstr "%(name)s을(를) 다음으로 바꾸기:"
 
 #: seahub/templates/repo.html:218
 msgid ""
@@ -4115,43 +4157,43 @@ msgid ""
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr "이 라이브러리는 암호화되어 있습니다. 온라인에서 탐색하려면 암호를 입력하세요. 암호는 1시간동안만 브라우저에서 유지합니다"
 
-#: seahub/templates/repo.html:246
-#: seahub/templates/view_shared_upload_link.html:77
+#: seahub/templates/repo.html:242
+#: seahub/templates/view_shared_upload_link.html:72
 msgid "File is too big"
 msgstr "파일이 너무 큽니다"
 
-#: seahub/templates/repo.html:247
-#: seahub/templates/view_shared_upload_link.html:78
+#: seahub/templates/repo.html:243
+#: seahub/templates/view_shared_upload_link.html:73
 msgid "File is too small"
 msgstr "파일이 너무 작습니다"
 
-#: seahub/templates/repo.html:248
-#: seahub/templates/view_shared_upload_link.html:79
+#: seahub/templates/repo.html:244
+#: seahub/templates/view_shared_upload_link.html:74
 msgid "Filetype not allowed"
 msgstr "파일 형식을 허용하지 않습니다"
 
-#: seahub/templates/repo.html:249
-#: seahub/templates/view_shared_upload_link.html:80
+#: seahub/templates/repo.html:245
+#: seahub/templates/view_shared_upload_link.html:75
 msgid "Max number of files exceeded"
 msgstr "최대 파일 갯수를 넘어섰습니다"
 
-#: seahub/templates/repo.html:250
-#: seahub/templates/view_shared_upload_link.html:81
+#: seahub/templates/repo.html:246
+#: seahub/templates/view_shared_upload_link.html:76
 msgid "Uploaded bytes exceed file size"
 msgstr "업로드한 파일 크기 제한을 넘어섰습니다"
 
-#: seahub/templates/repo.html:251
-#: seahub/templates/view_shared_upload_link.html:82
+#: seahub/templates/repo.html:247
+#: seahub/templates/view_shared_upload_link.html:77
 msgid "Empty file upload result"
 msgstr "업로드 결과가 빈 파일입니다"
 
-#: seahub/templates/repo.html:253
-#: seahub/templates/view_shared_upload_link.html:84 seahub/views/ajax.py:930
+#: seahub/templates/repo.html:249
+#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:932
 msgid "Error"
 msgstr "오류"
 
-#: seahub/templates/repo.html:254
-#: seahub/templates/view_shared_upload_link.html:85
+#: seahub/templates/repo.html:250
+#: seahub/templates/view_shared_upload_link.html:80
 msgid "Start"
 msgstr "시작"
 
@@ -4163,238 +4205,245 @@ msgstr "항목 삭제"
 msgid "Are you sure you want to delete these selected items?"
 msgstr "선택한 항목을 정말로 삭제할까요?"
 
-#: seahub/templates/repo.html:373 seahub/templates/repo.html.py:556
+#: seahub/templates/repo.html:373 seahub/templates/repo.html.py:550
 msgid "Processing..."
 msgstr "처리 중..."
 
 #: seahub/templates/repo.html:403
 #, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "%(name)s와(과) 항목 %(amount)s개를 성공적으로 삭제했습니다."
 
 #: seahub/templates/repo.html:405
 #, python-format
 msgid "Successfully deleted %(name)s."
-msgstr ""
+msgstr "%(name)s을(를) 성공적으로 삭제했습니다."
 
 #: seahub/templates/repo.html:414
 #, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "내부 오류. %(name)s와(과) 항목 %(amount)s개 삭제에 실패했습니다."
 
 #: seahub/templates/repo.html:416
 #, python-format
 msgid "Internal error. Failed to delete %(name)s."
-msgstr ""
+msgstr "내부 오류 %(name)s 삭제에 실패했습니다."
 
 #: seahub/templates/repo.html:516
 msgid "Move selected directories/files to:"
-msgstr "선택한 디렉토리/파일을 다음으로 이동:"
+msgstr "선택한 디렉터리/파일을 다음으로 이동:"
 
 #: seahub/templates/repo.html:519
 msgid "Copy selected directories/files to:"
-msgstr "선택한 디렉토리/파일을 다음으로 복사:"
+msgstr "선택한 디렉터리/파일을 다음으로 복사:"
 
-#: seahub/templates/repo.html:545 seahub/templates/repo.html.py:1677
-#: seahub/views/ajax.py:636 seahub/views/ajax.py:828
+#: seahub/templates/repo.html:545 seahub/templates/repo.html.py:1745
+#: seahub/views/ajax.py:644 seahub/views/ajax.py:836
 msgid "Invalid destination path"
 msgstr "대상 경로가 잘못되었습니다"
 
-#: seahub/templates/repo.html:600
-#, python-format
-msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr ""
-
-#: seahub/templates/repo.html:602
+#: seahub/templates/repo.html:594
 #, python-format
 msgid "Successfully moved %(name)s."
+msgstr "%(name)s을(를) 성공적으로 이동했습니다."
+
+#: seahub/templates/repo.html:596
+#, python-format
+msgid "Successfully moved %(name)s and 1 other item."
+msgstr ""
+
+#: seahub/templates/repo.html:598
+#, python-format
+msgid "Successfully moved %(name)s and %(amount)s other items."
+msgstr "%(name)s와(과) 항목 %(amount)s개를 성공적으로 이동했습니다."
+
+#: seahub/templates/repo.html:603
+#, python-format
+msgid "Successfully copied %(name)s."
+msgstr "%(name)s을(를) 성공적으로 복사했습니다."
+
+#: seahub/templates/repo.html:605
+#, python-format
+msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
 #: seahub/templates/repo.html:607
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "%(name)s와(과) 항목 %(amount)s개를 성공적으로 복사했습니다."
 
-#: seahub/templates/repo.html:609
+#: seahub/templates/repo.html:619
 #, python-format
-msgid "Successfully copied %(name)s."
-msgstr ""
+msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
+msgstr "내부 오류. %(name)s와(과) 항목 %(amount)s개 이동에 실패했습니다."
 
 #: seahub/templates/repo.html:621
 #, python-format
-msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
-msgstr ""
-
-#: seahub/templates/repo.html:623
-#, python-format
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "내부 오류. %(name)s 이동에 실패했습니다."
+
+#: seahub/templates/repo.html:625
+#, python-format
+msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
+msgstr "내부 오류. %(name)s와(과) 항목 %(amount)s개 복사에 실패했습니다."
 
 #: seahub/templates/repo.html:627
 #, python-format
-msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
-msgstr ""
-
-#: seahub/templates/repo.html:629
-#, python-format
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "내부 오류. %(name)s 복사에 실패했습니다."
 
-#: seahub/templates/repo.html:650 seahub/templates/repo.html.py:1718
-msgid "Moving..."
-msgstr "이동 중..."
-
-#: seahub/templates/repo.html:652 seahub/templates/repo.html.py:1720
-msgid "Copying..."
-msgstr "복사 중..."
-
-#: seahub/templates/repo.html:679
+#: seahub/templates/repo.html:665
 #, python-format
-msgid "Successfully moved %(s_num)s items."
+msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:681
+#: seahub/templates/repo.html:665
 #, python-format
-msgid "Failed to move %(f_num)s items."
+msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:684
-#, python-format
-msgid "Successfully copied %(s_num)s items."
-msgstr ""
+#: seahub/templates/repo.html:749 seahub/templates/repo.html.py:1809
+#: seahub/templates/repo.html:1836
+msgid "Canceled."
+msgstr "취소했습니다"
 
-#: seahub/templates/repo.html:686
-#, python-format
-msgid "Failed to copy %(f_num)s items."
-msgstr ""
-
-#: seahub/templates/repo.html:695 seahub/views/ajax.py:991
-msgid "Failed"
-msgstr "실패했습니다"
-
-#: seahub/templates/repo.html:769
+#: seahub/templates/repo.html:813
 msgid "Encrypting the file..."
 msgstr "파일 암호화 중..."
 
-#: seahub/templates/repo.html:791
+#: seahub/templates/repo.html:835
 msgid "Error when encrypting."
 msgstr "암호화 오류."
 
-#: seahub/templates/repo.html:798
+#: seahub/templates/repo.html:842
 #, python-format
 msgid "Encrypting, %(num)s% complete."
-msgstr ""
+msgstr "암호화 중,  %(num)s% 완료했습니다."
 
-#: seahub/templates/repo.html:815
+#: seahub/templates/repo.html:859
 msgid "Uploading ..."
 msgstr "업로드 중..."
 
-#: seahub/templates/repo.html:827 seahub/templates/repo.html.py:1148
+#: seahub/templates/repo.html:871 seahub/templates/repo.html.py:1207
 msgid "Done!"
 msgstr "완료!"
 
-#: seahub/templates/repo.html:914 seahub/templates/repo.html.py:1527
-#: seahub/templates/repo.html:1647
+#: seahub/templates/repo.html:962 seahub/templates/repo.html.py:1586
+#: seahub/templates/repo.html:1713
 #: seahub/templates/snippets/repo_dirents.html:51
 msgid "unstarred"
 msgstr "별표 해제"
 
-#: seahub/templates/repo.html:1158
+#: seahub/templates/repo.html:1009
+msgid "Failed to get upload url"
+msgstr ""
+
+#: seahub/templates/repo.html:1028
+msgid "Error. Please try later."
+msgstr ""
+
+#: seahub/templates/repo.html:1217
 msgid "Downloading..."
 msgstr "다운로드 중..."
 
-#: seahub/templates/repo.html:1191
+#: seahub/templates/repo.html:1250
 #, python-format
 msgid "Downloading, %(num)s% complete."
-msgstr ""
+msgstr "다운로드중, %(num)s% 완료했습니다."
 
-#: seahub/templates/repo.html:1212
+#: seahub/templates/repo.html:1271
 msgid "Decrypting..."
 msgstr "해독 중..."
 
-#: seahub/templates/repo.html:1229
+#: seahub/templates/repo.html:1288
 #, python-format
 msgid "Decrypting, %(num)s% complete."
-msgstr ""
+msgstr "해독중, %(num)s% 완료했습니다."
 
-#: seahub/templates/repo.html:1332
+#: seahub/templates/repo.html:1391
 #, python-format
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "%(name)s을(를) 성공적으로 삭제했습니다"
 
-#: seahub/templates/repo.html:1354
+#: seahub/templates/repo.html:1413
 msgid "Rename File"
-msgstr "파일 이름 변경"
+msgstr "파일 이름 바꾸기"
 
-#: seahub/templates/repo.html:1356
+#: seahub/templates/repo.html:1415
 msgid "Rename Directory"
-msgstr "디렉토리 이름 변경"
+msgstr "디렉터리 이름 바꾸기"
 
-#: seahub/templates/repo.html:1374
+#: seahub/templates/repo.html:1433
 msgid "Copy File"
 msgstr "파일 복사"
 
-#: seahub/templates/repo.html:1376
+#: seahub/templates/repo.html:1435
 msgid "Move File"
 msgstr "파일 이동"
 
-#: seahub/templates/repo.html:1378
+#: seahub/templates/repo.html:1437
 msgid "Copy Directory"
-msgstr "디렉토리 복사"
+msgstr "디렉터리 복사"
 
-#: seahub/templates/repo.html:1380
+#: seahub/templates/repo.html:1439
 msgid "Move Directory"
-msgstr "디렉토리 이동"
+msgstr "디렉터리 이동"
 
-#: seahub/templates/repo.html:1385
+#: seahub/templates/repo.html:1444
 #, python-format
 msgid "Copy %(name)s to:"
-msgstr ""
+msgstr "다음으로 %(name)s 복사:"
 
-#: seahub/templates/repo.html:1388
+#: seahub/templates/repo.html:1447
 #, python-format
 msgid "Move %(name)s to:"
-msgstr ""
+msgstr "다음으로 %(name)s 이동:"
 
-#: seahub/templates/repo.html:1411
+#: seahub/templates/repo.html:1470
 msgid "Directory download is not supported in this library."
 msgstr "이 라이브러리에서 디렉터리 다운로드를 지원하지 않습니다."
 
-#: seahub/templates/repo.html:1529
+#: seahub/templates/repo.html:1588
 #: seahub/templates/snippets/repo_dirents.html:49
 msgid "starred"
 msgstr "별표"
 
-#: seahub/templates/repo.html:1575 seahub/templates/repo.html.py:1615
+#: seahub/templates/repo.html:1634 seahub/templates/repo.html.py:1674
 msgid "It is required."
 msgstr "필요합니다."
 
-#: seahub/templates/repo.html:1581
+#: seahub/templates/repo.html:1640
 msgid "Only an extension there, please input a name."
 msgstr "확장자만 있습니다. 이름을 입력해주세요."
 
-#: seahub/templates/repo.html:1591
+#: seahub/templates/repo.html:1650
 msgid "Creating..."
 msgstr "만드는 중..."
 
-#: seahub/templates/repo.html:1619
+#: seahub/templates/repo.html:1678
 msgid "You have not renamed it."
 msgstr "이름을 바꾸지 않았습니다."
 
-#: seahub/templates/repo.html:1656
+#: seahub/templates/repo.html:1724
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
+msgstr "%(old_name)s을(를) %(new_name)s(으)로 성공적으로 바꾸었습니다"
+
+#: seahub/templates/repo.html:1778
+#, python-format
+msgid "Moving %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1756 seahub/templates/repo.html.py:1784
-msgid "Canceled."
-msgstr "취소했습니다"
+#: seahub/templates/repo.html:1778
+#, python-format
+msgid "Copying %(name)s"
+msgstr ""
 
-#: seahub/templates/repo.html:1871
+#: seahub/templates/repo.html:1938
 msgid "Please select at least one contact."
 msgstr "최소한 하나의 연락처를 선택해주세요."
 
-#: seahub/templates/repo.html:1982
+#: seahub/templates/repo.html:2049
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "전자메일, 그룹을 입력하거나 선택해주세요."
@@ -4438,28 +4487,50 @@ msgid "Can't view this library"
 msgstr "이 라이브러리를 볼 수 없습니다"
 
 #: seahub/templates/repo_history_view.html:58
-#: seahub/templates/repo_recycle_view.html:61
+#: seahub/templates/repo_recycle_view.html:66
 msgid "Directory"
-msgstr "디렉토리"
+msgstr "디렉터리"
 
-#: seahub/templates/repo_recycle_view.html:32
-#: seahub/templates/repo_recycle_view.html:34
-msgid "a week"
-msgstr "1주"
+#: seahub/templates/repo_recycle_view.html:11
+#: seahub/templates/repo_recycle_view.html:103
+msgid "Clean"
+msgstr ""
 
 #: seahub/templates/repo_recycle_view.html:37
 #: seahub/templates/repo_recycle_view.html:39
-msgid "a month"
-msgstr "1달"
+msgid "a week"
+msgstr "1주"
 
 #: seahub/templates/repo_recycle_view.html:42
 #: seahub/templates/repo_recycle_view.html:44
+msgid "a month"
+msgstr "1달"
+
+#: seahub/templates/repo_recycle_view.html:47
+#: seahub/templates/repo_recycle_view.html:49
+#: seahub/templates/repo_recycle_view.html:109
 msgid "all"
 msgstr "모두"
 
-#: seahub/templates/repo_recycle_view.html:54
+#: seahub/templates/repo_recycle_view.html:59
 msgid "Delete Time"
 msgstr "삭제 시간"
+
+#: seahub/templates/repo_recycle_view.html:104
+msgid "Clear files in trash and history："
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:106
+msgid "3 days ago"
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:107
+msgid "1 week ago"
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:108
+msgid "1 month ago"
+msgstr ""
 
 #: seahub/templates/repo_settings.html:20
 #: seahub/templates/repo_settings.html:54
@@ -4562,7 +4633,7 @@ msgstr "이 라이브러리를 정말로 복원할까요?"
 msgid ""
 "Please input the password if you want to browse the shared file/directory. "
 "And the password will be kept on the server for only 1 hour."
-msgstr "공유한 파일/디렉토리를 탐색하려면 암호를 입력하세요. 암호는 서버에서 1시간 동안만 유지합니다."
+msgstr "공유한 파일/디렉터리를 탐색하려면 암호를 입력하세요. 암호는 서버에서 1시간 동안만 유지합니다."
 
 #: seahub/templates/shared_file_view.html:26
 #: seahub/templates/view_shared_dir.html:8
@@ -4577,7 +4648,7 @@ msgstr "다음에 저장..."
 msgid "Save To:"
 msgstr "다음에 저장..."
 
-#: seahub/templates/shared_file_view.html:67
+#: seahub/templates/shared_file_view.html:69
 #: seahub/templates/view_shared_dir.html:74
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "파일 다운로드를 비활성화했습니다: 소유자의 공유 링크 트래픽을 사용하고 있습니다."
@@ -4596,7 +4667,7 @@ msgstr "안녕하세요,"
 msgid ""
 "%(email)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
-msgstr ""
+msgstr "%(email)s님이 %(site_name)s에 %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span>을(를) 공유했습니다."
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
@@ -4627,7 +4698,7 @@ msgstr "별표 표시한 파일이 없습니다"
 msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing"
 " page, and they will be listed here."
-msgstr "파일 보기 페이지에서 \"별표 표시\" 버튼을 눌러 중요한 파일에 별표 표시를 할 수 있으며, 해당 파일은 이곳에 나타납니다."
+msgstr "파일 보기 페이지에서 \"별표 표시\" 버튼을 눌러 중요한 파일에 별표 표시할 수 있으며, 해당 파일은 이곳에 나타납니다."
 
 #: seahub/templates/starred.html:59
 msgid "Successfully unstarred."
@@ -4639,7 +4710,7 @@ msgstr "수정 세부 내용"
 
 #: seahub/templates/text_diff.html:22
 msgid "It's a newly-created blank file."
-msgstr "새로 만든 빈 파일."
+msgstr "새로 만든 빈 파일입니다."
 
 #: seahub/templates/text_diff.html:29
 msgid "before modification"
@@ -4664,7 +4735,7 @@ msgstr "파일 업로드"
 
 #: seahub/templates/upload_file_error.html:6
 msgid "to"
-msgstr ""
+msgstr "다음으로"
 
 #: seahub/templates/user_404.html:6
 msgid "Sorry, this user is not registered yet."
@@ -4684,15 +4755,29 @@ msgstr[0] "기여자 %(counter)s명"
 
 #: seahub/templates/view_file_base.html:123
 msgid "discuss"
+msgstr "토론"
+
+#: seahub/templates/view_file_base.html:124
+msgid "Go to a group"
 msgstr ""
 
 #: seahub/templates/view_file_base.html:124
 msgid "group"
-msgstr ""
+msgstr "그룹"
+
+#: seahub/templates/view_file_base.html:127
+#: seahub/templates/snippets/my_owned_repos.html:52
+#: seahub/templates/snippets/my_owned_repos.html:99
+#: seahub/templates/snippets/my_owned_repos.html:153
+#: seahub/templates/snippets/repo_dir_data.html:24
+#: seahub/templates/snippets/repo_dirents.html:26
+#: seahub/templates/snippets/repo_dirents.html:80
+msgid "Share"
+msgstr "공유"
 
 #: seahub/templates/view_file_base.html:127
 msgid "share"
-msgstr ""
+msgstr "공유"
 
 #: seahub/templates/view_file_base.html:138
 #: seahub/templates/snippets/group_recommend_form.html:5
@@ -4706,18 +4791,22 @@ msgstr "토론"
 
 #: seahub/templates/view_file_base.html:163
 msgid "close"
+msgstr "닫기"
+
+#: seahub/templates/view_file_base.html:242
+msgid "Back to top"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:244
+#: seahub/templates/view_file_base.html:242
 msgid "top"
-msgstr ""
+msgstr "위로"
 
-#: seahub/templates/view_file_base.html:299
+#: seahub/templates/view_file_base.html:296
 #: seahub/templates/snippets/bottom_bar.html:66
 msgid "Please select at least 1 group."
 msgstr "최소한 그룹 하나를 선택해주세요."
 
-#: seahub/templates/view_file_base.html:303
+#: seahub/templates/view_file_base.html:300
 #: seahub/templates/snippets/bottom_bar.html:71
 msgid "Please input a discussion."
 msgstr "토론 내용을 입력해주세요."
@@ -4835,7 +4924,7 @@ msgid "Remember me for %(remember_days)s days "
 msgstr "%(remember_days)s일 동안 기억"
 
 #: seahub/templates/registration/login.html:62
-#: seahub/templates/registration/registration_form.html:6
+#: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "가입"
 
@@ -4844,15 +4933,15 @@ msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "CAPTCHA 새로 고침에 실패했습니다. 다시 시도해주세요."
 
 #: seahub/templates/registration/login.html:94
-#: seahub/templates/registration/registration_form.html:66
+#: seahub/templates/registration/registration_form.html:77
 #: seahub/templates/sysadmin/repoadmin_js.html:21
 #: seahub/templates/sysadmin/sys_useradmin.html:98
 msgid "Email cannot be blank"
 msgstr "전자메일 주소는 비워둘 수 없습니다"
 
 #: seahub/templates/registration/login.html:98
-#: seahub/templates/registration/password_change_form.html:54
-#: seahub/templates/registration/registration_form.html:70
+#: seahub/templates/registration/password_change_form.html:61
+#: seahub/templates/registration/registration_form.html:81
 #: seahub/templates/sysadmin/sys_useradmin.html:102
 msgid "Password cannot be blank"
 msgstr "암호는 비워둘 수 없습니다"
@@ -4863,7 +4952,7 @@ msgstr "로그아웃"
 
 #: seahub/templates/registration/logout.html:8
 msgid "Thanks for your participation! "
-msgstr "참여에 감사드립니다."
+msgstr "이용해주셔서 감사합니다!"
 
 #: seahub/templates/registration/logout.html:8
 msgid "Log in again"
@@ -4878,60 +4967,54 @@ msgid "Your password has been changed successfully."
 msgstr "암호를 성공적으로 바꾸었습니다."
 
 #: seahub/templates/registration/password_change_form.html:3
-#: seahub/templates/registration/password_change_form.html:7
+#: seahub/templates/registration/password_change_form.html:11
 msgid "Password Modification"
 msgstr "암호 수정"
 
-#: seahub/templates/registration/password_change_form.html:9
-msgid "Current Password: "
-msgstr "현재 암호: "
-
-#: seahub/templates/registration/password_change_form.html:11
-#: seahub/templates/registration/password_reset_confirm.html:13
-msgid "New Password: "
-msgstr "새 암호: "
-
 #: seahub/templates/registration/password_change_form.html:13
-#: seahub/templates/registration/registration_form.html:21
+msgid "Current Password"
+msgstr ""
+
+#: seahub/templates/registration/password_change_form.html:15
+msgid "New Password"
+msgstr ""
+
+#: seahub/templates/registration/password_change_form.html:18
+#: seahub/templates/registration/registration_form.html:27
+#: seahub/templates/sysadmin/sys_org_admin.html:24
+#: seahub/templates/sysadmin/sys_useradmin.html:47
+msgid "Confirm Password"
+msgstr "암호 확인"
+
+#: seahub/templates/registration/password_change_form.html:32
+#: seahub/templates/registration/registration_form.html:51
 #, python-format
 msgid ""
-"%(min_len)s characters or more, include %(level)s types or more of these: "
-"letters(case sensitive), numbers, and symbols\""
+"Passwords must have at least %(min_len)s characters and contain %(level)s of"
+" the following: uppercase letters, lowercase letters, numbers, and symbols."
 msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:17
-#: seahub/templates/registration/password_reset_confirm.html:16
-msgid "Confirm Password: "
-msgstr "암호 확인: "
-
-#: seahub/templates/registration/password_change_form.html:50
+#: seahub/templates/registration/password_change_form.html:57
 msgid "Current password cannot be blank"
-msgstr ""
+msgstr "현재 암호를 비워둘 수 없습니다"
 
-#: seahub/templates/registration/password_change_form.html:58
-#: seahub/templates/registration/registration_form.html:74
+#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/registration_form.html:85
 #: seahub/templates/snippets/repo_create_js.html:54
-#: seahub/templates/snippets/shared_link_js.html:251
-#: seahub/templates/snippets/shared_link_js.html:409
+#: seahub/templates/snippets/shared_link_js.html:250
+#: seahub/templates/snippets/shared_link_js.html:408
+#: seahub/templates/sysadmin/sys_org_admin.html:95
 #: seahub/templates/sysadmin/sys_useradmin.html:106
 msgid "Please enter the password again"
 msgstr "암호를 다시 입력해주세요"
 
-#: seahub/templates/registration/password_change_form.html:62
-#: seahub/templates/registration/registration_form.html:78
+#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/registration_form.html:89
 #: seahub/templates/snippets/repo_create_js.html:58
-#: seahub/templates/snippets/shared_link_js.html:255
-#: seahub/templates/snippets/shared_link_js.html:413
+#: seahub/templates/snippets/shared_link_js.html:254
+#: seahub/templates/snippets/shared_link_js.html:412
 msgid "Passwords don't match"
 msgstr "암호가 일치하지 않습니다"
-
-#: seahub/templates/registration/password_change_form.html:67
-#: seahub/templates/registration/registration_form.html:83
-#, python-format
-msgid ""
-"%(min_len)s characters or more, include %(level)s types or more of these: "
-"letters(case sensitive), numbers, and symbols"
-msgstr ""
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
@@ -4944,6 +5027,7 @@ msgstr "암호를 성공적으로 재설정했습니다."
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
+#: seahub/templates/sysadmin/sys_org_info.html:177
 #: seahub/templates/sysadmin/useradmin_js.html:7
 msgid "Password Reset"
 msgstr "암호 재설정"
@@ -4951,6 +5035,14 @@ msgstr "암호 재설정"
 #: seahub/templates/registration/password_reset_confirm.html:11
 msgid "Reset Password"
 msgstr "암호 재설정"
+
+#: seahub/templates/registration/password_reset_confirm.html:13
+msgid "New Password: "
+msgstr "새 암호: "
+
+#: seahub/templates/registration/password_reset_confirm.html:16
+msgid "Confirm Password: "
+msgstr "암호 확인: "
 
 #: seahub/templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
@@ -4997,22 +5089,17 @@ msgstr "활성화 전자메일을 보냈습니다. 전자메일을 확인하시�
 msgid ""
 "Registration complete, please wait for administrator to activate your "
 "account."
-msgstr "등록을 끝냈습니다. 관리자가 계정을 활성화 할 때까지 기다려주세요."
+msgstr "등록을 끝냈습니다. 관리자가 계정을 활성화할 때까지 기다려주세요."
 
 #: seahub/templates/registration/registration_form.html:3
 msgid "Register"
 msgstr "등록"
 
-#: seahub/templates/registration/registration_form.html:9
+#: seahub/templates/registration/registration_form.html:14
 msgid "Welcome back, you are already signed in."
 msgstr "잘 돌아오셨습니다. 이미 로그인했습니다."
 
-#: seahub/templates/registration/registration_form.html:25
-#: seahub/templates/sysadmin/sys_useradmin.html:47
-msgid "Confirm Password"
-msgstr "암호 확인"
-
-#: seahub/templates/registration/registration_form.html:37
+#: seahub/templates/registration/registration_form.html:39
 msgid "Sign Up"
 msgstr "가입"
 
@@ -5035,82 +5122,82 @@ msgstr "토론"
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
 msgid "Share %(name)s"
-msgstr ""
+msgstr "%(name)s 공유"
 
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
-msgstr "링크 다운로드"
+msgstr "다운로드 링크"
 
 #: seahub/templates/snippets/file_share_popup.html:8
 msgid "Upload Link"
-msgstr "링크 업로드"
+msgstr "업로드 링크"
 
 #: seahub/templates/snippets/file_share_popup.html:11
 #: seahub/templates/snippets/file_share_popup.html:14
 msgid "Private Share"
 msgstr "개인 공유"
 
-#: seahub/templates/snippets/file_share_popup.html:35
-#: seahub/templates/snippets/file_share_popup.html:73
+#: seahub/templates/snippets/file_share_popup.html:36
+#: seahub/templates/snippets/file_share_popup.html:74
 msgid "Add password protection"
-msgstr ""
+msgstr "암호 보호 추가"
 
-#: seahub/templates/snippets/file_share_popup.html:38
-#: seahub/templates/snippets/file_share_popup.html:76
+#: seahub/templates/snippets/file_share_popup.html:39
+#: seahub/templates/snippets/file_share_popup.html:77
 #: seahub/templates/snippets/repo_create_form.html:20
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(최소 %(repo_password_min_length)s문자)"
 
-#: seahub/templates/snippets/file_share_popup.html:40
-#: seahub/templates/snippets/file_share_popup.html:78
+#: seahub/templates/snippets/file_share_popup.html:41
+#: seahub/templates/snippets/file_share_popup.html:79
 #: seahub/templates/snippets/repo_create_form.html:22
 msgid "Password again"
 msgstr "암호를 다시 입력하세요"
 
-#: seahub/templates/snippets/file_share_popup.html:45
-#: seahub/templates/snippets/file_share_popup.html:83
+#: seahub/templates/snippets/file_share_popup.html:46
+#: seahub/templates/snippets/file_share_popup.html:84
 msgid "Generate"
 msgstr "만들기"
 
-#: seahub/templates/snippets/file_share_popup.html:47
+#: seahub/templates/snippets/file_share_popup.html:48
 msgid "Link: "
 msgstr "링크:"
 
-#: seahub/templates/snippets/file_share_popup.html:48
-#: seahub/templates/snippets/file_share_popup.html:86
+#: seahub/templates/snippets/file_share_popup.html:49
+#: seahub/templates/snippets/file_share_popup.html:87
 msgid "Send"
 msgstr "보내기"
 
-#: seahub/templates/snippets/file_share_popup.html:52
-#: seahub/templates/snippets/file_share_popup.html:90
+#: seahub/templates/snippets/file_share_popup.html:53
+#: seahub/templates/snippets/file_share_popup.html:91
 msgid "Send to:"
 msgstr "보낼 대상:"
 
-#: seahub/templates/snippets/file_share_popup.html:53
-#: seahub/templates/snippets/file_share_popup.html:91
+#: seahub/templates/snippets/file_share_popup.html:54
+#: seahub/templates/snippets/file_share_popup.html:92
 msgid "Emails, Seperated by ','"
 msgstr "세미콜론 ';' 으로 구분한 전자메일 주소"
 
-#: seahub/templates/snippets/file_share_popup.html:57
-#: seahub/templates/snippets/file_share_popup.html:93
+#: seahub/templates/snippets/file_share_popup.html:58
+#: seahub/templates/snippets/file_share_popup.html:94
 msgid "Message (optional):"
-msgstr ""
+msgstr "메시지 (선택):"
 
-#: seahub/templates/snippets/file_share_popup.html:62
-#: seahub/templates/snippets/file_share_popup.html:98
+#: seahub/templates/snippets/file_share_popup.html:63
+#: seahub/templates/snippets/file_share_popup.html:99
 msgid "Sending..."
 msgstr "보내는 중..."
 
-#: seahub/templates/snippets/file_share_popup.html:69
+#: seahub/templates/snippets/file_share_popup.html:70
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
-msgstr "만든 링크를 다른 사용자에게 공유할 수 있으며 다른 사용자들은 링크를 통해 이 디렉토리로 파일을 업로드 할 수 있습니다."
+msgstr "만든 링크를 다른 사용자에게 공유할 수 있으며 다른 사용자들은 링크를 통해 이 디렉터리로 파일을 업로드할 수 있습니다."
 
-#: seahub/templates/snippets/file_share_popup.html:85
+#: seahub/templates/snippets/file_share_popup.html:86
 msgid "Upload Link: "
-msgstr "링크 업로드:"
+msgstr "업로드 링크:"
 
 #: seahub/templates/snippets/list_commit_detail.html:11
 msgid "Modification Details"
@@ -5122,11 +5209,11 @@ msgstr "새 파일"
 
 #: seahub/templates/snippets/list_commit_detail.html:25
 msgid "Deleted files"
-msgstr "삭제된 파일"
+msgstr "삭제한 파일"
 
 #: seahub/templates/snippets/list_commit_detail.html:26
 msgid "Renamed or Moved files"
-msgstr "이름이 변경되거나 이동된 파일"
+msgstr "이름을 바꾸거나 이동한 파일"
 
 #: seahub/templates/snippets/list_commit_detail.html:27
 msgid "Modified files"
@@ -5134,11 +5221,11 @@ msgstr "수정한 파일"
 
 #: seahub/templates/snippets/list_commit_detail.html:28
 msgid "New directories"
-msgstr "새 디렉토리"
+msgstr "새 디렉터리"
 
 #: seahub/templates/snippets/list_commit_detail.html:29
 msgid "Deleted directories"
-msgstr "삭제된 디렉토리"
+msgstr "삭제한 디렉터리"
 
 #: seahub/templates/snippets/list_commit_detail.html:39
 msgid "Unknown error."
@@ -5146,7 +5233,7 @@ msgstr "알 수 없는 오류."
 
 #: seahub/templates/snippets/my_owned_repos.html:7
 msgid "Mine"
-msgstr ""
+msgstr "내 소유"
 
 #: seahub/templates/snippets/my_owned_repos.html:9
 msgid "Sub-libraries"
@@ -5155,20 +5242,11 @@ msgstr "하위 라이브러리"
 #: seahub/templates/snippets/my_owned_repos.html:12
 #: seahub/templates/sysadmin/userinfo.html:56
 msgid "Shared"
-msgstr "공유 됨"
+msgstr "공유함"
 
 #: seahub/templates/snippets/my_owned_repos.html:18
 msgid "New Sub-library"
 msgstr "새 하위 라이브러리"
-
-#: seahub/templates/snippets/my_owned_repos.html:52
-#: seahub/templates/snippets/my_owned_repos.html:99
-#: seahub/templates/snippets/my_owned_repos.html:153
-#: seahub/templates/snippets/repo_dir_data.html:24
-#: seahub/templates/snippets/repo_dirents.html:26
-#: seahub/templates/snippets/repo_dirents.html:80
-msgid "Share"
-msgstr "공유"
 
 #: seahub/templates/snippets/my_owned_repos.html:62
 msgid "You have not created any libraries"
@@ -5195,7 +5273,7 @@ msgid ""
 "library can be independently synced and shared. Files in the sub-library "
 "will be automatically kept in sync with those in the directory of the origin"
 " library."
-msgstr "라이브러리 내의 디렉토리에 하위 라이브러리를 만들 수 있습니다. 하위 라이브러리는 독립적으로 동기화 하고 공유할 수 있습니다. 하위 라이브러리의 파일은 자동으로 원본 라이브러리의 디렉터리와 동기화 상태를 유지합니다."
+msgstr "라이브러리 내의 디렉터리에 하위 라이브러리를 만들 수 있습니다. 하위 라이브러리는 독립적으로 동기화 하고 공유할 수 있습니다. 하위 라이브러리의 파일은 자동으로 원본 라이브러리의 디렉터리와 동기화 상태를 유지합니다."
 
 #: seahub/templates/snippets/office_convert_html.html:4
 #: seahub/templates/snippets/spreadsheet_convert_html.html:4
@@ -5204,34 +5282,34 @@ msgstr "파일을 처리중입니다. 기다려주세요..."
 
 #: seahub/templates/snippets/office_convert_js.html:48
 msgid "hide outline"
-msgstr ""
+msgstr "아웃라인 숨김"
 
 #: seahub/templates/snippets/office_convert_js.html:49
 msgid "show outline"
-msgstr ""
+msgstr "아웃라인 표시"
 
 #: seahub/templates/snippets/office_convert_js.html:181
 #: seahub/templates/snippets/office_convert_js.html:188
 #: seahub/templates/snippets/office_convert_js.html:213
-#: seahub/templates/snippets/spreadsheet_convert_js.html:30
+#: seahub/templates/snippets/spreadsheet_convert_js.html:29
 msgid "Document convertion failed."
 msgstr "문서 변환에 실패했습니다."
 
 #: seahub/templates/snippets/password_strength_js.html:42
 msgid "too weak"
-msgstr ""
+msgstr "너무 약함"
 
 #: seahub/templates/snippets/password_strength_js.html:43
 msgid "weak"
-msgstr ""
+msgstr "약함"
 
 #: seahub/templates/snippets/password_strength_js.html:44
 msgid "medium"
-msgstr ""
+msgstr "중간"
 
 #: seahub/templates/snippets/password_strength_js.html:45
 msgid "strong"
-msgstr ""
+msgstr "강함"
 
 #: seahub/templates/snippets/repo_create_form.html:9
 msgid "Share Permission"
@@ -5250,14 +5328,14 @@ msgid "Description is required"
 msgstr "설명이 필요합니다"
 
 #: seahub/templates/snippets/repo_create_js.html:46
-#: seahub/templates/snippets/shared_link_js.html:243
-#: seahub/templates/snippets/shared_link_js.html:401
+#: seahub/templates/snippets/shared_link_js.html:242
+#: seahub/templates/snippets/shared_link_js.html:400
 msgid "Please enter password"
 msgstr "암호를 입력해주세요"
 
 #: seahub/templates/snippets/repo_create_js.html:50
-#: seahub/templates/snippets/shared_link_js.html:247
-#: seahub/templates/snippets/shared_link_js.html:405
+#: seahub/templates/snippets/shared_link_js.html:246
+#: seahub/templates/snippets/shared_link_js.html:404
 msgid "Password is too short"
 msgstr "암호가 너무 짧습니다"
 
@@ -5268,7 +5346,7 @@ msgstr "삭제 성공."
 #: seahub/templates/snippets/repo_del_popup.html:3
 #, python-format
 msgid "Really want to delete %(lib_name)s ?"
-msgstr ""
+msgstr "%(lib_name)s을(를) 정말로 삭제할까요?"
 
 #: seahub/templates/snippets/repo_dir_data.html:14
 msgid "Upload"
@@ -5290,7 +5368,7 @@ msgstr "다른 동작"
 #: seahub/templates/snippets/repo_share_form.html:3
 #, python-format
 msgid "Share %(lib_name)s"
-msgstr ""
+msgstr "%(lib_name)s 공유"
 
 #: seahub/templates/snippets/repo_share_form.html:11
 msgid "Emails or Groups, Seperated by ','"
@@ -5397,20 +5475,20 @@ msgstr "최소한 하나의 파일 형식을 선택하거나 한 가지 파일 �
 msgid "Select contacts"
 msgstr "연락처를 선택하세요"
 
-#: seahub/templates/snippets/shared_link_js.html:179
-#: seahub/templates/snippets/shared_link_js.html:342
+#: seahub/templates/snippets/shared_link_js.html:178
+#: seahub/templates/snippets/shared_link_js.html:341
 msgid "Please input at least an email."
 msgstr "최소한 하나의 전자메일 주소를 입력해주세요."
 
 #: seahub/templates/snippets/space_and_traffic.html:4
 #: seahub/templates/snippets/space_and_traffic.html:12
 msgid "Used:"
-msgstr ""
+msgstr "사용함:"
 
 #: seahub/templates/snippets/space_and_traffic.html:6
 #: seahub/templates/snippets/space_and_traffic.html:8
 msgid "Self"
-msgstr ""
+msgstr "자신"
 
 #: seahub/templates/snippets/space_and_traffic.html:6
 #: seahub/templates/snippets/space_and_traffic.html:8
@@ -5432,7 +5510,7 @@ msgstr "사용자"
 
 #: seahub/templates/sysadmin/base.html:19
 msgid "Organizations"
-msgstr ""
+msgstr "조직"
 
 #: seahub/templates/sysadmin/base.html:30
 msgid "Traffic"
@@ -5449,25 +5527,29 @@ msgstr "라이브러리 이전"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr ""
+msgstr "%(lib_name)s 라이브러리를 다음에게 보내기:"
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
+#: seahub/templates/sysadmin/sys_org_admin.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_repo_search.html:12
 msgid "Owner"
 msgstr "소유자"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:13
-#: seahub/templates/sysadmin/sys_org_admin.html:13
+#: seahub/templates/sysadmin/sys_org_admin.html:36
+#: seahub/templates/sysadmin/sys_org_info.html:103
 msgid "Creator"
 msgstr "만든 사람"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
+#: seahub/templates/sysadmin/sys_org_info.html:104
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
 msgid "Create At"
 msgstr "만든 일시"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:37
+#: seahub/templates/sysadmin/sys_org_info.html:169
 msgid "Delete Group"
 msgstr "그룹 삭제"
 
@@ -5495,55 +5577,159 @@ msgstr "버려짐"
 msgid "System"
 msgstr "시스템"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:7
+#: seahub/templates/sysadmin/sys_org_admin.html:8
 msgid "All Organizations"
 msgstr "모든 조직"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:12
+#: seahub/templates/sysadmin/sys_org_admin.html:9
+#: seahub/templates/sysadmin/sys_org_admin.html:13
+msgid "Add organization"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:17
+#: seahub/templates/sysadmin/sys_org_admin.html:35
 msgid "Url Prefix"
 msgstr "URI 접두부"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:14
-msgid "Created At"
+#: seahub/templates/sysadmin/sys_org_admin.html:20
+msgid "Owner can use admin panel in an organization, must be a new account."
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_admin.html:31
-msgid "None."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_admin.html:38
-msgid "Delete Organization"
-msgstr "조직 삭제"
-
-#: seahub/templates/sysadmin/sys_org_info.html:19
-msgid "Number of members"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_info.html:21
-msgid "Number of groups"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_info.html:25
+#: seahub/templates/sysadmin/sys_org_admin.html:37
+#: seahub/templates/sysadmin/sys_org_info.html:27
+#: seahub/templates/sysadmin/sys_org_info.html:55
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:45
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
 #: seahub/templates/sysadmin/useradmin_table.html:7
 #: seahub/templates/sysadmin/userinfo.html:31
 msgid "Space Used"
-msgstr "공백 사용"
+msgstr "사용 공간"
 
-#: seahub/templates/sysadmin/sys_org_info.html:27
+#: seahub/templates/sysadmin/sys_org_admin.html:38
+msgid "Created At"
+msgstr "만든 날짜"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:57
+msgid "None."
+msgstr "없음."
+
+#: seahub/templates/sysadmin/sys_org_admin.html:79
+msgid "Name can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:83
+msgid "Url can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:87
+msgid "Owner can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:91
+msgid "Password can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:99
+#: seahub/templates/sysadmin/sys_useradmin.html:110
+msgid "Passwords do not match"
+msgstr "암호가 일치하지 않습니다"
+
+#: seahub/templates/sysadmin/sys_org_info.html:17
+msgid "Back to organization list"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info.html:21
+msgid "Number of members"
+msgstr "구성원 수"
+
+#: seahub/templates/sysadmin/sys_org_info.html:23
+msgid "Number of groups"
+msgstr "그룹 수"
+
+#: seahub/templates/sysadmin/sys_org_info.html:29
 #: seahub/templates/sysadmin/userinfo.html:39
 msgid "Set Quota"
 msgstr "제한 용량 설정"
 
-#: seahub/templates/sysadmin/sys_org_info.html:30
+#: seahub/templates/sysadmin/sys_org_info.html:32
 msgid "Set org storage limit"
-msgstr ""
+msgstr "조직 저장소 용량 제한 설정"
 
-#: seahub/templates/sysadmin/sys_org_info.html:33
+#: seahub/templates/sysadmin/sys_org_info.html:35
 #: seahub/templates/sysadmin/userinfo.html:45
 msgid "Tip: 0 means default limit"
 msgstr "요령: 0은 기본 한계 값을 의미합니다"
+
+#: seahub/templates/sysadmin/sys_org_info.html:54
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:43
+#: seahub/templates/sysadmin/useradmin_table.html:5
+msgid "Status"
+msgstr "상태"
+
+#: seahub/templates/sysadmin/sys_org_info.html:56
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:46
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
+#: seahub/templates/sysadmin/useradmin_table.html:8
+msgid "Create At / Last Login"
+msgstr "만든 날짜 / 마지막 로그인"
+
+#: seahub/templates/sysadmin/sys_org_info.html:66
+#: seahub/templates/sysadmin/sys_org_info.html:73
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:58
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:65
+#: seahub/templates/sysadmin/useradmin_table.html:19
+#: seahub/templates/sysadmin/useradmin_table.html:26
+msgid "Active"
+msgstr "활성"
+
+#: seahub/templates/sysadmin/sys_org_info.html:68
+#: seahub/templates/sysadmin/sys_org_info.html:74
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:60
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:66
+#: seahub/templates/sysadmin/useradmin_table.html:21
+#: seahub/templates/sysadmin/useradmin_table.html:27
+msgid "Inactive"
+msgstr "비활성"
+
+#: seahub/templates/sysadmin/sys_org_info.html:90
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:104
+#: seahub/templates/sysadmin/useradmin_table.html:69
+msgid "ResetPwd"
+msgstr "암호재설정"
+
+#: seahub/templates/sysadmin/sys_org_info.html:122
+#: seahub/templates/sysadmin/sys_useradmin.html:65
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:117
+#: seahub/templates/sysadmin/user_search.html:21
+msgid "Activating..., please wait"
+msgstr "활성화 중..., 기다려주세요"
+
+#: seahub/templates/sysadmin/sys_org_info.html:139
+msgid "Quota can not be empty"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info.html:173
+#: seahub/templates/sysadmin/useradmin_js.html:3
+msgid "Delete User"
+msgstr "사용자 삭제"
+
+#: seahub/templates/sysadmin/sys_org_info.html:178
+#: seahub/templates/sysadmin/useradmin_js.html:8
+#, python-format
+msgid "Are you sure you want to reset the password of %s ?"
+msgstr "정말로 %s의 암호를 재설정하시겠습니까?"
+
+#: seahub/templates/sysadmin/sys_org_info.html:212
+#: seahub/templates/sysadmin/useradmin_js.html:61
+msgid "Edit succeeded, an email has been sent."
+msgstr "성공적으로 편집했습니다. 전자메일을 보냈습니다."
+
+#: seahub/templates/sysadmin/sys_org_info.html:214
+#: seahub/templates/sysadmin/useradmin_js.html:63
+msgid ""
+"Edit succeeded, but failed to send email, please check your email "
+"configuration."
+msgstr "성공적으로 편집했지만 전자메일 보내기에 실패했습니다. 전자메일 설정을 확인해주세요."
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
 msgid "All Public Links"
@@ -5562,12 +5748,12 @@ msgid "Tip: you can search by keyword in name or owner or both."
 msgstr "요령: 이름, 소유자 또는 둘 다를 대상으로 키워드로 검색할 수 있습니다."
 
 #: seahub/templates/sysadmin/sys_repo_search.html:16
-#: seahub/templates/sysadmin/user_search.html:14
+#: seahub/templates/sysadmin/user_search.html:13
 msgid "Result"
 msgstr "결과"
 
 #: seahub/templates/sysadmin/sys_repo_search.html:20
-#: seahub/templates/sysadmin/user_search.html:18
+#: seahub/templates/sysadmin/user_search.html:17
 msgid "No result"
 msgstr "결과 없음"
 
@@ -5593,21 +5779,9 @@ msgstr "총 사용량"
 msgid "Search users..."
 msgstr "사용자 검색..."
 
-#: seahub/templates/sysadmin/sys_useradmin.html:22
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:14
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
-msgid "Database"
-msgstr "데이터베이스"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:24
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:16
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
-msgid "LDAP"
-msgstr "LDAP"
-
 #: seahub/templates/sysadmin/sys_useradmin.html:29
 msgid "Import users"
-msgstr ""
+msgstr "사용자 가져오기"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:30
 #: seahub/templates/sysadmin/sys_useradmin.html:35
@@ -5618,13 +5792,13 @@ msgstr "사용자 추가"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:6
 msgid "Role"
-msgstr ""
+msgstr "역할"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:39
 msgid ""
 "You can also add a user as a guest, who will not be allowed to create "
 "libraries and groups."
-msgstr ""
+msgstr "사용자를 라이브러리와 그룹을 만들 수 없는 손님으로 추가할 수 있습니다."
 
 #: seahub/templates/sysadmin/sys_useradmin.html:41
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:77
@@ -5632,7 +5806,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:37
 #: seahub/templates/sysadmin/useradmin_table.html:45
 msgid "Default"
-msgstr ""
+msgstr "기본"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:42
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:75
@@ -5640,34 +5814,24 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_table.html:35
 #: seahub/templates/sysadmin/useradmin_table.html:46
 msgid "Guest"
-msgstr ""
+msgstr "손님"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:54
 msgid "Import users from a CSV file"
-msgstr ""
+msgstr "CSV 파일에서 사용자 가져오기"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:56
 msgid "File format: user@mail.com,password"
-msgstr ""
+msgstr "파일 형식: user@mail.com,password"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:57
 msgid "Please choose a CSV file"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_useradmin.html:65
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:117
-#: seahub/templates/sysadmin/user_search.html:22
-msgid "Activating..., please wait"
-msgstr "활성화중입니다..., 기다려주세요"
+msgstr "CSV 파일을 선택하세요"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:80
 #, python-format
 msgid "A new server version %(v)s is available."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_useradmin.html:110
-msgid "Passwords do not match"
-msgstr "암호가 일치하지 않습니다"
+msgstr "새 %(v)s 버전의 서버가 있습니다."
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:20
 msgid "Add admin"
@@ -5680,36 +5844,6 @@ msgstr "관리자 추가"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:31
 msgid "Tip: the emails should be the users already added."
 msgstr "요령: 전자메일 주소는 이미 추가한 사용자여야 합니다."
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:43
-#: seahub/templates/sysadmin/useradmin_table.html:5
-msgid "Status"
-msgstr "상태"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:46
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
-#: seahub/templates/sysadmin/useradmin_table.html:8
-msgid "Create At / Last Login"
-msgstr "만든 날짜 / 마지막 로그인"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:58
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:65
-#: seahub/templates/sysadmin/useradmin_table.html:19
-#: seahub/templates/sysadmin/useradmin_table.html:26
-msgid "Active"
-msgstr "활성"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:60
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:66
-#: seahub/templates/sysadmin/useradmin_table.html:21
-#: seahub/templates/sysadmin/useradmin_table.html:27
-msgid "Inactive"
-msgstr "비활성"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:104
-#: seahub/templates/sysadmin/useradmin_table.html:69
-msgid "ResetPwd"
-msgstr "암호재설정"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:106
 #: seahub/templates/sysadmin/useradmin_js.html:11
@@ -5730,7 +5864,7 @@ msgstr "%(site_name)s 사이트의 %(username)s 계정을 활성화했습니다.
 #, python-format
 msgid ""
 "%(user)s invited you to join organization \"%(org_name)s\" on %(site_name)s."
-msgstr ""
+msgstr "%(user)s님이 %(site_name)s의 \"%(org_name)s\" 조직으로 초대했습니다."
 
 #: seahub/templates/sysadmin/user_add_email.html:15
 #, python-format
@@ -5744,7 +5878,7 @@ msgstr "계정 정보는 다음과 같습니다:"
 #: seahub/templates/sysadmin/user_add_email.html:21
 #, python-format
 msgid "Email: %(email)s"
-msgstr "이메일: %(email)s"
+msgstr "전자메일: %(email)s"
 
 #: seahub/templates/sysadmin/user_add_email.html:22
 #, python-format
@@ -5762,38 +5896,15 @@ msgstr "%(site_name)s 사이트의 암호를 재설정했습니다. 현재 설�
 msgid "Search User"
 msgstr "사용자 검색 "
 
-#: seahub/templates/sysadmin/user_search.html:10
-msgid "Tip: Use * to match any number of characters."
-msgstr "요령: 임의 갯수의 문자와 일치하려면 * 문자를 사용하세요."
-
-#: seahub/templates/sysadmin/useradmin_js.html:3
-msgid "Delete User"
-msgstr "사용자 삭제"
-
-#: seahub/templates/sysadmin/useradmin_js.html:8
-#, python-format
-msgid "Are you sure you want to reset the password of %s ?"
-msgstr ""
-
 #: seahub/templates/sysadmin/useradmin_js.html:12
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
-msgstr ""
+msgstr "정말로 %s의 관리자 권한을 철회하시겠습니까?"
 
 #: seahub/templates/sysadmin/useradmin_js.html:16
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
-msgstr ""
-
-#: seahub/templates/sysadmin/useradmin_js.html:61
-msgid "Edit succeeded, an email has been sent."
-msgstr "성공적으로 편집했습니다. 전자메일을 보냈습니다."
-
-#: seahub/templates/sysadmin/useradmin_js.html:63
-msgid ""
-"Edit succeeded, but failed to send email, please check your email "
-"configuration."
-msgstr "성공적으로 편집했지만 전자메일 보내기에 실패했습니다. 전자메일 설정을 확인해주세요."
+msgstr "정말로 %s을(를) 관리자로 설정하시겠습니까?"
 
 #: seahub/templates/sysadmin/userinfo.html:7
 msgid "Back to user list"
@@ -5831,472 +5942,482 @@ msgstr "개인 위키 페이지"
 msgid "permission error"
 msgstr "권한 오류"
 
-#: seahub/views/__init__.py:373
+#: seahub/views/__init__.py:376
 msgid "Unable to view recycle page"
 msgstr "휴지통 페이지를 볼 수 없습니다"
 
-#: seahub/views/__init__.py:476
+#: seahub/views/__init__.py:510
 msgid "Failed to edit library information."
 msgstr "라이브러리 정보 편집에 실패했습니다."
 
-#: seahub/views/__init__.py:485
+#: seahub/views/__init__.py:519
 msgid "Failed to save settings on server"
 msgstr "서버 설정 저장에 실패했습니다"
 
-#: seahub/views/__init__.py:488
+#: seahub/views/__init__.py:522
 msgid "Settings saved."
 msgstr "설정을 저장했습니다."
 
-#: seahub/views/__init__.py:519
+#: seahub/views/__init__.py:553
 #, python-format
 msgid "Username %s is not valid."
 msgstr "%s 사용자 이름이 잘못되었습니다."
 
-#: seahub/views/__init__.py:526
+#: seahub/views/__init__.py:560
 #, python-format
 msgid "User %s is not found."
 msgstr "%s 사용자가 없습니다."
 
-#: seahub/views/__init__.py:533
+#: seahub/views/__init__.py:567
 #, python-format
 msgid "User %s is not in current organization."
-msgstr ""
+msgstr "%s 사용자는 현재 조직에 없습니다."
 
-#: seahub/views/__init__.py:544
+#: seahub/views/__init__.py:578
 #, python-format
 msgid "Library %(repo_name)s has been transfered to %(new_owner)s."
 msgstr "%(repo_name)s 라이브러리를 %(new_owner)s님께 이전했습니다."
 
-#: seahub/views/__init__.py:571
+#: seahub/views/__init__.py:605
 msgid "Faied to change password, you are not owner."
-msgstr ""
+msgstr "암호 바꾸기에 실패했습니다. 소유자가 아닙니다."
 
-#: seahub/views/__init__.py:583
+#: seahub/views/__init__.py:617
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr "%(repo_name)s 라이브러리 암호를 성공적으로 업데이트했습니다."
 
-#: seahub/views/__init__.py:591
+#: seahub/views/__init__.py:625
 msgid "Filename contains invalid character"
 msgstr "파일 이름에 잘못된 문자가 있습니다"
 
-#: seahub/views/__init__.py:593
+#: seahub/views/__init__.py:627
 msgid "Duplicated filename"
 msgstr "중복된 파일 이름"
 
-#: seahub/views/__init__.py:597
+#: seahub/views/__init__.py:631
 msgid "File size surpasses the limit"
 msgstr "파일 크기가 제한을 넘었습니다."
 
-#: seahub/views/__init__.py:599
+#: seahub/views/__init__.py:633
 msgid "The space of owner is used up, upload failed"
 msgstr "소유자 공간이 가득 차서 업로드에 실패했습니다"
 
-#: seahub/views/__init__.py:601
+#: seahub/views/__init__.py:635
 msgid "An error occurs during file transfer"
 msgstr "파일 보내기 도중 오류가 발생했습니다"
 
-#: seahub/views/__init__.py:613 seahub/views/__init__.py:635
+#: seahub/views/__init__.py:647 seahub/views/__init__.py:669
 msgid "Invalid url"
-msgstr "잘못된 url"
+msgstr "잘못된 URL"
 
-#: seahub/views/__init__.py:655
+#: seahub/views/__init__.py:689
 msgid "Unable to view library modification"
 msgstr "라이브러리 수정 상태를 볼 수 없습니다"
 
-#: seahub/views/__init__.py:715
-msgid "Unable to view library snapshots"
-msgstr "라이브러리 스냅샷을 볼 수 없습니다"
-
-#: seahub/views/__init__.py:775
-msgid "You have no permission to restore library"
-msgstr "라이브러리를 복원할 권한이 없습니다"
-
-#: seahub/views/__init__.py:799
+#: seahub/views/__init__.py:835
 msgid "Please specify history ID"
 msgstr "이력 ID를 지정해주세요"
 
-#: seahub/views/__init__.py:807 seahub/views/__init__.py:1225
-#: seahub/views/__init__.py:1686 seahub/views/ajax.py:1324
+#: seahub/views/__init__.py:843 seahub/views/__init__.py:1252
+#: seahub/views/__init__.py:1633 seahub/views/ajax.py:1308
 msgid "Library does not exist"
 msgstr "라이브러리가 없습니다"
 
-#: seahub/views/__init__.py:809
+#: seahub/views/__init__.py:845
 msgid "History you specified does not exist"
 msgstr "지정한 이력이 없습니다"
 
-#: seahub/views/__init__.py:811
+#: seahub/views/__init__.py:847
 msgid "Unknown error"
 msgstr "알 수 없는 오류"
 
-#: seahub/views/__init__.py:870 seahub/views/__init__.py:871
-#: seahub/views/__init__.py:876 seahub/views/__init__.py:877
+#: seahub/views/__init__.py:895 seahub/views/__init__.py:896
+#: seahub/views/__init__.py:901 seahub/views/__init__.py:902
 msgid "My Library"
 msgstr "내 라이브러리"
 
-#: seahub/views/__init__.py:1038
+#: seahub/views/__init__.py:1063
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "라이브러리가 없어서 공유 해제에 실패했습니다."
 
-#: seahub/views/__init__.py:1063
+#: seahub/views/__init__.py:1088
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\"을(를) 성공적으로 공유 해제했습니다."
 
-#: seahub/views/__init__.py:1065
+#: seahub/views/__init__.py:1090
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "\"%s\" 공유 해제에 실패했습니다."
 
-#: seahub/views/__init__.py:1099
+#: seahub/views/__init__.py:1124
 msgid "Failed to delete file."
 msgstr "파일 삭제에 실패했습니다."
 
-#: seahub/views/__init__.py:1106
+#: seahub/views/__init__.py:1131
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s을(를) 성공적으로 삭제했습니다."
 
-#: seahub/views/__init__.py:1108 seahub/views/ajax.py:542
+#: seahub/views/__init__.py:1133 seahub/views/ajax.py:550
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "내부 오류. %s 삭제에 실패했습니다."
 
-#: seahub/views/__init__.py:1154 seahub/views/__init__.py:1719
+#: seahub/views/__init__.py:1181 seahub/views/__init__.py:1666
+#: seahub/views/file.py:1090
 msgid "Unable to access file: share link traffic is used up."
 msgstr "파일 접근 불가: 공유 링크 트래픽을 사용하고 있습니다."
 
-#: seahub/views/__init__.py:1163
+#: seahub/views/__init__.py:1190
 msgid "Unable to access file"
 msgstr "파일에 접근할 수 없습니다"
 
-#: seahub/views/__init__.py:1296
+#: seahub/views/__init__.py:1331
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
-msgstr "%(path)s 경로를 <a href=\"%(root)s\">루트 디렉토리</a>로 성공적으로 되돌렸습니다."
+msgstr "%(path)s 경로를 <a href=\"%(root)s\">루트 디렉터리</a>로 성공적으로 되돌렸습니다."
 
-#: seahub/views/__init__.py:1300 seahub/views/__init__.py:1326
+#: seahub/views/__init__.py:1335 seahub/views/__init__.py:1369
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
-msgstr ""
+msgstr "<a href=\"%(url)s\">%(path)s</a>을(를) 성공적으로 되돌렸습니다"
 
-#: seahub/views/__init__.py:1322
+#: seahub/views/__init__.py:1365
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
-msgstr "%(path)s 경로를 <a href=\"%(url)s\">루트 디렉토리</a>로 성공적으로 되돌렸습니다."
+msgstr "%(path)s 경로를 <a href=\"%(url)s\">루트 디렉터리</a>로 성공적으로 되돌렸습니다."
 
-#: seahub/views/__init__.py:1731 seahub/views/file.py:817
+#: seahub/views/__init__.py:1678 seahub/views/file.py:855
 msgid "Internal Error"
 msgstr "내부 오류"
 
-#: seahub/views/__init__.py:1734
+#: seahub/views/__init__.py:1681
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
-msgstr "\"%s\" 디렉토리를 다운로드 할 수 없습니다: 크기가 너무 큽니다."
+msgstr "\"%s\" 디렉터리를 다운로드할 수 없습니다: 크기가 너무 큽니다."
 
-#: seahub/views/__init__.py:1748
+#: seahub/views/__init__.py:1695
 #, python-format
 msgid "Unable to download \"%s\""
-msgstr "\"%s\"을(를) 다운로드 할 수 없습니다"
+msgstr "\"%s\"을(를) 다운로드할 수 없습니다"
 
-#: seahub/views/__init__.py:1887
+#: seahub/views/__init__.py:1841
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"개인 위키\"를 성공적으로 활성화했습니다."
 
-#: seahub/views/__init__.py:1892
+#: seahub/views/__init__.py:1846
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"개인 위키\"를 성공적으로 비활성화했습니다."
 
-#: seahub/views/ajax.py:72
+#: seahub/views/ajax.py:73
 msgid "You don't have permission to access the library."
 msgstr "라이브러리 접근 권한이 없습니다."
 
-#: seahub/views/ajax.py:80
+#: seahub/views/ajax.py:81
 msgid "No path."
 msgstr "경로가 없습니다."
 
-#: seahub/views/ajax.py:156
+#: seahub/views/ajax.py:157
 msgid "The group doesn't exist"
 msgstr "그룹이 없습니다."
 
-#: seahub/views/ajax.py:217 seahub/views/ajax.py:301 seahub/views/ajax.py:375
-#: seahub/views/ajax.py:462 seahub/views/ajax.py:516 seahub/views/ajax.py:555
-#: seahub/views/ajax.py:599 seahub/views/ajax.py:790 seahub/views/ajax.py:1042
+#: seahub/views/ajax.py:225 seahub/views/ajax.py:309 seahub/views/ajax.py:383
+#: seahub/views/ajax.py:470 seahub/views/ajax.py:524 seahub/views/ajax.py:563
+#: seahub/views/ajax.py:607 seahub/views/ajax.py:798 seahub/views/ajax.py:1026
 msgid "Library does not exist."
 msgstr "라이브러리가 없습니다."
 
-#: seahub/views/ajax.py:224 seahub/views/ajax.py:308 seahub/views/ajax.py:523
-#: seahub/views/ajax.py:562 seahub/views/ajax.py:1049
-#: seahub/views/ajax.py:1348 seahub/views/ajax.py:1366
+#: seahub/views/ajax.py:232 seahub/views/ajax.py:316 seahub/views/ajax.py:531
+#: seahub/views/ajax.py:570 seahub/views/ajax.py:973 seahub/views/ajax.py:993
+#: seahub/views/ajax.py:1033 seahub/views/ajax.py:1332
+#: seahub/views/ajax.py:1350
 msgid "Permission denied."
 msgstr "권한이 거부되었습니다."
 
-#: seahub/views/ajax.py:239 seahub/views/ajax.py:323 seahub/views/ajax.py:1062
+#: seahub/views/ajax.py:247 seahub/views/ajax.py:331 seahub/views/ajax.py:1046
 msgid "Library is encrypted."
 msgstr "라이브러리가 암호화되었습니다."
 
-#: seahub/views/ajax.py:245 seahub/views/ajax.py:329 seahub/views/ajax.py:1068
+#: seahub/views/ajax.py:253 seahub/views/ajax.py:337 seahub/views/ajax.py:1052
 msgid "Error: no head commit id"
 msgstr "오류: 헤드 커밋 ID가 없습니다"
 
-#: seahub/views/ajax.py:531 seahub/views/ajax.py:570
+#: seahub/views/ajax.py:539 seahub/views/ajax.py:578
 msgid "Argument missing."
 msgstr "인자가 빠졌습니다."
 
-#: seahub/views/ajax.py:624
+#: seahub/views/ajax.py:632
 msgid "Destination path is too long."
 msgstr "대상 경로가 너무 깁니다."
 
-#: seahub/views/ajax.py:663 seahub/views/ajax.py:730
+#: seahub/views/ajax.py:671 seahub/views/ajax.py:738
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
-msgstr ""
+msgstr "%(name)s을(를) 성공적으로 이동했습니다 <a href=\"%(url)s\">보기</a>"
 
-#: seahub/views/ajax.py:692 seahub/views/ajax.py:767
+#: seahub/views/ajax.py:700 seahub/views/ajax.py:775
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
-msgstr ""
+msgstr "%(name)s을(를) 성공적으로 복사했습니다 <a href=\"%(url)s\">보기</a>"
 
-#: seahub/views/ajax.py:709 seahub/views/ajax.py:843
+#: seahub/views/ajax.py:717 seahub/views/ajax.py:851
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
-msgstr ""
+msgstr "%(src)s 디렉터리를 %(des)s 하위 디렉터리로 이동할 수 없습니다"
 
-#: seahub/views/ajax.py:746 seahub/views/ajax.py:882
+#: seahub/views/ajax.py:754 seahub/views/ajax.py:887
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
-msgstr ""
+msgstr "%(src)s 디렉터리를 %(des)s 하위 디렉터리로 복사할 수 없습니다"
 
-#: seahub/views/ajax.py:816
+#: seahub/views/ajax.py:824
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "%s의 대상 경로가 너무 깁니다."
 
-#: seahub/views/ajax.py:1151
+#: seahub/views/ajax.py:963
+msgid "Cancel failed"
+msgstr ""
+
+#: seahub/views/ajax.py:1135
 msgid "Failed to get file block list"
 msgstr "파일 차단 목록 가져오기에 실패했습니다."
 
-#: seahub/views/ajax.py:1189
+#: seahub/views/ajax.py:1173
 msgid "Wrong repo id"
 msgstr "잘못된 저장소 ID 입니다"
 
-#: seahub/views/ajax.py:1319
+#: seahub/views/ajax.py:1303
 msgid "System library can not be deleted."
 msgstr "시스템 라이브러리는 삭제할 수 없습니다."
 
-#: seahub/views/ajax.py:1621
+#: seahub/views/ajax.py:1587
+msgid "Bad upload link token."
+msgstr ""
+
+#: seahub/views/ajax.py:1593
+msgid "Bad repo id in upload link."
+msgstr ""
+
+#: seahub/views/ajax.py:1643
 msgid "No conflict in the merge."
 msgstr "합친 내용에 충돌이 없습니다."
 
-#: seahub/views/ajax.py:1638 seahub/views/ajax.py:1719
+#: seahub/views/ajax.py:1693 seahub/views/ajax.py:1756
 msgid "You do not have permission to create library"
-msgstr ""
+msgstr "라이브러리를 만들 권한이 없습니다"
 
-#: seahub/views/file.py:119
+#: seahub/views/file.py:120
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP오류: 파일을 온라인에서 열기에 실패했습니다"
 
-#: seahub/views/file.py:123
+#: seahub/views/file.py:124
 msgid "URLError: failed to open file online"
-msgstr "URL오류: 파일을 온라인에서 열기에 실패했습니다"
+msgstr "URL오류: 온라인에서 파일 열기에 실패했습니다"
 
-#: seahub/views/file.py:130
+#: seahub/views/file.py:131
 msgid "The encoding you chose is not proper."
 msgstr "선택한 인코딩이 적합하지 않습니다"
 
-#: seahub/views/file.py:147 seahub/views/file.py:150
+#: seahub/views/file.py:148 seahub/views/file.py:151
 msgid "Unknown file encoding"
 msgstr "알 수 없는 파일 인코딩"
 
-#: seahub/views/file.py:274 seahub/views/file.py:281 seahub/views/file.py:506
-#: seahub/views/file.py:511
+#: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
+#: seahub/views/file.py:512
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
-#: seahub/views/file.py:321 seahub/views/file.py:546 seahub/views/file.py:561
-#: seahub/views/file.py:583
+#: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
+#: seahub/views/file.py:584
 msgid "Unable to view file"
 msgstr "파일을 볼 수 없습니다"
 
-#: seahub/views/file.py:357 seahub/views/file.py:524 seahub/views/file.py:659
+#: seahub/views/file.py:358 seahub/views/file.py:525 seahub/views/file.py:660
 msgid "Invalid file format."
 msgstr "잘못된 파일 형식입니다."
 
-#: seahub/views/file.py:828
+#: seahub/views/file.py:866
 msgid "The library does not exist."
 msgstr "라이브러리가 없습니다."
 
-#: seahub/views/file.py:832
+#: seahub/views/file.py:870
 msgid "The library is encrypted."
 msgstr "라이브러리가 암호화되었습니다."
 
-#: seahub/views/file.py:900
+#: seahub/views/file.py:938
 msgid "Unable to edit file"
 msgstr "파일을 편집할 수 없습니다"
 
-#: seahub/views/file.py:912
+#: seahub/views/file.py:950
 msgid "The file does not exist."
 msgstr "파일이 없습니다."
 
-#: seahub/views/file.py:940
+#: seahub/views/file.py:978
 msgid "Edit online is not offered for this type of file."
-msgstr "이 형식의 파일 온라인 편집을 할 수 없습니다."
+msgstr "이 형식의 파일에 대해 온라인에서 편집할 수 없습니다."
 
-#: seahub/views/sysadmin.py:378
-msgid "Failed to set quota: internal server error"
+#: seahub/views/file.py:1102
+msgid "Unable to download file"
 msgstr ""
 
-#: seahub/views/sysadmin.py:394
+#: seahub/views/sysadmin.py:398 seahub/views/sysadmin.py:424
+msgid "Failed to set quota: internal server error"
+msgstr "제한 용량 설정에 실패했습니다: 내부 서버 오류"
+
+#: seahub/views/sysadmin.py:443
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "%s을(를) 성공적으로 삭제했습니다"
 
-#: seahub/views/sysadmin.py:396
+#: seahub/views/sysadmin.py:445
 msgid "Failed to delete: the user does not exist"
 msgstr "삭제 실패: 사용자가 없습니다"
 
-#: seahub/views/sysadmin.py:411
+#: seahub/views/sysadmin.py:460
 #, python-format
 msgid "Successfully set %s as admin"
 msgstr "%s님을 관리자로 성공적으로 설정했습니다"
 
-#: seahub/views/sysadmin.py:413
+#: seahub/views/sysadmin.py:462
 msgid "Failed to set admin: the user does not exist"
 msgstr "관리자 설정 실패: 사용자가 없습니다"
 
-#: seahub/views/sysadmin.py:428
+#: seahub/views/sysadmin.py:477
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "%s의 관리자 권한을 성공적으로 철회했습니다"
 
-#: seahub/views/sysadmin.py:430
+#: seahub/views/sysadmin.py:479
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "관리자 해임 실패: 사용자가 없습니다"
 
-#: seahub/views/sysadmin.py:444
+#: seahub/views/sysadmin.py:493
 #, python-format
 msgid "Successfully activated \"%s\"."
 msgstr "\"%s\"님을 성공적으로 활성화했습니다."
 
-#: seahub/views/sysadmin.py:446
+#: seahub/views/sysadmin.py:495
 msgid "Failed to activate: user does not exist."
 msgstr "활성화 실패: 사용자가 없습니다."
 
-#: seahub/views/sysadmin.py:461
+#: seahub/views/sysadmin.py:510
 #, python-format
 msgid "Successfully deactivated \"%s\"."
 msgstr "\"%s\"님을 성공적으로 비활성화했습니다."
 
-#: seahub/views/sysadmin.py:463
+#: seahub/views/sysadmin.py:512
 msgid "Failed to deactivate: user does not exist."
 msgstr "비활성화 실패: 사용자가 없습니다."
 
-#: seahub/views/sysadmin.py:477
+#: seahub/views/sysadmin.py:526
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "%s의 계정을 활성화했습니다"
 
-#: seahub/views/sysadmin.py:553
+#: seahub/views/sysadmin.py:602
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "%s에 암호를 재설정했습니다"
 
-#: seahub/views/sysadmin.py:573
+#: seahub/views/sysadmin.py:622
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
-msgstr ""
+msgstr "암호를 %(passwd)s(으)로 성공적으로 바꾸고 %(user)s님께 전자메일을 보냈습니다."
 
-#: seahub/views/sysadmin.py:578
+#: seahub/views/sysadmin.py:627
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
-msgstr ""
+msgstr "암호를 %(passwd)s(으)로 성공적으로 바꾸었지만, %(user)s님께 전자메일을 보내지 못했습니다. 전자메일 설정을 확인하세요."
 
-#: seahub/views/sysadmin.py:582
+#: seahub/views/sysadmin.py:631
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
-msgstr ""
+msgstr "%(user)s님의 암호를 %(passwd)s(으)로 성공적으로 바꾸었습니다."
 
-#: seahub/views/sysadmin.py:585
+#: seahub/views/sysadmin.py:634
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
 "notification can not be sent, because Email service is not properly "
 "configured."
-msgstr ""
+msgstr "%(user)s님의 암호를 %(passwd)s(으)로 성공적으로 바꾸었습니다. 그러나 전자 메일 서비스를 제대로 설정하지 않아 전자메일 알림을 보낼 수 없었습니다."
 
-#: seahub/views/sysadmin.py:588
+#: seahub/views/sysadmin.py:637
 msgid "Failed to reset password: user does not exist"
 msgstr "암호 재설정 실패: 사용자가 없습니다"
 
-#: seahub/views/sysadmin.py:604
+#: seahub/views/sysadmin.py:653
 #, python-format
 msgid "You are invited to join %s"
 msgstr "%s 참여를 초대받았습니다"
 
-#: seahub/views/sysadmin.py:642 seahub/views/sysadmin.py:655
+#: seahub/views/sysadmin.py:691 seahub/views/sysadmin.py:704
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "%s 사용자를 성공적으로 추가했습니다. 전자메일 알림을 보냈습니다."
 
-#: seahub/views/sysadmin.py:645 seahub/views/sysadmin.py:658
+#: seahub/views/sysadmin.py:694 seahub/views/sysadmin.py:707
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "%s 사용자를 성공적으로 추가했습니다. 전자메일 알림을 보내는 동안 오류가 발생했습니다. 전자메일 설정을 확인해주세요."
 
-#: seahub/views/sysadmin.py:647 seahub/views/sysadmin.py:660
+#: seahub/views/sysadmin.py:696 seahub/views/sysadmin.py:709
 #, python-format
 msgid "Successfully added user %s."
 msgstr "%s 사용자를 성공적으로 추가했습니다."
 
-#: seahub/views/sysadmin.py:662
+#: seahub/views/sysadmin.py:711
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "%s 사용자를 성공적으로 추가했습니다만, 전자메일 서비스를 올바르게 설정하지 않아 전자메일 알림을 보낼 수 없었습니다."
 
-#: seahub/views/sysadmin.py:827
+#: seahub/views/sysadmin.py:922
 msgid "Successfully transfered."
 msgstr "성공적으로 보냈습니다."
 
-#: seahub/views/sysadmin.py:829
+#: seahub/views/sysadmin.py:924
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "%s 사용자가 없어 보내기에 실패했습니다"
 
-#: seahub/views/sysadmin.py:831
+#: seahub/views/sysadmin.py:926
 msgid "Failed to transfer, invalid arguments."
 msgstr "보내기에 실패했습니다. 잘못된 인자입니다."
 
-#: seahub/views/sysadmin.py:894
+#: seahub/views/sysadmin.py:989
 msgid "Using LDAP now, can not add admin."
 msgstr "LDAP를 지금 사용중이어서 관리자를 추가할 수 없습니다."
 
-#: seahub/views/sysadmin.py:911
+#: seahub/views/sysadmin.py:1006
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s님을 성공적으로 관리자로 설정했습니다."
 
-#: seahub/views/sysadmin.py:913
+#: seahub/views/sysadmin.py:1008
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "%s님 관리자 설정 실패: 사용자가 없습니다."
 
-#: seahub/views/sysadmin.py:955
+#: seahub/views/sysadmin.py:1050
 msgid "Import succeeded"
-msgstr ""
+msgstr "가져오기를 성공했습니다."
 
-#: seahub/views/sysadmin.py:957
+#: seahub/views/sysadmin.py:1052
 msgid "Please select a csv file first."
-msgstr ""
+msgstr "먼저 csv 파일을 선택하세요."
 
 #: seahub/views/wiki.py:134
 msgid "You do not have permission to create wiki"
-msgstr ""
+msgstr "위키를 만들 권한이 없습니다."

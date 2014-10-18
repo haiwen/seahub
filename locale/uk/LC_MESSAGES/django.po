@@ -12,9 +12,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-07-30 11:15+0800\n"
-"PO-Revision-Date: 2014-07-30 10:29+0000\n"
-"Last-Translator: Kvita <transifex@kvita.com.ua>\n"
+"POT-Creation-Date: 2014-10-18 11:03+0800\n"
+"PO-Revision-Date: 2014-10-18 03:05+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/seahub/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -22,112 +22,113 @@ msgstr ""
 "Language: uk\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: seahub/forms.py:31
+#: seahub/forms.py:26
 msgid "A user with this email already exists."
 msgstr "Користувач з таким email вже існує"
 
-#: seahub/forms.py:45
+#: seahub/forms.py:40
 msgid "The two passwords didn't match."
 msgstr "Паролі не збігаються."
 
-#: seahub/forms.py:54 seahub/group/forms.py:56 seahub/wiki/forms.py:16
+#: seahub/forms.py:49 seahub/group/forms.py:56 seahub/wiki/forms.py:16
 msgid "Name can't be empty"
 msgstr "Поле \"Ім'я\" не може бути порожнім"
 
-#: seahub/forms.py:55 seahub/group/forms.py:57 seahub/wiki/forms.py:17
+#: seahub/forms.py:50 seahub/group/forms.py:57 seahub/wiki/forms.py:17
 msgid "Name is too long (maximum is 255 characters)"
 msgstr "Дуже довге им'я (максимум 255 символів)"
 
-#: seahub/forms.py:58 seahub/group/forms.py:60 seahub/wiki/forms.py:20
+#: seahub/forms.py:53 seahub/group/forms.py:60 seahub/wiki/forms.py:20
 msgid "Description can't be empty"
 msgstr "Опис не може бути порожнім"
 
-#: seahub/forms.py:59 seahub/group/forms.py:61 seahub/wiki/forms.py:21
+#: seahub/forms.py:54 seahub/group/forms.py:61 seahub/wiki/forms.py:21
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "Опис дуже довгий (максимум 100 символів)"
 
-#: seahub/forms.py:68 seahub/forms.py:184
+#: seahub/forms.py:64 seahub/forms.py:180
 #, python-format
 msgid "Name %s is not valid"
 msgstr "Ім'я %s неприпустиме"
 
-#: seahub/forms.py:82 seahub/message/views.py:177 seahub/share/views.py:778
-#: seahub/share/views.py:816 seahub/views/__init__.py:1019
-#: seahub/views/ajax.py:339 seahub/views/ajax.py:398 seahub/views/ajax.py:489
-#: seahub/views/ajax.py:618 seahub/views/ajax.py:809 seahub/views/ajax.py:922
-#: seahub/views/ajax.py:951 seahub/views/ajax.py:981 seahub/views/ajax.py:1097
-#: seahub/views/ajax.py:1176 seahub/views/ajax.py:1180
-#: seahub/views/ajax.py:1184 seahub/views/ajax.py:1568
+#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:778
+#: seahub/share/views.py:816 seahub/views/__init__.py:1044
+#: seahub/views/ajax.py:347 seahub/views/ajax.py:406 seahub/views/ajax.py:497
+#: seahub/views/ajax.py:626 seahub/views/ajax.py:817 seahub/views/ajax.py:924
+#: seahub/views/ajax.py:953 seahub/views/ajax.py:1081
+#: seahub/views/ajax.py:1160 seahub/views/ajax.py:1164
+#: seahub/views/ajax.py:1168 seahub/views/ajax.py:1560
 msgid "Argument missing"
 msgstr "Відсутній аргумент"
 
-#: seahub/forms.py:96
+#: seahub/forms.py:92
 msgid "Oldname is required"
 msgstr "Потрібне старе имя"
 
-#: seahub/forms.py:99 seahub/forms.py:120
+#: seahub/forms.py:95 seahub/forms.py:116
 msgid "It's too long."
 msgstr "Дуже довге"
 
-#: seahub/forms.py:100 seahub/forms.py:121
+#: seahub/forms.py:96 seahub/forms.py:117
 msgid "It's required."
 msgstr "Потрібен Email."
 
-#: seahub/forms.py:107 seahub/forms.py:128
+#: seahub/forms.py:103 seahub/forms.py:124
 #, python-format
 msgid "Name \"%s\" is not valid"
 msgstr "Ім’я %s неприпустиме."
 
-#: seahub/forms.py:139
+#: seahub/forms.py:135
 msgid "Repo id is required"
 msgstr "Потрібен Repo ID"
 
-#: seahub/forms.py:140
+#: seahub/forms.py:136
 msgid "Username is required"
 msgstr "Необхідно ввести ім'я користувача"
 
-#: seahub/forms.py:141 seahub/share/forms.py:43
+#: seahub/forms.py:137 seahub/share/forms.py:43
 msgid "Password can't be empty"
 msgstr "Пароль не може бути порожнім"
 
-#: seahub/forms.py:152
+#: seahub/forms.py:148
 msgid "Bad url format"
 msgstr "Невірний формат URL"
 
-#: seahub/forms.py:157 seahub/templates/repo.html:350
+#: seahub/forms.py:153 seahub/templates/repo.html:350
 msgid "Wrong password"
 msgstr "Невірний пароль"
 
-#: seahub/forms.py:159 seahub/views/__init__.py:1025 seahub/views/ajax.py:657
-#: seahub/views/ajax.py:686 seahub/views/ajax.py:724 seahub/views/ajax.py:761
+#: seahub/forms.py:155 seahub/views/__init__.py:410
+#: seahub/views/__init__.py:1050 seahub/views/ajax.py:665
+#: seahub/views/ajax.py:694 seahub/views/ajax.py:732 seahub/views/ajax.py:769
 msgid "Internal server error"
 msgstr "Внутрішня помилка серверу"
 
-#: seahub/forms.py:161
+#: seahub/forms.py:157
 msgid "Decrypt library error"
 msgstr "Помилка розшифровки бібліотеки"
 
-#: seahub/forms.py:167 seahub/share/forms.py:20 seahub/share/forms.py:33
+#: seahub/forms.py:163 seahub/share/forms.py:20 seahub/share/forms.py:33
 msgid "Email is required"
 msgstr "Потрібен Email"
 
-#: seahub/forms.py:169 seahub/templates/sysadmin/userinfo.html:129
+#: seahub/forms.py:165 seahub/templates/sysadmin/userinfo.html:129
 msgid "Quota can't be empty"
 msgstr "Значення квоти не може бути порожнім"
 
-#: seahub/forms.py:170
+#: seahub/forms.py:166
 msgid "Quota is too low (minimum value is 0)"
 msgstr "Квота занадто мала (мінімальне значення 0)"
 
-#: seahub/forms.py:176
+#: seahub/forms.py:172
 msgid "Library name is required"
 msgstr "Потрібна назва бібліотеки"
 
-#: seahub/forms.py:177
+#: seahub/forms.py:173
 msgid "Library description is required"
 msgstr "Потрібен опис бібліотеки"
 
-#: seahub/forms.py:179
+#: seahub/forms.py:175
 msgid "Please enter a number"
 msgstr "Будь ласка, введіть число"
 
@@ -234,7 +235,7 @@ msgstr "Спільний файл команди спільноти"
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:175
+#: seahub/templates/base.html:175 seahub/templates/view_file_base.html:123
 msgid "Discussion"
 msgstr "Обговорення"
 
@@ -255,7 +256,7 @@ msgstr "Обговорення"
 #: seahub/share/templates/share/links.html:28
 #: seahub/share/templates/share/priv_shared_files.html:64
 #: seahub/templates/repo_history_view.html:66
-#: seahub/templates/repo_recycle_view.html:78
+#: seahub/templates/repo_recycle_view.html:83
 #: seahub/templates/view_file_base.html:156
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/snippets/group_recommend_form.html:28
@@ -312,27 +313,29 @@ msgstr "Завантаження..."
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:180
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
-#: seahub/templates/base.html:138 seahub/templates/file_edit.html:594
-#: seahub/templates/myhome.html:118 seahub/templates/myhome.html.py:146
-#: seahub/templates/repo.html:291 seahub/templates/repo.html.py:706
-#: seahub/templates/repo.html:1537 seahub/templates/repo.html.py:1768
-#: seahub/templates/repo.html:1793 seahub/templates/repo.html.py:1822
-#: seahub/templates/repo.html:1928 seahub/templates/repo.html.py:2000
-#: seahub/templates/repo_settings.html:142
+#: seahub/templates/base.html:138 seahub/templates/file_edit.html:595
+#: seahub/templates/myhome.html:123 seahub/templates/myhome.html.py:151
+#: seahub/templates/repo.html:291 seahub/templates/repo.html.py:700
+#: seahub/templates/repo.html:758 seahub/templates/repo.html.py:1596
+#: seahub/templates/repo.html:1820 seahub/templates/repo.html.py:1845
+#: seahub/templates/repo.html:1890 seahub/templates/repo.html.py:1995
+#: seahub/templates/repo.html:2067 seahub/templates/repo_settings.html:142
 #: seahub/templates/repo_settings.html:178
 #: seahub/templates/repo_settings.html:239
-#: seahub/templates/view_file_base.html:341
+#: seahub/templates/view_file_base.html:338
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:109
 #: seahub/templates/snippets/events_js.html:56
 #: seahub/templates/snippets/office_convert_js.html:190
 #: seahub/templates/snippets/office_convert_js.html:215
 #: seahub/templates/snippets/repo_decrypt_js.html:35
-#: seahub/templates/snippets/shared_link_js.html:218
-#: seahub/templates/snippets/shared_link_js.html:290
-#: seahub/templates/snippets/shared_link_js.html:379
-#: seahub/templates/snippets/shared_link_js.html:467
-#: seahub/templates/snippets/spreadsheet_convert_js.html:32
+#: seahub/templates/snippets/shared_link_js.html:217
+#: seahub/templates/snippets/shared_link_js.html:289
+#: seahub/templates/snippets/shared_link_js.html:378
+#: seahub/templates/snippets/shared_link_js.html:466
+#: seahub/templates/snippets/spreadsheet_convert_js.html:31
+#: seahub/templates/sysadmin/sys_org_admin.html:126
+#: seahub/templates/sysadmin/sys_org_info.html:161
 #: seahub/templates/sysadmin/sys_useradmin.html:139
 #: seahub/templates/sysadmin/userinfo.html:152
 msgid "Failed. Please check the network."
@@ -420,7 +423,7 @@ msgstr "Ключові дати"
 #: seahub/templates/pubgrp.html:16 seahub/templates/view_file_base.html:168
 #: seahub/templates/snippets/repo_share_form.html:7
 #: seahub/templates/sysadmin/base.html:15
-#: seahub/templates/sysadmin/sys_org_info.html:44
+#: seahub/templates/sysadmin/sys_org_info.html:46
 msgid "Groups"
 msgstr "Групи"
 
@@ -437,21 +440,22 @@ msgstr "Змінити пароль: %s"
 msgid "Please log in."
 msgstr "Будь ласка, увійдіть"
 
-#: seahub/auth/forms.py:22 seahub/base/accounts.py:441
+#: seahub/auth/forms.py:22 seahub/base/accounts.py:445
 msgid "Username"
 msgstr "Ім'я користувача"
 
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:182
-#: seahub/base/accounts.py:445 seahub/templates/registration/login.html:36
-#: seahub/templates/registration/registration_form.html:19
-#: seahub/templates/snippets/file_share_popup.html:38
-#: seahub/templates/snippets/file_share_popup.html:76
+#: seahub/base/accounts.py:449 seahub/templates/registration/login.html:36
+#: seahub/templates/registration/registration_form.html:24
+#: seahub/templates/snippets/file_share_popup.html:39
+#: seahub/templates/snippets/file_share_popup.html:77
 #: seahub/templates/snippets/repo_create_form.html:20
+#: seahub/templates/sysadmin/sys_org_admin.html:22
 #: seahub/templates/sysadmin/sys_useradmin.html:45
 msgid "Password"
 msgstr "Пароль"
 
-#: seahub/auth/forms.py:39 seahub/base/accounts.py:452
+#: seahub/auth/forms.py:39 seahub/base/accounts.py:456
 msgid "Enter a valid email address."
 msgstr "Введіть дійсну адресу електронної пошти."
 
@@ -505,7 +509,7 @@ msgid "New password confirmation"
 msgstr "Підтвердження нового паролю"
 
 #: seahub/auth/forms.py:152 seahub/auth/forms.py:194
-#: seahub/base/accounts.py:492
+#: seahub/base/accounts.py:496
 msgid "The two password fields didn't match."
 msgstr "Паролі не збігаються."
 
@@ -517,7 +521,7 @@ msgstr "Старий пароль"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Ваш старий пароль було введено невірно. Будь ласка, введіть його знову."
 
-#: seahub/auth/forms.py:183 seahub/base/accounts.py:447
+#: seahub/auth/forms.py:183 seahub/base/accounts.py:451
 msgid "Password (again)"
 msgstr "Пароль (ще раз)"
 
@@ -654,35 +658,37 @@ msgstr "Поточний аватар: "
 #: seahub/profile/templates/profile/set_profile.html:129
 #: seahub/templates/activities.html:25
 #: seahub/templates/decrypt_repo_form.html:13
-#: seahub/templates/file_edit.html:98 seahub/templates/file_edit.html:245
+#: seahub/templates/file_edit.html:99 seahub/templates/file_edit.html:246
 #: seahub/templates/home_base.html:57 seahub/templates/myhome.html:60
 #: seahub/templates/repo.html:65 seahub/templates/repo.html.py:115
 #: seahub/templates/repo.html:145 seahub/templates/repo.html.py:169
 #: seahub/templates/repo.html:190 seahub/templates/repo.html.py:206
-#: seahub/templates/repo.html:221 seahub/templates/repo_settings.html:49
+#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:111
+#: seahub/templates/repo_settings.html:49
 #: seahub/templates/repo_settings.html:59
 #: seahub/templates/repo_settings.html:75
 #: seahub/templates/share_access_validation.html:10
-#: seahub/templates/shared_file_view.html:52
+#: seahub/templates/shared_file_view.html:54
 #: seahub/templates/view_file_base.html:152
-#: seahub/templates/registration/password_change_form.html:22
+#: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
 #: seahub/templates/snippets/add_to_contacts_form.html:8
-#: seahub/templates/snippets/file_share_popup.html:26
-#: seahub/templates/snippets/file_share_popup.html:60
-#: seahub/templates/snippets/file_share_popup.html:96
+#: seahub/templates/snippets/file_share_popup.html:27
+#: seahub/templates/snippets/file_share_popup.html:61
+#: seahub/templates/snippets/file_share_popup.html:97
 #: seahub/templates/snippets/group_recommend_form.html:19
 #: seahub/templates/snippets/repo_create_form.html:26
 #: seahub/templates/snippets/repo_share_form.html:30
 #: seahub/templates/snippets/search_form.html:57
 #: seahub/templates/sysadmin/repo_transfer_form.html:8
-#: seahub/templates/sysadmin/sys_org_info.html:35
+#: seahub/templates/sysadmin/sys_org_admin.html:28
+#: seahub/templates/sysadmin/sys_org_info.html:37
 #: seahub/templates/sysadmin/sys_repo_search.html:13
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 #: seahub/templates/sysadmin/sys_useradmin.html:58
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:36
-#: seahub/templates/sysadmin/user_search.html:12
+#: seahub/templates/sysadmin/user_search.html:11
 #: seahub/templates/sysadmin/userinfo.html:47
 #: seahub/templates/wiki/personal_wiki.html:46
 #: seahub/templates/wiki/personal_wiki.html:56
@@ -703,35 +709,35 @@ msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> оновив свій а
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr "Ви оновили свій аватар <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
-#: seahub/base/accounts.py:436
+#: seahub/base/accounts.py:440
 msgid "Email address"
 msgstr "Email адреса"
 
-#: seahub/base/accounts.py:442
+#: seahub/base/accounts.py:446
 msgid "This value must be of length 40"
 msgstr "Це значення повинно мати довжину 40"
 
-#: seahub/base/accounts.py:458
+#: seahub/base/accounts.py:462
 msgid "A user with this email already"
 msgstr "Користувач з такою электронною адресою вже існує"
 
-#: seahub/base/accounts.py:462
+#: seahub/base/accounts.py:466
 msgid "Invalid user id."
 msgstr "Неправильний ідентифікатор користувача"
 
-#: seahub/base/accounts.py:499
+#: seahub/base/accounts.py:503
 msgid "name"
 msgstr "ім'я"
 
-#: seahub/base/accounts.py:501
+#: seahub/base/accounts.py:505
 msgid "department"
 msgstr "департамент"
 
-#: seahub/base/accounts.py:503
+#: seahub/base/accounts.py:507
 msgid "telephone"
 msgstr "телефон"
 
-#: seahub/base/accounts.py:505
+#: seahub/base/accounts.py:509
 msgid "note"
 msgstr "примітка"
 
@@ -792,7 +798,7 @@ msgstr "Статус файлу \"%(file)s\" відновлено за %(time)s.
 msgid "Recovered deleted directory"
 msgstr "Відновлений видалений каталог"
 
-#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1618
+#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1640
 msgid "Changed library name or description"
 msgstr "Змінено назву або опис бібліотеки"
 
@@ -803,7 +809,7 @@ msgstr "Автоматичне злиття системою seafile"
 #: seahub/base/templatetags/seahub_tags.py:188
 #: seahub/base/templatetags/seahub_tags.py:222
 #: seahub/group/templates/group/group_discuss.html:154
-#: seahub/templates/repo.html:924 seahub/templates/repo.html.py:1640
+#: seahub/templates/repo.html:969 seahub/templates/repo.html.py:1700
 #: seahub/templates/snippets/my_owned_repos.html:148
 msgid "Just now"
 msgstr "Просто зараз"
@@ -895,7 +901,7 @@ msgid "Email is required."
 msgstr "Потрібен email."
 
 #: seahub/contacts/views.py:64 seahub/contacts/views.py:101
-#: seahub/group/views.py:906 seahub/group/views.py:934
+#: seahub/group/views.py:907 seahub/group/views.py:935
 #, python-format
 msgid "%s is not a valid email."
 msgstr "%s неприпустима адреса email."
@@ -959,10 +965,10 @@ msgstr "Email "
 #: seahub/templates/my_group_repos.html:8
 #: seahub/templates/my_shared_repos.html:7 seahub/templates/pubrepo.html:16
 #: seahub/templates/repo_history_view.html:52
-#: seahub/templates/repo_recycle_view.html:53
+#: seahub/templates/repo_recycle_view.html:58
 #: seahub/templates/repo_settings.html:35
 #: seahub/templates/view_shared_dir.html:29
-#: seahub/templates/registration/registration_form.html:13
+#: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
 #: seahub/templates/snippets/my_owned_repos.html:27
 #: seahub/templates/snippets/my_owned_repos.html:74
@@ -973,7 +979,9 @@ msgstr "Email "
 #: seahub/templates/sysadmin/repoadmin_table.html:4
 #: seahub/templates/sysadmin/sys_group_admin.html:12
 #: seahub/templates/sysadmin/sys_list_system.html:23
-#: seahub/templates/sysadmin/sys_org_admin.html:11
+#: seahub/templates/sysadmin/sys_org_admin.html:14
+#: seahub/templates/sysadmin/sys_org_admin.html:34
+#: seahub/templates/sysadmin/sys_org_info.html:102
 #: seahub/templates/sysadmin/sys_publink_admin.html:12
 #: seahub/templates/sysadmin/sys_repo_search.html:11
 #: seahub/templates/sysadmin/userinfo.html:65
@@ -985,7 +993,7 @@ msgid "Name"
 msgstr "Им'я"
 
 #: seahub/contacts/templates/contacts/contact_list.html:19
-#: seahub/templates/registration/registration_form.html:32
+#: seahub/templates/registration/registration_form.html:34
 msgid "Note"
 msgstr "Примітка"
 
@@ -1005,7 +1013,7 @@ msgstr "Примітка"
 #: seahub/share/templates/share/user_share_list.html:36
 #: seahub/templates/file_revisions.html:28
 #: seahub/templates/my_shared_repos.html:11 seahub/templates/pubrepo.html:20
-#: seahub/templates/repo_recycle_view.html:56
+#: seahub/templates/repo_recycle_view.html:61
 #: seahub/templates/repo_view_snapshot.html:18
 #: seahub/templates/view_shared_dir.html:31
 #: seahub/templates/snippets/my_owned_repos.html:30
@@ -1015,7 +1023,8 @@ msgstr "Примітка"
 #: seahub/templates/snippets/repo_dir_data.html:43
 #: seahub/templates/sysadmin/repoadmin_table.html:8
 #: seahub/templates/sysadmin/sys_group_admin.html:15
-#: seahub/templates/sysadmin/sys_org_admin.html:15
+#: seahub/templates/sysadmin/sys_org_info.html:57
+#: seahub/templates/sysadmin/sys_org_info.html:105
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:47
 #: seahub/templates/sysadmin/useradmin_table.html:9
@@ -1027,10 +1036,11 @@ msgstr "Операції"
 #: seahub/group/templates/group/group_wiki.html:22
 #: seahub/share/templates/share/list_priv_shared_folders.html:29
 #: seahub/share/templates/share/repos.html:33
-#: seahub/templates/file_edit.html:80
+#: seahub/templates/file_edit.html:81
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_sf.html:6
 #: seahub/templates/view_file_text.html:24
+#: seahub/templates/sysadmin/sys_org_info.html:70
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:62
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:79
 #: seahub/templates/sysadmin/useradmin_table.html:23
@@ -1049,10 +1059,10 @@ msgstr "Редагувати"
 #: seahub/message/templates/message/user_msg_list.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:119
-#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:256
-#: seahub/templates/view_shared_upload_link.html:87
-#: seahub/templates/snippets/file_share_popup.html:49
-#: seahub/templates/snippets/file_share_popup.html:87
+#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:252
+#: seahub/templates/view_shared_upload_link.html:82
+#: seahub/templates/snippets/file_share_popup.html:50
+#: seahub/templates/snippets/file_share_popup.html:88
 #: seahub/templates/snippets/my_owned_repos.html:53
 #: seahub/templates/snippets/my_owned_repos.html:101
 #: seahub/templates/snippets/my_owned_repos.html:154
@@ -1060,7 +1070,9 @@ msgstr "Редагувати"
 #: seahub/templates/snippets/repo_dirents.html:86
 #: seahub/templates/sysadmin/repoadmin_table.html:24
 #: seahub/templates/sysadmin/sys_group_admin.html:22
-#: seahub/templates/sysadmin/sys_org_admin.html:23
+#: seahub/templates/sysadmin/sys_org_admin.html:49
+#: seahub/templates/sysadmin/sys_org_info.html:89
+#: seahub/templates/sysadmin/sys_org_info.html:112
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:103
 #: seahub/templates/sysadmin/useradmin_table.html:68
 #: seahub/templates/sysadmin/userinfo.html:76
@@ -1083,13 +1095,14 @@ msgstr "Додайте контакти, щоб ви могли швидко о�
 #: seahub/group/templates/group/group_manage.html:48
 #: seahub/templates/repo_settings.html:57
 #: seahub/templates/registration/login.html:34
-#: seahub/templates/registration/registration_form.html:17
+#: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/snippets/add_to_contacts_form.html:2
 #: seahub/templates/sysadmin/repo_transfer_form.html:5
+#: seahub/templates/sysadmin/sys_org_info.html:53
 #: seahub/templates/sysadmin/sys_useradmin.html:36
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:42
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:23
-#: seahub/templates/sysadmin/user_search.html:11
+#: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:4
 #: seahub/templates/sysadmin/userinfo.html:11
 msgid "Email"
@@ -1118,7 +1131,8 @@ msgstr "Видалити контакт"
 #: seahub/contacts/templates/contacts/contact_list.html:115
 #: seahub/notifications/templates/notifications/notification_list.html:52
 #: seahub/templates/sysadmin/sys_group_admin.html:38
-#: seahub/templates/sysadmin/sys_org_admin.html:39
+#: seahub/templates/sysadmin/sys_org_info.html:170
+#: seahub/templates/sysadmin/sys_org_info.html:174
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1246,33 +1260,33 @@ msgstr "Повідомлення, не існує"
 msgid "You don't have the permission."
 msgstr "У вас немає прав доступу."
 
-#: seahub/group/views.py:670
+#: seahub/group/views.py:671
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "Ви запрошені приєднатися до групи  %s"
 
-#: seahub/group/views.py:683
+#: seahub/group/views.py:684
 msgid "The group does not exist."
 msgstr "Група не існує."
 
-#: seahub/group/views.py:711
+#: seahub/group/views.py:712
 #, python-format
 msgid "Failed to add, %s is not in current organization."
 msgstr "Не вдається додати, %s не в поточної спільноти."
 
-#: seahub/group/views.py:729 seahub/group/views.py:881
+#: seahub/group/views.py:730 seahub/group/views.py:882
 #, python-format
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr "Ви можете запросити %d учасників.<a href = \"http://seafile.com/\">Оновлення аккаунту.</a>"
 
-#: seahub/group/views.py:767
+#: seahub/group/views.py:768
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "Не вдалося додати, %s не зареєстрований."
 
-#: seahub/group/views.py:782
+#: seahub/group/views.py:783
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
@@ -1280,141 +1294,141 @@ msgstr[0] "Успішно додано. %(count)s Повідомлення бу�
 msgstr[1] "Успішно додано. %(count)s поштових листів було надіслано."
 msgstr[2] "Успішно додано. %(count)s поштових листів було надіслано."
 
-#: seahub/group/views.py:789
+#: seahub/group/views.py:790
 msgid "Successfully added."
 msgstr "Успішно додано."
 
-#: seahub/group/views.py:852
+#: seahub/group/views.py:853
 #, python-format
 msgid "Failed to add, %s is not a valid email."
 msgstr "Не вдалося додати, %s неприпустимий email."
 
-#: seahub/group/views.py:862
+#: seahub/group/views.py:863
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "Не вдалося додати, %s не зареєстрований."
 
-#: seahub/group/views.py:894 seahub/group/views.py:911
-#: seahub/group/views.py:942
+#: seahub/group/views.py:895 seahub/group/views.py:912
+#: seahub/group/views.py:943
 msgid "Operation succeeded."
 msgstr "Операція виконана успішно."
 
-#: seahub/group/views.py:944
+#: seahub/group/views.py:945
 #, python-format
 msgid "Failed：%s"
 msgstr "Не вдалося：%s"
 
-#: seahub/group/views.py:974
+#: seahub/group/views.py:975
 msgid "Error: wrong group id"
 msgstr "Помилка: невірний ідентифікатор групи"
 
-#: seahub/group/views.py:980
+#: seahub/group/views.py:981
 msgid "Error: the group does not exist."
 msgstr "Помилка: група не існує."
 
-#: seahub/group/views.py:1013
+#: seahub/group/views.py:1014
 #, python-format
 msgid "Successfully posted to %(groups)s."
 msgstr "Успішно розміщений у %(groups)s."
 
-#: seahub/group/views.py:1016
+#: seahub/group/views.py:1017
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "Помилка: ви не учасник групи %s."
 
-#: seahub/group/views.py:1028
+#: seahub/group/views.py:1029
 msgid "Error: the library does not exist."
 msgstr "Помилка: бібліотека не існує."
 
-#: seahub/group/views.py:1031
+#: seahub/group/views.py:1032
 msgid "Error: no path."
 msgstr "Помилка: невірний шлях."
 
-#: seahub/group/views.py:1069
+#: seahub/group/views.py:1070
 msgid "Failed to create: the group does not exist."
 msgstr "Неможливо створити: група не існує."
 
-#: seahub/group/views.py:1074
+#: seahub/group/views.py:1075
 msgid "Failed to create: you are not in the group."
 msgstr "Неможливо створити: ви не в групі."
 
-#: seahub/group/views.py:1102 seahub/group/views.py:1124
-#: seahub/group/views.py:1528 seahub/views/wiki.py:149
+#: seahub/group/views.py:1103 seahub/group/views.py:1125
+#: seahub/group/views.py:1529 seahub/views/wiki.py:149
 msgid "Failed to create"
 msgstr "Неможливо створити"
 
-#: seahub/group/views.py:1109 seahub/group/views.py:1130
-#: seahub/group/views.py:1534
+#: seahub/group/views.py:1110 seahub/group/views.py:1131
+#: seahub/group/views.py:1535
 msgid "Failed to create: internal error."
 msgstr "Неможливо створити: внутрішня помилка."
 
-#: seahub/group/views.py:1153
+#: seahub/group/views.py:1154
 msgid "You are already in the group."
 msgstr "Ви вже в групі."
 
-#: seahub/group/views.py:1168
+#: seahub/group/views.py:1169
 msgid "Sent successfully, the group admin will handle it."
 msgstr "Успішно відправлено на розгляд адміністрації."
 
-#: seahub/group/views.py:1241
+#: seahub/group/views.py:1242
 msgid "Discussion is required."
 msgstr "Обговорення потрібно."
 
-#: seahub/group/views.py:1344 seahub/views/__init__.py:595
-#: seahub/views/ajax.py:1198 seahub/views/file.py:309 seahub/views/file.py:631
-#: seahub/views/file.py:725
+#: seahub/group/views.py:1345 seahub/views/__init__.py:629
+#: seahub/views/ajax.py:1182 seahub/views/file.py:310 seahub/views/file.py:632
+#: seahub/views/file.py:763
 msgid "File does not exist"
 msgstr "Файл не існує"
 
-#: seahub/group/views.py:1380
+#: seahub/group/views.py:1381
 msgid "Successfully enable \"Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/group/views.py:1385
+#: seahub/group/views.py:1386
 msgid "Successfully disable \"Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/group/views.py:1424 seahub/group/views.py:1596
+#: seahub/group/views.py:1425 seahub/group/views.py:1597
 #: seahub/views/wiki.py:60 seahub/views/wiki.py:205
 msgid "Failed to create wiki page. Please retry later."
 msgstr "Не вдалося створити wiki-сторінку. Повторіть спробу пізніше."
 
-#: seahub/group/views.py:1479 seahub/views/__init__.py:589
-#: seahub/views/ajax.py:1682 seahub/views/ajax.py:1754
+#: seahub/group/views.py:1480 seahub/views/__init__.py:623
+#: seahub/views/ajax.py:1714 seahub/views/ajax.py:1778
 #: seahub/views/wiki.py:109
 msgid "Internal Server Error"
 msgstr "Внутрішня помилка сервера"
 
-#: seahub/group/views.py:1481 seahub/views/wiki.py:111
+#: seahub/group/views.py:1482 seahub/views/wiki.py:111
 msgid "Wiki does not exists."
 msgstr "Файл wiki не існує"
 
-#: seahub/group/views.py:1541 seahub/group/views.py:1566
+#: seahub/group/views.py:1542 seahub/group/views.py:1567
 #: seahub/views/wiki.py:156 seahub/views/wiki.py:179
 msgid "Failed to create home page. Please retry later"
 msgstr "Не вдалося створити домашню сторінку. Повторіть спробу пізніше."
 
-#: seahub/group/views.py:1557 seahub/views/wiki.py:170
+#: seahub/group/views.py:1558 seahub/views/wiki.py:170
 msgid "Failed to set wiki library."
 msgstr "Невдало встановлено wiki бібліотеку."
 
-#: seahub/group/views.py:1586 seahub/group/views.py:1612
-#: seahub/group/views.py:1630 seahub/views/wiki.py:195
+#: seahub/group/views.py:1587 seahub/group/views.py:1613
+#: seahub/group/views.py:1631 seahub/views/wiki.py:195
 #: seahub/views/wiki.py:218 seahub/views/wiki.py:233
 msgid "Wiki is not found."
 msgstr "Wiki не знайдена."
 
-#: seahub/group/views.py:1593 seahub/views/wiki.py:202
+#: seahub/group/views.py:1594 seahub/views/wiki.py:202
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "Сторінка \"%s\" вже існує."
 
-#: seahub/group/views.py:1635
+#: seahub/group/views.py:1636
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "Успішно видалене \"%s\"."
 
-#: seahub/group/views.py:1637
+#: seahub/group/views.py:1638
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "Помилка при видалені \"%s\". Будь ласка, повторіть пізніше."
@@ -1469,15 +1483,16 @@ msgstr "Значення не може бути порожнім і має бу�
 #: seahub/message/templates/message/user_msg_list.html:22
 #: seahub/message/templates/message/user_msg_list.html:34
 #: seahub/profile/templates/profile/set_profile.html:130
-#: seahub/templates/activities.html:26 seahub/templates/file_edit.html:99
-#: seahub/templates/file_edit.html:246 seahub/templates/myhome.html:61
+#: seahub/templates/activities.html:26 seahub/templates/file_edit.html:100
+#: seahub/templates/file_edit.html:247 seahub/templates/myhome.html:61
 #: seahub/templates/repo.html:146 seahub/templates/repo.html.py:170
 #: seahub/templates/repo.html:191 seahub/templates/repo.html.py:198
-#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:255
-#: seahub/templates/shared_file_view.html:53
-#: seahub/templates/view_shared_upload_link.html:86
-#: seahub/templates/snippets/file_share_popup.html:61
-#: seahub/templates/snippets/file_share_popup.html:97
+#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:251
+#: seahub/templates/repo_recycle_view.html:112
+#: seahub/templates/shared_file_view.html:55
+#: seahub/templates/view_shared_upload_link.html:81
+#: seahub/templates/snippets/file_share_popup.html:62
+#: seahub/templates/snippets/file_share_popup.html:98
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
 #: seahub/templates/wiki/personal_wiki.html:57
 msgid "Cancel"
@@ -1518,8 +1533,8 @@ msgstr "Файли"
 #: seahub/group/templates/group/group_base.html:36
 #: seahub/group/templates/group/group_manage.html:10
 #: seahub/group/templates/group/group_members.html:8
-#: seahub/templates/pub_base.html:14 seahub/templates/pubuser.html:16
-#: seahub/templates/sysadmin/sys_org_info.html:43
+#: seahub/templates/pub_base.html:14
+#: seahub/templates/sysadmin/sys_org_info.html:45
 msgid "Members"
 msgstr "Учасники"
 
@@ -1550,7 +1565,7 @@ msgstr "Після авторизації Ви можете брати учас�
 
 #: seahub/group/templates/group/group_discuss.html:126
 #: seahub/message/templates/message/user_msg_list.html:82
-#: seahub/templates/pubuser.html:36 seahub/templates/repo_history.html:54
+#: seahub/templates/pubuser.html:49 seahub/templates/repo_history.html:54
 #: seahub/templates/repo_view_snapshot.html:51
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/admin_paginator.html:3
@@ -1562,7 +1577,7 @@ msgstr "Назад"
 
 #: seahub/group/templates/group/group_discuss.html:136
 #: seahub/message/templates/message/user_msg_list.html:92
-#: seahub/templates/pubuser.html:46 seahub/templates/repo_history.html:57
+#: seahub/templates/pubuser.html:59 seahub/templates/repo_history.html:57
 #: seahub/templates/repo_view_snapshot.html:54
 #: seahub/templates/view_file_pdf.html:30
 #: seahub/templates/snippets/admin_paginator.html:6
@@ -1614,7 +1629,7 @@ msgstr "Не вдалося видалити: "
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:216
 #: seahub/message/templates/message/user_msg_list.html:252
-#: seahub/templates/repo.html:832 seahub/templates/repo.html.py:1754
+#: seahub/templates/repo.html:876 seahub/templates/repo.html.py:1809
 msgid "Failed."
 msgstr "Невдало."
 
@@ -1725,7 +1740,7 @@ msgstr "Бібліотеки із спільним доступом і з пра
 #: seahub/share/templates/share/links.html:57
 #: seahub/share/templates/share/priv_shared_files.html:23
 #: seahub/share/templates/share/priv_shared_files.html:57
-#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:240
+#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:241
 #: seahub/templates/starred.html:14
 msgid "Library"
 msgstr "Бібліотека"
@@ -1754,11 +1769,11 @@ msgstr "Деталі"
 
 #: seahub/group/templates/group/group_info.html:109
 #: seahub/group/templates/group/new_msg_reply.html:76
-#: seahub/templates/pubuser.html:51 seahub/templates/repo_history.html:36
+#: seahub/templates/pubuser.html:65 seahub/templates/repo_history.html:36
 #: seahub/templates/repo_view_snapshot.html:29
 #: seahub/templates/sysadmin/sys_list_orphan.html:23
 #: seahub/templates/sysadmin/sys_list_system.html:36
-#: seahub/templates/sysadmin/sys_org_info.html:79
+#: seahub/templates/sysadmin/sys_org_info.html:117
 #: seahub/templates/sysadmin/sys_repo_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:82
 #: seahub/templates/sysadmin/userinfo.html:106
@@ -1775,17 +1790,17 @@ msgid "Unknown"
 msgstr "Не визначено"
 
 #: seahub/group/templates/group/group_info.html:129
-#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:240
+#: seahub/templates/activities.html:19 seahub/templates/file_edit.html:241
 msgid "is encrypted"
 msgstr "зашифровано"
 
 #: seahub/group/templates/group/group_info.html:131
-#: seahub/templates/activities.html:21 seahub/templates/file_edit.html:241
+#: seahub/templates/activities.html:21 seahub/templates/file_edit.html:242
 msgid "Password："
 msgstr "Пароль: "
 
 #: seahub/group/templates/group/group_info.html:133
-#: seahub/templates/activities.html:23 seahub/templates/file_edit.html:243
+#: seahub/templates/activities.html:23 seahub/templates/file_edit.html:244
 msgid "The password will be kept in the server for only 1 hour."
 msgstr "Пароль буде зберігатися на сервері протягом 1 години."
 
@@ -1946,7 +1961,7 @@ msgstr "Вихід"
 
 #: seahub/group/templates/group/group_members.html:22
 #: seahub/profile/templates/profile/user_profile.html:28
-#: seahub/templates/pubuser.html:27
+#: seahub/templates/pubuser.html:39
 msgid "Add to Contacts"
 msgstr "Додати в контакти"
 
@@ -1969,7 +1984,6 @@ msgstr "Ім'я"
 #: seahub/group/templates/group/group_pubinfo.html:14
 #: seahub/group/templates/group/groups_right_panel.html:15
 #: seahub/templates/pubgrp.html:24
-#: seahub/templates/sysadmin/sys_org_info.html:72
 msgid "Creator: "
 msgstr "Автор: "
 
@@ -2141,7 +2155,6 @@ msgstr "Нова група"
 
 #: seahub/group/templates/group/groups_right_panel.html:16
 #: seahub/templates/pubgrp.html:25
-#: seahub/templates/sysadmin/sys_org_info.html:73
 msgid "Time: "
 msgstr "Час: "
 
@@ -2496,13 +2509,13 @@ msgid "New Message"
 msgstr "Нове повідомлення"
 
 #: seahub/message/templates/message/all_msg_list.html:23
-#: seahub/notifications/templates/notifications/notice_email.html:21
+#: seahub/notifications/templates/notifications/notice_email.html:19
 #: seahub/notifications/templates/notifications/user_notification_list.html:23
 msgid "Message"
 msgstr "Повідомлення"
 
 #: seahub/message/templates/message/all_msg_list.html:24
-#: seahub/notifications/templates/notifications/notice_email.html:22
+#: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:24
 #: seahub/templates/file_revisions.html:25
 #: seahub/templates/repo_history.html:21
@@ -2525,61 +2538,62 @@ msgstr "спочатку виберіть контакти"
 msgid "Send a message..."
 msgstr "Надіслати повідомлення..."
 
-#: seahub/notifications/models.py:489
+#: seahub/notifications/models.py:491
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your "
 "folder <a href='%(folder_link)s'>%(folder)s</a>"
 msgstr "Файл <a href='%(file_link)s'>%(file_name)s</a> було завантажено до вашого каталогу <a href='%(folder_link)s'>%(folder)s</a>"
 
-#: seahub/notifications/models.py:512
+#: seahub/notifications/models.py:514
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
 msgstr "%(user)s надав вам доступ до бібліотеки <a href='%(href)s'>%(repo_name)s</a>."
 
-#: seahub/notifications/models.py:530
+#: seahub/notifications/models.py:532
 #, python-format
 msgid ""
 "%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to "
 "you."
 msgstr "%(user)s надав вам доступ до файла <a href='%(href)s'>%(file_name)s</a>."
 
-#: seahub/notifications/models.py:545 seahub/notifications/models.py:565
-#: seahub/notifications/models.py:582 seahub/notifications/models.py:612
-#: seahub/notifications/models.py:629 seahub/notifications/models.py:653
-#: seahub/utils/__init__.py:113 seahub/utils/__init__.py:872
+#: seahub/notifications/models.py:547 seahub/notifications/models.py:567
+#: seahub/notifications/models.py:584 seahub/notifications/models.py:614
+#: seahub/notifications/models.py:631 seahub/notifications/models.py:655
+#: seahub/notifications/models.py:672 seahub/utils/__init__.py:113
+#: seahub/utils/__init__.py:878
 msgid "Internal error"
 msgstr "Внутрішня помилка"
 
-#: seahub/notifications/models.py:550
+#: seahub/notifications/models.py:552
 #, python-format
 msgid "You have received a <a href='%(href)s'>new message</a> from %(user)s."
 msgstr "Ви отримали <a href='%(href)s'>нове повідомлення</a> від %(user)s."
 
-#: seahub/notifications/models.py:593
+#: seahub/notifications/models.py:595
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has a new discussion."
 msgstr "<a href='%(href)s'>%(group_name)s</a> нове обговорення."
 
-#: seahub/notifications/models.py:597
+#: seahub/notifications/models.py:599
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>."
 msgstr "%(user)s створив нове обговорення в <a href='%(href)s'>%(group_name)s</a>."
 
-#: seahub/notifications/models.py:634
+#: seahub/notifications/models.py:636
 #, python-format
 msgid "One <a href='%(href)s'>group discussion</a> has a new reply."
 msgstr "Одна з <a href='%(href)s'>групових дискусій</a> має нову відповідь."
 
-#: seahub/notifications/models.py:638
+#: seahub/notifications/models.py:640
 #, python-format
 msgid "%(user)s replied the <a href='%(href)s'>group discussion</a>."
 msgstr "%(user)s відповів <a href='%(href)s'>група дискусії</a>."
 
-#: seahub/notifications/models.py:677
+#: seahub/notifications/models.py:696
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -2591,18 +2605,18 @@ msgstr "Користувач <a href='%(user_profile)s'>%(username)s</a> зап�
 msgid "Successfully cleared all notices."
 msgstr "Всі записи успішно видалені."
 
-#: seahub/notifications/management/commands/send_notices.py:29
-#: seahub/notifications/management/commands/send_notices.py:222
+#: seahub/notifications/management/commands/send_notices.py:30
+#: seahub/notifications/management/commands/send_notices.py:248
 #, python-format
 msgid "New notice on %s"
 msgstr "Новий запис на  %s"
 
-#: seahub/notifications/templates/notifications/notice_email.html:8
+#: seahub/notifications/templates/notifications/notice_email.html:7
 #, python-format
 msgid "Hi, %(name)s"
 msgstr "Привіт, %(name)s"
 
-#: seahub/notifications/templates/notifications/notice_email.html:11
+#: seahub/notifications/templates/notifications/notice_email.html:9
 #, python-format
 msgid ""
 "\n"
@@ -2614,7 +2628,7 @@ msgstr[0] "\nВи маєте  %(num)s  нове повідомлення на %(
 msgstr[1] "\nВи маєте %(num)s нових повідомлень на %(site_name)s:\n"
 msgstr[2] "\nВи маєте %(num)s нових повідомлень на %(site_name)s:\n"
 
-#: seahub/notifications/templates/notifications/notice_email.html:28
+#: seahub/notifications/templates/notifications/notice_email.html:27
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a "
@@ -2628,44 +2642,44 @@ msgid ""
 "discussion</a>"
 msgstr "%(user)s відповів Вам  <a href=\"%(url_base)s%(reply_url)s\">групова дискусія</a>"
 
-#: seahub/notifications/templates/notifications/notice_email.html:38
+#: seahub/notifications/templates/notifications/notice_email.html:44
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
 msgstr "%(user)s надав Вам в спільне користування бібліотеку <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a>."
 
-#: seahub/notifications/templates/notifications/notice_email.html:43
+#: seahub/notifications/templates/notifications/notice_email.html:47
 #, python-format
 msgid ""
 "%(user)s has shared a file named <a "
 "href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> to you."
 msgstr "%(user)s надав Вам у спільнє використання файл <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a>."
 
-#: seahub/notifications/templates/notifications/notice_email.html:48
+#: seahub/notifications/templates/notifications/notice_email.html:50
 #, python-format
 msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
 msgstr "Ви отримали <a href=\"%(url_base)s%(msg_url)s\">нове повідомлення</a> від %(user)s."
 
-#: seahub/notifications/templates/notifications/notice_email.html:53
+#: seahub/notifications/templates/notifications/notice_email.html:56
 #, python-format
 msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
 "uploaded to your folder <a "
-"href=\"%(url_base)s%(folder_link)s\">%(folder_name)s</a>."
-msgstr "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is uploaded to your folder <a href=\"%(url_base)s%(folder_link)s\">%(folder_name)s</a>."
+"href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
+msgstr ""
 
-#: seahub/notifications/templates/notifications/notice_email.html:58
+#: seahub/notifications/templates/notifications/notice_email.html:59
 #, python-format
 msgid ""
-"User <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> has asked to "
-"join group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, "
-"verification message: %(msg)s."
-msgstr "Користувач <a href=\"%(url_base)s%(user_url)s\">%(user_name)s</a> попросив приєднатися до групи <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, Повідомлення перевірки: %(msg)s."
+"User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
+"group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, verification "
+"message: %(msg)s"
+msgstr ""
 
-#: seahub/notifications/templates/notifications/notice_email.html:67
+#: seahub/notifications/templates/notifications/notice_email.html:68
 msgid "Go check out at the following page:"
 msgstr "Перейдіть до наступної сторінки для перевіки"
 
@@ -2749,27 +2763,31 @@ msgid ""
 "browsers. We advise you to use the latest version of Chrome or Firefox."
 msgstr "Підказка: останній метод більш безпечний, але він може не підтримуватися деякими браузерами. Ми радимо вам використовувати актуальну версію Chrome або Firefox."
 
-#: seahub/profile/views.py:36
+#: seahub/profile/forms.py:16
+msgid "Nickname should not include ' / '"
+msgstr ""
+
+#: seahub/profile/views.py:37
 msgid "Successfully edited profile."
 msgstr "Профіль успішно змінено."
 
-#: seahub/profile/views.py:42
+#: seahub/profile/views.py:43
 msgid "Failed to edit profile"
 msgstr "Помилка редагування профілю"
 
-#: seahub/profile/views.py:113 seahub/profile/views.py:149
+#: seahub/profile/views.py:115 seahub/profile/views.py:151
 msgid "Has not accepted invitation yet"
 msgstr "Не прийняв запрошення ще"
 
-#: seahub/profile/views.py:165
+#: seahub/profile/views.py:167
 msgid "Demo account can not be deleted."
 msgstr "Демонстраційний обліковий запис не може бути видалений."
 
-#: seahub/profile/views.py:191
+#: seahub/profile/views.py:193
 msgid "Failed to set default library."
 msgstr "Не вдалося призначити бібліотеку за замовчанням."
 
-#: seahub/profile/views.py:196
+#: seahub/profile/views.py:198
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" успішно призначена вашою бібліотекою за замовчанням."
@@ -2923,13 +2941,13 @@ msgid "Self-introduction"
 msgstr "Про себе"
 
 #: seahub/profile/templates/profile/user_profile.html:48
-#: seahub/templates/registration/registration_form.html:28
+#: seahub/templates/registration/registration_form.html:30
 #: seahub/templates/sysadmin/userinfo.html:23
 msgid "Department"
 msgstr "Відділ:"
 
 #: seahub/profile/templates/profile/user_profile.html:51
-#: seahub/templates/registration/registration_form.html:30
+#: seahub/templates/registration/registration_form.html:32
 #: seahub/templates/sysadmin/userinfo.html:26
 msgid "Telephone"
 msgstr "Телефон:"
@@ -3032,9 +3050,9 @@ msgid "all members"
 msgstr "усі учасники"
 
 #: seahub/share/views.py:720 seahub/share/views.py:1074
-#: seahub/views/__init__.py:805 seahub/views/__init__.py:1275
-#: seahub/views/__init__.py:1310 seahub/views/ajax.py:1001
-#: seahub/views/ajax.py:1015 seahub/views/file.py:839
+#: seahub/views/__init__.py:841 seahub/views/__init__.py:1310
+#: seahub/views/__init__.py:1353 seahub/views/ajax.py:979
+#: seahub/views/ajax.py:999 seahub/views/file.py:877
 msgid "Invalid arguments"
 msgstr "Неприпустимі аргументи"
 
@@ -3107,10 +3125,10 @@ msgstr "Ви не маєте повноважень для надання у с�
 msgid "You don't have permission to save %s."
 msgstr "У вас немає дозволу на доступ до %s."
 
-#: seahub/share/views.py:1090 seahub/views/ajax.py:162
-#: seahub/views/ajax.py:382 seahub/views/ajax.py:468 seahub/views/ajax.py:606
-#: seahub/views/ajax.py:630 seahub/views/ajax.py:797 seahub/views/ajax.py:822
-#: seahub/views/file.py:824
+#: seahub/share/views.py:1090 seahub/views/__init__.py:403
+#: seahub/views/ajax.py:163 seahub/views/ajax.py:390 seahub/views/ajax.py:476
+#: seahub/views/ajax.py:614 seahub/views/ajax.py:638 seahub/views/ajax.py:805
+#: seahub/views/ajax.py:830 seahub/views/file.py:862
 msgid "Permission denied"
 msgstr "Доступ заборонено"
 
@@ -3148,8 +3166,7 @@ msgstr "Відвідування"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:613
-#: seahub/templates/repo.html.py:691
+#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:611
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "Перегляд"
@@ -3211,12 +3228,14 @@ msgstr "Ви можете відкрити спільний доступ до о
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:94
 #: seahub/share/templates/share/repos.html:99
+#: seahub/templates/sysadmin/sys_org_info.html:216
 #: seahub/templates/sysadmin/useradmin_js.html:65
 msgid "Edit succeeded"
 msgstr "Редагування успішне."
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:101
 #: seahub/share/templates/share/repos.html:106
+#: seahub/templates/sysadmin/sys_org_info.html:224
 #: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit failed."
 msgstr "Редагування не успішне."
@@ -3421,7 +3440,7 @@ msgstr "Успішно розсинхронізовано."
 #: seahub/templates/history_file_view.html:63
 #: seahub/templates/history_file_view.html:77 seahub/templates/repo.html:27
 #: seahub/templates/shared_file_view.html:36
-#: seahub/templates/shared_file_view.html:63
+#: seahub/templates/shared_file_view.html:65
 #: seahub/templates/view_file_base.html:104
 #: seahub/templates/view_file_base.html:190
 #: seahub/templates/view_history_file.html:34
@@ -3433,326 +3452,327 @@ msgstr "Успішно розсинхронізовано."
 msgid "Download"
 msgstr "Завантажити"
 
-#: seahub/templates/file_edit.html:83
+#: seahub/templates/file_edit.html:84
 #: seahub/templates/repo_history_view.html:38
-#: seahub/templates/repo_recycle_view.html:16
+#: seahub/templates/repo_recycle_view.html:21
 #: seahub/templates/shared_file_view.html:17
 #: seahub/templates/view_shared_dir.html:13
 msgid "Current path: "
 msgstr "Поточний шлях: "
 
-#: seahub/templates/file_edit.html:93
+#: seahub/templates/file_edit.html:94
 msgid "Draft saved."
 msgstr "Чернетку збережено."
 
-#: seahub/templates/file_edit.html:95
+#: seahub/templates/file_edit.html:96
 msgid "Continue editing"
 msgstr "Продовжити редагування"
 
-#: seahub/templates/file_edit.html:96
+#: seahub/templates/file_edit.html:97
 msgid "Preview"
 msgstr "Попередній"
 
-#: seahub/templates/file_edit.html:122
+#: seahub/templates/file_edit.html:123
 msgid "Standard Syntax"
 msgstr "Стандартний синтаксис"
 
-#: seahub/templates/file_edit.html:126
+#: seahub/templates/file_edit.html:127
 msgid "Enter this"
 msgstr "Ввести це"
 
-#: seahub/templates/file_edit.html:127
+#: seahub/templates/file_edit.html:128
 msgid "To see this"
 msgstr "Щоб побачити це"
 
-#: seahub/templates/file_edit.html:130 seahub/templates/file_edit.html:131
+#: seahub/templates/file_edit.html:131 seahub/templates/file_edit.html:132
 msgid "bold"
 msgstr "напівжирний"
 
-#: seahub/templates/file_edit.html:130 seahub/templates/file_edit.html:131
-#: seahub/templates/file_edit.html:134 seahub/templates/file_edit.html:135
+#: seahub/templates/file_edit.html:131 seahub/templates/file_edit.html:132
+#: seahub/templates/file_edit.html:135 seahub/templates/file_edit.html:136
 msgid "text"
 msgstr "текст"
 
-#: seahub/templates/file_edit.html:134 seahub/templates/file_edit.html:135
+#: seahub/templates/file_edit.html:135 seahub/templates/file_edit.html:136
 msgid "italics"
 msgstr "курсив"
 
-#: seahub/templates/file_edit.html:138 seahub/templates/file_edit.html:141
+#: seahub/templates/file_edit.html:139 seahub/templates/file_edit.html:142
 msgid "Header"
 msgstr "Тема"
 
-#: seahub/templates/file_edit.html:145 seahub/templates/file_edit.html:147
+#: seahub/templates/file_edit.html:146 seahub/templates/file_edit.html:148
 msgid "Smaller header"
 msgstr "Маленький заголовок"
 
-#: seahub/templates/file_edit.html:150 seahub/templates/file_edit.html:151
+#: seahub/templates/file_edit.html:151 seahub/templates/file_edit.html:152
 msgid "Link something"
 msgstr "Посилання"
 
-#: seahub/templates/file_edit.html:154
+#: seahub/templates/file_edit.html:155
 msgid "alt text"
 msgstr "alt текст"
 
-#: seahub/templates/file_edit.html:158
+#: seahub/templates/file_edit.html:159
 msgid "Extended Syntax for Wiki"
 msgstr "Розширений синтаксис для Wiki"
 
-#: seahub/templates/file_edit.html:160
+#: seahub/templates/file_edit.html:161
 msgid "or"
 msgstr "або"
 
-#: seahub/templates/file_edit.html:160
+#: seahub/templates/file_edit.html:161
 msgid "internal link to another wiki page."
 msgstr "внутрішні посилання на інші Wiki сторінки."
 
-#: seahub/templates/file_edit.html:161
+#: seahub/templates/file_edit.html:162
 msgid "internal link to a picture at this-library/images/pic.jpg."
 msgstr "внутрішнє посилання на картину в this-library/images/pic.jpg."
 
-#: seahub/templates/file_edit.html:162
+#: seahub/templates/file_edit.html:163
 msgid "internal link to a file at this-library/folder/file.doc."
 msgstr "внутрішні посилання на файл у this-library/folder/file.doc."
 
-#: seahub/templates/file_edit.html:170
+#: seahub/templates/file_edit.html:171
 msgid "Font"
 msgstr "Шрифт"
 
-#: seahub/templates/file_edit.html:174
+#: seahub/templates/file_edit.html:175
 msgid "Font Size"
 msgstr "Розмір шрифта"
 
-#: seahub/templates/file_edit.html:176
+#: seahub/templates/file_edit.html:177
 msgid "Huge"
 msgstr "Великий"
 
-#: seahub/templates/file_edit.html:177
+#: seahub/templates/file_edit.html:178
 msgid "Normal"
 msgstr "Нормальний"
 
-#: seahub/templates/file_edit.html:178
+#: seahub/templates/file_edit.html:179
 msgid "Small"
 msgstr "маленький"
 
-#: seahub/templates/file_edit.html:182
+#: seahub/templates/file_edit.html:183
 msgid "Font Color"
 msgstr "Колір шрифту"
 
-#: seahub/templates/file_edit.html:184
+#: seahub/templates/file_edit.html:185
 msgid "defaut color"
 msgstr "колір за замовчуванням"
 
-#: seahub/templates/file_edit.html:196
+#: seahub/templates/file_edit.html:197
 msgid "Bold (Ctrl/Cmd+B)"
 msgstr "Жирний (Ctrl/Cmd+B)"
 
-#: seahub/templates/file_edit.html:197
+#: seahub/templates/file_edit.html:198
 msgid "Italic (Ctrl/Cmd+I)"
 msgstr "Курсив (Ctrl/Cmd+I)"
 
-#: seahub/templates/file_edit.html:198
+#: seahub/templates/file_edit.html:199
 msgid "Strikethrough"
 msgstr "Закреслений"
 
-#: seahub/templates/file_edit.html:199
+#: seahub/templates/file_edit.html:200
 msgid "Underline (Ctrl/Cmd+U)"
 msgstr "Підкреслений (Ctrl/Cmd+U)"
 
-#: seahub/templates/file_edit.html:200
+#: seahub/templates/file_edit.html:201
 msgid "Remove format"
 msgstr "Виключено"
 
-#: seahub/templates/file_edit.html:203
+#: seahub/templates/file_edit.html:204
 msgid "Bullet list"
 msgstr "Маркований список"
 
-#: seahub/templates/file_edit.html:204
+#: seahub/templates/file_edit.html:205
 msgid "Number list"
 msgstr "Пронумерований список"
 
-#: seahub/templates/file_edit.html:205
+#: seahub/templates/file_edit.html:206
 msgid "Reduce indent (Shift+Tab)"
 msgstr "Зменшити відступ (Shift+Tab)"
 
-#: seahub/templates/file_edit.html:206
+#: seahub/templates/file_edit.html:207
 msgid "Indent (Tab)"
 msgstr "Відступ (Tab)"
 
-#: seahub/templates/file_edit.html:209
+#: seahub/templates/file_edit.html:210
 msgid "Align Left (Ctrl/Cmd+L)"
 msgstr "Вирівняти по лівому краю (Ctrl/Cmd+L)"
 
-#: seahub/templates/file_edit.html:210
+#: seahub/templates/file_edit.html:211
 msgid "Center (Ctrl/Cmd+E)"
 msgstr "Вирівняти по центру (Ctrl/Cmd + E)"
 
-#: seahub/templates/file_edit.html:211
+#: seahub/templates/file_edit.html:212
 msgid "Align Right (Ctrl/Cmd+R)"
 msgstr "Вирівняти по правому краю (Ctrl/Cmd + R)"
 
-#: seahub/templates/file_edit.html:212
+#: seahub/templates/file_edit.html:213
 msgid "Justify (Ctrl/Cmd+J)"
 msgstr "Вирівняти по ширині (Ctrl/Cmd + J)"
 
-#: seahub/templates/file_edit.html:215
+#: seahub/templates/file_edit.html:216
 msgid "Hyperlink"
 msgstr "Гіперпосилання"
 
-#: seahub/templates/file_edit.html:218
+#: seahub/templates/file_edit.html:219
 msgid "Add"
 msgstr "Додати"
 
-#: seahub/templates/file_edit.html:220
+#: seahub/templates/file_edit.html:221
 msgid "Remove Hyperlink"
 msgstr "Видалити гіперпосилання"
 
-#: seahub/templates/file_edit.html:224
+#: seahub/templates/file_edit.html:225
 msgid "Insert picture (or just drag & drop)"
 msgstr "Вставити картинку (або просто перетягнути)"
 
-#: seahub/templates/file_edit.html:227
+#: seahub/templates/file_edit.html:228
 msgid "Undo (Ctrl/Cmd+Z)"
 msgstr "Відмінити (Ctrl/Cmd + Z)"
 
-#: seahub/templates/file_edit.html:228
+#: seahub/templates/file_edit.html:229
 msgid "Redo (Ctrl/Cmd+Y)"
 msgstr "Повернути (Ctrl/Cmd + Y)"
 
-#: seahub/templates/file_edit.html:251
+#: seahub/templates/file_edit.html:252
 msgid "Draft Available"
 msgstr "Чорновик доступний"
 
-#: seahub/templates/file_edit.html:252
+#: seahub/templates/file_edit.html:253
 msgid "There's a saved draft for this file, would you like to load it?"
 msgstr "Існує чорновик для цього файлу, ви хотіли б завантажити його?"
 
-#: seahub/templates/file_edit.html:253
+#: seahub/templates/file_edit.html:254
 msgid "Load"
 msgstr "Завантажити"
 
-#: seahub/templates/file_edit.html:254
+#: seahub/templates/file_edit.html:255
 msgid "Discard"
 msgstr "Відмовитись"
 
-#: seahub/templates/file_edit.html:267
+#: seahub/templates/file_edit.html:268
 msgid "Failed to save draft, exceeded max quota"
 msgstr "Збій збереження чорнетки, перевищено максимальну квоту"
 
-#: seahub/templates/file_edit.html:366
+#: seahub/templates/file_edit.html:367
 msgid "Draft successfully loaded"
 msgstr "Успішно додано."
 
-#: seahub/templates/file_edit.html:414
+#: seahub/templates/file_edit.html:415
 msgid "Strong <strong> Ctrl+B"
 msgstr "Жирний <strong> Ctrl+B"
 
-#: seahub/templates/file_edit.html:415
+#: seahub/templates/file_edit.html:416
 msgid "strong text"
 msgstr "жирний текст"
 
-#: seahub/templates/file_edit.html:417
+#: seahub/templates/file_edit.html:418
 msgid "Emphasis <em> Ctrl+I"
 msgstr "Виділити <em> Ctrl+I"
 
-#: seahub/templates/file_edit.html:418
+#: seahub/templates/file_edit.html:419
 msgid "emphasized text"
 msgstr "виділений текст"
 
-#: seahub/templates/file_edit.html:420
+#: seahub/templates/file_edit.html:421
 msgid "Hyperlink <a> Ctrl+L"
 msgstr "Гіперпосилання <a> Ctrl+L"
 
-#: seahub/templates/file_edit.html:421
+#: seahub/templates/file_edit.html:422
 msgid "enter link description here"
 msgstr "введіть опис посилання"
 
-#: seahub/templates/file_edit.html:422
+#: seahub/templates/file_edit.html:423
 msgid "Insert Hyperlink"
 msgstr "Вставити гіперпосилання"
 
-#: seahub/templates/file_edit.html:422 seahub/templates/file_edit.html:432
+#: seahub/templates/file_edit.html:423 seahub/templates/file_edit.html:433
 msgid "optional title"
 msgstr "додатковий опис"
 
-#: seahub/templates/file_edit.html:424
+#: seahub/templates/file_edit.html:425
 msgid "Blockquote <blockquote> Ctrl+Q"
 msgstr "Цитата <blockquote> Ctrl+Q"
 
-#: seahub/templates/file_edit.html:425
+#: seahub/templates/file_edit.html:426
 msgid "Blockquote"
 msgstr "Цитата"
 
-#: seahub/templates/file_edit.html:427
+#: seahub/templates/file_edit.html:428
 msgid "Code Sample <pre><code> Ctrl+K"
 msgstr "Код <pre><code> Ctrl+K"
 
-#: seahub/templates/file_edit.html:428
+#: seahub/templates/file_edit.html:429
 msgid "enter code here"
 msgstr "введіть код"
 
-#: seahub/templates/file_edit.html:430
+#: seahub/templates/file_edit.html:431
 msgid "Image <img> Ctrl+G"
 msgstr "Зображення <img> Ctrl+G"
 
-#: seahub/templates/file_edit.html:431
+#: seahub/templates/file_edit.html:432
 msgid "enter image description here"
 msgstr "введіть опис зображення"
 
-#: seahub/templates/file_edit.html:432
+#: seahub/templates/file_edit.html:433
 msgid "Insert Image"
 msgstr "Вставити зображення"
 
-#: seahub/templates/file_edit.html:434
+#: seahub/templates/file_edit.html:435
 msgid "Numbered List <ol> Ctrl+O"
 msgstr "Нумерований список <ol> Ctrl+O"
 
-#: seahub/templates/file_edit.html:435
+#: seahub/templates/file_edit.html:436
 msgid "Bulleted List <ul> Ctrl+U"
 msgstr "Маркований список <ul> Ctrl+U"
 
-#: seahub/templates/file_edit.html:436
+#: seahub/templates/file_edit.html:437
 msgid "List item"
 msgstr "Список"
 
-#: seahub/templates/file_edit.html:438
+#: seahub/templates/file_edit.html:439
 msgid "Heading <h1>/<h2> Ctrl+H"
 msgstr "Тема <h1>/<h2> Ctrl+H"
 
-#: seahub/templates/file_edit.html:439
+#: seahub/templates/file_edit.html:440
 msgid "Heading"
 msgstr "Тема"
 
-#: seahub/templates/file_edit.html:441
+#: seahub/templates/file_edit.html:442
 msgid "Horizontal Rule <hr> Ctrl+R"
 msgstr "Горизонтальна лінія <hr> Ctrl+R"
 
-#: seahub/templates/file_edit.html:442
+#: seahub/templates/file_edit.html:443
 msgid "Undo - Ctrl+Z"
 msgstr "Скасувати - Ctrl+Z"
 
-#: seahub/templates/file_edit.html:443
+#: seahub/templates/file_edit.html:444
 msgid "Redo - Ctrl+Y"
 msgstr "Повернути - Ctrl+Y"
 
-#: seahub/templates/file_edit.html:444
+#: seahub/templates/file_edit.html:445
 msgid "Redo - Ctrl+Shift+Z"
 msgstr "Повернути - Ctrl+Shift+Z"
 
-#: seahub/templates/file_edit.html:446
+#: seahub/templates/file_edit.html:447
 msgid "Editing Help"
 msgstr "Допомога"
 
-#: seahub/templates/file_edit.html:547
+#: seahub/templates/file_edit.html:548
 msgid "Submit failed. Please check the network."
 msgstr "Відіслати не вдалося. Будь ласка, перевірте роботу мережі."
 
-#: seahub/templates/file_edit.html:565
+#: seahub/templates/file_edit.html:566
 #: seahub/templates/snippets/repo_decrypt_js.html:11
 msgid "Password is required."
 msgstr "Потрібен пароль."
 
 #: seahub/templates/file_revisions.html:5 seahub/templates/repo_history.html:5
 #: seahub/templates/repo_settings.html:41
+#: seahub/templates/view_file_base.html:130
 #: seahub/templates/snippets/current_commit.html:15
 #: seahub/templates/snippets/repo_dirents.html:90
 msgid "History"
@@ -3774,7 +3794,7 @@ msgstr "Поточний шлях:"
 
 #: seahub/templates/file_revisions.html:27
 #: seahub/templates/repo_history_view.html:53
-#: seahub/templates/repo_recycle_view.html:55
+#: seahub/templates/repo_recycle_view.html:60
 #: seahub/templates/view_shared_dir.html:30
 #: seahub/templates/snippets/repo_dir_data.html:41
 msgid "Size"
@@ -3790,8 +3810,8 @@ msgid "(Renamed or moved from %(old_path)s)"
 msgstr "(Перейменовані або переміщені з %(old_path)s)"
 
 #: seahub/templates/file_revisions.html:55
-#: seahub/templates/repo_recycle_view.html:66
-#: seahub/templates/repo_recycle_view.html:83
+#: seahub/templates/repo_recycle_view.html:71
+#: seahub/templates/repo_recycle_view.html:88
 #: seahub/templates/repo_view_snapshot.html:43
 msgid "Restore"
 msgstr "Відновити"
@@ -3830,8 +3850,8 @@ msgid "Seafile"
 msgstr "Seafile"
 
 #: seahub/templates/footer.html:21
-msgid "Contact Us"
-msgstr "Зворотній зв'язок"
+msgid "About Us"
+msgstr ""
 
 #: seahub/templates/history_file_view.html:16
 #: seahub/templates/repo_view_snapshot.html:7
@@ -3854,14 +3874,14 @@ msgstr "До попередньої версії файлу"
 #: seahub/templates/history_file_view.html:30
 #: seahub/templates/history_file_view.html:41
 #: seahub/templates/repo_recycle_view.html:8
-#: seahub/templates/repo_recycle_view.html:17
+#: seahub/templates/repo_recycle_view.html:22
 #: seahub/templates/view_trash_file.html:6
 msgid "'s trash"
 msgstr "кошик"
 
 #: seahub/templates/history_file_view.html:31
 #: seahub/templates/repo_history.html:10
-#: seahub/templates/repo_recycle_view.html:9
+#: seahub/templates/repo_recycle_view.html:13
 #: seahub/templates/repo_settings.html:16
 #: seahub/templates/view_trash_file.html:7
 msgid "Back to Library"
@@ -3896,6 +3916,10 @@ msgstr "Спільний доступ"
 #: seahub/templates/home_base.html:36 seahub/templates/sysadmin/base.html:26
 msgid "Links"
 msgstr "Посилання"
+
+#: seahub/templates/i18n.html:6
+msgid "Add folder"
+msgstr ""
 
 #: seahub/templates/my_group_repos.html:6
 #: seahub/templates/snippets/bottom_bar.html:3
@@ -3940,12 +3964,12 @@ msgstr "Закрити"
 msgid "Choose a directory:"
 msgstr " Оберіть каталог:"
 
-#: seahub/templates/myhome.html:110
+#: seahub/templates/myhome.html:115
 #: seahub/templates/snippets/add_file_js.html:15
 msgid "You don't have any library at present"
 msgstr "Ви ще не позначили жодного файлу"
 
-#: seahub/templates/myhome.html:129
+#: seahub/templates/myhome.html:134
 msgid "Please choose a directory"
 msgstr " Будь ласка оберіть каталог"
 
@@ -3991,6 +4015,24 @@ msgstr "Ви можете створити публічну бібліотеку
 #: seahub/templates/pubuser.html:10
 msgid "Search members..."
 msgstr "Пошук учасників..."
+
+#: seahub/templates/pubuser.html:17
+msgid "Search Results"
+msgstr ""
+
+#: seahub/templates/pubuser.html:21
+#: seahub/templates/sysadmin/sys_useradmin.html:22
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:14
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
+msgid "Database"
+msgstr "База даних"
+
+#: seahub/templates/pubuser.html:23
+#: seahub/templates/sysadmin/sys_useradmin.html:24
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:16
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
+msgid "LDAP"
+msgstr "LDAP"
 
 #: seahub/templates/repo.html:23
 msgid "Size: "
@@ -4053,7 +4095,7 @@ msgid "File size should be smaller than %(max_file_size)s"
 msgstr "Розмір файлу повинен бути менше за %(max_file_size)s"
 
 #: seahub/templates/repo.html:96 seahub/templates/repo.html.py:132
-#: seahub/templates/repo.html:1737
+#: seahub/templates/repo.html:1794
 #: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "Збереження..."
@@ -4114,7 +4156,7 @@ msgstr "Поточна бібліотека"
 msgid "Other Libraries"
 msgstr "Інші бібліотеки"
 
-#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:51
+#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:53
 msgid "Please click and choose a directory."
 msgstr "Клікніть для вибору каталогу"
 
@@ -4129,43 +4171,43 @@ msgid ""
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr "Ця бібліотека зашифрована. Введіть пароль, якщо ви хочете її переглянути. Пароль буде зберігатися на сервері тільки протягом 1 години."
 
-#: seahub/templates/repo.html:246
-#: seahub/templates/view_shared_upload_link.html:77
+#: seahub/templates/repo.html:242
+#: seahub/templates/view_shared_upload_link.html:72
 msgid "File is too big"
 msgstr "Файл занадто великий"
 
-#: seahub/templates/repo.html:247
-#: seahub/templates/view_shared_upload_link.html:78
+#: seahub/templates/repo.html:243
+#: seahub/templates/view_shared_upload_link.html:73
 msgid "File is too small"
 msgstr "Файл занадто малий"
 
-#: seahub/templates/repo.html:248
-#: seahub/templates/view_shared_upload_link.html:79
+#: seahub/templates/repo.html:244
+#: seahub/templates/view_shared_upload_link.html:74
 msgid "Filetype not allowed"
 msgstr "Заборонений тип файлів"
 
-#: seahub/templates/repo.html:249
-#: seahub/templates/view_shared_upload_link.html:80
+#: seahub/templates/repo.html:245
+#: seahub/templates/view_shared_upload_link.html:75
 msgid "Max number of files exceeded"
 msgstr "Перевищення максимального числа файлів"
 
-#: seahub/templates/repo.html:250
-#: seahub/templates/view_shared_upload_link.html:81
+#: seahub/templates/repo.html:246
+#: seahub/templates/view_shared_upload_link.html:76
 msgid "Uploaded bytes exceed file size"
 msgstr "Перевищення ліміту розміру файлу"
 
-#: seahub/templates/repo.html:251
-#: seahub/templates/view_shared_upload_link.html:82
+#: seahub/templates/repo.html:247
+#: seahub/templates/view_shared_upload_link.html:77
 msgid "Empty file upload result"
 msgstr "Результат завантаження порожнього файлу"
 
-#: seahub/templates/repo.html:253
-#: seahub/templates/view_shared_upload_link.html:84 seahub/views/ajax.py:930
+#: seahub/templates/repo.html:249
+#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:932
 msgid "Error"
 msgstr "Помилка"
 
-#: seahub/templates/repo.html:254
-#: seahub/templates/view_shared_upload_link.html:85
+#: seahub/templates/repo.html:250
+#: seahub/templates/view_shared_upload_link.html:80
 msgid "Start"
 msgstr "Позначити"
 
@@ -4177,7 +4219,7 @@ msgstr "Видалити"
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Ви впевнені, що хочете видалити %s ?"
 
-#: seahub/templates/repo.html:373 seahub/templates/repo.html.py:556
+#: seahub/templates/repo.html:373 seahub/templates/repo.html.py:550
 msgid "Processing..."
 msgstr "Обробка ..."
 
@@ -4209,206 +4251,213 @@ msgstr "Перемістити вибрані каталоги/файли до:"
 msgid "Copy selected directories/files to:"
 msgstr "Копіювати вибрані каталоги/файли до:"
 
-#: seahub/templates/repo.html:545 seahub/templates/repo.html.py:1677
-#: seahub/views/ajax.py:636 seahub/views/ajax.py:828
+#: seahub/templates/repo.html:545 seahub/templates/repo.html.py:1745
+#: seahub/views/ajax.py:644 seahub/views/ajax.py:836
 msgid "Invalid destination path"
 msgstr "Невірний шлях призначення"
 
-#: seahub/templates/repo.html:600
+#: seahub/templates/repo.html:594
+#, python-format
+msgid "Successfully moved %(name)s."
+msgstr "Успішно переміщено %(name)s."
+
+#: seahub/templates/repo.html:596
+#, python-format
+msgid "Successfully moved %(name)s and 1 other item."
+msgstr ""
+
+#: seahub/templates/repo.html:598
 #, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Успішно переміщено %(name)s та %(amount)s інших позицій."
 
-#: seahub/templates/repo.html:602
+#: seahub/templates/repo.html:603
 #, python-format
-msgid "Successfully moved %(name)s."
-msgstr "Успішно переміщено %(name)s."
+msgid "Successfully copied %(name)s."
+msgstr "Успішно скопійовано %(name)s."
+
+#: seahub/templates/repo.html:605
+#, python-format
+msgid "Successfully copied %(name)s and 1 other item."
+msgstr ""
 
 #: seahub/templates/repo.html:607
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Успішно скопійовано %(name)s та %(amount)s інших позицій."
 
-#: seahub/templates/repo.html:609
-#, python-format
-msgid "Successfully copied %(name)s."
-msgstr "Успішно скопійовано %(name)s."
-
-#: seahub/templates/repo.html:621
+#: seahub/templates/repo.html:619
 #, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr "Внутрішня помилка. Не вдалося перемістити %(name)s та %(amount)s інших позицій.."
 
-#: seahub/templates/repo.html:623
+#: seahub/templates/repo.html:621
 #, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Внутрішня помилка. Не вдалося перемістити  %(name)s."
 
-#: seahub/templates/repo.html:627
+#: seahub/templates/repo.html:625
 #, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr "Внутрішня помилка. Не вдалося скопіювати %(name)s та %(amount)s інших позицій.."
 
-#: seahub/templates/repo.html:629
+#: seahub/templates/repo.html:627
 #, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Внутрішня помилка. Не вдалося скопіювати  %(name)s."
 
-#: seahub/templates/repo.html:650 seahub/templates/repo.html.py:1718
-msgid "Moving..."
-msgstr "Переміщення..."
-
-#: seahub/templates/repo.html:652 seahub/templates/repo.html.py:1720
-msgid "Copying..."
-msgstr "Копіювання..."
-
-#: seahub/templates/repo.html:679
+#: seahub/templates/repo.html:665
 #, python-format
-msgid "Successfully moved %(s_num)s items."
-msgstr "Успішно переміщено %(s_num)s позицій."
+msgid "Moving file %(index)s of %(total)s"
+msgstr ""
 
-#: seahub/templates/repo.html:681
+#: seahub/templates/repo.html:665
 #, python-format
-msgid "Failed to move %(f_num)s items."
-msgstr "Не вдалося перемістити %(f_num)s позицій."
+msgid "Copying file %(index)s of %(total)s"
+msgstr ""
 
-#: seahub/templates/repo.html:684
-#, python-format
-msgid "Successfully copied %(s_num)s items."
-msgstr "Успішно скопійовано %(s_num)s позицій."
+#: seahub/templates/repo.html:749 seahub/templates/repo.html.py:1809
+#: seahub/templates/repo.html:1836
+msgid "Canceled."
+msgstr "Скасовано."
 
-#: seahub/templates/repo.html:686
-#, python-format
-msgid "Failed to copy %(f_num)s items."
-msgstr "Не вдалося скопіювати %(f_num)s позицій."
-
-#: seahub/templates/repo.html:695 seahub/views/ajax.py:991
-msgid "Failed"
-msgstr "Невдало."
-
-#: seahub/templates/repo.html:769
+#: seahub/templates/repo.html:813
 msgid "Encrypting the file..."
 msgstr "Шифрування файлу..."
 
-#: seahub/templates/repo.html:791
+#: seahub/templates/repo.html:835
 msgid "Error when encrypting."
 msgstr "Помилка під час шифрування."
 
-#: seahub/templates/repo.html:798
+#: seahub/templates/repo.html:842
 #, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr "Шифрування, %(num)s% виконано."
 
-#: seahub/templates/repo.html:815
+#: seahub/templates/repo.html:859
 msgid "Uploading ..."
 msgstr "Завантаження ..."
 
-#: seahub/templates/repo.html:827 seahub/templates/repo.html.py:1148
+#: seahub/templates/repo.html:871 seahub/templates/repo.html.py:1207
 msgid "Done!"
 msgstr "Виконано!"
 
-#: seahub/templates/repo.html:914 seahub/templates/repo.html.py:1527
-#: seahub/templates/repo.html:1647
+#: seahub/templates/repo.html:962 seahub/templates/repo.html.py:1586
+#: seahub/templates/repo.html:1713
 #: seahub/templates/snippets/repo_dirents.html:51
 msgid "unstarred"
 msgstr "Зняти відмітку"
 
-#: seahub/templates/repo.html:1158
+#: seahub/templates/repo.html:1009
+msgid "Failed to get upload url"
+msgstr ""
+
+#: seahub/templates/repo.html:1028
+msgid "Error. Please try later."
+msgstr ""
+
+#: seahub/templates/repo.html:1217
 msgid "Downloading..."
 msgstr "Завантаження ..."
 
-#: seahub/templates/repo.html:1191
+#: seahub/templates/repo.html:1250
 #, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr "Завантаження, %(num)s% виконано."
 
-#: seahub/templates/repo.html:1212
+#: seahub/templates/repo.html:1271
 msgid "Decrypting..."
 msgstr "Розшифрувати ..."
 
-#: seahub/templates/repo.html:1229
+#: seahub/templates/repo.html:1288
 #, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr "Розшифрування, %(num)s% виконано."
 
-#: seahub/templates/repo.html:1332
+#: seahub/templates/repo.html:1391
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "Успішно видалено %(name)s"
 
-#: seahub/templates/repo.html:1354
+#: seahub/templates/repo.html:1413
 msgid "Rename File"
 msgstr "Перейменувати файл"
 
-#: seahub/templates/repo.html:1356
+#: seahub/templates/repo.html:1415
 msgid "Rename Directory"
 msgstr "Перейменувати каталог"
 
-#: seahub/templates/repo.html:1374
+#: seahub/templates/repo.html:1433
 msgid "Copy File"
 msgstr "Копіювати"
 
-#: seahub/templates/repo.html:1376
+#: seahub/templates/repo.html:1435
 msgid "Move File"
 msgstr "Перемістити"
 
-#: seahub/templates/repo.html:1378
+#: seahub/templates/repo.html:1437
 msgid "Copy Directory"
 msgstr "Каталог"
 
-#: seahub/templates/repo.html:1380
+#: seahub/templates/repo.html:1439
 msgid "Move Directory"
 msgstr "Переміщено каталогів"
 
-#: seahub/templates/repo.html:1385
+#: seahub/templates/repo.html:1444
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "Скопійовано %(name)s до:"
 
-#: seahub/templates/repo.html:1388
+#: seahub/templates/repo.html:1447
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "Переміщено %(name)s до:"
 
-#: seahub/templates/repo.html:1411
+#: seahub/templates/repo.html:1470
 msgid "Directory download is not supported in this library."
 msgstr "Завантаження каталогу не підтримується у цій бібліотеці."
 
-#: seahub/templates/repo.html:1529
+#: seahub/templates/repo.html:1588
 #: seahub/templates/snippets/repo_dirents.html:49
 msgid "starred"
 msgstr "Позначити"
 
-#: seahub/templates/repo.html:1575 seahub/templates/repo.html.py:1615
+#: seahub/templates/repo.html:1634 seahub/templates/repo.html.py:1674
 msgid "It is required."
 msgstr "Потрібен Email."
 
-#: seahub/templates/repo.html:1581
+#: seahub/templates/repo.html:1640
 msgid "Only an extension there, please input a name."
 msgstr "Тут тільки розширення, будь ласка, введіть значення."
 
-#: seahub/templates/repo.html:1591
+#: seahub/templates/repo.html:1650
 msgid "Creating..."
 msgstr "Витяг ..."
 
-#: seahub/templates/repo.html:1619
+#: seahub/templates/repo.html:1678
 msgid "You have not renamed it."
 msgstr "Ви ще не завантажили"
 
-#: seahub/templates/repo.html:1656
+#: seahub/templates/repo.html:1724
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Успішно перейменовано з %(old_name)s до %(new_name)s"
 
-#: seahub/templates/repo.html:1756 seahub/templates/repo.html.py:1784
-msgid "Canceled."
-msgstr "Скасовано."
+#: seahub/templates/repo.html:1778
+#, python-format
+msgid "Moving %(name)s"
+msgstr ""
 
-#: seahub/templates/repo.html:1871
+#: seahub/templates/repo.html:1778
+#, python-format
+msgid "Copying %(name)s"
+msgstr ""
+
+#: seahub/templates/repo.html:1938
 msgid "Please select at least one contact."
 msgstr "Будь ласка, оберіть принаймні один контакт."
 
-#: seahub/templates/repo.html:1982
+#: seahub/templates/repo.html:2049
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "Будь ласка, введіть emails, або назви груп, або що небудь."
@@ -4452,28 +4501,50 @@ msgid "Can't view this library"
 msgstr "Не вдається переглянути цю бібліотеку"
 
 #: seahub/templates/repo_history_view.html:58
-#: seahub/templates/repo_recycle_view.html:61
+#: seahub/templates/repo_recycle_view.html:66
 msgid "Directory"
 msgstr "Каталог"
 
-#: seahub/templates/repo_recycle_view.html:32
-#: seahub/templates/repo_recycle_view.html:34
-msgid "a week"
-msgstr "за тиждень"
+#: seahub/templates/repo_recycle_view.html:11
+#: seahub/templates/repo_recycle_view.html:103
+msgid "Clean"
+msgstr ""
 
 #: seahub/templates/repo_recycle_view.html:37
 #: seahub/templates/repo_recycle_view.html:39
-msgid "a month"
-msgstr "за місяць"
+msgid "a week"
+msgstr "за тиждень"
 
 #: seahub/templates/repo_recycle_view.html:42
 #: seahub/templates/repo_recycle_view.html:44
+msgid "a month"
+msgstr "за місяць"
+
+#: seahub/templates/repo_recycle_view.html:47
+#: seahub/templates/repo_recycle_view.html:49
+#: seahub/templates/repo_recycle_view.html:109
 msgid "all"
 msgstr "все"
 
-#: seahub/templates/repo_recycle_view.html:54
+#: seahub/templates/repo_recycle_view.html:59
 msgid "Delete Time"
 msgstr "Видалити час"
+
+#: seahub/templates/repo_recycle_view.html:104
+msgid "Clear files in trash and history："
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:106
+msgid "3 days ago"
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:107
+msgid "1 week ago"
+msgstr ""
+
+#: seahub/templates/repo_recycle_view.html:108
+msgid "1 month ago"
+msgstr ""
 
 #: seahub/templates/repo_settings.html:20
 #: seahub/templates/repo_settings.html:54
@@ -4591,7 +4662,7 @@ msgstr "Зберегти до..."
 msgid "Save To:"
 msgstr "Записати до:"
 
-#: seahub/templates/shared_file_view.html:67
+#: seahub/templates/shared_file_view.html:69
 #: seahub/templates/view_shared_dir.html:74
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "File download is disabled: the share link traffic of owner is used up.\nЗавантаження файлу відключено:  трафік для загального ресурсу власником вичерпано."
@@ -4703,8 +4774,22 @@ msgid "discuss"
 msgstr "дискусія"
 
 #: seahub/templates/view_file_base.html:124
+msgid "Go to a group"
+msgstr ""
+
+#: seahub/templates/view_file_base.html:124
 msgid "group"
 msgstr "група"
+
+#: seahub/templates/view_file_base.html:127
+#: seahub/templates/snippets/my_owned_repos.html:52
+#: seahub/templates/snippets/my_owned_repos.html:99
+#: seahub/templates/snippets/my_owned_repos.html:153
+#: seahub/templates/snippets/repo_dir_data.html:24
+#: seahub/templates/snippets/repo_dirents.html:26
+#: seahub/templates/snippets/repo_dirents.html:80
+msgid "Share"
+msgstr "Доступ"
 
 #: seahub/templates/view_file_base.html:127
 msgid "share"
@@ -4724,16 +4809,20 @@ msgstr "обговорення"
 msgid "close"
 msgstr "закрито"
 
-#: seahub/templates/view_file_base.html:244
+#: seahub/templates/view_file_base.html:242
+msgid "Back to top"
+msgstr ""
+
+#: seahub/templates/view_file_base.html:242
 msgid "top"
 msgstr "top"
 
-#: seahub/templates/view_file_base.html:299
+#: seahub/templates/view_file_base.html:296
 #: seahub/templates/snippets/bottom_bar.html:66
 msgid "Please select at least 1 group."
 msgstr "Будь ласка, виберіть принаймні, одну групу."
 
-#: seahub/templates/view_file_base.html:303
+#: seahub/templates/view_file_base.html:300
 #: seahub/templates/snippets/bottom_bar.html:71
 msgid "Please input a discussion."
 msgstr "Будь ласка, почніть обговорення."
@@ -4851,7 +4940,7 @@ msgid "Remember me for %(remember_days)s days "
 msgstr "Пам’ятати мене %(remember_days)s діб"
 
 #: seahub/templates/registration/login.html:62
-#: seahub/templates/registration/registration_form.html:6
+#: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "Реєстрація"
 
@@ -4860,15 +4949,15 @@ msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Не вдалося поновити CAPTCHA, спробуйте ще раз."
 
 #: seahub/templates/registration/login.html:94
-#: seahub/templates/registration/registration_form.html:66
+#: seahub/templates/registration/registration_form.html:77
 #: seahub/templates/sysadmin/repoadmin_js.html:21
 #: seahub/templates/sysadmin/sys_useradmin.html:98
 msgid "Email cannot be blank"
 msgstr "E-mail не може бути порожнім"
 
 #: seahub/templates/registration/login.html:98
-#: seahub/templates/registration/password_change_form.html:54
-#: seahub/templates/registration/registration_form.html:70
+#: seahub/templates/registration/password_change_form.html:61
+#: seahub/templates/registration/registration_form.html:81
 #: seahub/templates/sysadmin/sys_useradmin.html:102
 msgid "Password cannot be blank"
 msgstr "Пароль не може бути порожнім"
@@ -4894,60 +4983,54 @@ msgid "Your password has been changed successfully."
 msgstr "Ваш пароль успішно змінено."
 
 #: seahub/templates/registration/password_change_form.html:3
-#: seahub/templates/registration/password_change_form.html:7
+#: seahub/templates/registration/password_change_form.html:11
 msgid "Password Modification"
 msgstr "Зміна пароля"
 
-#: seahub/templates/registration/password_change_form.html:9
-msgid "Current Password: "
-msgstr "Поточний пароль: "
-
-#: seahub/templates/registration/password_change_form.html:11
-#: seahub/templates/registration/password_reset_confirm.html:13
-msgid "New Password: "
-msgstr "Новий пароль: "
-
 #: seahub/templates/registration/password_change_form.html:13
-#: seahub/templates/registration/registration_form.html:21
+msgid "Current Password"
+msgstr ""
+
+#: seahub/templates/registration/password_change_form.html:15
+msgid "New Password"
+msgstr ""
+
+#: seahub/templates/registration/password_change_form.html:18
+#: seahub/templates/registration/registration_form.html:27
+#: seahub/templates/sysadmin/sys_org_admin.html:24
+#: seahub/templates/sysadmin/sys_useradmin.html:47
+msgid "Confirm Password"
+msgstr "Підтвердіть пароль"
+
+#: seahub/templates/registration/password_change_form.html:32
+#: seahub/templates/registration/registration_form.html:51
 #, python-format
 msgid ""
-"%(min_len)s characters or more, include %(level)s types or more of these: "
-"letters(case sensitive), numbers, and symbols\""
-msgstr "%(min_len)s символів чи більше, включая %(level)s видів чи більше, таких як: літери (чутливі к реєстру), числа, та символи\""
+"Passwords must have at least %(min_len)s characters and contain %(level)s of"
+" the following: uppercase letters, lowercase letters, numbers, and symbols."
+msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:17
-#: seahub/templates/registration/password_reset_confirm.html:16
-msgid "Confirm Password: "
-msgstr "Підтвердіть пароль: "
-
-#: seahub/templates/registration/password_change_form.html:50
+#: seahub/templates/registration/password_change_form.html:57
 msgid "Current password cannot be blank"
 msgstr "Пточний пароль не може бути пустим"
 
-#: seahub/templates/registration/password_change_form.html:58
-#: seahub/templates/registration/registration_form.html:74
+#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/registration_form.html:85
 #: seahub/templates/snippets/repo_create_js.html:54
-#: seahub/templates/snippets/shared_link_js.html:251
-#: seahub/templates/snippets/shared_link_js.html:409
+#: seahub/templates/snippets/shared_link_js.html:250
+#: seahub/templates/snippets/shared_link_js.html:408
+#: seahub/templates/sysadmin/sys_org_admin.html:95
 #: seahub/templates/sysadmin/sys_useradmin.html:106
 msgid "Please enter the password again"
 msgstr "Будь ласка підтвердіть пароль"
 
-#: seahub/templates/registration/password_change_form.html:62
-#: seahub/templates/registration/registration_form.html:78
+#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/registration_form.html:89
 #: seahub/templates/snippets/repo_create_js.html:58
-#: seahub/templates/snippets/shared_link_js.html:255
-#: seahub/templates/snippets/shared_link_js.html:413
+#: seahub/templates/snippets/shared_link_js.html:254
+#: seahub/templates/snippets/shared_link_js.html:412
 msgid "Passwords don't match"
 msgstr "Паролі не збігаються"
-
-#: seahub/templates/registration/password_change_form.html:67
-#: seahub/templates/registration/registration_form.html:83
-#, python-format
-msgid ""
-"%(min_len)s characters or more, include %(level)s types or more of these: "
-"letters(case sensitive), numbers, and symbols"
-msgstr "%(min_len)s characters or more, include %(level)s types or more of these: letters(case sensitive), numbers, and symbols%(min_len)s символів чи більше, включая %(level)s видів чи більше, таких як: літери (чутливі к реєстру), числа, та символи"
 
 #: seahub/templates/registration/password_reset_complete.html:4
 msgid "Successfully reset password"
@@ -4960,6 +5043,7 @@ msgstr "Пароль успішно змінено."
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
+#: seahub/templates/sysadmin/sys_org_info.html:177
 #: seahub/templates/sysadmin/useradmin_js.html:7
 msgid "Password Reset"
 msgstr "Змінити пароль"
@@ -4967,6 +5051,14 @@ msgstr "Змінити пароль"
 #: seahub/templates/registration/password_reset_confirm.html:11
 msgid "Reset Password"
 msgstr "Скидання пароля"
+
+#: seahub/templates/registration/password_reset_confirm.html:13
+msgid "New Password: "
+msgstr "Новий пароль: "
+
+#: seahub/templates/registration/password_reset_confirm.html:16
+msgid "Confirm Password: "
+msgstr "Підтвердіть пароль: "
 
 #: seahub/templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
@@ -5019,16 +5111,11 @@ msgstr "Реєстрація завершена. Зачекайте актива
 msgid "Register"
 msgstr "Зареєструвався"
 
-#: seahub/templates/registration/registration_form.html:9
+#: seahub/templates/registration/registration_form.html:14
 msgid "Welcome back, you are already signed in."
 msgstr "Ласкаво просимо! Ви вже увійшли в систему."
 
-#: seahub/templates/registration/registration_form.html:25
-#: seahub/templates/sysadmin/sys_useradmin.html:47
-msgid "Confirm Password"
-msgstr "Підтвердіть пароль"
-
-#: seahub/templates/registration/registration_form.html:37
+#: seahub/templates/registration/registration_form.html:39
 msgid "Sign Up"
 msgstr "Зареєструватися"
 
@@ -5066,65 +5153,65 @@ msgstr "Посилання з правами запису"
 msgid "Private Share"
 msgstr "Приватний спільний доступ"
 
-#: seahub/templates/snippets/file_share_popup.html:35
-#: seahub/templates/snippets/file_share_popup.html:73
+#: seahub/templates/snippets/file_share_popup.html:36
+#: seahub/templates/snippets/file_share_popup.html:74
 msgid "Add password protection"
 msgstr "Додати захист паролем"
 
-#: seahub/templates/snippets/file_share_popup.html:38
-#: seahub/templates/snippets/file_share_popup.html:76
+#: seahub/templates/snippets/file_share_popup.html:39
+#: seahub/templates/snippets/file_share_popup.html:77
 #: seahub/templates/snippets/repo_create_form.html:20
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(не менше %(repo_password_min_length)s символів)"
 
-#: seahub/templates/snippets/file_share_popup.html:40
-#: seahub/templates/snippets/file_share_popup.html:78
+#: seahub/templates/snippets/file_share_popup.html:41
+#: seahub/templates/snippets/file_share_popup.html:79
 #: seahub/templates/snippets/repo_create_form.html:22
 msgid "Password again"
 msgstr "Підтвердіть пароль"
 
-#: seahub/templates/snippets/file_share_popup.html:45
-#: seahub/templates/snippets/file_share_popup.html:83
+#: seahub/templates/snippets/file_share_popup.html:46
+#: seahub/templates/snippets/file_share_popup.html:84
 msgid "Generate"
 msgstr "Створити"
 
-#: seahub/templates/snippets/file_share_popup.html:47
+#: seahub/templates/snippets/file_share_popup.html:48
 msgid "Link: "
 msgstr "Посилання: "
 
-#: seahub/templates/snippets/file_share_popup.html:48
-#: seahub/templates/snippets/file_share_popup.html:86
+#: seahub/templates/snippets/file_share_popup.html:49
+#: seahub/templates/snippets/file_share_popup.html:87
 msgid "Send"
 msgstr "Надіслати"
 
-#: seahub/templates/snippets/file_share_popup.html:52
-#: seahub/templates/snippets/file_share_popup.html:90
+#: seahub/templates/snippets/file_share_popup.html:53
+#: seahub/templates/snippets/file_share_popup.html:91
 msgid "Send to:"
 msgstr "Надіслати: "
 
-#: seahub/templates/snippets/file_share_popup.html:53
-#: seahub/templates/snippets/file_share_popup.html:91
+#: seahub/templates/snippets/file_share_popup.html:54
+#: seahub/templates/snippets/file_share_popup.html:92
 msgid "Emails, Seperated by ','"
 msgstr "Email (и), розділені ','"
 
-#: seahub/templates/snippets/file_share_popup.html:57
-#: seahub/templates/snippets/file_share_popup.html:93
+#: seahub/templates/snippets/file_share_popup.html:58
+#: seahub/templates/snippets/file_share_popup.html:94
 msgid "Message (optional):"
 msgstr "Повідомлення (опціонально)"
 
-#: seahub/templates/snippets/file_share_popup.html:62
-#: seahub/templates/snippets/file_share_popup.html:98
+#: seahub/templates/snippets/file_share_popup.html:63
+#: seahub/templates/snippets/file_share_popup.html:99
 msgid "Sending..."
 msgstr "Відправка ..."
 
-#: seahub/templates/snippets/file_share_popup.html:69
+#: seahub/templates/snippets/file_share_popup.html:70
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Ви можете передати згенеровані посилання іншим, і вони матимуть змогу завантажувати файли до цього каталогу."
 
-#: seahub/templates/snippets/file_share_popup.html:85
+#: seahub/templates/snippets/file_share_popup.html:86
 msgid "Upload Link: "
 msgstr "Посилання з правами запису:"
 
@@ -5177,15 +5264,6 @@ msgstr "Спільні"
 msgid "New Sub-library"
 msgstr "Нова підбібліотека"
 
-#: seahub/templates/snippets/my_owned_repos.html:52
-#: seahub/templates/snippets/my_owned_repos.html:99
-#: seahub/templates/snippets/my_owned_repos.html:153
-#: seahub/templates/snippets/repo_dir_data.html:24
-#: seahub/templates/snippets/repo_dirents.html:26
-#: seahub/templates/snippets/repo_dirents.html:80
-msgid "Share"
-msgstr "Доступ"
-
 #: seahub/templates/snippets/my_owned_repos.html:62
 msgid "You have not created any libraries"
 msgstr "Ви не створили жодної бібліотеки"
@@ -5229,7 +5307,7 @@ msgstr "показати контур"
 #: seahub/templates/snippets/office_convert_js.html:181
 #: seahub/templates/snippets/office_convert_js.html:188
 #: seahub/templates/snippets/office_convert_js.html:213
-#: seahub/templates/snippets/spreadsheet_convert_js.html:30
+#: seahub/templates/snippets/spreadsheet_convert_js.html:29
 msgid "Document convertion failed."
 msgstr "Помилка конвертації."
 
@@ -5266,14 +5344,14 @@ msgid "Description is required"
 msgstr "Потрібен опис бібліотеки"
 
 #: seahub/templates/snippets/repo_create_js.html:46
-#: seahub/templates/snippets/shared_link_js.html:243
-#: seahub/templates/snippets/shared_link_js.html:401
+#: seahub/templates/snippets/shared_link_js.html:242
+#: seahub/templates/snippets/shared_link_js.html:400
 msgid "Please enter password"
 msgstr "Будь ласка, введіть пароль"
 
 #: seahub/templates/snippets/repo_create_js.html:50
-#: seahub/templates/snippets/shared_link_js.html:247
-#: seahub/templates/snippets/shared_link_js.html:405
+#: seahub/templates/snippets/shared_link_js.html:246
+#: seahub/templates/snippets/shared_link_js.html:404
 msgid "Password is too short"
 msgstr "Пароль дуже короткий"
 
@@ -5413,8 +5491,8 @@ msgstr "Будь ласка, оберіть принаймні 1 тип файл
 msgid "Select contacts"
 msgstr "Вибрати контакти"
 
-#: seahub/templates/snippets/shared_link_js.html:179
-#: seahub/templates/snippets/shared_link_js.html:342
+#: seahub/templates/snippets/shared_link_js.html:178
+#: seahub/templates/snippets/shared_link_js.html:341
 msgid "Please input at least an email."
 msgstr "Будь ласка, введіть принаймні, email."
 
@@ -5468,22 +5546,26 @@ msgid "Transfer %(lib_name)s to:"
 msgstr "Перенесення %(lib_name)s до:"
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
+#: seahub/templates/sysadmin/sys_org_admin.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_repo_search.html:12
 msgid "Owner"
 msgstr "Власник"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:13
-#: seahub/templates/sysadmin/sys_org_admin.html:13
+#: seahub/templates/sysadmin/sys_org_admin.html:36
+#: seahub/templates/sysadmin/sys_org_info.html:103
 msgid "Creator"
 msgstr "Автор"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
+#: seahub/templates/sysadmin/sys_org_info.html:104
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
 msgid "Create At"
 msgstr "Створити як"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:37
+#: seahub/templates/sysadmin/sys_org_info.html:169
 msgid "Delete Group"
 msgstr "Видалити групу"
 
@@ -5511,35 +5593,27 @@ msgstr "Висячий рядок"
 msgid "System"
 msgstr "Система"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:7
+#: seahub/templates/sysadmin/sys_org_admin.html:8
 msgid "All Organizations"
 msgstr "Всі спільноти"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:12
+#: seahub/templates/sysadmin/sys_org_admin.html:9
+#: seahub/templates/sysadmin/sys_org_admin.html:13
+msgid "Add organization"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:17
+#: seahub/templates/sysadmin/sys_org_admin.html:35
 msgid "Url Prefix"
 msgstr "Префикс URL"
 
-#: seahub/templates/sysadmin/sys_org_admin.html:14
-msgid "Created At"
-msgstr "Створено на"
+#: seahub/templates/sysadmin/sys_org_admin.html:20
+msgid "Owner can use admin panel in an organization, must be a new account."
+msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_admin.html:31
-msgid "None."
-msgstr "Ні."
-
-#: seahub/templates/sysadmin/sys_org_admin.html:38
-msgid "Delete Organization"
-msgstr "Видалити спільноту"
-
-#: seahub/templates/sysadmin/sys_org_info.html:19
-msgid "Number of members"
-msgstr "Кількість учасників"
-
-#: seahub/templates/sysadmin/sys_org_info.html:21
-msgid "Number of groups"
-msgstr "Кількість груп"
-
-#: seahub/templates/sysadmin/sys_org_info.html:25
+#: seahub/templates/sysadmin/sys_org_admin.html:37
+#: seahub/templates/sysadmin/sys_org_info.html:27
+#: seahub/templates/sysadmin/sys_org_info.html:55
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:45
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
 #: seahub/templates/sysadmin/useradmin_table.html:7
@@ -5547,19 +5621,131 @@ msgstr "Кількість груп"
 msgid "Space Used"
 msgstr "Дисковий простір, що використовується"
 
-#: seahub/templates/sysadmin/sys_org_info.html:27
+#: seahub/templates/sysadmin/sys_org_admin.html:38
+msgid "Created At"
+msgstr "Створено на"
+
+#: seahub/templates/sysadmin/sys_org_admin.html:57
+msgid "None."
+msgstr "Ні."
+
+#: seahub/templates/sysadmin/sys_org_admin.html:79
+msgid "Name can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:83
+msgid "Url can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:87
+msgid "Owner can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:91
+msgid "Password can not be blank"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_admin.html:99
+#: seahub/templates/sysadmin/sys_useradmin.html:110
+msgid "Passwords do not match"
+msgstr "Паролі не співпадають"
+
+#: seahub/templates/sysadmin/sys_org_info.html:17
+msgid "Back to organization list"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info.html:21
+msgid "Number of members"
+msgstr "Кількість учасників"
+
+#: seahub/templates/sysadmin/sys_org_info.html:23
+msgid "Number of groups"
+msgstr "Кількість груп"
+
+#: seahub/templates/sysadmin/sys_org_info.html:29
 #: seahub/templates/sysadmin/userinfo.html:39
 msgid "Set Quota"
 msgstr "Встановити квоту"
 
-#: seahub/templates/sysadmin/sys_org_info.html:30
+#: seahub/templates/sysadmin/sys_org_info.html:32
 msgid "Set org storage limit"
 msgstr "Set org storage limit"
 
-#: seahub/templates/sysadmin/sys_org_info.html:33
+#: seahub/templates/sysadmin/sys_org_info.html:35
 #: seahub/templates/sysadmin/userinfo.html:45
 msgid "Tip: 0 means default limit"
 msgstr "Врахуйте: 0 - без обмежень (за замовчуванням)"
+
+#: seahub/templates/sysadmin/sys_org_info.html:54
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:43
+#: seahub/templates/sysadmin/useradmin_table.html:5
+msgid "Status"
+msgstr "Статус"
+
+#: seahub/templates/sysadmin/sys_org_info.html:56
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:46
+#: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
+#: seahub/templates/sysadmin/useradmin_table.html:8
+msgid "Create At / Last Login"
+msgstr "Створено / Останній вхід"
+
+#: seahub/templates/sysadmin/sys_org_info.html:66
+#: seahub/templates/sysadmin/sys_org_info.html:73
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:58
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:65
+#: seahub/templates/sysadmin/useradmin_table.html:19
+#: seahub/templates/sysadmin/useradmin_table.html:26
+msgid "Active"
+msgstr "Активний"
+
+#: seahub/templates/sysadmin/sys_org_info.html:68
+#: seahub/templates/sysadmin/sys_org_info.html:74
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:60
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:66
+#: seahub/templates/sysadmin/useradmin_table.html:21
+#: seahub/templates/sysadmin/useradmin_table.html:27
+msgid "Inactive"
+msgstr "Неактивний"
+
+#: seahub/templates/sysadmin/sys_org_info.html:90
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:104
+#: seahub/templates/sysadmin/useradmin_table.html:69
+msgid "ResetPwd"
+msgstr "Змінити пароль"
+
+#: seahub/templates/sysadmin/sys_org_info.html:122
+#: seahub/templates/sysadmin/sys_useradmin.html:65
+#: seahub/templates/sysadmin/sys_useradmin_admins.html:117
+#: seahub/templates/sysadmin/user_search.html:21
+msgid "Activating..., please wait"
+msgstr "Активація..., зачекайте будь ласка"
+
+#: seahub/templates/sysadmin/sys_org_info.html:139
+msgid "Quota can not be empty"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info.html:173
+#: seahub/templates/sysadmin/useradmin_js.html:3
+msgid "Delete User"
+msgstr "Видалити користувача"
+
+#: seahub/templates/sysadmin/sys_org_info.html:178
+#: seahub/templates/sysadmin/useradmin_js.html:8
+#, python-format
+msgid "Are you sure you want to reset the password of %s ?"
+msgstr "Ви впевнені, що хочете скинути пароль %s ?"
+
+#: seahub/templates/sysadmin/sys_org_info.html:212
+#: seahub/templates/sysadmin/useradmin_js.html:61
+msgid "Edit succeeded, an email has been sent."
+msgstr "Успішно відредаговано. Повідомлення було надіслано."
+
+#: seahub/templates/sysadmin/sys_org_info.html:214
+#: seahub/templates/sysadmin/useradmin_js.html:63
+msgid ""
+"Edit succeeded, but failed to send email, please check your email "
+"configuration."
+msgstr "Пароль успішно змінено, але повідомлення не було відправлено, будь ласка, перевірте налаштування електронної пошти."
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
 msgid "All Public Links"
@@ -5578,12 +5764,12 @@ msgid "Tip: you can search by keyword in name or owner or both."
 msgstr "Підказка: Ви можете здійснювати пошук за ключовими словами в імені або власника чи обох."
 
 #: seahub/templates/sysadmin/sys_repo_search.html:16
-#: seahub/templates/sysadmin/user_search.html:14
+#: seahub/templates/sysadmin/user_search.html:13
 msgid "Result"
 msgstr "Результат"
 
 #: seahub/templates/sysadmin/sys_repo_search.html:20
-#: seahub/templates/sysadmin/user_search.html:18
+#: seahub/templates/sysadmin/user_search.html:17
 msgid "No result"
 msgstr "Немає результату"
 
@@ -5608,18 +5794,6 @@ msgstr "Загальна статистика"
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:8
 msgid "Search users..."
 msgstr "Пошук користувачів..."
-
-#: seahub/templates/sysadmin/sys_useradmin.html:22
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:14
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:15
-msgid "Database"
-msgstr "База даних"
-
-#: seahub/templates/sysadmin/sys_useradmin.html:24
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:16
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
-msgid "LDAP"
-msgstr "LDAP"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:29
 msgid "Import users"
@@ -5670,20 +5844,10 @@ msgstr "Формат файлу: user@mail.com,password"
 msgid "Please choose a CSV file"
 msgstr "Будь ласка, виберіть CSV файл"
 
-#: seahub/templates/sysadmin/sys_useradmin.html:65
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:117
-#: seahub/templates/sysadmin/user_search.html:22
-msgid "Activating..., please wait"
-msgstr "Активація..., зачекайте будь ласка"
-
 #: seahub/templates/sysadmin/sys_useradmin.html:80
 #, python-format
 msgid "A new server version %(v)s is available."
 msgstr "Доступна нова версія серверу %(v)s."
-
-#: seahub/templates/sysadmin/sys_useradmin.html:110
-msgid "Passwords do not match"
-msgstr "Паролі не співпадають"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:20
 msgid "Add admin"
@@ -5696,36 +5860,6 @@ msgstr "Додати адміністраторів"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:31
 msgid "Tip: the emails should be the users already added."
 msgstr "Порада: користувачі повинні раніше додати адреси електронної пошти."
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:43
-#: seahub/templates/sysadmin/useradmin_table.html:5
-msgid "Status"
-msgstr "Статус"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:46
-#: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
-#: seahub/templates/sysadmin/useradmin_table.html:8
-msgid "Create At / Last Login"
-msgstr "Створено / Останній вхід"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:58
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:65
-#: seahub/templates/sysadmin/useradmin_table.html:19
-#: seahub/templates/sysadmin/useradmin_table.html:26
-msgid "Active"
-msgstr "Активний"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:60
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:66
-#: seahub/templates/sysadmin/useradmin_table.html:21
-#: seahub/templates/sysadmin/useradmin_table.html:27
-msgid "Inactive"
-msgstr "Неактивний"
-
-#: seahub/templates/sysadmin/sys_useradmin_admins.html:104
-#: seahub/templates/sysadmin/useradmin_table.html:69
-msgid "ResetPwd"
-msgstr "Змінити пароль"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:106
 #: seahub/templates/sysadmin/useradmin_js.html:11
@@ -5778,19 +5912,6 @@ msgstr "Ваш пароль %(site_name)s скинуто. Тепер ваш па
 msgid "Search User"
 msgstr "Пошук користувача"
 
-#: seahub/templates/sysadmin/user_search.html:10
-msgid "Tip: Use * to match any number of characters."
-msgstr "Порада: Використовуйте * відповідно до будь-якої кількісті символів."
-
-#: seahub/templates/sysadmin/useradmin_js.html:3
-msgid "Delete User"
-msgstr "Видалити користувача"
-
-#: seahub/templates/sysadmin/useradmin_js.html:8
-#, python-format
-msgid "Are you sure you want to reset the password of %s ?"
-msgstr "Ви впевнені, що хочете скинути пароль %s ?"
-
 #: seahub/templates/sysadmin/useradmin_js.html:12
 #, python-format
 msgid "Are you sure you want to revoke the admin permission of %s ?"
@@ -5800,16 +5921,6 @@ msgstr "Ви впевнені, що хочете відкликати права
 #, python-format
 msgid "Are you sure you want to set %s as admin?"
 msgstr "Ви впевнені, що хочете надати %s права адміністратора?"
-
-#: seahub/templates/sysadmin/useradmin_js.html:61
-msgid "Edit succeeded, an email has been sent."
-msgstr "Успішно відредаговано. Повідомлення було надіслано."
-
-#: seahub/templates/sysadmin/useradmin_js.html:63
-msgid ""
-"Edit succeeded, but failed to send email, please check your email "
-"configuration."
-msgstr "Пароль успішно змінено, але повідомлення не було відправлено, будь ласка, перевірте налаштування електронної пошти."
 
 #: seahub/templates/sysadmin/userinfo.html:7
 msgid "Back to user list"
@@ -5847,397 +5958,407 @@ msgstr "Персональні Wiki сторінки"
 msgid "permission error"
 msgstr "помилка прав доступу"
 
-#: seahub/views/__init__.py:373
+#: seahub/views/__init__.py:376
 msgid "Unable to view recycle page"
 msgstr "Не вдається переглянути сторінку"
 
-#: seahub/views/__init__.py:476
+#: seahub/views/__init__.py:510
 msgid "Failed to edit library information."
 msgstr "Не вдається переглянути бібліотеку"
 
-#: seahub/views/__init__.py:485
+#: seahub/views/__init__.py:519
 msgid "Failed to save settings on server"
 msgstr "Не вдалося зберегти налаштування на сервері"
 
-#: seahub/views/__init__.py:488
+#: seahub/views/__init__.py:522
 msgid "Settings saved."
 msgstr "Налаштування збережені."
 
-#: seahub/views/__init__.py:519
+#: seahub/views/__init__.py:553
 #, python-format
 msgid "Username %s is not valid."
 msgstr "Ім’я користувача %s неприпустиме."
 
-#: seahub/views/__init__.py:526
+#: seahub/views/__init__.py:560
 #, python-format
 msgid "User %s is not found."
 msgstr "Користувача  %s не знайдено."
 
-#: seahub/views/__init__.py:533
+#: seahub/views/__init__.py:567
 #, python-format
 msgid "User %s is not in current organization."
 msgstr "Користувача %s немає у поточній спільноті."
 
-#: seahub/views/__init__.py:544
+#: seahub/views/__init__.py:578
 #, python-format
 msgid "Library %(repo_name)s has been transfered to %(new_owner)s."
 msgstr "Бібліотека  %(repo_name)s була передана до %(new_owner)s."
 
-#: seahub/views/__init__.py:571
+#: seahub/views/__init__.py:605
 msgid "Faied to change password, you are not owner."
 msgstr "Неможливо змінити пароль, Ви не власник."
 
-#: seahub/views/__init__.py:583
+#: seahub/views/__init__.py:617
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr "Вдало змінено пароль до бібліотеки %(repo_name)s."
 
-#: seahub/views/__init__.py:591
+#: seahub/views/__init__.py:625
 msgid "Filename contains invalid character"
 msgstr "Назва файлу містить неприпустимий символ"
 
-#: seahub/views/__init__.py:593
+#: seahub/views/__init__.py:627
 msgid "Duplicated filename"
 msgstr "Дублікат файлу"
 
-#: seahub/views/__init__.py:597
+#: seahub/views/__init__.py:631
 msgid "File size surpasses the limit"
 msgstr "Розмір файлу перевищує ліміт"
 
-#: seahub/views/__init__.py:599
+#: seahub/views/__init__.py:633
 msgid "The space of owner is used up, upload failed"
 msgstr "Дисковий простір власника вичерпано, завантаження не вдалася"
 
-#: seahub/views/__init__.py:601
+#: seahub/views/__init__.py:635
 msgid "An error occurs during file transfer"
 msgstr "Сталася помилка під час передачі файлів"
 
-#: seahub/views/__init__.py:613 seahub/views/__init__.py:635
+#: seahub/views/__init__.py:647 seahub/views/__init__.py:669
 msgid "Invalid url"
 msgstr "Неправильний URL"
 
-#: seahub/views/__init__.py:655
+#: seahub/views/__init__.py:689
 msgid "Unable to view library modification"
 msgstr "Не вдається переглянути бібліотеку"
 
-#: seahub/views/__init__.py:715
-msgid "Unable to view library snapshots"
-msgstr "Не вдається переглянути бібліотеки snapshots"
-
-#: seahub/views/__init__.py:775
-msgid "You have no permission to restore library"
-msgstr "у вас немає прав на відновлення бібліотеки"
-
-#: seahub/views/__init__.py:799
+#: seahub/views/__init__.py:835
 msgid "Please specify history ID"
 msgstr "Будь ласка визначте ID історії"
 
-#: seahub/views/__init__.py:807 seahub/views/__init__.py:1225
-#: seahub/views/__init__.py:1686 seahub/views/ajax.py:1324
+#: seahub/views/__init__.py:843 seahub/views/__init__.py:1252
+#: seahub/views/__init__.py:1633 seahub/views/ajax.py:1308
 msgid "Library does not exist"
 msgstr "Бібліотека не існує"
 
-#: seahub/views/__init__.py:809
+#: seahub/views/__init__.py:845
 msgid "History you specified does not exist"
 msgstr "Вказана історія не існує"
 
-#: seahub/views/__init__.py:811
+#: seahub/views/__init__.py:847
 msgid "Unknown error"
 msgstr "Невідома помилка"
 
-#: seahub/views/__init__.py:870 seahub/views/__init__.py:871
-#: seahub/views/__init__.py:876 seahub/views/__init__.py:877
+#: seahub/views/__init__.py:895 seahub/views/__init__.py:896
+#: seahub/views/__init__.py:901 seahub/views/__init__.py:902
 msgid "My Library"
 msgstr "Моя бібліотека"
 
-#: seahub/views/__init__.py:1038
+#: seahub/views/__init__.py:1063
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "Не вдалося заборонити спільне використання бібліотек, оскільки де вони існує."
 
-#: seahub/views/__init__.py:1063
+#: seahub/views/__init__.py:1088
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "Заборонено спільне використання \"%s\"."
 
-#: seahub/views/__init__.py:1065
+#: seahub/views/__init__.py:1090
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "Не вдалося заборонити спільне використання \"%s\"."
 
-#: seahub/views/__init__.py:1099
+#: seahub/views/__init__.py:1124
 msgid "Failed to delete file."
 msgstr "Не вдалося видалити файл."
 
-#: seahub/views/__init__.py:1106
+#: seahub/views/__init__.py:1131
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s успішно видалено."
 
-#: seahub/views/__init__.py:1108 seahub/views/ajax.py:542
+#: seahub/views/__init__.py:1133 seahub/views/ajax.py:550
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Внутрішня помилка. Файл %s не видалено."
 
-#: seahub/views/__init__.py:1154 seahub/views/__init__.py:1719
+#: seahub/views/__init__.py:1181 seahub/views/__init__.py:1666
+#: seahub/views/file.py:1090
 msgid "Unable to access file: share link traffic is used up."
 msgstr "Неможливо отримати доступ до файлу: трафік для загального файлу вичерпався."
 
-#: seahub/views/__init__.py:1163
+#: seahub/views/__init__.py:1190
 msgid "Unable to access file"
 msgstr "Неможливо отримати доступ до файлу."
 
-#: seahub/views/__init__.py:1296
+#: seahub/views/__init__.py:1331
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "Успішно відновлено %(path)s до <a href=\"%(root)s\">основної директорії.</a>"
 
-#: seahub/views/__init__.py:1300 seahub/views/__init__.py:1326
+#: seahub/views/__init__.py:1335 seahub/views/__init__.py:1369
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "Успішно відновлено <a href=\"%(url)s\">%(path)s</a>"
 
-#: seahub/views/__init__.py:1322
+#: seahub/views/__init__.py:1365
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "Успішно відновлено %(path)s до <a href=\"%(url)s\">основної директорії.</a>"
 
-#: seahub/views/__init__.py:1731 seahub/views/file.py:817
+#: seahub/views/__init__.py:1678 seahub/views/file.py:855
 msgid "Internal Error"
 msgstr "Внутрішня помилка"
 
-#: seahub/views/__init__.py:1734
+#: seahub/views/__init__.py:1681
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Не вдається завантажити каталог \"%s\": занадто великий розмір."
 
-#: seahub/views/__init__.py:1748
+#: seahub/views/__init__.py:1695
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Не вдається завантажити \"%s\""
 
-#: seahub/views/__init__.py:1887
+#: seahub/views/__init__.py:1841
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/views/__init__.py:1892
+#: seahub/views/__init__.py:1846
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/views/ajax.py:72
+#: seahub/views/ajax.py:73
 msgid "You don't have permission to access the library."
 msgstr "У вас немає дозволу на доступ до бібліотеки."
 
-#: seahub/views/ajax.py:80
+#: seahub/views/ajax.py:81
 msgid "No path."
 msgstr "No path."
 
-#: seahub/views/ajax.py:156
+#: seahub/views/ajax.py:157
 msgid "The group doesn't exist"
 msgstr "Група не існує"
 
-#: seahub/views/ajax.py:217 seahub/views/ajax.py:301 seahub/views/ajax.py:375
-#: seahub/views/ajax.py:462 seahub/views/ajax.py:516 seahub/views/ajax.py:555
-#: seahub/views/ajax.py:599 seahub/views/ajax.py:790 seahub/views/ajax.py:1042
+#: seahub/views/ajax.py:225 seahub/views/ajax.py:309 seahub/views/ajax.py:383
+#: seahub/views/ajax.py:470 seahub/views/ajax.py:524 seahub/views/ajax.py:563
+#: seahub/views/ajax.py:607 seahub/views/ajax.py:798 seahub/views/ajax.py:1026
 msgid "Library does not exist."
 msgstr "Бібліотека не існує"
 
-#: seahub/views/ajax.py:224 seahub/views/ajax.py:308 seahub/views/ajax.py:523
-#: seahub/views/ajax.py:562 seahub/views/ajax.py:1049
-#: seahub/views/ajax.py:1348 seahub/views/ajax.py:1366
+#: seahub/views/ajax.py:232 seahub/views/ajax.py:316 seahub/views/ajax.py:531
+#: seahub/views/ajax.py:570 seahub/views/ajax.py:973 seahub/views/ajax.py:993
+#: seahub/views/ajax.py:1033 seahub/views/ajax.py:1332
+#: seahub/views/ajax.py:1350
 msgid "Permission denied."
 msgstr "Доступ заборонено"
 
-#: seahub/views/ajax.py:239 seahub/views/ajax.py:323 seahub/views/ajax.py:1062
+#: seahub/views/ajax.py:247 seahub/views/ajax.py:331 seahub/views/ajax.py:1046
 msgid "Library is encrypted."
 msgstr "Бібліотека зашифрована."
 
-#: seahub/views/ajax.py:245 seahub/views/ajax.py:329 seahub/views/ajax.py:1068
+#: seahub/views/ajax.py:253 seahub/views/ajax.py:337 seahub/views/ajax.py:1052
 msgid "Error: no head commit id"
 msgstr "Error: no head commit id"
 
-#: seahub/views/ajax.py:531 seahub/views/ajax.py:570
+#: seahub/views/ajax.py:539 seahub/views/ajax.py:578
 msgid "Argument missing."
 msgstr "Аргумент пропущений."
 
-#: seahub/views/ajax.py:624
+#: seahub/views/ajax.py:632
 msgid "Destination path is too long."
 msgstr "Шлях призначення занадто довгий."
 
-#: seahub/views/ajax.py:663 seahub/views/ajax.py:730
+#: seahub/views/ajax.py:671 seahub/views/ajax.py:738
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успішне переміщення %(name)s <a href=\"%(url)s\">переглянути</a>"
 
-#: seahub/views/ajax.py:692 seahub/views/ajax.py:767
+#: seahub/views/ajax.py:700 seahub/views/ajax.py:775
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успішне копіювання %(name)s <a href=\"%(url)s\">переглянути</a>"
 
-#: seahub/views/ajax.py:709 seahub/views/ajax.py:843
+#: seahub/views/ajax.py:717 seahub/views/ajax.py:851
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Не можливо перемістити каталог %(src)s до свого підкаталогу %(des)s"
 
-#: seahub/views/ajax.py:746 seahub/views/ajax.py:882
+#: seahub/views/ajax.py:754 seahub/views/ajax.py:887
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Не моливо зробити копію каталогу %(src)s до свого підкаталогу %(des)s"
 
-#: seahub/views/ajax.py:816
+#: seahub/views/ajax.py:824
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Шлях призначення занадто довгий  для %s."
 
-#: seahub/views/ajax.py:1151
+#: seahub/views/ajax.py:963
+msgid "Cancel failed"
+msgstr ""
+
+#: seahub/views/ajax.py:1135
 msgid "Failed to get file block list"
 msgstr "Збій отримання переліку бкованих файлів."
 
-#: seahub/views/ajax.py:1189
+#: seahub/views/ajax.py:1173
 msgid "Wrong repo id"
 msgstr "Невірний repo id"
 
-#: seahub/views/ajax.py:1319
+#: seahub/views/ajax.py:1303
 msgid "System library can not be deleted."
 msgstr "Системна бібліотека не може  бути видалена."
 
-#: seahub/views/ajax.py:1621
+#: seahub/views/ajax.py:1587
+msgid "Bad upload link token."
+msgstr ""
+
+#: seahub/views/ajax.py:1593
+msgid "Bad repo id in upload link."
+msgstr ""
+
+#: seahub/views/ajax.py:1643
 msgid "No conflict in the merge."
 msgstr "Немає конфлікту при злитті."
 
-#: seahub/views/ajax.py:1638 seahub/views/ajax.py:1719
+#: seahub/views/ajax.py:1693 seahub/views/ajax.py:1756
 msgid "You do not have permission to create library"
 msgstr "Ви не має прав на створення бібліотеки"
 
-#: seahub/views/file.py:119
+#: seahub/views/file.py:120
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP помилка: файл не може бути відкритий в он-лайн режимі."
 
-#: seahub/views/file.py:123
+#: seahub/views/file.py:124
 msgid "URLError: failed to open file online"
 msgstr "URL помилка: файл не може бути відкритий в он-лайн режимі."
 
-#: seahub/views/file.py:130
+#: seahub/views/file.py:131
 msgid "The encoding you chose is not proper."
 msgstr "Обраний режим шифрування не є правильним."
 
-#: seahub/views/file.py:147 seahub/views/file.py:150
+#: seahub/views/file.py:148 seahub/views/file.py:151
 msgid "Unknown file encoding"
 msgstr "Шевідомий алгоритм шифрування файлу."
 
-#: seahub/views/file.py:274 seahub/views/file.py:281 seahub/views/file.py:506
-#: seahub/views/file.py:511
+#: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
+#: seahub/views/file.py:512
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Розмір файлу перевищує %s, і не може бути відкритий в онлайн режимі."
 
-#: seahub/views/file.py:321 seahub/views/file.py:546 seahub/views/file.py:561
-#: seahub/views/file.py:583
+#: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
+#: seahub/views/file.py:584
 msgid "Unable to view file"
 msgstr "Не вдається переглянути файл"
 
-#: seahub/views/file.py:357 seahub/views/file.py:524 seahub/views/file.py:659
+#: seahub/views/file.py:358 seahub/views/file.py:525 seahub/views/file.py:660
 msgid "Invalid file format."
 msgstr "Невірний формат файла."
 
-#: seahub/views/file.py:828
+#: seahub/views/file.py:866
 msgid "The library does not exist."
 msgstr "Бібліотека не існує."
 
-#: seahub/views/file.py:832
+#: seahub/views/file.py:870
 msgid "The library is encrypted."
 msgstr "Бібліотека зашифрована."
 
-#: seahub/views/file.py:900
+#: seahub/views/file.py:938
 msgid "Unable to edit file"
 msgstr "Неможливо редагувати файл."
 
-#: seahub/views/file.py:912
+#: seahub/views/file.py:950
 msgid "The file does not exist."
 msgstr "Файл не існує."
 
-#: seahub/views/file.py:940
+#: seahub/views/file.py:978
 msgid "Edit online is not offered for this type of file."
 msgstr "Редагування онлайн не передбачається для цього типу файлів."
 
-#: seahub/views/sysadmin.py:378
+#: seahub/views/file.py:1102
+msgid "Unable to download file"
+msgstr ""
+
+#: seahub/views/sysadmin.py:398 seahub/views/sysadmin.py:424
 msgid "Failed to set quota: internal server error"
 msgstr "Не вдалося встановити квоту: внутрішня помилка сервера"
 
-#: seahub/views/sysadmin.py:394
+#: seahub/views/sysadmin.py:443
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Успішно видалено %s"
 
-#: seahub/views/sysadmin.py:396
+#: seahub/views/sysadmin.py:445
 msgid "Failed to delete: the user does not exist"
 msgstr "Не вдалося видалити: користувач не існує"
 
-#: seahub/views/sysadmin.py:411
+#: seahub/views/sysadmin.py:460
 #, python-format
 msgid "Successfully set %s as admin"
 msgstr "%s успішно призначений адміністратором"
 
-#: seahub/views/sysadmin.py:413
+#: seahub/views/sysadmin.py:462
 msgid "Failed to set admin: the user does not exist"
 msgstr "Не вдалося призначити адміністратора: користувач не існує"
 
-#: seahub/views/sysadmin.py:428
+#: seahub/views/sysadmin.py:477
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Права адміністратора %s успішно відкликані"
 
-#: seahub/views/sysadmin.py:430
+#: seahub/views/sysadmin.py:479
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Не вдалося відкликати адміністратора: користувач не існує"
 
-#: seahub/views/sysadmin.py:444
+#: seahub/views/sysadmin.py:493
 #, python-format
 msgid "Successfully activated \"%s\"."
 msgstr "Успішно активовано %s."
 
-#: seahub/views/sysadmin.py:446
+#: seahub/views/sysadmin.py:495
 msgid "Failed to activate: user does not exist."
 msgstr "Неможливо активувати: користувач не існує."
 
-#: seahub/views/sysadmin.py:461
+#: seahub/views/sysadmin.py:510
 #, python-format
 msgid "Successfully deactivated \"%s\"."
 msgstr "Успішно деактивовано %s."
 
-#: seahub/views/sysadmin.py:463
+#: seahub/views/sysadmin.py:512
 msgid "Failed to deactivate: user does not exist."
 msgstr "Неможливо деактивувати: користувач не існує."
 
-#: seahub/views/sysadmin.py:477
+#: seahub/views/sysadmin.py:526
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Ваш обліковий запис %s активовано"
 
-#: seahub/views/sysadmin.py:553
+#: seahub/views/sysadmin.py:602
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Пароль було змінно на  %s"
 
-#: seahub/views/sysadmin.py:573
+#: seahub/views/sysadmin.py:622
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Пароль успішно змінено на %(passwd)s, повідомлення було надіслано %(user)s."
 
-#: seahub/views/sysadmin.py:578
+#: seahub/views/sysadmin.py:627
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Пароль успішно змінено на %(passwd)s, але повідомлення не було надіслано %(user)s, будь ласка, перевірте налаштування електронної пошти."
 
-#: seahub/views/sysadmin.py:582
+#: seahub/views/sysadmin.py:631
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Пароль успішно змінено на %(passwd)s для користувача %(user)s."
 
-#: seahub/views/sysadmin.py:585
+#: seahub/views/sysadmin.py:634
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6245,71 +6366,71 @@ msgid ""
 "configured."
 msgstr "Пароль успішно змінено на %(passwd)s для користувача %(user)s. Але повідомлення не було надіслано, бо не правильно налаштована поштова служба."
 
-#: seahub/views/sysadmin.py:588
+#: seahub/views/sysadmin.py:637
 msgid "Failed to reset password: user does not exist"
 msgstr "Не вдалося змінити пароль: користувач не існує."
 
-#: seahub/views/sysadmin.py:604
+#: seahub/views/sysadmin.py:653
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Ви запрошені приєднатися до %s"
 
-#: seahub/views/sysadmin.py:642 seahub/views/sysadmin.py:655
+#: seahub/views/sysadmin.py:691 seahub/views/sysadmin.py:704
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Успішно додано користувача %s. Повідомлення було надіслано електронною поштою."
 
-#: seahub/views/sysadmin.py:645 seahub/views/sysadmin.py:658
+#: seahub/views/sysadmin.py:694 seahub/views/sysadmin.py:707
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Успішно додано користувача %s. Але сталася помилка при відправці email, будь ласка, перевірте налаштування email."
 
-#: seahub/views/sysadmin.py:647 seahub/views/sysadmin.py:660
+#: seahub/views/sysadmin.py:696 seahub/views/sysadmin.py:709
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Успішно доданий користувач %s."
 
-#: seahub/views/sysadmin.py:662
+#: seahub/views/sysadmin.py:711
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Успішно доданий користувач %s. Але повідомлення не було надіслано, томущо неправильно налаштована поштова служба."
 
-#: seahub/views/sysadmin.py:827
+#: seahub/views/sysadmin.py:922
 msgid "Successfully transfered."
 msgstr "Успішно передано."
 
-#: seahub/views/sysadmin.py:829
+#: seahub/views/sysadmin.py:924
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "Неможливо наділати повідомлення для %s, користувач не знайдений."
 
-#: seahub/views/sysadmin.py:831
+#: seahub/views/sysadmin.py:926
 msgid "Failed to transfer, invalid arguments."
 msgstr "Не вдалося передати, неприпустимі аргументи."
 
-#: seahub/views/sysadmin.py:894
+#: seahub/views/sysadmin.py:989
 msgid "Using LDAP now, can not add admin."
 msgstr "При використанні LDAP зараз, неможливо додати адміністратора."
 
-#: seahub/views/sysadmin.py:911
+#: seahub/views/sysadmin.py:1006
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "%s надано права адміністратора."
 
-#: seahub/views/sysadmin.py:913
+#: seahub/views/sysadmin.py:1008
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Не вдалося %s надати права адміністратора: користувач не існує"
 
-#: seahub/views/sysadmin.py:955
+#: seahub/views/sysadmin.py:1050
 msgid "Import succeeded"
 msgstr "Імпорт виконано успішно"
 
-#: seahub/views/sysadmin.py:957
+#: seahub/views/sysadmin.py:1052
 msgid "Please select a csv file first."
 msgstr "В першу чергу, виберіть файл csv ."
 
