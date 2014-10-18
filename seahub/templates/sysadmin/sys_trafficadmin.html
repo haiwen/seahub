@@ -30,7 +30,7 @@
     </tr>
     {% for info in traffic_info_list %}
     <tr>
-        <td>{{ info.email }}</td>
+        <td><a href="{% url 'user_info' info.email %}">{{ info.email }}</a></td>
         <td>{{ info.total |filesizeformat }}</td>
     </tr>
     {% endfor %}
