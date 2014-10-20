@@ -594,23 +594,13 @@ def check_set_repo_password(request, repo):
     if not check_permission(repo.id, request.user.username):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
-    password_set = False
     if repo.encrypted:
-        try:
-            ret = seafile_api.is_password_set(repo.id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             "SearpcError:" + e.msg)
+        password = request.REQUEST.get('password', default=None)
+        if not password:
+            return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
+                             'Repo password is needed.')
 
-        if not password_set:
-            password = request.REQUEST.get('password', default=None)
-            if not password:
-                return api_error(HTTP_440_REPO_PASSWD_REQUIRED,
-                                 'Repo password is needed.')
-
-            return set_repo_password(request, repo, password)
+        return set_repo_password(request, repo, password)
 
 def check_repo_access_permission(request, repo):
     if not seafile_api.check_repo_access_permission(repo.id,
