@@ -252,7 +252,7 @@ def email2id(value):
 
     key = normalize_cache_key(value, EMAIL_ID_CACHE_PREFIX)
     user_id = cache.get(key)
-    if not user_id:
+    if user_id is None:
         try:
             user = User.objects.get(email=value)
             user_id = user.id
