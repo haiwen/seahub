@@ -3130,13 +3130,13 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* side-info */
-.side-info {
-    position: relative;
+#left-panel .side-info .hd { /* '#left-panel' to override some style */
+    margin-top:19px;
 }
 .go-back {
     position: absolute;
     left: -41px;
-    top: -15px;
+    top: 9px;
     padding: 0 5px;
     font-size: 25px;
     color:#ccc;

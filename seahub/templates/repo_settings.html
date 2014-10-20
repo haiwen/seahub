@@ -6,14 +6,13 @@
 
 {% block extra_style %}
 <style type="text/css">
-.side-textnav {
-    margin-top:10px;
-}
+#left-panel { position: relative; }
+.go-back { top:0; }
 </style>
 {% endblock %}
 
 {% block left_panel %}
-<a href="{% url 'repo' repo.id %}" title="{% trans "Back to Library" %}"><span class="icon-chevron-left"></span> {% trans "Back to Library" %}</a>
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
 <div class="side-textnav">
     <ul class="side-textnav-tabs">
         <li class="tab tab-cur"><a href="#basic-info">{% trans "Basic Info" %}</a></li>

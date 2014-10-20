@@ -3,15 +3,20 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block extra_style %}
+<style type="text/css">
+#main-panel { position:relative; }
+.go-back { top:-4px; }
+</style>
+{% endblock %}
+
 {% block main_panel %}
+    <a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
     <div class="w100 ovhd">
         <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
-        <div class="fright">
-            {% if enable_clean %}
-            <button id="online-gc">{% trans "Clean" %}</button>
-            {% endif %}
-            <button data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library" %}</button>
-        </div>
+        {% if enable_clean %}
+        <button id="online-gc" class="fright">{% trans "Clean" %}</button>
+        {% endif %}
     </div>
 
     <div class="repo-file-list-outer-container">
@@ -116,9 +121,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#back').click(function() {
-    location.href = $(this).attr('data');
-});
+$('#main-panel').removeClass('ovhd');
 
 {% if enable_clean %}
 $('#online-gc').click(function() {
