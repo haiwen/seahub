@@ -415,6 +415,19 @@ textarea:-moz-placeholder {/* for FF */
     top:-15px;
     left:-14px;
 }
+.up-outer-caret,
+.up-outer-caret .inner-caret {
+    border-top-width:0;
+    border-bottom-width:14px;
+}
+.up-outer-caret .inner-caret {
+    border-bottom-color:#fff;
+    top:1px;
+}
+.up-outer-caret {
+    position:absolute;
+    top:-15px;
+}
 /**** info-item *****/
 .info-item {
     border: 1px solid #eee;
@@ -1330,6 +1343,7 @@ textarea:-moz-placeholder {/* for FF */
     text-align:left;
     top:48px;
     font-size:13px;
+    border-radius:4px;
 }
 #user-info-popup {
     width:220px;
@@ -1338,6 +1352,20 @@ textarea:-moz-placeholder {/* for FF */
     width:235px;
     top:40px;
     font-size:14px;
+}
+#top-nav-grp-info .outer-caret {
+    left:39px;
+}
+#notice-popup .outer-caret {
+    left:138px;
+}
+#user-info-popup .outer-caret,
+#user-info-popup .inner-caret {
+    border-bottom-width:10px;
+}
+#user-info-popup .outer-caret {
+    top:-10px;
+    left:178px;
 }
 .top-info-popup .item {
     display:block;
