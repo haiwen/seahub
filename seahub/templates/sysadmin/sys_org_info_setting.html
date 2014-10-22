@@ -16,7 +16,7 @@
     <h3>{% trans "Rename Organization" %}</h3>
     <form action="{% url 'sys_org_rename' org.org_id %}" method="post">{% csrf_token %}
         <label>{% trans "New Name" %}</label></br>
-        <input type="text" name="new_name" class="input" /></br>
+        <input type="text" name="new_name" class="input" value="{{ org.org_name }}"/></br>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
 </div>
