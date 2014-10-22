@@ -146,5 +146,6 @@ $(document).click(function(e) {
 $(function() {
     var btn_height = $('#bottom-bar').outerHeight();
     $('#discuss-to-group-caret, #to-group-caret').css({'bottom': btn_height});
-    $('#to-group, #discuss-to-group').css({'bottom': btn_height + $('.outer-caret').outerHeight()});
+    $('#to-group').css({'bottom': btn_height + $('#to-group-caret').outerHeight()});
+    $('#discuss-to-group').css({'bottom': btn_height + $('#discuss-to-group-caret').outerHeight()});
 });
