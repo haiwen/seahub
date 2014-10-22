@@ -1,0 +1,138 @@
+{% extends "sysadmin/sys_org_info_base.html" %}
+{% load i18n seahub_tags %}
+{% load url from future %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_org_info_user' org.org_id %}">{% trans "Members" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_group' org.org_id %}">{% trans "Groups" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_library' org.org_id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_setting' org.org_id %}">{% trans "Setting" %}</a></li>
+    </ul>
+</div>
+
+<table>
+    <tr>
+        <th width="25%">{% trans "Email" %}</th>
+        <th width="10%">{% trans "Status" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="25%">{% trans "Create At / Last Login" %}</th>
+        <th width="20%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr data-userid="{{user.email}}">
+        <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a></td>
+        <td>
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+            </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+            </select>
+        </td>
+        <td>
+            {% if CALC_SHARE_USAGE %}
+            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% else %}
+            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {% endif %}
+        </td>
+        <td style="font-size:11px;">
+        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        </td>
+        <td>
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op vh" data-url="{% url 'user_remove' user.id %}" data-target="{{ user.email }}">{% trans "Delete" %}</a>
+          <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.email }}">{% trans "ResetPwd" %}</a>
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include 'sysadmin/sys_org_set_quota_js.html' %}
+addConfirmTo($('.remove-user-btn'), {
+        'title':"{% trans "Delete User" %}",
+        'con':"{% trans "Are you sure you want to delete %s ?" %}"
+});
+addConfirmTo($('.reset-user-btn'), {
+        'title':"{% trans "Password Reset" %}",
+        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
+});
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.user-status-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.user-status-edit-icon').addClass('vh');
+    }
+);
+$('.user-status-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'select'
+});
+$('.user-status-select').change(function() {
+    var select = $(this),
+        select_val = select.val(),
+        uid = select.parents('tr').attr('data-userid'),
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        cache: false,
+        beforeSend: function() {
+            if (select_val == 1) {
+                // show activating popup
+                $('#activate-msg').modal();
+                $('#simplemodal-container').css({'height':'auto'});
+            }
+        },
+        success: function(data) {
+            if (data['email_sent']) {
+                feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
+            } else if (data['email_sent'] === false) {
+                feedback("{% trans "Edit succeeded, but failed to send email, please check your email configuration." %}", 'success');
+            } else {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+            }
+            select.prev().children('span').html(select.children('option[value="' +select.val() + '"]').text());
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+            $.modal.close();
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            select.prev().removeClass('hide');
+            $.modal.close();
+        }
+    });
+});
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
+});
+</script>
+{% endblock %}

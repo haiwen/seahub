@@ -11,6 +11,11 @@
         <dt>{% trans "Email" %}</dt>
         <dd>{{ email }}</dd>
 
+        {% if org_name %}
+        <dt>{% trans "Organization" %}</dt>
+        <dd>{{ org_name }}</dd>
+        {%  endif %}
+
         {% if profile %}
         <dt>{% trans "Name" context "true name" %}</dt>
         <dd>{{ profile.nickname }}</dd>

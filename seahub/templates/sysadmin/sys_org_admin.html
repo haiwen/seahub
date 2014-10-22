@@ -39,7 +39,7 @@
     </tr>
     {% for org in orgs %}
     <tr>
-        <td><a href="{% url 'sys_org_info' org.org_id %}">{{ org.org_name }}</a></td>
+        <td><a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a></td>
         <td>{{ org.url_prefix }}</td>
         <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
         <td>

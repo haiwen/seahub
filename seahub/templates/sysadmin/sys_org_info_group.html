@@ -1,0 +1,47 @@
+{% extends "sysadmin/sys_org_info_base.html" %}
+{% load i18n seahub_tags %}
+{% load url from future %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_user' org.org_id %}">{% trans "Members" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_org_info_group' org.org_id %}">{% trans "Groups" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_library' org.org_id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_setting' org.org_id %}">{% trans "Setting" %}</a></li>
+    </ul>
+</div>
+
+{% if groups %}
+<table>
+    <tr>
+        <th width="30%">{% trans "Name" %}</th>
+        <th width="30%">{% trans "Creator" %}</th>
+        <th width="25%">{% trans "Create At" %}</th>
+        <th width="15%">{% trans "Operations" %}</th>
+    </tr>
+    {% for group in groups %}
+    <tr>
+        <td><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a></td>
+        <td>{{ group.creator_name }}</td>
+        <td>{{ group.timestamp|tsstr_sec }}</td>
+        <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="group-remove-btn op vh">{% trans "Delete" %}</a></td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<div class="empty-tips">
+<h2 class="alc">{% trans "This organization doesn't have any groups" %}</h2>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include 'sysadmin/sys_org_set_quota_js.html' %}
+addConfirmTo($('.group-remove-btn'), {
+    'title': "{% trans "Delete Group" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}"
+});
+</script>
+{% endblock %}
