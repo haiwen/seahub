@@ -1,0 +1,41 @@
+{% load i18n%}
+$('#set-quota').click(function() {
+    $("#set-quota-form").modal({appendTo: "#main"});
+    return false;
+});
+
+$('#set-quota-form .submit').click(function() {
+    var form = $('#set-quota-form'),
+        form_id = form.attr('id');
+
+    var quota = $('input[name="quota"]', form).val();
+    if (!$.trim(quota)) {
+        apply_form_error(form_id, "{% trans "Quota can not be empty" %}");
+        return false;
+    }
+
+    var sb_btn = $(this);
+    disable(sb_btn);
+    $.ajax({
+        url: '{% url 'sys_org_set_quota' org.org_id %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'quota': quota
+        },
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                apply_form_error(form_id, $.parseJSON(xhr.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+            enable(sb_btn);
+        }
+    });
+    return false;
+});

@@ -26,7 +26,7 @@ from seaserv import get_repo, get_commits, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
     is_passwd_set, get_file_size, edit_repo, \
     get_session_info, set_repo_history_limit, get_commit, \
-    MAX_DOWNLOAD_DIR_SIZE, send_message
+    MAX_DOWNLOAD_DIR_SIZE, send_message, ccnet_threaded_rpc
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -572,7 +572,12 @@ def repo_transfer_owner(request, repo_id):
             org_id = request.user.org.org_id
             seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
         else:
-            seafile_api.set_repo_owner(repo_id, repo_owner)
+            if ccnet_threaded_rpc.get_orgs_by_user(repo_owner):
+                return HttpResponse(json.dumps({
+                       'error': _('Can not transfer library to organization user %s.') % repo_owner,
+                       }), status=400, content_type=content_type)
+            else:
+                seafile_api.set_repo_owner(repo_id, repo_owner)
 
     messages.success(request,
                      _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %

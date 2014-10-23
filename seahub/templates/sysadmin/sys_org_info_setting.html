@@ -1,0 +1,30 @@
+{% extends "sysadmin/sys_org_info_base.html" %}
+{% load i18n seahub_tags %}
+{% load url from future %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_user' org.org_id %}">{% trans "Members" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_group' org.org_id %}">{% trans "Groups" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_org_info_library' org.org_id %}">{% trans "Libraries" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_org_info_setting' org.org_id %}">{% trans "Setting" %}</a></li>
+    </ul>
+</div>
+
+<div class="setting-item">
+    <h3>{% trans "Rename Organization" %}</h3>
+    <form action="{% url 'sys_org_rename' org.org_id %}" method="post">{% csrf_token %}
+        <label>{% trans "New Name" %}</label></br>
+        <input type="text" name="new_name" class="input" value="{{ org.org_name }}"/></br>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+</div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include 'sysadmin/sys_org_set_quota_js.html' %}
+</script>
+{% endblock %}

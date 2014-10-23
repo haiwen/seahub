@@ -16,7 +16,11 @@
     </tr>
     {% for group in groups %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a></td>
+        <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+        {% if group.org_name %}
+        <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' group.org_id %}">({{group.org_name}})</a></p>
+        {% endif %}
+        </td>
         <td>{{ group.props.creator_name }}</td>
         <td>{{ group.props.timestamp|tsstr_sec }}</td>
         <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.props.group_name }}" class="group-remove-btn op vh">{% trans "Delete" %}</a></td>

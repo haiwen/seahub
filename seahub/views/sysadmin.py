@@ -331,6 +331,7 @@ def user_info(request, email):
     owned_repos = seafile_api.get_owned_repo_list(email)
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
+    org_name = None
     if not org:
         my_usage = seafile_api.get_user_self_usage(email)
         quota = seafile_api.get_user_quota(email)
@@ -340,6 +341,7 @@ def user_info(request, email):
                 get_org_user_quota_usage(org_id, email)
         quota = seafserv_threaded_rpc. \
                 get_org_user_quota(org_id, email)
+        org_name = org[0].org_name
 
     if CALC_SHARE_USAGE:
         try:
@@ -371,6 +373,7 @@ def user_info(request, email):
             'email': email,
             'profile': profile,
             'd_profile': d_profile,
+            'org_name': org_name,
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -394,7 +397,13 @@ def user_set_quota(request, email):
                 seafile_api.set_user_quota(email, quota)
             else:
                 org_id = org[0].org_id
-                seafserv_threaded_rpc.set_org_user_quota(org_id, email, quota)
+                org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / (1 << 20)
+                if quota_mb > org_quota_mb:
+                    result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
+                                            org_quota_mb)
+                    return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+                else:
+                    seafserv_threaded_rpc.set_org_user_quota(org_id, email, quota)
         except:
             result['error'] = _(u'Failed to set quota: internal server error')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
@@ -444,8 +453,8 @@ def user_remove(request, user_id):
                 return HttpResponseRedirect(next)
 
             org_id = org[0].org_id
-            org_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
-            for repo in org_repos:
+            org_user_repos = seafile_api.get_org_owned_repo_list(org_id, user.email)
+            for repo in org_user_repos:
                 seafile_api.remove_repo(repo.id)
 
         user.delete()
@@ -733,8 +742,13 @@ def sys_group_admin(request):
 
     groups_plus_one = ccnet_threaded_rpc.get_all_groups(per_page * (current_page -1),
                                                per_page +1)
-        
+
     groups = groups_plus_one[:per_page]
+    for grp in groups:
+        org_id = ccnet_threaded_rpc.get_org_id_by_group(int(grp.id))
+        if org_id > 0:
+            grp.org_id = org_id
+            grp.org_name = ccnet_threaded_rpc.get_org_by_id(int(org_id)).org_name
 
     if len(groups_plus_one) == per_page + 1:
         page_next = True
@@ -784,18 +798,59 @@ def sys_org_admin(request):
 
 @login_required
 @sys_staff_required
-def sys_org_info(request, org_id):
+def sys_org_rename(request, org_id):
 
-    org_id = int(org_id)
+    if request.method != 'POST':
+        raise Http404
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_org_admin') if referer is None else referer
+
+    new_name = request.POST.get('new_name', None)
+    if new_name:
+        try:
+            ccnet_threaded_rpc.set_org_name(int(org_id), new_name)
+            messages.success(request, _(u'Success'))
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, _(u'Failed to rename organization'))
+
+    return HttpResponseRedirect(next)
+
+def sys_get_org_base_info(org_id):
+
     org = ccnet_threaded_rpc.get_org_by_id(org_id)
 
+    # users
     users = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, -1, -1)
     users_count = len(users)
+
+    # groups
+    groups = ccnet_threaded_rpc.get_org_groups(org_id, -1, -1)
+    groups_count = len(groups)
 
     # quota
     total_quota = seafserv_threaded_rpc.get_org_quota(org_id)
     quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org_id)
 
+    return {
+            "org": org,
+            "users": users,
+            "users_count": users_count,
+            "groups": groups,
+            "groups_count": groups_count,
+            "total_quota": total_quota,
+            "quota_usage": quota_usage,
+           }
+
+@login_required
+@sys_staff_required
+def sys_org_info_user(request, org_id):
+
+    org_id = int(org_id)
+
+    org_basic_info = sys_get_org_base_info(org_id)
+    users = org_basic_info["users"]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
         if user.id == request.user.id:
@@ -803,7 +858,7 @@ def sys_org_info(request, org_id):
         try:
             user.self_usage =seafserv_threaded_rpc. \
                     get_org_user_quota_usage(org_id, user.email)
-            user.share_usage = 0 #seafile_api.get_user_share_usage(user.email)
+            user.share_usage = 0
             user.quota = seafserv_threaded_rpc. \
                     get_org_user_quota(org_id, user.email)
         except SearpcError as e:
@@ -818,20 +873,49 @@ def sys_org_info(request, org_id):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    # groups
-    groups = ccnet_threaded_rpc.get_org_groups(org_id, -1, -1)
-    groups_count = len(groups)
+    return render_to_response('sysadmin/sys_org_info_user.html',
+           org_basic_info, context_instance=RequestContext(request))
 
-    return render_to_response('sysadmin/sys_org_info.html', {
-            'org': org,
-            'users': users,
-            'users_count': users_count,
-            'total_quota': total_quota,
-            'quota_usage': quota_usage,
-            'groups': groups,
-            'groups_count': groups_count,
-            }, context_instance=RequestContext(request))
 
+@login_required
+@sys_staff_required
+def sys_org_info_group(request, org_id):
+
+    org_id = int(org_id)
+    org_basic_info = sys_get_org_base_info(org_id)
+
+    return render_to_response('sysadmin/sys_org_info_group.html',
+           org_basic_info, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_org_info_library(request, org_id):
+
+    org_id = int(org_id)
+    org_basic_info = sys_get_org_base_info(org_id)
+
+    # library
+    org_repos = seafserv_threaded_rpc.get_org_repo_list(org_id, -1, -1)
+
+    for repo in org_repos:
+        try:
+            repo.owner = seafserv_threaded_rpc.get_org_repo_owner(repo.id)
+        except:
+            repo.owner = None
+
+    org_basic_info["org_repos"] = org_repos
+    return render_to_response('sysadmin/sys_org_info_library.html',
+           org_basic_info, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_org_info_setting(request, org_id):
+
+    org_id = int(org_id)
+    org_basic_info = sys_get_org_base_info(org_id)
+
+    return render_to_response('sysadmin/sys_org_info_setting.html',
+           org_basic_info, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -930,12 +1014,18 @@ def sys_repo_transfer(request):
     new_owner = request.POST.get('email', None)
 
     if repo_id and new_owner:
-        try:
-            User.objects.get(email=new_owner)
-            seafile_api.set_repo_owner(repo_id, new_owner)
-            messages.success(request, _(u'Successfully transfered.'))    
-        except User.DoesNotExist:
-            messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
+        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+            messages.error(request, _(u'Can not transfer organization library'))
+        else:
+            try:
+                User.objects.get(email=new_owner)
+                if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
+                    messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
+                else:
+                    seafile_api.set_repo_owner(repo_id, new_owner)
+                    messages.success(request, _(u'Successfully transfered.'))
+            except User.DoesNotExist:
+                messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
     else:
         messages.error(request, _(u'Failed to transfer, invalid arguments.'))
 
