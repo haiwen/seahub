@@ -277,6 +277,7 @@ function reqDirData(url, func) {
             }
 
             cur_path = data['path']; // update cur_path
+            last_start = 0; // for current dir's 'list_dir_more'
             if (func) {
                 func(data);
             }
