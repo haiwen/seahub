@@ -6,6 +6,7 @@
 
 {% block extra_style %}
 <style type="text/css">
+#left-panel { position:relative; }
 #set-quota-form {
     min-width:255px;
 }
@@ -13,9 +14,8 @@
 {% endblock %}
 
 {% block left_panel %}
+<a class="go-back" title="{% trans "Back to organization list" %}"  href="{% url 'sys_org_admin' %}"><span class="icon-chevron-left"></span></a>
 <div class="side-info">
-    <a class="go-back" title="{% trans "Back to organization list" %}"  href="{% url 'sys_org_admin' %}"><span class="icon-chevron-left"></span></a>
-
     <h3 class="hd">{{ org.org_name }}</h3>
     <dl>
         <dt>{% trans "Number of members" %}</dt>
