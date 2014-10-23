@@ -1,0 +1,39 @@
+{% extends "admin_base.html" %}
+{% load i18n seahub_tags %}
+{% load url from future %}
+
+{% block nav_orgadmin_class %}class="cur"{% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position:relative; }
+#set-quota-form {
+    min-width:255px;
+}
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to organization list" %}"  href="{% url 'sys_org_admin' %}"><span class="icon-chevron-left"></span></a>
+<div class="side-info">
+    <h3 class="hd">{{ org.org_name }}</h3>
+    <dl>
+        <dt>{% trans "Number of members" %}</dt>
+        <dd>{{ users_count }}</dd>
+        <dt>{% trans "Number of groups" %}</dt>
+        <dd>{{ groups_count }}</dd>
+    </dl>
+
+    <h3 class="hd">{% trans "Space Used" %}</h3>
+    <p>{{ quota_usage|filesizeformat }} {% if total_quota > 0 %}/ {{ total_quota|filesizeformat }} {% endif %}</p>
+    <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
+</div>
+<form id="set-quota-form" method="post" class="hide">{% csrf_token %}
+    <h3>{% trans "Set org storage limit" %}</h3>
+    <input type="hidden" name="org_id" value="{{ org.org_id }}" />
+    <input type="text" name="quota" /> MB
+    <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+{% endblock %}
