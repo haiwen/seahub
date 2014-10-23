@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-18 11:03+0800\n"
-"PO-Revision-Date: 2014-10-18 03:05+0000\n"
+"POT-Creation-Date: 2014-10-23 14:32+0800\n"
+"PO-Revision-Date: 2014-10-23 06:34+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Catalan (http://www.transifex.com/projects/p/seahub/language/ca/)\n"
 "MIME-Version: 1.0\n"
@@ -48,7 +48,7 @@ msgid "Name %s is not valid"
 msgstr "El nom %s no és vàlid"
 
 #: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:778
-#: seahub/share/views.py:816 seahub/views/__init__.py:1044
+#: seahub/share/views.py:816 seahub/views/__init__.py:1049
 #: seahub/views/ajax.py:347 seahub/views/ajax.py:406 seahub/views/ajax.py:497
 #: seahub/views/ajax.py:626 seahub/views/ajax.py:817 seahub/views/ajax.py:924
 #: seahub/views/ajax.py:953 seahub/views/ajax.py:1081
@@ -90,12 +90,12 @@ msgstr "La contrasenya és obligatòria"
 msgid "Bad url format"
 msgstr "El URL no és correcte"
 
-#: seahub/forms.py:153 seahub/templates/repo.html:350
+#: seahub/forms.py:153 seahub/templates/repo.html:351
 msgid "Wrong password"
 msgstr "La contrasenya no és correcte"
 
 #: seahub/forms.py:155 seahub/views/__init__.py:410
-#: seahub/views/__init__.py:1050 seahub/views/ajax.py:665
+#: seahub/views/__init__.py:1055 seahub/views/ajax.py:665
 #: seahub/views/ajax.py:694 seahub/views/ajax.py:732 seahub/views/ajax.py:769
 msgid "Internal server error"
 msgstr "Error intern al servidor"
@@ -108,7 +108,7 @@ msgstr "S'ha produït un error al desencriptar la llibreria"
 msgid "Email is required"
 msgstr "El correu electrònic és obligatori "
 
-#: seahub/forms.py:165 seahub/templates/sysadmin/userinfo.html:129
+#: seahub/forms.py:165 seahub/templates/sysadmin/userinfo.html:140
 msgid "Quota can't be empty"
 msgstr "La quota és obligatòria"
 
@@ -231,7 +231,7 @@ msgstr "Equip d'organització de fitxers"
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:175 seahub/templates/view_file_base.html:123
+#: seahub/templates/base.html:177 seahub/templates/view_file_base.html:123
 msgid "Discussion"
 msgstr "Missatges"
 
@@ -252,7 +252,7 @@ msgstr "Missatges"
 #: seahub/share/templates/share/links.html:28
 #: seahub/share/templates/share/priv_shared_files.html:64
 #: seahub/templates/repo_history_view.html:66
-#: seahub/templates/repo_recycle_view.html:83
+#: seahub/templates/repo_recycle_view.html:88
 #: seahub/templates/view_file_base.html:156
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/snippets/group_recommend_form.html:28
@@ -309,15 +309,15 @@ msgstr "S'està carregant..."
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:180
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
-#: seahub/templates/base.html:138 seahub/templates/file_edit.html:595
+#: seahub/templates/base.html:140 seahub/templates/file_edit.html:595
 #: seahub/templates/myhome.html:123 seahub/templates/myhome.html.py:151
-#: seahub/templates/repo.html:291 seahub/templates/repo.html.py:700
-#: seahub/templates/repo.html:758 seahub/templates/repo.html.py:1596
-#: seahub/templates/repo.html:1820 seahub/templates/repo.html.py:1845
-#: seahub/templates/repo.html:1890 seahub/templates/repo.html.py:1995
-#: seahub/templates/repo.html:2067 seahub/templates/repo_settings.html:142
-#: seahub/templates/repo_settings.html:178
-#: seahub/templates/repo_settings.html:239
+#: seahub/templates/repo.html:292 seahub/templates/repo.html.py:701
+#: seahub/templates/repo.html:759 seahub/templates/repo.html.py:1597
+#: seahub/templates/repo.html:1821 seahub/templates/repo.html.py:1846
+#: seahub/templates/repo.html:1891 seahub/templates/repo.html.py:1996
+#: seahub/templates/repo.html:2068 seahub/templates/repo_settings.html:141
+#: seahub/templates/repo_settings.html:177
+#: seahub/templates/repo_settings.html:238
 #: seahub/templates/view_file_base.html:338
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:109
@@ -331,9 +331,9 @@ msgstr "S'està carregant..."
 #: seahub/templates/snippets/shared_link_js.html:466
 #: seahub/templates/snippets/spreadsheet_convert_js.html:31
 #: seahub/templates/sysadmin/sys_org_admin.html:126
-#: seahub/templates/sysadmin/sys_org_info.html:161
+#: seahub/templates/sysadmin/sys_org_set_quota_js.html:35
 #: seahub/templates/sysadmin/sys_useradmin.html:139
-#: seahub/templates/sysadmin/userinfo.html:152
+#: seahub/templates/sysadmin/userinfo.html:163
 msgid "Failed. Please check the network."
 msgstr "Error. Verifiqueu la connexió a la xarxa"
 
@@ -419,7 +419,10 @@ msgstr "Dates importants"
 #: seahub/templates/pubgrp.html:16 seahub/templates/view_file_base.html:168
 #: seahub/templates/snippets/repo_share_form.html:7
 #: seahub/templates/sysadmin/base.html:15
-#: seahub/templates/sysadmin/sys_org_info.html:46
+#: seahub/templates/sysadmin/sys_org_info_group.html:9
+#: seahub/templates/sysadmin/sys_org_info_library.html:9
+#: seahub/templates/sysadmin/sys_org_info_setting.html:9
+#: seahub/templates/sysadmin/sys_org_info_user.html:9
 msgid "Groups"
 msgstr "Grups"
 
@@ -659,10 +662,10 @@ msgstr "Avatar actual:"
 #: seahub/templates/repo.html:65 seahub/templates/repo.html.py:115
 #: seahub/templates/repo.html:145 seahub/templates/repo.html.py:169
 #: seahub/templates/repo.html:190 seahub/templates/repo.html.py:206
-#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:111
-#: seahub/templates/repo_settings.html:49
-#: seahub/templates/repo_settings.html:59
-#: seahub/templates/repo_settings.html:75
+#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:116
+#: seahub/templates/repo_settings.html:48
+#: seahub/templates/repo_settings.html:58
+#: seahub/templates/repo_settings.html:74
 #: seahub/templates/share_access_validation.html:10
 #: seahub/templates/shared_file_view.html:54
 #: seahub/templates/view_file_base.html:152
@@ -679,13 +682,14 @@ msgstr "Avatar actual:"
 #: seahub/templates/snippets/search_form.html:57
 #: seahub/templates/sysadmin/repo_transfer_form.html:8
 #: seahub/templates/sysadmin/sys_org_admin.html:28
-#: seahub/templates/sysadmin/sys_org_info.html:37
+#: seahub/templates/sysadmin/sys_org_info_base.html:37
+#: seahub/templates/sysadmin/sys_org_info_setting.html:20
 #: seahub/templates/sysadmin/sys_repo_search.html:13
 #: seahub/templates/sysadmin/sys_useradmin.html:50
 #: seahub/templates/sysadmin/sys_useradmin.html:58
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:36
 #: seahub/templates/sysadmin/user_search.html:11
-#: seahub/templates/sysadmin/userinfo.html:47
+#: seahub/templates/sysadmin/userinfo.html:58
 #: seahub/templates/wiki/personal_wiki.html:46
 #: seahub/templates/wiki/personal_wiki.html:56
 #: seahub/templates/wiki/personal_wiki.html:85
@@ -805,7 +809,7 @@ msgstr "Sincronització automàtica de seafile"
 #: seahub/base/templatetags/seahub_tags.py:188
 #: seahub/base/templatetags/seahub_tags.py:222
 #: seahub/group/templates/group/group_discuss.html:154
-#: seahub/templates/repo.html:969 seahub/templates/repo.html.py:1700
+#: seahub/templates/repo.html:970 seahub/templates/repo.html.py:1701
 #: seahub/templates/snippets/my_owned_repos.html:148
 msgid "Just now"
 msgstr "Ara mateix"
@@ -865,8 +869,8 @@ msgstr[1] "Fa %(seconds)d segons"
 #: seahub/templates/snippets/my_shared_repos.html:10
 #: seahub/templates/snippets/repo_create_form.html:11
 #: seahub/templates/snippets/repo_share_form.html:25
-#: seahub/templates/sysadmin/userinfo.html:72
-#: seahub/templates/sysadmin/userinfo.html:98
+#: seahub/templates/sysadmin/userinfo.html:83
+#: seahub/templates/sysadmin/userinfo.html:109
 msgid "Read-Write"
 msgstr "Lectura-Escriptura"
 
@@ -957,8 +961,8 @@ msgstr "Correu electrònic"
 #: seahub/templates/my_group_repos.html:8
 #: seahub/templates/my_shared_repos.html:7 seahub/templates/pubrepo.html:16
 #: seahub/templates/repo_history_view.html:52
-#: seahub/templates/repo_recycle_view.html:58
-#: seahub/templates/repo_settings.html:35
+#: seahub/templates/repo_recycle_view.html:63
+#: seahub/templates/repo_settings.html:34
 #: seahub/templates/view_shared_dir.html:29
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
@@ -973,11 +977,12 @@ msgstr "Correu electrònic"
 #: seahub/templates/sysadmin/sys_list_system.html:23
 #: seahub/templates/sysadmin/sys_org_admin.html:14
 #: seahub/templates/sysadmin/sys_org_admin.html:34
-#: seahub/templates/sysadmin/sys_org_info.html:102
+#: seahub/templates/sysadmin/sys_org_info_group.html:18
+#: seahub/templates/sysadmin/sys_org_info_library.html:18
 #: seahub/templates/sysadmin/sys_publink_admin.html:12
 #: seahub/templates/sysadmin/sys_repo_search.html:11
-#: seahub/templates/sysadmin/userinfo.html:65
-#: seahub/templates/sysadmin/userinfo.html:91
+#: seahub/templates/sysadmin/userinfo.html:76
+#: seahub/templates/sysadmin/userinfo.html:102
 #: seahub/templates/wiki/personal_wiki.html:41
 #: seahub/templates/wiki/personal_wiki.html:82
 #: seahub/templates/wiki/personal_wiki_pages.html:28
@@ -1005,7 +1010,7 @@ msgstr "Nota"
 #: seahub/share/templates/share/user_share_list.html:36
 #: seahub/templates/file_revisions.html:28
 #: seahub/templates/my_shared_repos.html:11 seahub/templates/pubrepo.html:20
-#: seahub/templates/repo_recycle_view.html:61
+#: seahub/templates/repo_recycle_view.html:66
 #: seahub/templates/repo_view_snapshot.html:18
 #: seahub/templates/view_shared_dir.html:31
 #: seahub/templates/snippets/my_owned_repos.html:30
@@ -1015,12 +1020,13 @@ msgstr "Nota"
 #: seahub/templates/snippets/repo_dir_data.html:43
 #: seahub/templates/sysadmin/repoadmin_table.html:8
 #: seahub/templates/sysadmin/sys_group_admin.html:15
-#: seahub/templates/sysadmin/sys_org_info.html:57
-#: seahub/templates/sysadmin/sys_org_info.html:105
+#: seahub/templates/sysadmin/sys_org_info_group.html:21
+#: seahub/templates/sysadmin/sys_org_info_library.html:22
+#: seahub/templates/sysadmin/sys_org_info_user.html:21
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:47
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/templates/sysadmin/userinfo.html:67
+#: seahub/templates/sysadmin/userinfo.html:78
 msgid "Operations"
 msgstr "Operacions"
 
@@ -1032,11 +1038,11 @@ msgstr "Operacions"
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_sf.html:6
 #: seahub/templates/view_file_text.html:24
-#: seahub/templates/sysadmin/sys_org_info.html:70
+#: seahub/templates/sysadmin/sys_org_info_user.html:34
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:62
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:79
-#: seahub/templates/sysadmin/useradmin_table.html:23
-#: seahub/templates/sysadmin/useradmin_table.html:40
+#: seahub/templates/sysadmin/useradmin_table.html:27
+#: seahub/templates/sysadmin/useradmin_table.html:44
 #: seahub/templates/wiki/personal_wiki.html:21
 msgid "Edit"
 msgstr "Edita"
@@ -1061,13 +1067,14 @@ msgstr "Edita"
 #: seahub/templates/snippets/repo_dirents.html:32
 #: seahub/templates/snippets/repo_dirents.html:86
 #: seahub/templates/sysadmin/repoadmin_table.html:24
-#: seahub/templates/sysadmin/sys_group_admin.html:22
+#: seahub/templates/sysadmin/sys_group_admin.html:26
 #: seahub/templates/sysadmin/sys_org_admin.html:49
-#: seahub/templates/sysadmin/sys_org_info.html:89
-#: seahub/templates/sysadmin/sys_org_info.html:112
+#: seahub/templates/sysadmin/sys_org_info_group.html:28
+#: seahub/templates/sysadmin/sys_org_info_library.html:38
+#: seahub/templates/sysadmin/sys_org_info_user.html:53
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:103
-#: seahub/templates/sysadmin/useradmin_table.html:68
-#: seahub/templates/sysadmin/userinfo.html:76
+#: seahub/templates/sysadmin/useradmin_table.html:72
+#: seahub/templates/sysadmin/userinfo.html:87
 msgid "Delete"
 msgstr "Elimina"
 
@@ -1085,18 +1092,18 @@ msgstr "Afegiu nous contactes per compartir llibreries més fàcilment"
 #: seahub/contacts/templates/contacts/contact_list.html:55
 #: seahub/group/templates/group/group_manage.html:24
 #: seahub/group/templates/group/group_manage.html:48
-#: seahub/templates/repo_settings.html:57
+#: seahub/templates/repo_settings.html:56
 #: seahub/templates/registration/login.html:34
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/snippets/add_to_contacts_form.html:2
 #: seahub/templates/sysadmin/repo_transfer_form.html:5
-#: seahub/templates/sysadmin/sys_org_info.html:53
+#: seahub/templates/sysadmin/sys_org_info_user.html:17
 #: seahub/templates/sysadmin/sys_useradmin.html:36
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:42
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:23
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:4
-#: seahub/templates/sysadmin/userinfo.html:11
+#: seahub/templates/sysadmin/userinfo.html:17
 msgid "Email"
 msgstr "Correu electrònic"
 
@@ -1122,9 +1129,9 @@ msgstr "Elimina el contacte"
 
 #: seahub/contacts/templates/contacts/contact_list.html:115
 #: seahub/notifications/templates/notifications/notification_list.html:52
-#: seahub/templates/sysadmin/sys_group_admin.html:38
-#: seahub/templates/sysadmin/sys_org_info.html:170
-#: seahub/templates/sysadmin/sys_org_info.html:174
+#: seahub/templates/sysadmin/sys_group_admin.html:42
+#: seahub/templates/sysadmin/sys_org_info_group.html:44
+#: seahub/templates/sysadmin/sys_org_info_user.html:72
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #, python-format
 msgid "Are you sure you want to delete %s ?"
@@ -1365,7 +1372,7 @@ msgstr "S'ha notificat al administrador del grup."
 msgid "Discussion is required."
 msgstr ""
 
-#: seahub/group/views.py:1345 seahub/views/__init__.py:629
+#: seahub/group/views.py:1345 seahub/views/__init__.py:634
 #: seahub/views/ajax.py:1182 seahub/views/file.py:310 seahub/views/file.py:632
 #: seahub/views/file.py:763
 msgid "File does not exist"
@@ -1384,7 +1391,7 @@ msgstr "La \"Wiki\" s'ha desactivat."
 msgid "Failed to create wiki page. Please retry later."
 msgstr "No s'ha pogut crear la pàgina. Proveu més tard. "
 
-#: seahub/group/views.py:1480 seahub/views/__init__.py:623
+#: seahub/group/views.py:1480 seahub/views/__init__.py:628
 #: seahub/views/ajax.py:1714 seahub/views/ajax.py:1778
 #: seahub/views/wiki.py:109
 msgid "Internal Server Error"
@@ -1479,7 +1486,7 @@ msgstr "No pot estar buit i ha de tenir 2048 caràcters com a màxim."
 #: seahub/templates/repo.html:146 seahub/templates/repo.html.py:170
 #: seahub/templates/repo.html:191 seahub/templates/repo.html.py:198
 #: seahub/templates/repo.html:207 seahub/templates/repo.html.py:251
-#: seahub/templates/repo_recycle_view.html:112
+#: seahub/templates/repo_recycle_view.html:117
 #: seahub/templates/shared_file_view.html:55
 #: seahub/templates/view_shared_upload_link.html:81
 #: seahub/templates/snippets/file_share_popup.html:62
@@ -1507,6 +1514,10 @@ msgstr "Aquest grup és públic"
 #: seahub/templates/home_base.html:14 seahub/templates/home_base.html.py:32
 #: seahub/templates/myhome.html:4 seahub/templates/pub_base.html:12
 #: seahub/templates/pubrepo.html:9 seahub/templates/sysadmin/base.html:9
+#: seahub/templates/sysadmin/sys_org_info_group.html:10
+#: seahub/templates/sysadmin/sys_org_info_library.html:10
+#: seahub/templates/sysadmin/sys_org_info_setting.html:10
+#: seahub/templates/sysadmin/sys_org_info_user.html:10
 msgid "Libraries"
 msgstr "Llibreries"
 
@@ -1525,12 +1536,15 @@ msgstr "Fitxers"
 #: seahub/group/templates/group/group_manage.html:10
 #: seahub/group/templates/group/group_members.html:8
 #: seahub/templates/pub_base.html:14
-#: seahub/templates/sysadmin/sys_org_info.html:45
+#: seahub/templates/sysadmin/sys_org_info_group.html:8
+#: seahub/templates/sysadmin/sys_org_info_library.html:8
+#: seahub/templates/sysadmin/sys_org_info_setting.html:8
+#: seahub/templates/sysadmin/sys_org_info_user.html:8
 msgid "Members"
 msgstr "Membres"
 
 #: seahub/group/templates/group/group_base.html:40
-#: seahub/templates/base.html:88
+#: seahub/templates/base.html:90
 msgid "Admin"
 msgstr "Administra"
 
@@ -1592,7 +1606,7 @@ msgstr "Esteu segurs que voleu eliminar aquest missatge?"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:195
 #: seahub/message/templates/message/user_msg_list.html:231
-#: seahub/templates/base.html:122 seahub/templates/devices.html:45
+#: seahub/templates/base.html:124 seahub/templates/devices.html:45
 #: seahub/templates/snippets/repo_del_popup.html:4
 msgid "Yes"
 msgstr "Sí"
@@ -1600,7 +1614,7 @@ msgstr "Sí"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:195
 #: seahub/message/templates/message/user_msg_list.html:231
-#: seahub/templates/base.html:123 seahub/templates/devices.html:46
+#: seahub/templates/base.html:125 seahub/templates/devices.html:46
 #: seahub/templates/snippets/repo_del_popup.html:5
 msgid "No"
 msgstr "No"
@@ -1620,7 +1634,7 @@ msgstr "No s'ha eliminat: "
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:216
 #: seahub/message/templates/message/user_msg_list.html:252
-#: seahub/templates/repo.html:876 seahub/templates/repo.html.py:1809
+#: seahub/templates/repo.html:877 seahub/templates/repo.html.py:1810
 msgid "Failed."
 msgstr "Error."
 
@@ -1645,7 +1659,7 @@ msgstr "Crea una llibreria"
 #: seahub/templates/my_group_repos.html:9
 #: seahub/templates/my_shared_repos.html:8 seahub/templates/pubrepo.html:17
 #: seahub/templates/repo_history.html:23
-#: seahub/templates/repo_settings.html:37
+#: seahub/templates/repo_settings.html:36
 #: seahub/templates/snippets/my_group_repos.html:9
 #: seahub/templates/snippets/my_owned_repos.html:28
 #: seahub/templates/snippets/my_owned_repos.html:122
@@ -1653,8 +1667,9 @@ msgstr "Crea una llibreria"
 #: seahub/templates/snippets/repo_create_form.html:6
 #: seahub/templates/sysadmin/repoadmin_table.html:7
 #: seahub/templates/sysadmin/sys_list_system.html:25
-#: seahub/templates/sysadmin/userinfo.html:66
-#: seahub/templates/sysadmin/userinfo.html:93
+#: seahub/templates/sysadmin/sys_org_info_library.html:21
+#: seahub/templates/sysadmin/userinfo.html:77
+#: seahub/templates/sysadmin/userinfo.html:104
 #: seahub/templates/wiki/personal_wiki.html:43
 msgid "Description"
 msgstr "Descripció"
@@ -1764,10 +1779,9 @@ msgstr "Detalls"
 #: seahub/templates/repo_view_snapshot.html:29
 #: seahub/templates/sysadmin/sys_list_orphan.html:23
 #: seahub/templates/sysadmin/sys_list_system.html:36
-#: seahub/templates/sysadmin/sys_org_info.html:117
 #: seahub/templates/sysadmin/sys_repo_admin.html:25
-#: seahub/templates/sysadmin/userinfo.html:82
-#: seahub/templates/sysadmin/userinfo.html:106
+#: seahub/templates/sysadmin/userinfo.html:93
+#: seahub/templates/sysadmin/userinfo.html:117
 msgid "None"
 msgstr "Cap"
 
@@ -1828,7 +1842,7 @@ msgstr ""
 #: seahub/templates/snippets/my_shared_repos.html:7
 #: seahub/templates/snippets/my_shared_repos.html:10
 #: seahub/templates/snippets/my_shared_repos.html:12
-#: seahub/templates/sysadmin/userinfo.html:72
+#: seahub/templates/sysadmin/userinfo.html:83
 msgid "directory icon"
 msgstr "Icona de directori"
 
@@ -1869,7 +1883,7 @@ msgstr "Administradors"
 #: seahub/group/templates/group/group_manage.html:12
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:25
-#: seahub/templates/base.html:78 seahub/templates/repo.html:30
+#: seahub/templates/base.html:80 seahub/templates/repo.html:30
 msgid "Settings"
 msgstr "Configuració"
 
@@ -2111,13 +2125,13 @@ msgid "Are you sure you want to delete this page?"
 msgstr ""
 
 #: seahub/group/templates/group/group_wiki.html:158
-#: seahub/templates/repo_settings.html:102
+#: seahub/templates/repo_settings.html:101
 #: seahub/templates/wiki/personal_wiki.html:149
 msgid "Name is required."
 msgstr "El nom és obligatori."
 
 #: seahub/group/templates/group/group_wiki.html:162
-#: seahub/templates/repo_settings.html:106
+#: seahub/templates/repo_settings.html:105
 #: seahub/templates/wiki/personal_wiki.html:153
 msgid "Description is required."
 msgstr "La descripció és obligatoria."
@@ -2695,7 +2709,7 @@ msgid "Set to current"
 msgstr "Estableix com a actual"
 
 #: seahub/notifications/templates/notifications/notification_list.html:39
-#: seahub/templates/sysadmin/sys_group_admin.html:30
+#: seahub/templates/sysadmin/sys_group_admin.html:34
 #: seahub/templates/sysadmin/sys_publink_admin.html:31
 msgid "Empty"
 msgstr "Buit"
@@ -2788,7 +2802,7 @@ msgid "Profile Setting"
 msgstr "Configuració "
 
 #: seahub/profile/templates/profile/set_profile.html:10
-#: seahub/templates/sysadmin/userinfo.html:8
+#: seahub/templates/sysadmin/userinfo.html:14
 msgid "Profile"
 msgstr "Perfil"
 
@@ -2920,25 +2934,25 @@ msgid "Info"
 msgstr "Informació"
 
 #: seahub/profile/templates/profile/user_profile.html:41
-#: seahub/templates/sysadmin/userinfo.html:15
+#: seahub/templates/sysadmin/userinfo.html:26
 msgctxt "true name"
 msgid "Name"
 msgstr "Nom"
 
 #: seahub/profile/templates/profile/user_profile.html:44
-#: seahub/templates/sysadmin/userinfo.html:18
+#: seahub/templates/sysadmin/userinfo.html:29
 msgid "Self-introduction"
 msgstr "Introducció"
 
 #: seahub/profile/templates/profile/user_profile.html:48
 #: seahub/templates/registration/registration_form.html:30
-#: seahub/templates/sysadmin/userinfo.html:23
+#: seahub/templates/sysadmin/userinfo.html:34
 msgid "Department"
 msgstr "Departament"
 
 #: seahub/profile/templates/profile/user_profile.html:51
 #: seahub/templates/registration/registration_form.html:32
-#: seahub/templates/sysadmin/userinfo.html:26
+#: seahub/templates/sysadmin/userinfo.html:37
 msgid "Telephone"
 msgstr "Telèfon"
 
@@ -3040,8 +3054,8 @@ msgid "all members"
 msgstr "Tots el membres"
 
 #: seahub/share/views.py:720 seahub/share/views.py:1074
-#: seahub/views/__init__.py:841 seahub/views/__init__.py:1310
-#: seahub/views/__init__.py:1353 seahub/views/ajax.py:979
+#: seahub/views/__init__.py:846 seahub/views/__init__.py:1315
+#: seahub/views/__init__.py:1358 seahub/views/ajax.py:979
 #: seahub/views/ajax.py:999 seahub/views/file.py:877
 msgid "Invalid arguments"
 msgstr "Els arguments no són vàlids"
@@ -3156,7 +3170,7 @@ msgstr "Visites"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:611
+#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:612
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "Mostra"
@@ -3218,14 +3232,14 @@ msgstr ""
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:94
 #: seahub/share/templates/share/repos.html:99
-#: seahub/templates/sysadmin/sys_org_info.html:216
+#: seahub/templates/sysadmin/sys_org_info_user.html:114
 #: seahub/templates/sysadmin/useradmin_js.html:65
 msgid "Edit succeeded"
 msgstr "S'ha actualitzat"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:101
 #: seahub/share/templates/share/repos.html:106
-#: seahub/templates/sysadmin/sys_org_info.html:224
+#: seahub/templates/sysadmin/sys_org_info_user.html:122
 #: seahub/templates/sysadmin/useradmin_js.html:73
 msgid "Edit failed."
 msgstr "No s'ha pogut actualitzar."
@@ -3291,8 +3305,8 @@ msgid "Shares"
 msgstr "Compartit"
 
 #: seahub/share/templates/share/user_share_list.html:8
-#: seahub/templates/repo_settings.html:19
-#: seahub/templates/repo_settings.html:33
+#: seahub/templates/repo_settings.html:18
+#: seahub/templates/repo_settings.html:32
 msgid "Basic Info"
 msgstr "Informació bàsica"
 
@@ -3327,24 +3341,24 @@ msgstr "Activitat"
 msgid "Exit System Admin"
 msgstr "Surt de l'administrador de sistema"
 
-#: seahub/templates/base.html:49 seahub/templates/base.html.py:54
+#: seahub/templates/base.html:49 seahub/templates/base.html.py:55
 #: seahub/templates/sysadmin/base.html:23
 msgid "Notifications"
 msgstr "Notificacions"
 
-#: seahub/templates/base.html:58
+#: seahub/templates/base.html:59
 msgid "See All Notifications"
 msgstr ""
 
-#: seahub/templates/base.html:79
+#: seahub/templates/base.html:81
 msgid "Log out"
 msgstr "Tanca la sessió"
 
-#: seahub/templates/base.html:83 seahub/templates/sysadmin/base.html:6
+#: seahub/templates/base.html:85 seahub/templates/sysadmin/base.html:6
 msgid "System Admin"
 msgstr "Administrador de sistema"
 
-#: seahub/templates/base.html:178
+#: seahub/templates/base.html:180
 #: seahub/templates/sysadmin/sys_group_admin.html:7
 msgid "All Groups"
 msgstr "Tots els grups"
@@ -3367,7 +3381,7 @@ msgid ""
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
 msgstr ""
 
-#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:326
+#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:327
 #: seahub/templates/share_access_validation.html:25
 msgid "Please enter the password."
 msgstr "Introduïu la contrasenya."
@@ -3427,9 +3441,7 @@ msgid "Successfully unlinked."
 msgstr ""
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:57
-#: seahub/templates/history_file_view.html:63
-#: seahub/templates/history_file_view.html:77 seahub/templates/repo.html:27
-#: seahub/templates/shared_file_view.html:36
+#: seahub/templates/repo.html:27 seahub/templates/shared_file_view.html:36
 #: seahub/templates/shared_file_view.html:65
 #: seahub/templates/view_file_base.html:104
 #: seahub/templates/view_file_base.html:190
@@ -3444,7 +3456,7 @@ msgstr "Descarrega"
 
 #: seahub/templates/file_edit.html:84
 #: seahub/templates/repo_history_view.html:38
-#: seahub/templates/repo_recycle_view.html:21
+#: seahub/templates/repo_recycle_view.html:26
 #: seahub/templates/shared_file_view.html:17
 #: seahub/templates/view_shared_dir.html:13
 msgid "Current path: "
@@ -3761,7 +3773,7 @@ msgid "Password is required."
 msgstr "Es requereix contrasenya."
 
 #: seahub/templates/file_revisions.html:5 seahub/templates/repo_history.html:5
-#: seahub/templates/repo_settings.html:41
+#: seahub/templates/repo_settings.html:40
 #: seahub/templates/view_file_base.html:130
 #: seahub/templates/snippets/current_commit.html:15
 #: seahub/templates/snippets/repo_dirents.html:90
@@ -3784,7 +3796,7 @@ msgstr "Ruta actual:"
 
 #: seahub/templates/file_revisions.html:27
 #: seahub/templates/repo_history_view.html:53
-#: seahub/templates/repo_recycle_view.html:60
+#: seahub/templates/repo_recycle_view.html:65
 #: seahub/templates/view_shared_dir.html:30
 #: seahub/templates/snippets/repo_dir_data.html:41
 msgid "Size"
@@ -3800,8 +3812,8 @@ msgid "(Renamed or moved from %(old_path)s)"
 msgstr ""
 
 #: seahub/templates/file_revisions.html:55
-#: seahub/templates/repo_recycle_view.html:71
-#: seahub/templates/repo_recycle_view.html:88
+#: seahub/templates/repo_recycle_view.html:76
+#: seahub/templates/repo_recycle_view.html:93
 #: seahub/templates/repo_view_snapshot.html:43
 msgid "Restore"
 msgstr "Restaura"
@@ -3843,48 +3855,6 @@ msgstr "Seafile"
 msgid "About Us"
 msgstr ""
 
-#: seahub/templates/history_file_view.html:16
-#: seahub/templates/repo_view_snapshot.html:7
-#: seahub/templates/view_snapshot_file.html:7
-msgid "snapshots"
-msgstr "captures"
-
-#: seahub/templates/history_file_view.html:23
-#: seahub/templates/view_file_base.html:130
-#: seahub/templates/view_history_file.html:16
-msgid "history"
-msgstr "historial"
-
-#: seahub/templates/history_file_view.html:26
-#: seahub/templates/text_diff.html:7
-#: seahub/templates/view_history_file.html:19
-msgid "Back to file versions"
-msgstr "Torna a les versions del fitxer"
-
-#: seahub/templates/history_file_view.html:30
-#: seahub/templates/history_file_view.html:41
-#: seahub/templates/repo_recycle_view.html:8
-#: seahub/templates/repo_recycle_view.html:22
-#: seahub/templates/view_trash_file.html:6
-msgid "'s trash"
-msgstr " brosa"
-
-#: seahub/templates/history_file_view.html:31
-#: seahub/templates/repo_history.html:10
-#: seahub/templates/repo_recycle_view.html:13
-#: seahub/templates/repo_settings.html:16
-#: seahub/templates/view_trash_file.html:7
-msgid "Back to Library"
-msgstr "Torna a la llibreria"
-
-#: seahub/templates/history_file_view.html:38
-#: seahub/templates/view_file_base.html:66
-#: seahub/templates/view_history_file.html:27
-#: seahub/templates/view_snapshot_file.html:13
-#: seahub/templates/view_trash_file.html:11
-msgid "Current Path: "
-msgstr "Ruta actual:"
-
 #: seahub/templates/home_base.html:8
 msgid "Personal"
 msgstr "Personal"
@@ -3909,6 +3879,30 @@ msgstr "Enllaços"
 
 #: seahub/templates/i18n.html:6
 msgid "Add folder"
+msgstr ""
+
+#: seahub/templates/i18n.html:7
+msgid "Add auto expiration"
+msgstr ""
+
+#: seahub/templates/i18n.html:8
+msgid "Days"
+msgstr ""
+
+#: seahub/templates/i18n.html:9
+msgid "Shared Links"
+msgstr ""
+
+#: seahub/templates/i18n.html:10
+msgid "View and manage all the shared links in this library."
+msgstr ""
+
+#: seahub/templates/i18n.html:11
+msgid "Owned Libs"
+msgstr ""
+
+#: seahub/templates/i18n.html:12
+msgid "Shared Libs"
 msgstr ""
 
 #: seahub/templates/my_group_repos.html:6
@@ -3969,6 +3963,7 @@ msgstr "Inici"
 
 #: seahub/templates/myhome_base.html:13 seahub/templates/pub_base.html:5
 #: seahub/templates/pub_base.html.py:10
+#: seahub/templates/sysadmin/userinfo.html:21
 msgid "Organization"
 msgstr "Organització"
 
@@ -3988,7 +3983,8 @@ msgstr "No s'ha creat cap grup"
 msgid "You can click \"Add Group\" button under \"Group\" label to create a group. "
 msgstr "Podeu clicar \"Afegeix grup\" per crear un nou grup."
 
-#: seahub/templates/pubrepo.html:19 seahub/templates/sysadmin/userinfo.html:92
+#: seahub/templates/pubrepo.html:19
+#: seahub/templates/sysadmin/userinfo.html:103
 msgid "Share From"
 msgstr "Compartit desde"
 
@@ -4085,7 +4081,7 @@ msgid "File size should be smaller than %(max_file_size)s"
 msgstr "La mida del fitxer no pot superar %(max_file_size)s"
 
 #: seahub/templates/repo.html:96 seahub/templates/repo.html.py:132
-#: seahub/templates/repo.html:1794
+#: seahub/templates/repo.html:1795
 #: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "Guardant..."
@@ -4201,253 +4197,253 @@ msgstr "Error"
 msgid "Start"
 msgstr "Inicia"
 
-#: seahub/templates/repo.html:369
+#: seahub/templates/repo.html:370
 msgid "Delete Items"
 msgstr "Elimina els elements"
 
-#: seahub/templates/repo.html:369
+#: seahub/templates/repo.html:370
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Esteu segur que voleu eliminar els elements seleccionats?"
 
-#: seahub/templates/repo.html:373 seahub/templates/repo.html.py:550
+#: seahub/templates/repo.html:374 seahub/templates/repo.html.py:551
 msgid "Processing..."
 msgstr "Processant..."
 
-#: seahub/templates/repo.html:403
+#: seahub/templates/repo.html:404
 #, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:405
+#: seahub/templates/repo.html:406
 #, python-format
 msgid "Successfully deleted %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:414
+#: seahub/templates/repo.html:415
 #, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:416
+#: seahub/templates/repo.html:417
 #, python-format
 msgid "Internal error. Failed to delete %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:516
+#: seahub/templates/repo.html:517
 msgid "Move selected directories/files to:"
 msgstr "Mou els fitxers/directoris seleccionats a:"
 
-#: seahub/templates/repo.html:519
+#: seahub/templates/repo.html:520
 msgid "Copy selected directories/files to:"
 msgstr "Copia els fitxers/directoris seleccionats a:"
 
-#: seahub/templates/repo.html:545 seahub/templates/repo.html.py:1745
+#: seahub/templates/repo.html:546 seahub/templates/repo.html.py:1746
 #: seahub/views/ajax.py:644 seahub/views/ajax.py:836
 msgid "Invalid destination path"
 msgstr "La ruta de destí no és vàlida"
 
-#: seahub/templates/repo.html:594
+#: seahub/templates/repo.html:595
 #, python-format
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:596
+#: seahub/templates/repo.html:597
 #, python-format
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: seahub/templates/repo.html:598
+#: seahub/templates/repo.html:599
 #, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:603
+#: seahub/templates/repo.html:604
 #, python-format
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:605
+#: seahub/templates/repo.html:606
 #, python-format
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: seahub/templates/repo.html:607
+#: seahub/templates/repo.html:608
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:619
+#: seahub/templates/repo.html:620
 #, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:621
+#: seahub/templates/repo.html:622
 #, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:625
+#: seahub/templates/repo.html:626
 #, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr ""
 
-#: seahub/templates/repo.html:627
+#: seahub/templates/repo.html:628
 #, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr ""
 
-#: seahub/templates/repo.html:665
+#: seahub/templates/repo.html:666
 #, python-format
 msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:665
+#: seahub/templates/repo.html:666
 #, python-format
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:749 seahub/templates/repo.html.py:1809
-#: seahub/templates/repo.html:1836
+#: seahub/templates/repo.html:750 seahub/templates/repo.html.py:1810
+#: seahub/templates/repo.html:1837
 msgid "Canceled."
 msgstr ""
 
-#: seahub/templates/repo.html:813
+#: seahub/templates/repo.html:814
 msgid "Encrypting the file..."
 msgstr "Encriptant el fitxer..."
 
-#: seahub/templates/repo.html:835
+#: seahub/templates/repo.html:836
 msgid "Error when encrypting."
 msgstr "S'ha produït un error al encriptar."
 
-#: seahub/templates/repo.html:842
+#: seahub/templates/repo.html:843
 #, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr ""
 
-#: seahub/templates/repo.html:859
+#: seahub/templates/repo.html:860
 msgid "Uploading ..."
 msgstr "Pujant les dades..."
 
-#: seahub/templates/repo.html:871 seahub/templates/repo.html.py:1207
+#: seahub/templates/repo.html:872 seahub/templates/repo.html.py:1208
 msgid "Done!"
 msgstr "Finalitzat"
 
-#: seahub/templates/repo.html:962 seahub/templates/repo.html.py:1586
-#: seahub/templates/repo.html:1713
+#: seahub/templates/repo.html:963 seahub/templates/repo.html.py:1587
+#: seahub/templates/repo.html:1714
 #: seahub/templates/snippets/repo_dirents.html:51
 msgid "unstarred"
 msgstr "no destacat"
 
-#: seahub/templates/repo.html:1009
+#: seahub/templates/repo.html:1010
 msgid "Failed to get upload url"
 msgstr ""
 
-#: seahub/templates/repo.html:1028
+#: seahub/templates/repo.html:1029
 msgid "Error. Please try later."
 msgstr ""
 
-#: seahub/templates/repo.html:1217
+#: seahub/templates/repo.html:1218
 msgid "Downloading..."
 msgstr "Descarregant dades..."
 
-#: seahub/templates/repo.html:1250
+#: seahub/templates/repo.html:1251
 #, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr ""
 
-#: seahub/templates/repo.html:1271
+#: seahub/templates/repo.html:1272
 msgid "Decrypting..."
 msgstr "Desencriptant..."
 
-#: seahub/templates/repo.html:1288
+#: seahub/templates/repo.html:1289
 #, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr ""
 
-#: seahub/templates/repo.html:1391
+#: seahub/templates/repo.html:1392
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1413
+#: seahub/templates/repo.html:1414
 msgid "Rename File"
 msgstr "Reanomena el fitxer"
 
-#: seahub/templates/repo.html:1415
+#: seahub/templates/repo.html:1416
 msgid "Rename Directory"
 msgstr "Reanomena el directori"
 
-#: seahub/templates/repo.html:1433
+#: seahub/templates/repo.html:1434
 msgid "Copy File"
 msgstr "Copia el fitxer"
 
-#: seahub/templates/repo.html:1435
+#: seahub/templates/repo.html:1436
 msgid "Move File"
 msgstr "Mou el fitxer"
 
-#: seahub/templates/repo.html:1437
+#: seahub/templates/repo.html:1438
 msgid "Copy Directory"
 msgstr "Copia el directori"
 
-#: seahub/templates/repo.html:1439
+#: seahub/templates/repo.html:1440
 msgid "Move Directory"
 msgstr "Mou el directori"
 
-#: seahub/templates/repo.html:1444
+#: seahub/templates/repo.html:1445
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr ""
 
-#: seahub/templates/repo.html:1447
+#: seahub/templates/repo.html:1448
 #, python-format
 msgid "Move %(name)s to:"
 msgstr ""
 
-#: seahub/templates/repo.html:1470
+#: seahub/templates/repo.html:1471
 msgid "Directory download is not supported in this library."
 msgstr "En aquesta llibreria no es poden descarregar directoris."
 
-#: seahub/templates/repo.html:1588
+#: seahub/templates/repo.html:1589
 #: seahub/templates/snippets/repo_dirents.html:49
 msgid "starred"
 msgstr "destacat"
 
-#: seahub/templates/repo.html:1634 seahub/templates/repo.html.py:1674
+#: seahub/templates/repo.html:1635 seahub/templates/repo.html.py:1675
 msgid "It is required."
 msgstr "És obligatori."
 
-#: seahub/templates/repo.html:1640
+#: seahub/templates/repo.html:1641
 msgid "Only an extension there, please input a name."
 msgstr "Cal el nom complet, no només l'extensió."
 
-#: seahub/templates/repo.html:1650
+#: seahub/templates/repo.html:1651
 msgid "Creating..."
 msgstr "Creant..."
 
-#: seahub/templates/repo.html:1678
+#: seahub/templates/repo.html:1679
 msgid "You have not renamed it."
 msgstr "No ha estat reanomenat."
 
-#: seahub/templates/repo.html:1724
+#: seahub/templates/repo.html:1725
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1778
+#: seahub/templates/repo.html:1779
 #, python-format
 msgid "Moving %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1778
+#: seahub/templates/repo.html:1779
 #, python-format
 msgid "Copying %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1938
+#: seahub/templates/repo.html:1939
 msgid "Please select at least one contact."
 msgstr "Seleccioneu un contacte com a mínim."
 
-#: seahub/templates/repo.html:2049
+#: seahub/templates/repo.html:2050
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "Introduïu correus electrònics o grups, o bé seleccioneu-ne alguns."
@@ -4459,6 +4455,13 @@ msgstr "No té permís per accedir aquesta llibreria."
 #: seahub/templates/repo_history.html:9
 msgid "modification history"
 msgstr "Historial d'actualitzacions"
+
+#: seahub/templates/repo_history.html:10
+#: seahub/templates/repo_recycle_view.html:14
+#: seahub/templates/repo_settings.html:15
+#: seahub/templates/view_trash_file.html:7
+msgid "Back to Library"
+msgstr "Torna a la llibreria"
 
 #: seahub/templates/repo_history.html:14
 msgid ""
@@ -4491,121 +4494,132 @@ msgid "Can't view this library"
 msgstr "No es pot visualitzar aquesta llibreria"
 
 #: seahub/templates/repo_history_view.html:58
-#: seahub/templates/repo_recycle_view.html:66
+#: seahub/templates/repo_recycle_view.html:71
 msgid "Directory"
 msgstr "Directori"
 
-#: seahub/templates/repo_recycle_view.html:11
-#: seahub/templates/repo_recycle_view.html:103
+#: seahub/templates/repo_recycle_view.html:16
+#: seahub/templates/repo_recycle_view.html:27
+#: seahub/templates/view_trash_file.html:6
+msgid "'s trash"
+msgstr " brosa"
+
+#: seahub/templates/repo_recycle_view.html:18
+#: seahub/templates/repo_recycle_view.html:108
 msgid "Clean"
 msgstr ""
 
-#: seahub/templates/repo_recycle_view.html:37
-#: seahub/templates/repo_recycle_view.html:39
+#: seahub/templates/repo_recycle_view.html:42
+#: seahub/templates/repo_recycle_view.html:44
 msgid "a week"
 msgstr "una setmana"
 
-#: seahub/templates/repo_recycle_view.html:42
-#: seahub/templates/repo_recycle_view.html:44
+#: seahub/templates/repo_recycle_view.html:47
+#: seahub/templates/repo_recycle_view.html:49
 msgid "a month"
 msgstr "un mes"
 
-#: seahub/templates/repo_recycle_view.html:47
-#: seahub/templates/repo_recycle_view.html:49
-#: seahub/templates/repo_recycle_view.html:109
+#: seahub/templates/repo_recycle_view.html:52
+#: seahub/templates/repo_recycle_view.html:54
+#: seahub/templates/repo_recycle_view.html:114
 msgid "all"
 msgstr "tot"
 
-#: seahub/templates/repo_recycle_view.html:59
+#: seahub/templates/repo_recycle_view.html:64
 msgid "Delete Time"
 msgstr "Elimina la data"
 
-#: seahub/templates/repo_recycle_view.html:104
+#: seahub/templates/repo_recycle_view.html:109
 msgid "Clear files in trash and history："
 msgstr ""
 
-#: seahub/templates/repo_recycle_view.html:106
+#: seahub/templates/repo_recycle_view.html:111
 msgid "3 days ago"
 msgstr ""
 
-#: seahub/templates/repo_recycle_view.html:107
+#: seahub/templates/repo_recycle_view.html:112
 msgid "1 week ago"
 msgstr ""
 
-#: seahub/templates/repo_recycle_view.html:108
+#: seahub/templates/repo_recycle_view.html:113
 msgid "1 month ago"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:20
-#: seahub/templates/repo_settings.html:54
+#: seahub/templates/repo_settings.html:19
+#: seahub/templates/repo_settings.html:53
 msgid "Transfer Ownership"
 msgstr "Transfereix la propietat"
 
-#: seahub/templates/repo_settings.html:22
-#: seahub/templates/repo_settings.html:65
+#: seahub/templates/repo_settings.html:21
+#: seahub/templates/repo_settings.html:64
 msgid "Change Password"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:30
+#: seahub/templates/repo_settings.html:29
 msgid "Library Settings"
 msgstr "Configuració de la llibreria"
 
-#: seahub/templates/repo_settings.html:42
+#: seahub/templates/repo_settings.html:41
 msgid "Keep full history"
 msgstr "Conserva tot l'historial"
 
-#: seahub/templates/repo_settings.html:43
+#: seahub/templates/repo_settings.html:42
 msgid "Don't keep history"
 msgstr "No conservis l'historial"
 
-#: seahub/templates/repo_settings.html:44
+#: seahub/templates/repo_settings.html:43
 msgid "Only keep a period of history:"
 msgstr "Només conserva l'historial dels darrers:"
 
-#: seahub/templates/repo_settings.html:45
+#: seahub/templates/repo_settings.html:44
 msgid "days"
 msgstr "dies"
 
-#: seahub/templates/repo_settings.html:56
+#: seahub/templates/repo_settings.html:55
 msgid "Transfer this library to another user:"
 msgstr "Transfereix aquesta llibreria a un altre usuari:"
 
-#: seahub/templates/repo_settings.html:67
+#: seahub/templates/repo_settings.html:66
 msgid "Change the password of this library:"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:68
+#: seahub/templates/repo_settings.html:67
 msgid "Old Password"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:70
+#: seahub/templates/repo_settings.html:69
 #, python-format
 msgid "New Password(at least %(repo_password_min_length)s characters)"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:72
+#: seahub/templates/repo_settings.html:71
 msgid "New Password Again"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:197
+#: seahub/templates/repo_settings.html:196
 msgid "Please enter the old password"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:201
+#: seahub/templates/repo_settings.html:200
 msgid "Please enter the new password"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:205
+#: seahub/templates/repo_settings.html:204
 msgid "New password is too short"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:209
+#: seahub/templates/repo_settings.html:208
 msgid "Please enter the new password again"
 msgstr ""
 
-#: seahub/templates/repo_settings.html:213
+#: seahub/templates/repo_settings.html:212
 msgid "New passwords don't match"
 msgstr ""
+
+#: seahub/templates/repo_view_snapshot.html:7
+#: seahub/templates/view_snapshot_file.html:7
+msgid "snapshots"
+msgstr "captures"
 
 #: seahub/templates/repo_view_snapshot.html:8
 msgid "Back to modification history"
@@ -4712,6 +4726,11 @@ msgstr "S'ha deixat de destacar."
 msgid "modification details"
 msgstr "detalls de la modificació"
 
+#: seahub/templates/text_diff.html:7
+#: seahub/templates/view_history_file.html:19
+msgid "Back to file versions"
+msgstr "Torna a les versions del fitxer"
+
 #: seahub/templates/text_diff.html:22
 msgid "It's a newly-created blank file."
 msgstr "S'ha creat un fitxer buit nou."
@@ -4744,6 +4763,13 @@ msgstr "a"
 #: seahub/templates/user_404.html:6
 msgid "Sorry, this user is not registered yet."
 msgstr "Aquest usuari encara no està registrat."
+
+#: seahub/templates/view_file_base.html:66
+#: seahub/templates/view_history_file.html:27
+#: seahub/templates/view_snapshot_file.html:13
+#: seahub/templates/view_trash_file.html:11
+msgid "Current Path: "
+msgstr "Ruta actual:"
 
 #: seahub/templates/view_file_base.html:89
 #: seahub/templates/view_file_markdown.html:7
@@ -4783,6 +4809,11 @@ msgstr "Comparteix"
 #: seahub/templates/view_file_base.html:127
 msgid "share"
 msgstr ""
+
+#: seahub/templates/view_file_base.html:130
+#: seahub/templates/view_history_file.html:16
+msgid "history"
+msgstr "historial"
 
 #: seahub/templates/view_file_base.html:138
 #: seahub/templates/snippets/group_recommend_form.html:5
@@ -5032,7 +5063,7 @@ msgstr "La contrasenya s'ha reinicialitzat"
 #: seahub/templates/registration/password_reset_confirm.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
-#: seahub/templates/sysadmin/sys_org_info.html:177
+#: seahub/templates/sysadmin/sys_org_info_user.html:75
 #: seahub/templates/sysadmin/useradmin_js.html:7
 msgid "Password Reset"
 msgstr "Reinicialitza la contrasenya"
@@ -5245,7 +5276,7 @@ msgid "Sub-libraries"
 msgstr "Sub-llibreries"
 
 #: seahub/templates/snippets/my_owned_repos.html:12
-#: seahub/templates/sysadmin/userinfo.html:56
+#: seahub/templates/sysadmin/userinfo.html:67
 msgid "Shared"
 msgstr "Compartides"
 
@@ -5497,7 +5528,7 @@ msgstr "Propi"
 
 #: seahub/templates/snippets/space_and_traffic.html:6
 #: seahub/templates/snippets/space_and_traffic.html:8
-#: seahub/templates/sysadmin/userinfo.html:35
+#: seahub/templates/sysadmin/userinfo.html:46
 msgid "Sharing"
 msgstr "Compartint"
 
@@ -5536,6 +5567,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
 #: seahub/templates/sysadmin/sys_org_admin.html:20
+#: seahub/templates/sysadmin/sys_org_info_library.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:13
 #: seahub/templates/sysadmin/sys_repo_search.html:12
 msgid "Owner"
@@ -5543,18 +5575,18 @@ msgstr "Propietari"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:13
 #: seahub/templates/sysadmin/sys_org_admin.html:36
-#: seahub/templates/sysadmin/sys_org_info.html:103
+#: seahub/templates/sysadmin/sys_org_info_group.html:19
 msgid "Creator"
 msgstr "Autor"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
-#: seahub/templates/sysadmin/sys_org_info.html:104
+#: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
 msgid "Create At"
 msgstr "Creat el"
 
-#: seahub/templates/sysadmin/sys_group_admin.html:37
-#: seahub/templates/sysadmin/sys_org_info.html:169
+#: seahub/templates/sysadmin/sys_group_admin.html:41
+#: seahub/templates/sysadmin/sys_org_info_group.html:43
 msgid "Delete Group"
 msgstr "Elimina el grup"
 
@@ -5601,12 +5633,12 @@ msgid "Owner can use admin panel in an organization, must be a new account."
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:37
-#: seahub/templates/sysadmin/sys_org_info.html:27
-#: seahub/templates/sysadmin/sys_org_info.html:55
+#: seahub/templates/sysadmin/sys_org_info_base.html:27
+#: seahub/templates/sysadmin/sys_org_info_user.html:19
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:45
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:25
 #: seahub/templates/sysadmin/useradmin_table.html:7
-#: seahub/templates/sysadmin/userinfo.html:31
+#: seahub/templates/sysadmin/userinfo.html:42
 msgid "Space Used"
 msgstr "Espai ocupat"
 
@@ -5639,102 +5671,125 @@ msgstr ""
 msgid "Passwords do not match"
 msgstr "Les contrasenyes no coincideixen"
 
-#: seahub/templates/sysadmin/sys_org_info.html:17
+#: seahub/templates/sysadmin/sys_org_info_base.html:17
 msgid "Back to organization list"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info.html:21
+#: seahub/templates/sysadmin/sys_org_info_base.html:21
 msgid "Number of members"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info.html:23
+#: seahub/templates/sysadmin/sys_org_info_base.html:23
 msgid "Number of groups"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info.html:29
-#: seahub/templates/sysadmin/userinfo.html:39
+#: seahub/templates/sysadmin/sys_org_info_base.html:29
+#: seahub/templates/sysadmin/userinfo.html:50
 msgid "Set Quota"
 msgstr "Estableix quota"
 
-#: seahub/templates/sysadmin/sys_org_info.html:32
+#: seahub/templates/sysadmin/sys_org_info_base.html:32
 msgid "Set org storage limit"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info.html:35
-#: seahub/templates/sysadmin/userinfo.html:45
+#: seahub/templates/sysadmin/sys_org_info_base.html:35
+#: seahub/templates/sysadmin/userinfo.html:56
 msgid "Tip: 0 means default limit"
 msgstr "Consell: El 0 equival al límit per defecte"
 
-#: seahub/templates/sysadmin/sys_org_info.html:54
+#: seahub/templates/sysadmin/sys_org_info_group.html:11
+#: seahub/templates/sysadmin/sys_org_info_library.html:11
+#: seahub/templates/sysadmin/sys_org_info_setting.html:11
+#: seahub/templates/sysadmin/sys_org_info_user.html:11
+msgid "Setting"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_group.html:34
+msgid "This organization doesn't have any groups"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_library.html:46
+msgid "This organization doesn't have any libraries"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_setting.html:16
+msgid "Rename Organization"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_setting.html:18
+msgid "New Name"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_org_info_user.html:18
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:43
 #: seahub/templates/sysadmin/useradmin_table.html:5
 msgid "Status"
 msgstr "Estat"
 
-#: seahub/templates/sysadmin/sys_org_info.html:56
+#: seahub/templates/sysadmin/sys_org_info_user.html:20
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:46
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:24
 #: seahub/templates/sysadmin/useradmin_table.html:8
 msgid "Create At / Last Login"
 msgstr "Alta / Última sessió"
 
-#: seahub/templates/sysadmin/sys_org_info.html:66
-#: seahub/templates/sysadmin/sys_org_info.html:73
+#: seahub/templates/sysadmin/sys_org_info_user.html:30
+#: seahub/templates/sysadmin/sys_org_info_user.html:37
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:58
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:65
-#: seahub/templates/sysadmin/useradmin_table.html:19
-#: seahub/templates/sysadmin/useradmin_table.html:26
+#: seahub/templates/sysadmin/useradmin_table.html:23
+#: seahub/templates/sysadmin/useradmin_table.html:30
 msgid "Active"
 msgstr "Actiu"
 
-#: seahub/templates/sysadmin/sys_org_info.html:68
-#: seahub/templates/sysadmin/sys_org_info.html:74
+#: seahub/templates/sysadmin/sys_org_info_user.html:32
+#: seahub/templates/sysadmin/sys_org_info_user.html:38
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:60
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:66
-#: seahub/templates/sysadmin/useradmin_table.html:21
-#: seahub/templates/sysadmin/useradmin_table.html:27
+#: seahub/templates/sysadmin/useradmin_table.html:25
+#: seahub/templates/sysadmin/useradmin_table.html:31
 msgid "Inactive"
 msgstr "Inactiu"
 
-#: seahub/templates/sysadmin/sys_org_info.html:90
+#: seahub/templates/sysadmin/sys_org_info_user.html:54
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:104
-#: seahub/templates/sysadmin/useradmin_table.html:69
+#: seahub/templates/sysadmin/useradmin_table.html:73
 msgid "ResetPwd"
 msgstr "ReiniContra"
 
-#: seahub/templates/sysadmin/sys_org_info.html:122
+#: seahub/templates/sysadmin/sys_org_info_user.html:62
 #: seahub/templates/sysadmin/sys_useradmin.html:65
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:117
 #: seahub/templates/sysadmin/user_search.html:21
 msgid "Activating..., please wait"
 msgstr "Activant... espereu."
 
-#: seahub/templates/sysadmin/sys_org_info.html:139
-msgid "Quota can not be empty"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_info.html:173
+#: seahub/templates/sysadmin/sys_org_info_user.html:71
 #: seahub/templates/sysadmin/useradmin_js.html:3
 msgid "Delete User"
 msgstr "Elimina l'usuari"
 
-#: seahub/templates/sysadmin/sys_org_info.html:178
+#: seahub/templates/sysadmin/sys_org_info_user.html:76
 #: seahub/templates/sysadmin/useradmin_js.html:8
 #, python-format
 msgid "Are you sure you want to reset the password of %s ?"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_info.html:212
+#: seahub/templates/sysadmin/sys_org_info_user.html:110
 #: seahub/templates/sysadmin/useradmin_js.html:61
 msgid "Edit succeeded, an email has been sent."
 msgstr "S'ha editat i enviat un correu electrònic."
 
-#: seahub/templates/sysadmin/sys_org_info.html:214
+#: seahub/templates/sysadmin/sys_org_info_user.html:112
 #: seahub/templates/sysadmin/useradmin_js.html:63
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
 msgstr "S'ha editat però no s'ha pogut notificar per correu electrònic. Revisa la configuració del correu."
+
+#: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
+msgid "Quota can not be empty"
+msgstr ""
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
 msgid "All Public Links"
@@ -5808,16 +5863,16 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_useradmin.html:41
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:77
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:82
-#: seahub/templates/sysadmin/useradmin_table.html:37
-#: seahub/templates/sysadmin/useradmin_table.html:45
+#: seahub/templates/sysadmin/useradmin_table.html:41
+#: seahub/templates/sysadmin/useradmin_table.html:49
 msgid "Default"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:42
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:75
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:83
-#: seahub/templates/sysadmin/useradmin_table.html:35
-#: seahub/templates/sysadmin/useradmin_table.html:46
+#: seahub/templates/sysadmin/useradmin_table.html:39
+#: seahub/templates/sysadmin/useradmin_table.html:50
 msgid "Guest"
 msgstr ""
 
@@ -5911,23 +5966,23 @@ msgstr ""
 msgid "Are you sure you want to set %s as admin?"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:7
+#: seahub/templates/sysadmin/userinfo.html:12
 msgid "Back to user list"
 msgstr ""
 
-#: seahub/templates/sysadmin/userinfo.html:33
+#: seahub/templates/sysadmin/userinfo.html:44
 msgid "Total"
 msgstr "Total"
 
-#: seahub/templates/sysadmin/userinfo.html:34
+#: seahub/templates/sysadmin/userinfo.html:45
 msgid "Used"
 msgstr "Usat"
 
-#: seahub/templates/sysadmin/userinfo.html:42
+#: seahub/templates/sysadmin/userinfo.html:53
 msgid "Set user storage limit"
 msgstr "Estableix el límit d'espai"
 
-#: seahub/templates/sysadmin/userinfo.html:55
+#: seahub/templates/sysadmin/userinfo.html:66
 msgid "Owned"
 msgstr "Propietat"
 
@@ -5978,141 +6033,146 @@ msgstr "No s'ha trobat l'usuari %s."
 msgid "User %s is not in current organization."
 msgstr ""
 
-#: seahub/views/__init__.py:578
+#: seahub/views/__init__.py:577
+#, python-format
+msgid "Can not transfer library to organization user %s."
+msgstr ""
+
+#: seahub/views/__init__.py:583
 #, python-format
 msgid "Library %(repo_name)s has been transfered to %(new_owner)s."
 msgstr "S'ha transferit la llibreria %(repo_name)s a en %(new_owner)s."
 
-#: seahub/views/__init__.py:605
+#: seahub/views/__init__.py:610
 msgid "Faied to change password, you are not owner."
 msgstr ""
 
-#: seahub/views/__init__.py:617
+#: seahub/views/__init__.py:622
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr ""
 
-#: seahub/views/__init__.py:625
+#: seahub/views/__init__.py:630
 msgid "Filename contains invalid character"
 msgstr "El nom del fitxer conté caràcters no vàlids"
 
-#: seahub/views/__init__.py:627
+#: seahub/views/__init__.py:632
 msgid "Duplicated filename"
 msgstr "Nom de fitxer duplicat"
 
-#: seahub/views/__init__.py:631
+#: seahub/views/__init__.py:636
 msgid "File size surpasses the limit"
 msgstr "La mida del fitxer supera el màxim permès"
 
-#: seahub/views/__init__.py:633
+#: seahub/views/__init__.py:638
 msgid "The space of owner is used up, upload failed"
 msgstr "No s'ha pujat el fitxer perquè s'ha exhaurit l'espai de disc del propietari"
 
-#: seahub/views/__init__.py:635
+#: seahub/views/__init__.py:640
 msgid "An error occurs during file transfer"
 msgstr "S'ha produït un error al transferir el fitxer"
 
-#: seahub/views/__init__.py:647 seahub/views/__init__.py:669
+#: seahub/views/__init__.py:652 seahub/views/__init__.py:674
 msgid "Invalid url"
 msgstr "L'enllaç no és vàlid"
 
-#: seahub/views/__init__.py:689
+#: seahub/views/__init__.py:694
 msgid "Unable to view library modification"
 msgstr "No es poden visualitzar les modificacions de la llibreria"
 
-#: seahub/views/__init__.py:835
+#: seahub/views/__init__.py:840
 msgid "Please specify history ID"
 msgstr "Especifiqueu un identificador d'historial"
 
-#: seahub/views/__init__.py:843 seahub/views/__init__.py:1252
-#: seahub/views/__init__.py:1633 seahub/views/ajax.py:1308
+#: seahub/views/__init__.py:848 seahub/views/__init__.py:1257
+#: seahub/views/__init__.py:1638 seahub/views/ajax.py:1308
 msgid "Library does not exist"
 msgstr "La llibreria no existeix"
 
-#: seahub/views/__init__.py:845
+#: seahub/views/__init__.py:850
 msgid "History you specified does not exist"
 msgstr "L'historial que heu especificat no existeix"
 
-#: seahub/views/__init__.py:847
+#: seahub/views/__init__.py:852
 msgid "Unknown error"
 msgstr "Error desconegut"
 
-#: seahub/views/__init__.py:895 seahub/views/__init__.py:896
-#: seahub/views/__init__.py:901 seahub/views/__init__.py:902
+#: seahub/views/__init__.py:900 seahub/views/__init__.py:901
+#: seahub/views/__init__.py:906 seahub/views/__init__.py:907
 msgid "My Library"
 msgstr "Personal"
 
-#: seahub/views/__init__.py:1063
+#: seahub/views/__init__.py:1068
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "No es pot deixar de compartir la llibreria perquè no existeix."
 
-#: seahub/views/__init__.py:1088
+#: seahub/views/__init__.py:1093
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "S'ha deixat de compartir \"%s\"."
 
-#: seahub/views/__init__.py:1090
+#: seahub/views/__init__.py:1095
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "No s'ha pogut deixar de compartir \"%s\"."
 
-#: seahub/views/__init__.py:1124
+#: seahub/views/__init__.py:1129
 msgid "Failed to delete file."
 msgstr "No s'ha pogut eliminar el fitxer."
 
-#: seahub/views/__init__.py:1131
+#: seahub/views/__init__.py:1136
 #, python-format
 msgid "%s successfully deleted."
 msgstr "S'ha eliminat %s."
 
-#: seahub/views/__init__.py:1133 seahub/views/ajax.py:550
+#: seahub/views/__init__.py:1138 seahub/views/ajax.py:550
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Error intern. No s'ha pogut eliminar %s."
 
-#: seahub/views/__init__.py:1181 seahub/views/__init__.py:1666
+#: seahub/views/__init__.py:1186 seahub/views/__init__.py:1671
 #: seahub/views/file.py:1090
 msgid "Unable to access file: share link traffic is used up."
 msgstr ""
 
-#: seahub/views/__init__.py:1190
+#: seahub/views/__init__.py:1195
 msgid "Unable to access file"
 msgstr "No es pot accedir al fitxer"
 
-#: seahub/views/__init__.py:1331
+#: seahub/views/__init__.py:1336
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "S'ha revertit %(path)s al <a href=\"%(root)s\">directori arrel.</a>"
 
-#: seahub/views/__init__.py:1335 seahub/views/__init__.py:1369
+#: seahub/views/__init__.py:1340 seahub/views/__init__.py:1374
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "S'ha revertit <a href=\"%(url)s\">%(path)s</a>"
 
-#: seahub/views/__init__.py:1365
+#: seahub/views/__init__.py:1370
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "S'ha revertit %(path)s al <a href=\"%(url)s\">directori arrel.</a>"
 
-#: seahub/views/__init__.py:1678 seahub/views/file.py:855
+#: seahub/views/__init__.py:1683 seahub/views/file.py:855
 msgid "Internal Error"
 msgstr "Error intern"
 
-#: seahub/views/__init__.py:1681
+#: seahub/views/__init__.py:1686
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "No s'ha pogut descarregar el directori \"%s\" perquè és massa gran."
 
-#: seahub/views/__init__.py:1695
+#: seahub/views/__init__.py:1700
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "No s'ha pogut descarregar \"%s\""
 
-#: seahub/views/__init__.py:1841
+#: seahub/views/__init__.py:1846
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "S'ha activat la Wiki personal."
 
-#: seahub/views/__init__.py:1846
+#: seahub/views/__init__.py:1851
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "S'ha desactivat la Wiki personal."
 
@@ -6269,85 +6329,94 @@ msgstr "Aquest tipus de fitxer no es pot editar a la web."
 msgid "Unable to download file"
 msgstr ""
 
-#: seahub/views/sysadmin.py:398 seahub/views/sysadmin.py:424
+#: seahub/views/sysadmin.py:402
+#, python-format
+msgid "Failed to set quota: maximum quota is %d MB"
+msgstr ""
+
+#: seahub/views/sysadmin.py:408 seahub/views/sysadmin.py:434
 msgid "Failed to set quota: internal server error"
 msgstr ""
 
-#: seahub/views/sysadmin.py:443
+#: seahub/views/sysadmin.py:452
+msgid "Failed to delete: the user is an organization creator"
+msgstr ""
+
+#: seahub/views/sysadmin.py:461
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "S'ha eliminat %s"
 
-#: seahub/views/sysadmin.py:445
+#: seahub/views/sysadmin.py:463
 msgid "Failed to delete: the user does not exist"
 msgstr "No s'ha pogut eliminar: l'usuari no existeix"
 
-#: seahub/views/sysadmin.py:460
+#: seahub/views/sysadmin.py:475
 #, python-format
 msgid "Successfully set %s as admin"
 msgstr "S'ha establert %s com administrador"
 
-#: seahub/views/sysadmin.py:462
+#: seahub/views/sysadmin.py:477
 msgid "Failed to set admin: the user does not exist"
 msgstr "L'usuari no existeix i no s'ha pogut establir com administrador"
 
-#: seahub/views/sysadmin.py:477
+#: seahub/views/sysadmin.py:492
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "S'ha revocat el permís d'administrador a %s"
 
-#: seahub/views/sysadmin.py:479
+#: seahub/views/sysadmin.py:494
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "L'usuari no existeix i no s'ha revocat el permís d'administrador"
 
-#: seahub/views/sysadmin.py:493
+#: seahub/views/sysadmin.py:508
 #, python-format
 msgid "Successfully activated \"%s\"."
 msgstr "S'ha activat \"%s\"."
 
-#: seahub/views/sysadmin.py:495
+#: seahub/views/sysadmin.py:510
 msgid "Failed to activate: user does not exist."
 msgstr "No existeix l'usuari i no s'ha pogut activar."
 
-#: seahub/views/sysadmin.py:510
+#: seahub/views/sysadmin.py:525
 #, python-format
 msgid "Successfully deactivated \"%s\"."
 msgstr "S'ha desactivat \"%s\"."
 
-#: seahub/views/sysadmin.py:512
+#: seahub/views/sysadmin.py:527
 msgid "Failed to deactivate: user does not exist."
 msgstr "L'usuari no existeix, no s'ha pogut desactivar."
 
-#: seahub/views/sysadmin.py:526
+#: seahub/views/sysadmin.py:541
 #, python-format
 msgid "Your account on %s is activated"
 msgstr ""
 
-#: seahub/views/sysadmin.py:602
+#: seahub/views/sysadmin.py:617
 #, python-format
 msgid "Password has been reset on %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:622
+#: seahub/views/sysadmin.py:637
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "S'ha reinicialitzar la contrasenya a %(passwd)s. S'ha notificat per correu a %(user)s."
 
-#: seahub/views/sysadmin.py:627
+#: seahub/views/sysadmin.py:642
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "S'ha reinicialitzat la contrasenya a %(passwd)s, però no s'ha pogut enviar un correu electrònic a %(user)s. Reviseu la configuració del correu."
 
-#: seahub/views/sysadmin.py:631
+#: seahub/views/sysadmin.py:646
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "S'ha reinicialitzat la contrasenya a %(passwd)s per l'usuari %(user)s."
 
-#: seahub/views/sysadmin.py:634
+#: seahub/views/sysadmin.py:649
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6355,71 +6424,88 @@ msgid ""
 "configured."
 msgstr "S'ha reinicialitzat la contrasenya %(passwd)s de l'usuari %(user)s. Però no s'ha pogut notificar per correu electrònic. El servei de missatgeria no està ben configurat."
 
-#: seahub/views/sysadmin.py:637
+#: seahub/views/sysadmin.py:652
 msgid "Failed to reset password: user does not exist"
 msgstr "L'usuari no existeix i no s'ha pogut reinicialitzar la contrasenya"
 
-#: seahub/views/sysadmin.py:653
+#: seahub/views/sysadmin.py:668
 #, python-format
 msgid "You are invited to join %s"
 msgstr ""
 
-#: seahub/views/sysadmin.py:691 seahub/views/sysadmin.py:704
+#: seahub/views/sysadmin.py:706 seahub/views/sysadmin.py:719
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "S'ha registrat l'usuari %s. S'ha enviat una notificació per correu electrònic."
 
-#: seahub/views/sysadmin.py:694 seahub/views/sysadmin.py:707
+#: seahub/views/sysadmin.py:709 seahub/views/sysadmin.py:722
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "S'ha registrat l'usuari %s. Però no s'ho pogut notificar per correu electrònic. Reviseu la configuració del correu."
 
-#: seahub/views/sysadmin.py:696 seahub/views/sysadmin.py:709
+#: seahub/views/sysadmin.py:711 seahub/views/sysadmin.py:724
 #, python-format
 msgid "Successfully added user %s."
 msgstr "S'ha registrat l'usuari %s."
 
-#: seahub/views/sysadmin.py:711
+#: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "S'ha registrat l'usuari %s. No s'ha pogut notificar per correu electrònic. Reviseu la configuració del servei de missatgeria."
 
-#: seahub/views/sysadmin.py:922
+#: seahub/views/sysadmin.py:813
+msgid "Success"
+msgstr ""
+
+#: seahub/views/sysadmin.py:816
+msgid "Failed to rename organization"
+msgstr ""
+
+#: seahub/views/sysadmin.py:1018
+msgid "Can not transfer organization library"
+msgstr ""
+
+#: seahub/views/sysadmin.py:1023
+#, python-format
+msgid "Can not transfer library to organization user %s"
+msgstr ""
+
+#: seahub/views/sysadmin.py:1026
 msgid "Successfully transfered."
 msgstr "S'ha transferit correctament."
 
-#: seahub/views/sysadmin.py:924
+#: seahub/views/sysadmin.py:1028
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "No s'ha transferit perquè no s'ha trobat l'usuari %s"
 
-#: seahub/views/sysadmin.py:926
+#: seahub/views/sysadmin.py:1030
 msgid "Failed to transfer, invalid arguments."
 msgstr "No s'ha transferit perquè el paràmetres no són vàlids."
 
-#: seahub/views/sysadmin.py:989
+#: seahub/views/sysadmin.py:1093
 msgid "Using LDAP now, can not add admin."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1006
+#: seahub/views/sysadmin.py:1110
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1008
+#: seahub/views/sysadmin.py:1112
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1050
+#: seahub/views/sysadmin.py:1154
 msgid "Import succeeded"
 msgstr ""
 
-#: seahub/views/sysadmin.py:1052
+#: seahub/views/sysadmin.py:1156
 msgid "Please select a csv file first."
 msgstr ""
 
