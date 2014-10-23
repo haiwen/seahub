@@ -661,17 +661,17 @@ def view_shared_file(request, token):
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
-        # Increase file shared link view_cnt, this operation should be atomic
-        fileshare.view_cnt = F('view_cnt') + 1
-        fileshare.save()
+    # Increase file shared link view_cnt, this operation should be atomic
+    fileshare.view_cnt = F('view_cnt') + 1
+    fileshare.save()
 
-        # send statistic messages
-        if ret_dict['filetype'] != 'Unknown':
-            try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, file_size))
-            except SearpcError, e:
-                logger.error('Error when sending file-view message: %s' % str(e))
+    # send statistic messages
+    if ret_dict['filetype'] != 'Unknown':
+        try:
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, file_size))
+        except SearpcError, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
