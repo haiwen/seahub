@@ -1265,6 +1265,25 @@ $('.dir-item, .file-item').unbind().hover( // remove previously binded hover han
 
 opOnDirent();
 
+{% if not repo.encrypted and ENABLE_THUMBNAIL %}
+// get thumbnails for image files
+$(function() {
+    $('.not-thumbnail').each(function() {
+        var this_img = $(this),
+            file_name = $(this).parents('tr.file-item').attr('data-name');
+        $.ajax({
+            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(cur_path+file_name),
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                this_img.attr("src", data.thumbnail_src);
+            },
+            error: ajaxErrorHandler
+        });
+    });
+});
+{% endif %}
+
 } // function dirOP ends here
 
 dirOP();
@@ -2161,6 +2180,24 @@ $(window).scroll(function() {
                 } else {
                     ele_more.remove();
                 }
+                {% if not repo.encrypted and ENABLE_THUMBNAIL %}
+                // get thumbnails for image files
+                $(function() {
+                    $('.not-thumbnail').each(function() {
+                        var this_img = $(this),
+                            file_name = $(this).parents('tr.file-item').attr('data-name');
+                        $.ajax({
+                            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(cur_path+file_name),
+                            cache: false,
+                            dataType: 'json',
+                            success: function(data) {
+                                this_img.attr("src", data.thumbnail_src);
+                            },
+                            error: ajaxErrorHandler
+                        });
+                    });
+                });
+                {% endif %}
             },
             error: function(xhr, textStatus, errorThrown) {
                 var error;

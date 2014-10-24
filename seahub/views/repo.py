@@ -28,9 +28,13 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
-    get_commit_before_new_merge, user_traffic_over_limit
+    get_commit_before_new_merge, user_traffic_over_limit, \
+    get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
-    ENABLE_UPLOAD_FOLDER
+    ENABLE_UPLOAD_FOLDER, \
+    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+from seahub.utils.file_types import IMAGE
+from seahub.thumbnail.utils import get_thumbnail_src
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -238,6 +242,15 @@ def render_repo(request, repo):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        size = THUMBNAIL_DEFAULT_SIZE
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+
     return render_to_response('repo.html', {
             'repo': repo,
             'user_perm': user_perm,
@@ -268,8 +281,9 @@ def render_repo(request, repo):
             'dir_shared_upload_link': dir_shared_upload_link,
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             'server_crypto': server_crypto,
-            "sub_lib_enabled": sub_lib_enabled,
-            "enable_upload_folder": ENABLE_UPLOAD_FOLDER,
+            'sub_lib_enabled': sub_lib_enabled,
+            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             }, context_instance=RequestContext(request))
    
 @login_required    

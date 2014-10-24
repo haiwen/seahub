@@ -72,6 +72,7 @@ FILEEXT_ICON_MAP = {
     'svg' : 'pic.png',
     'gif' : 'pic.png',
     'bmp' : 'pic.png',
+    'ico' : 'pic.png',
     # normal file and unknown file
     'default' : 'file.png',
 }

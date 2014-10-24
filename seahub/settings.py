@@ -190,6 +190,7 @@ INSTALLED_APPS = (
     'seahub.profile',
     'seahub.share',
     'seahub.help',
+    'seahub.thumbnail',
 )
 
 
@@ -527,3 +528,12 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
+# Enable or disable thumbnail
+ENABLE_THUMBNAIL = True
+
+# Absolute filesystem path to the directory that will hold thumbnail files.
+THUMBNAIL_ROOT = '%s/seahub/thumbnail/thumb/' % PROJECT_ROOT
+
+THUMBNAIL_EXTENSION = 'png'
+THUMBNAIL_DEFAULT_SIZE = '24'

@@ -32,3 +32,4 @@ cscope*
 docs/_build/*
 deps
 ghostdriver.log
+seahub/thumbnail/thumb/*

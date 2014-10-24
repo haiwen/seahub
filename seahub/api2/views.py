@@ -4,7 +4,10 @@ import os
 import stat
 import json
 import datetime
+import urllib2
 from urllib2 import unquote, quote
+from PIL import Image
+from StringIO import StringIO
 
 from rest_framework import parsers
 from rest_framework import status
@@ -71,6 +74,8 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, \
         query_office_file_pages, prepare_converted_html
 import seahub.settings as settings
+from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
+        ENABLE_THUMBNAIL
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -3476,6 +3481,63 @@ class OfficeGenerateView(APIView):
             ret_dict['filetype'] = 'Unknown'
 
         return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
+
+class ThumbnailGetView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id):
+
+        path = request.GET.get('p', None)
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+
+        size = request.GET.get('s', None)
+        if size is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
+
+        obj_id = get_file_id_by_path(repo_id, path)
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                      repo_id,
+                                                                      obj_id, path)
+
+        if user_perm is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Permission denied.')
+
+        repo = get_repo(repo_id)
+        if repo.encrypted:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Image thumbnail is not supported in encrypted libraries.')
+
+        if not ENABLE_THUMBNAIL:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Thumbnail function is not enabled.')
+
+        thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
+        if not os.path.exists(thumbnail_dir):
+            os.makedirs(thumbnail_dir)
+
+        thumbnail_file = os.path.join(thumbnail_dir, obj_id)
+        if not os.path.exists(thumbnail_file):
+            try:
+                f = StringIO(urllib2.urlopen(raw_path).read())
+                image = Image.open(f)
+                image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
+                image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+            except IOError, e:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "error:" + e.msg)
+
+        try:
+            with open(thumbnail_file, 'rb') as f:
+                thumbnail = f.read()
+            f.close()
+            return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
+        except IOError, e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             "error:" + e.msg)
 
 #Following is only for debug
 # from seahub.auth.decorators import login_required

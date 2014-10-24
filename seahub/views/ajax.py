@@ -36,13 +36,17 @@ from seahub.views import get_repo_dirents, validate_owner, \
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
+from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
+    THUMBNAIL_DEFAULT_SIZE
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_org_user_events, get_user_events
+    get_org_user_events, get_user_events, get_file_type_and_ext
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
+from seahub.utils.file_types import IMAGE
+from seahub.thumbnail.utils import get_thumbnail_src
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -274,6 +278,15 @@ def list_dir(request, repo_id):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        size = THUMBNAIL_DEFAULT_SIZE
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+
     ctx = { 
         'repo': repo,
         'zipped': zipped,
@@ -289,10 +302,11 @@ def list_dir(request, repo_id):
         'dirent_more': dirent_more,
         'more_start': more_start,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
-        "sub_lib_enabled": sub_lib_enabled,
-        "enable_upload_folder": settings.ENABLE_UPLOAD_FOLDER,
+        'sub_lib_enabled': sub_lib_enabled,
+        'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
         'current_commit': head_commit,
         'info_commit': info_commit,
+        'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
     }   
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
@@ -354,7 +368,16 @@ def list_dir_more(request, repo_id):
     if dirent_more:
         more_start = offset + 100
 
-    ctx = { 
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        size = THUMBNAIL_DEFAULT_SIZE
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+
+    ctx = {
         'repo': repo,
         'user_perm': user_perm,
         'path': path,
@@ -362,8 +385,9 @@ def list_dir_more(request, repo_id):
         'dir_list': dir_list,
         'file_list': file_list,
         'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
-        "sub_lib_enabled": sub_lib_enabled,
-    }   
+        'sub_lib_enabled': sub_lib_enabled,
+        'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+    }
     html = render_to_string('snippets/repo_dirents.html', ctx,
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html, 'dirent_more': dirent_more, 'more_start': more_start}),
