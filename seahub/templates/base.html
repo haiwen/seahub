@@ -168,13 +168,11 @@ $('#info-bar .close').click(function() {
 {% if grps %}
 $(function() {
     var grp_nav = $('#top-nav-grp');
-    grp_nav.after('<div id="top-nav-grp-info" class="top-info-popup hide"></div>').click(function() {
-        return false;
-    });
+    grp_nav.after('<div id="top-nav-grp-info" class="top-info-popup hide"></div>');
     var popup = $('#top-nav-grp-info');
     var popup_con = '<div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div><ul id="top-nav-grp-list">';
     {% for grp in grps %}
-    popup_con += '<li class="item" data-url="{% url "group_info" grp.id %}" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="vam">{{ grp.group_name|truncatechars:14 }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
+    popup_con += '<li class="item" data-url="{% url "group_info" grp.id %}" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="name ellipsis vam">{{ grp.group_name }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
     {% endfor %}
     popup_con += '</ul>';
     popup_con += '<a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>';

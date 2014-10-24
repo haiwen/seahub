@@ -10,7 +10,7 @@
 <div class="side-tabnav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">
-        {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="vam">{{ group.group_name|truncatechars:14 }}</span>
+        {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="grp-name ellipsis vam">{{ group.group_name }}</span>
         </h3>
         {% if is_staff %}
         <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />

@@ -376,6 +376,11 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: inset 0 0 8px #EEE;
     margin-top:5.5em;
 }
+.ellipsis {
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
 
 /*******ui widgets**************/
 /****paginator****/
@@ -514,6 +519,10 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align:middle;
 	border-radius:1000px;
     margin:0 6px 0 4px;
+}
+.side-tabnav .grp-name { /*for 'group'*/
+    display:inline-block;
+    width:130px;
 }
 .side-tabnav-tabs {
     margin-bottom:1em;
@@ -1379,6 +1388,10 @@ textarea:-moz-placeholder {/* for FF */
 #top-nav-grp-list .item.hl {
     background:#fafafa;
     cursor:pointer;
+}
+#top-nav-grp-list .name {
+    display:inline-block;
+    width:143px;
 }
 .top-info-popup a.item:hover {
     background:#fafafa;
