@@ -193,6 +193,10 @@ def default_repo(request):
         messages.error(request, _('Failed to set default library.'))
         return HttpResponseRedirect(next)
 
+    if repo.encrypted:
+        messages.error(request, _('Can not set encrypted library as default library.'))
+        return HttpResponseRedirect(next)
+
     username = request.user.username
     UserOptions.objects.set_default_repo(username, repo.id)
     messages.success(request, _('Successfully set "%s" as your default library.') % repo.name)
