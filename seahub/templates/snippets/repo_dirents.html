@@ -21,9 +21,13 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op dir-download" href="{{dirent.dl_link}}">{% trans 'Download' %}</a>
+                    <a class="op dir-download" href="{{dirent.dl_link}}" title="{% trans "Download" %}">
+                        <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                    </a>
                     {% if not repo.encrypted %}
-                    <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-upload-link="{{ dirent.uploadlink }}" data-upload-token="{{ dirent.uploadtoken }}">{% trans "Share" %}</a>
+                    <a class="op dir-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" data-upload-link="{{ dirent.uploadlink }}" data-upload-token="{{ dirent.uploadtoken }}" title="{% trans "Share" %}">
+                        <img src="{{MEDIA_URL}}img/share_20.png" alt="" />
+                    </a>
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
@@ -71,19 +75,20 @@
         <td class="dirent-op">
             <div class="repo-file-op vh">
                 <div class="displayed-op">
-                    <a class="op file-download" href="{{dirent.dl_link}}" data-fileid="{{ dirent.props.obj_id }}">{% trans "Download"%}</a>
-                    {% if user_perm == 'rw' %}
-                    <a class="op file-update" href="#">{% trans "Update"%}</a>
-                    {% endif %}
-                    
+                    <a class="op file-download" href="{{dirent.dl_link}}" data-fileid="{{ dirent.props.obj_id }}" title="{% trans "Download"%}">
+                        <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                    </a>
                     {% if not repo.encrypted %}
-                    <a class="op file-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}">{% trans "Share" %}</a>
+                    <a class="op file-share" href="#" data-link="{{ dirent.sharelink }}" data-token="{{ dirent.sharetoken }}" title="{% trans "Share" %}">
+                        <img src="{{MEDIA_URL}}img/share_20.png" alt="" />
+                    </a>
                     {% endif %}
                 </div>
                 {% if user_perm == 'rw' %}
                 <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" data="no-popup" />
                 <ul class="hidden-op hide">
                     <li><a class="op file-del" href="#">{% trans "Delete"%}</a></li>
+                    <li><a class="op file-update" href="#">{% trans "Update"%}</a></li>
                     <li><a class="op file-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op file-mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op file-cp" href="#">{% trans "Copy" %}</a></li>

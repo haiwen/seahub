@@ -1768,13 +1768,13 @@ textarea:-moz-placeholder {/* for FF */
     width:400px;
 }
 .repo-file-list .dirent-size {
-    width:89px;
+    width:114px;
 }
 .repo-file-list .dirent-update {
-    width:108px;
+    width:133px;
 }
 .repo-file-list .dirent-op {
-    width:250px;
+    width:200px;
 }
 .repo-file-list .checkbox-label,
 .repo-file-list .checkbox {
@@ -1809,6 +1809,13 @@ textarea:-moz-placeholder {/* for FF */
 .displayed-op {
     display:inline;
     margin-right:8px;
+}
+.displayed-op .dir-download,
+.displayed-op .file-download {
+    margin-right:5px;
+}
+.displayed-op .op:hover {
+    text-decoration:none;
 }
 .repo-file-list .hidden-op {
     position:absolute;
