@@ -42,6 +42,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_org_user_events, get_user_events
 from seahub.utils.star import star_file, unstar_file
+from seahub.base.accounts import User
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -1010,11 +1011,16 @@ def get_contacts(request):
 
     username = request.user.username
     contacts = Contact.objects.get_contacts_by_user(username)
-    contact_list = [] 
+    contact_list = []
     from seahub.avatar.templatetags.avatar_tags import avatar
     for c in contacts:
-        contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
-    
+        try:
+            user = User.objects.get(email = c.contact_email)
+            if user.is_active:
+                contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
+        except User.DoesNotExist:
+            continue
+
     return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
 
 @login_required_ajax
