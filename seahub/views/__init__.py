@@ -1587,6 +1587,8 @@ def pubuser(request):
         else:
             u.can_be_contact = True
 
+    users = filter(lambda u: u.is_active, users)
+
     return render_to_response('pubuser.html', {
                 'users': users,
                 'current_page': current_page,
