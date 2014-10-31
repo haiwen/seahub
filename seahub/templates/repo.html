@@ -72,10 +72,6 @@
                         <span>{% trans "Add Files" %}</span>
                         <input type="file" name="file" multiple />
                     </span>
-                    <button type="submit" class="start vam">
-                        <span class="icon-upload"></span>
-                        <span>{% trans "Start All" %}</span>
-                    </button>
                     <button type="reset" class="cancel vam">
                         <span class="icon-ban-circle"></span>
                         <span>{% trans "Cancel All" %}</span>
@@ -992,6 +988,7 @@ $('#upload-file').click(function () {
         // Initialize the jQuery File Upload widget, which needs to use form action
         form.fileupload({
             //singleFileUploads: false // using 1 request to upload all files of a selection
+            autoUpload: true,
             sequentialUploads: true
         })
         .bind('fileuploadsubmit', function(e, data) {
