@@ -2538,7 +2538,8 @@ class EventsView(APIView):
 
                 epoch = datetime.datetime(1970, 1, 1)
                 local = utc_to_local(e.timestamp)
-                d['time'] = (local - epoch).total_seconds()
+                time_diff = local - epoch
+                d['time'] = time_diff.seconds + (time_diff.days * 24 * 3600)
 
             d['nick'] = email2nickname(d['author'])
 
