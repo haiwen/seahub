@@ -1,10 +1,11 @@
 """
-Tools for automating daily tasks.
+Tools for i18n.
 """
-from fabric.api import local
+from fabric.api import local, task
 from fabric.colors import red, green
 
-def i18n_upload():
+@task
+def push():
     """Update source language, and upload to Transifex.
     """
     local('django-admin.py makemessages -l en -e py,html -i "thirdpart*"')
@@ -15,12 +16,14 @@ def i18n_upload():
 
     local('tx push -s')
 
-def i18n_pull():
+@task
+def pull():
     """Update local po files with Transifex.
     """
     local('tx pull')
 
-def i18n_compile():
+@task(default=True)
+def compile():
     """Compile po files.
     """
     local('django-admin.py compilemessages')
