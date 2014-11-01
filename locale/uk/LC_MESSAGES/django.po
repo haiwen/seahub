@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-23 14:32+0800\n"
-"PO-Revision-Date: 2014-10-23 06:34+0000\n"
+"POT-Creation-Date: 2014-11-01 11:42+0800\n"
+"PO-Revision-Date: 2014-11-01 03:15+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Ukrainian (http://www.transifex.com/projects/p/seahub/language/uk/)\n"
 "MIME-Version: 1.0\n"
@@ -53,11 +53,11 @@ msgstr "Ім'я %s неприпустиме"
 
 #: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:778
 #: seahub/share/views.py:816 seahub/views/__init__.py:1049
-#: seahub/views/ajax.py:347 seahub/views/ajax.py:406 seahub/views/ajax.py:497
-#: seahub/views/ajax.py:626 seahub/views/ajax.py:817 seahub/views/ajax.py:924
-#: seahub/views/ajax.py:953 seahub/views/ajax.py:1081
-#: seahub/views/ajax.py:1160 seahub/views/ajax.py:1164
-#: seahub/views/ajax.py:1168 seahub/views/ajax.py:1560
+#: seahub/views/ajax.py:348 seahub/views/ajax.py:407 seahub/views/ajax.py:498
+#: seahub/views/ajax.py:627 seahub/views/ajax.py:818 seahub/views/ajax.py:925
+#: seahub/views/ajax.py:954 seahub/views/ajax.py:1087
+#: seahub/views/ajax.py:1166 seahub/views/ajax.py:1170
+#: seahub/views/ajax.py:1174 seahub/views/ajax.py:1566
 msgid "Argument missing"
 msgstr "Відсутній аргумент"
 
@@ -94,13 +94,13 @@ msgstr "Пароль не може бути порожнім"
 msgid "Bad url format"
 msgstr "Невірний формат URL"
 
-#: seahub/forms.py:153 seahub/templates/repo.html:351
+#: seahub/forms.py:153 seahub/templates/repo.html:347
 msgid "Wrong password"
 msgstr "Невірний пароль"
 
 #: seahub/forms.py:155 seahub/views/__init__.py:410
-#: seahub/views/__init__.py:1055 seahub/views/ajax.py:665
-#: seahub/views/ajax.py:694 seahub/views/ajax.py:732 seahub/views/ajax.py:769
+#: seahub/views/__init__.py:1055 seahub/views/ajax.py:666
+#: seahub/views/ajax.py:695 seahub/views/ajax.py:733 seahub/views/ajax.py:770
 msgid "Internal server error"
 msgstr "Внутрішня помилка серверу"
 
@@ -235,7 +235,7 @@ msgstr "Спільний файл команди спільноти"
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:177 seahub/templates/view_file_base.html:123
+#: seahub/templates/base.html:175 seahub/templates/view_file_base.html:123
 msgid "Discussion"
 msgstr "Обговорення"
 
@@ -260,7 +260,7 @@ msgstr "Обговорення"
 #: seahub/templates/view_file_base.html:156
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/snippets/group_recommend_form.html:28
-#: seahub/templates/snippets/repo_dirents.html:54
+#: seahub/templates/snippets/repo_dirents.html:58
 msgid "File"
 msgstr "Файл"
 
@@ -315,11 +315,11 @@ msgstr "Завантаження..."
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
 #: seahub/templates/base.html:140 seahub/templates/file_edit.html:595
 #: seahub/templates/myhome.html:123 seahub/templates/myhome.html.py:151
-#: seahub/templates/repo.html:292 seahub/templates/repo.html.py:701
-#: seahub/templates/repo.html:759 seahub/templates/repo.html.py:1597
-#: seahub/templates/repo.html:1821 seahub/templates/repo.html.py:1846
-#: seahub/templates/repo.html:1891 seahub/templates/repo.html.py:1996
-#: seahub/templates/repo.html:2068 seahub/templates/repo_settings.html:141
+#: seahub/templates/repo.html:288 seahub/templates/repo.html.py:697
+#: seahub/templates/repo.html:755 seahub/templates/repo.html.py:1594
+#: seahub/templates/repo.html:1818 seahub/templates/repo.html.py:1843
+#: seahub/templates/repo.html:1888 seahub/templates/repo.html.py:1993
+#: seahub/templates/repo.html:2065 seahub/templates/repo_settings.html:141
 #: seahub/templates/repo_settings.html:177
 #: seahub/templates/repo_settings.html:238
 #: seahub/templates/view_file_base.html:338
@@ -663,10 +663,10 @@ msgstr "Поточний аватар: "
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/file_edit.html:99 seahub/templates/file_edit.html:246
 #: seahub/templates/home_base.html:57 seahub/templates/myhome.html:60
-#: seahub/templates/repo.html:65 seahub/templates/repo.html.py:115
-#: seahub/templates/repo.html:145 seahub/templates/repo.html.py:169
-#: seahub/templates/repo.html:190 seahub/templates/repo.html.py:206
-#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:116
+#: seahub/templates/repo.html:65 seahub/templates/repo.html.py:111
+#: seahub/templates/repo.html:141 seahub/templates/repo.html.py:165
+#: seahub/templates/repo.html:186 seahub/templates/repo.html.py:202
+#: seahub/templates/repo.html:217 seahub/templates/repo_recycle_view.html:116
 #: seahub/templates/repo_settings.html:48
 #: seahub/templates/repo_settings.html:58
 #: seahub/templates/repo_settings.html:74
@@ -802,7 +802,7 @@ msgstr "Статус файлу \"%(file)s\" відновлено за %(time)s.
 msgid "Recovered deleted directory"
 msgstr "Відновлений видалений каталог"
 
-#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1640
+#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1646
 msgid "Changed library name or description"
 msgstr "Змінено назву або опис бібліотеки"
 
@@ -813,7 +813,7 @@ msgstr "Автоматичне злиття системою seafile"
 #: seahub/base/templatetags/seahub_tags.py:188
 #: seahub/base/templatetags/seahub_tags.py:222
 #: seahub/group/templates/group/group_discuss.html:154
-#: seahub/templates/repo.html:970 seahub/templates/repo.html.py:1701
+#: seahub/templates/repo.html:966 seahub/templates/repo.html.py:1698
 #: seahub/templates/snippets/my_owned_repos.html:148
 msgid "Just now"
 msgstr "Просто зараз"
@@ -1065,15 +1065,15 @@ msgstr "Редагувати"
 #: seahub/message/templates/message/user_msg_list.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:119
-#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:252
+#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:248
 #: seahub/templates/view_shared_upload_link.html:82
 #: seahub/templates/snippets/file_share_popup.html:50
 #: seahub/templates/snippets/file_share_popup.html:88
 #: seahub/templates/snippets/my_owned_repos.html:53
 #: seahub/templates/snippets/my_owned_repos.html:101
 #: seahub/templates/snippets/my_owned_repos.html:154
-#: seahub/templates/snippets/repo_dirents.html:32
-#: seahub/templates/snippets/repo_dirents.html:86
+#: seahub/templates/snippets/repo_dirents.html:36
+#: seahub/templates/snippets/repo_dirents.html:90
 #: seahub/templates/sysadmin/repoadmin_table.html:24
 #: seahub/templates/sysadmin/sys_group_admin.html:26
 #: seahub/templates/sysadmin/sys_org_admin.html:49
@@ -1382,7 +1382,7 @@ msgid "Discussion is required."
 msgstr "Обговорення потрібно."
 
 #: seahub/group/views.py:1345 seahub/views/__init__.py:634
-#: seahub/views/ajax.py:1182 seahub/views/file.py:310 seahub/views/file.py:632
+#: seahub/views/ajax.py:1188 seahub/views/file.py:310 seahub/views/file.py:632
 #: seahub/views/file.py:763
 msgid "File does not exist"
 msgstr "Файл не існує"
@@ -1401,7 +1401,7 @@ msgid "Failed to create wiki page. Please retry later."
 msgstr "Не вдалося створити wiki-сторінку. Повторіть спробу пізніше."
 
 #: seahub/group/views.py:1480 seahub/views/__init__.py:628
-#: seahub/views/ajax.py:1714 seahub/views/ajax.py:1778
+#: seahub/views/ajax.py:1720 seahub/views/ajax.py:1784
 #: seahub/views/wiki.py:109
 msgid "Internal Server Error"
 msgstr "Внутрішня помилка сервера"
@@ -1492,9 +1492,9 @@ msgstr "Значення не може бути порожнім і має бу�
 #: seahub/profile/templates/profile/set_profile.html:130
 #: seahub/templates/activities.html:26 seahub/templates/file_edit.html:100
 #: seahub/templates/file_edit.html:247 seahub/templates/myhome.html:61
-#: seahub/templates/repo.html:146 seahub/templates/repo.html.py:170
-#: seahub/templates/repo.html:191 seahub/templates/repo.html.py:198
-#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:251
+#: seahub/templates/repo.html:142 seahub/templates/repo.html.py:166
+#: seahub/templates/repo.html:187 seahub/templates/repo.html.py:194
+#: seahub/templates/repo.html:203 seahub/templates/repo.html.py:247
 #: seahub/templates/repo_recycle_view.html:117
 #: seahub/templates/shared_file_view.html:55
 #: seahub/templates/view_shared_upload_link.html:81
@@ -1643,7 +1643,7 @@ msgstr "Не вдалося видалити: "
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:216
 #: seahub/message/templates/message/user_msg_list.html:252
-#: seahub/templates/repo.html:877 seahub/templates/repo.html.py:1810
+#: seahub/templates/repo.html:873 seahub/templates/repo.html.py:1807
 msgid "Failed."
 msgstr "Невдало."
 
@@ -1772,8 +1772,8 @@ msgstr "Модифіковано"
 
 #: seahub/group/templates/group/group_info.html:100
 #: seahub/group/templates/group/group_info.html:102
-#: seahub/templates/repo.html:155 seahub/templates/repo.html.py:157
-#: seahub/templates/repo.html:161 seahub/templates/repo.html.py:163
+#: seahub/templates/repo.html:151 seahub/templates/repo.html.py:153
+#: seahub/templates/repo.html:157 seahub/templates/repo.html.py:159
 #: seahub/templates/repo_history.html:45
 #: seahub/templates/repo_view_snapshot.html:38
 #: seahub/templates/snippets/current_commit.html:4
@@ -1893,6 +1893,10 @@ msgstr "Адміністратори"
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:25
 #: seahub/templates/base.html:80 seahub/templates/repo.html:30
+#: seahub/templates/sysadmin/sys_org_info_group.html:11
+#: seahub/templates/sysadmin/sys_org_info_library.html:11
+#: seahub/templates/sysadmin/sys_org_info_setting.html:11
+#: seahub/templates/sysadmin/sys_org_info_user.html:11
 msgid "Settings"
 msgstr "Налаштування"
 
@@ -1914,8 +1918,8 @@ msgid "Change"
 msgstr "Змінити"
 
 #: seahub/group/templates/group/group_manage.html:81
-#: seahub/templates/snippets/repo_dirents.html:33
-#: seahub/templates/snippets/repo_dirents.html:87
+#: seahub/templates/snippets/repo_dirents.html:37
+#: seahub/templates/snippets/repo_dirents.html:92
 msgid "Rename"
 msgstr "Перейменувати"
 
@@ -2801,7 +2805,11 @@ msgstr "Демонстраційний обліковий запис не мож
 msgid "Failed to set default library."
 msgstr "Не вдалося призначити бібліотеку за замовчанням."
 
-#: seahub/profile/views.py:198
+#: seahub/profile/views.py:197
+msgid "Can not set encrypted library as default library."
+msgstr ""
+
+#: seahub/profile/views.py:202
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "\"%s\" успішно призначена вашою бібліотекою за замовчанням."
@@ -2847,7 +2855,7 @@ msgid "Password:"
 msgstr "Пароль: "
 
 #: seahub/profile/templates/profile/set_profile.html:38
-#: seahub/templates/snippets/repo_dirents.html:76
+#: seahub/templates/snippets/repo_dirents.html:91
 msgid "Update"
 msgstr "Оновити"
 
@@ -3065,8 +3073,8 @@ msgstr "усі учасники"
 
 #: seahub/share/views.py:720 seahub/share/views.py:1074
 #: seahub/views/__init__.py:846 seahub/views/__init__.py:1315
-#: seahub/views/__init__.py:1358 seahub/views/ajax.py:979
-#: seahub/views/ajax.py:999 seahub/views/file.py:877
+#: seahub/views/__init__.py:1358 seahub/views/ajax.py:980
+#: seahub/views/ajax.py:1000 seahub/views/file.py:877
 msgid "Invalid arguments"
 msgstr "Неприпустимі аргументи"
 
@@ -3140,9 +3148,9 @@ msgid "You don't have permission to save %s."
 msgstr "У вас немає дозволу на доступ до %s."
 
 #: seahub/share/views.py:1090 seahub/views/__init__.py:403
-#: seahub/views/ajax.py:163 seahub/views/ajax.py:390 seahub/views/ajax.py:476
-#: seahub/views/ajax.py:614 seahub/views/ajax.py:638 seahub/views/ajax.py:805
-#: seahub/views/ajax.py:830 seahub/views/file.py:862
+#: seahub/views/ajax.py:164 seahub/views/ajax.py:391 seahub/views/ajax.py:477
+#: seahub/views/ajax.py:615 seahub/views/ajax.py:639 seahub/views/ajax.py:806
+#: seahub/views/ajax.py:831 seahub/views/file.py:862
 msgid "Permission denied"
 msgstr "Доступ заборонено"
 
@@ -3180,7 +3188,7 @@ msgstr "Відвідування"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:612
+#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:608
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "Перегляд"
@@ -3368,7 +3376,7 @@ msgstr "Вихід"
 msgid "System Admin"
 msgstr "Системний адміністратор"
 
-#: seahub/templates/base.html:180
+#: seahub/templates/base.html:178
 #: seahub/templates/sysadmin/sys_group_admin.html:7
 msgid "All Groups"
 msgstr "Всі групи"
@@ -3379,19 +3387,19 @@ msgid ""
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr "Ця бібліотека зашифрована. Введіть пароль, якщо ви хочете її переглянути.пароль буде зберігатися на сервері тільки протягом 1 години."
 
-#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:219
+#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:215
 #: seahub/templates/share_access_validation.html:8
 msgid "Password: "
 msgstr "Пароль: "
 
-#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:224
+#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:220
 #, python-format
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
 msgstr "Ви можете змінити режим онлайн перегляду зашифрованих бібліотек <a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
 
-#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:327
+#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:323
 #: seahub/templates/share_access_validation.html:25
 msgid "Please enter the password."
 msgstr "Будь ласка, введіть пароль"
@@ -3460,7 +3468,7 @@ msgstr "Успішно розсинхронізовано."
 #: seahub/templates/view_shared_dir.html:44
 #: seahub/templates/view_shared_dir.html:60
 #: seahub/templates/snippets/repo_dirents.html:24
-#: seahub/templates/snippets/repo_dirents.html:74
+#: seahub/templates/snippets/repo_dirents.html:78
 msgid "Download"
 msgstr "Завантажити"
 
@@ -3786,7 +3794,7 @@ msgstr "Потрібен пароль."
 #: seahub/templates/repo_settings.html:40
 #: seahub/templates/view_file_base.html:130
 #: seahub/templates/snippets/current_commit.html:15
-#: seahub/templates/snippets/repo_dirents.html:90
+#: seahub/templates/snippets/repo_dirents.html:95
 msgid "History"
 msgstr "Історія"
 
@@ -4039,14 +4047,14 @@ msgid "Trash"
 msgstr "Кошик"
 
 #: seahub/templates/repo.html:52
-#: seahub/templates/snippets/repo_dirents.html:34
-#: seahub/templates/snippets/repo_dirents.html:88
+#: seahub/templates/snippets/repo_dirents.html:38
+#: seahub/templates/snippets/repo_dirents.html:93
 msgid "Move"
 msgstr "Перемістити"
 
 #: seahub/templates/repo.html:53
-#: seahub/templates/snippets/repo_dirents.html:35
-#: seahub/templates/snippets/repo_dirents.html:89
+#: seahub/templates/snippets/repo_dirents.html:39
+#: seahub/templates/snippets/repo_dirents.html:94
 msgid "Copy"
 msgstr "Копіювати"
 
@@ -4054,12 +4062,12 @@ msgstr "Копіювати"
 msgid "Upload Files"
 msgstr "Завантажити файл"
 
-#: seahub/templates/repo.html:59 seahub/templates/repo.html.py:107
+#: seahub/templates/repo.html:59 seahub/templates/repo.html.py:103
 #: seahub/templates/view_shared_upload_link.html:24
 msgid "The owner of this library has run out of space."
 msgstr "Власник цієї бібліотеки перевищив допустимий ліміт."
 
-#: seahub/templates/repo.html:64 seahub/templates/repo.html.py:114
+#: seahub/templates/repo.html:64 seahub/templates/repo.html.py:110
 msgid "Please select a file at first."
 msgstr "Будь ласка, виберіть файл в першу чергу."
 
@@ -4069,391 +4077,386 @@ msgid "Add Files"
 msgstr "Додати файл"
 
 #: seahub/templates/repo.html:77
-#: seahub/templates/view_shared_upload_link.html:37
-msgid "Start All"
-msgstr "Позначити"
-
-#: seahub/templates/repo.html:81
 #: seahub/templates/view_shared_upload_link.html:41
 msgid "Cancel All"
 msgstr "Вихід"
 
-#: seahub/templates/repo.html:85
+#: seahub/templates/repo.html:81
 #: seahub/templates/view_shared_upload_link.html:45
 msgid ""
 "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 msgstr "Перетягування підтримується Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
-#: seahub/templates/repo.html:87
+#: seahub/templates/repo.html:83
 #: seahub/templates/view_shared_upload_link.html:46
 #, python-format
 msgid "File size should be smaller than %(max_file_size)s"
 msgstr "Розмір файлу повинен бути менше за %(max_file_size)s"
 
-#: seahub/templates/repo.html:96 seahub/templates/repo.html.py:132
-#: seahub/templates/repo.html:1795
+#: seahub/templates/repo.html:92 seahub/templates/repo.html.py:128
+#: seahub/templates/repo.html:1792
 #: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "Збереження..."
 
-#: seahub/templates/repo.html:105
+#: seahub/templates/repo.html:101
 #, python-format
 msgid "Update %(file_name)s"
 msgstr "Оновлення %(file_name)s"
 
-#: seahub/templates/repo.html:120
+#: seahub/templates/repo.html:116
 msgid "Choose a file"
 msgstr "Вибрати файл"
 
-#: seahub/templates/repo.html:124
+#: seahub/templates/repo.html:120
 #, python-format
 msgid "Smaller than %(max_file_size)s"
 msgstr "Менше, ніж %(max_file_size)s"
 
-#: seahub/templates/repo.html:141
+#: seahub/templates/repo.html:137
 #: seahub/templates/snippets/repo_dir_data.html:15
 msgid "New Directory"
 msgstr "Новий каталог"
 
-#: seahub/templates/repo.html:142
+#: seahub/templates/repo.html:138
 msgid "Directory Name"
 msgstr "Ім'я каталогу"
 
-#: seahub/templates/repo.html:150
+#: seahub/templates/repo.html:146
 #: seahub/templates/snippets/repo_dir_data.html:18
 msgid "New File"
 msgstr "Новий файл"
 
-#: seahub/templates/repo.html:152
+#: seahub/templates/repo.html:148
 msgid "Featured File Type"
 msgstr "Рекомендовані типи файлів"
 
-#: seahub/templates/repo.html:153 seahub/templates/repo.html.py:159
+#: seahub/templates/repo.html:149 seahub/templates/repo.html.py:155
 msgid "Click to choose"
 msgstr "Натисніть для вибору"
 
-#: seahub/templates/repo.html:153
+#: seahub/templates/repo.html:149
 msgid "online Rich Text format."
 msgstr "Онлайновий Rich Text формат."
 
-#: seahub/templates/repo.html:159
+#: seahub/templates/repo.html:155
 msgid "simple markup format."
 msgstr "формат простий розмітки."
 
-#: seahub/templates/repo.html:166 seahub/templates/starred.html:13
+#: seahub/templates/repo.html:162 seahub/templates/starred.html:13
 msgid "File Name"
 msgstr "Файл"
 
-#: seahub/templates/repo.html:175
+#: seahub/templates/repo.html:171
 msgid "Current Library"
 msgstr "Поточна бібліотека"
 
-#: seahub/templates/repo.html:179
+#: seahub/templates/repo.html:175
 msgid "Other Libraries"
 msgstr "Інші бібліотеки"
 
-#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:53
+#: seahub/templates/repo.html:185 seahub/templates/shared_file_view.html:53
 msgid "Please click and choose a directory."
 msgstr "Клікніть для вибору каталогу"
 
-#: seahub/templates/repo.html:202
+#: seahub/templates/repo.html:198
 #, python-format
 msgid "Rename %(name)s as:"
 msgstr "Зміна ім'я %(name)s на:"
 
-#: seahub/templates/repo.html:218
+#: seahub/templates/repo.html:214
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr "Ця бібліотека зашифрована. Введіть пароль, якщо ви хочете її переглянути. Пароль буде зберігатися на сервері тільки протягом 1 години."
 
-#: seahub/templates/repo.html:242
+#: seahub/templates/repo.html:238
 #: seahub/templates/view_shared_upload_link.html:72
 msgid "File is too big"
 msgstr "Файл занадто великий"
 
-#: seahub/templates/repo.html:243
+#: seahub/templates/repo.html:239
 #: seahub/templates/view_shared_upload_link.html:73
 msgid "File is too small"
 msgstr "Файл занадто малий"
 
-#: seahub/templates/repo.html:244
+#: seahub/templates/repo.html:240
 #: seahub/templates/view_shared_upload_link.html:74
 msgid "Filetype not allowed"
 msgstr "Заборонений тип файлів"
 
-#: seahub/templates/repo.html:245
+#: seahub/templates/repo.html:241
 #: seahub/templates/view_shared_upload_link.html:75
 msgid "Max number of files exceeded"
 msgstr "Перевищення максимального числа файлів"
 
-#: seahub/templates/repo.html:246
+#: seahub/templates/repo.html:242
 #: seahub/templates/view_shared_upload_link.html:76
 msgid "Uploaded bytes exceed file size"
 msgstr "Перевищення ліміту розміру файлу"
 
-#: seahub/templates/repo.html:247
+#: seahub/templates/repo.html:243
 #: seahub/templates/view_shared_upload_link.html:77
 msgid "Empty file upload result"
 msgstr "Результат завантаження порожнього файлу"
 
-#: seahub/templates/repo.html:249
-#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:932
+#: seahub/templates/repo.html:245
+#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:933
 msgid "Error"
 msgstr "Помилка"
 
-#: seahub/templates/repo.html:250
+#: seahub/templates/repo.html:246
 #: seahub/templates/view_shared_upload_link.html:80
 msgid "Start"
 msgstr "Позначити"
 
-#: seahub/templates/repo.html:370
+#: seahub/templates/repo.html:366
 msgid "Delete Items"
 msgstr "Видалити"
 
-#: seahub/templates/repo.html:370
+#: seahub/templates/repo.html:366
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Ви впевнені, що хочете видалити %s ?"
 
-#: seahub/templates/repo.html:374 seahub/templates/repo.html.py:551
+#: seahub/templates/repo.html:370 seahub/templates/repo.html.py:547
 msgid "Processing..."
 msgstr "Обробка ..."
 
-#: seahub/templates/repo.html:404
+#: seahub/templates/repo.html:400
 #, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "Успішно видалені %(name)s та %(amount)s інших позицій."
 
-#: seahub/templates/repo.html:406
+#: seahub/templates/repo.html:402
 #, python-format
 msgid "Successfully deleted %(name)s."
 msgstr "Успішно видалені %(name)s."
 
-#: seahub/templates/repo.html:415
+#: seahub/templates/repo.html:411
 #, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr "Внутрішня помилка. Не вдалося видалити %(name)s та %(amount)s інших позицій.."
 
-#: seahub/templates/repo.html:417
+#: seahub/templates/repo.html:413
 #, python-format
 msgid "Internal error. Failed to delete %(name)s."
 msgstr "Внутрішня помилка. Не вдалося видалити  %(name)s."
 
-#: seahub/templates/repo.html:517
+#: seahub/templates/repo.html:513
 msgid "Move selected directories/files to:"
 msgstr "Перемістити вибрані каталоги/файли до:"
 
-#: seahub/templates/repo.html:520
+#: seahub/templates/repo.html:516
 msgid "Copy selected directories/files to:"
 msgstr "Копіювати вибрані каталоги/файли до:"
 
-#: seahub/templates/repo.html:546 seahub/templates/repo.html.py:1746
-#: seahub/views/ajax.py:644 seahub/views/ajax.py:836
+#: seahub/templates/repo.html:542 seahub/templates/repo.html.py:1743
+#: seahub/views/ajax.py:645 seahub/views/ajax.py:837
 msgid "Invalid destination path"
 msgstr "Невірний шлях призначення"
 
-#: seahub/templates/repo.html:595
+#: seahub/templates/repo.html:591
 #, python-format
 msgid "Successfully moved %(name)s."
 msgstr "Успішно переміщено %(name)s."
 
-#: seahub/templates/repo.html:597
+#: seahub/templates/repo.html:593
 #, python-format
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: seahub/templates/repo.html:599
+#: seahub/templates/repo.html:595
 #, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Успішно переміщено %(name)s та %(amount)s інших позицій."
 
-#: seahub/templates/repo.html:604
+#: seahub/templates/repo.html:600
 #, python-format
 msgid "Successfully copied %(name)s."
 msgstr "Успішно скопійовано %(name)s."
 
-#: seahub/templates/repo.html:606
+#: seahub/templates/repo.html:602
 #, python-format
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: seahub/templates/repo.html:608
+#: seahub/templates/repo.html:604
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Успішно скопійовано %(name)s та %(amount)s інших позицій."
 
-#: seahub/templates/repo.html:620
+#: seahub/templates/repo.html:616
 #, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr "Внутрішня помилка. Не вдалося перемістити %(name)s та %(amount)s інших позицій.."
 
-#: seahub/templates/repo.html:622
+#: seahub/templates/repo.html:618
 #, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Внутрішня помилка. Не вдалося перемістити  %(name)s."
 
-#: seahub/templates/repo.html:626
+#: seahub/templates/repo.html:622
 #, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr "Внутрішня помилка. Не вдалося скопіювати %(name)s та %(amount)s інших позицій.."
 
-#: seahub/templates/repo.html:628
+#: seahub/templates/repo.html:624
 #, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Внутрішня помилка. Не вдалося скопіювати  %(name)s."
 
-#: seahub/templates/repo.html:666
+#: seahub/templates/repo.html:662
 #, python-format
 msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:666
+#: seahub/templates/repo.html:662
 #, python-format
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:750 seahub/templates/repo.html.py:1810
-#: seahub/templates/repo.html:1837
+#: seahub/templates/repo.html:746 seahub/templates/repo.html.py:1807
+#: seahub/templates/repo.html:1834
 msgid "Canceled."
 msgstr "Скасовано."
 
-#: seahub/templates/repo.html:814
+#: seahub/templates/repo.html:810
 msgid "Encrypting the file..."
 msgstr "Шифрування файлу..."
 
-#: seahub/templates/repo.html:836
+#: seahub/templates/repo.html:832
 msgid "Error when encrypting."
 msgstr "Помилка під час шифрування."
 
-#: seahub/templates/repo.html:843
+#: seahub/templates/repo.html:839
 #, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr "Шифрування, %(num)s% виконано."
 
-#: seahub/templates/repo.html:860
+#: seahub/templates/repo.html:856
 msgid "Uploading ..."
 msgstr "Завантаження ..."
 
-#: seahub/templates/repo.html:872 seahub/templates/repo.html.py:1208
+#: seahub/templates/repo.html:868 seahub/templates/repo.html.py:1205
 msgid "Done!"
 msgstr "Виконано!"
 
-#: seahub/templates/repo.html:963 seahub/templates/repo.html.py:1587
-#: seahub/templates/repo.html:1714
-#: seahub/templates/snippets/repo_dirents.html:51
+#: seahub/templates/repo.html:959 seahub/templates/repo.html.py:1584
+#: seahub/templates/repo.html:1711
+#: seahub/templates/snippets/repo_dirents.html:55
 msgid "unstarred"
 msgstr "Зняти відмітку"
 
-#: seahub/templates/repo.html:1010
+#: seahub/templates/repo.html:1007
 msgid "Failed to get upload url"
 msgstr ""
 
-#: seahub/templates/repo.html:1029
+#: seahub/templates/repo.html:1026
 msgid "Error. Please try later."
 msgstr ""
 
-#: seahub/templates/repo.html:1218
+#: seahub/templates/repo.html:1215
 msgid "Downloading..."
 msgstr "Завантаження ..."
 
-#: seahub/templates/repo.html:1251
+#: seahub/templates/repo.html:1248
 #, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr "Завантаження, %(num)s% виконано."
 
-#: seahub/templates/repo.html:1272
+#: seahub/templates/repo.html:1269
 msgid "Decrypting..."
 msgstr "Розшифрувати ..."
 
-#: seahub/templates/repo.html:1289
+#: seahub/templates/repo.html:1286
 #, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr "Розшифрування, %(num)s% виконано."
 
-#: seahub/templates/repo.html:1392
+#: seahub/templates/repo.html:1389
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "Успішно видалено %(name)s"
 
-#: seahub/templates/repo.html:1414
+#: seahub/templates/repo.html:1411
 msgid "Rename File"
 msgstr "Перейменувати файл"
 
-#: seahub/templates/repo.html:1416
+#: seahub/templates/repo.html:1413
 msgid "Rename Directory"
 msgstr "Перейменувати каталог"
 
-#: seahub/templates/repo.html:1434
+#: seahub/templates/repo.html:1431
 msgid "Copy File"
 msgstr "Копіювати"
 
-#: seahub/templates/repo.html:1436
+#: seahub/templates/repo.html:1433
 msgid "Move File"
 msgstr "Перемістити"
 
-#: seahub/templates/repo.html:1438
+#: seahub/templates/repo.html:1435
 msgid "Copy Directory"
 msgstr "Каталог"
 
-#: seahub/templates/repo.html:1440
+#: seahub/templates/repo.html:1437
 msgid "Move Directory"
 msgstr "Переміщено каталогів"
 
-#: seahub/templates/repo.html:1445
+#: seahub/templates/repo.html:1442
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "Скопійовано %(name)s до:"
 
-#: seahub/templates/repo.html:1448
+#: seahub/templates/repo.html:1445
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "Переміщено %(name)s до:"
 
-#: seahub/templates/repo.html:1471
+#: seahub/templates/repo.html:1468
 msgid "Directory download is not supported in this library."
 msgstr "Завантаження каталогу не підтримується у цій бібліотеці."
 
-#: seahub/templates/repo.html:1589
-#: seahub/templates/snippets/repo_dirents.html:49
+#: seahub/templates/repo.html:1586
+#: seahub/templates/snippets/repo_dirents.html:53
 msgid "starred"
 msgstr "Позначити"
 
-#: seahub/templates/repo.html:1635 seahub/templates/repo.html.py:1675
+#: seahub/templates/repo.html:1632 seahub/templates/repo.html.py:1672
 msgid "It is required."
 msgstr "Потрібен Email."
 
-#: seahub/templates/repo.html:1641
+#: seahub/templates/repo.html:1638
 msgid "Only an extension there, please input a name."
 msgstr "Тут тільки розширення, будь ласка, введіть значення."
 
-#: seahub/templates/repo.html:1651
+#: seahub/templates/repo.html:1648
 msgid "Creating..."
 msgstr "Витяг ..."
 
-#: seahub/templates/repo.html:1679
+#: seahub/templates/repo.html:1676
 msgid "You have not renamed it."
 msgstr "Ви ще не завантажили"
 
-#: seahub/templates/repo.html:1725
+#: seahub/templates/repo.html:1722
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Успішно перейменовано з %(old_name)s до %(new_name)s"
 
-#: seahub/templates/repo.html:1779
+#: seahub/templates/repo.html:1776
 #, python-format
 msgid "Moving %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1779
+#: seahub/templates/repo.html:1776
 #, python-format
 msgid "Copying %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1939
+#: seahub/templates/repo.html:1936
 msgid "Please select at least one contact."
 msgstr "Будь ласка, оберіть принаймні один контакт."
 
-#: seahub/templates/repo.html:2050
+#: seahub/templates/repo.html:2047
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "Будь ласка, введіть emails, або назви груп, або що небудь."
@@ -4812,8 +4815,8 @@ msgstr "група"
 #: seahub/templates/snippets/my_owned_repos.html:99
 #: seahub/templates/snippets/my_owned_repos.html:153
 #: seahub/templates/snippets/repo_dir_data.html:24
-#: seahub/templates/snippets/repo_dirents.html:26
-#: seahub/templates/snippets/repo_dirents.html:80
+#: seahub/templates/snippets/repo_dirents.html:28
+#: seahub/templates/snippets/repo_dirents.html:82
 msgid "Share"
 msgstr "Доступ"
 
@@ -4939,6 +4942,10 @@ msgstr "Завантажити файли до <span class=\"op-target\">%(dir_n
 #: seahub/templates/view_shared_upload_link.html:22
 msgid "shared by:"
 msgstr "надано:"
+
+#: seahub/templates/view_shared_upload_link.html:37
+msgid "Start All"
+msgstr "Позначити"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5400,15 +5407,15 @@ msgid "Upload"
 msgstr "Завантажити"
 
 #: seahub/templates/snippets/repo_dirents.html:18
-#: seahub/templates/snippets/repo_dirents.html:68
+#: seahub/templates/snippets/repo_dirents.html:72
 msgid "Fetch failed"
 msgstr "Fetch failed"
 
-#: seahub/templates/snippets/repo_dirents.html:30
+#: seahub/templates/snippets/repo_dirents.html:34
 msgid "More operations"
 msgstr "Більше операцій"
 
-#: seahub/templates/snippets/repo_dirents.html:84
+#: seahub/templates/snippets/repo_dirents.html:88
 msgid "More Operations"
 msgstr "Більше операцій"
 
@@ -5707,13 +5714,6 @@ msgstr "Set org storage limit"
 #: seahub/templates/sysadmin/userinfo.html:56
 msgid "Tip: 0 means default limit"
 msgstr "Врахуйте: 0 - без обмежень (за замовчуванням)"
-
-#: seahub/templates/sysadmin/sys_org_info_group.html:11
-#: seahub/templates/sysadmin/sys_org_info_library.html:11
-#: seahub/templates/sysadmin/sys_org_info_setting.html:11
-#: seahub/templates/sysadmin/sys_org_info_user.html:11
-msgid "Setting"
-msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_group.html:34
 msgid "This organization doesn't have any groups"
@@ -6096,7 +6096,7 @@ msgid "Please specify history ID"
 msgstr "Будь ласка визначте ID історії"
 
 #: seahub/views/__init__.py:848 seahub/views/__init__.py:1257
-#: seahub/views/__init__.py:1638 seahub/views/ajax.py:1308
+#: seahub/views/__init__.py:1640 seahub/views/ajax.py:1314
 msgid "Library does not exist"
 msgstr "Бібліотека не існує"
 
@@ -6136,12 +6136,12 @@ msgstr "Не вдалося видалити файл."
 msgid "%s successfully deleted."
 msgstr "%s успішно видалено."
 
-#: seahub/views/__init__.py:1138 seahub/views/ajax.py:550
+#: seahub/views/__init__.py:1138 seahub/views/ajax.py:551
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Внутрішня помилка. Файл %s не видалено."
 
-#: seahub/views/__init__.py:1186 seahub/views/__init__.py:1671
+#: seahub/views/__init__.py:1186 seahub/views/__init__.py:1673
 #: seahub/views/file.py:1090
 msgid "Unable to access file: share link traffic is used up."
 msgstr "Неможливо отримати доступ до файлу: трафік для загального файлу вичерпався."
@@ -6165,123 +6165,123 @@ msgstr "Успішно відновлено <a href=\"%(url)s\">%(path)s</a>"
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "Успішно відновлено %(path)s до <a href=\"%(url)s\">основної директорії.</a>"
 
-#: seahub/views/__init__.py:1683 seahub/views/file.py:855
+#: seahub/views/__init__.py:1685 seahub/views/file.py:855
 msgid "Internal Error"
 msgstr "Внутрішня помилка"
 
-#: seahub/views/__init__.py:1686
+#: seahub/views/__init__.py:1688
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Не вдається завантажити каталог \"%s\": занадто великий розмір."
 
-#: seahub/views/__init__.py:1700
+#: seahub/views/__init__.py:1702
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Не вдається завантажити \"%s\""
 
-#: seahub/views/__init__.py:1846
+#: seahub/views/__init__.py:1848
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/views/__init__.py:1851
+#: seahub/views/__init__.py:1853
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Успішно закритий доступ до \"%s\"."
 
-#: seahub/views/ajax.py:73
+#: seahub/views/ajax.py:74
 msgid "You don't have permission to access the library."
 msgstr "У вас немає дозволу на доступ до бібліотеки."
 
-#: seahub/views/ajax.py:81
+#: seahub/views/ajax.py:82
 msgid "No path."
 msgstr "No path."
 
-#: seahub/views/ajax.py:157
+#: seahub/views/ajax.py:158
 msgid "The group doesn't exist"
 msgstr "Група не існує"
 
-#: seahub/views/ajax.py:225 seahub/views/ajax.py:309 seahub/views/ajax.py:383
-#: seahub/views/ajax.py:470 seahub/views/ajax.py:524 seahub/views/ajax.py:563
-#: seahub/views/ajax.py:607 seahub/views/ajax.py:798 seahub/views/ajax.py:1026
+#: seahub/views/ajax.py:226 seahub/views/ajax.py:310 seahub/views/ajax.py:384
+#: seahub/views/ajax.py:471 seahub/views/ajax.py:525 seahub/views/ajax.py:564
+#: seahub/views/ajax.py:608 seahub/views/ajax.py:799 seahub/views/ajax.py:1032
 msgid "Library does not exist."
 msgstr "Бібліотека не існує"
 
-#: seahub/views/ajax.py:232 seahub/views/ajax.py:316 seahub/views/ajax.py:531
-#: seahub/views/ajax.py:570 seahub/views/ajax.py:973 seahub/views/ajax.py:993
-#: seahub/views/ajax.py:1033 seahub/views/ajax.py:1332
-#: seahub/views/ajax.py:1350
+#: seahub/views/ajax.py:233 seahub/views/ajax.py:317 seahub/views/ajax.py:532
+#: seahub/views/ajax.py:571 seahub/views/ajax.py:974 seahub/views/ajax.py:994
+#: seahub/views/ajax.py:1039 seahub/views/ajax.py:1338
+#: seahub/views/ajax.py:1356
 msgid "Permission denied."
 msgstr "Доступ заборонено"
 
-#: seahub/views/ajax.py:247 seahub/views/ajax.py:331 seahub/views/ajax.py:1046
+#: seahub/views/ajax.py:248 seahub/views/ajax.py:332 seahub/views/ajax.py:1052
 msgid "Library is encrypted."
 msgstr "Бібліотека зашифрована."
 
-#: seahub/views/ajax.py:253 seahub/views/ajax.py:337 seahub/views/ajax.py:1052
+#: seahub/views/ajax.py:254 seahub/views/ajax.py:338 seahub/views/ajax.py:1058
 msgid "Error: no head commit id"
 msgstr "Error: no head commit id"
 
-#: seahub/views/ajax.py:539 seahub/views/ajax.py:578
+#: seahub/views/ajax.py:540 seahub/views/ajax.py:579
 msgid "Argument missing."
 msgstr "Аргумент пропущений."
 
-#: seahub/views/ajax.py:632
+#: seahub/views/ajax.py:633
 msgid "Destination path is too long."
 msgstr "Шлях призначення занадто довгий."
 
-#: seahub/views/ajax.py:671 seahub/views/ajax.py:738
+#: seahub/views/ajax.py:672 seahub/views/ajax.py:739
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успішне переміщення %(name)s <a href=\"%(url)s\">переглянути</a>"
 
-#: seahub/views/ajax.py:700 seahub/views/ajax.py:775
+#: seahub/views/ajax.py:701 seahub/views/ajax.py:776
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "Успішне копіювання %(name)s <a href=\"%(url)s\">переглянути</a>"
 
-#: seahub/views/ajax.py:717 seahub/views/ajax.py:851
+#: seahub/views/ajax.py:718 seahub/views/ajax.py:852
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Не можливо перемістити каталог %(src)s до свого підкаталогу %(des)s"
 
-#: seahub/views/ajax.py:754 seahub/views/ajax.py:887
+#: seahub/views/ajax.py:755 seahub/views/ajax.py:888
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Не моливо зробити копію каталогу %(src)s до свого підкаталогу %(des)s"
 
-#: seahub/views/ajax.py:824
+#: seahub/views/ajax.py:825
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Шлях призначення занадто довгий  для %s."
 
-#: seahub/views/ajax.py:963
+#: seahub/views/ajax.py:964
 msgid "Cancel failed"
 msgstr ""
 
-#: seahub/views/ajax.py:1135
+#: seahub/views/ajax.py:1141
 msgid "Failed to get file block list"
 msgstr "Збій отримання переліку бкованих файлів."
 
-#: seahub/views/ajax.py:1173
+#: seahub/views/ajax.py:1179
 msgid "Wrong repo id"
 msgstr "Невірний repo id"
 
-#: seahub/views/ajax.py:1303
+#: seahub/views/ajax.py:1309
 msgid "System library can not be deleted."
 msgstr "Системна бібліотека не може  бути видалена."
 
-#: seahub/views/ajax.py:1587
+#: seahub/views/ajax.py:1593
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:1593
+#: seahub/views/ajax.py:1599
 msgid "Bad repo id in upload link."
 msgstr ""
 
-#: seahub/views/ajax.py:1643
+#: seahub/views/ajax.py:1649
 msgid "No conflict in the merge."
 msgstr "Немає конфлікту при злитті."
 
-#: seahub/views/ajax.py:1693 seahub/views/ajax.py:1756
+#: seahub/views/ajax.py:1699 seahub/views/ajax.py:1762
 msgid "You do not have permission to create library"
 msgstr "Ви не має прав на створення бібліотеки"
 

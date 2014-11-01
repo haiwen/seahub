@@ -28,6 +28,7 @@
 # rotzbua, 2014
 # pieceofsoul <sascha@pieceofsoul.de>, 2014
 # Schnuffel <th.grethlein@gmx.net>, 2014
+# siljaj <silja.jackson@jackson-it.de>, 2014
 # Stefan Lorenz <stefan.lorenz@it-consulting-lorenz.de>, 2014
 # Sven Weintuch, 2013
 # Sven Weintuch, 2013
@@ -41,8 +42,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-10-23 14:32+0800\n"
-"PO-Revision-Date: 2014-10-23 06:34+0000\n"
+"POT-Creation-Date: 2014-11-01 11:42+0800\n"
+"PO-Revision-Date: 2014-11-01 03:15+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/projects/p/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
@@ -82,11 +83,11 @@ msgstr "Name %s ist ungültig"
 
 #: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:778
 #: seahub/share/views.py:816 seahub/views/__init__.py:1049
-#: seahub/views/ajax.py:347 seahub/views/ajax.py:406 seahub/views/ajax.py:497
-#: seahub/views/ajax.py:626 seahub/views/ajax.py:817 seahub/views/ajax.py:924
-#: seahub/views/ajax.py:953 seahub/views/ajax.py:1081
-#: seahub/views/ajax.py:1160 seahub/views/ajax.py:1164
-#: seahub/views/ajax.py:1168 seahub/views/ajax.py:1560
+#: seahub/views/ajax.py:348 seahub/views/ajax.py:407 seahub/views/ajax.py:498
+#: seahub/views/ajax.py:627 seahub/views/ajax.py:818 seahub/views/ajax.py:925
+#: seahub/views/ajax.py:954 seahub/views/ajax.py:1087
+#: seahub/views/ajax.py:1166 seahub/views/ajax.py:1170
+#: seahub/views/ajax.py:1174 seahub/views/ajax.py:1566
 msgid "Argument missing"
 msgstr "Argument fehlt"
 
@@ -123,13 +124,13 @@ msgstr "Passwort darf nicht leer sein"
 msgid "Bad url format"
 msgstr "Ungültiges Adresseformat"
 
-#: seahub/forms.py:153 seahub/templates/repo.html:351
+#: seahub/forms.py:153 seahub/templates/repo.html:347
 msgid "Wrong password"
 msgstr "Falsches Passwort"
 
 #: seahub/forms.py:155 seahub/views/__init__.py:410
-#: seahub/views/__init__.py:1055 seahub/views/ajax.py:665
-#: seahub/views/ajax.py:694 seahub/views/ajax.py:732 seahub/views/ajax.py:769
+#: seahub/views/__init__.py:1055 seahub/views/ajax.py:666
+#: seahub/views/ajax.py:695 seahub/views/ajax.py:733 seahub/views/ajax.py:770
 msgid "Internal server error"
 msgstr "Interner Serverfehler"
 
@@ -264,7 +265,7 @@ msgstr "File Collaboration Team Organization"
 #: seahub/api2/templates/api2/discussion.html:6
 #: seahub/group/templates/group/group_base.html:23
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:177 seahub/templates/view_file_base.html:123
+#: seahub/templates/base.html:175 seahub/templates/view_file_base.html:123
 msgid "Discussion"
 msgstr "Diskussionen"
 
@@ -289,7 +290,7 @@ msgstr "Diskussionen"
 #: seahub/templates/view_file_base.html:156
 #: seahub/templates/view_shared_dir.html:52
 #: seahub/templates/snippets/group_recommend_form.html:28
-#: seahub/templates/snippets/repo_dirents.html:54
+#: seahub/templates/snippets/repo_dirents.html:58
 msgid "File"
 msgstr "Datei"
 
@@ -344,11 +345,11 @@ msgstr "Wird geladen …"
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
 #: seahub/templates/base.html:140 seahub/templates/file_edit.html:595
 #: seahub/templates/myhome.html:123 seahub/templates/myhome.html.py:151
-#: seahub/templates/repo.html:292 seahub/templates/repo.html.py:701
-#: seahub/templates/repo.html:759 seahub/templates/repo.html.py:1597
-#: seahub/templates/repo.html:1821 seahub/templates/repo.html.py:1846
-#: seahub/templates/repo.html:1891 seahub/templates/repo.html.py:1996
-#: seahub/templates/repo.html:2068 seahub/templates/repo_settings.html:141
+#: seahub/templates/repo.html:288 seahub/templates/repo.html.py:697
+#: seahub/templates/repo.html:755 seahub/templates/repo.html.py:1594
+#: seahub/templates/repo.html:1818 seahub/templates/repo.html.py:1843
+#: seahub/templates/repo.html:1888 seahub/templates/repo.html.py:1993
+#: seahub/templates/repo.html:2065 seahub/templates/repo_settings.html:141
 #: seahub/templates/repo_settings.html:177
 #: seahub/templates/repo_settings.html:238
 #: seahub/templates/view_file_base.html:338
@@ -692,10 +693,10 @@ msgstr "Aktueller Avatar: "
 #: seahub/templates/decrypt_repo_form.html:13
 #: seahub/templates/file_edit.html:99 seahub/templates/file_edit.html:246
 #: seahub/templates/home_base.html:57 seahub/templates/myhome.html:60
-#: seahub/templates/repo.html:65 seahub/templates/repo.html.py:115
-#: seahub/templates/repo.html:145 seahub/templates/repo.html.py:169
-#: seahub/templates/repo.html:190 seahub/templates/repo.html.py:206
-#: seahub/templates/repo.html:221 seahub/templates/repo_recycle_view.html:116
+#: seahub/templates/repo.html:65 seahub/templates/repo.html.py:111
+#: seahub/templates/repo.html:141 seahub/templates/repo.html.py:165
+#: seahub/templates/repo.html:186 seahub/templates/repo.html.py:202
+#: seahub/templates/repo.html:217 seahub/templates/repo_recycle_view.html:116
 #: seahub/templates/repo_settings.html:48
 #: seahub/templates/repo_settings.html:58
 #: seahub/templates/repo_settings.html:74
@@ -831,7 +832,7 @@ msgstr "Datei „%(file)s“ wurde auf den Stand von %(time)s zurückgesetzt."
 msgid "Recovered deleted directory"
 msgstr "Gelöschter Ordner wieder hergestellt"
 
-#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1640
+#: seahub/base/templatetags/seahub_tags.py:126 seahub/views/ajax.py:1646
 msgid "Changed library name or description"
 msgstr "Bibliotheksname oder -beschreibung geändert."
 
@@ -842,7 +843,7 @@ msgstr "Automatisch von Seafile zusammengeführt"
 #: seahub/base/templatetags/seahub_tags.py:188
 #: seahub/base/templatetags/seahub_tags.py:222
 #: seahub/group/templates/group/group_discuss.html:154
-#: seahub/templates/repo.html:970 seahub/templates/repo.html.py:1701
+#: seahub/templates/repo.html:966 seahub/templates/repo.html.py:1698
 #: seahub/templates/snippets/my_owned_repos.html:148
 msgid "Just now"
 msgstr "Gerade eben"
@@ -1090,15 +1091,15 @@ msgstr "Bearbeiten"
 #: seahub/message/templates/message/user_msg_list.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
 #: seahub/profile/templates/profile/set_profile.html:119
-#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:252
+#: seahub/templates/repo.html:51 seahub/templates/repo.html.py:248
 #: seahub/templates/view_shared_upload_link.html:82
 #: seahub/templates/snippets/file_share_popup.html:50
 #: seahub/templates/snippets/file_share_popup.html:88
 #: seahub/templates/snippets/my_owned_repos.html:53
 #: seahub/templates/snippets/my_owned_repos.html:101
 #: seahub/templates/snippets/my_owned_repos.html:154
-#: seahub/templates/snippets/repo_dirents.html:32
-#: seahub/templates/snippets/repo_dirents.html:86
+#: seahub/templates/snippets/repo_dirents.html:36
+#: seahub/templates/snippets/repo_dirents.html:90
 #: seahub/templates/sysadmin/repoadmin_table.html:24
 #: seahub/templates/sysadmin/sys_group_admin.html:26
 #: seahub/templates/sysadmin/sys_org_admin.html:49
@@ -1406,7 +1407,7 @@ msgid "Discussion is required."
 msgstr "Diskussion notwendig."
 
 #: seahub/group/views.py:1345 seahub/views/__init__.py:634
-#: seahub/views/ajax.py:1182 seahub/views/file.py:310 seahub/views/file.py:632
+#: seahub/views/ajax.py:1188 seahub/views/file.py:310 seahub/views/file.py:632
 #: seahub/views/file.py:763
 msgid "File does not exist"
 msgstr "Die Datei existiert nicht"
@@ -1425,7 +1426,7 @@ msgid "Failed to create wiki page. Please retry later."
 msgstr "Wikiseite konnte nicht erstellt werden, bitte versuchen Sie es später nochmals."
 
 #: seahub/group/views.py:1480 seahub/views/__init__.py:628
-#: seahub/views/ajax.py:1714 seahub/views/ajax.py:1778
+#: seahub/views/ajax.py:1720 seahub/views/ajax.py:1784
 #: seahub/views/wiki.py:109
 msgid "Internal Server Error"
 msgstr "Interner Serverfehler"
@@ -1516,9 +1517,9 @@ msgstr "Darf nicht leer sein und sollte nicht mehr als 2048 Zeichen haben."
 #: seahub/profile/templates/profile/set_profile.html:130
 #: seahub/templates/activities.html:26 seahub/templates/file_edit.html:100
 #: seahub/templates/file_edit.html:247 seahub/templates/myhome.html:61
-#: seahub/templates/repo.html:146 seahub/templates/repo.html.py:170
-#: seahub/templates/repo.html:191 seahub/templates/repo.html.py:198
-#: seahub/templates/repo.html:207 seahub/templates/repo.html.py:251
+#: seahub/templates/repo.html:142 seahub/templates/repo.html.py:166
+#: seahub/templates/repo.html:187 seahub/templates/repo.html.py:194
+#: seahub/templates/repo.html:203 seahub/templates/repo.html.py:247
 #: seahub/templates/repo_recycle_view.html:117
 #: seahub/templates/shared_file_view.html:55
 #: seahub/templates/view_shared_upload_link.html:81
@@ -1667,7 +1668,7 @@ msgstr "Löschen fehlgeschlagen:"
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:216
 #: seahub/message/templates/message/user_msg_list.html:252
-#: seahub/templates/repo.html:877 seahub/templates/repo.html.py:1810
+#: seahub/templates/repo.html:873 seahub/templates/repo.html.py:1807
 msgid "Failed."
 msgstr "Fehlgeschlagen."
 
@@ -1796,8 +1797,8 @@ msgstr "Bearbeiter"
 
 #: seahub/group/templates/group/group_info.html:100
 #: seahub/group/templates/group/group_info.html:102
-#: seahub/templates/repo.html:155 seahub/templates/repo.html.py:157
-#: seahub/templates/repo.html:161 seahub/templates/repo.html.py:163
+#: seahub/templates/repo.html:151 seahub/templates/repo.html.py:153
+#: seahub/templates/repo.html:157 seahub/templates/repo.html.py:159
 #: seahub/templates/repo_history.html:45
 #: seahub/templates/repo_view_snapshot.html:38
 #: seahub/templates/snippets/current_commit.html:4
@@ -1917,6 +1918,10 @@ msgstr "Administratoren"
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:25
 #: seahub/templates/base.html:80 seahub/templates/repo.html:30
+#: seahub/templates/sysadmin/sys_org_info_group.html:11
+#: seahub/templates/sysadmin/sys_org_info_library.html:11
+#: seahub/templates/sysadmin/sys_org_info_setting.html:11
+#: seahub/templates/sysadmin/sys_org_info_user.html:11
 msgid "Settings"
 msgstr "Einstellungen"
 
@@ -1938,8 +1943,8 @@ msgid "Change"
 msgstr "Ändern"
 
 #: seahub/group/templates/group/group_manage.html:81
-#: seahub/templates/snippets/repo_dirents.html:33
-#: seahub/templates/snippets/repo_dirents.html:87
+#: seahub/templates/snippets/repo_dirents.html:37
+#: seahub/templates/snippets/repo_dirents.html:92
 msgid "Rename"
 msgstr "Umbenennen"
 
@@ -2824,7 +2829,11 @@ msgstr "Demo Benutzerkonto kann nicht gelöscht werden."
 msgid "Failed to set default library."
 msgstr "Standard Bibliothek konnte nicht festlegt werden."
 
-#: seahub/profile/views.py:198
+#: seahub/profile/views.py:197
+msgid "Can not set encrypted library as default library."
+msgstr ""
+
+#: seahub/profile/views.py:202
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "„%s“ wurde als Ihre vorgegebene Bibliothek eingestellt. "
@@ -2870,7 +2879,7 @@ msgid "Password:"
 msgstr "Passwort:"
 
 #: seahub/profile/templates/profile/set_profile.html:38
-#: seahub/templates/snippets/repo_dirents.html:76
+#: seahub/templates/snippets/repo_dirents.html:91
 msgid "Update"
 msgstr "Aktualisieren"
 
@@ -3088,8 +3097,8 @@ msgstr "Alle Mitglieder"
 
 #: seahub/share/views.py:720 seahub/share/views.py:1074
 #: seahub/views/__init__.py:846 seahub/views/__init__.py:1315
-#: seahub/views/__init__.py:1358 seahub/views/ajax.py:979
-#: seahub/views/ajax.py:999 seahub/views/file.py:877
+#: seahub/views/__init__.py:1358 seahub/views/ajax.py:980
+#: seahub/views/ajax.py:1000 seahub/views/file.py:877
 msgid "Invalid arguments"
 msgstr "Ungültige Argumente"
 
@@ -3163,9 +3172,9 @@ msgid "You don't have permission to save %s."
 msgstr "Sie haben keine Berechtigung, %s zu speichern."
 
 #: seahub/share/views.py:1090 seahub/views/__init__.py:403
-#: seahub/views/ajax.py:163 seahub/views/ajax.py:390 seahub/views/ajax.py:476
-#: seahub/views/ajax.py:614 seahub/views/ajax.py:638 seahub/views/ajax.py:805
-#: seahub/views/ajax.py:830 seahub/views/file.py:862
+#: seahub/views/ajax.py:164 seahub/views/ajax.py:391 seahub/views/ajax.py:477
+#: seahub/views/ajax.py:615 seahub/views/ajax.py:639 seahub/views/ajax.py:806
+#: seahub/views/ajax.py:831 seahub/views/file.py:862
 msgid "Permission denied"
 msgstr "Zugriff verweigert"
 
@@ -3203,7 +3212,7 @@ msgstr "Besuche"
 
 #: seahub/share/templates/share/links.html:37
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:612
+#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:608
 #: seahub/templates/repo_view_snapshot.html:42
 msgid "View"
 msgstr "Ansicht"
@@ -3391,7 +3400,7 @@ msgstr "Abmelden"
 msgid "System Admin"
 msgstr "Systemadministration"
 
-#: seahub/templates/base.html:180
+#: seahub/templates/base.html:178
 #: seahub/templates/sysadmin/sys_group_admin.html:7
 msgid "All Groups"
 msgstr "Alle Gruppen"
@@ -3402,19 +3411,19 @@ msgid ""
 "it online. And the password will be kept on the server for only 1 hour."
 msgstr "Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn Sie die Bibliothek online betrachten wollen. Das Passwort wird auf dem Server nur für eine Stunde behalten."
 
-#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:219
+#: seahub/templates/decrypt_repo_form.html:9 seahub/templates/repo.html:215
 #: seahub/templates/share_access_validation.html:8
 msgid "Password: "
 msgstr "Passwort: "
 
-#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:224
+#: seahub/templates/decrypt_repo_form.html:21 seahub/templates/repo.html:220
 #, python-format
 msgid ""
 "You can change how to view encrypted libraries online <a class=\"normal\" "
 "href=\"%(profile_edit_url)s#enc-lib-setting\">here</a>."
 msgstr "<a class=\"normal\" href=\"%(profile_edit_url)s#enc-lib-setting\">Hier</a> können den Modus ändern wie verschlüsselte Bibliotheken online angezeigt werden sollen."
 
-#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:327
+#: seahub/templates/decrypt_repo_form.html:33 seahub/templates/repo.html:323
 #: seahub/templates/share_access_validation.html:25
 msgid "Please enter the password."
 msgstr "Bitte das Passwort eingeben."
@@ -3483,7 +3492,7 @@ msgstr "Verknüpfung erfolgreich aufgehoben."
 #: seahub/templates/view_shared_dir.html:44
 #: seahub/templates/view_shared_dir.html:60
 #: seahub/templates/snippets/repo_dirents.html:24
-#: seahub/templates/snippets/repo_dirents.html:74
+#: seahub/templates/snippets/repo_dirents.html:78
 msgid "Download"
 msgstr "Herunterladen"
 
@@ -3809,7 +3818,7 @@ msgstr "Passwort wird benötigt."
 #: seahub/templates/repo_settings.html:40
 #: seahub/templates/view_file_base.html:130
 #: seahub/templates/snippets/current_commit.html:15
-#: seahub/templates/snippets/repo_dirents.html:90
+#: seahub/templates/snippets/repo_dirents.html:95
 msgid "History"
 msgstr "Verlauf"
 
@@ -3916,27 +3925,27 @@ msgstr "Ordner hinzufügen"
 
 #: seahub/templates/i18n.html:7
 msgid "Add auto expiration"
-msgstr ""
+msgstr "Automatischen Ablauf festlegen"
 
 #: seahub/templates/i18n.html:8
 msgid "Days"
-msgstr ""
+msgstr "Tage"
 
 #: seahub/templates/i18n.html:9
 msgid "Shared Links"
-msgstr ""
+msgstr "Geteilte Links"
 
 #: seahub/templates/i18n.html:10
 msgid "View and manage all the shared links in this library."
-msgstr ""
+msgstr "Alle geteilten Links in dieser Bibliothek ansehen und verwalten."
 
 #: seahub/templates/i18n.html:11
 msgid "Owned Libs"
-msgstr ""
+msgstr "Eigene Bibliotheken"
 
 #: seahub/templates/i18n.html:12
 msgid "Shared Libs"
-msgstr ""
+msgstr "Geteilte Bibliotheken"
 
 #: seahub/templates/my_group_repos.html:6
 #: seahub/templates/snippets/bottom_bar.html:3
@@ -4062,14 +4071,14 @@ msgid "Trash"
 msgstr "Papierkorb"
 
 #: seahub/templates/repo.html:52
-#: seahub/templates/snippets/repo_dirents.html:34
-#: seahub/templates/snippets/repo_dirents.html:88
+#: seahub/templates/snippets/repo_dirents.html:38
+#: seahub/templates/snippets/repo_dirents.html:93
 msgid "Move"
 msgstr "Verschieben"
 
 #: seahub/templates/repo.html:53
-#: seahub/templates/snippets/repo_dirents.html:35
-#: seahub/templates/snippets/repo_dirents.html:89
+#: seahub/templates/snippets/repo_dirents.html:39
+#: seahub/templates/snippets/repo_dirents.html:94
 msgid "Copy"
 msgstr "Kopieren"
 
@@ -4077,12 +4086,12 @@ msgstr "Kopieren"
 msgid "Upload Files"
 msgstr "Dateien hochladen"
 
-#: seahub/templates/repo.html:59 seahub/templates/repo.html.py:107
+#: seahub/templates/repo.html:59 seahub/templates/repo.html.py:103
 #: seahub/templates/view_shared_upload_link.html:24
 msgid "The owner of this library has run out of space."
 msgstr "Der Besitzer dieser Bibliothek besitzt keinen freien Speicherplatz mehr."
 
-#: seahub/templates/repo.html:64 seahub/templates/repo.html.py:114
+#: seahub/templates/repo.html:64 seahub/templates/repo.html.py:110
 msgid "Please select a file at first."
 msgstr "Bitte zuerst eine Datei auswählen."
 
@@ -4092,391 +4101,386 @@ msgid "Add Files"
 msgstr "Dateien hinzufügen"
 
 #: seahub/templates/repo.html:77
-#: seahub/templates/view_shared_upload_link.html:37
-msgid "Start All"
-msgstr "Alle starten"
-
-#: seahub/templates/repo.html:81
 #: seahub/templates/view_shared_upload_link.html:41
 msgid "Cancel All"
 msgstr "Alle abbrechen"
 
-#: seahub/templates/repo.html:85
+#: seahub/templates/repo.html:81
 #: seahub/templates/view_shared_upload_link.html:45
 msgid ""
 "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 msgstr "Ziehen und Ablegen wird bei Chrome, Safari 5.0+, Firefox 4.0+ und IE 10.0+ unterstützt."
 
-#: seahub/templates/repo.html:87
+#: seahub/templates/repo.html:83
 #: seahub/templates/view_shared_upload_link.html:46
 #, python-format
 msgid "File size should be smaller than %(max_file_size)s"
 msgstr "Die Dateigröße darf %(max_file_size)s nicht übersteigen"
 
-#: seahub/templates/repo.html:96 seahub/templates/repo.html.py:132
-#: seahub/templates/repo.html:1795
+#: seahub/templates/repo.html:92 seahub/templates/repo.html.py:128
+#: seahub/templates/repo.html:1792
 #: seahub/templates/view_shared_upload_link.html:54
 msgid "Saving..."
 msgstr "Wird gespeichert …"
 
-#: seahub/templates/repo.html:105
+#: seahub/templates/repo.html:101
 #, python-format
 msgid "Update %(file_name)s"
 msgstr "%(file_name)s aktualisieren "
 
-#: seahub/templates/repo.html:120
+#: seahub/templates/repo.html:116
 msgid "Choose a file"
 msgstr "Datei auswählen"
 
-#: seahub/templates/repo.html:124
+#: seahub/templates/repo.html:120
 #, python-format
 msgid "Smaller than %(max_file_size)s"
 msgstr "Kleiner als %(max_file_size)s"
 
-#: seahub/templates/repo.html:141
+#: seahub/templates/repo.html:137
 #: seahub/templates/snippets/repo_dir_data.html:15
 msgid "New Directory"
 msgstr "Neuer Ordner"
 
-#: seahub/templates/repo.html:142
+#: seahub/templates/repo.html:138
 msgid "Directory Name"
 msgstr "Ordnername"
 
-#: seahub/templates/repo.html:150
+#: seahub/templates/repo.html:146
 #: seahub/templates/snippets/repo_dir_data.html:18
 msgid "New File"
 msgstr "Neue Datei"
 
-#: seahub/templates/repo.html:152
+#: seahub/templates/repo.html:148
 msgid "Featured File Type"
 msgstr "Verfügbare Dateiformate"
 
-#: seahub/templates/repo.html:153 seahub/templates/repo.html.py:159
+#: seahub/templates/repo.html:149 seahub/templates/repo.html.py:155
 msgid "Click to choose"
 msgstr "Klicken zum auswählen"
 
-#: seahub/templates/repo.html:153
+#: seahub/templates/repo.html:149
 msgid "online Rich Text format."
 msgstr "Online Rich Text Format."
 
-#: seahub/templates/repo.html:159
+#: seahub/templates/repo.html:155
 msgid "simple markup format."
 msgstr "einfaches Markup Format."
 
-#: seahub/templates/repo.html:166 seahub/templates/starred.html:13
+#: seahub/templates/repo.html:162 seahub/templates/starred.html:13
 msgid "File Name"
 msgstr "Dateiname"
 
-#: seahub/templates/repo.html:175
+#: seahub/templates/repo.html:171
 msgid "Current Library"
 msgstr "Aktuelle Bibliothek"
 
-#: seahub/templates/repo.html:179
+#: seahub/templates/repo.html:175
 msgid "Other Libraries"
 msgstr "Andere Bibliotheken"
 
-#: seahub/templates/repo.html:189 seahub/templates/shared_file_view.html:53
+#: seahub/templates/repo.html:185 seahub/templates/shared_file_view.html:53
 msgid "Please click and choose a directory."
 msgstr "Bitte eine Bibliothek auswählen."
 
-#: seahub/templates/repo.html:202
+#: seahub/templates/repo.html:198
 #, python-format
 msgid "Rename %(name)s as:"
 msgstr "%(name)s umbenennen zu:"
 
-#: seahub/templates/repo.html:218
+#: seahub/templates/repo.html:214
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
 "it online. And the password will be kept in the browser for only 1 hour."
 msgstr "Diese Bibliothek ist verschlüsselt. Bitte geben Sie das Passwort ein, wenn Sie die Bibliothek online betrachten wollen. Das Passwort wird in Ihrem Navigator nur für eine Stunde gespeichert."
 
-#: seahub/templates/repo.html:242
+#: seahub/templates/repo.html:238
 #: seahub/templates/view_shared_upload_link.html:72
 msgid "File is too big"
 msgstr "Datei ist zu groß"
 
-#: seahub/templates/repo.html:243
+#: seahub/templates/repo.html:239
 #: seahub/templates/view_shared_upload_link.html:73
 msgid "File is too small"
 msgstr "Datei ist zu klein"
 
-#: seahub/templates/repo.html:244
+#: seahub/templates/repo.html:240
 #: seahub/templates/view_shared_upload_link.html:74
 msgid "Filetype not allowed"
 msgstr "Dateityp is nicht erlaubt"
 
-#: seahub/templates/repo.html:245
+#: seahub/templates/repo.html:241
 #: seahub/templates/view_shared_upload_link.html:75
 msgid "Max number of files exceeded"
 msgstr "Maximale Anzahl Dateien wurde überschritten"
 
-#: seahub/templates/repo.html:246
+#: seahub/templates/repo.html:242
 #: seahub/templates/view_shared_upload_link.html:76
 msgid "Uploaded bytes exceed file size"
 msgstr "Hochgeladene Bytes überschreitet tatsächliche Dateigröße "
 
-#: seahub/templates/repo.html:247
+#: seahub/templates/repo.html:243
 #: seahub/templates/view_shared_upload_link.html:77
 msgid "Empty file upload result"
 msgstr "Leere Datei hochgeladen"
 
-#: seahub/templates/repo.html:249
-#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:932
+#: seahub/templates/repo.html:245
+#: seahub/templates/view_shared_upload_link.html:79 seahub/views/ajax.py:933
 msgid "Error"
 msgstr "Fehler"
 
-#: seahub/templates/repo.html:250
+#: seahub/templates/repo.html:246
 #: seahub/templates/view_shared_upload_link.html:80
 msgid "Start"
 msgstr "Start"
 
-#: seahub/templates/repo.html:370
+#: seahub/templates/repo.html:366
 msgid "Delete Items"
 msgstr "Einträge löschen"
 
-#: seahub/templates/repo.html:370
+#: seahub/templates/repo.html:366
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Sind Sie sicher, dass Sie die ausgewählten Dateien löschen wollen?"
 
-#: seahub/templates/repo.html:374 seahub/templates/repo.html.py:551
+#: seahub/templates/repo.html:370 seahub/templates/repo.html.py:547
 msgid "Processing..."
 msgstr "Verarbeiten …"
 
-#: seahub/templates/repo.html:404
+#: seahub/templates/repo.html:400
 #, python-format
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "%(name)s und %(amount)s andere Elemente wurden erfolgreich gelöscht."
 
-#: seahub/templates/repo.html:406
+#: seahub/templates/repo.html:402
 #, python-format
 msgid "Successfully deleted %(name)s."
 msgstr "%(name)s erfolgreich gelöscht."
 
-#: seahub/templates/repo.html:415
+#: seahub/templates/repo.html:411
 #, python-format
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr "Interner Fehler. %(name)s und %(amount)s andere Elemente konnten nicht gelöscht werden."
 
-#: seahub/templates/repo.html:417
+#: seahub/templates/repo.html:413
 #, python-format
 msgid "Internal error. Failed to delete %(name)s."
 msgstr "Interner Fehler. %(name)s konnte nicht gelöscht werden."
 
-#: seahub/templates/repo.html:517
+#: seahub/templates/repo.html:513
 msgid "Move selected directories/files to:"
 msgstr "Ausgewählte Ordner/Dateien verschieben nach:"
 
-#: seahub/templates/repo.html:520
+#: seahub/templates/repo.html:516
 msgid "Copy selected directories/files to:"
 msgstr "Ausgewählte Dateien/Ordner kopieren nach:"
 
-#: seahub/templates/repo.html:546 seahub/templates/repo.html.py:1746
-#: seahub/views/ajax.py:644 seahub/views/ajax.py:836
+#: seahub/templates/repo.html:542 seahub/templates/repo.html.py:1743
+#: seahub/views/ajax.py:645 seahub/views/ajax.py:837
 msgid "Invalid destination path"
 msgstr "Ungültiges Ziel"
 
-#: seahub/templates/repo.html:595
+#: seahub/templates/repo.html:591
 #, python-format
 msgid "Successfully moved %(name)s."
 msgstr "%(name)s wurde erfolgreich verschoben."
 
-#: seahub/templates/repo.html:597
+#: seahub/templates/repo.html:593
 #, python-format
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "%(name)s und ein 1 anderes Objekt wurden erfolgreich verschoben."
 
-#: seahub/templates/repo.html:599
+#: seahub/templates/repo.html:595
 #, python-format
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "%(name)s und %(amount)s andere Elemente wurden erfolgreich verschoben."
 
-#: seahub/templates/repo.html:604
+#: seahub/templates/repo.html:600
 #, python-format
 msgid "Successfully copied %(name)s."
 msgstr "%(name)s wurde erfolgreich kopiert."
 
-#: seahub/templates/repo.html:606
+#: seahub/templates/repo.html:602
 #, python-format
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "%(name)s und in 1 anderes Objekt wurden erfolgreich kopiert."
 
-#: seahub/templates/repo.html:608
+#: seahub/templates/repo.html:604
 #, python-format
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "%(name)s und %(amount)s andere Elemente wurden erfolgreich kopiert."
 
-#: seahub/templates/repo.html:620
+#: seahub/templates/repo.html:616
 #, python-format
 msgid "Internal error. Failed to move %(name)s and %(amount)s other items."
 msgstr "Interner Fehler. %(name)s und %(amount)s andere Elemente konnten nicht verschoben werden."
 
-#: seahub/templates/repo.html:622
+#: seahub/templates/repo.html:618
 #, python-format
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Interner Fehler. %(name)s konnte nicht verschoben werden."
 
-#: seahub/templates/repo.html:626
+#: seahub/templates/repo.html:622
 #, python-format
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other items."
 msgstr "Interner Fehler. %(name)s und %(amount)s andere Elemente konnten nicht kopiert werden."
 
-#: seahub/templates/repo.html:628
+#: seahub/templates/repo.html:624
 #, python-format
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Interner Fehler. %(name)s konnte nicht kopiert werden."
 
-#: seahub/templates/repo.html:666
+#: seahub/templates/repo.html:662
 #, python-format
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Verschiebe Datei %(index)s von %(total)s"
 
-#: seahub/templates/repo.html:666
+#: seahub/templates/repo.html:662
 #, python-format
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopiere Datei %(index)s von %(total)s"
 
-#: seahub/templates/repo.html:750 seahub/templates/repo.html.py:1810
-#: seahub/templates/repo.html:1837
+#: seahub/templates/repo.html:746 seahub/templates/repo.html.py:1807
+#: seahub/templates/repo.html:1834
 msgid "Canceled."
 msgstr "Abgebrochen."
 
-#: seahub/templates/repo.html:814
+#: seahub/templates/repo.html:810
 msgid "Encrypting the file..."
 msgstr "Datei wird verschlüsselt …"
 
-#: seahub/templates/repo.html:836
+#: seahub/templates/repo.html:832
 msgid "Error when encrypting."
 msgstr "Fehler beim Verschlüsseln."
 
-#: seahub/templates/repo.html:843
+#: seahub/templates/repo.html:839
 #, python-format
 msgid "Encrypting, %(num)s% complete."
 msgstr "Verschlüsseln, %(num)s% fertig."
 
-#: seahub/templates/repo.html:860
+#: seahub/templates/repo.html:856
 msgid "Uploading ..."
 msgstr "Hochladen …"
 
-#: seahub/templates/repo.html:872 seahub/templates/repo.html.py:1208
+#: seahub/templates/repo.html:868 seahub/templates/repo.html.py:1205
 msgid "Done!"
 msgstr "Fertig!"
 
-#: seahub/templates/repo.html:963 seahub/templates/repo.html.py:1587
-#: seahub/templates/repo.html:1714
-#: seahub/templates/snippets/repo_dirents.html:51
+#: seahub/templates/repo.html:959 seahub/templates/repo.html.py:1584
+#: seahub/templates/repo.html:1711
+#: seahub/templates/snippets/repo_dirents.html:55
 msgid "unstarred"
 msgstr "nicht mehr favorisiert"
 
-#: seahub/templates/repo.html:1010
+#: seahub/templates/repo.html:1007
 msgid "Failed to get upload url"
 msgstr "Die Upload Url konnte nicht abgerufen werden"
 
-#: seahub/templates/repo.html:1029
+#: seahub/templates/repo.html:1026
 msgid "Error. Please try later."
 msgstr "Fehler. Bitte versuchen sie es später noch einmal."
 
-#: seahub/templates/repo.html:1218
+#: seahub/templates/repo.html:1215
 msgid "Downloading..."
 msgstr "Herunterladen …"
 
-#: seahub/templates/repo.html:1251
+#: seahub/templates/repo.html:1248
 #, python-format
 msgid "Downloading, %(num)s% complete."
 msgstr "Herunterladen, %(num)s% fertig."
 
-#: seahub/templates/repo.html:1272
+#: seahub/templates/repo.html:1269
 msgid "Decrypting..."
 msgstr "Entschlüsseln …"
 
-#: seahub/templates/repo.html:1289
+#: seahub/templates/repo.html:1286
 #, python-format
 msgid "Decrypting, %(num)s% complete."
 msgstr "Entschlüsseln, %(num)s% fertig."
 
-#: seahub/templates/repo.html:1392
+#: seahub/templates/repo.html:1389
 #, python-format
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s erfolgreich gelöscht"
 
-#: seahub/templates/repo.html:1414
+#: seahub/templates/repo.html:1411
 msgid "Rename File"
 msgstr "Datei umbenennen"
 
-#: seahub/templates/repo.html:1416
+#: seahub/templates/repo.html:1413
 msgid "Rename Directory"
 msgstr "Ordner umbenennen"
 
-#: seahub/templates/repo.html:1434
+#: seahub/templates/repo.html:1431
 msgid "Copy File"
 msgstr "Datei kopieren"
 
-#: seahub/templates/repo.html:1436
+#: seahub/templates/repo.html:1433
 msgid "Move File"
 msgstr "Datei verschieben "
 
-#: seahub/templates/repo.html:1438
+#: seahub/templates/repo.html:1435
 msgid "Copy Directory"
 msgstr "Ordner kopieren"
 
-#: seahub/templates/repo.html:1440
+#: seahub/templates/repo.html:1437
 msgid "Move Directory"
 msgstr "Ordner verschieben"
 
-#: seahub/templates/repo.html:1445
+#: seahub/templates/repo.html:1442
 #, python-format
 msgid "Copy %(name)s to:"
 msgstr "Kopiere %(name)s nach:"
 
-#: seahub/templates/repo.html:1448
+#: seahub/templates/repo.html:1445
 #, python-format
 msgid "Move %(name)s to:"
 msgstr "Verschiebe %(name)s nach:"
 
-#: seahub/templates/repo.html:1471
+#: seahub/templates/repo.html:1468
 msgid "Directory download is not supported in this library."
 msgstr "Herunterladen von Ordnern wird von dieser Bibliothek nicht unterstützt."
 
-#: seahub/templates/repo.html:1589
-#: seahub/templates/snippets/repo_dirents.html:49
+#: seahub/templates/repo.html:1586
+#: seahub/templates/snippets/repo_dirents.html:53
 msgid "starred"
 msgstr "favorisiert"
 
-#: seahub/templates/repo.html:1635 seahub/templates/repo.html.py:1675
+#: seahub/templates/repo.html:1632 seahub/templates/repo.html.py:1672
 msgid "It is required."
 msgstr "Erforderlich."
 
-#: seahub/templates/repo.html:1641
+#: seahub/templates/repo.html:1638
 msgid "Only an extension there, please input a name."
 msgstr "Nur eine Erweiterung angegeben, bitte einen Namen angeben."
 
-#: seahub/templates/repo.html:1651
+#: seahub/templates/repo.html:1648
 msgid "Creating..."
 msgstr "Wird erstellt …"
 
-#: seahub/templates/repo.html:1679
+#: seahub/templates/repo.html:1676
 msgid "You have not renamed it."
 msgstr "Nicht umbenannt. "
 
-#: seahub/templates/repo.html:1725
+#: seahub/templates/repo.html:1722
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr "Erfolgreich %(old_name)s in %(new_name)s umbenannt"
 
-#: seahub/templates/repo.html:1779
+#: seahub/templates/repo.html:1776
 #, python-format
 msgid "Moving %(name)s"
 msgstr "Verschiebe %(name)s"
 
-#: seahub/templates/repo.html:1779
+#: seahub/templates/repo.html:1776
 #, python-format
 msgid "Copying %(name)s"
 msgstr "Kopiere %(name)s"
 
-#: seahub/templates/repo.html:1939
+#: seahub/templates/repo.html:1936
 msgid "Please select at least one contact."
 msgstr "Bitte geben Sie mindestens einen Kontakt an."
 
-#: seahub/templates/repo.html:2050
+#: seahub/templates/repo.html:2047
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "Bitte geben Sie E-Mail-Adressen oder Gruppen an oder wählen Sie welche aus."
@@ -4834,8 +4838,8 @@ msgstr "Gruppe"
 #: seahub/templates/snippets/my_owned_repos.html:99
 #: seahub/templates/snippets/my_owned_repos.html:153
 #: seahub/templates/snippets/repo_dir_data.html:24
-#: seahub/templates/snippets/repo_dirents.html:26
-#: seahub/templates/snippets/repo_dirents.html:80
+#: seahub/templates/snippets/repo_dirents.html:28
+#: seahub/templates/snippets/repo_dirents.html:82
 msgid "Share"
 msgstr "Freigeben"
 
@@ -4961,6 +4965,10 @@ msgstr "Dateien hochladen zu <span class=\"op-target\">%(dir_name)s</span>"
 #: seahub/templates/view_shared_upload_link.html:22
 msgid "shared by:"
 msgstr "freigegeben von:"
+
+#: seahub/templates/view_shared_upload_link.html:37
+msgid "Start All"
+msgstr "Alle starten"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5422,15 +5430,15 @@ msgid "Upload"
 msgstr "Hochladen"
 
 #: seahub/templates/snippets/repo_dirents.html:18
-#: seahub/templates/snippets/repo_dirents.html:68
+#: seahub/templates/snippets/repo_dirents.html:72
 msgid "Fetch failed"
 msgstr "Abrufen fehlgeschlagen"
 
-#: seahub/templates/snippets/repo_dirents.html:30
+#: seahub/templates/snippets/repo_dirents.html:34
 msgid "More operations"
 msgstr "Mehr Aktionen"
 
-#: seahub/templates/snippets/repo_dirents.html:84
+#: seahub/templates/snippets/repo_dirents.html:88
 msgid "More Operations"
 msgstr "Weitere Funktionen"
 
@@ -5730,28 +5738,21 @@ msgstr "org-Speicherlimit einstellen."
 msgid "Tip: 0 means default limit"
 msgstr "Tipp: 0 heißt es wird das Standardlimit verwendet"
 
-#: seahub/templates/sysadmin/sys_org_info_group.html:11
-#: seahub/templates/sysadmin/sys_org_info_library.html:11
-#: seahub/templates/sysadmin/sys_org_info_setting.html:11
-#: seahub/templates/sysadmin/sys_org_info_user.html:11
-msgid "Setting"
-msgstr ""
-
 #: seahub/templates/sysadmin/sys_org_info_group.html:34
 msgid "This organization doesn't have any groups"
-msgstr ""
+msgstr "In dieser Organisation gibt es keine Gruppen."
 
 #: seahub/templates/sysadmin/sys_org_info_library.html:46
 msgid "This organization doesn't have any libraries"
-msgstr ""
+msgstr "Diese Organisation besitzt keine Bibliotheken."
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:16
 msgid "Rename Organization"
-msgstr ""
+msgstr "Organisation umbenennen"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:18
 msgid "New Name"
-msgstr ""
+msgstr "Neuer Name"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:18
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:43
@@ -6069,7 +6070,7 @@ msgstr "Benutzer %s befindet sich nicht in der aktuellen Organisation."
 #: seahub/views/__init__.py:577
 #, python-format
 msgid "Can not transfer library to organization user %s."
-msgstr ""
+msgstr "Die Bibliothek kann nicht die Organisation %s übertragen werden."
 
 #: seahub/views/__init__.py:583
 #, python-format
@@ -6118,7 +6119,7 @@ msgid "Please specify history ID"
 msgstr "Bitte eine Verlaufskennung angeben"
 
 #: seahub/views/__init__.py:848 seahub/views/__init__.py:1257
-#: seahub/views/__init__.py:1638 seahub/views/ajax.py:1308
+#: seahub/views/__init__.py:1640 seahub/views/ajax.py:1314
 msgid "Library does not exist"
 msgstr "Die Bibliothek existiert nicht"
 
@@ -6158,12 +6159,12 @@ msgstr "Fehler beim Löschen der Datei."
 msgid "%s successfully deleted."
 msgstr "%s wurde erfolgreich gelöscht."
 
-#: seahub/views/__init__.py:1138 seahub/views/ajax.py:550
+#: seahub/views/__init__.py:1138 seahub/views/ajax.py:551
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Interner Fehler: Datei %s konnte nicht gelöscht werden."
 
-#: seahub/views/__init__.py:1186 seahub/views/__init__.py:1671
+#: seahub/views/__init__.py:1186 seahub/views/__init__.py:1673
 #: seahub/views/file.py:1090
 msgid "Unable to access file: share link traffic is used up."
 msgstr "Auf die Datei kann nicht zugegriffen werden: das Datenvolumen ist aufgebraucht."
@@ -6187,123 +6188,123 @@ msgstr "<a href=\"%(url)s\">%(path)s</a> wurde erfolgreich zurükgesetzt."
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "%(path)s wurde erfolgreich zum <a href=\"%(url)s\">Hauptverzeichnis</a> zurückgesetzt."
 
-#: seahub/views/__init__.py:1683 seahub/views/file.py:855
+#: seahub/views/__init__.py:1685 seahub/views/file.py:855
 msgid "Internal Error"
 msgstr "Interner Fehler"
 
-#: seahub/views/__init__.py:1686
+#: seahub/views/__init__.py:1688
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "„%s“ konnte nicht heruntergeladen werden, da der Ordner zu groß ist."
 
-#: seahub/views/__init__.py:1700
+#: seahub/views/__init__.py:1702
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "„%s“ konnte nicht heruntergeladen werden"
 
-#: seahub/views/__init__.py:1846
+#: seahub/views/__init__.py:1848
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "„Persönliches Wiki“ erfolgreich aktiviert."
 
-#: seahub/views/__init__.py:1851
+#: seahub/views/__init__.py:1853
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "„Persönliches Wiki“ erfolgreich deaktiviert."
 
-#: seahub/views/ajax.py:73
+#: seahub/views/ajax.py:74
 msgid "You don't have permission to access the library."
 msgstr "Sie haben keine Berechtigung, auf die Bibliothek zuzugreifen."
 
-#: seahub/views/ajax.py:81
+#: seahub/views/ajax.py:82
 msgid "No path."
 msgstr "Kein Pfad."
 
-#: seahub/views/ajax.py:157
+#: seahub/views/ajax.py:158
 msgid "The group doesn't exist"
 msgstr "Diese Gruppe existiert nicht."
 
-#: seahub/views/ajax.py:225 seahub/views/ajax.py:309 seahub/views/ajax.py:383
-#: seahub/views/ajax.py:470 seahub/views/ajax.py:524 seahub/views/ajax.py:563
-#: seahub/views/ajax.py:607 seahub/views/ajax.py:798 seahub/views/ajax.py:1026
+#: seahub/views/ajax.py:226 seahub/views/ajax.py:310 seahub/views/ajax.py:384
+#: seahub/views/ajax.py:471 seahub/views/ajax.py:525 seahub/views/ajax.py:564
+#: seahub/views/ajax.py:608 seahub/views/ajax.py:799 seahub/views/ajax.py:1032
 msgid "Library does not exist."
 msgstr "Die Bibliothek existiert nicht."
 
-#: seahub/views/ajax.py:232 seahub/views/ajax.py:316 seahub/views/ajax.py:531
-#: seahub/views/ajax.py:570 seahub/views/ajax.py:973 seahub/views/ajax.py:993
-#: seahub/views/ajax.py:1033 seahub/views/ajax.py:1332
-#: seahub/views/ajax.py:1350
+#: seahub/views/ajax.py:233 seahub/views/ajax.py:317 seahub/views/ajax.py:532
+#: seahub/views/ajax.py:571 seahub/views/ajax.py:974 seahub/views/ajax.py:994
+#: seahub/views/ajax.py:1039 seahub/views/ajax.py:1338
+#: seahub/views/ajax.py:1356
 msgid "Permission denied."
 msgstr "Zugriff verweigert."
 
-#: seahub/views/ajax.py:247 seahub/views/ajax.py:331 seahub/views/ajax.py:1046
+#: seahub/views/ajax.py:248 seahub/views/ajax.py:332 seahub/views/ajax.py:1052
 msgid "Library is encrypted."
 msgstr "Diese Bibliothek ist verschlüsselt."
 
-#: seahub/views/ajax.py:253 seahub/views/ajax.py:337 seahub/views/ajax.py:1052
+#: seahub/views/ajax.py:254 seahub/views/ajax.py:338 seahub/views/ajax.py:1058
 msgid "Error: no head commit id"
 msgstr "Fehler: keine Head Commit ID"
 
-#: seahub/views/ajax.py:539 seahub/views/ajax.py:578
+#: seahub/views/ajax.py:540 seahub/views/ajax.py:579
 msgid "Argument missing."
 msgstr "Argument fehlt."
 
-#: seahub/views/ajax.py:632
+#: seahub/views/ajax.py:633
 msgid "Destination path is too long."
 msgstr "Zielpfad ist zu lang."
 
-#: seahub/views/ajax.py:671 seahub/views/ajax.py:738
+#: seahub/views/ajax.py:672 seahub/views/ajax.py:739
 #, python-format
 msgid "Successfully moved %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich verschoben: <a href=\"%(url)s\">anzeigen</a>"
 
-#: seahub/views/ajax.py:700 seahub/views/ajax.py:775
+#: seahub/views/ajax.py:701 seahub/views/ajax.py:776
 #, python-format
 msgid "Successfully copied %(name)s <a href=\"%(url)s\">view</a>"
 msgstr "%(name)s erfolgreich kopiert: <a href=\"%(url)s\">anzeigen</a>"
 
-#: seahub/views/ajax.py:717 seahub/views/ajax.py:851
+#: seahub/views/ajax.py:718 seahub/views/ajax.py:852
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Verschieben des Verzeichnisses nicht möglich, %(src)s ist ein Unterverzeichnis von %(des)s."
 
-#: seahub/views/ajax.py:754 seahub/views/ajax.py:887
+#: seahub/views/ajax.py:755 seahub/views/ajax.py:888
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Kopieren des Verzeichnisses nicht möglich, %(src)s ist ein Unterverzeichnis von %(des)s."
 
-#: seahub/views/ajax.py:824
+#: seahub/views/ajax.py:825
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Zielpfad für %s ist zu lang."
 
-#: seahub/views/ajax.py:963
+#: seahub/views/ajax.py:964
 msgid "Cancel failed"
 msgstr "Abbruch fehlgeschlagen"
 
-#: seahub/views/ajax.py:1135
+#: seahub/views/ajax.py:1141
 msgid "Failed to get file block list"
 msgstr "Die Blockliste konnte nicht abgerufen werden"
 
-#: seahub/views/ajax.py:1173
+#: seahub/views/ajax.py:1179
 msgid "Wrong repo id"
 msgstr "Falsche Paketquellenkennung"
 
-#: seahub/views/ajax.py:1303
+#: seahub/views/ajax.py:1309
 msgid "System library can not be deleted."
 msgstr "Eine Systembibliothek kann nicht gelöscht werden. "
 
-#: seahub/views/ajax.py:1587
+#: seahub/views/ajax.py:1593
 msgid "Bad upload link token."
 msgstr "Falsches Upload Link Token."
 
-#: seahub/views/ajax.py:1593
+#: seahub/views/ajax.py:1599
 msgid "Bad repo id in upload link."
 msgstr "Falsche Repo ID in Upload Link."
 
-#: seahub/views/ajax.py:1643
+#: seahub/views/ajax.py:1649
 msgid "No conflict in the merge."
 msgstr "Kein Konflikt bei der Zusammenführung."
 
-#: seahub/views/ajax.py:1693 seahub/views/ajax.py:1756
+#: seahub/views/ajax.py:1699 seahub/views/ajax.py:1762
 msgid "You do not have permission to create library"
 msgstr "Sie haben keine Berechtigung, eine Bibliothek zu erstellen"
 
@@ -6365,7 +6366,7 @@ msgstr "Kann die Datei nicht herunterladen"
 #: seahub/views/sysadmin.py:402
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
-msgstr ""
+msgstr "Quota konnte nicht gesetzt werden: Maximale Quota ist %d MB"
 
 #: seahub/views/sysadmin.py:408 seahub/views/sysadmin.py:434
 msgid "Failed to set quota: internal server error"
@@ -6373,7 +6374,7 @@ msgstr "Quota konnte nicht gesetzt werden: Interner Fehler"
 
 #: seahub/views/sysadmin.py:452
 msgid "Failed to delete: the user is an organization creator"
-msgstr ""
+msgstr "Löschen fehlgeschlagen: Dieser Benutzer hat eine Organisation angelegt."
 
 #: seahub/views/sysadmin.py:461
 #, python-format
@@ -6492,20 +6493,20 @@ msgstr "Benutzer %s wurde erfolgreich hinzugefügt. Es konnte jedoch keine E-Mai
 
 #: seahub/views/sysadmin.py:813
 msgid "Success"
-msgstr ""
+msgstr "Erfolg"
 
 #: seahub/views/sysadmin.py:816
 msgid "Failed to rename organization"
-msgstr ""
+msgstr "Fehler beim Umbenennen der Organisation"
 
 #: seahub/views/sysadmin.py:1018
 msgid "Can not transfer organization library"
-msgstr ""
+msgstr "Die Bibliothek der Organisation kann nicht übertragen werden"
 
 #: seahub/views/sysadmin.py:1023
 #, python-format
 msgid "Can not transfer library to organization user %s"
-msgstr ""
+msgstr "Die Bibliothek kann nicht die Organisation %s übertragen werden."
 
 #: seahub/views/sysadmin.py:1026
 msgid "Successfully transfered."
