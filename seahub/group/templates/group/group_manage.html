@@ -30,9 +30,9 @@
                 <td>{% avatar member.user_name 20 %}</td>
                 <td>{{ member.user_name }}</td>
                 <td>
-                  {% if member.user_name != request.user.username %}
-                    <a href="#" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="member-remove-btn op vh">{% trans "Delete"%}</a>
-                  {% endif %}
+                    {% if member.user_name != request.user.username %}
+                    <img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="rm-member op-icon vh" title="{% trans "Delete" %}" />
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
@@ -55,7 +55,7 @@
                 <td>{{ member.user_name }}</td>
                 <td>
                     {% if member.user_name != request.user.username %}
-                    <a href="#" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="member-remove-btn op vh">{% trans "Delete"%}</a>
+                    <img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="rm-member op-icon vh" title="{% trans "Delete"%}" />
                     {% endif %}
                 </td>
             </tr>
@@ -142,7 +142,7 @@ addConfirmTo($("#group-dismiss"), {
         'title':"{% trans "Dismiss Group" %}",
         'con':"{% trans "Really want to dismiss this group?" %}"
 });
-addConfirmTo($(".member-remove-btn"), {
+addConfirmTo($(".rm-member"), {
         'title':"{% trans "Delete Member" %}",
         'con':"{% trans "Really want to delete %s ?" %}"
 });

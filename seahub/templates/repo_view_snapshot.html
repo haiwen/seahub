@@ -2,11 +2,18 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block extra_style %}
+<style type="text/css">
+#main { position: relative; }
+.go-back { top:-3px; }
+</style>
+{% endblock %}
+
 {% block main_panel %}
-<div class="w100 ovhd">
-    <h2 class="fleft"><span class="op-target">{{repo.props.name}}</span> {% trans "snapshots"%}</h2>
-    <button data="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="fright" id="back">{% trans "Back to modification history"%}</button>
-</div>
+<h2><span class="op-target">{{repo.props.name}}</span> {% trans "snapshots"%}</h2>
+<a href="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="go-back" title="{% trans "Back to modification history"%}">
+    <span class="icon-chevron-left"></span>
+</a>
 
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">

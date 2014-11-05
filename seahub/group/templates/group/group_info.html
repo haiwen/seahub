@@ -50,11 +50,8 @@
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
         <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}">
-            {% if show_repo_download_button %}
-            <span class="icon-cloud-download download op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            {% endif %}
             {% if is_staff or repo.share_from_me %}
-            <span class="icon-trash cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
+            <img src="{{MEDIA_URL}}img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
             {% endif %}
         </td>
     </tr>
@@ -150,11 +147,6 @@ $('.cancel-share').click(function() {
 addConfirmTo($('.cancel-share'), {
     'title': "{% trans "Unshare Library" %}",
     'con': "{% trans "Are you sure you want to unshare %s ?" %}"
-});
-
-$('.download').click(function() {
-    var repo_id = $(this).parent().data('id');
-    window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + e(repo_id));
 });
 
 {% if user.permissions.can_add_repo %}

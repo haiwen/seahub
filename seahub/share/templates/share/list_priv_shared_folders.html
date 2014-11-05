@@ -40,16 +40,16 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
             {% if repo.props.share_type == 'group' %}
-            <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'personal' %}
-            <a href="#" data="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
             {% if not org %}
-            <a href="#" data="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op vh">{% trans "Unshare"%}</a>
+            <a href="{% url 'unsetinnerpub' repo.repo_id %}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% else %}
-            <a href="#" data="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="cancel-share op vh">{% trans "Unshare"%}</a>
+            <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="op-icon vh" title="{% trans "Unshare" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% endif %}
         </td>
@@ -112,9 +112,6 @@ $(document).click(function(e) {
         $('.share-permission').removeClass('hide');
         $('.share-permission-select').addClass('hide');
     }
-});
-$('.cancel-share').click(function() {
-    location.href = $(this).attr('data');
 });
 {% endif %}                     // shared_repos
 

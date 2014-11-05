@@ -34,8 +34,8 @@
                 <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
                 <td>{{ fs.view_cnt }}</td>
                 <td>
-                    <a href="#" class="view-link op vh" data="{{ fs.shared_link }}">{% trans "View" %}</a>
-                    <a class="op vh" href="{% url 'remove_shared_link' %}?t={{ fs.token }}">{% trans "Remove"%}</a>
+                    <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}" />
+                    <img src="{{ MEDIA_URL }}img/rm.png" alt="" class="rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}" />
                 </td>
             </tr>
             {% endfor %}
@@ -65,8 +65,8 @@
                 <td><a href="{{ SITE_ROOT }}repo/{{ link.repo.id }}/">{{ link.repo.name }}</a></td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
-                    <a href="#" class="view-link op vh" data="{{ link.shared_link }}">{% trans "View" %}</a>
-                    <a class="op vh" href="{% url 'remove_shared_upload_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                    <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}" />
+                    <img src="{{ MEDIA_URL }}img/rm.png" alt="" class="rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}" />
                 </td>
             </tr>
             {% endfor %}
@@ -86,12 +86,19 @@
 <script type="text/javascript">
 {% if fileshares or uploadlinks %}
 $(".view-link").click(function() {
-    var link = $(this).attr('data');
+    var link = $(this).attr('data-link');
     $('#shared-link').before('<p class="hide">' + link + '</p>')
     .val(link).css('width', $('#shared-link').prev().width() + 2)
     .modal({focus:false});
     $('#shared-link').prev().remove();
-    return false;
+});
+// rm shared_link
+$('.rm-link').click(function() {
+    location.href = '{% url 'remove_shared_link' %}?t=' + $(this).attr('data-token');
+});
+// rm shared_upload_link
+$('.rm-upload-link').click(function() {
+    location.href = '{% url 'remove_shared_upload_link' %}?t=' + $(this).attr('data-token');
 });
 $('#shared-link').click(function() {
     $(this).select();

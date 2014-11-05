@@ -16,14 +16,15 @@
     </tr>
     {% for group in groups %}
     <tr>
-        <td><a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
-        {% if group.org_name %}
-        <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' group.org_id %}">({{group.org_name}})</a></p>
-        {% endif %}
+        <td>
+            <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+            {% if group.org_name %}
+            <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' group.org_id %}">({{group.org_name}})</a></p>
+            {% endif %}
         </td>
         <td>{{ group.props.creator_name }}</td>
         <td>{{ group.props.timestamp|tsstr_sec }}</td>
-        <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.props.group_name }}" class="group-remove-btn op vh">{% trans "Delete" %}</a></td>
+        <td><img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.props.group_name }}" class="rm-grp op-icon vh" title="{% trans "Delete" %}" /></td>
     </tr>
     {% endfor %}
 </table>
@@ -37,7 +38,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addConfirmTo($('.group-remove-btn'), {
+addConfirmTo($('.rm-grp'), {
     'title': "{% trans "Delete Group" %}",
     'con': "{% trans "Are you sure you want to delete %s ?" %}"
 });

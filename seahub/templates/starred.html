@@ -24,7 +24,7 @@
         <td>{{ sfile.repo.name }}</td>
         <td>{{ sfile.last_modified|translate_seahub_time }}</td>
         <td>
-          <span data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path|urlencode}}" class="icon-trash unstar-btn op-icon vh" title="{% trans "Unstar" %}"></span>
+            <img src="{{MEDIA_URL}}img/rm.png" alt=""  data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path}}" class="unstar op-icon vh" title="{% trans "Unstar" %}" />
         </td>
     </tr>
     {% endfor %}
@@ -40,22 +40,19 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-    $('.unstar-btn').click(function() {
-        var that = $(this),
-            tr = that.parents('tr'),
-            repo_id = that.data('repoid'),
-            path = that.data('path'),
-            post_url;
+    $('.unstar').click(function() {
+        var op = $(this),
+            file_ele = op.parents('tr'),
+            repo_id = op.data('repoid'),
+            path = op.data('path');
 
-        post_url = '{{SITE_ROOT}}ajax/repo/' + repo_id + '/file/unstar/?file=' + path;
-        
         $.ajax({
-            url: post_url,
+            url: '{{SITE_ROOT}}ajax/repo/' + repo_id + '/file/unstar/?file=' + e(path),
             cache: false,
             dataType: 'json',
             success:function(data) {
                 if (data['success']) {
-                    tr.hide();
+                    file_ele.remove();
                     feedback("{% trans 'Successfully unstarred.' %}", "success");
                 }
             },

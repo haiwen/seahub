@@ -84,7 +84,7 @@
                 <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
                 <td>{{ repo.props.desc }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a></div>
+                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
                 </td>
             </tr>
             {% endfor %}

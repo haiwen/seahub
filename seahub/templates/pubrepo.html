@@ -37,13 +37,9 @@
         <td>{% if repo.props.last_modified %}{{ repo.props.last_modified|translate_seahub_time }}{% else %}--{% endif %}</td>
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
-            {% if show_repo_download_button %}
-            <span data-id="{{ repo.props.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync"%}"></span>
-            {% endif %}
             {% if request.user.is_staff or repo.share_from_me %}
-            <span data-href="{% url 'unsetinnerpub' repo.repo_id %}" class="icon-trash cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
+            <img src="{{MEDIA_URL}}img/rm.png" alt="" data-href="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
             {% endif %}
-            
         </td>
     </tr>
     {% endfor %}
@@ -59,9 +55,6 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-$(".download-btn").click(function() {
-    window.open('{{ SITE_ROOT }}seafile_access_check/?repo_id=' + $(this).data('id'));
-});
 $(".cancel-share").click(function() {
     location.href = $(this).data('href');
 });

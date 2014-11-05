@@ -46,11 +46,8 @@
         {% endif %}
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>
-            {% if show_repo_download_button %}
-            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            {% endif %}
-            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+                <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+                <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
             </div>
         </td>
     </tr>
@@ -92,13 +89,10 @@
         {% endif %}
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>
-            {% if show_repo_download_button %}
-            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            {% endif %}
-            {% if repo.is_original_owner %}
-            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-            {% endif %}
-            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+                {% if repo.is_original_owner %}
+                <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+                {% endif %}
+                <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
             </div>
         </td>
     </tr>
@@ -147,11 +141,8 @@
         <td>{{ repo.props.desc }}</td>
         <td>{% trans "Just now" %}</td>
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
-            {% if show_repo_download_button %}
-            <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
-            {% endif %}
-            <span class="sf-icon-share repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-            <span class="icon-trash repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+            <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
         </td>
     </tr>
 </table>

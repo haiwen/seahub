@@ -25,7 +25,7 @@
         <td><a href="{{ SITE_ROOT }}group/{{ group.id }}/">{{ group.group_name }}</a></td>
         <td>{{ group.creator_name }}</td>
         <td>{{ group.timestamp|tsstr_sec }}</td>
-        <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="group-remove-btn op vh">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="group-remove-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></td>
     </tr>
     {% endfor %}
 </table>

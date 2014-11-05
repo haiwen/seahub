@@ -26,8 +26,8 @@
         <td>{{ contact.contact_name }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
-            <a href="#" data="{{ SITE_ROOT }}contacts/edit/?email={{ contact.contact_email }}" class="contact-edit op vh">{% trans "Edit"%}</a>
-            <a href="#" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|urlencode}}" data-target="{{ contact.contact_email}}" class="contact-delete op vh">{% trans "Delete"%}</a>
+            <img src="{{MEDIA_URL}}img/edit.png" alt="" class="contact-edit op-icon vh" title="{% trans "Edit" %}" />
+            <img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{{ SITE_ROOT }}contacts/delete/?email={{ contact.contact_email|urlencode}}" data-target="{{ contact.contact_email}}" class="contact-delete op-icon vh" title="{% trans "Delete" %}" />
         </td>
     </tr>
 {% endfor %}

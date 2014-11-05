@@ -34,7 +34,9 @@
             {% endif %}
         </td>
         <td>
-            <div><a href="#" class="unlink-device op vh">{% trans "Unlink" %}</a></div>
+            <div>
+                <a href="#" class="unlink-device op-icon vh" title="{% trans "Unlink" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            </div>
         </td>
     </tr>
     {% endfor %}

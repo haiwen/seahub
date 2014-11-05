@@ -26,9 +26,9 @@
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
-                    <th width="56%">{% trans "Name"%}</th>
-                    <th width="10%">{% trans "Size"%}</th>
-                    <th width="29%">{% trans "Operations"%}</th>
+                    <th width="55%">{% trans "Name"%}</th>
+                    <th width="20%">{% trans "Size"%}</th>
+                    <th width="20%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -41,7 +41,9 @@
                     <td></td>
                     <td>
                       {% if not traffic_over_limit %}
-                        <a class="op vh" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}">{% trans 'Download' %}</a>
+                      <a class="op-icon vh" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}" title="{% trans 'Download' %}">
+                          <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                      </a>
                       {% endif %}
                     </td>
                 </tr>
@@ -57,7 +59,9 @@
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
                       {% if not traffic_over_limit %}
-                        <a class="op vh" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download&t={{token}}">{% trans "Download"%}</a>
+                      <a class="op-icon vh" href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/{{ dirent.props.obj_id }}/?file_name={{ dirent.props.obj_name }}&op=download&t={{token}}" title="{% trans "Download"%}">
+                          <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                      </a>
                       {% endif %}
                     </td>
                 </tr>
