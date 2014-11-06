@@ -1,6 +1,63 @@
 {% extends "myhome_base.html" %}
 {% load i18n %}
 
+{% block nav %}{% endblock %}
+{% block header_right %}
+<a href="{{ SITE_ROOT }}accounts/logout/" class="logout" style="float:right; padding-top:10px;">{% trans "Log out" %}</a>
+{% endblock %}
+
+{% block sub_title %}{% trans "Plan" %} - {% endblock %}
+
 {% block main_panel %}
-<h2 id="hd">Please finish the payment to continue. Thanks!</h2>
+
+
+<div id="plans">
+<h3>Please finish the payment to continue. Thanks!</h3>
+<table>
+    <tr>
+        <th width="40%"></th>
+        <th width="60%">Professional<br /><span class="price">$10/month</span></th>
+    </tr>
+    <tr>
+        <td class="item">Storage</td>
+        <td>100GB</td>
+    </tr>
+    <tr>
+        <td class="item">Number of Members</td>
+        <td>10</td>
+    </tr>
+    <tr>
+        <td class="item">Number of Groups</td>
+        <td>No limit</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td><a href="#" class="buy" data-target="A">Buy or Renew</a></td>
+    </tr>
+</table>
+</div>
+
+
+<form id="plan-form" method="post" action="{% url 'to_paypal' %}" class="hide">
+    {% csrf_token %}
+    <p>How many months would you like to buy?</p>
+    <input type="hidden" name="email" value="{{request.user.username}}" />
+    <input type="hidden" name="plan" value="A" />
+    <input type="radio" name="months" value="3" checked="checked" class="vam" /> <span class="vam options">3</span>
+    <input type="radio" name="months" value="6" class="vam" /> <span class="vam options">6</span>
+    <input type="radio" name="months" value="12" class="vam" /> <span class="vam options">12</span>
+    <br/>
+    <input type="submit" value="Submit" class="submit" />
+</form>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$(".buy").click(function() {
+    $('#plan-form').modal({appendTo: '#main', autoResize: true});
+    $('#simplemodal-container').css({'width':'auto', 'height': 'auto'});
+    return false;
+});
+$('#plans tr').unbind();
+</script>
 {% endblock %}

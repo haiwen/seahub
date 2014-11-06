@@ -39,6 +39,7 @@
                 </a>
                 {% block nav %}{% endblock %}
 
+                {% block header_right %}
                 {% if request.user.is_authenticated %}
                 <div class="fright">
                 {% if has_file_search %}
@@ -91,8 +92,9 @@
                     </div>
                     {% endif %}
                 </div>
-            </div>
+                </div>
                 {% endif %}
+                {% endblock %}
             </div>
         </div>
 
