@@ -1,17 +1,41 @@
 {% load i18n %}
 {% load url from future %}
-var Bottom_bar = '<div id="bottom-bar">{% if groups %}<button id="discuss">{% trans "Discuss" %}</button><button id="click-into-group">{% trans "Group" %} &gt;&gt;</button>{% endif %}</div>';
-$('#wrapper').append(Bottom_bar);
-$('#main-panel').css('margin-bottom', $('#bottom-bar').outerHeight() + 2);
+
+// set 'side toolbar' & 'groups' popup position
+function setToolbarPos() {
+    var toolbar = $('#side-toolbar');
+
+    // set toolbar pos
+    toolbar.css({'top': ($(window).height() - toolbar.outerHeight())/2});
+
+    // set 'groups' popup position
+    $('#to-group').css({'top': parseInt(toolbar.css('top')) + 59});
+}
+$(window).load(function() {
+    var to_top = $('<ul class="side-toolbar hide" style="margin-top:3px;"><li class="item" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
+    to_top.click(function() {
+        $(window).scrollTop(0);
+    }).appendTo($('#side-toolbar'));
+    $(window).scroll(function() {
+        if ($(window).scrollTop() > 0) {
+            to_top.show();
+        } else {
+            to_top.hide();
+        }
+    });
+    setToolbarPos();
+}).resize(setToolbarPos);
+
 
 {% if groups %}
 function getAndHandleDiscussions(data_html) {
-    $('#discussions-to-grp').html(data_html).css({'max-height': parseInt($(window).height() * 0.9 - $('#bottom-bar').height() - $('#discuss-to-group-caret').height() - $('#discuss-to-group-form').outerHeight())}).removeClass('hide'); // 'parseInt' to fix '.msg-main top border missing when the ul's max-height is xxx.5px'
+    $('#discussions-to-grp').html(data_html).css({'max-height': parseInt($(window).height() * 0.8 - $('#discuss-to-group-form').outerHeight())}).removeClass('hide'); // 'parseInt' to fix '.msg-main top border missing when the ul's max-height is xxx.5px'
+    var popup = $('#discuss-to-group');
+    popup.css({'top':($(window).height() - popup.outerHeight())/2});
     {% include 'group/msg_js.html' %}
 }
 $('#discuss').click(function() {
     var popup = $('#discuss-to-group'),
-        caret = $('#discuss-to-group-caret'),
         form = $('#discuss-to-group-form'),
         path = '{{ path }}';
 
@@ -20,13 +44,10 @@ $('#discuss').click(function() {
         path = cur_path;
         $('[name="path"]', form).val(path);
         // modify attachment dir name
-        $('#discuss-to-group-form .att-name').html($('#cur-dir-name').html());
+        $('.att-name', form).html($('#cur-dir-name').html());
     }   
 
     if (popup.hasClass('hide')) {
-        popup.removeClass('hide');
-        caret.removeClass('hide');
-        caret.css({'left': $(this).offset().left});
         $.ajax({
             url: form.attr('action'),
             dataType: 'json',
@@ -36,6 +57,7 @@ $('#discuss').click(function() {
             },
             success: function(data) {
                 getAndHandleDiscussions(data['html']);
+                popup.removeClass('hide');
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 var err_str = ''; 
@@ -47,14 +69,18 @@ $('#discuss').click(function() {
         });
     } else {
         popup.addClass('hide');
-        caret.addClass('hide');
     }
+});
+
+// click 'close' to close discuss popup
+$('#discuss-to-group .close').click(function () {
+    $('#discuss-to-group').addClass('hide');
 });
 
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
-    if (!$('#discuss, #discuss-to-group, #discuss-to-group-caret').is(target) && !($('#discuss, #discuss-to-group, #discuss-to-group-caret').find('*').is(target))) {
-        $('#discuss-to-group, #discuss-to-group-caret').addClass('hide');
+    if (!$('#discuss, #discuss-to-group').is(target) && !($('#discuss, #discuss-to-group').find('*').is(target))) {
+        $('#discuss-to-group').addClass('hide');
     }   
 });
 
@@ -114,7 +140,6 @@ $('#discuss-submit').click(function() {
     return false;
 });
 
-$('#main').append('<div id="to-group" class="hide">{{ repo_group_str|escapejs }}</div><div id="to-group-caret" class="hide"><div class="outer-caret"><div class="inner-caret"></div></div></div>');
 $('#click-into-group').click(function() {
     {% if groups|length == 1 %}
     // only one group, just turn to group page
@@ -124,28 +149,13 @@ $('#click-into-group').click(function() {
 
     {% else %}
     // more than one group, then let user choose
-    if ($('#to-group').hasClass('hide')) {
-        $('#to-group, #to-group-caret').removeClass('hide');
-        $('#to-group-caret').css('left', $('#click-into-group').offset().left + $('#click-into-group').width()/3);
-        if ($('#to-group').offset().left > $('#click-into-group').offset().left) {
-            $('#to-group').css('left', $('#click-into-group').offset().left);
-        }
-    } else {
-        $('#to-group, #to-group-caret').addClass('hide');
-    }
+    $('#to-group').toggleClass('hide');
     {% endif %}
 });
 $(document).click(function(e) {
     var target = e.target || event.srcElement;
-    if (!$('#click-into-group, #to-group, #to-group-caret').is(target) && !($('#to-group, #to-group-caret').find('*').is(target))) {
-        $('#to-group, #to-group-caret').addClass('hide');
+    if (!$('#click-into-group, #to-group').is(target) && !($('#click-into-group, #to-group').find('*').is(target))) {
+        $('#to-group').addClass('hide');
     }   
 });
 {% endif %}
-
-$(function() {
-    var btn_height = $('#bottom-bar').outerHeight();
-    $('#discuss-to-group-caret, #to-group-caret').css({'bottom': btn_height});
-    $('#to-group').css({'bottom': btn_height + $('#to-group-caret').outerHeight()});
-    $('#discuss-to-group').css({'bottom': btn_height + $('#discuss-to-group-caret').outerHeight()});
-});

@@ -19,38 +19,6 @@
 #file-op .avatar {
     border-radius:1000px;
 }
-#discuss-to-group,
-#to-group {
-    right:0;
-    border-radius:5px 0 0 5px;
-}
-#to-group {
-    min-width:250px;
-    padding:0 12px 10px;
-    right:78px;
-}
-#to-group .outer-caret {
-    position:absolute;
-    top: 15px;
-    right: -15px;
-}
-#to-group .outer-caret,
-#to-group .inner-caret {
-    border-color:transparent #cbcbcb;
-    border-right-width:0;
-}
-#to-group .inner-caret {
-    border-left-color:#fff;
-    top:-15px;
-    left:-16px;
-}
-#to-group ul {
-    padding-left: 20px;
-    list-style-type: disc;
-}
-#to-group a {
-    padding:1px 3px;
-}
 </style>
 {% endblock %}
 
@@ -117,8 +85,8 @@
 
     {% include "snippets/file_share_popup.html" %} 
 
-    <div id="fileview-toolbar">
-        <ul class="fileview-toolbar">
+    <div id="side-toolbar">
+        <ul class="side-toolbar">
             {% if groups %}
             <li class="item" id="file-discuss-icon" title="{% trans "Discussion" %}"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
             <li id="file-group-icon" class="item" title="{% trans "Go to a group" %}"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
@@ -230,7 +198,7 @@ $('#star').click(function() {
 
 // set 'side toolbar' & 'groups' popup position
 function setToolbarPos() {
-    var toolbar = $('#fileview-toolbar');
+    var toolbar = $('#side-toolbar');
 
     // set toolbar pos
     toolbar.css({'top': ($(window).height() - toolbar.outerHeight())/2});
@@ -239,10 +207,10 @@ function setToolbarPos() {
     $('#to-group').css({'top': parseInt(toolbar.css('top')) + 59});
 }
 $(window).load(function() {
-    var to_top = $('<ul class="fileview-toolbar hide" style="margin-top:3px;"><li class="item" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
+    var to_top = $('<ul class="side-toolbar hide" style="margin-top:3px;"><li class="item" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
     to_top.click(function() {
         $(window).scrollTop(0);
-    }).appendTo($('#fileview-toolbar'));
+    }).appendTo($('#side-toolbar'));
     $(window).scroll(function() {
         if ($(window).scrollTop() > 0) {
             to_top.show();
@@ -265,10 +233,9 @@ function handleDiscussions(html) {
 // show discuss popup
 $('#file-discuss-icon').click(function() {
     var popup = $('#discuss-to-group');
-    popup.toggleClass('hide');
 
     // get discussions
-    if (!popup.hasClass('hide')) {
+    if (popup.hasClass('hide')) {
         $.ajax({
             url: $('#discuss-to-group-form').attr('action'),
             dataType: 'json',
@@ -278,9 +245,12 @@ $('#file-discuss-icon').click(function() {
             },
             success: function(data) {
                 handleDiscussions(data['html']);
+                popup.removeClass('hide');
             },
             error: ajaxErrorHandler
         });
+    } else {
+        popup.addClass('hide');
     }
 });
 // click 'close' to close discuss popup

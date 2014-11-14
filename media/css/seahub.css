@@ -337,8 +337,7 @@ input.btn-disabled:hover {/*for input*/
 .side-tabnav-tabs .tab a,
 .checkbox,
 .checkbox-checked,
-.modalCloseImg,
-#discuss {
+.modalCloseImg {
     background:transparent url('../img/bg.png') no-repeat scroll 0 0;
 }
 .op-list li {
@@ -1187,7 +1186,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #right-panel .hd button,
 .tabnav button,
-.repo-file-list-topbar button,
+.repo-file-list-topbar .op-btn,
 .wiki-top .op-btn {
     height:29px;
     background:#fff;
@@ -1716,6 +1715,9 @@ textarea:-moz-placeholder {/* for FF */
 .repo-op .op-btn [class^="sf-icon-"] {
     margin-right:3px;
 }
+.repo-op .op-btn {
+    vertical-align:middle;
+}
 #featured-filetype {
     margin:5px 0;
 }
@@ -1929,9 +1931,45 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:8px;
 }
 /* file upload */
-.fileupload-buttonbar .start,
+.repo-op .upload-file-btn {
+    display: inline-block;
+    height: auto;
+    padding: 5px 6px;
+    border: 1px solid #c5c5c5;
+    border-radius: 2px;
+    position:relative;
+    overflow:hidden;
+}
+.fixed-upload-file-dialog {
+    width: 540px;
+    position: fixed;
+    bottom: 0;
+    right: 10px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    box-shadow: 0 0 6px #ddd;
+}
+.fixed-upload-file-dialog .hd {
+    padding: 6px 10px;
+    background: #f0f0f0;
+    margin:0;
+}
+.fixed-upload-file-dialog .con {
+    height:114px;
+    overflow-y:auto;
+}
+.fixed-upload-file-dialog .ops {
+    position:absolute;
+    top:10px;
+    right:10px;
+}
+.fixed-upload-file-dialog .close,
 .fileupload-buttonbar .cancel {
     *margin-left:5px;
+}
+.fileupload-progress {
+    margin-top:5px;
 }
 .fileinput-button {
     display:inline-block;
@@ -1943,7 +1981,8 @@ textarea:-moz-placeholder {/* for FF */
     font-size:13px;
     color:#333;
 }  
-.fileinput-button input {
+.fileinput-button input,
+#upload-file input {
     position: absolute;
     top: 0;     
     right: 0;   
@@ -1958,6 +1997,7 @@ textarea:-moz-placeholder {/* for FF */
 }   
 .table .name {
     width:60%;
+    padding-left:10px;
 }   
 .table .size {
     width:14%;
@@ -1965,15 +2005,18 @@ textarea:-moz-placeholder {/* for FF */
 .template-upload .start {
     text-align:right;
 }
-.template-upload .start {
-    text-align:right;
+.fixed-upload-file-dialog .fileupload-buttonbar .cancel,
+.template-upload .btn {
+    background: transparent;
+    border: none;
+    color: #e83;
+}
+.fixed-upload-file-dialog .fileupload-buttonbar .cancel {
+    color:#909090;
 }
 .template-upload .start,
 .template-upload .cancel {
     width:13%;
-}
-.fileupload-progress {
-    margin-top:10px;
 }
 .ui-progressbar,
 .progress {
@@ -2009,6 +2052,7 @@ textarea:-moz-placeholder {/* for FF */
     *padding-left:1.9em;
     margin-top:5px;
 }
+
 /* repo-history */
 #back {
     margin-top:3px;
@@ -2431,9 +2475,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:64px;
 }
 /*file upload*/
-#upload-file-form {
-    margin-top:10px;
-}
 .files-add {
     position: relative;
     overflow: hidden;
@@ -2680,11 +2721,12 @@ textarea:-moz-placeholder {/* for FF */
 #md-edit-help {
     width:550px;
 }
-#fileview-toolbar {
+/* for repo, file_view page. */
+#side-toolbar {
     position:fixed;
     right:0;
 }
-.fileview-toolbar .item {
+.side-toolbar .item {
     width:59px;
     height:40px;
     padding-top:18px;
@@ -2695,11 +2737,11 @@ textarea:-moz-placeholder {/* for FF */
     border-right:0;
     border-top:0;
 }
-.fileview-toolbar .item:first-child {
+.side-toolbar .item:first-child {
     border-top:1px solid #c0c0c0;
     border-top-left-radius:3px;
 }
-.fileview-toolbar .item:last-child {
+.side-toolbar .item:last-child {
     border-bottom-left-radius:3px;
 }
 /* shareadmin & useradmin */
@@ -2715,43 +2757,13 @@ textarea:-moz-placeholder {/* for FF */
     border:1px solid #ddd;
     border-radius:2px;
 }
-/*bottom bar*/
-#bottom-bar {
-    position:fixed;
-    bottom:0;
-    right:10px;
-    background:#fff;
-    border-style:solid;
-    border-width:1px;
-    border-color:#f2f2f2 #cacaca #919191;
-    border-top-left-radius:4px;
-    border-top-right-radius:4px;
-}
-#discuss, #click-into-group {
-    color:#424242;
-    font-size:15px;
-    line-height:21px;
-    padding:3px 16px;
-    border:none;
-}
-#discuss {
-    padding-left: 42px;
-    background-color:#fff;
-    background-position: 16px -162px;
-}
-#click-into-group {
-    background:#fff;
-    border-left:1px solid #ebebeb;
-}
-#bottom-bar button:focus {
-    outline:none;
-}
 #to-group,
 #discuss-to-group {
     width:400px;
     padding:0 15px;
     position:fixed;
-    right:10px;
+    right:0;
+    border-radius:5px 0 0 5px;
     background:#fff;
     border:1px solid #cbcbcb;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
@@ -2775,22 +2787,38 @@ textarea:-moz-placeholder {/* for FF */
 #discussions-to-grp .reply-input {
     width:270px;
 }
-#to-group-caret,
-#discuss-to-group-caret {
-    width:28px;
-    position:fixed;
-}
 #to-group,
-#discuss-to-group,
-#to-group-caret,
-#discuss-to-group-caret {
+#discuss-to-group {
     z-index:12; /* to be on top of 'fixed-hd' in repo.html*/
 }
 /*to-group*/
 #to-group {
-    min-width:100px;
     width:auto;
-    padding:6px 0;
+    min-width:250px;
+    padding:0 12px 10px;
+    right:78px;
+}
+#to-group .outer-caret {
+    position:absolute;
+    top: 15px;
+    right: -15px;
+}
+#to-group .outer-caret,
+#to-group .inner-caret {
+    border-color:transparent #cbcbcb;
+    border-right-width:0;
+}
+#to-group .inner-caret {
+    border-left-color:#fff;
+    top:-15px;
+    left:-16px;
+}
+#to-group ul {
+    padding-left: 20px;
+    list-style-type: disc;
+}
+#to-group a {
+    padding:1px 3px;
 }
 /*discuss to group*/
 #discuss-to-group-form .checkbox-label {

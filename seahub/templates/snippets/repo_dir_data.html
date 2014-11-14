@@ -11,7 +11,19 @@
     </p>
     <div class="repo-op fright">
         {% if user_perm == 'rw' %}
+
+        {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
         <button id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
+        {% else %}
+            {% if no_quota %}
+            <button id="upload-file" class="op-btn"><span class="icon-upload-alt"></span>{% trans "Upload"%}</button>
+            {% else %}
+            <div id="upload-file" class="op-btn upload-file-btn">
+                <span class="icon-upload-alt"></span><span>{% trans "Upload"%}</span>
+                <input type="file" name="file" multiple />
+            </div>
+            {% endif %}
+        {% endif %}
         <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
         {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
         {% else %}

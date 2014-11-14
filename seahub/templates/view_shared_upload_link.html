@@ -32,10 +32,6 @@
                         <span>{% trans "Add Files" %}</span>
                         <input type="file" name="file" multiple />
                     </span>
-                    <button type="submit" class="start vam">
-                        <span class="icon-upload"></span>
-                        <span>{% trans "Start All" %}</span>
-                    </button>
                     <button type="reset" class="cancel vam">
                         <span class="icon-ban-circle"></span>
                         <span>{% trans "Cancel All" %}</span>
@@ -77,6 +73,8 @@ window.locale = {
             "emptyResult": "{% trans "Empty file upload result" %}"
         },  
         "error": "{% trans "Error" %}",
+        "uploaded": "{% trans "uploaded" %}",
+        "canceled": "{% trans "canceled" %}",
         "start": "{% trans "Start" %}",
         "cancel": "{% trans "Cancel" %}",
         "destroy": "{% trans "Delete" %}"
@@ -88,29 +86,32 @@ var form = $('#upload-file-form');
 // Initialize the jQuery File Upload widget:
 form.fileupload({
     //singleFileUploads: false // using 1 request to upload all files of a selection
+    autoUpload: true,
     sequentialUploads: true
 })
-.bind('fileuploadadd', function(e, data) {
+.bind('fileuploadsubmit', function(e, data) {
+    var _this = $(this);
+    var file = data.files[0];
     // get url(token) for every file
-    $.ajax({
-        url: '{% url 'get_file_upload_url_ul' uploadlink.token %}?&r={{uploadlink.repo_id }}',
-        cache: false,
-        dataType: 'json',
-        success: function(ret) {
-            data.url = ret['url'];
-        }
-    });
-})
-.bind('fileuploaddone', function(e, data) {
-    if (data.textStatus == 'success') {
-        var filename = "";
-        $.each(data.files, function(index, file) {
-            filename = file.name;
-            $('#uploaded-files-list').append(
-                '<tr><td></td><td>' + filename +'</td><td>' + filesizeformat(file.size) + '</td></tr>');
+    if (!file.error) {
+        $.ajax({
+            url: '{% url 'get_file_upload_url_ul' uploadlink.token %}?&r={{uploadlink.repo_id }}',
+            cache: false,
+            dataType: 'json',
+            success: function(ret) {
+                data.url = ret['url'];
+                data.jqXHR = _this.fileupload('send', data);
+            },
+            error: function() {
+                file.error = "{% trans "Failed to get upload url" %}";
+            }
         });
-
-        var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + encodeURIComponent(filename) + "&repo_id={{repo.id}}" + "&p={{path}}";
+        return false;
+    }
+})
+.bind('fileuploaddone', function(evt, data) {
+    if (data.textStatus == 'success') {
+        var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + e(data.files[0].name) + "&repo_id={{repo.id}}" + "&p={{path}}";
         $.get(uploaded_done_link);
     }
 });
