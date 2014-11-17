@@ -287,17 +287,26 @@ $(function() {
                 'cancel_status':"{% trans "File Upload canceled" %}"
                 });
 
+        var update_dir_names = []; // dirs with 'time' to be updated
+        var new_dir_names = [];
         popup.fileupload({
             formData: {'parent_dir': cur_path},
             fileInput: $('#upload-file input'),
+            paramName: 'file',
             autoUpload:true,
             sequentialUploads: true
         })
-        .bind('fileuploadadd', function() {
+        .bind('fileuploadadd', function(e, data) {
             popup.removeClass('hide');
             fu_status.html("{% trans "File Uploading..." %}");
             cancel_all_btn.removeClass('hide');
             close_icon.addClass('hide');
+
+            // when add folder, a subdirectory will be shown as '.'. rm it.
+            var file = data.files[0];
+            if (file.name == '.') {
+                data.files.shift();
+            }
         })
         .bind('fileuploadsubmit', function(e, data) {
             var _this = $(this);
@@ -309,6 +318,15 @@ $(function() {
                     cache: false,
                     dataType: 'json',
                     success: function(ret) {
+                        var file_path = file.webkitRelativePath, // can be undefined, '', or a valid path
+                            r_path;
+                        if (file_path) { // 'add folder'
+                            r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
+                        }
+                        var formData = popup.fileupload('option', 'formData');
+                        formData.relative_path = r_path || '';
+                        popup.fileupload('option', 'formData', formData);
+
                         data.url = ret['url'];
                         data.jqXHR = _this.fileupload('send', data);
                     },
@@ -324,10 +342,83 @@ $(function() {
         })
         .bind('fileuploaddone', function(e, data) {
             if (data.textStatus == 'success') {
-                if (data.formData.parent_dir == cur_path) {
+                if (data.formData.parent_dir != cur_path) {
+                    return;
+                }
+                var file = data.files[0];
+                var file_path = file.webkitRelativePath;
+
+                if (!file_path) {
                     addFile(data.result[0]);
+                    return;
+                }
+
+                // for 'add folder'
+                var cur_dirs = $('.dir-item');
+                var cur_dir_names = [];
+                cur_dirs.each(function() {
+                    cur_dir_names.push($(this).attr('data-name'));
+                });
+
+                var new_dir_name = file_path.substring(0, file_path.indexOf('/'));
+                if (cur_dir_names.indexOf(new_dir_name) == -1) {
+                    if (new_dir_names.indexOf(new_dir_name) == -1) {
+                        new_dir_names.push(new_dir_name);
+                    }
+                } else {
+                    if (update_dir_names.indexOf(new_dir_name) == -1) {
+                        update_dir_names.push(new_dir_name);
+                    }
+                }
+                data.result[0].webkitRelativePath = file_path; // for 'template_download'
+            }
+        })
+        .bind('fileuploadstop', function() {
+            if (popup.fileupload('option','formData').parent_dir != cur_path) {
+                return;
+            }
+            var now = parseInt(new Date().getTime()/1000);
+            var cur_dirs = $('.dir-item');
+            if (new_dir_names.length > 0) {
+                if (cur_dirs.length == 0) {
+                    reqDirData('{% url 'repo_dir_data' repo.id %}?p=' + e(cur_path));
+                    return;
+                } else {
+                    var dir_tpl = $(cur_dirs[0]);
+                    var path = cur_path;
+                    $(new_dir_names).each(function(index, new_dir_name) {
+                        var new_dir = dir_tpl.clone(true);
+                        new_dir.attr({
+                            'data-name': new_dir_name,
+                            'data-time': now
+                        });
+                        $('.dirent-name a', new_dir).html(new_dir_name).attr('href', '{% url 'repo' repo.id %}?p=' + e(path+new_dir_name));
+                        $('.dirent-update', new_dir).html("{% trans "Just now" %}");
+                        $('.dir-download', new_dir).attr('href', '{% url 'repo_download_dir' repo.id %}?p=' + e(path+new_dir_name));
+                        $('.dir-share', new_dir).attr({
+                            'data-link':'',
+                            'data-token':'',
+                            'data-upload-link':'',
+                            'data-upload-token':''
+                        });
+                        dir_tpl.before(new_dir);
+                    });
+                    updateCmt();
                 }
             }
+            if (update_dir_names.length > 0) {
+                cur_dirs.each(function() {
+                    var dir = $(this);
+                    if (update_dir_names.indexOf(dir.attr('data-name')) != -1) {
+                        dir.attr('data-time', now);
+                        $('.dirent-update', dir).html("{% trans "Just now" %}");
+                    }
+                });
+                updateCmt();
+            }
+            // empty the arrays
+            new_dir_names = [];
+            update_dir_names = [];
         });
 
         // Enable iframe cross-domain access via redirect option:
@@ -1078,6 +1169,38 @@ $('#upload-file').click(function () {
 $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
 });
+    {% else %}
+    if ('webkitdirectory' in $('#upload-file input[type="file"]')[0]) {
+        $('#upload-file').find('input').remove().end().addClass('cspt');
+        $('#upload-menu .item').click(function() {
+            $('#upload-file-dialog').fileupload(
+                'option',
+                'fileInput',
+                $('input[type="file"]', $(this))
+            );
+        })
+        .hover(
+            function() {
+                $(this).css({'background':'#f3f3f3'});
+            },
+            function() {
+                $(this).css({'background':'transparent'});
+            }
+        );
+        $('.repo-op').css({'position': 'relative'});
+        $('#upload-file').click(function () {
+            $('#upload-menu').toggleClass('hide');
+        });
+        $(document).click(function(e) {
+            var target = e.target || event.srcElement;
+            var closePopup = function(popup, popup_switch) {
+                if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
+                    popup.addClass('hide');
+                }
+            };
+            closePopup($('#upload-menu'), $('#upload-file'));
+        });
+    }
     {% endif %}
 {% endif %}
 

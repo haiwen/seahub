@@ -1794,6 +1794,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #repo-file-list .repo-file-list-topbar.fixed-hd {
     width:930px;
+    z-index:12; /* to make #upload-menu be on top of .repo-file-list tr.fixed-hd */
 }
 .repo-file-list .fixed-hd th {
     background:#fff;
@@ -1940,6 +1941,23 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     overflow:hidden;
 }
+#upload-menu {
+    position:absolute;
+    left:0;
+    top:29px;
+    border:1px solid #c5c5c5;
+    border-radius:2px;
+    box-shadow: 0 0 2px #c5c5c5;
+    background:#fff;
+}
+#upload-menu .item {
+    position:relative;
+    text-align:left;
+    padding:0 10px;
+    height:27px;
+    line-height:27px;
+    overflow:hidden; /* for 'hover', as long 'input' in it. */
+}
 .fixed-upload-file-dialog {
     width: 540px;
     position: fixed;
@@ -1982,7 +2000,8 @@ textarea:-moz-placeholder {/* for FF */
     color:#333;
 }  
 .fileinput-button input,
-#upload-file input {
+#upload-file input,
+#upload-menu input {
     position: absolute;
     top: 0;     
     right: 0;   

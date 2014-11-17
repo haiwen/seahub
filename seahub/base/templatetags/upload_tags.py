@@ -10,12 +10,14 @@ def upload_js():
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-upload fade">
         {% if (file.error) { %}
-            <td class="name ellipsis" title="{%=file.name%}">{%=file.name%}</td>
+            <td class="name ellipsis" title="{%=file.webkitRelativePath || file.name%}">
+                {%=file.webkitRelativePath || file.name%}
+            </td>
             <td class="size">{%=o.formatFileSize(file.size)%}</td>
             <td class="error"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
         {% } else if (o.files.valid && !i) { %}
-            <td class="name ellipsis" title="{%=file.name%}">
-                {%=file.name%}
+            <td class="name ellipsis" title="{%=file.webkitRelativePath || file.name%}">
+                {%=file.webkitRelativePath || file.name%}
                 <div class="progress progress-success progress-striped active"><div class="bar" style="width:0%;"></div></div>
             </td>
             <td class="size">{%=o.formatFileSize(file.size)%}</td>
@@ -41,7 +43,9 @@ def upload_js():
 <script id="template-download" type="text/x-tmpl">
 {% for (var i=0, file; file=o.files[i]; i++) { %}
     <tr class="template-download fade">
-            <td class="name ellipsis" title="{%=file.name%}">{%=file.name%}</td>
+            <td class="name ellipsis" title="{%=file.webkitRelativePath || file.name%}">
+                {%=file.webkitRelativePath || file.name%}
+            </td>
             <td class="size">{%=o.formatFileSize(file.size)%}</td>
         {% if (file.error) { %}
             <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}:</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
