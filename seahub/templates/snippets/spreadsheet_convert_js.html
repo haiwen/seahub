@@ -1,8 +1,11 @@
 {% load i18n %}
+    function prepareOfficePreviewToken(xhr, settings) {
+        xhr.setRequestHeader('X-Seafile-Office-Preview-Token', '{{ office_preview_token }}');
+    }
     function load_excel() {
         $('#convert-loading').remove();
         var iframe = document.createElement('iframe');
-        iframe.src = "{% url 'office_convert_static' obj_id %}/index.html";
+        iframe.src = "{% url 'office_convert_get_page' obj_id %}/index.html?office_preview_token={{ office_preview_token }}";
         $('#spreadsheet-container').append(iframe);
     }
 
@@ -15,6 +18,7 @@
             url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
             cache: false,
             dataType: 'json',
+            beforeSend: prepareOfficePreviewToken,
             success: function(data) {
                 var status = data['status'];
                 if (status == 'QUEUED' || status == 'PROCESSING') {

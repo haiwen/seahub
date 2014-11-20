@@ -1,4 +1,7 @@
 {% load i18n %}
+    function prepareOfficePreviewToken(xhr, settings) {
+        xhr.setRequestHeader('X-Seafile-Office-Preview-Token', '{{ office_preview_token }}');
+    }
     /**
      * @param {boolean} html_exists True if the html has already been converted.
      * @param {number} page_num The number of pages of this document
@@ -7,7 +10,7 @@
      */
     function load_document(html_exists, page_num, outline) {
         $('#convert-loading').remove();
-        var base_page_url = "{% url 'office_convert_static' obj_id %}/",
+        var base_page_url = "{% url 'office_convert_get_page' obj_id %}/",
             page_urls = [];
 
         for (var i = 1; i < page_num + 1; i++) {
@@ -25,7 +28,7 @@
         } else {
             has_outline = $.trim(outline);
         }
-        
+
         if (has_outline) {
             var sidebar = $('#sidebar'),
                 page_container = $('#page-container'),
@@ -68,6 +71,7 @@
         }
 
         new pdf2htmlEX.Viewer({
+            before_send: prepareOfficePreviewToken,
             container_id : 'page-container',
             sidebar_id : 'sidebar',
             outline_id : 'outline',
@@ -100,7 +104,7 @@
                 pg_num = $('.pd').length,
                 orig_win_scrollTop = $(window).scrollTop(),
                 orig_pg_h, cur_pg, pg_h_offset;
-            
+
             if (!orig_pg_total_h && scale_ratio == 1) {
                 orig_pg_total_h = file_cont.height();
             }
@@ -118,11 +122,11 @@
                 return ;
             }
             scale($('#page-container'), scale_ratio);
-            
-            // modify file container's height
-            file_cont.height(orig_pg_total_h*scale_ratio); 
 
-            // scroll to the right cur page 
+            // modify file container's height
+            file_cont.height(orig_pg_total_h*scale_ratio);
+
+            // scroll to the right cur page
             pg_h_offset = (orig_pg_total_h * scale_ratio_offset)/pg_num;
             if (op == 'zoom-in') {
                 $(window).scrollTop(orig_win_scrollTop + cur_pg*pg_h_offset);
@@ -155,7 +159,8 @@
     var m_page_num;
     function get_outline() {
         $.ajax({
-            url: "{% url 'office_convert_static' obj_id %}/file.outline",
+            url: "{% url 'office_convert_get_page' obj_id %}/file.outline",
+            beforeSend: prepareOfficePreviewToken,
             dataType: 'text'
         }).done(function(outline) {
             load_document(false, m_page_num, outline);
@@ -163,7 +168,7 @@
     }
 
     function get_file_css() {
-        var css_href = "{% url 'office_convert_static' obj_id %}/file.css";
+        var css_href = "{% url 'office_convert_get_page' obj_id %}/file.css";
         $('head').append('<link rel="stylesheet" type="text/css" href="' + css_href + '" />');
     }
 
@@ -172,6 +177,7 @@
             url: "{% url 'office_convert_query_page_num' %}?file_id={{ obj_id }}",
             cache: false,
             dataType: 'json',
+            beforeSend: prepareOfficePreviewToken,
             success: function(data) {
                 if (data['success']) {
                     m_page_num = data['count'];
@@ -199,6 +205,7 @@
             url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
             cache: false,
             dataType: 'json',
+            beforeSend: prepareOfficePreviewToken,
             success: function(data) {
                 var status = data['status'];
                 if (status == 'QUEUED' || status == 'PROCESSING') {
