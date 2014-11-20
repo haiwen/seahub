@@ -1,6 +1,7 @@
 # encoding: utf-8
 import os
 import re
+import urllib
 import urllib2
 import uuid
 import logging
@@ -8,8 +9,12 @@ import hashlib
 import tempfile
 import locale
 import ConfigParser
+import mimetypes
+
 from datetime import datetime
-from urlparse import urlparse
+from urlparse import urlparse, urljoin
+
+import json
 
 import ccnet
 
@@ -18,8 +23,9 @@ from django.core.mail import EmailMessage
 from django.shortcuts import render_to_response
 from django.template import RequestContext, Context, loader
 from django.utils.translation import ugettext as _
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
+from django.views.static import serve as django_static_serve
 
 import seaserv
 from seaserv import seafile_api
@@ -53,6 +59,33 @@ try:
     from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
+    
+def is_cluster_mode():
+    cfg = ConfigParser.ConfigParser()
+    conf = os.path.join(os.environ['SEAFILE_CONF_DIR'], 'seafile.conf')
+    cfg.read(conf)
+    if cfg.has_option('cluster', 'enabled'):
+        enabled = cfg.getboolean('cluster', 'enabled')
+    else:
+        enabled = False
+
+    if enabled:
+        logging.info('cluster mode is enabled')
+    else:
+        logging.info('cluster mode is disabled')
+
+    return enabled
+
+CLUSTER_MODE = is_cluster_mode()
+
+try:
+    from seahub.settings import OFFICE_CONVERTOR_ROOT
+except ImportError:
+    OFFICE_CONVERTOR_ROOT = ''
+try:
+    from seahub.settings import OFFICE_CONVERTOR_NODE
+except ImportError:
+    OFFICE_CONVERTOR_NODE = False
 
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
@@ -844,17 +877,130 @@ if HAS_OFFICE_CONVERTER:
 
         return office_converter_rpc
 
-    def add_office_convert_task(file_id, doctype, url):
-        rpc = _get_office_converter_rpc()
-        return rpc.add_task(file_id, doctype, url)
+    def cluster_delegate(delegate_func):
+        '''usage:
+        
+        @cluster_delegate(funcA)
+        def func(*args):
+            ...non-cluster logic goes here...
+        
+        - In non-cluster mode, this decorator effectively does nothing.
+        - In cluster mode, if this node is not the office convert node,
+        funcA is called instead of the decorated function itself
 
+        '''
+        def decorated(func):
+            def real_func(*args, **kwargs):
+                internal = kwargs.pop('internal', False)
+                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not internal:
+                    return delegate_func(*args)
+                else:
+                    return func(*args)
+            return real_func
+            
+        return decorated
+
+    def delegate_add_office_convert_task(file_id, doctype, raw_path):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
+        sec_token = do_md5(seahub.settings.SECRET_KEY)
+        data = urllib.urlencode({
+            'sec_token': sec_token,
+            'file_id': file_id,
+            'doctype': doctype,
+            'raw_path': raw_path,
+        })
+        
+        ret = do_urlopen(url, data=data).read()
+        
+        return json.loads(ret)
+
+    def delegate_query_office_convert_status(file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
+        url += '?file_id=' + file_id
+        headers = { 
+            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
+        }
+        ret = do_urlopen(url, headers=headers).read()
+        
+        return json.loads(ret)
+
+    def delegate_query_office_file_pages(file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/page-num/')
+        url += '?file_id=' + file_id
+        
+        headers = { 
+            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
+        }
+
+        ret = do_urlopen(url, headers=headers).read()
+        
+        return json.loads(ret)
+
+    def delegate_get_office_converted_page(request, path, file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/static/' + path)
+        headers = {
+            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
+        }
+        timestamp = request.META.get('HTTP_IF_MODIFIED_SINCE')
+        if timestamp:
+            headers['If-Modified-Since'] = timestamp
+
+        try:
+            ret = do_urlopen(url, headers=headers)
+            data = ret.read()
+        except urllib2.HTTPError, e:
+            if timestamp and e.code == 304:
+                return HttpResponseNotModified()
+            else:
+                raise
+
+        content_type = ret.headers.get('content-type', None)
+        if content_type is None:
+            dummy, ext = os.path.splitext(os.path.basename(path))
+            content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
+
+        resp = HttpResponse(data, content_type=content_type)
+
+        if ret.headers.has_key('last-modified'):
+            resp['Last-Modified'] = ret.headers.get('last-modified')
+
+        return resp
+        
+    @cluster_delegate(delegate_add_office_convert_task)
+    def add_office_convert_task(file_id, doctype, raw_path):
+        rpc = _get_office_converter_rpc()
+        d = rpc.add_task(file_id, doctype, raw_path)
+        return {
+            'exists': d.exists
+        }
+
+    @cluster_delegate(delegate_query_office_convert_status)
     def query_office_convert_status(file_id):
         rpc = _get_office_converter_rpc()
-        return rpc.query_convert_status(file_id)
-
+        d = rpc.query_convert_status(file_id)
+        ret = {}
+        if d.error:
+            ret['error'] = d.error
+        else:
+            ret['success'] = True
+            ret['status'] = d.status
+        return ret
+            
+    @cluster_delegate(delegate_query_office_file_pages)
     def query_office_file_pages(file_id):
         rpc = _get_office_converter_rpc()
-        return rpc.query_file_pages(file_id)
+        d = rpc.query_file_pages(file_id)
+        ret = {}
+        if d.error:
+            ret['error'] = d.error
+        else:
+            ret['success'] = True
+            ret['count'] = d.count
+        return ret
+        
+    @cluster_delegate(delegate_get_office_converted_page)
+    def get_office_converted_page(request, path, file_id):
+        return django_static_serve(request, path, document_root=OFFICE_HTML_DIR)
 
     def get_converted_html_detail(file_id):
         d = {}
@@ -863,7 +1009,7 @@ if HAS_OFFICE_CONVERTER:
         with open(outline_file, 'r') as fp:
             outline = fp.read()
 
-        page_num = query_office_file_pages(file_id).count
+        page_num = query_office_file_pages(file_id)['count']
 
         d['outline'] = outline
         d['page_num'] = page_num
@@ -871,18 +1017,20 @@ if HAS_OFFICE_CONVERTER:
         return d
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
+        ret_dict['office_preview_token'] = do_md5(obj_id + seahub.settings.SECRET_KEY)
         try:
             ret = add_office_convert_task(obj_id, doctype, raw_path)
+            exists = ret.get('exists', False)
         except:
             logging.exception('failed to add_office_convert_task:')
             return _(u'Internal error'), False
         else:
-            if ret.exists and (doctype not in ('xls', 'xlsx')):
+            if (not CLUSTER_MODE) and exists and (doctype not in ('xls', 'xlsx')):
                 try:
                     ret_dict['html_detail'] = get_converted_html_detail(obj_id)
                 except:
                     pass
-            return None, ret.exists
+            return None, False
 
 # search realted
 HAS_FILE_SEARCH = False
@@ -1000,3 +1148,14 @@ def calculate_bitwise(num):
         # Right logical shift
         num = num >> 1
     return level
+
+def do_md5(s):
+    if isinstance(s, unicode):
+        s = s.encode('UTF-8')
+    return hashlib.md5(s).hexdigest()
+
+def do_urlopen(url, data=None, headers=None):
+    headers = headers or {}
+    req = urllib2.Request(url, data=data, headers=headers)
+    ret = urllib2.urlopen(req)
+    return ret

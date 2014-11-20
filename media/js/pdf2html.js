@@ -115,6 +115,7 @@ var pdf2htmlEX = (function(){
     this.sidebar_id = config['sidebar_id'];
     this.outline_id = config['outline_id'];
     this.page_urls = config['page_urls'];
+    this.before_send = config['before_send'];
     this.init_before_loading_content();
 
     var _ = this;
@@ -175,6 +176,7 @@ var pdf2htmlEX = (function(){
         var _ = this;
         $.ajax({
           url: this.page_urls[idx],
+          beforeSend: _.before_send,
           dataType: 'text'
         }).done(function(data){
           $('#'+_.container_id).append(data);
