@@ -54,7 +54,7 @@ function start_seahub() {
 function run_tests() {
     set +e
     cd tests
-    nosetests $nose_opts
+    py.test $nose_opts
     rvalue=$?
     cd -
     if [[ ${TRAVIS} != "" ]]; then
