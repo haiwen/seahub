@@ -26,4 +26,10 @@ def value_to_db_datetime(value):
 
     # MySQL doesn't support microseconds
     return six.text_type(value.replace(microsecond=0))
-    
+
+def utc_to_local(dt):
+    # change from UTC timezone to current seahub timezone
+    tz = timezone.get_default_timezone()
+    utc = dt.replace(tzinfo=timezone.utc)
+    local = timezone.make_naive(utc, tz)
+    return local

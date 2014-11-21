@@ -628,6 +628,23 @@ if EVENTS_CONFIG_FILE:
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
+    def get_file_audit_events(email, repo_id, start, limit):
+        """Return file audit events list.
+
+        For example:
+        ``get_file_audit_events(email, repo_id, 0, 10)`` returns the first 10
+        events.
+        ``get_file_audit_events(email, repo_id, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        ev_session = SeafEventsSession()
+
+        events = seafevents.get_file_audit_events(ev_session, email, repo_id, start, limit)
+        if not events:
+            return None
+
+        return events
+
 else:
     EVENTS_ENABLED = False
     def get_user_events():

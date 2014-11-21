@@ -25,7 +25,6 @@ from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
-from django.utils import timezone
 
 from authentication import TokenAuthentication
 from serializers import AuthTokenSerializer, AccountSerializer
@@ -61,6 +60,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_org_user_events
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
+from seahub.utils.timeutils import utc_to_local
 from seahub.views import validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
     list_inner_pub_repos, get_virtual_repos_by_owner
@@ -2534,12 +2534,6 @@ class EventsView(APIView):
                     d['author'] = e.creator
                 else:
                     d['author'] = e.repo_owner
-
-                def utc_to_local(dt):
-                    tz = timezone.get_default_timezone()
-                    utc = dt.replace(tzinfo=timezone.utc)
-                    local = timezone.make_naive(utc, tz)
-                    return local
 
                 epoch = datetime.datetime(1970, 1, 1)
                 local = utc_to_local(e.timestamp)

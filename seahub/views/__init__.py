@@ -56,6 +56,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     user_traffic_over_limit, is_org_context
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
+from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 from seahub.utils.devices import get_user_devices, do_unlink_device
@@ -1783,14 +1784,6 @@ def group_events_data(events):
     """
     Group events according to the date.
     """
-    # e.timestamp is a datetime.datetime in UTC
-    # change from UTC timezone to current seahub timezone
-    def utc_to_local(dt):
-        tz = timezone.get_default_timezone()
-        utc = dt.replace(tzinfo=timezone.utc)
-        local = timezone.make_naive(utc, tz)
-        return local
-
     event_groups = []
     for e in events:
         e.time = utc_to_local(e.timestamp)
