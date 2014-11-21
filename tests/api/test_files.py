@@ -113,13 +113,13 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_url = urljoin(repo.repo_url, 'upload-link')
             res = self.get(upload_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/\w{8,8}"')
+            self.assertRegexpMatches(res.text, r'"http(.*)/upload-api/[^/]+"')
 
     def test_get_update_link(self):
         with self.get_tmp_repo() as repo:
             update_url = urljoin(repo.repo_url, 'update-link')
             res = self.get(update_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-api/\w{8,8}"')
+            self.assertRegexpMatches(res.text, r'"http(.*)/update-api/[^/]+"')
 
     # def test_upload_file(self):
     #     # XXX: requests has problems when post a file whose name contains
@@ -154,13 +154,13 @@ class FilesApiTest(ApiTestBase):
         with self.get_tmp_repo() as repo:
             upload_blks_url = urljoin(repo.repo_url, 'upload-blks-link')
             res = self.get(upload_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/\w{8,8}"')
+            self.assertRegexpMatches(res.text, r'"http(.*)/upload-blks-api/[^/]+"')
 
     def test_get_update_blocks_link(self):
         with self.get_tmp_repo() as repo:
             update_blks_url = urljoin(repo.repo_url, 'update-blks-link')
             res = self.get(update_blks_url)
-            self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/\w{8,8}"')
+            self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/[^/]+"')
 
     def test_list_dir(self):
         with self.get_tmp_repo() as repo:
@@ -189,7 +189,7 @@ class FilesApiTest(ApiTestBase):
             ddurl = urljoin(repo.dir_url, 'download') + query
             res = self.get(ddurl)
             self.assertRegexpMatches(res.text,
-                r'"http(.*)/files/\w{8,8}/%s"' % quote(dpath[1:]))
+                r'"http(.*)/files/[^/]+/%s"' % quote(dpath[1:]))
 
     def test_share_dir(self):
         with self.get_tmp_repo() as repo:
