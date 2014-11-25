@@ -251,19 +251,23 @@ if getattr(settings, 'MULTI_TENANCY', False):
     )    
 
 # serve office converter static files
-from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
 if HAS_OFFICE_CONVERTER:
-    from seahub.utils import OFFICE_HTML_DIR
-    from seahub.views.file import office_convert_query_status, office_convert_query_page_num
-    media_url = settings.MEDIA_URL.strip('/')
-    # my.seafile.com/media/office-html/<file_id>/<css, outline, page>
+    from seahub.views.file import office_convert_query_status, office_convert_query_page_num, \
+        office_convert_add_task, office_convert_get_page
     urlpatterns += patterns('',
-        url(r'^office-convert/static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': OFFICE_HTML_DIR}, name='office_convert_static'),
-    )
-    urlpatterns += patterns('',
+        url(r'^office-convert/static/(?P<path>.*)$', office_convert_get_page, name='office_convert_get_page'),
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
         url(r'^office-convert/page-num/$', office_convert_query_page_num, name='office_convert_query_page_num'),
     )
+
+    if CLUSTER_MODE and OFFICE_CONVERTOR_NODE:
+        urlpatterns += patterns('',
+            url(r'^office-convert/internal/add-task/$', office_convert_add_task),
+            url(r'^office-convert/internal/status/$', office_convert_query_status, {'internal': True}),
+            url(r'^office-convert/internal/page-num/$', office_convert_query_page_num, {'internal': True}),
+            url(r'^office-convert/internal/static/(?P<path>.*)$', office_convert_get_page, {'internal': True}),
+        )
 
 if TRAFFIC_STATS_ENABLED:
     from seahub.views.sysadmin import sys_traffic_admin
