@@ -32,32 +32,17 @@
     </tr>
     <tr>
         <td></td>
-        <td><a href="#" class="buy" data-target="A">Buy or Renew</a></td>
+        <td>
+            <span id="sub-btn">{{ o_subscr.form|safe }}</span>
+        </td>
     </tr>
 </table>
 </div>
 
-
-<form id="plan-form" method="post" action="{% url 'to_paypal' %}" class="hide">
-    {% csrf_token %}
-    <p>How many months would you like to buy?</p>
-    <input type="hidden" name="email" value="{{request.user.username}}" />
-    <input type="hidden" name="plan" value="A" />
-    <input type="radio" name="months" value="3" checked="checked" class="vam" /> <span class="vam options">3</span>
-    <input type="radio" name="months" value="6" class="vam" /> <span class="vam options">6</span>
-    <input type="radio" name="months" value="12" class="vam" /> <span class="vam options">12</span>
-    <br/>
-    <input type="submit" value="Submit" class="submit" />
-</form>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$(".buy").click(function() {
-    $('#plan-form').modal({appendTo: '#main', autoResize: true});
-    $('#simplemodal-container').css({'width':'auto', 'height': 'auto'});
-    return false;
-});
 $('#plans tr').unbind();
 </script>
 {% endblock %}
