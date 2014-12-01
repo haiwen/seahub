@@ -230,10 +230,10 @@
 {% endblock %}
 
 {% block extra_script %}
-{% if not no_quota %}
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/repo_crypto.js"></script>
 {% else %}
+    {% if not no_quota and user_perm == 'rw' %}
 {% upload_js %}
 <script type="text/javascript">
 function addFile(file_data) {
