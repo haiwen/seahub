@@ -41,7 +41,6 @@ from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
-from seahub.base.models import FileContributors
 from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, PrivateFileDirShare, \
     check_share_link_access, set_share_link_access
@@ -420,10 +419,12 @@ def view_file(request, repo_id):
     file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
 
     # fetch file contributors and latest contributor
-    contributors, last_modified, last_commit_id = \
-        FileContributors.objects.get_file_contributors(
-        repo_id, path.encode('utf-8'), file_path_hash, obj_id)
-    latest_contributor = contributors[0] if contributors else None
+    try:
+        dirent = seafile_api.get_dirent_by_path(repo.id, path)
+        latest_contributor, last_modified = dirent.modifier, dirent.mtime
+    except SearpcError as e:
+        logger.error(e)
+        latest_contributor, last_modified = None, 0
 
     # check whether file is starred
     is_starred = False
@@ -460,10 +461,9 @@ def view_file(request, repo_id):
             'filetype': ret_dict['filetype'],
             'groups': groups,
             'use_pdfjs': USE_PDFJS,
-            'contributors': contributors,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,
-            'last_commit_id': last_commit_id,
+            'last_commit_id': repo.head_cmmt_id,
             'repo_group_str': repogrp_str,
             'is_starred': is_starred,
             'user_perm': user_perm,

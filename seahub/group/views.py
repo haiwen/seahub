@@ -33,7 +33,7 @@ from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
 from signals import grpmsg_added, grpmsg_reply_added, group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required
-from seahub.base.models import FileDiscuss, FileContributors
+from seahub.base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
@@ -1428,13 +1428,14 @@ def group_wiki(request, group, page_name="home"):
         url_prefix = reverse('group_wiki', args=[group.id])
         content = convert_wiki_link(content, url_prefix, repo.id, username)
         
-        # fetch file latest contributor and last modified
+        # fetch file modified time and modifier
         path = '/' + dirent.obj_name
-        file_path_hash = calc_file_path_hash(path)
-        contributors, last_modified, last_commit_id = \
-            FileContributors.objects.get_file_contributors(
-            repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
-        latest_contributor = contributors[0] if contributors else None
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo.id, path)
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except SearpcError as e:
+            logger.error(e)
+            latest_contributor, last_modified = None, 0
 
         repo_perm = seafile_api.check_repo_access_permission(repo.id, username)
 

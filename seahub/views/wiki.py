@@ -30,7 +30,6 @@ from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
-from seahub.base.models import FileContributors
 from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages
@@ -63,13 +62,13 @@ def personal_wiki(request, page_name="home"):
         url_prefix = reverse('personal_wiki', args=[])
         content = convert_wiki_link(content, url_prefix, repo.id, username)
         
-        # fetch file latest contributor and last modified
+        # fetch file modified time and modifier
         path = '/' + dirent.obj_name
-        file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]            
-        contributors, last_modified, last_commit_id = \
-            FileContributors.objects.get_file_contributors(
-            repo.id, path.encode('utf-8'), file_path_hash, dirent.obj_id)
-        latest_contributor = contributors[0] if contributors else None
+        try:
+            dirent = seafile_api.get_dirent_by_path(repo.id, path)
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except SearpcError as e:
+            latest_contributor, last_modified = None, 0
 
         wiki_index_exists = True
         index_pagename = 'index'

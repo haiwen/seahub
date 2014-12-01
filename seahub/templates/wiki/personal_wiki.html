@@ -74,7 +74,8 @@
     <div id="wiki-area" class="article">
         <h1>{{ page|capfirst }}</h1>
         <div id="wiki-content"></div><!--content will be offered by js-->
-        <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}</p>
+        <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}
+        </p>
     </div>
 
     <form id="page-create-form" action="{% url 'personal_wiki_page_new' %}" method="post" class="hide">{% csrf_token %}
