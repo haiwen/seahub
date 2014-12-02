@@ -22,6 +22,7 @@
                 <span class="icon-upload-alt"></span><span>{% trans "Upload"%}</span>
                 <input type="file" name="file" multiple />
             </div>
+                {% if enable_upload_folder %}
             <ul id="upload-menu" class="hide">
                 <li class="item">
                 <span>{% trans "Upload Files" %}</span>
@@ -32,6 +33,7 @@
                 <input type="file" name="file" multiple directory webkitdirectory />
                 </li>
             </ul>
+                {% endif %}
             {% endif %}
         {% endif %}
         <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>

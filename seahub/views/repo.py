@@ -29,7 +29,8 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
     get_commit_before_new_merge, user_traffic_over_limit
-from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO
+from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
+    ENABLE_UPLOAD_FOLDER
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -268,6 +269,7 @@ def render_repo(request, repo):
             'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
+            "enable_upload_folder": ENABLE_UPLOAD_FOLDER,
             }, context_instance=RequestContext(request))
    
 @login_required    

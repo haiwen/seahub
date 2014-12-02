@@ -1170,6 +1170,7 @@ $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
 });
     {% else %}
+        {% if enable_upload_folder %}
     if ('webkitdirectory' in $('#upload-file input[type="file"]')[0]) {
         $('#upload-file').find('input').remove().end().addClass('cspt');
         $('#upload-menu .item').click(function() {
@@ -1201,6 +1202,7 @@ $('#upload-file').click(function () {
             closePopup($('#upload-menu'), $('#upload-file'));
         });
     }
+        {% endif %}
     {% endif %}
 {% endif %}
 
