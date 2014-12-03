@@ -1456,7 +1456,7 @@ def group_wiki(request, group, page_name="home"):
             "content": content,
             "page": os.path.splitext(dirent.obj_name)[0],
             "last_modified": last_modified,
-            "latest_contributor": latest_contributor,
+            "latest_contributor": latest_contributor or _("Unknown"),
             "path": path,
             "repo_id": repo.id,
             "search_repo_id": repo.id,
