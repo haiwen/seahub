@@ -36,7 +36,7 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
     ENABLE_GUEST
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
-
+from seahub_extra.organizations.models import OrgMemberQuota
 logger = logging.getLogger(__name__)
 
 @login_required
@@ -875,6 +875,29 @@ def sys_org_rename(request, org_id):
 
     return HttpResponseRedirect(next)
 
+@login_required_ajax
+@sys_staff_required
+def sys_org_set_member_quota(request, org_id):
+
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+
+    try:
+        member_quota = int(request.POST.get('member_quota', '0'))
+        if member_quota > 0:
+            OrgMemberQuota.objects.set_quota(org_id, member_quota)
+            messages.success(request, _(u'Success'))
+            return HttpResponse(json.dumps({'success': True}), status=200,
+                                content_type=content_type)
+        else:
+            return HttpResponse(json.dumps({ 'error': _('Input number should be greater than 1')}),
+                                status=400, content_type=content_type)
+    except ValueError:
+        return HttpResponse(json.dumps({ 'error': _('Input should be a number')}),
+                            status=400, content_type=content_type)
+
 def sys_get_org_base_info(org_id):
 
     org = ccnet_threaded_rpc.get_org_by_id(org_id)
@@ -971,6 +994,7 @@ def sys_org_info_setting(request, org_id):
 
     org_id = int(org_id)
     org_basic_info = sys_get_org_base_info(org_id)
+    org_basic_info['org_member_quota'] = OrgMemberQuota.objects.get_quota(org_id)
 
     return render_to_response('sysadmin/sys_org_info_setting.html',
            org_basic_info, context_instance=RequestContext(request))
