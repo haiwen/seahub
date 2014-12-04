@@ -19,6 +19,8 @@
         <input type="text" name="new_name" class="input" value="{{ org.org_name }}"/></br>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
+
+    {% if org_member_quota %}
     <h3>{% trans "Limit Organization User Number" %}</h3>
     <form id="org_member_quota" action="" method="post" class="form">{% csrf_token %}
         <label>{% trans "Max User Number" %}</label></br>
@@ -26,6 +28,7 @@
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
+    {% endif %}
 </div>
 
 {% endblock %}
@@ -33,6 +36,8 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
+
+{% if org_member_quota %}
 $('#org_member_quota').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
@@ -47,7 +52,7 @@ $('#org_member_quota').submit(function() {
         apply_form_error(form_id, "{% trans "Input should be a number" %}");
         return false;
     } else if (member_quota <= 0) {
-        apply_form_error(form_id, "{% trans "Input number should be greater than 1" %}");
+        apply_form_error(form_id, "{% trans "Input number should be greater than 0" %}");
         return false;
     }
 
@@ -69,5 +74,6 @@ $('#org_member_quota').submit(function() {
     });
     return false;
 });
+{% endif %}
 </script>
 {% endblock %}
