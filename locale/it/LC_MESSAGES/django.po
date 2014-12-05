@@ -6295,7 +6295,7 @@ msgstr "Codifica file sconosciuta"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, cannot be opened online."
+msgid "File size surpasses %s. Cannot be opened online."
 msgstr "La dimensione del file supera %s e non può essere aperta online."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6490,7 +6490,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Trasferimento fallito, argomenti non validi."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, cannot add admin."
+msgid "Using LDAP now. Cannot add admin."
 msgstr "Ora utilizzo LDAP, non puoi aggiungere utenti di amministrazione."
 
 #: seahub/views/sysadmin.py:1110

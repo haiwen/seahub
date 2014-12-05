@@ -6308,7 +6308,7 @@ msgstr "Неизвестная кодировка файла."
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, cannot be opened online."
+msgid "File size surpasses %s. Cannot be opened online."
 msgstr "Размер файла превышает %s, и не может быть открыт в онлайн режиме."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6503,7 +6503,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Ошибка передачи, неверные параметры."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, cannot add admin."
+msgid "Using LDAP now. Cannot add admin."
 msgstr ""
 
 #: seahub/views/sysadmin.py:1110

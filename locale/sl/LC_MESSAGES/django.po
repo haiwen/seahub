@@ -6110,7 +6110,7 @@ msgstr "Neznana enkripcija datoteke"
 #: seahub/views/file.py:273 seahub/views/file.py:280 seahub/views/file.py:509
 #: seahub/views/file.py:514
 #, python-format
-msgid "File size surpasses %s, cannot be opened online."
+msgid "File size surpasses %s. Cannot be opened online."
 msgstr "Velikost datoteke presega %s. Ne more biti odprta na spletu."
 
 #: seahub/views/file.py:320 seahub/views/file.py:552 seahub/views/file.py:567
@@ -6275,7 +6275,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Prenos spodletel, neveljavni argumenti."
 
 #: seahub/views/sysadmin.py:830
-msgid "Using LDAP now, cannot add admin."
+msgid "Using LDAP now. Cannot add admin."
 msgstr "Uporablja LDAP, ne more se ga dodati kot admina."
 
 #: seahub/views/sysadmin.py:847

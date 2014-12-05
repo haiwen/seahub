@@ -1180,7 +1180,7 @@ def batch_user_make_admin(request):
     already_admin = []
 
     if len(get_emailusers('LDAP', 0, 1)) > 0:
-        messages.error(request, _(u'Using LDAP now, cannot add admin.'))
+        messages.error(request, _(u'Using LDAP now. Cannot add admin.'))
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
 

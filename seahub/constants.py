@@ -1,5 +1,5 @@
-# Default user have common operations, like creating group and library.
+# Default users have common operations, like creating groups and libraries.
 DEFAULT_USER = 'default'
 
-# Guest user have limited operations, cannot create group and library.
+# Guest users have limited operations; cannot create groups and libraries.
 GUEST_USER = 'guest'

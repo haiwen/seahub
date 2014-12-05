@@ -6288,7 +6288,7 @@ msgstr "알 수 없는 파일 인코딩"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, cannot be opened online."
+msgid "File size surpasses %s. Cannot be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6483,7 +6483,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "보내기에 실패했습니다. 잘못된 인자입니다."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, cannot add admin."
+msgid "Using LDAP now. Cannot add admin."
 msgstr "LDAP를 지금 사용중이어서 관리자를 추가할 수 없습니다."
 
 #: seahub/views/sysadmin.py:1110

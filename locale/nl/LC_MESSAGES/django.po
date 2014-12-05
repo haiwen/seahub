@@ -5512,7 +5512,7 @@ msgstr "Onbekende bestandscodering"
 #: seahub/views/file.py:263 seahub/views/file.py:270 seahub/views/file.py:491
 #: seahub/views/file.py:496
 #, python-format
-msgid "File size surpasses %s, cannot be opened online."
+msgid "File size surpasses %s. Cannot be opened online."
 msgstr "Bestandsgrootte overschrijdt %s, kan online niet geopend worden."
 
 #: seahub/views/file.py:309 seahub/views/file.py:529 seahub/views/file.py:544
