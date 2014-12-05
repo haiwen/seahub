@@ -724,7 +724,7 @@ msgid "note"
 msgstr "zaznamek"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Datoteke v tej knjižnici ne more biti ogledane na spletu"
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1439,7 +1439,7 @@ msgstr "Dodaj odgovor..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "Ne more bit prazno in mora biti večje od 2048 znakov."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2461,7 +2461,7 @@ msgid "contact is required"
 msgstr "kontakt je zahtevan"
 
 #: seahub/message/views.py:214
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "Sporočila samemu sebi ne morete poslati."
 
 #: seahub/message/views.py:218
@@ -2741,7 +2741,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Še ni sprejel vašega povabila"
 
 #: seahub/profile/views.py:165
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "Demo račun ni mogoče pobristi."
 
 #: seahub/profile/views.py:191
@@ -2946,7 +2946,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:136
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "Sami sebi ne morete deljiti knjižnice"
 
 #: seahub/share/views.py:144
@@ -6084,7 +6084,7 @@ msgid "Please log in."
 msgstr ""
 
 #: seahub/views/ajax.py:1424
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "Sistemska knjižnica ne more biti izbrisana."
 
 #: seahub/views/ajax.py:1742
@@ -6110,7 +6110,7 @@ msgstr "Neznana enkripcija datoteke"
 #: seahub/views/file.py:273 seahub/views/file.py:280 seahub/views/file.py:509
 #: seahub/views/file.py:514
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "Velikost datoteke presega %s. Ne more biti odprta na spletu."
 
 #: seahub/views/file.py:320 seahub/views/file.py:552 seahub/views/file.py:567
@@ -6224,7 +6224,7 @@ msgstr "Uspešno ponastavljeno geslo na %(passwd)s za uporabnika %(user)s."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Uspešno ponastavljeno geslo na %(passwd)s za uporabnika %(user)s. Vendar email obvestilo ni bilo poslano, ker email servis ni pravilno nastavljen."
 
@@ -6257,7 +6257,7 @@ msgstr "Uspešno dodan uporabnik %s"
 #: seahub/views/sysadmin.py:608
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "Uspešno dodan uproabnik %s. Vendar pa email obvestio ni bilo mogoče poslati, ker email servis ni pravilno nastavljen."
 
@@ -6275,7 +6275,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Prenos spodletel, neveljavni argumenti."
 
 #: seahub/views/sysadmin.py:830
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "Uporablja LDAP, ne more se ga dodati kot admina."
 
 #: seahub/views/sysadmin.py:847

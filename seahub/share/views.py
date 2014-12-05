@@ -135,7 +135,7 @@ def share_to_user(request, repo, to_user, permission):
     from_user = request.user.username
 
     if from_user == to_user:
-        msg = _(u'You can not share libray to yourself.')
+        msg = _(u'You cannot share libray to yourself.')
         messages.error(request, msg)
         return
 
@@ -622,7 +622,7 @@ def share_permission_admin(request):
 #     anon_email = kwargs['anon_email']
 #     is_encrypted = kwargs['is_encrypted']
 
-#     # Encrypt repo can not be shared to unregistered user.
+#     # Encrypt repo cannot be shared to unregistered user.
 #     if is_encrypted:
 #         msg = _(u'Failed to share to %s, as encrypted libraries cannot be shared to emails outside the site.') % anon_email
 #         messages.error(request, msg)
@@ -1092,7 +1092,7 @@ def get_shared_upload_link(request):
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)
 
-    if path == '/':         # can not share root dir
+    if path == '/':         # cannot share root dir
         err = _('You cannot share the library in this way.')
         data = json.dumps({'error': err})
         return HttpResponse(data, status=400, content_type=content_type)

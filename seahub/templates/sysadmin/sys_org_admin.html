@@ -76,19 +76,19 @@ $('#add-org-form').submit(function() {
         pwd2 = $.trim(form.children('[name="password2"]').val());
 
     if (!name) {
-        apply_form_error(form_id, "{% trans "Name can not be blank"%}");
+        apply_form_error(form_id, "{% trans "Name cannot be blank"%}");
         return false;
     }
     if (!url_prefix) {
-        apply_form_error(form_id, "{% trans "Url can not be blank"%}");
+        apply_form_error(form_id, "{% trans "Url cannot be blank"%}");
         return false;
     }
     if (!owner) {
-        apply_form_error(form_id, "{% trans "Owner can not be blank"%}");
+        apply_form_error(form_id, "{% trans "Owner cannot be blank"%}");
         return false;
     }
     if (!pwd1) {
-        apply_form_error(form_id, "{% trans "Password can not be blank" %}");
+        apply_form_error(form_id, "{% trans "Password cannot be blank" %}");
         return false;
     } 
     if (!pwd2) {

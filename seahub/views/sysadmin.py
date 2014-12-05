@@ -704,7 +704,7 @@ def user_reset(request, user_id):
                 messages.success(request, _(u'Successfully reset password to %(passwd)s for user %(user)s.') % \
                                      {'passwd':new_password,'user': user.email})
         else:
-            messages.success(request, _(u'Successfully reset password to %(passwd)s for user %(user)s. But email notification can not be sent, because Email service is not properly configured.') % \
+            messages.success(request, _(u'Successfully reset password to %(passwd)s for user %(user)s. But email notification cannot be sent, because Email service is not properly configured.') % \
                                  {'passwd':new_password,'user': user.email})
     except User.DoesNotExist:
         msg = _(u'Failed to reset password: user does not exist')
@@ -781,7 +781,7 @@ def user_add(request):
                 else:
                     messages.success(request, _(u'Successfully added user %s.') % email)
             else:
-                messages.success(request, _(u'Successfully added user %s. But email notification can not be sent, because Email service is not properly configured.') % email)
+                messages.success(request, _(u'Successfully added user %s. But email notification cannot be sent, because Email service is not properly configured.') % email)
 
             return HttpResponse(json.dumps({'success': True}), content_type=content_type)
     else:
@@ -1180,7 +1180,7 @@ def batch_user_make_admin(request):
     already_admin = []
 
     if len(get_emailusers('LDAP', 0, 1)) > 0:
-        messages.error(request, _(u'Using LDAP now, can not add admin.'))
+        messages.error(request, _(u'Using LDAP now, cannot add admin.'))
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
 

@@ -10,7 +10,7 @@ $('#set-quota-form .submit').click(function() {
 
     var quota = $('input[name="quota"]', form).val();
     if (!$.trim(quota)) {
-        apply_form_error(form_id, "{% trans "Quota can not be empty" %}");
+        apply_form_error(form_id, "{% trans "Quota cannot be empty" %}");
         return false;
     }
 

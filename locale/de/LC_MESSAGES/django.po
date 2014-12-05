@@ -776,7 +776,7 @@ msgid "note"
 msgstr "Anmerkung"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Dateien in dieser Bibliothek können nicht online geöffnet werden."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1499,7 +1499,7 @@ msgstr "Antworten hinzufügen …"
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "Darf nicht leer sein und sollte nicht mehr als 2048 Zeichen haben."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2184,7 +2184,7 @@ msgid ""
 msgstr "Nach dem Erstellen einer Gruppe können Sie Mitglieder hinzufügen und Bibliotheken freigeben."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "Sie sind derzeit Gast, Sie können keine Gruppen erstellen."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2539,7 +2539,7 @@ msgid "contact is required"
 msgstr "Kontakt wird benötigt"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "Sie können sich nicht selbst eine Nachricht schicken."
 
 #: seahub/message/views.py:216
@@ -2822,7 +2822,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Hat die Einladung noch nicht akzeptiert"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "Demo Benutzerkonto kann nicht gelöscht werden."
 
 #: seahub/profile/views.py:193
@@ -3035,7 +3035,7 @@ msgid ""
 msgstr "Erfolgreich an %(group)s freigegeben. Siehe <a href=\"%(share)s\">Freigaben</a>."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "Sie können die Bibliothek nicht an sich selbst freigeben."
 
 #: seahub/share/views.py:146
@@ -3978,7 +3978,7 @@ msgstr "Seafile verwaltet Dateien in Bibliotheken. Jede Bibliothek kann synchron
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "Seafile verwaltet Dateien in Bibliotheken. Jede Bibliothek kann synchronisiert und separat geteilt werden. Da Sie ein Gast Nutzer sind, können Sie allerdings keine weiteren Bibliotheken erstellen."
 
@@ -5692,19 +5692,19 @@ msgid "None."
 msgstr "Keine."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr "Der Name kann nicht leer sein"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr "Url kann nicht leer sein"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr "Besitzer kann nicht leer sein"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr "Passwort kann nicht leer sein"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5822,7 +5822,7 @@ msgid ""
 msgstr "Bearbeitung erfolgreich, allerdings konnte keine E-Mail gesendet werden. Bitte prüfen Sie die Konfiguration Ihres E-Mail-Dienstes."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr "Quota kann nicht leer sein"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6289,7 +6289,7 @@ msgid "Wrong repo id"
 msgstr "Falsche Paketquellenkennung"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "Eine Systembibliothek kann nicht gelöscht werden. "
 
 #: seahub/views/ajax.py:1593
@@ -6327,7 +6327,7 @@ msgstr "Unbekannte Datenkodierung"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "Dateien größer als %s, können online nicht geöffnet werden."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6454,7 +6454,7 @@ msgstr "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Passwort von %(user)s erfolgreich auf %(passwd)s zurückgesetzt. Es konnte jedoch keine E-Mail Benachrichtigung gesendet werden, da der E-Mail-Service nicht korrekt konfiguriert ist."
 
@@ -6487,7 +6487,7 @@ msgstr "Benutzer %s erfolgreich hinzugefügt."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "Benutzer %s wurde erfolgreich hinzugefügt. Es konnte jedoch keine E-Mail-Benachrichtigung gesendet werden, da der E-Mail-Dienst nicht korrekt konfiguriert ist."
 
@@ -6522,7 +6522,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Übertragung fehlgeschlagen, Argumente ungültig."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "LDAP wird jetzt benutzt, Admin kann nicht hinzugefügt werden."
 
 #: seahub/views/sysadmin.py:1110

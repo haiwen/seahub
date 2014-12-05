@@ -391,7 +391,7 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
 
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
+        Raises ``InvalidDetailError`` if detail field cannot be parsed.
         """
         assert self.is_group_msg()
 
@@ -424,7 +424,7 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
 
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
+        Raises ``InvalidDetailError`` if detail field cannot be parsed.
         """
         assert self.is_grpmsg_reply()
 

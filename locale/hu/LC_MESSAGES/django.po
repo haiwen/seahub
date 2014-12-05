@@ -748,7 +748,7 @@ msgid "note"
 msgstr "megjegyzés"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Ebben a kötetben a fájlok nem nézhetők meg online."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1471,7 +1471,7 @@ msgstr "Válasz hozzáadása"
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "Nem lehet üres, sem 2048 karakternél több."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2156,7 +2156,7 @@ msgid ""
 msgstr "A csoport létrehozása után hozzáadhat tagokat és megoszthat köteteket."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "Vendég felhasználóként nincs joga csoportot létrehozni."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2511,7 +2511,7 @@ msgid "contact is required"
 msgstr "kötelező a kapcsolat"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "Önmagának nem üzenhet."
 
 #: seahub/message/views.py:216
@@ -2794,7 +2794,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Még nem fogadta el a meghívást"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "A demó fiók nem törölhető."
 
 #: seahub/profile/views.py:193
@@ -3007,7 +3007,7 @@ msgid ""
 msgstr "%(group)s csoporttal sikerült a megosztás，a <a href=\"%(share)s\">Megosztások</a> oldalon ellenőrizheti."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "Önmagával nem oszthatja meg a könyvtárat."
 
 #: seahub/share/views.py:146
@@ -3950,7 +3950,7 @@ msgstr "A Seafile a fájlokat kötetekbe szervezi, melyek szinkronizálhatók k�
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "A Seafile a fájlokat kötetekbe szervezi, melyek szinkronizálhatók különféle eszközökkel, illetve megoszthatók más felhasználókkal vagy csoportokkal. Vendég felhasználóként nem hozhat létre kötetet."
 
@@ -5664,19 +5664,19 @@ msgid "None."
 msgstr "Nincs."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr "Név megadása kötelező"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr "Link megadása kötelező"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr "Tulajdonos megadása kötelező"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr "Jelszó megadása kötelező"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5794,7 +5794,7 @@ msgid ""
 msgstr "Szerkesztés sikeres de az e-mail küldés sikertelen. Ellenőrizze a levelezés beállításokat."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr "A kvóta megadása kötelező"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6261,7 +6261,7 @@ msgid "Wrong repo id"
 msgstr "Hibás tárolóazonosító"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "A rendszer kötetet nem lehet törölni."
 
 #: seahub/views/ajax.py:1593
@@ -6299,7 +6299,7 @@ msgstr "Érvénytelen fájlkódolás"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "Fájlméret több mint %s, nem nyitható meg online."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6426,7 +6426,7 @@ msgstr "%(user)s jelszava sikeresen átállítva erre: %(passwd)s."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Jelszó sikeresen átállítva erre: %(passwd)s, de a(z) %(user)s felhasználónak nem lehet levelet küldeni mert a levél küldés nincs megfelelően beállítva."
 
@@ -6459,7 +6459,7 @@ msgstr "%s hozzáadása sikeres."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "%s hozzáadása sikeres. E-mail értesítés kiküldése sikertelen, mivel nincs jól beállítva."
 
@@ -6494,7 +6494,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Átadás sikertelen, érvénytelen paraméterek."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "LDAP van használatban, nem lehet \"admin\"-t felvenni."
 
 #: seahub/views/sysadmin.py:1110

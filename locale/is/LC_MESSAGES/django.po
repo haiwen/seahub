@@ -743,7 +743,7 @@ msgid "note"
 msgstr "athugasemd"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Ekki er hægt að skoða skrár í þessu safni á vefnum."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1466,7 +1466,7 @@ msgstr "Bæta við svari..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "Það má ekki vanta og ætti ekki að vera meira en 2048 stafir."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2151,7 +2151,7 @@ msgid ""
 msgstr "Eftir að hafa búið til hóp, þá geturðu bætt við félögum og deilt söfnum með hópnum"
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "Þar sem að þú ert gestanotandi núna, þá getur þú ekki búið til hópa."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2506,7 +2506,7 @@ msgid "contact is required"
 msgstr "tengiliður er áskilinn"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "Þú getur ekki sent skilaboð til sjálfs þíns."
 
 #: seahub/message/views.py:216
@@ -2789,7 +2789,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Hefur ekki enn tekið boðinu"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "Prufureikningi er ekki hægt að eyða."
 
 #: seahub/profile/views.py:193
@@ -3002,7 +3002,7 @@ msgid ""
 msgstr "Tókst að deila með %(group)s, þú getur skoðað það undir <a href=\"%(share)s\">Stjórnun Deilinga</a>."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "Þú getur ekki deilt safni með sjálfum þér."
 
 #: seahub/share/views.py:146
@@ -3945,7 +3945,7 @@ msgstr "Seafile flokkar skrár í söfn.  Hverju safni fyrir sig er hægt að de
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "Seafile flokkar skrár í söfn.  Hverju safni er samstillt og deilt óháð öðrum söfnum. Hinsvegar, þar sem að þú ert gestanotandi núna, þá getur þú ekki búið til söfn."
 
@@ -5659,19 +5659,19 @@ msgid "None."
 msgstr "Ekkert."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr "Nafn má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr "Hlekk má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr "Eiganda má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr "Lykilorð má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5789,7 +5789,7 @@ msgid ""
 msgstr "Breyting tókst, en ekki tókst að senda tölvupóst, vinsamlegast athugið tölvupóststillingarnar þínar."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr "Kvóta má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6256,7 +6256,7 @@ msgid "Wrong repo id"
 msgstr "Rangt auðkenni safns"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "Ekki er hægt að eyða kerfissafni."
 
 #: seahub/views/ajax.py:1593
@@ -6294,7 +6294,7 @@ msgstr "Óþekkt skráargerð"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "Skráarstærð yfir %s, ekki hægt að opna í vafra."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6421,7 +6421,7 @@ msgstr "Tókst að endurstilla lykilorðið í %(passwd)s fyrir notandann %(user
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Tókst að endurstilla lykilorðið í %(passwd)s fyrir notandann %(user)s. En tölvupóst er ekki hægt að senda því tölvupóststillingar eru ekki rétt stilltar."
 
@@ -6454,7 +6454,7 @@ msgstr "Tókst að bæta við notandanum %s."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "Tókst að bæta við notandanum %s.  En ekki var hægt að senda tilkynningu um það í tölvupósti, því póstþjónustan er ekki rétt upp sett."
 
@@ -6489,7 +6489,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Flutningurinn tókst ekki, eitthvað vitlaust slegið inn"
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "Nota LDAP núna, get ekki bætt við kerfisstjóra."
 
 #: seahub/views/sysadmin.py:1110

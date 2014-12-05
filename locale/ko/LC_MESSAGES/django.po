@@ -744,7 +744,7 @@ msgid "note"
 msgstr "참고"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "이 라이브러리의 파일은 온라인에서 볼 수 없습니다."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1462,7 +1462,7 @@ msgstr "답글 추가..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "비워둘 수 없으며 문자 갯수가 2048개를 넘어서면 안됩니다."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2147,7 +2147,7 @@ msgid ""
 msgstr "그룹을 만들고 나면 구성원을 추가할 수 있고 라이브러리를 공유할 수 있습니다."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "현재 손님 사용자이기 때문에 그룹을 만들 수 없습니다."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2502,7 +2502,7 @@ msgid "contact is required"
 msgstr "연락처가 필요합니다"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "자신에게 메시지를 보낼 수 없습니다"
 
 #: seahub/message/views.py:216
@@ -2784,7 +2784,7 @@ msgid "Has not accepted invitation yet"
 msgstr "아직 초대를 수락하지 않았습니다"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "데모 계정은 삭제할 수 없습니다."
 
 #: seahub/profile/views.py:193
@@ -2997,7 +2997,7 @@ msgid ""
 msgstr "%(group)s 그룹에 성공적으로 공유했습니다. <a href=\"%(share)s\">공유</a> 항목에서 확인하세요."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "자신에게 라이브러리를 공유할 수 없습니다."
 
 #: seahub/share/views.py:146
@@ -3940,7 +3940,7 @@ msgstr "Seafile은 파일을 라이브러리에 정리해줍니다. 각각의 �
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "Seafile은 파일을 라이브러리에 정리해줍니다. 각각의 라이브러리는 따로 동기화하고 공유됩니다. 방문객이기 때문에 라이브러리를 만들 수 없습니다."
 
@@ -5653,19 +5653,19 @@ msgid "None."
 msgstr "없음."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr "이름은 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr "URL은 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr "소유자는 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr "암호는 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5783,7 +5783,7 @@ msgid ""
 msgstr "성공적으로 편집했지만 전자메일 보내기에 실패했습니다. 전자메일 설정을 확인해주세요."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr "제한 용량은 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6250,7 +6250,7 @@ msgid "Wrong repo id"
 msgstr "잘못된 저장소 ID 입니다"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "시스템 라이브러리는 삭제할 수 없습니다."
 
 #: seahub/views/ajax.py:1593
@@ -6288,7 +6288,7 @@ msgstr "알 수 없는 파일 인코딩"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "파일 크기가 %s을(를) 넘어, 온라인에서 열 수 없습니다."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6415,7 +6415,7 @@ msgstr "%(user)s님의 암호를 %(passwd)s(으)로 성공적으로 바꾸었습
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "%(user)s님의 암호를 %(passwd)s(으)로 성공적으로 바꾸었습니다. 그러나 전자 메일 서비스를 제대로 설정하지 않아 전자메일 알림을 보낼 수 없었습니다."
 
@@ -6448,7 +6448,7 @@ msgstr "%s 사용자를 성공적으로 추가했습니다."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "%s 사용자를 성공적으로 추가했습니다만, 전자메일 서비스를 올바르게 설정하지 않아 전자메일 알림을 보낼 수 없었습니다."
 
@@ -6483,7 +6483,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "보내기에 실패했습니다. 잘못된 인자입니다."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "LDAP를 지금 사용중이어서 관리자를 추가할 수 없습니다."
 
 #: seahub/views/sysadmin.py:1110

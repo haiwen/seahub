@@ -748,7 +748,7 @@ msgid "note"
 msgstr "nota"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Los archivos de esta biblioteca no se pueden ver en línea."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1471,7 +1471,7 @@ msgstr "Agregar respuesta..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "No puede estar en blanco ni ser mayor a 2048 caracteres."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2156,7 +2156,7 @@ msgid ""
 msgstr "Después de crear un grupo, puedes agregar miembros y compartir bibliotecas en él."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "No puedes crear grupos ya que eres un invitado."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2511,7 +2511,7 @@ msgid "contact is required"
 msgstr "se requiere contacto"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "No puedes enviarte un mensaje a ti mismo."
 
 #: seahub/message/views.py:216
@@ -2794,7 +2794,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Aún no ha aceptado la invitación"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "La cuenta demo no puede ser eliminada."
 
 #: seahub/profile/views.py:193
@@ -3007,7 +3007,7 @@ msgid ""
 msgstr "Compartido con %(group)s exitosamente, verifícalo en <a href=\"%(share)s\">Compartidos</a>."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "No puedes compartir bibliotecas contigo mismo."
 
 #: seahub/share/views.py:146
@@ -3950,7 +3950,7 @@ msgstr "Seafile organiza los archivos en bibliotecas. Cada biblioteca se puede s
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "Seafile organiza los archivos en bibliotecas. Cada biblioteca se puede sincronizar y compartir por separado. Sin embargo, ya que eres un invitado, no puedes crear bibliotecas."
 
@@ -5664,19 +5664,19 @@ msgid "None."
 msgstr "Ninguno/a."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr "El nombre no puede estar en blanco"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr "La url no puede estar en blanco"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr "El propietario no puede estar en blanco"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr "La contraseña no puede estar en blanco"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5794,7 +5794,7 @@ msgid ""
 msgstr "Edición exitosa, pero hubo un fallo al enviar el correo, revisa la configuración de email."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr "La cuota no puede estar vacía"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6261,7 +6261,7 @@ msgid "Wrong repo id"
 msgstr "repo id incorrecto"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "La bibilioteca del sistema no puede ser eliminada."
 
 #: seahub/views/ajax.py:1593
@@ -6299,7 +6299,7 @@ msgstr "Codificación de archivo desconocida"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "El tamaño del archivo sobrepasa %s, no se puede abrir en línea."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6426,7 +6426,7 @@ msgstr "Contraseña de %(user)s restablecida a %(passwd)s con éxito."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Contraseña de %(user)s restablecida a %(passwd)s. Pero el correo de notificación no pudo ser enviado, porque el servicio de correo no está configurado correctamente."
 
@@ -6459,7 +6459,7 @@ msgstr "El usuario %s fue agregado con éxito."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "El usuario %s fue agregado con éxito. Pero el correo de aviso no pudo ser enviado, el servicio de correo no esta configurado."
 
@@ -6494,7 +6494,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Fallo al transferir, argumentos inválidos."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "Utilizando LDAP ahora, no se puede agregar admin."
 
 #: seahub/views/sysadmin.py:1110

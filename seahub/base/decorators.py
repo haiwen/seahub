@@ -65,7 +65,7 @@ def repo_passwd_set_required(func):
                         }, context_instance=RequestContext(request))
 
             if repo.enc_version == 2 and not server_crypto:
-                return render_error(request, _(u'Files in this library can not be viewed online.'))
+                return render_error(request, _(u'Files in this library cannot be viewed online.'))
 
         return func(request, *args, **kwargs)
     return _decorated

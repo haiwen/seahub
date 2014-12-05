@@ -642,7 +642,7 @@ msgid "note"
 msgstr "aantekening"
 
 #: seahub/base/decorators.py:85
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "Bestanden in deze bibliotheek kunnen niet online bekeken worden"
 
 #: seahub/base/templatetags/seahub_tags.py:87
@@ -1325,7 +1325,7 @@ msgstr "Reageer..."
 #: seahub/group/templates/group/group_discuss.html:97
 #: seahub/group/templates/group/group_discuss.html:154
 #: seahub/group/templates/group/new_msg_reply.html:64
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "Mag niet leeg zijn en mag niet meer dan 2048 tekens bevatten."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2246,7 +2246,7 @@ msgid "contact is required"
 msgstr "contact is verplicht"
 
 #: seahub/message/views.py:159
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "je kan geen bericht naar jezelf sturen"
 
 #: seahub/message/views.py:163
@@ -2465,7 +2465,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Heeft uitnodiging nog niet aanvaard"
 
 #: seahub/profile/views.py:166
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "Demo account kan niet verwijderd worden."
 
 #: seahub/profile/views.py:187
@@ -2667,7 +2667,7 @@ msgid ""
 msgstr "Delen met %(group)s gelukt, bekijk op <a href=\"%(share)s\">Gedeelde folders</a>"
 
 #: seahub/share/views.py:97
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "Je kan geen bibliotheek met jezelf delen."
 
 #: seahub/share/views.py:106
@@ -5512,7 +5512,7 @@ msgstr "Onbekende bestandscodering"
 #: seahub/views/file.py:263 seahub/views/file.py:270 seahub/views/file.py:491
 #: seahub/views/file.py:496
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "Bestandsgrootte overschrijdt %s, kan online niet geopend worden."
 
 #: seahub/views/file.py:309 seahub/views/file.py:529 seahub/views/file.py:544
@@ -5616,7 +5616,7 @@ msgstr "Succesvolle reset wachtwoord naar %(passwd)s voor gebruiker %(user)s."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "Succesvolle reset wachtwoord naar %(passwd)s voor gebruiker %(user)s. Maar email notificatie kan niet verzonden worden, omdat Emaildienst niet correct geconfigureerd is."
 
@@ -5648,7 +5648,7 @@ msgstr "Gebruiker %s succesvol toegevoegd."
 #: seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "Gebruiker %s succesvol toegevoegd. Maar email bericht kan niet verstuurd worden, omdat Emaildienst iet correct geconfigureerd werd."
 

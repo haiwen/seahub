@@ -743,7 +743,7 @@ msgid "note"
 msgstr "备注"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library can not be viewed online."
+msgid "Files in this library cannot be viewed online."
 msgstr "该资料库中的文件无法在线查看。"
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1461,7 +1461,7 @@ msgstr "添加回复..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It can not be blank and should be no more than 2048 characters."
+msgid "It cannot be blank and should be no more than 2048 characters."
 msgstr "输入不能为空且应少于2048个字符。"
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2146,7 +2146,7 @@ msgid ""
 msgstr "群组创建后，就可以添加成员，共享资料。"
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you can not create groups."
+msgid "Since you are a guest user now, you cannot create groups."
 msgstr "你现在为“访客”用户，无法创建群组。"
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2501,7 +2501,7 @@ msgid "contact is required"
 msgstr "联系人是必填项"
 
 #: seahub/message/views.py:212
-msgid "You can not send message to yourself."
+msgid "You cannot send message to yourself."
 msgstr "你不能发消息给自己。"
 
 #: seahub/message/views.py:216
@@ -2783,7 +2783,7 @@ msgid "Has not accepted invitation yet"
 msgstr "还未接受邀请"
 
 #: seahub/profile/views.py:167
-msgid "Demo account can not be deleted."
+msgid "Demo account cannot be deleted."
 msgstr "Demo帐号无法被删除。"
 
 #: seahub/profile/views.py:193
@@ -2996,7 +2996,7 @@ msgid ""
 msgstr "成功共享给 %(group)s，请到 <a href=\"%(share)s\">Shares</a> 查看。"
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You cannot share libray to yourself."
 msgstr "你无法共享资料库给你自己。"
 
 #: seahub/share/views.py:146
@@ -3939,7 +3939,7 @@ msgstr "Seafile把文件组织到资料库里。每个资料库可以被单独�
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you can not "
+"shared separately. Howerver, since you are a guest user now, you cannot "
 "create libraries."
 msgstr "Seafile 通过资料库来管理文件，每个资料库可以单独加密与共享，但并不对“访客”用户提供此功能。"
 
@@ -5652,19 +5652,19 @@ msgid "None."
 msgstr "无"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name can not be blank"
+msgid "Name cannot be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url can not be blank"
+msgid "Url cannot be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner can not be blank"
+msgid "Owner cannot be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password can not be blank"
+msgid "Password cannot be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5782,7 +5782,7 @@ msgid ""
 msgstr "编辑成功, 但发送邮件失败，请检查你的邮件配置。"
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota can not be empty"
+msgid "Quota cannot be empty"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6249,7 +6249,7 @@ msgid "Wrong repo id"
 msgstr "错误的repo id"
 
 #: seahub/views/ajax.py:1309
-msgid "System library can not be deleted."
+msgid "System library cannot be deleted."
 msgstr "系统资料库无法被删除。"
 
 #: seahub/views/ajax.py:1593
@@ -6287,7 +6287,7 @@ msgstr "文件编码无法识别"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s, can not be opened online."
+msgid "File size surpasses %s, cannot be opened online."
 msgstr "文件大小超过 %s，无法在线查看。"
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6414,7 +6414,7 @@ msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s。"
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification can not be sent, because Email service is not properly "
+"notification cannot be sent, because Email service is not properly "
 "configured."
 msgstr "成功将用户 %(user)s 的密码重置为 %(passwd)s, 但是由于邮箱服务未正确配置，通知邮件无法发送。"
 
@@ -6447,7 +6447,7 @@ msgstr "成功添加用户 %s。"
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification can not be sent, because "
+"Successfully added user %s. But email notification cannot be sent, because "
 "Email service is not properly configured."
 msgstr "成功添加用户 %s。 但由于邮件服务未正确配置，通知邮件无法发送。"
 
@@ -6482,7 +6482,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "转让失败， 参数无效"
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now, can not add admin."
+msgid "Using LDAP now, cannot add admin."
 msgstr "当前使用 LDAP，无法添加管理员。"
 
 #: seahub/views/sysadmin.py:1110
