@@ -3002,7 +3002,7 @@ msgid ""
 msgstr "Tókst að deila með %(group)s, þú getur skoðað það undir <a href=\"%(share)s\">Stjórnun Deilinga</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Þú getur ekki deilt safni með sjálfum þér."
 
 #: seahub/share/views.py:146

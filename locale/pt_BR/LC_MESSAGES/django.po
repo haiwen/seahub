@@ -3008,7 +3008,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Você não pode compartilhar uma biblioteca com você mesmo."
 
 #: seahub/share/views.py:146

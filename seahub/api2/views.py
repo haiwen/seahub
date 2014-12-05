@@ -3063,7 +3063,7 @@ def html_get_group_discussion(request, msg_id):
             if repo:
                 att.name = repo.name
             else:
-                att.err = 'the libray does not exist'
+                att.err = 'the library does not exist'
         else:
             path = path.rstrip('/') # cut out last '/' if possible
             att.name = os.path.basename(path)

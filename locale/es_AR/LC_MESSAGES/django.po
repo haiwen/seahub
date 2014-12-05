@@ -3004,7 +3004,7 @@ msgid ""
 msgstr "Compartido con %(group)s exitosamente, verifícalo en <a href=\"%(share)s\">Compartidos</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "No puedes compartir bibliotecas contigo mismo."
 
 #: seahub/share/views.py:146

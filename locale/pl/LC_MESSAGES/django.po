@@ -3011,7 +3011,7 @@ msgid ""
 msgstr "Pomyślnie udostępniono grupie %(group)s, sprawdź <a href=\"%(share)s\">udziały</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Nie możesz udostępniać bibliotek sobie."
 
 #: seahub/share/views.py:146

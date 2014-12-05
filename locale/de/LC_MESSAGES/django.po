@@ -3035,7 +3035,7 @@ msgid ""
 msgstr "Erfolgreich an %(group)s freigegeben. Siehe <a href=\"%(share)s\">Freigaben</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Sie können die Bibliothek nicht an sich selbst freigeben."
 
 #: seahub/share/views.py:146

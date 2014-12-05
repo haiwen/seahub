@@ -135,7 +135,7 @@ def share_to_user(request, repo, to_user, permission):
     from_user = request.user.username
 
     if from_user == to_user:
-        msg = _(u'You cannot share libray to yourself.')
+        msg = _(u'You cannot share library to yourself.')
         messages.error(request, msg)
         return
 

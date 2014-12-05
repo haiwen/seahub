@@ -3011,7 +3011,7 @@ msgid ""
 msgstr "Успішно надано спільний доступ до %(group)s, для перевірки перейдіть до <a href=\"%(share)s\">Спільний доступ</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Ви не можете відкрити спільний доступ самому собі"
 
 #: seahub/share/views.py:146

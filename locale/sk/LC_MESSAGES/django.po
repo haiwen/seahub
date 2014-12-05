@@ -2672,7 +2672,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:97
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr ""
 
 #: seahub/share/views.py:106

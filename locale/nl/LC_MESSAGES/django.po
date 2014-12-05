@@ -2667,7 +2667,7 @@ msgid ""
 msgstr "Delen met %(group)s gelukt, bekijk op <a href=\"%(share)s\">Gedeelde folders</a>"
 
 #: seahub/share/views.py:97
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "Je kan geen bibliotheek met jezelf delen."
 
 #: seahub/share/views.py:106

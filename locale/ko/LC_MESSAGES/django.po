@@ -2997,7 +2997,7 @@ msgid ""
 msgstr "%(group)s 그룹에 성공적으로 공유했습니다. <a href=\"%(share)s\">공유</a> 항목에서 확인하세요."
 
 #: seahub/share/views.py:138
-msgid "You cannot share libray to yourself."
+msgid "You cannot share library to yourself."
 msgstr "자신에게 라이브러리를 공유할 수 없습니다."
 
 #: seahub/share/views.py:146
