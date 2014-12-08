@@ -6,7 +6,6 @@ from StringIO import StringIO
 from PIL import Image
 
 from django.utils.translation import ugettext as _
-from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404
 
 from seaserv import get_file_id_by_path, get_repo

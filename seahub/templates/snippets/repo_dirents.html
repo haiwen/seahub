@@ -57,7 +57,7 @@
         </td>
         {% if not repo.encrypted and ENABLE_THUMBNAIL and dirent.is_img %}
             {% if dirent.thumbnail_src %}
-                <td class="dirent-icon"><img src="{{ dirent.thumbnail_src }}" alt="{% trans "File"%}" /></td>
+                <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}" alt="{% trans "File"%}" /></td>
             {% else %}
                 <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
             {% endif %}

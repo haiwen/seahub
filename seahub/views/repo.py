@@ -32,7 +32,8 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
-    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
+
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
 
@@ -284,6 +285,7 @@ def render_repo(request, repo):
             'sub_lib_enabled': sub_lib_enabled,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
    
 @login_required    
