@@ -1807,8 +1807,7 @@ $(function() {
                 this_img.attr("src", data.thumbnail_src).load(function() {
                     $(this).removeClass("not-thumbnail").addClass("thumbnail");
                 });
-            },
-            error: ajaxErrorHandler
+            }
         });
     });
 });
@@ -2282,7 +2281,7 @@ var timer,
 
 $("#repo-file-list").on({
     mouseenter: function() {
-        var thumbnail = $(this),
+        var thumbnail = $('.thumbnail', $(this)),
             file_item = thumbnail.closest('.file-item');
 
         timer = setTimeout(function () {
@@ -2306,8 +2305,9 @@ $("#repo-file-list").on({
                     wrap_left = file_item_offset.left - wrap_width - caret_width;
 
                 if (wrap_left >= 0) {
-                    caret.removeClass("bottom-outer-caret").addClass("right-outer-caret");
-                    caret.css({'top':caret_pos_x + 'px', 'left':caret_pos_y + 'px'});
+                    caret.removeClass('bottom-outer-caret')
+                        .addClass('right-outer-caret')
+                        .css({'top':caret_pos_x + 'px', 'left':caret_pos_y + 'px'});
 
                     preview_wrap.css({
                         'top'  : (thumbnail_offset.top + (thumbnail.height() - wrap_width)/2) + 'px',
@@ -2326,13 +2326,14 @@ $("#repo-file-list").on({
             },
             error: ajaxErrorHandler
             });
-        }, 500);
+        }, 200);
     },
     mouseleave: function() {
         clearTimeout(timer);
         preview_wrap.hide();
+        image_preview.attr('src', ''); // for ff. In ff, when hover, the last preview image would be shown first, then the right one.
     }
-}, ".thumbnail");
+}, ".dirent-icon:has('.thumbnail')");
 {% endif %}
 
 {% include "snippets/shared_link_js.html" %}

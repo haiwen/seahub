@@ -63,7 +63,7 @@ def thumbnail_create(request, repo_id):
             image.save(thumbnail_file, THUMBNAIL_EXTENSION)
         except IOError, e:
             logger.error(e)
-            return HttpResponse(json.dumps({'success': False}), content_type=content_type)
+            return HttpResponse(json.dumps({'success': False}), status=500, content_type=content_type)
 
     result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
     return HttpResponse(json.dumps(result), content_type=content_type)
