@@ -75,10 +75,10 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     $("#file-share-tabs").tabs();
 
     // share link
-    if (op.data('link')) {
+    if (op.attr('data-link')) {
         $('#gen-link-btn, #link-options').addClass('hide');
         $('#share-link-body').removeClass('hide');
-        var link = op.data('link');
+        var link = op.attr('data-link');
         $('#shared-link-text, #link-send-form input[name="file_shared_link"]').val(link);
         $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
         $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
@@ -95,10 +95,10 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     {% if user_perm == 'rw' %}
     // share upload link
     $('#upload-link-share-tab .a').click(function() {
-        if (op.data('upload-link')) {
+        if (op.attr('data-upload-link')) {
             $('#gen-upload-link-btn, #upload-link-options').addClass('hide');
             $('#share-upload-link-body').removeClass('hide');
-            var link = op.data('upload-link');
+            var link = op.attr('data-upload-link');
             $('#shared-upload-link-text, #upload-link-send-form input[name="shared_upload_link"]').val(link);
             $('#main').append('<p id="linkwidth" class="hide">' + link + '</p>');
             $('#shared-upload-link-text').css({'width':$('#linkwidth').width() + 25});
@@ -295,22 +295,16 @@ $('#gen-link-btn').click(function() {
                 $('#shared-link-text').css({'width':$('#linkwidth').width() + 25});
                 $('#linkwidth').remove();
                 $('#share-link-body').removeClass('hide');
-                obj.data('link', link).data('token', data['token']);
+                obj.attr({'data-link': link, 'data-token':data['token']});
             },
-            error: function(xhr, textStatus, errorThrown) {
-                if (xhr.responseText) {
-                    feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-                } else {
-                    feedback("{% trans "Failed. Please check the network." %}", 'error');
-                }   
-            }
+            error:ajaxErrorHandler
     });
     return false;
 });
 
 $('#rm-shared-link').click(function() {
     var obj = $(this).data('obj'),
-        token = obj.data('token');
+        token = obj.attr('data-token');
 
     $.ajax({
         url: '{% url 'ajax_remove_shared_link' %}?t=' + token,
@@ -319,7 +313,7 @@ $('#rm-shared-link').click(function() {
         success: function(data) {
             $('#share-link-body').addClass('hide');
             $('#link-options, #gen-link-btn').removeClass('hide');
-            obj.data('link', '').data('token', '');
+            obj.attr({'data-link':'', 'data-token':''});
         },
         error: ajaxErrorHandler
     });
@@ -452,7 +446,7 @@ $('#gen-upload-link-btn').click(function() {
             $('#shared-upload-link-text').css({'width':$('#linkwidth').width() + 25});
             $('#linkwidth').remove();
             $('#share-upload-link-body').removeClass('hide');
-            obj.data('upload-link', upload_link).data('upload-token', data['token']);
+            obj.attr({'data-upload-link': upload_link, 'data-upload-token': data['token']});
         },
         error: function(xhr, textStatus, errorThrown) {
             location.reload(true);
@@ -463,7 +457,7 @@ $('#gen-upload-link-btn').click(function() {
 
 $('#rm-shared-upload-link').click(function() {
     var obj = $(this).data('obj'),
-        token = obj.data('upload-token');
+        token = obj.attr('data-upload-token');
 
     $.ajax({
         url: '{% url 'ajax_remove_shared_upload_link' %}?t=' + token,
@@ -472,15 +466,9 @@ $('#rm-shared-upload-link').click(function() {
         success: function(data) {
             $('#share-upload-link-body').addClass('hide');
             $('#upload-link-options, #gen-upload-link-btn').removeClass('hide');
-            obj.data('upload-link', '').data('upload-token', '');
+            obj.attr({'data-upload-link': '', 'data-upload-token':''});
         },
-        error: function(xhr, textStatus, errorThrown) {
-            if (xhr.responseText) {
-                feedback(jQuery.parseJSON(xhr.responseText).error, 'error');
-            } else {
-                feedback("{% trans "Failed. Please check the network." %}", 'error');
-            }
-        }
+        error:ajaxErrorHandler
     });
 });
 
