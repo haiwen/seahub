@@ -1362,7 +1362,7 @@ class FileView(APIView):
                 return reloaddir(request, dst_repo, dst_dir)
             else:
                 resp = Response('success', status=status.HTTP_301_MOVED_PERMANENTLY)
-                uri = reverse('FileView', args=[repo_id], request=request)
+                uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
         elif operation.lower() == 'create':
