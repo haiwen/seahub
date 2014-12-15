@@ -1475,7 +1475,7 @@ def demo(request):
     """
     Login as demo account.
     """
-    user = User.objects.get(email='demo@seafile.com')
+    user = User.objects.get(email=settings.CLOUD_DEMO_USER)
     for backend in get_backends():
         user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
 
