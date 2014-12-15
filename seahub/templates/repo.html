@@ -425,7 +425,7 @@ $(function() {
         popup.fileupload(
             'option',
             'redirect',
-            window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+            window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
         );
     });
 });
@@ -1730,7 +1730,7 @@ $('.file-update', context).click(function() {
             form.fileupload(
                 'option',
                 'redirect',
-                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
             );
         },
         error: ajaxErrorHandler
