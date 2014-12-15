@@ -2043,14 +2043,8 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0;
 }   
 .table .name {
-    width:60%;
     padding-left:10px;
-}   
-.table .size {
-    width:14%;
-}
-.template-upload .start {
-    text-align:right;
+    margin:0;
 }
 .fixed-upload-file-dialog .fileupload-buttonbar .cancel,
 .template-upload .btn {
@@ -2060,10 +2054,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .fixed-upload-file-dialog .fileupload-buttonbar .cancel {
     color:#909090;
-}
-.template-upload .start,
-.template-upload .cancel {
-    width:13%;
 }
 .ui-progressbar,
 .progress {

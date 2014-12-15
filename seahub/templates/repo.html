@@ -70,7 +70,7 @@
             </form>
 
             {% else %}
-            <h3 class="hd"><span class="status"></span> <span class="total-progress hide"></span></h3>
+            <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
             <div class="ops">
                 <img src="{{MEDIA_URL}}img/minus.png" alt="" class="fold-switch cspt" />
                 <img src="{{MEDIA_URL}}img/close.png" alt="close" title="{% trans "close" %}" class="close cspt hide" />
@@ -280,12 +280,15 @@ $(function() {
         var fu_status = $('.status', popup),
             total_progress = $('.total-progress', popup),
             cancel_all_btn = $('.fileupload-buttonbar .cancel', popup),
-            close_icon = $('.close', popup);
+            close_icon = $('.close', popup),
+            saving_tip = $('.saving-tip', popup);
 
-            fu_status.data({
-                'complete_status':"{% trans "File Upload complete" %}",
-                'cancel_status':"{% trans "File Upload canceled" %}"
-                });
+        var fu_status_ = {
+            'uploading': "{% trans "File Uploading..." %}",
+            'complete': "{% trans "File Upload complete" %}",
+            'canceled': "{% trans "File Upload canceled" %}",
+            'failed': "{% trans "File Upload failed" %}"
+        };
 
         var update_dir_names = []; // dirs with 'time' to be updated
         var new_dir_names = [];
@@ -293,12 +296,17 @@ $(function() {
             formData: {'parent_dir': cur_path},
             fileInput: $('#upload-file input'),
             paramName: 'file',
+            // customize it for 'done'
+            getFilesFromResponse: function (data) {
+                if (data.result) {
+                    return data.result;
+                }
+            },
             autoUpload:true,
             sequentialUploads: true
         })
         .bind('fileuploadadd', function(e, data) {
             popup.removeClass('hide');
-            fu_status.html("{% trans "File Uploading..." %}");
             cancel_all_btn.removeClass('hide');
             close_icon.addClass('hide');
 
@@ -307,6 +315,15 @@ $(function() {
             if (file.name == '.') {
                 data.files.shift();
             }
+            if (file.webkitRelativePath) { // for 'upload folder'
+                file.relative_path = file.webkitRelativePath;
+            }
+            if (file.relativePath) { // for 'folder drag & drop'
+                file.relative_path = file.relativePath + file.name;
+            }
+        })
+        .bind('fileuploadstart', function() {
+            fu_status.html(fu_status_.uploading);
         })
         .bind('fileuploadsubmit', function(e, data) {
             var _this = $(this);
@@ -318,7 +335,7 @@ $(function() {
                     cache: false,
                     dataType: 'json',
                     success: function(ret) {
-                        var file_path = file.webkitRelativePath, // can be undefined, '', or a valid path
+                        var file_path = file.relative_path,
                             r_path;
                         if (file_path) { // 'add folder'
                             r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
@@ -338,42 +355,52 @@ $(function() {
             }
         })
         .bind('fileuploadprogressall', function (e, data) {
-            total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' + '<span style="font-size:14px;color:#555;">(' + $(this).data('fileupload')._formatBitrate(data.bitrate) + ')</span>').removeClass('hide');
+            total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' + '<span style="font-size:14px;color:#555;">(' + $(this).data('blueimp-fileupload')._formatBitrate(data.bitrate) + ')</span>').removeClass('hide');
+            if (data.loaded > 0 && data.loaded == data.total) {
+                saving_tip.show();
+            }
         })
         .bind('fileuploaddone', function(e, data) {
-            if (data.textStatus == 'success') {
-                if (data.formData.parent_dir != cur_path) {
-                    return;
-                }
-                var file = data.files[0];
-                var file_path = file.webkitRelativePath;
+            if (data.textStatus != 'success') {
+                return;
+            }
+            var file = data.files[0];
+            var file_path = file.relative_path;
+            var file_uploaded = data.result[0]; // 'id', 'name', 'size'
 
-                if (!file_path) {
-                    addFile(data.result[0]);
-                    return;
-                }
+            // for 'template_download' render
+            file_uploaded.uploaded = true;
+            file_uploaded.relative_path = file_path;
 
-                // for 'add folder'
-                var cur_dirs = $('.dir-item');
-                var cur_dir_names = [];
-                cur_dirs.each(function() {
-                    cur_dir_names.push($(this).attr('data-name'));
-                });
+            if (data.formData.parent_dir != cur_path) {
+                return;
+            }
+            if (!file_path) {
+                addFile(file_uploaded);
+                return;
+            }
 
-                var new_dir_name = file_path.substring(0, file_path.indexOf('/'));
-                if (cur_dir_names.indexOf(new_dir_name) == -1) {
-                    if (new_dir_names.indexOf(new_dir_name) == -1) {
-                        new_dir_names.push(new_dir_name);
-                    }
-                } else {
-                    if (update_dir_names.indexOf(new_dir_name) == -1) {
-                        update_dir_names.push(new_dir_name);
-                    }
+            // for 'add folder'
+            var cur_dirs = $('.dir-item');
+            var cur_dir_names = [];
+            cur_dirs.each(function() {
+                cur_dir_names.push($(this).attr('data-name'));
+            });
+
+            var new_dir_name = file_path.substring(0, file_path.indexOf('/'));
+            if (cur_dir_names.indexOf(new_dir_name) == -1) {
+                if (new_dir_names.indexOf(new_dir_name) == -1) {
+                    new_dir_names.push(new_dir_name);
                 }
-                data.result[0].webkitRelativePath = file_path; // for 'template_download'
+            } else {
+                if (update_dir_names.indexOf(new_dir_name) == -1) {
+                    update_dir_names.push(new_dir_name);
+                }
             }
         })
         .bind('fileuploadstop', function() {
+            cancel_all_btn.addClass('hide');
+            close_icon.removeClass('hide');
             if (popup.fileupload('option','formData').parent_dir != cur_path) {
                 return;
             }
@@ -419,6 +446,26 @@ $(function() {
             // empty the arrays
             new_dir_names = [];
             update_dir_names = [];
+        })
+        // after tpl has rendered
+        .bind('fileuploadcompleted', function() { // 'done'
+            if ($('.files .cancel', popup).length == 0) {
+                saving_tip.hide();
+                total_progress.addClass('hide');
+                fu_status.html(fu_status_.complete);
+            }
+        })
+        .bind('fileuploadfailed', function(e, data) { // 'fail'
+            if ($('.files .cancel', popup).length == 0) {
+                cancel_all_btn.addClass('hide');
+                close_icon.removeClass('hide');
+                total_progress.addClass('hide');
+                if (data.errorThrown == 'abort') { // 'cancel'
+                    fu_status.html(fu_status_.canceled);
+                } else { // 'error'
+                    fu_status.html(fu_status_.failed);
+                }
+            }
         });
 
         // Enable iframe cross-domain access via redirect option:
