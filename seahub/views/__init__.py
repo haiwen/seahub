@@ -163,32 +163,39 @@ def get_file_download_link(repo_id, obj_id, path):
         urlquote(path)
 
 def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
+    """List repo dirents based on commit id and path. Use ``offset`` and
+    ``limit`` to do paginating.
+
+    Returns: A tupple of (file_list, dir_list, dirent_more)
+
+    TODO: Some unrelated parts(file sharing, stars, modified info, etc) need
+    to be pulled out to multiple functions.
+    """
+
     dir_list = []
     file_list = []
     dirent_more = False
     if commit.root_id == EMPTY_SHA1:
-        return ([], []) if limit == -1 else ([], [], False)
+        return ([], [], False) if limit == -1 else ([], [], False)
     else:
         try:
-            if limit == -1:
-                dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path, offset, limit)
-            else:
-                dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id, commit.id, path, offset, limit + 1)
-                if len(dirs) == limit + 1:
-                    dirs = dirs[:limit]
-                    dirent_more = True
-        except SearpcError, e:
-            raise Http404
-            # return render_error(self.request, e.msg)
+            dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id,
+                                                           commit.id, path,
+                                                           offset, limit)
+        except SearpcError as e:
+            logger.error(e)
+            return ([], [], False)
 
-        org_id = -1
-        starred_files = get_dir_starred_files(request.user.username, repo.id, path, org_id)
+        if limit != -1 and limit == len(dirs):
+            dirent_more = True
 
+        username = request.user.username
+        starred_files = get_dir_starred_files(username, repo.id, path)
         if repo.version == 0:
             last_modified_info = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(repo.id, path)
 
-        fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
-        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=request.user.username)
+        fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=username)
+        uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
         view_dir_base = reverse('repo', args=[repo.id])
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
@@ -239,14 +246,8 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                         dirent.sharelink = gen_file_share_link(share.token)
                         dirent.sharetoken = share.token
                         break
-        dir_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                        y.obj_name.lower()))
-        file_list.sort(lambda x, y : cmp(x.obj_name.lower(),
-                                         y.obj_name.lower()))
-        if limit == -1:
-            return (file_list, dir_list)
-        else:
-            return (file_list, dir_list, dirent_more)
+
+        return (file_list, dir_list, dirent_more)
 
 def get_unencry_rw_repos_by_user(request):
     """Get all unencrypted repos the user can read and write.
@@ -342,7 +343,8 @@ def render_recycle_dir(request, repo_id, commit_id):
         raise Http404
 
     zipped = gen_path_link(path, '')
-    file_list, dir_list = get_repo_dirents(request, repo, commit, basedir + path)
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, commit,
+                                                        basedir + path)
 
     days = show_delete_days(request)
 
@@ -406,7 +408,8 @@ def repo_online_gc(request, repo_id):
     day = int(request.POST.get('day'))
     try:
         seafile_api.clean_up_repo_history(repo.id, day)
-    except SearpcError, e:
+    except SearpcError as e:
+        logger.error(e)
         messages.error(request, _('Internal server error'))
         return HttpResponseRedirect(next)
 
@@ -910,8 +913,8 @@ def fpath_to_link(repo_id, path, is_dir=False):
     return '<a href="%s">%s</a>' % (href, path)
 
 def get_diff(repo_id, arg1, arg2):
-    lists = {'new' : [], 'removed' : [], 'renamed' : [], 'modified' : [], \
-                 'newdir' : [], 'deldir' : []}
+    lists = {'new': [], 'removed': [], 'renamed': [], 'modified': [],
+             'newdir': [], 'deldir': []}
 
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, arg1, arg2)
     if not diff_result:
@@ -1245,7 +1248,7 @@ def repo_access_file(request, repo_id, obj_id):
         # send stats message
         try:
             file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version, obj_id)
-            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' % \
+            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
                          (repo.id, shared_by, obj_id, file_size))
         except Exception, e:
             logger.error('Error when sending file-download message: %s' % str(e))
@@ -1739,7 +1742,7 @@ def repo_download_dir(request, repo_id):
 
         if from_shared_link:
             try:
-                send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' % \
+                send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
                              (repo_id, shared_by, dir_id, total_size))
             except Exception, e:
                 logger.error('Error when sending dir-download message: %s' % str(e))
@@ -1857,15 +1860,15 @@ def convert_cmmt_desc_link(request):
             # match the diff_result
             continue
 
-        if d.status == 'add' or d.status == 'mod': # Add or modify file
-            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
-                                            '?p=/%s' % urlquote(d.name))
-        elif d.status == 'mov': # Move or Rename file
-            return HttpResponseRedirect(reverse('repo_view_file', args=[repo_id]) + \
-                                            '?p=/%s' % urlquote(d.new_name))
+        if d.status == 'add' or d.status == 'mod':  # Add or modify file
+            return HttpResponseRedirect(
+                reverse('repo_view_file', args=[repo_id]) + '?p=/%s' % urlquote(d.name))
+        elif d.status == 'mov':  # Move or Rename file
+            return HttpResponseRedirect(
+                reverse('repo_view_file', args=[repo_id]) + '?p=/%s' % urlquote(d.new_name))
         elif d.status == 'newdir':
-            return HttpResponseRedirect(reverse('repo', args=[repo_id]) + \
-                                            '?p=/%s' % urlquote(d.name))
+            return HttpResponseRedirect(
+                reverse('repo', args=[repo_id]) + '?p=/%s' % urlquote(d.name))
         else:
             continue
 

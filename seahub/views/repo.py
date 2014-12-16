@@ -87,8 +87,7 @@ def get_shared_groups_by_repo_and_user(repo_id, username):
     repo_shared_groups = seaserv.get_shared_groups_by_repo(repo_id)
 
     # Filter out groups that user is joined.
-    groups = [ x for x in repo_shared_groups if \
-                   seaserv.is_group_user(x.id, username)]
+    groups = [x for x in repo_shared_groups if seaserv.is_group_user(x.id, username)]
     return groups
 
 def is_no_quota(repo_id):
@@ -187,8 +186,7 @@ def render_repo(request, repo):
                 and not is_password_set(repo.id, username):
             return render_to_response('decrypt_repo_form.html', {
                     'repo': repo,
-                    'next': get_next_url_from_request(request) or \
-                        reverse('repo', args=[repo.id]),
+                    'next': get_next_url_from_request(request) or reverse('repo', args=[repo.id]),
                     'force_server_crypto': FORCE_SERVER_CRYPTO,
                     }, context_instance=RequestContext(request))
 
@@ -340,8 +338,7 @@ def repo_history_view(request, repo_id):
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
-                'next': get_next_url_from_request(request) or \
-                    reverse('repo', args=[repo.id]),
+                'next': get_next_url_from_request(request) or reverse('repo', args=[repo.id]),
                 'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
     
@@ -352,7 +349,8 @@ def repo_history_view(request, repo_id):
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
 
-    file_list, dir_list = get_repo_dirents(request, repo, current_commit, path)
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
+                                                        current_commit, path)
     zipped = get_nav_path(path, repo.name)
 
     return render_to_response('repo_history_view.html', {
@@ -408,8 +406,8 @@ def view_shared_dir(request, token):
 
     dir_name = os.path.basename(path[:-1])
     current_commit = seaserv.get_commits(repo_id, 0, 1)[0]
-    file_list, dir_list = get_repo_dirents(request, repo, current_commit,
-                                           path)
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
+                                                        current_commit, path)
     zipped = gen_path_link(path, '')
 
     if path == fileshare.path:  # When user view the shared dir..
