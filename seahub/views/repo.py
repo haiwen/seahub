@@ -484,4 +484,5 @@ def view_shared_upload_link(request, token):
             'no_quota': no_quota,
             'ajax_upload_url': ajax_upload_url,
             'uploadlink': uploadlink,
+            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             }, context_instance=RequestContext(request))

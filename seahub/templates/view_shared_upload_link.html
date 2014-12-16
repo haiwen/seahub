@@ -24,7 +24,6 @@
         <p class="error">{% trans "The owner of this library has run out of space." %}</p>
         {% else %}
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-            <input type="hidden" name="parent_dir" value="{{ path }}" />
             <div class="row fileupload-buttonbar">
                 <div>
                     <span class="fileinput-button vam">
@@ -38,8 +37,13 @@
                     </button>
                 </div>
                 <ol class="tip">
-                    <li>{% trans "Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
+                    <li>{% trans "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
+                    {% if enable_upload_folder %}
+                    <li>{% trans "Folder Drag & Drop is supported for Chrome" %}</li>
+                    {% endif %}
+                    {% if max_upload_file_size %}
                     <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}File size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                    {% endif %}
                 </ol>
                 <div class="fileupload-progress fade">
                     <div class="progress progress-success progres-striped active">
@@ -82,12 +86,38 @@ window.locale = {
 };
 
 var form = $('#upload-file-form');
+var saving_tip = $('.saving-tip', form);
 
 // Initialize the jQuery File Upload widget:
 form.fileupload({
-    //singleFileUploads: false // using 1 request to upload all files of a selection
+    formData: {'parent_dir': {{path}} },
+    // customize it for 'done'
+    getFilesFromResponse: function (data) {
+        if (data.result) {
+            return data.result;
+        }
+    },
     autoUpload: true,
+    {% if max_upload_file_size %}
+    maxFileSize: {{ max_upload_file_size }}, // in bytes
+    {% endif %}
+    maxNumberOfFiles: 500,
     sequentialUploads: true
+})
+.bind('fileuploadadd', function(e, data) {
+    {% if enable_upload_folder %}
+    // when add folder, a subdirectory will be shown as '.'. rm it.
+    var file = data.files[0];
+    if (file.name == '.') {
+        data.files.shift();
+    }
+    if (file.webkitRelativePath) { // for 'upload folder'
+        file.relative_path = file.webkitRelativePath;
+    }
+    if (file.relativePath) { // for 'folder drag & drop'
+        file.relative_path = file.relativePath + file.name;
+    }
+    {% endif %}
 })
 .bind('fileuploadsubmit', function(e, data) {
     var _this = $(this);
@@ -99,6 +129,17 @@ form.fileupload({
             cache: false,
             dataType: 'json',
             success: function(ret) {
+                {% if enable_upload_folder %}
+                var file_path = file.relative_path,
+                    r_path;
+                if (file_path) { // 'add folder'
+                    r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
+                }
+                var formData = form.fileupload('option', 'formData');
+                formData.relative_path = r_path || '';
+                form.fileupload('option', 'formData', formData);
+                {% endif %}
+
                 data.url = ret['url'];
                 data.jqXHR = _this.fileupload('send', data);
             },
@@ -109,10 +150,30 @@ form.fileupload({
         return false;
     }
 })
+.bind('fileuploadprogressall', function (e, data) {
+    if (data.loaded > 0 && data.loaded == data.total) {
+        saving_tip.show();
+    }
+})
 .bind('fileuploaddone', function(evt, data) {
     if (data.textStatus == 'success') {
-        var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + e(data.files[0].name) + "&repo_id={{repo.id}}" + "&p={{path}}";
+        var file = data.result[0];
+        var file_path = data.files[0].relative_path;
+        file.uploaded = true;
+        file.relative_path = file_path;
+
+        var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + e(file.name) + "&repo_id=" + e("{{repo.id}}");
+        if (file_path) {
+            uploaded_done_link += '&p=' + e("{{path}}" + file_path.substr(0, file_path.lastIndexOf('/') + 1));
+        } else {
+            uploaded_done_link += '&p=' + e("{{path}}");
+        }
         $.get(uploaded_done_link);
+    }
+})
+.bind('fileuploadcompleted fileuploadfailed', function() {
+    if ($('.files .cancel', form).length == 0) {
+        saving_tip.hide();
     }
 });
 

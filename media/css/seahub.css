@@ -2002,7 +2002,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:0;
 }
 .fixed-upload-file-dialog .con {
-    height:114px;
+    height:164px;
     overflow-y:auto;
 }
 .fixed-upload-file-dialog .ops {
@@ -2042,8 +2042,9 @@ textarea:-moz-placeholder {/* for FF */
 .table {
     margin-bottom:0;
 }   
-.table .name {
-    padding-left:10px;
+.table .name,
+.table .error {
+    padding-left:7px;
     margin:0;
 }
 .fixed-upload-file-dialog .fileupload-buttonbar .cancel,

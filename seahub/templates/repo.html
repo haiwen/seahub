@@ -274,7 +274,7 @@ function addFile(file_data) {
 $(function() {
     $.getScript('{{ MEDIA_URL }}js/jquery.fileupload.min.js', function () {
         var popup = $('#upload-file-dialog').addClass('fixed-upload-file-dialog');;
-        var popup_height = '150px';
+        var popup_height = '200px';
         popup.css({'height': popup_height}).data('height', popup_height);
 
         var fu_status = $('.status', popup),
@@ -303,6 +303,10 @@ $(function() {
                 }
             },
             autoUpload:true,
+            {% if max_upload_file_size %}
+            maxFileSize: {{ max_upload_file_size }}, // in bytes
+            {% endif %}
+            maxNumberOfFiles: 500,
             sequentialUploads: true
         })
         .bind('fileuploadadd', function(e, data) {
@@ -310,6 +314,7 @@ $(function() {
             cancel_all_btn.removeClass('hide');
             close_icon.addClass('hide');
 
+            {% if enable_upload_folder %}
             // when add folder, a subdirectory will be shown as '.'. rm it.
             var file = data.files[0];
             if (file.name == '.') {
@@ -321,6 +326,7 @@ $(function() {
             if (file.relativePath) { // for 'folder drag & drop'
                 file.relative_path = file.relativePath + file.name;
             }
+            {% endif %}
         })
         .bind('fileuploadstart', function() {
             fu_status.html(fu_status_.uploading);
@@ -335,6 +341,7 @@ $(function() {
                     cache: false,
                     dataType: 'json',
                     success: function(ret) {
+                        {% if enable_upload_folder %}
                         var file_path = file.relative_path,
                             r_path;
                         if (file_path) { // 'add folder'
@@ -343,6 +350,7 @@ $(function() {
                         var formData = popup.fileupload('option', 'formData');
                         formData.relative_path = r_path || '';
                         popup.fileupload('option', 'formData', formData);
+                        {% endif %}
 
                         data.url = ret['url'];
                         data.jqXHR = _this.fileupload('send', data);
@@ -380,6 +388,7 @@ $(function() {
                 return;
             }
 
+            {% if enable_upload_folder %}
             // for 'add folder'
             var cur_dirs = $('.dir-item');
             var cur_dir_names = [];
@@ -397,6 +406,7 @@ $(function() {
                     update_dir_names.push(new_dir_name);
                 }
             }
+            {% endif %}
         })
         .bind('fileuploadstop', function() {
             cancel_all_btn.addClass('hide');
@@ -1737,6 +1747,7 @@ $('.file-update', context).click(function() {
 $('.file-update', context).click(function() {
     var file_name = $(this).parents('.file-item').attr('data-name');
     var form = $('#update-file-form');
+    var saving_tip = $('.saving-tip', form);
     var upload_success = false;
     $('#update-file-dialog').modal({
         focus:false,
@@ -1762,15 +1773,30 @@ $('.file-update', context).click(function() {
             // Initialize the jQuery File Upload widget:
             form.fileupload({
                 url: data['url'] + '?head=' + $('#repo-latest-commit .commit-msg').data('cmtid'),
+                // customize it for 'done'
+                getFilesFromResponse: function (data) {
+                    if (data.result) {
+                        return data.result;
+                    }
+                },
                 {% if max_upload_file_size %}
                 maxFileSize: {{max_upload_file_size}}, // in bytes
                 {% endif %}
                 maxNumberOfFiles: 1 // only 1 file can be uploaded
             })
+            .bind('fileuploadprogressall', function (e, data) {
+                if (data.loaded > 0 && data.loaded == data.total) {
+                    saving_tip.show();
+                }
+            })
             .bind('fileuploaddone', function(e, data) {
                 if (data.textStatus == 'success') {
                     upload_success = true; 
+                    data.result[0].uploaded = true; // for 'template_download' render
                 }
+            })
+            .bind('fileuploadcompleted fileuploadfailed', function() {
+                saving_tip.hide();
             });
 
             // Enable iframe cross-domain access via redirect option:
