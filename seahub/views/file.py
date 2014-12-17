@@ -57,7 +57,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
-from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -286,6 +286,14 @@ def file_size_exceeds_preview_limit(file_size, file_type):
         else:
             return False, ''
 
+def can_preview_file(fileext):
+    """Check whether can preview file.
+    """
+    if fileext in FILEEXT_TYPE_MAP:
+        return True
+    else:
+        return False
+
 @login_required
 @repo_passwd_set_required
 def view_file(request, repo_id):
@@ -340,48 +348,47 @@ def view_file(request, repo_id):
 
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
 
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        """Choose different approach when dealing with different type of file."""
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, inner_path, ret_dict)
-            if filetype == MARKDOWN:
-                c = ret_dict['file_content']
-                ret_dict['file_content'] = convert_md_link(c, repo_id, username)
-        elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == OPENDOCUMENT:
-            if fsize == 0:
-                ret_dict['err'] = _(u'Invalid file format.')
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == IMAGE:
-            parent_dir = os.path.dirname(path)
-            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
-                                                           current_commit.id, parent_dir)
-            if not dirs:
-                raise Http404
-
-            img_list = []
-            for dirent in dirs:
-                if not stat.S_ISDIR(dirent.props.mode):
-                    fltype, flext = get_file_type_and_ext(dirent.obj_name)
-                    if fltype == 'Image':
-                        img_list.append(dirent.obj_name)
-
-            if len(img_list) > 1:
-                img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
-                cur_img_index = img_list.index(u_filename)
-                if cur_img_index != 0:
-                    img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
-                if cur_img_index != len(img_list) - 1:
-                    img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
+    if can_preview_file(fileext):
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+        if exceeds_limit:
+            ret_dict['err'] = err_msg
         else:
-            pass
+            """Choose different approach when dealing with different type of file."""
+            if is_textual_file(file_type=filetype):
+                handle_textual_file(request, filetype, inner_path, ret_dict)
+                if filetype == MARKDOWN:
+                    c = ret_dict['file_content']
+                    ret_dict['file_content'] = convert_md_link(c, repo_id, username)
+            elif filetype == DOCUMENT:
+                handle_document(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == SPREADSHEET:
+                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == OPENDOCUMENT:
+                if fsize == 0:
+                    ret_dict['err'] = _(u'Invalid file format.')
+            elif filetype == PDF:
+                handle_pdf(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == IMAGE:
+                parent_dir = os.path.dirname(path)
+                dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
+                                                               current_commit.id, parent_dir)
+                if not dirs:
+                    raise Http404
+
+                img_list = []
+                for dirent in dirs:
+                    if not stat.S_ISDIR(dirent.props.mode):
+                        fltype, flext = get_file_type_and_ext(dirent.obj_name)
+                        if fltype == 'Image':
+                            img_list.append(dirent.obj_name)
+
+                if len(img_list) > 1:
+                    img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
+                    cur_img_index = img_list.index(u_filename)
+                    if cur_img_index != 0:
+                        img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
+                    if cur_img_index != len(img_list) - 1:
+                        img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
     # generate file path navigator
     zipped = gen_path_link(path, repo.name)
@@ -648,35 +655,36 @@ def view_shared_file(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        """Choose different approach when dealing with different type of file."""
+    if can_preview_file(fileext):
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
+        if exceeds_limit:
+            ret_dict['err'] = err_msg
+        else:
+            """Choose different approach when dealing with different type of file."""
 
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, inner_path, ret_dict)
-        elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == OPENDOCUMENT:
-            if file_size == 0:
-                ret_dict['err'] = _(u'Invalid file format.')
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
+            if is_textual_file(file_type=filetype):
+                handle_textual_file(request, filetype, inner_path, ret_dict)
+            elif filetype == DOCUMENT:
+                handle_document(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == SPREADSHEET:
+                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == OPENDOCUMENT:
+                if file_size == 0:
+                    ret_dict['err'] = _(u'Invalid file format.')
+            elif filetype == PDF:
+                handle_pdf(inner_path, obj_id, fileext, ret_dict)
+
+            # send statistic messages
+            if ret_dict['filetype'] != 'Unknown':
+                try:
+                    send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                                 (repo.id, shared_by, obj_id, file_size))
+                except SearpcError, e:
+                    logger.error('Error when sending file-view message: %s' % str(e))
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
-
-    # send statistic messages
-    if ret_dict['filetype'] != 'Unknown':
-        try:
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, file_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -782,50 +790,51 @@ def view_file_via_shared_dir(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        """Choose different approach when dealing with different type of file."""
+    if can_preview_file(fileext):
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
+        if exceeds_limit:
+            ret_dict['err'] = err_msg
+        else:
+            """Choose different approach when dealing with different type of file."""
 
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, inner_path, ret_dict)
-        elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == IMAGE:
-            current_commit = get_commits(repo_id, 0, 1)[0]
-            parent_dir = os.path.dirname(path)
-            dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
-                                                           current_commit.id, parent_dir)
-            if not dirs:
-                raise Http404
+            if is_textual_file(file_type=filetype):
+                handle_textual_file(request, filetype, inner_path, ret_dict)
+            elif filetype == DOCUMENT:
+                handle_document(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == SPREADSHEET:
+                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == PDF:
+                handle_pdf(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == IMAGE:
+                current_commit = get_commits(repo_id, 0, 1)[0]
+                parent_dir = os.path.dirname(path)
+                dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
+                                                               current_commit.id, parent_dir)
+                if not dirs:
+                    raise Http404
 
-            img_list = []
-            for dirent in dirs:
-                if not stat.S_ISDIR(dirent.props.mode):
-                    fltype, flext = get_file_type_and_ext(dirent.obj_name)
-                    if fltype == 'Image':
-                        img_list.append(dirent.obj_name)
+                img_list = []
+                for dirent in dirs:
+                    if not stat.S_ISDIR(dirent.props.mode):
+                        fltype, flext = get_file_type_and_ext(dirent.obj_name)
+                        if fltype == 'Image':
+                            img_list.append(dirent.obj_name)
 
-            if len(img_list) > 1:
-                img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
-                cur_img_index = img_list.index(filename)
-                if cur_img_index != 0:
-                    img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
-                if cur_img_index != len(img_list) - 1:
-                    img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
+                if len(img_list) > 1:
+                    img_list.sort(lambda x, y : cmp(x.lower(), y.lower()))
+                    cur_img_index = img_list.index(filename)
+                    if cur_img_index != 0:
+                        img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
+                    if cur_img_index != len(img_list) - 1:
+                        img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
-        # send statistic messages
-        if ret_dict['filetype'] != 'Unknown':
-            try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, file_size))
-            except SearpcError, e:
-                logger.error('Error when sending file-view message: %s' % str(e))
+            # send statistic messages
+            if ret_dict['filetype'] != 'Unknown':
+                try:
+                    send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                                 (repo.id, shared_by, obj_id, file_size))
+                except SearpcError, e:
+                    logger.error('Error when sending file-view message: %s' % str(e))
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
@@ -1372,20 +1381,21 @@ def view_priv_shared_file(request, token):
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        """Choose different approach when dealing with different type of file."""
+    if can_preview_file(fileext):
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
+        if exceeds_limit:
+            ret_dict['err'] = err_msg
+        else:
+            """Choose different approach when dealing with different type of file."""
 
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, inner_path, ret_dict)
-        elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
+            if is_textual_file(file_type=filetype):
+                handle_textual_file(request, filetype, inner_path, ret_dict)
+            elif filetype == DOCUMENT:
+                handle_document(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == SPREADSHEET:
+                handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
+            elif filetype == PDF:
+                handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_private_file_share', args=[pfs.token])
