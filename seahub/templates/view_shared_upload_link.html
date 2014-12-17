@@ -26,11 +26,18 @@
         <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <div class="row fileupload-buttonbar">
                 <div>
-                    <span class="fileinput-button vam">
+                    <span class="fileinput-button vam" id="add-file">
                         <span class="icon-plus"></span>
                         <span>{% trans "Add Files" %}</span>
                         <input type="file" name="file" multiple />
                     </span>
+                    {% if enable_upload_folder %}
+                    <span class="fileinput-button vam" id="add-folder" style="display:none;">
+                        <span class="icon-plus"></span>
+                        <span>{% trans "Add folder" %}</span>
+                        <input type="file" name="file" multiple directory webkitdirectory />
+                    </span>
+                    {% endif %}
                     <button type="reset" class="cancel vam">
                         <span class="icon-ban-circle"></span>
                         <span>{% trans "Cancel All" %}</span>
@@ -176,6 +183,19 @@ form.fileupload({
         saving_tip.hide();
     }
 });
+
+{% if enable_upload_folder %}
+if ('webkitdirectory' in $('input[type="file"]', $('#add-file'))[0]) {
+    $('#add-folder').show();
+    $('#add-file, #add-folder').click(function() {
+        form.fileupload(
+            'option',
+            'fileInput',
+            $('input[type="file"]', $(this))
+        );
+    });
+}
+{% endif %}
 
 // Enable iframe cross-domain access via redirect option:
 form.fileupload(
