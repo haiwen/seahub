@@ -42,7 +42,7 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         # instead we use get_or_create when creating unknown users since it has
         # built-in safeguards for multiple threads.
         if self.create_unknown_user:
-            user = User.objects.create_user(email=username)
+            user = User.objects.create_user(email=username, is_active=True)
         else:
             try:
                 user = User.objects.get(email=username)

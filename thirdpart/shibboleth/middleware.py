@@ -4,12 +4,17 @@ from django.core.exceptions import ImproperlyConfigured
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY
 
 from seahub import auth
+from seahub.api2.models import Token
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
     Authentication Middleware for use with Shibboleth.  Uses the recommended pattern
     for remote authentication from: http://code.djangoproject.com/svn/django/tags/releases/1.3/django/contrib/auth/middleware.py
     """
+    def __init__(self, *a, **kw):
+        super(ShibbolethRemoteUserMiddleware, self).__init__(*a, **kw)
+        self.shib_login = False
+
     def process_request(self, request):
         # AuthenticationMiddleware is required so that request.user exists.
         if not hasattr(request, 'user'):
@@ -65,6 +70,16 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             self.make_profile(user, shib_meta)
             #setup session.
             self.setup_session(request)
+            self.shib_login = True
+
+    def process_response(self, request, response):
+        if self.shib_login:
+            self._set_auth_cookie(request, response)
+        return response
+
+    def _set_auth_cookie(self, request, response):
+        token, _ = Token.objects.get_or_create(user=request.user.username)
+        response.set_cookie('seahub_auth', request.user.username + '@' + token.key)
 
     def make_profile(self, user, shib_meta):
         """
