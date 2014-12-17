@@ -1,6 +1,7 @@
 from django.db import connection
-from django.contrib.auth.models import User, Permission
 from django.contrib.auth.backends import RemoteUserBackend
+
+from seahub.base.accounts import User
 
 class ShibbolethRemoteUserBackend(RemoteUserBackend):
     """
@@ -17,6 +18,13 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
     # Create a User object if not already in the database?
     create_unknown_user = True
 
+    def get_user(self, username):
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+        return user
+
     def authenticate(self, remote_user, shib_meta):
         """
         The username passed as ``remote_user`` is considered trusted.  This
@@ -30,17 +38,14 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
             return
         user = None
         username = self.clean_username(remote_user)
-        shib_user_params = dict([(k, shib_meta[k]) for k in User._meta.get_all_field_names() if k in shib_meta])
         # Note that this could be accomplished in one try-except clause, but
         # instead we use get_or_create when creating unknown users since it has
         # built-in safeguards for multiple threads.
         if self.create_unknown_user:
-            user, created = User.objects.get_or_create(username=shib_user_params.get('username'), defaults=shib_user_params)
-            if created:
-                user = self.configure_user(user)
+            user = User.objects.create_user(email=username)
         else:
             try:
-                user = User.objects.get(**shib_user_params)
+                user = User.objects.get(email=username)
             except User.DoesNotExist:
                 pass
         return user

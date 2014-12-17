@@ -1,8 +1,9 @@
 from django.contrib.auth.middleware import RemoteUserMiddleware
-from django.contrib import auth
 from django.core.exceptions import ImproperlyConfigured
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY
+
+from seahub import auth
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -39,7 +40,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated():
-            if request.user.username == self.clean_username(username, request):
+            if request.user.username == username:
                 return
 
         # Make sure we have all required Shiboleth elements before proceeding.
