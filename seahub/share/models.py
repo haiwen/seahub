@@ -5,7 +5,9 @@ from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
+from seahub.utils import normalize_file_path, normalize_dir_path, gen_token, \
+    normalize_cache_key
+from seahub.utils.ip import get_remote_ip
 from seahub.settings import SHARE_ACCESS_PASSWD_TIMEOUT
 
 class AnonymousShare(models.Model):
@@ -17,17 +19,34 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
-def set_share_link_access(username, token):
+def _get_cache_key(request, prefix):
+    """Return cache key of certain ``prefix``. If user is logged in, use
+    username, otherwise use combination of request ip and user agent.
+
+    Arguments:
+    - `prefix`:
+    """
+    if request.user.is_authenticated():
+        key = normalize_cache_key(request.user.username, 'SharedLink_')
+    else:
+        ip = get_remote_ip(request)
+        agent = request.META.get('HTTP_USER_AGENT', '')
+        key = normalize_cache_key(ip + agent, 'SharedLink_')
+
+    return key
+
+def set_share_link_access(request, token):
     """Remember which share download/upload links user can access without
     providing password.
     """
-    cache.set('SharedLink_' + username + token, True,
-              SHARE_ACCESS_PASSWD_TIMEOUT)
+    key = _get_cache_key(request, 'SharedLink_')
+    cache.set(key, True, SHARE_ACCESS_PASSWD_TIMEOUT)
 
-def check_share_link_access(username, token):
+def check_share_link_access(request, token):
     """Check whether user can access share link without providing password.
     """
-    cache.get('SharedLink_' + username + token, False)
+    key = _get_cache_key(request, 'SharedLink_')
+    return cache.get(key, False)
 
 class FileShareManager(models.Manager):
     def _add_file_share(self, username, repo_id, path, s_type,
