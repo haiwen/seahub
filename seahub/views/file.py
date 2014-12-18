@@ -163,7 +163,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """ Get path and the permission to view file.
 
     Returns:
-    	outer fileserver file url, inner fileserver file url, permission
+        outer fileserver file url, inner fileserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -183,7 +183,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
     file_enc = request.GET.get('file_enc', 'auto')
-    if not file_enc in FILE_ENCODING_LIST:
+    if file_enc not in FILE_ENCODING_LIST:
         file_enc = 'auto'
     err, file_content, encoding = get_file_content(filetype,
                                                    raw_path, file_enc)
@@ -434,8 +434,6 @@ def view_file(request, repo_id):
     else:
         repogrp_str = ''
 
-    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
-
     # fetch file contributors and latest contributor
     try:
         dirent = seafile_api.get_dirent_by_path(repo.id, path)
@@ -556,7 +554,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['current_commit'] = current_commit
     ret_dict['fileext'] = fileext
     ret_dict['raw_path'] = raw_path
-    if not ret_dict.has_key('filetype'):
+    if 'filetype' not in ret_dict:
         ret_dict['filetype'] = filetype
     ret_dict['use_pdfjs'] = USE_PDFJS
 
@@ -683,7 +681,7 @@ def view_shared_file(request, token):
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
             try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' %
                              (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
@@ -838,7 +836,7 @@ def view_file_via_shared_dir(request, token):
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
             try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' %
                              (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
@@ -875,6 +873,7 @@ def view_file_via_shared_dir(request, token):
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
+
     def error_json(error_msg=_(u'Internal Error'), op=None):
         return HttpResponse(json.dumps({'error': error_msg, 'op': op}),
                             status=400,
@@ -904,6 +903,7 @@ def file_edit_submit(request, repo_id):
 
     # first dump the file content to a tmp file, then update the file
     fd, tmpfile = mkstemp()
+
     def remove_tmp_file():
         try:
             os.remove(tmpfile)
@@ -992,7 +992,7 @@ def file_edit(request, repo_id):
         if not op:
             inner_path = gen_inner_file_get_url(token, filename)
             file_enc = request.GET.get('file_enc', 'auto')
-            if not file_enc in FILE_ENCODING_LIST:
+            if file_enc not in FILE_ENCODING_LIST:
                 file_enc = 'auto'
             err, file_content, encoding = repo_file_get(inner_path, file_enc)
             if encoding and encoding not in FILE_ENCODING_LIST:
@@ -1146,8 +1146,9 @@ def download_file(request, repo_id, obj_id):
 ########## text diff
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:
-        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        repo_id, commit_id, path)
+        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id,
+                                                                      commit_id,
+                                                                      path)
     except:
         return None, 'bad path'
 
@@ -1179,7 +1180,7 @@ def text_diff(request, repo_id):
     path = request.GET.get('p', '')
     u_filename = os.path.basename(path)
     file_enc = request.GET.get('file_enc', 'auto')
-    if not file_enc in FILE_ENCODING_LIST:
+    if file_enc not in FILE_ENCODING_LIST:
         file_enc = 'auto'
 
     if not (commit_id and path):
@@ -1199,13 +1200,13 @@ def text_diff(request, repo_id):
 
     path = path.encode('utf-8')
 
-    current_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, current_commit.id, path, file_enc)
+    current_content, err = get_file_content_by_commit_and_path(
+        request, repo_id, current_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
 
-    prev_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, prev_commit.id, path, file_enc)
+    prev_content, err = get_file_content_by_commit_and_path(
+        request, repo_id, prev_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
 
