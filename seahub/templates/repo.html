@@ -315,6 +315,12 @@ $(function() {
             close_icon.addClass('hide');
 
             {% if enable_upload_folder %}
+            // hide the upload menu
+            if (!$('#upload-menu').hasClass('hide')) {
+                $('#upload-menu').find('.item').removeAttr('style')
+            .end().addClass('hide');
+            }
+
             // when add folder, a subdirectory will be shown as '.'. rm it.
             var file = data.files[0];
             if (file.name == '.') {
