@@ -290,7 +290,7 @@ $(function() {
             'failed': "{% trans "File Upload failed" %}"
         };
 
-        var update_dir_names = []; // dirs with 'time' to be updated
+        var dirs_to_update = []; // dirs with 'time' to be updated
         var new_dir_names = [];
         popup.fileupload({
             formData: {'parent_dir': cur_path},
@@ -378,7 +378,9 @@ $(function() {
 
             // for 'template_download' render
             file_uploaded.uploaded = true;
-            file_uploaded.relative_path = file_path;
+            if (file_path) {
+                file_uploaded.relative_path = file_path.substring(0, file_path.lastIndexOf('/') + 1) + file_uploaded.name;
+            }
 
             if (data.formData.parent_dir != cur_path) {
                 return;
@@ -402,8 +404,8 @@ $(function() {
                     new_dir_names.push(new_dir_name);
                 }
             } else {
-                if (update_dir_names.indexOf(new_dir_name) == -1) {
-                    update_dir_names.push(new_dir_name);
+                if (dirs_to_update.indexOf(new_dir_name) == -1) {
+                    dirs_to_update.push(new_dir_name);
                 }
             }
             {% endif %}
@@ -443,10 +445,10 @@ $(function() {
                     updateCmt();
                 }
             }
-            if (update_dir_names.length > 0) {
+            if (dirs_to_update.length > 0) {
                 cur_dirs.each(function() {
                     var dir = $(this);
-                    if (update_dir_names.indexOf(dir.attr('data-name')) != -1) {
+                    if (dirs_to_update.indexOf(dir.attr('data-name')) != -1) {
                         dir.attr('data-time', now);
                         $('.dirent-update', dir).html("{% trans "Just now" %}");
                     }
@@ -455,7 +457,7 @@ $(function() {
             }
             // empty the arrays
             new_dir_names = [];
-            update_dir_names = [];
+            dirs_to_update = [];
         })
         // after tpl has rendered
         .bind('fileuploadcompleted', function() { // 'done'
@@ -470,6 +472,7 @@ $(function() {
                 cancel_all_btn.addClass('hide');
                 close_icon.removeClass('hide');
                 total_progress.addClass('hide');
+                saving_tip.hide();
                 if (data.errorThrown == 'abort') { // 'cancel'
                     fu_status.html(fu_status_.canceled);
                 } else { // 'error'

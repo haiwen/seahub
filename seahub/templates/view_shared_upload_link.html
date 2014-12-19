@@ -97,7 +97,7 @@ var saving_tip = $('.saving-tip', form);
 
 // Initialize the jQuery File Upload widget:
 form.fileupload({
-    formData: {'parent_dir': {{path}} },
+    formData: {'parent_dir': "{{path}}"},
     // customize it for 'done'
     getFilesFromResponse: function (data) {
         if (data.result) {
@@ -167,7 +167,9 @@ form.fileupload({
         var file = data.result[0];
         var file_path = data.files[0].relative_path;
         file.uploaded = true;
-        file.relative_path = file_path;
+        if (file_path) {
+            file.relative_path = file_path.substring(0, file_path.lastIndexOf('/') + 1) + file.name;
+        }
 
         var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + e(file.name) + "&repo_id=" + e("{{repo.id}}");
         if (file_path) {
@@ -201,7 +203,7 @@ if ('webkitdirectory' in $('input[type="file"]', $('#add-file'))[0]) {
 form.fileupload(
     'option',
     'redirect',
-    window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+    window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{MEDIA_URL}}cors/result.html?%s')
 );
 </script>
 {% endif %}
