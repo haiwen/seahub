@@ -1878,20 +1878,32 @@ $('.file-share, .dir-share', context).click(function() {
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 // get thumbnails for image files
 $(function() {
-    $('.not-thumbnail').each(function() {
-        var this_img = $(this),
-            file_name = $(this).parents('.file-item').attr('data-name');
+    var img_icons = $('.not-thumbnail');
+    if (img_icons.length == 0) {
+        return;
+    }
+    var get_thumbnail = function(i) {
+        var img_icon = $(img_icons[i]),
+            file_name = img_icon.closest('.file-item').attr('data-name');
         $.ajax({
-            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(cur_path+file_name),
+            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(parent_dir + file_name),
             cache: false,
             dataType: 'json',
             success: function(data) {
-                this_img.attr("src", data.thumbnail_src).load(function() {
+                img_icon.attr("src", data.thumbnail_src).load(function() {
                     $(this).removeClass("not-thumbnail").addClass("thumbnail");
                 });
+            },
+            complete: function() {
+                // cur_path may be changed. e.g., the user enter another directory
+                if (i < img_icons.length - 1 && parent_dir == cur_path) {
+                    get_thumbnail(++i);
+                }
             }
         });
-    });
+    };
+    var parent_dir = cur_path;
+    get_thumbnail(0);
 });
 {% endif %}
 
