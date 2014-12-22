@@ -1391,7 +1391,11 @@ function dirlinkClick() {
         link.parents('.dir-item').children('.dirent-icon').html(loading_icon);
     } else {
         // link is in '.path'
-        $('.path').append(' ' + loading_icon);
+        var path = $('.path');
+        // check if loading_icon is already there, in case some users may repeatly click the link
+        if (path.find('img').length == 0) {
+            path.append(' ' + loading_icon);
+        }
     }
     var url_search = link.attr('href').substr(link.attr('href').indexOf('?'));
     reqDirData('{% url 'repo_dir_data' repo.id %}' + url_search, changeLocation);
