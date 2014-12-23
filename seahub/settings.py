@@ -406,6 +406,20 @@ SHARE_ACCESS_PASSWD_TIMEOUT = 60 * 60
 
 SEAFILE_VERSION = '3.0.0'
 
+###################
+# Image Thumbnail #
+###################
+
+# Enable or disable thumbnail
+ENABLE_THUMBNAIL = True
+
+# Absolute filesystem path to the directory that will hold thumbnail files.
+THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
+
+THUMBNAIL_EXTENSION = 'png'
+THUMBNAIL_DEFAULT_SIZE = '24'
+PREVIEW_DEFAULT_SIZE = '100'
+
 #################
 # Email sending #
 #################
@@ -529,12 +543,3 @@ LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
-# Enable or disable thumbnail
-ENABLE_THUMBNAIL = True
-
-# Absolute filesystem path to the directory that will hold thumbnail files.
-THUMBNAIL_ROOT = '%s/seahub/thumbnail/thumb/' % PROJECT_ROOT
-
-THUMBNAIL_EXTENSION = 'png'
-THUMBNAIL_DEFAULT_SIZE = '24'
-PREVIEW_DEFAULT_SIZE = '100'
