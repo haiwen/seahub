@@ -133,6 +133,28 @@
 
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1398068110"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
+
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/underscore.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/backbone.js"></script>
+
+<script type="text/javascript">
+ app = window.app = {
+     config: {
+         mediaUrl: '{{ MEDIA_URL }}',
+         siteRoot: '{{ SITE_ROOT }}'
+     },
+     templates: {},
+     utils: {}
+ };
+</script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/models.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/collections.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/utils.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/templates.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/views.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/app.js"></script>
+
+
 <script type="text/javascript">
 $.jstree._themes = '{{ MEDIA_URL }}js/themes/';
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
