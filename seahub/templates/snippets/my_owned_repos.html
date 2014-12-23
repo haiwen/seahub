@@ -22,6 +22,7 @@
 <div id="my-own-repos" class="hide">
 {% if owned_repos %}
 <table class="repo-list">{# 'repo-list': for repo which has 'repo-delete-btn' #}
+    <thead>
     <tr>
         <th width="4%"><!--icon--></th>
         <th width="24%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
@@ -29,30 +30,7 @@
         <th width="22%">{% trans "Last Update" %} <span id="my-owned-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-owned-repo-list-time-down" class="icon-caret-down cspt"></span></th>
         <th width="12%">{% trans "Operations" %}</th>
     </tr>
-    {% for repo in owned_repos %}
-    {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
-    <tr data-repo_name="{{repo.props.name}}" data-time="{% if repo.latest_modify %}{{ repo.latest_modify }}{% else %}0{% endif %}">
-        {% if repo.encrypted %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
-        {% else %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
-        {% endif %}
-        <td><a href="{% url 'repo' repo.props.id %}">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.desc }}</td>
-        {% if repo.latest_modify %}
-        <td>{{ repo.latest_modify|translate_seahub_time }}</td>
-        {% else %}
-        <td>--</td>
-        {% endif %}
-        <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
-            <div>
-                <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
-                <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
-            </div>
-        </td>
-    </tr>
-    {% endif %}
-    {% endfor %}
+    </thead>
 </table>
 {% else %}
 <div class="empty-tips">
