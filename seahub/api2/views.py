@@ -14,6 +14,7 @@ from StringIO import StringIO
 from rest_framework import parsers
 from rest_framework import status
 from rest_framework import renderers
+from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
@@ -486,7 +487,7 @@ def repo_download_info(request, repo_id):
     return Response(info_json)
 
 class Repos(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
