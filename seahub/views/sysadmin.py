@@ -149,7 +149,30 @@ def sys_repo_search(request):
             'name': repo_name,
             'owner': owner,
             }, context_instance=RequestContext(request))
-    
+
+def _populate_user_quota_usage(user):
+    """Populate space/share quota to user.
+
+    Arguments:
+    - `user`:
+    """
+    orgs = ccnet_threaded_rpc.get_orgs_by_user(user.email)
+    try:
+        if orgs:
+            user.org = orgs[0]
+            org_id = user.org.org_id
+            user.space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
+            user.space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
+            user.share_usage = user.share_quota = 0
+        else:
+            user.space_usage = seafile_api.get_user_self_usage(user.email)
+            user.share_usage = seafile_api.get_user_share_usage(user.email)
+            user.space_quota = seafile_api.get_user_quota(user.email)
+            user.share_quota = seafile_api.get_user_share_quota(user.email)
+    except SearpcError as e:
+        logger.error(e)
+        user.space_usage = user.space_quota = user.share_usage = user.share_quota = -1
+
 @login_required
 @sys_staff_required
 def sys_user_admin(request):
@@ -174,22 +197,7 @@ def sys_user_admin(request):
         if user.props.id == request.user.id:
             user.is_self = True
 
-        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
-        try:
-            if not org:
-                user.self_usage = seafile_api.get_user_self_usage(user.email)
-                user.share_usage = seafile_api.get_user_share_usage(user.email)
-                user.quota = seafile_api.get_user_quota(user.email)
-            else:
-                user.org = org[0]
-                org_id = user.org.org_id
-                user.self_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
-                user.share_usage = 0 #seafile_api.get_user_share_usage(user.email)
-                user.quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
-        except:
-            user.self_usage = -1
-            user.share_usage = -1
-            user.quota = -1
+        _populate_user_quota_usage(user)
 
         # check user's role
         if user.role == GUEST_USER:
@@ -247,14 +255,8 @@ def sys_user_admin_ldap(request):
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
-        try:
-            user.self_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
-            user.quota = seafile_api.get_user_quota(user.email)
-        except:
-            user.self_usage = -1
-            user.share_usage = -1
-            user.quota = -1
+
+        _populate_user_quota_usage(user)
 
         # populate user last login time
         user.last_login = None
@@ -294,14 +296,9 @@ def sys_user_admin_admins(request):
     for user in admin_users:
         if user.props.id == request.user.id:
             user.is_self = True
-        try:
-            user.self_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
-            user.quota = seafile_api.get_user_quota(user.email)
-        except:
-            user.self_usage = -1
-            user.share_usage = -1
-            user.quota = -1
+
+        _populate_user_quota_usage(user)
+
         # check user's role
         if user.role == GUEST_USER:
             user.is_guest = True
@@ -323,7 +320,7 @@ def sys_user_admin_admins(request):
             'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
-            }, context_instance=RequestContext(request))
+        }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -333,26 +330,17 @@ def user_info(request, email):
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
     org_name = None
     if not org:
-        my_usage = seafile_api.get_user_self_usage(email)
-        quota = seafile_api.get_user_quota(email)
+        space_usage = seafile_api.get_user_self_usage(email)
+        space_quota = seafile_api.get_user_quota(email)
+        share_usage = seafile_api.get_user_share_usage(email)
+        share_quota = seafile_api.get_user_share_quota(email)
     else:
         org_id = org[0].org_id
-        my_usage =seafserv_threaded_rpc. \
-                get_org_user_quota_usage(org_id, email)
-        quota = seafserv_threaded_rpc. \
-                get_org_user_quota(org_id, email)
         org_name = org[0].org_name
-
-    if CALC_SHARE_USAGE:
-        try:
-            share_usage = seafile_api.get_user_share_usage(email)
-        except SearpcError, e:
-            logger.error(e)
-            share_usage = 0
-        quota_usage = my_usage + share_usage
-    else:
-        share_usage = 0
-        quota_usage = my_usage
+        space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
+                                                                     email)
+        space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, email)
+        share_usage = share_quota = 0
 
     # Repos that are share to user
     in_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
@@ -421,18 +409,17 @@ def user_info(request, email):
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
-            'quota': quota,
-            'quota_usage': quota_usage,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'space_quota': space_quota,
+            'space_usage': space_usage,
+            'share_quota': share_quota,
             'share_usage': share_usage,
-            'my_usage': my_usage,
             'in_repos': in_repos,
             'email': email,
             'profile': profile,
             'd_profile': d_profile,
             'org_name': org_name,
             "user_shared_links": user_shared_links,
-            }, context_instance=RequestContext(request))
+        }, context_instance=RequestContext(request))
 
 @login_required_ajax
 @sys_staff_required
@@ -1054,23 +1041,7 @@ def user_search(request):
     users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
-        org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
-        try:
-            if not org:
-                user.self_usage = seafile_api.get_user_self_usage(user.email)
-                user.share_usage = seafile_api.get_user_share_usage(user.email)
-                user.quota = seafile_api.get_user_quota(user.email)
-            else:
-                user.org = org[0]
-                org_id = user.org.org_id
-                user.self_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
-                user.share_usage = 0
-                user.quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
-        except SearpcError as e:
-            logger.error(e)
-            user.self_usage = -1
-            user.share_usage = -1
-            user.quota = -1
+        _populate_user_quota_usage(user)
 
         # check user's role
         if user.role == GUEST_USER:
@@ -1091,7 +1062,7 @@ def user_search(request):
             'guest_user': GUEST_USER,
             'enable_guest': ENABLE_GUEST,
             }, context_instance=RequestContext(request))
-    
+
 @login_required
 @sys_staff_required
 def sys_repo_transfer(request):

@@ -172,7 +172,8 @@ def share_to_user(request, repo, to_user, permission):
         messages.success(request, msg)
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
-    """Check whether user has enough quota when share repo to users/groups.
+    """Check whether user has enough share quota when share repo to
+    users/groups. Only used for cloud service.
     """
     if not users and not groups:
         return True
@@ -181,8 +182,7 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
         return True
 
     check_pass = False
-    quota = seafile_api.get_user_quota(username)
-    self_usage = seafile_api.get_user_self_usage(username)
+    share_quota = seafile_api.get_user_share_quota(username)
     current_share_usage = seafile_api.get_user_share_usage(username)
 
     share_usage = 0
@@ -192,10 +192,10 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
     if groups:
         grp_members = []
         for group in groups:
-            grp_members += [ e.user_name for e in seaserv.get_group_members(group.id)]
+            grp_members += [e.user_name for e in seaserv.get_group_members(group.id)]
         grp_members = set(grp_members)
-        share_usage += seafile_api.get_repo_size(repo.id) * (len(grp_members) -1)
-    if share_usage + self_usage + current_share_usage < quota:
+        share_usage += seafile_api.get_repo_size(repo.id) * (len(grp_members) - 1)
+    if share_usage + current_share_usage < share_quota:
         check_pass = True
 
     return check_pass

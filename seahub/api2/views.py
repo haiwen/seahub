@@ -89,9 +89,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_personal_repos_by_owner, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     list_inner_pub_repos_by_owner, \
-    remove_share, unshare_group_repo, \
-    unset_inner_pub_repo, get_user_quota, \
-    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
+    remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
 
@@ -223,14 +221,8 @@ class Account(APIView):
         info['is_staff'] = user.is_staff
         info['is_active'] = user.is_active
         info['create_time'] = user.ctime
-
-        info['total'] = get_user_quota(email)
-        if CALC_SHARE_USAGE:
-            my_usage = get_user_quota_usage(email)
-            share_usage = get_user_share_usage(email)
-            info['usage'] = my_usage + share_usage
-        else:
-            info['usage'] = get_user_quota_usage(email)
+        info['total'] = seafile_api.get_user_quota(email)
+        info['usage'] = seafile_api.get_user_quota_usage(email)
 
         return Response(info)
 
@@ -307,15 +299,9 @@ class AccountInfo(APIView):
         info = {}
         email = request.user.username
         info['email'] = email
-        info['total'] = get_user_quota(email)
         info['nickname'] = email2nickname(email)
-
-        if CALC_SHARE_USAGE:
-            my_usage = get_user_quota_usage(email)
-            share_usage = get_user_share_usage(email)
-            info['usage'] = my_usage + share_usage
-        else:
-            info['usage'] = get_user_quota_usage(email)
+        info['total'] = seafile_api.get_user_quota(email)
+        info['usage'] = seafile_api.get_user_quota_usage(email)
 
         return Response(info)
 

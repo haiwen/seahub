@@ -40,13 +40,9 @@
     </dl>
 
     <h3 class="hd">{% trans "Space Used" %}</h3>
-    {% if CALC_SHARE_USAGE %}
-    <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    <p>{% trans "Used" %}: {{ my_usage|filesizeformat }}</p>
-    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }}</p>
-    {% else %}
-    <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    {% endif %}
+    <p>{% trans "Self" %}: {{ space_usage|filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }} {% if share_quota > 0 %} / {{ share_quota|filesizeformat }} {% endif %}</p>
+
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
