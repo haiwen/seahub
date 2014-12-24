@@ -116,7 +116,7 @@ class Ping(APIView):
     """
     Returns a simple `pong` message when client calls `api2/ping/`.
     For example:
-    	curl http://127.0.0.1:8000/api2/ping/
+        curl http://127.0.0.1:8000/api2/ping/
     """
     def get(self, request, format=None):
         return Response('pong')
@@ -128,7 +128,7 @@ class AuthPing(APIView):
     """
     Returns a simple `pong` message when client provided an auth token.
     For example:
-    	curl -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" http://127.0.0.1:8000/api2/auth/ping/
+        curl -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" http://127.0.0.1:8000/api2/auth/ping/
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -141,7 +141,7 @@ class ObtainAuthToken(APIView):
     """
     Returns auth token if username and password are valid.
     For example:
-    	curl -d "username=foo@example.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
+        curl -d "username=foo@example.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
     """
     throttle_classes = (AnonRateThrottle, )
     permission_classes = ()
@@ -699,8 +699,8 @@ class Repo(APIView):
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, \
-                    'Library does not exist.')
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Library does not exist.')
 
         # check permission
         if is_org_context(request):
@@ -1919,13 +1919,13 @@ class BeShared(APIView):
 
         joined_groups = get_personal_groups_by_user(username)
         for grp in joined_groups:
-        # Get group repos, and for each group repos...
+            # Get group repos, and for each group repos...
             for r_id in get_group_repoids(grp.id):
                 # No need to list my own repo
                 if seafile_api.is_repo_owner(username, r_id):
                     continue
-                 # Convert repo properties due to the different collumns in Repo
-                 # and SharedRepo
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
                 r = get_repo(r_id)
                 if not r:
                     continue
@@ -2055,9 +2055,7 @@ class PrivateSharedFileView(APIView):
         return get_repo_file(request, repo_id, file_id, file_name, op)
 
 class SharedFileView(APIView):
-# Anyone should be able to access a Shared File assuming they have the token
-#    authentication_classes = (TokenAuthentication, )
-#    permission_classes = (IsAuthenticated,)
+    # Anyone should be able to access a Shared File assuming they have the token
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, token, format=None):

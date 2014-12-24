@@ -648,7 +648,7 @@ def copy_move_common(func):
         dst_repo_id = request.POST.get('dst_repo')
         dst_path = request.POST.get('dst_path')
 
-        if not (path and obj_name and dst_repo_id and  dst_path):
+        if not (path and obj_name and dst_repo_id and dst_path):
             result['error'] = _('Argument missing')
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
@@ -1040,7 +1040,7 @@ def get_contacts(request):
     from seahub.avatar.templatetags.avatar_tags import avatar
     for c in contacts:
         try:
-            user = User.objects.get(email = c.contact_email)
+            user = User.objects.get(email=c.contact_email)
             if user.is_active:
                 contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
         except User.DoesNotExist:
@@ -1319,7 +1319,7 @@ def set_notice_seen_by_id(request):
     notice_id = request.GET.get('notice_id')
 
     notice = UserNotification.objects.get(id=notice_id)
-    if notice.seen == False:
+    if not notice.seen:
         notice.seen = True
         notice.save()
 
