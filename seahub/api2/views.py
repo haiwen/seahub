@@ -2510,10 +2510,12 @@ class EventsView(APIView):
 
         if is_org_context(request):
             org_id = request.user.org.org_id
-            events, start = get_org_user_events(org_id, email, start,
-                                                events_count)
+            events, events_more_offset = get_org_user_events(org_id, email,
+                                                             start,
+                                                             events_count)
         else:
-            events, events_more_offset = get_user_events(email, start, events_count)
+            events, events_more_offset = get_user_events(email, start,
+                                                         events_count)
         events_more = True if len(events) == events_count else False
 
         l = []
@@ -2550,7 +2552,7 @@ class EventsView(APIView):
 
         ret = {
             'events': l,
-            'more':  events_more,
+            'more': events_more,
             'more_offset': events_more_offset,
             }
         return Response(ret)
