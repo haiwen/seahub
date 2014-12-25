@@ -166,9 +166,13 @@ def _populate_user_quota_usage(user):
             user.share_usage = user.share_quota = 0
         else:
             user.space_usage = seafile_api.get_user_self_usage(user.email)
-            user.share_usage = seafile_api.get_user_share_usage(user.email)
             user.space_quota = seafile_api.get_user_quota(user.email)
-            user.share_quota = seafile_api.get_user_share_quota(user.email)
+
+            if CALC_SHARE_USAGE:
+                user.share_quota = seafile_api.get_user_share_quota(user.email)
+                user.share_usage = seafile_api.get_user_share_usage(user.email)
+            else:
+                user.share_usage = user.share_quota = 0
     except SearpcError as e:
         logger.error(e)
         user.space_usage = user.space_quota = user.share_usage = user.share_quota = -1
@@ -332,8 +336,11 @@ def user_info(request, email):
     if not org:
         space_usage = seafile_api.get_user_self_usage(email)
         space_quota = seafile_api.get_user_quota(email)
-        share_usage = seafile_api.get_user_share_usage(email)
-        share_quota = seafile_api.get_user_share_quota(email)
+        if CALC_SHARE_USAGE:
+            share_usage = seafile_api.get_user_share_usage(email)
+            share_quota = seafile_api.get_user_share_quota(email)
+        else:
+            share_quota = share_usage = 0
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
@@ -413,6 +420,7 @@ def user_info(request, email):
             'space_usage': space_usage,
             'share_quota': share_quota,
             'share_usage': share_usage,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'in_repos': in_repos,
             'email': email,
             'profile': profile,

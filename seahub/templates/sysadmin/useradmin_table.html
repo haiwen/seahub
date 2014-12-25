@@ -4,7 +4,7 @@
         <th width="25%">{% trans "Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         <th width="9%">{% trans "Role" %}</th>
-        <th width="18%">{% trans "Space/Share Used" %}</th>
+        <th width="18%">{% trans "Space Used" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
         <th width="14%">{% trans "Operations" %}</th>
     </tr>
@@ -56,7 +56,9 @@
         <td style="font-size:11px;">
             <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
             {% if not user.org %}
+            {% if CALC_SHARE_USAGE %}
             <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
+            {% endif %}
             {% endif %}
         </td>
         <td>

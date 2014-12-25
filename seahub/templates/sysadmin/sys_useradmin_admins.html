@@ -41,10 +41,10 @@
     <tr>
         <th width="25%">{% trans "Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
-        <th width="11%">{% trans "Role" %}</th>
-        <th width="15%">{% trans "Space Used" %}</th>
+        <th width="9%">{% trans "Role" %}</th>
+        <th width="18%">{% trans "Space Used" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="15%">{% trans "Operations" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in admin_users %}
@@ -85,11 +85,12 @@
           {% endif %}
         </td>
 
-        <td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
+            {% if not user.org %}
             {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
-            {% else %}
-            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
+            {% endif %}
             {% endif %}
         </td>
         <td>

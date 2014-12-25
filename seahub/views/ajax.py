@@ -1387,8 +1387,12 @@ def space_and_traffic(request):
     if not org:
         space_quota = seafile_api.get_user_quota(username)
         space_usage = seafile_api.get_user_self_usage(username)
-        share_quota = seafile_api.get_user_share_quota(username)
-        share_usage = seafile_api.get_user_share_usage(username)
+        if CALC_SHARE_USAGE:
+            share_quota = seafile_api.get_user_share_quota(username)
+            share_usage = seafile_api.get_user_share_usage(username)
+        else:
+            share_quota = 0
+            share_usage = 0
     else:
         org_id = org[0].org_id
         space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
@@ -1446,6 +1450,7 @@ def space_and_traffic(request):
         "space_usage": space_usage,
         "share_quota": share_quota,
         "share_usage": share_usage,
+        "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
         "show_quota_help": not CALC_SHARE_USAGE,
         "rates": rates,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
