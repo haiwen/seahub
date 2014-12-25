@@ -17,7 +17,8 @@ try:
 except ImportError:
     SEACLOUD_MODE = False
 
-from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, TRAFFIC_STATS_ENABLED
+from seahub.utils import HAS_FILE_SEARCH, EVENTS_ENABLED, \
+    TRAFFIC_STATS_ENABLED, is_pro_version
 
 try:
     from seahub.settings import ENABLE_PUBFILE
@@ -57,6 +58,7 @@ def base(request):
     repo_id_patt = r".*/([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})/.*"
     m = re.match(repo_id_patt, request.get_full_path())
     search_repo_id = m.group(1) if m is not None else None
+    is_pro = is_pro_version()
 
     return {
         'seafile_version': SEAFILE_VERSION,
@@ -82,4 +84,5 @@ def base(request):
         'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
         'search_repo_id': search_repo_id,
+        'is_pro': is_pro,
         }

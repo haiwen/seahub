@@ -1167,3 +1167,9 @@ def do_urlopen(url, data=None, headers=None):
     req = urllib2.Request(url, data=data, headers=headers)
     ret = urllib2.urlopen(req)
     return ret
+
+def is_pro_version():
+    if EVENTS_CONFIG_FILE:
+        return True
+    else:
+        return False
