@@ -24,7 +24,8 @@ from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
-from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username
+from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
+    is_pro_version
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -206,6 +207,7 @@ def sys_user_admin(request):
 
     platform = get_platform_name()
     server_id = get_server_id()
+    pro_server = 1 if is_pro_version() else 0
 
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
@@ -222,6 +224,7 @@ def sys_user_admin(request):
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'enable_guest': ENABLE_GUEST,
+            'pro_server': pro_server,
         }, context_instance=RequestContext(request))
 
 @login_required
