@@ -562,7 +562,7 @@ function reqDirData(url, func) {
 
             {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
             {% else %}
-                {% if not no_quota %}
+                {% if user_perm == 'rw' and not no_quota %}
             $('#upload-file-dialog').fileupload(
                 'option',
                 {
@@ -1197,6 +1197,7 @@ $('.lsch').unbind().click(function() {
     return false;
 }); 
 
+{% if user_perm == 'rw' %}
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
@@ -1281,6 +1282,7 @@ $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main', focus:false, containerCss:{'padding':'20px 25px'}});
     $('#simplemodal-container').css({'height':'auto'});
 });
+{% endif %} {# user_perm == 'rw' #}
 
 // share current dir
 $('#share-cur-dir').click(function() {
