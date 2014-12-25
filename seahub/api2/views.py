@@ -221,7 +221,7 @@ class Account(APIView):
         info['is_active'] = user.is_active
         info['create_time'] = user.ctime
         info['total'] = seafile_api.get_user_quota(email)
-        info['usage'] = seafile_api.get_user_quota_usage(email)
+        info['usage'] = seafile_api.get_user_self_usage(email)
 
         return Response(info)
 
@@ -300,7 +300,7 @@ class AccountInfo(APIView):
         info['email'] = email
         info['nickname'] = email2nickname(email)
         info['total'] = seafile_api.get_user_quota(email)
-        info['usage'] = seafile_api.get_user_quota_usage(email)
+        info['usage'] = seafile_api.get_user_self_usage(email)
 
         return Response(info)
 
