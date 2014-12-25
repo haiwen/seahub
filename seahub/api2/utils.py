@@ -3,10 +3,13 @@
 
 import os
 import time
+import json
 
 from collections import defaultdict
+from functools import wraps
 
 from django.core.paginator import EmptyPage, InvalidPage
+from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status
 from seaserv import seafile_api, get_commits, server_repo_size, \
@@ -505,3 +508,12 @@ def get_diff_details(repo_id, commit1, commit2):
             result['deleted_dirs'].append(d.name)
 
     return result
+
+JSON_CONTENT_TYPE = 'application/json; charset=utf-8'
+def json_response(func):
+    @wraps(func)
+    def wrapped(*a, **kw):
+        result = func(*a, **kw)
+        return HttpResponse(json.dumps(result), status=200,
+                            content_type=JSON_CONTENT_TYPE)
+    return wrapped
