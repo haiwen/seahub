@@ -37,8 +37,7 @@ from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
-from seahub.base.models import FileDiscuss, UserStarredFiles, \
-    DirFilesLastModifiedInfo, DeviceToken
+from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
@@ -887,9 +886,6 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
-    mtimes = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(
-        repo.id, path, dir_id)
-
     dir_list, file_list = [], []
     for dirent in dirs:
         dtype = "file"
@@ -897,16 +893,16 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
-            try:
+            if repo.version == 0:
                 entry["size"] = get_file_size(repo.store_id, repo.version,
                                               dirent.obj_id)
-            except Exception, e:
-                entry["size"] = 0
+            else:
+                entry["size"] = dirent.size
 
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
-        entry["mtime"] = mtimes.get(dirent.obj_name, None)
+        entry["mtime"] = dirent.mtime
         if dtype == 'dir':
             dir_list.append(entry)
         else:

@@ -36,7 +36,7 @@ from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check
-from seahub.base.models import UserStarredFiles, DirFilesLastModifiedInfo
+from seahub.base.models import UserStarredFiles
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
@@ -191,9 +191,6 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
 
         username = request.user.username
         starred_files = get_dir_starred_files(username, repo.id, path)
-        if repo.version == 0:
-            last_modified_info = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(repo.id, path)
-
         fileshares = FileShare.objects.filter(repo_id=repo.id).filter(username=username)
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
@@ -202,10 +199,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         view_file_base = reverse('repo_view_file', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
-            if repo.version == 0:
-                dirent.last_modified = last_modified_info.get(dirent.obj_name, 0)
-            else:
-                dirent.last_modified = dirent.mtime
+            dirent.last_modified = dirent.mtime
             dirent.sharelink = ''
             dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
