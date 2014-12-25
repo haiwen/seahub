@@ -183,6 +183,9 @@ def check_user_share_quota(username, repo, users=[], groups=[]):
 
     check_pass = False
     share_quota = seafile_api.get_user_share_quota(username)
+    if share_quota == -2:
+        return True             # share quota is unlimited
+
     current_share_usage = seafile_api.get_user_share_usage(username)
 
     share_usage = 0
