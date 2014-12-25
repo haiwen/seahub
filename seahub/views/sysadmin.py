@@ -128,7 +128,7 @@ def list_repos_by_owner(owner):
     for e in repos:
         e.owner = owner
     return repos
-    
+
 @login_required
 @sys_staff_required
 def sys_repo_search(request):
@@ -136,7 +136,7 @@ def sys_repo_search(request):
     """
     repo_name = request.GET.get('name', '')
     owner = request.GET.get('owner', '')
-    repos = []    
+    repos = []
 
     if repo_name and owner : # search by name and owner
         repos = list_repos_by_name_and_owner(repo_name, owner)
@@ -270,7 +270,7 @@ def sys_user_admin_ldap(request):
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
-            
+
     return render_to_response(
         'sysadmin/sys_useradmin_ldap.html', {
             'users': users,
@@ -374,7 +374,7 @@ def user_info(request, email):
                 fs.delete()
                 continue
             fs.filename = os.path.basename(fs.path)
-            path = fs.path.rstrip('/') # Normalize file path 
+            path = fs.path.rstrip('/') # Normalize file path
             obj_id = seafile_api.get_file_id_by_path(r.id, path)
             fs.file_size = seafile_api.get_file_size(r.store_id, r.version,
                                                      obj_id)
@@ -429,7 +429,7 @@ def user_info(request, email):
             'profile': profile,
             'd_profile': d_profile,
             'org_name': org_name,
-            "user_shared_links": user_shared_links,
+            'user_shared_links': user_shared_links,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -444,22 +444,29 @@ def user_set_quota(request, email):
     f = SetUserQuotaForm(request.POST)
     if f.is_valid():
         email = f.cleaned_data['email']
-        quota_mb = f.cleaned_data['quota']
-        quota = quota_mb * (1 << 20)
+        space_quota_mb = f.cleaned_data['space_quota']
+        space_quota = space_quota_mb * (1 << 20)
+        share_quota_mb = f.cleaned_data['share_quota']
+
+        share_quota = None
+        if share_quota_mb is not None:
+            share_quota = share_quota_mb * (1 << 20)
 
         org = ccnet_threaded_rpc.get_orgs_by_user(email)
         try:
             if not org:
-                seafile_api.set_user_quota(email, quota)
+                seafile_api.set_user_quota(email, space_quota)
+                if share_quota is not None:
+                    seafile_api.set_user_share_quota(email, share_quota)
             else:
                 org_id = org[0].org_id
                 org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / (1 << 20)
-                if quota_mb > org_quota_mb:
+                if space_quota_mb > org_quota_mb:
                     result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
                                             org_quota_mb)
                     return HttpResponse(json.dumps(result), status=400, content_type=content_type)
                 else:
-                    seafserv_threaded_rpc.set_org_user_quota(org_id, email, quota)
+                    seafserv_threaded_rpc.set_org_user_quota(org_id, email, space_quota)
         except:
             result['error'] = _(u'Failed to set quota: internal server error')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
@@ -534,7 +541,7 @@ def user_make_admin(request, user_id):
 
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
-        
+
     return HttpResponseRedirect(next)
 
 @login_required
@@ -551,7 +558,7 @@ def user_remove_admin(request, user_id):
 
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
-        
+
     return HttpResponseRedirect(next)
 
 @login_required
@@ -568,7 +575,7 @@ def user_activate(request, user_id):
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_useradmin')
-        
+
     return HttpResponseRedirect(next)
 
 @login_required
@@ -585,7 +592,7 @@ def user_deactivate(request, user_id):
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_useradmin')
-        
+
     return HttpResponseRedirect(next)
 
 def email_user_on_activation(user):
@@ -672,7 +679,7 @@ def send_user_reset_email(request, email, password):
         }
     send_html_email(_(u'Password has been reset on %s') % SITE_NAME,
             'sysadmin/user_reset_email.html', c, None, [email])
-    
+
 @login_required
 @sys_staff_required
 def user_reset(request, user_id):
@@ -710,9 +717,9 @@ def user_reset(request, user_id):
 
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
-        
+
     return HttpResponseRedirect(next)
-    
+
 def send_user_add_mail(request, email, password):
     """Send email when add new user."""
     c = {
@@ -1105,7 +1112,7 @@ def sys_repo_transfer(request):
     if not next:
         next = reverse(sys_repo_admin)
     return HttpResponseRedirect(next)
-    
+
 @login_required
 @sys_staff_required
 def sys_traffic_admin(request):
