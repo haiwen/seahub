@@ -12,11 +12,7 @@
 
         <td class="dirent-size"></td>
         <td class="dirent-update">
-            {% if dirent.last_modified %}
             {{ dirent.last_modified|translate_seahub_time }}
-            {% else %}
-            {% trans "Fetch failed" %}
-            {% endif %}
         </td>
         <td class="dirent-op">
             <div class="repo-file-op vh">
@@ -74,11 +70,7 @@
 
         <td class="dirent-size">{{ dirent.file_size|filesizeformat }}</td>
         <td class="dirent-update">
-            {% if dirent.last_modified %}
             {{ dirent.last_modified|translate_seahub_time }}
-            {% else %}
-            {% trans "Fetch failed" %}
-            {% endif %}
         </td>
         <td class="dirent-op">
             <div class="repo-file-op vh">
