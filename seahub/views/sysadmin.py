@@ -279,6 +279,7 @@ def sys_user_admin_ldap(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'enable_guest': ENABLE_GUEST,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
         },
         context_instance=RequestContext(request))
@@ -327,6 +328,7 @@ def sys_user_admin_admins(request):
             'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
+            'enable_guest': ENABLE_GUEST,
         }, context_instance=RequestContext(request))
 
 @login_required
