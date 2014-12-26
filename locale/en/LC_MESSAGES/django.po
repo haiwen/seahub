@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-26 15:04+0800\n"
+"POT-Creation-Date: 2014-12-26 17:20+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4383,7 +4383,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:1138
 #, python-format
-msgid "Encrypting, %(num)s% complete."
+msgid "Encrypting, %(num)s%% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:1155
@@ -4400,7 +4400,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:1497
 #, python-format
-msgid "Downloading, %(num)s% complete."
+msgid "Downloading, %(num)s%% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:1518
@@ -4409,7 +4409,7 @@ msgstr ""
 
 #: seahub/templates/repo.html:1535
 #, python-format
-msgid "Decrypting, %(num)s% complete."
+msgid "Decrypting, %(num)s%% complete."
 msgstr ""
 
 #: seahub/templates/repo.html:1638

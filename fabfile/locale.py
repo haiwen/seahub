@@ -12,7 +12,8 @@ def make(default=True):
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".
-    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%', '%')
+    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%s', '%s')
+    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%(', '%(')
 
 @task
 def push():
