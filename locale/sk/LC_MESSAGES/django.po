@@ -642,7 +642,7 @@ msgid "note"
 msgstr ""
 
 #: seahub/base/decorators.py:85
-msgid "Files in this library cannot be viewed online."
+msgid "Files in this library can not be viewed online."
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:87
@@ -1330,7 +1330,7 @@ msgstr "Pridať odpoveď..."
 #: seahub/group/templates/group/group_discuss.html:97
 #: seahub/group/templates/group/group_discuss.html:154
 #: seahub/group/templates/group/new_msg_reply.html:64
-msgid "It cannot be blank and should be no more than 2048 characters."
+msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Nesmie byť prázdne a presiahnuť 2048 znakov."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2251,7 +2251,7 @@ msgid "contact is required"
 msgstr ""
 
 #: seahub/message/views.py:159
-msgid "You cannot send message to yourself."
+msgid "You can not send message to yourself."
 msgstr ""
 
 #: seahub/message/views.py:163
@@ -2470,7 +2470,7 @@ msgid "Has not accepted invitation yet"
 msgstr ""
 
 #: seahub/profile/views.py:166
-msgid "Demo account cannot be deleted."
+msgid "Demo account can not be deleted."
 msgstr ""
 
 #: seahub/profile/views.py:187
@@ -2672,7 +2672,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:97
-msgid "You cannot share library to yourself."
+msgid "You can not share libray to yourself."
 msgstr ""
 
 #: seahub/share/views.py:106
@@ -5518,7 +5518,7 @@ msgstr ""
 #: seahub/views/file.py:263 seahub/views/file.py:270 seahub/views/file.py:491
 #: seahub/views/file.py:496
 #, python-format
-msgid "File size surpasses %s. Cannot be opened online."
+msgid "File size surpasses %s, can not be opened online."
 msgstr ""
 
 #: seahub/views/file.py:309 seahub/views/file.py:529 seahub/views/file.py:544
@@ -5622,7 +5622,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification cannot be sent, because Email service is not properly "
+"notification can not be sent, because Email service is not properly "
 "configured."
 msgstr ""
 
@@ -5654,7 +5654,7 @@ msgstr ""
 #: seahub/views/sysadmin.py:570
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification cannot be sent, because "
+"Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr ""
 

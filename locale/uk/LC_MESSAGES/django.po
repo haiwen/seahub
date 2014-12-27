@@ -746,7 +746,7 @@ msgid "note"
 msgstr "примітка"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library cannot be viewed online."
+msgid "Files in this library can not be viewed online."
 msgstr "Розмір файлу перевищує 10M і він не може бути переглянутий в он-лайн."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1474,7 +1474,7 @@ msgstr "Додати відповідь..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It cannot be blank and should be no more than 2048 characters."
+msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Значення не може бути порожнім і має бути не більше 150 символів."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2159,7 +2159,7 @@ msgid ""
 msgstr "Після створення групи, ви можете додати учасників для спільного використання бібліотек."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you cannot create groups."
+msgid "Since you are a guest user now, you can not create groups."
 msgstr "Так як ви гість, ви не можете створювати групи."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2514,7 +2514,7 @@ msgid "contact is required"
 msgstr "потрібен контакт"
 
 #: seahub/message/views.py:212
-msgid "You cannot send message to yourself."
+msgid "You can not send message to yourself."
 msgstr "Ви не можете посилати повідомлення самому собі."
 
 #: seahub/message/views.py:216
@@ -2798,7 +2798,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Не прийняв запрошення ще"
 
 #: seahub/profile/views.py:167
-msgid "Demo account cannot be deleted."
+msgid "Demo account can not be deleted."
 msgstr "Демонстраційний обліковий запис не може бути видалений."
 
 #: seahub/profile/views.py:193
@@ -3011,7 +3011,7 @@ msgid ""
 msgstr "Успішно надано спільний доступ до %(group)s, для перевірки перейдіть до <a href=\"%(share)s\">Спільний доступ</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share library to yourself."
+msgid "You can not share libray to yourself."
 msgstr "Ви не можете відкрити спільний доступ самому собі"
 
 #: seahub/share/views.py:146
@@ -3954,7 +3954,7 @@ msgstr "Seafile організує файли в бібліотеках. Кож�
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you cannot "
+"shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
 msgstr "Seafile організовує файли в бібліотеках. Кожна бібліотека може бути синхронізована і надана у спільне користування окремо. Однак, так як ви гість, ви не можете створювати бібліотеки."
 
@@ -5669,19 +5669,19 @@ msgid "None."
 msgstr "Ні."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name cannot be blank"
+msgid "Name can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url cannot be blank"
+msgid "Url can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner cannot be blank"
+msgid "Owner can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password cannot be blank"
+msgid "Password can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5799,7 +5799,7 @@ msgid ""
 msgstr "Пароль успішно змінено, але повідомлення не було відправлено, будь ласка, перевірте налаштування електронної пошти."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota cannot be empty"
+msgid "Quota can not be empty"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6266,7 +6266,7 @@ msgid "Wrong repo id"
 msgstr "Невірний repo id"
 
 #: seahub/views/ajax.py:1309
-msgid "System library cannot be deleted."
+msgid "System library can not be deleted."
 msgstr "Системна бібліотека не може  бути видалена."
 
 #: seahub/views/ajax.py:1593
@@ -6304,7 +6304,7 @@ msgstr "Шевідомий алгоритм шифрування файлу."
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s. Cannot be opened online."
+msgid "File size surpasses %s, can not be opened online."
 msgstr "Розмір файлу перевищує %s, і не може бути відкритий в онлайн режимі."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6431,7 +6431,7 @@ msgstr "Пароль успішно змінено на %(passwd)s для кор
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification cannot be sent, because Email service is not properly "
+"notification can not be sent, because Email service is not properly "
 "configured."
 msgstr "Пароль успішно змінено на %(passwd)s для користувача %(user)s. Але повідомлення не було надіслано, бо не правильно налаштована поштова служба."
 
@@ -6464,7 +6464,7 @@ msgstr "Успішно доданий користувач %s."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification cannot be sent, because "
+"Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Успішно доданий користувач %s. Але повідомлення не було надіслано, томущо неправильно налаштована поштова служба."
 
@@ -6499,7 +6499,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Не вдалося передати, неприпустимі аргументи."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now. Cannot add admin."
+msgid "Using LDAP now, can not add admin."
 msgstr "При використанні LDAP зараз, неможливо додати адміністратора."
 
 #: seahub/views/sysadmin.py:1110

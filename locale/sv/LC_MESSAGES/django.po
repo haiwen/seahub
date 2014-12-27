@@ -743,7 +743,7 @@ msgid "note"
 msgstr "anteckning"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library cannot be viewed online."
+msgid "Files in this library can not be viewed online."
 msgstr "Filer i denna katalog kan inte läsas on-line"
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1466,7 +1466,7 @@ msgstr "Skapa kommentar..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It cannot be blank and should be no more than 2048 characters."
+msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Kan inte vara tom och ska inte vara mer än 2048 tecken."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2151,7 +2151,7 @@ msgid ""
 msgstr "Efter du skapat en grupp kan du lägga till medlemmar och dela kataloger till gruppen"
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you cannot create groups."
+msgid "Since you are a guest user now, you can not create groups."
 msgstr "Eftersom du är en gästanvändare nu, kan du inte skapa grupper."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2506,7 +2506,7 @@ msgid "contact is required"
 msgstr "kontakt krävs"
 
 #: seahub/message/views.py:212
-msgid "You cannot send message to yourself."
+msgid "You can not send message to yourself."
 msgstr "Du kan inte skicka meddelande till dig själv."
 
 #: seahub/message/views.py:216
@@ -2789,7 +2789,7 @@ msgid "Has not accepted invitation yet"
 msgstr "Har inte accepterat inbjudan ännu"
 
 #: seahub/profile/views.py:167
-msgid "Demo account cannot be deleted."
+msgid "Demo account can not be deleted."
 msgstr "Demo-konto kan inte tas bort"
 
 #: seahub/profile/views.py:193
@@ -3002,7 +3002,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:138
-msgid "You cannot share library to yourself."
+msgid "You can not share libray to yourself."
 msgstr "Du kan inte dela en katalog till dig själv"
 
 #: seahub/share/views.py:146
@@ -3945,7 +3945,7 @@ msgstr "Seafile ordnar filer i kataloger. Varje katalog kan synkas och delas sep
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you cannot "
+"shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
 msgstr ""
 
@@ -5659,19 +5659,19 @@ msgid "None."
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name cannot be blank"
+msgid "Name can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url cannot be blank"
+msgid "Url can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner cannot be blank"
+msgid "Owner can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password cannot be blank"
+msgid "Password can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5789,7 +5789,7 @@ msgid ""
 msgstr "Ändring genomförd, men email kunde inte skickas, kontrollera email-konfiguration"
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota cannot be empty"
+msgid "Quota can not be empty"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6256,7 +6256,7 @@ msgid "Wrong repo id"
 msgstr "Fel repo id"
 
 #: seahub/views/ajax.py:1309
-msgid "System library cannot be deleted."
+msgid "System library can not be deleted."
 msgstr "System bibliotek kan inte raderas."
 
 #: seahub/views/ajax.py:1593
@@ -6294,7 +6294,7 @@ msgstr "Okänd fil-kodning"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s. Cannot be opened online."
+msgid "File size surpasses %s, can not be opened online."
 msgstr "Filen är stötte än %s, och kan inte öppnas on-line."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6421,7 +6421,7 @@ msgstr "Återställde lösenord till %(passwd)s för användare %(user)s."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification cannot be sent, because Email service is not properly "
+"notification can not be sent, because Email service is not properly "
 "configured."
 msgstr "Återställde lösenordet till %(passwd)s för användare %(user)s. Men email kan inte skickas, eftersom email-service inte är korrekt konfigurerad."
 
@@ -6454,7 +6454,7 @@ msgstr "Skapade användare %s"
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification cannot be sent, because "
+"Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Skapade användare %s. Men email kunde inte skickas, eftersom email-service inte är korrekt konfigurerad."
 
@@ -6489,7 +6489,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Misslyckades med överföring, ogiltiga argument-"
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now. Cannot add admin."
+msgid "Using LDAP now, can not add admin."
 msgstr ""
 
 #: seahub/views/sysadmin.py:1110

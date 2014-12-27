@@ -742,7 +742,7 @@ msgid "note"
 msgstr "Piezīme"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library cannot be viewed online."
+msgid "Files in this library can not be viewed online."
 msgstr "Šīs bibliotēkas datnes nevar tikt skatītas tiešsaistē"
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1470,7 +1470,7 @@ msgstr "Pievienot atbildi..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It cannot be blank and should be no more than 2048 characters."
+msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Lauks nevar būt tukšs, un nedrīkst būt garāks par 2048 rakstzīmēm."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2155,7 +2155,7 @@ msgid ""
 msgstr "Kad tiks izveidota grupa, tai varēs pievienot biedrus un sniegt tiem pieeju bibliotēkām"
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you cannot create groups."
+msgid "Since you are a guest user now, you can not create groups."
 msgstr "Tā kā jūs esat, tagad viesis nevarat izveidot grupas."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2510,7 +2510,7 @@ msgid "contact is required"
 msgstr "kontakts ir nepieciešams"
 
 #: seahub/message/views.py:212
-msgid "You cannot send message to yourself."
+msgid "You can not send message to yourself."
 msgstr "Jūs nevarat nosūtīt ziņojumu pats sev."
 
 #: seahub/message/views.py:216
@@ -2794,7 +2794,7 @@ msgid "Has not accepted invitation yet"
 msgstr ""
 
 #: seahub/profile/views.py:167
-msgid "Demo account cannot be deleted."
+msgid "Demo account can not be deleted."
 msgstr "Demo kontu nevar dzēst."
 
 #: seahub/profile/views.py:193
@@ -3007,7 +3007,7 @@ msgid ""
 msgstr ""
 
 #: seahub/share/views.py:138
-msgid "You cannot share library to yourself."
+msgid "You can not share libray to yourself."
 msgstr ""
 
 #: seahub/share/views.py:146
@@ -3950,7 +3950,7 @@ msgstr ""
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you cannot "
+"shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
 msgstr ""
 
@@ -5665,19 +5665,19 @@ msgid "None."
 msgstr "Neviens."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name cannot be blank"
+msgid "Name can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url cannot be blank"
+msgid "Url can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner cannot be blank"
+msgid "Owner can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password cannot be blank"
+msgid "Password can not be blank"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5795,7 +5795,7 @@ msgid ""
 msgstr "Rediģēt izdevās, tomēr neizdevās nosūtīt e-pastu, lūdzu, pārbaudiet savu e-pasta konfigurāciju."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota cannot be empty"
+msgid "Quota can not be empty"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6262,7 +6262,7 @@ msgid "Wrong repo id"
 msgstr "Nepareizs repozitorija ID"
 
 #: seahub/views/ajax.py:1309
-msgid "System library cannot be deleted."
+msgid "System library can not be deleted."
 msgstr "Sistēmas bibliotēku nevar dzēst."
 
 #: seahub/views/ajax.py:1593
@@ -6300,7 +6300,7 @@ msgstr "Nezināms datnes kodējums"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s. Cannot be opened online."
+msgid "File size surpasses %s, can not be opened online."
 msgstr "Datnes lielums pārsniedz %s, nevar atvērt tiešsaistes režīmā.."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6427,7 +6427,7 @@ msgstr "Veiksmīgi atiestatīta parole %(passwd)s lietotājam %(user)s."
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification cannot be sent, because Email service is not properly "
+"notification can not be sent, because Email service is not properly "
 "configured."
 msgstr "Veiksmīgi atiestatīta parole %(passwd)s lietotājam %(user)s. Taču e-pasta ziņojumu nevar nosūtīt, jo e-pasta pakalpojums nav pareizi konfigurēts."
 
@@ -6460,7 +6460,7 @@ msgstr "Veiksmīgi pievienots lietotājs %s."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification cannot be sent, because "
+"Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Veiksmīgi pievienots lietotājs %s. Taču e-pasta ziņojumu nevar nosūtīt, jo e-pasta pakalpojums nav pareizi konfigurēts."
 
@@ -6495,7 +6495,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Neizdevās pārsūtīt, nederīgi argumenti."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now. Cannot add admin."
+msgid "Using LDAP now, can not add admin."
 msgstr "Tagad, izmantojot LDAP nevar pievienot administratoru."
 
 #: seahub/views/sysadmin.py:1110

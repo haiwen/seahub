@@ -752,7 +752,7 @@ msgid "note"
 msgstr "note"
 
 #: seahub/base/decorators.py:68
-msgid "Files in this library cannot be viewed online."
+msgid "Files in this library can not be viewed online."
 msgstr "Les fichiers de cette bibliothèque ne peuvent pas être consultés en ligne."
 
 #: seahub/base/templatetags/seahub_tags.py:93
@@ -1475,7 +1475,7 @@ msgstr "Ajouter une réponse ..."
 #: seahub/group/templates/group/group_discuss.html:111
 #: seahub/group/templates/group/group_discuss.html:167
 #: seahub/group/templates/group/new_msg_reply.html:66
-msgid "It cannot be blank and should be no more than 2048 characters."
+msgid "It can not be blank and should be no more than 2048 characters."
 msgstr "Il ne peut pas être vide et ne doit pas faire plus de 2048 caractères."
 
 #: seahub/group/templates/group/discussion_list.html:43
@@ -2160,7 +2160,7 @@ msgid ""
 msgstr "Après avoir créé un groupe, vous pouvez ajouter des membres et partager des bibliothèques avec eux."
 
 #: seahub/group/templates/group/groups_left_panel.html:8
-msgid "Since you are a guest user now, you cannot create groups."
+msgid "Since you are a guest user now, you can not create groups."
 msgstr "Comme vous êtes un utilisateur invité vous ne pouvez pas créer des groupes."
 
 #: seahub/group/templates/group/groups_right_panel.html:4
@@ -2515,7 +2515,7 @@ msgid "contact is required"
 msgstr "Un contact est requis"
 
 #: seahub/message/views.py:212
-msgid "You cannot send message to yourself."
+msgid "You can not send message to yourself."
 msgstr "Vous ne pouvez pas envoyer de messages à vous-même."
 
 #: seahub/message/views.py:216
@@ -2798,7 +2798,7 @@ msgid "Has not accepted invitation yet"
 msgstr "L'invitation n'a pas encore été acceptée."
 
 #: seahub/profile/views.py:167
-msgid "Demo account cannot be deleted."
+msgid "Demo account can not be deleted."
 msgstr "Le compte de démo ne peut pas être supprimé."
 
 #: seahub/profile/views.py:193
@@ -3011,7 +3011,7 @@ msgid ""
 msgstr "Partagé à %(group)s avec succès，vous pouvez vérifier sur <a href=\"%(share)s\">Partages</a>."
 
 #: seahub/share/views.py:138
-msgid "You cannot share library to yourself."
+msgid "You can not share libray to yourself."
 msgstr "Vous ne pouvez pas partager une bibliothèque avec vous-même."
 
 #: seahub/share/views.py:146
@@ -3954,7 +3954,7 @@ msgstr "Seafile organise les fichiers dans des bibliothèques. Chaque bibliothè
 #: seahub/templates/myhome.html:44
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
-"shared separately. Howerver, since you are a guest user now, you cannot "
+"shared separately. Howerver, since you are a guest user now, you can not "
 "create libraries."
 msgstr "Seafile organise les fichiers dans des bibliothèques. Chaque bibliothèque peut être synchronisée et partagée séparément. Cependant comme vous êtes un invité vous ne pouvez pas créer des bibliothèques."
 
@@ -5668,19 +5668,19 @@ msgid "None."
 msgstr "Aucun."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:79
-msgid "Name cannot be blank"
+msgid "Name can not be blank"
 msgstr "Nom ne peut pas être vide."
 
 #: seahub/templates/sysadmin/sys_org_admin.html:83
-msgid "Url cannot be blank"
+msgid "Url can not be blank"
 msgstr "Url ne peut pas être vide"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:87
-msgid "Owner cannot be blank"
+msgid "Owner can not be blank"
 msgstr "Propriétaire ne peut pas être vide"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:91
-msgid "Password cannot be blank"
+msgid "Password can not be blank"
 msgstr "Mot de passe ne peut pas être vide"
 
 #: seahub/templates/sysadmin/sys_org_admin.html:99
@@ -5798,7 +5798,7 @@ msgid ""
 msgstr "Édité avec succès, mais échec d\\'envoi de l'email, veuillez vérifier votre configuration."
 
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:13
-msgid "Quota cannot be empty"
+msgid "Quota can not be empty"
 msgstr "Quota ne peut pas être vide"
 
 #: seahub/templates/sysadmin/sys_publink_admin.html:7
@@ -6265,7 +6265,7 @@ msgid "Wrong repo id"
 msgstr "Mauvais ID de repo"
 
 #: seahub/views/ajax.py:1309
-msgid "System library cannot be deleted."
+msgid "System library can not be deleted."
 msgstr "La librairie système ne peut pas être supprimée."
 
 #: seahub/views/ajax.py:1593
@@ -6303,7 +6303,7 @@ msgstr "Codage de fichier inconnu"
 #: seahub/views/file.py:275 seahub/views/file.py:282 seahub/views/file.py:507
 #: seahub/views/file.py:512
 #, python-format
-msgid "File size surpasses %s. Cannot be opened online."
+msgid "File size surpasses %s, can not be opened online."
 msgstr "La taille du fichier dépasse %s, il ne peut donc pas être visionné en ligne."
 
 #: seahub/views/file.py:322 seahub/views/file.py:547 seahub/views/file.py:562
@@ -6430,7 +6430,7 @@ msgstr "Mot de passe de l'utilisateur %(user)s remplacé par %(passwd)s avec suc
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
-"notification cannot be sent, because Email service is not properly "
+"notification can not be sent, because Email service is not properly "
 "configured."
 msgstr "Le mot de passe de l'utilisateur %(user)s a été remplacé par %(passwd)s avec succès. Malheureusement la notification par email ne peut pas être envoyée : le service de courrier électronique n'est pas configuré correctement."
 
@@ -6463,7 +6463,7 @@ msgstr "L'utilisateur %s a été ajouté avec succès."
 #: seahub/views/sysadmin.py:726
 #, python-format
 msgid ""
-"Successfully added user %s. But email notification cannot be sent, because "
+"Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "L'utilisateur %s a été ajouté avec succès. La notification par email ne peut être envoyée, le service de courrier électronique n'est pas configuré correctement."
 
@@ -6498,7 +6498,7 @@ msgid "Failed to transfer, invalid arguments."
 msgstr "Échec du transfert, arguments invalides."
 
 #: seahub/views/sysadmin.py:1093
-msgid "Using LDAP now. Cannot add admin."
+msgid "Using LDAP now, can not add admin."
 msgstr "Utilisateur LDAP, impossible de le rendre administrateur."
 
 #: seahub/views/sysadmin.py:1110
