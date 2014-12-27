@@ -411,7 +411,7 @@ SEAFILE_VERSION = '3.0.0'
 ###################
 
 # Enable or disable thumbnail
-ENABLE_THUMBNAIL = False
+ENABLE_THUMBNAIL = True
 
 # Absolute filesystem path to the directory that will hold thumbnail files.
 THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
