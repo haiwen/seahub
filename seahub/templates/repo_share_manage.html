@@ -1,0 +1,239 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n avatar_tags group_avatar_tags seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position: relative; }
+.go-back { top:0; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab"><a href="{% url 'repo_change_password' repo.id %}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+        <li class="tab tab-cur"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="lib-setting">
+    <h2>{% trans "Library Settings" %}</h2>
+    <h3>{% trans "Sharing Management" %}</h3>
+    <p>{% trans "View and manage all the share of this library." %}</p>
+
+    <div id="tabs" class="tab-tabs">
+        <div class="hd ovhd">
+            <ul class="tab-tabs-nav fleft">
+                <li class="tab"><a href="#user-tab" class="a" id="user-tab">{% trans "User" %}</a></li>
+                <li class="tab"><a href="#group-tab" class="a" id="group-tab">{% trans "Group" %}</a></li>
+            </ul>
+            <div class="fright">
+                <button class="repo-share-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Share Library" %}</span></button>
+            </div>
+        </div>
+
+        <div id="user-tab">
+            <table>
+                <tr>
+                    <th width="40%">{% trans "Share To"%}</th>
+                    <th width="40%">{% trans "Permission"%}</th>
+                    <th width="20%">{% trans "Operations"%}</th>
+                </tr>
+                {% if repo_share_user %}
+                {% for share in repo_share_user %}
+                <tr class="perm-item" data-to_user="{{ share.user }}">
+                    <td><a href="{% url 'user_profile' share.user %}">{{ share.user }}</a></td>
+                    <td>
+                        <div class="perm-change">
+                          {% if share.permission == 'rw' %}
+                            <span class="share-perm-cur-value">{% trans "Read-Write" %}</span>
+                          {% else %}
+                            <span class="share-perm-cur-value">{% trans "Read-Only" %}</span>
+                          {% endif %}
+                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                        </div>
+                        <select class="perm-toggle-select hide">
+                            <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
+                            <option value="r" {%if not share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&to={{ share.user|urlencode }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+        <div id="group-tab" class="hide">
+            <table>
+                <tr>
+                    <th width="40%">{% trans "Share To"%}</th>
+                    <th width="40%">{% trans "Permission"%}</th>
+                    <th width="20%">{% trans "Operations"%}</th>
+                </tr>
+                {% if repo_share_group %}
+                {% for share in repo_share_group %}
+                <tr class="perm-item" data-group_id="{{ share.group_id }}">
+                    <td><a href="{% url 'group_info' share.group_id%}">{{ share.group_name }}</a></td>
+                    <td>
+                        <div class="perm-change">
+                          {% if share.permission == 'rw' %}
+                            <span class="perm-cur-value">{% trans "Read-Write" %}</span>
+                          {% else %}
+                            <span class="perm-cur-value">{% trans "Read-Only" %}</span>
+                          {% endif %}
+                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                        </div>
+                        <select class="perm-toggle-select hide">
+                            <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
+                            <option value="r" {%if not share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ share.group_id }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+</div>
+
+{% url 'share_repo' as repo_share_url %}
+{% with post_url=repo_share_url %}
+{% include "snippets/repo_share_form.html" %}
+{% endwith %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+
+$(function () {
+    $.ajax({
+        url:'{% url 'get_contacts' %}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var share_list = [];
+            var contacts = data['contacts'], contact_email, group_name, group_name_py;   
+            for (var i = 0, len = contacts.length; i < len; i++) {
+                contact_email = contacts[i].email;
+                share_list.push({value:contact_email, label:contact_email});
+            }
+            {% for group in request.user.joined_groups %}
+            group_name = '{{ group.group_name }}';
+            group_name_py = '{{ group.group_name|char2pinyin }}'
+            share_list.push({value:group_name + group_name_py, label:group_name});
+            {% endfor %}
+
+            $(".repo-share-btn").click(function() {
+                var form = $("#repo-share-form"),
+                    hd = $('.hd', form),
+                    btn_ct = $(this).parents('td'),
+                    repo_name = btn_ct.attr('data-name');
+                var grp_options_ct = $('#share-grp-options');
+                if (!$.trim(grp_options_ct.html())) {
+                    var grp_options = '<ul class="option-list">';
+                    {% for group in request.user.joined_groups %}
+                    grp_options += '<li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="grp" value="{{ group.group_name }}" class="checkbox-orig"/></span> {% grp_avatar group.id 20 %} <span class="checkbox-option">{{ group.group_name }}</span> </label> </li>';
+                    {% endfor %}
+                    grp_options += '</ul>';
+                    grp_options_ct.html(grp_options);
+                }
+                var contact_options_ct = $('#share-contact-options');
+                if (!$.trim(contact_options_ct.html())) {
+                    var contact_options = '<ul class="option-list">';
+                    for (var i = 0, len = contacts.length; i < len; i++) {
+                        contact_email = contacts[i].email;
+                        contact_options += ' <li> <label class="checkbox-label"> <span class="checkbox"><input type="checkbox" name="contact" value="' + contact_email + '" class="checkbox-orig" /></span>' + contacts[i].avatar + ' <span class="checkbox-option">' + contact_email + '</span> </label> </li>';
+                    }
+                    contact_options += '</ul>';
+                    contact_options_ct.html(contact_options);
+                }
+
+                $('.checkbox-orig', form).unbind().click(function() {
+                    $(this).parent().toggleClass('checkbox-checked');
+                });
+                $(".checkbox-label", form).unbind().hover(
+                    function() {
+                        $(this).addClass('hl');
+                    },
+                    function() {
+                        $(this).removeClass('hl');
+                    }
+                );
+                form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
+                $('[name="repo_id"]', form).val('{{repo.id}}');
+                hd.html(hd.html().replace('%(lib_name)s', '<span class="op-target">' + repo_name + '</span>'));
+                $('#repo-share-tabs').tabs();
+                $('#simplemodal-container').css('height', 'auto');
+                addAutocomplete('#email_or_group', '#repo-share-form', share_list);
+            });
+        }
+    });
+});
+
+//check before post
+$('#share-submit-btn').click(function() {
+    var form = $("#repo-share-form"),
+        cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
+        post_data = '',
+        input = $('[name="email_or_group"]', form);
+    switch(cur_tab_id) {
+        case '#share-enter':
+            post_data = input.val();
+            break;
+        case '#share-grp-options':
+        case '#share-contact-options':
+            $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
+                post_data += $(this).val() + ',';
+            });
+            input.val(post_data);
+    }
+    if (!post_data) {
+        apply_form_error(form.attr('id'), "{% trans "Please enter emails or groups, or select some." %}");
+        return false;
+    }
+    form.submit();
+    disable($(this));
+});
+
+{% include "repo_setting_extra_js.html" %}
+
+$('.perm-toggle-select').on('change', function() {
+    var select = $(this),
+        perm_item = select.parents('.perm-item'),
+        perm = select.val();
+
+    if (is_user_tab == true) {
+        var to_user = perm_item.attr('data-to_user'),
+            data = { repo_id: '{{repo.id}}', email_or_group: to_user, permission: perm },
+            url = '{% url 'share_permission_admin' %}?share_type=' + 'personal';
+    } else {
+        var group_id = perm_item.attr('data-group_id'),
+            data = { repo_id: '{{repo.id}}', email_or_group: group_id, permission: perm },
+            url = '{% url 'share_permission_admin' %}?share_type=' + 'group';
+    }
+
+    perm_toggle(select, data, url)
+});
+
+</script>
+{% endblock %}

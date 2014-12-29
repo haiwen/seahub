@@ -27,7 +27,7 @@
                     <a href="{{ SITE_ROOT }}seafile_access_check/?repo_id={{repo.props.id}}" target="_blank">{% trans "Download" %}</a>
                     {% endif %}
                     {% if show_repo_settings %}
-                    <a id="repo-setting-btn" href="{% url 'repo_settings' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/setting.png" alt="" /><span class="vam">{% trans "Settings" %}</span></a>
+                    <a id="repo-setting-btn" href="{% url 'repo_basic_info' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/setting.png" alt="" /><span class="vam">{% trans "Settings" %}</span></a>
                     {% endif %}
                     {% if user_perm == 'rw' %}
                     <a id="recycle-btn" href="{% url 'repo_recycle_view' repo.id %}" class="normal"><img class="link-icon vam" src="{{ MEDIA_URL }}img/lib_trash.png" alt="" /><span class="vam">{% trans "Trash"%}</span></a>

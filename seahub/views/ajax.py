@@ -10,18 +10,20 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage
+    get_user_quota_usage, get_user_share_usage, edit_repo, \
+    set_repo_history_limit
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
-    RepoCreateForm, SharedRepoCreateForm
+    RepoCreateForm, SharedRepoCreateForm, RepoSettingForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
@@ -37,12 +39,15 @@ from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE
+    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_org_user_events, get_user_events, get_file_type_and_ext
+    get_org_user_events, get_user_events, get_file_type_and_ext, \
+    is_valid_username
+from seahub.utils.repo import check_group_folder_perm_args, \
+    check_user_folder_perm_args
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.utils.file_types import IMAGE
@@ -301,7 +306,7 @@ def list_dir(request, repo_id):
         'file_list': file_list,
         'dirent_more': dirent_more,
         'more_start': more_start,
-        'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
         'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
         'current_commit': head_commit,
@@ -384,7 +389,7 @@ def list_dir_more(request, repo_id):
         'server_crypto': server_crypto,
         'dir_list': dir_list,
         'file_list': file_list,
-        'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
         'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
     }
@@ -1859,3 +1864,355 @@ def events(request):
                                     'events_more': events_more,
                                     'new_start': start}),
                         content_type='application/json; charset=utf-8')
+
+@login_required_ajax
+def ajax_repo_change_basic_info(request, repo_id):
+    """Handle post request to change library basic info.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # no settings for virtual repo
+    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        raise Http404
+
+    form = RepoSettingForm(request.POST)
+    if not form.is_valid():
+        return HttpResponse(json.dumps({
+                    'error': str(form.errors.values()[0])
+                    }), status=400, content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    days = form.cleaned_data['days']
+
+    # Edit library info (name, descryption).
+    if repo.name != repo_name or repo.desc != repo_desc:
+        if not edit_repo(repo_id, repo_name, repo_desc, username):
+            err_msg = _(u'Failed to edit library information.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=500, content_type=content_type)
+
+    # set library history
+    if days is not None and ENABLE_REPO_HISTORY_SETTING:
+        res = set_repo_history_limit(repo_id, days)
+        if res != 0:
+            return HttpResponse(json.dumps({
+                        'error': _(u'Failed to save settings on server')
+                        }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Settings saved.'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def ajax_repo_transfer_owner(request, repo_id):
+    """Handle post request to transfer library owner.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        raise Http404
+
+    # check POST arg
+    repo_owner = request.POST.get('repo_owner', '').lower()
+    if not is_valid_username(repo_owner):
+        return HttpResponse(json.dumps({
+                        'error': _('Username %s is not valid.') % repo_owner,
+                        }), status=400, content_type=content_type)
+
+    try:
+        User.objects.get(email=repo_owner)
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({
+                        'error': _('User %s is not found.') % repo_owner,
+                        }), status=400, content_type=content_type)
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, repo_owner):
+            return HttpResponse(json.dumps({
+                        'error': _('User %s is not in current organization.') %
+                        repo_owner,}), status=400, content_type=content_type)
+
+    if repo_owner and repo_owner != username:
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
+        else:
+            if ccnet_threaded_rpc.get_orgs_by_user(repo_owner):
+                return HttpResponse(json.dumps({
+                       'error': _('Can not transfer library to organization user %s.') % repo_owner,
+                       }), status=400, content_type=content_type)
+            else:
+                seafile_api.set_repo_owner(repo_id, repo_owner)
+
+    messages.success(request,
+                     _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
+                     {'repo_name': repo.name, 'new_owner': repo_owner})
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def ajax_repo_change_passwd(request, repo_id):
+    """Handle ajax post request to change library password.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        return HttpResponse(json.dumps({
+                    'error': _('Faied to change password, you are not owner.')}),
+                    status=400, content_type=content_type)
+
+    old_passwd = request.POST.get('old_passwd', '')
+    new_passwd = request.POST.get('new_passwd', '')
+    try:
+        seafile_api.change_repo_passwd(repo_id, old_passwd, new_passwd, username)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({
+                    'error': e.msg,
+                    }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
+                     {'repo_name': repo.name})
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def add_user_folder_permission(request, repo_id):
+    """
+    Add folder permission to a user
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.POST.get('user', None)
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not user or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.add_folder_user_perm(repo_id, path, perm, user)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+    messages.success(request, _(u'Success'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def remove_user_folder_permission(request, repo_id):
+    """
+    Remove folder permission of a user
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.GET.get('user', None)
+    path = request.GET.get('path', None)
+
+    if not user or not path:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.rm_folder_user_perm(repo_id, path, user)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def toggle_user_folder_permission(request, repo_id):
+    """
+    Change folder permission of a user
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.POST.get('user', None)
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    print user, path, perm
+    if not user or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.set_folder_user_perm(repo_id, path, perm, user)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def add_group_folder_permission(request, repo_id):
+    """
+    Add folder permission to a group
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.POST.get('group_id', None))
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not group_id or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+    messages.success(request, _(u'Success'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def remove_group_folder_permission(request, repo_id):
+    """
+    Remove folder permission of a group
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.GET.get('group_id', None))
+    path = request.GET.get('path', None)
+
+    if not group_id or not path:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.rm_folder_group_perm(repo_id, path, group_id)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def toggle_group_folder_permission(request, repo_id):
+    """
+    Change folder permission of a group
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.POST.get('group_id', None))
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not group_id or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.set_folder_group_perm(repo_id, path, perm, group_id)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
