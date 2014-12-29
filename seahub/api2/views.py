@@ -27,9 +27,10 @@ from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils import timezone
 
-from authentication import TokenAuthentication
-from serializers import AuthTokenSerializer, AccountSerializer
-from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
+from .throttling import ScopedRateThrottle
+from .authentication import TokenAuthentication
+from .serializers import AuthTokenSerializer, AccountSerializer
+from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
@@ -117,6 +118,9 @@ class Ping(APIView):
     For example:
         curl http://127.0.0.1:8000/api2/ping/
     """
+    throttle_classes = (ScopedRateThrottle, )
+    throttle_scope = 'ping'
+
     def get(self, request, format=None):
         return Response('pong')
 
@@ -131,6 +135,7 @@ class AuthPing(APIView):
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         return Response('pong')
