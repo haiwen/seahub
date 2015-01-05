@@ -57,7 +57,7 @@ from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
-from seahub.utils import HAS_OFFICE_CONVERTER
+from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -163,7 +163,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """ Get path and the permission to view file.
 
     Returns:
-    	outer fileserver file url, inner fileserver file url, permission
+        outer fileserver file url, inner fileserver file url, permission
     """
     username = request.user.username
     filename = os.path.basename(path)
@@ -183,7 +183,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path):
 def handle_textual_file(request, filetype, raw_path, ret_dict):
     # encoding option a user chose
     file_enc = request.GET.get('file_enc', 'auto')
-    if not file_enc in FILE_ENCODING_LIST:
+    if file_enc not in FILE_ENCODING_LIST:
         file_enc = 'auto'
     err, file_content, encoding = get_file_content(filetype,
                                                    raw_path, file_enc)
@@ -286,6 +286,23 @@ def file_size_exceeds_preview_limit(file_size, file_type):
         else:
             return False, ''
 
+def can_preview_file(file_name, file_size):
+    """Check whether a file can be viewed online.
+
+    Returns (True, None) if file can be viewed online, otherwise
+    (False, erro_msg).
+    """
+    file_type, file_ext = get_file_type_and_ext(file_name)
+    if file_ext in FILEEXT_TYPE_MAP:  # check file extension
+        exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
+                                                                 file_type)
+        if exceeds_limit:
+            return (False, err_msg)
+        else:
+            return (True, None)
+    else:
+        return (False, "This type of file cannot be viewed online.")
+
 @login_required
 @repo_passwd_set_required
 def view_file(request, repo_id):
@@ -339,11 +356,9 @@ def view_file(request, repo_id):
                 'filetype': filetype}
 
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
+    can_preview, err_msg = can_preview_file(u_filename, fsize)
 
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
+    if can_preview:
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -380,8 +395,11 @@ def view_file(request, repo_id):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
-        else:
-            pass
+
+        template = 'view_file_%s.html' % ret_dict['filetype'].lower()
+    else:
+        ret_dict['err'] = err_msg
+        template = 'view_file_base.html'
 
     # generate file path navigator
     zipped = gen_path_link(path, repo.name)
@@ -416,8 +434,6 @@ def view_file(request, repo_id):
     else:
         repogrp_str = ''
 
-    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
-
     # fetch file contributors and latest contributor
     try:
         dirent = seafile_api.get_dirent_by_path(repo.id, path)
@@ -432,8 +448,6 @@ def view_file(request, repo_id):
     if request.user.org:
         org_id = request.user.org.org_id
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
-
-    template = 'view_file_%s.html' % ret_dict['filetype'].lower()
 
     office_preview_token = ret_dict.get('office_preview_token', '')
 
@@ -540,7 +554,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     ret_dict['current_commit'] = current_commit
     ret_dict['fileext'] = fileext
     ret_dict['raw_path'] = raw_path
-    if not ret_dict.has_key('filetype'):
+    if 'filetype' not in ret_dict:
         ret_dict['filetype'] = filetype
     ret_dict['use_pdfjs'] = USE_PDFJS
 
@@ -607,7 +621,7 @@ def view_shared_file(request, token):
         raise Http404
 
     if fileshare.is_encrypted():
-        if not check_share_link_access(request.user.username, token):
+        if not check_share_link_access(request, token):
             d = {'token': token, 'view_name': 'view_shared_file', }
             if request.method == 'POST':
                 post_values = request.POST.copy()
@@ -615,9 +629,7 @@ def view_shared_file(request, token):
                 form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
                 if form.is_valid():
-                    # set cache for non-anonymous user
-                    if request.user.is_authenticated():
-                        set_share_link_access(request.user.username, token)
+                    set_share_link_access(request, token)
                 else:
                     return render_to_response('share_access_validation.html', d,
                                               context_instance=RequestContext(request))
@@ -648,10 +660,10 @@ def view_shared_file(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
+
+    can_preview, err_msg = can_preview_file(filename, file_size)
+
+    if can_preview:
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
@@ -666,17 +678,19 @@ def view_shared_file(request, token):
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
 
+        # send statistic messages
+        if ret_dict['filetype'] != 'Unknown':
+            try:
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' %
+                             (repo.id, shared_by, obj_id, file_size))
+            except SearpcError, e:
+                logger.error('Error when sending file-view message: %s' % str(e))
+    else:
+        ret_dict['err'] = err_msg
+
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
     fileshare.save()
-
-    # send statistic messages
-    if ret_dict['filetype'] != 'Unknown':
-        try:
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, file_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -782,10 +796,10 @@ def view_file_via_shared_dir(request, token):
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
+
+    can_preview, err_msg = can_preview_file(filename, file_size)
+
+    if can_preview:
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
@@ -822,10 +836,12 @@ def view_file_via_shared_dir(request, token):
         # send statistic messages
         if ret_dict['filetype'] != 'Unknown':
             try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' %
                              (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
+    else:
+        ret_dict['err'] = err_msg
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
@@ -857,6 +873,7 @@ def view_file_via_shared_dir(request, token):
 
 def file_edit_submit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
+
     def error_json(error_msg=_(u'Internal Error'), op=None):
         return HttpResponse(json.dumps({'error': error_msg, 'op': op}),
                             status=400,
@@ -886,6 +903,7 @@ def file_edit_submit(request, repo_id):
 
     # first dump the file content to a tmp file, then update the file
     fd, tmpfile = mkstemp()
+
     def remove_tmp_file():
         try:
             os.remove(tmpfile)
@@ -974,7 +992,7 @@ def file_edit(request, repo_id):
         if not op:
             inner_path = gen_inner_file_get_url(token, filename)
             file_enc = request.GET.get('file_enc', 'auto')
-            if not file_enc in FILE_ENCODING_LIST:
+            if file_enc not in FILE_ENCODING_LIST:
                 file_enc = 'auto'
             err, file_content, encoding = repo_file_get(inner_path, file_enc)
             if encoding and encoding not in FILE_ENCODING_LIST:
@@ -1128,8 +1146,9 @@ def download_file(request, repo_id, obj_id):
 ########## text diff
 def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_enc):
     try:
-        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path( \
-                                        repo_id, commit_id, path)
+        obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id,
+                                                                      commit_id,
+                                                                      path)
     except:
         return None, 'bad path'
 
@@ -1161,7 +1180,7 @@ def text_diff(request, repo_id):
     path = request.GET.get('p', '')
     u_filename = os.path.basename(path)
     file_enc = request.GET.get('file_enc', 'auto')
-    if not file_enc in FILE_ENCODING_LIST:
+    if file_enc not in FILE_ENCODING_LIST:
         file_enc = 'auto'
 
     if not (commit_id and path):
@@ -1181,13 +1200,13 @@ def text_diff(request, repo_id):
 
     path = path.encode('utf-8')
 
-    current_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, current_commit.id, path, file_enc)
+    current_content, err = get_file_content_by_commit_and_path(
+        request, repo_id, current_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
 
-    prev_content, err = get_file_content_by_commit_and_path(request, \
-                                    repo_id, prev_commit.id, path, file_enc)
+    prev_content, err = get_file_content_by_commit_and_path(
+        request, repo_id, prev_commit.id, path, file_enc)
     if err:
         return render_error(request, err)
 
@@ -1372,10 +1391,9 @@ def view_priv_shared_file(request, token):
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
+    can_preview, err_msg = can_preview_file(filename, fsize)
+
+    if can_preview:
         """Choose different approach when dealing with different type of file."""
 
         if is_textual_file(file_type=filetype):
@@ -1386,6 +1404,8 @@ def view_priv_shared_file(request, token):
             handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
+    else:
+        ret_dict['err'] = err_msg
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_private_file_share', args=[pfs.token])

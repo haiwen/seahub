@@ -5,15 +5,20 @@ from fabric.api import local, task
 from fabric.colors import red, green
 
 @task
-def push():
-    """Update source language, and upload to Transifex.
+def make(default=True):
+    """Update source language.
     """
-    local('django-admin.py makemessages -l en -e py,html -i "thirdpart*"')
+    local('django-admin.py makemessages -l en -e py,html -i "thirdpart*" -i "docs*"')
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".
-    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%', '%')
+    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%s', '%s')
+    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%(', '%(')
 
+@task
+def push():
+    """Push source file to Transifex.
+    """
     local('tx push -s')
 
 @task
@@ -22,7 +27,7 @@ def pull():
     """
     local('tx pull')
 
-@task(default=True)
+@task()
 def compile():
     """Compile po files.
     """

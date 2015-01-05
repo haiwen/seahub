@@ -40,19 +40,21 @@
     </dl>
 
     <h3 class="hd">{% trans "Space Used" %}</h3>
+    <p>{% trans "Used" %}: {{ space_usage|filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|filesizeformat }} {% endif %}</p>
+
     {% if CALC_SHARE_USAGE %}
-    <p>{% trans "Total" %}: {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    <p>{% trans "Used" %}: {{ my_usage|filesizeformat }}</p>
-    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }}</p>
-    {% else %}
-    <p>{{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }} {% if share_quota > 0 %} / {{ share_quota|filesizeformat }} {% endif %}</p>
     {% endif %}
+
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
     <h3>{% trans "Set user storage limit" %}</h3>
     <input type="hidden" name="email" value="{{ email }}" />
-    <input type="text" name="quota" /> MB
+    <input type="text" name="space_quota" /> MB
+    {% if CALC_SHARE_USAGE %}
+    <br /><input type="text" name="share_quota" placeholder=" Share quota" /> MB<br />
+    {% endif %}
     <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" class="submit" />
@@ -180,13 +182,24 @@ $('#set-quota').click(function() {
 
 $('#set-quota-form .submit').click(function() {
     var form = $('#set-quota-form'),
-        form_id = form.attr('id');
+        form_id = form.attr('id'),
+        space_quota = $('input[name="space_quota"]', form).val();
 
-    var quota = $('input[name="quota"]', form).val();
-    if (!$.trim(quota)) {
-        apply_form_error(form_id, "{% trans "Quota can't be empty" %}");
+    if (!$.trim(space_quota)) {
+        apply_form_error(form_id, "{% trans "Space Quota can't be empty" %}");
         return false;
     }
+
+    data = { 'email': $('input[name="email"]', form).val(), 'space_quota': space_quota };
+
+    {% if CALC_SHARE_USAGE %}
+    var share_quota = $('input[name="share_quota"]', form).val();
+    if (!$.trim(share_quota)) {
+        apply_form_error(form_id, "{% trans "Share Quota can't be empty" %}");
+        return false;
+    }
+    data['share_quota'] = share_quota;
+    {% endif %}
 
     var sb_btn = $(this);
     disable(sb_btn);
@@ -196,10 +209,7 @@ $('#set-quota-form .submit').click(function() {
         dataType: 'json',
         cache: 'false',
         beforeSend: prepareCSRFToken,
-        data: {
-            'email': $('input[name="email"]', form).val(),
-            'quota': quota
-        },
+        data: data,
         success: function(data) {
             location.reload(true);
         },

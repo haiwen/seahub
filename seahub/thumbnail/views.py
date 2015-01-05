@@ -61,7 +61,7 @@ def thumbnail_create(request, repo_id):
             image = Image.open(f)
             image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
             image.save(thumbnail_file, THUMBNAIL_EXTENSION)
-        except IOError, e:
+        except Exception as e:
             logger.error(e)
             return HttpResponse(json.dumps({'success': False}), status=500, content_type=content_type)
 

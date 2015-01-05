@@ -648,7 +648,7 @@ def copy_move_common(func):
         dst_repo_id = request.POST.get('dst_repo')
         dst_path = request.POST.get('dst_path')
 
-        if not (path and obj_name and dst_repo_id and  dst_path):
+        if not (path and obj_name and dst_repo_id and dst_path):
             result['error'] = _('Argument missing')
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
@@ -1040,7 +1040,7 @@ def get_contacts(request):
     from seahub.avatar.templatetags.avatar_tags import avatar
     for c in contacts:
         try:
-            user = User.objects.get(email = c.contact_email)
+            user = User.objects.get(email=c.contact_email)
             if user.is_active:
                 contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
         except User.DoesNotExist:
@@ -1319,7 +1319,7 @@ def set_notice_seen_by_id(request):
     notice_id = request.GET.get('notice_id')
 
     notice = UserNotification.objects.get(id=notice_id)
-    if notice.seen == False:
+    if not notice.seen:
         notice.seen = True
         notice.save()
 
@@ -1380,33 +1380,43 @@ def repo_remove(request, repo_id):
 @login_required_ajax
 def space_and_traffic(request):
     content_type = 'application/json; charset=utf-8'
-
     username = request.user.username
 
+    # space & quota calculation
     org = ccnet_threaded_rpc.get_orgs_by_user(username)
     if not org:
-        quota = seafserv_threaded_rpc.get_user_quota(username)
-        my_usage = get_user_quota_usage(username)
+        space_quota = seafile_api.get_user_quota(username)
+        space_usage = seafile_api.get_user_self_usage(username)
+        if CALC_SHARE_USAGE:
+            share_quota = seafile_api.get_user_share_quota(username)
+            share_usage = seafile_api.get_user_share_usage(username)
+        else:
+            share_quota = 0
+            share_usage = 0
     else:
         org_id = org[0].org_id
-        quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
-                                                         username)
-        my_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
-                                                                 username)
+        space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
+                                                               username)
+        space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(
+            org_id, username)
+        share_quota = 0         # no share quota/usage for org account
+        share_usage = 0
 
     rates = {}
-    if CALC_SHARE_USAGE:
-        share_usage = get_user_share_usage(username)
-        quota_usage = my_usage + share_usage
-        if quota > 0:
-            rates['my_usage'] = str(float(my_usage)/quota * 100) + '%'
-            rates['share_usage'] = str(float(share_usage)/quota * 100) + '%'
-    else:
-        quota_usage = my_usage
-        share_usage = 0
-        if quota > 0:
-            rates['quota_usage'] = str(float(my_usage)/quota * 100) + '%'
+    rates['space_quota'] = space_quota
+    rates['share_quota'] = share_quota
+    total_quota = space_quota + share_quota
+    if space_quota > 0:
+        rates['space_usage'] = str(float(space_usage) / total_quota * 100) + '%'
+    else:                       # no space quota set in config
+        rates['space_usage'] = '0%'
 
+    if share_quota > 0:
+        rates['share_usage'] = str(float(share_usage) / total_quota * 100) + '%'
+    else:                       # no share quota set in config
+        rates['share_usage'] = '0%'
+
+    # traffic calculation
     traffic_stat = 0
     if TRAFFIC_STATS_ENABLED:
         # User's network traffic stat in this month
@@ -1419,6 +1429,7 @@ def space_and_traffic(request):
         if stat:
             traffic_stat = stat['file_view'] + stat['file_download'] + stat['dir_download']
 
+    # payment url, TODO: need to remove from here.
     payment_url = ''
     ENABLE_PAYMENT = getattr(settings, 'ENABLE_PAYMENT', False)
     if ENABLE_PAYMENT:
@@ -1432,13 +1443,15 @@ def space_and_traffic(request):
         else:
             # payment for personal account
             payment_url = reverse('plan')
-    
+
     ctx = {
-        "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
-        "quota": quota,
-        "quota_usage": quota_usage,
+        "org": org,
+        "space_quota": space_quota,
+        "space_usage": space_usage,
+        "share_quota": share_quota,
         "share_usage": share_usage,
-        "my_usage": my_usage,
+        "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
+        "show_quota_help": not CALC_SHARE_USAGE,
         "rates": rates,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
         "traffic_stat": traffic_stat,

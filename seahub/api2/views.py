@@ -27,9 +27,10 @@ from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
 from django.utils import timezone
 
-from authentication import TokenAuthentication
-from serializers import AuthTokenSerializer, AccountSerializer
-from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
+from .throttling import ScopedRateThrottle
+from .authentication import TokenAuthentication
+from .serializers import AuthTokenSerializer, AccountSerializer
+from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
@@ -37,8 +38,7 @@ from utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
-from seahub.base.models import FileDiscuss, UserStarredFiles, \
-    DirFilesLastModifiedInfo, DeviceToken
+from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
@@ -89,9 +89,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
     list_personal_repos_by_owner, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     list_inner_pub_repos_by_owner, \
-    remove_share, unshare_group_repo, \
-    unset_inner_pub_repo, get_user_quota, \
-    get_user_share_usage, get_user_quota_usage, CALC_SHARE_USAGE, get_group, \
+    remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
 
@@ -118,8 +116,11 @@ class Ping(APIView):
     """
     Returns a simple `pong` message when client calls `api2/ping/`.
     For example:
-    	curl http://127.0.0.1:8000/api2/ping/
+        curl http://127.0.0.1:8000/api2/ping/
     """
+    throttle_classes = (ScopedRateThrottle, )
+    throttle_scope = 'ping'
+
     def get(self, request, format=None):
         return Response('pong')
 
@@ -130,10 +131,11 @@ class AuthPing(APIView):
     """
     Returns a simple `pong` message when client provided an auth token.
     For example:
-    	curl -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" http://127.0.0.1:8000/api2/auth/ping/
+        curl -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" http://127.0.0.1:8000/api2/auth/ping/
     """
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
         return Response('pong')
@@ -143,7 +145,7 @@ class ObtainAuthToken(APIView):
     """
     Returns auth token if username and password are valid.
     For example:
-    	curl -d "username=foo@example.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
+        curl -d "username=foo@example.com&password=123456" http://127.0.0.1:8000/api2/auth-token/
     """
     throttle_classes = (AnonRateThrottle, )
     permission_classes = ()
@@ -223,14 +225,8 @@ class Account(APIView):
         info['is_staff'] = user.is_staff
         info['is_active'] = user.is_active
         info['create_time'] = user.ctime
-
-        info['total'] = get_user_quota(email)
-        if CALC_SHARE_USAGE:
-            my_usage = get_user_quota_usage(email)
-            share_usage = get_user_share_usage(email)
-            info['usage'] = my_usage + share_usage
-        else:
-            info['usage'] = get_user_quota_usage(email)
+        info['total'] = seafile_api.get_user_quota(email)
+        info['usage'] = seafile_api.get_user_self_usage(email)
 
         return Response(info)
 
@@ -307,15 +303,9 @@ class AccountInfo(APIView):
         info = {}
         email = request.user.username
         info['email'] = email
-        info['total'] = get_user_quota(email)
         info['nickname'] = email2nickname(email)
-
-        if CALC_SHARE_USAGE:
-            my_usage = get_user_quota_usage(email)
-            share_usage = get_user_share_usage(email)
-            info['usage'] = my_usage + share_usage
-        else:
-            info['usage'] = get_user_quota_usage(email)
+        info['total'] = seafile_api.get_user_quota(email)
+        info['usage'] = seafile_api.get_user_self_usage(email)
 
         return Response(info)
 
@@ -713,8 +703,8 @@ class Repo(APIView):
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, \
-                    'Library does not exist.')
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Library does not exist.')
 
         # check permission
         if is_org_context(request):
@@ -901,9 +891,6 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
-    mtimes = DirFilesLastModifiedInfo.objects.get_dir_files_last_modified(
-        repo.id, path, dir_id)
-
     dir_list, file_list = [], []
     for dirent in dirs:
         dtype = "file"
@@ -911,16 +898,16 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         if stat.S_ISDIR(dirent.mode):
             dtype = "dir"
         else:
-            try:
+            if repo.version == 0:
                 entry["size"] = get_file_size(repo.store_id, repo.version,
                                               dirent.obj_id)
-            except Exception, e:
-                entry["size"] = 0
+            else:
+                entry["size"] = dirent.size
 
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
-        entry["mtime"] = mtimes.get(dirent.obj_name, None)
+        entry["mtime"] = dirent.mtime
         if dtype == 'dir':
             dir_list.append(entry)
         else:
@@ -1933,13 +1920,13 @@ class BeShared(APIView):
 
         joined_groups = get_personal_groups_by_user(username)
         for grp in joined_groups:
-        # Get group repos, and for each group repos...
+            # Get group repos, and for each group repos...
             for r_id in get_group_repoids(grp.id):
                 # No need to list my own repo
                 if seafile_api.is_repo_owner(username, r_id):
                     continue
-                 # Convert repo properties due to the different collumns in Repo
-                 # and SharedRepo
+                # Convert repo properties due to the different collumns in Repo
+                # and SharedRepo
                 r = get_repo(r_id)
                 if not r:
                     continue
@@ -2069,9 +2056,7 @@ class PrivateSharedFileView(APIView):
         return get_repo_file(request, repo_id, file_id, file_name, op)
 
 class SharedFileView(APIView):
-# Anyone should be able to access a Shared File assuming they have the token
-#    authentication_classes = (TokenAuthentication, )
-#    permission_classes = (IsAuthenticated,)
+    # Anyone should be able to access a Shared File assuming they have the token
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, token, format=None):
@@ -2510,10 +2495,12 @@ class EventsView(APIView):
 
         if is_org_context(request):
             org_id = request.user.org.org_id
-            events, start = get_org_user_events(org_id, email, start,
-                                                events_count)
+            events, events_more_offset = get_org_user_events(org_id, email,
+                                                             start,
+                                                             events_count)
         else:
-            events, events_more_offset = get_user_events(email, start, events_count)
+            events, events_more_offset = get_user_events(email, start,
+                                                         events_count)
         events_more = True if len(events) == events_count else False
 
         l = []
@@ -2550,7 +2537,7 @@ class EventsView(APIView):
 
         ret = {
             'events': l,
-            'more':  events_more,
+            'more': events_more,
             'more_offset': events_more_offset,
             }
         return Response(ret)

@@ -1,20 +1,25 @@
 {% load i18n %}
-{% if CALC_SHARE_USAGE %}
 <div class="item">
-    <p>{% trans "Used:" %} {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    {% if quota > 0 %}
-    <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank" id="quota-bar"><span id="my-usage" title="{% trans "Self" %}" class="usage" style="width:{{rates.my_usage}};"></span><span id="share-usage" title="{% trans "Sharing" %}" class="usage" style="width:{{rates.share_usage}};"></span></a>
+    <p>{% trans "Used:" %} {{ space_usage|filesizeformat }} {% if space_quota > 0 %}/ {{ space_quota|filesizeformat }} {% endif %}</p>
+
+    {% if not org %}
+    {% if CALC_SHARE_USAGE %}
+    <p>{% trans "Sharing:" %} {{ share_usage|filesizeformat }} {% if share_quota > 0 %}/ {{ share_quota|filesizeformat }} {% endif %}</p>
     {% endif %}
-    <p id="usage-details">{% trans "Self" %} {{ my_usage|filesizeformat }}, {% trans "Sharing" %} {{ share_usage|filesizeformat }}</p>
-</div>
-{% else %}
-<div class="item">
-    <p>{% trans "Used:" %} {{ quota_usage|filesizeformat }} {% if quota > 0 %}/ {{ quota|filesizeformat }} {% endif %}</p>
-    {% if quota > 0 %}
-    <div id="quota-bar"><span id="quota-usage" class="usage" style="width:{{rates.quota_usage}};"></span></div>
+    {% endif %}
+
+    {% if space_quota > 0 or share_quota > 0 %}
+    <div id="quota-bar">
+        {% if show_quota_help %}
+        <a href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/quota/" target="_blank">
+        {% endif %}
+            <span id="quota-usage" class="usage" style="width:{{rates.space_usage}};"></span><span id="share-usage" class="usage" style="width:{{rates.share_usage}};"></span>
+        {% if show_quota_help %}
+        </a>
+        {% endif %}
+    </div>
     {% endif %}
 </div>
-{% endif %}
 
 {% if TRAFFIC_STATS_ENABLED %}
 <a class="item" href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/traffic/" target="_blank" id="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</a>

@@ -290,7 +290,7 @@ $(function() {
             'failed': "{% trans "File Upload failed" %}"
         };
 
-        var update_dir_names = []; // dirs with 'time' to be updated
+        var dirs_to_update = []; // dirs with 'time' to be updated
         var new_dir_names = [];
         popup.fileupload({
             formData: {'parent_dir': cur_path},
@@ -315,6 +315,12 @@ $(function() {
             close_icon.addClass('hide');
 
             {% if enable_upload_folder %}
+            // hide the upload menu
+            if (!$('#upload-menu').hasClass('hide')) {
+                $('#upload-menu').find('.item').removeAttr('style')
+            .end().addClass('hide');
+            }
+
             // when add folder, a subdirectory will be shown as '.'. rm it.
             var file = data.files[0];
             if (file.name == '.') {
@@ -378,7 +384,9 @@ $(function() {
 
             // for 'template_download' render
             file_uploaded.uploaded = true;
-            file_uploaded.relative_path = file_path;
+            if (file_path) {
+                file_uploaded.relative_path = file_path.substring(0, file_path.lastIndexOf('/') + 1) + file_uploaded.name;
+            }
 
             if (data.formData.parent_dir != cur_path) {
                 return;
@@ -402,8 +410,8 @@ $(function() {
                     new_dir_names.push(new_dir_name);
                 }
             } else {
-                if (update_dir_names.indexOf(new_dir_name) == -1) {
-                    update_dir_names.push(new_dir_name);
+                if (dirs_to_update.indexOf(new_dir_name) == -1) {
+                    dirs_to_update.push(new_dir_name);
                 }
             }
             {% endif %}
@@ -443,10 +451,10 @@ $(function() {
                     updateCmt();
                 }
             }
-            if (update_dir_names.length > 0) {
+            if (dirs_to_update.length > 0) {
                 cur_dirs.each(function() {
                     var dir = $(this);
-                    if (update_dir_names.indexOf(dir.attr('data-name')) != -1) {
+                    if (dirs_to_update.indexOf(dir.attr('data-name')) != -1) {
                         dir.attr('data-time', now);
                         $('.dirent-update', dir).html("{% trans "Just now" %}");
                     }
@@ -455,7 +463,7 @@ $(function() {
             }
             // empty the arrays
             new_dir_names = [];
-            update_dir_names = [];
+            dirs_to_update = [];
         })
         // after tpl has rendered
         .bind('fileuploadcompleted', function() { // 'done'
@@ -470,6 +478,7 @@ $(function() {
                 cancel_all_btn.addClass('hide');
                 close_icon.removeClass('hide');
                 total_progress.addClass('hide');
+                saving_tip.hide();
                 if (data.errorThrown == 'abort') { // 'cancel'
                     fu_status.html(fu_status_.canceled);
                 } else { // 'error'
@@ -482,7 +491,7 @@ $(function() {
         popup.fileupload(
             'option',
             'redirect',
-            window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+            window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
         );
     });
 });
@@ -553,7 +562,7 @@ function reqDirData(url, func) {
 
             {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
             {% else %}
-                {% if not no_quota %}
+                {% if user_perm == 'rw' and not no_quota %}
             $('#upload-file-dialog').fileupload(
                 'option',
                 {
@@ -1188,6 +1197,7 @@ $('.lsch').unbind().click(function() {
     return false;
 }); 
 
+{% if user_perm == 'rw' %}
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('#upload-file').click(function () {
     $('#upload-file-dialog').modal();
@@ -1272,6 +1282,7 @@ $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main', focus:false, containerCss:{'padding':'20px 25px'}});
     $('#simplemodal-container').css({'height':'auto'});
 });
+{% endif %} {# user_perm == 'rw' #}
 
 // share current dir
 $('#share-cur-dir').click(function() {
@@ -1382,7 +1393,11 @@ function dirlinkClick() {
         link.parents('.dir-item').children('.dirent-icon').html(loading_icon);
     } else {
         // link is in '.path'
-        $('.path').append(' ' + loading_icon);
+        var path = $('.path');
+        // check if loading_icon is already there, in case some users may repeatly click the link
+        if (path.find('img').length == 0) {
+            path.append(' ' + loading_icon);
+        }
     }
     var url_search = link.attr('href').substr(link.attr('href').indexOf('?'));
     reqDirData('{% url 'repo_dir_data' repo.id %}' + url_search, changeLocation);
@@ -1803,7 +1818,7 @@ $('.file-update', context).click(function() {
             form.fileupload(
                 'option',
                 'redirect',
-                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '/media/cors/result.html?%s')
+                window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
             );
         },
         error: ajaxErrorHandler
@@ -1869,20 +1884,32 @@ $('.file-share, .dir-share', context).click(function() {
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 // get thumbnails for image files
 $(function() {
-    $('.not-thumbnail').each(function() {
-        var this_img = $(this),
-            file_name = $(this).parents('.file-item').attr('data-name');
+    var img_icons = $('.not-thumbnail');
+    if (img_icons.length == 0) {
+        return;
+    }
+    var get_thumbnail = function(i) {
+        var img_icon = $(img_icons[i]),
+            file_name = img_icon.closest('.file-item').attr('data-name');
         $.ajax({
-            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(cur_path+file_name),
+            url: '{% url 'thumbnail_create' repo.id %}?path=' + e(parent_dir + file_name),
             cache: false,
             dataType: 'json',
             success: function(data) {
-                this_img.attr("src", data.thumbnail_src).load(function() {
+                img_icon.attr("src", data.thumbnail_src).load(function() {
                     $(this).removeClass("not-thumbnail").addClass("thumbnail");
                 });
+            },
+            complete: function() {
+                // cur_path may be changed. e.g., the user enter another directory
+                if (i < img_icons.length - 1 && parent_dir == cur_path) {
+                    get_thumbnail(++i);
+                }
             }
         });
-    });
+    };
+    var parent_dir = cur_path;
+    get_thumbnail(0);
 });
 {% endif %}
 

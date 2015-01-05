@@ -39,12 +39,12 @@
 
 <table>
     <tr>
-        <th width="25%">{% trans "Email" %}</th>
+        <th width="24%">{% trans "Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
-        <th width="11%">{% trans "Role" %}</th>
-        <th width="15%">{% trans "Space Used" %}</th>
+        <th width="12%">{% trans "Role" %}</th>
+        <th width="16%">{% trans "Space Used" %}</th>
         <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="15%">{% trans "Operations" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
     </tr>
 
     {% for user in admin_users %}
@@ -76,20 +76,25 @@
                 {% else %}
                     <span class="user-role-cur-value">{% trans "Default" %}</span>
                 {% endif %}
+                {% if enable_guest %}
                 <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
+                {% endif %}
             </div>
+            {% if enable_guest %}
             <select name="role" class="user-role-select hide">
                 <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
                 <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
             </select>
+            {% endif %}
           {% endif %}
         </td>
 
-        <td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
+            {% if not user.org %}
             {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
-            {% else %}
-            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
+            {% endif %}
             {% endif %}
         </td>
         <td>
