@@ -42,8 +42,10 @@ function init() {
     # create admin
     $PYTHON -c "import ccnet; pool = ccnet.ClientPool('${CCNET_CONF_DIR}'); ccnet_threaded_rpc = ccnet.CcnetThreadedRpcClient(pool, req_pool=True); ccnet_threaded_rpc.add_emailuser('${SEAHUB_TEST_ADMIN_USERNAME}', '${SEAHUB_TEST_ADMIN_PASSWORD}', 1, 1);"
 
-    # overwrite api throttling settings in settings.py
-    echo "REST_FRAMEWORK = {}" >> "${local_settings_py}"
+    # enlarge anon api throttling settings in settings.py, this is a workaround
+    # to make tests pass, otherwise a few tests will be throttlled.
+    # TODO: cache api token.
+    echo "REST_FRAMEWORK = {'DEFAULT_THROTTLE_RATES': {'ping': '600/minute', 'anon': '5000/minute', 'user': '300/minute',},}" >> "${local_settings_py}"
 }
 
 function start_seahub() {
