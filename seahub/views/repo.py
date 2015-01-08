@@ -166,6 +166,9 @@ def render_repo(request, repo):
     """
     username = request.user.username
     path = get_path_from_request(request)
+    if not seafile_api.get_dir_id_by_path(repo.id, path):
+        raise Http404
+
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
