@@ -70,9 +70,9 @@ def is_cluster_mode():
         enabled = False
 
     if enabled:
-        logging.info('cluster mode is enabled')
+        logging.debug('cluster mode is enabled')
     else:
-        logging.info('cluster mode is disabled')
+        logging.debug('cluster mode is disabled')
 
     return enabled
 
