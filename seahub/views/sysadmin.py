@@ -30,13 +30,17 @@ from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.share.models import FileShare, UploadLinkShare
-
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_GUEST
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
+try:
+    from seahub_extra.trialuser.models import TrialUser
+    enable_trial_user = True
+except:
+    enable_trial_user = False
 
 logger = logging.getLogger(__name__)
 
@@ -198,6 +202,10 @@ def sys_user_admin(request):
 
     users = users_plus_one[:per_page]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    if enable_trial_user:
+        trial_users = TrialUser.objects.filter(username__in=[x.email for x in users])
+    else:
+        trial_users = []
     for user in users:
         if user.props.id == request.user.id:
             user.is_self = True
@@ -209,11 +217,17 @@ def sys_user_admin(request):
             user.is_guest = True
         else:
             user.is_guest = False
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
+
+        user.trial_info = None
+        for trial_user in trial_users:
+            if trial_user.username == user.email:
+                user.trial_info = {'expire_date': trial_user.expire_date}
 
     have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
 
@@ -527,6 +541,22 @@ def user_remove(request, user_id):
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
 
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def user_remove_trial(request, username):
+    """
+    
+    Arguments:
+    - `request`:
+    """
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_useradmin') if referer is None else referer
+
+    TrialUser.objects.filter(username=username).delete()
+
+    messages.success(request, _('Successfully remove trial for user: %s') % username)
     return HttpResponseRedirect(next)
 
 @login_required
@@ -1060,6 +1090,10 @@ def user_search(request):
 
     users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    if enable_trial_user:
+        trial_users = TrialUser.objects.filter(username__in=[x.email for x in users])
+    else:
+        trial_users = []
     for user in users:
         _populate_user_quota_usage(user)
 
@@ -1074,6 +1108,11 @@ def user_search(request):
         for last_login in last_logins:
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
+
+        user.trial_info = None
+        for trial_user in trial_users:
+            if trial_user.username == user.email:
+                user.trial_info = {'expire_date': trial_user.expire_date}
 
     return render_to_response('sysadmin/user_search.html', {
             'users': users,

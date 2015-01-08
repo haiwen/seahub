@@ -15,6 +15,10 @@ addConfirmTo($('.set-admin-btn'), {
         'title':"{% trans "Set Admin" %}",
         'con':"{% trans "Are you sure you want to set %s as admin?" %}"
 });
+addConfirmTo($('.unset-trial'), {
+        'title':"{% trans "Remove Trial" %}",
+        'con':"{% trans "Are you sure you want to remove trial for %s ?" %}"
+});
 
 $('#add-user-btn').click(function() {
         $('#add-user-form').modal();

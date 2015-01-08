@@ -15,6 +15,9 @@
         {% if user.org %}
         <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' user.org.org_id %}">({{user.org.org_name}})</a></p>
         {% endif %}
+        {% if user.trial_info %}
+        <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ user.email }}" data-url="{% url 'user_remove_trial' user.email %}">X</a>)</p>
+        {% endif %}
         </td>
         <td>
           {% if user.source != 'LDAP' %}

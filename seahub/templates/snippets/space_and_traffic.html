@@ -19,6 +19,10 @@
         {% endif %}
     </div>
     {% endif %}
+
+    {% if user.trialing %}
+    <p><a href="#">Trial expires at {{user.trial_expire_date|date:"Y-m-d"}}</a></p>
+    {% endif %}
 </div>
 
 {% if TRAFFIC_STATS_ENABLED %}
