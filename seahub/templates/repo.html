@@ -343,8 +343,12 @@ $(function() {
             // get url(token) for every file
             if (!file.error) {
                 $.ajax({
-                    url: '{% url 'get_file_op_url' repo.id %}?op_type=upload',
+                    url: '{% url 'get_file_op_url' repo.id %}',
                     cache: false,
+                    data: {
+                        'op_type': 'upload',
+                        'path': cur_path
+                    },
                     dataType: 'json',
                     success: function(ret) {
                         {% if enable_upload_folder %}
@@ -1221,8 +1225,12 @@ $('#upload-file').click(function () {
 
         $.modal.close();
         $.ajax({
-            url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('upload-blks'),
+            url: '{% url 'get_file_op_url' repo.id %}',
             cache: false,
+            data: {
+                'op_type': 'upload-blks',
+                'path': cur_path
+            },
             dataType: 'json',
             success: function(data) {
                 encAndSubmitFile(file, fd, data['url']);
@@ -1745,8 +1753,12 @@ $('.file-update', context).click(function() {
         $.modal.close();
 
         $.ajax({
-            url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('update-blks'),
+            url: '{% url 'get_file_op_url' repo.id %}',
             cache: false,
+            data: {
+                'op_type': 'update-blks',
+                'path': cur_path
+            },
             dataType: 'json',
             success: function(data) {
                 var sb_url = data['url'] + '?head=' + $('#repo-latest-commit .commit-msg').data('cmtid');
@@ -1781,8 +1793,12 @@ $('.file-update', context).click(function() {
     hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
 
     $.ajax({
-        url: '{% url 'get_file_op_url' repo.id %}?op_type=' + e('update'),
+        url: '{% url 'get_file_op_url' repo.id %}',
         cache: false,
+        data: {
+            'op_type': 'update',
+            'path': cur_path
+        },
         dataType: 'json',
         success: function(data) {
             // Initialize the jQuery File Upload widget:

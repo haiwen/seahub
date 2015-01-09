@@ -95,6 +95,12 @@ def get_system_default_repo_id():
         logger.error(e)
         return None
 
+def check_folder_permission(repo_id, path, username):
+    if path != '/' and path.endswith('/'):
+        path = path.rstrip('/')
+
+    return seafile_api.check_permission_by_path(repo_id, path, username)
+
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
     system repo and user is admin.
@@ -1312,16 +1318,20 @@ def repo_revert_file (request, repo_id):
     if not repo:
         raise Http404
 
-    # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
-        raise Http404
-    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
     from_page = request.GET.get('from')
 
     if not (commit_id and path and from_page):
         return render_error(request, _(u"Invalid arguments"))
+
+    # perm check
+    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = settings.SITE_ROOT
+        messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
 
     try:
         ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
@@ -1356,15 +1366,19 @@ def repo_revert_dir (request, repo_id):
     if not repo:
         raise Http404
 
-    # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
-        raise Http404
-    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
 
     if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
+
+    # perm check
+    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = settings.SITE_ROOT
+        messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
 
     try:
         ret = seafserv_threaded_rpc.revert_dir (repo_id, commit_id,

@@ -267,7 +267,7 @@ $('.perm-delete-btn').on('click', function() {
         dataType: 'json',
         data: data,
         success: function() {
-            item.remove();
+            perm_item.remove();
             feedback("{% trans "Delete succeeded" %}", 'success');
         },
         error: ajaxErrorHandler

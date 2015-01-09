@@ -35,7 +35,8 @@ from seahub.base.decorators import user_mods_check
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
-from seahub.views import is_registered_user, check_repo_access_permission
+from seahub.views import is_registered_user, check_repo_access_permission, \
+        check_folder_permission
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
@@ -1104,7 +1105,11 @@ def get_shared_upload_link(request):
             path += '/'
 
     repo = seaserv.get_repo(repo_id)
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponse(status=400, content_type=content_type)
+
+    user_perm = check_folder_permission(repo.id, path, request.user.username)
 
     if user_perm == 'r':
         messages.error(request, _(u'Permission denied'))
