@@ -10,18 +10,20 @@ from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
+from django.contrib import messages
 
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage
+    get_user_quota_usage, get_user_share_usage, edit_repo, \
+    set_repo_history_limit
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
-    RepoCreateForm, SharedRepoCreateForm
+    RepoCreateForm, SharedRepoCreateForm, RepoSettingForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
@@ -31,18 +33,20 @@ from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
     get_system_default_repo_id, get_diff, group_events_data, \
-    get_owned_repo_list
-
+    get_owned_repo_list, check_folder_permission
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE
+    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_org_user_events, get_user_events, get_file_type_and_ext
+    get_org_user_events, get_user_events, get_file_type_and_ext, \
+    is_valid_username
+from seahub.utils.repo import check_group_folder_perm_args, \
+    check_user_folder_perm_args
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.utils.file_types import IMAGE
@@ -301,7 +305,7 @@ def list_dir(request, repo_id):
         'file_list': file_list,
         'dirent_more': dirent_more,
         'more_start': more_start,
-        'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
         'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
         'current_commit': head_commit,
@@ -384,7 +388,7 @@ def list_dir_more(request, repo_id):
         'server_crypto': server_crypto,
         'dir_list': dir_list,
         'file_list': file_list,
-        'ENABLE_SUB_LIBRARY': settings.ENABLE_SUB_LIBRARY,
+        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
         'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
     }
@@ -392,7 +396,6 @@ def list_dir_more(request, repo_id):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html, 'dirent_more': dirent_more, 'more_start': more_start}),
                         content_type=content_type)
-
 
 def new_dirent_common(func):
     """Decorator for common logic in creating directory and file.
@@ -410,9 +413,16 @@ def new_dirent_common(func):
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
 
+        # arguments checking
+        parent_dir = request.GET.get('parent_dir', None)
+        if not parent_dir:
+            result['error'] = _('Argument missing')
+            return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
         # permission checking
         username = request.user.username
-        if check_repo_access_permission(repo.id, request.user) != 'rw':
+        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -425,13 +435,6 @@ def new_dirent_common(func):
             result['error'] = str(form.errors.values()[0])
             return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
-
-        # arguments checking
-        parent_dir = request.GET.get('parent_dir', None)
-        if not parent_dir:
-            result['error'] = _('Argument missing')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
 
         # rename duplicate name
         dirent_name = check_filename_with_rename(repo.id, parent_dir,
@@ -497,8 +500,15 @@ def rename_dirent(request, repo_id):
         return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
 
+    # argument checking
+    parent_dir = request.GET.get('parent_dir', None)
+    if not parent_dir:
+        result['error'] = _('Argument missing')
+        return HttpResponse(json.dumps(result), status=400,
+                            content_type=content_type)
+
     # permission checking
-    if check_repo_access_permission(repo.id, request.user) != 'rw':
+    if check_folder_permission(repo.id, parent_dir, username) != 'rw':
         result['error'] = _('Permission denied')
         return HttpResponse(json.dumps(result), status=403,
                             content_type=content_type)
@@ -517,12 +527,13 @@ def rename_dirent(request, repo_id):
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
 
-    # argument checking
-    parent_dir = request.GET.get('parent_dir', None)
-    if not parent_dir:
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400,
-                            content_type=content_type)
+    full_path = os.path.join(parent_dir, oldname)
+    # when dirent is a dir, check perm again
+    if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
+        if check_folder_permission(repo.id, full_path, username) != 'rw':
+            result['error'] = _('Permission denied')
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
 
     # rename duplicate name
     newname = check_filename_with_rename(repo_id, parent_dir, newname)
@@ -551,13 +562,6 @@ def delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
-    # permission checking
-    username = request.user.username
-    if check_repo_access_permission(repo.id, request.user) != 'rw':
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=403, content_type=content_type)
-
     # argument checking
     parent_dir = request.GET.get("parent_dir", None)
     dirent_name = request.GET.get("name", None)
@@ -565,6 +569,21 @@ def delete_dirent(request, repo_id):
         err_msg = _(u'Argument missing.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
+
+    # permission checking
+    username = request.user.username
+    if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=403, content_type=content_type)
+
+    full_path = os.path.join(parent_dir, dirent_name)
+    # when dirent is a dir, check perm again
+    if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
+        if check_folder_permission(repo.id, full_path, username) != 'rw':
+            err_msg = _('Permission denied')
+            return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                                content_type=content_type)
 
     # delete file/dir
     try:
@@ -590,13 +609,6 @@ def delete_dirents(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
-    # permission checking
-    username = request.user.username
-    if check_repo_access_permission(repo.id, request.user) != 'rw':
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=403, content_type=content_type)
-
     # argument checking
     parent_dir = request.GET.get("parent_dir")
     dirents_names = request.POST.getlist('dirents_names')
@@ -604,6 +616,13 @@ def delete_dirents(request, repo_id):
         err_msg = _(u'Argument missing.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
+
+    # permission checking
+    username = request.user.username
+    if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=403, content_type=content_type)
 
     deleted = []
     undeleted = []
@@ -634,14 +653,6 @@ def copy_move_common(func):
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
 
-        # permission checking
-        username = request.user.username
-        if check_repo_access_permission(repo.id, request.user) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
-
         # arguments validation
         path = request.GET.get('path')
         obj_name = request.GET.get('obj_name')
@@ -651,6 +662,13 @@ def copy_move_common(func):
         if not (path and obj_name and dst_repo_id and dst_path):
             result['error'] = _('Argument missing')
             return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
+        # permission checking
+        username = request.user.username
+        if check_folder_permission(repo.id, path, username) != 'rw':
+            result['error'] = _('Permission denied')
+            return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
 
         # check file path
@@ -737,8 +755,17 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     src_dir = os.path.join(src_path, obj_name)
+
+    # permission checking
+    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
+    if check_folder_permission(src_repo_id, src_dir, username) != 'rw' or \
+        check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
     if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
             % {'src': src_dir, 'des': dst_path}
@@ -775,6 +802,14 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
     
+    # permission checking
+    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
+    if check_folder_permission(src_repo_id, src_path, username) != 'rw' or \
+        check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
@@ -825,13 +860,6 @@ def dirents_copy_move_common(func):
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
 
-        # permission checking
-        username = request.user.username
-        if check_repo_access_permission(repo.id, request.user) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
         # arguments validation
         parent_dir = request.GET.get('parent_dir')
         obj_file_names = request.POST.getlist('file_names')
@@ -842,6 +870,13 @@ def dirents_copy_move_common(func):
         if not (parent_dir and dst_repo_id and dst_path) and not (obj_file_names or obj_dir_names):
             result['error'] = _('Argument missing')
             return HttpResponse(json.dumps(result), status=400,
+                                content_type=content_type)
+
+        # permission checking
+        username = request.user.username
+        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+            result['error'] = _('Permission denied')
+            return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
 
         # check file path
@@ -870,6 +905,9 @@ def dirents_copy_move_common(func):
 def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    failed = []
+    allowed_dirs = []
+    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
 
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
@@ -878,11 +916,18 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
                 % {'src': src_dir, 'des': dst_path}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    
+
+    # permission checking
+        if check_folder_permission(src_repo_id, obj_name, username) != 'rw' or \
+            check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
+            failed.append(obj_name)
+        else:
+            allowed_dirs.append(obj_name)
+
     success = []
-    failed = []
     url = None
-    for obj_name in obj_file_names + obj_dir_names:
+
+    for obj_name in obj_file_names + allowed_dirs:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.move_file(src_repo_id, src_path, obj_name,
@@ -907,6 +952,10 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     result = {}
     content_type = 'application/json; charset=utf-8'
 
+    failed = []
+    allowed_dirs = []
+    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
+
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
@@ -914,11 +963,18 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
                 % {'src': src_dir, 'des': dst_path}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    
+
+        # permission checking
+        if check_folder_permission(src_repo_id, obj_name, username) != 'rw' or \
+            check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
+            failed.append(obj_name)
+        else:
+            allowed_dirs.append(obj_name)
+
     success = []
-    failed = []
     url = None
-    for obj_name in obj_file_names + obj_dir_names:
+
+    for obj_name in obj_file_names + allowed_dirs:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
@@ -1596,17 +1652,28 @@ def get_file_op_url(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     op_type = request.GET.get('op_type') # value can be 'upload', 'update', 'upload-blks', 'update-blks'
-    if not op_type:
+    path = request.GET.get('path')
+    if not (op_type and path):
         err_msg = _(u'Argument missing')
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u'Library does not exist')
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
+                            content_type=content_type)
+
     username = request.user.username
+    # permission checking
+    if check_folder_permission(repo.id, path, username) != 'rw':
+        return HttpResponse(json.dumps({"url": _('Permission denied')}), status=403,
+                            content_type=content_type)
+
     url = ''
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
-        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        op_type, username)
-        url = gen_file_upload_url(token, op_type + '-aj')
+    token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
+                                                    op_type, username)
+    url = gen_file_upload_url(token, op_type + '-aj')
     
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
@@ -1859,3 +1926,355 @@ def events(request):
                                     'events_more': events_more,
                                     'new_start': start}),
                         content_type='application/json; charset=utf-8')
+
+@login_required_ajax
+def ajax_repo_change_basic_info(request, repo_id):
+    """Handle post request to change library basic info.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # no settings for virtual repo
+    if ENABLE_SUB_LIBRARY and repo.is_virtual:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        raise Http404
+
+    form = RepoSettingForm(request.POST)
+    if not form.is_valid():
+        return HttpResponse(json.dumps({
+                    'error': str(form.errors.values()[0])
+                    }), status=400, content_type=content_type)
+
+    repo_name = form.cleaned_data['repo_name']
+    repo_desc = form.cleaned_data['repo_desc']
+    days = form.cleaned_data['days']
+
+    # Edit library info (name, descryption).
+    if repo.name != repo_name or repo.desc != repo_desc:
+        if not edit_repo(repo_id, repo_name, repo_desc, username):
+            err_msg = _(u'Failed to edit library information.')
+            return HttpResponse(json.dumps({'error': err_msg}),
+                                status=500, content_type=content_type)
+
+    # set library history
+    if days is not None and ENABLE_REPO_HISTORY_SETTING:
+        res = set_repo_history_limit(repo_id, days)
+        if res != 0:
+            return HttpResponse(json.dumps({
+                        'error': _(u'Failed to save settings on server')
+                        }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Settings saved.'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def ajax_repo_transfer_owner(request, repo_id):
+    """Handle post request to transfer library owner.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        raise Http404
+
+    # check POST arg
+    repo_owner = request.POST.get('repo_owner', '').lower()
+    if not is_valid_username(repo_owner):
+        return HttpResponse(json.dumps({
+                        'error': _('Username %s is not valid.') % repo_owner,
+                        }), status=400, content_type=content_type)
+
+    try:
+        User.objects.get(email=repo_owner)
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({
+                        'error': _('User %s is not found.') % repo_owner,
+                        }), status=400, content_type=content_type)
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, repo_owner):
+            return HttpResponse(json.dumps({
+                        'error': _('User %s is not in current organization.') %
+                        repo_owner,}), status=400, content_type=content_type)
+
+    if repo_owner and repo_owner != username:
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
+        else:
+            if ccnet_threaded_rpc.get_orgs_by_user(repo_owner):
+                return HttpResponse(json.dumps({
+                       'error': _('Can not transfer library to organization user %s.') % repo_owner,
+                       }), status=400, content_type=content_type)
+            else:
+                seafile_api.set_repo_owner(repo_id, repo_owner)
+
+    messages.success(request,
+                     _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
+                     {'repo_name': repo.name, 'new_owner': repo_owner})
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def ajax_repo_change_passwd(request, repo_id):
+    """Handle ajax post request to change library password.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    # check permission
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_owner = True if username == repo_owner else False
+    if not is_owner:
+        return HttpResponse(json.dumps({
+                    'error': _('Faied to change password, you are not owner.')}),
+                    status=400, content_type=content_type)
+
+    old_passwd = request.POST.get('old_passwd', '')
+    new_passwd = request.POST.get('new_passwd', '')
+    try:
+        seafile_api.change_repo_passwd(repo_id, old_passwd, new_passwd, username)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({
+                    'error': e.msg,
+                    }), status=400, content_type=content_type)
+
+    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
+                     {'repo_name': repo.name})
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def add_user_folder_permission(request, repo_id):
+    """
+    Add folder permission to a user
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.POST.get('user', None)
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not user or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.add_folder_user_perm(repo_id, path, perm, user)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+    messages.success(request, _(u'Success'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def remove_user_folder_permission(request, repo_id):
+    """
+    Remove folder permission of a user
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.GET.get('user', None)
+    path = request.GET.get('path', None)
+
+    if not user or not path:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.rm_folder_user_perm(repo_id, path, user)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def toggle_user_folder_permission(request, repo_id):
+    """
+    Change folder permission of a user
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    user = request.POST.get('user', None)
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    print user, path, perm
+    if not user or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_user_folder_perm_args(request.user, repo_id, path, user, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.set_folder_user_perm(repo_id, path, perm, user)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def add_group_folder_permission(request, repo_id):
+    """
+    Add folder permission to a group
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.POST.get('group_id', None))
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not group_id or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+    messages.success(request, _(u'Success'))
+    return HttpResponse(json.dumps({'success': True}),
+                        content_type=content_type)
+
+@login_required_ajax
+def remove_group_folder_permission(request, repo_id):
+    """
+    Remove folder permission of a group
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.GET.get('group_id', None))
+    path = request.GET.get('path', None)
+
+    if not group_id or not path:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.rm_folder_group_perm(repo_id, path, group_id)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)
+
+@login_required_ajax
+def toggle_group_folder_permission(request, repo_id):
+    """
+    Change folder permission of a group
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(request.POST.get('group_id', None))
+    path = request.POST.get('path', None)
+    perm = request.POST.get('perm', None)
+
+    if not group_id or not path or not perm:
+        return HttpResponse(json.dumps({"error": _('Argument missing')}),
+                            status=400,
+                            content_type=content_type)
+
+    result = check_group_folder_perm_args(request.user, repo_id, path, group_id, perm)
+    if 'error' in result:
+        return HttpResponse(json.dumps(result), status=result['status'],
+                            content_type=content_type)
+
+    try:
+        seafile_api.set_folder_group_perm(repo_id, path, perm, group_id)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except SearpcError, e:
+        return HttpResponse(json.dumps({"error": e.msg}), status=500,
+                            content_type=content_type)

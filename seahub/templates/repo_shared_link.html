@@ -1,0 +1,130 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n avatar_tags seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position: relative; }
+.go-back { top:0; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab"><a href="{% url 'repo_change_password' repo.id %}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab tab-cur"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="lib-setting">
+    <h2>{% trans "Library Settings" %}</h2>
+    <div id="shared-links" class="setting-item">
+        <h3>{% trans "Shared Links" %}</h3>
+        <p>{% trans "View and manage all the shared links in this library." %}</p>
+        <div id="tabs" class="tab-tabs">
+            <ul class="tab-tabs-nav hd ovhd">
+                <li class="tab"><a href="#upload-links" class="a">{% trans "Upload Links" %}</a></li>
+                <li class="tab"><a href="#download-links" class="a">{% trans "Download Links" %}</a></li>
+            </ul>
+            <div id="upload-links">
+                <table>
+                    <tr>
+                        <th width="5%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="15%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="13%">{% trans "Operations"%}</th>
+                    </tr>
+                    {% if uploadlinks %}
+                    {% for link in uploadlinks %}
+                    <tr>
+                        <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                        <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+                        <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                        <td>--</td>
+                        <td>{{ link.view_cnt }}</td>
+                        <td>
+                            <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="upload" title="{% trans "Remove"%}"></span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
+            </div>
+            <div id="download-links" class="hide">
+                <table>
+                    <tr>
+                        <th width="5%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="15%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="13%">{% trans "Operations"%}</th>
+                    </tr>
+                    {% if fileshares %}
+                    {% for link in fileshares %}
+                    <tr>
+                        {% if link.s_type == 'd'%}
+                        <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                        <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                        <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                        {% else %}
+                        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                        <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                        <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
+                        {% endif %}
+                        <td>{{ link.filesize|filesizeformat}}</td>
+                        <td>{{ link.view_cnt }}</td>
+                        <td>
+                            <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="download" title="{% trans "Remove"%}"></span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#shared-links .rm-link').click(function() {
+    var op = $(this),
+        link_token = op.data('token'),
+        link_type = op.data('type'),
+        ajax_url;
+    if (link_type == 'upload') {
+        ajax_url = '{% url 'ajax_remove_shared_upload_link' %}';
+    } else {
+        ajax_url = '{% url 'ajax_remove_shared_link' %}';
+    }
+    $.ajax({
+        url: ajax_url + '?t=' + e(link_token),
+        dataType: 'json',
+        success: function(data) {
+            op.parents('tr').remove();
+            feedback("{% trans "Removed successfully." %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
+</script>
+{% endblock %}

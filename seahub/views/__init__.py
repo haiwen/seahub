@@ -24,9 +24,9 @@ from django.views.decorators.http import condition
 import seaserv
 from seaserv import get_repo, get_commits, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
-    is_passwd_set, get_file_size, edit_repo, \
-    get_session_info, set_repo_history_limit, get_commit, \
-    MAX_DOWNLOAD_DIR_SIZE, send_message, ccnet_threaded_rpc
+    is_passwd_set, get_file_size, get_group, get_session_info, get_commit, \
+    MAX_DOWNLOAD_DIR_SIZE, send_message, ccnet_threaded_rpc, \
+    get_personal_groups_by_user
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -42,18 +42,17 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, \
     UploadLinkShare
-from seahub.forms import RepoPassowrdForm, RepoSettingForm
+from seahub.forms import RepoPassowrdForm
 from seahub.utils import render_permission_error, render_error, list_to_string, \
-    get_fileserver_root, gen_shared_upload_link, \
+    get_fileserver_root, gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
     calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
-    EMPTY_SHA1, normalize_file_path, is_valid_username, \
+    EMPTY_SHA1, normalize_file_path, gen_file_upload_url, \
     get_file_revision_id_size, get_ccnet_server_addr_port, \
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
-    gen_file_upload_url, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
-    user_traffic_over_limit, is_org_context
+    user_traffic_over_limit
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
@@ -95,6 +94,12 @@ def get_system_default_repo_id():
     except SearpcError as e:
         logger.error(e)
         return None
+
+def check_folder_permission(repo_id, path, username):
+    if path != '/' and path.endswith('/'):
+        path = path.rstrip('/')
+
+    return seafile_api.check_permission_by_path(repo_id, path, username)
 
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
@@ -409,27 +414,34 @@ def repo_online_gc(request, repo_id):
 
     return HttpResponseRedirect(next)
 
-@login_required
-def repo_settings(request, repo_id):
-    """List and change library settings.
-    """
-    username = request.user.username
-
+def can_access_repo_setting(request, repo_id, username):
     repo = seafile_api.get_repo(repo_id)
     if not repo:
-        raise Http404
+        return (False, None)
 
     # no settings for virtual repo
     if ENABLE_SUB_LIBRARY and repo.is_virtual:
-        raise Http404
+        return (False, None)
 
     # check permission
     if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
     else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
+        repo_owner = seafile_api.get_repo_owner(repo_id)
     is_owner = True if username == repo_owner else False
     if not is_owner:
+        return (False, None)
+
+    return (True, repo)
+
+@login_required
+def repo_basic_info(request, repo_id):
+    """List and change library basic info.
+    """
+    username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
+
+    if not can_access:
         raise Http404
 
     history_limit = seaserv.get_repo_history_limit(repo.id)
@@ -449,6 +461,57 @@ def repo_settings(request, repo_id):
 
     if history_limit <= 0:
         days_enabled = False
+
+    return render_to_response('repo_basic_info.html', {
+            'repo': repo,
+            'history_limit': history_limit if history_limit > 0 else '',
+            'full_history_checked': full_history_checked,
+            'no_history_checked': no_history_checked,
+            'partial_history_checked': partial_history_checked,
+            'full_history_enabled': full_history_enabled,
+            'no_history_enabled': no_history_enabled,
+            'partial_history_enabled': partial_history_enabled,
+            'days_enabled': days_enabled,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def repo_transfer_owner(request, repo_id):
+    """Transfer repo owner.
+    """
+    username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
+
+    if not can_access:
+        raise Http404
+
+    return render_to_response('repo_transfer_owner.html', {
+            'repo': repo,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def repo_change_password(request, repo_id):
+    """Change library password.
+    """
+    username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
+
+    if not can_access:
+        raise Http404
+
+    return render_to_response('repo_change_password.html', {
+            'repo': repo,
+            'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def repo_shared_link(request, repo_id):
+    """List and change library shared links.
+    """
+    username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
+
+    if not can_access:
+        raise Http404
 
     # download links
     fileshares = FileShare.objects.filter(repo_id=repo_id)
@@ -493,178 +556,88 @@ def repo_settings(request, repo_id):
         link.shared_link = gen_shared_upload_link(link.token)
         p_uploadlinks.append(link)
 
-    return render_to_response('repo_settings.html', {
+    return render_to_response('repo_shared_link.html', {
             'repo': repo,
-            'repo_owner': repo_owner,
-            'history_limit': history_limit if history_limit > 0 else '',
-            'full_history_checked': full_history_checked,
-            'no_history_checked': no_history_checked,
-            'partial_history_checked': partial_history_checked,
-            'full_history_enabled': full_history_enabled,
-            'no_history_enabled': no_history_enabled,
-            'partial_history_enabled': partial_history_enabled,
-            'days_enabled': days_enabled,
-            'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
             'fileshares': p_fileshares,
             'uploadlinks': p_uploadlinks,
             }, context_instance=RequestContext(request))
 
-@login_required_ajax
-def repo_change_basic_info(request, repo_id):
-    """Handle post request to change library basic info.
+@login_required
+def repo_share_manage(request, repo_id):
+    """Manage share of this library.
     """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
     username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
 
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
+    if not can_access:
         raise Http404
 
-    # no settings for virtual repo
-    if ENABLE_SUB_LIBRARY and repo.is_virtual:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        raise Http404
-
-    form = RepoSettingForm(request.POST)
-    if not form.is_valid():
-        return HttpResponse(json.dumps({
-                    'error': str(form.errors.values()[0])
-                    }), status=400, content_type=content_type)
-
-    repo_name = form.cleaned_data['repo_name']
-    repo_desc = form.cleaned_data['repo_desc']
-    days = form.cleaned_data['days']
-
-    # Edit library info (name, descryption).
-    if repo.name != repo_name or repo.desc != repo_desc:
-        if not edit_repo(repo_id, repo_name, repo_desc, username):
-            err_msg = _(u'Failed to edit library information.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=500, content_type=content_type)
-
-    # set library history
-    if days is not None and ENABLE_REPO_HISTORY_SETTING:
-        res = set_repo_history_limit(repo_id, days)
-        if res != 0:
-            return HttpResponse(json.dumps({
-                        'error': _(u'Failed to save settings on server')
-                        }), status=400, content_type=content_type)
-
-    messages.success(request, _(u'Settings saved.'))
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
-
-@login_required_ajax
-def repo_transfer_owner(request, repo_id):
-    """Handle post request to transfer library owner.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        raise Http404
-
-    # check POST arg
-    repo_owner = request.POST.get('repo_owner', '').lower()
-    if not is_valid_username(repo_owner):
-        return HttpResponse(json.dumps({
-                        'error': _('Username %s is not valid.') % repo_owner,
-                        }), status=400, content_type=content_type)
-
-    try:
-        User.objects.get(email=repo_owner)
-    except User.DoesNotExist:
-        return HttpResponse(json.dumps({
-                        'error': _('User %s is not found.') % repo_owner,
-                        }), status=400, content_type=content_type)
+    # sharing management
+    repo_share_user = []
+    repo_share_group = []
 
     if is_org_context(request):
         org_id = request.user.org.org_id
-        if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, repo_owner):
-            return HttpResponse(json.dumps({
-                        'error': _('User %s is not in current organization.') %
-                        repo_owner,}), status=400, content_type=content_type)
-
-    if repo_owner and repo_owner != username:
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
-        else:
-            if ccnet_threaded_rpc.get_orgs_by_user(repo_owner):
-                return HttpResponse(json.dumps({
-                       'error': _('Can not transfer library to organization user %s.') % repo_owner,
-                       }), status=400, content_type=content_type)
-            else:
-                seafile_api.set_repo_owner(repo_id, repo_owner)
-
-    messages.success(request,
-                     _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
-                     {'repo_name': repo.name, 'new_owner': repo_owner})
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
-
-@login_required_ajax
-def repo_change_passwd(request, repo_id):
-    """Handle ajax post request to change library password.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+        repo_share_user = seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
+        repo_share_group = seafserv_threaded_rpc.get_org_group_repos_by_owner(org_id, username)
     else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        return HttpResponse(json.dumps({
-                    'error': _('Faied to change password, you are not owner.')}),
-                    status=400, content_type=content_type)
+        repo_share_user = seafile_api.get_share_out_repo_list(username, -1, -1)
+        repo_share_group = seaserv.get_group_repos_by_owner(username)
 
-    old_passwd = request.POST.get('old_passwd', '')
-    new_passwd = request.POST.get('new_passwd', '')
-    try:
-        seafile_api.change_repo_passwd(repo_id, old_passwd, new_passwd, username)
-    except SearpcError, e:
-        return HttpResponse(json.dumps({
-                    'error': e.msg,
-                    }), status=400, content_type=content_type)
+    repo_share_user = filter(lambda i: i.repo_id == repo_id, repo_share_user)
+    repo_share_group = filter(lambda i: i.repo_id == repo_id, repo_share_group)
+    for share in repo_share_group:
+        share.group_name = get_group(share.group_id).group_name
 
-    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
-                     {'repo_name': repo.name})
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return render_to_response('repo_share_manage.html', {
+            'repo': repo,
+            'repo_share_user': repo_share_user,
+            'repo_share_group': repo_share_group,
+            }, context_instance=RequestContext(request))
+
+@login_required
+def repo_folder_perm(request, repo_id):
+    """Manage folder permmission of this library.
+    """
+    username = request.user.username
+    can_access, repo = can_access_repo_setting(request, repo_id, username)
+
+    if not can_access:
+        raise Http404
+
+    # for user folder permission
+    user_folder_perms = seafile_api.list_folder_user_perm_by_repo(repo_id)
+    user_folder_perms.reverse()
+
+    for folder_perm in user_folder_perms:
+        folder_path = folder_perm.path
+        folder_perm.folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(folder_path)
+        if folder_path == '/':
+            folder_perm.folder_name = _(u'Root Directory')
+        else:
+            folder_perm.folder_name = os.path.basename(folder_path)
+
+    # for group folder permission
+    group_folder_perms = seafile_api.list_folder_group_perm_by_repo(repo_id)
+    group_folder_perms.reverse()
+
+    for folder_perm in group_folder_perms:
+        folder_path = folder_perm.path
+        folder_perm.folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(folder_path)
+        if folder_path == '/':
+            folder_perm.folder_name = _(u'Root Directory')
+        else:
+            folder_perm.folder_name = os.path.basename(folder_path)
+        folder_perm.group_name = get_group(folder_perm.group_id).group_name
+
+    contacts = Contact.objects.get_contacts_by_user(username)
+
+    return render_to_response('repo_folder_perm.html', {
+            'repo': repo,
+            'user_folder_perms': user_folder_perms,
+            'group_folder_perms': group_folder_perms,
+            'contacts': contacts,
+            }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
     err_msg = _(u'Internal Server Error')
@@ -1345,16 +1318,20 @@ def repo_revert_file (request, repo_id):
     if not repo:
         raise Http404
 
-    # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
-        raise Http404
-    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
     from_page = request.GET.get('from')
 
     if not (commit_id and path and from_page):
         return render_error(request, _(u"Invalid arguments"))
+
+    # perm check
+    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = settings.SITE_ROOT
+        messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
 
     try:
         ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
@@ -1389,15 +1366,19 @@ def repo_revert_dir (request, repo_id):
     if not repo:
         raise Http404
 
-    # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
-        raise Http404
-    
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
 
     if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
+
+    # perm check
+    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+        next = request.META.get('HTTP_REFERER', None)
+        if not next:
+            next = settings.SITE_ROOT
+        messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
 
     try:
         ret = seafserv_threaded_rpc.revert_dir (repo_id, commit_id,
