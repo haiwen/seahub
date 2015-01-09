@@ -1848,6 +1848,7 @@ textarea:-moz-placeholder {/* for FF */
 .displayed-op .op:hover {
     text-decoration:none;
 }
+.audit-item .audit-select-hidden,
 .repo-file-list .hidden-op {
     position:absolute;
     background:#fff;
@@ -1856,6 +1857,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
+.audit-select-hidden li a,
 .hidden-op li a {
     display:block;
     padding:0 12px;
@@ -3342,4 +3344,26 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     background:#fff;
     z-index:100;
+}
+
+/* file audit*/
+.audit-show-select {
+    font-weight: normal;
+    font-size: 13px;
+    padding-right: 2px;
+}
+#audit-unselect-op div {
+    display: inline-block;
+    height: 20px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+    cursor: pointer;
+}
+#audit-unselect-op span {
+    margin-right: 5px;
+}
+#audit-unselect-op a {
+    margin: 0 8px;
+    text-decoration: none;
+    font-size: 14px;
 }

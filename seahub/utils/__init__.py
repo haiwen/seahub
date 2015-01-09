@@ -10,6 +10,7 @@ import tempfile
 import locale
 import ConfigParser
 import mimetypes
+import contextlib
 
 from datetime import datetime
 from urlparse import urlparse, urljoin
@@ -522,6 +523,14 @@ if EVENTS_CONFIG_FILE:
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
 
+    @contextlib.contextmanager
+    def _get_seafevents_session():
+        try:
+            session = SeafEventsSession()
+            yield session
+        finally:
+           session.close()
+
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
         1. event1.commit.creator = event2.commit.creator
@@ -627,6 +636,20 @@ if EVENTS_CONFIG_FILE:
 
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
+
+    def get_file_audit_events(email, repo_id, start, limit):
+        """Return file audit events list. (If no file audit, return 'None')
+
+        For example:
+        ``get_file_audit_events(email, repo_id, 0, 10)`` returns the first 10
+        events.
+        ``get_file_audit_events(email, repo_id, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_file_audit_events(session, email, repo_id, start, limit)
+
+        return events if events else None
 
 else:
     EVENTS_ENABLED = False
