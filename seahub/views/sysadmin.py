@@ -1199,40 +1199,37 @@ def batch_user_make_admin(request):
     if request.method != 'POST':
         raise Http404
 
-    result = {}
     content_type = 'application/json; charset=utf-8'
 
     set_admin_emails = request.POST.get('set_admin_emails')
     set_admin_emails = string2list(set_admin_emails)
-
     success = []
     failed = []
-    already_admin = []
-
-    if len(get_emailusers('LDAP', 0, 1)) > 0:
-        messages.error(request, _(u'Using LDAP now, can not add admin.'))
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
 
     for email in set_admin_emails:
         try:
             user = User.objects.get(email=email)
-            if user.is_staff is True:
-                already_admin.append(email)
-            else:
-                user.is_staff = True
-                user.save()
-                success.append(email)
         except User.DoesNotExist:
             failed.append(email)
+            continue
 
-    for item in success + already_admin:
+        if user.source == 'DB':
+            # check if is DB user first
+            user.is_staff = True
+            user.save()
+        else:
+            # if is LDAP user, add this 'email' as a DB user first
+            # then set admin
+            ccnet_threaded_rpc.add_emailuser(email, '!', 1, 1)
+
+        success.append(email)
+
+    for item in success:
         messages.success(request, _(u'Successfully set %s as admin.') % item)
     for item in failed:
         messages.error(request, _(u'Failed to set %s as admin: user does not exist.') % item)
 
-    result['success'] = True
-    return HttpResponse(json.dumps(result), content_type=content_type)
+    return HttpResponse(json.dumps({'success': True,}), content_type=content_type)
 
 @login_required
 @sys_staff_required
