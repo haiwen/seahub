@@ -21,7 +21,7 @@
     {% endif %}
 
     {% if user.trialing %}
-    <p><a href="#">Trial expires at {{user.trial_expire_date|date:"Y-m-d"}}</a></p>
+    <p><a href="{{user.trial_info.payment_url}}">Trial expires at {{user.trial_info.expire_date|date:"Y-m-d"}}</a></p>
     {% endif %}
 </div>
 

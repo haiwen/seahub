@@ -37,10 +37,10 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 try:
-    from seahub_extra.trialuser.models import TrialUser
-    enable_trial_user = True
+    from seahub_extra.trialaccount.models import TrialAccount
+    enable_trial_account = True
 except:
-    enable_trial_user = False
+    enable_trial_account = False
 
 logger = logging.getLogger(__name__)
 
@@ -202,8 +202,8 @@ def sys_user_admin(request):
 
     users = users_plus_one[:per_page]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    if enable_trial_user:
-        trial_users = TrialUser.objects.filter(username__in=[x.email for x in users])
+    if enable_trial_account:
+        trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
     for user in users:
@@ -226,7 +226,7 @@ def sys_user_admin(request):
 
         user.trial_info = None
         for trial_user in trial_users:
-            if trial_user.username == user.email:
+            if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
     have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
@@ -545,8 +545,8 @@ def user_remove(request, user_id):
 
 @login_required
 @sys_staff_required
-def user_remove_trial(request, username):
-    """
+def remove_trial(request, user_or_org):
+    """Remove trial account.
     
     Arguments:
     - `request`:
@@ -554,9 +554,9 @@ def user_remove_trial(request, username):
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
 
-    TrialUser.objects.filter(username=username).delete()
+    TrialAccount.objects.filter(user_or_org=user_or_org).delete()
 
-    messages.success(request, _('Successfully remove trial for user: %s') % username)
+    messages.success(request, _('Successfully remove trial for: %s') % user_or_org)
     return HttpResponseRedirect(next)
 
 @login_required
@@ -873,9 +873,19 @@ def sys_org_admin(request):
     orgs_plus_one = ccnet_threaded_rpc.get_all_orgs(per_page * (current_page - 1),
                                                     per_page + 1)
     orgs = orgs_plus_one[:per_page]
+
+    if enable_trial_account:
+        trial_orgs = TrialAccount.objects.filter(user_or_org__in=[x.org_id for x in orgs])
+    else:
+        trial_orgs = []
     for org in orgs:
         org.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
         org.total_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
+
+        org.trial_info = None
+        for trial_org in trial_orgs:
+            if trial_org.user_or_org == str(org.org_id):
+                org.trial_info = {'expire_date': trial_org.expire_date}
 
     if len(orgs_plus_one) == per_page + 1:
         page_next = True
@@ -1090,8 +1100,8 @@ def user_search(request):
 
     users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    if enable_trial_user:
-        trial_users = TrialUser.objects.filter(username__in=[x.email for x in users])
+    if enable_trial_account:
+        trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
     for user in users:
@@ -1111,7 +1121,7 @@ def user_search(request):
 
         user.trial_info = None
         for trial_user in trial_users:
-            if trial_user.username == user.email:
+            if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
     return render_to_response('sysadmin/user_search.html', {

@@ -39,7 +39,12 @@
     </tr>
     {% for org in orgs %}
     <tr>
-        <td><a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a></td>
+        <td>
+            <a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a>
+            {% if org.trial_info %}
+            <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ org.org_name }}" data-url="{% url 'remove_trial' org.org_id %}">X</a>)</p>
+            {% endif %}
+        </td>
         <td>{{ org.url_prefix }}</td>
         <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
         <td>
@@ -132,5 +137,11 @@ $('#add-org-form').submit(function() {
 
     return false;
 });
+
+addConfirmTo($('.unset-trial'), {
+    'title':"{% trans "Remove Trial" %}",
+    'con':"{% trans "Are you sure you want to remove trial for %s ?" %}"
+});
+
 </script>
 {% endblock %}
