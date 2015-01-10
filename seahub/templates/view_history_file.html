@@ -31,7 +31,7 @@
               {% endblock %}
             </p>
 
-            <button data-url="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name }}&op=download" id="download">{% trans "Download"%}</button>
+            <button data-url="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</button>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>

@@ -49,8 +49,9 @@
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
-                    <th width="65%">{% trans "Name"%}</th>
+                    <th width="45%">{% trans "Name"%}</th>
                     <th width="30%">{% trans "Size"%}</th>
+                    <th width="20%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -58,6 +59,7 @@
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory"%}" /></td>
                     <td><a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a></td>              
                     <td></td>
+                    <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ current_commit.id }}&p={{ path|urlencode }}{{dirent.obj_name|urlencode}}&from=repo_history">{% trans "Restore" %}</a></td>
                 </tr>
                 {% endfor %}
 
@@ -67,6 +69,8 @@
                     <td><a class="normal" href="{% url 'view_snapshot_file' repo.props.id %}?obj_id={{ dirent.props.obj_id }}&commit_id={{ current_commit.id }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a></td>              
                     <td>{{ dirent.file_size|filesizeformat }}</td>
                     <td>
+                        <a class="op vh" href="{% url 'repo_revert_file' repo.id %}?commit={{ current_commit.id }}&p={{ path|urlencode }}{{dirent.obj_name|urlencode}}&from=repo_history">{% trans "Restore" %}</a>
+                        <a class="op vh" href="{% url 'download_file' repo.id dirent.obj_id%}?file_name={{ dirent.obj_name|urlencode }}&p={{path|urlencode}}{{ dirent.obj_name|urlencode }}">{% trans "Download" %}</a>
                     </td>
                 </tr>
                 {% endfor %}
