@@ -1331,7 +1331,7 @@ def repo_remove(request, repo_id):
     result = {}
 
     if get_system_default_repo_id() == repo_id:
-        result['error'] = _(u'System library can not be deleted.')
+        result['error'] = _(u'System library cannot be deleted.')
         return HttpResponse(json.dumps(result), status=403, content_type=ct)
 
     repo = get_repo(repo_id)

@@ -177,7 +177,7 @@ def get_inner_fileserver_root():
 
     Inner fileserver root allows Seahub access fileserver through local
     address, thus avoiding the overhead of DNS queries, as well as other
-    related issues, for example, the server can not ping itself, etc.
+    related issues, for example, the server cannot ping itself, etc.
 
     Returns:
     	http://127.0.0.1:<port>

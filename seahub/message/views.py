@@ -209,7 +209,7 @@ def message_send(request):
             continue
 
         if to_email == username:
-            errors.append(_(u'You can not send message to yourself.'))
+            errors.append(_(u'You cannot send message to yourself.'))
             continue
 
         if not is_registered_user(to_email):

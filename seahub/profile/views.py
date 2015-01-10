@@ -164,7 +164,7 @@ def delete_user_account(request):
     username = request.user.username
         
     if username == 'demo@seafile.com':
-        messages.error(request, _(u'Demo account can not be deleted.'))
+        messages.error(request, _(u'Demo account cannot be deleted.'))
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
         return HttpResponseRedirect(next)
         

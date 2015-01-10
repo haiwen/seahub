@@ -273,14 +273,14 @@ def file_size_exceeds_preview_limit(file_size, file_type):
     """
     if file_type in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER:
         if file_size > OFFICE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
+            err = _(u'File size surpasses %s. Cannot be opened online.') % \
                 filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             return True, err
         else:
             return False, ''
     else:
         if file_size > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
+            err = _(u'File size surpasses %s. Cannot be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             return True, err
         else:
@@ -523,12 +523,12 @@ def view_history_file_common(request, repo_id, ret_dict):
         # Check file size
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
         if fsize > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
+            err = _(u'File size surpasses %s. Cannot be opened online.') % \
                 filesizeformat(FILE_PREVIEW_MAX_SIZE)
             ret_dict['err'] = err
 
         elif filetype in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER and fsize > OFFICE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
+            err = _(u'File size surpasses %s. Cannot be opened online.') % \
                 filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
             ret_dict['err'] = err
         else:

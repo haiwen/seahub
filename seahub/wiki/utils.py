@@ -144,7 +144,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             filename = os.path.basename(path)
             obj_id = seaserv.get_file_id_by_path(repo_id, path)
             if not obj_id:
-                # Replace '/' in page_name to '-', since wiki name can not
+                # Replace '/' in page_name to '-', since wiki name cannot
                 # contain '/'.
                 return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
                     (url_prefix + '/' + page_name.replace('/', '-'), page_name)
