@@ -3510,7 +3510,7 @@ msgstr "Verknüpfung erfolgreich aufgehoben."
 #: seahub/templates/snippets/repo_dirents.html:78
 #: seahub/templates/sysadmin/userinfo.html:147
 msgid "Download"
-msgstr "Öffentlich teilen"
+msgstr "Download"
 
 #: seahub/templates/file_edit.html:84
 #: seahub/templates/repo_history_view.html:38
