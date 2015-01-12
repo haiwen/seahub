@@ -30,3 +30,4 @@ S_F_URL = apiurl('/api2/s/f/')
 
 LIST_GROUP_AND_CONTACTS_URL = apiurl('/api2/groupandcontacts/')
 
+SERVER_INFO_URL = apiurl('/api2/server-info/')
