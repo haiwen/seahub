@@ -30,7 +30,9 @@ def _get_cache_key(request, prefix):
         key = normalize_cache_key(request.user.username, 'SharedLink_')
     else:
         ip = get_remote_ip(request)
-        agent = request.META.get('HTTP_USER_AGENT', '')
+        # Memcached key length limit is 250 chars, and user agent somethings may
+        # be long which will cause error.
+        agent = request.META.get('HTTP_USER_AGENT', '')[:150]
         key = normalize_cache_key(ip + agent, 'SharedLink_')
 
     return key
