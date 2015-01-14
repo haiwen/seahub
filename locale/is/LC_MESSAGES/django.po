@@ -5,14 +5,14 @@
 # Translators:
 # Anna Jonna Ármannsdóttir <annaj@hi.is>, 2014
 # Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2014
-# Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2014
+# Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2014-12-26 09:22+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-01-13 14:52+0000\n"
+"Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/projects/p/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,15 +112,15 @@ msgstr "Netfang er áskilið"
 
 #: seahub/forms.py:165
 msgid "Space quota can't be empty"
-msgstr ""
+msgstr "Geymslukvóta má ekki vanta"
 
 #: seahub/forms.py:166
 msgid "Space quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "Geymslukvóti er of lítill (lágmarksgildi er 0)"
 
 #: seahub/forms.py:168
 msgid "Share quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "Deilikvóti er of lítill (lágmarksgildi er 0)"
 
 #: seahub/forms.py:174
 msgid "Library name is required"
@@ -3851,7 +3851,7 @@ msgstr "Munur"
 
 #: seahub/templates/finish_payment.html:9
 msgid "Plan"
-msgstr ""
+msgstr "Áætlun"
 
 #: seahub/templates/footer.html:5
 #: seahub/templates/snippets/search_form.html:44
@@ -3911,7 +3911,7 @@ msgstr "Tenglar"
 #: seahub/templates/i18n.html:6
 #: seahub/templates/snippets/repo_dir_data.html:32
 msgid "Upload Folder"
-msgstr ""
+msgstr "Hlaða upp Skráarsafni"
 
 #: seahub/templates/i18n.html:7
 #: seahub/templates/snippets/file_share_popup.html:46
@@ -4086,7 +4086,7 @@ msgstr "Vinsamlegast veljið fyrst skrá."
 
 #: seahub/templates/repo.html:73
 msgid "File Upload"
-msgstr ""
+msgstr "Skráarupphleðsla"
 
 #: seahub/templates/repo.html:76 seahub/templates/view_file_base.html:122
 #: seahub/templates/snippets/group_recommend_form.html:36
@@ -4195,19 +4195,19 @@ msgstr "Taka stjörnu af"
 
 #: seahub/templates/repo.html:287
 msgid "File Uploading..."
-msgstr ""
+msgstr "Skrá hleðst upp..."
 
 #: seahub/templates/repo.html:288
 msgid "File Upload complete"
-msgstr ""
+msgstr "Upphleðslu Skrár Lokið"
 
 #: seahub/templates/repo.html:289
 msgid "File Upload canceled"
-msgstr ""
+msgstr "Hætt við Upphleðslu Skrár "
 
 #: seahub/templates/repo.html:290
 msgid "File Upload failed"
-msgstr ""
+msgstr "Skráarupphleðsla mistókst"
 
 #: seahub/templates/repo.html:365
 #: seahub/templates/view_shared_upload_link.html:154
@@ -4252,12 +4252,12 @@ msgstr "Villa"
 #: seahub/templates/repo.html:528
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "uploaded"
-msgstr ""
+msgstr "upphlaðin"
 
 #: seahub/templates/repo.html:529
 #: seahub/templates/view_shared_upload_link.html:88
 msgid "canceled"
-msgstr ""
+msgstr "hætt við"
 
 #: seahub/templates/repo.html:530
 #: seahub/templates/view_shared_upload_link.html:89
@@ -4385,7 +4385,7 @@ msgstr "Villa við dulkóðun."
 #: seahub/templates/repo.html:1138
 #, python-format
 msgid "Encrypting, %(num)s%% complete."
-msgstr ""
+msgstr "Dulkóðun, %(num)s%% lokið."
 
 #: seahub/templates/repo.html:1155
 msgid "Uploading ..."
@@ -4402,7 +4402,7 @@ msgstr "Er að hala niður... "
 #: seahub/templates/repo.html:1497
 #, python-format
 msgid "Downloading, %(num)s%% complete."
-msgstr ""
+msgstr "Niðurhölun, %(num)s%% lokið."
 
 #: seahub/templates/repo.html:1518
 msgid "Decrypting..."
@@ -4411,7 +4411,7 @@ msgstr "Er að dulkóða..."
 #: seahub/templates/repo.html:1535
 #, python-format
 msgid "Decrypting, %(num)s%% complete."
-msgstr ""
+msgstr "Akóðun, %(num)s%% lokið."
 
 #: seahub/templates/repo.html:1638
 #, python-format
@@ -4652,7 +4652,7 @@ msgstr "Endurtaktu Nýja Lykilorðið"
 #: seahub/templates/repo_settings.html:96
 #: seahub/templates/repo_settings.html:122
 msgid "Created By"
-msgstr ""
+msgstr "Gert Af"
 
 #: seahub/templates/repo_settings.html:270
 msgid "Please enter the old password"
@@ -4676,7 +4676,7 @@ msgstr "Nýju lykilorðin stemma ekki"
 
 #: seahub/templates/repo_settings.html:350
 msgid "Removed successfully."
-msgstr ""
+msgstr "Fjarlægt giftursamlega."
 
 #: seahub/templates/repo_view_snapshot.html:13
 #: seahub/templates/view_snapshot_file.html:7
@@ -4977,11 +4977,11 @@ msgstr "Bæta við skráasafni"
 msgid ""
 "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE "
 "10.0+"
-msgstr ""
+msgstr "Að draga og sleppa skrám er stutt í Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
 #: seahub/templates/view_shared_upload_link.html:49
 msgid "Folder Drag & Drop is supported for Chrome"
-msgstr ""
+msgstr "Að draga og sleppa skráarsöfnum er stutt í Chrome"
 
 #: seahub/templates/view_shared_upload_link.html:52
 #, python-format
@@ -5578,11 +5578,11 @@ msgstr "Vinsamlegast settu inn að minnsta kosti eitt netfang"
 
 #: seahub/templates/snippets/shared_link_js.html:266
 msgid "Please enter days"
-msgstr ""
+msgstr "Vinsamlegast settu inn dagafjölda "
 
 #: seahub/templates/snippets/shared_link_js.html:272
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Vinsamlegast sláðu inn rétta daga"
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
@@ -5590,7 +5590,7 @@ msgstr "Notað:"
 
 #: seahub/templates/snippets/space_and_traffic.html:7
 msgid "Sharing:"
-msgstr ""
+msgstr "Deili:"
 
 #: seahub/templates/snippets/space_and_traffic.html:25
 msgid "Traffic this month:"
@@ -5775,21 +5775,21 @@ msgstr "Nýtt Nafn"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:24
 msgid "Limit Organization User Number"
-msgstr ""
+msgstr "Takmakra Notendafjölda Samfélags"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:26
 msgid "Max User Number"
-msgstr ""
+msgstr "Hámarks Notendafjöldi"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
 #: seahub/views/sysadmin.py:897
 msgid "Input should be a number"
-msgstr ""
+msgstr "Gildið ætti að vera tala"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
 #: seahub/views/sysadmin.py:907
 msgid "Input number should be greater than 0"
-msgstr ""
+msgstr "Gildið ætti að vera tala stærri en 0"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:18
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:43
@@ -6055,15 +6055,15 @@ msgstr "Setja kvóta á geymslurými notanda"
 
 #: seahub/templates/sysadmin/userinfo.html:131
 msgid "Type"
-msgstr ""
+msgstr "Gerð"
 
 #: seahub/templates/sysadmin/userinfo.html:189
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "Geymslukvóta má ekki vanta"
 
 #: seahub/templates/sysadmin/userinfo.html:198
 msgid "Share Quota can't be empty"
-msgstr ""
+msgstr "Deilikvóta má ekki vanta"
 
 #: seahub/templates/wiki/personal_wiki.html:32
 msgid "You do not have personal wiki"
@@ -6087,11 +6087,11 @@ msgstr "Aðgangur óheimill."
 
 #: seahub/thumbnail/views.py:44
 msgid "Image thumbnail is not supported in encrypted libraries."
-msgstr ""
+msgstr "Smámyndir eru ekki studdar í dulkóðuðum söfnum."
 
 #: seahub/thumbnail/views.py:49
 msgid "Thumbnail function is not enabled."
-msgstr ""
+msgstr "Smámyndastilling er ekki virk."
 
 #: seahub/utils/__init__.py:131
 msgid "permission error"

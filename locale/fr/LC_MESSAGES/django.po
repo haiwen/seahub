@@ -7,7 +7,7 @@
 # EricLF44 <E.lefoll@cdg44.fr>, 2014
 # Gaspard <info@widelinkpc.be>, 2013-2014
 # jcbeylot78, 2014
-# jcbeylot78, 2014
+# jcbeylot78, 2014-2015
 # schaeffer <jonathan.schaeffer@univ-brest.fr>, 2014
 # Gaspard <info@widelinkpc.be>, 2013
 # MathieuP, 2014
@@ -19,8 +19,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2014-12-26 09:25+0000\n"
-"Last-Translator: EricLF44 <E.lefoll@cdg44.fr>\n"
+"PO-Revision-Date: 2015-01-08 08:39+0000\n"
+"Last-Translator: jcbeylot78\n"
 "Language-Team: French (http://www.transifex.com/projects/p/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1596,7 +1596,7 @@ msgstr "Ajouter des fichiers"
 #: seahub/message/templates/message/all_msg_list.html:55
 #: seahub/message/templates/message/user_msg_list.html:29
 msgid "Choose a file or files:"
-msgstr "Veuillez choisir un fichier ou des fichiers:"
+msgstr "Veuillez choisir un fichier ou des fichiers :"
 
 #: seahub/group/templates/group/group_discuss.html:33
 msgid "After login, you can post discussions and add replies."
@@ -1719,7 +1719,7 @@ msgstr "Description"
 #: seahub/templates/snippets/my_owned_repos.html:135
 #: seahub/templates/snippets/repo_dir_data.html:66
 msgid "Last Update"
-msgstr "Synchro"
+msgstr "Mise à jour"
 
 #: seahub/group/templates/group/group_info.html:26
 #: seahub/group/templates/group/group_info_for_pub.html:16
@@ -1805,7 +1805,7 @@ msgstr "Détails"
 #: seahub/templates/sysadmin/userinfo.html:120
 #: seahub/templates/sysadmin/userinfo.html:166
 msgid "None"
-msgstr "Aucun"
+msgstr "Aucun(e)"
 
 #: seahub/group/templates/group/group_info.html:126
 #: seahub/templates/activities.html:19 seahub/templates/file_edit.html:241
@@ -1951,11 +1951,11 @@ msgstr "email"
 
 #: seahub/group/templates/group/group_manage.html:100
 msgid "Tip: the email should be already registered."
-msgstr "Astuce : les emails devraient déjà être enregistrés."
+msgstr "Astuce : les emails doivent déjà être enregistrés."
 
 #: seahub/group/templates/group/group_manage.html:106
 msgid "Rename Group To"
-msgstr "Renommer le Groupe en "
+msgstr "Renommer le groupe en "
 
 #: seahub/group/templates/group/group_manage.html:142
 msgid "Dismiss Group"
@@ -2218,7 +2218,7 @@ msgstr "Astuce : une invitation sera envoyée si l'email n'est pas enregistré."
 
 #: seahub/group/templates/group/grpmember_add_form.html:14
 msgid "Tip: the emails should be already registered."
-msgstr "Astuce : les emails devraient être déjà inscrits."
+msgstr "Astuce : les emails doivent être déjà enregistrés."
 
 #: seahub/group/templates/group/grpmember_add_js.html:8
 msgid "Add administrators"
@@ -2665,7 +2665,7 @@ msgstr "%(user)s a répondu à votre <a href=\"%(url_base)s%(reply_url)s\">discu
 msgid ""
 "%(user)s has shared a library named <a "
 "href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to you."
-msgstr "%(user)s a partagé une bibliothèque nommé <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> avec vous."
+msgstr "%(user)s a partagé une bibliothèque nommée <a href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> avec vous."
 
 #: seahub/notifications/templates/notifications/notice_email.html:47
 #, python-format
@@ -2699,7 +2699,7 @@ msgstr "L'utilisateur <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> vous dem
 
 #: seahub/notifications/templates/notifications/notice_email.html:68
 msgid "Go check out at the following page:"
-msgstr "Allez vérifier à la page suivante:"
+msgstr "Allez vérifier à la page suivante :"
 
 #: seahub/notifications/templates/notifications/notification_list.html:8
 msgid "All Notifications"
@@ -2886,7 +2886,7 @@ msgstr "Paramètres de la bibliothèque chiffrée"
 
 #: seahub/profile/templates/profile/set_profile.html:83
 msgid "How to view encrypted libraries online:"
-msgstr "Comment voir les bibliothèques chiffrée en ligne: "
+msgstr "Comment voir les bibliothèques chiffrée en ligne : "
 
 #: seahub/profile/templates/profile/set_profile.html:96
 msgid "Sub-library Setting"
@@ -3277,11 +3277,11 @@ msgstr "Fichiers - Partage"
 
 #: seahub/share/templates/share/priv_shared_files.html:12
 msgid "From Others"
-msgstr "Partages entrants"
+msgstr "Partages reçus"
 
 #: seahub/share/templates/share/priv_shared_files.html:14
 msgid "To Others"
-msgstr "Partages sortants"
+msgstr "Partages émis"
 
 #: seahub/share/templates/share/priv_shared_files.html:24
 msgid "From"
@@ -3929,7 +3929,7 @@ msgstr "Ajouter l'expiration automatique"
 #: seahub/templates/i18n.html:8
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid "Days"
-msgstr "Jours"
+msgstr "Nombre de jours"
 
 #: seahub/templates/i18n.html:9 seahub/templates/repo_settings.html:24
 #: seahub/templates/repo_settings.html:84
@@ -3943,11 +3943,11 @@ msgstr "Voir et administrer tous les liens partagés de cette bibliothèque."
 
 #: seahub/templates/i18n.html:11 seahub/templates/sysadmin/userinfo.html:68
 msgid "Owned Libs"
-msgstr "Bibliothèques Possédées"
+msgstr "Bibliothèques possédées"
 
 #: seahub/templates/i18n.html:12 seahub/templates/sysadmin/userinfo.html:69
 msgid "Shared Libs"
-msgstr "Bibliothèques Partagées"
+msgstr "Bibliothèques partagées"
 
 #: seahub/templates/my_group_repos.html:6
 #: seahub/templates/snippets/my_group_repos.html:6
@@ -4384,7 +4384,7 @@ msgstr "Annulé."
 
 #: seahub/templates/repo.html:1109
 msgid "Encrypting the file..."
-msgstr "Cryptage du fichier ..."
+msgstr "Cryptage du fichier..."
 
 #: seahub/templates/repo.html:1131
 msgid "Error when encrypting."
@@ -4642,7 +4642,7 @@ msgstr "Transférer cette bibliothèque à un autre utilisateur :"
 
 #: seahub/templates/repo_settings.html:69
 msgid "Change the password of this library:"
-msgstr "Changement du mot de passe de la bibliothèque:"
+msgstr "Changement du mot de passe de la bibliothèque :"
 
 #: seahub/templates/repo_settings.html:70
 msgid "Old Password"
@@ -4755,7 +4755,7 @@ msgstr "Bonjour,"
 msgid ""
 "%(email)s shared a %(file_shared_type)s <span style=\"font-"
 "weight:bold;\">%(file_shared_name)s</span> to you on %(site_name)s:"
-msgstr "%(email)s a partagé un %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span> fichier sur %(site_name)s:"
+msgstr "%(email)s a partagé un %(file_shared_type)s <span style=\"font-weight:bold;\">%(file_shared_name)s</span> sur %(site_name)s:"
 
 #: seahub/templates/shared_upload_link_email.html:11
 #, python-format
@@ -5164,7 +5164,7 @@ msgstr "Un message de réinitialisation de votre mot de passe a été envoyé da
 msgid ""
 "To reset the password of your account %(account)s on %(site_name)s, please "
 "click the following link: "
-msgstr "Pour réinitialiser le mot de passe de votre compte %(account)s sur %(site_name)s, cliquez sur le lien suivant:: "
+msgstr "Pour réinitialiser le mot de passe de votre compte %(account)s sur %(site_name)s, cliquez sur le lien suivant :"
 
 #: seahub/templates/registration/password_reset_email.html:17
 msgid "If you did not request it, just skip it."
@@ -5586,11 +5586,11 @@ msgstr "Veuillez saisir au moins un email."
 
 #: seahub/templates/snippets/shared_link_js.html:266
 msgid "Please enter days"
-msgstr "Veuillez entrer des jours"
+msgstr "Veuillez entrer un nombre de jours"
 
 #: seahub/templates/snippets/shared_link_js.html:272
 msgid "Please enter valid days"
-msgstr "Veuillez entrer des jours valides"
+msgstr "Veuillez entrer un nombre de jours valide"
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
@@ -5631,7 +5631,7 @@ msgstr "Transférer la bibliothèque"
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
 msgid "Transfer %(lib_name)s to:"
-msgstr "Transfert %(lib_name)s vers:"
+msgstr "Transfert %(lib_name)s vers :"
 
 #: seahub/templates/sysadmin/repoadmin_table.html:6
 #: seahub/templates/sysadmin/sys_org_admin.html:20
@@ -5763,7 +5763,7 @@ msgstr "Définissez la limite de stockage de l'organisation"
 #: seahub/templates/sysadmin/sys_org_info_base.html:35
 #: seahub/templates/sysadmin/userinfo.html:58
 msgid "Tip: 0 means default limit"
-msgstr "Astuce: 0 signifie aucune limite par défaut"
+msgstr "Astuce : 0 signifie aucune limite par défaut"
 
 #: seahub/templates/sysadmin/sys_org_info_group.html:34
 msgid "This organization doesn't have any groups"
@@ -5775,7 +5775,7 @@ msgstr "Cette organisation n'a aucune bibliothèque"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:16
 msgid "Rename Organization"
-msgstr "Renommer l'Organisation"
+msgstr "Renommer l'organisation"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:18
 msgid "New Name"
@@ -5902,7 +5902,7 @@ msgstr "Trafic de l'utilisateur"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:22
 msgid "Month:"
-msgstr "Mois:"
+msgstr "Mois :"
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:28
 msgid "User"
@@ -5982,7 +5982,7 @@ msgstr "Ajouter des administrateurs"
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:31
 msgid "Tip: the emails should be the users already added."
-msgstr "Astuce: les emails doivent correspondre à des utilisateurs déjà ajoutés."
+msgstr "Astuce : les emails doivent correspondre à des utilisateurs déjà ajoutés."
 
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:111
 #: seahub/templates/sysadmin/useradmin_js.html:11
@@ -6022,7 +6022,7 @@ msgstr "Email : %(email)s"
 #: seahub/templates/sysadmin/user_add_email.html:22
 #, python-format
 msgid "Password: %(password)s"
-msgstr "Mot de passe: %(password)s"
+msgstr "Mot de passe : %(password)s"
 
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
@@ -6264,7 +6264,7 @@ msgstr "Erreur interne"
 #: seahub/views/__init__.py:1730
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
-msgstr "Impossible de télécharger le dossier \"%s\": cet élément est trop volumineux."
+msgstr "Impossible de télécharger le dossier \"%s\" : cet élément est trop volumineux."
 
 #: seahub/views/__init__.py:1744
 #, python-format

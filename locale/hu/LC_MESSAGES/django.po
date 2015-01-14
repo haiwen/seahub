@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2014-12-26 09:22+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2014-12-26 20:25+0000\n"
+"Last-Translator: Szabolcs Gyuris <szimszon@oregpreshaz.eu>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -116,15 +116,15 @@ msgstr "Az e-mail megadása kötelező"
 
 #: seahub/forms.py:165
 msgid "Space quota can't be empty"
-msgstr ""
+msgstr "A tárhely kvóta megadása kötelező"
 
 #: seahub/forms.py:166
 msgid "Space quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "A tárhely kvóta túl alacsony (minimális érték 0)"
 
 #: seahub/forms.py:168
 msgid "Share quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "A megosztási kvóta túl alacsony (minimális érték 0)"
 
 #: seahub/forms.py:174
 msgid "Library name is required"
@@ -3855,7 +3855,7 @@ msgstr "Különbség"
 
 #: seahub/templates/finish_payment.html:9
 msgid "Plan"
-msgstr ""
+msgstr "Terv"
 
 #: seahub/templates/footer.html:5
 #: seahub/templates/snippets/search_form.html:44
@@ -3915,7 +3915,7 @@ msgstr "Linkek"
 #: seahub/templates/i18n.html:6
 #: seahub/templates/snippets/repo_dir_data.html:32
 msgid "Upload Folder"
-msgstr ""
+msgstr "Könyvtár feltöltése"
 
 #: seahub/templates/i18n.html:7
 #: seahub/templates/snippets/file_share_popup.html:46
@@ -4090,7 +4090,7 @@ msgstr "Kérem válasszon egy fájlt elsőként."
 
 #: seahub/templates/repo.html:73
 msgid "File Upload"
-msgstr ""
+msgstr "Fájl feltöltés"
 
 #: seahub/templates/repo.html:76 seahub/templates/view_file_base.html:122
 #: seahub/templates/snippets/group_recommend_form.html:36
@@ -4199,19 +4199,19 @@ msgstr "csillagozatlan"
 
 #: seahub/templates/repo.html:287
 msgid "File Uploading..."
-msgstr ""
+msgstr "Fájl feltöltés ..."
 
 #: seahub/templates/repo.html:288
 msgid "File Upload complete"
-msgstr ""
+msgstr "Fájl feltöltés kész"
 
 #: seahub/templates/repo.html:289
 msgid "File Upload canceled"
-msgstr ""
+msgstr "Fájl feltöltés megszakítva"
 
 #: seahub/templates/repo.html:290
 msgid "File Upload failed"
-msgstr ""
+msgstr "Fájl feltöltés sikertelen"
 
 #: seahub/templates/repo.html:365
 #: seahub/templates/view_shared_upload_link.html:154
@@ -4256,12 +4256,12 @@ msgstr "Hiba"
 #: seahub/templates/repo.html:528
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "uploaded"
-msgstr ""
+msgstr "feltöltve"
 
 #: seahub/templates/repo.html:529
 #: seahub/templates/view_shared_upload_link.html:88
 msgid "canceled"
-msgstr ""
+msgstr "megszakítva"
 
 #: seahub/templates/repo.html:530
 #: seahub/templates/view_shared_upload_link.html:89
@@ -4389,7 +4389,7 @@ msgstr "Hiba a titkosítás közben."
 #: seahub/templates/repo.html:1138
 #, python-format
 msgid "Encrypting, %(num)s%% complete."
-msgstr ""
+msgstr "Titkosítás, %(num)s%% kész."
 
 #: seahub/templates/repo.html:1155
 msgid "Uploading ..."
@@ -4406,7 +4406,7 @@ msgstr "Letöltés ..."
 #: seahub/templates/repo.html:1497
 #, python-format
 msgid "Downloading, %(num)s%% complete."
-msgstr ""
+msgstr "Letöltés, %(num)s%% kész."
 
 #: seahub/templates/repo.html:1518
 msgid "Decrypting..."
@@ -4415,7 +4415,7 @@ msgstr "Titkosítás visszafejtése..."
 #: seahub/templates/repo.html:1535
 #, python-format
 msgid "Decrypting, %(num)s%% complete."
-msgstr ""
+msgstr "Titkosítás feloldása, %(num)s%% kész."
 
 #: seahub/templates/repo.html:1638
 #, python-format
@@ -4656,7 +4656,7 @@ msgstr "Új jelszó ismét"
 #: seahub/templates/repo_settings.html:96
 #: seahub/templates/repo_settings.html:122
 msgid "Created By"
-msgstr ""
+msgstr "Létrehozta"
 
 #: seahub/templates/repo_settings.html:270
 msgid "Please enter the old password"
@@ -4680,7 +4680,7 @@ msgstr "Az új jelszavak nem egyeznek"
 
 #: seahub/templates/repo_settings.html:350
 msgid "Removed successfully."
-msgstr ""
+msgstr "Sikeresen törölve."
 
 #: seahub/templates/repo_view_snapshot.html:13
 #: seahub/templates/view_snapshot_file.html:7
@@ -4981,11 +4981,11 @@ msgstr "Könyvtár hozzáadás"
 msgid ""
 "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE "
 "10.0+"
-msgstr ""
+msgstr "A fájl húzd és ejtd a következő böngészőkkel támogatott: Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
 #: seahub/templates/view_shared_upload_link.html:49
 msgid "Folder Drag & Drop is supported for Chrome"
-msgstr ""
+msgstr "A könyvtár húzd és ejtd a következő böngészőkkel támogatott: Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+"
 
 #: seahub/templates/view_shared_upload_link.html:52
 #, python-format
@@ -5582,11 +5582,11 @@ msgstr "Adjon meg legalább egy e-mail címet"
 
 #: seahub/templates/snippets/shared_link_js.html:266
 msgid "Please enter days"
-msgstr ""
+msgstr "Adja meg a napok számát"
 
 #: seahub/templates/snippets/shared_link_js.html:272
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Kérem érvényes nap számot adjon meg"
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
@@ -5594,7 +5594,7 @@ msgstr "Foglalt:"
 
 #: seahub/templates/snippets/space_and_traffic.html:7
 msgid "Sharing:"
-msgstr ""
+msgstr "Megosztás:"
 
 #: seahub/templates/snippets/space_and_traffic.html:25
 msgid "Traffic this month:"
@@ -5779,21 +5779,21 @@ msgstr "Új név"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:24
 msgid "Limit Organization User Number"
-msgstr ""
+msgstr "Felhasználók számának korlátozása a szervezetekben"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:26
 msgid "Max User Number"
-msgstr ""
+msgstr "Max. felhasználói szám"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
 #: seahub/views/sysadmin.py:897
 msgid "Input should be a number"
-msgstr ""
+msgstr "Szám kell"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
 #: seahub/views/sysadmin.py:907
 msgid "Input number should be greater than 0"
-msgstr ""
+msgstr "A szám legyen 0-nál nagyobb"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:18
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:43
@@ -6059,15 +6059,15 @@ msgstr "Felhasználó tárhely beállítása"
 
 #: seahub/templates/sysadmin/userinfo.html:131
 msgid "Type"
-msgstr ""
+msgstr "Típus"
 
 #: seahub/templates/sysadmin/userinfo.html:189
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "A tárhely kvóta megadása kötelező"
 
 #: seahub/templates/sysadmin/userinfo.html:198
 msgid "Share Quota can't be empty"
-msgstr ""
+msgstr "A megosztási kvóta megadása kötelező"
 
 #: seahub/templates/wiki/personal_wiki.html:32
 msgid "You do not have personal wiki"
@@ -6091,11 +6091,11 @@ msgstr "Jogosultság megtagadva"
 
 #: seahub/thumbnail/views.py:44
 msgid "Image thumbnail is not supported in encrypted libraries."
-msgstr ""
+msgstr "Titkosított köteteken a bélyegképek nem támogatottak."
 
 #: seahub/thumbnail/views.py:49
 msgid "Thumbnail function is not enabled."
-msgstr ""
+msgstr "A bélyegkép funkció nincs engedélyezve."
 
 #: seahub/utils/__init__.py:131
 msgid "permission error"

@@ -5,14 +5,14 @@
 # Translators:
 # kim.hunsoo <kim.hunsoo@gmail.com>, 2014
 # kim.hunsoo <kim.hunsoo@gmail.com>, 2014
-# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014
+# Seong-ho Cho <darkcircle.0426@gmail.com>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2014-12-26 09:22+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-01-07 17:45+0000\n"
+"Last-Translator: Seong-ho Cho <darkcircle.0426@gmail.com>\n"
 "Language-Team: Korean (http://www.transifex.com/projects/p/seahub/language/ko/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -112,15 +112,15 @@ msgstr "전자메일 주소가 필요합니다"
 
 #: seahub/forms.py:165
 msgid "Space quota can't be empty"
-msgstr ""
+msgstr "공간 제한을 비워둘 수 없습니다"
 
 #: seahub/forms.py:166
 msgid "Space quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "공간 제한 용량이 너무 적습니다(최소 값은 0)"
 
 #: seahub/forms.py:168
 msgid "Share quota is too low (minimum value is 0)"
-msgstr ""
+msgstr "공유 제한 용량이 너무 적습니다(최소 값은 0)"
 
 #: seahub/forms.py:174
 msgid "Library name is required"
@@ -3845,7 +3845,7 @@ msgstr "비교"
 
 #: seahub/templates/finish_payment.html:9
 msgid "Plan"
-msgstr ""
+msgstr "계획"
 
 #: seahub/templates/footer.html:5
 #: seahub/templates/snippets/search_form.html:44
@@ -3905,7 +3905,7 @@ msgstr "링크"
 #: seahub/templates/i18n.html:6
 #: seahub/templates/snippets/repo_dir_data.html:32
 msgid "Upload Folder"
-msgstr ""
+msgstr "폴더 업로드"
 
 #: seahub/templates/i18n.html:7
 #: seahub/templates/snippets/file_share_popup.html:46
@@ -4080,7 +4080,7 @@ msgstr "먼저 파일을 선택해주세요."
 
 #: seahub/templates/repo.html:73
 msgid "File Upload"
-msgstr ""
+msgstr "파일 업로드"
 
 #: seahub/templates/repo.html:76 seahub/templates/view_file_base.html:122
 #: seahub/templates/snippets/group_recommend_form.html:36
@@ -4189,19 +4189,19 @@ msgstr "별표 해제"
 
 #: seahub/templates/repo.html:287
 msgid "File Uploading..."
-msgstr ""
+msgstr "파일 업로드 중..."
 
 #: seahub/templates/repo.html:288
 msgid "File Upload complete"
-msgstr ""
+msgstr "파일 업로드가 끝났습니다"
 
 #: seahub/templates/repo.html:289
 msgid "File Upload canceled"
-msgstr ""
+msgstr "파일 업로드를 취소했습니다"
 
 #: seahub/templates/repo.html:290
 msgid "File Upload failed"
-msgstr ""
+msgstr "파일 업로드에 실패했습니다"
 
 #: seahub/templates/repo.html:365
 #: seahub/templates/view_shared_upload_link.html:154
@@ -4246,12 +4246,12 @@ msgstr "오류"
 #: seahub/templates/repo.html:528
 #: seahub/templates/view_shared_upload_link.html:87
 msgid "uploaded"
-msgstr ""
+msgstr "업로드함"
 
 #: seahub/templates/repo.html:529
 #: seahub/templates/view_shared_upload_link.html:88
 msgid "canceled"
-msgstr ""
+msgstr "취소함"
 
 #: seahub/templates/repo.html:530
 #: seahub/templates/view_shared_upload_link.html:89
@@ -4379,7 +4379,7 @@ msgstr "암호화 오류."
 #: seahub/templates/repo.html:1138
 #, python-format
 msgid "Encrypting, %(num)s%% complete."
-msgstr ""
+msgstr "암호화 중. %(num)s%% 완료."
 
 #: seahub/templates/repo.html:1155
 msgid "Uploading ..."
@@ -4396,7 +4396,7 @@ msgstr "다운로드 중..."
 #: seahub/templates/repo.html:1497
 #, python-format
 msgid "Downloading, %(num)s%% complete."
-msgstr ""
+msgstr "다운로드 중. %(num)s%% 완료."
 
 #: seahub/templates/repo.html:1518
 msgid "Decrypting..."
@@ -4405,7 +4405,7 @@ msgstr "해독 중..."
 #: seahub/templates/repo.html:1535
 #, python-format
 msgid "Decrypting, %(num)s%% complete."
-msgstr ""
+msgstr "해독 중. %(num)s%% 완료."
 
 #: seahub/templates/repo.html:1638
 #, python-format
@@ -4646,7 +4646,7 @@ msgstr "새 암호를 다시 입력하세요"
 #: seahub/templates/repo_settings.html:96
 #: seahub/templates/repo_settings.html:122
 msgid "Created By"
-msgstr ""
+msgstr "만든 사람"
 
 #: seahub/templates/repo_settings.html:270
 msgid "Please enter the old password"
@@ -4670,7 +4670,7 @@ msgstr "새 암호가 서로 맞지 않습니다."
 
 #: seahub/templates/repo_settings.html:350
 msgid "Removed successfully."
-msgstr ""
+msgstr "성공적으로 제거했습니다."
 
 #: seahub/templates/repo_view_snapshot.html:13
 #: seahub/templates/view_snapshot_file.html:7
@@ -4971,11 +4971,11 @@ msgstr "폴더 추가"
 msgid ""
 "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE "
 "10.0+"
-msgstr ""
+msgstr "파일 끌어다 놓기는 크롬, 사파리 5.0 이상, 파이어폭스 4.0 이상, IE 10.0 이상에서 지원합니다."
 
 #: seahub/templates/view_shared_upload_link.html:49
 msgid "Folder Drag & Drop is supported for Chrome"
-msgstr ""
+msgstr "폴더 끌어다 놓기는 크롬에서 지원합니다"
 
 #: seahub/templates/view_shared_upload_link.html:52
 #, python-format
@@ -5572,11 +5572,11 @@ msgstr "최소한 하나의 전자메일 주소를 입력해주세요."
 
 #: seahub/templates/snippets/shared_link_js.html:266
 msgid "Please enter days"
-msgstr ""
+msgstr "일자를 입력하십시오"
 
 #: seahub/templates/snippets/shared_link_js.html:272
 msgid "Please enter valid days"
-msgstr ""
+msgstr "올바른 날짜를 입력하십시오."
 
 #: seahub/templates/snippets/space_and_traffic.html:3
 msgid "Used:"
@@ -5584,7 +5584,7 @@ msgstr "사용함:"
 
 #: seahub/templates/snippets/space_and_traffic.html:7
 msgid "Sharing:"
-msgstr ""
+msgstr "공유:"
 
 #: seahub/templates/snippets/space_and_traffic.html:25
 msgid "Traffic this month:"
@@ -5769,21 +5769,21 @@ msgstr "새 이름"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:24
 msgid "Limit Organization User Number"
-msgstr ""
+msgstr "조직 사용자 수 제한"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:26
 msgid "Max User Number"
-msgstr ""
+msgstr "최대 사용자 수"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
 #: seahub/views/sysadmin.py:897
 msgid "Input should be a number"
-msgstr ""
+msgstr "입력 값은 숫자여야합니다"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
 #: seahub/views/sysadmin.py:907
 msgid "Input number should be greater than 0"
-msgstr ""
+msgstr "입력 숫자는 0보다 커야합니다"
 
 #: seahub/templates/sysadmin/sys_org_info_user.html:18
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:43
@@ -6049,15 +6049,15 @@ msgstr "사용자 저장공간 한계 설정"
 
 #: seahub/templates/sysadmin/userinfo.html:131
 msgid "Type"
-msgstr ""
+msgstr "형식"
 
 #: seahub/templates/sysadmin/userinfo.html:189
 msgid "Space Quota can't be empty"
-msgstr ""
+msgstr "공간 제한을 비워둘 수 없습니다"
 
 #: seahub/templates/sysadmin/userinfo.html:198
 msgid "Share Quota can't be empty"
-msgstr ""
+msgstr "공유 제한을 비워둘 수 없습니다"
 
 #: seahub/templates/wiki/personal_wiki.html:32
 msgid "You do not have personal wiki"
@@ -6081,11 +6081,11 @@ msgstr "권한이 거부되었습니다."
 
 #: seahub/thumbnail/views.py:44
 msgid "Image thumbnail is not supported in encrypted libraries."
-msgstr ""
+msgstr "암호화 라이브러리에서는 미리 보기 이미지를 지원하지 않습니다."
 
 #: seahub/thumbnail/views.py:49
 msgid "Thumbnail function is not enabled."
-msgstr ""
+msgstr "미리 보기 기능을 활성화하지 않았습니다."
 
 #: seahub/utils/__init__.py:131
 msgid "permission error"
