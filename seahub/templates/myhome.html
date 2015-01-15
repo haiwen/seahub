@@ -65,6 +65,20 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+<script type="text/template" id="dirent-template">
+        <td class="select">
+            <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        </td>
+        <td class="star"></td>
+        <td class="dirent-icon"><img src="<%= app.utils.getMediaUrl() %>img/folder-icon-24.png" alt="Directory icon" /></td>
+        <td>
+            <span class="dirent-name"><a href="<%= id %>" class="dir-link"><%- name %></a></span>
+        </td>
+        <td class="dirent-size"></td>
+        <td class="dirent-update"></td>
+        <td></td>
+</script>
+
 <script type="text/javascript">
 {% if need_guide %}
 $(function() {$('#guide-for-new').modal({appendTo: '#main', focus:false});});
@@ -158,9 +172,9 @@ $('.submit', sublib_create_form).click(function() {
 {% endif %}
 {% include "snippets/repo_create_js.html" with post_url=repo_create_url %}
 
-
-$(function(){
-    new app.MyHomePage();
-});
+    /* $(function(){
+       app.myHomePage = new app.MyHomePage();
+       }); */
 </script>
+
 {% endblock %}
