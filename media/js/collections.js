@@ -12,4 +12,12 @@
         }
     });
 
+    app.DirentList = Backbone.Collection.extend({
+        model: app.models.Dirent,
+
+        initialize: function(data) {
+            this.url = app.config.siteRoot + 'api2/repos/' + data.id + '/dir/?p=' + data.path;
+        }
+    });
+
 }(app, Backbone));
