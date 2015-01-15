@@ -9,7 +9,7 @@
                 '<img src="<%= app.utils.getMediaUrl() %>img/sync-folder-20.png" title=Read-Write" alt="directory icon" />' +
                 '<% } %>' +
             '</td>' +
-            '<td><a href="/repo/<%= id %>/"><%- name %></a></td>' +
+            '<td><a href="#/libs/<%= id %>"><%- name %></a></td>' +
             '<td><%- desc %></td>' +
             '<td><%- mtime %></td>' +
             '<td><div>' +
