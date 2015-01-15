@@ -1621,7 +1621,7 @@ class DirView(APIView):
     Support uniform interface for directory operations, including
     create/delete/rename/list, etc.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
