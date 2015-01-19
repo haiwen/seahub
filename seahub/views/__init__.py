@@ -1923,7 +1923,11 @@ def toggle_modules(request):
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
-    return storage.modified_time(filename)
+    try:
+        return storage.modified_time(filename)
+    except Exception as e:
+        logger.error(e)
+        return None
 
 @condition(last_modified_func=latest_entry)
 def image_view(request, filename):
