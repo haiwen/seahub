@@ -881,14 +881,14 @@ def send_shared_link(request):
 
             try:
                 if file_shared_type == 'f':
-                    c['file_shared_type'] = "file"
+                    c['file_shared_type'] = _(u"file")
                     send_html_email(_(u'A file is shared to you on %s') % SITE_NAME,
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
                                     reply_to=reply_to
                                     )
                 else:
-                    c['file_shared_type'] = "directory"
+                    c['file_shared_type'] = _(u"directory")
                     send_html_email(_(u'A directory is shared to you on %s') % SITE_NAME,
                                     'shared_link_email.html',
                                     c, from_email, [to_email],
