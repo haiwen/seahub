@@ -2087,3 +2087,16 @@ def image_view(request, filename):
 
 def shib_login(request):
     return HttpResponseRedirect(request.GET.get("next",reverse('myhome')))
+
+def underscore_template(request, template):
+    """Serve underscore template through Django, mainly for I18n.
+
+    Arguments:
+    - `request`:
+    - `template`:
+    """
+    if not template.startswith('js'):  # light security check
+        raise Http404
+
+    return render_to_response(template, {},
+                              context_instance=RequestContext(request))
