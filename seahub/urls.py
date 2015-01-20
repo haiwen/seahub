@@ -167,6 +167,9 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/group-folder-permission/remove/$', remove_group_folder_permission, name='remove_group_folder_permission'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/group-folder-permission/toggle/$', toggle_group_folder_permission, name='toggle_group_folder_permission'),
 
+    url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
+
+
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
     url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
@@ -293,3 +296,11 @@ if TRAFFIC_STATS_ENABLED:
     urlpatterns += patterns('',
         url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
     )
+
+js_info_dict = {
+    'packages': ('seahub.settings',),
+}
+
+urlpatterns += patterns('',
+    (r'^jsi18n/$', 'seahub.views.i18n.cached_javascript_catalog', js_info_dict),
+)
