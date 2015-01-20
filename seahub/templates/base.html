@@ -131,21 +131,21 @@
         {% include 'footer.html' %}
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1398068110"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
+<!-- <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1398068110"></script> -->
+<!-- <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script> -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/lib/underscore.js"></script>
+<!-- <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/underscore.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/lib/backbone.js"></script>
 
 <script type="text/javascript">
- app = window.app = {
-     config: {
-         mediaUrl: '{{ MEDIA_URL }}',
-         siteRoot: '{{ SITE_ROOT }}'
-     },
-     templates: {},
-     utils: {}
- };
+app = window.app = {
+config: {
+mediaUrl: '{{ MEDIA_URL }}',
+siteRoot: '{{ SITE_ROOT }}'
+},
+templates: {},
+utils: {}
+};
 </script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/models.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/collections.js"></script>
@@ -153,86 +153,19 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/templates.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/views.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/app.js"></script>
-<script type="text/javascript" src="{{ MEDIA_URL }}js/routers.js"></script>
-
+<script type="text/javascript" src="{{ MEDIA_URL }}js/routers.js"></script> -->
 <script type="text/javascript">
-$.jstree._themes = '{{ MEDIA_URL }}js/themes/';
-function ajaxErrorHandler(xhr, textStatus, errorThrown) {
-    if (xhr.responseText) {
-        feedback($.parseJSON(xhr.responseText).error, 'error');
-    } else {
-        feedback("{% trans "Failed. Please check the network." %}", 'error');
-    }    
-}
-{% if request.user.is_authenticated %}
-{% if request.cur_note %}
-$('#info-bar .close').click(function() {
-    $('#info-bar').addClass('hide');
-    if (navigator.cookieEnabled) {
-        var date = new Date(),
-            cookies = document.cookie.split('; '),
-            info_id_exist = false,
-            new_info_id = $(this).attr('data') + '_';
-        date.setTime(date.getTime() + 14*24*60*60*1000);
-        new_info_id += '; expires=' + date.toGMTString() + '; path=' + '{{ SITE_ROOT }}';
-        for (var i = 0, len = cookies.length; i < len; i++) {
-            if (cookies[i].split('=')[0] == 'info_id') {
-                info_id_exist = true;
-                document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
-                break;
-            }
-        }
-        if (!info_id_exist) {
-            document.cookie = 'info_id=' + new_info_id;
-        }
-    }
-});
-{% endif %}
-
-{% if grps %}
-$(function() {
-    var grp_nav = $('#top-nav-grp');
-    grp_nav.after('<div id="top-nav-grp-info" class="top-info-popup hide"></div>');
-    var popup = $('#top-nav-grp-info');
-    var popup_con = '<div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div><ul id="top-nav-grp-list">';
-    {% for grp in grps %}
-    popup_con += '<li class="item" data-url="{% url "group_info" grp.id %}" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="name ellipsis vam">{{ grp.group_name }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
-    {% endfor %}
-    popup_con += '</ul>';
-    popup_con += '<a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>';
-    popup.html(popup_con);
-    $('.item', popup).hover(
-        function() {
-            $(this).addClass('hl').children('.a').removeClass('vh');
-        },
-        function() {
-            $(this).removeClass('hl').children('.a').addClass('vh');
-        }
-    )
-    .click(function() {
-        location.href = $(this).data('url');
-    });
-
-    popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
-
-    grp_nav.parent('.nav-item').hover(
-        function() {
-            popup.removeClass('hide');
-        },
-        function() {
-            popup.addClass('hide');
-        }
-    );
-});
-{% endif %}
-
-{% if has_file_search %}
-    {% include 'snippets/search_js.html' %}
-{% endif %}
-
-{% endif %}
+app = window.app = {
+     config: {
+         mediaUrl: '{{ MEDIA_URL }}',
+         siteRoot: '{{ SITE_ROOT }}',
+         _tmplRoot: '{{ SITE_ROOT }}_templates/js/'
+     },
+};
 </script>
+<script type="text/javascript" src="{% url 'seahub.views.i18n.cached_javascript_catalog' %}"></script>
+
 {% block extra_script %}{% endblock %}
-{% include 'snippets/font_icon_support_for_some_browsers.html' %}
+
 </body>
 </html>

@@ -155,6 +155,7 @@ urlpatterns = patterns('',
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
     url(r'^ajax/my-shared-and-group-repos/$', my_shared_and_group_repos, name='my_shared_and_group_repos'),
     url(r'^ajax/events/$', events, name="events"),
+    url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
 
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
@@ -277,3 +278,11 @@ if TRAFFIC_STATS_ENABLED:
     urlpatterns += patterns('',
         url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
     )
+
+js_info_dict = {
+    'packages': ('seahub.settings',),
+}
+
+urlpatterns += patterns('',
+    (r'^jsi18n/$', 'seahub.views.i18n.cached_javascript_catalog', js_info_dict),
+)
