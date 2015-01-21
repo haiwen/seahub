@@ -2826,6 +2826,42 @@ class GroupMembers(APIView):
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
 
+
+class GroupRepos(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        username = request.user.username
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repos = get_org_group_repos(org_id, group_id, username)
+        else:
+            repos = seaserv.get_group_repos(int(group_id), username)
+
+        repos_json = []
+        for r in repos:
+            repo = {
+                "id": r.id,
+                "name": r.name,
+                "desc": r.desc,
+                "mtime": r.latest_modify,
+                "encrypted": r.encrypted,
+                "permission": check_permission(r.id, username)
+            }
+            repos_json.append(repo)
+
+        return Response(repos_json)
+
+class GroupRepo(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, group_id, repo_id, format=None):
+        assert False
+
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False
