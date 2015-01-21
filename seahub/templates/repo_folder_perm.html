@@ -1,0 +1,393 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n avatar_tags seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position: relative; }
+.go-back { top:0; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab"><a href="{% url 'repo_change_password' repo.id %}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
+        <li class="tab tab-cur"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="lib-setting">
+    <h2>{% trans "Library Settings" %}</h2>
+    <h3>{% trans "Folder Permission" %}</h3>
+    <p>{% trans "View and manage all the folder permissions in this library." %}</p>
+    <div id="tabs" class="tab-tabs">
+        <div class="hd ovhd">
+            <ul class="tab-tabs-nav fleft">
+                <li class="tab"><a href="#user-tab" class="a" id="user-tab">{% trans "User Permission" %}</a></li>
+                <li class="tab"><a href="#group-tab" class="a" id="group-tab">{% trans "Group permission" %}</a></li>
+            </ul>
+            <div class="fright">
+                <button id="folder-perm-add-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Permission" %}</span></button>
+            </div>
+        </div>
+
+        <div id="user-tab">
+            <table>
+                <tr>
+                    <th width="30%">{% trans "User" %}</th>
+                    <th width="30%">{% trans "Folder" %}</th>
+                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="10%"></th>
+                </tr>
+                <tr class="user-perm-add-tr hide">
+                    <td><input id="perm-add-user" placeholder=" {% trans "Email"%}"></input></td>
+                    <td>
+                        <input class="user-perm-add-folder-name" placeholder=" {% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
+                        <input class="user-perm-add-folder-path" type="hidden"></input>
+                    </td>
+                    <td>
+                        <select name="permission" class="user-perm-add-perm">
+                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                        <option value="r">{% trans "Read-Only"%}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="perm-add-submit">{% trans "Submit" %}</button>
+                    </td>
+                </tr>
+                {% if user_folder_perms %}
+                {% for perm in user_folder_perms %}
+                <tr class="perm-item" data-user="{{ perm.user }}" data-path="{{ perm.path }}">
+                    <td><a href="{% url 'user_profile' perm.user %}">{{ perm.user }}</a></td>
+                    <td><span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span></td>
+                    <td>
+                        <div class="perm-change">
+                          {% if perm.permission == 'rw' %}
+                            <span class="perm-cur-value">{% trans "Read-Write" %}</span>
+                          {% else %}
+                            <span class="perm-cur-value">{% trans "Read-Only" %}</span>
+                          {% endif %}
+                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                        </div>
+                        <select class="perm-toggle-select hide">
+                            <option value="rw" {%if perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
+                            <option value="r" {%if not perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <img src="{{MEDIA_URL}}img/rm.png" class="perm-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+                    </td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+
+        <div id="group-tab" class="hide">
+            <table>
+                <tr>
+                    <th width="30%">{% trans "Group" %}</th>
+                    <th width="30%">{% trans "Folder" %}</th>
+                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="10%"></th>
+                </tr>
+                <tr class="group-perm-add-tr hide">
+                    <td>
+                        <input id="perm-add-grp-name" placeholder=" {% trans "Group"%}"></input>
+                        <input id="perm-add-grp-id" type="hidden"></input>
+                    </td>
+                    <td>
+                        <input class="group-perm-add-folder-name" placeholder=" {% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
+                        <input class="group-perm-add-folder-path" type="hidden"></input>
+                    </td>
+                    <td>
+                        <select name="permission" class="group-perm-add-perm">
+                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                        <option value="r">{% trans "Read-Only"%}</option>
+                        </select>
+                    </td>
+                    <td>
+                        <button class="perm-add-submit">{% trans "Submit" %}</button>
+                    </td>
+                </tr>
+                {% if group_folder_perms %}
+                {% for perm in group_folder_perms %}
+                    <tr class="perm-item" data-group_id="{{ perm.group_id }}" data-path="{{ perm.path }}">
+                        <td><a href="{% url 'group_info' perm.group_id %}">{{ perm.group_name }}</a></td>
+                        <td>
+                            <span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span>
+                        </td>
+                        <td>
+                            <div class="perm-change">
+                              {% if perm.permission == 'rw' %}
+                                <span class="perm-cur-value">{% trans "Read-Write" %}</span>
+                              {% else %}
+                                <span class="perm-cur-value">{% trans "Read-Only" %}</span>
+                              {% endif %}
+                                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                            </div>
+                            <select class="perm-toggle-select hide">
+                                <option value="rw" {%if perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
+                                <option value="r" {%if not perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <img src="{{MEDIA_URL}}img/rm.png" class="perm-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+                        </td>
+                    </tr>
+                {% endfor %}
+                {% endif %}
+            </table>
+        </div>
+    </div>
+    <div id="perm-add-jstree-wrap" class="hide">
+        <h3>{% trans "Please selecte a directory" %}</h3>
+        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+        <div id="perm-add-jstree" data-repo_id="{{repo.id}}"></div>
+        <button class="perm-add-jstree-select">{% trans "Select" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel"%}</button><br />
+        <span class="error hide"></span>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include "repo_setting_extra_js.html" %}
+
+var user_perm_add_tr = $('.user-perm-add-tr'),
+    group_perm_add_tr = $('.group-perm-add-tr');
+
+$('#user-tab').click(function() {
+    group_perm_add_tr.addClass('hide');
+});
+$('#group-tab').click(function() {
+    user_perm_add_tr.addClass('hide');
+});
+
+var user_list = [], contact,
+    group_list = [], group_name, group_id,
+    user_input = $('#perm-add-user'),
+    group_input = $('#perm-add-grp-name');
+
+{% for contact in contacts %}
+contact = '{{ contact }}';
+user_list.push({value:contact, label:contact});
+{% endfor %}
+
+{% for group in request.user.joined_groups %}
+group_name = '{{ group.group_name }}';
+group_id = '{{ group.id }}';
+group_list.push({value:group_id, label:group_name});
+{% endfor %}
+
+user_input.bind('autocompleteopen', function(e, ui) {
+              var widget = user_input.autocomplete('widget');
+              widget.css({'max-width':user_input.width() - 2 * parseInt(widget.css('padding')), 'max-height':$(window).height() + $(window).scrollTop() - user_input.offset().top - user_input.outerHeight()});
+          })
+          .autocomplete({
+            source: user_list
+          });
+
+group_input.bind('autocompleteopen', function(e, ui) {
+               var widget = group_input.autocomplete('widget');
+               widget.css({'max-width':group_input.width() - 2 * parseInt(widget.css('padding')), 'max-height':$(window).height() + $(window).scrollTop() - group_input.offset().top - group_input.outerHeight()});
+           })
+           .autocomplete({
+               source: group_list,
+               select: function(event, ui) {
+                   // prevent autocomplete from updating the textbox
+                   event.preventDefault();
+                   // manually update the textbox and hidden field
+                   group_input.val(ui.item.label);
+                   $('#perm-add-grp-id').val(ui.item.value);
+               }
+           });
+
+$('#folder-perm-add-btn').click(function() {
+    if (is_user_tab == true) {
+        user_perm_add_tr.removeClass('hide');
+        $('.user-perm-add-folder-name').val('');
+        user_input.focus().val('');
+    } else {
+        group_perm_add_tr.removeClass('hide');
+        $('.group-perm-add-folder-name').val('');
+        group_input.focus().val('');
+    }
+});
+
+$('.perm-toggle-select').on('change', function() {
+    var select = $(this),
+        perm_item = select.parents('.perm-item'),
+        path = perm_item.attr('data-path'),
+        perm = select.val();
+
+    if (is_user_tab == true) {
+        var user = perm_item.attr('data-user'),
+            data = { 'user': user, 'path': path, 'perm': perm },
+            url = '{% url 'toggle_user_folder_permission' repo.id %}';
+    } else {
+        var group_id = perm_item.attr('data-group_id'),
+            data = { 'group_id': group_id, 'path': path, 'perm': perm },
+            url = '{% url 'toggle_group_folder_permission' repo.id %}';
+    }
+
+    perm_toggle(select, data, url)
+});
+$('.perm-delete-btn').on('click', function() {
+    var perm_item = $(this).parents('.perm-item'),
+        path = perm_item.attr('data-path');
+
+    if (is_user_tab == true) {
+        var user = perm_item.attr('data-user'),
+            data = { 'user': user, 'path': path },
+            url = '{% url 'remove_user_folder_permission' repo.id %}';
+    } else {
+        var group_id = perm_item.attr('data-group_id'),
+            data = { 'group_id': group_id, 'path': path },
+            url = '{% url 'remove_group_folder_permission' repo.id %}';
+    }
+
+    $.ajax({
+        url: url,
+        dataType: 'json',
+        data: data,
+        success: function() {
+            perm_item.remove();
+            feedback("{% trans "Delete succeeded" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+});
+$('.perm-add-submit').click(function() {
+    if (is_user_tab == true) {
+        var path = $('.user-perm-add-folder-path').val();
+        if (!$.trim(path)) {
+            path = $('.user-perm-add-folder-name').val();
+        }
+
+        var user = user_input.val(),
+            perm = $('.user-perm-add-perm').val(),
+            data = { 'user': user, 'path': path, 'perm': perm },
+            url = '{% url 'add_user_folder_permission' repo.id %}';
+    } else {
+        var path = $('.group-perm-add-folder-path').val();
+        if (!$.trim(path)) {
+            path = $('.group-perm-add-folder-name').val();
+        }
+
+        var group_id = $('#perm-add-grp-id').val(),
+            perm = $('.group-perm-add-perm').val(),
+            data = { 'group_id': group_id, 'path': path, 'perm': perm },
+            url = '{% url 'add_group_folder_permission' repo.id %}';
+    }
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: data,
+        success: function() {
+            location.reload();
+        },
+        error: ajaxErrorHandler
+    });
+});
+
+$('.perm-add-select-folder').click(function() {
+    $('#perm-add-jstree-wrap').modal({appendTo:'#main', autoResize:true, focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+    render_jstree($('#perm-add-jstree'))
+});
+
+function selectClickHandler(event) {
+    var path, folder_name, folder_path,
+        path_array = event.data.path_array;
+
+    if (is_user_tab == true) {
+        folder_name = $('.user-perm-add-folder-name');
+        folder_path = $('.user-perm-add-folder-path');
+    } else {
+        folder_name = $('.group-perm-add-folder-name');
+        folder_path = $('.group-perm-add-folder-path');
+    }
+    if (path_array.length == 1) {
+        path = path_array.shift();
+        folder_name.val('Root Directory');
+    } else {
+        var root = path_array.shift(),
+            path = root + path_array.join('/'),
+            name = path.split('/');
+
+        folder_name.val(name.pop());
+    }
+
+    folder_path.val(path);
+    $.modal.close();
+};
+
+function render_jstree(container) {
+    var base_path = '/', loading_tip = $('.loading-tip'),
+        file_tree = new FileTree();
+
+    container.data('site_root', '{{SITE_ROOT}}');
+    container.data('repo_id', '{{repo.id}}');
+
+    $.ajax({
+        url: '{% url 'get_dirents' repo.id %}?path=' + e(base_path) + '&dir_only=true&all_dir=true',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            var json_data = [], children = [],
+                repo_data = {'data': base_path, 'attr': {'root_node': true}, 'state': 'open'};
+
+            for (var i = 0, len = data[0].length; i < len; i++) {
+                children.push({ 'data': data[0][i], 'state': 'closed' });
+            }
+            if (children.length > 0) {
+                $.extend(repo_data, {'children': children});
+            }
+            json_data.push(repo_data);
+
+            loading_tip.hide();
+            file_tree.renderDirTreeByRepo(container, json_data, selectClickHandler);
+            container.removeClass('hide');
+        },
+        error: function() {
+            var cur_repo = [{
+                'data': base_path,
+                'attr': {'root_node': true},
+                'state': 'open'
+            }];
+
+            loading_tip.hide();
+            renderDirTree(container, json_data);
+            container.removeClass('hide');
+        }
+    });
+}
+$('.perm-add-jstree-select').click(function() {
+    if($("#perm-add-jstree:has('.jstree-clicked')").length == 0) {
+        $('#perm-add-jstree-wrap').find('.error')
+                                  .removeClass('hide')
+                                  .html('Please select a folder');
+    }
+});
+</script>
+{% endblock %}

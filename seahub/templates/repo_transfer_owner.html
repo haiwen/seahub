@@ -1,0 +1,85 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n avatar_tags seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position: relative; }
+.go-back { top:0; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
+        <li class="tab tab-cur"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab"><a href="{% url 'repo_change_password' repo.id %}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="lib-setting">
+    <h2>{% trans "Library Settings" %}</h2>
+    <div id="transfer-ownership" class="setting-item">
+        <h3>{% trans "Transfer Ownership" %}</h3>
+        <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
+            <p>{% trans "Transfer this library to another user:" %}</p>
+            <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#repo-owner-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        new_owner = $('[name="repo_owner"]', form).val(),
+        submit_btn = $('input[type="submit"]', form);
+
+    if (!$.trim(new_owner)) {
+        return false;
+    }
+
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'ajax_repo_transfer_owner' repo.id %}',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_owner': new_owner
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.href = '{% url 'myhome' %}';
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
+</script>
+{% endblock %}

@@ -713,6 +713,58 @@ FileTree.prototype.renderDirTree = function(container, form, repo_data) {
         });
 }
 
+// list dir by repo
+FileTree.prototype.renderDirTreeByRepo = function(container, repo_data) {
+    container
+        .bind('select_node.jstree', function(e, data) {
+            var select_path_array = data.inst.get_path(data.rslt.obj);
+            container.next().on("click", { path_array: select_path_array }, selectClickHandler);
+        })
+        .jstree({
+            'json_data': {
+                'data': repo_data,
+                'ajax': {
+                    'url': function(data) {
+                        var path = this.get_path(data),
+                            root = path.shift(),
+                            path = root + path.join('/'),
+                            site_root = container.data('site_root'),
+                            repo_id = container.data('repo_id');
+
+                        return site_root + 'ajax/repo/' + repo_id + '/dirents/?path=' + e(path) + '&dir_only=true';
+                    },
+                    'success': function(data) {
+                        var items = [], o, item;
+                        for (var i = 0, len = data.length; i < len; i++) {
+                            o = data[i];
+                            if (o.has_subdir) {
+                                item = {
+                                    'data': o.name,
+                                    'attr': { 'type': o.type },
+                                    'state': 'closed'
+                                };
+                            } else {
+                                item = {
+                                    'data': o.name,
+                                    'attr': {'type': o.type }
+                                };
+                            }
+                            items.push(item);
+                       }
+                        return items;
+                    }
+                }
+            },
+            'plugins': ['themes', 'json_data', 'ui'],
+            'core': {
+                'animation': 100
+            },
+            'ui': {
+                'select_limit': 1
+            }
+        });
+}
+
 function trimFilename(name, n) {
     var len = name.length;
     var ext = '';
