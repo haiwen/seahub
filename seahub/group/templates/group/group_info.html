@@ -15,55 +15,25 @@
         <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
-    <div id="grp-repos" class="hide">
-    {% if repos %}
-    <table>
-    <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name" %} <span id="grp-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="grp-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
-        <th width="33%">{% trans "Description" %}</th>
-        <th width="16%">{% trans "Last Update" %} <span id="grp-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="grp-repo-list-time-down" class="icon-caret-down cspt"></span></th>
-        <th width="14%">{% trans "Shared By" %}</th>
-        <th width="13%">{% trans "Operations" %}</th>
-    </tr>
-    {% for repo in repos %}
-    <tr data-repo_name="{{repo.props.name}}" data-time="{% if repo.latest_modify %}{{ repo.latest_modify }}{% else %}0{% endif %}">
-        <td>
-          {% if repo.encrypted %}
-            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
-          {% else%}
-            {% if repo.user_perm == 'rw' %}
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
-            {% else %}
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
-            {% endif %}
-          {% endif %}
-        </td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
-        <td>{{ repo.props.desc }}</td>
-        <td>
-        {% if repo.latest_modify %}
-        {{ repo.latest_modify|translate_seahub_time }}
-        {% else %}
-        --
-        {% endif %}
-        </td>
-        <td>{{ repo.owner|email2nickname }}</td>
-        <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}" data-perm="{{ repo.user_perm }}">
-            {% if is_staff or repo.share_from_me %}
-            <img src="{{MEDIA_URL}}img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
-            {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-    </table>
-    {% else %}
-    <div class="empty-tips" style="margin-bottom:150px;">
-        <h2 class="alc">{% trans "No library is sharing to this group" %}</h2>
-        <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
-        <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
-    </div>
-    {% endif %}
+    <div id="grp-repos">
+        <table style="display:none">
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="20%">{% trans "Name" %} <span id="grp-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="grp-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                <th width="33%">{% trans "Description" %}</th>
+                <th width="16%">{% trans "Last Update" %} <span id="grp-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="grp-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                <th width="14%">{% trans "Shared By" %}</th>
+                <th width="13%">{% trans "Operations" %}</th>
+            </tr>
+
+            <p class="loading">{% trans "Loading ..." %}</p>
+        </table>
+
+        <div class="empty-tips" style="margin-bottom:150px; display:none;">
+            <h2 class="alc">{% trans "No library is sharing to this group" %}</h2>
+            <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
+            <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+        </div>
     </div>
 
     <div id="grp-repos-commits" class="hide">
@@ -135,48 +105,19 @@
 
 {% endblock %}
 
-{% block extra_script %}{{block.super}}
-<script type="text/javascript">
-$('.cancel-share').click(function() {
-    var btn_ct = $(this).parent(),
-        repo_id = btn_ct.data('id'),
-        repo_owner = btn_ct.attr('data-owner'),
-        repo_perm = btn_ct.attr('data-perm'),
-        repo_name = btn_ct.attr('data-name');
-    $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}' + '&permission=' + e(repo_perm)).attr('data-target', repo_name);
-});
-addConfirmTo($('.cancel-share'), {
-    'title': "{% trans "Unshare Library" %}",
-    'con': "{% trans "Are you sure you want to unshare %s ?" %}"
-});
-
-{% if user.permissions.can_add_repo %}
-function repoCreateSuccessCallback() {
-    location.reload();
-}
-{% url 'create_group_repo' group.id as repo_create_url %}
-{% with post_url=repo_create_url %}
-    {% include 'snippets/repo_create_js.html' %}
-{% endwith %}
-{% endif %}
-
-{% if recent_commits %}
-{% include 'snippets/list_commit_detail.html' %}
-$('.lsch-encrypted').click(function() {
-    if ($(this).data('passwordset')) {
-        listCommitDetails($(this).data('url'), $(this).data('time'));
-    } else {
-        var form = $('#repo-decrypt-form');
-        form.find('input[name="repo_id"]').val($(this).data('repoid'));
-        form.find('.op-target').html($(this).data('reponame'));
-        form.data({'url':$(this).data('url'), 'time':$(this).data('time')}).modal({appendTo:'#main'});
-        $('#simplemodal-container').css({'width':'auto'});
-        $(window).resize();
-    }   
-    return false;
-}); 
-{% include 'snippets/repo_decrypt_js.html' %}
-{% endif %}
-{% include "snippets/sort_lib_js.html" %}
+{% block extra_script %}
+<script>
+ app["pageOptions"] = {
+     groupId: {{ group.id }},
+     groupReposUrl: "{% url "api2-grouprepos" group.id %}",
+     isGroupStaff: (function() {
+         if ("{{ is_staff }}" == "True")
+             return true;
+         return false;
+     })(),
+     csrfToken: "{{csrf_token}}"
+ };
 </script>
+<script data-main="{{ MEDIA_URL }}scripts/group" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+
 {% endblock %}
