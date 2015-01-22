@@ -2774,6 +2774,10 @@ class GroupRepos(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
+    def post(self, request, group_id, format=None):
+        # add group repo
+        assert False
+
     def get(self, request, group_id, format=None):
         username = request.user.username
         if is_org_context(request):
@@ -2790,7 +2794,9 @@ class GroupRepos(APIView):
                 "desc": r.desc,
                 "mtime": r.latest_modify,
                 "encrypted": r.encrypted,
-                "permission": check_permission(r.id, username)
+                "permission": check_permission(r.id, username),
+                "owner": r.owner,
+                "owner_nickname": email2nickname(r.owner)
             }
             repos_json.append(repo)
 
@@ -2802,7 +2808,19 @@ class GroupRepo(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def delete(self, request, group_id, repo_id, format=None):
-        assert False
+        username = request.user.username
+        group_id = int(group_id)
+
+        # TODO: perm check
+
+        if seaserv.is_org_group(group_id):
+            org_id = seaserv.get_org_id_by_group(group_id)
+            seaserv.del_org_group_repo(repo_id, org_id, group_id)
+        else:
+            seafile_api.unset_group_repo(repo_id, group_id, username)
+
+        return HttpResponse(json.dumps({'success': True}), status=200,
+                            content_type=json_content_type)
 
 def is_group_staff(group, user):
     if user.is_anonymous():

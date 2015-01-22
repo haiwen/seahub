@@ -5,37 +5,56 @@ define([
     'app/collections/group-repos',
     'app/collections/dirents',
     'app/views/group-repos',
+    'app/views/add-group-repo',
     'app/views/dirents'
-], function($, _, Backbone, Repos, DirentCollection, GroupRepoView, DirentView) {
+], function($, _, Backbone, Repos, DirentCollection, GroupRepoView, AddGroupRepoView, DirentView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
         el: '#main',
 
-        initialize: function() {
-            $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
-                var token;
-                options.xhrFields = {
-                    withCredentials: true
-                };
-                // token = $('meta[name="csrf-token"]').attr('content');
-                token = app.pageOptions.csrfToken;
-                if (token) {
-                    return jqXHR.setRequestHeader('X-CSRF-Token', token);
+        prepareCsrf: function() { // TODO: move to common
+            /* alias away the sync method */
+            Backbone._sync = Backbone.sync;
+
+            /* define a new sync method */
+            Backbone.sync = function(method, model, options) {
+
+                /* only need a token for non-get requests */
+                if (method == 'create' || method == 'update' || method == 'delete') {
+                    // CSRF token value is in an embedded meta tag 
+                    // var csrfToken = $("meta[name='csrf_token']").attr('content');
+                    var csrfToken = app.pageOptions.csrfToken;
+
+                    options.beforeSend = function(xhr){
+                        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                    };
                 }
-            });
+
+                /* proxy the call to the old sync method */
+                return Backbone._sync(method, model, options);
+            };
+        },
+
+        events: {
+            'click #repo-create': 'createRepo',
+        },
+
+        initialize: function() {
+            this.prepareCsrf();
 
             this.$cont = this.$('#right-panel');
             this.$tab = this.$('#tabs div:first-child');
             this.$tabCont = this.$('#grp-repos');
-
             this.$tableCont = this.$('#grp-repos table');
+            this.$createForm = this.$('#repo-create-form');
         },
 
         initializeRepos: function() {
             this.listenTo(Repos, 'add', this.addOne);
             this.listenTo(Repos, 'reset', this.addAll);
             this.listenTo(Repos, 'sync', this.render);
+            // this.listenTo(Repos, 'all', this.render);
         },
 
         initializeDirents: function() {
@@ -120,7 +139,6 @@ define([
         showRepoList: function() {
             this.initializeRepos();
             Repos.fetch({reset: true});
-            // $('#my-own-repos table').append(new RepoView().render().el);
         },
 
         showDirentList: function(id, path) {
@@ -135,8 +153,12 @@ define([
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);
+        },
+
+        createRepo: function() {
+            var view = new AddGroupRepoView();
         }
-        
+
     });
 
     return GroupView;
