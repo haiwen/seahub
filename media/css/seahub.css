@@ -756,7 +756,11 @@ textarea:-moz-placeholder {/* for FF */
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     z-index:15; /* for repo.html: to show on top of fixed-hd */
 }
-.messages .info,
+.messages .info {
+    padding:5px;
+    background:#f9edbe;
+    margin:0;
+}
 .messages .success {
     padding:5px;
     background:#C4ECA9;
