@@ -8,7 +8,7 @@ from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOU
 from registration.signals import user_registered
 
 class ProfileManager(models.Manager):
-    def add_or_update(self, username, nickname, intro, lang_code=None):
+    def add_or_update(self, username, nickname, intro='', lang_code=None):
         """Add or update user profile.
         """
         try:
