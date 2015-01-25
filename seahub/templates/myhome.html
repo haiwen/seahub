@@ -1,4 +1,4 @@
-{% extends "home_base.html" %}
+{% extends "base_for_backbone.html" %}
 {% load seahub_tags i18n %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
@@ -21,10 +21,102 @@
 {% endif %}
 {% endblock %}
 
-{% block cur_my_lib %}tab-cur{% endblock %}
+{% block left_panel %}
+<div class="side-tabnav">
+  <div class="hd w100 ovhd">
+    <h3 class="fleft">{% trans "Personal" %}</h3>
+    {% if user.permissions.can_add_repo %}
+    <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+    {% endif %}
+  </div>
+  <ul class="side-tabnav-tabs">
+    <li class="tab tab-cur"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
+    <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
+    {% if events_enabled %}
+    <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
+    {% endif %}
+    {% for mod in request.user.mods_enabled %}
+    {% if mod == 'personal wiki' %}
+    <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
+    {% endif %}
+    {% endfor %}
+    <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
+    <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
+    <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
+  </ul>
+
+  <h3 class="hd">{% trans "Share Admin" %}</h3>
+  <ul class="side-tabnav-tabs">
+    {% if user.permissions.can_add_repo %}
+    <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
+    <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
+    {% endif %}
+    <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
+    <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
+  </ul>
+</div>
+{% endblock %}
 
 {% block right_panel %}
-{% include "snippets/my_owned_repos.html" %}
+<div id="repo-tabs" class="tab-tabs hide">
+<div class="hd">
+  <ul class="tab-tabs-nav fleft">
+    {% if user.permissions.can_add_repo %}
+    <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
+    {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+    <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
+    {% endif %}
+    {% endif %}
+    <li class="tab"><a href="#repos-shared-to-me" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
+    <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
+  </ul>
+  <div class="fright">
+    <button id="repo-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+    {% if sub_lib_enabled %}
+    <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
+    {% endif %}
+  </div>
+</div>
+<div id="my-own-repos" class="hide">
+  <table class="repo-list">{# 'repo-list': for repo which has 'repo-delete-btn' #}
+    <thead>
+      <tr>
+        <th width="4%"><!--icon--></th>
+        <th width="24%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+        <th width="38%">{% trans "Description" %}</th>
+        <th width="22%">{% trans "Last Update" %} <span id="my-owned-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-owned-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+        <th width="12%">{% trans "Operations" %}</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <div class="empty-tips hide">
+    <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
+    <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
+  </div>
+</div>
+</div>
+
+<table id="new-repo" class="hide">
+  <tr>
+    <th width="4%"><!--icon--></th>
+    <th width="24%">{% trans "Name" %}</th>
+    <th width="40%">{% trans "Description" %}</th>
+    <th width="18%">{% trans "Last Update" %}</th>
+    <th width="14%">{% trans "Operations" %}</th>
+  </tr>
+  <tr class="repo-item">
+    <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+    <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+    <td>{{ repo.props.desc }}</td>
+    <td>{% trans "Just now" %}</td>
+    <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
+      <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+      <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+    </td>
+  </tr>
+</table>
 
 {% url 'share_repo' as repo_share_url %}
 {% with post_url=repo_share_url %}
@@ -48,7 +140,7 @@
 </div>
 {% endif %}
 
-{% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+{% if sub_lib_enabled %}
 <form id="sublib-create-form" class="file-choose-form hide">
     <h3>{% trans "Choose a directory:" %}</h3>
     <div class="dir-tree-cont">
@@ -62,8 +154,45 @@
 </form>
 {% endif %}
 
+
+<div id="dir-view" class="hide">
+  <div class="repo-file-list-topbar">
+    <p class="path fleft"></p>
+    <div class="repo-op fright"></div>
+    <div class="clear"></div>
+  </div>
+  <table class="repo-file-list">
+    <thead>
+    <tr>
+      <th class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+      </th>
+      <th class="star"></th>
+      <th class="dirent-icon"></th>
+      <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+      <th class="dirent-size">{% trans "Size"%}</th>
+      <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+      <th class="dirent-op">{% trans "Operations"%}</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tboby>
+  </table>
+  <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+</div>
+
+{% include "snippets/lib_op_popups.html" %}
+
+
 {% endblock %}
 
 {% block extra_script %}
+<script>
+  app["pageOptions"] = {
+    base_url: "{{ SITE_ROOT }}" + "home/my/",
+    csrfToken: "{{ csrf_token }}",
+  };
+  app.globalState = {};
+</script>
 <script data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
 {% endblock %}

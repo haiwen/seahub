@@ -3,6 +3,7 @@ import os
 import stat
 import logging
 import json
+import posixpath
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
@@ -12,6 +13,7 @@ from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.contrib import messages
+from django.template.defaultfilters import filesizeformat
 
 import seaserv
 from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
@@ -51,6 +53,9 @@ from seahub.utils.repo import check_group_folder_perm_args, \
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
+from seahub.utils.file_types import IMAGE
+from seahub.thumbnail.utils import get_thumbnail_src
+from seahub.base.templatetags.seahub_tags import translate_seahub_time, file_icon_filter
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -67,7 +72,7 @@ def get_group(gid):
 
 def is_group_user(gid, username):
     return seaserv.is_group_user(gid, username)
-    
+
 ########## repo related
 @login_required_ajax
 def get_dirents(request, repo_id):
@@ -156,14 +161,14 @@ def get_dirents(request, repo_id):
 @login_required_ajax
 def get_unenc_group_repos(request, group_id):
     '''
-    Get unenc repos in a group. 
+    Get unenc repos in a group.
     '''
     content_type = 'application/json; charset=utf-8'
 
-    group_id_int = int(group_id) 
-    group = get_group(group_id_int)    
+    group_id_int = int(group_id)
+    group = get_group(group_id_int)
     if not group:
-        err_msg = _(u"The group doesn't exist") 
+        err_msg = _(u"The group doesn't exist")
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
@@ -208,7 +213,7 @@ def get_my_unenc_repos(request):
 @login_required_ajax
 def unenc_rw_repos(request):
     """Get a user's unencrypt repos that he/she can read-write.
-    
+
     Arguments:
     - `request`:
     """
@@ -222,7 +227,7 @@ def unenc_rw_repos(request):
     repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
-@login_required_ajax        
+@login_required_ajax
 def list_dir(request, repo_id):
     """
     List directory entries in AJAX.
@@ -310,13 +315,13 @@ def list_dir(request, repo_id):
         'current_commit': head_commit,
         'info_commit': info_commit,
         'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-    }   
+    }
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html, 'path': path}),
                         content_type=content_type)
 
-@login_required_ajax        
+@login_required_ajax
 def list_dir_more(request, repo_id):
     """
     List 'more' entries in a directory with AJAX.
@@ -342,8 +347,8 @@ def list_dir_more(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
            and not seafile_api.is_password_set(repo.id, username):
@@ -359,7 +364,7 @@ def list_dir_more(request, repo_id):
 
     path = request.GET.get('p', '/')
     if path[-1] != '/':
-        path = path + '/' 
+        path = path + '/'
 
     offset = int(request.GET.get('start'))
     if not offset:
@@ -394,6 +399,125 @@ def list_dir_more(request, repo_id):
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html, 'dirent_more': dirent_more, 'more_start': more_start}),
                         content_type=content_type)
+
+@login_required_ajax
+def list_lib_dir(request, repo_id):
+    '''
+        New ajax API for list library directory
+    '''
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u'Library does not exist.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=400, content_type=content_type)
+
+    username = request.user.username
+    user_perm = check_repo_access_permission(repo.id, request.user)
+    if user_perm is None:
+        err_msg = _(u'Permission denied.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    if repo.encrypted \
+            and not seafile_api.is_password_set(repo.id, username):
+        err_msg = _(u'Library is encrypted.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
+    if not head_commit:
+        err_msg = _(u'Error: no head commit id')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=500, content_type=content_type)
+
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+
+    offset = int(request.GET.get('start', 0))
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, head_commit, path, offset, limit=100)
+    more_start = None
+    if dirent_more:
+        more_start = offset + 100
+
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo.id)
+    result["is_repo_owner"] = True if repo_owner == username else False
+
+    result["is_virtual"] = repo.is_virtual
+    result["repo_name"] = repo.name
+    result["user_perm"] = user_perm
+    result["encrypted"] = repo.encrypted
+
+    result["dirent_more"] = dirent_more
+    result["more_start"] = more_start
+
+    if path != '/' and not repo.encrypted:
+        fileshare = get_fileshare(repo.id, username, path)
+        dir_shared_link = get_dir_share_link(fileshare)
+        uploadlink = get_uploadlink(repo.id, username, path)
+        dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
+
+        token = fileshare.token if fileshare is not None else ''
+        upload_token = uploadlink.token if uploadlink is not None else ''
+
+        result["share"] = {
+            "link": dir_shared_link,
+            "token": token,
+            "upload_link": dir_shared_upload_link,
+            "upload_token": upload_token
+        }
+
+    dirent_list = []
+    for d in dir_list:
+        d_ = {}
+        d_['is_dir'] = True
+        d_['obj_name'] = d.obj_name
+        d_['last_modified'] = d.last_modified
+        d_['last_update'] = translate_seahub_time(d.last_modified)
+        p_dpath = posixpath.join(path, d.obj_name)
+        d_['p_dpath'] = p_dpath # for 'view_link' & 'dl_link'
+        d_['sharelink'] = d.sharelink
+        d_['sharetoken'] = d.sharetoken
+        d_['uploadlink'] = d.uploadlink
+        d_['uploadtoken'] = d.uploadtoken
+        dirent_list.append(d_)
+
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        size = THUMBNAIL_DEFAULT_SIZE
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+
+    for f in file_list:
+        f_ = {}
+        f_['is_file'] = True
+        f_['file_icon'] = file_icon_filter(f.obj_name)
+        f_['obj_name'] = f.obj_name
+        f_['last_modified'] = f.last_modified
+        f_['last_update'] = translate_seahub_time(f.last_modified)
+        f_['starred'] = f.starred
+        f_['file_size'] = filesizeformat(f.file_size)
+        f_['obj_id'] = f.obj_id
+        f_['sharelink'] = f.sharelink
+        f_['sharetoken'] = f.sharetoken
+        if f.is_img:
+            f_['is_img'] = f.is_img
+        if f.thumbnail_src:
+            f_['thumbnail_src'] = f.thumbnail_src
+        dirent_list.append(f_)
+
+    result["dirent_list"] = dirent_list
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 def new_dirent_common(func):
     """Decorator for common logic in creating directory and file.
@@ -439,12 +563,12 @@ def new_dirent_common(func):
                                                  dirent_name)
         return func(repo.id, parent_dir, dirent_name, username)
     return _decorated
-    
+
 @login_required_ajax
 @new_dirent_common
 def new_dir(repo_id, parent_dir, dirent_name, username):
     """
-    Create a new dir with ajax.    
+    Create a new dir with ajax.
     """
     result = {}
     content_type = 'application/json; charset=utf-8'
@@ -456,7 +580,7 @@ def new_dir(repo_id, parent_dir, dirent_name, username):
         result['error'] = str(e)
         return HttpResponse(json.dumps(result), status=500,
                             content_type=content_type)
-       
+
     return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
                         content_type=content_type)
 
@@ -464,7 +588,7 @@ def new_dir(repo_id, parent_dir, dirent_name, username):
 @new_dirent_common
 def new_file(repo_id, parent_dir, dirent_name, username):
     """
-    Create a new file with ajax.    
+    Create a new file with ajax.
     """
     result = {}
     content_type = 'application/json; charset=utf-8'
@@ -480,15 +604,15 @@ def new_file(repo_id, parent_dir, dirent_name, username):
     return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
                         content_type=content_type)
 
-@login_required_ajax    
+@login_required_ajax
 def rename_dirent(request, repo_id):
     """
-    Rename a file/dir in a repo, with ajax    
+    Rename a file/dir in a repo, with ajax
     """
     if request.method != 'POST':
         raise Http404
 
-    result = {}    
+    result = {}
     username = request.user.username
     content_type = 'application/json; charset=utf-8'
 
@@ -548,10 +672,10 @@ def rename_dirent(request, repo_id):
     return HttpResponse(json.dumps({'success': True, 'newname': newname}),
                         content_type=content_type)
 
-@login_required_ajax    
+@login_required_ajax
 def delete_dirent(request, repo_id):
     """
-    Delete a file/dir with ajax.    
+    Delete a file/dir with ajax.
     """
     content_type = 'application/json; charset=utf-8'
 
@@ -597,10 +721,10 @@ def delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
-@login_required_ajax    
+@login_required_ajax
 def delete_dirents(request, repo_id):
     """
-    Delete multi files/dirs with ajax.    
+    Delete multi files/dirs with ajax.
     """
     content_type = 'application/json; charset=utf-8'
 
@@ -677,7 +801,7 @@ def copy_move_common(func):
             result['error'] =  _('Destination path is too long.')
             return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
-    
+
         # check whether user has write permission to dest repo
         if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
             result['error'] = _('Permission denied')
@@ -696,7 +820,7 @@ def copy_move_common(func):
 def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
@@ -726,7 +850,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
 
     try:
@@ -747,7 +871,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['msg'] = msg
 
     if res.background:
-        result['task_id'] = res.task_id     
+        result['task_id'] = res.task_id
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -786,14 +910,14 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         result['error'] = _(u'Internal server error')
         return HttpResponse(json.dumps(result), status=500,
                         content_type=content_type)
-    
+
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
         {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
-        result['task_id'] = res.task_id     
+        result['task_id'] = res.task_id
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -838,7 +962,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
         {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
-        result['task_id'] = res.task_id     
+        result['task_id'] = res.task_id
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -886,7 +1010,7 @@ def dirents_copy_move_common(func):
                 result['error'] =  _('Destination path is too long for %s.') % escape(obj_name)
                 return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
-    
+
         # check whether user has write permission to dest repo
         if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
             result['error'] = _('Permission denied')
@@ -941,7 +1065,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         else:
             success.append(obj_name)
 
-    if len(success) > 0:   
+    if len(success) > 0:
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
 
     result = {'success': success, 'failed': failed, 'url': url}
@@ -988,7 +1112,7 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         else:
             success.append(obj_name)
 
-    if len(success) > 0:   
+    if len(success) > 0:
         url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
 
     result = {'success': success, 'failed': failed, 'url': url}
@@ -1007,8 +1131,8 @@ def get_cp_progress(request):
         result['error'] = _(u'Argument missing')
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
-    
-    res = seafile_api.get_copy_task(task_id) 
+
+    res = seafile_api.get_copy_task(task_id)
 
     # res can be None
     if not res:
@@ -1036,9 +1160,9 @@ def cancel_cp(request):
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
-    
+
     res = seafile_api.cancel_copy_task(task_id) # returns 0 or -1
-    
+
     if res == 0:
         result['success'] = True
         return HttpResponse(json.dumps(result), content_type=content_type)
@@ -1126,8 +1250,8 @@ def get_current_commit(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not seafile_api.is_password_set(repo.id, username):
@@ -1146,17 +1270,17 @@ def get_current_commit(request, repo_id):
     else:
         info_commit = head_commit
 
-    ctx = { 
+    ctx = {
         'repo': repo,
         'info_commit': info_commit
-    }   
+    }
     html = render_to_string('snippets/current_commit.html', ctx,
                             context_instance=RequestContext(request))
     return HttpResponse(json.dumps({'html': html}),
                         content_type=content_type)
 
 @login_required_ajax
-def sub_repo(request, repo_id): 
+def sub_repo(request, repo_id):
     '''
     check if a dir has a corresponding sub_repo
     if it does not have, create one
@@ -1164,7 +1288,7 @@ def sub_repo(request, repo_id):
     content_type = 'application/json; charset=utf-8'
     result = {}
 
-    path = request.GET.get('p') 
+    path = request.GET.get('p')
     if not path:
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
@@ -1183,7 +1307,7 @@ def sub_repo(request, repo_id):
     except SearpcError as e:
         result['error'] = e.msg
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-    
+
     if sub_repo:
         result['sub_repo_id'] = sub_repo.id
     else:
@@ -1208,16 +1332,16 @@ def sub_repo(request, repo_id):
 @login_required_ajax
 def download_enc_file(request, repo_id, file_id):
     content_type = 'application/json; charset=utf-8'
-    result = {}  
+    result = {}
 
     op = 'downloadblks'
-    blklist = [] 
+    blklist = []
 
     if file_id == EMPTY_SHA1:
-        result = { 'blklist':blklist, 'url':None, }    
+        result = { 'blklist':blklist, 'url':None, }
         return HttpResponse(json.dumps(result), content_type=content_type)
 
-    try: 
+    try:
         blks = seafile_api.list_file_by_file_id(repo_id, file_id)
     except SearpcError, e:
         result['error'] = _(u'Failed to get file block list')
@@ -1231,18 +1355,18 @@ def download_enc_file(request, repo_id, file_id):
     result = {
         'blklist':blklist,
         'url':url,
-        }    
+        }
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 def upload_file_done(request):
     """Send a message when a file is uploaded.
-    
+
     Arguments:
     - `request`:
     """
     ct = 'application/json; charset=utf-8'
-    result = {}  
-    
+    result = {}
+
     filename = request.GET.get('fn', '')
     if not filename:
         result['error'] = _('Argument missing')
@@ -1281,7 +1405,7 @@ def upload_file_done(request):
 @login_required_ajax
 def unseen_notices_count(request):
     """Count user's unseen notices.
-    
+
     Arguments:
     - `request`:
     """
@@ -1553,7 +1677,7 @@ def get_group_repos(request, groups):
     group_repos = []
     if is_org_context(request):
         org_id = request.user.org.org_id
-        # For each group I joined... 
+        # For each group I joined...
         for grp in groups:
             # Get group repos, and for each group repos...
             for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
@@ -1577,7 +1701,7 @@ def get_group_repos(request, groups):
                 r.group = grp
                 group_repos.append(r)
     else:
-        # For each group I joined... 
+        # For each group I joined...
         for grp in groups:
             # Get group repos, and for each group repos...
             for r_id in seafile_api.get_group_repoids(grp.id):
@@ -1676,12 +1800,12 @@ def get_file_op_url(request, repo_id):
     token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                     op_type, username)
     url = gen_file_upload_url(token, op_type + '-aj')
-    
+
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
-    
+
     Arguments:
     - `request`:
     - `token`:
@@ -1710,7 +1834,7 @@ def get_file_upload_url_ul(request, token):
 
 @login_required_ajax
 def repo_history_changes(request, repo_id):
-    changes = {} 
+    changes = {}
     content_type = 'application/json; charset=utf-8'
 
     repo = get_repo(repo_id)
@@ -1725,12 +1849,12 @@ def repo_history_changes(request, repo_id):
             return HttpResponse(json.dumps(changes), content_type=content_type)
 
     username = request.user.username
-    try: 
+    try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not is_passwd_set(repo_id, username):
@@ -1791,9 +1915,9 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
 
 @login_required_ajax
 def repo_create(request):
-    '''  
+    '''
     Handle ajax post to create a library.
-    
+
     '''
     if request.method != 'POST':
         return Http404
@@ -1854,9 +1978,9 @@ def repo_create(request):
 
 @login_required_ajax
 def public_repo_create(request):
-    '''  
+    '''
     Handle ajax post to create public repo.
-    
+
     '''
     if request.method != 'POST':
         return Http404
