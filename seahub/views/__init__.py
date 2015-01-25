@@ -165,7 +165,7 @@ def gen_path_link(path, repo_name):
 
 def get_file_download_link(repo_id, obj_id, path):
     """Generate file download link.
-    
+
     Arguments:
     - `repo_id`:
     - `obj_id`:
@@ -2101,5 +2101,6 @@ def underscore_template(request, template):
     if not template.startswith('js'):  # light security check
         raise Http404
 
+    print "" + template
     return render_to_response(template, {},
                               context_instance=RequestContext(request))
