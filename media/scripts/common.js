@@ -64,8 +64,70 @@ define([
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
             setTimeout(function() { $('.messages').addClass('hide'); }, time);
-        }
+        },
 
+        // TODO: Change to jquery function like $.disableButtion(btn)
+        enableButton: function(btn) {
+          btn.removeAttr('disabled').removeClass('btn-disabled');
+        },
+
+        disableButton: function(btn) {
+          btn.attr('disabled', 'disabled').addClass('btn-disabled');
+        },
+
+        prepareCSRFToken: function(xhr, settings) {
+          function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+                }
+              }
+            }
+            return cookieValue;
+          }
+          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // Only send the token to relative URLs i.e. locally.
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+          }
+        },
+
+        ajaxPost: function(params) {
+          var form = params.form,
+          post_url = params.post_url,
+          post_data = params.post_data,
+          after_op_success = params.after_op_success,
+          form_id = params.form_id;
+          var submit_btn = form.children('[type="submit"]');
+          this.disableButton(submit_btn);
+          $.ajax({
+            url: post_url,
+            type: 'POST',
+            dataType: 'json',
+            beforeSend: this.prepareCSRFToken,
+            data: post_data,
+            success: function(data) {
+              if (data['success']) {
+                after_op_success(data);
+              }
+            },
+            error: function(xhr, textStatus, errorThrown) {
+              var err;
+              if (xhr.responseText) {
+                err = $.parseJSON(xhr.responseText).error;
+              } else {
+                err = getText("Failed. Please check the network.");
+              }
+              this.feedback(err);
+              //enable(submit_btn);
+            }
+          });
+        },
 
     }
 });
