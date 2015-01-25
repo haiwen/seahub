@@ -57,7 +57,7 @@ def is_password_set(repo_id, username):
 #     1. check whether this directory is private shared.
 #     2. if failed, check whether the parent of this directory is private shared.
 #     """
-     
+
 #     pfs = PrivateFileDirShare.objects.get_private_share_in_dir(username,
 #                                                                repo_id, path)
 #     if pfs is None:
@@ -125,7 +125,7 @@ def get_upload_url(request, repo_id):
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
         return None
-        
+
     l = FileShare.objects.filter(repo_id=repo_id).filter(
         username=username).filter(path=path)
     return l[0] if len(l) > 0 else None
@@ -166,9 +166,6 @@ def render_repo(request, repo):
     """
     username = request.user.username
     path = get_path_from_request(request)
-    if not seafile_api.get_dir_id_by_path(repo.id, path):
-        raise Http404
-
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
         return render_to_response('repo_access_deny.html', {
@@ -184,7 +181,7 @@ def render_repo(request, repo):
         except CryptoOptionNotSetError:
             return render_to_response('options/set_user_options.html', {
                     }, context_instance=RequestContext(request))
-            
+
         if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
                 and not is_password_set(repo.id, username):
             return render_to_response('decrypt_repo_form.html', {
@@ -288,8 +285,8 @@ def render_repo(request, repo):
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
             'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
-   
-@login_required    
+
+@login_required
 def repo(request, repo_id):
     """Show repo page and handle POST request to decrypt repo.
     """
@@ -297,7 +294,7 @@ def repo(request, repo_id):
 
     if not repo:
         raise Http404
-    
+
     if request.method == 'GET':
         return render_repo(request, repo)
     elif request.method == 'POST':
@@ -311,9 +308,9 @@ def repo(request, repo_id):
                     'repo': repo,
                     'form': form,
                     'next': next,
-                    'force_server_crypto': FORCE_SERVER_CRYPTO,      
+                    'force_server_crypto': FORCE_SERVER_CRYPTO,
                     }, context_instance=RequestContext(request))
-    
+
 @login_required
 def repo_history_view(request, repo_id):
     """View repo in history.
@@ -334,8 +331,8 @@ def repo_history_view(request, repo_id):
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
-    
+        server_crypto = False
+
     if repo.encrypted and \
         (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
         and not is_password_set(repo.id, username):
@@ -344,7 +341,7 @@ def repo_history_view(request, repo_id):
                 'next': get_next_url_from_request(request) or reverse('repo', args=[repo.id]),
                 'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
-    
+
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
         return HttpResponseRedirect(reverse('repo', args=[repo.id]))
@@ -375,7 +372,7 @@ def view_shared_dir(request, token):
         raise Http404
 
     if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
+        if not check_share_link_access(request.user.username, token):
             d = {'token': token, 'view_name': 'view_shared_dir', }
             if request.method == 'POST':
                 post_values = request.POST.copy()
@@ -383,7 +380,9 @@ def view_shared_dir(request, token):
                 form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
                 if form.is_valid():
-                    set_share_link_access(request, token)
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        set_share_link_access(request.user.username, token)
                 else:
                     return render_to_response('share_access_validation.html', d,
                                               context_instance=RequestContext(request))
@@ -439,7 +438,7 @@ def view_shared_upload_link(request, token):
         raise Http404
 
     if uploadlink.is_encrypted():
-        if not check_share_link_access(request, token):
+        if not check_share_link_access(request.user.username, token):
             d = {'token': token, 'view_name': 'view_shared_upload_link', }
             if request.method == 'POST':
                 post_values = request.POST.copy()
@@ -447,7 +446,9 @@ def view_shared_upload_link(request, token):
                 form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
                 if form.is_valid():
-                    set_share_link_access(request, token)
+                    # set cache for non-anonymous user
+                    if request.user.is_authenticated():
+                        set_share_link_access(request.user.username, token)
                 else:
                     return render_to_response('share_access_validation.html', d,
                                               context_instance=RequestContext(request))

@@ -153,7 +153,7 @@ def gen_path_link(path, repo_name):
 
 def get_file_download_link(repo_id, obj_id, path):
     """Generate file download link.
-    
+
     Arguments:
     - `repo_id`:
     - `obj_id`:
@@ -1362,7 +1362,7 @@ def repo_revert_file (request, repo_id):
     # perm check
     if check_repo_access_permission(repo.id, request.user) is None:
         raise Http404
-    
+
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
     from_page = request.GET.get('from')
@@ -1406,7 +1406,7 @@ def repo_revert_dir (request, repo_id):
     # perm check
     if check_repo_access_permission(repo.id, request.user) is None:
         raise Http404
-    
+
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
 
@@ -1950,5 +1950,6 @@ def underscore_template(request, template):
     if not template.startswith('js'):  # light security check
         raise Http404
 
+    print "" + template
     return render_to_response(template, {},
                               context_instance=RequestContext(request))

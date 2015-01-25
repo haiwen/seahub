@@ -1,8 +1,65 @@
-{% extends 'group/group_base.html' %}
+{% extends 'base_for_backbone.html' %}
 
-{% load seahub_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 
-{% block cur_library %}tab-cur{% endblock%}
+{% block sub_title %}{{group.group_name}} - {% endblock %}
+
+
+{% block main_panel %}
+<form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
+  <h3>{% trans "Enable Modules"%}</h3>
+  <ul>
+    {% for mod in mods_available %}
+    {% if mod == 'group wiki' %}
+    <li>
+      <label class="checkbox-label">
+        <span class="checkbox {% if mod in mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="group_wiki" class="checkbox-orig" {%if mod in mods_enabled%}checked{% endif%} /></span>
+        <span class="checkbox-option">{% trans "Wiki" %}</span>
+      </label>
+    </li>
+    {% endif %}
+    {% endfor %}
+  </ul>
+  <input type="submit" value="{% trans "Submit"%}" class="submit" />
+</form>
+{% endblock %}
+
+{% block left_panel %}
+<div class="side-tabnav">
+  <div class="hd w100 ovhd">
+    <h3 class="fleft">
+      {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="grp-name ellipsis vam">{{ group.group_name }}</span>
+    </h3>
+    {% if is_staff %}
+    <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
+    {% endif %}
+    {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />{% endif %}
+  </div>
+  <ul class="side-tabnav-tabs">
+    <li class="tab tab-cur"><a href="{% url 'group_info' group.id %}" class="lib">{% trans "Libraries" %}</a></li>
+
+    <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}" class="msgs">{% trans "Discussion" %}</a></li>
+
+    {% for mod in mods_enabled %}
+    {% if mod == 'group wiki' %}
+    <li class="tab {% block cur_wiki %}{%endblock%}"><a href="{% url 'group_wiki' group.id %}" class="wiki">{% trans "Wiki" %}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if enable_pubfile and group.is_pub %}
+    <li class="tab {% block cur_pubfile %}{%endblock%}"><a href="{% url 'group_pubfiles' group.id %}" class="files">{% trans "Files" %}</a></li>
+    {% endif %}
+
+    {% if group.view_perm != 'pub' %}
+    <li class="tab {% block cur_members %}{%endblock%}"><a href="{% url 'group_members' group.id %}" class="members">{% trans "Members" %}</a></li>
+    {% endif %}
+
+    {% if is_staff %}
+    <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}" class="admin">{% trans "Admin" %}</a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endblock %}
 
 {% block right_panel %}
 <div id="tabs" class="tab-tabs">

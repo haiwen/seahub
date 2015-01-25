@@ -130,7 +130,7 @@ input { height:22px; margin:3px 0; outline:0; }
 input, button { display:inline-block;/*for ie*/ }
 input[type=submit],
 input[type=button],
-input.submit { 
+input.submit {
     height:auto;
 }
 button,
@@ -138,7 +138,7 @@ input[type=submit],
 input[type=button],
 input.submit,
 .fileinput-button,
-select { 
+select {
     padding:5px 6px;
     background:-webkit-linear-gradient(top, #fafafb, #eeeeee);
     background:-moz-linear-gradient(top, #fafafb, #eeeeee);
@@ -200,7 +200,7 @@ button.submit {
 input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover,
-button:hover, 
+button:hover,
 .fileinput-button:hover {
     cursor:pointer;
     background:#fff;
@@ -833,9 +833,9 @@ textarea:-moz-placeholder {/* for FF */
 /**** wide panel ****/ /* e.g. repo decrypt page */
 .wide-panel {
     width: 928px;
-    padding: 10px 10px 15px; 
-    border: 1px solid #DDD; 
-    border-radius: 3px;  
+    padding: 10px 10px 15px;
+    border: 1px solid #DDD;
+    border-radius: 3px;
     margin: 2em auto 0;
 }
 /**** text-panel ****/ /* e.g. logout */
@@ -956,8 +956,8 @@ textarea:-moz-placeholder {/* for FF */
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
 #simplemodal-container {
-    padding: 20px; 
-    background-color:#fcfcfc; 
+    padding: 20px;
+    background-color:#fcfcfc;
     border-radius:4px;
     -moz-border-radius:4px;
 }
@@ -1002,7 +1002,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     overflow:auto;
 }
-.ui-menu .ui-menu-item a { 
+.ui-menu .ui-menu-item a {
     display:block;
     padding:.2em .4em;
     font-size:1.1em;
@@ -1079,8 +1079,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .article blockquote {
     color: #777;
-    padding: 0 15px; 
-    border-left: 4px solid #DDD; 
+    padding: 0 15px;
+    border-left: 4px solid #DDD;
     margin: 1.2em 0;
 }
 .article table {
@@ -1111,7 +1111,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .obv-btn:hover {
     color:#fff;
-    text-decoration:none;  
+    text-decoration:none;
 }
 .big-obv-btn {
     font-size:14px;
@@ -1125,7 +1125,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .big-obv-btn:hover {
     color:#333;
-    text-decoration:none;  
+    text-decoration:none;
 }
 /********** container ***********/
 #main, #footer {
@@ -1245,7 +1245,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* top-bar */
 #msg-count {
-    position:relative; 
+    position:relative;
     margin:10px 32px 0 25px;
 }
 #msg-count .num {
@@ -1505,7 +1505,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* footer */
-#footer { 
+#footer {
     color:#636363;
     font-size:12px;
     padding:20px 0 10px;
@@ -1934,7 +1934,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #ls-ch {/*repo commit details container*/
     min-width:300px;
-    min-height:300px; 
+    min-height:300px;
     max-width:850px;
     max-height:550px;
     overflow:auto;
@@ -2026,26 +2026,26 @@ textarea:-moz-placeholder {/* for FF */
     line-height:19px;
     position:relative;
     overflow:hidden;
-}       
+}
 .fileinput-button .icon-plus {
     font-size:13px;
     color:#333;
-}  
+}
 .fileinput-button input,
 #upload-file input,
 #upload-menu input {
     position: absolute;
-    top: 0;     
-    right: 0;   
-    margin: 0;  
+    top: 0;
+    right: 0;
+    margin: 0;
     height:27px;
     opacity: 0;
     filter: alpha(opacity=0);
     cursor: pointer;
-}       
+}
 .table {
     margin-bottom:0;
-}   
+}
 .table .name,
 .table .error {
     padding-left:7px;
@@ -2675,14 +2675,14 @@ textarea:-moz-placeholder {/* for FF */
 .wiki-image {
     display: block;
     margin-left: auto;
-    margin-right: auto;     
+    margin-right: auto;
     max-width: 100%;
 }
 #wiki-content img {
-    padding: 5px; 
+    padding: 5px;
     border: 1px solid #DDD;
     box-shadow: 0 1px 1px #CCC;
-    border-radius: 2px; 
+    border-radius: 2px;
     max-width:688px;
     margin:15px 0;
 }
@@ -2695,10 +2695,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 .anchor {
    font-size:0.8em;
-   margin-left:6px; 
+   margin-left:6px;
 }
 .anchor:hover {
-   text-decoration:none; 
+   text-decoration:none;
 }
 #svg-view {
     min-height:500px;/*for ff*/
@@ -3166,7 +3166,7 @@ textarea:-moz-placeholder {/* for FF */
     border-left-color:transparent;
 }
 #plans .item {
-   text-align:right; 
+   text-align:right;
    font-weight:bold;
    color:#555;
 }
