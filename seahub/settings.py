@@ -11,7 +11,7 @@ from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

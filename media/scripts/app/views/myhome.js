@@ -5,8 +5,9 @@ define([
     'app/collections/repos',
     'app/collections/dirents',
     'app/views/repos',
-    'app/views/dirents'
-], function($, _, Backbone, Repos, DirentCollection, RepoView, DirentView) {
+    'app/views/dirents',
+    'app/views/dir'
+], function($, _, Backbone, Repos, DirentCollection, RepoView, DirentView, DirView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -17,8 +18,9 @@ define([
             // this.on('showDirents', this.showDirents, this);
 
             this.$mine = this.$('#my-own-repos');
-            this.$repoList = this.$('#my-own-repos table');
-
+            this.$repoTabs = this.$('#repo-tabs');
+            this.$repoList = this.$('#my-own-repos table tbody');
+            this.dirView = new DirView();
         },
 
         initializeRepos: function() {
@@ -28,15 +30,8 @@ define([
             this.listenTo(Repos, 'all', this.render);
         },
 
-        initializeDirents: function() {
-            this.listenTo(this.dirents, 'add', this.addOneDirent);
-            this.listenTo(this.dirents, 'reset', this.addAllDirent);
-            // this.listenTo(this.dirents, 'sync', this.render);
-            this.listenTo(this.dirents, 'all', this.renderDirent);
-        },
-        
         addOne: function(repo) {
-            console.log('add repo: ' + repo);
+            console.log('add repo: ' + repo.owner);
             var view = new RepoView({model: repo});
             this.$repoList.append(view.render().el);
         },
@@ -74,23 +69,22 @@ define([
             console.log('show repo list');
             this.initializeRepos();
             Repos.fetch({reset: true});
+            this.dirView.hide();
+            this.$repoTabs.show();
             // $('#my-own-repos table').append(new RepoView().render().el);
         },
 
-        showDirentList: function(id, path) {
-            console.log('show repo page and hide repo list: ' + id + ' ' + path);
+        showDir: function(repo_id, path) {
+            console.log('show dir' + repo_id + ' ' + path);
+            this.$repoTabs.hide();
 
             var path = path || '/';
-            this.dirents = new DirentCollection(id, path);
-            this.initializeDirents();
-
-            this.dirents.fetch({reset: true});
-
+            this.dirView.showDir(repo_id, path);
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);
         }
-        
+
     });
 
     return MyHomeView;
