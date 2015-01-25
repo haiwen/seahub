@@ -9,15 +9,15 @@ define([
 
     var MyHomeRouter = Backbone.Router.extend({
         routes: {
-            'libs/:id(/*path)': 'showDirents',
+            'lib/:repo_id(/*path)': 'showDir',
 
             // Default
             '*actions': 'defaultAction'
         },
 
-        showDirents: function(id, path){
-            console.log("Repo route has been called.." + "id:" + id + " path:" + path);
-            new MyHomeView().showDirentList(id, path);
+        showDir: function(repo_id, path){
+            console.log("Repo route has been called.." + "repo_id:" + repo_id + " path:" + path);
+            new MyHomeView().showDir(repo_id, path);
         },
 
         defaultAction: function(actions){

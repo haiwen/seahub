@@ -4,10 +4,10 @@ from django.conf import settings
 from django.views.generic import TemplateView
 
 from seahub.views import *
-from seahub.views.file import view_file, view_history_file, view_trash_file,\
+from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_priv_shared_file, view_raw_file, view_raw_shared_file, \
-    download_file
+    download_file, view_lib_file
 from seahub.views.repo import repo, repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
@@ -29,7 +29,7 @@ urlpatterns = patterns('',
     # Example:
     # (r'^seahub/', include('seahub.foo.urls')),
 
-    # Uncomment the admin/doc line below and add 'django.contrib.admindocs' 
+    # Uncomment the admin/doc line below and add 'django.contrib.admindocs'
     # to INSTALLED_APPS to enable admin documentation:
     # (r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
@@ -74,7 +74,7 @@ urlpatterns = patterns('',
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/online_gc/$', repo_online_gc, name='repo_online_gc'),
     url(r'^repo/snapshot/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_view_snapshot, name='repo_view_snapshot'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_file, name="repo_view_file"),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/files/$', view_repo_file, name="repo_view_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/raw/(?P<file_path>.*)$', view_raw_file, name="view_raw_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/history/files/$', view_history_file, name="view_history_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/trash/files/$', view_trash_file, name="view_trash_file"),
@@ -89,6 +89,11 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/setting/shared-link/$', repo_shared_link, name='repo_shared_link'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/setting/share-manage/$', repo_share_manage, name='repo_share_manage'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/setting/folder-perm/$', repo_folder_perm, name='repo_folder_perm'),
+
+    ### lib (replace the old `repo` urls) ###
+    # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
+    url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file/(?P<path>.*)$', view_lib_file, name='view_lib_file'),
+    # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
@@ -169,6 +174,8 @@ urlpatterns = patterns('',
 
     url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
 
+    ## ajax lib
+    url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
@@ -180,18 +187,18 @@ urlpatterns = patterns('',
     (r'^api2/', include('seahub.api2.urls')),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
-    (r'^contacts/', include('seahub.contacts.urls')),                       
+    (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
     url(r'^groups/', group_list, name='group_list'),
     (r'^message/', include('seahub.message.urls')),
-    (r'^options/', include('seahub.options.urls')),     
+    (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),
     (r'^help/', include('seahub.help.urls')),
     url(r'^captcha/', include('captcha.urls')),
     (r'^thumbnail/', include('seahub.thumbnail.urls')),
 
-    ### system admin ###                       
+    ### system admin ###
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
     url(r'^sys/seafadmin/orphan/$', sys_list_orphan, name='sys_list_orphan'),
     url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
@@ -223,7 +230,7 @@ urlpatterns = patterns('',
     url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
-                       
+
     url(r'^useradmin/password/reset/(?P<user_id>[^/]+)/$', user_reset, name='user_reset'),
 
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
@@ -265,7 +272,7 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
 if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += patterns('',
         (r'^org/', include('seahub_extra.organizations.urls')),
-    )    
+    )
 
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += patterns('',
