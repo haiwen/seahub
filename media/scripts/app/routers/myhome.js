@@ -15,12 +15,16 @@ define([
             '*actions': 'defaultAction'
         },
 
-        showDir: function(repo_id, path){
-            console.log("Repo route has been called.." + "repo_id:" + repo_id + " path:" + path);
-            new MyHomeView().showDir(repo_id, path);
+        showDir: function(repo_id, path) {
+          if (path)
+            path = '/' + path;
+          else
+            path = '/';
+          console.log("Repo route has been called.." + "repo_id:" + repo_id + " path:" + path);
+          new MyHomeView().showDir(repo_id, path);
         },
 
-        defaultAction: function(actions){
+        defaultAction: function(actions) {
             // We have no matching route, lets just log what the URL was
             console.log('No route:', actions);
 

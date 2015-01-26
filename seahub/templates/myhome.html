@@ -192,6 +192,11 @@
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
   };
+  app.config = {
+    siteRoot: "{{ SITE_ROOT }}",
+    _tmplRoot: "{{ SITE_ROOT }}" + "_templates/js/",
+    mediaURL: "{{ MEDIA_URL }}",
+  };
   app.globalState = {};
 </script>
 <script data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
