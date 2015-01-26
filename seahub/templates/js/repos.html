@@ -1,15 +1,17 @@
 {% load i18n %}
 <td>
-    <% if (encrypted) { %>
-    <img src="/media/img/sync-folder-encrypt-20.png" title="{% trans 'Read-Write' %}" alt="directory icon" />
-    <% } else { %>
-    <img src="<%= app.config.mediaUrl %>/img/sync-folder-20.png" title="Read-Write" alt="directory icon" />
-    <% } %>
+  <% if (encrypted) { %>
+  <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans 'Read-Write' %}" alt="directory icon" />
+  <% } else { %>
+  <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="Read-Write" alt="directory icon" />
+  <% } %>
 </td>
 <td><a href="#/lib/<%= id %>"><%- name %></a></td>
 <td><%- desc %></td>
 <td><%- mtime %></td>
-<td><div>
-    <img src="/media/img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="Share" />
-    <img src="/media/img/rm.png" class="repo-delete-btn op-icon vh" title="Delete" />
-</div></td>
+<td>
+  <div>
+    <img src="{{ MEDIA_URL }}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="Share" />
+    <img src="{{ MEDIA_URL }}img/rm.png" class="repo-delete-btn op-icon vh" title="Delete" />
+  </div>
+</td>
