@@ -6,7 +6,7 @@
 <td class="star"></td>
 <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
 <td>
-  <span class="dirent-name"><a href="<%= dirent.obj_name %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
+  <span class="dirent-name"><a href="#/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
 </td>
 <td class="dirent-size"></td>
 <td class="dirent-update">
@@ -19,7 +19,7 @@
 <td class="dirent-op">
   <div class="repo-file-op vh">
     <div class="displayed-op">
-      <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent.p_dpath); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
+      <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
       <% if (!repo_encrypted) { %>
       <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
       <% } %>

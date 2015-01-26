@@ -3,9 +3,9 @@
 <% if (path == '/') { %>
 <%= repo_name %> /
 <% } else { %>
-<a href="<%= app.pageOptions.base_url %>lib/<%= repo_id %>/dir/" class="path-link normal"><%= repo_name %></a> /
+<a href="#lib/<%= repo_id %>/" class="path-link normal"><%= repo_name %></a> /
 <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-<a href="<%= app.pageOptions.base_url %>lib/<%= repo_id %>/dir/<% print(path_list.slice(0, i+1).join('/')); %>/" class="path-link normal"><%= path_list[i] %></a> /
+<a href="#lib/<%= repo_id %>/<% print(path_list.slice(0, i+1).join('/')); %>/" class="path-link normal"><%= path_list[i] %></a> /
 <% } %>
 <% print(path_list[i] + ' /'); %>
 <% } %>

@@ -114,8 +114,8 @@ define([
             return false;
           }
           var post_data = {'dirent_name': dirent_name};
-          var post_url = '/ajax/repo/' + dir.repo_id + '/dir/new/?parent_dir='
-            + encodeURIComponent(dir.path);
+          var post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
+            + '?parent_dir=' + encodeURIComponent(dir.path);
           var after_op_success = function(data) {
             $.modal.close();
             var now = new Date().getTime()/1000;
