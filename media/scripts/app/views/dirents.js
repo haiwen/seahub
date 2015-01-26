@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'common',
+    'file-tree',
     'text!' + app.config._tmplRoot + 'dirent.html'
-], function($, _, Backbone, Common, direntsTemplate) {
+], function($, _, Backbone, Common, FileTree, direntsTemplate) {
     'use strict';
 
     app = app || {};
@@ -14,6 +15,7 @@ define([
         tagName: 'tr',
 
         template: _.template(direntsTemplate),
+        renameTemplate: _.template($("#rename-form-template").html()),
 
         initialize: function(options) {
             this.options = options || {};
@@ -32,7 +34,7 @@ define([
             this.$el.html(this.template({
               dirent: this.model.attributes,
               repo_id: this.dirView.dir.repo_id,
-              path: this.dirView.dir.path,
+              // dir_path: this.dirView.dir.path,
               dirent_path: dirent_path,
               user_perm: this.dirView.dir.user_perm,
               repo_encrypted: this.dirView.dir.encrypted
@@ -146,6 +148,134 @@ define([
             app.globalState.popup_tr = '';
           }
         },
+
+        delete: function() {
+          var dirent_name = this.model.get('obj_name');
+          var options = {repo_id: this.dirView.dir.repo_id};
+          options.name = this.model.get('is_dir') ? 'del_dir' : 'del_file';
+          var url_main = Common.getUrl(options);
+          var el = this.$el;
+          $.ajax({
+            url: url_main + '?parent_dir=' + encodeURIComponent(this.dirView.dir.path)
+              + '&name=' + encodeURIComponent(dirent_name),
+            dataType: 'json',
+            success: function(data) {
+              el.remove();
+              app.globalState.noFileOpPopup = true;// make other items can work normally when hover
+              var msg = gettext("Successfully deleted %(name)s");
+              msg = msg.replace('%(name)s', dirent_name);
+              Common.feedback(msg, 'success');
+            },
+            error: Common.ajaxErrorHandler
+          });
+          return false;
+        },
+
+        rename: function() {
+          var is_dir = this.model.get('is_dir');
+          //var hd_text = is_dir ? "{% trans "Rename Directory" %}" : "{% trans "Rename File" %}";
+          var title = is_dir ? gettext("Rename Directory") : gettext("Rename File");
+          //var op_detail = $('.detail', form);
+          //op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + dirent_name + '</span>'));
+          var dirent_name = this.model.get('obj_name');
+
+          var form = $(this.renameTemplate({
+            form_title: title,
+            dirent_name: dirent_name,
+          }));
+          form.modal();
+          var form_id = form.attr('id');
+          $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+          var _this = this;
+          var dir = this.dirView.dir;
+          form.submit(function() {
+            var new_name = $.trim($('[name="newname"]', form).val());
+            if (!new_name) {
+              Common.showFormError(form_id, gettext("It is required."));
+              return false;
+            }
+            if (new_name == dirent_name) {
+              Common.showFormError(form_id, gettext("You have not renamed it."));
+              return false;
+            }
+            var post_data = {'oldname': dirent_name, 'newname':new_name};
+            var options = { repo_id: dir.repo_id };
+            options.name = is_dir ? 'rename_dir' : 'rename_file';
+            var post_url = Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path);
+            var after_op_success = function (data) {
+              new_name = data['newname'];
+              var now = new Date().getTime()/1000;
+              $.modal.close();
+              _this.model.set({ // it will trigger 'change' event
+              'obj_name': new_name,
+              'last_modified': now,
+              //'last_update': "{% trans "Just now" %}",
+              'last_update': "Just now",
+              'sharelink': '',
+              'sharetoken': ''
+            });
+            if (is_dir) {
+
+            } else {
+              _this.model.set({
+                'starred': false
+              });
+            }
+          };
+          Common.ajaxPost({
+            'form': form,
+            'post_url': post_url,
+            'post_data': post_data,
+            'after_op_success': after_op_success,
+            'form_id': form_id
+          });
+          return false;
+        });
+        return false;
+      },
+
+      mvcp: function() {
+        var el = event.target || event.srcElement,
+        op_type = $(el).hasClass('mv') ? 'mv':'cp',
+        op_detail,
+        dirent = this.$el,
+        obj_name = this.model.get('obj_name'),
+        obj_type = this.model.get('is_dir') ? 'dir':'file',
+        form = $('#mv-form'), form_hd;
+
+        form.modal({appendTo:'#main', autoResize:true, focus:false});
+        $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+        if (!this.dirView.dir.encrypted) {
+          $('#other-repos').show();
+        }
+
+        if (op_type == 'mv') {
+          //form_hd = obj_type == 'dir'? "{% trans "Move Directory" %}":"{% trans "Move File" %}";
+          form_hd = obj_type == 'dir'? "Move Directory" : "Move File";
+        } else {
+          //form_hd = obj_type == 'dir'? "{% trans "Copy Directory" %}":"{% trans "Copy File" %}";
+          form_hd = obj_type == 'dir'? "Copy Directory" : "Copy File";
+        }
+
+        //op_detail = op_type == 'mv' ? "{% trans "Move %(name)s to:" %}" : "{% trans "Copy %(name)s to:" %}";
+        op_detail = op_type == 'mv' ? "Move %(name)s to:" : "Copy %(name)s to:";
+        op_detail = op_detail.replace('%(name)s', '<span class="op-target">' + obj_name + '</span>');
+        form.prepend('<h3>' + form_hd + '</h3><h4>' + op_detail + '</h4>');
+
+        $('input[name="op"]', form).val(op_type);
+        $('input[name="obj_type"]', form).val(obj_type);
+        $('input[name="obj_name"]', form).val(obj_name);
+
+        form.data('op_obj', dirent);
+        FileTree.render_jstree_for_cur_path({
+          repo_name: this.dirView.dir.repo_name,
+          repo_id: this.dirView.dir.repo_id,
+          path: this.dirView.dir.path,
+        });
+        return false;
+      },
 
     });
 
