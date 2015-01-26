@@ -3,11 +3,12 @@ define([
   'underscore',
   'backbone',
   'common',
+  'file-tree',
   'app/collections/dirents',
   'app/views/dirents',
   'text!' + app.config._tmplRoot + 'dir-op-bar.html',
   'text!' + app.config._tmplRoot + 'path-bar.html',
-  ], function($, _, Backbone, Common, DirentCollection, DirentView,
+  ], function($, _, Backbone, Common, FileTree, DirentCollection, DirentView,
     DirOpBarTemplate, PathBarTemplate) {
     'use strict';
 
@@ -130,7 +131,6 @@ define([
             var view = new DirentView({model: new_dirent, dirView: dirView});
             $('tr:first', dirView.$dirent_list).before(view.render().el); // put the new dir as the first one
           };
-          console.log("ajaxPost");
           Common.ajaxPost({
             'form': form,
             'post_url': post_url,
