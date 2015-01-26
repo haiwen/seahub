@@ -37,6 +37,35 @@ define([
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
         ERROR_TIMEOUT: 3000,     // 3 secs for error msg
 
+        getUrl: function(options) {
+            var siteRoot = app.config.siteRoot;
+            switch (options.name) {
+              case 'get_lib_dirents': return siteRoot + 'ajax/lib/' + options.repo_id + '/dirents/';
+              case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
+              case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
+              case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
+              case 'del_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/delete/';
+              case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
+              case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
+              case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
+              case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
+              case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
+              case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
+              case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
+              case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
+              case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
+              case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
+              case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
+              case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
+              case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
+              case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
+              case 'get_cp_progress': return '';
+              case 'cancel_cp': return '';
+              case 'get_shared_link': return '';
+              case 'get_shared_upload_link': return '';
+            }
+        },
+
         showConfirm: function(title, content, yesCallback) {
             var $popup = $("#confirm-popup");
             var $cont = $('#confirm-con');
@@ -64,6 +93,14 @@ define([
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
             setTimeout(function() { $('.messages').addClass('hide'); }, time);
+        },
+
+        ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
+          if (xhr.responseText) {
+            feedback($.parseJSON(xhr.responseText).error, 'error');
+          } else {
+            feedback(getText("Failed. Please check the network."), 'error');
+          }
         },
 
         // TODO: Change to jquery function like $.disableButtion(btn)
@@ -129,5 +166,15 @@ define([
           });
         },
 
+        pathJoin: function(array) {
+          result = array[0];
+          for (var i = 1; i < array.length; i++) {
+            if (result[result.length-1] == '/' || array[i][0] == '/')
+              result += array[i];
+            else
+              result += '/' + array[i];
+          }
+          return result;
+        },
     }
 });
