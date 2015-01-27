@@ -4,10 +4,13 @@ define([
     'backbone',
     'app/collections/repos',
     'app/collections/dirents',
+    'app/collections/groups',
     'app/views/repos',
     'app/views/dirents',
-    'app/views/dir'
-], function($, _, Backbone, Repos, DirentCollection, RepoView, DirentView, DirView) {
+    'app/views/dir',
+    'app/views/group-nav'
+], function($, _, Backbone, Repos, DirentCollection, GroupCollection,
+        RepoView, DirentView, DirView, GroupNavView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -21,6 +24,9 @@ define([
             this.$repoTabs = this.$('#repo-tabs');
             this.$repoList = this.$('#my-own-repos table tbody');
             this.dirView = new DirView();
+
+            this.groupView = new GroupNavView();
+            this.groupView.fetch();
         },
 
         initializeRepos: function() {
