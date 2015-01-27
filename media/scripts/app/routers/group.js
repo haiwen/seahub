@@ -17,7 +17,7 @@ define([
 
         showDirents: function(id, path){
             console.log("Repo route has been called.." + "id:" + id + " path:" + path);
-            new GroupView().showDirentList(id, path);
+            // new GroupView().showDirentList(id, path);
         },
 
         defaultAction: function(actions){
