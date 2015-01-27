@@ -53,8 +53,8 @@ define([
         initializeRepos: function() {
             this.listenTo(Repos, 'add', this.addOne);
             this.listenTo(Repos, 'reset', this.addAll);
-            this.listenTo(Repos, 'sync', this.render);
-            // this.listenTo(Repos, 'all', this.render);
+            // this.listenTo(Repos, 'sync', this.render);
+            this.listenTo(Repos, 'all', this.render); // XXX: really render table when recieve any event ?
         },
 
         initializeDirents: function() {
@@ -63,11 +63,19 @@ define([
             // this.listenTo(this.dirents, 'sync', this.render);
             this.listenTo(this.dirents, 'all', this.renderDirent);
         },
-        
-        addOne: function(repo) {
-            console.log('add repo: ' + repo);
+
+        all: function(event) {
+            console.log('event: ' + event);
+        },
+
+        addOne: function(repo, collection, options) {
+            console.log('add repo: ' + repo.get('name'));
             var view = new GroupRepoView({model: repo});
-            this.$tableCont.append(view.render().el);
+            if (options.prepend) {
+                $('tr:first', this.$tableCont).after(view.render().el);
+            } else {
+                this.$tableCont.append(view.render().el);
+            }
         },
 
         addAll: function() {
@@ -126,13 +134,16 @@ define([
             this.$cont.find('.empty-tips').show();
         },
 
-        render: function(eventName) {
+        render: function(event) {
+            console.log('got event: ' + event + ', render repo list...' );
+
             this.hideLoading();
             if (Repos.length) {
                 this.hideEmptyTips();
                 this.showTable();
             } else {
                 this.showEmptyTips();
+                this.hideTable();
             }
         },
 
@@ -156,7 +167,7 @@ define([
         },
 
         createRepo: function() {
-            var view = new AddGroupRepoView();
+            new AddGroupRepoView();
         }
 
     });
