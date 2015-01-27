@@ -110,11 +110,11 @@ define([
 
         // TODO: Change to jquery function like $.disableButtion(btn)
         enableButton: function(btn) {
-          btn.removeAttr('disabled').removeClass('btn-disabled');
+            btn.removeAttr('disabled').removeClass('btn-disabled');
         },
 
         disableButton: function(btn) {
-          btn.attr('disabled', 'disabled').addClass('btn-disabled');
+            btn.attr('disabled', 'disabled').addClass('btn-disabled');
         },
 
         prepareCSRFToken: function(xhr, settings) {
