@@ -1,0 +1,17 @@
+<div id="top-nav-grp-info" class="top-info-popup hide">
+    <div class="outer-caret up-outer-caret">
+        <div class="inner-caret"></div>
+    </div>
+    <ul id="top-nav-grp-list">
+        <% for (var i = 0; i < groups.length; i++) { %>
+        <li class="item" data-url="/group/1/" title="test">
+            <img src="/media/avatars/groups/default.png" alt="" width="36" height="36" class="avatar">
+            <span class="name ellipsis vam">test</span>
+            <a href="/group/1/discuss/" title="Discussion" class="a fright vh">
+                <img src="/media/img/msgs.png" alt="">
+            </a>
+        </li>
+        <% } %>
+    </ul>
+    <a href="/groups/" class="item all-grp">All Groups</a>
+</div>
