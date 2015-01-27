@@ -7,13 +7,14 @@ define([
     var GroupRepo = Backbone.Model.extend({
 
         defaults: {
-            id: "",
+            id: null,
             name: "",
             desc: "",
-            mtime: "",
+            mtime: 0,
             encrypted: false,
-            permission: "",
-            owner: gettext("Unknown")
+            permission: "r",
+            owner: "-",
+            owner_nickname: "-"
         }
 
     });
