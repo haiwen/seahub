@@ -73,17 +73,20 @@
         {% endif %}
     </div>
     <div id="grp-repos">
-        <table style="display:none">
-            <tr>
-                <th width="4%"><!--icon--></th>
-                <th width="20%">{% trans "Name" %} <span id="grp-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="grp-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
-                <th width="33%">{% trans "Description" %}</th>
-                <th width="16%">{% trans "Last Update" %} <span id="grp-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="grp-repo-list-time-down" class="icon-caret-down cspt"></span></th>
-                <th width="14%">{% trans "Shared By" %}</th>
-                <th width="13%">{% trans "Operations" %}</th>
-            </tr>
+        <p class="loading">{% trans "Loading ..." %}</p>
 
-            <p class="loading">{% trans "Loading ..." %}</p>
+        <table style="display:none">
+            <thead>
+                <tr>
+                    <th width="4%"><!--icon--></th>
+                    <th width="20%">{% trans "Name" %} <span id="grp-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="grp-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                    <th width="33%">{% trans "Description" %}</th>
+                    <th width="16%">{% trans "Last Update" %} <span id="grp-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="grp-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                    <th width="14%">{% trans "Shared By" %}</th>
+                    <th width="13%">{% trans "Operations" %}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
         </table>
 
         <div class="empty-tips" style="margin-bottom:150px; display:none;">
