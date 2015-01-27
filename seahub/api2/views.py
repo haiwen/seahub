@@ -61,7 +61,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events
+    get_org_user_events, calculate_repos_last_modify
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.views import validate_owner, is_registered_user, \
@@ -2766,7 +2766,33 @@ class GroupRepos(APIView):
 
     def post(self, request, group_id, format=None):
         # add group repo
-        assert False
+
+        # TODO: perm check
+
+        username = request.user.username
+        repo_name = request.DATA.get("name", None)
+        repo_desc = request.DATA.get("desc", 'new repo')
+        permission = request.DATA.get("permission", 'r')
+
+        repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                          username, None)
+        repo = seafile_api.get_repo(repo_id)
+        calculate_repos_last_modify([repo])
+
+        seafile_api.set_group_repo(repo.id, int(group_id), username, permission)
+
+        group_repo = {
+            "id": repo.id,
+            "name": repo.name,
+            "desc": repo.desc,
+            "mtime": repo.latest_modify,
+            "encrypted": repo.encrypted,
+            "permission": 'rw',  # Always have read-write permission to owned repo
+            "owner": username,
+            "owner_nickname": email2nickname(username)
+        }
+
+        return Response(group_repo, status=200)
 
     def get(self, request, group_id, format=None):
         username = request.user.username
