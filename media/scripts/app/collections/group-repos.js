@@ -7,7 +7,15 @@ define([
 
     var GroupRepoCollection = Backbone.Collection.extend({
         model: GroupRepo,
-        url: app.pageOptions.groupReposUrl
+        url: app.pageOptions.groupReposUrl,
+
+        comparator: -'mtime',
+
+        // initialize: function( ) {
+
+        // },
+
+
     });
 
     return new GroupRepoCollection();
