@@ -177,7 +177,7 @@ class Accounts(APIView):
         limit = int(request.GET.get('limit', '100'))
         # reading scope user list
         scope = request.GET.get('scope', None)
-        
+
         accounts_ldap = []
         accounts_db = []
         if scope:
@@ -193,7 +193,7 @@ class Accounts(APIView):
             accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
             if len(accounts_ldap) == 0:
                 accounts_db = seaserv.get_emailusers('DB', start, limit)
-                
+
         accounts_json = []
         for account in accounts_ldap:
             accounts_json.append({'email': account.email, 'source' : 'LDAP'})
@@ -1651,7 +1651,7 @@ class DirView(APIView):
 
         username = request.user.username
         operation = request.POST.get('operation', '')
-        
+
         if operation.lower() == 'mkdir':
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
@@ -2556,15 +2556,31 @@ class UnseenMessagesCountView(APIView):
 
 ########## Groups related
 class Groups(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
-        group_json, replynum = get_groups(request.user.username)
-        res = {"groups": group_json, "replynum": replynum}
-        return Response(res)
-    
+        with_msg = request.GET.get('with_msg', 'true')
+        # To not broken the old API, we need to make with_msg default
+        if with_msg == 'true':
+            group_json, replynum = get_groups(request.user.username)
+            res = {"groups": group_json, "replynum": replynum}
+            return Response(res)
+        else:
+            groups_json = []
+            joined_groups = get_personal_groups_by_user(request.user.username)
+            for g in joined_groups:
+                group = {
+                    "id": g.id,
+                    "name": g.group_name,
+                    "creator": g.creator_name,
+                    "ctime": g.timestamp,
+                }
+                groups_json.append(group)
+            return Response(groups_json)
+
+
     def put(self, request, format=None):
         # modified slightly from groups/views.py::group_list
         """
