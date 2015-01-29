@@ -18,7 +18,7 @@ define([
         },
 
         reset: function() {
-            console.log(this.template({groups: this.groups.models}));
+            //console.log(this.template({groups: this.groups.models}));
         },
 
         fetch: function() {
