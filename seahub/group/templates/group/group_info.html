@@ -65,16 +65,18 @@
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
-            <li class="tab"><a href="#grp-repos" class="a">{% trans "Libraries" %}</a></li>
-            <li class="tab long-tab"><a href="#grp-repos-commits" class="a">{% trans "Recent Changes" %}</a></li>
+            <li class="tab"><a href="{% url 'group_info' group.id %}" class="a">{% trans "Libraries" %}</a></li>
+            <li class="tab long-tab"><a href="#/recent-changes" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
         {% if user.permissions.can_add_repo %}
         <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
+
+
+
     <div id="grp-repos">
         <p class="loading">{% trans "Loading ..." %}</p>
-
         <table style="display:none">
             <thead>
                 <tr>
@@ -97,54 +99,19 @@
     </div>
 
     <div id="grp-repos-commits" class="hide">
-    {% if recent_commits|length > 0 %}
-    <table>
-    <tr>
-        <th width="5%"></th>
-        <th width="17%">{% trans "Library" %}</th>
-        <th width="48%">{% trans "Description" %}</th>
-        <th width="15%">{% trans "Modified at" %}</th>
-        <th width="15%">{% trans "Modifier" %}</th>
-    </tr>
-
-    {% for cmt in recent_commits %}
-    <tr>
-        <td>
-            {% if cmt.tp == 'Added' or cmt.tp == 'Deleted' or cmt.tp == 'Removed' %}
-                {% if cmt.tp == 'Added' %}
-                <span class="icon-plus"></span>
-                {% else %}
-                <span class="icon-minus"></span>
-                {% endif %}
-            {% else %}
-                <span class="icon-pencil"></span>
-            {% endif %}
-        </td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ cmt.repo.props.id }}/">{{ cmt.repo.props.name }}</a></td>
-        <td>
-            {{cmt.props.desc|translate_commit_desc}}
-            {% if cmt.repo.encrypted %}
-                <a class="lsch-encrypted"{% if cmt.repo.password_set %} data-passwordset="true"{% endif %} href="#" data-url="{% url 'repo_history_changes' cmt.repo.id %}?commit_id={{ cmt.id }}" data-repoid="{{cmt.repo.id}}" data-reponame="{{cmt.repo.name}}" data-time="{{ cmt.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
-            {% else %}
-                <a class="lsch" href="#" data-url="{% url 'repo_history_changes' cmt.repo.id %}?commit_id={{ cmt.id }}" data-time="{{ cmt.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>
-            {% endif %}
-        </td>
-        <td>{{cmt.props.ctime|translate_seahub_time}}</td>
-        <td>
-        {% if cmt.creator_name %}
-            {% if cmt.second_parent_id %}
-                {% trans "None" %}
-            {% else %}
-                {{cmt.creator_name|email2nickname}}
-            {% endif %}
-        {% else %}
-            {% trans "Unknown"%}
-        {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-    </table>
-    {% endif %}
+        <p class="loading">{% trans "Loading ..." %}</p>
+        <table class="hide">
+            <thead>
+                <tr>
+                    <th width="5%"></th>
+                    <th width="17%">{% trans "Library" %}</th>
+                    <th width="48%">{% trans "Description" %}</th>
+                    <th width="15%">{% trans "Modified at" %}</th>
+                    <th width="15%">{% trans "Modifier" %}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
 
@@ -170,6 +137,7 @@
  app["pageOptions"] = {
      groupId: {{ group.id }},
      groupReposUrl: "{% url "api2-grouprepos" group.id %}",
+     groupChangesUrl: "{% url "api2-group-changes" group.id %}",
      isGroupStaff: (function() {
          if ("{{ is_staff }}" == "True")
              return true;
