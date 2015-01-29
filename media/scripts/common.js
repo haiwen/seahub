@@ -59,6 +59,7 @@ define([
               case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
               case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
               case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
+              case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
               case 'get_cp_progress': return '';
               case 'cancel_cp': return '';
               case 'get_shared_link': return '';
