@@ -207,6 +207,13 @@ define([
             });
         },
 
+        HTMLescape: function(html){
+            return document.createElement('div')
+                .appendChild(document.createTextNode(html))
+                .parentNode
+                .innerHTML;
+        },
+        
         pathJoin: function(array) {
             var result = array[0];
             for (var i = 1; i < array.length; i++) {
@@ -216,7 +223,7 @@ define([
                     result += '/' + array[i];
             }
             return result;
-        },
+        }
 
     }
 });
