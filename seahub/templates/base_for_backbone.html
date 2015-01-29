@@ -42,7 +42,7 @@
                   <li class="nav-item">
                     <a href="{{ SITE_ROOT }}home/my/" class="a {% block cur_myhome %}{% endblock %}">{% trans "My Home" %}</a>
                   </li>
-                  <li class="nav-item" {% if grps %}style="position:relative;"{% endif %}>
+                  <li class="nav-item nav-item-group" {% if grps %}style="position:relative;"{% endif %}>
                     <a href="{% url 'group_list' %}" class="a {% block cur_group %}{% endblock %}" {% if grps %}id="top-nav-grp"{% endif %}>{% trans "Groups" %}{% if grps %} <span class="icon-caret-down"></span>{% endif %}</a>
                   </li>
                   {% if user.permissions.can_view_org %}
