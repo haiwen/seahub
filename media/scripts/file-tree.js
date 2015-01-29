@@ -271,7 +271,51 @@ define([
                     container.removeClass('hide');
                 }
             });
+
+
         },
+
+        prepareOtherReposTree: function(options) {
+            var _this = this;
+
+            $('#mv-dir-list #other-repos .hd').click(function() {
+                var span = $('span', $(this)),
+                    form = $('#mv-form'),
+                    loading_tip = $(this).next(),
+                    dir_tree_container = $("#mv-dir-list #other-repos #other-repos-dirs");
+
+                if (span.hasClass('icon-caret-right')) {
+                    span.attr('class','icon-caret-down');
+                    loading_tip.show();
+                    $.ajax({
+                        url: Common.getUrl({name:'unenc_rw_repos'}),
+                        cache: false,
+                        dataType: 'json',
+                        success: function(data) {
+                            var other_repos = [];
+                            var cur_repo_id = options.cur_repo_id;
+                            for (var i = 0, len = data.length; i < len; i++) {
+                                if (data[i].id != cur_repo_id) {
+                                    other_repos.push({
+                                    'data': data[i].name,
+                                    'attr': {'repo_id': data[i].id, 'root_node': true},
+                                    'state': 'closed'
+                                    });
+                                }
+                            }
+                            loading_tip.hide();
+                            _this.renderDirTree(dir_tree_container, form, other_repos);
+                            dir_tree_container.removeClass('hide');
+                        }
+                    });
+                } else {
+                    span.attr('class','icon-caret-right');
+                    dir_tree_container.addClass('hide');
+                }
+            });
+
+        }
+
 
     };
 

@@ -249,6 +249,7 @@ define([
 
             if (!this.dirView.dir.encrypted) {
                 $('#other-repos').show();
+                FileTree.prepareOtherReposTree({cur_repo_id: this.dirView.dir.repo_id});
             }
 
             if (op_type == 'mv') {
