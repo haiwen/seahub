@@ -43,7 +43,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+    translate_commit_desc, translate_seahub_time
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check, remove_group_common, \
@@ -2785,6 +2786,71 @@ class GroupMembers(APIView):
 
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
 
+
+class GroupChanges(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        # TODO: group check
+
+        # TODO: perm check
+
+        group_id = int(group_id)
+        username = request.user.username
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repos = seaserv.get_org_group_repos(org_id, group_id, username)
+        else:
+            repos = seaserv.get_group_repos(group_id, username)
+
+        recent_commits = []
+        cmt_repo_dict = {}
+        for repo in repos:
+            repo.user_perm = check_permission(repo.props.id, username)
+            cmmts = get_commits(repo.props.id, 0, 10)
+            for c in cmmts:
+                cmt_repo_dict[c.id] = repo
+            recent_commits += cmmts
+
+        recent_commits.sort(lambda x, y: cmp(y.props.ctime, x.props.ctime))
+        recent_commits = recent_commits[:15]
+        for cmt in recent_commits:
+            cmt.repo = cmt_repo_dict[cmt.id]
+            cmt.repo.password_set = is_passwd_set(cmt.props.repo_id, username)
+            cmt.tp = cmt.props.desc.split(' ')[0]
+
+        res = []
+        for c in recent_commits:
+            cmt_tp = c.tp.lower()
+            if 'add' in cmt_tp:
+                change_tp = 'added'
+            elif ('delete' or 'remove') in cmt_tp:
+                change_tp = 'deleted'
+            else:
+                change_tp = 'modified'
+
+            change_repo = {
+                'id': c.repo.id,
+                'name': c.repo.name,
+                'desc': c.repo.desc,
+                'encrypted': c.repo.encrypted,
+            }
+            change = {
+                "type": change_tp,
+                "repo": change_repo,
+                "id": c.id,
+                "desc": c.desc,
+                "desc_human": translate_commit_desc(c.desc),
+                "ctime": c.ctime,
+                "ctime_human": translate_seahub_time(c.ctime),
+                "creator": c.creator_name,
+                "creator_nickname": email2nickname(c.creator_name)
+            }
+            res.append(change)
+
+        return Response(res)
 
 class GroupRepos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
