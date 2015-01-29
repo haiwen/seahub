@@ -3,15 +3,15 @@
         <div class="inner-caret"></div>
     </div>
     <ul id="top-nav-grp-list">
-        <% for (var i = 0; i < groups.length; i++) { %>
-        <li class="item" data-url="/group/1/" title="test">
-            <img src="/media/avatars/groups/default.png" alt="" width="36" height="36" class="avatar">
-            <span class="name ellipsis vam">test</span>
-            <a href="/group/1/discuss/" title="Discussion" class="a fright vh">
-                <img src="/media/img/msgs.png" alt="">
+        <% for (var i = 0, len = groups.length; i < len; i++) { %>
+        <li class="item" data-url="<%= app.config.siteRoot %>group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
+            <%= groups[i].avatar %>
+            <span class="name ellipsis vam"><%= groups[i].name %></span>
+            <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
+                <img src="<%= app.config.mediaURL %>img/msgs.png" alt="">
             </a>
         </li>
         <% } %>
     </ul>
-    <a href="/groups/" class="item all-grp">All Groups</a>
+    <a href="<%= app.config.siteRoot %>groups/" class="item all-grp">All Groups</a>
 </div>
