@@ -6,9 +6,10 @@ define([
     'app/collections/group-repos',
     'app/collections/dirents',
     'app/views/group-repos',
-    'app/views/add-group-repo'
+    'app/views/add-group-repo',
+    'app/views/group-recent-change'
     // 'app/views/dirents'
-], function($, _, Backbone, Common, Repos, DirentCollection, GroupRepoView, AddGroupRepoView/*, DirentView*/) {
+], function($, _, Backbone, Common, Repos, DirentCollection, GroupRepoView, AddGroupRepoView/*, DirentView*/, GroupRecentChangeView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -24,7 +25,6 @@ define([
             this.$cont = this.$('#right-panel');
 
             this.$tab = this.$('#tabs div:first-child');
-            this.$tabCont = this.$('#grp-repos');
 
             this.$table = this.$('#grp-repos table');
             this.$tableHead = $('thead', this.$table);
@@ -38,6 +38,7 @@ define([
             this.listenTo(Repos, 'reset', this.addAll);
             // this.listenTo(Repos, 'sync', this.render);
             this.listenTo(Repos, 'all', this.render); // XXX: really render table when recieve any event ?
+            this.listenTo(Repos, 'all', this.all);
         },
 
         all: function(event) {
@@ -93,7 +94,9 @@ define([
         render: function(event) {
             console.log('got event: ' + event + ', render repo list...' );
 
+            this.$table.parent().show();
             this.hideLoading();
+
             if (Repos.length) {
                 this.hideEmptyTips();
                 this.showTable();
@@ -110,6 +113,15 @@ define([
 
         createRepo: function() {
             new AddGroupRepoView();
+        },
+
+        showChanges: function() {
+            this.$table.parent().hide(); // XXX: hide or empty ?
+
+            if (!this.recentChangeView) {
+                this.recentChangeView = new GroupRecentChangeView();
+            }
+            this.recentChangeView.show();
         }
 
     });
