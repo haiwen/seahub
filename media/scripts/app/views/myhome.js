@@ -26,7 +26,6 @@ define([
             this.dirView = new DirView();
 
             this.groupView = new GroupNavView();
-            this.groupView.fetch();
         },
 
         initializeRepos: function() {

@@ -38,7 +38,8 @@ from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
+from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
+        grp_avatar
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -51,6 +52,7 @@ from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile
+from seahub.views.modules import get_wiki_enabled_group_list
 from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import repo_created, share_file_to_user_successful
 from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare
@@ -2584,7 +2586,11 @@ class Groups(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+
+        size = request.GET.get('size', 36)
+        limit = int(request.GET.get('limit', 8))
         with_msg = request.GET.get('with_msg', 'true')
+
         # To not broken the old API, we need to make with_msg default
         if with_msg == 'true':
             group_json, replynum = get_groups(request.user.username)
@@ -2593,14 +2599,22 @@ class Groups(APIView):
         else:
             groups_json = []
             joined_groups = get_personal_groups_by_user(request.user.username)
+
             for g in joined_groups:
+
+                if limit <= 0:
+                    break;
+
                 group = {
                     "id": g.id,
                     "name": g.group_name,
                     "creator": g.creator_name,
                     "ctime": g.timestamp,
+                    "avatar": grp_avatar(g.id, int(size)),
                 }
                 groups_json.append(group)
+                limit = limit - 1
+
             return Response(groups_json)
 
     def put(self, request, format=None):
