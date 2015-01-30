@@ -15,6 +15,7 @@ define([
         tagName: 'tr',
 
         template: _.template(direntsTemplate),
+        shareTemplate: _.template($("#share-dialog-template").html()),
         renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
 
@@ -148,6 +149,44 @@ define([
                 app.globalState.noFileOpPopup = true;
                 app.globalState.popup_tr = '';
             }
+        },
+
+        share: function() {
+            /*
+            var op = this.$('.share'),
+                name = this.model.get('obj_name');
+            var col = this.collection;
+            var cur_path = col.path;
+            cur_path += cur_path == '/' ? '' : '/';
+            var repo_id = col.repo_id;
+            var ajax_urls = {
+                'link': app.utils.getUrl({name: 'get_shared_link'}) + '?repo_id=' + e(repo_id) + '&p=' + e(cur_path + name),
+                'upload-link': app.utils.getUrl({name: 'get_shared_upload_link'}) + '?repo_id=' + e(repo_id) + '&p=' + e(cur_path + name)
+            };
+            var type = this.model.get('is_dir') ? 'd' : 'f';
+            if (type == 'd') {
+                ajax_urls['link'] += '&type=d';
+            }
+            op.data('repo', {
+                'is_repo_owner': col.is_repo_owner,
+                'is_virtual': col.is_virtual,
+                'user_perm': col.user_perm,
+                'repo_id': col.repo_id});
+                */
+            var obj_name = this.model.get("obj_name");
+            var title = gettext("Sharing {placeholder}")
+                .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
+            var dialog = $(this.shareTemplate({
+                title: title,
+                is_repo_owner: this.dirView.dir.is_repo_owner,
+                is_virtual: this.dirView.dir.is_virtual,
+                user_perm: this.dirView.dir.user_perm,
+                repo_id: this.dirView.dir.repo_id,
+            }));
+            dialog.modal();
+            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+            //showSharePopup(op, name, ajax_urls, type, cur_path);
+            return false;
         },
 
         delete: function() {
