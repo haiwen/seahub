@@ -53,6 +53,7 @@ define([
               case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
               case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
               case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
+              case 'repo_new_file': return siteRoot + 'repo/' + options.repo_id + '/files/';
               case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
               case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
               case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
@@ -116,6 +117,17 @@ define([
 
         disableButton: function(btn) {
             btn.attr('disabled', 'disabled').addClass('btn-disabled');
+        },
+
+        setCaretPos: function(inputor, pos) {
+            var range;
+            if (document.selection) {
+                range = inputor.createTextRange();
+                range.move("character", pos);
+                return range.select();
+            } else {
+                return inputor.setSelectionRange(pos, pos);
+            }
         },
 
         prepareCSRFToken: function(xhr, settings) {

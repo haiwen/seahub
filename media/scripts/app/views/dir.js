@@ -16,6 +16,8 @@ define([
             el: $('#dir-view'),
             path_bar_template: _.template(PathBarTemplate),
             dir_op_bar_template: _.template(DirOpBarTemplate),
+            newDirTemplate: _.template($("#add-new-dir-form-template").html()),
+            newFileTemplate: _.template($("#add-new-file-form-template").html()),
 
             initialize: function(options) {
                 this.$dirent_list = this.$('.repo-file-list tbody');
@@ -57,29 +59,29 @@ define([
             },
 
             renderPath: function() {
-                var dir = this.dir;
-                var path = dir.path,
-                obj = {
-                    path: path,
-                    repo_name: dir.repo_name,
-                };
+                var dir = this.dir,
+                    path = dir.path,
+                    obj = {path: path, repo_name: dir.repo_name};
+
                 if (path != '/') {
                     $.extend(obj, {
                        path_list: path.substr(1).split('/'),
-                       repo_id: dir.repo_id,
+                       repo_id: dir.repo_id
                     });
                 }
+
                 this.$path_bar.html(this.path_bar_template(obj));
             },
 
             renderDirOpBar: function() {
-                var dir = this.dir;
-                var user_perm = dir.user_perm;
+                var dir = this.dir,
+                    user_perm = dir.user_perm;
+
                 this.$dir_op_bar.html($.trim(this.dir_op_bar_template({
                     user_perm: user_perm,
                     encrypted: dir.encrypted,
                     path: dir.path,
-                    repo_id: dir.repo_id,
+                    repo_id: dir.repo_id
                 })));
             },
 
@@ -99,47 +101,95 @@ define([
             },
 
             newDir: function() {
-              var form = $('#add-new-dir-form'),
-              form_id = form.attr('id');
-              form.modal({appendTo:'#main'});
-              $('#simplemodal-container').css({'height':'auto'});
-              var dir = this.dir;
-              var dirView = this;
-              form.submit(function() {
-                var dirent_name = $.trim($('input[name="name"]', form).val());
-                if (!dirent_name) {
-                  //apply_form_error(form_id, "{% trans "It is required." %}");
-                  //apply_form_error(form_id, "It is required.");
-                  return false;
-                }
-                var post_data = {'dirent_name': dirent_name};
-                var post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
-                  + '?parent_dir=' + encodeURIComponent(dir.path);
-                var after_op_success = function(data) {
-                  $.modal.close();
-                  var now = new Date().getTime()/1000;
-                  var new_dirent = dir.add({
-                    'is_dir': true,
-                    'obj_name': data['name'],
-                    'last_modified': now,
-                    //'last_update': "{% trans "Just now" %}",
-                    'last_update': "Just now",
-                    'p_dpath': data['p_dpath'],
-                  }, {silent:true});
-                  var view = new DirentView({model: new_dirent, dirView: dirView});
-                  $('tr:first', dirView.$dirent_list).before(view.render().el); // put the new dir as the first one
-                };
-                Common.ajaxPost({
-                  'form': form,
-                  'post_url': post_url,
-                  'post_data': post_data,
-                  'after_op_success': after_op_success,
-                  'form_id': form_id
+                var form = $(this.newDirTemplate()),
+                    form_id = form.attr('id'),
+                    dir = this.dir,
+                    dirView = this;
+
+                form.modal({appendTo:'#main'});
+                $('#simplemodal-container').css({'height':'auto'});
+
+                form.submit(function() {
+                    var dirent_name = $.trim($('input[name="name"]', form).val()),
+                        post_data = {'dirent_name': dirent_name},
+                        post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
+                                   + '?parent_dir=' + encodeURIComponent(dir.path);
+
+                    if (!dirent_name) {
+                      Common.showFormError(form_id, gettext("It is required."));
+                      return false;
+                    };
+
+                    var after_op_success = function(data) {
+                        $.modal.close();
+
+                        var new_dirent = dir.add({
+                            'is_dir': true,
+                            'obj_name': data['name'],
+                            'last_modified': new Date().getTime() / 1000,
+                            'last_update': gettext("Just now"),
+                            'p_dpath': data['p_dpath']
+                        }, {silent:true});
+
+                        var view = new DirentView({model: new_dirent, dirView: dirView});
+                        $('tr:first', dirView.$dirent_list).before(view.render().el); // put the new dir as the first one
+                    };
+
+                    Common.ajaxPost({
+                        'form': form,
+                        'post_url': post_url,
+                        'post_data': post_data,
+                        'after_op_success': after_op_success,
+                        'form_id': form_id
+                    });
+
+                    return false;
                 });
-                return false;
-              });
             },
 
+            newFile: function() {
+                var form = $(this.newFileTemplate()),
+                    form_id = form.attr('id'),
+                    file_name = form.find('input[name="name"]'),
+                    dir = this.dir,
+                    dirView = this;
+
+                form.modal({appendTo:'#main'});
+                $('#simplemodal-container').css({'height':'auto'});
+
+                form.find('.set-file-type').on('click', function() {
+                    file_name.val('.' + $(this).data('filetype'));
+                    Common.setCaretPos(file_name[0], 0);
+                    file_name.focus();
+                });
+
+                form.submit(function() {
+                    var dirent_name = $.trim(file_name.val()),
+                        post_data = {'dirent_name': dirent_name},
+                        post_url = Common.getUrl({name: "new_file", repo_id: dir.repo_id})
+                                   + '?parent_dir=' + encodeURIComponent(dir.path);
+
+                    if (!dirent_name) {
+                      Common.showFormError(form_id, gettext("It is required."));
+                      return false;
+                    };
+
+                    var after_op_success = function(data) {
+                        location.href = Common.getUrl({name: "repo_new_file", repo_id: dir.repo_id})
+                                        + '?p=' + encodeURIComponent(dir.path) + encodeURIComponent(data['name']);
+                    };
+
+                    Common.ajaxPost({
+                        'form': form,
+                        'post_url': post_url,
+                        'post_data': post_data,
+                        'after_op_success': after_op_success,
+                        'form_id': form_id
+                    });
+
+                    return false;
+                });
+            }
       });
 
       return DirView;
