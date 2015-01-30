@@ -1,5 +1,6 @@
 {% load i18n %}
 
+    <script type="text/template" id="add-new-dir-form-template">
     <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "New Directory" %}</h3>
         <label>{% trans "Directory Name" %}</label><br />
@@ -8,7 +9,9 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
+    </script>
 
+    <script type="text/template" id="add-new-file-form-template">
     <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "New File" %}</h3>
         <div id="featured-filetype">
@@ -32,6 +35,7 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
+    </script>
 
     <script type="text/template" id="rename-form-template">
     <form id="rename-form" action="" method="post" class="hide">{% csrf_token %}
