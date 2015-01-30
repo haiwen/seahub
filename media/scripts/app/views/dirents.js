@@ -16,6 +16,7 @@ define([
 
         template: _.template(direntsTemplate),
         renameTemplate: _.template($("#rename-form-template").html()),
+        mvcpTemplate: _.template($("#mvcp-form-template").html()),
 
         initialize: function(options) {
             this.options = options || {};
@@ -238,43 +239,34 @@ define([
         mvcp: function() {
             var el = event.target || event.srcElement,
                 op_type = $(el).hasClass('mv') ? 'mv':'cp',
-                op_detail,
-                dirent = this.$el,
                 obj_name = this.model.get('obj_name'),
-                obj_type = this.model.get('is_dir') ? 'dir':'file',
-                form = $('#mv-form'), form_hd;
+                obj_type = this.model.get('is_dir') ? 'dir':'file';
 
+            var title;
+            if (op_type == 'mv')
+                title = gettext("Move {placeholder} to:")
+                    .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
+            else
+                title = gettext("Copy {placeholder} to:")
+                    .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
+            var form = $(this.mvcpTemplate({
+                form_title: title,
+                op_type: op_type,
+                obj_type: obj_type,
+                obj_name: obj_name,
+                show_other_repos: !this.dirView.dir.encrypted,
+            }));
             form.modal({appendTo:'#main', autoResize:true, focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            if (!this.dirView.dir.encrypted) {
-                $('#other-repos').show();
-                FileTree.prepareOtherReposTree({cur_repo_id: this.dirView.dir.repo_id});
-            }
-
-            if (op_type == 'mv') {
-                //form_hd = obj_type == 'dir'? "{% trans "Move Directory" %}":"{% trans "Move File" %}";
-                form_hd = obj_type == 'dir' ? "Move Directory" : "Move File";
-            } else {
-                //form_hd = obj_type == 'dir'? "{% trans "Copy Directory" %}":"{% trans "Copy File" %}";
-                form_hd = obj_type == 'dir' ? "Copy Directory" : "Copy File";
-            }
-
-            //op_detail = op_type == 'mv' ? "{% trans "Move %(name)s to:" %}" : "{% trans "Copy %(name)s to:" %}";
-            op_detail = op_type == 'mv' ? "Move %(name)s to:" : "Copy %(name)s to:";
-            op_detail = op_detail.replace('%(name)s', '<span class="op-target">' + obj_name + '</span>');
-            form.prepend('<h3>' + form_hd + '</h3><h4>' + op_detail + '</h4>');
-
-            $('input[name="op"]', form).val(op_type);
-            $('input[name="obj_type"]', form).val(obj_type);
-            $('input[name="obj_name"]', form).val(obj_name);
-
-            form.data('op_obj', dirent);
             FileTree.renderTreeForPath({
                 repo_name: this.dirView.dir.repo_name,
                 repo_id: this.dirView.dir.repo_id,
                 path: this.dirView.dir.path,
             });
+            if (!this.dirView.dir.encrypted) {
+                FileTree.prepareOtherReposTree({cur_repo_id: this.dirView.dir.repo_id});
+            }
             return false;
         },
 
