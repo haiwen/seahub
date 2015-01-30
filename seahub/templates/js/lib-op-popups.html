@@ -1,0 +1,117 @@
+{% load i18n %}
+
+    <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3>{% trans "New Directory" %}</h3>
+        <label>{% trans "Directory Name" %}</label><br />
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+
+    <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3>{% trans "New File" %}</h3>
+        <div id="featured-filetype">
+            <label>{% trans "Featured File Type" %}</label><br />
+            <button type="button" class="set-file-type" data-filetype="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format." %}</span>
+            {% if LANGUAGE_CODE == 'zh-cn' %}
+            <a href="http://www.seafile.com/help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
+            {% else %}
+            <a href="http://www.seafile.com/en/help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
+            {% endif %}
+            <button type="button" class="set-file-type" data-filetype="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span>
+            {% if LANGUAGE_CODE == 'zh-cn' %}
+            <a href="http://www.seafile.com/help/markdown/" target="_blank">{% trans 'Details' %}</a>
+            {% else %}
+            <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>
+            {% endif %}
+        </div>
+        <label>{% trans "File Name" %}</label><br/>
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+
+    <script type="text/template" id="rename-form-template">
+    <form id="rename-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3><%= form_title %></h3>
+        <p class="detail">{% trans "Rename %(name)s as:" %}</p>
+        <input type="hidden" name="oldname" value="<%= dirent_name %>" />
+        <input type="text" name="newname" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+    </script>
+
+    <script type="text/template" id="mvcp-form-template">
+    <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
+        <h3><%= form_title %></h3>
+        <div id="mv-dir-list" class="dir-tree-cont">
+            <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <div id="current-repo-dirs"></div>
+            <% if (show_other_repos) { %>
+            <div id="other-repos">
+                <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
+                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />
+                <div id="other-repos-dirs" class="hide"></div>
+            </div>
+            <% } %>
+        </div>
+        <input type="hidden" name="obj_name" value="<%= obj_name %>" />
+        <input type="hidden" name="obj_type" value="<%= obj_type %>" />
+        <input type="hidden" name="op" value="<%= op_type %>" />
+        <input type="hidden" name="dst_repo" value="" />
+        <input type="hidden" name="dst_path" value="" />
+        <p class="error hide">{% trans "Please click and choose a directory."%}</p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel"%}</button>
+    </form>
+    <div id="mv-progress-popup" class="alc hide">
+        <p id="mv-details"></p>
+        <div id="mv-progress"></div>
+        <p id="mv-other-info" class="hide"></p>
+        <button id="cancel-mv">{% trans "Cancel" %}</button>
+    </div>
+    </script>
+
+    <div id="upload-file-dialog" class="hide">
+        <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
+        <div class="ops">
+            <img src="{{MEDIA_URL}}img/minus.png" alt="" class="fold-switch cspt" />
+            <img src="{{MEDIA_URL}}img/close.png" alt="close" title="{% trans "close" %}" class="close cspt hide" />
+        </div>
+        <div class="con">
+            <div class="row fileupload-buttonbar">
+                <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
+            </div>
+            <p class="saving-tip alc clear hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        </div>
+    </div>
+
+    <div id="update-file-dialog" class="hide">
+        <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>
+        <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+            <input type="hidden" name="target_file" />
+            <div class="fileupload-buttonbar">
+                <span class="fileinput-button vam">
+                    <span>{% trans "Choose a file" %}</span>
+                    <input type="file" name="file" />
+                </span>
+                {% if max_upload_file_size %}
+                <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }}{% endblocktrans %})</span>
+                {% endif %}
+                <div class="fileupload-progress fade">
+                    <div class="progress progress-success progres-striped active">
+                        <div class="bar" style="width:0%"></div>
+                    </div>
+                    <div class="progress-extended"></div>
+                </div>
+                <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+            </div>
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        </form>
+    </div>
