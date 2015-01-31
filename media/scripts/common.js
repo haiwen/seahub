@@ -130,6 +130,29 @@ define([
             }
         },
 
+        prepareApiCsrf: function() {
+            /* alias away the sync method */
+            Backbone._sync = Backbone.sync;
+
+            /* define a new sync method */
+            Backbone.sync = function(method, model, options) {
+
+                /* only need a token for non-get requests */
+                if (method == 'create' || method == 'update' || method == 'delete') {
+                    // CSRF token value is in an embedded meta tag 
+                    // var csrfToken = $("meta[name='csrf_token']").attr('content');
+                    var csrfToken = app.pageOptions.csrfToken;
+
+                    options.beforeSend = function(xhr){
+                        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                    };
+                }
+
+                /* proxy the call to the old sync method */
+                return Backbone._sync(method, model, options);
+            };
+        },        
+        
         prepareCSRFToken: function(xhr, settings) {
             function getCookie(name) {
                 var cookieValue = null;
@@ -184,6 +207,13 @@ define([
             });
         },
 
+        HTMLescape: function(html){
+            return document.createElement('div')
+                .appendChild(document.createTextNode(html))
+                .parentNode
+                .innerHTML;
+        },
+        
         pathJoin: function(array) {
             var result = array[0];
             for (var i = 1; i < array.length; i++) {
@@ -193,7 +223,7 @@ define([
                     result += '/' + array[i];
             }
             return result;
-        },
+        }
 
     }
 });

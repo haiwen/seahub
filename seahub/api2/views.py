@@ -41,7 +41,8 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+    translate_commit_desc, translate_seahub_time
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check, remove_group_common, \
@@ -61,7 +62,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events
+    get_org_user_events, calculate_repos_last_modify
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.views import validate_owner, is_registered_user, \
@@ -391,11 +392,14 @@ def repo_download_info(request, repo_id):
     email = request.user.username
     token = seafile_api.generate_repo_token(repo_id, request.user.username)
     repo_name = repo.name
+    repo_desc = repo.desc
     enc = 1 if repo.encrypted else ''
     magic = repo.magic if repo.encrypted else ''
     random_key = repo.random_key if repo.random_key else ''
     enc_version = repo.enc_version
     repo_version = repo.version
+
+    calculate_repos_last_modify([repo])
 
     info_json = {
         'relay_id': relay_id,
@@ -405,6 +409,9 @@ def repo_download_info(request, repo_id):
         'token': token,
         'repo_id': repo_id,
         'repo_name': repo_name,
+        'repo_desc': repo_desc,
+        'mtime': repo.latest_modify,
+        'mtime_relative': translate_seahub_time(repo.latest_modify),
         'encrypted': enc,
         'enc_version': enc_version,
         'magic': magic,
@@ -419,89 +426,111 @@ class Repos(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+        # parse request params
+        filter_by = {
+            'mine': False,
+            'shared': False,
+            'group': False,
+            'org': False,
+        }
+
+        rtype = request.GET.get('type', "")
+        if not rtype:
+            # set all to True, no filter applied
+            filter_by = filter_by.fromkeys(filter_by.iterkeys(), True)
+
+        for f in rtype.split(','):
+            f = f.strip()
+            filter_by[f] = True
+
+
         email = request.user.username
         repos_json = []
 
-        owned_repos = get_owned_repo_list(request)
-        calculate_repo_info(owned_repos, email)
-        owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-        sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
-            and UserOptions.objects.is_sub_lib_enabled(email)
+        if filter_by['mine']:
+            owned_repos = get_owned_repo_list(request)
+            calculate_repo_info(owned_repos, email)
+            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
+                              and UserOptions.objects.is_sub_lib_enabled(email)
 
-        for r in owned_repos:
-            if r.is_virtual and not sub_lib_enabled:
-                continue
-            repo = {
-                "type":"repo",
-                "id":r.id,
-                "owner":email,
-                "name":r.name,
-                "desc":r.desc,
-                "mtime":r.latest_modify,
-                "root":r.root,
-                "size":r.size,
-                "encrypted":r.encrypted,
-                "permission": 'rw', # Always have read-write permission to owned repo
-                "virtual": r.is_virtual,
-            }
-            if r.encrypted:
-                repo["enc_version"] = r.enc_version
-                repo["magic"] = r.magic
-                repo["random_key"] = r.random_key
-            repos_json.append(repo)
-
-        shared_repos = get_share_in_repo_list(request, -1, -1)
-        for r in shared_repos:
-            commit = get_commits(r.repo_id, 0, 1)[0]
-            if not commit:
-                continue
-            r.latest_modify = commit.ctime
-            r.root = commit.root_id
-            r.size = server_repo_size(r.repo_id)
-            r.password_need = is_passwd_set(r.repo_id, email)
-            repo = {
-                "type":"srepo",
-                "id":r.repo_id,
-                "owner":r.user,
-                "name":r.repo_name,
-                "desc":r.repo_desc,
-                "mtime":r.latest_modify,
-                "root":r.root,
-                "size":r.size,
-                "encrypted":r.encrypted,
-                "permission": r.user_perm,
+            for r in owned_repos:
+                if r.is_virtual and not sub_lib_enabled:
+                    continue
+                repo = {
+                    "type":"repo",
+                    "id":r.id,
+                    "owner":email,
+                    "name":r.name,
+                    "desc":r.desc,
+                    "mtime":r.latest_modify,
+                    "mtime_relative": translate_seahub_time(r.latest_modify),
+                    "root":r.root,
+                    "size":r.size,
+                    "encrypted":r.encrypted,
+                    "permission": 'rw', # Always have read-write permission to owned repo
+                    "virtual": r.is_virtual,
                 }
-            if r.encrypted:
-                repo["enc_version"] = r.enc_version
-                repo["magic"] = r.magic
-                repo["random_key"] = r.random_key
-            repos_json.append(repo)
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
+                repos_json.append(repo)
 
-        groups = get_groups_by_user(request)
-        group_repos = get_group_repos(request, groups)
-        calculate_repo_info(group_repos, email)
-        group_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-        for r in group_repos:
-            repo = {
-                "type":"grepo",
-                "id":r.id,
-                "owner":r.group.group_name,
-                "groupid":r.group.id,
-                "name":r.name,
-                "desc":r.desc,
-                "mtime":r.latest_modify,
-                "root":r.root,
-                "size":r.size,
-                "encrypted":r.encrypted,
-                "permission": check_permission(r.id, email),
+        if filter_by['shared']:
+            shared_repos = get_share_in_repo_list(request, -1, -1)
+            for r in shared_repos:
+                commit = get_commits(r.repo_id, 0, 1)[0]
+                if not commit:
+                    continue
+                r.latest_modify = commit.ctime
+                r.root = commit.root_id
+                r.size = server_repo_size(r.repo_id)
+                r.password_need = is_passwd_set(r.repo_id, email)
+                repo = {
+                    "type":"srepo",
+                    "id":r.repo_id,
+                    "owner":r.user,
+                    "name":r.repo_name,
+                    "desc":r.repo_desc,
+                    "mtime":r.latest_modify,
+                    "root":r.root,
+                    "size":r.size,
+                    "encrypted":r.encrypted,
+                    "permission": r.user_perm,
                 }
-            if r.encrypted:
-                repo["enc_version"] = r.enc_version
-                repo["magic"] = r.magic
-                repo["random_key"] = r.random_key
-            repos_json.append(repo)
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
+                repos_json.append(repo)
 
-        if request.user.permissions.can_view_org():
+        if filter_by['group']:
+            groups = get_groups_by_user(request)
+            group_repos = get_group_repos(request, groups)
+            calculate_repo_info(group_repos, email)
+            group_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            for r in group_repos:
+                repo = {
+                    "type":"grepo",
+                    "id":r.id,
+                    "owner":r.group.group_name,
+                    "groupid":r.group.id,
+                    "name":r.name,
+                    "desc":r.desc,
+                    "mtime":r.latest_modify,
+                    "root":r.root,
+                    "size":r.size,
+                    "encrypted":r.encrypted,
+                    "permission": check_permission(r.id, email),
+                }
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
+                repos_json.append(repo)
+
+        if filter_by['org'] and request.user.permissions.can_view_org():
             public_repos = list_inner_pub_repos(request)
             for r in public_repos:
                 commit = get_commits(r.repo_id, 0, 1)[0]
@@ -535,12 +564,15 @@ class Repos(APIView):
                              'You do not have permission to create library.')
 
         username = request.user.username
-        repo_name = request.POST.get("name", None)
-        repo_desc = request.POST.get("desc", 'new repo')
-        passwd = request.POST.get("passwd")
+        repo_name = request.DATA.get("name", None)
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
+
+        repo_desc = request.DATA.get("desc", 'new repo')
+        passwd = request.DATA.get("passwd", None)
+        if not passwd:
+            passwd = None
 
         # create a repo
         org_id = -1
@@ -552,7 +584,8 @@ class Repos(APIView):
             else:
                 repo_id = seafile_api.create_repo(repo_name, repo_desc,
                                                   username, passwd)
-        except:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         if not repo_id:
@@ -606,7 +639,7 @@ def check_repo_access_permission(request, repo):
         return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this repo.')
 
 class Repo(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -2759,6 +2792,71 @@ class GroupMembers(APIView):
         return HttpResponse(json.dumps({'success': True}), status=200, content_type=json_content_type)
 
 
+class GroupChanges(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        # TODO: group check
+
+        # TODO: perm check
+
+        group_id = int(group_id)
+        username = request.user.username
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repos = seaserv.get_org_group_repos(org_id, group_id, username)
+        else:
+            repos = seaserv.get_group_repos(group_id, username)
+
+        recent_commits = []
+        cmt_repo_dict = {}
+        for repo in repos:
+            repo.user_perm = check_permission(repo.props.id, username)
+            cmmts = get_commits(repo.props.id, 0, 10)
+            for c in cmmts:
+                cmt_repo_dict[c.id] = repo
+            recent_commits += cmmts
+
+        recent_commits.sort(lambda x, y: cmp(y.props.ctime, x.props.ctime))
+        recent_commits = recent_commits[:15]
+        for cmt in recent_commits:
+            cmt.repo = cmt_repo_dict[cmt.id]
+            cmt.repo.password_set = is_passwd_set(cmt.props.repo_id, username)
+            cmt.tp = cmt.props.desc.split(' ')[0]
+
+        res = []
+        for c in recent_commits:
+            cmt_tp = c.tp.lower()
+            if 'add' in cmt_tp:
+                change_tp = 'added'
+            elif ('delete' or 'remove') in cmt_tp:
+                change_tp = 'deleted'
+            else:
+                change_tp = 'modified'
+
+            change_repo = {
+                'id': c.repo.id,
+                'name': c.repo.name,
+                'desc': c.repo.desc,
+                'encrypted': c.repo.encrypted,
+            }
+            change = {
+                "type": change_tp,
+                "repo": change_repo,
+                "id": c.id,
+                "desc": c.desc,
+                "desc_human": translate_commit_desc(c.desc),
+                "ctime": c.ctime,
+                "ctime_human": translate_seahub_time(c.ctime),
+                "creator": c.creator_name,
+                "creator_nickname": email2nickname(c.creator_name)
+            }
+            res.append(change)
+
+        return Response(res)
+
 class GroupRepos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
@@ -2766,7 +2864,33 @@ class GroupRepos(APIView):
 
     def post(self, request, group_id, format=None):
         # add group repo
-        assert False
+
+        # TODO: perm check
+
+        username = request.user.username
+        repo_name = request.DATA.get("name", None)
+        repo_desc = request.DATA.get("desc", 'new repo')
+        permission = request.DATA.get("permission", 'r')
+
+        repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                          username, None)
+        repo = seafile_api.get_repo(repo_id)
+        calculate_repos_last_modify([repo])
+
+        seafile_api.set_group_repo(repo.id, int(group_id), username, permission)
+
+        group_repo = {
+            "id": repo.id,
+            "name": repo.name,
+            "desc": repo.desc,
+            "mtime": repo.latest_modify,
+            "encrypted": repo.encrypted,
+            "permission": 'rw',  # Always have read-write permission to owned repo
+            "owner": username,
+            "owner_nickname": email2nickname(username)
+        }
+
+        return Response(group_repo, status=200)
 
     def get(self, request, group_id, format=None):
         username = request.user.username

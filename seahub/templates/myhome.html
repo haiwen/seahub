@@ -59,43 +59,47 @@
 
 {% block right_panel %}
 <div id="repo-tabs" class="tab-tabs hide">
-<div class="hd">
-  <ul class="tab-tabs-nav fleft">
-    {% if user.permissions.can_add_repo %}
-    <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
-    {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
-    <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
-    {% endif %}
-    {% endif %}
-    <li class="tab"><a href="#repos-shared-to-me" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
-    <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
-  </ul>
-  <div class="fright">
-    <button id="repo-create" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
-    {% if sub_lib_enabled %}
-    <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
-    {% endif %}
-  </div>
-</div>
-<div id="my-own-repos" class="hide">
-  <table class="repo-list">{# 'repo-list': for repo which has 'repo-delete-btn' #}
-    <thead>
-      <tr>
-        <th width="4%"><!--icon--></th>
-        <th width="24%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
-        <th width="38%">{% trans "Description" %}</th>
-        <th width="22%">{% trans "Last Update" %} <span id="my-owned-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-owned-repo-list-time-down" class="icon-caret-down cspt"></span></th>
-        <th width="12%">{% trans "Operations" %}</th>
-      </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <div class="empty-tips hide">
-    <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
-    <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
-  </div>
-</div>
+    <div class="hd">
+        <ul class="tab-tabs-nav fleft">
+            {% if user.permissions.can_add_repo %}
+            <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
+            {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+            <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
+            {% endif %}
+            {% endif %}
+            <li class="tab"><a href="#repos-shared-to-me" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
+            <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
+        </ul>
+        <div class="fright">
+            <button id="repo-create" class=""><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+            {% if sub_lib_enabled %}
+            <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
+            {% endif %}
+        </div>
+    </div>
+    <div id="my-own-repos">
+        <table class="repo-list hide">
+            <thead>
+                <tr>
+                    <th width="4%"><!--icon--></th>
+                    <th width="24%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                    <th width="38%">{% trans "Description" %}</th>
+                    <th width="22%">{% trans "Last Update" %} <span id="my-owned-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-owned-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                    <th width="12%">{% trans "Operations" %}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="op-confirm repo-del-cfm hide" id="repo-del-cfm-popup">
+            <p class="con"></p>
+            <button class="yes">{% trans "Yes" %}</button>
+            <button class="no">{% trans "No" %}</button>
+        </div>
+        <div class="empty-tips hide">
+            <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
+            <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
+        </div>
+    </div>
 </div>
 
 <table id="new-repo" class="hide">
@@ -188,8 +192,9 @@
 {% include "js/lib-op-popups.html" %}
 <script>
   app["pageOptions"] = {
-    base_url: "{{ SITE_ROOT }}" + "home/my/",
-    csrfToken: "{{ csrf_token }}",
+      base_url: "{{ SITE_ROOT }}" + "home/my/",
+      csrfToken: "{{ csrf_token }}",
+      reposUrl: "{% url 'api2-repos' %}"
   };
   app.config = {
     siteRoot: "{{ SITE_ROOT }}",
