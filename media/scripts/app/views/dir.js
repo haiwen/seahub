@@ -189,7 +189,46 @@ define([
 
                     return false;
                 });
-            }
+            },
+
+            sortByName: function() {
+                var dirents = this.dir;
+                var el = $('#by-name');
+                this.dir.comparator = function(a, b) {
+                    if (a.get('is_dir') && b.get('is_file')) {
+                        return -1;
+                    }
+                    if (el.hasClass('icon-caret-up')) {
+                        return a.get('obj_name').toLowerCase() < b.get('obj_name').toLowerCase() ? 1 : -1;
+                    } else {
+                        return a.get('obj_name').toLowerCase() < b.get('obj_name').toLowerCase() ? -1 : 1;
+                    }
+                };
+                dirents.sort();
+                this.$dirent_list.empty();
+                dirents.each(this.addOne, this);
+                el.toggleClass('icon-caret-up icon-caret-down');
+            },
+
+            sortByTime: function () {
+                var dirents = this.dir;
+                var el = $('#by-time');
+                dirents.comparator = function(a, b) {
+                    if (a.get('is_dir') && b.get('is_file')) {
+                        return -1;
+                    }
+                    if (el.hasClass('icon-caret-down')) {
+                        return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
+                    } else {
+                        return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
+                    }
+                };
+                dirents.sort();
+                this.$dirent_list.empty();
+                dirents.each(this.addOne, this);
+                el.toggleClass('icon-caret-up icon-caret-down');
+            },
+
       });
 
       return DirView;
