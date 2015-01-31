@@ -49,7 +49,7 @@ define([
             console.log('add repo: ' + repo.get('name'));
             var view = new GroupRepoView({model: repo});
             if (options.prepend) {
-                this.$tableBody.before(view.render().el);
+                this.$tableBody.prepend(view.render().el);
             } else {
                 this.$tableBody.append(view.render().el);
             }

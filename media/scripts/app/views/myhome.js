@@ -2,27 +2,42 @@ define([
     'jquery',
     'underscore',
     'backbone',
+    'common',
     'app/collections/repos',
     'app/collections/dirents',
     'app/collections/groups',
     'app/views/repos',
     'app/views/dirents',
     'app/views/dir',
-    'app/views/group-nav'
-], function($, _, Backbone, Repos, DirentCollection, GroupCollection,
-        RepoView, DirentView, DirView, GroupNavView) {
+    'app/views/group-nav',
+    'app/views/add-repo'
+], function($, _, Backbone, Common, Repos, DirentCollection, GroupCollection,
+        RepoView, DirentView, DirView, GroupNavView, AddRepoView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
         el: '#main',
 
+        events: {
+            'click #repo-create': 'createRepo',
+        },
+
         initialize: function() {
             console.log('init MyHomePage');
+            Common.prepareApiCsrf();
+
+            _.bindAll(this, 'ajaxLoadingShow', 'ajaxLoadingHide');
+            this.$el.ajaxStart(this.ajaxLoadingShow).ajaxStop(this.ajaxLoadingHide);
+
             // this.on('showDirents', this.showDirents, this);
 
-            this.$mine = this.$('#my-own-repos');
             this.$repoTabs = this.$('#repo-tabs');
-            this.$repoList = this.$('#my-own-repos table tbody');
+
+            this.$cont = this.$('#right-panel');
+            this.$table = this.$('#my-own-repos table');
+            this.$tableHead = $('thead', this.$table);
+            this.$tableBody = $('tbody', this.$table);
+
             this.dirView = new DirView();
 
             this.groupView = new GroupNavView();
@@ -35,17 +50,94 @@ define([
             this.listenTo(Repos, 'all', this.render);
         },
 
-        addOne: function(repo) {
-            console.log('add repo: ' + repo.owner);
+        ajaxLoadingShow: function() {
+            Common.feedback('Loading...', 'info', Common.INFO_TIMEOUT);
+        },
+
+        ajaxLoadingHide: function() {
+            $('.messages .info').hide();
+        },
+
+        addOne: function(repo, collection, options) {
+            console.log('add repo: ' + repo.get('name'));
             var view = new RepoView({model: repo});
-            this.$repoList.append(view.render().el);
+            if (options.prepend) {
+                this.$tableBody.prepend(view.render().el);
+            } else {
+                this.$tableBody.append(view.render().el);
+            }
         },
 
         addAll: function() {
-            this.$repoList.empty();
+            this.$tableBody.empty();
             Repos.each(this.addOne, this);
         },
 
+        hideTable: function() {
+            this.$table.hide();
+        },
+
+        showTable: function() {
+            this.$table.show();
+        },
+
+        hideLoading: function() {
+            this.$cont.find('.loading').hide();
+        },
+
+        showLoading: function() {
+            this.$cont.find('.loading').show();
+        },
+
+        hideEmptyTips: function() {
+            this.$cont.find('.empty-tips').hide();
+        },
+
+        showEmptyTips: function() {
+            this.$cont.find('.empty-tips').show();
+        },
+        
+        render: function(eventName) {
+            console.log('render repos with event: ' + eventName);
+
+            this.$repoTabs.show();
+            this.$table.parent().show();
+            this.hideLoading();
+            
+            if (Repos.length) {
+                this.hideEmptyTips();
+                this.showTable();
+            } else {
+                this.showEmptyTips();
+                this.hideTable();
+            }
+        },
+
+        showRepoList: function() {
+            console.log('show repo list');
+            this.initializeRepos();
+            Repos.fetch({reset: true});
+
+            this.dirView.hide();
+        },
+
+        showDir: function(repo_id, path) {
+            console.log('show dir ' + repo_id + ' ' + path);
+            this.$repoTabs.hide();
+
+            var path = path || '/';
+            this.dirView.showDir(repo_id, path);
+            // this.dirent_list = new app.DirentListView({id: id, path: path});
+            // $('#my-own-repos table').children().remove();
+            // $('#my-own-repos table').append(this.dirent_list.render().el);
+        },
+
+        createRepo: function() {
+            new AddRepoView();
+        }
+
+
+        /*
         addOneDirent: function(dirent) {
             var view = new DirentView({model: dirent});
             this.$repoList.append(view.render().el);
@@ -61,34 +153,8 @@ define([
             if (this.dirents.length) {
                 this.$mine.show();
             }
-        },
-
-        render: function(eventName) {
-            console.log('render repos with event: ' + eventName);
-            if (Repos.length) {
-                this.$mine.show();
-            }
-        },
-
-        showRepoList: function() {
-            console.log('show repo list');
-            this.initializeRepos();
-            Repos.fetch({reset: true});
-            this.dirView.hide();
-            this.$repoTabs.show();
-            // $('#my-own-repos table').append(new RepoView().render().el);
-        },
-
-        showDir: function(repo_id, path) {
-            console.log('show dir ' + repo_id + ' ' + path);
-            this.$repoTabs.hide();
-
-            var path = path || '/';
-            this.dirView.showDir(repo_id, path);
-            // this.dirent_list = new app.DirentListView({id: id, path: path});
-            // $('#my-own-repos table').children().remove();
-            // $('#my-own-repos table').append(this.dirent_list.render().el);
-        }
+        },*/
+        
 
     });
 
