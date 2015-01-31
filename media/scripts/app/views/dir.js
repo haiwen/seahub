@@ -34,9 +34,6 @@ define([
             },
 
             showDir: function(repo_id, path) {
-                console.log("showDir " + repo_id + " " + path);
-                this.repo_id = repo_id;
-                this.path = path;
                 this.dir.setPath(repo_id, path);
                 this.dir.fetch({reset: true});
                 this.$el.show();
@@ -116,8 +113,8 @@ define([
                                    + '?parent_dir=' + encodeURIComponent(dir.path);
 
                     if (!dirent_name) {
-                      Common.showFormError(form_id, gettext("It is required."));
-                      return false;
+                        Common.showFormError(form_id, gettext("It is required."));
+                        return false;
                     };
 
                     var after_op_success = function(data) {
@@ -211,6 +208,7 @@ define([
             },
 
             sortByTime: function () {
+                console.log("sortByTime: " + this.dir.repo_id + " " + this.dir.path);
                 var dirents = this.dir;
                 var el = $('#by-time');
                 dirents.comparator = function(a, b) {

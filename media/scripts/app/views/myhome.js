@@ -80,7 +80,7 @@ define([
         },
 
         showDir: function(repo_id, path) {
-            console.log('show dir' + repo_id + ' ' + path);
+            console.log('show dir ' + repo_id + ' ' + path);
             this.$repoTabs.hide();
 
             var path = path || '/';
