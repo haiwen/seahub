@@ -30,9 +30,9 @@ define([
             this.$el.ajaxStart(this.ajaxLoadingShow).ajaxStop(this.ajaxLoadingHide);
 
             // this.on('showDirents', this.showDirents, this);
+            this.initializeRepos();
 
             this.$repoTabs = this.$('#repo-tabs');
-
             this.$cont = this.$('#right-panel');
             this.$table = this.$('#my-own-repos table');
             this.$tableHead = $('thead', this.$table);
@@ -115,7 +115,6 @@ define([
 
         showRepoList: function() {
             console.log('show repo list');
-            this.initializeRepos();
             Repos.fetch({reset: true});
 
             this.dirView.hide();
@@ -135,26 +134,6 @@ define([
         createRepo: function() {
             new AddRepoView();
         }
-
-
-        /*
-        addOneDirent: function(dirent) {
-            var view = new DirentView({model: dirent});
-            this.$repoList.append(view.render().el);
-        },
-
-        addAllDirent: function() {
-            this.$repoList.empty();
-            this.dirents.each(this.addOneDirent, this);
-        },
-
-        renderDirent: function(eventName) {
-            console.log('render dirents with event: ' + eventName);
-            if (this.dirents.length) {
-                this.$mine.show();
-            }
-        },*/
-        
 
     });
 
