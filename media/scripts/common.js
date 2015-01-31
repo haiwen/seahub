@@ -98,16 +98,16 @@ define([
         },
 
         showFormError: function(formid, error_msg) {
-          $("#" + formid + " .error").html(error_msg).removeClass('hide');
-          $("#simplemodal-container").css({'height':'auto'});
+            $("#" + formid + " .error").html(error_msg).removeClass('hide');
+            $("#simplemodal-container").css({'height':'auto'});
         },
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
-          if (xhr.responseText) {
-            feedback($.parseJSON(xhr.responseText).error, 'error');
-          } else {
-            feedback(getText("Failed. Please check the network."), 'error');
-          }
+            if (xhr.responseText) {
+                feedback($.parseJSON(xhr.responseText).error, 'error');
+            } else {
+                feedback(getText("Failed. Please check the network."), 'error');
+            }
         },
 
         // TODO: Change to jquery function like $.disableButtion(btn)
@@ -131,153 +131,69 @@ define([
         },
 
         prepareCSRFToken: function(xhr, settings) {
-          function getCookie(name) {
-            var cookieValue = null;
-            if (document.cookie && document.cookie != '') {
-              var cookies = document.cookie.split(';');
-              for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                  break;
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
                 }
-              }
+                return cookieValue;
             }
-            return cookieValue;
-          }
-          if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-            // Only send the token to relative URLs i.e. locally.
-            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-          }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
         },
 
         ajaxPost: function(params) {
-          var form = params.form,
-          post_url = params.post_url,
-          post_data = params.post_data,
-          after_op_success = params.after_op_success,
-          form_id = params.form_id;
-          var submit_btn = form.children('[type="submit"]');
-          this.disableButton(submit_btn);
-          $.ajax({
-            url: post_url,
-            type: 'POST',
-            dataType: 'json',
-            beforeSend: this.prepareCSRFToken,
-            data: post_data,
-            success: function(data) {
-              if (data['success']) {
-                after_op_success(data);
-              }
-            },
-            error: function(xhr, textStatus, errorThrown) {
-              var err;
-              if (xhr.responseText) {
-                err = $.parseJSON(xhr.responseText).error;
-              } else {
-                err = getText("Failed. Please check the network.");
-              }
-              this.feedback(err);
-              //enable(submit_btn);
-            }
-          });
+            var form = params.form,
+            post_url = params.post_url,
+            post_data = params.post_data,
+            after_op_success = params.after_op_success,
+            form_id = params.form_id;
+            var submit_btn = form.children('[type="submit"]');
+            this.disableButton(submit_btn);
+            $.ajax({
+                url: post_url,
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: this.prepareCSRFToken,
+                data: post_data,
+                success: function(data) {
+                    if (data['success']) {
+                        after_op_success(data);
+                    }
+                },
+                error: function(xhr, textStatus, errorThrown) {
+                    var err;
+                    if (xhr.responseText) {
+                        err = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err = getText("Failed. Please check the network.");
+                    }
+                    this.feedback(err);
+                    this.enableButton(submit_btn);
+                }
+            });
         },
 
         pathJoin: function(array) {
-          result = array[0];
-          for (var i = 1; i < array.length; i++) {
-            if (result[result.length-1] == '/' || array[i][0] == '/')
-              result += array[i];
-            else
-              result += '/' + array[i];
-          }
-          return result;
+            var result = array[0];
+            for (var i = 1; i < array.length; i++) {
+                if (result[result.length-1] == '/' || array[i][0] == '/')
+                    result += array[i];
+                else
+                    result += '/' + array[i];
+            }
+            return result;
         },
 
-
-        renderFileSystemTree: function() {
-          var form = $('#mv-form'),
-          file_tree = new FileTree(),
-          container = $('#current-repo-dirs'),
-          loading_tip = container.prev();
-
-          var dirents = app.libdirents,
-          repo_id = dirents.repo_id,
-          repo_name = dirents.repo_name,
-          cur_path = dirents.path;
-          if (cur_path != '/') {
-            cur_path += '/';
-          }
-          container.data('site_root', '{{SITE_ROOT}}');
-          $.ajax({
-            url: app.utils.getUrl({name: 'get_dirents', repo_id: repo_id}) + '?path=' + e(cur_path) + '&dir_only=true&all_dir=true',
-            cache: false,
-            dataType: 'json',
-            success: function(data) {
-              var json_data = [];
-              var repo_data = {
-                'data': repo_name,
-                'attr': {'repo_id': repo_id, 'root_node': true},
-                'state': 'open'
-              };
-
-              var path_eles = cur_path.split('/');
-              path_eles.pop();
-              /* e.g.
-              * path: '/xx/'
-              * path_eles: ['', 'xx']
-              * data: [["xxx", "xx", "test1022"], ["lkjj", "kjhkhi"]]
-              * when no dir in '/', data will be [[]];
-              */
-              var len = data.length;
-              var children = [];
-              for (var i = len - 1; i > -1; i--) {
-                children[i] = [];
-                if (i == len - 1) {
-                  for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                    children[i].push({
-                      'data': data[i][j],
-                      'state': 'closed'
-                    });
-                  }
-                } else {
-                  for (var j = 0, len_i = data[i].length; j < len_i; j++) {
-                    if (data[i][j] == path_eles[i+1]) {
-                      children[i].push({
-                        'data': data[i][j],
-                        'state': 'open',
-                        'children': children[i+1]
-                      });
-                    } else {
-                      children[i].push({
-                        'data': data[i][j],
-                        'state': 'closed'
-                      });
-                    }
-                  }
-                }
-              }
-              if (children[0].length > 0) {
-                $.extend(repo_data, {'children': children[0]});
-              }
-              json_data.push(repo_data);
-
-              loading_tip.hide();
-              file_tree.renderDirTree(container, form, json_data);
-              container.removeClass('hide');
-            },
-            error: function() {
-              var cur_repo = [{
-                'data': repo_name,
-                'attr': {'repo_id': repo_id, 'root_node': true},
-                'state': 'closed'
-              }];
-              loading_tip.hide();
-              file_tree.renderDirTree(container, form, cur_repo);
-              container.removeClass('hide');
-            }
-          });
-        }
     }
 });
