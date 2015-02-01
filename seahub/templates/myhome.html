@@ -63,7 +63,7 @@
         <ul class="tab-tabs-nav fleft">
             {% if user.permissions.can_add_repo %}
             <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
-            {% if ENABLE_SUB_LIBRARY and sub_lib_enabled %}
+            {% if sub_lib_enabled %}
             <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
             {% endif %}
             {% endif %}
@@ -100,6 +100,7 @@
             <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
         </div>
     </div>
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
 <table id="new-repo" class="hide">

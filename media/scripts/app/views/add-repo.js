@@ -15,10 +15,9 @@ define([
             "click #encrypt-switch": "togglePasswdInput"
         },
 
-        initialize: function() {
-            this.listenTo(Repos, 'invalid', this.displayValidationErrors);
-
-            this.render();
+        initialize: function(repos) {
+            this.repos = repos;
+            this.listenTo(repos, 'invalid', this.displayValidationErrors);
         },
 
         render: function() {
@@ -42,16 +41,17 @@ define([
             this.$('.error').html(error).show();
             $("#simplemodal-container").css({'height':'auto'});
         },
-        
+
         addRepo: function(e) {
             e.preventDefault();
 
-            Repos.create(this.newAttributes(), {
+            this.repos.create(this.newAttributes(), {
                 wait: true,
                 validate: true,
                 prepend: true,  // show newly created repo at first line
                 success: function() {
-                    Common.feedback('Success', 'success', Common.SUCCESS_TIMEOUT);
+                    // No need to show feedback
+                    // Common.feedback('Success', 'success', Common.SUCCESS_TIMEOUT);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     // TODO: handle error gracefully
