@@ -5,7 +5,7 @@ define([
     'common',
     'file-tree',
     'app/collections/dirents',
-    'app/views/dirents',
+    'app/views/dirent',
     'text!' + app.config._tmplRoot + 'dir-op-bar.html',
     'text!' + app.config._tmplRoot + 'path-bar.html',
     ], function($, _, Backbone, Common, FileTree, DirentCollection, DirentView,
