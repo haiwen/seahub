@@ -10,7 +10,7 @@ define([
         url: app.pageOptions.reposUrl,
 
         initialize: function() {
-            console.log('init RepoCollection');
+            //console.log('init RepoCollection');
         },
 
         fetch: function(options) {
@@ -24,5 +24,5 @@ define([
 
     });
 
-    return new RepoCollection();
+    return RepoCollection;
 });
