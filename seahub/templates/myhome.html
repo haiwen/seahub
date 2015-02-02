@@ -4,8 +4,8 @@
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
 
 {% block extra_style %}
-{% if need_guide %}
 <style type="text/css">
+{% if need_guide %}
 #guide-for-new {
     padding: 0 20px;
     width: 450px;
@@ -17,8 +17,21 @@
 #guide-for-new .txt {
     margin-left:6.4em;
 }
-</style>
 {% endif %}
+/* lib view */
+.repo-file-list .dirent-name {
+    width:300px;
+}
+.repo-file-list .dirent-size {
+    width:104px;
+}
+.repo-file-list .dirent-update {
+    width:103px;
+}
+.repo-file-list .dirent-op {
+    width:100px;
+}
+</style>
 {% endblock %}
 
 {% block left_panel %}
@@ -162,9 +175,8 @@
 
 <div id="dir-view" class="hide">
   <div class="repo-file-list-topbar">
-    <p class="path fleft"></p>
-    <div class="repo-op fright"></div>
-    <div class="clear"></div>
+    <p class="path"></p>
+    <div class="repo-op"></div>
   </div>
   <table class="repo-file-list">
     <thead>
@@ -181,7 +193,7 @@
     </tr>
     </thead>
     <tbody>
-    </tboby>
+    </tbody>
   </table>
   <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
