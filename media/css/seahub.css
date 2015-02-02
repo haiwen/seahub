@@ -116,7 +116,7 @@ ol { padding-left:2em; }
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; }
 dd { margin-bottom:.8em; color:#222; }
-a { color:#ee8833; text-decoration:none; font-weight:bold; }
+a { color:#eb8205; text-decoration:none; font-weight:bold; }
 a.normal {font-weight: normal;}
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
@@ -269,8 +269,8 @@ p { margin:0.5em 0; }
     margin:1em auto;
 }
 .icon-plus, .icon-minus, .icon-pencil,
-.file-item .icon-star-empty,
-.file-item .icon-star {
+.repo-file-list .icon-star-empty,
+.repo-file-list .icon-star {
     font-size:16px;
     line-height:1;
 }
@@ -278,8 +278,8 @@ p { margin:0.5em 0; }
     color:#444;
     margin-left:3px;
 }
-.file-item .icon-star-empty { color:#d0d0d0; }
-.file-item .icon-star { color:#505050; }
+.repo-file-list .icon-star-empty { color:#d0d0d0; }
+.repo-file-list .icon-star { color:#505050; }
 .op,
 .more {
     font-weight:normal;
@@ -1168,6 +1168,7 @@ textarea:-moz-placeholder {/* for FF */
 #right-panel .hd,
 .tabnav,
 .repo-file-list-topbar,
+#dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
     background:#f2f2f2;
@@ -1182,6 +1183,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list-topbar {
     margin-bottom:0;
+}
+#dir-view .repo-file-list-topbar {
+    background:none;
+    padding:0;
 }
 #right-panel .hd h3,
 #right-panel h3.hd {
@@ -1733,7 +1738,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .path { margin: 1.4em 0 0; }
 .access-notice { margin: 0.8em 0 0.4em; }
-.repo-op {
+#repo-file-list .repo-op {
     text-align:right;
     margin-bottom:4px;
 }
@@ -1782,6 +1787,14 @@ textarea:-moz-placeholder {/* for FF */
     font-size:14px;
     line-height:25px;
     margin:0;
+}
+#dir-view .path {
+    font-size:16px;
+    line-height:1.5;
+    margin:0 0 5px;
+}
+#dir-view .repo-op .op-btn {
+    padding:5px 14px;
 }
 .repo-file-list {
     table-layout:auto;
@@ -1860,9 +1873,12 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
-.hidden-op li a {
+.hidden-op a {
     display:block;
     padding:0 12px;
+}
+.hidden-op a:hover {
+    background: #eee;
 }
 .file-choose-form {
     width:500px;
