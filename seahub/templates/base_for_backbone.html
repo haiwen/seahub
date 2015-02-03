@@ -149,12 +149,12 @@
 </div><!-- wrapper -->
 
 <script type="text/javascript">
-app = window.app = {
-     config: {
-         mediaUrl: '{{ MEDIA_URL }}',
-         siteRoot: '{{ SITE_ROOT }}',
-         _tmplRoot: '{{ SITE_ROOT }}_templates/js/'
-     },
+var app = {
+    config: {
+        mediaUrl: '{{ MEDIA_URL }}',
+        siteRoot: '{{ SITE_ROOT }}',
+        _tmplRoot: '{{ SITE_ROOT }}_templates/js/'
+    }
 };
 </script>
 <script type="text/javascript" src="{% url 'seahub.views.i18n.cached_javascript_catalog' %}"></script>
