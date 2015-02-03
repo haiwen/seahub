@@ -3469,31 +3469,18 @@ class OfficeGenerateView(APIView):
 
         return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
-class ThumbnailGetView(APIView):
+class ThumbnailView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, repo_id):
-
-        path = request.GET.get('p', None)
-        if path is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-
-        size = request.GET.get('s', None)
-        if size is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
-
-        obj_id = get_file_id_by_path(repo_id, path)
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
-                                                                      repo_id,
-                                                                      obj_id, path)
-
-        if user_perm is None:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Permission denied.')
+    def get(self, request, repo_id, path):
 
         repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND,
+                             'Library not found.')
+
         if repo.encrypted:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Image thumbnail is not supported in encrypted libraries.')
@@ -3501,6 +3488,23 @@ class ThumbnailGetView(APIView):
         if not ENABLE_THUMBNAIL:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Thumbnail function is not enabled.')
+
+        size = request.GET.get('s', None)
+        if size is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
+
+        obj_id = get_file_id_by_path(repo_id, path)
+
+        if obj_id is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path')
+
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                      repo_id,
+                                                                      obj_id, path)
+
+        if user_perm is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Permission denied.')
 
         thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
         if not os.path.exists(thumbnail_dir):
@@ -3513,18 +3517,16 @@ class ThumbnailGetView(APIView):
                 image = Image.open(f)
                 image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
                 image.save(thumbnail_file, THUMBNAIL_EXTENSION)
-            except IOError, e:
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                 "error:" + e.msg)
+            except IOError as e:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
 
         try:
             with open(thumbnail_file, 'rb') as f:
                 thumbnail = f.read()
             f.close()
             return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
-        except IOError, e:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             "error:" + e.msg)
+        except IOError as e:
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
 
 #Following is only for debug
 # from seahub.auth.decorators import login_required

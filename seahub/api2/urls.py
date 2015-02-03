@@ -36,6 +36,7 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/sub_repo/$', DirSubRepoView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/share/$', DirShareView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/download/$', DirDownloadView.as_view()),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/thumbnail/(?P<path>.+)$', ThumbnailView.as_view(), name='api2-thumbnail'),
     url(r'^starredfiles/', StarredFileView.as_view(), name='starredfiles'),
     url(r'^shared-repos/$', SharedRepos.as_view(), name='sharedrepos'),
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
@@ -93,7 +94,6 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/move/$', OpMoveView.as_view()),
-    url(r'^thumbnail/(?P<repo_id>[-0-9a-f]{36})/$', ThumbnailGetView.as_view()),
 )
 
 # serve office converter static files
