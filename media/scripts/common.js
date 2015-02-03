@@ -40,7 +40,7 @@ define([
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
             switch (options.name) {
-              case 'get_lib_dirents': return siteRoot + 'ajax/lib/' + options.repo_id + '/dirents/';
+              case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
               case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
               case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
               case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
