@@ -116,8 +116,10 @@ class UserStarredFilesManager(models.Manager):
                 continue
 
             try:
-                dirent = seafile_api.get_dirent_by_path(sfile.repo.id,
-                                                        sfile.path)
+                # get real path for sub repo
+                real_path = sfile.repo.origin_path + sfile.path if sfile.repo.origin_path else sfile.path
+                dirent = seafile_api.get_dirent_by_path(sfile.repo.store_id,
+                                                        real_path)
                 sfile.last_modified = dirent.mtime
             except SearpcError as e:
                 logger.error(e)
@@ -207,4 +209,3 @@ class DeviceToken(models.Model):
 
     def __unicode__(self):
         return "/".join(self.user, self.token)
-

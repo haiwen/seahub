@@ -58,7 +58,6 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
-
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, query_office_file_pages, add_office_convert_task,
@@ -436,7 +435,9 @@ def view_file(request, repo_id):
 
     # fetch file contributors and latest contributor
     try:
-        dirent = seafile_api.get_dirent_by_path(repo.id, path)
+        # get real path for sub repo
+        real_path = repo.origin_path + path if repo.origin_path else path
+        dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
         latest_contributor, last_modified = dirent.modifier, dirent.mtime
     except SearpcError as e:
         logger.error(e)
