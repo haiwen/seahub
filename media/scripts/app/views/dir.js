@@ -31,12 +31,34 @@ define([
 
                 // initialize common js behavior
                 $('th .checkbox-orig').unbind();
+
+                var _this = this;
+                $(window).scroll(function() {
+                    if ($(_this.el).is(':visible')) {
+                        _this.onWindowScroll();
+                    }
+                });
             },
 
             showDir: function(repo_id, path) {
-                this.dir.setPath(repo_id, path);
-                this.dir.fetch({reset: true});
                 this.$el.show();
+                var loading_tip = this.$('.loading-tip').show();
+                var dir = this.dir;
+                dir.setPath(repo_id, path);
+                dir.fetch({
+                    reset: true,
+                    data: {'p': path},
+                    success: function (collection, response, opts) {
+                        dir.last_start = 0; // for 'more'
+                        if (response.dirent_list.length == 0 ||  // the dir is empty
+                            !response.dirent_more ) { // no 'more'
+                            loading_tip.hide();
+                        }
+                    },
+                    error: function () { // todo
+                        loading_tip.hide();
+                    }
+                });
             },
 
             hide: function() {
@@ -227,6 +249,30 @@ define([
                 el.toggleClass('icon-caret-up icon-caret-down');
             },
 
+            onWindowScroll: function () {
+                var dir = this.dir;
+                var start = dir.more_start;
+                if (dir.dirent_more && $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) && start != dir.last_start) {
+                    dir.last_start = start;
+                    var loading_tip = this.$('.loading-tip');
+                    dir.fetch({
+                        remove: false,
+                        data: {
+                            'p': dir.path,
+                            'start': dir.more_start
+                        },
+                        success: function (collection, response, opts) {
+                            if (!response.dirent_more ) { // no 'more'
+                                loading_tip.hide();
+                            }
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            loading_tip.hide();
+                            Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                        }
+                    });
+                }
+            }
       });
 
       return DirView;
