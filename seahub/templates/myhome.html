@@ -203,18 +203,13 @@
 
 {% block extra_script %}
 {% include "js/lib-op-popups.html" %}
-<script>
-  app["pageOptions"] = {
-      base_url: "{{ SITE_ROOT }}" + "home/my/",
-      csrfToken: "{{ csrf_token }}",
-      reposUrl: "{% url 'api2-repos' %}"
-  };
-  app.config = {
-    siteRoot: "{{ SITE_ROOT }}",
-    _tmplRoot: "{{ SITE_ROOT }}" + "_templates/js/",
-    mediaURL: "{{ MEDIA_URL }}",
-  };
-  app.globalState = {};
+<script type="text/javascript">
+app["pageOptions"] = {
+    base_url: "{{ SITE_ROOT }}" + "home/my/",
+    csrfToken: "{{ csrf_token }}",
+    reposUrl: "{% url 'api2-repos' %}"
+};
+app.globalState = {};
 </script>
-<script data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+<script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
 {% endblock %}

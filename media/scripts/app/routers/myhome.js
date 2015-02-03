@@ -20,10 +20,11 @@ define([
         },
 
         showDir: function(repo_id, path) {
-            if (path)
+            if (path) {
                 path = '/' + path;
-            else
+            } else {
                 path = '/';
+            }
             console.log("Repo route has been called.." + "repo_id:" + repo_id + " path:" + path);
             this.myHomeView.showDir(repo_id, path);
         },
