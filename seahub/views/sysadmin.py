@@ -1147,25 +1147,38 @@ def sys_repo_transfer(request):
     repo_id = request.POST.get('repo_id', None)
     new_owner = request.POST.get('email', None)
 
-    if repo_id and new_owner:
-        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
-            messages.error(request, _(u'Can not transfer organization library'))
-        else:
-            try:
-                User.objects.get(email=new_owner)
-                if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
-                    messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
-                else:
-                    seafile_api.set_repo_owner(repo_id, new_owner)
-                    messages.success(request, _(u'Successfully transfered.'))
-            except User.DoesNotExist:
-                messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
-    else:
-        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
-
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse(sys_repo_admin)
+
+    if not (repo_id and new_owner):
+        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
+        return HttpResponseRedirect(next)
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponseRedirect(next)
+
+    try:
+        User.objects.get(email=new_owner)
+    except User.DoesNotExist:
+        messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
+        return HttpResponseRedirect(next)
+
+    try:
+        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+            messages.error(request, _(u'Can not transfer organization library'))
+            return HttpResponseRedirect(next)
+
+        if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
+            messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
+            return HttpResponseRedirect(next)
+    except SearpcError:    # XXX: ignore rpc not found error
+        pass
+
+    seafile_api.set_repo_owner(repo_id, new_owner)
+    messages.success(request, _(u'Successfully transfered.'))
     return HttpResponseRedirect(next)
 
 @login_required
