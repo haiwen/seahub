@@ -1,12 +1,17 @@
 define([
     'underscore',
     'backbone',
+    'common',
     'app/models/dirent'
-], function(_, Backbone, Dirent) {
+], function(_, Backbone, Common, Dirent) {
     'use strict';
 
     var DirentCollection = Backbone.Collection.extend({
         model: Dirent,
+
+        url: function () {
+            return Common.getUrl({name: 'list_lib_dir', repo_id: this.repo_id});
+        },
 
         initialize: function() {
 
@@ -26,11 +31,9 @@ define([
         },
 
         setPath: function(repo_id, path) {
-          console.log('init dir: ' + repo_id + ' ' + path);
           this.repo_id = repo_id;
           this.path = path;
-          this.url = '/ajax/lib/' + repo_id + '/dir/?p=' + path;
-        },
+        }
     });
 
     return DirentCollection;
