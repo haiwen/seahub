@@ -300,7 +300,7 @@ def can_preview_file(file_name, file_size):
         else:
             return (True, None)
     else:
-        return (False, "This type of file cannot be viewed online.")
+        return (False, _(u'This type of file cannot be viewed online.'))
 
 @login_required
 @repo_passwd_set_required
