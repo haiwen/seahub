@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'common',
-    'text!' + app.config._tmplRoot + 'repos.html'
+    'text!' + app.config._tmplRoot + 'repo.html'
 ], function($, _, Backbone, Common, reposTemplate) {
     'use strict';
 
@@ -18,7 +18,7 @@ define([
             'click .repo-delete-btn': 'delete',
             'click .repo-share-btn': 'share'
         },
-        
+
         initialize: function() {
             console.log('init RepoView');
 
