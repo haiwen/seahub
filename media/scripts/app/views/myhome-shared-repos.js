@@ -4,33 +4,28 @@ define([
     'backbone',
     'common',
     'app/collections/repos',
-    'app/views/repo',
-    'app/views/add-repo',
-], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView) {
+    'app/views/shared-repo',
+], function($, _, Backbone, Common, RepoCollection, SharedRepoView) {
     'use strict';
 
-    var ReposView = Backbone.View.extend({
+    var SharedReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
-
-        events: {
-            'click #repo-create': 'createRepo',
-        },
 
         initialize: function(options) {
             this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#my-own-repos table');
+            this.$table = this.$('#repos-shared-to-me table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
             this.$emptyTip = $('.empty-tips', this.tabs);
 
-            this.repos = new RepoCollection();
+            this.repos = new RepoCollection({type: 'shared'});
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
         },
 
         addOne: function(repo, collection, options) {
-            var view = new RepoView({model: repo});
+            var view = new SharedRepoView({model: repo});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
@@ -55,7 +50,7 @@ define([
             //
         },
 
-        showMyRepos: function() {
+        showSharedRepos: function() {
             this.repos.fetch({reset: true});
             this.$tabs.show();
             //this.$table.parent().show();
@@ -64,7 +59,7 @@ define([
         },
 
         show: function() {
-            this.showMyRepos();
+            this.showSharedRepos();
         },
 
         hide: function() {
@@ -72,13 +67,8 @@ define([
             this.$table.hide();
         },
 
-        createRepo: function() {
-            var dialog = new AddRepoView(this.repos);
-            dialog.render();
-        },
-
 
     });
 
-    return ReposView;
+    return SharedReposView;
 });
