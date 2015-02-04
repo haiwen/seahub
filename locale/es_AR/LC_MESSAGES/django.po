@@ -6,13 +6,13 @@
 # Hector Colina <hcolina@gmail.com>, 2013
 # eddelac <edg.delac@gmail.com>, 2013
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014
-# Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014
+# Rodolfo Cossalter <rcoss@dm.uba.ar>, 2014-2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2014-12-26 18:14+0000\n"
+"PO-Revision-Date: 2015-01-14 17:06+0000\n"
 "Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
@@ -3807,7 +3807,7 @@ msgstr "Historial"
 
 #: seahub/templates/file_revisions.html:8
 msgid "'s Version History"
-msgstr "Historial de versiones"
+msgstr ": historial de versiones"
 
 #: seahub/templates/file_revisions.html:9
 msgid ""

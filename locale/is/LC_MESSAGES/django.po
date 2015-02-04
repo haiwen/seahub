@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-12-26 17:20+0800\n"
-"PO-Revision-Date: 2015-01-13 14:52+0000\n"
+"PO-Revision-Date: 2015-01-15 16:35+0000\n"
 "Last-Translator: Hjörleifur Sveinbjörnsson <hjorleifur@gmail.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/projects/p/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
@@ -5459,7 +5459,7 @@ msgstr "Fleiri aðgerðir"
 
 #: seahub/templates/snippets/repo_dirents.html:88
 msgid "More Operations"
-msgstr "Fleyri aðgerðir"
+msgstr "Fleiri aðgerðir"
 
 #: seahub/templates/snippets/repo_share_form.html:3
 #, python-format
