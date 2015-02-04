@@ -10,6 +10,8 @@ define([
     var MyHomeRouter = Backbone.Router.extend({
         routes: {
             'lib/:repo_id(/*path)': 'showDir',
+            'my-libs': 'showMyRepos',
+            'shared-libs': 'showSharedRepos',
 
             // Default
             '*actions': 'defaultAction'
@@ -29,11 +31,21 @@ define([
             this.myHomeView.showDir(repo_id, path);
         },
 
+        showMyRepos: function() {
+            console.log("show My Repos");
+            this.myHomeView.showMyRepos();
+        },
+
+        showSharedRepos: function() {
+            console.log("show shared repos");
+            this.myHomeView.showSharedRepos();
+        },
+
         defaultAction: function(actions) {
             // We have no matching route, lets just log what the URL was
             console.log('No route:', actions);
 
-            this.myHomeView.showRepoList();
+            this.myHomeView.showMyRepos();
         }
     });
 
