@@ -496,6 +496,7 @@ class Repos(APIView):
                     "name":r.repo_name,
                     "desc":r.repo_desc,
                     "mtime":r.latest_modify,
+                    "mtime_relative": translate_seahub_time(r.latest_modify),
                     "root":r.root,
                     "size":r.size,
                     "encrypted":r.encrypted,
