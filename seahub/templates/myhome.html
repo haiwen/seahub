@@ -75,13 +75,13 @@
     <div class="hd">
         <ul class="tab-tabs-nav fleft">
             {% if user.permissions.can_add_repo %}
-            <li class="tab"><a href="#my-own-repos" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
+            <li class="tab"><a href="#my-libs" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
             {% if sub_lib_enabled %}
-            <li class="tab"><a href="#my-sub-repos" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
+            <li class="tab"><a href="#my-sub-libs" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
             {% endif %}
             {% endif %}
-            <li class="tab"><a href="#repos-shared-to-me" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
-            <li class="tab"><a href="#group-repos" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
+            <li class="tab"><a href="#shared-libs" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
+            <li class="tab"><a href="#group-libs" class="a" id="grp-lib-tab">{% trans "Group" %}</a></li>
         </ul>
         <div class="fright">
             <button id="repo-create" class=""><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
@@ -113,6 +113,23 @@
             <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
         </div>
     </div>
+
+    <div id="repos-shared-to-me" class="hide">
+        <table class="hide">
+            <thead>
+                <tr>
+                    <th width="4%"><!--icon--></th>
+                    <th width="20%">{% trans "Name" %} <span id="be-shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="be-shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                    <th width="33%">{% trans "Description" %}</th>
+                    <th width="15%">{% trans "Last Update" %} <span id="be-shared-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="be-shared-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                    <th width="15%">{% trans "Shared By" %}</th>
+                    <th width="13%">{% trans "Operations" %}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
     <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
