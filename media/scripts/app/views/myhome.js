@@ -60,12 +60,12 @@ define([
             this.sharedReposView.show();
         },
 
-        showDir: function(repo_id, path) {
+        showDir: function(category, repo_id, path) {
             console.log('show dir ' + repo_id + ' ' + path);
 
             var path = path || '/';
             this.reposView.hide();
-            this.dirView.showDir(repo_id, path);
+            this.dirView.showDir(category, repo_id, path);
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);

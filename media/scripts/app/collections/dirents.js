@@ -30,9 +30,11 @@ define([
           return data.dirent_list; // return the array
         },
 
-        setPath: function(repo_id, path) {
-          this.repo_id = repo_id;
-          this.path = path;
+        // category: 'my-libs', 'shared-libs'
+        setPath: function(category, repo_id, path) {
+            this.category = category;
+            this.repo_id = repo_id;
+            this.path = path;
         }
     });
 
