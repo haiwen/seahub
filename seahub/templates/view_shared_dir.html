@@ -10,10 +10,10 @@
         <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar ovhd">
                 <p class="path fleft">
-                {% trans "Current path: "%} 
+                {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ link|urlencode }}">{{ name }}</a> /               
+                <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ link|urlencode }}">{{ name }}</a> /
                 {% else %}
                 {{ name }}
                 {% endif %}
@@ -50,8 +50,17 @@
                 {% endfor %}
 
                 {% for dirent in file_list %}
-                <tr>
-                    <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                <tr class="file-item" data-name="{{dirent.obj_name}}" >
+                    {% if not repo.encrypted and ENABLE_THUMBNAIL and dirent.is_img %}
+                        {% if dirent.thumbnail_src %}
+                            <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}" alt="{% trans "File"%}" /></td>
+                        {% else %}
+                            <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
+                        {% endif %}
+                    {% else %}
+                        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" />11</td>
+                    {% endif %}
+
                     <td>
                         <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
                     </td>
@@ -79,5 +88,102 @@ $(function() {
     $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
     {% endif %}
 });
+
+{% if not repo.encrypted and ENABLE_THUMBNAIL %}
+var timer,
+    cur_path = "{{path}}";
+    default_size = {{PREVIEW_DEFAULT_SIZE}},
+    preview_wrap = $('<div id="preview-wrap"><img id="image-preview" src="" alt=""/><div class="outer-caret right-outer-caret"><div class="inner-caret"></div></div></div>')
+        .appendTo("body")
+        .css({'width':default_size + 'px', 'height':default_size + 'px'})
+        .hide(),
+    image_preview = $("#image-preview"),
+    caret = image_preview.next();
+
+$(".repo-file-list").on({
+    mouseenter: function() {
+        var thumbnail = $('.thumbnail', $(this)),
+            file_item = thumbnail.closest('.file-item');
+
+        timer = setTimeout(function () {
+            $.ajax({
+            url: '{% url "thumbnail_create" repo.id %}?path=' + e(cur_path+file_item.attr('data-name')) + '&size=' + default_size,
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                image_preview.attr("src", data.thumbnail_src);
+
+                var file_item_offset = file_item.offset(),
+                    thumbnail_offset = thumbnail.offset(),
+
+                    wrap_width = preview_wrap.outerWidth(),
+                    wrap_padding = parseInt(preview_wrap.css('padding-top')),
+
+                    caret_width = parseInt(caret.css('border-top-width')),
+                    caret_pos_x = (default_size)/2 + wrap_padding - caret_width,
+                    caret_pos_y = default_size + 2 * wrap_padding,
+
+                    wrap_left = file_item_offset.left - wrap_width - caret_width;
+
+                if (wrap_left >= 0) {
+                    caret.removeClass('bottom-outer-caret')
+                        .addClass('right-outer-caret')
+                        .css({'top':caret_pos_x + 'px', 'left':caret_pos_y + 'px'});
+
+                    preview_wrap.css({
+                        'top'  : (thumbnail_offset.top + (thumbnail.height() - wrap_width)/2) + 'px',
+                        'left' : wrap_left + 'px'
+                    }).fadeIn();
+                } else {
+                    caret.removeClass("right-outer-caret")
+                         .addClass("bottom-outer-caret")
+                         .css({'top':caret_pos_y + 'px', 'left':caret_pos_x + 'px'});
+
+                    preview_wrap.css({
+                        'top'  : (file_item_offset.top - wrap_width) - caret_width + 'px',
+                        'left' : (thumbnail_offset.left + (thumbnail.width() - wrap_width)/2) + 'px'
+                    }).fadeIn();
+                }
+            },
+            error: ajaxErrorHandler
+            });
+        }, 200);
+    },
+    mouseleave: function() {
+        clearTimeout(timer);
+        preview_wrap.hide();
+        image_preview.attr('src', ''); // for ff. In ff, when hover, the last preview image would be shown first, then the right one.
+    }
+}, ".dirent-icon:has('.thumbnail')");
+
+// get thumbnails for image files
+$(function() {
+    var img_icons = $('.not-thumbnail');
+    if (img_icons.length == 0) {
+        return;
+    }
+    var get_thumbnail = function(i) {
+        var img_icon = $(img_icons[i]),
+            file_name = img_icon.closest('.file-item').attr('data-name');
+        $.ajax({
+            url: '{% url "thumbnail_create" repo.id %}?path=' + e(cur_path + file_name),
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                img_icon.attr("src", data.thumbnail_src).load(function() {
+                    $(this).removeClass("not-thumbnail").addClass("thumbnail");
+                });
+            },
+            complete: function() {
+                // cur_path may be changed. e.g., the user enter another directory
+                if (i < img_icons.length - 1) {
+                    get_thumbnail(++i);
+                }
+            }
+        });
+    };
+    get_thumbnail(0);
+});
+{% endif %}
 </script>
 {% endblock %}
