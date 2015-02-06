@@ -11,7 +11,9 @@ define([
         routes: {
             'lib/:repo_id(/*path)': 'showDir',
             'my-libs': 'showMyRepos',
+            'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'shared-libs': 'showSharedRepos',
+            'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
 
             // Default
             '*actions': 'defaultAction'
@@ -39,6 +41,24 @@ define([
         showSharedRepos: function() {
             console.log("show shared repos");
             this.myHomeView.showSharedRepos();
+        },
+
+        showMyRepoDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.myHomeView.showDir('my-libs', repo_id, path);
+        },
+
+        showSharedRepoDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.myHomeView.showDir('shared-libs', repo_id, path);
         },
 
         defaultAction: function(actions) {

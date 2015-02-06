@@ -32,6 +32,7 @@ define([
             this.$el.html(this.template({
                 dirent: this.model.attributes,
                 dirent_path: Common.pathJoin([dir.path, this.model.get('obj_name')]),
+                category: dir.category,
                 repo_id: dir.repo_id,
                 user_perm: dir.user_perm,
                 repo_encrypted: dir.encrypted
