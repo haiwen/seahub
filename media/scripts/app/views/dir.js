@@ -32,12 +32,35 @@ define([
                 // initialize common js behavior
                 $('th .checkbox-orig').unbind();
 
+                // get 'more'
                 var _this = this;
                 $(window).scroll(function() {
                     if ($(_this.el).is(':visible')) {
                         _this.onWindowScroll();
                     }
                 });
+
+                // hide 'hidden-op' popup
+                app.globalState.noFileOpPopup = true;
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var popup = $('.hidden-op');
+                    if (!app.globalState.noFileOpPopup &&
+                        !$('.more-op-icon, .hidden-op').is(target) &&
+                        !popup.find('*').is(target)) {
+                        popup.addClass('hide');
+                        app.globalState.noFileOpPopup = true;
+                        if (!app.globalState.popup_tr.find('*').is(target)) {
+                            app.globalState.popup_tr.removeClass('hl').find('.repo-file-op').addClass('vh'); // clicked place: the first tr, place out of the table
+                            $('.repo-file-list tr:gt(0)').each(function() { // when other tr is clicked
+                                if ($(this).find('*').is(target)) {
+                                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+                                }
+                            });
+                        }
+                    }
+                });
+
             },
 
             showDir: function(repo_id, path) {

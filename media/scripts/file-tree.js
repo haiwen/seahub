@@ -6,7 +6,7 @@ define([
   ], function($, _, Backbone, Common) {
     'use strict';
 
-    $.jstree._themes = app.config.mediaURL + 'js/themes/';
+    $.jstree._themes = app.config.mediaUrl + 'js/themes/';
 
     var FileTree = {
 
@@ -195,7 +195,7 @@ define([
                 loading_tip = container.prev();
 
             var repo_name = options.repo_name,
-            repo_id = options.repo_id;
+                repo_id = options.repo_id;
             var cur_path = options.path;
             if (cur_path != '/') {
                 cur_path += '/';

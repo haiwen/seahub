@@ -42,7 +42,7 @@
         <h3><%= form_title %></h3>
         <p class="detail">{% trans "Rename %(name)s as:" %}</p>
         <input type="hidden" name="oldname" value="<%= dirent_name %>" />
-        <input type="text" name="newname" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <input type="text" name="newname" value="<%= dirent_name %>" class="input" maxlength="{{max_file_name}}" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -73,8 +73,11 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
+    </script>
+
+    <script type="text/template" id="mv-progress-popup-template">
     <div id="mv-progress-popup" class="alc hide">
-        <p id="mv-details"></p>
+        <p id="mv-details" class="ellipsis"></p>
         <div id="mv-progress"></div>
         <p id="mv-other-info" class="hide"></p>
         <button id="cancel-mv">{% trans "Cancel" %}</button>
