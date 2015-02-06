@@ -6,7 +6,7 @@
 <td class="star"></td>
 <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
 <td>
-  <span class="dirent-name"><a href="#/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
+  <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
 </td>
 <td class="dirent-size"></td>
 <td class="dirent-update">
