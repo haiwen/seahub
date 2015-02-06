@@ -1,11 +1,12 @@
 {% load i18n %}
 <a href="<%= app.pageOptions.base_url %>#" class="path-link normal">Top</a> /
+<a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a> /
 <% if (path == '/') { %>
 <%= repo_name %> /
 <% } else { %>
-<a href="#lib/<%= repo_id %>/" class="path-link normal"><%= repo_name %></a> /
+<a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%= repo_name %></a> /
 <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-<a href="#lib/<%= repo_id %>/<% print(path_list.slice(0, i+1).join('/')); %>/" class="path-link normal"><%= path_list[i] %></a> /
+<a href="#<%= category %>lib/<%= repo_id %>/<% print(path_list.slice(0, i+1).join('/')); %>/" class="path-link normal"><%= path_list[i] %></a> /
 <% } %>
 <% print(path_list[i] + ' /'); %>
 <% } %>
