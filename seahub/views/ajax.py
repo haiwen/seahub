@@ -815,9 +815,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+    msg = _(u'Successfully moved %(name)s') % {"name":obj_name}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -844,9 +842,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+    msg = _(u'Successfully copied %(name)s') % {"name":obj_name}
     result['msg'] = msg
 
     if res.background:
@@ -882,9 +878,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+    msg = _(u'Successfully moved %(name)s') % {"name":obj_name}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -919,9 +913,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+    msg = _(u'Successfully copied %(name)s') % {"name":obj_name}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
