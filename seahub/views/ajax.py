@@ -832,9 +832,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":escape(obj_name), "url":msg_url}
+    msg = _(u'Successfully moved %(name)s') % {"name": escape(obj_name)}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -861,9 +859,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":escape(obj_name), "url":msg_url}
+    msg = _(u'Successfully copied %(name)s') % {"name":escape(obj_name)}
     result['msg'] = msg
 
     if res.background:
@@ -908,9 +904,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":escape(obj_name), "url":msg_url}
+    msg = _(u'Successfully moved %(name)s') % {"name":escape(obj_name)}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -953,9 +947,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
-    msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":escape(obj_name), "url":msg_url}
+    msg = _(u'Successfully copied %(name)s') % {"name":escape(obj_name)}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -2202,7 +2194,7 @@ def ajax_repo_change_passwd(request, repo_id):
                     }), status=400, content_type=content_type)
 
     messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
-                     {'repo_name': repo.name})
+                     {'repo_name': escape(repo.name)})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
 
