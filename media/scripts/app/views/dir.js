@@ -63,11 +63,11 @@ define([
 
             },
 
-            showDir: function(repo_id, path) {
+            showDir: function(category, repo_id, path) {
                 this.$el.show();
                 var loading_tip = this.$('.loading-tip').show();
                 var dir = this.dir;
-                dir.setPath(repo_id, path);
+                dir.setPath(category, repo_id, path);
                 dir.fetch({
                     reset: true,
                     data: {'p': path},
@@ -103,12 +103,12 @@ define([
             renderPath: function() {
                 var dir = this.dir,
                     path = dir.path,
-                    obj = {path: path, repo_name: dir.repo_name};
+                    obj = {path: path, repo_name: dir.repo_name, category: dir.category};
 
                 if (path != '/') {
                     $.extend(obj, {
                        path_list: path.substr(1).split('/'),
-                       repo_id: dir.repo_id
+                       repo_id: dir.repo_id,
                     });
                 }
 
