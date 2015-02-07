@@ -72,11 +72,6 @@
 
 {% block right_panel %}
 <div id="repo-tabs" class="tab-tabs hide">
-    <div class="repo-list-path-bar">
-        <p class="path mine-libs-path hide">{% trans "Libraries" %} / {% trans "Mine" %} /</p>
-        <p class="path shared-libs-path hide">{% trans "Libraries" %} / {% trans "Shared" %} /</p>
-    </div>
-
     <div class="hd">
         <ul class="tab-tabs-nav fleft">
             {% if user.permissions.can_add_repo %}
