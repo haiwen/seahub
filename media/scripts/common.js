@@ -53,7 +53,6 @@ define([
               case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
               case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
               case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
-              case 'repo_new_file': return siteRoot + 'repo/' + options.repo_id + '/files/';
               case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
               case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
               case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
@@ -207,7 +206,7 @@ define([
             });
         },
 
-        HTMLescape: function(html){
+        HTMLescape: function(html) {
             return document.createElement('div')
                 .appendChild(document.createTextNode(html))
                 .parentNode
@@ -223,7 +222,35 @@ define([
                     result += '/' + array[i];
             }
             return result;
-        }
+        },
+
+       fileSizeFormat: function (bytes, precision) {
+           var kilobyte = 1024;
+           var megabyte = kilobyte * 1024;
+           var gigabyte = megabyte * 1024;
+           var terabyte = gigabyte * 1024;
+
+           var precision = precision || 0;
+
+           if ((bytes >= 0) && (bytes < kilobyte)) {
+               return bytes + ' B';
+
+           } else if ((bytes >= kilobyte) && (bytes < megabyte)) {
+               return (bytes / kilobyte).toFixed(precision) + ' KB';
+
+           } else if ((bytes >= megabyte) && (bytes < gigabyte)) {
+               return (bytes / megabyte).toFixed(precision) + ' MB';
+
+           } else if ((bytes >= gigabyte) && (bytes < terabyte)) {
+               return (bytes / gigabyte).toFixed(precision) + ' GB';
+
+           } else if (bytes >= terabyte) {
+               return (bytes / terabyte).toFixed(precision) + ' TB';
+
+           } else {
+               return bytes + ' B';
+           }
+       }
 
     }
 });

@@ -1,92 +1,92 @@
 {% load i18n %}
 <% if (dirent.is_dir) { %>
 <td class="select">
-  <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+    <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
 </td>
 <td class="star"></td>
 <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
 <td>
-  <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
+    <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
 </td>
 <td class="dirent-size"></td>
 <td class="dirent-update">
-  <% if (dirent.last_modified) { %>
-  <% print(dirent.last_update); %>
-  <% } else { %>
-  <% print(""); %>
-  <% } %>
+    <% if (dirent.last_modified) { %>
+    <% print(dirent.last_update); %>
+    <% } else { %>
+    <% print(""); %>
+    <% } %>
 </td>
 <td class="dirent-op">
-  <div class="repo-file-op vh">
-    <div class="displayed-op">
-      <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
-      <% if (!repo_encrypted) { %>
-      <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
-      <% } %>
+    <div class="repo-file-op vh">
+        <div class="displayed-op">
+            <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
+            <% if (!repo_encrypted) { %>
+            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
+            <% } %>
+        </div>
+        <% if (user_perm == 'rw') { %>
+        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
+        <ul class="hidden-op hide">
+            <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
+            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+        </ul>
+        <% } %>
     </div>
-    <% if (user_perm == 'rw') { %>
-    <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
-    <ul class="hidden-op hide">
-      <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
-      <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
-      <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-      <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-    </ul>
-    <% } %>
-  </div>
 </td>
 <% } else { %>
 <td class="select">
-  <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+    <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
 </td>
 <td class="star alc">
-  <% if (dirent.starred) { %>
-  <span title="{% trans "starred" %}" class="icon-star file-star"></span>
-  <% } else { %>
-  <span title="{% trans "unstarred" %}" class="icon-star-empty file-star"></span>
-  <% } %>
+    <% if (dirent.starred) { %>
+    <span title="{% trans "starred" %}" class="icon-star file-star"></span>
+    <% } else { %>
+    <span title="{% trans "unstarred" %}" class="icon-star-empty file-star"></span>
+    <% } %>
 </td>
 <td class="dirent-icon">
-  <% if (dirent.is_img) { %>
-  <% if (dirent.thumbnail_src) { %>
-  <img class="thumbnail" src="<%= dirent.thumbnail_src %>" alt="" />
-  <% } else { %>
-  <img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
-  <% } %>
-  <% } else { %>
-  <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
-  <% } %>
+    <% if (dirent.is_img) { %>
+    <% if (dirent.thumbnail_src) { %>
+    <img class="thumbnail" src="<%= dirent.thumbnail_src %>" alt="" />
+    <% } else { %>
+    <img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+    <% } %>
+    <% } else { %>
+    <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+    <% } %>
 </td>
 <td>
-  <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<% print(dirent_path); %>" target="_blank"><%= dirent.obj_name %></a></span>
+    <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<% print(dirent_path); %>" target="_blank"><%= dirent.obj_name %></a></span>
 </td>
 <td class="dirent-size"><%= dirent.file_size %></td>
 <td class="dirent-update">
-  <% if (dirent.last_modified) { %>
-  <% print(dirent.last_update); %>
-  <% } else { %>
-  <% print("{% trans "Fetch failed" %}"); %>
-  <% } %>
+    <% if (dirent.last_modified) { %>
+    <% print(dirent.last_update); %>
+    <% } else { %>
+    <% print("{% trans "Fetch failed" %}"); %>
+    <% } %>
 </td>
 <td class="dirent-op">
-  <div class="repo-file-op vh">
-    <div class="displayed-op">
-      <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
-      <% if (!repo_encrypted) { %>
-      <a class="op share" href="#" data-link="<%= dirent.sharelink %>" data-token="<%= dirent.sharetoken %>" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
-      <% } %>
+    <div class="repo-file-op vh">
+        <div class="displayed-op">
+            <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
+            <% if (!repo_encrypted) { %>
+            <a class="op share" href="#" data-link="<%= dirent.sharelink %>" data-token="<%= dirent.sharetoken %>" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
+            <% } %>
+        </div>
+        <% if (user_perm == 'rw') { %>
+        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
+        <ul class="hidden-op hide">
+            <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
+            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            <li><a class="op file-update" href="#">{% trans "Update"%}</a></li>
+            <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
+        </ul>
+        <% } %>
     </div>
-    <% if (user_perm == 'rw') { %>
-    <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
-    <ul class="hidden-op hide">
-      <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
-      <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
-      <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-      <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-      <li><a class="op file-update" href="#">{% trans "Update"%}</a></li>
-      <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
-    </ul>
-    <% } %>
-  </div>
 </td>
 <% } %>
