@@ -226,7 +226,9 @@ app["pageOptions"] = {
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}"
 };
-app.globalState = {};
+app.globalState = {
+    enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %}
+};
 </script>
 <script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
 {% endblock %}
