@@ -12,6 +12,7 @@ define([
         el: $('#repo-tabs'),
 
         initialize: function(options) {
+            this.$path_bar = this.$('.shared-libs-path');
             this.$tabs = $('#repo-tabs');
             this.$table = this.$('#repos-shared-to-me table');
             this.$tableHead = $('thead', this.$table);
@@ -56,6 +57,7 @@ define([
             //this.$table.parent().show();
             this.$table.hide();
             this.$loadingTip.show();
+            this.$path_bar.show();
         },
 
         show: function() {
@@ -65,6 +67,7 @@ define([
         hide: function() {
             this.$el.hide();
             this.$table.hide();
+            this.$path_bar.hide();
         },
 
 
