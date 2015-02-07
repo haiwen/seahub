@@ -17,7 +17,6 @@ define([
         },
 
         initialize: function(options) {
-            this.$path_bar = this.$('.mine-libs-path');
             this.$tabs = $('#repo-tabs');
             this.$table = this.$('#my-own-repos table');
             this.$tableHead = $('thead', this.$table);
@@ -57,7 +56,6 @@ define([
             this.$tabs.show();
             this.$table.hide();
             this.$loadingTip.show();
-            this.$path_bar.show();
         },
 
         show: function() {
@@ -67,7 +65,6 @@ define([
         hide: function() {
             this.$el.hide();
             this.$table.hide();
-            this.$path_bar.hide();
         },
 
         createRepo: function() {
