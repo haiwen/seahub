@@ -1064,6 +1064,7 @@ def myhome(request):
             "sub_lib_enabled": sub_lib_enabled,
             "sub_repos": sub_repos,
             "repo_create_url": repo_create_url,
+            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             }, context_instance=RequestContext(request))
 
 @login_required
