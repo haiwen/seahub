@@ -1,5 +1,5 @@
 {% load i18n %}
-<a href="<%= app.pageOptions.base_url %>#" class="path-link normal">Top</a> /
+{% trans "Libraries" %} /
 <a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a> /
 <% if (path == '/') { %>
 <%= repo_name %> /
