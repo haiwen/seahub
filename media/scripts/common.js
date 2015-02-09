@@ -30,8 +30,9 @@ require.config({
 
 define([
     'jquery',
-    'underscore'
-], function($, _) {
+    'underscore',
+    'text',                     // Workaround for r.js, otherwise text.js will not be included
+], function($, _, text) {
     return {
         INFO_TIMEOUT: 10000,     // 10 secs for info msg
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
