@@ -230,5 +230,9 @@ app.globalState = {
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %}
 };
 </script>
+{% if debug %}
 <script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+{% else %}
+<script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/dist/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+{% endif %}
 {% endblock %}
