@@ -146,6 +146,10 @@
      csrfToken: "{{csrf_token}}"
  };
 </script>
+{% if debug %}
 <script data-main="{{ MEDIA_URL }}scripts/group" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+{% else %}
+<script data-main="{{ MEDIA_URL }}scripts/dist/group" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+{% endif %}
 
 {% endblock %}
