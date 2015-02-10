@@ -73,7 +73,7 @@
                     <td><a href="?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
                     <td>{{ dirent.delete_time|translate_seahub_time }}</td>
                     <td></td>
-                    <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}">{% trans "Restore" %}</a></td>
+                    <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
                     {% else %}
                     <td><a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}">{{ dirent.obj_name }}</a></td>
                     <td></td>

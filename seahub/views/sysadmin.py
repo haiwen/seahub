@@ -37,10 +37,11 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
 from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
 from seahub.utils.sysinfo import get_platform_name
 try:
-    from seahub_extra.trialaccount.models import TrialAccount
-    enable_trial_account = True
+    from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
-    enable_trial_account = False
+    ENABLE_TRIAL_ACCOUNT = False
+if ENABLE_TRIAL_ACCOUNT:
+    from seahub_extra.trialaccount.models import TrialAccount
 
 logger = logging.getLogger(__name__)
 
@@ -202,7 +203,7 @@ def sys_user_admin(request):
 
     users = users_plus_one[:per_page]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    if enable_trial_account:
+    if ENABLE_TRIAL_ACCOUNT:
         trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
@@ -551,6 +552,9 @@ def remove_trial(request, user_or_org):
     Arguments:
     - `request`:
     """
+    if not ENABLE_TRIAL_ACCOUNT:
+        raise Http404
+
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
 
@@ -874,7 +878,7 @@ def sys_org_admin(request):
                                                     per_page + 1)
     orgs = orgs_plus_one[:per_page]
 
-    if enable_trial_account:
+    if ENABLE_TRIAL_ACCOUNT:
         trial_orgs = TrialAccount.objects.filter(user_or_org__in=[x.org_id for x in orgs])
     else:
         trial_orgs = []
@@ -1100,7 +1104,7 @@ def user_search(request):
 
     users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
-    if enable_trial_account:
+    if ENABLE_TRIAL_ACCOUNT:
         trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
@@ -1143,25 +1147,38 @@ def sys_repo_transfer(request):
     repo_id = request.POST.get('repo_id', None)
     new_owner = request.POST.get('email', None)
 
-    if repo_id and new_owner:
-        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
-            messages.error(request, _(u'Can not transfer organization library'))
-        else:
-            try:
-                User.objects.get(email=new_owner)
-                if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
-                    messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
-                else:
-                    seafile_api.set_repo_owner(repo_id, new_owner)
-                    messages.success(request, _(u'Successfully transfered.'))
-            except User.DoesNotExist:
-                messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
-    else:
-        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
-
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse(sys_repo_admin)
+
+    if not (repo_id and new_owner):
+        messages.error(request, _(u'Failed to transfer, invalid arguments.'))
+        return HttpResponseRedirect(next)
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponseRedirect(next)
+
+    try:
+        User.objects.get(email=new_owner)
+    except User.DoesNotExist:
+        messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
+        return HttpResponseRedirect(next)
+
+    try:
+        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+            messages.error(request, _(u'Can not transfer organization library'))
+            return HttpResponseRedirect(next)
+
+        if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
+            messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
+            return HttpResponseRedirect(next)
+    except SearpcError:    # XXX: ignore rpc not found error
+        pass
+
+    seafile_api.set_repo_owner(repo_id, new_owner)
+    messages.success(request, _(u'Successfully transfered.'))
     return HttpResponseRedirect(next)
 
 @login_required

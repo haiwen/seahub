@@ -14,7 +14,7 @@
     <p>{% trans "Welcome back, you are already signed in." %}</p>
 {% else %}
     <form action="" method="post">{% csrf_token %}
-        {% if form.name %}
+        {% if form.name.field.required %}
         <label for="id_name">{% trans "Name" %}</label>
         {{ form.name }} {{ form.name.errors }}
         {% endif %}
@@ -26,11 +26,18 @@
         <div id="pwd_strength"></div>
         <label for="id_password2">{% trans "Confirm Password" %}</label>
         {{ form.password2 }}        {{ form.password2.errors }}
-        {% if form.department and form.telephone %}
+
+        {% if form.department.field.required %}
         <label for="id_department">{% trans "Department" %}</label>
         {{ form.department }}       {{ form.department.errors }}
+        {% endif %}
+
+        {% if form.telephone.field.required %}
         <label for="id_telephone">{% trans "Telephone" %}</label>
         {{ form.telephone }}        {{ form.telephone.errors }}
+        {% endif %}
+
+        {% if form.note.field.required %}
         <label for="id_note">{% trans "Note" %}</label>
         {{ form.note }}             {{ form.note.errors }}
         {% endif %}

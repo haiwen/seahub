@@ -30,11 +30,12 @@
         <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
         <td style="font-size:11px;"> -- / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
-        <td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
+            {% if not user.org %}
             {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
-            {% else %}
-            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
+            {% endif %}
             {% endif %}
         </td>
     </tr>

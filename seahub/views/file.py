@@ -302,7 +302,7 @@ def can_preview_file(file_name, file_size):
         else:
             return (True, None)
     else:
-        return (False, "This type of file cannot be viewed online.")
+        return (False, _(u'This type of file cannot be viewed online.'))
 
 @login_required
 @repo_passwd_set_required
@@ -437,7 +437,9 @@ def view_file(request, repo_id):
 
     # fetch file contributors and latest contributor
     try:
-        dirent = seafile_api.get_dirent_by_path(repo.id, path)
+        # get real path for sub repo
+        real_path = repo.origin_path + path if repo.origin_path else path
+        dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
         latest_contributor, last_modified = dirent.modifier, dirent.mtime
     except SearpcError as e:
         logger.error(e)
@@ -637,7 +639,7 @@ def view_shared_file(request, token):
             else:
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
-    
+
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -697,6 +699,8 @@ def view_shared_file(request, token):
     save_to_link = reverse('save_shared_link') + '?t=' + token
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
+    office_preview_token = ret_dict.get('office_preview_token', '')
+
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -714,6 +718,7 @@ def view_shared_file(request, token):
             'file_encoding_list':ret_dict['file_encoding_list'],
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
+            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'accessible_repos': accessible_repos,
@@ -723,7 +728,7 @@ def view_shared_file(request, token):
 
 def view_raw_shared_file(request, token, obj_id, file_name):
     """Returns raw content of a shared file.
-    
+
     Arguments:
     - `request`:
     - `token`:
@@ -845,6 +850,7 @@ def view_file_via_shared_dir(request, token):
         ret_dict['err'] = err_msg
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
+    office_preview_token = ret_dict.get('office_preview_token', '')
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -864,6 +870,7 @@ def view_file_via_shared_dir(request, token):
             'file_encoding_list':ret_dict['file_encoding_list'],
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
+            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
@@ -1035,7 +1042,7 @@ def file_edit(request, repo_id):
 @login_required
 def view_raw_file(request, repo_id, file_path):
     """Returns raw content of a file.
-    
+
     Arguments:
     - `request`:
     - `repo_id`:
@@ -1061,7 +1068,7 @@ def view_raw_file(request, repo_id, file_path):
 
 def send_file_download_msg(request, repo, path, dl_type):
     """Send file downlaod msg.
-    
+
     Arguments:
     - `request`:
     - `repo`:
@@ -1258,9 +1265,9 @@ def office_convert_add_task(request):
         return HttpResponseBadRequest('invalid params')
 
     resp = add_office_convert_task(file_id, doctype, raw_path, internal=True)
-    
+
     return HttpResponse(json.dumps(resp), content_type=content_type)
-    
+
 def check_office_token(func):
     '''Set the `office_convert_add_task` attr on the request object for office
     preview related requests
@@ -1270,14 +1277,14 @@ def check_office_token(func):
         token = request.META.get('HTTP_X_SEAFILE_OFFICE_PREVIEW_TOKEN', '')
         if token and len(token) != 32:
             return HttpResponseForbidden()
-            
+
         if not token:
             token = request.GET.get('office_preview_token', '')
-            
+
         request.office_preview_token = token
-            
+
         return func(request, *args, **kwargs)
-        
+
     return newfunc
 
 @check_office_token
@@ -1322,7 +1329,7 @@ def office_convert_get_page(request, path, internal=False):
     m = _OFFICE_PAGE_PATTERN.match(path)
     if not m:
         return HttpResponseForbidden()
-        
+
     file_id = m.group(1)
     if path.endswith('file.css'):
         pass
@@ -1411,6 +1418,7 @@ def view_priv_shared_file(request, token):
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_private_file_share', args=[pfs.token])
+    office_preview_token = ret_dict.get('office_preview_token', '')
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -1428,6 +1436,7 @@ def view_priv_shared_file(request, token):
             'file_encoding_list':ret_dict['file_encoding_list'],
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
+            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'accessible_repos': accessible_repos,

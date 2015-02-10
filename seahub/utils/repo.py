@@ -13,7 +13,7 @@ def list_dir_by_path(cmmt, path):
     else:
         return seafile_api.list_dir_by_commit_and_path(cmmt.repo_id, cmmt.id, path)
 
-def check_user_folder_perm_args(request_user, repo_id, path, user, perm = None):
+def check_user_folder_perm_args(request_user, repo_id, path, user, perm=None):
     if not seafile_api.get_repo(repo_id):
         return {'error': _(u'Library does not exist.'), 'status': 400}
 

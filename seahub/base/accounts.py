@@ -6,7 +6,7 @@ from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 
-from seahub.auth.models import get_hexdigest, check_password
+from seahub.auth.models import get_hexdigest
 from seahub.auth import login
 from registration import signals
 #from registration.forms import RegistrationForm
@@ -329,7 +329,7 @@ class RegistrationBackend(object):
             site = RequestSite(request)
 
         from registration.models import RegistrationProfile
-        if settings.ACTIVATE_AFTER_REGISTRATION == True:
+        if settings.ACTIVATE_AFTER_REGISTRATION is True:
             # since user will be activated after registration,
             # so we will not use email sending, just create acitvated user
             new_user = RegistrationProfile.objects.create_active_user(username, email,
@@ -350,10 +350,10 @@ class RegistrationBackend(object):
         #     ccnet_threaded_rpc.add_binding(new_user.username, userid)
 
         if settings.REQUIRE_DETAIL_ON_REGISTRATION:
-            name = kwargs['name']
-            department = kwargs['department']
-            telephone = kwargs['telephone']
-            note = kwargs['note']
+            name = kwargs.get('name', '')
+            department = kwargs.get('department', '')
+            telephone = kwargs.get('telephone', '')
+            note = kwargs.get('note', '')
             Profile.objects.add_or_update(new_user.username, name, note)
             DetailedProfile.objects.add_detailed_profile(new_user.username,
                                                          department,
@@ -499,11 +499,29 @@ class RegistrationForm(forms.Form):
 class DetailedRegistrationForm(RegistrationForm):
     attrs_dict = { 'class': 'input' }
 
+    try:
+        from seahub.settings import REGISTRATION_DETAILS_MAP
+    except:
+        REGISTRATION_DETAILS_MAP = None
+
+    if REGISTRATION_DETAILS_MAP:
+        name_required = REGISTRATION_DETAILS_MAP.get('name', False)
+        dept_required = REGISTRATION_DETAILS_MAP.get('department', False)
+        tele_required = REGISTRATION_DETAILS_MAP.get('telephone', False)
+        note_required = REGISTRATION_DETAILS_MAP.get('note', False)
+    else:
+        # Backward compatible
+        name_required = dept_required = tele_required = note_required = True
+
     name = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=64)), label=_("name"))
+            attrs=dict(attrs_dict, maxlength=64)), label=_("name"),
+                           required=name_required)
     department = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=512)), label=_("department"))
+            attrs=dict(attrs_dict, maxlength=512)), label=_("department"),
+                                 required=dept_required)
     telephone = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=100)), label=_("telephone"))
+            attrs=dict(attrs_dict, maxlength=100)), label=_("telephone"),
+                                required=tele_required)
     note = forms.CharField(widget=forms.TextInput(
-            attrs=dict(attrs_dict, maxlength=100)), label=_("note"))
+            attrs=dict(attrs_dict, maxlength=100)), label=_("note"),
+                           required=note_required)
