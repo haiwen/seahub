@@ -56,7 +56,7 @@ msgstr "%s ismi geçerli değil."
 #: seahub/views/ajax.py:1191 seahub/views/ajax.py:1195
 #: seahub/views/ajax.py:1199 seahub/views/ajax.py:1600
 msgid "Argument missing"
-msgstr "Bağımsız değişken eksik"
+msgstr "Değişken eksik"
 
 #: seahub/forms.py:92
 msgid "Oldname is required"
@@ -475,7 +475,7 @@ msgstr "Geçerli bir eposta adresi girin."
 msgid ""
 "Please enter a correct username and password. Note that both fields are "
 "case-sensitive."
-msgstr "Lütfen doğru kullanıcı adı ve şifre girin. Her iki alan da büyük-küçük harf duyarlıdır."
+msgstr "Lütfen doğru bir kullanıcı adı ve şifre girin. Her iki alan da büyük-küçük harf duyarlıdır."
 
 #: seahub/auth/forms.py:51
 msgid "This account is inactive."
