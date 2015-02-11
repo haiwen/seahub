@@ -56,6 +56,7 @@ define([
             //this.$table.parent().show();
             this.$table.hide();
             this.$loadingTip.show();
+            $('#shared-lib-tab', this.$tabs).parent().addClass('ui-state-active');
         },
 
         show: function() {
@@ -65,6 +66,7 @@ define([
         hide: function() {
             this.$el.hide();
             this.$table.hide();
+            $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
 
