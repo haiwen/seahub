@@ -28,6 +28,8 @@ define([
             this.sharedReposView = new SharedReposView();
             this.dirView = new DirView();
             this.groupView = new GroupNavView();
+
+            Common.initAccountPopup();
         },
 
 

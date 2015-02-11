@@ -11,7 +11,7 @@ from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -549,4 +549,3 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
-
