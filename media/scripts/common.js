@@ -21,7 +21,10 @@ require.config({
         },
     },
     paths: {
-        jquery: 'lib/jq.min',
+        jquery: 'lib/jquery',
+        simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
+        jstree: 'lib/jstree.1.0',
+
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
         text: 'lib/text'

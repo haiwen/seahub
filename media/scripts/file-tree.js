@@ -1,9 +1,10 @@
 define([
   'jquery',
+  'jstree',
   'underscore',
   'backbone',
   'common',
-  ], function($, _, Backbone, Common) {
+  ], function($, jstree, _, Backbone, Common) {
     'use strict';
 
     $.jstree._themes = app.config.mediaUrl + 'js/themes/';
