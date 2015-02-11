@@ -1,5 +1,6 @@
 define([
     'jquery',
+    'simplemodal',
     'underscore',
     'backbone',
     'common',
@@ -8,7 +9,7 @@ define([
     'app/views/dirent',
     'text!' + app.config._tmplRoot + 'dir-op-bar.html',
     'text!' + app.config._tmplRoot + 'path-bar.html',
-    ], function($, _, Backbone, Common, FileTree, DirentCollection, DirentView,
+    ], function($, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
         DirOpBarTemplate, PathBarTemplate) {
         'use strict';
 
