@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load i18n upload_tags %}
 
     <script type="text/template" id="add-new-dir-form-template">
     <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
@@ -84,6 +84,9 @@
     </div>
     </script>
 
+    {% upload_js %}    
+
+    <!--script type="text/template" id="upload-file-dialog-template"-->
     <div id="upload-file-dialog" class="hide">
         <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
         <div class="ops">
@@ -98,6 +101,7 @@
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </div>
     </div>
+    <!--/script-->
 
     <div id="update-file-dialog" class="hide">
         <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>

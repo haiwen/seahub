@@ -53,7 +53,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
-    user_traffic_over_limit
+    user_traffic_over_limit, is_org_context, get_max_upload_file_size
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
@@ -1033,6 +1033,8 @@ def myhome(request):
 
     repo_create_url = reverse("repo_create")
 
+    max_upload_file_size = get_max_upload_file_size()
+
     return render_to_response('myhome.html', {
             "owned_repos": owned_repos,
             "create_shared_repo": False,
@@ -1043,6 +1045,7 @@ def myhome(request):
             "sub_repos": sub_repos,
             "repo_create_url": repo_create_url,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'max_upload_file_size': max_upload_file_size,
             }, context_instance=RequestContext(request))
 
 @login_required
