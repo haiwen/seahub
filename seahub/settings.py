@@ -412,7 +412,11 @@ SEAFILE_VERSION = '3.0.0'
 ENABLE_THUMBNAIL = True
 
 # Absolute filesystem path to the directory that will hold thumbnail files.
-THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
+SEAHUB_DATA_ROOT = os.path.join(PROJECT_ROOT, '../../seahub-data')
+if os.path.exists(SEAHUB_DATA_ROOT):
+    THUMBNAIL_ROOT = os.path.join(SEAHUB_DATA_ROOT, 'thumbnail')
+else:
+    THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
 
 THUMBNAIL_EXTENSION = 'png'
 THUMBNAIL_DEFAULT_SIZE = '24'
