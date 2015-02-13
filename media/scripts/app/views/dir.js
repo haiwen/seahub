@@ -7,10 +7,11 @@ define([
     'file-tree',
     'app/collections/dirents',
     'app/views/dirent',
+    'app/views/fileupload',
     'text!' + app.config._tmplRoot + 'dir-op-bar.html',
     'text!' + app.config._tmplRoot + 'path-bar.html',
     ], function($, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
-        DirOpBarTemplate, PathBarTemplate) {
+        FileUploadView, DirOpBarTemplate, PathBarTemplate) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -29,6 +30,8 @@ define([
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
                 this.listenTo(this.dir, 'reset', this.reset);
+
+                this.fileUploadView = new FileUploadView({dirView: this});
 
                 // initialize common js behavior
                 $('th .checkbox-orig').unbind();
@@ -61,7 +64,6 @@ define([
                         }
                     }
                 });
-
             },
 
             showDir: function(category, repo_id, path) {
@@ -99,12 +101,17 @@ define([
                 this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
+                this.fileUploadView.setFileInput();
             },
 
             renderPath: function() {
                 var dir = this.dir,
                     path = dir.path,
-                    obj = {path: path, repo_name: dir.repo_name, category: dir.category};
+                    obj = {
+                        path: path,
+                        repo_name: dir.repo_name,
+                        category: dir.category
+                    };
 
                 if (path != '/') {
                     $.extend(obj, {
@@ -125,7 +132,7 @@ define([
                     encrypted: dir.encrypted,
                     path: dir.path,
                     repo_id: dir.repo_id,
-                    enable_upload_folder: app.globalState.enable_upload_folder
+                    enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },
 
@@ -174,9 +181,7 @@ define([
                             'last_update': gettext("Just now"),
                             'p_dpath': data['p_dpath']
                         }, {silent:true});
-
-                        var view = new DirentView({model: new_dirent, dirView: dirView});
-                        dirView.$dirent_list.prepend(view.render().el); // put the new dir as the first one
+                        dirView.addNewDir(new_dirent);
                     };
 
                     Common.ajaxPost({
@@ -242,20 +247,7 @@ define([
                             'sharelink': '',
                             'sharetoken': ''
                         }, {silent: true});
-                        var view = new DirentView({model: new_dirent, dirView: dirView});
-                        var new_file = view.render().el;
-                        // put the new file as the first file
-                        if ($('tr', dirView.$dirent_list).length == 0) {
-                            dirView.$dirent_list.append(new_file);
-                        } else {
-                            var dirs = dir.where({'is_dir':true});
-                            if (dirs.length == 0) {
-                                dirView.$dirent_list.prepend(new_file);
-                            } else {
-                                // put the new file after the last dir
-                                $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
-                            }
-                        }
+                        dirView.addNewFile(new_dirent);
                     };
 
                     Common.ajaxPost({
@@ -268,6 +260,31 @@ define([
 
                     return false;
                 });
+            },
+
+            addNewFile: function(new_dirent) {
+                var dirView = this,
+                    dir = this.dir;
+                var view = new DirentView({model: new_dirent, dirView: dirView});
+                var new_file = view.render().el;
+                // put the new file as the first file
+                if ($('tr', dirView.$dirent_list).length == 0) {
+                    dirView.$dirent_list.append(new_file);
+                } else {
+                    var dirs = dir.where({'is_dir':true});
+                    if (dirs.length == 0) {
+                        dirView.$dirent_list.prepend(new_file);
+                    } else {
+                        // put the new file after the last dir
+                        $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
+                    }
+                }
+            },
+
+            addNewDir: function(new_dirent) {
+                var dirView = this;
+                var view = new DirentView({model: new_dirent, dirView: dirView});
+                dirView.$dirent_list.prepend(view.render().el); // put the new dir as the first one
             },
 
             sortByName: function() {
@@ -290,7 +307,6 @@ define([
             },
 
             sortByTime: function () {
-                console.log("sortByTime: " + this.dir.repo_id + " " + this.dir.path);
                 var dirents = this.dir;
                 var el = $('#by-time');
                 dirents.comparator = function(a, b) {
