@@ -6636,7 +6636,7 @@ msgstr "İçe aktarıldı"
 
 #: seahub/views/sysadmin.py:1300
 msgid "Please select a csv file first."
-msgstr "Lütfen önce CSV dosyası seçiniz."
+msgstr "Lütfen önce bir CSV dosyası seçiniz."
 
 #: seahub/views/wiki.py:133
 msgid "You do not have permission to create wiki"
