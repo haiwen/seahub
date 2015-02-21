@@ -141,6 +141,7 @@ LANGUAGES = (
     ('hu', gettext_noop('Magyar')),
     ('is', gettext_noop('Íslenska')),
     ('it', gettext_noop('Italiano')),
+    ('ja', gettext_noop('日本語')),
     ('ko', gettext_noop('한국어')),
     ('lv', gettext_noop('Latvian')),
     ('nl', gettext_noop('Nederlands')),
