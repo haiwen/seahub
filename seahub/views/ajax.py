@@ -1973,3 +1973,16 @@ def events(request):
                                     'events_more': events_more,
                                     'new_start': start}),
                         content_type='application/json; charset=utf-8')
+
+@login_required_ajax
+def get_groups(request):
+    content_type = 'application/json; charset=utf-8'
+
+    groups = request.user.joined_groups
+    group_list = []
+    from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
+    for g in groups:
+        group_list.append({"name": g.group_name, "id": g.id, "avatar": grp_avatar(g.id, 16)})
+
+    return HttpResponse(json.dumps({"groups":group_list}), content_type=content_type)
+

@@ -1,0 +1,117 @@
+{% load i18n %}
+<div id="share-popup">
+    <h3 class="hd"><%= title %></h3>
+    <div id="share-tabs" class="left-right-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#download-link" class="a">{% trans "Download Link" %}</a></li>
+            <% if (user_perm == 'rw' && is_dir) { %>
+            <li class="tab"><a href="#upload-link" class="a">{% trans "Upload Link" %}</a></li>
+            <% } %>
+            <% if (!is_dir && is_repo_owner) { %>
+            <li class="tab"><a href="#file-share" class="a">{% trans "Private Share" %}</a></li>
+            <% } %>
+            <% if (is_dir && !is_virtual && is_repo_owner) { %>
+            <li class="tab"><a href="#dir-share" class="a">{% trans "Private Share" %}</a></li>
+            <% } %>
+        </ul>
+
+        <div class="fright">
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <div id="download-link" class="tabs-panel">
+                <form id="get-download-link-form" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" id="d-password-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password"%}</label><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password-again" class="input" />
+                    </div>
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" id="expire-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Days" %}</label><br />
+                        <input type="text" name="expire-days" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}"/>
+                </form>
+                <div id="send-download-link" class="hide">
+                    <p style="margin-top:3px;"><span class="vam">{% trans 'Link: ' %}</span><span id="download-link-text"></span></p>
+                    <button id="send-download-link-btn">{% trans 'Send' %}</button>
+                    <button id="delete-download-link-btn">{% trans 'Delete' %}</button>
+                </div>
+            </div>
+            <div id="upload-link" class="tabs-panel hide">
+                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
+                <form id="get-upload-link-form" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" id="u-password-switch" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password"%}</label><span class="tip"></span><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password-again" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}"/>
+                </form>
+                <div id="send-upload-link" class="hide">
+                    <p style="margin-top:3px;"><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link-text"></span></p>
+                    <button id="send-upload-link-btn">{% trans 'Send' %}</button>
+                    <button id="delete-upload-link-btn">{% trans 'Delete' %}</button>
+                </div>
+            </div>
+            <div id="dir-share" class="tabs-panel hide">
+            </div>
+            <div id="file-share" class="tabs-panel hide">
+            </div>
+            <form id="send-link-form" class="hide">
+                <label>{% trans "Send to:"%}</label><br />
+                <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                <label>{% trans "Message (optional):"%}</label><br />
+                <textarea class="textarea" name="extra_msg"></textarea><br />
+                <p class="error hide"></p>
+                <input type="submit" value="{% trans 'Submit'%}"/>
+                <button id="send-link-cancel">{% trans "Cancel"%}</button>
+                <p id="sending" class="hide">{% trans "Sending..."%}</p>
+            </form>
+            <form id="private-share-form" class="hide">
+                <p>
+                    <label>{% trans "Peoples:" %}</label><br />
+                    <select name="emails" class="w100" multiple="multiple">
+                    </select>
+                </p>
+                <div class="dir-share-option">
+                    <p>
+                        <label>{% trans "Groups:" %}</label><br />
+                        <select name="groups" class="w100" multiple="multiple">
+                        </select>
+                    </p>
+                    <% if (cloud_mode) { %>
+                        <% if (org) { %>
+                        <p class="tip">{% trans 'Tip: must be organization members or organization groups, enter "all" to share to public library.' %}</p>
+                        <% } %>
+                    <% } else { %>
+                    <p class="tip">{% trans 'Tip: enter "all" in "Peoples" input box to share dir to public.' %}</p>
+                    <% } %>
+
+                    <div class="bot">
+                        <select name="permission" class="share-permission-select w100">
+                            <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                            <option value="r">{% trans "Read-Only"%}</option>
+                        </select>
+                    </div>
+                </div>
+                <p class="error hide"></p>
+                <input type="submit" value="{% trans "Submit"%}"/>
+            </form>
+        </div>
+    </div>
+</div>
