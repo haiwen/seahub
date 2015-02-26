@@ -90,15 +90,20 @@ define([
                     menu.find('.item').removeAttr('style')
                         .end().addClass('hide');
                 }
-                // when add folder, a subdirectory will be shown as '.'. rm it.
+
                 var file = data.files[0];
-                if (file.name == '.') {
+
+                // add folder by clicking 'Upload Folder'
+                if (file.name == '.') { // a subdirectory will be shown as '.'
                     data.files.shift();
+                    return;
                 }
-                if (file.webkitRelativePath) { // for 'upload folder'
+                if (file.webkitRelativePath) {
                     file.relative_path = file.webkitRelativePath;
                 }
-                if (file.relativePath) { // for 'folder drag & drop'
+
+                // add folder by drag & drop
+                if (file.relativePath) {
                     file.relative_path = file.relativePath + file.name;
                 }
             })
@@ -106,6 +111,9 @@ define([
                 $fu_status.html(fu_status.uploading);
             })
             .bind('fileuploadsubmit', function(e, data) {
+                if (data.files.length == 0) {
+                    return false;
+                }
                 var file = data.files[0];
                 // get url(token) for every file
                 if (!file.error) {
