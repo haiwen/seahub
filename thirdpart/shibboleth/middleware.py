@@ -4,7 +4,6 @@ from django.core.exceptions import ImproperlyConfigured
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
 from seahub import auth
-from seahub.api2.models import Token
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -79,7 +78,28 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         return response
 
     def _set_auth_cookie(self, request, response):
-        token, _ = Token.objects.get_or_create(user=request.user.username)
+        from seahub.api2.utils import get_token_v1, get_token_v2
+        # generate tokenv2 using information in request params
+        keys = (
+            'platform',
+            'device_id',
+            'device_name',
+            'client_version',
+            'platform_version',
+        )
+        if all(['shib_' + key in request.GET for key in keys]):
+            platform = request.GET['shib_platform']
+            device_id = request.GET['shib_device_id']
+            device_name = request.GET['shib_device_name']
+            client_version = request.GET['shib_client_version']
+            platform_version = request.GET['shib_platform_version']
+            token = get_token_v2(
+                request, request.user.username, platform, device_id,
+                device_name, client_version, platform_version)
+        elif all(['shib_' + key not in request.GET for key in keys]):
+            token = get_token_v1(request, request.user.username, )
+        else:
+            return
         response.set_cookie('seahub_auth', request.user.username + '@' + token.key)
 
     def make_profile(self, user, shib_meta):
