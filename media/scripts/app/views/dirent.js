@@ -4,8 +4,9 @@ define([
     'backbone',
     'common',
     'file-tree',
+    'app/views/share-popup',
     'text!' + app.config._tmplRoot + 'dirent.html'
-], function($, _, Backbone, Common, FileTree, direntsTemplate) {
+], function($, _, Backbone, Common, FileTree, SharePopupView, direntsTemplate) {
     'use strict';
 
     app = app || {};
@@ -15,7 +16,7 @@ define([
         tagName: 'tr',
 
         template: _.template(direntsTemplate),
-        shareTemplate: _.template($("#share-dialog-template").html()),
+        shareTemplate: _.template($("#share-popup-template").html()),
         renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
         mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
@@ -23,6 +24,7 @@ define([
         initialize: function(options) {
             this.dirView = options.dirView;
             this.dir = this.dirView.dir;
+            this.sharePopupView = new SharePopupView();
 
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
@@ -48,7 +50,7 @@ define([
             'click .file-star': 'starFile',
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
-            'click .share': 'share',
+            'click .share': 'showSharePopup',
             'click .del': 'delete',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
@@ -162,42 +164,28 @@ define([
             }
         },
 
-        share: function() {
-            /*
-            var op = this.$('.share'),
-                name = this.model.get('obj_name');
-            var col = this.collection;
-            var cur_path = col.path;
-            cur_path += cur_path == '/' ? '' : '/';
-            var repo_id = col.repo_id;
-            var ajax_urls = {
-                'link': app.utils.getUrl({name: 'get_shared_link'}) + '?repo_id=' + e(repo_id) + '&p=' + e(cur_path + name),
-                'upload-link': app.utils.getUrl({name: 'get_shared_upload_link'}) + '?repo_id=' + e(repo_id) + '&p=' + e(cur_path + name)
+        showSharePopup: function() {
+            var dir = this.dirView.dir,
+                obj_name = this.model.attributes.obj_name,
+                dirent_path = Common.pathJoin([dir.path, obj_name]),
+                is_dir;
+
+            if (this.model.get('is_dir')) {
+                is_dir = true;
+            } else {
+                is_dir = false;
             };
-            var type = this.model.get('is_dir') ? 'd' : 'f';
-            if (type == 'd') {
-                ajax_urls['link'] += '&type=d';
-            }
-            op.data('repo', {
-                'is_repo_owner': col.is_repo_owner,
-                'is_virtual': col.is_virtual,
-                'user_perm': col.user_perm,
-                'repo_id': col.repo_id});
-                */
-            var obj_name = this.model.get("obj_name");
-            var title = gettext("Sharing {placeholder}")
-                .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
-            var dialog = $(this.shareTemplate({
-                title: title,
-                is_repo_owner: this.dirView.dir.is_repo_owner,
-                is_virtual: this.dirView.dir.is_virtual,
-                user_perm: this.dirView.dir.user_perm,
-                repo_id: this.dirView.dir.repo_id,
-            }));
-            dialog.modal();
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-            //showSharePopup(op, name, ajax_urls, type, cur_path);
-            return false;
+
+            var options = {
+                    'is_repo_owner': dir.is_repo_owner,
+                    'is_virtual': dir.is_virtual,
+                    'user_perm': dir.user_perm,
+                    'repo_id': dir.repo_id,
+                    'is_dir': is_dir,
+                    'dirent_path': dirent_path,
+                    'obj_name': obj_name
+                };
+            this.sharePopupView.showPopup(options);
         },
 
         delete: function() {
