@@ -2412,3 +2412,15 @@ def toggle_group_folder_permission(request, repo_id):
     except SearpcError, e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
+
+
+def get_groups(request):
+    content_type = 'application/json; charset=utf-8'
+
+    groups = request.user.joined_groups
+    group_list = []
+    from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
+    for g in groups:
+        group_list.append({"name": g.group_name, "id": g.id, "avatar": grp_avatar(g.id, 16)})
+
+    return HttpResponse(json.dumps({"groups":group_list}), content_type=content_type)
