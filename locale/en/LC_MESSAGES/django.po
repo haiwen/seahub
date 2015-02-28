@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-04 11:39+0800\n"
+"POT-Creation-Date: 2015-02-12 18:45+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -263,7 +263,9 @@ msgstr ""
 #: seahub/templates/repo_recycle_view.html:88
 #: seahub/templates/repo_settings.html:135
 #: seahub/templates/view_file_base.html:115
-#: seahub/templates/view_shared_dir.html:54
+#: seahub/templates/view_shared_dir.html:56
+#: seahub/templates/view_shared_dir.html:58
+#: seahub/templates/view_shared_dir.html:61
 #: seahub/templates/snippets/group_recommend_form.html:28
 #: seahub/templates/snippets/repo_dirents.html:56
 #: seahub/templates/snippets/repo_dirents.html:58
@@ -3398,6 +3400,20 @@ msgstr ""
 msgid "All Groups"
 msgstr ""
 
+#: seahub/templates/choose_register.html:13
+#: seahub/templates/registration/login.html:62
+#: seahub/templates/registration/registration_form.html:11
+msgid "Signup"
+msgstr ""
+
+#: seahub/templates/choose_register.html:14
+msgid "Create a personal account"
+msgstr ""
+
+#: seahub/templates/choose_register.html:15
+msgid "Create an organization account"
+msgstr ""
+
 #: seahub/templates/decrypt_repo_form.html:7
 msgid ""
 "This library is encrypted. Please input the password if you want to browse "
@@ -3484,7 +3500,7 @@ msgstr ""
 #: seahub/templates/view_history_file.html:34
 #: seahub/templates/view_history_file.html:48
 #: seahub/templates/view_shared_dir.html:44
-#: seahub/templates/view_shared_dir.html:62
+#: seahub/templates/view_shared_dir.html:71
 #: seahub/templates/snippets/repo_dirents.html:20
 #: seahub/templates/snippets/repo_dirents.html:78
 #: seahub/templates/sysadmin/userinfo.html:147
@@ -4745,7 +4761,7 @@ msgid "Save To:"
 msgstr ""
 
 #: seahub/templates/shared_file_view.html:69
-#: seahub/templates/view_shared_dir.html:78
+#: seahub/templates/view_shared_dir.html:87
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr ""
 
@@ -5035,11 +5051,6 @@ msgstr ""
 #: seahub/templates/registration/login.html:57
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr ""
-
-#: seahub/templates/registration/login.html:62
-#: seahub/templates/registration/registration_form.html:11
-msgid "Signup"
 msgstr ""
 
 #: seahub/templates/registration/login.html:87

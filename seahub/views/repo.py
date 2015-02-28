@@ -419,6 +419,15 @@ def view_shared_dir(request, token):
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        size = THUMBNAIL_DEFAULT_SIZE
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
             'token': token,
@@ -429,6 +438,8 @@ def view_shared_dir(request, token):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 def view_shared_upload_link(request, token):
