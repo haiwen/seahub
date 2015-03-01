@@ -9,7 +9,7 @@ define([
 
     var GroupRouter = Backbone.Router.extend({
         routes: {
-            'libs/:id(/*path)': 'showDirents',
+            'lib/:repo_id(/*path)': 'showDir',
 
             'recent-changes': 'showRecentChanges',
 
@@ -21,9 +21,13 @@ define([
             this.groupView = new GroupView();
         },
 
-        showDirents: function(id, path){
-            console.log("Repo route has been called.." + "id:" + id + " path:" + path);
-            // new GroupView().showDirentList(id, path);
+        showDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.groupView.showDir(repo_id, path);
         },
 
         showRecentChanges: function() {
