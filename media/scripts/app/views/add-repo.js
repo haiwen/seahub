@@ -4,24 +4,29 @@ define([
     'backbone',
     'common',
     'app/collections/repos',
-], function($, _, Backbone, Common, Repos) {
+    'text!' + app.config._tmplRoot + 'create-repo.html',
+], function($, _, Backbone, Common, Repos, CreateRepoTemplate) {
     'use strict';
 
     var AddRepoView = Backbone.View.extend({
-        el: '#repo-create-form',
 
-        events: {
-            "submit": "addRepo",
-            "click #encrypt-switch": "togglePasswdInput"
-        },
+        tagName: 'div',
+
+        template: _.template(CreateRepoTemplate),
 
         initialize: function(repos) {
             this.repos = repos;
             this.listenTo(repos, 'invalid', this.displayValidationErrors);
         },
 
+        events: {
+            "submit": "addRepo",
+            "click #encrypt-switch": "togglePasswdInput"
+        },
+
         render: function() {
-            this.$el.modal({appendTo: '#main', autoResize: true});
+            this.$el.html(this.template({}));
+            this.$el.modal();
         },
 
         // Generate the attributes for a new GroupRepo item.
