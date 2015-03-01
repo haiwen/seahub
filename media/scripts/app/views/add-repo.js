@@ -1,11 +1,12 @@
 define([
     'jquery',
+    'simplemodal',
     'underscore',
     'backbone',
     'common',
     'app/collections/repos',
     'text!' + app.config._tmplRoot + 'create-repo.html',
-], function($, _, Backbone, Common, Repos, CreateRepoTemplate) {
+], function($, simplemodal, _, Backbone, Common, Repos, CreateRepoTemplate) {
     'use strict';
 
     var AddRepoView = Backbone.View.extend({
