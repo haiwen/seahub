@@ -1,6 +1,9 @@
 {% load i18n %}
 <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
+<% if (category) { %>
 <a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a> /
+<% } else { %>
+<% } %>
 <% if (path == '/') { %>
 <%= repo_name %> /
 <% } else { %>
