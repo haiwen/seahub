@@ -7,9 +7,12 @@ define([
     'app/collections/dirents',
     'app/views/group-repos',
     'app/views/add-group-repo',
-    'app/views/group-recent-change'
+    'app/views/group-recent-change',
+    'app/views/dir',
     // 'app/views/dirents'
-], function($, _, Backbone, Common, Repos, DirentCollection, GroupRepoView, AddGroupRepoView/*, DirentView*/, GroupRecentChangeView) {
+], function($, _, Backbone, Common, GroupRepos, DirentCollection,
+    GroupRepoView, AddGroupRepoView/*, DirentView*/, GroupRecentChangeView,
+    DirView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -24,15 +27,23 @@ define([
 
             this.$cont = this.$('#right-panel');
 
+            this.$tabs = this.$('#tabs');
             this.$tab = this.$('#tabs div:first-child');
-
             this.$table = this.$('#grp-repos table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
+            this.$loadingTip = $('.loading-tip', this.$cont);
+            this.$emptyTip = $('.empty-tips', this.$cont);
 
             this.$createForm = this.$('#repo-create-form');
+            this.repos = new GroupRepos();
+            this.listenTo(this.repos, 'add', this.addOne);
+            this.listenTo(this.repos, 'reset', this.reset);
+
+            this.dirView = new DirView();
         },
 
+        /*
         initializeRepos: function() {
             this.listenTo(Repos, 'add', this.addOne);
             this.listenTo(Repos, 'reset', this.addAll);
@@ -40,6 +51,7 @@ define([
             this.listenTo(Repos, 'all', this.render); // XXX: really render table when recieve any event ?
             this.listenTo(Repos, 'all', this.all);
         },
+        */
 
         all: function(event) {
             console.log('event: ' + event);
@@ -55,64 +67,38 @@ define([
             }
         },
 
-        addAll: function() {
-            console.log('add all');
-            this.resetTable();
-            Repos.each(this.addOne, this);
-        },
-
-        // Reset table by empty table body.
-        resetTable: function() {
-            console.log('rest table');
+        reset: function() {
             this.$tableBody.empty();
-        },
-
-        hideTable: function() {
-            this.$table.hide();
-        },
-
-        showTable: function() {
-            this.$table.show();
-        },
-
-        hideLoading: function() {
-            this.$cont.find('.loading').hide();
-        },
-
-        showLoading: function() {
-            this.$cont.find('.loading').show();
-        },
-
-        hideEmptyTips: function() {
-            this.$cont.find('.empty-tips').hide();
-        },
-
-        showEmptyTips: function() {
-            this.$cont.find('.empty-tips').show();
-        },
-
-        render: function(event) {
-            console.log('got event: ' + event + ', render repo list...' );
-
-            this.$table.parent().show();
-            this.hideLoading();
-
-            if (Repos.length) {
-                this.hideEmptyTips();
-                this.showTable();
+            this.repos.each(this.addOne, this);
+            this.$loadingTip.hide();
+            if (this.repos.length) {
+                this.$emptyTip.hide();
+                this.$table.show();
             } else {
-                this.showEmptyTips();
-                this.hideTable();
+                this.$emptyTip.show();
+                this.$table.hide();
             }
         },
 
         showRepoList: function() {
-            this.initializeRepos();
-            Repos.fetch({reset: true});
+            this.dirView.hide();
+            this.$tabs.show();
+            this.repos.fetch({reset: true});
+            this.$loadingTip.show();
+        },
+
+        hideRepoList: function() {
+            this.$tabs.hide();
+        },
+
+        showDir: function(repo_id, path) {
+            this.hideRepoList();
+            this.dirView.showDir('', repo_id, path);
         },
 
         createRepo: function() {
-            new AddGroupRepoView();
+            var addGroupRepoView = new AddGroupRepoView(this.repos);
+            addGroupRepoView.render();
         },
 
         showChanges: function() {
