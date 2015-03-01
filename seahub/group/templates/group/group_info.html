@@ -4,6 +4,23 @@
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+/* lib view */
+.repo-file-list .dirent-name {
+    width:260px;
+}
+.repo-file-list .dirent-size {
+    width:114px;
+}
+.repo-file-list .dirent-update {
+    width:123px;
+}
+.repo-file-list .dirent-op {
+    width:110px;
+}
+</style>
+{% endblock %}
 
 {% block main_panel %}
 <form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
@@ -66,17 +83,13 @@
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab"><a href="{% url 'group_info' group.id %}" class="a">{% trans "Libraries" %}</a></li>
-            <li class="tab long-tab"><a href="#/recent-changes" class="a">{% trans "Recent Changes" %}</a></li>
         </ul>
         {% if user.permissions.can_add_repo %}
         <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
 
-
-
     <div id="grp-repos">
-        <p class="loading">{% trans "Loading ..." %}</p>
         <table style="display:none">
             <thead>
                 <tr>
@@ -99,7 +112,6 @@
     </div>
 
     <div id="grp-repos-commits" class="hide">
-        <p class="loading">{% trans "Loading ..." %}</p>
         <table class="hide">
             <thead>
                 <tr>
@@ -113,6 +125,8 @@
             <tbody></tbody>
         </table>
     </div>
+
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
 {% if user.permissions.can_add_repo %}
@@ -130,9 +144,35 @@
     <button class="simplemodal-close">{% trans 'Cancel' %}</button>
 </form>
 
+<div id="dir-view" class="hide">
+  <div class="repo-file-list-topbar">
+    <p class="path"></p>
+    <div class="repo-op"></div>
+  </div>
+  <table class="repo-file-list">
+    <thead>
+    <tr>
+      <th class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+      </th>
+      <th class="star"></th>
+      <th class="dirent-icon"></th>
+      <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+      <th class="dirent-size">{% trans "Size"%}</th>
+      <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+      <th class="dirent-op">{% trans "Operations"%}</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
+{% include "js/lib-op-popups.html" %}
 <script>
  app["pageOptions"] = {
      groupId: {{ group.id }},
