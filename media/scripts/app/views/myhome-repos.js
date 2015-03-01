@@ -70,8 +70,8 @@ define([
         },
 
         createRepo: function() {
-            var dialog = new AddRepoView(this.repos);
-            dialog.render();
+            var addRepoView = new AddRepoView(this.repos);
+            addRepoView.render();
         },
 
 
