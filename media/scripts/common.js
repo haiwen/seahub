@@ -21,8 +21,11 @@ require.config({
         },
     },
     paths: {
-        jquery: 'lib/jquery',
+        'jquery': 'lib/jquery',
+        'jquery.ui.core': 'lib/jquery.ui.core',
         'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
+        'jquery.ui.progressbar': 'lib/jquery.ui.progressbar',
+
         'tmpl': 'lib/tmpl.min',
         'jquery.iframe-transport': 'lib/jquery.iframe-transport.1.4',
         'jquery.fileupload': 'lib/jquery.fileupload.5.42.1',
@@ -114,9 +117,9 @@ define([
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                feedback($.parseJSON(xhr.responseText).error, 'error');
+                this.feedback($.parseJSON(xhr.responseText).error, 'error');
             } else {
-                feedback(getText("Failed. Please check the network."), 'error');
+                this.feedback(gettext("Failed. Please check the network."), 'error');
             }
         },
 
