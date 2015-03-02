@@ -25,6 +25,7 @@ define([
             this.dir = this.dirView.dir;
 
             this.listenTo(this.model, "change", this.render);
+            this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
         },
 
         render: function() {
@@ -76,6 +77,20 @@ define([
                 this.model.set({'selected':false}, {silent:true});
             }
 
+            var dirView = this.dirView;
+            var $dirents_op = dirView.$('#multi-dirents-op');
+            var toggle_all_checkbox = dirView.$('th .checkbox'); // TODO: any better variable name?
+            var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;
+            if (checked_num > 0) {
+                $dirents_op.css({'display':'inline'});
+            } else {
+                $dirents_op.hide();
+            }
+            if (checked_num == dirView.$('tr:gt(0)').length) {
+                toggle_all_checkbox.addClass('checkbox-checked');
+            } else {
+                toggle_all_checkbox.removeClass('checkbox-checked');
+            }
         },
 
         starFile: function() {
@@ -354,9 +369,9 @@ define([
                         Common.feedback(msg, 'success');
                     } else {
                         var mv_progress_popup = $(_this.mvProgressTemplate());
-                        var details = $('#mv-details'),
-                            cancel_btn = $('#cancel-mv'),
-                            other_info = $('#mv-other-info');
+                        var details = $('#mv-details', mv_progress_popup),
+                            cancel_btn = $('#cancel-mv', mv_progress_popup),
+                            other_info = $('#mv-other-info', mv_progress_popup);
                         cancel_btn.removeClass('hide');
                         setTimeout(function () {
                             mv_progress_popup.modal({containerCss: {
@@ -365,7 +380,7 @@ define([
                                 paddingTop: 50
                             }, focus:false});
                             var det_text = op == 'mv' ? gettext("Moving %(name)s") : gettext("Copying %(name)s");
-                            details.html(det_text.replace('%(name)s', obj_name));
+                            details.html(det_text.replace('%(name)s', obj_name)).removeClass('vh');
                             $('#mv-progress').progressbar();
                             req_progress();
                         }, 100);
