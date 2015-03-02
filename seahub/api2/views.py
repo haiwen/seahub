@@ -3474,7 +3474,7 @@ class ThumbnailView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, repo_id, path):
+    def get(self, request, repo_id):
 
         repo = get_repo(repo_id)
         if not repo:
@@ -3489,9 +3489,13 @@ class ThumbnailView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Thumbnail function is not enabled.')
 
-        size = request.GET.get('s', None)
+        size = request.GET.get('size', None)
+        path = request.GET.get('p', None)
         if size is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
+
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         obj_id = get_file_id_by_path(repo_id, path)
 
