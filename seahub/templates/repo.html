@@ -325,6 +325,7 @@ $(function() {
             var file = data.files[0];
             if (file.name == '.') {
                 data.files.shift();
+                return;
             }
             if (file.webkitRelativePath) { // for 'upload folder'
                 file.relative_path = file.webkitRelativePath;
@@ -338,7 +339,9 @@ $(function() {
             fu_status.html(fu_status_.uploading);
         })
         .bind('fileuploadsubmit', function(e, data) {
-            var _this = $(this);
+            if (data.files.length == 0) {
+                return false;
+            }
             var file = data.files[0];
             // get url(token) for every file
             if (!file.error) {
@@ -359,7 +362,7 @@ $(function() {
                         {% endif %}
 
                         data.url = ret['url'];
-                        data.jqXHR = _this.fileupload('send', data);
+                        data.jqXHR = popup.fileupload('send', data);
                     },
                     error: function() {
                         file.error = "{% trans "Failed to get upload url" %}";
@@ -2071,7 +2074,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                         paddingTop: 50
                     }, focus:false});
                     var det_text = op == 'mv' ? "{% trans "Moving %(name)s" %}": "{% trans "Copying %(name)s" %}";
-                    details.html(det_text.replace('%(name)s', trimFilename(obj_name, 20)));
+                    details.html(det_text.replace('%(name)s', trimFilename(obj_name, 20))).removeClass('vh');
                     $('#mv-progress').progressbar();
                     req_progress();
                 }, 100);
