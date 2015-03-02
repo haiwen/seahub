@@ -1,5 +1,6 @@
 define([
     'jquery',
+    'jquery.ui.progressbar',
     'simplemodal',
     'underscore',
     'backbone',
@@ -10,7 +11,7 @@ define([
     'app/views/fileupload',
     'text!' + app.config._tmplRoot + 'dir-op-bar.html',
     'text!' + app.config._tmplRoot + 'path-bar.html',
-    ], function($, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
+    ], function($, progressbar, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
         FileUploadView, DirOpBarTemplate, PathBarTemplate) {
         'use strict';
 
@@ -20,6 +21,8 @@ define([
             dir_op_bar_template: _.template(DirOpBarTemplate),
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
+            mvcpTemplate: _.template($("#mvcp-form-template").html()),
+            mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
             initialize: function(options) {
                 this.$dirent_list = this.$('.repo-file-list tbody');
@@ -34,7 +37,7 @@ define([
                 this.fileUploadView = new FileUploadView({dirView: this});
 
                 // initialize common js behavior
-                $('th .checkbox-orig').unbind();
+                this.$('th .checkbox-orig').unbind();
 
                 // get 'more'
                 var _this = this;
@@ -144,11 +147,11 @@ define([
                 'click #add-new-file': 'newFile',
                 'click #share-cur-dir': 'share',
                 'click th.select': 'select',
-                'click #by-name': 'sortByName',
-                'click #by-time': 'sortByTime',
-                'click #del-dirents': 'delete',
                 'click #mv-dirents': 'mv',
-                'click #cp-dirents': 'cp'
+                'click #cp-dirents': 'cp',
+                'click #del-dirents': 'del',
+                'click #by-name': 'sortByName',
+                'click #by-time': 'sortByTime'
             },
 
             newDir: function() {
@@ -323,6 +326,381 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+            },
+
+            select: function () {
+                var el = this.$('th .checkbox');
+                el.toggleClass('checkbox-checked');
+
+                var dir = this.dir;
+                var all_dirent_checkbox = this.$('.checkbox');
+                var $dirents_op = this.$('#multi-dirents-op');
+
+                if (el.hasClass('checkbox-checked')) {
+                    all_dirent_checkbox.addClass('checkbox-checked');
+                    dir.each(function(model) {
+                        model.set({'selected': true}, {silent: true});
+                    });
+                    $dirents_op.css({'display':'inline'});
+                } else {
+                    all_dirent_checkbox.removeClass('checkbox-checked');
+                    dir.each(function(model) {
+                        model.set({'selected': false}, {silent: true});
+                    });
+                    $dirents_op.hide();
+                }
+            },
+
+            del: function () {
+                var dirents = this.dir;
+                var _this = this;
+
+                var del_dirents = function() {
+                    $('#confirm-popup').append('<p style="color:red;">' + gettext("Processing...") + '</p>');
+                    var selected_dirents = dirents.where({'selected':true}),
+                        selected_names = [];
+                    $(selected_dirents).each(function() {
+                        selected_names.push(this.get('obj_name'));
+                    });
+                    $.ajax({
+                        url: Common.getUrl({
+                            name: 'del_dirents',
+                            repo_id: dirents.repo_id
+                        }) + '?parent_dir=' + encodeURIComponent(dirents.path),
+                        type: 'POST',
+                        dataType: 'json',
+                        beforeSend: Common.prepareCSRFToken,
+                        traditional: true,
+                        data: {
+                            'dirents_names': selected_names
+                        },
+                        success: function(data) {
+                            var del_len = data['deleted'].length,
+                                not_del_len = data['undeleted'].length,
+                                msg_s, msg_f;
+
+                            if (del_len > 0) {
+                                if (del_len == selected_names.length) {
+                                    dirents.remove(selected_dirents);
+                                    _this.$('th .checkbox').removeClass('checkbox-checked');
+                                    _this.$('#multi-dirents-op').hide();
+                                } else {
+                                    $(selected_dirents).each(function() {
+                                        if (this.get('obj_name') in data['deleted']) {
+                                            dirents.remove(this);
+                                        }
+                                    });
+                                }
+                                if (del_len == 1) {
+                                    msg_s = gettext("Successfully deleted %(name)s.");
+                                } else if (del_len == 2) {
+                                    msg_s = gettext("Successfully deleted %(name)s and 1 other item.");
+                                } else {
+                                    msg_s = gettext("Successfully deleted %(name)s and %(amount)s other items.");
+                                }
+                                msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', del_len - 1);
+                                Common.feedback(msg_s, 'success');
+                            }
+                            if (not_del_len > 0) {
+                                if (not_del_len == 1) {
+                                    msg_f = gettext("Internal error. Failed to delete %(name)s.");
+                                } else if (not_del_len == 2) {
+                                    msg_f = gettext("Internal error. Failed to delete %(name)s and 1 other item.");
+                                } else {
+                                    msg_f = gettext("Internal error. Failed to delete %(name)s and %(amount)s other items.");
+                                }
+                                msg_f = msg_f.replace('%(name)s', data['undeleted'][0]).replace('%(amount)s', not_del_len - 1);
+                                Common.feedback(msg_f, 'error');
+                            }
+                            $.modal.close();
+                        },
+                        error: function(xhr, textStatus, errorThrown) {
+                            $.modal.close();
+                            Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                        }
+                    });
+                };
+                Common.showConfirm(gettext("Delete Items"),
+                    gettext("Are you sure you want to delete these selected items?"),
+                    del_dirents);
+            },
+
+            mv: function () {
+                this.mvcp({'op':'mv'});
+            },
+            cp: function () {
+                this.mvcp({'op':'cp'});
+            },
+            mvcp: function (params) {
+                var dir = this.dir;
+                var op = params.op;
+
+                var title = op == 'mv' ? "Move selected item(s) to:" : "Copy selected item(s) to:";
+
+                var form = $(this.mvcpTemplate({
+                    form_title: title,
+                    op_type: op,
+                    obj_type: '',
+                    obj_name: '',
+                    show_other_repos: !dir.encrypted,
+                }));
+                form.modal({appendTo:'#main', autoResize:true, focus:false});
+                $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+                FileTree.renderTreeForPath({
+                    repo_name: dir.repo_name,
+                    repo_id: dir.repo_id,
+                    path: dir.path
+                });
+                if (!dir.encrypted) {
+                    FileTree.prepareOtherReposTree({cur_repo_id: dir.repo_id});
+                }
+
+                var _this = this;
+                var dirents = this.dir;
+                // get models
+                var dirs = dirents.where({'is_dir':true, 'selected':true}),
+                    files = dirents.where({'is_file':true, 'selected':true});
+                var dir_names = [], file_names = [];
+                $(dirs).each(function() {
+                    dir_names.push(this.get('obj_name'));
+                });
+                $(files).each(function() {
+                    file_names.push(this.get('obj_name'));
+                });
+                form.submit(function() {
+                    var dst_repo = $('[name="dst_repo"]', form).val(),
+                        dst_path = $('[name="dst_path"]', form).val(),
+                        url_main;
+                    var cur_path = dirents.path;
+                    var url_obj = {repo_id:dirents.repo_id};
+
+                    if (!$.trim(dst_repo) || !$.trim(dst_path)) {
+                        $('.error', form).removeClass('hide');
+                        return false;
+                    }
+                    if (dst_repo == dirents.repo_id && dst_path == cur_path) {
+                        $('.error', form).html(gettext("Invalid destination path")).removeClass('hide');
+                        return false;
+                    }
+
+                    Common.disableButton($('[type="submit"]', form));
+                    form.append('<p style="color:red;">' + gettext("Processing...") + '</p>');
+
+                    if (dst_repo == dirents.repo_id) {
+                        // when mv/cp in current lib, files/dirs can be handled in batch, and no need to show progress
+                        url_obj.name = op == 'mv' ? 'mv_dirents' : 'cp_dirents';
+                        $.ajax({
+                            url: Common.getUrl(url_obj) + '?parent_dir=' + encodeURIComponent(cur_path),
+                            type: 'POST',
+                            dataType: 'json',
+                            beforeSend: Common.prepareCSRFToken,
+                            traditional: true,
+                            data: {
+                                'file_names': file_names,
+                                'dir_names': dir_names,
+                                'dst_repo': dst_repo,
+                                'dst_path': dst_path
+                            },
+                            success: function(data) {
+                                var success_len = data['success'].length,
+                                    msg_s, msg_f,
+                                    view_url = data['url'];
+
+                                $.modal.close();
+                                if (success_len > 0) {
+                                    if (op == 'mv') {
+                                        if (success_len == files.length + dirs.length) {
+                                            dirents.remove(dirs);
+                                            dirents.remove(files);
+                                            _this.$('th .checkbox').removeClass('checkbox-checked');
+                                            _this.$('#multi-dirents-op').hide();
+                                        } else {
+                                            $(dirs).each(function() {
+                                                if (this.get('obj_name') in data['success']) {
+                                                    dirents.remove(this);
+                                                }
+                                            });
+                                            $(files).each(function() {
+                                                if (this.get('obj_name') in data['success']) {
+                                                    dirents.remove(this);
+                                                }
+                                            });
+                                        }
+                                        if (success_len == 1) {
+                                            msg_s = gettext("Successfully moved %(name)s.");
+                                        } else if (success_len == 2) {
+                                            msg_s = gettext("Successfully moved %(name)s and 1 other item.");
+                                        } else {
+                                            msg_s = gettext("Successfully moved %(name)s and %(amount)s other items.");
+                                        }
+                                    } else { // cp
+                                        if (success_len == 1) {
+                                            msg_s = gettext("Successfully copied %(name)s.");
+                                        } else if (success_len == 2) {
+                                            msg_s = gettext("Successfully copied %(name)s and 1 other item.");
+                                        } else {
+                                            msg_s = gettext("Successfully copied %(name)s and %(amount)s other items.");
+                                        }
+                                    }
+
+                                    msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', success_len - 1);
+                                    //msg_s += ' <a href="' + view_url + '">' + "View" + '</a>';
+                                    Common.feedback(msg_s, 'success');
+                                }
+
+                                if (data['failed'].length > 0) {
+                                    if (op == 'mv') {
+                                        if (data['failed'].length > 1) {
+                                            msg_f = gettext("Internal error. Failed to move %(name)s and %(amount)s other item(s).");
+                                        } else {
+                                            msg_f = gettext("Internal error. Failed to move %(name)s.");
+                                        }
+                                    } else {
+                                        if (data['failed'].length > 1) {
+                                            msg_f = gettext("Internal error. Failed to copy %(name)s and %(amount)s other item(s).");
+                                        } else {
+                                            msg_f = gettext("Internal error. Failed to copy %(name)s.");
+                                        }
+                                    }
+                                    msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
+                                    Common.feedback(msg_f, 'error');
+                                }
+                            },
+                            error: function(xhr, textStatus, errorThrown) {
+                                $.modal.close();
+                                Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                            }
+                        });
+                    } else {
+                        // when mv/cp to another lib, files/dirs should be handled one by one, and need to show progress
+                        var op_objs = dirents.where({'selected':true}),
+                            i = 0;
+                        // progress popup
+                        var mv_progress_popup = $(_this.mvProgressTemplate());
+                        var details = $('#mv-details', mv_progress_popup),
+                            cancel_btn = $('#cancel-mv', mv_progress_popup),
+                            other_info = $('#mv-other-info', mv_progress_popup);
+
+                        var mvcpDirent = function () {
+                            var op_obj = op_objs[i],
+                                obj_type = op_obj.get('is_dir') ? 'dir':'file',
+                                obj_name = op_obj.get('obj_name'),
+                                post_url,
+                                post_data;
+
+                            if (op == 'mv') {
+                                url_obj.name = obj_type == 'dir' ? 'mv_dir' : 'mv_file';
+                            } else {
+                                url_obj.name = obj_type == 'dir' ? 'cp_dir' : 'cp_file';
+                            }
+                            post_url = Common.getUrl(url_obj) + '?path=' + encodeURIComponent(cur_path) + '&obj_name=' + encodeURIComponent(obj_name);
+                            post_data = {
+                                'dst_repo': dst_repo,
+                                'dst_path': dst_path
+                            };
+                            var after_op_success = function (data) {
+                                var det_text = op == 'mv' ? gettext("Moving file %(index)s of %(total)s") : gettext("Copying file %(index)s of %(total)s");
+                                details.html(det_text.replace('%(index)s', i + 1).replace('%(total)s', op_objs.length)).removeClass('vh');
+                                cancel_btn.removeClass('hide');
+                                var req_progress = function () {
+                                    var task_id = data['task_id'];
+                                    cancel_btn.data('task_id', task_id);
+                                    $.ajax({
+                                        url: Common.getUrl({name:'get_cp_progress'}) + '?task_id=' + encodeURIComponent(task_id),
+                                        dataType: 'json',
+                                        success: function(data) {
+                                            var bar = $('.ui-progressbar-value', $('#mv-progress'));
+                                            if (!data['failed'] && !data['canceled'] && !data['successful']) {
+                                                setTimeout(req_progress, 1000);
+                                            } else {
+                                                if (data['successful']) {
+                                                    bar.css('width', parseInt((i + 1)/op_objs.length*100, 10) + '%').show();
+                                                    if (op == 'mv') {
+                                                        dirents.remove(op_obj);
+                                                    }
+                                                    endOrContinue();
+                                                } else { // failed or canceled
+                                                    if (data['failed']) {
+                                                        var error_msg = op == 'mv' ? gettext('Failed to move %(name)s') : gettext('Failed to copy %(name)s');
+                                                        cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');
+                                                        end();
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        error: function(xhr, textStatus, errorThrown) {
+                                            var error;
+                                            if (xhr.responseText) {
+                                                error = $.parseJSON(xhr.responseText).error;
+                                            } else {
+                                                error = gettext("Failed. Please check the network.");
+                                            }
+                                            cancel_btn.after('<p class="error">' + error + '</p>');
+                                            end();
+                                        }
+                                    });
+                                }; // 'req_progress' ends
+                                if (i == 0) {
+                                    $.modal.close();
+                                    setTimeout(function () {
+                                        mv_progress_popup.modal({containerCss: {
+                                            width: 300,
+                                            height: 150,
+                                            paddingTop: 50
+                                        }, focus:false});
+                                        $('#mv-progress').progressbar();
+                                        req_progress();
+                                    }, 100);
+                                } else {
+                                    req_progress();
+                                }
+                            }; // 'after_op_success' ends
+                            Common.ajaxPost({
+                                'form': form,
+                                'post_url': post_url,
+                                'post_data': post_data,
+                                'after_op_success': after_op_success,
+                                'form_id': form.attr('id')
+                            });
+                        }; // 'mvcpDirent' ends
+                        var endOrContinue = function () {
+                            if (i == op_objs.length - 1) {
+                                setTimeout(function () { $.modal.close(); }, 500);
+                            } else {
+                                mvcpDirent(++i);
+                            }
+                        };
+                        var end = function () {
+                            setTimeout(function () { $.modal.close(); }, 500);
+                        };
+                        mvcpDirent();
+                        cancel_btn.click(function() {
+                            Common.disableButton(cancel_btn);
+                            var task_id = $(this).data('task_id');
+                            $.ajax({
+                                url: Common.getUrl({name:'cancel_cp'}) + '?task_id=' + encodeURIComponent(task_id),
+                                dataType: 'json',
+                                success: function(data) {
+                                    other_info.html(gettext("Canceled.")).removeClass('hide');
+                                    cancel_btn.addClass('hide');
+                                    end();
+                                },
+                                error: function(xhr, textStatus, errorThrown) {
+                                    var error;
+                                    if (xhr.responseText) {
+                                        error = $.parseJSON(xhr.responseText).error;
+                                    } else {
+                                        error = gettext("Failed. Please check the network.");
+                                    }
+                                    other_info.html(error).removeClass('hide');
+                                    Common.enableButton(cancel_btn);
+                                }
+                            });
+                        });
+                    }
+                    return false;
+                });
             },
 
             onWindowScroll: function () {
