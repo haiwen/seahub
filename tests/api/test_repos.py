@@ -6,8 +6,11 @@ Test repos api.
 import unittest
 
 from tests.api.apitestbase import ApiTestBase
-from tests.api.urls import REPOS_URL, DEFAULT_REPO_URL, VIRTUAL_REPOS_URL
+from tests.api.urls import (
+    REPOS_URL, DEFAULT_REPO_URL, VIRTUAL_REPOS_URL, GET_REPO_TOKENS_URL
+)
 from tests.common.utils import apiurl, urljoin, randstring
+from tests.common.common import USERNAME, PASSWORD, SEAFILE_BASE_URL
 
 # TODO: all tests should be run on an encrypted repo
 class ReposApiTest(ApiTestBase):
@@ -156,3 +159,25 @@ class ReposApiTest(ApiTestBase):
             #self.assertIsNotNone(repo['worktree'])
             self.assertIsNotNone(repo['auto_sync'])
             #self.assertIsNotNone(repo['relay_id'])
+
+    def test_generate_repo_tokens(self):
+        with self.get_tmp_repo() as ra:
+            with self.get_tmp_repo() as rb:
+                repo_ids = ','.join([ra.repo_id, rb.repo_id])
+                tokens = self.get(GET_REPO_TOKENS_URL + '?repos=%s' % repo_ids).json()
+                assert ra.repo_id in tokens
+                assert rb.repo_id in tokens
+                for repo_id, token in tokens.iteritems():
+                    self._get_repo_info(token, repo_id)
+
+    def test_generate_repo_tokens_reject_invalid_params(self):
+        self.get(GET_REPO_TOKENS_URL, expected=400)
+        self.get(GET_REPO_TOKENS_URL + '?repos=badxxx', expected=400)
+
+    def _get_repo_info(self, sync_token, repo_id, **kwargs):
+        headers = {
+            'Seafile-Repo-Token': sync_token
+        }
+        url = urljoin(SEAFILE_BASE_URL,
+                      'repo/%s/permission-check/?op=upload' % repo_id)
+        self.get(url, use_token=False, headers=headers, **kwargs)
