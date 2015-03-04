@@ -1,7 +1,7 @@
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
 
-from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY
+from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
 from seahub import auth
 from seahub.api2.models import Token
@@ -35,7 +35,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
         #Locate the remote user header.
         try:
-            username = request.META[self.header]
+            username = request.META[SHIB_USER_HEADER]
         except KeyError:
             # If specified header doesn't exist then return (leaving
             # request.user set to AnonymousUser by the
