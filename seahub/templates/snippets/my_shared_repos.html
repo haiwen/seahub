@@ -22,6 +22,7 @@
             {% endif %}
             <td>{{ repo.user|email2nickname }}</td>
             <td>
+                <a href="{% url 'repo_download_dir' repo.repo_id %}" class="repo-download-btn op-icon vh" title="{% trans "Download" %}"><img src="{{MEDIA_URL}}img/download.png" alt="" /></a>
                 {% if show_repo_download_button %}
                 <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
                 {% endif %}
