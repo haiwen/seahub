@@ -1,18 +1,22 @@
 {% load i18n %}
 <td>
-  <% if (encrypted) { %>
-  <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans 'Read-Write' %}" alt="directory icon" />
-  <% } else { %>
-  <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="Read-Write" alt="directory icon" />
-  <% } %>
+    <% if (encrypted) { %>
+        <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+    <% } else { %>
+        <% if (permission == 'rw') { %>
+        <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+        <% } else { %>
+        <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+        <% } %>
+    <% } %>
 </td>
 <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
 <td><%- desc %></td>
 <td><%- mtime_relative %></td>
-<td></td>
+<td><%- owner %></td>
 <td>
-  <div>
-    <img src="{{ MEDIA_URL }}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="Share" />
-    <img src="{{ MEDIA_URL }}img/rm.png" class="repo-delete-btn op-icon vh" title="Delete" />
-  </div>
+    <% if (app.pageOptions.show_repo_download_button) { %>
+    <span class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
+    <% } %>
+    <span class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
 </td>
