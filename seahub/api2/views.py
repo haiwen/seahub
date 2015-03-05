@@ -1131,7 +1131,7 @@ class OpCopyView(APIView):
         if resp:
             return resp
 
-        parent_dir = request.GET.get('p', None)
+        parent_dir = request.POST.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
