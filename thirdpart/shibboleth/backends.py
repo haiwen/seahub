@@ -41,11 +41,12 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         # Note that this could be accomplished in one try-except clause, but
         # instead we use get_or_create when creating unknown users since it has
         # built-in safeguards for multiple threads.
-        if self.create_unknown_user:
-            user = User.objects.create_user(email=username, is_active=True)
-        else:
-            try:
-                user = User.objects.get(email=username)
-            except User.DoesNotExist:
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            if self.create_unknown_user:
+                user = User.objects.create_user(email=username, is_active=True)
+            else:
                 pass
+
         return user
