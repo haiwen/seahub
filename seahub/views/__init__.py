@@ -1938,3 +1938,6 @@ def image_view(request, filename):
     if content_encoding:
         response['Content-Encoding'] = content_encoding
     return response
+
+def shib_login(request):
+    return HttpResponseRedirect(reverse('myhome'))
