@@ -1140,6 +1140,10 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
 
+        if seafile_api.get_dir_id_by_path(repo_id, parent_dir) is None or \
+            seafile_api.get_dir_id_by_path(repo_id, dst_dir) is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path does not exist.')
+
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
             file_name = unquote(file_name.encode('utf-8'))
