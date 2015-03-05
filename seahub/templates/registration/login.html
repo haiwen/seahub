@@ -130,11 +130,13 @@ $(function() {
     });
 })();
 
+{% if enable_shib_login %}
 $(function() {
     $('#shib-login').click(function() {
         window.location = "{% url 'shib_login' %}";
         return false;
     });
 });
+{% endif %}
 </script>
 {% endblock %}
