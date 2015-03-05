@@ -253,6 +253,11 @@ if getattr(settings, 'MULTI_TENANCY', False):
         (r'^org/', include('seahub_extra.organizations.urls')),
     )    
 
+if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
+    urlpatterns += patterns('',
+        url(r'^shib-login/', shib_login, name="shib_login"),
+    )
+
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
 if HAS_OFFICE_CONVERTER:

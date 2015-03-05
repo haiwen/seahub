@@ -61,6 +61,10 @@
     {% if enable_signup %}
     <a href="{{ signup_url }}">{% trans "Signup" %}</a>
     {% endif %}
+
+    {% if enable_shib_login %}
+    <button id="shib-login" class="submit fright">{% trans "Shibboleth" %}</button>
+    {% endif %}
 </form>
 </div>
 {% endblock %}
@@ -126,5 +130,11 @@ $(function() {
     });
 })();
 
+$(function() {
+    $('#shib-login').click(function() {
+        window.location = "{% url 'shib_login' %}";
+        return false;
+    });
+});
 </script>
 {% endblock %}

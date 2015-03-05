@@ -191,14 +191,17 @@ def login(request, template_name='registration/login.html',
     else:
         signup_url = ''
 
+    enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
+
     return render_to_response(template_name, {
-            'form': form,
-            redirect_field_name: redirect_to,
-            'site': current_site,
-            'site_name': current_site.name,
-            'remember_days': settings.LOGIN_REMEMBER_DAYS,
-            'signup_url': signup_url,
-            }, context_instance=RequestContext(request))
+        'form': form,
+        redirect_field_name: redirect_to,
+        'site': current_site,
+        'site_name': current_site.name,
+        'remember_days': settings.LOGIN_REMEMBER_DAYS,
+        'signup_url': signup_url,
+        'enable_shib_login': enable_shib_login,
+    }, context_instance=RequestContext(request))
 
 def login_simple_check(request):
     """A simple check for login called by thirdpart systems(OA, etc).
