@@ -11,6 +11,8 @@ SHIB_ATTRIBUTE_MAP = getattr(settings, 'SHIBBOLETH_ATTRIBUTE_MAP', default_shib_
 #Set to true if you are testing and want to insert sample headers.
 SHIB_MOCK_HEADERS = getattr(settings, 'SHIBBOLETH_MOCK_HEADERS', False)
 
+SHIB_USER_HEADER = getattr(settings, 'SHIBBOLETH_USER_HEADER', "REMOTE_USER")
+
 LOGIN_URL = getattr(settings, 'LOGIN_URL', None)
 
 if not LOGIN_URL:
