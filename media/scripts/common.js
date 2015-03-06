@@ -78,6 +78,8 @@ define([
               case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
               case 'get_shared_link': return '';
               case 'get_shared_upload_link': return '';
+
+              case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
             }
         },
 
@@ -188,6 +190,36 @@ define([
             }
         },
 
+        ajaxGet: function(params) {
+            var _this = this,
+                get_url = params.get_url,
+                data = params.data,
+                after_op_error,
+                after_op_success = params.after_op_success;
+
+            if (params.hasOwnProperty('after_op_error')) {
+                after_op_error = params.after_op_error;
+            } else {
+                after_op_error = function(xhr, textStatus, errorThrown) {
+                    var err;
+                    if (xhr.responseText) {
+                        err = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err = gettext("Failed. Please check the network.");
+                    }
+                    _this.feedback(err, 'error', _this.ERROR_TIMEOUT);
+                }
+            };
+            $.ajax({
+                url: get_url,
+                cache: false,
+                dataType: 'json',
+                data: data,
+                success: function(data) {after_op_success(data);},
+                error: after_op_error
+            });
+        },
+
         ajaxPost: function(params) {
             var form = params.form,
             post_url = params.post_url,
@@ -212,7 +244,7 @@ define([
                     if (xhr.responseText) {
                         err = $.parseJSON(xhr.responseText).error;
                     } else {
-                        err = getText("Failed. Please check the network.");
+                        err = gettext("Failed. Please check the network.");
                     }
                     this.feedback(err);
                     this.enableButton(submit_btn);
