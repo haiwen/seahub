@@ -13,11 +13,11 @@ define([
 
         initialize: function(options) {
             this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#repos-shared-to-me table');
+            this.$table = $('#repos-shared-to-me table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('.empty-tips', this.tabs);
+            this.$emptyTip = $('#repos-shared-to-me .empty-tips');
 
             this.repos = new RepoCollection({type: 'shared'});
             this.listenTo(this.repos, 'add', this.addOne);
@@ -25,7 +25,7 @@ define([
         },
 
         addOne: function(repo, collection, options) {
-            var view = new SharedRepoView({model: repo});
+            var view = new SharedRepoView({model: repo, collection: this.repos});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
@@ -68,7 +68,6 @@ define([
             this.$table.hide();
             $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
-
 
     });
 

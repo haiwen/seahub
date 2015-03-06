@@ -15,12 +15,33 @@ define([
         events: {
             'mouseenter': 'showAction',
             'mouseleave': 'hideAction',
-            'click .repo-delete-btn': 'delete',
-            'click .repo-share-btn': 'share'
+            'click .unshare-btn': 'removeShare'
         },
 
         initialize: function() {
-            this.listenTo(this.model, 'destroy', this.remove);
+        },
+
+        removeShare: function(e) {
+            var _this = this,
+                after_leave_success = function(data) {
+                    Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
+                    _this.$el.remove();
+                    _this.collection.remove(_this.model, {silent: true});
+                    if (_this.collection.length == 0) {
+                        $('#repos-shared-to-me table').hide();
+                        $('#repos-shared-to-me .empty-tips').show();
+                    };
+                };
+
+            Common.ajaxGet({
+                'get_url': Common.getUrl({name: 'ajax_repo_remove_share'}),
+                'data': {
+                         'repo_id': this.model.get('id'),
+                         'from': this.model.get('owner'),
+                         'share_type': this.model.get('share_type')
+                        },
+                'after_op_success': after_leave_success
+            });
         },
 
         render: function() {
@@ -37,8 +58,6 @@ define([
             this.$el.removeClass('hl');
             this.$el.find('.op-icon').addClass('vh');
         },
-
-
     });
 
     return SharedRepoView;
