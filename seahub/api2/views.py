@@ -1159,7 +1159,7 @@ class OpCopyView(APIView):
         if check_folder_permission(repo_id, parent_dir, username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
-        parent_dir = request.GET.get('p', None)
+        parent_dir = request.POST.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
@@ -1167,6 +1167,13 @@ class OpCopyView(APIView):
         if not parent_dir or not file_names or not dst_repo or not dst_dir:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
+
+        if not get_repo(dst_repo):
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        if seafile_api.get_dir_id_by_path(repo_id, parent_dir) is None or \
+            seafile_api.get_dir_id_by_path(dst_repo, dst_dir) is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path does not exist.')
 
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
@@ -3508,7 +3515,7 @@ class ThumbnailView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, repo_id, path):
+    def get(self, request, repo_id):
 
         repo = get_repo(repo_id)
         if not repo:
@@ -3523,9 +3530,13 @@ class ThumbnailView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Thumbnail function is not enabled.')
 
-        size = request.GET.get('s', None)
+        size = request.GET.get('size', None)
+        path = request.GET.get('p', None)
         if size is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
+
+        if path is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         obj_id = get_file_id_by_path(repo_id, path)
 

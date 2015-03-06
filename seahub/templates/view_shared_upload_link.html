@@ -117,6 +117,7 @@ form.fileupload({
     var file = data.files[0];
     if (file.name == '.') {
         data.files.shift();
+        return;
     }
     if (file.webkitRelativePath) { // for 'upload folder'
         file.relative_path = file.webkitRelativePath;
@@ -127,7 +128,9 @@ form.fileupload({
     {% endif %}
 })
 .bind('fileuploadsubmit', function(e, data) {
-    var _this = $(this);
+    if (data.files.length == 0) {
+        return false;
+    }
     var file = data.files[0];
     // get url(token) for every file
     if (!file.error) {
@@ -148,7 +151,7 @@ form.fileupload({
                 {% endif %}
 
                 data.url = ret['url'];
-                data.jqXHR = _this.fileupload('send', data);
+                data.jqXHR = form.fileupload('send', data);
             },
             error: function() {
                 file.error = "{% trans "Failed to get upload url" %}";

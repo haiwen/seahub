@@ -1,4 +1,5 @@
 import logging
+import datetime
 
 from seaserv import seafile_api
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
@@ -10,6 +11,10 @@ __all__ = [
     'do_unlink_device',
 ]
 
+def _last_sync_time(repos):
+    latest_sync_time = max([r['sync_time'] for r in repos])
+    return datetime.datetime.fromtimestamp(latest_sync_time)
+
 def get_user_devices(username):
     devices = TokenV2.objects.get_user_devices(username)
 
@@ -18,7 +23,11 @@ def get_user_devices(username):
     for device in devices:
         if device['platform'] in DESKTOP_PLATFORMS:
             peer_id = device['device_id']
-            device['synced_repos'] = peer_repos_map.get(peer_id, [])
+            repos = peer_repos_map.get(peer_id, [])
+            device['synced_repos'] = repos
+            if repos:
+                device['last_accessed'] = max(device['last_accessed'],
+                                              _last_sync_time(repos))
 
     return devices
 
@@ -61,7 +70,7 @@ def get_user_synced_repo_infos(username):
 def do_unlink_device(username, platform, device_id):
     if platform in DESKTOP_PLATFORMS:
         # For desktop client, we also remove the sync tokens
-        msg = 'failed to delete_repo_tokens_by_peer_id' 
+        msg = 'failed to delete_repo_tokens_by_peer_id'
         try:
             if seafile_api.delete_repo_tokens_by_peer_id(username, device_id) < 0:
                 logger.warning(msg)
