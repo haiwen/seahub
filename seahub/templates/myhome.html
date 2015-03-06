@@ -113,7 +113,7 @@
         </div>
     </div>
 
-    <div id="repos-shared-to-me" class="hide">
+    <div id="repos-shared-to-me">
         <table class="hide">
             <thead>
                 <tr>
@@ -127,6 +127,9 @@
             </thead>
             <tbody></tbody>
         </table>
+        <div class="empty-tips hide">
+            <h2 class="alc">{% trans "No library is shared to you" %}</h2>
+        </div>
     </div>
 
     <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
