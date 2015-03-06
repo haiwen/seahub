@@ -499,6 +499,7 @@ class Repos(APIView):
                     "size":r.size,
                     "encrypted":r.encrypted,
                     "permission": r.user_perm,
+                    "share_type": r.share_type,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
