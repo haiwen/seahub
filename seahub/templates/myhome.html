@@ -225,7 +225,6 @@ app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
-    show_repo_download_button: {% if show_repo_download_button %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %}
 };

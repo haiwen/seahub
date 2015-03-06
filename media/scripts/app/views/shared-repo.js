@@ -15,13 +15,13 @@ define([
         events: {
             'mouseenter': 'showAction',
             'mouseleave': 'hideAction',
-            'click .unshare-btn': 'unshare'
+            'click .unshare-btn': 'removeShare'
         },
 
         initialize: function() {
         },
 
-        unshare: function(e) {
+        removeShare: function(e) {
             var _this = this,
                 after_leave_success = function(data) {
                     Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
