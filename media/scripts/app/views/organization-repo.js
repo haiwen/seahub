@@ -3,11 +3,11 @@ define([
     'underscore',
     'backbone',
     'common',
-    'text!' + app.config._tmplRoot + 'shared-repo.html'
+    'text!' + app.config._tmplRoot + 'organization-repos.html'
 ], function($, _, Backbone, Common, reposTemplate) {
     'use strict';
 
-    var SharedRepoView = Backbone.View.extend({
+    var OrganizationRepoView = Backbone.View.extend({
         tagName: 'tr',
 
         template: _.template(reposTemplate),
@@ -15,7 +15,7 @@ define([
         events: {
             'mouseenter': 'showAction',
             'mouseleave': 'hideAction',
-            'click .unshare-btn': 'removeShare'
+            'click .cancel-share': 'removeShare'
         },
 
         initialize: function() {
@@ -28,8 +28,8 @@ define([
                     _this.$el.remove();
                     _this.collection.remove(_this.model, {silent: true});
                     if (_this.collection.length == 0) {
-                        $('#repos-shared-to-me table').hide();
-                        $('#repos-shared-to-me .empty-tips').show();
+                        $('#organization-repos table').hide();
+                        $('#organization-repos .empty-tips').show();
                     };
                 };
 
@@ -37,7 +37,6 @@ define([
                 'get_url': Common.getUrl({name: 'ajax_repo_remove_share'}),
                 'data': {
                          'repo_id': this.model.get('id'),
-                         'from': this.model.get('owner'),
                          'share_type': this.model.get('share_type')
                         },
                 'after_op_success': success_callback
@@ -45,7 +44,14 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var data, show_unshare_btn;
+            if (this.model.get('share_from') == app.pageOptions.current_user || app.pageOptions.is_staff == true) {
+                show_unshare_btn = true;
+            } else {
+                show_unshare_btn = false;
+            };
+            data = $.extend(this.model.toJSON(), {'show_unshare_btn': show_unshare_btn});
+            this.$el.html(this.template(data));
             return this;
         },
 
@@ -57,8 +63,8 @@ define([
         hideAction: function() {
             this.$el.removeClass('hl');
             this.$el.find('.op-icon').addClass('vh');
-        },
+        }
     });
 
-    return SharedRepoView;
+    return OrganizationRepoView;
 });
