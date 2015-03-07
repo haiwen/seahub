@@ -10,8 +10,7 @@
         <% } %>
     <% } %>
 </td>
-{# TODO #}
-<td><a href="#/libs/<%= id %>"><%- name %></a></td>
+<td><a href="#/lib/<%= id %>"><%- name %></a></td>
 <td><%- desc %></td>
 <td><%- mtime_relative %></td>
 <td><%- share_from %></td>
@@ -20,4 +19,3 @@
 <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
 <% } %>
 </td>
-
