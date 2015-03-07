@@ -4,6 +4,24 @@
 
 {% block sub_title %}{% trans "Organization" %} - {% endblock %}
 
+{% block extra_style %}
+<style type="text/css">
+/* lib view */
+.repo-file-list .dirent-name {
+    width:260px;
+}
+.repo-file-list .dirent-size {
+    width:114px;
+}
+.repo-file-list .dirent-update {
+    width:123px;
+}
+.repo-file-list .dirent-op {
+    width:110px;
+}
+</style>
+{% endblock %}
+
 {% block left_panel %}
 <div class="side-tabnav">
     <h3 class="hd">{% trans "Organization" %}</h3>
@@ -16,12 +34,12 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="hd ovhd">
-    <h3 class="fleft">{% trans "Libraries" %}</h3>
-    <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
-</div>
-
 <div id="organization-repos">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Libraries" %}</h3>
+        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
+    </div>
+
     <table class="repo-list hide">
     <thead>
         <tr>
@@ -43,10 +61,35 @@
     </div>
 </div>
 
+<div id="dir-view" class="hide">
+  <div class="repo-file-list-topbar">
+    <p class="path"></p>
+    <div class="repo-op"></div>
+  </div>
+  <table class="repo-file-list">
+    <thead>
+    <tr>
+      <th class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+      </th>
+      <th class="star"></th>
+      <th class="dirent-icon"></th>
+      <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+      <th class="dirent-size">{% trans "Size"%}</th>
+      <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+      <th class="dirent-op">{% trans "Operations"%}</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+  <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+</div>
 
 {% endblock %}
 
 {% block extra_script %}
+{% include "js/lib-op-popups.html" %}
 <script>
 app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
