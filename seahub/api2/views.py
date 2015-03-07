@@ -822,11 +822,7 @@ class UploadLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        parent_dir = request.GET.get('p', None)
-        if parent_dir is None:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Missing argument.')
-
+        parent_dir = request.GET.get('p', '/')
         if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
