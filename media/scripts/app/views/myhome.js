@@ -54,12 +54,14 @@ define([
             this.sharedReposView.hide();
             this.reposView.show();
             this.dirView.hide();
+            $('#repo-create').show();
         },
 
         showSharedRepos: function() {
             this.dirView.hide();
             this.reposView.hide();
             this.sharedReposView.show();
+            $('#repo-create').hide();
         },
 
         showDir: function(category, repo_id, path) {

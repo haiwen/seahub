@@ -549,10 +549,13 @@ class Repos(APIView):
                     "desc": r.repo_desc,
                     "owner": "Organization",
                     "mtime": r.last_modified,
+                    "mtime_relative": translate_seahub_time(r.last_modified),
                     "root": r.root,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
+                    "share_from": r.user,
+                    "share_type": r.share_type,
                 }
                 if r.encrypted:
                     repo["enc_version"] = commit.enc_version
