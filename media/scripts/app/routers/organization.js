@@ -8,21 +8,26 @@ define([
 
     var OrganizationRouter = Backbone.Router.extend({
         routes: {
-           'libs/:id(/*path)': 'showDir',
+           'lib/:repo_id(/*path)': 'showDir',
             // Default
             '*actions': 'defaultAction'
         },
 
         initialize: function() {
-            this.organizationView = new OrganizationView();
+            this.orgView = new OrganizationView();
         },
 
-        showDir: function() {
-            alert('todo');
+        showDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.orgView.showDir(repo_id, path);
         },
 
         defaultAction: function(){
-            this.organizationView.showPublicRepos();
+            this.orgView.showPublicRepos();
         }
     });
 
