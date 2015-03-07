@@ -1,6 +1,6 @@
 define([
     'app/routers/organization'
 ], function(Router){
-    new Router();
+    app.router = new Router();
     Backbone.history.start();
 });
