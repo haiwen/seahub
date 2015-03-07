@@ -16,7 +16,6 @@ define([
         el: '#main',
 
         initialize: function() {
-            console.log('init MyHomePage');
             Common.prepareApiCsrf();
 
             //_.bindAll(this, 'ajaxLoadingShow', 'ajaxLoadingHide');
