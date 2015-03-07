@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'common',
-    'text!' + app.config._tmplRoot + 'organization-repos.html'
+    'text!' + app.config._tmplRoot + 'organization-repo.html'
 ], function($, _, Backbone, Common, reposTemplate) {
     'use strict';
 

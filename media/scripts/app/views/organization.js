@@ -4,15 +4,17 @@ define([
     'backbone',
     'common',
     'app/collections/repos',
-    'app/views/organization-repo'
-], function($, _, Backbone, Common, RepoCollection, OrganizationRepoView) {
+    'app/views/organization-repo',
+    'app/views/dir',
+], function($, _, Backbone, Common, RepoCollection, OrganizationRepoView,
+    DirView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
         initialize: function() {
-
+            this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('#organization-repos .loading-tip');
@@ -21,6 +23,8 @@ define([
             this.repos = new RepoCollection({type: 'org'});
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
+
+            this.dirView = new DirView();
         },
 
         events: {
@@ -54,7 +58,23 @@ define([
         },
 
         showPublicRepos: function() {
+            this.dirView.hide();
+            this.$reposDiv.show();
             this.repos.fetch({reset: true});
+            this.$loadingTip.show();
+        },
+
+        hideRepos: function() {
+            this.$reposDiv.hide();
+        },
+
+        showDir: function(repo_id, path) {
+            var path = path || '/';
+            this.hideRepos();
+            this.dirView.showDir('', repo_id, path);
+            // this.dirent_list = new app.DirentListView({id: id, path: path});
+            // $('#my-own-repos table').children().remove();
+            // $('#my-own-repos table').append(this.dirent_list.render().el);
         }
 
     });
