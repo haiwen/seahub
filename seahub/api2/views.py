@@ -2910,6 +2910,7 @@ class GroupRepos(APIView):
             "name": repo.name,
             "desc": repo.desc,
             "mtime": repo.latest_modify,
+            "mtime_relative": translate_seahub_time(repo.latest_modify),
             "encrypted": repo.encrypted,
             "permission": 'rw',  # Always have read-write permission to owned repo
             "owner": username,
@@ -2933,6 +2934,7 @@ class GroupRepos(APIView):
                 "name": r.name,
                 "desc": r.desc,
                 "mtime": r.latest_modify,
+                "mtime_relative": translate_seahub_time(r.latest_modify),
                 "encrypted": r.encrypted,
                 "permission": check_permission(r.id, username),
                 "owner": r.owner,
