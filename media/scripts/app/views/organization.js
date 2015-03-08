@@ -6,8 +6,9 @@ define([
     'app/collections/repos',
     'app/views/organization-repo',
     'app/views/dir',
+    'app/views/group-nav',
 ], function($, _, Backbone, Common, RepoCollection, OrganizationRepoView,
-    DirView) {
+    DirView, GroupNavView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
@@ -25,6 +26,9 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
+
+            this.groupView = new GroupNavView();
+            Common.initAccountPopup();
         },
 
         events: {
