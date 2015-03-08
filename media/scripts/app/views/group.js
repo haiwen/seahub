@@ -9,10 +9,10 @@ define([
     'app/views/add-group-repo',
     'app/views/group-recent-change',
     'app/views/dir',
-    // 'app/views/dirents'
+    'app/views/group-nav',
 ], function($, _, Backbone, Common, GroupRepos, DirentCollection,
     GroupRepoView, AddGroupRepoView/*, DirentView*/, GroupRecentChangeView,
-    DirView) {
+    DirView, GroupNavView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -41,6 +41,9 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
+
+            this.groupView = new GroupNavView();
+            Common.initAccountPopup();
         },
 
         /*
