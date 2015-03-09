@@ -27,6 +27,7 @@ from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModif
 from django.utils.http import urlquote
 from django.views.static import serve as django_static_serve
 
+from seahub.api2.models import Token, TokenV2
 import seaserv
 from seaserv import seafile_api
 from seaserv import seafserv_rpc, seafserv_threaded_rpc, get_repo, get_commits,\
@@ -1173,3 +1174,12 @@ def is_pro_version():
         return True
     else:
         return False
+
+def clear_token(username):
+    '''
+    clear web api and repo sync token
+    when delete/inactive an user
+    '''
+    Token.objects.filter(user = username).delete()
+    TokenV2.objects.filter(user = username).delete()
+    seafile_api.delete_repo_tokens_by_email(username)
