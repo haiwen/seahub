@@ -34,7 +34,8 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_GUEST
-from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
+from seahub.utils import send_html_email, get_user_traffic_list, \
+    get_server_id, clear_token
 from seahub.utils.sysinfo import get_platform_name
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -538,6 +539,7 @@ def user_remove(request, user_id):
                 seafile_api.remove_repo(repo.id)
 
         user.delete()
+        clear_token(user.email)
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
@@ -670,6 +672,8 @@ def user_toggle_status(request, email):
             return HttpResponse(json.dumps({'success': True,
                                             'email_sent': email_sent,
                                             }), content_type=content_type)
+        else:
+            clear_token(user.email)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except User.DoesNotExist:
