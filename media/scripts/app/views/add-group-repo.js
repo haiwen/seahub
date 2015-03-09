@@ -16,7 +16,8 @@ define([
         template: _.template(CreateRepoTemplate),
 
         events: {
-            "submit": "addGroupRepo"
+            "submit": "addGroupRepo",
+            "click #encrypt-switch": "togglePasswdInput"
         },
 
         initialize: function(repos) {
@@ -59,6 +60,18 @@ define([
                     Common.closeModal();
                 }
             });
+        },
+
+        togglePasswdInput: function(e) {
+            var $parent = $(e.target).parent();
+            $parent.toggleClass('checkbox-checked');
+
+            var pwd_input = $('input[type="password"]', $('.repo-create-encryption'));
+            if ($parent.hasClass('checkbox-checked')) {
+                pwd_input.attr('disabled', false).removeClass('input-disabled');
+            } else {
+                pwd_input.attr('disabled', true).addClass('input-disabled');
+            }
         }
 
     });
