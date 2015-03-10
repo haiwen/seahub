@@ -27,3 +27,6 @@
 <% if (path != '/' && !encrypted) { %>
 <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
 <% } %>
+<a class="repo-history-icon fright" href="repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'Settings' %}"></a>
+<a class="repo-trash-icon fright" href="repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Settings' %}"></a>
+<a class="repo-setting-icon fright" href="repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
