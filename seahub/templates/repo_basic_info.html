@@ -1,0 +1,125 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n avatar_tags seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position: relative; }
+.go-back { top:0; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to Library" %}" href="{% url 'repo' repo.id %}"><span class="icon-chevron-left"></span></a>
+<div class="side-textnav">
+    <ul class="side-textnav-tabs">
+        <li class="tab tab-cur"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
+        {% if repo.encrypted and repo.enc_version == 2 %}
+        <li class="tab"><a href="{% url 'repo_change_password' repo.id %}">{% trans "Change Password" %}</a></li>
+        {% endif %}
+        {% if not repo.encrypted %}
+        <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
+        {% endif %}
+        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div class="lib-setting">
+    <h2>{% trans "Library Settings" %}</h2>
+    <div id="basic-info" class="setting-item">
+        <h3>{% trans "Basic Info" %}</h3>
+        <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
+            <label>{% trans "Name" %}</label><br />
+            <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
+            <label>{% trans "Description" %}</label></br />
+            <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
+
+            {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
+            <label>{% trans "History" %}</label><br />
+            <input type="radio" name="history" value="full_history" {% if full_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Keep full history" %}</span><br />
+            <input type="radio" name="history" value="no_history" {% if no_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span class="vam">{% trans "Don't keep history" %}</span><br />
+            <input type="radio" name="history" value="partial_history" {% if partial_history_checked %}checked="checked"{% endif %} class="vam" {% if not full_history_enabled %}disabled="disabled"{% endif %} /> <span calss="vam">{% trans "Only keep a period of history:" %}
+            <input type="text" name="days" size="4" {% if not days_enabled %} disabled="disabled" class="input-disabled"{% endif %} value="{{history_limit}}" /> {% trans "days" %}</span><br />
+            {% endif %}
+
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#repo-basic-info-form input[name="history"]').change(function() {
+    var value = $(this).attr('value'),
+        days_input = $('#repo-basic-info-form input[name="days"]');
+    if (value == 'full_history' || value == 'no_history') {
+        days_input.attr('disabled', true).addClass('input-disabled');
+    } else {
+        days_input.attr('disabled', false).removeClass('input-disabled');
+    }
+});
+
+$('#repo-basic-info-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id');
+    var repo_name = $('[name="repo_name"]', form).val(),
+        repo_desc = $('[name="repo_desc"]', form).val();
+
+    if (!$.trim(repo_name)) {
+        apply_form_error(form_id, "{% trans "Name is required." %}");
+        return false;
+    }
+    if (!$.trim(repo_desc)) {
+        apply_form_error(form_id, "{% trans "Description is required." %}");
+        return false;
+    }
+
+    var days;
+    var value = $(this).find('input[name="history"]:checked').val();
+
+    if (value == 'partial_history') {
+        days = $(this).find('input[name="days"]').val();
+    } else if (value == 'full_history') {
+        days = -1;
+    } else {
+        days = 0;
+    }
+
+    var submit_btn = $(this).children('input[type="submit"]');
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'ajax_repo_change_basic_info' repo.id %}',
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: {
+            'repo_name': repo_name,
+            'repo_desc': repo_desc,
+            'days': days
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
+</script>
+{% endblock %}

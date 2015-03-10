@@ -58,6 +58,8 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
+from seahub.views import check_folder_permission
+
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, query_office_file_pages, add_office_convert_task,
@@ -963,14 +965,15 @@ def file_edit(request, repo_id):
     if request.method == 'POST':
         return file_edit_submit(request, repo_id)
 
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
-        return render_permission_error(request, _(u'Unable to edit file'))
-
     path = request.GET.get('p', '/')
     if path[-1] == '/':
         path = path[:-1]
     u_filename = os.path.basename(path)
     filename = urllib2.quote(u_filename.encode('utf-8'))
+    parent_dir = os.path.dirname(path)
+
+    if check_folder_permission(repo.id, parent_dir, request.user.username) != 'rw':
+        return render_permission_error(request, _(u'Unable to edit file'))
 
     head_id = repo.head_cmmt_id
 

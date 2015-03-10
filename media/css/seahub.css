@@ -2786,6 +2786,8 @@ textarea:-moz-placeholder {/* for FF */
 .view-link-alert p {
     display: inline-block;
 }
+.perm-add-perm,
+.perm-toggle-select,
 .share-permission-select,
 .user-role-select,
 .user-status-select {
@@ -3342,4 +3344,27 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     background:#fff;
     z-index:100;
+}
+
+/* repo setting */
+.user-perm-add-perm,
+.group-perm-add-perm,
+.perm-toggle-select,
+.share-permission-select {
+    position:relative;/*for long text in other lang in 'share admin'*/
+    padding:3px 2px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:2px;
+}
+.perm-add-select-folder {
+    position:relative;
+    right:18px;
+    cursor:pointer;
+}
+.perm-add-jstree-select {
+    margin-top:8px;
+}
+#perm-add-jstree-wrap {
+    background:#fcfcfc;
 }
