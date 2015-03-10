@@ -3424,3 +3424,33 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration: none;
     font-size: 14px;
 }
+/* multi repo operation */
+.repo-setting-icon,
+.repo-trash-icon,
+.repo-history-icon {
+    display:inline-block;
+    margin-right:25px;
+    outline:none; /* removing the dotted outline for FireFox */
+    width:30px;
+    height:30px;
+}
+.repo-setting-icon {
+    background-image: url('../img/multi-repo-op.png');
+}
+.repo-setting-icon:hover {
+    background-position: 0 -30px;
+}
+.repo-trash-icon {
+    background-image: url('../img/multi-repo-op.png');
+    background-position: 0 -60px;
+}
+.repo-trash-icon:hover {
+    background-position: 0 -90px;
+}
+.repo-history-icon {
+    background-image: url('../img/multi-repo-op.png');
+    background-position: 0 -120px;
+}
+.repo-history-icon:hover {
+    background-position: 0 -150px;
+}
