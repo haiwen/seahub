@@ -3363,3 +3363,26 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     z-index:100;
 }
+
+.repo-setting-icon,
+.repo-trash-icon,
+.repo-history-icon {
+    display:inline-block;
+    margin-right:25px;
+    width:30px;
+    height:30px;
+}
+.repo-setting-icon {
+    background-image: url('../img/repo-setting-icon.png');
+}
+.repo-trash-icon {
+    background-image: url('../img/repo-trash-icon.png');
+}
+.repo-history-icon {
+    background-image: url('../img/repo-history-icon.png');
+}
+.repo-history-icon:hover,
+.repo-trash-icon:hover,
+.repo-setting-icon:hover {
+    background-position: -30px 0;
+}
