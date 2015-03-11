@@ -1371,11 +1371,11 @@ def repo_revert_file (request, repo_id):
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
             msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path":path.lstrip('/'), "root":root_url}
-            messages.add_message(request, messages.INFO, msg)
+            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
         else:
             file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
             msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":file_view_url, "path":path.lstrip('/')}
-            messages.add_message(request, messages.INFO, msg)
+            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
 
 @login_required
@@ -1419,11 +1419,11 @@ def repo_revert_dir (request, repo_id):
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
             msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path":path.lstrip('/'), "url":root_url}
-            messages.add_message(request, messages.INFO, msg)
+            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
         else:
             dir_view_url = reverse('repo', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
             msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":dir_view_url, "path":path.lstrip('/')}
-            messages.add_message(request, messages.INFO, msg)
+            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
 
 @login_required
