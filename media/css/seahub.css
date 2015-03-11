@@ -1175,6 +1175,9 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:.5em;
     border-radius:2px;
 }
+#dir-view .repo-op {
+    height:30px;
+}
 #right-panel .hd,
 .tabnav,
 .wiki-top {

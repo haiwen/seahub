@@ -71,8 +71,8 @@ define([
 
             showDir: function(category, repo_id, path) {
                 this.$el.show();
-                var loading_tip = this.$('.loading-tip').show();
-                var dir = this.dir;
+                var loading_tip = this.$('.loading-tip').show(),
+                    dir = this.dir;
                 dir.setPath(category, repo_id, path);
                 dir.fetch({
                     reset: true,
@@ -135,6 +135,7 @@ define([
                     encrypted: dir.encrypted,
                     path: dir.path,
                     repo_id: dir.repo_id,
+                    is_repo_owner: dir.is_repo_owner,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },
