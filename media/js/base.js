@@ -235,7 +235,7 @@ function addConfirmTo(op_ele, popup) {
     op_ele.click(function() {
         var con = '';
         if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
-            con = popup['con'].replace('%s', '<span class="op-target">' + $(this).data('target') + '</span>');
+            con = popup['con'].replace('%s', '<span class="op-target">' + HTMLescape($(this).data('target')) + '</span>');
         } else {
             con = popup['con'];
         }
