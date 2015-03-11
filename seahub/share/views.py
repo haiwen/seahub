@@ -88,7 +88,7 @@ def share_to_public(request, repo, permission):
     else:
         msg = _(u'Shared to all members successfully, go check it at <a href="%s">Shares</a>.') % \
             (reverse('share_admin'))
-        messages.success(request, msg)
+        messages.success(request, msg, extra_tags='safe')
 
 def share_to_group(request, repo, group, permission):
     """Share repo to group with given permission.
@@ -107,7 +107,7 @@ def share_to_group(request, repo, group, permission):
         msg = _(u'"%(repo)s" is already in group %(group)s. <a href="%(href)s">View</a>') % {
             'repo': repo.name, 'group': group.group_name,
             'href': reverse('group_info', args=[group.id])}
-        messages.error(request, msg)
+        messages.error(request, msg, extra_tags='safe')
         return
 
     try:
@@ -126,7 +126,7 @@ def share_to_group(request, repo, group, permission):
     else:
         msg = _(u'Shared to %(group)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
             {'group': group_name, 'share': reverse('share_admin')}
-        messages.success(request, msg)
+        messages.success(request, msg, extra_tags='safe')
 
 def share_to_user(request, repo, to_user, permission):
     """Share repo to a user with given permission.
@@ -169,7 +169,7 @@ def share_to_user(request, repo, to_user, permission):
                                            to_user=to_user, repo=repo)
         msg = _(u'Shared to %(email)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
             {'email': to_user, 'share': reverse('share_admin')}
-        messages.success(request, msg)
+        messages.success(request, msg, extra_tags='safe')
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
     """Check whether user has enough share quota when share repo to
@@ -257,7 +257,7 @@ def share_repo(request):
 
     if not check_user_share_quota(username, repo, users=share_to_users,
                                   groups=share_to_groups):
-        messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name)
+        messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name, extra_tags='safe')
         return HttpResponseRedirect(next)
 
     for group in share_to_groups:

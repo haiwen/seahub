@@ -110,13 +110,17 @@
             </div>
             <div id="main-panel" class="clear w100 ovhd">
                 {% if messages %}
-                {% autoescape off %}
                 <ul class="messages hide">
                     {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
+                    <li class="{{ message.tags }}">
+                        {% if 'safe' in message.tags %}
+                            {{ message|safe }}
+                        {% else %}
+                            {{ message }}
+                        {% endif %}
+                    </li>
                     {% endfor %}
                 </ul>
-                {% endautoescape %}
                 {% endif %}
 
                 {% block main_panel %} {% endblock %}
