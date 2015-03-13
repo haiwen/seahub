@@ -16,9 +16,10 @@ from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from django.utils.translation import ugettext as _
 from django.utils import timezone
 from django.utils.http import urlquote
+from django.utils.html import escape
+from django.utils.translation import ugettext as _
 from django.views.decorators.http import condition
 
 import seaserv
@@ -1354,7 +1355,7 @@ def render_file_revisions (request, repo_id):
         }, context_instance=RequestContext(request))
 
 @login_required
-def repo_revert_file (request, repo_id):
+def repo_revert_file(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -1371,10 +1372,13 @@ def repo_revert_file (request, repo_id):
         return render_error(request, _(u"Invalid arguments"))
 
     try:
-        ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
-                            path.encode('utf-8'), request.user.username)
-    except Exception, e:
-        return render_error(request, str(e))
+        ret = seafile_api.revert_file(repo_id, commit_id, path, request.user.username)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _('Failed to restore, please try again later.'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
     else:
         if from_page == 'repo_history':
             # When revert file from repo history, we redirect to repo history
@@ -1389,16 +1393,16 @@ def repo_revert_file (request, repo_id):
 
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
-            msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path":path.lstrip('/'), "root":root_url}
-            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
+            msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
+            messages.success(request, msg, extra_tags='safe')
         else:
             file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":file_view_url, "path":path.lstrip('/')}
-            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
+            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
+            messages.success(request, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
 
 @login_required
-def repo_revert_dir (request, repo_id):
+def repo_revert_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -1415,10 +1419,13 @@ def repo_revert_dir (request, repo_id):
         return render_error(request, _(u"Invalid arguments"))
 
     try:
-        ret = seafserv_threaded_rpc.revert_dir (repo_id, commit_id,
-                            path.encode('utf-8'), request.user.username)
-    except Exception, e:
-        return render_error(request, str(e))
+        ret = seafile_api.revert_dir(repo_id, commit_id, path, request.user.username)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _('Failed to restore, please try again later.'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
     else:
         if from_page == 'repo_history':
             # When revert file from repo history, we redirect to repo history
@@ -1433,12 +1440,12 @@ def repo_revert_dir (request, repo_id):
 
         if ret == 1:
             root_url = reverse('repo', args=[repo_id]) + u'?p=/'
-            msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path":path.lstrip('/'), "url":root_url}
-            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
+            msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
+            messages.success(request, msg, extra_tags='safe')
         else:
             dir_view_url = reverse('repo', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url":dir_view_url, "path":path.lstrip('/')}
-            messages.add_message(request, messages.INFO, msg, extra_tags='safe')
+            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
+            messages.success(request, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
 
 @login_required
