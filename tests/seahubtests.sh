@@ -23,13 +23,14 @@ if [[ ${TRAVIS} != "" ]]; then
     set -x
 fi
 
-SCRIPT=$(readlink -f "$0")
-SEAHUB_TESTSDIR=$(dirname "${SCRIPT}")
+set -x
+SEAHUB_TESTSDIR=$(python -c "import os; print os.path.dirname(os.path.realpath('$0'))")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 local_settings_py=${SEAHUB_SRCDIR}/seahub/local_settings.py
 
 export PYTHONPATH="/usr/local/lib/python2.7/site-packages:/usr/lib/python2.7/site-packages:${SEAHUB_SRCDIR}/thirdpart:${PYTHONPATH}"
 cd "$SEAHUB_SRCDIR"
+set +x
 
 function init() {
     ###############################
@@ -55,10 +56,8 @@ function start_seahub() {
 
 function run_tests() {
     set +e
-    cd tests
     py.test $nose_opts
     rvalue=$?
-    cd -
     if [[ ${TRAVIS} != "" ]]; then
         # On travis-ci, dump seahub logs when test finished
         for logfile in /tmp/seahub*.log; do

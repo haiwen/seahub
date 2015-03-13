@@ -514,6 +514,9 @@ def json_response(func):
     @wraps(func)
     def wrapped(*a, **kw):
         result = func(*a, **kw)
-        return HttpResponse(json.dumps(result), status=200,
-                            content_type=JSON_CONTENT_TYPE)
+        if isinstance(result, HttpResponse):
+            return result
+        else:
+            return HttpResponse(json.dumps(result), status=200,
+                                content_type=JSON_CONTENT_TYPE)
     return wrapped
