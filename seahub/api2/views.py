@@ -75,7 +75,7 @@ if HAS_OFFICE_CONVERTER:
         query_office_file_pages, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL
+        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -3517,6 +3517,13 @@ class ThumbnailView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
 
+        open_file = urllib2.urlopen(raw_path)
+        file_size = int(open_file.info()['Content-Length'])
+        if  file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
+            # if file is bigger than 30MB
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Image file is too large.')
+
         thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
         if not os.path.exists(thumbnail_dir):
             os.makedirs(thumbnail_dir)
@@ -3524,7 +3531,7 @@ class ThumbnailView(APIView):
         thumbnail_file = os.path.join(thumbnail_dir, obj_id)
         if not os.path.exists(thumbnail_file):
             try:
-                f = StringIO(urllib2.urlopen(raw_path).read())
+                f = StringIO(open_file.read())
                 image = Image.open(f)
                 image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
                 image.save(thumbnail_file, THUMBNAIL_EXTENSION)

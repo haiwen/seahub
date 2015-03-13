@@ -51,7 +51,7 @@
             <span title="{% trans 'unstarred' %}" class="icon-star-empty file-star" data-status="unstarred"></span>
             {% endif %}
         </td>
-        {% if not repo.encrypted and ENABLE_THUMBNAIL and dirent.is_img %}
+        {% if dirent.allow_generate_thumbnail %}
             {% if dirent.thumbnail_src %}
                 <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}" alt="{% trans "File"%}" /></td>
             {% else %}
@@ -67,7 +67,6 @@
             <span class="dirent-name"><a class="normal" href="{{dirent.view_link}}" target="_blank">{{ dirent.obj_name }}</a></span>
             {% endif %}
         </td>
-
         <td class="dirent-size">{{ dirent.file_size|filesizeformat }}</td>
         <td class="dirent-update">
             {{ dirent.last_modified|translate_seahub_time }}

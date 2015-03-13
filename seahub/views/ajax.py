@@ -43,11 +43,10 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_org_user_events, get_user_events, get_file_type_and_ext
+    get_org_user_events, get_user_events
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
-from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src
+from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -279,16 +278,13 @@ def list_dir(request, repo_id):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
-    ctx = { 
+    ctx = {
         'repo': repo,
         'zipped': zipped,
         'user_perm': user_perm,
@@ -369,14 +365,11 @@ def list_dir_more(request, repo_id):
     if dirent_more:
         more_start = offset + 100
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
     ctx = {
         'repo': repo,
