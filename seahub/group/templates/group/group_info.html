@@ -175,6 +175,7 @@
 {% include "js/lib-op-popups.html" %}
 <script>
  app["pageOptions"] = {
+     site_root: "{{ SITE_ROOT }}",
      groupId: {{ group.id }},
      groupReposUrl: "{% url "api2-grouprepos" group.id %}",
      groupChangesUrl: "{% url "api2-group-changes" group.id %}",
