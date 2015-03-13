@@ -224,6 +224,7 @@
 {% include "js/lib-op-popups.html" %}
 <script type="text/javascript">
 app["pageOptions"] = {
+    site_root: "{{ SITE_ROOT }}",
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
