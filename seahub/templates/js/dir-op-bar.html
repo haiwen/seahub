@@ -1,9 +1,9 @@
 {% load i18n %}
 <% if (user_perm == 'rw') { %>
 <div id="multi-dirents-op" class="hide">
-    <button id="mv-dirents" title="{% trans "Move" %}" class="op-btn"><span class="icon-move"></span></button>
-    <button id="cp-dirents" title="{% trans "Copy" %}" class="op-btn"><span class="icon-copy"></span></button>
-    <button id="del-dirents" title="{% trans "Delete" %}" class="op-btn"><span class="icon-trash"></span></button>
+    <button id="mv-dirents" title="{% trans 'Move' %}" class="op-btn"><span class="mv-dirents"></span></button>
+    <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
+    <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn"><span class="del-dirents"></span></button>
 </div>
 <div id="upload-file" class="op-btn upload-file-btn">
     <span>{% trans "Upload" %}</span>
