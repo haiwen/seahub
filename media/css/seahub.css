@@ -1175,6 +1175,9 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:.5em;
     border-radius:2px;
 }
+#dir-view .repo-op {
+    height:30px;
+}
 #right-panel .hd,
 .tabnav,
 .wiki-top {
@@ -3369,7 +3372,7 @@ textarea:-moz-placeholder {/* for FF */
 .repo-trash-icon,
 .repo-history-icon {
     display:inline-block;
-    margin-right:25px;
+    margin-right:10px;
     outline:none; /* removing the dotted outline for FireFox */
     width:30px;
     height:30px;
