@@ -15,7 +15,7 @@ from tests.api.urls import TOKEN_URL, GROUPS_URL, ACCOUNTS_URL, REPOS_URL
 class ApiTestBase(unittest.TestCase):
     _token = None
     _admin_token = None
-    
+
     username = USERNAME
     password = PASSWORD
     admin_username = ADMIN_USERNAME
@@ -59,20 +59,24 @@ class ApiTestBase(unittest.TestCase):
 
     @classmethod
     def _req(cls, method, *args, **kwargs):
-        admin = kwargs.pop('admin', False)
-        if admin:
-            if cls._admin_token is None:
-                cls._admin_token = get_auth_token(ADMIN_USERNAME,
-                    ADMIN_PASSWORD)
-            token = cls._admin_token
-        else:
-            if cls._token is None:
-                cls._token = get_auth_token(USERNAME, PASSWORD)
-            token = cls._token
+        use_token = kwargs.pop('use_token', True)
+        token = kwargs.pop('token', None)
+        if use_token and token is None:
+            admin = kwargs.pop('admin', False)
+            if admin:
+                if cls._admin_token is None:
+                    cls._admin_token = get_auth_token(ADMIN_USERNAME,
+                        ADMIN_PASSWORD)
+                token = cls._admin_token
+            else:
+                if cls._token is None:
+                    cls._token = get_auth_token(USERNAME, PASSWORD)
+                token = cls._token
 
-        headers = kwargs.get('headers', {})
-        headers.setdefault('Authorization', 'Token ' + token)
-        kwargs['headers'] = headers
+        if use_token:
+            headers = kwargs.get('headers', {})
+            headers.setdefault('Authorization', 'Token ' + token)
+            kwargs['headers'] = headers
 
         expected = kwargs.pop('expected', 200)
         resp = requests.request(method, *args, **kwargs)

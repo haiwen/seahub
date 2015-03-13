@@ -5,6 +5,7 @@ import stat
 import json
 import datetime
 import urllib2
+import re
 from urllib2 import unquote, quote
 from PIL import Image
 from StringIO import StringIO
@@ -34,7 +35,8 @@ from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
-    get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details
+    get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
+    json_response
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
@@ -176,7 +178,7 @@ class Accounts(APIView):
         limit = int(request.GET.get('limit', '100'))
         # reading scope user list
         scope = request.GET.get('scope', None)
-        
+
         accounts_ldap = []
         accounts_db = []
         if scope:
@@ -192,7 +194,7 @@ class Accounts(APIView):
             accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
             if len(accounts_ldap) == 0:
                 accounts_db = seaserv.get_emailusers('DB', start, limit)
-                
+
         accounts_json = []
         for account in accounts_ldap:
             accounts_json.append({'email': account.email, 'source' : 'LDAP'})
@@ -2604,7 +2606,7 @@ class Groups(APIView):
         group_json, replynum = get_groups(request.user.username)
         res = {"groups": group_json, "replynum": replynum}
         return Response(res)
-    
+
     def put(self, request, format=None):
         # modified slightly from groups/views.py::group_list
         """
@@ -3572,6 +3574,32 @@ class ThumbnailView(APIView):
             return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
         except IOError as e:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
+
+_REPO_ID_PATTERN = re.compile(r'[-0-9a-f]{36}')
+
+class RepoTokensView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    @json_response
+    def get(self, request, format=None):
+        repos = request.GET.get('repos', None)
+        if not repos:
+            return api_error(status.HTTP_400_BAD_REQUEST, "You must specify libaries ids")
+
+        repos = [repo for repo in repos.split(',') if repo]
+        if any([not _REPO_ID_PATTERN.match(repo) for repo in repos]):
+            return api_error(status.HTTP_400_BAD_REQUEST, "Libraries ids are invalid")
+
+        tokens = {}
+        for repo in repos:
+            if not seafile_api.check_repo_access_permission(repo, request.user.username):
+                continue
+            tokens[repo] = seafile_api.generate_repo_token(repo, request.user.username)
+
+        return tokens
+
 
 #Following is only for debug
 # from seahub.auth.decorators import login_required
