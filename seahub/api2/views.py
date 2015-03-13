@@ -3592,13 +3592,10 @@ class RepoTokensView(APIView):
         if any([not _REPO_ID_PATTERN.match(repo) for repo in repos]):
             return api_error(status.HTTP_400_BAD_REQUEST, "Libraries ids are invalid")
 
-        if any([not seafile_api.check_repo_access_permission(
-                repo, request.user.username) for repo in repos]):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             "You do not have permission to access those libraries")
-
         tokens = {}
         for repo in repos:
+            if not seafile_api.check_repo_access_permission(repo, request.user.username):
+                continue
             tokens[repo] = seafile_api.generate_repo_token(repo, request.user.username)
 
         return tokens

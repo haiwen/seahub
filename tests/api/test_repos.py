@@ -3,6 +3,7 @@
 Test repos api.
 """
 
+import uuid
 import unittest
 
 from tests.api.apitestbase import ApiTestBase
@@ -163,10 +164,12 @@ class ReposApiTest(ApiTestBase):
     def test_generate_repo_tokens(self):
         with self.get_tmp_repo() as ra:
             with self.get_tmp_repo() as rb:
-                repo_ids = ','.join([ra.repo_id, rb.repo_id])
+                fake_repo_id = str(uuid.uuid4())
+                repo_ids = ','.join([ra.repo_id, rb.repo_id, fake_repo_id])
                 tokens = self.get(GET_REPO_TOKENS_URL + '?repos=%s' % repo_ids).json()
                 assert ra.repo_id in tokens
                 assert rb.repo_id in tokens
+                assert fake_repo_id not in tokens
                 for repo_id, token in tokens.iteritems():
                     self._get_repo_info(token, repo_id)
 
