@@ -3431,29 +3431,54 @@ textarea:-moz-placeholder {/* for FF */
 .repo-setting-icon,
 .repo-trash-icon,
 .repo-history-icon {
+    width:30px;
+    height:30px;
+    background-image: url('../img/multi-repo-op.png');
+    background-repeat: no-repeat;
     display:inline-block;
     margin-right:10px;
     outline:none; /* removing the dotted outline for FireFox */
-    width:30px;
-    height:30px;
-}
-.repo-setting-icon {
-    background-image: url('../img/multi-repo-op.png');
 }
 .repo-setting-icon:hover {
     background-position: 0 -30px;
 }
 .repo-trash-icon {
-    background-image: url('../img/multi-repo-op.png');
     background-position: 0 -60px;
 }
 .repo-trash-icon:hover {
     background-position: 0 -90px;
 }
 .repo-history-icon {
-    background-image: url('../img/multi-repo-op.png');
     background-position: 0 -120px;
 }
 .repo-history-icon:hover {
     background-position: 0 -150px;
+}
+
+/* multi dirents operation */
+#multi-dirents-op {
+    padding: 0 10px;
+}
+#multi-dirents-op button {
+    margin-left: -5px;
+}
+#multi-dirents-op button:focus {
+    outline: 0; /* removing blue border after click for chrome */
+}
+#multi-dirents-op span {
+    width: 16px;
+    height: 16px;
+    background-image: url('../img/multi-dirents-op.png');
+    background-repeat: no-repeat;
+    display: inline-block;
+    margin-top:1px;
+}
+#multi-dirents-op .mv-dirents {
+    background-position: -5px -5px;
+}
+#multi-dirents-op .cp-dirents {
+    background-position: -31px -5px;
+}
+#multi-dirents-op .del-dirents {
+    background-position: -57px -5px;
 }
