@@ -490,9 +490,9 @@ class UserNotification(models.Model):
 
         msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your folder <a href='%(folder_link)s'>%(folder)s</a>") % {
             'file_link': file_link,
-            'file_name': filename,
+            'file_name': escape(filename),
             'folder_link': folder_link,
-            'folder': folder_name,
+            'folder': escape(folder_name),
             }
         return msg
 
@@ -514,7 +514,7 @@ class UserNotification(models.Model):
         msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
             'user': escape(share_from),
             'href': reverse('repo', args=[repo.id]),
-            'repo_name': repo.name,
+            'repo_name': escape(repo.name),
             }
         return msg
         
@@ -532,7 +532,7 @@ class UserNotification(models.Model):
         msg = _(u"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % {
             'user': escape(share_from),
             'href': reverse('view_priv_shared_file', args=[priv_share_token]),
-            'file_name': file_name,
+            'file_name': escape(file_name),
             }
         return msg
     def format_user_message_title(self):

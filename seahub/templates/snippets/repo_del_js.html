@@ -30,7 +30,7 @@ $('.repo-delete-btn').click(function() {
         cfm.css({'left': op.position().left, 'top': op.position().top + op.height() + 2, 'width':202});
     }
     var con = $('.con', cfm);
-    con.html(con.html().replace('%(lib_name)s', '<span class="op-target">' + cfm.parents('td').attr('data-name') + '</span>'));
+    con.html(con.html().replace('%(lib_name)s', '<span class="op-target">' + HTMLescape(cfm.parents('td').attr('data-name')) + '</span>'));
     cfm.removeClass('hide');
     $('.no',cfm).click(function() {
         cfm.addClass('hide');

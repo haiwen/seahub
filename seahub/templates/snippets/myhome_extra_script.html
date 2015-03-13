@@ -22,7 +22,7 @@ $(function () {
                     hd = $('.hd', form),
                     btn_ct = $(this).parents('td'),
                     repo_id = btn_ct.data('id'),
-                    repo_name = btn_ct.attr('data-name');
+                    repo_name = HTMLescape(btn_ct.attr('data-name'));
                 var grp_options_ct = $('#share-grp-options');
                 if (!$.trim(grp_options_ct.html())) {
                     var grp_options = '<ul class="option-list">';
