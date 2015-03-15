@@ -70,9 +70,11 @@ define([
         },
 
         togglePasswdInput: function(e) {
-            var pwd_input = $('input[type="password"]', this.$el);
+            var $parent = $(e.target).parent();
+            $parent.toggleClass('checkbox-checked');
 
-            if ($(e.target).attr('checked')) {
+            var pwd_input = $('input[type="password"]', $('.repo-create-encryption'));
+            if ($parent.hasClass('checkbox-checked')) {
                 pwd_input.attr('disabled', false).removeClass('input-disabled');
             } else {
                 pwd_input.attr('disabled', true).addClass('input-disabled');
