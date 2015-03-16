@@ -919,7 +919,7 @@ def fpath_to_link(repo_id, path, is_dir=False):
 
     href = url + '?p=/%s' % urllib2.quote(path.encode('utf-8'))
 
-    return '<a href="%s">%s</a>' % (href, path)
+    return '<a href="%s">%s</a>' % (href, escape(path))
 
 def get_diff(repo_id, arg1, arg2):
     lists = {'new': [], 'removed': [], 'renamed': [], 'modified': [],
@@ -933,15 +933,15 @@ def get_diff(repo_id, arg1, arg2):
         if d.status == "add":
             lists['new'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "del":
-            lists['removed'].append(d.name)
+            lists['removed'].append(escape(d.name))
         elif d.status == "mov":
-            lists['renamed'].append(d.name + " ==> " + fpath_to_link(repo_id, d.new_name))
+            lists['renamed'].append(escape(d.name) + " ==> " + fpath_to_link(repo_id, d.new_name))
         elif d.status == "mod":
             lists['modified'].append(fpath_to_link(repo_id, d.name))
         elif d.status == "newdir":
             lists['newdir'].append(fpath_to_link(repo_id, d.name, is_dir=True))
         elif d.status == "deldir":
-            lists['deldir'].append(d.name)
+            lists['deldir'].append(escape(d.name))
 
     return lists
 

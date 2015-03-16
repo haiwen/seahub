@@ -12,7 +12,7 @@
             <p class="w100 ovhd">
             <a href="{% url 'repo' repo.id %}" class="updated-repo normal fright">{{ repo.name }}</a>
             <span class="cmt-desc">
-            {{ commit.converted_cmmt_desc|translate_commit_desc|safe }}
+            {{ commit.converted_cmmt_desc|translate_commit_desc }}
             {% if commit.more_files %}
               {% if repo.encrypted %}
               <a class="lsch-encrypted"{% if repo.password_set %} data-passwordset="true"{% endif %} href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-repoid="{{repo.id}}" data-reponame="{{repo.name}}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans 'Details' %}</a>

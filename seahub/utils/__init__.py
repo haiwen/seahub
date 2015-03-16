@@ -25,6 +25,8 @@ from django.template import RequestContext, Context, loader
 from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
+from django.utils.html import escape
+from django.utils.safestring import mark_safe
 from django.views.static import serve as django_static_serve
 
 import seaserv
@@ -785,11 +787,15 @@ def convert_cmmt_desc_link(commit):
         tmp_str = '%s "<a href="%s?repo_id=%s&cmmt_id=%s&nm=%s" class="normal">%s</a>"'
         if remaining:
             return (tmp_str + ' %s') % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir),
-                                        file_or_dir, remaining)
+                                        escape(file_or_dir), remaining)
         else:
-            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), file_or_dir)
+            return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), escape(file_or_dir))
 
-    return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
+    if re.search(CMMT_DESC_PATT, commit.desc):
+        # if the string matches the pattern, return escaped value
+        return mark_safe(re.sub(CMMT_DESC_PATT, link_repl, commit.desc))
+
+    return commit.desc
 
 def api_tsstr_sec(value):
     """Turn a timestamp to string"""
