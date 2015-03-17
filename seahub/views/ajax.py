@@ -9,6 +9,7 @@ from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
+from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
 import seaserv
@@ -695,7 +696,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -724,7 +725,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
 
     if res.background:
@@ -741,7 +742,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
-            % {'src': src_dir, 'des': dst_path}
+            % {'src': escape(src_dir), 'des': escape(dst_path)}
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -762,7 +763,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id     
@@ -778,7 +779,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
-            % {'src': src_dir, 'des': dst_path}
+            % {'src': escape(src_dir), 'des': escape(dst_path)}
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -799,7 +800,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id     
@@ -847,7 +848,7 @@ def dirents_copy_move_common(func):
         # check file path
         for obj_name in obj_file_names + obj_dir_names:
             if len(dst_path+obj_name) > settings.MAX_PATH:
-                result['error'] =  _('Destination path is too long for %s.') % obj_name
+                result['error'] =  _('Destination path is too long for %s.') % escape(obj_name)
                 return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
     
@@ -875,7 +876,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir + '/'):
             error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
-                % {'src': src_dir, 'des': dst_path}
+                % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     
@@ -911,7 +912,7 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
             error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
-                % {'src': src_dir, 'des': dst_path}
+                % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     

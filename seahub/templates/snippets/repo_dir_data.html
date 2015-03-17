@@ -5,7 +5,7 @@
     {% if forloop.first or not forloop.last %}
     <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}" class="dir-link normal">{{ name }}</a> /    
     {% else %}
-    <span id="cur-dir-name">{{ name }}</span> /
+    <span id="cur-dir-name" data-name="{{ name }}">{{ name }}</span> /
     {% endif %}
     {% endfor %}
     </p>
