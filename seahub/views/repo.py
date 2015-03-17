@@ -449,22 +449,21 @@ def view_shared_upload_link(request, token):
     if uploadlink is None:
         raise Http404
 
-    if uploadlink.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token, 'view_name': 'view_shared_upload_link', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = uploadlink.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
+    if uploadlink.is_encrypted() and not check_share_link_access(request, token):
+        d = {'token': token, 'view_name': 'view_shared_upload_link', }
+        if request.method == 'POST':
+            post_values = request.POST.copy()
+            post_values['enc_password'] = uploadlink.password
+            form = SharedLinkPasswordForm(post_values)
+            d['form'] = form
+            if form.is_valid():
+                set_share_link_access(request, token)
             else:
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
+        else:
+            return render_to_response('share_access_validation.html', d,
+                                      context_instance=RequestContext(request))
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id
