@@ -4,7 +4,7 @@
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2-4.0.0.css?t=1398068110" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2-3.5.2.css" />
 <style type="text/css">
 {% if need_guide %}
 #guide-for-new {
@@ -31,6 +31,19 @@
 }
 .repo-file-list .dirent-op {
     width:110px;
+}
+/* custom select2 */
+.select2-container-multi .select2-choices {
+    border-color: #ddd;
+    background-image: none; /* rm the shadow */
+}
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding:2px;
+}
+.select2-container-multi .select2-choices .select2-search-choice {
+    border:none;
+    border-radius:0;
+    background:#eee;
 }
 </style>
 {% endblock %}
@@ -229,9 +242,18 @@ app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
+    groups: (function () {
+        var groups = [];
+        {% for group in request.user.joined_groups %}
+        groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
+        {% endfor %}
+        return groups;
+    })(),
+    repo_password_min_length: {{ repo_password_min_length }},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %}
 };
+
 </script>
 {% if debug %}
 <script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
