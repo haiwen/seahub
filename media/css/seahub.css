@@ -510,6 +510,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     color:#747476;
     font-size:14px;
+    outline:none; /* to overwrite webkit ':focus' style */
 }
 .left-right-tabs-nav a:hover {
     text-decoration:none;
@@ -2148,14 +2149,17 @@ textarea:-moz-placeholder {/* for FF */
     padding:2px;
 }
 /* file/dir share popup */
-#file-share {
+#file-share,
+#share-popup {
     padding:15px;
     min-height:200px;
 }
-#file-share .hd {
+#file-share .hd,
+#share-popup .hd {
     margin:0 0 8px 4px;
 }
-#file-share .tip {
+#file-share .tip,
+#share-popup .tip {
     max-width:400px;
 }
 /* group-join-form */
