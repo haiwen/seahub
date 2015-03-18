@@ -198,7 +198,14 @@ $("#link-send-form").submit(function(event) {
               },
         success: function(data) {
             $.modal.close();
-            feedback(data['msg'], "success");
+            var msg = "{% trans "Successfully sent to {placeholder}" %}"
+                .replace('{placeholder}', data['send_success'].join(', '));
+            feedback(msg, "success");
+            if (data['send_failed'].length > 0) {
+                msg += '<br />' + "{% trans "Failed to send to {placeholder}" %}"
+                    .replace('{placeholder}', data['send_failed'].join(', '));
+                feedback(msg, 'info');
+            }
         },
         error: function(xhr, textStatus, errorThrown) {
             $('#sending').addClass('hide');
@@ -368,7 +375,14 @@ $("#upload-link-send-form").submit(function(event) {
               },
         success: function(data) {
             $.modal.close();
-            feedback(data['msg'], "success");
+            var msg = "{% trans "Successfully sent to {placeholder}" %}"
+                .replace('{placeholder}', data['send_success'].join(', '));
+            feedback(msg, "success");
+            if (data['send_failed'].length > 0) {
+                msg += '<br />' + "{% trans "Failed to send to {placeholder}" %}"
+                    .replace('{placeholder}', data['send_failed'].join(', '));
+                feedback(msg, 'info');
+            }
         },
         error: function(xhr, textStatus, errorThrown) {
             $('#upload-sending').addClass('hide');
