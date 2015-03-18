@@ -36,7 +36,6 @@ urlpatterns = patterns('',
     url(r'^ajax/repo_remove_share/$', ajax_repo_remove_share, name='ajax_repo_remove_share'),
     url(r'^ajax/get-download-link/$', ajax_get_download_link, name='ajax_get_download_link'),
     url(r'^ajax/get-upload-link/$', ajax_get_upload_link, name='ajax_get_upload_link'),
-    url(r'^ajax/send-share-link/$', ajax_send_share_link, name='ajax_send_share_link'),
     url(r'^ajax/private-share-file/$', ajax_private_share_file, name='ajax_private_share_file'),
     url(r'^ajax/private-share-dir/$', ajax_private_share_dir, name='ajax_private_share_dir'),
 )
