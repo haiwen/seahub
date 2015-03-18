@@ -25,7 +25,7 @@
         <div class="displayed-op">
             <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
             <% if (!repo_encrypted) { %>
-            <a class="op share cspt" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
+            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
             <% } %>
         </div>
         <% if (user_perm == 'rw') { %>
@@ -77,7 +77,7 @@
         <div class="displayed-op">
             <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
             <% if (!repo_encrypted) { %>
-            <a class="op share cspt" data-link="<%= dirent.sharelink %>" data-token="<%= dirent.sharetoken %>" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
+            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
             <% } %>
         </div>
         <% if (user_perm == 'rw') { %>
