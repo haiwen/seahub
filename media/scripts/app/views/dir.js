@@ -9,14 +9,16 @@ define([
     'app/collections/dirents',
     'app/views/dirent',
     'app/views/fileupload',
+    'app/views/share',
     'text!' + app.config._tmplRoot + 'dir-op-bar.html',
     'text!' + app.config._tmplRoot + 'path-bar.html',
     ], function($, progressbar, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
-        FileUploadView, DirOpBarTemplate, PathBarTemplate) {
+        FileUploadView, ShareView, DirOpBarTemplate, PathBarTemplate) {
         'use strict';
 
         var DirView = Backbone.View.extend({
             el: $('#dir-view'),
+
             path_bar_template: _.template(PathBarTemplate),
             dir_op_bar_template: _.template(DirOpBarTemplate),
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
@@ -65,6 +67,14 @@ define([
                                 }
                             });
                         }
+                    }
+                });
+
+                // get contacts for 'share'
+                Common.ajaxGet({
+                    'get_url': Common.getUrl({name: 'get_user_contacts'}),
+                    'after_op_success': function (data) {
+                        app.pageOptions.contacts = data["contacts"];
                     }
                 });
             },
@@ -248,9 +258,7 @@ define([
                             'file_icon': 'file.png',
                             'starred': false,
                             'last_modified': new Date().getTime() / 1000,
-                            'last_update': gettext("Just now"),
-                            'sharelink': '',
-                            'sharetoken': ''
+                            'last_update': gettext("Just now")
                         }, {silent: true});
                         dirView.addNewFile(new_dirent);
                     };
@@ -290,6 +298,21 @@ define([
                 var dirView = this;
                 var view = new DirentView({model: new_dirent, dirView: dirView});
                 dirView.$dirent_list.prepend(view.render().el); // put the new dir as the first one
+            },
+
+            share: function () {
+                var dir = this.dir;
+                var path = dir.path;
+                var options = { 
+                    'is_repo_owner': dir.is_repo_owner,
+                    'is_virtual': dir.is_virtual,
+                    'user_perm': dir.user_perm,
+                    'repo_id': dir.repo_id,
+                    'is_dir': true,
+                    'dirent_path': path,
+                    'obj_name': path.substr(path.lastIndexOf('/') + 1)
+                };  
+                new ShareView(options);
             },
 
             sortByName: function() {
