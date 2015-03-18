@@ -36,7 +36,8 @@ require.config({
 
         simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
         jstree: 'lib/jstree.1.0',
-        select2: 'lib/select2',
+        select2: 'lib/select2-3.5.2',
+
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
         text: 'lib/text'
@@ -78,17 +79,19 @@ define([
               case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
               case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
               case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
-              case 'get_shared_link': return '';
-              case 'get_shared_upload_link': return '';
 
               case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
-              case 'delete_share_download_link': return siteRoot + 'share/ajax/link/remove/';
-              case 'delete_share_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
+
               case 'get_user_contacts': return siteRoot + 'ajax/contacts/';
-              case 'get_user_groups': return siteRoot + 'ajax/groups/';
-              case 'get_share_download_link': return siteRoot + 'share/ajax/get-download-link/';
+
+              case 'get_shared_download_link': return siteRoot + 'share/ajax/get-download-link/';
+              case 'delete_shared_download_link': return siteRoot + 'share/ajax/link/remove/';
+              case 'send_shared_download_link': return siteRoot + 'share/link/send/';
+
+              case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
+              case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
               case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
-              case 'send_share_link': return siteRoot + 'share/ajax/send-share-link/';
+
               case 'private_share_dir': return siteRoot + 'share/ajax/private-share-dir/';
               case 'private_share_file': return siteRoot + 'share/ajax/private-share-file/';
             }
@@ -201,14 +204,20 @@ define([
             }
         },
 
-        ajaxGet: function(params) {
+        ajaxPost: function(params) {
+            // usually used for form ajax post in modal popup
             var _this = this,
-                get_url = params.get_url,
-                data = params.data,
-                after_op_error,
-                after_op_success = params.after_op_success;
+                form = params.form,
+                form_id = params.form_id,
+                post_url = params.post_url,
+                post_data = params.post_data,
+                after_op_success = params.after_op_success,
+                after_op_error;
 
-            if (params.hasOwnProperty('after_op_error')) {
+            var submit_btn = form.children('[type="submit"]');
+            this.disableButton(submit_btn);
+
+            if (params.after_op_error) {
                 after_op_error = params.after_op_error;
             } else {
                 after_op_error = function(xhr, textStatus, errorThrown) {
@@ -218,44 +227,10 @@ define([
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
-                    _this.feedback(err, 'error', _this.ERROR_TIMEOUT);
-                }
-            };
-            $.ajax({
-                url: get_url,
-                cache: false,
-                dataType: 'json',
-                data: data,
-                success: function(data) {after_op_success(data);},
-                error: after_op_error
-            });
-        },
-
-        ajaxPost: function(params) {
-            var _this = this,
-                form = params.form,
-                form_id = params.form_id,
-                post_url = params.post_url,
-                post_data = params.post_data,
-                submit_btn = form.children('[type="submit"]'),
-                after_op_error,
-                after_op_success = params.after_op_success;
-
-            this.disableButton(submit_btn);
-
-            if (params.hasOwnProperty('after_op_error')) {
-                after_op_error = params.after_op_error;
-            } else {
-                after_op_error = function(xhr, textStatus, errorThrown) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
-                    } else {
-                        err = getText("Failed. Please check the network.");
-                    }
-                    _this.feedback(err, 'error', _this.ERROR_TIMEOUT);
-                }
-            };
+                    _this.showFormError(form_id, err);
+                    _this.enableButton(submit_btn);
+                };
+            }
 
             $.ajax({
                 url: post_url,
@@ -263,7 +238,7 @@ define([
                 dataType: 'json',
                 beforeSend: this.prepareCSRFToken,
                 data: post_data,
-                success: function(data) { after_op_success(data); },
+                success: after_op_success,
                 error: after_op_error
             });
         },
@@ -272,28 +247,21 @@ define([
             var _this = this,
                 get_url = params.get_url,
                 data = params.data,
-                after_op_error,
-                after_op_success = params.after_op_success;
+                after_op_success = params.after_op_success,
+                after_op_error;
 
-            if (params.hasOwnProperty('after_op_error')) {
+            if (params.after_op_error) {
                 after_op_error = params.after_op_error;
             } else {
                 after_op_error = function(xhr, textStatus, errorThrown) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    _this.feedback(err, 'error', _this.ERROR_TIMEOUT);
-                }
-            };
+                };
+            }
             $.ajax({
                 url: get_url,
                 cache: false,
                 dataType: 'json',
                 data: data,
-                success: function(data) {after_op_success(data);},
+                success: after_op_success,
                 error: after_op_error
             });
         },
@@ -322,11 +290,6 @@ define([
                 popup.addClass('hide');
             }
         },
-
-//        validateEmail: function(email) {
-//            var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-//            return re.test(email);
-//        },
 
         initAccountPopup: function() {
             // TODO: need improving

@@ -4,9 +4,9 @@ define([
     'backbone',
     'common',
     'file-tree',
-    'app/views/share-popup',
+    'app/views/share',
     'text!' + app.config._tmplRoot + 'dirent.html'
-], function($, _, Backbone, Common, FileTree, SharePopupView, direntsTemplate) {
+], function($, _, Backbone, Common, FileTree, ShareView, direntTemplate) {
     'use strict';
 
     app = app || {};
@@ -15,7 +15,7 @@ define([
     var DirentView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(direntsTemplate),
+        template: _.template(direntTemplate),
         shareTemplate: _.template($("#share-popup-template").html()),
         renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
@@ -24,7 +24,6 @@ define([
         initialize: function(options) {
             this.dirView = options.dirView;
             this.dir = this.dirView.dir;
-            this.sharePopupView = new SharePopupView();
 
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
@@ -50,7 +49,7 @@ define([
             'click .file-star': 'starFile',
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
-            'click .share': 'showSharePopup',
+            'click .share': 'share',
             'click .del': 'delete',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
@@ -164,28 +163,22 @@ define([
             }
         },
 
-        showSharePopup: function() {
-            var dir = this.dirView.dir,
-                obj_name = this.model.attributes.obj_name,
-                dirent_path = Common.pathJoin([dir.path, obj_name]),
-                is_dir;
-
-            if (this.model.get('is_dir')) {
-                is_dir = true;
-            } else {
-                is_dir = false;
-            };
+        share: function() {
+            var dir = this.dir,
+                obj_name = this.model.get('obj_name'),
+                dirent_path = Common.pathJoin([dir.path, obj_name]);
 
             var options = {
-                    'is_repo_owner': dir.is_repo_owner,
-                    'is_virtual': dir.is_virtual,
-                    'user_perm': dir.user_perm,
-                    'repo_id': dir.repo_id,
-                    'is_dir': is_dir,
-                    'dirent_path': dirent_path,
-                    'obj_name': obj_name
-                };
-            this.sharePopupView.showPopup(options);
+                'is_repo_owner': dir.is_repo_owner,
+                'is_virtual': dir.is_virtual,
+                'user_perm': dir.user_perm,
+                'repo_id': dir.repo_id,
+                'is_dir': this.model.get('is_dir') ? true : false,
+                'dirent_path': dirent_path,
+                'obj_name': obj_name
+            };
+            new ShareView(options);
+            return false;
         },
 
         delete: function() {
