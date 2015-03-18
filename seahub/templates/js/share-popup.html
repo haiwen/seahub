@@ -1,0 +1,132 @@
+{% load i18n %}
+{# for lib/dir/file share #}
+    <h3 class="hd"><%= title %></h3>
+    <div id="share-tabs" class="left-right-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft"> {# TODO: better var name? #}
+            <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
+            <% if (!is_dir && is_repo_owner) { %>
+            <li class="tab"><a href="#file-private-share" class="a">{% trans "Private Share" %}</a></li>
+            <% } %>
+            <% if (is_dir) { %>
+                <% if (user_perm == 'rw') { %>
+            <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
+                <% } %>
+                <% if (!is_virtual && is_repo_owner) { %>
+            <li class="tab"><a href="#dir-private-share" class="a">{% trans "Private Share" %}</a></li>
+                <% } %>
+            <% } %>
+        </ul>
+
+        <div class="fright">
+
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <div id="download-link-share" class="tabs-panel">
+                <form id="generate-download-link-form" action="" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" />
+                    </div>
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="set_expiration" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Days" %}</label><br />
+                        <input type="text" name="expire_days" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}" />
+                </form>
+                <div id="download-link-operations" class="hide">
+                    <p><span class="vam">{% trans "Link: " %}</span><span id="download-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <button id="send-download-link">{% trans 'Send' %}</button>
+                    <button id="delete-download-link">{% trans 'Delete' %}</button>
+                    <form id="send-download-link-form" action="" class="hide">
+                        <label>{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-download-link" />
+                        <p class="sending-tip hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+
+            <% if (is_dir) { %>
+                <% if (user_perm == 'rw') { %>
+            <div id="dir-upload-link-share" class="tabs-panel hide">
+                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
+                <form id="generate-upload-link-form" action="" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}" />
+                </form>
+                <div id="upload-link-operations" class="hide">
+                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <button id="send-upload-link">{% trans 'Send' %}</button>
+                    <button id="delete-upload-link">{% trans 'Delete' %}</button>
+                    <form id="send-upload-link-form" action="" class="hide">
+                        <label>{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-upload-link" />
+                        <p class="sending-tip hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+                <% } %>
+
+                <% if (!is_virtual && is_repo_owner) { %>
+            <div id="dir-private-share" class="tabs-panel hide">
+                <form id="dir-private-share-form" action="" class="hide">
+                    <label>{% trans "People:" %}</label><br />
+                    <input type="hidden" name="emails" class="w100" /><br />
+
+                    <label>{% trans "Groups:" %}</label><br />
+                    <select name="groups" class="w100" multiple="multiple"></select><br />
+
+                    <label>{% trans "Permission:" %}</label><br />
+                    <select name="permission" class="share-permission-select w100">
+                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                        <option value="r">{% trans "Read-Only"%}</option>
+                    </select>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </form>
+            </div>
+                <% } %>
+            <% } %>
+
+            <% if (!is_dir && is_repo_owner) { %>
+            <div id="file-private-share" class="tabs-panel hide">
+                <form id="file-private-share-form" action="" class="hide">
+                    <label>{% trans "People:" %}</label><br />
+                    <input type="hidden" name="emails" class="w100" /><br />
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </form>
+            </div>
+            <% } %>
+
+        </div>
+    </div>

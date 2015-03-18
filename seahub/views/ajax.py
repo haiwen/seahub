@@ -453,22 +453,6 @@ def list_lib_dir(request, repo_id):
     result["dirent_more"] = dirent_more
     result["more_start"] = more_start
 
-    if path != '/' and not repo.encrypted:
-        fileshare = get_fileshare(repo.id, username, path)
-        dir_shared_link = get_dir_share_link(fileshare)
-        uploadlink = get_uploadlink(repo.id, username, path)
-        dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
-
-        token = fileshare.token if fileshare is not None else ''
-        upload_token = uploadlink.token if uploadlink is not None else ''
-
-        result["share"] = {
-            "link": dir_shared_link,
-            "token": token,
-            "upload_link": dir_shared_upload_link,
-            "upload_token": upload_token
-        }
-
     dirent_list = []
     for d in dir_list:
         d_ = {}
@@ -478,10 +462,6 @@ def list_lib_dir(request, repo_id):
         d_['last_update'] = translate_seahub_time(d.last_modified)
         p_dpath = posixpath.join(path, d.obj_name)
         d_['p_dpath'] = p_dpath # for 'view_link' & 'dl_link'
-        d_['sharelink'] = d.sharelink
-        d_['sharetoken'] = d.sharetoken
-        d_['uploadlink'] = d.uploadlink
-        d_['uploadtoken'] = d.uploadtoken
         dirent_list.append(d_)
 
     if not repo.encrypted and ENABLE_THUMBNAIL:
@@ -503,8 +483,6 @@ def list_lib_dir(request, repo_id):
         f_['starred'] = f.starred
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
-        f_['sharelink'] = f.sharelink
-        f_['sharetoken'] = f.sharetoken
         if f.is_img:
             f_['is_img'] = f.is_img
         if f.thumbnail_src:
