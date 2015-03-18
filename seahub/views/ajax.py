@@ -9,6 +9,7 @@ from django.http import HttpResponse, Http404, HttpResponseBadRequest
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
+from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.contrib import messages
 
@@ -49,8 +50,7 @@ from seahub.utils.repo import check_group_folder_perm_args, \
     check_user_folder_perm_args
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
-from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src
+from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -282,16 +282,13 @@ def list_dir(request, repo_id):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
-    ctx = { 
+    ctx = {
         'repo': repo,
         'zipped': zipped,
         'user_perm': user_perm,
@@ -372,14 +369,11 @@ def list_dir_more(request, repo_id):
     if dirent_more:
         more_start = offset + 100
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
     ctx = {
         'repo': repo,
@@ -716,7 +710,7 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -745,7 +739,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
 
     if res.background:
@@ -771,7 +765,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 
     if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
-            % {'src': src_dir, 'des': dst_path}
+            % {'src': escape(src_dir), 'des': escape(dst_path)}
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -792,7 +786,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully moved %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id     
@@ -816,7 +810,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
-            % {'src': src_dir, 'des': dst_path}
+            % {'src': escape(src_dir), 'des': escape(dst_path)}
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -837,7 +831,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result['success'] = True
     msg_url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
     msg = _(u'Successfully copied %(name)s <a href="%(url)s">view</a>') % \
-        {"name":obj_name, "url":msg_url}
+        {"name":escape(obj_name), "url":msg_url}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id     
@@ -885,7 +879,7 @@ def dirents_copy_move_common(func):
         # check file path
         for obj_name in obj_file_names + obj_dir_names:
             if len(dst_path+obj_name) > settings.MAX_PATH:
-                result['error'] =  _('Destination path is too long for %s.') % obj_name
+                result['error'] =  _('Destination path is too long for %s.') % escape(obj_name)
                 return HttpResponse(json.dumps(result), status=400,
                                 content_type=content_type)
     
@@ -916,7 +910,7 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir + '/'):
             error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
-                % {'src': src_dir, 'des': dst_path}
+                % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
@@ -963,7 +957,7 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
         src_dir = os.path.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
             error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
-                % {'src': src_dir, 'des': dst_path}
+                % {'src': escape(src_dir), 'des': escape(dst_path)}
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 

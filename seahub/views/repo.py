@@ -28,14 +28,13 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
-    get_commit_before_new_merge, user_traffic_over_limit, \
-    get_file_type_and_ext
+    get_commit_before_new_merge, user_traffic_over_limit
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
     ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
 
 from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src
+from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -244,14 +243,11 @@ def render_repo(request, repo):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
     return render_to_response('repo.html', {
             'repo': repo,
@@ -419,14 +415,11 @@ def view_shared_dir(request, token):
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+    for f in file_list:
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
+                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
@@ -449,22 +442,21 @@ def view_shared_upload_link(request, token):
     if uploadlink is None:
         raise Http404
 
-    if uploadlink.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token, 'view_name': 'view_shared_upload_link', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = uploadlink.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
+    if uploadlink.is_encrypted() and not check_share_link_access(request, token):
+        d = {'token': token, 'view_name': 'view_shared_upload_link', }
+        if request.method == 'POST':
+            post_values = request.POST.copy()
+            post_values['enc_password'] = uploadlink.password
+            form = SharedLinkPasswordForm(post_values)
+            d['form'] = form
+            if form.is_valid():
+                set_share_link_access(request, token)
             else:
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
+        else:
+            return render_to_response('share_access_validation.html', d,
+                                      context_instance=RequestContext(request))
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id

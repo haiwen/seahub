@@ -19,21 +19,22 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
-def _get_cache_key(request, prefix):
+def _get_cache_key(request, prefix, token):
     """Return cache key of certain ``prefix``. If user is logged in, use
-    username, otherwise use combination of request ip and user agent.
+    username and token, otherwise use combination of request ip and user agent
+    and token.
 
     Arguments:
     - `prefix`:
     """
     if request.user.is_authenticated():
-        key = normalize_cache_key(request.user.username, 'SharedLink_')
+        key = normalize_cache_key(request.user.username, 'SharedLink_', token)
     else:
         ip = get_remote_ip(request)
         # Memcached key length limit is 250 chars, and user agent somethings may
         # be long which will cause error.
         agent = request.META.get('HTTP_USER_AGENT', '')[:150]
-        key = normalize_cache_key(ip + agent, 'SharedLink_')
+        key = normalize_cache_key(ip + agent, 'SharedLink_', token)
 
     return key
 
@@ -41,13 +42,13 @@ def set_share_link_access(request, token):
     """Remember which share download/upload links user can access without
     providing password.
     """
-    key = _get_cache_key(request, 'SharedLink_')
+    key = _get_cache_key(request, 'SharedLink_', token)
     cache.set(key, True, SHARE_ACCESS_PASSWD_TIMEOUT)
 
 def check_share_link_access(request, token):
     """Check whether user can access share link without providing password.
     """
-    key = _get_cache_key(request, 'SharedLink_')
+    key = _get_cache_key(request, 'SharedLink_', token)
     return cache.get(key, False)
 
 class FileShareManager(models.Manager):

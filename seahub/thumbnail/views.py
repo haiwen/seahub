@@ -14,7 +14,7 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.views.file import get_file_view_path_and_perm
 from seahub.views import check_repo_access_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
-    THUMBNAIL_ROOT, ENABLE_THUMBNAIL
+    THUMBNAIL_ROOT, ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
 
 from seahub.thumbnail.utils import get_thumbnail_src
 
@@ -50,6 +50,14 @@ def thumbnail_create(request, repo_id):
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
+    open_file = urllib2.urlopen(raw_path)
+    file_size = int(open_file.info()['Content-Length'])
+    if  file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
+        # if file is bigger than 30MB
+        err_msg = _(u"Image file is too large.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=520,
+                            content_type=content_type)
+
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
@@ -57,7 +65,7 @@ def thumbnail_create(request, repo_id):
     thumbnail_file = os.path.join(thumbnail_dir, obj_id)
     if not os.path.exists(thumbnail_file):
         try:
-            f = StringIO(urllib2.urlopen(raw_path).read())
+            f = StringIO(open_file.read())
             image = Image.open(f)
             image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
             image.save(thumbnail_file, THUMBNAIL_EXTENSION)

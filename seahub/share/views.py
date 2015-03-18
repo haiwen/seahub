@@ -106,7 +106,7 @@ def share_to_group(request, repo, group, permission):
         group_repo_ids = seafile_api.get_group_repoids(group.id)
     if repo.id in group_repo_ids:
         msg = _(u'"%(repo)s" is already in group %(group)s. <a href="%(href)s">View</a>') % {
-            'repo': repo.name, 'group': group.group_name,
+            'repo': escape(repo.name), 'group': escape(group.group_name),
             'href': reverse('group_info', args=[group.id])}
         messages.error(request, msg, extra_tags='safe')
         return
@@ -126,7 +126,7 @@ def share_to_group(request, repo, group, permission):
         messages.error(request, msg)
     else:
         msg = _(u'Shared to %(group)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
-            {'group': group_name, 'share': reverse('share_admin')}
+            {'group': escape(group_name), 'share': reverse('share_admin')}
         messages.success(request, msg, extra_tags='safe')
 
 def share_to_user(request, repo, to_user, permission):
@@ -258,7 +258,10 @@ def share_repo(request):
 
     if not check_user_share_quota(username, repo, users=share_to_users,
                                   groups=share_to_groups):
-        messages.error(request, _('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % repo.name, extra_tags='safe')
+        messages.error(request, _(
+            'Failed to share "%s", no enough quota. '
+            '<a href="http://seafile.com/">Upgrade account.</a>'
+        ) % escape(repo.name), extra_tags='safe')
         return HttpResponseRedirect(next)
 
     for group in share_to_groups:

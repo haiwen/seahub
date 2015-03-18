@@ -707,7 +707,7 @@ var del_dirents = function() {
                 } else {
                     msg_s = "{% trans "Successfully deleted %(name)s." %}";
                 }
-                msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', data['deleted'].length - 1);
+                msg_s = msg_s.replace('%(name)s', HTMLescape(data['deleted'][0])).replace('%(amount)s', data['deleted'].length - 1);
                 feedback(msg_s, 'success'); 
                 updateCmt();
             }
@@ -910,7 +910,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                 msg_s = "{% trans "Successfully copied %(name)s and %(amount)s other items." %}";
                             }
                         }
-                        msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', data['success'].length - 1);
+                        msg_s = msg_s.replace('%(name)s', HTMLescape(data['success'][0])).replace('%(amount)s', data['success'].length - 1);
                         msg_s += ' <a href="' + view_url + '">' + "{% trans "View" %}" + '</a>';
                         feedback(msg_s, 'success');
                         updateCmt();
@@ -930,7 +930,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                 msg_f = "{% trans "Internal error. Failed to copy %(name)s." %}";
                             }
                         }
-                        msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
+                        msg_f = msg_f.replace('%(name)s', HTMLescape(data['failed'][0])).replace('%(amount)s', data['failed'].length - 1);
                         feedback(msg_f, 'error');
                     }
                 },
@@ -1298,7 +1298,7 @@ $('#add-new-file').click(function () {
 // share current dir
 $('#share-cur-dir').click(function() {
    var op = $(this), name, aj_urls, type;
-   name = $('#cur-dir-name').html();
+   name = $('#cur-dir-name').attr('data-name');
    aj_urls = { 'link': op.data('url'), 'upload-link': op.data('upload-url') };
    type = 'd';
    showSharePopup(op, name, aj_urls, type, cur_path);
@@ -1647,7 +1647,7 @@ $('.dir-del, .file-del', context).click(function() {
                 dirent.remove();
                 no_file_op_popup = true;// make other items can work normally when hover
                 var msg = "{% trans "Successfully deleted %(name)s" %}";
-                msg = msg.replace('%(name)s', dirent_name);
+                msg = msg.replace('%(name)s', HTMLescape(dirent_name));
                 feedback(msg, 'success'); 
                 updateCmt();
             }
@@ -1665,7 +1665,7 @@ $('.file-rename, .dir-rename', context).click(function () {
         op_detail = $('.detail', form);
     form.data('op_obj', dirent).modal();
 
-    op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + orig_name + '</span>'));
+    op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + HTMLescape(orig_name) + '</span>'));
     $('input[name*="name"]', form).val(orig_name);
     if (op.hasClass('file-rename')) {
         form.prepend("<h3>{% trans "Rename File" %}</h3>").data('obj_type', 'file');
@@ -1681,7 +1681,8 @@ $('.file-rename, .dir-rename', context).click(function () {
 $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     var op = $(this), op_type, op_detail,
         dirent = op.parents('tr'),
-        obj_name = dirent.attr('data-name'), obj_type,
+        obj_name = dirent.attr('data-name'),
+        obj_type,
         form = $('#mv-form'), form_hd;
 
     form.modal({appendTo:'#main', autoResize:true, focus:false});
@@ -1711,7 +1712,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
         obj_type = 'dir';
     }
 
-    op_detail = op_detail.replace('%(name)s', '<span class="op-target">' + obj_name + '</span>');
+    op_detail = op_detail.replace('%(name)s', '<span class="op-target">' + HTMLescape(obj_name) + '</span>');
     form.prepend('<h3>' + form_hd + '</h3><h4>' + op_detail + '</h4>');
 
     $('input[name="op"]', form).val(op_type);
@@ -1736,7 +1737,7 @@ $('.file-update', context).click(function() {
     var file_name = $(this).parents('.file-item').attr('data-name');
     var form = $('#update-file-form');
     var hd = $('#update-file-dialog .hd');
-    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
+    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + HTMLescape(file_name) + '</span>'));
 
     $('input[name="target_file"]', form).val(cur_path + file_name);
 
@@ -1793,7 +1794,7 @@ $('.file-update', context).click(function() {
 
     $('input[name="target_file"]', form).val(cur_path + file_name);
     var hd = $('#update-file-dialog .hd');
-    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + file_name + '</span>'));
+    hd.html(hd.html().replace('%(file_name)s', '<span class="op-target">' + HTMLescape(file_name) + '</span>'));
 
     $.ajax({
         url: '{% url 'get_file_op_url' repo.id %}',
@@ -2007,9 +2008,9 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
 
             var name_link = $('.dirent-name a', op_obj);
             if (name_link.length == 1) {
-                name_link.html(new_name).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
+                name_link.html(HTMLescape(new_name)).attr('href', name_link.attr('href').substr(0, name_link.attr('href').indexOf('?')) + '?p=' + e(path+new_name));
             } else {
-                $('.dirent-name', op_obj).html(new_name); // no link for files in client_crypto mode
+                $('.dirent-name', op_obj).html(HTMLescape(new_name)); // no link for files in client_crypto mode
             }
             $('.dirent-update', op_obj).html("{% trans "Just now" %}");
             var dld_link; 
@@ -2036,7 +2037,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             }
 
             var msg = "{% trans "Successfully renamed %(old_name)s to %(new_name)s" %}";
-            msg = msg.replace('%(old_name)s', old_name).replace('%(new_name)s', new_name);
+            msg = msg.replace('%(old_name)s', HTMLescape(old_name)).replace('%(new_name)s', HTMLescape(new_name));
             feedback(msg, 'success');
         };
     } else {// #mv-form
@@ -2090,7 +2091,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                         paddingTop: 50
                     }, focus:false});
                     var det_text = op == 'mv' ? "{% trans "Moving %(name)s" %}": "{% trans "Copying %(name)s" %}";
-                    details.html(det_text.replace('%(name)s', trimFilename(obj_name, 20))).removeClass('vh');
+                    details.html(det_text.replace('%(name)s', HTMLescape(trimFilename(obj_name, 20)))).removeClass('vh');
                     $('#mv-progress').progressbar();
                     req_progress();
                 }, 100);

@@ -65,7 +65,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
     form.modal({appendTo: "#main",'focus':false, containerCss:{"padding":0}});
 
     var hd = $('#file-share .hd');
-    hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + trimFilename(name, 30) + '</span>'));
+    hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + HTMLescape(trimFilename(name, 30)) + '</span>'));
 
     if (type == 'd') {
         $('#private-share-tab, #private-share').remove();
@@ -141,7 +141,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         form.removeClass('hide').css({'width':'auto', 'padding-top':0});
         $("h3", form).remove();
         $('.checkbox-label', form).css({'margin-right':'3px'}); // make it not show on top of the scrollbar when hover
-        form.data('dir-path', path).attr('data-name', name);
+        form.data('dir-path', path);
         $("#repo-share-tabs").tabs();
         $('#repo-share-tabs .ui-tabs-nav').css({'padding-left': '1.4em'});
     });

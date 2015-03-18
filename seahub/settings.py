@@ -419,8 +419,13 @@ else:
     THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
 
 THUMBNAIL_EXTENSION = 'png'
+
+# for thumbnail: height(px) and width(px)
 THUMBNAIL_DEFAULT_SIZE = '24'
 PREVIEW_DEFAULT_SIZE = '100'
+
+# for origin image file: size(MB)
+THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
 #################
 # Email sending #

@@ -97,7 +97,7 @@ var saving_tip = $('.saving-tip', form);
 
 // Initialize the jQuery File Upload widget:
 form.fileupload({
-    formData: {'parent_dir': "{{path}}"},
+    formData: {'parent_dir': "{{path|escapejs}}"},
     // customize it for 'done'
     getFilesFromResponse: function (data) {
         if (data.result) {
@@ -175,10 +175,11 @@ form.fileupload({
         }
 
         var uploaded_done_link = "{% url "upload_file_done" %}" + "?fn=" + e(file.name) + "&repo_id=" + e("{{repo.id}}");
+        var path = "{{path|escapejs}}";
         if (file_path) {
-            uploaded_done_link += '&p=' + e("{{path}}" + file_path.substr(0, file_path.lastIndexOf('/') + 1));
+            uploaded_done_link += '&p=' + e(path + file_path.substr(0, file_path.lastIndexOf('/') + 1));
         } else {
-            uploaded_done_link += '&p=' + e("{{path}}");
+            uploaded_done_link += '&p=' + e(path);
         }
         $.get(uploaded_done_link);
     }
