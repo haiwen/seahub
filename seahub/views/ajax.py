@@ -691,7 +691,7 @@ def delete_dirent(request, repo_id):
                             content_type=content_type)
     except SearpcError, e:
         logger.error(e)
-        err_msg = _(u'Internal error. Failed to delete %s.') % dirent_name
+        err_msg = _(u'Internal error. Failed to delete %s.') % escape(dirent_name)
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=500, content_type=content_type)
 
@@ -837,7 +837,7 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg = _(u'Successfully copied %(name)s') % {"name":escape(obj_name)}
+    msg = _(u'Successfully copied %(name)s') % {"name": escape(obj_name)}
     result['msg'] = msg
 
     if res.background:
@@ -882,7 +882,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg = _(u'Successfully moved %(name)s') % {"name":escape(obj_name)}
+    msg = _(u'Successfully moved %(name)s') % {"name": escape(obj_name)}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
@@ -925,7 +925,7 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
                         content_type=content_type)
 
     result['success'] = True
-    msg = _(u'Successfully copied %(name)s') % {"name":escape(obj_name)}
+    msg = _(u'Successfully copied %(name)s') % {"name": escape(obj_name)}
     result['msg'] = msg
     if res.background:
         result['task_id'] = res.task_id
