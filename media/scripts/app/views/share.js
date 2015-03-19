@@ -51,7 +51,7 @@ define([
         render: function () {
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
-                    .replace('{placeholder}', '<span class="op-target">' + this.obj_name + '</span>'),
+                    .replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(this.obj_name) + '</span>'),
                 is_dir: this.is_dir,
                 is_repo_owner: this.is_repo_owner,
                 is_virtual: this.is_virtual,
@@ -281,11 +281,11 @@ define([
             var after_op_success = function(data) {
                 $.modal.close();
                 var msg = gettext("Successfully sent to {placeholder}")
-                    .replace('{placeholder}', data['send_success'].join(', '));
+                    .replace('{placeholder}', Common.HTMLescape(data['send_success'].join(', ')));
                 Common.feedback(msg, 'success');
                 if (data['send_failed'].length > 0) {
                     msg += '<br />' + gettext("Failed to send to {placeholder}")
-                        .replace('{placeholder}', data['send_failed'].join(', '));
+                        .replace('{placeholder}', Common.HTMLescape(data['send_failed'].join(', ')));
                     Common.feedback(msg, 'info');
                 }
             };
@@ -452,11 +452,11 @@ define([
             var after_op_success = function (data) {
                 $.modal.close();
                 var msg = gettext("Successfully shared to {placeholder}")
-                    .replace('{placeholder}', data['shared_success'].join(', '));
+                    .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
                 Common.feedback(msg, 'success');
                 if (data['shared_failed'].length > 0) {
                     msg += '<br />' + gettext("Failed to share to {placeholder}")
-                        .replace('{placeholder}', data['shared_failed'].join(', '));
+                        .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
                     Common.feedback(msg, 'info');
                 }
             };
@@ -534,11 +534,11 @@ define([
             var after_op_success = function(data) {
                 $.modal.close();
                 var msg = gettext("Successfully shared to {placeholder}")
-                    .replace('{placeholder}', data['shared_success'].join(', '));
+                    .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
                 Common.feedback(msg, 'success');
                 if (data['shared_failed'].length > 0) {
                     msg += '<br />' + gettext("Failed to share to {placeholder}")
-                        .replace('{placeholder}', data['shared_failed'].join(', '));
+                        .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
                     Common.feedback(msg, 'info');
                 }
             };
