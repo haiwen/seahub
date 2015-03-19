@@ -32,6 +32,10 @@ define([
             if (attrs.encrypted) {
                 if (!attrs.passwd1)  return gettext("Please enter password");
                 if (!attrs.passwd2)  return gettext("Please enter the password again");
+                if (attrs.passwd1.length < app.pageOptions.repo_password_min_length) {
+                    return gettext("Password is too short");
+
+                }
                 if (attrs.passwd1 != attrs.passwd2) return gettext("Passwords don't match");
             }
         }

@@ -1068,6 +1068,7 @@ def myhome(request):
             "repo_create_url": repo_create_url,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
+            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @login_required
