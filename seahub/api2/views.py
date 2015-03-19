@@ -2902,10 +2902,13 @@ class GroupRepos(APIView):
         username = request.user.username
         repo_name = request.DATA.get("name", None)
         repo_desc = request.DATA.get("desc", 'new repo')
+        passwd = request.DATA.get("passwd", None)
+        if not passwd:
+            passwd = None
         permission = request.DATA.get("permission", 'r')
 
         repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                          username, None)
+                                          username, passwd)
         repo = seafile_api.get_repo(repo_id)
         calculate_repos_last_modify([repo])
 
