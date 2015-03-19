@@ -419,7 +419,7 @@ def _file_view(request, repo_id, path):
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
         else:
             pass
-
+                
         template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     else:
         ret_dict['err'] = err_msg
