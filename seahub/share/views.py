@@ -1368,7 +1368,6 @@ def ajax_get_upload_link(request):
             username=username).filter(path=path)
         if len(l) > 0:
             token = l[0].token
-            print token
             data = {
                     'upload_link': gen_shared_upload_link(token),
                     'token': token,
@@ -1572,7 +1571,7 @@ def ajax_private_share_dir(request):
 
     if not check_user_share_quota(username, shared_repo, users=share_to_users,
                                   groups=share_to_groups):
-        result['error'] = _(('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % shared_repo.name)
+        result['error'] = _(('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % escape(shared_repo.name))
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     for email in share_to_users:
