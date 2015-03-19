@@ -5,13 +5,13 @@
     <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
     <label>{% trans "Description"%}</label><br/>
     <textarea name="repo_desc" class="textarea"></textarea><br />
-    {% if create_shared_repo %}
+    <% if (showSharePerm) { %>
     <label>{% trans "Share Permission"%}</label><br />
     <select name="permission" class="perm">
       <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
       <option value="r">{% trans "Read-Only"%}</option>
     </select>
-    {% endif %}
+    <% } %>
     <div class="repo-create-encryption">
         <label class="checkbox-label">
             <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
