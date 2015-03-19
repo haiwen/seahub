@@ -196,7 +196,7 @@ define([
                     el.remove();
                     app.globalState.noFileOpPopup = true; // make other items can work normally when hover
                     var msg = gettext("Successfully deleted %(name)s");
-                    msg = msg.replace('%(name)s', dirent_name);
+                    msg = msg.replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
                 },
                 error: Common.ajaxErrorHandler
@@ -217,7 +217,7 @@ define([
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             var op_detail = $('.detail', form);
-            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + dirent_name + '</span>'));
+            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + Common.HTMLescape(dirent_name) + '</span>'));
 
             var form_id = form.attr('id');
             var _this = this;
@@ -281,14 +281,9 @@ define([
                 obj_name = this.model.get('obj_name'),
                 obj_type = this.model.get('is_dir') ? 'dir' : 'file';
 
-            var title;
-            if (op_type == 'mv') {
-                title = gettext("Move {placeholder} to:")
-                    .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
-            } else {
-                title = gettext("Copy {placeholder} to:")
-                    .replace('{placeholder}', '<span class="op-target">' + obj_name + '</span>');
-            }
+            var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
+            title = title.replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(obj_name) + '</span>');
+
             var form = $(this.mvcpTemplate({
                 form_title: title,
                 op_type: op_type,
@@ -361,7 +356,7 @@ define([
                                 paddingTop: 50
                             }, focus:false});
                             var det_text = op == 'mv' ? gettext("Moving %(name)s") : gettext("Copying %(name)s");
-                            details.html(det_text.replace('%(name)s', obj_name)).removeClass('vh');
+                            details.html(det_text.replace('%(name)s', Common.HTMLescape(obj_name))).removeClass('vh');
                             $('#mv-progress').progressbar();
                             req_progress();
                         }, 100);
