@@ -423,7 +423,7 @@ define([
                                 } else {
                                     msg_s = gettext("Successfully deleted %(name)s and %(amount)s other items.");
                                 }
-                                msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', del_len - 1);
+                                msg_s = msg_s.replace('%(name)s', Common.HTMLescape(data['deleted'][0])).replace('%(amount)s', del_len - 1);
                                 Common.feedback(msg_s, 'success');
                             }
                             if (not_del_len > 0) {
@@ -434,7 +434,7 @@ define([
                                 } else {
                                     msg_f = gettext("Internal error. Failed to delete %(name)s and %(amount)s other items.");
                                 }
-                                msg_f = msg_f.replace('%(name)s', data['undeleted'][0]).replace('%(amount)s', not_del_len - 1);
+                                msg_f = msg_f.replace('%(name)s', Common.HTMLescape(data['undeleted'][0])).replace('%(amount)s', not_del_len - 1);
                                 Common.feedback(msg_f, 'error');
                             }
                             $.modal.close();
@@ -569,7 +569,7 @@ define([
                                         }
                                     }
 
-                                    msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', success_len - 1);
+                                    msg_s = msg_s.replace('%(name)s', Common.HTMLescape(data['success'][0])).replace('%(amount)s', success_len - 1);
                                     //msg_s += ' <a href="' + view_url + '">' + "View" + '</a>';
                                     Common.feedback(msg_s, 'success');
                                 }
@@ -588,7 +588,7 @@ define([
                                             msg_f = gettext("Internal error. Failed to copy %(name)s.");
                                         }
                                     }
-                                    msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
+                                    msg_f = msg_f.replace('%(name)s', Common.HTMLescape(data['failed'][0])).replace('%(amount)s', data['failed'].length - 1);
                                     Common.feedback(msg_f, 'error');
                                 }
                             },
@@ -648,7 +648,7 @@ define([
                                                 } else { // failed or canceled
                                                     if (data['failed']) {
                                                         var error_msg = op == 'mv' ? gettext('Failed to move %(name)s') : gettext('Failed to copy %(name)s');
-                                                        cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');
+                                                        cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', Common.HTMLescape(obj_name)) + '</p>');
                                                         end();
                                                     }
                                                 }
