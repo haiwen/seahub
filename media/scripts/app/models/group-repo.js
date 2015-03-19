@@ -1,23 +1,17 @@
 define([
     'underscore',
-    'backbone'
-], function(_, Backbone) {
+    'backbone',
+    'app/models/repo'
+], function(_, Backbone, Repo) {
     'use strict';
 
-    var GroupRepo = Backbone.Model.extend({
-
+    var GroupRepo = Repo.extend({
         defaults: {
-            id: null,
-            name: "",
-            desc: "",
-            mtime: 0,
-            encrypted: false,
             permission: "r",
-            owner: "-",
-            owner_nickname: "-"
         }
-
     });
+
+    _.extend(GroupRepo.prototype.defaults, Repo.prototype.defaults);
 
     return GroupRepo;
 });

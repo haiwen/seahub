@@ -628,6 +628,7 @@ def group_info(request, group):
             'create_shared_repo': True,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
+            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @group_check
