@@ -184,7 +184,8 @@
              return true;
          return false;
      })(),
-     csrfToken: "{{csrf_token}}"
+     csrfToken: "{{csrf_token}}",
+     repo_password_min_length: {{ repo_password_min_length }}
  };
 </script>
 {% if debug %}
