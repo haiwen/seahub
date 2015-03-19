@@ -4,9 +4,8 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/collections/repos',
-    'text!' + app.config._tmplRoot + 'create-repo.html',
-], function($, simplemodal, _, Backbone, Common, Repos, CreateRepoTemplate) {
+    'text!' + app.config._tmplRoot + 'create-repo.html'
+], function($, simplemodal, _, Backbone, Common, CreateRepoTemplate) {
     'use strict';
 
     var AddRepoView = Backbone.View.extend({
@@ -26,8 +25,14 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template({}));
+            this.$el.html(this.template(this.templateData()));
             this.$el.modal();
+        },
+
+        templateData: function() {
+            return {
+                showSharePerm: false
+            };
         },
 
         // Generate the attributes for a new GroupRepo item.
@@ -35,7 +40,7 @@ define([
             return {
                 name: $('input[name=repo_name]', this.$el).val().trim(),
                 desc: $('textarea[name=repo_desc]', this.$el).val().trim(),
-                encrypted: $('#encrypt-switch', this.$el).attr('checked'),
+                encrypted: $('#encrypt-switch', this.$el).parent().hasClass('checkbox-checked'),
                 passwd1: $('input[name=passwd]', this.$el).val(),
                 passwd2: $('input[name=passwd_again]', this.$el).val(),
                 passwd: $('input[name=passwd]', this.$el).val()
@@ -70,9 +75,11 @@ define([
         },
 
         togglePasswdInput: function(e) {
-            var pwd_input = $('input[type="password"]', this.$el);
+            var $parent = $(e.target).parent();
+            $parent.toggleClass('checkbox-checked');
 
-            if ($(e.target).attr('checked')) {
+            var pwd_input = $('input[type="password"]', $('.repo-create-encryption'));
+            if ($parent.hasClass('checkbox-checked')) {
                 pwd_input.attr('disabled', false).removeClass('input-disabled');
             } else {
                 pwd_input.attr('disabled', true).addClass('input-disabled');
