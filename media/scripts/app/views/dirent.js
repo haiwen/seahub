@@ -138,21 +138,10 @@ define([
                 popup = this.$('.hidden-op');
 
             if (popup.hasClass('hide')) { // the popup is not shown
-                if (icon.position().left + icon.width() + popup.outerWidth() < icon.parent().width()) {
-                    popup.css({'left': icon.position().left + icon.width() + 5});
-                    if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
-                        popup.css('top', 6);
-                    } else {
-                        popup.css('bottom', 2);
-                    }
-                } else {
-                    popup.css({'right':0});
-                    if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
-                        popup.css('top', icon.position().top + icon.height() + 6);
-                    } else {
-                        popup.css('bottom', icon.position().top + icon.height() + 3);
-                    }
+                if (icon.offset().top + popup.height() > $('#main').offset().top + $('#main').height()) {
+                    popup.css('bottom', 20);
                 }
+                popup.css({'left': icon.position().left});
                 popup.removeClass('hide');
                 app.globalState.noFileOpPopup = false;
                 app.globalState.popup_tr = icon.parents('tr');

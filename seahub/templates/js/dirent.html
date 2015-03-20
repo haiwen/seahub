@@ -12,6 +12,27 @@
     <span class="dirent-name"><a href="#lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%= dirent.obj_name %></a></span>
     <% } %>
 </td>
+<td class="dirent-op">
+    <div class="repo-file-op vh">
+        <div class="displayed-op">
+            <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+            <% if (!repo_encrypted) { %>
+            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+            <% } %>
+            <% if (user_perm == 'rw') { %>
+            <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+            <% } %>
+        </div>
+        <% if (user_perm == 'rw') { %>
+        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
+        <ul class="hidden-op hide">
+            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+        </ul>
+        <% } %>
+    </div>
+</td>
 <td class="dirent-size"></td>
 <td class="dirent-update">
     <% if (dirent.last_modified) { %>
@@ -19,25 +40,6 @@
     <% } else { %>
     <% print(""); %>
     <% } %>
-</td>
-<td class="dirent-op">
-    <div class="repo-file-op vh">
-        <div class="displayed-op">
-            <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
-            <% if (!repo_encrypted) { %>
-            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
-            <% } %>
-        </div>
-        <% if (user_perm == 'rw') { %>
-        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
-        <ul class="hidden-op hide">
-            <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
-            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
-            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-        </ul>
-        <% } %>
-    </div>
 </td>
 <% } else { %>
 <td class="select">
@@ -64,6 +66,28 @@
 <td>
     <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<% print(dirent_path); %>" target="_blank"><%= dirent.obj_name %></a></span>
 </td>
+<td class="dirent-op">
+    <div class="repo-file-op vh">
+        <div class="displayed-op">
+            <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+            <% if (!repo_encrypted) { %>
+            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+            <% } %>
+            <% if (user_perm == 'rw') { %>
+            <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+            <% } %>
+        </div>
+        <% if (user_perm == 'rw') { %>
+        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
+        <ul class="hidden-op hide">
+            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
+        </ul>
+        <% } %>
+    </div>
+</td>
 <td class="dirent-size"><%= dirent.file_size %></td>
 <td class="dirent-update">
     <% if (dirent.last_modified) { %>
@@ -71,26 +95,5 @@
     <% } else { %>
     <% print("{% trans "Fetch failed" %}"); %>
     <% } %>
-</td>
-<td class="dirent-op">
-    <div class="repo-file-op vh">
-        <div class="displayed-op">
-            <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download.png" alt="" /></a>
-            <% if (!repo_encrypted) { %>
-            <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share_20.png" alt="" /></a>
-            <% } %>
-        </div>
-        <% if (user_perm == 'rw') { %>
-        <img src="{{ MEDIA_URL }}img/dropdown-arrow.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
-        <ul class="hidden-op hide">
-            <li><a class="op del" href="#">{% trans "Delete" %}</a></li>
-            <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
-            <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-            <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-            <li><a class="op file-update" href="#">{% trans "Update"%}</a></li>
-            <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
-        </ul>
-        <% } %>
-    </div>
 </td>
 <% } %>

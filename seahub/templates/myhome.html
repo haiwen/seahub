@@ -21,7 +21,7 @@
 {% endif %}
 /* lib view */
 .repo-file-list .dirent-name {
-    width:260px;
+    width:220px;
 }
 .repo-file-list .dirent-size {
     width:114px;
@@ -30,7 +30,12 @@
     width:123px;
 }
 .repo-file-list .dirent-op {
-    width:110px;
+    width:150px;
+}
+.displayed-op .download,
+.displayed-op .share,
+.displayed-op .delete {
+    margin-left:5px;
 }
 /* custom select2 */
 .select2-container-multi .select2-choices {
@@ -205,32 +210,7 @@
 </form>
 {% endif %}
 
-
-<div id="dir-view" class="hide">
-  <div class="repo-file-list-topbar">
-    <p class="path"></p>
-    <div class="repo-op"></div>
-  </div>
-  <table class="repo-file-list">
-    <thead>
-    <tr>
-      <th class="select">
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
-      </th>
-      <th class="star"></th>
-      <th class="dirent-icon"></th>
-      <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
-      <th class="dirent-size">{% trans "Size"%}</th>
-      <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
-      <th class="dirent-op">{% trans "Operations"%}</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
-</div>
-
+{% include "js/dir-view.html" %}
 
 {% endblock %}
 
