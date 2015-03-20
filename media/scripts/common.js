@@ -94,6 +94,11 @@ define([
 
               case 'private_share_dir': return siteRoot + 'share/ajax/private-share-dir/';
               case 'private_share_file': return siteRoot + 'share/ajax/private-share-file/';
+
+              case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
+              case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
+              case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
+              case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
             }
         },
 
@@ -328,6 +333,119 @@ define([
             _this = this;
             $(document).click(function(e) {
                 _this.closePopup(e, $('#user-info-popup'), $('#my-info'));
+            });
+        },
+
+        initNoticePopup: function() {
+            var msg_ct = $("#msg-count");
+
+            // for login page, and pages without 'header' such as 'file view' page.
+            if (msg_ct.length == 0) {
+                return false;
+            }
+            // original title
+            var orig_doc_title = document.title;
+            msg_ct.data('orig_doc_title', orig_doc_title); // for 'mark all read' in 'notice list' page
+            var reqUnreadNum = function() {
+                $.ajax({
+                    url: _this.getUrl({name: 'get_unseen_notices_num'}),
+                    dataType: 'json',
+                    cache: false,
+                    success: function(data) {
+                        var count = data['count'],
+                            num = $('.num', msg_ct);
+                        num.html(count);
+                        if (count > 0) {
+                            num.removeClass('hide');
+                            document.title = '(' + count + ')' + orig_doc_title;
+                        } else {
+                            num.addClass('hide');
+                            document.title = orig_doc_title;
+                        }
+                    }
+                });
+            };
+            reqUnreadNum();
+            // request every 30s
+            setInterval(reqUnreadNum, 30*1000);
+
+            $('#notice-icon').click(function() {
+                var popup = $('#notice-popup');
+                popup.toggleClass('hide');
+
+                if (!popup.hasClass('hide')) {
+                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.hd', popup).outerHeight() - 3});
+                    var loading_tip = $('.loading-tip', popup),
+                        notice_list = $('#notice-list');
+                    notice_list.addClass('hide');
+                    loading_tip.show();
+                    $('.error', popup).addClass('hide');
+
+                    $.ajax({
+                        url: _this.getUrl({name: 'get_popup_notices'}),
+                        dataType: 'json',
+                        success: function(data) {
+                            loading_tip.hide();
+                            notice_list.html(data['notice_html']).removeClass('hide');
+
+                            // set a notice to be read when <a> in it is clicked
+                            $('.unread a', notice_list).click(function() {
+                                var notice_id = $(this).parents('.unread').data('id');
+                                var link_href = $(this).attr('href');
+                                $.ajax({
+                                    url: _this.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
+                                    dataType:'json',
+                                    success: function(data) {
+                                        location.href = link_href;
+                                    },
+                                    error: function() {
+                                        location.href = link_href;
+                                    }
+                                });
+                                return false;
+                            });
+                            $('.detail', notice_list).click(function() {
+                                location.href = $('.brief a', $(this).parent()).attr('href');
+                            });
+                        },
+                        error: function (xhr, textStatus, errorThrown) {
+                            if (xhr.responseText) {
+                                var error = $.parseJSON(xhr.responseText).error;
+                                loading_tip.hide();
+                                if ($('.error', popup).length == 0) {
+                                    loading_tip.after('<p class="error alc">' + error + '</p>');
+                                } else {
+                                    $('.error', popup).removeClass('hide');
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+            $(window).resize(function() {
+                var popup = $('#notice-popup');
+                if (!popup.hasClass('hide')) {
+                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.hd', popup).outerHeight() - 3});
+                }
+            });
+
+            $('#notice-popup .close').click(function() {
+                $('#notice-popup').addClass('hide');
+                if ($('#notice-list .unread').length > 0) {
+                    // set all unread notice to be read
+                    $.ajax({
+                        url: _this.getUrl({name: 'set_notices_seen'}),
+                        dataType: 'json',
+                        success: function() {
+                            $('.num', msg_ct).html(0).addClass('hide');
+                            document.title = orig_doc_title;
+                        }
+                    });
+                }
+            });
+
+            $(document).click(function(e) {
+                _this.closePopup(e, $('#notice-popup'), $('#notice-icon'));
             });
         },
 
