@@ -1,0 +1,34 @@
+/* lib view */
+.repo-file-list .dirent-name {
+    width:220px;
+}
+.repo-file-list .dirent-size {
+    width:114px;
+}
+.repo-file-list .dirent-update {
+    width:123px;
+}
+.repo-file-list .dirent-op {
+    width:150px;
+}
+.repo-file-list .hidden-op {
+    min-width: 100px;
+}
+.displayed-op .download,
+.displayed-op .share,
+.displayed-op .delete {
+    margin-left:5px;
+}
+/* custom select2 */
+.select2-container-multi .select2-choices {
+    border-color: #ddd;
+    background-image: none; /* rm the shadow */
+}
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding:2px;
+}
+.select2-container-multi .select2-choices .select2-search-choice {
+    border:none;
+    border-radius:0;
+    background:#eee;
+}
