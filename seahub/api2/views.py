@@ -383,16 +383,19 @@ class Search(APIView):
         return Response(res)
 
 ########## Repo related
-def repo_download_info(request, repo_id):
+def repo_download_info(request, repo_id, gen_sync_token=True):
     repo = get_repo(repo_id)
     if not repo:
         return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
     # generate download url for client
     relay_id = get_session_info().id
-    addr, port = get_ccnet_server_addr_port ()
+    addr, port = get_ccnet_server_addr_port()
     email = request.user.username
-    token = seafile_api.generate_repo_token(repo_id, request.user.username)
+    if gen_sync_token:
+        token = seafile_api.generate_repo_token(repo_id, email)
+    else:
+        token = ''
     repo_name = repo.name
     repo_desc = repo.desc
     enc = 1 if repo.encrypted else ''
@@ -570,12 +573,17 @@ class Repos(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
 
+        req_from = request.GET.get('from', "")
+        if req_from == 'web':
+            gen_sync_token = False  # Do not generate repo sync token
+        else:
+            gen_sync_token = True
+
         username = request.user.username
         repo_name = request.DATA.get("name", None)
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
-
         repo_desc = request.DATA.get("desc", 'new repo')
         passwd = request.DATA.get("passwd", None)
         if not passwd:
@@ -604,7 +612,8 @@ class Repos(APIView):
                               creator=username,
                               repo_id=repo_id,
                               repo_name=repo_name)
-            resp = repo_download_info(request, repo_id)
+            resp = repo_download_info(request, repo_id,
+                                      gen_sync_token=gen_sync_token)
 
             # FIXME: according to the HTTP spec, need to return 201 code and
             # with a corresponding location header
@@ -2829,12 +2838,9 @@ class GroupChanges(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def get(self, request, group_id, format=None):
-        # TODO: group check
-
-        # TODO: perm check
-
-        group_id = int(group_id)
+    @api_group_check
+    def get(self, request, group, format=None):
+        group_id = int(group.id)
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
@@ -2894,11 +2900,9 @@ class GroupRepos(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def post(self, request, group_id, format=None):
+    @api_group_check
+    def post(self, request, group, format=None):
         # add group repo
-
-        # TODO: perm check
-
         username = request.user.username
         repo_name = request.DATA.get("name", None)
         repo_desc = request.DATA.get("desc", 'new repo')
@@ -2906,14 +2910,23 @@ class GroupRepos(APIView):
         if not passwd:
             passwd = None
         permission = request.DATA.get("permission", 'r')
+        if permission != 'r' and permission != 'rw':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
-        repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                          username, passwd)
-        repo = seafile_api.get_repo(repo_id)
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                  username, passwd, org_id)
+            repo = seafile_api.get_repo(repo_id)
+            seafile_api.add_org_group_repo(repo_id, org_id, group.id,
+                                           username, permission)
+        else:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                              username, passwd)
+            repo = seafile_api.get_repo(repo_id)
+            seafile_api.set_group_repo(repo.id, group.id, username, permission)
+
         calculate_repos_last_modify([repo])
-
-        seafile_api.set_group_repo(repo.id, int(group_id), username, permission)
-
         group_repo = {
             "id": repo.id,
             "name": repo.name,
@@ -2928,13 +2941,14 @@ class GroupRepos(APIView):
 
         return Response(group_repo, status=200)
 
-    def get(self, request, group_id, format=None):
+    @api_group_check
+    def get(self, request, group, format=None):
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
-            repos = get_org_group_repos(org_id, group_id, username)
+            repos = seaserv.get_org_group_repos(org_id, group.id, username)
         else:
-            repos = seaserv.get_group_repos(int(group_id), username)
+            repos = seaserv.get_group_repos(group.id, username)
 
         repos_json = []
         for r in repos:
@@ -2958,11 +2972,14 @@ class GroupRepo(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    def delete(self, request, group_id, repo_id, format=None):
+    @api_group_check
+    def delete(self, request, group, repo_id, format=None):
         username = request.user.username
-        group_id = int(group_id)
+        group_id = group.id
 
-        # TODO: perm check
+        if not group.is_staff and not seafile_api.is_repo_owner(username, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to delete repo.')
 
         if seaserv.is_org_group(group_id):
             org_id = seaserv.get_org_id_by_group(group_id)
