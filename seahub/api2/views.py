@@ -842,11 +842,7 @@ class UpdateLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        parent_dir = request.GET.get('p', None)
-        if parent_dir is None:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Missing argument.')
-
+        parent_dir = request.GET.get('p', '/')
         if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
@@ -864,11 +860,7 @@ class UploadBlksLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        parent_dir = request.GET.get('p', None)
-        if parent_dir is None:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Missing argument.')
-
+        parent_dir = request.GET.get('p', '/')
         if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
@@ -886,11 +878,7 @@ class UpdateBlksLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        parent_dir = request.GET.get('p', None)
-        if parent_dir is None:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Missing argument.')
-
+        parent_dir = request.GET.get('p', '/')
         if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
@@ -1094,7 +1082,7 @@ class OpMoveView(APIView):
         username = request.user.username
         if not is_repo_writable(repo.id, username):
             return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to delete file.')
+                             'You do not have permission to move file.')
 
         resp = check_repo_access_permission(request, repo)
         if resp:
@@ -1143,7 +1131,7 @@ class OpCopyView(APIView):
         username = request.user.username
         if not is_repo_writable(repo.id, username):
             return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to delete file.')
+                             'You do not have permission to copy file.')
 
         parent_dir = request.GET.get('p', None)
         dst_repo = request.POST.get('dst_repo', None)
