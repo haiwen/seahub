@@ -44,6 +44,7 @@ define([
 
             this.groupView = new GroupNavView();
             Common.initAccountPopup();
+            Common.initNoticePopup();
         },
 
         /*
