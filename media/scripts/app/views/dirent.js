@@ -50,11 +50,10 @@ define([
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
             'click .share': 'share',
-            'click .del': 'delete',
+            'click .delete': 'delete',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
-            'click .cp': 'mvcp',
-            'click .file-update': 'updateFile'
+            'click .cp': 'mvcp'
         },
 
         highlight: function() {
@@ -138,10 +137,15 @@ define([
                 popup = this.$('.hidden-op');
 
             if (popup.hasClass('hide')) { // the popup is not shown
-                if (icon.offset().top + popup.height() > $('#main').offset().top + $('#main').height()) {
-                    popup.css('bottom', 20);
-                }
+
                 popup.css({'left': icon.position().left});
+                if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
+                    // below the icon
+                    popup.css('top', icon.position().top + icon.height() + 3);
+                } else {
+                    popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
+                }
+
                 popup.removeClass('hide');
                 app.globalState.noFileOpPopup = false;
                 app.globalState.popup_tr = icon.parents('tr');
@@ -435,9 +439,6 @@ define([
                 return false;
             });
             return false;
-        },
-
-        updateFile: function () {
         }
 
     });
