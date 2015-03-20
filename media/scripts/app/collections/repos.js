@@ -24,8 +24,16 @@ define([
 
             //call Backbone's fetch
             return Backbone.Collection.prototype.fetch.call(this, options);
-        }
+        },
 
+        create: function(model, options) {
+            // override default create url
+            options = options ? _.clone(options) : {};
+            options.url = this.url + '?from=web';
+
+            //call Backbone's create
+            return Backbone.Collection.prototype.create.call(this, model, options);
+        }
     });
 
     return RepoCollection;
