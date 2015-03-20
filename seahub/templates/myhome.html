@@ -5,6 +5,7 @@
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2-3.5.2.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/backbone.css" />
 <style type="text/css">
 {% if need_guide %}
 #guide-for-new {
@@ -19,37 +20,6 @@
     margin-left:6.4em;
 }
 {% endif %}
-/* lib view */
-.repo-file-list .dirent-name {
-    width:220px;
-}
-.repo-file-list .dirent-size {
-    width:114px;
-}
-.repo-file-list .dirent-update {
-    width:123px;
-}
-.repo-file-list .dirent-op {
-    width:150px;
-}
-.displayed-op .download,
-.displayed-op .share,
-.displayed-op .delete {
-    margin-left:5px;
-}
-/* custom select2 */
-.select2-container-multi .select2-choices {
-    border-color: #ddd;
-    background-image: none; /* rm the shadow */
-}
-.select2-container-multi .select2-choices .select2-search-field input {
-    padding:2px;
-}
-.select2-container-multi .select2-choices .select2-search-choice {
-    border:none;
-    border-radius:0;
-    background:#eee;
-}
 </style>
 {% endblock %}
 
