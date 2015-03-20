@@ -5,21 +5,8 @@
 {% block sub_title %}{% trans "Organization" %} - {% endblock %}
 
 {% block extra_style %}
-<style type="text/css">
-/* lib view */
-.repo-file-list .dirent-name {
-    width:260px;
-}
-.repo-file-list .dirent-size {
-    width:114px;
-}
-.repo-file-list .dirent-update {
-    width:123px;
-}
-.repo-file-list .dirent-op {
-    width:110px;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2-3.5.2.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/backbone.css" />
 {% endblock %}
 
 {% block left_panel %}
