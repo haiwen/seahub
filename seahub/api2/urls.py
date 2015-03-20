@@ -72,7 +72,7 @@ urlpatterns = patterns('',
     url(r'^groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view()),
     url(r'^groups/(?P<group_id>\d+)/changes/$', GroupChanges.as_view(), name="api2-group-changes"),
     url(r'^groups/(?P<group_id>\d+)/repos/$', GroupRepos.as_view(), name="api2-grouprepos"),
-    url(r'^groups/(?P<group_id>\d+)/repos/(?P<repo_id>[-0-9a-f]{36})/$', GroupRepo.as_view()),
+    url(r'^groups/(?P<group_id>\d+)/repos/(?P<repo_id>[-0-9a-f]{36})/$', GroupRepo.as_view(), name="api2-grouprepo"),
 
     url(r'^html/events/$', EventsHtml.as_view()),
     url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
