@@ -26,7 +26,6 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
 from django.utils.html import escape
-from django.utils.safestring import mark_safe
 from django.views.static import serve as django_static_serve
 
 from seahub.api2.models import Token, TokenV2
@@ -793,11 +792,7 @@ def convert_cmmt_desc_link(commit):
         else:
             return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), escape(file_or_dir))
 
-    if re.search(CMMT_DESC_PATT, commit.desc):
-        # if the string matches the pattern, return escaped value
-        return mark_safe(re.sub(CMMT_DESC_PATT, link_repl, commit.desc))
-
-    return commit.desc
+    return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
 def api_tsstr_sec(value):
     """Turn a timestamp to string"""
