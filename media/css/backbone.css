@@ -19,6 +19,14 @@
 .displayed-op .delete {
     margin-left:5px;
 }
+.hidden-op a {
+    color:#444;
+}
+.hidden-op a:hover {
+    color:#fff;
+    text-decoration:none;
+    background:#feaa7c;
+}
 /* custom select2 */
 .select2-container-multi .select2-choices {
     border-color: #ddd;
