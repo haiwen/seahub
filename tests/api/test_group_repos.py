@@ -5,11 +5,11 @@ from tests.common.utils import apiurl
 
 
 class GroupRepoTest(ApiTestBase):
-    def create_group_repo(self, group_id, *args, **kwargs):
+    def create_group_repo(self, group_id, expected=None, *args, **kwargs):
         path = apiurl(reverse("api2-grouprepos", args=[group_id]))
         data = {"name": 'grepo-test'}
         data.update(kwargs)
-        resp = self.post(path, data=data)
+        resp = self.post(path, data=data, expected=expected)
 
         return resp
 
