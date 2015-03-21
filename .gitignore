@@ -18,11 +18,13 @@ setenv.sh
 pylintrc
 .DS_Store
 *.mo
+media/assets
 media/avatars/*
 !media/avatars/default-non-register.jpg
 !media/avatars/default.png
 !media/default.jpg
 !media/groups/default.jpg
+static/scripts/dist
 logs/
 mysite.pid
 notification_email.sh
