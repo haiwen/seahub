@@ -33,7 +33,7 @@ from django.utils import timezone
 from .throttling import ScopedRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer, AccountSerializer
-from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
+from .utils import is_repo_writable, is_repo_accessible, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
@@ -91,7 +91,7 @@ except ImportError:
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
-from seaserv import seafserv_rpc, seafserv_threaded_rpc, server_repo_size, \
+from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, check_quota, \
@@ -521,31 +521,26 @@ class Repos(APIView):
             f = f.strip()
             filter_by[f] = True
 
-
         email = request.user.username
         repos_json = []
-
         if filter_by['mine']:
             owned_repos = get_owned_repo_list(request)
-            calculate_repo_info(owned_repos, email)
-            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
                     continue
+
                 repo = {
-                    "type":"repo",
-                    "id":r.id,
-                    "owner":email,
-                    "name":r.name,
-                    "desc":r.desc,
-                    "mtime":r.latest_modify,
-                    "mtime_relative": translate_seahub_time(r.latest_modify),
-                    "root":r.root,
-                    "size":r.size,
-                    "encrypted":r.encrypted,
-                    "permission": 'rw', # Always have read-write permission to owned repo
+                    "type": "repo",
+                    "id": r.id,
+                    "owner": email,
+                    "name": r.name,
+                    "desc": r.desc,
+                    "mtime": r.last_modify,
+                    "mtime_relative": translate_seahub_time(r.last_modify),
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": 'rw',  # Always have read-write permission to owned repo
                     "virtual": r.is_virtual,
                 }
                 if r.encrypted:
@@ -557,25 +552,18 @@ class Repos(APIView):
         if filter_by['shared']:
             shared_repos = get_share_in_repo_list(request, -1, -1)
             for r in shared_repos:
-                commit = get_commits(r.repo_id, 0, 1)[0]
-                if not commit:
-                    continue
-                r.latest_modify = commit.ctime
-                r.root = commit.root_id
-                r.size = server_repo_size(r.repo_id)
                 r.password_need = is_passwd_set(r.repo_id, email)
                 repo = {
-                    "type":"srepo",
-                    "id":r.repo_id,
-                    "owner":r.user,
-                    "name":r.repo_name,
+                    "type": "srepo",
+                    "id": r.repo_id,
+                    "owner": r.user,
+                    "name": r.repo_name,
                     "owner_nickname": email2nickname(r.user),
-                    "desc":r.repo_desc,
-                    "mtime":r.latest_modify,
+                    "desc": r.repo_desc,
+                    "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.latest_modify),
-                    "root":r.root,
-                    "size":r.size,
-                    "encrypted":r.encrypted,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
                     "permission": r.user_perm,
                     "share_type": r.share_type,
                 }
@@ -588,20 +576,18 @@ class Repos(APIView):
         if filter_by['group']:
             groups = get_groups_by_user(request)
             group_repos = get_group_repos(request, groups)
-            calculate_repo_info(group_repos, email)
-            group_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            group_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in group_repos:
                 repo = {
-                    "type":"grepo",
-                    "id":r.id,
-                    "owner":r.group.group_name,
-                    "groupid":r.group.id,
-                    "name":r.name,
-                    "desc":r.desc,
-                    "mtime":r.latest_modify,
-                    "root":r.root,
-                    "size":r.size,
-                    "encrypted":r.encrypted,
+                    "type": "grepo",
+                    "id": r.id,
+                    "owner": r.group.group_name,
+                    "groupid": r.group.id,
+                    "name": r.name,
+                    "desc": r.desc,
+                    "mtime": r.last_modify,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
                 }
                 if r.encrypted:
@@ -613,11 +599,6 @@ class Repos(APIView):
         if filter_by['org'] and request.user.permissions.can_view_org():
             public_repos = list_inner_pub_repos(request)
             for r in public_repos:
-                commit = get_commits(r.repo_id, 0, 1)[0]
-                if not commit:
-                    continue
-                r.root = commit.root_id
-                r.size = server_repo_size(r.repo_id)
                 repo = {
                     "type": "grepo",
                     "id": r.repo_id,
@@ -626,7 +607,6 @@ class Repos(APIView):
                     "owner": "Organization",
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
-                    "root": r.root,
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.permission,
@@ -634,9 +614,9 @@ class Repos(APIView):
                     "share_type": r.share_type,
                 }
                 if r.encrypted:
-                    repo["enc_version"] = commit.enc_version
-                    repo["magic"] = commit.magic
-                    repo["random_key"] = commit.random_key
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
         return Response(repos_json)
