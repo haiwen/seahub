@@ -63,9 +63,7 @@ def invalidate_group_cache(group_id, size=None):
         cache.delete(get_grp_cache_key(group_id, size))
             
 def get_default_avatar_url():
-    base_url = getattr(settings, 'STATIC_URL', None)
-    if not base_url:
-        base_url = getattr(settings, 'MEDIA_URL', '')
+    base_url = getattr(settings, 'MEDIA_URL', '')
     # Don't use base_url if the default avatar url starts with http:// of https://
     if AVATAR_DEFAULT_URL.startswith('http://') or AVATAR_DEFAULT_URL.startswith('https://'):
         return AVATAR_DEFAULT_URL
@@ -79,9 +77,7 @@ def get_default_avatar_url():
     return '%s%s' % (base_url, AVATAR_DEFAULT_URL)
 
 def get_default_avatar_non_registered_url():
-    base_url = getattr(settings, 'STATIC_URL', None)
-    if not base_url:
-        base_url = getattr(settings, 'MEDIA_URL', '')
+    base_url = getattr(settings, 'MEDIA_URL', '')
     # Don't use base_url if the default avatar url starts with http:// of https://
     if AVATAR_DEFAULT_NON_REGISTERED_URL.startswith('http://') or AVATAR_DEFAULT_NON_REGISTERED_URL.startswith('https://'):
         return AVATAR_DEFAULT_NON_REGISTERED_URL

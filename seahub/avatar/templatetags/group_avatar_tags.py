@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 register = template.Library()
 
 def get_default_group_avatar_url():
-    base_url = getattr(settings, 'STATIC_URL', None)
-    if not base_url:
-        base_url = getattr(settings, 'MEDIA_URL', '') 
+    base_url = getattr(settings, 'MEDIA_URL', '')
     # Don't use base_url if the default avatar url starts with http:// of https://
     if GROUP_AVATAR_DEFAULT_URL.startswith('http://') or GROUP_AVATAR_DEFAULT_URL.startswith('https://'):
         return GROUP_AVATAR_DEFAULT_URL

@@ -1,5 +1,5 @@
 {% extends 'base_for_backbone.html' %}
-
+{% load staticfiles %}
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
@@ -154,9 +154,9 @@
  };
 </script>
 {% if debug %}
-<script data-main="{{ MEDIA_URL }}scripts/group" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+<script data-main="{% static "scripts/group.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% else %}
-<script data-main="{{ MEDIA_URL }}scripts/dist/group" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+<script data-main="{% static "scripts/dist/group.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% endif %}
 
 {% endblock %}
