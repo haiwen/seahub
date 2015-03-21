@@ -26,12 +26,13 @@ class ReposApiTest(ApiTestBase):
 
     def test_list_repos(self):
         repos = self.get(REPOS_URL).json()
-        self.assertHasLen(repos, 1)
+        # self.assertHasLen(repos, 1)
 
         for repo in repos:
             self.assertIsNotNone(repo['permission'])
             self.assertIsNotNone(repo['encrypted'])
-            self.assertIsNotNone(repo['mtime'])
+            self.assertGreater(repo['mtime'], 0)
+            self.assertIsNotNone(repo['mtime_relative'])
             self.assertIsNotNone(repo['owner'])
             self.assertIsNotNone(repo['id'])
             self.assertIsNotNone(repo['size'])
@@ -39,7 +40,6 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['type'])
             # self.assertIsNotNone(repo['virtual']) #allow null for pub-repo
             self.assertIsNotNone(repo['desc'])
-            self.assertIsNotNone(repo['root'])
 
     def test_get_repo_info(self):
         with self.get_tmp_repo() as repo:
