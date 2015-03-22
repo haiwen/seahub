@@ -60,6 +60,10 @@
 {% endblock %}
 
 {% block right_panel %}
+<div id="initial-loading-view">
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+</div>
+
 <div id="repo-tabs" class="tab-tabs hide">
     <div class="hd">
         <ul class="tab-tabs-nav fleft">
