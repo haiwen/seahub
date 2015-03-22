@@ -81,6 +81,7 @@ define([
 
             showDir: function(category, repo_id, path) {
                 this.$el.show();
+                this.$dirent_list.empty();
                 var loading_tip = this.$('.loading-tip').show(),
                     dir = this.dir;
                 dir.setPath(category, repo_id, path);
@@ -110,7 +111,6 @@ define([
             },
 
             reset: function() {
-                this.$dirent_list.empty();
                 this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
@@ -303,7 +303,7 @@ define([
             share: function () {
                 var dir = this.dir;
                 var path = dir.path;
-                var options = { 
+                var options = {
                     'is_repo_owner': dir.is_repo_owner,
                     'is_virtual': dir.is_virtual,
                     'user_perm': dir.user_perm,
@@ -311,7 +311,7 @@ define([
                     'is_dir': true,
                     'dirent_path': path,
                     'obj_name': path.substr(path.lastIndexOf('/') + 1)
-                };  
+                };
                 new ShareView(options);
             },
 
