@@ -27,9 +27,12 @@ define([
             this.sharedReposView = new SharedReposView();
             this.dirView = new DirView();
             this.groupView = new GroupNavView();
+            this.currentView = this.reposView;
 
             Common.initAccountPopup();
             Common.initNoticePopup();
+
+            $('#initial-loading-view').hide();
         },
 
 
@@ -50,29 +53,22 @@ define([
         },
 
         showMyRepos: function() {
-            console.log('show repo list');
-            this.sharedReposView.hide();
+            this.currentView.hide();
             this.reposView.show();
-            this.dirView.hide();
-            $('#repo-create').show();
+            this.currentView = this.reposView;
         },
 
         showSharedRepos: function() {
-            this.dirView.hide();
-            this.reposView.hide();
+            this.currentView.hide();
             this.sharedReposView.show();
-            $('#repo-create').hide();
+            this.currentView = this.sharedReposView;
         },
 
         showDir: function(category, repo_id, path) {
-            console.log('show dir ' + repo_id + ' ' + path);
-
             var path = path || '/';
-            this.reposView.hide();
+            this.currentView.hide();
             this.dirView.showDir(category, repo_id, path);
-            // this.dirent_list = new app.DirentListView({id: id, path: path});
-            // $('#my-own-repos table').children().remove();
-            // $('#my-own-repos table').append(this.dirent_list.render().el);
+            this.currentView = this.dirView;
         },
 
 

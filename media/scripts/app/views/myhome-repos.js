@@ -60,10 +60,12 @@ define([
         },
 
         show: function() {
+            $('#repo-create').show();
             this.showMyRepos();
         },
 
         hide: function() {
+            $('#repo-create').hide();
             this.$el.hide();
             this.$table.hide();
             $('#mylib-tab', this.$tabs).parent().removeClass('ui-state-active');
