@@ -98,14 +98,15 @@ define([
                     },
                     error: function (collection, response, opts) {
                         loading_tip.hide();
-                        _this.$('.repo-file-list-topbar, .repo-file-list').hide();
+                        var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
+                        var $error = _this.$('.error');
                         var err_msg;
                         if (response.responseText) {
                             err_msg = response.responseJSON.error;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
-                        _this.$('.error').html(err_msg).show();
+                        $error.html(err_msg).show();
 
                         if (response.responseJSON.lib_need_decrypt) {
                             var form = $($('#repo-decrypt-form-template').html()).removeClass('hide');
@@ -126,7 +127,10 @@ define([
                                         username: app.pageOptions.username
                                     },
                                     after_op_success: function() {
-                                        location.reload(true);
+                                        form.remove();
+                                        $error.html('').hide();
+                                        $el_con.show();
+                                        _this.showDir(category, repo_id, path);
                                     }
                                 });
                                 return false;
