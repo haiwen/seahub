@@ -82,9 +82,10 @@ define([
             showDir: function(category, repo_id, path) {
                 this.$el.show();
                 this.$dirent_list.empty();
-                var loading_tip = this.$('.loading-tip').show(),
-                    dir = this.dir;
+                var loading_tip = this.$('.loading-tip').show();
+                var dir = this.dir;
                 dir.setPath(category, repo_id, path);
+                var _this = this;
                 dir.fetch({
                     reset: true,
                     data: {'p': path},
@@ -95,8 +96,42 @@ define([
                             loading_tip.hide();
                         }
                     },
-                    error: function () { // todo
+                    error: function (collection, response, opts) {
                         loading_tip.hide();
+                        _this.$('.repo-file-list-topbar, .repo-file-list').hide();
+                        var err_msg;
+                        if (response.responseText) {
+                            err_msg = response.responseJSON.error;
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        _this.$('.error').html(err_msg).show();
+
+                        if (response.responseJSON.lib_need_decrypt) {
+                            var form = $($('#repo-decrypt-form-template').html()).removeClass('hide');
+                            _this.$el.append(form);
+                            form.submit(function() {
+                                var passwd = $.trim($('[name="password"]', form).val());
+                                if (!passwd) {
+                                    $('.error', form).html(gettext("Password is required.")).removeClass('hide');
+                                    return false;
+                                }
+                                Common.ajaxPost({
+                                    form: form,
+                                    form_id: form.attr('id'),
+                                    post_url: Common.getUrl({'name':'repo_set_password'}),
+                                    post_data: {
+                                        repo_id: repo_id,
+                                        password: passwd,
+                                        username: app.pageOptions.username
+                                    },
+                                    after_op_success: function() {
+                                        location.reload(true);
+                                    }
+                                });
+                                return false;
+                            });
+                        }
                     }
                 });
             },
