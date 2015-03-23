@@ -1,26 +1,26 @@
 {% load i18n %}
 <div id="dir-view" class="hide">
-  <div class="repo-file-list-topbar">
-    <p class="path"></p>
-    <div class="repo-op"></div>
-  </div>
-  <table class="repo-file-list">
-    <thead>
-    <tr>
-      <th class="select">
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
-      </th>
-      <th class="star"></th>
-      <th class="dirent-icon"></th>
-      <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
-      <th class="dirent-op"></th>
-      <th class="dirent-size">{% trans "Size"%}</th>
-      <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-  </table>
-  <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <div class="repo-file-list-topbar">
+        <p class="path"></p>
+        <div class="repo-op"></div>
+    </div>
+    <table class="repo-file-list">
+        <thead>
+            <tr>
+                <th class="select">
+                    <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+                </th>
+                <th class="star"></th>
+                <th class="dirent-icon"></th>
+                <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+                <th class="dirent-op"></th>
+                <th class="dirent-size">{% trans "Size"%}</th>
+                <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <p class="error hide"></p>
 </div>
-
