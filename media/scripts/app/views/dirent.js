@@ -16,7 +16,6 @@ define([
         tagName: 'tr',
 
         template: _.template(direntTemplate),
-        shareTemplate: _.template($("#share-popup-template").html()),
         renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
         mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
