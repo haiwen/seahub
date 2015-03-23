@@ -99,6 +99,8 @@ define([
               case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
               case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
               case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
+
+              case 'repo_set_password': return siteRoot + 'repo/set_password/';
             }
         },
 

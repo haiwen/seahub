@@ -424,7 +424,7 @@ def list_lib_dir(request, repo_id):
     if repo.encrypted \
             and not seafile_api.is_password_set(repo.id, username):
         err_msg = _(u'Library is encrypted.')
-        return HttpResponse(json.dumps({'error': err_msg}),
+        return HttpResponse(json.dumps({'error': err_msg, 'lib_need_decrypt': True}),
                             status=403, content_type=content_type)
 
     head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
