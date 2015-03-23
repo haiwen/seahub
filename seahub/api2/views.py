@@ -456,11 +456,10 @@ class Repos(APIView):
             owned_repos = get_owned_repo_list(request)
             calculate_repo_info(owned_repos, email)
             owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-            sub_lib_enabled = settings.ENABLE_SUB_LIBRARY \
-                              and UserOptions.objects.is_sub_lib_enabled(email)
 
             for r in owned_repos:
-                if r.is_virtual and not sub_lib_enabled:
+                # do not return virtual repos
+                if r.is_virtual:
                     continue
                 repo = {
                     "type":"repo",
@@ -497,6 +496,7 @@ class Repos(APIView):
                     "id":r.repo_id,
                     "owner":r.user,
                     "name":r.repo_name,
+                    "owner_nickname": email2nickname(r.user),
                     "desc":r.repo_desc,
                     "mtime":r.latest_modify,
                     "mtime_relative": translate_seahub_time(r.latest_modify),
