@@ -103,28 +103,12 @@
     </div>
     <!--/script-->
 
-    <div id="update-file-dialog" class="hide">
-        <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>
-        <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-            <input type="hidden" name="target_file" />
-            <div class="fileupload-buttonbar">
-                <span class="fileinput-button vam">
-                    <span>{% trans "Choose a file" %}</span>
-                    <input type="file" name="file" />
-                </span>
-                {% if max_upload_file_size %}
-                <span class="vam">({% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}Smaller than {{ max_file_size }}{% endblocktrans %})</span>
-                {% endif %}
-                <div class="fileupload-progress fade">
-                    <div class="progress progress-success progres-striped active">
-                        <div class="bar" style="width:0%"></div>
-                    </div>
-                    <div class="progress-extended"></div>
-                </div>
-                <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
-            </div>
-            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
-        </form>
-    </div>
-    <script type="text/template" id="share-popup-template">
+    <script type="text/template" id="repo-decrypt-form-template">
+    <form id="repo-decrypt-form" action="">
+        <label>{% trans 'Password：' %}</label><br />
+        <input type="password" name="password" class="input" />
+        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
     </script>
