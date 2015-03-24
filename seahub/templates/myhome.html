@@ -25,37 +25,37 @@
 
 {% block left_panel %}
 <div class="side-tabnav">
-  <div class="hd w100 ovhd">
-    <h3 class="fleft">{% trans "Personal" %}</h3>
-    {% if user.permissions.can_add_repo %}
-    <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
-    {% endif %}
-  </div>
-  <ul class="side-tabnav-tabs">
-    <li class="tab tab-cur"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
-    <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
-    {% if events_enabled %}
-    <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
-    {% endif %}
-    {% for mod in request.user.mods_enabled %}
-    {% if mod == 'personal wiki' %}
-    <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
-    {% endif %}
-    {% endfor %}
-    <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
-    <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
-    <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
-  </ul>
+    <div class="hd w100 ovhd">
+        <h3 class="fleft">{% trans "Personal" %}</h3>
+        {% if user.permissions.can_add_repo %}
+        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+        {% endif %}
+    </div>
+    <ul class="side-tabnav-tabs">
+        <li class="tab tab-cur"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
+        {% if events_enabled %}
+        <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
+        {% endif %}
+        {% for mod in request.user.mods_enabled %}
+        {% if mod == 'personal wiki' %}
+        <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
+        {% endif %}
+        {% endfor %}
+        <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
+        <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
+        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
+    </ul>
 
-  <h3 class="hd">{% trans "Share Admin" %}</h3>
-  <ul class="side-tabnav-tabs">
-    {% if user.permissions.can_add_repo %}
-    <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
-    <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
-    {% endif %}
-    <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
-    <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
-  </ul>
+    <h3 class="hd">{% trans "Share Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        {% if user.permissions.can_add_repo %}
+        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
+        {% endif %}
+        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
+        <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
+    </ul>
 </div>
 {% endblock %}
 
@@ -87,9 +87,9 @@
             <thead>
                 <tr>
                     <th width="4%"><!--icon--></th>
-                    <th width="24%">{% trans "Name" %} <span id="my-owned-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-owned-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                    <th width="24%">{% trans "Name" %} <span class="by-name icon-caret-up cspt"></span></th>
                     <th width="38%">{% trans "Description" %}</th>
-                    <th width="22%">{% trans "Last Update" %} <span id="my-owned-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-owned-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                    <th width="22%">{% trans "Last Update" %} <span class="by-time icon-caret-down cspt"></span></th>
                     <th width="12%">{% trans "Operations" %}</th>
                 </tr>
             </thead>
@@ -111,9 +111,9 @@
             <thead>
                 <tr>
                     <th width="4%"><!--icon--></th>
-                    <th width="20%">{% trans "Name" %} <span id="be-shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="be-shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                    <th width="20%">{% trans "Name" %} <span class="by-name icon-caret-up cspt"></span></th>
                     <th width="33%">{% trans "Description" %}</th>
-                    <th width="15%">{% trans "Last Update" %} <span id="be-shared-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="be-shared-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                    <th width="15%">{% trans "Last Update" %} <span class="by-time icon-caret-down cspt"></span></th>
                     <th width="15%">{% trans "Shared By" %}</th>
                     <th width="13%">{% trans "Operations" %}</th>
                 </tr>
