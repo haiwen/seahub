@@ -6,7 +6,7 @@
                     {% else %}
                     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     {% endif %}
-                    <span class="icon-caret-down" title="{% trans "advanced" %}"></span><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+                    <!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
                 </form>
 
                 <form id="advanced-search-form" method="get" action="{% url 'search' %}" class="search-form hide">
