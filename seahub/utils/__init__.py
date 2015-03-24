@@ -528,12 +528,14 @@ if EVENTS_CONFIG_FILE:
 
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
-        1. event1.commit.creator = event2.commit.creator
-        2. event1.commit.desc = event2.commit.desc
+        1. event1.repo_id = event2.repo_id
+        2. event1.commit.creator = event2.commit.creator
+        3. event1.commit.desc = event2.commit.desc
         """
         if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-            if e1.commit.desc == e2.commit.desc and \
-                    e1.commit.creator_name == e2.commit.creator_name:
+            if e1.repo_id == e2.repo_id and \
+               e1.commit.desc == e2.commit.desc and \
+               e1.commit.creator_name == e2.commit.creator_name:
                 return True
         return False
 
