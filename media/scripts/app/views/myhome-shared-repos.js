@@ -69,6 +69,43 @@ define([
             $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
+        events: {
+            'click #repos-shared-to-me .by-name': 'sortByName',
+            'click #repos-shared-to-me .by-time': 'sortByTime'
+        },
+
+        sortByName: function() {
+            var repos = this.repos;
+            var el = $('.by-name', this.$table);
+            repos.comparator = function(a, b) { // a, b: model
+                if (el.hasClass('icon-caret-up')) {
+                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? 1 : -1;
+                } else {
+                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? -1 : 1;
+                }
+            };
+            repos.sort();
+            this.$tableBody.empty();
+            repos.each(this.addOne, this);
+            el.toggleClass('icon-caret-up icon-caret-down');
+        },
+
+        sortByTime: function() {
+            var repos = this.repos;
+            var el = $('.by-time', this.$table);
+            repos.comparator = function(a, b) { // a, b: model
+                if (el.hasClass('icon-caret-down')) {
+                    return a.get('mtime') < b.get('mtime') ? 1 : -1;
+                } else {
+                    return a.get('mtime') < b.get('mtime') ? -1 : 1;
+                }
+            };
+            repos.sort();
+            this.$tableBody.empty();
+            repos.each(this.addOne, this);
+            el.toggleClass('icon-caret-up icon-caret-down');
+        }
+
     });
 
     return SharedReposView;
