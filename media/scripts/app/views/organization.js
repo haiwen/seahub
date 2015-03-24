@@ -33,7 +33,9 @@ define([
         },
 
         events: {
-            'click #repo-create': 'createRepo'
+            'click #repo-create': 'createRepo',
+            'click #organization-repos .by-name': 'sortByName',
+            'click #organization-repos .by-time': 'sortByTime'
         },
 
         createRepo: function() {
@@ -80,6 +82,39 @@ define([
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);
+        },
+
+        sortByName: function() {
+            var repos = this.repos;
+            console.log(repos);
+            var el = $('.by-name', this.$table);
+            repos.comparator = function(a, b) { // a, b: model
+                if (el.hasClass('icon-caret-up')) {
+                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? 1 : -1;
+                } else {
+                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? -1 : 1;
+                }
+            };
+            repos.sort();
+            this.$tableBody.empty();
+            repos.each(this.addOne, this);
+            el.toggleClass('icon-caret-up icon-caret-down');
+        },
+
+        sortByTime: function() {
+            var repos = this.repos;
+            var el = $('.by-time', this.$table);
+            repos.comparator = function(a, b) { // a, b: model
+                if (el.hasClass('icon-caret-down')) {
+                    return a.get('mtime') < b.get('mtime') ? 1 : -1;
+                } else {
+                    return a.get('mtime') < b.get('mtime') ? -1 : 1;
+                }
+            };
+            repos.sort();
+            this.$tableBody.empty();
+            repos.each(this.addOne, this);
+            el.toggleClass('icon-caret-up icon-caret-down');
         }
 
     });

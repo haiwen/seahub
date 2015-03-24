@@ -357,7 +357,7 @@ define([
             sortByName: function() {
                 var dirents = this.dir;
                 var el = $('#by-name');
-                this.dir.comparator = function(a, b) {
+                dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
                     }
