@@ -114,6 +114,7 @@ $('#add-org-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'org_name': name,
+            'name': owner,
             'url_prefix': url_prefix,
             'email': owner,
             'password1': pwd1,
