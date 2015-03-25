@@ -254,9 +254,13 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
 
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import sys_login_admin
+    from seahub_extra.sysadmin_extra.views import sys_login_admin, \
+        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
     urlpatterns += patterns('',
         url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
+        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
+        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
     )
 
 if getattr(settings, 'MULTI_TENANCY', False):

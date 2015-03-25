@@ -40,14 +40,14 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
             {% if repo.props.share_type == 'group' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}&permission={{ repo.props.permission }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'personal' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
             {% if not org %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% else %}
             <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="op-icon vh" title="{% trans "Unshare" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
@@ -92,10 +92,8 @@ $('.share-permission-select').change(function() {
         success: function(data) {
             if (data['success']) {
                 feedback("{% trans "Edit succeeded" %}", 'success');
-                select.prev().children('.share-permission-cur-value').html(select.children('option[value="' +select.val() + '"]').text());
+                location.reload(true);
             }
-            select.addClass('hide');
-            select.prev().removeClass('hide');
         },
         error: function() {
             feedback("{% trans "Edit failed." %}", 'error');

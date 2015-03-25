@@ -1848,6 +1848,7 @@ textarea:-moz-placeholder {/* for FF */
 .displayed-op .op:hover {
     text-decoration:none;
 }
+.audit-item .audit-select-hidden,
 .repo-file-list .hidden-op {
     position:absolute;
     background:#fff;
@@ -1856,6 +1857,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
+.audit-select-hidden li a,
 .hidden-op li a {
     display:block;
     padding:0 12px;
@@ -1863,6 +1865,13 @@ textarea:-moz-placeholder {/* for FF */
 .file-choose-form {
     width:500px;
     padding:10px 20px;
+}
+.perm-dir-tree-cont {
+    padding:5px;
+    height:100px;
+    overflow:auto;
+    border:1px solid #eee;
+    margin:5px 0 10px;
 }
 .file-tree-cont, .dir-tree-cont {
     padding:5px;
@@ -3347,6 +3356,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* repo setting */
+.user-perm-add-tr input,
+.group-perm-add-tr input {
+    padding:2px 5px;
+}
+
 .user-perm-add-perm,
 .group-perm-add-perm,
 .perm-toggle-select,
@@ -3367,4 +3381,26 @@ textarea:-moz-placeholder {/* for FF */
 }
 #perm-add-jstree-wrap {
     background:#fcfcfc;
+}
+
+/* file audit*/
+.audit-show-select {
+    font-weight: normal;
+    font-size: 13px;
+    padding-right: 2px;
+}
+#audit-unselect-op div {
+    display: inline-block;
+    height: 20px;
+    border: 1px solid #ccc;
+    background: #f2f2f2;
+    cursor: pointer;
+}
+#audit-unselect-op span {
+    margin-right: 5px;
+}
+#audit-unselect-op a {
+    margin: 0 8px;
+    text-decoration: none;
+    font-size: 14px;
 }

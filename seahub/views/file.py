@@ -1079,8 +1079,8 @@ def send_file_download_msg(request, repo, path, dl_type):
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
 
-    msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s\t%s' % \
-        (dl_type, username, ip, user_agent, repo.id, repo.name, path)
+    msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
+        (dl_type, username, ip, user_agent, repo.id, path)
     msg_utf8 = msg.encode('utf-8')
 
     try:
@@ -1137,6 +1137,7 @@ def download_file(request, repo_id, obj_id):
 
     # send stats message
     if from_shared_link:
+        send_file_download_msg(request, repo, path, 'share-link')
         try:
             file_size = seafile_api.get_file_size(repo.store_id, repo.version,
                                                   obj_id)
