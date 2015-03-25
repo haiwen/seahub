@@ -192,6 +192,10 @@ urlpatterns = patterns('',
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
     url(r'^sys/seafadmin/orphan/$', sys_list_orphan, name='sys_list_orphan'),
     url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
+    url(r'^sys/seafadmin/repo-trash/$', sys_repo_trash, name='sys_repo_trash'),
+    url(r'^sys/seafadmin/repo-trash/clear/$', sys_repo_trash_clear, name="sys_repo_trash_clear"),
+    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/remove/$', sys_repo_trash_remove, name="sys_repo_trash_remove"),
+    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/restore/$', sys_repo_trash_restore, name="sys_repo_trash_restore"),
     url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
@@ -254,9 +258,13 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
 
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import sys_login_admin
+    from seahub_extra.sysadmin_extra.views import sys_login_admin, \
+        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
     urlpatterns += patterns('',
         url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
+        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
+        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
     )
 
 if getattr(settings, 'MULTI_TENANCY', False):

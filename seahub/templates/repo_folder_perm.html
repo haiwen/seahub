@@ -23,8 +23,8 @@
         {% if not repo.encrypted %}
         <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
         {% endif %}
-        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
-        <li class="tab tab-cur"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+        <li class="tab"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Permission" %}</a></li>
+        <li class="tab tab-cur"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "Folder Permission" %}</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -33,7 +33,7 @@
 <div class="lib-setting">
     <h2>{% trans "Library Settings" %}</h2>
     <h3>{% trans "Folder Permission" %}</h3>
-    <p>{% trans "View and manage all the folder permissions in this library." %}</p>
+    <p>{% trans "View and manage all folder permissions in this library." %}</p>
     <div id="tabs" class="tab-tabs">
         <div class="hd ovhd">
             <ul class="tab-tabs-nav fleft">
@@ -54,9 +54,9 @@
                     <th width="10%"></th>
                 </tr>
                 <tr class="user-perm-add-tr hide">
-                    <td><input id="perm-add-user" placeholder=" {% trans "Email"%}"></input></td>
+                    <td><input id="perm-add-user" placeholder="{% trans "Email"%}"></input></td>
                     <td>
-                        <input class="user-perm-add-folder-name" placeholder=" {% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
+                        <input class="user-perm-add-folder-name" placeholder="{% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
                         <input class="user-perm-add-folder-path" type="hidden"></input>
                     </td>
                     <td>
@@ -71,7 +71,7 @@
                 </tr>
                 {% if user_folder_perms %}
                 {% for perm in user_folder_perms %}
-                <tr class="perm-item" data-user="{{ perm.user }}" data-path="{{ perm.path }}">
+                <tr class="perm-item" data-user="{{ perm.user }}" data-path="{{ perm.path }}" data-perm="{{ perm.permission }}">
                     <td><a href="{% url 'user_profile' perm.user %}">{{ perm.user }}</a></td>
                     <td><span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span></td>
                     <td>
@@ -107,11 +107,11 @@
                 </tr>
                 <tr class="group-perm-add-tr hide">
                     <td>
-                        <input id="perm-add-grp-name" placeholder=" {% trans "Group"%}"></input>
+                        <input id="perm-add-grp-name" placeholder="{% trans "Group"%}"></input>
                         <input id="perm-add-grp-id" type="hidden"></input>
                     </td>
                     <td>
-                        <input class="group-perm-add-folder-name" placeholder=" {% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
+                        <input class="group-perm-add-folder-name" placeholder="{% trans "Select a folder"%}"></input><img src="{{ MEDIA_URL }}img/add.png" alt="" title="Select Folder" class="perm-add-select-folder add vam" />
                         <input class="group-perm-add-folder-path" type="hidden"></input>
                     </td>
                     <td>
@@ -126,7 +126,7 @@
                 </tr>
                 {% if group_folder_perms %}
                 {% for perm in group_folder_perms %}
-                    <tr class="perm-item" data-group_id="{{ perm.group_id }}" data-path="{{ perm.path }}">
+                    <tr class="perm-item" data-group_id="{{ perm.group_id }}" data-path="{{ perm.path }}" data-perm="{{ perm.permission }}">
                         <td><a href="{% url 'group_info' perm.group_id %}">{{ perm.group_name }}</a></td>
                         <td>
                             <span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span>
@@ -157,7 +157,7 @@
     <div id="perm-add-jstree-wrap" class="hide">
         <h3>{% trans "Please selecte a directory" %}</h3>
         <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
-        <div id="perm-add-jstree" data-repo_id="{{repo.id}}"></div>
+        <div id="perm-add-jstree" class="perm-dir-tree-cont" data-repo_id="{{repo.id}}"></div>
         <button class="perm-add-jstree-select">{% trans "Select" %}</button>
         <button class="simplemodal-close">{% trans "Cancel"%}</button><br />
         <span class="error hide"></span>
@@ -197,7 +197,7 @@ group_list.push({value:group_id, label:group_name});
 
 user_input.bind('autocompleteopen', function(e, ui) {
               var widget = user_input.autocomplete('widget');
-              widget.css({'max-width':user_input.width() - 2 * parseInt(widget.css('padding')), 'max-height':$(window).height() + $(window).scrollTop() - user_input.offset().top - user_input.outerHeight()});
+              widget.css({'max-width':user_input.width() + 2 * parseInt(widget.css('padding-top')), 'max-height':$(window).height() + $(window).scrollTop() - user_input.offset().top - user_input.outerHeight()});
           })
           .autocomplete({
             source: user_list
@@ -205,7 +205,7 @@ user_input.bind('autocompleteopen', function(e, ui) {
 
 group_input.bind('autocompleteopen', function(e, ui) {
                var widget = group_input.autocomplete('widget');
-               widget.css({'max-width':group_input.width() - 2 * parseInt(widget.css('padding')), 'max-height':$(window).height() + $(window).scrollTop() - group_input.offset().top - group_input.outerHeight()});
+               widget.css({'max-width':group_input.width() + 2 * parseInt(widget.css('padding-top')), 'max-height':$(window).height() + $(window).scrollTop() - group_input.offset().top - group_input.outerHeight()});
            })
            .autocomplete({
                source: group_list,
@@ -250,15 +250,16 @@ $('.perm-toggle-select').on('change', function() {
 });
 $('.perm-delete-btn').on('click', function() {
     var perm_item = $(this).parents('.perm-item'),
+        perm = perm_item.attr('data-perm'),
         path = perm_item.attr('data-path');
 
     if (is_user_tab == true) {
         var user = perm_item.attr('data-user'),
-            data = { 'user': user, 'path': path },
+            data = { 'user': user, 'path': path, 'perm': perm },
             url = '{% url 'remove_user_folder_permission' repo.id %}';
     } else {
         var group_id = perm_item.attr('data-group_id'),
-            data = { 'group_id': group_id, 'path': path },
+            data = { 'group_id': group_id, 'path': path, 'perm': perm},
             url = '{% url 'remove_group_folder_permission' repo.id %}';
     }
 
@@ -329,7 +330,7 @@ function selectClickHandler(event) {
     }
     if (path_array.length == 1) {
         path = path_array.shift();
-        folder_name.val('Root Directory');
+        folder_name.val('/');
     } else {
         var root = path_array.shift(),
             path = root + path_array.join('/'),

@@ -45,7 +45,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_org_user_events, get_user_events, get_file_type_and_ext, \
-    is_valid_username
+    is_valid_username, send_perm_audit_msg
 from seahub.utils.repo import check_group_folder_perm_args, \
     check_user_folder_perm_args
 from seahub.utils.star import star_file, unstar_file
@@ -1715,7 +1715,10 @@ def repo_history_changes(request, repo_id):
 
     # perm check
     if check_repo_access_permission(repo.id, request.user) is None:
-        return HttpResponse(json.dumps(changes), content_type=content_type)
+        if request.user.is_staff is True:
+            pass # Allow system staff to check repo changes
+        else:
+            return HttpResponse(json.dumps(changes), content_type=content_type)
 
     username = request.user.username
     try: 
@@ -2109,6 +2112,8 @@ def add_user_folder_permission(request, repo_id):
 
     try:
         seafile_api.add_folder_user_perm(repo_id, path, perm, user)
+        send_perm_audit_msg('add-repo-perm', request.user.username, user, \
+                            repo_id, path, perm)
     except SearpcError, e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
@@ -2127,8 +2132,9 @@ def remove_user_folder_permission(request, repo_id):
 
     user = request.GET.get('user', None)
     path = request.GET.get('path', None)
+    perm = request.GET.get('perm', None)
 
-    if not user or not path:
+    if not user or not path or not perm:
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400,
                             content_type=content_type)
@@ -2140,6 +2146,8 @@ def remove_user_folder_permission(request, repo_id):
 
     try:
         seafile_api.rm_folder_user_perm(repo_id, path, user)
+        send_perm_audit_msg('delete-repo-perm', request.user.username, user, \
+                            repo_id, path, perm)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except SearpcError, e:
@@ -2161,7 +2169,6 @@ def toggle_user_folder_permission(request, repo_id):
     path = request.POST.get('path', None)
     perm = request.POST.get('perm', None)
 
-    print user, path, perm
     if not user or not path or not perm:
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400,
@@ -2174,6 +2181,8 @@ def toggle_user_folder_permission(request, repo_id):
 
     try:
         seafile_api.set_folder_user_perm(repo_id, path, perm, user)
+        send_perm_audit_msg('modify-repo-perm', request.user.username, user, \
+                            repo_id, path, perm)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except SearpcError, e:
@@ -2207,6 +2216,8 @@ def add_group_folder_permission(request, repo_id):
 
     try:
         seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
+        send_perm_audit_msg('add-repo-perm', request.user.username, \
+                group_id, repo_id, path, perm)
     except SearpcError, e:
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
@@ -2225,8 +2236,9 @@ def remove_group_folder_permission(request, repo_id):
 
     group_id = int(request.GET.get('group_id', None))
     path = request.GET.get('path', None)
+    perm = request.GET.get('perm', None)
 
-    if not group_id or not path:
+    if not group_id or not path or not perm:
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400,
                             content_type=content_type)
@@ -2238,6 +2250,8 @@ def remove_group_folder_permission(request, repo_id):
 
     try:
         seafile_api.rm_folder_group_perm(repo_id, path, group_id)
+        send_perm_audit_msg('delete-repo-perm', request.user.username, \
+                group_id, repo_id, path, perm)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except SearpcError, e:
@@ -2271,6 +2285,8 @@ def toggle_group_folder_permission(request, repo_id):
 
     try:
         seafile_api.set_folder_group_perm(repo_id, path, perm, group_id)
+        send_perm_audit_msg('modify-repo-perm', request.user.username, \
+                group_id, repo_id, path, perm)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except SearpcError, e:

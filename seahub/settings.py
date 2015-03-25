@@ -427,6 +427,11 @@ PREVIEW_DEFAULT_SIZE = '100'
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
+#####################
+# Folder Permission #
+#####################
+ENABLE_FOLDER_PERM = False
+
 #################
 # Email sending #
 #################

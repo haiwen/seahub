@@ -26,7 +26,7 @@
                 <span data="{{ repo.repo_id }}" class="icon-cloud-download download-btn op-icon vh" title="{% trans "Download and Sync" %}"></span>
                 {% endif %}
                 {% if repo.share_type == 'personal' %}
-                <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+                <span data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.repo_id }}&from={{ repo.user|urlencode }}&to={{ request.user.username|urlencode }}&permission={{ repo.user_perm }}" data-target="{{repo.repo_name}}" class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
                 {% endif %}
             </td>
         </tr>

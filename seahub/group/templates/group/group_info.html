@@ -49,7 +49,7 @@
         {% endif %}
         </td>
         <td>{{ repo.owner|email2nickname }}</td>
-        <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}">
+        <td data-id="{{ repo.props.id }}" data-owner="{{ repo.owner }}" data-name="{{ repo.props.name }}" data-perm="{{ repo.user_perm }}">
             {% if is_staff or repo.share_from_me %}
             <img src="{{MEDIA_URL}}img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
             {% endif %}
@@ -141,8 +141,9 @@ $('.cancel-share').click(function() {
     var btn_ct = $(this).parent(),
         repo_id = btn_ct.data('id'),
         repo_owner = btn_ct.attr('data-owner'),
+        repo_perm = btn_ct.attr('data-perm'),
         repo_name = btn_ct.attr('data-name');
-    $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}').attr('data-target', repo_name);
+    $(this).data('url', '{% url 'repo_remove_share' %}?repo_id=' + e(repo_id) + '&from=' + e(repo_owner) + '&gid={{ group.id }}' + '&permission=' + e(repo_perm)).attr('data-target', repo_name);
 });
 addConfirmTo($('.cancel-share'), {
     'title': "{% trans "Unshare Library" %}",

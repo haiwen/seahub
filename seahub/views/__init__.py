@@ -53,9 +53,10 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
-    user_traffic_over_limit
+    user_traffic_over_limit, send_perm_audit_msg, get_origin_repo_info
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
+from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 from seahub.utils.devices import get_user_devices, do_unlink_device
@@ -63,7 +64,8 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, REPO_PASSWORD_MIN_LENGTH
+    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
+    REPO_PASSWORD_MIN_LENGTH, ENABLE_FOLDER_PERM
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -477,6 +479,7 @@ def repo_basic_info(request, repo_id):
             'no_history_enabled': no_history_enabled,
             'partial_history_enabled': partial_history_enabled,
             'days_enabled': days_enabled,
+            'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -491,6 +494,7 @@ def repo_transfer_owner(request, repo_id):
 
     return render_to_response('repo_transfer_owner.html', {
             'repo': repo,
+            'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -506,6 +510,7 @@ def repo_change_password(request, repo_id):
     return render_to_response('repo_change_password.html', {
             'repo': repo,
             'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
+            'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -565,6 +570,7 @@ def repo_shared_link(request, repo_id):
             'repo': repo,
             'fileshares': p_fileshares,
             'uploadlinks': p_uploadlinks,
+            'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -598,6 +604,7 @@ def repo_share_manage(request, repo_id):
             'repo': repo,
             'repo_share_user': repo_share_user,
             'repo_share_group': repo_share_group,
+            'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -607,11 +614,42 @@ def repo_folder_perm(request, repo_id):
     username = request.user.username
     can_access, repo = can_access_repo_setting(request, repo_id, username)
 
-    if not can_access:
+    if not can_access or not ENABLE_FOLDER_PERM:
         raise Http404
+
+    def not_need_delete(perm):
+        repo_id = perm.repo_id
+        path = perm.path
+        group_id = perm.group_id if hasattr(perm, 'group_id') else None
+        email = perm.user if hasattr(perm, 'user') else None
+
+        repo = get_repo(repo_id)
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+
+        if group_id is not None:
+            # is a group folder perm
+            group = get_group(group_id)
+            if repo is None or dir_id is None or group is None:
+                seafile_api.rm_folder_group_perm(repo_id, path, group_id)
+                return False
+
+        if email is not None:
+            # is a user folder perm
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                user = None
+
+            if repo is None or dir_id is None or user is None:
+                seafile_api.rm_folder_user_perm(repo_id, path, email)
+                return False
+
+        return True
 
     # for user folder permission
     user_folder_perms = seafile_api.list_folder_user_perm_by_repo(repo_id)
+    user_folder_perms = filter(lambda x: not_need_delete(x), user_folder_perms)
+
     user_folder_perms.reverse()
 
     for folder_perm in user_folder_perms:
@@ -624,6 +662,8 @@ def repo_folder_perm(request, repo_id):
 
     # for group folder permission
     group_folder_perms = seafile_api.list_folder_group_perm_by_repo(repo_id)
+    group_folder_perms = filter(lambda x: not_need_delete(x), group_folder_perms)
+
     group_folder_perms.reverse()
 
     for folder_perm in group_folder_perms:
@@ -633,15 +673,26 @@ def repo_folder_perm(request, repo_id):
             folder_perm.folder_name = _(u'Root Directory')
         else:
             folder_perm.folder_name = os.path.basename(folder_path)
+
         folder_perm.group_name = get_group(folder_perm.group_id).group_name
 
+    # contacts that already registered
+    sys_contacts = []
     contacts = Contact.objects.get_contacts_by_user(username)
+    for contact in contacts:
+        try:
+            user = User.objects.get(email = contact.contact_email)
+        except User.DoesNotExist:
+            user = None
+
+        if user is not None:
+            sys_contacts.append(contact.contact_email)
 
     return render_to_response('repo_folder_perm.html', {
             'repo': repo,
             'user_folder_perms': user_folder_perms,
             'group_folder_perms': group_folder_perms,
-            'contacts': contacts,
+            'contacts': sys_contacts,
             }, context_instance=RequestContext(request))
 
 def upload_error_msg (code):
@@ -1098,6 +1149,9 @@ def unsetinnerpub(request, repo_id):
     Only system admin, organization admin or repo owner can perform this op.
     """
     repo = get_repo(repo_id)
+    perm = request.GET.get('permission', None)
+    if perm is None:
+        return render_error(request, _(u'Argument is not valid'))
     if not repo:
         messages.error(request, _('Failed to unshare the library, as it does not exist.'))
         return HttpResponseRedirect(reverse('share_admin'))
@@ -1123,6 +1177,17 @@ def unsetinnerpub(request, repo_id):
                                                                    repo.id)
         else:
             seaserv.unset_inner_pub_repo(repo.id)
+
+            origin_repo_id, origin_path = get_origin_repo_info(repo.id)
+            if origin_repo_id is not None:
+                perm_repo_id = origin_repo_id
+                perm_path = origin_path
+            else:
+                perm_repo_id = repo.id
+                perm_path =  '/'
+
+            send_perm_audit_msg('delete-repo-perm', username, 'all', \
+                                perm_repo_id, perm_path, perm)
 
         messages.success(request, _('Unshare "%s" successfully.') % repo.name)
     except SearpcError:
@@ -1793,14 +1858,6 @@ def group_events_data(events):
     """
     Group events according to the date.
     """
-    # e.timestamp is a datetime.datetime in UTC
-    # change from UTC timezone to current seahub timezone
-    def utc_to_local(dt):
-        tz = timezone.get_default_timezone()
-        utc = dt.replace(tzinfo=timezone.utc)
-        local = timezone.make_naive(utc, tz)
-        return local
-
     event_groups = []
     for e in events:
         e.time = utc_to_local(e.timestamp)

@@ -11,6 +11,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 from django.utils.translation import pgettext
+from django.utils.html import escape
 
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
@@ -19,7 +20,7 @@ from seahub.profile.settings import NICKNAME_CACHE_TIMEOUT, NICKNAME_CACHE_PREFI
 from seahub.cconvert import CConvert
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
-from seahub.utils import normalize_cache_key
+from seahub.utils import normalize_cache_key, CMMT_DESC_PATT
 
 register = template.Library()
 
@@ -163,6 +164,82 @@ def translate_commit_desc(value):
             ret_list.append(ret)
 
         return '\n'.join(ret_list)
+
+@register.filter(name='translate_commit_desc_escape')
+def translate_commit_desc_escape(value):
+    """Translate commit description."""
+    if value.startswith('Reverted repo'):
+        # Change 'repo' to 'library' in revert commit msg, since 'repo' is
+        # only used inside of seafile system.
+        value = value.replace('repo', 'library')
+
+    ret_list = []
+
+    # Do nothing if current language is English.
+    if translation.get_language() == 'en':
+        for e in value.split('\n'):
+            # if not match, this commit desc will not convert link, so
+            # escape it
+            ret = e if re.search(CMMT_DESC_PATT, e) else escape(e)
+            ret_list.append(ret)
+        return '\n'.join(ret_list)
+
+    if value.startswith('Reverted library'):
+        return_value = escape(value.replace('Reverted library to status at', _('Reverted library to status at')))
+    elif value.startswith('Reverted file'):
+        def repl(matchobj):
+            return _('Reverted file "%(file)s" to status at %(time)s.') % \
+                {'file':matchobj.group(1), 'time':matchobj.group(2)}
+        return_value = escape(re.sub('Reverted file "(.*)" to status at (.*)', repl, value))
+    elif value.startswith('Recovered deleted directory'):
+        return_value = escape(value.replace('Recovered deleted directory', _('Recovered deleted directory')))
+    elif value.startswith('Changed library'):
+        return_value = escape(value.replace('Changed library name or description', _('Changed library name or description')))
+    elif value.startswith('Merged') or value.startswith('Auto merge'):
+        return_value = escape(_('Auto merge by seafile system'))
+    else:
+        # Use regular expression to translate commit description.
+        # Commit description has two forms, e.g., 'Added "foo.txt" and 3 more files.' or 'Added "foo.txt".'
+        operations = '|'.join(COMMIT_MSG_TRANSLATION_MAP.keys())
+        patt = r'(%s) "(.*)"\s?(and ([0-9]+) more (files|directories))?' % operations
+
+        for e in value.split('\n'):
+            if not e:
+                continue
+
+            m = re.match(patt, e)
+            if not m:
+                # if not match, this commit desc will not convert link, so
+                # escape it
+                ret_list.append(escape(e))
+                continue
+
+            op = m.group(1)     # e.g., "Added"
+            op_trans = _(op)
+            file_name = m.group(2) # e.g., "foo.txt"
+            has_more = m.group(3)  # e.g., "and 3 more files"
+            n_files = m.group(4)   # e.g., "3"
+            more_type = m.group(5) # e.g., "files"
+
+            if has_more:
+                if translation.get_language() == 'zh-cn':
+                    typ = u'文件' if more_type == 'files' else u'目录'
+                    ret = op_trans + u' "' + file_name + u'"以及另外' + n_files + u'个' + typ + '.'
+                # elif translation.get_language() == 'ru':
+                #     ret = ...
+                else:
+                    ret = e
+            else:
+                ret = op_trans + u' "' + file_name + u'".'
+
+            # if not match, this commit desc will not convert link, so
+            # escape it
+            ret = ret if re.search(CMMT_DESC_PATT, e) else escape(ret)
+            ret_list.append(ret)
+
+        return_value = '\n'.join(ret_list)
+
+    return return_value
 
 @register.filter(name='translate_seahub_time')
 def translate_seahub_time(value):
