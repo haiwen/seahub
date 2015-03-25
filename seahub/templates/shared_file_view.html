@@ -33,7 +33,7 @@
               {% endif %}
             {% endif %}
             {% if not traffic_over_limit %}
-            <a href="{{ SITE_ROOT }}repo/{{ repo.id }}/{{ obj_id }}/?file_name={{ file_name|urlencode }}&op=download&t={{ shared_token }}&p={{path|urlencode}}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+            <a href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&t={{ shared_token }}&p={{path|urlencode}}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
         </div>
         {% include 'snippets/file_content_html.html' %}

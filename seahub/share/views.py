@@ -40,8 +40,8 @@ from seahub.views import is_registered_user, check_repo_access_permission, \
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    is_valid_username, send_html_email, is_org_context, \
-    normalize_file_path, normalize_dir_path
+    is_valid_username, send_html_email, is_org_context, normalize_file_path, \
+    normalize_dir_path, send_perm_audit_msg, get_origin_repo_info
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 
 # Get an instance of a logger
@@ -253,8 +253,18 @@ def share_repo(request):
             if is_valid_username(share_to):
                 share_to_users.append(share_to)
 
+    origin_repo_id, origin_path = get_origin_repo_info(repo.id)
+    if origin_repo_id is not None:
+        perm_repo_id = origin_repo_id
+        perm_path = origin_path
+    else:
+        perm_repo_id = repo.id
+        perm_path =  '/'
+
     if share_to_all:
         share_to_public(request, repo, permission)
+        send_perm_audit_msg('add-repo-perm', username, 'all', \
+                            perm_repo_id, perm_path, permission)
 
     if not check_user_share_quota(username, repo, users=share_to_users,
                                   groups=share_to_groups):
@@ -266,11 +276,15 @@ def share_repo(request):
 
     for group in share_to_groups:
         share_to_group(request, repo, group, permission)
+        send_perm_audit_msg('add-repo-perm', username, group.id, \
+                            perm_repo_id, perm_path, permission)
 
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
         share_to_user(request, repo, email, permission)
+        send_perm_audit_msg('add-repo-perm', username, email, \
+                            perm_repo_id, perm_path, permission)
 
     return HttpResponseRedirect(next)
 
@@ -285,9 +299,22 @@ def repo_remove_share(request):
     repo_id = request.GET.get('repo_id', '')
     group_id = request.GET.get('gid', '')
     from_email = request.GET.get('from', '')
-    if not is_valid_username(from_email):
+    perm = request.GET.get('permission', None)
+    if not is_valid_username(from_email) or perm is None:
         return render_error(request, _(u'Argument is not valid'))
     username = request.user.username
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(u'Library does not exist'))
+
+    origin_repo_id, origin_path = get_origin_repo_info(repo.id)
+    if origin_repo_id is not None:
+        perm_repo_id = origin_repo_id
+        perm_path = origin_path
+    else:
+        perm_repo_id = repo.id
+        perm_path =  '/'
 
     # if request params don't have 'gid', then remove repos that share to
     # to other person; else, remove repos that share to groups
@@ -304,6 +331,8 @@ def repo_remove_share(request):
             org_remove_share(org_id, repo_id, from_email, to_email)
         else:
             seaserv.remove_share(repo_id, from_email, to_email)
+            send_perm_audit_msg('delete-repo-perm', from_email, to_email, \
+                                perm_repo_id, perm_path, perm)
     else:
         try:
             group_id = int(group_id)
@@ -323,6 +352,8 @@ def repo_remove_share(request):
             del_org_group_repo(repo_id, org_id, group_id)
         else:
             seafile_api.unset_group_repo(repo_id, group_id, from_email)
+            send_perm_audit_msg('delete-repo-perm', from_email, group_id, \
+                                perm_repo_id, perm_path, perm)
 
     messages.success(request, _('Successfully removed share'))
 
@@ -566,6 +597,19 @@ def share_permission_admin(request):
     permission = form.cleaned_data['permission']
     from_email = request.user.username
 
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        return render_error(request, _(u'Library does not exist'))
+
+    origin_repo_id, origin_path = get_origin_repo_info(repo.id)
+    if origin_repo_id is not None:
+        perm_repo_id = origin_repo_id
+        perm_path = origin_path
+    else:
+        perm_repo_id = repo.id
+        perm_path =  '/'
+
+
     if share_type == 'personal':
         if not is_valid_username(email_or_group):
             return HttpResponse(json.dumps({'success': False}), status=400,
@@ -579,6 +623,9 @@ def share_permission_admin(request):
             else:
                 seafile_api.set_share_permission(repo_id, from_email,
                                                  email_or_group, permission)
+                send_perm_audit_msg('modify-repo-perm', from_email, \
+                        email_or_group, perm_repo_id, perm_path, permission)
+
         except SearpcError:
             return HttpResponse(json.dumps({'success': False}), status=500,
                                 content_type=content_type)
@@ -592,8 +639,12 @@ def share_permission_admin(request):
                 seaserv.seafserv_threaded_rpc.set_org_group_repo_permission(
                     org_id, int(email_or_group), repo_id, permission)
             else:
-                seafile_api.set_group_repo_permission(int(email_or_group),
-                                                      repo_id, permission)
+                group_id = int(email_or_group)
+                seafile_api.set_group_repo_permission(group_id,
+                                                      repo_id,
+                                                      permission)
+                send_perm_audit_msg('modify-repo-perm', from_email, \
+                                    group_id, perm_repo_id, perm_path, permission)
         except SearpcError:
             return HttpResponse(json.dumps({'success': False}), status=500,
                                 content_type=content_type)
@@ -608,6 +659,8 @@ def share_permission_admin(request):
                     org_id, repo_id, permission)
             else:
                 seafile_api.add_inner_pub_repo(repo_id, permission)
+                send_perm_audit_msg('modify-repo-perm', from_email, 'all', \
+                                    perm_repo_id, perm_path, permission)
         except SearpcError:
             return HttpResponse(json.dumps({'success': False}), status=500,
                                 content_type=content_type)

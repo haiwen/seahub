@@ -23,8 +23,10 @@
         {% if not repo.encrypted %}
         <li class="tab"><a href="{% url 'repo_shared_link' repo.id %}">{% trans "Shared Links" %}</a></li>
         {% endif %}
-        <li class="tab tab-cur"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Management" %}</a></li>
-        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "SubFolder Permission" %}</a></li>
+        <li class="tab tab-cur"><a href="{% url 'repo_share_manage' repo.id %}">{% trans "Sharing Permission" %}</a></li>
+        {% if ENABLE_FOLDER_PERM %}
+        <li class="tab"><a href="{% url 'repo_folder_perm' repo.id %}">{% trans "Folder Permission" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
@@ -33,7 +35,7 @@
 <div class="lib-setting">
     <h2>{% trans "Library Settings" %}</h2>
     <h3>{% trans "Sharing Management" %}</h3>
-    <p>{% trans "View and manage all the share of this library." %}</p>
+    <p>{% trans "View and manage sharing permissions of this library." %}</p>
 
     <div id="tabs" class="tab-tabs">
         <div class="hd ovhd">
@@ -72,7 +74,7 @@
                         </select>
                     </td>
                     <td>
-                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&to={{ share.user|urlencode }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&to={{ share.user|urlencode }}&permission={{ share.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -105,7 +107,7 @@
                         </select>
                     </td>
                     <td>
-                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ share.group_id }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ share.group_id }}&permission={{ share.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
                     </td>
                 </tr>
                 {% endfor %}
