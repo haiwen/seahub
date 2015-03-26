@@ -27,26 +27,37 @@ def thumbnail_create(request, repo_id):
     content_type = 'application/json; charset=utf-8'
     result = {}
 
-    path = request.GET.get('path')
+    if not ENABLE_THUMBNAIL:
+        err_msg = _(u"Thumbnail function is not enabled.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u"Library does not exist.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
+    if repo.encrypted:
+        err_msg = _(u"Image thumbnail is not supported in encrypted libraries.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
+    path = request.GET.get('path', None)
     size = request.GET.get('size', THUMBNAIL_DEFAULT_SIZE)
     obj_id = get_file_id_by_path(repo_id, path)
+
+    if path is None or obj_id is None:
+        err_msg = _(u"Wrong path.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
     raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
                                                                   repo_id,
                                                                   obj_id, path)
 
     if user_perm is None:
         err_msg = _(u"Permission denied.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
-                            content_type=content_type)
-
-    repo = get_repo(repo_id)
-    if repo.encrypted:
-        err_msg = _(u"Image thumbnail is not supported in encrypted libraries.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
-                            content_type=content_type)
-
-    if not ENABLE_THUMBNAIL:
-        err_msg = _(u"Thumbnail function is not enabled.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
@@ -67,6 +78,8 @@ def thumbnail_create(request, repo_id):
         try:
             f = StringIO(open_file.read())
             image = Image.open(f)
+            if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+               image = image.convert("RGB")
             image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
             image.save(thumbnail_file, THUMBNAIL_EXTENSION)
         except Exception as e:
