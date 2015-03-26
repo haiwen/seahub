@@ -48,6 +48,7 @@ define([
             };
 
             var uploaded_files = [];
+            var updated_files = [];
 
             var enable_upload_folder = app.pageOptions.enable_upload_folder;
             var new_dir_names = [];
@@ -115,13 +116,20 @@ define([
                     return false;
                 }
                 var file = data.files[0];
-                // get url(token) for every file
-                if (!file.error) {
+                if (file.error) {
+                    return false;
+                }
+
+                var upload_file = function() {
                     $.ajax({
                         url: Common.getUrl({
                             name: 'get_file_op_url',
                             repo_id: dirents.repo_id
-                            }) + '?op_type=upload',
+                            }),
+                        data: {
+                            'op_type': 'upload',
+                            'path': dirents.path
+                        },
                         cache: false,
                         dataType: 'json',
                         success: function(ret) {
@@ -142,8 +150,70 @@ define([
                             file.error = gettext("Failed to get upload url");
                         }
                     });
+                };
+
+                if (file.relative_path || data.originalFiles.length > 1) { // 'add folder' or upload more than 1 file once
+                    upload_file();
                     return false;
                 }
+
+                var update_file = function() {
+                    $.ajax({
+                        url: Common.getUrl({
+                            name: 'get_file_op_url',
+                            repo_id: dirents.repo_id
+                            }),
+                        data: {
+                            'op_type': 'update',
+                            'path': dirents.path
+                        },
+                        cache: false,
+                        dataType: 'json',
+                        success: function(ret) {
+                            var formData = popup.fileupload('option', 'formData');
+                            formData.target_file = formData.parent_dir + file.name;
+                            popup.fileupload('option', 'formData', formData);
+
+                            file.to_update = true;
+
+                            data.url = ret['url'];
+                            data.jqXHR = popup.fileupload('send', data);
+                        },
+                        error: function() {
+                            file.error = gettext("Failed to get update url");
+                        }
+                    });
+                };
+
+                var files = dirents.where({'is_file': true}),
+                    file_names = [];
+                $(files).each(function() {
+                    file_names.push(this.get('obj_name'));
+                });
+                if (file_names.indexOf(file.name) != -1) { // file with the same name already exists in the dir
+                    file.choose_to_update = false;
+                    var confirm_msg = gettext("Replace file {filename}?")
+                        .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
+                    var confirm_msg_detail = gettext("A file with the same name already exists in this directory. Replacing it with overwrite its content.");
+                    $('#confirm-con').html('<h3>' + confirm_msg + '</h3><p>' + confirm_msg_detail + '</p>');
+                    $('#confirm-popup').modal({
+                        onClose: function() {
+                            $.modal.close();
+                            if (file.choose_to_update) {
+                                update_file();
+                            } else {
+                                upload_file();
+                            }
+                        }
+                    });
+                    $('#confirm-yes').click(function() {
+                        file.choose_to_update = true;
+                        $.modal.close();
+                    });
+                } else {
+                    upload_file();
+                }
+                return false;
             })
             .bind('fileuploadprogressall', function (e, data) {
                 $total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' +
@@ -172,7 +242,11 @@ define([
                     return;
                 }
                 if (!file_path) {
-                    uploaded_files.push(file_uploaded);
+                    if (!file.to_update) {
+                        uploaded_files.push(file_uploaded);
+                    } else {
+                        updated_files.push(file_uploaded);
+                    }
                     return;
                 }
                 if (!enable_upload_folder) {
@@ -210,9 +284,7 @@ define([
                             'obj_id': file.id,
                             'file_icon': 'file.png',
                             'last_update': gettext("Just now"),
-                            'starred': false,
-                            'sharelink': '',
-                            'sharetoken': ''
+                            'starred': false
                         }, {silent: true});
                         dirView.addNewFile(new_dirent);
                     });
@@ -240,6 +312,18 @@ define([
                         });
                     });
                     dirs_to_update = [];
+                }
+                if (updated_files.length > 0) {
+                    $(updated_files).each(function(index, item) {
+                        var file_to_update = dirents.where({'is_file':true, 'obj_name':item.name});
+                        file_to_update[0].set({
+                            'obj_id': item.id,
+                            'file_size': Common.fileSizeFormat(item.size, 1),
+                            'last_modified': now,
+                            'last_update': gettext("Just now")
+                        });
+                    });
+                    updated_files = [];
                 }
             })
             // after tpl has rendered
