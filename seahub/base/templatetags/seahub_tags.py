@@ -242,31 +242,37 @@ def translate_commit_desc_escape(value):
     return return_value
 
 @register.filter(name='translate_seahub_time')
-def translate_seahub_time(value):
-    """Translate seahub time to human friendly format instead of timestamp"""
-    
+def translate_seahub_time(value, autoescape=None):
     if isinstance(value, int) or isinstance(value, long): # check whether value is int
-        val_ts = value
         try:
-            val = datetime.fromtimestamp(val_ts) # convert timestamp to datetime
+            val = datetime.fromtimestamp(value) # convert timestamp to datetime
         except ValueError as e:
             return ""
     elif isinstance(value, datetime):
         # FIXME: convert datetime to timestamp may cause problem, need a better way.
-        val_ts = int(time.mktime(value.timetuple())) 
         val = value
     else:
         return value
 
-    limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
+    translated_time=translate_seahub_time_str(val);
+    if autoescape:
+       translated_time = escape(translated_time)
+
+    timestring=val.isoformat()
+    titletime=val.strftime("%c")
+ 
+    time_with_tag='<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'
+
+    return mark_safe(time_with_tag)
+
+def translate_seahub_time_str(val):
+    """Translate seahub time to human friendly format instead of timestamp"""
+    
     now = datetime.now()
-    # If current time is less than value, that means clock at user machine is
-    # faster than server, in this case, we just set time description to `just now`
-    if time.mktime(now.timetuple()) < val_ts:
-        return _('Just now')
+    limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
 
     delta = now - (val - dt.timedelta(0, 0, val.microsecond))
-    seconds = delta.seconds
+    seconds = delta.total_seconds()
     days = delta.days
     if days * 24 * 60 * 60 + seconds > limit:
         return val.strftime("%Y-%m-%d")
