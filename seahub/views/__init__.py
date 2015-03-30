@@ -1370,7 +1370,7 @@ def render_file_revisions (request, repo_id):
         return render_error(request, e.msg)
 
     if not commits:
-        return render_error(request)
+        return render_error(request, _(u'No revisions found'))
 
     # Check whether user is repo owner
     if validate_owner(request, repo_id):
