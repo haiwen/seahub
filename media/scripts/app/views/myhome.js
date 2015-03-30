@@ -5,11 +5,12 @@ define([
     'common',
     'app/collections/groups',
     'app/views/myhome-repos',
+    'app/views/myhome-sub-repos',
     'app/views/myhome-shared-repos',
     'app/views/dir',
     'app/views/group-nav',
 ], function($, _, Backbone, Common, GroupCollection,
-        ReposView, SharedReposView, DirView, GroupNavView) {
+        ReposView, SubReposView, SharedReposView, DirView, GroupNavView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -24,6 +25,7 @@ define([
             this.$cont = this.$('#right-panel');
 
             this.reposView = new ReposView();
+            this.subReposView = new SubReposView();
             this.sharedReposView = new SharedReposView();
             this.dirView = new DirView();
             this.groupView = new GroupNavView();
@@ -58,6 +60,12 @@ define([
             this.currentView = this.reposView;
         },
 
+        showMySubRepos: function() {
+            this.currentView.hide();
+            this.subReposView.show();
+            this.currentView = this.subReposView;
+        },
+
         showSharedRepos: function() {
             this.currentView.hide();
             this.sharedReposView.show();
@@ -69,7 +77,7 @@ define([
             this.currentView.hide();
             this.dirView.showDir(category, repo_id, path);
             this.currentView = this.dirView;
-        },
+        }
 
 
     });

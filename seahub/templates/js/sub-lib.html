@@ -1,0 +1,19 @@
+{% load i18n %}
+<td>
+    <% if (encrypted) { %>
+    <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+    <% } else { %>
+    <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+    <% } %>
+</td>
+<td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
+<td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
+<td><%- mtime_relative %></td>
+<td>
+    <div>
+        <% if (is_original_owner) { %>
+        <img src="{{MEDIA_URL}}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+        <% } %>
+        <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+    </div>
+</td>
