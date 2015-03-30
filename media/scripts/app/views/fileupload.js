@@ -26,6 +26,8 @@ define([
     var FileUploadView = Backbone.View.extend({
         el: $('#upload-file-dialog'),
 
+        fileupdateConfirmTemplate: _.template($("#fileupdate-confirm-template").html()),
+
         initialize: function (options) {
             var dirView = this.dirView = options.dirView;
             var dirents = dirView.dir;
@@ -54,6 +56,7 @@ define([
             var new_dir_names = [];
             var dirs_to_update = [];
 
+            var _this = this;
             popup.fileupload({
                 paramName: 'file',
                 // customize it for 'done'
@@ -191,7 +194,11 @@ define([
                     file_names.push(this.get('obj_name'));
                 });
                 if (file_names.indexOf(file.name) != -1) { // file with the same name already exists in the dir
-                    var confirm_popup = $('#confirm-popup');
+                    var confirm_title = gettext("Replace file {filename}?")
+                        .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
+                    var confirm_popup = $(_this.fileupdateConfirmTemplate({
+                        title: confirm_title
+                    }));
                     confirm_popup.modal({
                         onClose: function() {
                             $.modal.close();
@@ -205,19 +212,11 @@ define([
                             }
                         }
                     });
-                    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-                    var confirm_msg = gettext("Replace file {filename}?")
-                        .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
-                    var confirm_msg_detail = gettext("A file with the same name already exists in this folder.") + '<br />' + gettext("Replacing it will overwrite its content.");
-                    var upload_btn = $('<button id="not-replace" class="btn">' + gettext("Don't replace") + '</button>').css({'margin-left': '8px'});
-                    $('#confirm-con').html('<h3>' + confirm_msg + '</h3><p>' + confirm_msg_detail + '</p>');
-                    $('#confirm-yes').html(gettext("Replace")).after(upload_btn);
-                    $('.simplemodal-close', confirm_popup).html(gettext("Cancel"));
-                    $('#confirm-yes').click(function() {
+                    $('.yes', confirm_popup).click(function() {
                         file.choose_to_update = true;
                         $.modal.close();
                     });
-                    upload_btn.click(function() {
+                    $('.no', confirm_popup).click(function() {
                         file.choose_to_upload = true;
                         $.modal.close();
                     });
