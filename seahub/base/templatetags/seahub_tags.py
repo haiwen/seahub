@@ -249,30 +249,34 @@ def translate_seahub_time(value, autoescape=None):
         except ValueError as e:
             return ""
     elif isinstance(value, datetime):
-        # FIXME: convert datetime to timestamp may cause problem, need a better way.
         val = value
     else:
         return value
 
-    translated_time=translate_seahub_time_str(val);
+    translated_time = translate_seahub_time_str(val)
     if autoescape:
-       translated_time = escape(translated_time)
+        translated_time = escape(translated_time)
 
-    timestring=val.isoformat()
-    titletime=val.strftime("%c")
- 
-    time_with_tag='<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'
+    timestring = val.isoformat()
+    titletime = val.strftime("%c")
+
+    time_with_tag = '<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'
 
     return mark_safe(time_with_tag)
 
 def translate_seahub_time_str(val):
-    """Translate seahub time to human friendly format instead of timestamp"""
-    
+    """Convert python datetime to human friendly format."""
+
     now = datetime.now()
-    limit = 14 * 24 * 60 * 60	# Timestamp with in two weeks will be translated
+    # If current time is less than `val`, that means clock at user machine is
+    # faster than server, in this case, we just set time description to `just now`
+    if now < val:
+        return _('Just now')
+
+    limit = 14 * 24 * 60 * 60  # Timestamp with in two weeks will be translated
 
     delta = now - (val - dt.timedelta(0, 0, val.microsecond))
-    seconds = delta.total_seconds()
+    seconds = delta.seconds
     days = delta.days
     if days * 24 * 60 * 60 + seconds > limit:
         return val.strftime("%Y-%m-%d")
