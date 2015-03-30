@@ -481,6 +481,8 @@ REPLACE_FROM_EMAIL = False
 # Add ``Reply-to`` header, see RFC #822.
 ADD_REPLY_TO_HEADER = False
 
+CLOUD_DEMO_USER = 'demo@seafile.com'
+
 #####################
 # External settings #
 #####################
@@ -555,4 +557,3 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
-
