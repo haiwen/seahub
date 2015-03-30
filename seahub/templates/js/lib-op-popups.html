@@ -112,3 +112,13 @@
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>
     </script>
+
+    <script type="text/template" id="fileupdate-confirm-template">
+        <div>
+            <h3><%= title %></h3>
+            <p>{% trans "A file with the same name already exists in this folder." %}<br />{% trans "Replacing it will overwrite its content." %}</p>
+            <button class="yes btn">{% trans "Replace" %}</button>
+            <button class="no btn" style="margin-left:5px;">{% trans "Don't replace" %}</button>
+            <button class="simplemodal-close btn">{% trans "Cancel" %}</button>
+        </div>
+    </script>
