@@ -9,7 +9,6 @@ define([
 
     var MyHomeRouter = Backbone.Router.extend({
         routes: {
-            'lib/:repo_id(/*path)': 'showDir',
             'my-libs': 'showMyRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'shared-libs': 'showSharedRepos',
@@ -23,18 +22,7 @@ define([
             this.myHomeView = new MyHomeView();
         },
 
-        showDir: function(repo_id, path) {
-            if (path) {
-                path = '/' + path;
-            } else {
-                path = '/';
-            }
-            console.log("Repo route has been called.." + "repo_id:" + repo_id + " path:" + path);
-            this.myHomeView.showDir(repo_id, path);
-        },
-
         showMyRepos: function() {
-            console.log("show My Repos");
             this.myHomeView.showMyRepos();
         },
 

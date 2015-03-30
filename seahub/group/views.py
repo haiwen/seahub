@@ -43,7 +43,7 @@ from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_l
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name
-from seahub.settings import SITE_ROOT, SITE_NAME
+from seahub.settings import SITE_ROOT, SITE_NAME, PREVIEW_DEFAULT_SIZE
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     gen_file_get_url, get_file_type_and_ext, \
@@ -629,6 +629,7 @@ def group_info(request, group):
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
+            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 @group_check

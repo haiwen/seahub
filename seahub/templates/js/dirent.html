@@ -55,9 +55,9 @@
 <td class="dirent-icon">
     <% if (dirent.is_img) { %>
     <% if (dirent.thumbnail_src) { %>
-    <img class="thumbnail" src="<%= dirent.thumbnail_src %>" alt="" />
+    <img class="thumbnail cspt" data-name="<%- dirent.obj_name %>" src="<%= dirent.thumbnail_src %>" alt="" />
     <% } else { %>
-    <img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+    <img class="not-thumbnail cspt" data-name="<%- dirent.obj_name %>" src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
     <% } %>
     <% } else { %>
     <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
