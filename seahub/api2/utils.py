@@ -59,19 +59,6 @@ def is_repo_accessible(repo_id, username):
     else:
         return True
 
-def calculate_repo_info(repo_list, username):
-    """
-    Get some info for repo.
-
-    """
-    for repo in repo_list:
-        commit = get_commits(repo.id, 0, 1)[0]
-        if not commit:
-            continue
-        repo.latest_modify = commit.ctime
-        repo.root = commit.root_id
-        repo.size = server_repo_size(repo.id)
-
 def get_file_size(store_id, repo_version, file_id):
     size = seafile_api.get_file_size(store_id, repo_version, file_id)
     return size if size else 0
