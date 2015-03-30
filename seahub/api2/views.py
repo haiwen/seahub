@@ -483,42 +483,39 @@ class Repos(APIView):
                     abbrev_path = path[-20:]
                     return repo_name + '/...' + abbrev_path
                 else:
-                    return repo_name + path 
+                    return repo_name + path
 
             # compose abbrev origin path for display
-            sub_repos = [] 
-            sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(email)
-            if settings.ENABLE_SUB_LIBRARY and sub_lib_enabled:
-                sub_repos = get_virtual_repos_by_owner(request)
-                for repo in sub_repos:
-                    repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
-                                                                     repo.origin_path)
-                #calculate_repos_last_modify(sub_repos)
-                calculate_repo_info(sub_repos, email)
-                sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-                for r in sub_repos:
-                    print r._dict
-                    repo = {
-                        #"type":"repo",
-                        "encrypted":r.encrypted,
-                        "id":r.id,
-                        "name":r.name,
-                        "origin_repo_id": r.origin_repo_id,
-                        "origin_path": r.origin_path,
-                        "abbrev_origin_path": r.abbrev_origin_path,
-                        "mtime": r.latest_modify,
-                        "mtime_relative": translate_seahub_time(r.latest_modify),
-                        "is_original_owner": r.is_original_owner,
+            sub_repos = []
+            sub_repos = get_virtual_repos_by_owner(request)
+            for repo in sub_repos:
+                repo.abbrev_origin_path = get_abbrev_origin_path(
+                    repo.origin_repo_name, repo.origin_path)
 
-                        "owner":email,
-                        "desc":r.desc,
-                        "root":r.root,
-                        "size":r.size,
-                        "permission": 'rw', # TODO 
-                        "virtual": r.is_virtual,
-                    }
-                    repos_json.append(repo)
-
+            sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            for r in sub_repos:
+                # print r._dict
+                repo = {
+                    "type": "repo",
+                    "id": r.id,
+                    "name": r.name,
+                    "origin_repo_id": r.origin_repo_id,
+                    "origin_path": r.origin_path,
+                    "abbrev_origin_path": r.abbrev_origin_path,
+                    "mtime": r.latest_modify,
+                    "mtime_relative": translate_seahub_time(r.latest_modify),
+                    "owner": email,
+                    "desc": r.desc,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": 'rw',
+                    "virtual": r.is_virtual,
+                }
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
+                repos_json.append(repo)
 
         if filter_by['shared']:
             shared_repos = get_share_in_repo_list(request, -1, -1)
