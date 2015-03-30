@@ -191,23 +191,34 @@ define([
                     file_names.push(this.get('obj_name'));
                 });
                 if (file_names.indexOf(file.name) != -1) { // file with the same name already exists in the dir
-                    file.choose_to_update = false;
-                    var confirm_msg = gettext("Replace file {filename}?")
-                        .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
-                    var confirm_msg_detail = gettext("A file with the same name already exists in this directory. Replacing it with overwrite its content.");
-                    $('#confirm-con').html('<h3>' + confirm_msg + '</h3><p>' + confirm_msg_detail + '</p>');
-                    $('#confirm-popup').modal({
+                    var confirm_popup = $('#confirm-popup');
+                    confirm_popup.modal({
                         onClose: function() {
                             $.modal.close();
                             if (file.choose_to_update) {
                                 update_file();
-                            } else {
+                            } else if (file.choose_to_upload) {
                                 upload_file();
+                            } else {
+                                data.jqXHR = popup.fileupload('send', data);
+                                data.jqXHR.abort();
                             }
                         }
                     });
+                    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+                    var confirm_msg = gettext("Replace file {filename}?")
+                        .replace('{filename}', '<span class="op-target">' + Common.HTMLescape(file.name) + '</span>');
+                    var confirm_msg_detail = gettext("A file with the same name already exists in this folder.") + '<br />' + gettext("Replacing it will overwrite its content.");
+                    var upload_btn = $('<button id="not-replace" class="btn">' + gettext("Don't replace") + '</button>').css({'margin-left': '8px'});
+                    $('#confirm-con').html('<h3>' + confirm_msg + '</h3><p>' + confirm_msg_detail + '</p>');
+                    $('#confirm-yes').html(gettext("Replace")).after(upload_btn);
+                    $('.simplemodal-close', confirm_popup).html(gettext("Cancel"));
                     $('#confirm-yes').click(function() {
                         file.choose_to_update = true;
+                        $.modal.close();
+                    });
+                    upload_btn.click(function() {
+                        file.choose_to_upload = true;
                         $.modal.close();
                     });
                 } else {
