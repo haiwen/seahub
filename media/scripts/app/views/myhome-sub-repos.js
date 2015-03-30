@@ -22,7 +22,7 @@ define([
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('.empty-tips', this.tabs);
+            this.$emptyTip = $('#my-sub-repos .empty-tips');
 
             this.repos = new RepoCollection({type: 'sub'});
             this.listenTo(this.repos, 'add', this.addOne);
