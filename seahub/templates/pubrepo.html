@@ -60,6 +60,7 @@ app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     reposUrl: "{% url 'api2-repos' %}",
     current_user: "{{ request.user.username }}",
+    previewDefaultSize: "{{ PREVIEW_DEFAULT_SIZE }}",
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %}
 };
 </script>
