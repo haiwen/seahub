@@ -154,6 +154,52 @@ define([
                 this.renderPath();
                 this.renderDirOpBar();
                 this.fileUploadView.setFileInput();
+                this.renderThumbnail();
+            },
+
+            renderThumbnail: function() {
+                var img_icons = $('.not-thumbnail'),
+                    repo_id = this.dir.repo_id,
+                    cur_path = this.dir.path,
+                    _this = this,
+                    file_path;
+
+                if (img_icons.length === 0) {
+                    return;
+                }
+
+                var get_thumbnail = function(i) {
+
+                    var img_icon = $(img_icons[i]),
+                        file_name = img_icon.attr('data-name');
+
+                    if (cur_path === '/') {
+                        file_path = cur_path + file_name;
+                    } else {
+                        file_path = cur_path + '/' + file_name;
+                    }
+
+                    $.ajax({
+                        url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
+                        data: {'path': file_path},
+                        cache: false,
+                        dataType: 'json',
+                        success: function(data) {
+                            img_icon.attr("src", data.thumbnail_src).load(function() {
+                                $(this).removeClass("not-thumbnail").addClass("thumbnail");
+                            });
+                        },
+                        complete: function() {
+                            // cur_path may be changed. e.g., the user enter another directory
+                            if (i < img_icons.length - 1 && _this.dir.path === cur_path) {
+                                get_thumbnail(++i);
+                            } else {
+                                return;
+                            }
+                        }
+                    });
+                };
+                get_thumbnail(0);
             },
 
             renderPath: function() {
@@ -202,7 +248,65 @@ define([
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click #by-name': 'sortByName',
-                'click #by-time': 'sortByTime'
+                'click #by-time': 'sortByTime',
+                'mouseenter .thumbnail': 'showPreview'
+            },
+
+            showPreview: function(e) {
+                var thumbnail = $(e.target),
+                    file_name = thumbnail.attr('data-name'),
+                    preview_wrap = $("#preview-wrap"),
+                    caret = $("#image-preview").next(),
+                    cur_path = this.dir.path,
+                    repo_id = this.dir.repo_id,
+                    default_size = parseInt(app.pageOptions.previewDefaultSize),
+                    ajaxRequest = {},
+                    file_path;
+
+                preview_wrap.css({'width': default_size + 'px', 'height': default_size + 'px'})
+
+                if (cur_path === '/') {
+                    file_path = cur_path + file_name;
+                } else {
+                    file_path = cur_path + '/' + file_name;
+                }
+
+                var timer = setTimeout(function () {
+                        ajaxRequest = $.ajax({
+                            url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
+                            data: {'path': file_path, 'size': default_size},
+                            cache: false,
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#image-preview').attr("src", data.thumbnail_src);
+
+                                var wrap_width = preview_wrap.outerWidth(),
+                                    wrap_padding = parseInt(preview_wrap.css('padding-top')),
+                                    caret_width = parseInt(caret.css('border-top-width'));
+
+                                caret.removeClass('bottom-outer-caret')
+                                     .addClass('right-outer-caret')
+                                     .css({
+                                           'top':(default_size)/2 + wrap_padding - caret_width + 'px',
+                                           'left':default_size + 2 * wrap_padding + 'px'
+                                         });
+
+                                preview_wrap.css({
+                                    'top'  : (thumbnail.offset().top + (thumbnail.height() - wrap_width)/2) + 'px',
+                                    'left' : thumbnail.closest('tr').offset().left - wrap_width - caret_width + 'px'
+                                }).fadeIn();
+                            }
+                        });
+                    }, 200);
+
+                $('.dirent-icon').on('mouseleave', function() {
+                    if (ajaxRequest.hasOwnProperty('abort')) {
+                        ajaxRequest.abort();
+                    }
+                    clearTimeout(timer);
+                    preview_wrap.hide();
+                    $("#image-preview").attr('src', ''); // for ff. In ff, when hover, the last preview image would be shown first, then the right one.
+                });
             },
 
             newDir: function() {
@@ -768,11 +872,13 @@ define([
             },
 
             onWindowScroll: function () {
-                var dir = this.dir;
-                var start = dir.more_start;
+                var dir = this.dir,
+                    start = dir.more_start,
+                    loading_tip = this.$('.loading-tip'),
+                    _this = this;
+
                 if (dir.dirent_more && $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) && start != dir.last_start) {
                     dir.last_start = start;
-                    var loading_tip = this.$('.loading-tip');
                     dir.fetch({
                         remove: false,
                         data: {
@@ -783,6 +889,7 @@ define([
                             if (!response.dirent_more ) { // no 'more'
                                 loading_tip.hide();
                             }
+                            _this.renderThumbnail();
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             loading_tip.hide();

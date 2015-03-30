@@ -66,7 +66,8 @@ from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
-    REPO_PASSWORD_MIN_LENGTH, ENABLE_FOLDER_PERM
+    REPO_PASSWORD_MIN_LENGTH, ENABLE_FOLDER_PERM, \
+    PREVIEW_DEFAULT_SIZE
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -1181,6 +1182,7 @@ def myhome(request):
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
             'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
+            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1692,6 +1694,7 @@ def pubrepo(request):
         return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
+                'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
                 }, context_instance=RequestContext(request))
 
     raise Http404
