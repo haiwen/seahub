@@ -8,6 +8,7 @@ from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
 from django.utils import translation
+from django.utils.dateformat import DateFormat
 from django.utils.translation import ugettext as _
 from django.utils.translation import ungettext
 from django.utils.translation import pgettext
@@ -258,7 +259,7 @@ def translate_seahub_time(value, autoescape=None):
         translated_time = escape(translated_time)
 
     timestring = val.isoformat()
-    titletime = val.strftime("%c")
+    titletime = DateFormat(val).format('r')
 
     time_with_tag = '<time datetime="'+timestring+'" is="relative-time" title="'+titletime+'" >'+translated_time+'</time>'
 
