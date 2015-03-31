@@ -70,6 +70,7 @@ define([
             $('#repo-create').hide();
             this.$el.hide();
             this.$table.hide();
+            this.$emptyTip.hide();
             $('#mylib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
