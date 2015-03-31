@@ -3,22 +3,20 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/share',
     'text!' + app.config._tmplRoot + 'sub-lib.html'
-], function($, _, Backbone, Common, ShareView, reposTemplate) {
+], function($, _, Backbone, Common, repoTemplate) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(reposTemplate),
+        template: _.template(repoTemplate),
         repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
 
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'click .repo-delete-btn': 'del',
-            'click .repo-share-btn': 'share'
+            'click .repo-delete-btn': 'del'
         },
 
         initialize: function() {
@@ -85,19 +83,6 @@ define([
                     }
                 }); 
             }); 
-        },
-
-        share: function() {
-            var options = {
-                'is_repo_owner': true,
-                'is_virtual': this.model.get('virtual'),
-                'user_perm': this.model.get('permission'),
-                'repo_id': this.model.get('id'),
-                'is_dir': true,
-                'dirent_path': '/',
-                'obj_name': this.model.get('name')
-            };
-            new ShareView(options);
         }
 
     });
