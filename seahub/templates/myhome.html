@@ -82,6 +82,7 @@
             {% endif %}
         </div>
     </div>
+
     <div id="my-own-repos">
         <table class="repo-list hide">
             <thead>
@@ -103,6 +104,25 @@
         <div class="empty-tips hide">
             <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
             <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
+        </div>
+    </div>
+
+    <div id="my-sub-repos">
+        <table class="repo-list hide">
+            <thead>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="24%">{% trans "Name" %} <span id="my-sub-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="my-sub-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+                <th width="38%">{% trans "Origin" %}</th>
+                <th width="22%">{% trans "Last Update" %} <span id="my-sub-repo-list-time-up" class="icon-caret-up cspt hide"></span> <span id="my-sub-repo-list-time-down" class="icon-caret-down cspt"></span></th>
+                <th width="12%">{% trans "Operations" %}</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+        <div class="empty-tips hide">
+            <h2 class="center-contents">{% trans "You have not created any sub-libraries" %}</h2>
+            <p>{% trans "You can create a sub-library from a directory inside a library. A sub-library can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
         </div>
     </div>
 

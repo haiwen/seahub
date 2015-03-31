@@ -3,22 +3,20 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/share',
-    'text!' + app.config._tmplRoot + 'repo.html'
-], function($, _, Backbone, Common, ShareView, reposTemplate) {
+    'text!' + app.config._tmplRoot + 'sub-lib.html'
+], function($, _, Backbone, Common, repoTemplate) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(reposTemplate),
+        template: _.template(repoTemplate),
         repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
 
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'click .repo-delete-btn': 'del',
-            'click .repo-share-btn': 'share'
+            'click .repo-delete-btn': 'del'
         },
 
         initialize: function() {
@@ -31,13 +29,13 @@ define([
 
         // disable 'hover' when 'repo-del-confirm' popup is shown
         highlight: function() {
-            if ($('#my-own-repos .repo-del-confirm').length == 0) {
+            if ($('#my-sub-repos .repo-del-confirm').length == 0) {
                 this.$el.addClass('hl').find('.op-icon').removeClass('vh');
             }
         },
 
         rmHighlight: function() {
-            if ($('#my-own-repos .repo-del-confirm').length == 0) {
+            if ($('#my-sub-repos .repo-del-confirm').length == 0) {
                 this.$el.removeClass('hl').find('.op-icon').addClass('vh');
             }
         },
@@ -65,12 +63,12 @@ define([
             });
             $('.yes', confirm_popup).click(function() {
                 $.ajax({
-                    url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}),
+                    url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}), 
                     dataType: 'json',
                     success: function(data) {
                         _this.remove();
                         Common.feedback(gettext("Delete succeeded."), 'success');
-                    },
+                    },  
                     error: function(xhr) {
                         confirm_popup.addClass('hide').remove();
                         _this.rmHighlight();
@@ -83,21 +81,8 @@ define([
                         }
                         Common.feedback(err, 'error');
                     }
-                });
-            });
-        },
-
-        share: function() {
-            var options = {
-                'is_repo_owner': true,
-                'is_virtual': this.model.get('virtual'),
-                'user_perm': this.model.get('permission'),
-                'repo_id': this.model.get('id'),
-                'is_dir': true,
-                'dirent_path': '/',
-                'obj_name': this.model.get('name')
-            };
-            new ShareView(options);
+                }); 
+            }); 
         }
 
     });

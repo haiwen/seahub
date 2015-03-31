@@ -434,6 +434,7 @@ class Repos(APIView):
         # parse request params
         filter_by = {
             'mine': False,
+            'sub': False,
             'shared': False,
             'group': False,
             'org': False,
@@ -468,6 +469,46 @@ class Repos(APIView):
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
+                    "virtual": r.is_virtual,
+                }
+                if r.encrypted:
+                    repo["enc_version"] = r.enc_version
+                    repo["magic"] = r.magic
+                    repo["random_key"] = r.random_key
+                repos_json.append(repo)
+
+        if filter_by['sub']:
+            def get_abbrev_origin_path(repo_name, path):
+                if len(path) > 20:
+                    abbrev_path = path[-20:]
+                    return repo_name + '/...' + abbrev_path
+                else:
+                    return repo_name + path
+
+            # compose abbrev origin path for display
+            sub_repos = []
+            sub_repos = get_virtual_repos_by_owner(request)
+            for repo in sub_repos:
+                repo.abbrev_origin_path = get_abbrev_origin_path(
+                    repo.origin_repo_name, repo.origin_path)
+
+            sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            for r in sub_repos:
+                # print r._dict
+                repo = {
+                    "type": "repo",
+                    "id": r.id,
+                    "name": r.name,
+                    "origin_repo_id": r.origin_repo_id,
+                    "origin_path": r.origin_path,
+                    "abbrev_origin_path": r.abbrev_origin_path,
+                    "mtime": r.latest_modify,
+                    "mtime_relative": translate_seahub_time(r.latest_modify),
+                    "owner": email,
+                    "desc": r.desc,
+                    "size": r.size,
+                    "encrypted": r.encrypted,
+                    "permission": 'rw',
                     "virtual": r.is_virtual,
                 }
                 if r.encrypted:
