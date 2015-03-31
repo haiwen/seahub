@@ -12,16 +12,16 @@ define([
         tagName: 'tr',
 
         template: _.template(reposTemplate),
+        repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
 
         events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
-            'click .repo-delete-btn': 'delete',
+            'mouseenter': 'highlight',
+            'mouseleave': 'rmHighlight',
+            'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share'
         },
 
         initialize: function() {
-            this.listenTo(this.model, 'destroy', this.remove);
         },
 
         render: function() {
@@ -29,67 +29,62 @@ define([
             return this;
         },
 
-        showAction: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
-        },
-
-        hideAction: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
-        },
-
-        showDelConfirm: function($target, msg, yesCallback) {
-            // TODO: need to refactor, copied from repo_del_js.html
-
-            var op = $target,
-                cont = op.parent().css({'position': 'relative'}),
-                cfm;
-
-            // only show 1 popup each time.
-            $('.repo-del-cfm', op.parents('table')).addClass('hide');
-
-            if (cont.find('.repo-del-cfm').length == 1) {
-                cfm = cont.find('.repo-del-cfm');
-            } else {
-                cfm = $('#repo-del-cfm-popup').clone().removeAttr('id');
-                cont.append(cfm);
-                cfm.css({'left': op.position().left, 'top': op.position().top + op.height() + 2, 'width':202});
+        // disable 'hover' when 'repo-del-confirm' popup is shown
+        highlight: function() {
+            if ($('#my-sub-repos .repo-del-confirm').length == 0) {
+                this.$el.addClass('hl').find('.op-icon').removeClass('vh');
             }
+        },
 
-            var con = $('.con', cfm);
-            con.html(msg.replace('{placeholder}', '<span class="op-target">' + this.model.get("name") + '</span>'));
-            cfm.removeClass('hide');
-            $('.no',cfm).click(function() {
-                cfm.addClass('hide');
+        rmHighlight: function() {
+            if ($('#my-sub-repos .repo-del-confirm').length == 0) {
+                this.$el.removeClass('hl').find('.op-icon').addClass('vh');
+            }
+        },
+
+        del: function() {
+            var del_icon = this.$('.repo-delete-btn');
+            var op_container = this.$('.op-container').css({'position': 'relative'});
+
+            var confirm_msg = gettext("Really want to delete {lib_name}?")
+                .replace('{lib_name}', '<span class="op-target">' + Common.HTMLescape(this.model.get('name')) + '</span>');
+            var confirm_popup = $(this.repoDelConfirmTemplate({
+                content: confirm_msg
+            }))
+            .appendTo(op_container)
+            .css({
+                'left': del_icon.position().left,
+                'top': del_icon.position().top + del_icon.height() + 2,
+                'width': 180
             });
 
-            $('.yes', cfm).click(yesCallback);
-        },
+            var _this = this;
+            $('.no', confirm_popup).click(function() {
+                confirm_popup.addClass('hide').remove(); // `addClass('hide')`: to rm cursor
+                _this.rmHighlight();
+            });
+            $('.yes', confirm_popup).click(function() {
+                $.ajax({
+                    url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}), 
+                    dataType: 'json',
+                    success: function(data) {
+                        _this.remove();
+                        Common.feedback(gettext("Delete succeeded."), 'success');
+                    },  
+                    error: function(xhr) {
+                        confirm_popup.addClass('hide').remove();
+                        _this.rmHighlight();
 
-        delete: function(e) {
-            e.preventDefault();
-
-            var that = this;
-            var yesCallback = function() {
-                Common.feedback(gettext('Loading...'), 'info', Common.INFO_TIMEOUT); // TODO: what if there is still response after 10 secs ?
-                that.model.destroy({
-                    wait: true,
-                    success: function(model, rep) {
-                        Common.feedback(gettext('Delete succeeded'), 'success', Common.SUCCESS_TIMOUT);
-                    },
-                    error: function() {
-                        Common.feedback(gettext('Error'), 'error', Common.ERROR_TIMEOUT);
+                        var err;
+                        if (xhr.responseText) {
+                            err = $.parseJSON(xhr.responseText).error;
+                        } else {
+                            err = gettext("Failed. Please check the network.");
+                        }
+                        Common.feedback(err, 'error');
                     }
-                });
-            }
-
-            this.showDelConfirm(
-                $(e.target),
-                gettext('Really want to delete {placeholder} ?')
-                    .replace(/\{placeholder\}/g, '<span class="op-target">' + this.model.get('name') + '</span>'),
-                yesCallback
-            );
+                }); 
+            }); 
         },
 
         share: function() {
