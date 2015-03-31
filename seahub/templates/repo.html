@@ -1392,7 +1392,7 @@ function sortDirent() {
 
 var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="vam" />';
 // cur_path: will be updated after reqDirdata
-var cur_path = "{{ path|safe }}"; {# safe is for ''', '&' included in path #}
+var cur_path = "{{ path|escapejs}}";
 
 // '.dir-link' click handler
 function dirlinkClick() {
