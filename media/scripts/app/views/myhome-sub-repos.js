@@ -3,17 +3,18 @@ define([
     'underscore',
     'backbone',
     'common',
+    'file-tree',
     'app/collections/repos',
     'app/views/sub-lib',
     'app/views/add-repo',
-], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView) {
+], function($, _, Backbone, Common, FileTree, RepoCollection, RepoView, AddRepoView) {
     'use strict';
 
     var ReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
 
         events: {
-           'click #sub-lib-create': 'createRepo', // TODO
+            'click #sub-lib-create': 'createRepo',
         },
 
         initialize: function(options) {
@@ -73,9 +74,75 @@ define([
         },
 
         createRepo: function() {
-            var addRepoView = new AddRepoView(this.repos);
-            addRepoView.render();
-        },
+            var _this = this;
+
+            var sublib_create_form = $('#sublib-create-form');
+
+            var dir_tree_cont = $('.dir-tree-cont', sublib_create_form);
+            sublib_create_form.modal();
+
+            $.ajax({
+                url: Common.getUrl({'name': 'get_my_unenc_repos'}),
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    var repos = FileTree.formatRepoData(data);
+                    if (repos.length > 0) {
+                        FileTree.renderDirTree(dir_tree_cont, sublib_create_form, repos);
+                    } else {
+                        dir_tree_cont.html('<p class="error">' + gettext("You don't have any library at present.") + '</p>');
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    var error;
+                    if (jqXHR.responseText) {
+                        error = $.parseJSON(jqXHR.responseText).error;
+                    } else {
+                        error = gettext("Failed. Please check the network.");
+                    }
+                    dir_tree_cont.html('<p class="error">' + error + '</p>');
+                }
+            });
+
+            $('.submit', sublib_create_form).click(function() {
+                var ori_repo_id = $('[name="dst_repo"]', sublib_create_form).val();
+                var path = $('[name="dst_path"]', sublib_create_form).val();
+
+                if (!path || path == '/') {
+                    $('.error', sublib_create_form).html(gettext("Please choose a directory")).removeClass('hide');
+                    return false;
+                }
+
+                // path ends with '/', rm it here
+                path = path.substr(0, path.length - 1);
+                $.ajax({
+                    url: Common.getUrl({'name':'sub_repo', 'repo_id':ori_repo_id}) + '?p=' + encodeURIComponent(path),
+                    dataType: 'json',
+                    success: function(data) {
+                        $.modal.close();
+                        _this.repos.add({
+                            'id': data["sub_repo_id"],
+                            'name': data["name"],
+                            'origin_repo_id': ori_repo_id,
+                            'origin_path': path,
+                            'abbrev_origin_path': '', // TODO
+                            'mtime': new Date().getTime() / 1000,
+                            'mtime_relative': gettext("Just now")
+                        }, {prepend: true});
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        var err;
+                        if (xhr.responseText) {
+                            err = jQuery.parseJSON(xhr.responseText).error;
+                        } else {
+                            err = gettext("Failed. Please check the network.");
+                        }
+                        $('.error', sublib_create_form).html(err).removeClass('hide');
+                    }
+                });
+                return false;
+            });
+        }
 
 
     });
