@@ -84,7 +84,7 @@
     </div>
 
     <div id="my-own-repos">
-        <table class="repo-list hide">
+        <table class="hide">
             <thead>
                 <tr>
                     <th width="4%"><!--icon--></th>
@@ -96,11 +96,6 @@
             </thead>
             <tbody></tbody>
         </table>
-        <div class="op-confirm repo-del-cfm hide" id="repo-del-cfm-popup">
-            <p class="con"></p>
-            <button class="yes">{% trans "Yes" %}</button>
-            <button class="no">{% trans "No" %}</button>
-        </div>
         <div class="empty-tips hide">
             <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
             <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
@@ -108,7 +103,7 @@
     </div>
 
     <div id="my-sub-repos">
-        <table class="repo-list hide">
+        <table class="hide">
             <thead>
             <tr>
                 <th width="4%"><!--icon--></th>
@@ -167,11 +162,6 @@
     </td>
   </tr>
 </table>
-
-{% url 'share_repo' as repo_share_url %}
-{% with post_url=repo_share_url %}
-{% include "snippets/repo_share_form.html" %}
-{% endwith %}
 
 {% include "snippets/repo_create_form.html" %}
 
