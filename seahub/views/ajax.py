@@ -1289,6 +1289,7 @@ def sub_repo(request, repo_id):
                                                               name, name,
                                                               username)
             result['sub_repo_id'] = sub_repo_id
+            result['name'] = name
         except SearpcError, e:
             result['error'] = e.msg
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
