@@ -3547,6 +3547,8 @@ class ThumbnailView(APIView):
             try:
                 f = StringIO(open_file.read())
                 image = Image.open(f)
+                if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+                   image = image.convert("RGB")
                 image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
                 image.save(thumbnail_file, THUMBNAIL_EXTENSION)
             except IOError as e:
