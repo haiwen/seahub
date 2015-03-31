@@ -66,6 +66,7 @@ define([
         hide: function() {
             this.$el.hide();
             this.$table.hide();
+            this.$emptyTip.hide();
             $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
