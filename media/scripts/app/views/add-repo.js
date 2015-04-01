@@ -3,16 +3,15 @@ define([
     'simplemodal',
     'underscore',
     'backbone',
-    'common',
-    'text!' + app.config._tmplRoot + 'create-repo.html'
-], function($, simplemodal, _, Backbone, Common, CreateRepoTemplate) {
+    'common'
+], function($, simplemodal, _, Backbone, Common) {
     'use strict';
 
     var AddRepoView = Backbone.View.extend({
 
         tagName: 'div',
 
-        template: _.template(CreateRepoTemplate),
+        template: _.template($('#create-repo-tmpl').html()),
 
         initialize: function(repos) {
             this.repos = repos;
