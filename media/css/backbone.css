@@ -9,14 +9,13 @@
     width:123px;
 }
 .repo-file-list .dirent-op {
-    width:150px;
+    padding-left:30px;
+    width:120px;
 }
 .repo-file-list .hidden-op {
     min-width: 100px;
 }
-.displayed-op .download,
-.displayed-op .share,
-.displayed-op .delete {
+.displayed-op .op {
     margin-left:5px;
 }
 .hidden-op a {
