@@ -690,6 +690,12 @@ else:
         pass
     def get_org_user_events():
         pass
+    def get_file_audit_events():
+        pass
+    def get_file_update_events():
+        pass
+    def get_perm_audit_events():
+        pass
 
 def calc_file_path_hash(path, bits=12):
     if isinstance(path, unicode):
