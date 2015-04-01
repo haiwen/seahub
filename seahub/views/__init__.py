@@ -1041,62 +1041,19 @@ def get_virtual_repos_by_owner(request):
 def myhome(request):
     username = request.user.username
 
-    def get_abbrev_origin_path(repo_name, path):
-        if len(path) > 20:
-            abbrev_path = path[-20:]
-            return repo_name + '/...' + abbrev_path
-        else:
-            return repo_name + path
-
-    # compose abbrev origin path for display
-    sub_repos = []
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-    if ENABLE_SUB_LIBRARY and sub_lib_enabled:
-        sub_repos = get_virtual_repos_by_owner(request)
-        for repo in sub_repos:
-            repo.abbrev_origin_path = get_abbrev_origin_path(repo.origin_repo_name,
-                                                             repo.origin_path)
-        calculate_repos_last_modify(sub_repos)
-        sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
-    # mine
-    owned_repos = get_owned_repo_list(request)
-    calculate_repos_last_modify(owned_repos)
-    owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
-
-    # misc
+    # options
     if request.cloud_mode and request.user.org is None:
         allow_public_share = False
     else:
         allow_public_share = True
-
-    # user guide
-    user_can_add_repo = request.user.permissions.can_add_repo()
-    need_guide = False
-    if len(owned_repos) == 0:
-        need_guide = UserOptions.objects.is_user_guide_enabled(username)
-        if need_guide:
-            UserOptions.objects.disable_user_guide(username)
-            if user_can_add_repo:
-                # create a default library for user
-                create_default_library(request)
-                # refetch owned repos
-                owned_repos = get_owned_repo_list(request)
-                calculate_repos_last_modify(owned_repos)
-
-    repo_create_url = reverse("repo_create")
-
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
+    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     max_upload_file_size = get_max_upload_file_size()
 
     return render_to_response('myhome.html', {
-            "owned_repos": owned_repos,
-            "create_shared_repo": False,
             "allow_public_share": allow_public_share,
-            "ENABLE_SUB_LIBRARY": ENABLE_SUB_LIBRARY,
-            "need_guide": need_guide,
+            "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
-            "sub_repos": sub_repos,
-            "repo_create_url": repo_create_url,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
             'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
@@ -2025,7 +1982,5 @@ def underscore_template(request, template):
     if not template.startswith('js'):  # light security check
         raise Http404
 
-    print "" + template
     return render_to_response(template, {},
                               context_instance=RequestContext(request))
-
