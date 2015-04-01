@@ -99,19 +99,19 @@
                 <% if (!is_virtual && is_repo_owner) { %>
             <div id="dir-private-share" class="tabs-panel hide">
                 <form id="dir-private-share-form" action="" class="hide">
-                    <label>{% trans "People:" %}</label><br />
+                    <label class="label">{% trans "People:" %}</label><br />
                     <input type="hidden" name="emails" class="w100" /><br />
 
-                    <label>{% trans "Groups:" %}</label><br />
+                    <label class="label">{% trans "Groups:" %}</label><br />
                     <select name="groups" class="w100" multiple="multiple"></select><br />
 
-                    <label>{% trans "Permission:" %}</label><br />
+                    <label class="label">{% trans "Permission:" %}</label><br />
                     <select name="permission" class="share-permission-select w100">
                         <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
                         <option value="r">{% trans "Read-Only"%}</option>
                     </select>
                     <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Submit" %}" />
+                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
                 </form>
             </div>
                 <% } %>
