@@ -2,15 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common',
-    'text!' + app.config._tmplRoot + 'organization-repo.html'
-], function($, _, Backbone, Common, reposTemplate) {
+    'common'
+], function($, _, Backbone, Common) {
     'use strict';
 
     var OrganizationRepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(reposTemplate),
+        template: _.template($('#org-repo-tmpl').html()),
 
         events: {
             'mouseenter': 'showAction',

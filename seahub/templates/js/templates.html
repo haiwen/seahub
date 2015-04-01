@@ -44,3 +44,64 @@
         </div>
     </td>
 </script>
+<script type="text/template" id="org-repo-tmpl">
+    <td>
+        <% if (encrypted) { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+            <% } else { %>
+        <img src="<%= app.config.mediaUrl %>img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td><%- desc %></td>
+    <td><%- mtime_relative %></td>
+    <td><%- share_from %></td>
+    <td>
+    <% if (show_unshare_btn == true) { %>
+    <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <% } %>
+    </td>
+</script>
+<script type="text/template" id="top-nav-grp-info-tmpl">
+<div id="top-nav-grp-info" class="top-info-popup hide">
+    <div class="outer-caret up-outer-caret">
+        <div class="inner-caret"></div>
+    </div>
+    <ul id="top-nav-grp-list">
+        <% for (var i = 0, len = groups.length; i < len; i++) { %>
+        <li class="item" data-url="<%= app.config.siteRoot %>group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
+            <%= groups[i].avatar %>
+            <span class="name ellipsis vam"><%= groups[i].name %></span>
+            <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
+                <img src="<%= app.config.mediaUrl %>img/msgs.png" alt="" />
+            </a>
+        </li>
+        <% } %>
+    </ul>
+    <a href="<%= app.config.siteRoot %>groups/" class="item all-grp">All Groups</a>
+</div>
+</script>
+<script type="text/template" id="shared-repo-tmpl">
+    <td>
+        <% if (encrypted) { %>
+            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <% } else { %>
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
+    <td><%- desc %></td>
+    <td><%= mtime_relative %></td>
+    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <td>
+        <span class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+    </td>
+</script>
