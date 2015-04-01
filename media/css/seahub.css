@@ -3486,3 +3486,13 @@ textarea:-moz-placeholder {/* for FF */
 #multi-dirents-op .del-dirents {
     background-position: -57px -5px;
 }
+
+#dir-private-share .label {
+    margin:6px 0 8px;
+}
+#dir-private-share .select2-container {
+    margin-bottom:10px;
+}
+#dir-private-share .submit {
+    margin-top:18px;
+}
