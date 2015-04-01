@@ -453,6 +453,7 @@ class Repos(APIView):
         repos_json = []
         if filter_by['mine']:
             owned_repos = get_owned_repo_list(request)
+            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
@@ -519,6 +520,7 @@ class Repos(APIView):
 
         if filter_by['shared']:
             shared_repos = get_share_in_repo_list(request, -1, -1)
+            shared_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in shared_repos:
                 r.password_need = is_passwd_set(r.repo_id, email)
                 repo = {
@@ -529,7 +531,7 @@ class Repos(APIView):
                     "owner_nickname": email2nickname(r.user),
                     "desc": r.repo_desc,
                     "mtime": r.last_modify,
-                    "mtime_relative": translate_seahub_time(r.latest_modify),
+                    "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
                     "encrypted": r.encrypted,
                     "permission": r.user_perm,
