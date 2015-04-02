@@ -5,13 +5,13 @@ define([
     'common',
     'app/views/share',
     'text!' + app.config._tmplRoot + 'repo.html'
-], function($, _, Backbone, Common, ShareView, reposTemplate) {
+], function($, _, Backbone, Common, ShareView, repoTemplate) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(reposTemplate),
+        template: _.template(repoTemplate),
         repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
 
         events: {

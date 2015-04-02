@@ -26,6 +26,7 @@ from django.db.models import F
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 
 from .throttling import ScopedRateThrottle
@@ -398,6 +399,8 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         token = ''
     repo_name = repo.name
     repo_desc = repo.desc
+    repo_size = repo.size
+    repo_size_formatted = filesizeformat(repo.size)
     enc = 1 if repo.encrypted else ''
     magic = repo.magic if repo.encrypted else ''
     random_key = repo.random_key if repo.random_key else ''
@@ -415,6 +418,8 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'repo_id': repo_id,
         'repo_name': repo_name,
         'repo_desc': repo_desc,
+        'repo_size': repo_size,
+        'repo_size_formatted': repo_size_formatted,
         'mtime': repo.latest_modify,
         'mtime_relative': translate_seahub_time(repo.latest_modify),
         'encrypted': enc,
@@ -453,7 +458,7 @@ class Repos(APIView):
         repos_json = []
         if filter_by['mine']:
             owned_repos = get_owned_repo_list(request)
-            owned_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in owned_repos:
                 # do not return virtual repos
                 if r.is_virtual:
@@ -468,6 +473,7 @@ class Repos(APIView):
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
+                    "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "virtual": r.is_virtual,
@@ -494,7 +500,7 @@ class Repos(APIView):
                 repo.abbrev_origin_path = get_abbrev_origin_path(
                     repo.origin_repo_name, repo.origin_path)
 
-            sub_repos.sort(lambda x, y: cmp(y.latest_modify, x.latest_modify))
+            sub_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in sub_repos:
                 # print r._dict
                 repo = {
@@ -504,8 +510,8 @@ class Repos(APIView):
                     "origin_repo_id": r.origin_repo_id,
                     "origin_path": r.origin_path,
                     "abbrev_origin_path": r.abbrev_origin_path,
-                    "mtime": r.latest_modify,
-                    "mtime_relative": translate_seahub_time(r.latest_modify),
+                    "mtime": r.last_modify,
+                    "mtime_relative": translate_seahub_time(r.last_modify),
                     "owner": email,
                     "desc": r.desc,
                     "size": r.size,
@@ -535,6 +541,7 @@ class Repos(APIView):
                     "mtime": r.last_modify,
                     "mtime_relative": translate_seahub_time(r.last_modify),
                     "size": r.size,
+                    "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": r.user_perm,
                     "share_type": r.share_type,
@@ -582,6 +589,7 @@ class Repos(APIView):
                     "mtime": r.last_modified,
                     "mtime_relative": translate_seahub_time(r.last_modified),
                     "size": r.size,
+                    "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": r.permission,
                     "share_from": r.user,
@@ -2955,10 +2963,12 @@ class GroupRepos(APIView):
             "id": repo.id,
             "name": repo.name,
             "desc": repo.desc,
+            "size": repo.size,
+            "size_formatted": filesizeformat(repo.size),
             "mtime": repo.latest_modify,
             "mtime_relative": translate_seahub_time(repo.latest_modify),
             "encrypted": repo.encrypted,
-            "permission": 'rw',  # Always have read-write permission to owned repo
+            "permission": permission,
             "owner": username,
             "owner_nickname": email2nickname(username)
         }
@@ -2980,6 +2990,8 @@ class GroupRepos(APIView):
                 "id": r.id,
                 "name": r.name,
                 "desc": r.desc,
+                "size": r.size,
+                "size_formatted": filesizeformat(r.size),
                 "mtime": r.latest_modify,
                 "mtime_relative": translate_seahub_time(r.latest_modify),
                 "encrypted": r.encrypted,
