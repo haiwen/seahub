@@ -403,7 +403,7 @@ LOGIN_REMEMBER_DAYS = 7
 #Share Access
 SHARE_ACCESS_PASSWD_TIMEOUT = 60 * 60
 
-SEAFILE_VERSION = '3.0.0'
+SEAFILE_VERSION = '4.1.2'
 
 ###################
 # Image Thumbnail #
