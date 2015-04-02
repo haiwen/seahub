@@ -133,7 +133,7 @@ $(function() {
 {% if enable_shib_login %}
 $(function() {
     $('#shib-login').click(function() {
-        window.location = "{% url 'shib_login' %}";
+        window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
         return false;
     });
 });

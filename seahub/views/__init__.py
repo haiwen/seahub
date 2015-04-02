@@ -2004,4 +2004,4 @@ def image_view(request, filename):
     return response
 
 def shib_login(request):
-    return HttpResponseRedirect(reverse('myhome'))
+    return HttpResponseRedirect(request.GET.get("next",reverse('myhome')))
