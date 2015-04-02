@@ -3496,3 +3496,20 @@ textarea:-moz-placeholder {/* for FF */
 #dir-private-share .submit {
     margin-top:18px;
 }
+.lib-decrypt-form {
+    padding:25px 40px 30px;
+}
+.lib-decrypt-form .intro {
+    font-size:19px;
+    color:#464646;
+}
+.lib-decrypt-form .input {
+    height:30px;
+    width:194px;
+    margin-top:10px;
+}
+.lib-decrypt-form .submit {
+    width:202px;
+    height:36px;
+    margin:21px 0 10px;
+}
