@@ -10,18 +10,17 @@ Preparation
 
 * Build and deploy Seafile server from source. See <https://github.com/haiwen/seafile/wiki/Build-and-deploy-seafile-server-from-source>
 
-* Django 1.5, download from <https://www.djangoproject.com/download/1.5.5/tarball/>
-
-* Djblets
-
-    easy_install --upgrade Djblets
-
 Getting it
 ==========
 
 You can grab souce code from GitHub.
 
     $ git clone git://github.com/haiwen/seahub.git
+
+Install python libraries by pip:
+
+    pip install -r requirements.txt
+
 
 Configuration
 ==========
