@@ -40,6 +40,7 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['type'])
             # self.assertIsNotNone(repo['virtual']) #allow null for pub-repo
             self.assertIsNotNone(repo['desc'])
+            self.assertIsNotNone(repo['root'])
 
     def test_get_repo_info(self):
         with self.get_tmp_repo() as repo:
