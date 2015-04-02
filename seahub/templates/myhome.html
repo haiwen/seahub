@@ -1,5 +1,6 @@
 {% extends "base_for_backbone.html" %}
 {% load seahub_tags i18n %}
+{% load staticfiles %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
 
@@ -223,8 +224,8 @@ app["pageOptions"] = {
 
 </script>
 {% if debug %}
-<script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+<script data-main="{% static "scripts/myhome.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% else %}
-<script type="text/javascript" data-main="{{ MEDIA_URL }}scripts/dist/myhome" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+<script data-main="{% static "scripts/dist/myhome.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% endif %}
 {% endblock %}
