@@ -1596,7 +1596,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 #repo-create-form .perm {
     width:268px;
-    margin-bottom:10px;
+    margin-bottom:5px;
+}
+#repo-create-form .checkbox-label { /* for "Encrypt" */
+    margin:10px 0 0;
 }
 .event-group-hd {
     padding: 8px;

@@ -3,8 +3,6 @@
     <h3>{% trans "New Library"%}</h3>
     <label>{% trans "Name"%}</label><br/>
     <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
-    <label>{% trans "Description"%}</label><br/>
-    <textarea name="repo_desc" class="textarea"></textarea><br />
     <% if (showSharePerm) { %>
     <label>{% trans "Share Permission"%}</label><br />
     <select name="permission" class="perm">
