@@ -39,7 +39,6 @@ define([
         newAttributes: function() {
             return {
                 name: $('input[name=repo_name]', this.$el).val().trim(),
-                desc: $('textarea[name=repo_desc]', this.$el).val().trim(),
                 encrypted: $('#encrypt-switch', this.$el).parent().hasClass('checkbox-checked'),
                 passwd1: $('input[name=passwd]', this.$el).val(),
                 passwd2: $('input[name=passwd_again]', this.$el).val(),
