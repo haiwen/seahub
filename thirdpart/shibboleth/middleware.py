@@ -13,7 +13,6 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
     def __init__(self, *a, **kw):
         super(ShibbolethRemoteUserMiddleware, self).__init__(*a, **kw)
-        self.shib_login = False
 
     def process_request(self, request):
         # AuthenticationMiddleware is required so that request.user exists.
@@ -34,6 +33,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 	        request.session.pop(LOGOUT_SESSION_KEY, None)
 
         #Locate the remote user header.
+        # import pprint; pprint.pprint(request.META)
         try:
             username = request.META[SHIB_USER_HEADER]
         except KeyError:
@@ -70,10 +70,11 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             self.make_profile(user, shib_meta)
             #setup session.
             self.setup_session(request)
-            self.shib_login = True
+            request.shib_login = True
 
     def process_response(self, request, response):
-        if self.shib_login:
+        if getattr(request, 'shib_login', False):
+            print '%s: set shibboleth cookie!' % id(self)
             self._set_auth_cookie(request, response)
         return response
 
