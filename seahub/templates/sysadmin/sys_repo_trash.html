@@ -1,0 +1,76 @@
+{% extends "sysadmin/base.html" %}
+{% load i18n %}
+{% block cur_repo %}tab-cur{% endblock %}
+
+{% block left_panel %}{{block.super}}
+<form action="{% url 'sys_repo_trash' %}" method="get" class="side-search-form">
+    <input type="text" name="name" class="input" value="{{ search_owner }}" placeholder="{% trans "Search libraries by owner..." %}" />
+</form>
+{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab"><a href="{% url 'sys_repo_admin' %}">{% trans "All" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_list_orphan' %}">{% trans "Orphan" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_list_system' %}">{% trans "System" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_repo_trash' %}">{% trans "Trash" %}</a></li>
+    </ul>
+    <div class="fright">
+        <button id="repo-trash-clear" data-url="{% url 'sys_repo_trash_clear' %}?owner={% if search_owner %}{{search_owner}}{% endif %}" data-target="{{ search_owner }}"><span class="vam">{% trans "Clear Trash" %}</span></button>
+    </div>
+</div>
+
+{% if repos %}
+<table class="repo-list">
+    <tr>
+        <th width="30%">{% trans "Name" %}</th>
+        <th width="50%">{% trans "Owner" %}</th>
+        <th width="20%">{% trans "Operations" %}</th>
+    </tr>
+    {% for repo in repos %}
+    <tr>
+        <td>{{ repo.repo_name }}</td>
+        <td><a href="{% url 'user_info' repo.owner_id %}">{{ repo.owner_id }}</a></td>
+        <td>
+            <a href="#" class="repo-delete-btn op vh" data-url="{% url 'sys_repo_trash_remove' repo.repo_id %}" data-target="{{ repo.repo_name }}">{% trans "Delete" %}</a>
+            <a href="#" class="repo-restore-btn op vh" data-url="{% url 'sys_repo_trash_restore' repo.repo_id %}" data-target="{{ repo.repo_name }}">{% trans "Restore" %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% if not search_owner %}
+{% include "snippets/admin_paginator.html" %}
+{% endif %}
+
+{% else %}
+<div class="empty-tips">
+    <h2 class="alc">{% trans "No library deleted yet" %}</h2>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% if search_owner %}
+addConfirmTo($('#repo-trash-clear'), {
+        'title':"{% trans 'Delete Library By Owner' %}",
+        'con':"{% trans "Are you sure you want to delete all %s's libraries?" %}"
+});
+{% else %}
+addConfirmTo($('#repo-trash-clear'), {
+        'title':"{% trans 'Clear Trash' %}",
+        'con':"{% trans "Are you sure you want to clear trash?" %}"
+});
+{% endif %}
+addConfirmTo($('.repo-restore-btn'), {
+        'title':"{% trans 'Restore Library' %}",
+        'con':"{% trans "Are you sure you want to restore %s?" %}"
+});
+addConfirmTo($('.repo-delete-btn'), {
+        'title':"{% trans 'Delete Library' %}",
+        'con':"{% trans "Are you sure you want to delete %s completely?" %}"
+});
+</script>
+{% endblock %}

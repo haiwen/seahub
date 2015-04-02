@@ -83,10 +83,12 @@ urlpatterns = patterns('',
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/privshare/$', gen_private_file_share, name='gen_private_file_share'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/$', repo_access_file, name='repo_access_file'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_settings, name='repo_settings'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/basic_info/$', repo_change_basic_info, name='repo_change_basic_info'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/owner/$', repo_transfer_owner, name='repo_transfer_owner'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/passwd/$', repo_change_passwd, name='repo_change_passwd'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_basic_info, name='repo_basic_info'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/transfer-owner/$', repo_transfer_owner, name='repo_transfer_owner'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/change-password/$', repo_change_password, name='repo_change_password'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/shared-link/$', repo_shared_link, name='repo_shared_link'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/share-manage/$', repo_share_manage, name='repo_share_manage'),
+    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/folder-perm/$', repo_folder_perm, name='repo_folder_perm'),
 
     ### share file/dir, upload link ###
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
@@ -155,6 +157,15 @@ urlpatterns = patterns('',
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
     url(r'^ajax/my-shared-and-group-repos/$', my_shared_and_group_repos, name='my_shared_and_group_repos'),
     url(r'^ajax/events/$', events, name="events"),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-basic-info/$', ajax_repo_change_basic_info, name='ajax_repo_change_basic_info'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/transfer-owner/$', ajax_repo_transfer_owner, name='ajax_repo_transfer_owner'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/user-folder-permission/add/$', add_user_folder_permission, name='add_user_folder_permission'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/user-folder-permission/remove/$', remove_user_folder_permission, name='remove_user_folder_permission'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/user-folder-permission/toggle/$', toggle_user_folder_permission, name='toggle_user_folder_permission'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/group-folder-permission/add/$', add_group_folder_permission, name='add_group_folder_permission'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/group-folder-permission/remove/$', remove_group_folder_permission, name='remove_group_folder_permission'),
+    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/group-folder-permission/toggle/$', toggle_group_folder_permission, name='toggle_group_folder_permission'),
 
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
@@ -181,6 +192,10 @@ urlpatterns = patterns('',
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
     url(r'^sys/seafadmin/orphan/$', sys_list_orphan, name='sys_list_orphan'),
     url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
+    url(r'^sys/seafadmin/repo-trash/$', sys_repo_trash, name='sys_repo_trash'),
+    url(r'^sys/seafadmin/repo-trash/clear/$', sys_repo_trash_clear, name="sys_repo_trash_clear"),
+    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/remove/$', sys_repo_trash_remove, name="sys_repo_trash_remove"),
+    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/restore/$', sys_repo_trash_restore, name="sys_repo_trash_restore"),
     url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
@@ -243,9 +258,13 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
 
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import sys_login_admin
+    from seahub_extra.sysadmin_extra.views import sys_login_admin, \
+        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
     urlpatterns += patterns('',
         url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
+        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
+        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
     )
 
 if getattr(settings, 'MULTI_TENANCY', False):

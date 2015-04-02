@@ -4,6 +4,7 @@
 import os
 import time
 import json
+import re
 
 from collections import defaultdict
 from functools import wraps
@@ -11,7 +12,7 @@ from functools import wraps
 from django.core.paginator import EmptyPage, InvalidPage
 from django.http import HttpResponse
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from seaserv import seafile_api, get_commits, server_repo_size, \
     get_personal_groups_by_user, is_group_user, get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
@@ -28,6 +29,7 @@ from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
     gen_file_get_url
 from seahub.utils.paginator import Paginator
 from seahub.utils.file_types import IMAGE
+from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 
 
 def api_error(code, msg):
@@ -514,6 +516,38 @@ def json_response(func):
     @wraps(func)
     def wrapped(*a, **kw):
         result = func(*a, **kw)
-        return HttpResponse(json.dumps(result), status=200,
-                            content_type=JSON_CONTENT_TYPE)
+        if isinstance(result, HttpResponse):
+            return result
+        else:
+            return HttpResponse(json.dumps(result), status=200,
+                                content_type=JSON_CONTENT_TYPE)
     return wrapped
+
+def get_token_v1(username):
+    token, _ = Token.objects.get_or_create(user=username)
+    return token
+
+_ANDROID_DEVICE_ID_PATTERN = re.compile('^[a-f0-9]{1,16}$')
+def get_token_v2(request, username, platform, device_id, device_name,
+                 client_version, platform_version):
+
+    if platform in DESKTOP_PLATFORMS:
+        # desktop device id is the peer id, so it must be 40 chars
+        if len(device_id) != 40:
+            raise serializers.ValidationError('invalid device id')
+
+    elif platform == 'android':
+        # See http://developer.android.com/reference/android/provider/Settings.Secure.html#ANDROID_ID
+        # android device id is the 64bit secure id, so it must be 16 chars in hex representation
+        # but some user reports their device ids are 14 or 15 chars long. So we relax the validation.
+        if not _ANDROID_DEVICE_ID_PATTERN.match(device_id.lower()):
+            raise serializers.ValidationError('invalid device id')
+    elif platform == 'ios':
+        if len(device_id) != 36:
+            raise serializers.ValidationError('invalid device id')
+    else:
+        raise serializers.ValidationError('invalid platform')
+
+    return TokenV2.objects.get_or_create_token(
+        username, platform, device_id, device_name,
+        client_version, platform_version, get_client_ip(request))

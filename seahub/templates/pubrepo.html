@@ -38,7 +38,7 @@
         <td>{{ repo.props.user|email2nickname }}</td>
         <td>
             {% if request.user.is_staff or repo.share_from_me %}
-            <img src="{{MEDIA_URL}}img/rm.png" alt="" data-href="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+            <img src="{{MEDIA_URL}}img/rm.png" alt="" data-href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{repo.permission}}" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
             {% endif %}
         </td>
     </tr>

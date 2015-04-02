@@ -34,7 +34,8 @@ import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_GUEST
-from seahub.utils import send_html_email, get_user_traffic_list, get_server_id
+from seahub.utils import send_html_email, get_user_traffic_list, \
+    get_server_id, clear_token
 from seahub.utils.sysinfo import get_platform_name
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -106,6 +107,106 @@ def sys_list_system(request):
     return render_to_response('sysadmin/sys_list_system.html', {
             'repos': repos,
             }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_repo_trash(request):
+    """ List deleted repos (by owner) """
+
+    search_owner = request.GET.get('name', '')
+    if search_owner:
+        if is_valid_username(search_owner):
+            repos = seafserv_threaded_rpc.get_trash_repos_by_owner(search_owner)
+            return render_to_response(
+                    'sysadmin/sys_repo_trash.html', {
+                    'repos': repos,
+                    'search_owner': search_owner,
+                }, context_instance=RequestContext(request))
+        else:
+            messages.error(request, _(u'Invalid username'))
+            return HttpResponseRedirect(reverse('sys_repo_trash'))
+
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    repos_all = seafserv_threaded_rpc.get_trash_repo_list(per_page * (current_page -1),
+                                          per_page + 1)
+    repos = repos_all[:per_page]
+    if len(repos_all) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response(
+            'sysadmin/sys_repo_trash.html', {
+            'repos': repos,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_repo_trash_restore(request, repo_id):
+    """Restore deleted repo by id"""
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_repo_trash') if referer is None else referer
+
+    try:
+        seafserv_threaded_rpc.restore_repo_from_trash(repo_id)
+        messages.success(request, _(u'Success'))
+    except SearpcError, e:
+        logger.error(e)
+        messages.error(request, _(u'Failed'))
+
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def sys_repo_trash_remove(request, repo_id):
+    """Remove deleted repo by id"""
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_repo_trash') if referer is None else referer
+
+    try:
+        seafserv_threaded_rpc.del_repo_from_trash(repo_id)
+        messages.success(request, _(u'Success'))
+    except SearpcError, e:
+        logger.error(e)
+        messages.error(request, _(u'Failed'))
+
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def sys_repo_trash_clear(request):
+    """Clear repo trash (by owner)"""
+
+    next = reverse('sys_repo_trash')
+    owner = request.GET.get('owner', '')
+    try:
+        if owner:
+            if is_valid_username(owner):
+                seafserv_threaded_rpc.empty_repo_trash_by_owner(owner)
+            else:
+                messages.error(request, _(u'Invalid username'))
+                return HttpResponseRedirect(next)
+        else:
+            seafserv_threaded_rpc.empty_repo_trash()
+    except SearpcError, e:
+        logger.error(e)
+        messages.error(request, _(u'Failed'))
+
+    messages.success(request, _(u'Success'))
+    return HttpResponseRedirect(next)
 
 def list_repos_by_name_and_owner(repo_name, owner):
     repos = []
@@ -538,6 +639,7 @@ def user_remove(request, user_id):
                 seafile_api.remove_repo(repo.id)
 
         user.delete()
+        clear_token(user.email)
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))
@@ -670,6 +772,8 @@ def user_toggle_status(request, email):
             return HttpResponse(json.dumps({'success': True,
                                             'email_sent': email_sent,
                                             }), content_type=content_type)
+        else:
+            clear_token(user.email)
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
     except User.DoesNotExist:

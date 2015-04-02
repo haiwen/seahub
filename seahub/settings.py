@@ -141,6 +141,7 @@ LANGUAGES = (
     ('hu', gettext_noop('Magyar')),
     ('is', gettext_noop('Íslenska')),
     ('it', gettext_noop('Italiano')),
+    ('ja', gettext_noop('日本語')),
     ('ko', gettext_noop('한국어')),
     ('lv', gettext_noop('Latvian')),
     ('nl', gettext_noop('Nederlands')),
@@ -427,6 +428,11 @@ PREVIEW_DEFAULT_SIZE = '100'
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
+#####################
+# Folder Permission #
+#####################
+ENABLE_FOLDER_PERM = False
+
 #################
 # Email sending #
 #################
@@ -474,6 +480,8 @@ REPLACE_FROM_EMAIL = False
 
 # Add ``Reply-to`` header, see RFC #822.
 ADD_REPLY_TO_HEADER = False
+
+CLOUD_DEMO_USER = 'demo@seafile.com'
 
 #####################
 # External settings #
@@ -549,4 +557,3 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
-

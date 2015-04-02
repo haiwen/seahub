@@ -10,6 +10,7 @@ import tempfile
 import locale
 import ConfigParser
 import mimetypes
+import contextlib
 
 from datetime import datetime
 from urlparse import urlparse, urljoin
@@ -26,12 +27,12 @@ from django.utils.translation import ugettext as _
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseNotModified
 from django.utils.http import urlquote
 from django.utils.html import escape
-from django.utils.safestring import mark_safe
 from django.views.static import serve as django_static_serve
 
+from seahub.api2.models import Token, TokenV2
 import seaserv
-from seaserv import seafile_api
-from seaserv import seafserv_rpc, seafserv_threaded_rpc, get_repo, get_commits,\
+from seaserv import seafile_api, send_message, seafserv_rpc, \
+    seafserv_threaded_rpc, get_repo, get_commits,\
     CCNET_SERVER_ADDR, CCNET_SERVER_PORT, get_org_by_id, is_org_staff, \
     get_org_id_by_group, get_personal_groups_by_user, \
     list_personal_repos_by_owner, get_group_repos, \
@@ -525,14 +526,24 @@ if EVENTS_CONFIG_FILE:
     EVENTS_ENABLED = True
     SeafEventsSession = seafevents.init_db_session_class(EVENTS_CONFIG_FILE)
 
+    @contextlib.contextmanager
+    def _get_seafevents_session():
+        try:
+            session = SeafEventsSession()
+            yield session
+        finally:
+           session.close()
+
     def _same_events(e1, e2):
         """Two events are equal should follow two rules:
-        1. event1.commit.creator = event2.commit.creator
-        2. event1.commit.desc = event2.commit.desc
+        1. event1.repo_id = event2.repo_id
+        2. event1.commit.creator = event2.commit.creator
+        3. event1.commit.desc = event2.commit.desc
         """
         if hasattr(e1, 'commit') and hasattr(e2, 'commit'):
-            if e1.commit.desc == e2.commit.desc and \
-                    e1.commit.creator_name == e2.commit.creator_name:
+            if e1.repo_id == e2.repo_id and \
+               e1.commit.desc == e2.commit.desc and \
+               e1.commit.creator_name == e2.commit.creator_name:
                 return True
         return False
 
@@ -630,6 +641,48 @@ if EVENTS_CONFIG_FILE:
 
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
+
+    def get_file_audit_events(email, org_id, repo_id, start, limit):
+        """Return file audit events list. (If no file audit, return 'None')
+
+        For example:
+        ``get_file_audit_events(email, org_id, repo_id, 0, 10)`` returns the first 10
+        events.
+        ``get_file_audit_events(email, org_id, repo_id, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_file_audit_events(session, email, org_id, repo_id, start, limit)
+
+        return events if events else None
+
+    def get_file_update_events(email, org_id, repo_id, start, limit):
+        """Return file update events list. (If no file update, return 'None')
+
+        For example:
+        ``get_file_update_events(email, org_id, repo_id, 0, 10)`` returns the first 10
+        events.
+        ``get_file_update_events(email, org_id, repo_id, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_file_update_events(session, email, org_id, repo_id, start, limit)
+
+        return events if events else None
+
+    def get_perm_audit_events(email, org_id, repo_id, start, limit):
+        """Return repo perm events list. (If no repo perm, return 'None')
+
+        For example:
+        ``get_repo_perm_events(email, org_id, repo_id, 0, 10)`` returns the first 10
+        events.
+        ``get_repo_perm_events(email, org_id, repo_id, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_perm_audit_events(session, email, org_id, repo_id, start, limit)
+
+        return events if events else None
 
 else:
     EVENTS_ENABLED = False
@@ -792,11 +845,7 @@ def convert_cmmt_desc_link(commit):
         else:
             return tmp_str % (op, conv_link_url, repo_id, cmmt_id, urlquote(file_or_dir), escape(file_or_dir))
 
-    if re.search(CMMT_DESC_PATT, commit.desc):
-        # if the string matches the pattern, return escaped value
-        return mark_safe(re.sub(CMMT_DESC_PATT, link_repl, commit.desc))
-
-    return commit.desc
+    return re.sub(CMMT_DESC_PATT, link_repl, commit.desc)
 
 def api_tsstr_sec(value):
     """Turn a timestamp to string"""
@@ -1180,3 +1229,40 @@ def is_pro_version():
         return True
     else:
         return False
+
+def clear_token(username):
+    '''
+    clear web api and repo sync token
+    when delete/inactive an user
+    '''
+    Token.objects.filter(user = username).delete()
+    TokenV2.objects.filter(user = username).delete()
+    seafile_api.delete_repo_tokens_by_email(username)
+
+def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
+    """Send repo permission audit msg.
+
+    Arguments:
+    - `request`:
+    - `repo`:
+    - `obj_id`:
+    - `dl_type`: web or api
+    """
+    msg = 'perm-update\t%s\t%s\t%s\t%s\t%s\t%s' % \
+        (etype, from_user, to, repo_id, path, perm)
+    msg_utf8 = msg.encode('utf-8')
+
+    try:
+        send_message('seahub.stats', msg_utf8)
+    except Exception as e:
+        logger.error("Error when sending perm-audit-%s message: %s" %
+                     (etype, str(e)))
+
+def get_origin_repo_info(repo_id):
+    repo = seafile_api.get_repo(repo_id)
+    if repo.origin_repo_id is not None:
+        origin_repo_id = repo.origin_repo_id
+        origin_path = repo.origin_path
+        return (origin_repo_id, origin_path)
+
+    return (None, None)

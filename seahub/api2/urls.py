@@ -2,6 +2,7 @@ from django.conf.urls.defaults import *
 
 from .views import *
 from .views_misc import ServerInfoView
+from .views_auth import LogoutDeviceView
 
 
 urlpatterns = patterns('',
@@ -9,6 +10,7 @@ urlpatterns = patterns('',
     url(r'^auth/ping/$', AuthPing.as_view()),
     url(r'^auth-token/', ObtainAuthToken.as_view()),
     url(r'^server-info/$', ServerInfoView.as_view()),
+    url(r'^logout-device/$', LogoutDeviceView.as_view()),
 
     # RESTful API
     url(r'^accounts/$', Accounts.as_view(), name="accounts"),
@@ -45,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^shared-links/$', SharedLinksView.as_view()),
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
+    url(r'^repo-tokens/$', RepoTokensView.as_view()),
 
 
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),

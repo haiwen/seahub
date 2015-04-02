@@ -44,13 +44,13 @@
         <td>{{ repo.props.repo_desc }}</td>
         <td>
             {% if repo.props.share_type == 'group' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}&permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'personal' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
             {% endif %}
         </td>
     </tr>
