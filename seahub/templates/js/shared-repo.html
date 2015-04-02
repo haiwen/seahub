@@ -11,9 +11,9 @@
     <% } %>
 </td>
 <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
-<td><%- desc %></td>
-<td><%= mtime_relative %></td>
-<td><span title="<%- owner %>"><%- owner_nickname %></span></td>
-<td>
+<td class="alc">
     <span class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
 </td>
+<td><%= size_formatted %></td>
+<td><%= mtime_relative %></td>
+<td><span title="<%- owner %>"><%- owner_nickname %></span></td>

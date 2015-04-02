@@ -22,12 +22,12 @@ define([
             attrs.id = response.id || response.repo_id;
             attrs.name = response.name || response.repo_name;
             attrs.desc = response.desc || response.repo_desc;
+            attrs.size_formatted = response.size_formatted || response.repo_size_formatted;
             return attrs;
         },
 
         validate: function(attrs, options) {
             if (!attrs.name) return gettext("Name is required");
-            if (!attrs.desc) return gettext("Description is required");
 
             if (attrs.encrypted) {
                 if (!attrs.passwd1) return gettext("Please enter password");

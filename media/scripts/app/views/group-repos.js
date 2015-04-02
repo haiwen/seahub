@@ -60,7 +60,7 @@ define([
             Common.showConfirm(
                 gettext('Unshare Library'),
                 gettext('Are you sure you want to unshare {placeholder} ?')
-                    .replace(/\{placeholder\}/g, '<span class="op-target">' + this.model.get('name') + '</span>'),
+                    .replace(/\{placeholder\}/g, '<span class="op-target">' + Common.HTMLescape(this.model.get('name')) + '</span>'),
                 yesCallback
             );
         },
