@@ -101,16 +101,24 @@ define([
                         var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
                         var $error = _this.$('.error');
                         var err_msg;
+                        var decrypt_lib = false;
                         if (response.responseText) {
-                            err_msg = response.responseJSON.error;
+                            if (response.responseJSON.lib_need_decrypt) {
+                                decrypt_lib = true;
+                            } else {
+                                err_msg = response.responseJSON.error;
+                            }
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
-                        $error.html(err_msg).show();
+                        if (err_msg) {
+                            $error.html(err_msg).show();
+                        }
 
-                        if (response.responseJSON.lib_need_decrypt) {
+                        if (decrypt_lib) {
                             var form = $($('#repo-decrypt-form-template').html());
-                            _this.$el.append(form);
+                            form.modal({containerCss: {'padding': '1px'}});
+                            $('#simplemodal-container').css({'height':'auto'});
                             form.submit(function() {
                                 var passwd = $.trim($('[name="password"]', form).val());
                                 if (!passwd) {
@@ -127,8 +135,7 @@ define([
                                         username: app.pageOptions.username
                                     },
                                     after_op_success: function() {
-                                        form.remove();
-                                        $error.html('').hide();
+                                        $.modal.close();
                                         $el_con.show();
                                         _this.showDir(category, repo_id, path);
                                     }
