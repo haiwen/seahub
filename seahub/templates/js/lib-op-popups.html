@@ -104,12 +104,13 @@
     <!--/script-->
 
     <script type="text/template" id="repo-decrypt-form-template">
-    <form id="repo-decrypt-form" action="">
-        <label>{% trans 'Password：' %}</label><br />
-        <input type="password" name="password" class="input" />
-        <p class="tip">{% trans 'The password will be kept in the server for only 1 hour.' %}</p>
+    <form id="repo-decrypt-form" action="" class="alc lib-decrypt-form">
+        <img src="{{MEDIA_URL}}img/lock.png" alt="" />
+        <p class="intro">{% trans "This library is password protected" %}</p>
         <p class="error hide"></p>
+        <input type="password" name="password" class="input" placeholder="{% trans "Password" %}" /><br />
         <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <p class="tip">{% trans '*The password will be kept in the server for only 1 hour.' %}</p>
     </form>
     </script>
 
