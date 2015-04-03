@@ -2,15 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common',
-    'text!' + app.config._tmplRoot + 'sub-lib.html'
-], function($, _, Backbone, Common, repoTemplate) {
+    'common'
+], function($, _, Backbone, Common) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(repoTemplate),
+        template: _.template($('#sub-lib-tmpl').html()),
         repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
 
         events: {
