@@ -41,8 +41,8 @@
     <form id="rename-form" action="" method="post" class="hide">{% csrf_token %}
         <h3><%= form_title %></h3>
         <p class="detail">{% trans "Rename %(name)s as:" %}</p>
-        <input type="hidden" name="oldname" value="<%= dirent_name %>" />
-        <input type="text" name="newname" value="<%= dirent_name %>" class="input" maxlength="{{max_file_name}}" /><br />
+        <input type="hidden" name="oldname" value="<%- dirent_name %>" />
+        <input type="text" name="newname" value="<%- dirent_name %>" class="input" maxlength="{{max_file_name}}" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -64,7 +64,7 @@
             </div>
             <% } %>
         </div>
-        <input type="hidden" name="obj_name" value="<%= obj_name %>" />
+        <input type="hidden" name="obj_name" value="<%- obj_name %>" />
         <input type="hidden" name="obj_type" value="<%= obj_type %>" />
         <input type="hidden" name="op" value="<%= op_type %>" />
         <input type="hidden" name="dst_repo" value="" />
