@@ -28,7 +28,7 @@
 <script type="text/template" id="repo-tmpl">
     <td>
       <% if (encrypted) { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
       <% } else { %>
       <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
       <% } %>
@@ -46,7 +46,7 @@
 <script type="text/template" id="group-repos-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
         <% } else { %>
             <% if (permission == 'rw') { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
@@ -63,12 +63,12 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><%- owner_nickname %></td>
+    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="organization-repos-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
         <% } else { %>
             <% if (permission == 'rw') { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
@@ -85,7 +85,7 @@
     </td>
     <td><%- size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><%- owner_nickname %></td>
+    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="group-nav-tmpl">
     <div id="top-nav-grp-info" class="top-info-popup hide">
