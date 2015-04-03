@@ -3,15 +3,14 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/collections/groups',
-    'text!' + app.config._tmplRoot + 'group-nav.html',
+    'app/collections/groups'
 ], function($, _, Backbone, Common, GroupCollection, GroupNavTemplate) {
     'use strict';
 
     var GroupNavView = Backbone.View.extend({
         el: '#header-inner',
 
-        template: _.template(GroupNavTemplate),
+        template: _.template($('#group-nav-tmpl').html()),
 
         initialize: function(options) {
             this.$topNavGrp = this.$('#top-nav-grp');
