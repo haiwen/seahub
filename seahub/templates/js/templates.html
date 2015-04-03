@@ -170,15 +170,15 @@
     <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
     <td>
         <% if (category) { %>
-        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><%- dirent_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
         <% } else { %>
-        <span class="dirent-name"><a href="#lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name"><a href="#lib/<%= repo_id %><%- dirent_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
         <% } %>
     </td>
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
                 <% if (!repo_encrypted) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
@@ -227,12 +227,12 @@
         <% } %>
     </td>
     <td>
-        <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<% print(dirent_path); %>" target="_blank"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- dirent_path %>" target="_blank"><%- dirent.obj_name %></a></span>
     </td>
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
                 <% if (!repo_encrypted) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
@@ -246,7 +246,7 @@
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
+                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "History" %}</a></li>
             </ul>
             <% } %>
         </div>
