@@ -60,8 +60,10 @@ app["pageOptions"] = {
     site_root: "{{ SITE_ROOT }}",
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     reposUrl: "{% url 'api2-repos' %}",
+    pubReposUrl: "{% url 'api2-pub-repos' %}",
     current_user: "{{ request.user.username }}",
     previewDefaultSize: "{{ PREVIEW_DEFAULT_SIZE }}",
+    csrfToken: "{{csrf_token}}",
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %}
 };
 </script>
