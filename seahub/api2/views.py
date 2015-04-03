@@ -693,7 +693,7 @@ class Repos(APIView):
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
-        repo_desc = request.DATA.get("desc", 'new repo')
+        repo_desc = request.DATA.get("desc", '')
         passwd = request.DATA.get("passwd", None)
         if not passwd:
             passwd = None
@@ -728,6 +728,90 @@ class Repos(APIView):
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
             return resp
+
+class PubRepos(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        # List public repos
+        if not request.user.permissions.can_view_org():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to view pub repos.')
+
+        repos_json = []
+        public_repos = list_inner_pub_repos(request)
+        for r in public_repos:
+            repo = {
+                "id": r.repo_id,
+                "name": r.repo_name,
+                "desc": r.repo_desc,
+                "owner": r.user,
+                "owner_nickname": email2nickname(r.user),
+                "mtime": r.last_modified,
+                "mtime_relative": translate_seahub_time(r.last_modified),
+                "size": r.size,
+                "size_formatted": filesizeformat(r.size),
+                "encrypted": r.encrypted,
+                "permission": r.permission,
+                "root": r.root,
+            }
+            if r.encrypted:
+                repo["enc_version"] = r.enc_version
+                repo["magic"] = r.magic
+                repo["random_key"] = r.random_key
+            repos_json.append(repo)
+
+        return Response(repos_json)
+
+    def post(self, request, format=None):
+        # Create public repo
+        if not request.user.permissions.can_add_repo():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create library.')
+
+        username = request.user.username
+        repo_name = request.DATA.get("name", None)
+        if not repo_name:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Library name is required.')
+        repo_desc = request.DATA.get("desc", '')
+        passwd = request.DATA.get("passwd", None)
+        if not passwd:
+            passwd = None
+        permission = request.DATA.get("permission", 'r')
+        if permission != 'r' and permission != 'rw':
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
+
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                  username, passwd, org_id)
+            repo = seafile_api.get_repo(repo_id)
+            seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
+                org_id, repo.id, permission)
+        else:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                              username, passwd)
+            repo = seafile_api.get_repo(repo_id)
+            seafile_api.add_inner_pub_repo(repo.id, permission)
+
+        pub_repo = {
+            "id": repo.id,
+            "name": repo.name,
+            "desc": repo.desc,
+            "size": repo.size,
+            "size_formatted": filesizeformat(repo.size),
+            "mtime": repo.last_modify,
+            "mtime_relative": translate_seahub_time(repo.last_modify),
+            "encrypted": repo.encrypted,
+            "permission": 'rw',  # Always have read-write permission to owned repo
+            "owner": username,
+            "owner_nickname": email2nickname(username),
+        }
+
+        return Response(pub_repo, status=201)
 
 def set_repo_password(request, repo, password):
     assert password, 'password must not be none'
@@ -3010,7 +3094,7 @@ class GroupRepos(APIView):
         # add group repo
         username = request.user.username
         repo_name = request.DATA.get("name", None)
-        repo_desc = request.DATA.get("desc", 'new repo')
+        repo_desc = request.DATA.get("desc", '')
         passwd = request.DATA.get("passwd", None)
         if not passwd:
             passwd = None
@@ -3043,7 +3127,7 @@ class GroupRepos(APIView):
             "encrypted": repo.encrypted,
             "permission": 'rw',  # Always have read-write permission to owned repo
             "owner": username,
-            "owner_nickname": email2nickname(username)
+            "owner_nickname": email2nickname(username),
         }
 
         return Response(group_repo, status=200)
