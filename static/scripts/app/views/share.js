@@ -4,15 +4,14 @@ define([
     'backbone',
     'common',
     'jquery.ui.tabs',
-    'select2',
-    'text!' + app.config._tmplRoot + 'share-popup.html',
-], function($, _, Backbone, Common, Tabs, Select2, SharePopupTemplate) {
+    'select2'
+], function($, _, Backbone, Common, Tabs, Select2) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
         tagName: 'div',
         id: 'share-popup',
-        template: _.template(SharePopupTemplate),
+        template: _.template($('#share-popup-tmpl').html()),
 
         initialize: function(options) {
             this.is_repo_owner = options.is_repo_owner;

@@ -4,9 +4,8 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/add-repo',
-    'text!' + app.config._tmplRoot + 'create-repo.html'
-], function($, simplemodal, _, Backbone, Common, AddRepoView, CreateRepoTemplate) {
+    'app/views/add-repo'
+], function($, simplemodal, _, Backbone, Common, AddRepoView) {
     'use strict';
 
     var AddGroupRepoView = AddRepoView.extend({
