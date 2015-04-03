@@ -36,8 +36,8 @@
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
       <div class="op-container">
-        <img src="{{ MEDIA_URL }}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
-        <img src="{{ MEDIA_URL }}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+        <img src="{{ MEDIA_URL }}img/share-orange.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+        <img src="{{ MEDIA_URL }}img/delete-orange.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -58,7 +58,7 @@
     <td><a href="#/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.isGroupStaff) { %>
-    <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
     <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -80,7 +80,7 @@
     <td><a href="#/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (show_unshare_btn) { %>
-    <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -132,15 +132,17 @@
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
-    <% if (path != '/' && !encrypted) { %>
+    <% if (!encrypted) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
+    <% if (path == '/') { %>
     <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
     <% if (user_perm == 'rw') { %>
     <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
     <% } %>
-    <% if (is_repo_owner == true) { %>
+    <% if (is_repo_owner) { %>
     <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+    <% } %>
     <% } %>
 </script>
 <script type="text/template" id="path-bar-tmpl">
@@ -419,7 +421,7 @@
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-        <span class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+        <img src="{{MEDIA_URL}}img/delete-orange.png" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" />
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -435,8 +437,8 @@
     </td>
     <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
-        <div class="op-container alc">
-            <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+        <div class="op-container">
+            <img src="{{MEDIA_URL}}img/delete-orange.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
         </div>
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>

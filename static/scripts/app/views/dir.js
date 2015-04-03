@@ -458,7 +458,7 @@ define([
                     'repo_id': dir.repo_id,
                     'is_dir': true,
                     'dirent_path': path,
-                    'obj_name': path.substr(path.lastIndexOf('/') + 1)
+                    'obj_name': path == '/' ? dir.repo_name : path.substr(path.lastIndexOf('/') + 1)
                 };
                 new ShareView(options);
             },
