@@ -4,9 +4,8 @@ define([
     'backbone',
     'common',
     'file-tree',
-    'app/views/share',
-    'text!' + app.config._tmplRoot + 'dirent.html'
-], function($, _, Backbone, Common, FileTree, ShareView, direntTemplate) {
+    'app/views/share'
+], function($, _, Backbone, Common, FileTree, ShareView) {
     'use strict';
 
     app = app || {};
@@ -15,7 +14,7 @@ define([
     var DirentView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(direntTemplate),
+        template: _.template($('#dirent-tmpl').html()),
         renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
         mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),

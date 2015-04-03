@@ -2,15 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common',
-    'text!' + app.config._tmplRoot + 'group-change-item.html'
-], function($, _, Backbone, Common, changeItemTemplate) {
+    'common'
+], function($, _, Backbone, Common) {
     'use strict';
 
     var GroupChangeItemView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(changeItemTemplate),
+        template: _.template($('#group-change-item-tmpl').html()),
 
         events: {
             'click .lsch': 'showDetail'

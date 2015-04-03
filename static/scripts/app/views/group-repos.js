@@ -2,15 +2,14 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common',
-    'text!' + app.config._tmplRoot + 'group-repos.html'
-], function($, _, Backbone, Common, reposTemplate) {
+    'common'
+], function($, _, Backbone, Common) {
     'use strict';
 
     var GroupRepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template(reposTemplate),
+        template: _.template($('#group-repos-tmpl').html()),
 
         events: {
             'mouseenter': 'showAction',
