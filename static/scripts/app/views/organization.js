@@ -3,25 +3,28 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/collections/repos',
+    'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/dir',
     'app/views/group-nav',
-], function($, _, Backbone, Common, RepoCollection, OrganizationRepoView,
-    DirView, GroupNavView) {
+    'app/views/add-pub-repo'
+], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
+    DirView, GroupNavView, AddPubRepoView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
         initialize: function() {
+            Common.prepareApiCsrf();
+
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('#organization-repos .loading-tip');
             this.$emptyTip = $('#organization-repos .empty-tips');
 
-            this.repos = new RepoCollection({type: 'org'});
+            this.repos = new PubRepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
@@ -39,7 +42,7 @@ define([
         },
 
         createRepo: function() {
-            alert('todo');
+            new AddPubRepoView(this.repos).render();
         },
 
         addOne: function(repo, collection, options) {
