@@ -1,6 +1,7 @@
 {% extends 'base_for_backbone.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
+{% load staticfiles %}
 
 {% block sub_title %}{% trans "Organization" %} - {% endblock %}
 
@@ -64,5 +65,9 @@ app["pageOptions"] = {
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %}
 };
 </script>
-<script data-main="{{ MEDIA_URL }}scripts/organization" src="{{ MEDIA_URL }}scripts/lib/require.js"></script>
+{% if debug %}
+<script data-main="{% static "scripts/organization.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% else %}
+<script data-main="{% static "scripts/dist/group.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% endif %}
 {% endblock %}

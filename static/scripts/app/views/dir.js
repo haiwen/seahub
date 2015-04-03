@@ -9,18 +9,16 @@ define([
     'app/collections/dirents',
     'app/views/dirent',
     'app/views/fileupload',
-    'app/views/share',
-    'text!' + app.config._tmplRoot + 'dir-op-bar.html',
-    'text!' + app.config._tmplRoot + 'path-bar.html',
+    'app/views/share'
     ], function($, progressbar, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
-        FileUploadView, ShareView, DirOpBarTemplate, PathBarTemplate) {
+        FileUploadView, ShareView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
             el: $('#dir-view'),
 
-            path_bar_template: _.template(PathBarTemplate),
-            dir_op_bar_template: _.template(DirOpBarTemplate),
+            path_bar_template: _.template($('#path-bar-tmpl').html()),
+            dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
             mvcpTemplate: _.template($("#mvcp-form-template").html()),

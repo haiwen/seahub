@@ -1,0 +1,444 @@
+{% load i18n %}
+<script type="text/template" id="create-repo-tmpl">
+    <form id="repo-create-form" action="" method="post">{% csrf_token %}
+        <h3>{% trans "New Library"%}</h3>
+        <label>{% trans "Name"%}</label><br/>
+        <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <% if (showSharePerm) { %>
+        <label>{% trans "Share Permission"%}</label><br />
+        <select name="permission" class="perm">
+          <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+          <option value="r">{% trans "Read-Only"%}</option>
+        </select>
+        <% } %>
+        <div class="repo-create-encryption">
+            <label class="checkbox-label">
+                <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
+                <span class="checkbox-option">{% trans "Encrypt"%}</span>
+            </label>
+            <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+            <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
+            <label>{% trans "Password again"%}</label><br />
+            <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
+        </div>
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+</script>
+<script type="text/template" id="repo-tmpl">
+    <td>
+      <% if (encrypted) { %>
+      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <% } else { %>
+      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <% } %>
+    </td>
+    <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
+    <td>
+      <div class="op-container">
+        <img src="{{ MEDIA_URL }}img/share_20.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
+        <img src="{{ MEDIA_URL }}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+      </div>
+    </td>
+    <td><%= size_formatted %></td>
+    <td><%= mtime_relative %></td>
+</script>
+<script type="text/template" id="group-repos-tmpl">
+    <td>
+        <% if (encrypted) { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+            <% } else { %>
+        <img src="<%= app.config.mediaUrl %>img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td class="alc">
+    <% if (app.pageOptions.isGroupStaff) { %>
+    <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <% } %>
+    </td>
+    <td><%= size_formatted %></td>
+    <td><%= mtime_relative %></td>
+    <td><%- owner_nickname %></td>
+</script>
+<script type="text/template" id="organization-repos-tmpl">
+    <td>
+        <% if (encrypted) { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+        <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+            <% } else { %>
+        <img src="<%= app.config.mediaUrl %>img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td class="alc">
+    <% if (show_unshare_btn) { %>
+    <img src="<%= app.config.mediaUrl%>img/rm.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <% } %>
+    </td>
+    <td><%- size_formatted %></td>
+    <td><%= mtime_relative %></td>
+    <td><%- share_from %></td>
+</script>
+<script type="text/template" id="group-nav-tmpl">
+    <div id="top-nav-grp-info" class="top-info-popup hide">
+        <div class="outer-caret up-outer-caret">
+            <div class="inner-caret"></div>
+        </div>
+        <ul id="top-nav-grp-list">
+            <% for (var i = 0, len = groups.length; i < len; i++) { %>
+            <li class="item" data-url="<%= app.config.siteRoot %>group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
+                <%= groups[i].avatar %>
+                <span class="name ellipsis vam"><%= groups[i].name %></span>
+                <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
+                    <img src="<%= app.config.mediaUrl %>img/msgs.png" alt="" />
+                </a>
+            </li>
+            <% } %>
+        </ul>
+        <a href="<%= app.config.siteRoot %>groups/" class="item all-grp">All Groups</a>
+    </div>
+</script>
+<script type="text/template" id="dir-op-bar-tmpl">
+    <% if (user_perm == 'rw') { %>
+    <div id="multi-dirents-op" class="hide">
+        <button id="mv-dirents" title="{% trans 'Move' %}" class="op-btn"><span class="mv-dirents"></span></button>
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
+        <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn"><span class="del-dirents"></span></button>
+    </div>
+    <div id="upload-file" class="op-btn upload-file-btn">
+        <span>{% trans "Upload" %}</span>
+        <input type="file" name="file" multiple />
+    </div>
+    <% if (enable_upload_folder) { %>
+    <ul id="upload-menu" class="hide">
+      <li class="item">
+        <span>{% trans "Upload Files" %}</span>
+        <input type="file" name="file" multiple />
+      </li>
+      <li class="item">
+        <span>{% trans "Upload Folder" %}</span>
+        <input type="file" name="file" multiple directory webkitdirectory />
+      </li>
+    </ul>
+    <% } %>
+    <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
+    <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
+    <% } %>
+    <% if (path != '/' && !encrypted) { %>
+    <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
+    <% } %>
+    <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
+    <% if (user_perm == 'rw') { %>
+    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
+    <% } %>
+    <% if (is_repo_owner == true) { %>
+    <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+    <% } %>
+</script>
+<script type="text/template" id="path-bar-tmpl">
+    <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
+    <% if (category) { %>
+    <a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a> /
+    <% } else { %>
+    <% } %>
+    <% if (path == '/') { %>
+    <%- repo_name %> /
+    <% } else { %>
+    <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
+    <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
+        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
+    <% } %>
+    <%- path_list[i] + ' /' %>
+    <% } %>
+</script>
+<script type="text/template" id="dirent-tmpl">
+    <% if (dirent.is_dir) { %>
+    <td class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+    </td>
+    <td class="star"></td>
+    <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
+    <td>
+        <% if (category) { %>
+        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <% } else { %>
+        <span class="dirent-name"><a href="#lib/<%= repo_id %><% print(dirent_path); %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <% } %>
+    </td>
+    <td class="dirent-op">
+        <div class="repo-file-op vh">
+            <div class="displayed-op">
+                <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <% if (!repo_encrypted) { %>
+                <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+                <% } %>
+                <% if (user_perm == 'rw') { %>
+                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                <% } %>
+            </div>
+            <% if (user_perm == 'rw') { %>
+            <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
+            <ul class="hidden-op hide">
+                <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+                <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            </ul>
+            <% } %>
+        </div>
+    </td>
+    <td class="dirent-size"></td>
+    <td class="dirent-update">
+        <% if (dirent.last_modified) { %>
+        <% print(dirent.last_update); %>
+        <% } else { %>
+        <% print(""); %>
+        <% } %>
+    </td>
+    <% } else { %>
+    <td class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+    </td>
+    <td class="star alc">
+        <% if (dirent.starred) { %>
+        <span title="{% trans "starred" %}" class="icon-star file-star"></span>
+        <% } else { %>
+        <span title="{% trans "unstarred" %}" class="icon-star-empty file-star"></span>
+        <% } %>
+    </td>
+    <td class="dirent-icon">
+        <% if (dirent.is_img) { %>
+        <% if (dirent.thumbnail_src) { %>
+        <img class="thumbnail cspt" data-name="<%- dirent.obj_name %>" src="<%= dirent.thumbnail_src %>" alt="" />
+        <% } else { %>
+        <img class="not-thumbnail cspt" data-name="<%- dirent.obj_name %>" src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+        <% } %>
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+        <% } %>
+    </td>
+    <td>
+        <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<% print(dirent_path); %>" target="_blank"><%- dirent.obj_name %></a></span>
+    </td>
+    <td class="dirent-op">
+        <div class="repo-file-op vh">
+            <div class="displayed-op">
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(dirent_path); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <% if (!repo_encrypted) { %>
+                <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+                <% } %>
+                <% if (user_perm == 'rw') { %>
+                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                <% } %>
+            </div>
+            <% if (user_perm == 'rw') { %>
+            <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
+            <ul class="hidden-op hide">
+                <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+                <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(dirent_path); %>" target="_blank">{% trans "History" %}</a></li>
+            </ul>
+            <% } %>
+        </div>
+    </td>
+    <td class="dirent-size"><%= dirent.file_size %></td>
+    <td class="dirent-update">
+        <% if (dirent.last_modified) { %>
+        <% print(dirent.last_update); %>
+        <% } else { %>
+        <% print("{% trans "Fetch failed" %}"); %>
+        <% } %>
+    </td>
+    <% } %>
+</script>
+<script type="text/template" id="group-change-item-tmpl">
+    <td>
+    <span class="icon-plus"></span>
+    </td>
+    <td><a href="#"><%= repo.name %></a></td>
+    <td>
+        <%= desc_human %>
+        <a class="lsch" >{% trans 'Details' %}</a>
+    </td>
+    <td><%= ctime_human %></td>
+    <td>
+        <%- creator_nickname %>
+    </td>
+</script>
+<script type="text/template" id="share-popup-tmpl">
+    <h3 class="hd"><%= title %></h3>
+    <div id="share-tabs" class="left-right-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft"> {# TODO: better var name? #}
+            <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
+            <% if (!is_dir && is_repo_owner) { %>
+            <li class="tab"><a href="#file-private-share" class="a">{% trans "Private Share" %}</a></li>
+            <% } %>
+            <% if (is_dir) { %>
+                <% if (user_perm == 'rw') { %>
+            <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
+                <% } %>
+                <% if (!is_virtual && is_repo_owner) { %>
+            <li class="tab"><a href="#dir-private-share" class="a">{% trans "Private Share" %}</a></li>
+                <% } %>
+            <% } %>
+        </ul>
+
+        <div class="fright">
+
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <div id="download-link-share" class="tabs-panel">
+                <form id="generate-download-link-form" action="" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" />
+                    </div>
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="set_expiration" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Days" %}</label><br />
+                        <input type="text" name="expire_days" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}" />
+                </form>
+                <div id="download-link-operations" class="hide">
+                    <p><span class="vam">{% trans "Link: " %}</span><span id="download-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <button id="send-download-link">{% trans 'Send' %}</button>
+                    <button id="delete-download-link">{% trans 'Delete' %}</button>
+                    <form id="send-download-link-form" action="" class="hide">
+                        <label>{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-download-link" />
+                        <p class="sending-tip hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+
+            <% if (is_dir) { %>
+                <% if (user_perm == 'rw') { %>
+            <div id="dir-upload-link-share" class="tabs-panel hide">
+                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
+                <form id="generate-upload-link-form" action="" class="hide">
+                    <label class="checkbox-label">
+                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
+                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                    </label>
+                    <div class="hide">
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+                        <input type="password" name="password" class="input" /><br />
+                        <label>{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" />
+                    </div>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans 'Generate'%}" />
+                </form>
+                <div id="upload-link-operations" class="hide">
+                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><span id="upload-link"></span><!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /--></p>
+                    <button id="send-upload-link">{% trans 'Send' %}</button>
+                    <button id="delete-upload-link">{% trans 'Delete' %}</button>
+                    <form id="send-upload-link-form" action="" class="hide">
+                        <label>{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
+                        <label>{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <p class="error hide"></p>
+                        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                        <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-upload-link" />
+                        <p class="sending-tip hide">{% trans "Sending..."%}</p>
+                    </form>
+                </div>
+            </div>
+                <% } %>
+
+                <% if (!is_virtual && is_repo_owner) { %>
+            <div id="dir-private-share" class="tabs-panel hide">
+                <form id="dir-private-share-form" action="" class="hide">
+                    <label class="label">{% trans "People:" %}</label><br />
+                    <input type="hidden" name="emails" class="w100" /><br />
+
+                    <label class="label">{% trans "Groups:" %}</label><br />
+                    <select name="groups" class="w100" multiple="multiple"></select><br />
+
+                    <label class="label">{% trans "Permission:" %}</label><br />
+                    <select name="permission" class="share-permission-select w100">
+                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                        <option value="r">{% trans "Read-Only"%}</option>
+                    </select>
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                </form>
+            </div>
+                <% } %>
+            <% } %>
+
+            <% if (!is_dir && is_repo_owner) { %>
+            <div id="file-private-share" class="tabs-panel hide">
+                <form id="file-private-share-form" action="" class="hide">
+                    <label>{% trans "People:" %}</label><br />
+                    <input type="hidden" name="emails" class="w100" /><br />
+                    <p class="error hide"></p>
+                    <input type="submit" value="{% trans "Submit" %}" />
+                </form>
+            </div>
+            <% } %>
+
+        </div>
+    </div>
+</script>
+<script type="text/template" id="shared-repo-tmpl">
+    <td>
+        <% if (encrypted) { %>
+            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <% } else { %>
+            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
+    <td class="alc">
+        <span class="icon-trash unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+    </td>
+    <td><%= size_formatted %></td>
+    <td><%= mtime_relative %></td>
+    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+</script>
+<script type="text/template" id="sub-lib-tmpl">
+    <td>
+        <% if (encrypted) { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } %>
+    </td>
+    <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
+    <td>
+        <div class="op-container alc">
+            <img src="{{MEDIA_URL}}img/rm.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+        </div>
+    </td>
+    <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
+    <td><%= mtime_relative %></td>
+</script>
