@@ -892,7 +892,8 @@ class UpdateBlksLinkView(APIView):
 
 def get_dir_entrys_by_id(request, repo, path, dir_id):
     try:
-        dirs = seafile_api.list_dir_by_dir_id(repo.id, dir_id)
+        dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
+                request.user.username, -1, -1)
     except SearpcError, e:
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
@@ -914,6 +915,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
         entry["mtime"] = dirent.mtime
+        entry["permission"] = dirent.permission
         if dtype == 'dir':
             dir_list.append(entry)
         else:
