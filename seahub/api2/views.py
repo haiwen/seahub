@@ -67,6 +67,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify
+from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.utils.timeutils import utc_to_local
@@ -559,18 +560,11 @@ class Repos(APIView):
                 repos_json.append(repo)
 
         if filter_by['sub']:
-            def get_abbrev_origin_path(repo_name, path):
-                if len(path) > 20:
-                    abbrev_path = path[-20:]
-                    return repo_name + '/...' + abbrev_path
-                else:
-                    return repo_name + path
-
             # compose abbrev origin path for display
             sub_repos = []
             sub_repos = get_virtual_repos_by_owner(request)
             for repo in sub_repos:
-                repo.abbrev_origin_path = get_abbrev_origin_path(
+                repo.abbrev_origin_path = get_sub_repo_abbrev_origin_path(
                     repo.origin_repo_name, repo.origin_path)
 
             sub_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))

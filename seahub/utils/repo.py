@@ -74,3 +74,15 @@ def check_group_folder_perm_args(from_user, repo_id, path, group_id, perm = None
 
     return {'success': True}
 
+def get_sub_repo_abbrev_origin_path(repo_name, origin_path):
+    """Return abbrev path for sub repo based on `repo_name` and `origin_path`.
+
+    Arguments:
+    - `repo_id`:
+    - `origin_path`:
+    """
+    if len(origin_path) > 20:
+        abbrev_path = origin_path[-20:]
+        return repo_name + '/...' + abbrev_path
+    else:
+        return repo_name + origin_path
