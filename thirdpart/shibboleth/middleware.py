@@ -97,7 +97,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
                 request, request.user.username, platform, device_id,
                 device_name, client_version, platform_version)
         elif all(['shib_' + key not in request.GET for key in keys]):
-            token = get_token_v1(request, request.user.username, )
+            token = get_token_v1(request.user.username)
         else:
             return
         response.set_cookie('seahub_auth', request.user.username + '@' + token.key)
