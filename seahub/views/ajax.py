@@ -49,7 +49,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_org_user_events, get_user_events, get_file_type_and_ext, \
     is_valid_username, send_perm_audit_msg
 from seahub.utils.repo import check_group_folder_perm_args, \
-    check_user_folder_perm_args
+    check_user_folder_perm_args, get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
@@ -1255,16 +1255,34 @@ def sub_repo(request, repo_id):
     check if a dir has a corresponding sub_repo
     if it does not have, create one
     '''
+    username = request.user.username
     content_type = 'application/json; charset=utf-8'
     result = {}
+
+    if not request.user.permissions.can_add_repo():
+        result['error'] = _(u"You do not have permission to create library")
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
+    origin_repo = seafile_api.get_repo(repo_id)
+    if origin_repo is None:
+        result['error'] = _('Repo not found.')
+        return HttpResponse(json.dumps(result), status=400,
+                            content_type=content_type)
+
+    # perm check, only repo owner can create sub repo
+    repo_owner = seafile_api.get_repo_owner(origin_repo.id)
+    is_repo_owner = True if username == repo_owner else False
+    if not is_repo_owner:
+        result['error'] = _(u"You do not have permission to create library")
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
     path = request.GET.get('p')
     if not path:
         result['error'] = _('Argument missing')
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
     name = os.path.basename(path)
-
-    username = request.user.username
 
     # check if the sub-lib exist
     try:
@@ -1275,7 +1293,8 @@ def sub_repo(request, repo_id):
         else:
             sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
     except SearpcError as e:
-        result['error'] = e.msg
+        logger.error(e)
+        result['error'] = _('Failed to create sub library, please try again later.')
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
     if sub_repo:
@@ -1294,8 +1313,12 @@ def sub_repo(request, repo_id):
                                                               username)
             result['sub_repo_id'] = sub_repo_id
             result['name'] = name
-        except SearpcError, e:
-            result['error'] = e.msg
+            result['abbrev_origin_path'] = get_sub_repo_abbrev_origin_path(
+                origin_repo.name, path)
+
+        except SearpcError as e:
+            logger.error(e)
+            result['error'] = _('Failed to create sub library, please try again later.')
             return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
     return HttpResponse(json.dumps(result), content_type=content_type)
