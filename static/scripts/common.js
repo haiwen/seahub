@@ -34,6 +34,8 @@ require.config({
         'jquery.fileupload-validate': 'lib/jquery.fileupload.validation.1.1.2',
         'jquery.fileupload-ui': 'lib/jquery.fileupload.ui.9.6.0',
 
+        'jquery.magnific-popup': 'lib/jquery.magnific-popup',
+
         simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
