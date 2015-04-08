@@ -296,6 +296,12 @@ define([
             return result;
         },
 
+        encodePath: function(path) {
+            return path.split('/').map(function(e) {
+                return encodeURIComponent(e);
+            }).join('/');
+        },
+
         closePopup: function(e, popup, popup_switch) {
             var target = e.target || event.srcElement;
             if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {

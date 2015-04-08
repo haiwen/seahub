@@ -29,9 +29,11 @@ define([
 
         render: function() {
             var dir = this.dir;
+            var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             this.$el.html(this.template({
                 dirent: this.model.attributes,
-                dirent_path: Common.pathJoin([dir.path, this.model.get('obj_name')]),
+                dirent_path: dirent_path,
+                encoded_path: Common.encodePath(dirent_path),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 user_perm: dir.user_perm,
