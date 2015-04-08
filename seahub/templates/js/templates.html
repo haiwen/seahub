@@ -156,7 +156,7 @@
     <% } else { %>
     <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
     <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
+        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
     <% } %>
     <%- path_list[i] + ' /' %>
     <% } %>
@@ -170,9 +170,9 @@
     <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon" %}" /></td>
     <td>
         <% if (category) { %>
-        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><%- dirent_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><%- encoded_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
         <% } else { %>
-        <span class="dirent-name"><a href="#lib/<%= repo_id %><%- dirent_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name"><a href="#lib/<%= repo_id %><%- encoded_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
         <% } %>
     </td>
     <td class="dirent-op">
