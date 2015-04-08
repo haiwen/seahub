@@ -26,6 +26,7 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
+from seahub.utils.rpc import mute_seafile_api
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -450,28 +451,27 @@ def sys_user_admin_admins(request):
 @login_required
 @sys_staff_required
 def user_info(request, email):
-    owned_repos = seafile_api.get_owned_repo_list(email)
+    owned_repos = mute_seafile_api.get_owned_repo_list(email)
+    org_name = None
+    space_quota = space_usage = 0
+    share_quota = share_usage = 0
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
-    org_name = None
     if not org:
-        space_usage = seafile_api.get_user_self_usage(email)
-        space_quota = seafile_api.get_user_quota(email)
+        space_usage = mute_seafile_api.get_user_self_usage(email)
+        space_quota = mute_seafile_api.get_user_quota(email)
         if CALC_SHARE_USAGE:
-            share_usage = seafile_api.get_user_share_usage(email)
-            share_quota = seafile_api.get_user_share_quota(email)
-        else:
-            share_quota = share_usage = 0
+            share_usage = mute_seafile_api.get_user_share_usage(email)
+            share_quota = mute_seafile_api.get_user_share_quota(email)
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
                                                                      email)
         space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, email)
-        share_usage = share_quota = 0
 
     # Repos that are share to user
-    in_repos = seafile_api.get_share_in_repo_list(email, -1, -1)
+    in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
 
     # get user profile
     profile = Profile.objects.get_profile_by_user(email)
@@ -482,38 +482,44 @@ def user_info(request, email):
     p_fileshares = []
     fileshares = list(FileShare.objects.filter(username=email))
     for fs in fileshares:
-        r = seafile_api.get_repo(fs.repo_id)
-        if not r:
-            fs.delete()
+        try:
+            r = seafile_api.get_repo(fs.repo_id)
+            if not r:
+                fs.delete()
+                continue
+
+            if fs.is_file_share_link():
+                if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
+                    fs.delete()
+                    continue
+
+                fs.filename = os.path.basename(fs.path)
+                path = fs.path.rstrip('/')  # Normalize file path
+                obj_id = seafile_api.get_file_id_by_path(r.id, path)
+                fs.file_size = seafile_api.get_file_size(r.store_id,
+                                                         r.version, obj_id)
+            else:
+                if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
+                    fs.delete()
+                    continue
+
+                fs.filename = os.path.basename(fs.path.rstrip('/'))
+                path = fs.path
+                if path[-1] != '/':         # Normalize dir path
+                    path += '/'
+                # get dir size
+                dir_id = seafserv_threaded_rpc.get_dirid_by_path(r.id,
+                                                                 r.head_cmmt_id,
+                                                                 path)
+                fs.dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id,
+                                                                 r.version,
+                                                                 dir_id)
+
+            fs.is_download = True
+            p_fileshares.append(fs)
+        except SearpcError as e:
+            logger.error(e)
             continue
-
-        if fs.is_file_share_link():
-            if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
-                fs.delete()
-                continue
-            fs.filename = os.path.basename(fs.path)
-            path = fs.path.rstrip('/') # Normalize file path
-            obj_id = seafile_api.get_file_id_by_path(r.id, path)
-            fs.file_size = seafile_api.get_file_size(r.store_id, r.version,
-                                                     obj_id)
-        else:
-            if seafile_api.get_dir_id_by_path(r.id, fs.path) is None:
-                fs.delete()
-                continue
-            fs.filename = os.path.basename(fs.path.rstrip('/'))
-            path = fs.path
-            if path[-1] != '/':         # Normalize dir path
-                path += '/'
-            # get dir size
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(r.id,
-                                                             r.head_cmmt_id,
-                                                             path)
-            fs.dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id,
-                                                             r.version,
-                                                             dir_id)
-
-        fs.is_download = True
-        p_fileshares.append(fs)
     p_fileshares.sort(key=lambda x: x.view_cnt, reverse=True)
     user_shared_links += p_fileshares
 
@@ -521,16 +527,20 @@ def user_info(request, email):
     uploadlinks = list(UploadLinkShare.objects.filter(username=email))
     p_uploadlinks = []
     for link in uploadlinks:
-        r = seafile_api.get_repo(link.repo_id)
-        if not r:
-            link.delete()
+        try:
+            r = seafile_api.get_repo(link.repo_id)
+            if not r:
+                link.delete()
+                continue
+            if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
+                link.delete()
+                continue
+            link.dir_name = os.path.basename(link.path.rstrip('/'))
+            link.is_upload = True
+            p_uploadlinks.append(link)
+        except SearpcError as e:
+            logger.error(e)
             continue
-        if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
-            link.delete()
-            continue
-        link.dir_name = os.path.basename(link.path.rstrip('/'))
-        link.is_upload = True
-        p_uploadlinks.append(link)
     p_uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
     user_shared_links += p_uploadlinks
 
