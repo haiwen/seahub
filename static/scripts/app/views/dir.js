@@ -52,8 +52,9 @@ define([
                         titleSrc: function(item) {
                             var el = item.el;
                             var img_name = Common.HTMLescape(el[0].innerText);
-                            var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
-                            return img_name + '<br />' + img_link;
+                            var img_link = $('<a href="" target="_blank">' + gettext("Open in New Tab") + '</a>');
+                            img_link.attr('href', el.attr('href')); // for file with double quote in its name
+                            return img_name + '<br />' + img_link[0].outerHTML;
                         },
                         tError: gettext('<a href="%url%">The image</a> could not be loaded.') // Error message when image could not be loaded
                     }
