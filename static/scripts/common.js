@@ -34,6 +34,8 @@ require.config({
         'jquery.fileupload-validate': 'lib/jquery.fileupload.validation.1.1.2',
         'jquery.fileupload-ui': 'lib/jquery.fileupload.ui.9.6.0',
 
+        'jquery.magnific-popup': 'lib/jquery.magnific-popup',
+
         simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
@@ -460,6 +462,21 @@ define([
             $(document).click(function(e) {
                 _this.closePopup(e, $('#notice-popup'), $('#notice-icon'));
             });
+        },
+
+        // check if a file is an image
+        imageCheck: function (filename) {
+            // no file ext
+            if (filename.lastIndexOf('.') == -1) {
+                return false;
+            }
+            var file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+            var image_exts = ['gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'];
+            if (image_exts.indexOf(file_ext) != -1) {
+                return true;
+            } else {
+                return false;
+            }
         },
 
         fileSizeFormat: function(bytes, precision) {
