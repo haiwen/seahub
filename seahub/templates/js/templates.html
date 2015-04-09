@@ -227,7 +227,13 @@
         <% } %>
     </td>
     <td>
-        <span class="dirent-name"><a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- dirent_path %>" target="_blank"><%- dirent.obj_name %></a></span>
+        <span class="dirent-name">
+            <% if (dirent.is_img) { %>
+            <a class="normal img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- dirent_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- dirent_path %>"><%- dirent.obj_name %></a>
+            <% } else { %>
+            <a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- dirent_path %>" target="_blank"><%- dirent.obj_name %></a>
+            <% } %>
+        </span>
     </td>
     <td class="dirent-op">
         <div class="repo-file-op vh">
