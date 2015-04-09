@@ -4,3 +4,4 @@ six
 Image
 Django==1.5.8
 Djblets==0.6.14
+django-compressor==1.4
