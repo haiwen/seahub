@@ -1,6 +1,7 @@
 define([
     'jquery',
     'jquery.ui.progressbar',
+    'jquery.magnific-popup',
     'simplemodal',
     'underscore',
     'backbone',
@@ -10,7 +11,7 @@ define([
     'app/views/dirent',
     'app/views/fileupload',
     'app/views/share'
-    ], function($, progressbar, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
+    ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
         FileUploadView, ShareView) {
         'use strict';
 
@@ -35,6 +36,28 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
+
+                this.$el.magnificPopup({
+                    type: 'image',
+                    delegate: '.img-name-link',
+                    tClose: gettext("Close (Esc)"), // Alt text on close button
+                    tLoading: gettext("Loading..."), // Text that is displayed during loading. Can contain %curr% and %total% keys
+                    gallery: {
+                        enabled: true,
+                        tPrev: gettext("Previous (Left arrow key)"), // Alt text on left arrow
+                        tNext: gettext("Next (Right arrow key)"), // Alt text on right arrow
+                        tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
+                    },
+                    image: {
+                        titleSrc: function(item) {
+                            var el = item.el;
+                            var img_name = el[0].innerHTML;
+                            var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
+                            return img_name + '<br />' + img_link;
+                        },
+                        tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
+                    }
+                });
 
                 // initialize common js behavior
                 this.$('th .checkbox-orig').unbind();
@@ -403,6 +426,7 @@ define([
                         $.modal.close();
                         var new_dirent = dir.add({
                             'is_file': true,
+                            'is_img': Common.imageCheck(data['name']),
                             'obj_name': data['name'],
                             'file_size': Common.fileSizeFormat(0),
                             'obj_id': '0000000000000000000000000000000000000000',
