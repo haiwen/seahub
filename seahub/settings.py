@@ -90,6 +90,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'compressor.finders.CompressorFinder',
 )
 
 # Make this unique, and don't share it with anybody.
@@ -183,6 +184,7 @@ INSTALLED_APPS = (
 
     'registration',
     'captcha',
+    'compressor',
 
     'seahub.api2',
     'seahub.avatar',
@@ -408,6 +410,12 @@ LOGIN_REMEMBER_DAYS = 7
 SHARE_ACCESS_PASSWD_TIMEOUT = 60 * 60
 
 SEAFILE_VERSION = '4.1.2'
+
+# Compress static files(css, js)
+COMPRESS_URL = MEDIA_URL
+COMPRESS_ROOT = MEDIA_ROOT
+COMPRESS_DEBUG_TOGGLE = 'nocompress'
+COMPRESS_CSS_HASHING_METHOD = 'content'
 
 ###################
 # Image Thumbnail #
