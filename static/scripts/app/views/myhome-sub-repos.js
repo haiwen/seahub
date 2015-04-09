@@ -120,15 +120,19 @@ define([
                     dataType: 'json',
                     success: function(data) {
                         $.modal.close();
-                        _this.repos.add({
-                            'id': data["sub_repo_id"],
-                            'name': data["name"],
-                            'origin_repo_id': ori_repo_id,
-                            'origin_path': path,
-                            'abbrev_origin_path': data["abbrev_origin_path"],
-                            'mtime': new Date().getTime() / 1000,
-                            'mtime_relative': gettext("Just now")
-                        }, {prepend: true});
+                        if (_this.repos.length > 0) {
+                            _this.repos.add({
+                                'id': data["sub_repo_id"],
+                                'name': data["name"],
+                                'origin_repo_id': ori_repo_id,
+                                'origin_path': path,
+                                'abbrev_origin_path': data["abbrev_origin_path"],
+                                'mtime': new Date().getTime() / 1000,
+                                'mtime_relative': gettext("Just now")
+                            }, {prepend: true});
+                        } else {
+                            _this.showMyRepos();
+                        }
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         var err;
@@ -143,7 +147,6 @@ define([
                 return false;
             });
         }
-
 
     });
 
