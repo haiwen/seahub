@@ -2,11 +2,16 @@ import os
 import json
 import logging
 import urllib2
+import mimetypes
+import stat
+import re
 from StringIO import StringIO
 from PIL import Image
 
+from django.utils.http import http_date, parse_http_date
 from django.utils.translation import ugettext as _
-from django.http import HttpResponse, Http404
+from django.http import CompatibleStreamingHttpResponse, \
+        HttpResponse, HttpResponseNotModified
 
 from seaserv import get_file_id_by_path, get_repo, seafile_api
 
@@ -115,6 +120,7 @@ def thumbnail_create(request, repo_id):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
+
     # permission check
     token = request.GET.get('t', None)
     path = request.GET.get('p', None)
@@ -131,11 +137,48 @@ def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
         elif check_repo_access_permission(repo_id, request.user) is None:
             return HttpResponse()
 
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, size, obj_id)
+    fullpath = os.path.join(THUMBNAIL_ROOT, size, obj_id)
+
+    # refer to 'django/views/static.py'
+    statobj = os.stat(fullpath)
+    mimetype, encoding = mimetypes.guess_type(fullpath)
+    mimetype = mimetype or 'application/octet-stream'
+    if not was_modified_since(request.META.get('HTTP_IF_MODIFIED_SINCE'),
+                              statobj.st_mtime, statobj.st_size):
+        return HttpResponseNotModified()
+    response = CompatibleStreamingHttpResponse(open(fullpath, 'rb'), content_type=mimetype)
+    response["Last-Modified"] = http_date(statobj.st_mtime)
+    if stat.S_ISREG(statobj.st_mode):
+        response["Content-Length"] = statobj.st_size
+    if encoding:
+        response["Content-Encoding"] = encoding
+    return response
+
+def was_modified_since(header=None, mtime=0, size=0):
+    """
+    Was something modified since the user last downloaded it?
+
+    header
+      This is the value of the If-Modified-Since header.  If this is None,
+      I'll just return True.
+
+    mtime
+      This is the modification time of the item we're talking about.
+
+    size
+      This is the size of the item we're talking about.
+    """
     try:
-        with open(thumbnail_file, 'rb') as f:
-            thumbnail = f.read()
-        f.close()
-        return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
-    except IOError:
-        return HttpResponse()
+        if header is None:
+            raise ValueError
+        matches = re.match(r"^([^;]+)(; length=([0-9]+))?$", header,
+                           re.IGNORECASE)
+        header_mtime = parse_http_date(matches.group(1))
+        header_len = matches.group(3)
+        if header_len and int(header_len) != size:
+            raise ValueError
+        if int(mtime) > header_mtime:
+            raise ValueError
+    except (AttributeError, ValueError, OverflowError):
+        return True
+    return False
