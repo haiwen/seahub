@@ -288,6 +288,7 @@ define([
                     $(uploaded_files).each(function(index, file) {
                         var new_dirent = dirents.add({
                             'is_file': true,
+                            'is_img': Common.imageCheck(file.name),
                             'obj_name': file.name,
                             'last_modified': now,
                             'file_size': Common.fileSizeFormat(file.size, 1),
