@@ -99,38 +99,8 @@
         </div>
     </div>
 
-    <div id="grp-repos-commits" class="hide">
-        <table class="hide">
-            <thead>
-                <tr>
-                    <th width="5%"></th>
-                    <th width="17%">{% trans "Library" %}</th>
-                    <th width="48%">{% trans "Description" %}</th>
-                    <th width="15%">{% trans "Modified at" %}</th>
-                    <th width="15%">{% trans "Modifier" %}</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
     <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
-
-{% if user.permissions.can_add_repo %}
-{% include "snippets/repo_create_form.html" %}
-{% endif %}
-
-<form id="repo-decrypt-form" class="hide">
-    <h3>{% trans 'Library' %} <span class="op-target"></span> {% trans 'is encrypted' %}</h3>
-    <input type="hidden" name="repo_id" value="" />
-    <label>{% trans 'Password：' %}</label><br />
-    <input type="password" name="password" class="input" />
-    <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
-    <p class="error"></p>
-    <input type="submit" class="submit" value="{% trans 'Submit' %}" />
-    <button class="simplemodal-close">{% trans 'Cancel' %}</button>
-</form>
 
 {% include "js/dir-view.html" %}
 
