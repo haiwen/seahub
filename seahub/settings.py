@@ -418,7 +418,10 @@ COMPRESS_DEBUG_TOGGLE = 'nocompress'
 COMPRESS_CSS_HASHING_METHOD = 'content'
 COMPRESS_OFFLINE = True
 COMPRESS_OFFLINE_CONTEXT = {'MEDIA_URL': MEDIA_URL, 'base_template': 'base.html'}
-COMPRESS_CSS_FILTERS = ['compressor.filters.cssmin.CSSMinFilter']
+COMPRESS_CSS_FILTERS = [
+    'compressor.filters.css_default.CssAbsoluteFilter',
+    'compressor.filters.cssmin.CSSMinFilter',
+]
 
 
 ###################
