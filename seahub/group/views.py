@@ -603,7 +603,6 @@ def group_info(request, group):
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 @group_check
