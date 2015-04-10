@@ -182,47 +182,41 @@ define([
                 this.renderPath();
                 this.renderDirOpBar();
                 this.fileUploadView.setFileInput();
-                this.renderThumbnail();
+                this.getImageThumbnail();
             },
 
-            renderThumbnail: function() {
-                var img_icons = $('.not-thumbnail'),
-                    repo_id = this.dir.repo_id,
-                    cur_path = this.dir.path,
-                    _this = this,
-                    file_path;
-
-                if (img_icons.length === 0) {
-                    return;
+            getImageThumbnail: function() {
+                var images_with_no_thumbnail = this.dir.filter(function(dirent) {
+                    // 'dirent' is a model
+                    return dirent.get('is_img') && !dirent.get('thumbnail_src');
+                });
+                if (images_with_no_thumbnail.length == 0) {
+                    return ;
                 }
 
+                var images_len = images_with_no_thumbnail.length,
+                    repo_id = this.dir.repo_id,
+                    cur_path = this.dir.path,
+                    _this = this;
                 var get_thumbnail = function(i) {
-
-                    var img_icon = $(img_icons[i]),
-                        file_name = img_icon.attr('data-name');
-
-                    if (cur_path === '/') {
-                        file_path = cur_path + file_name;
-                    } else {
-                        file_path = cur_path + '/' + file_name;
-                    }
-
+                    var cur_img = images_with_no_thumbnail[i];
+                    var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
                     $.ajax({
                         url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
-                        data: {'path': file_path},
+                        data: {'path': cur_img_path},
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
-                            img_icon.attr("src", data.thumbnail_src).load(function() {
-                                $(this).removeClass("not-thumbnail").addClass("thumbnail");
+                            cur_img.set({
+                                'thumbnail_src': data.thumbnail_src
                             });
                         },
                         complete: function() {
-                            // cur_path may be changed. e.g., the user enter another directory
-                            if (i < img_icons.length - 1 && _this.dir.path === cur_path) {
+                            // cur path may be changed. e.g., the user enter another directory
+                            if (i < images_len - 1 &&
+                                _this.dir.repo_id == repo_id &&
+                                _this.dir.path == cur_path) {
                                 get_thumbnail(++i);
-                            } else {
-                                return;
                             }
                         }
                     });
@@ -905,11 +899,11 @@ define([
 
             onWindowScroll: function () {
                 var dir = this.dir,
-                    start = dir.more_start,
-                    loading_tip = this.$('.loading-tip'),
-                    _this = this;
+                    start = dir.more_start;
 
                 if (dir.dirent_more && $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) && start != dir.last_start) {
+                    var loading_tip = this.$('.loading-tip'),
+                        _this = this;
                     dir.last_start = start;
                     dir.fetch({
                         remove: false,
@@ -921,7 +915,7 @@ define([
                             if (!response.dirent_more ) { // no 'more'
                                 loading_tip.hide();
                             }
-                            _this.renderThumbnail();
+                            _this.getImageThumbnail();
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             loading_tip.hide();
