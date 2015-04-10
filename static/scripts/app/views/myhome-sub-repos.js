@@ -52,7 +52,7 @@ define([
             this.$loadingTip.hide();
         },
 
-        showMyRepos: function() {
+        showSubRepos: function() {
             this.repos.fetch({reset: true});
             this.$tabs.show();
             this.$table.hide();
@@ -62,7 +62,7 @@ define([
 
         show: function() {
             $('#sub-lib-create').show();
-            this.showMyRepos();
+            this.showSubRepos();
         },
 
         hide: function() {
