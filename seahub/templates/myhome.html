@@ -183,7 +183,6 @@ app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
-    previewDefaultSize: "{{ PREVIEW_DEFAULT_SIZE }}",
     groups: (function () {
         var groups = [];
         {% for group in request.user.joined_groups %}

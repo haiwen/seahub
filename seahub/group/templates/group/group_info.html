@@ -111,7 +111,6 @@
      groupId: {{ group.id }},
      groupReposUrl: "{% url "api2-grouprepos" group.id %}",
      groupChangesUrl: "{% url "api2-group-changes" group.id %}",
-     previewDefaultSize: "{{ PREVIEW_DEFAULT_SIZE }}",
      isGroupStaff: (function() {
          if ("{{ is_staff }}" == "True")
              return true;
