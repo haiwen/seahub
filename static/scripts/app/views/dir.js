@@ -273,65 +273,7 @@ define([
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click #by-name': 'sortByName',
-                'click #by-time': 'sortByTime',
-                'mouseenter .thumbnail': 'showPreview'
-            },
-
-            showPreview: function(e) {
-                var thumbnail = $(e.target),
-                    file_name = thumbnail.attr('data-name'),
-                    preview_wrap = $("#preview-wrap"),
-                    caret = $("#image-preview").next(),
-                    cur_path = this.dir.path,
-                    repo_id = this.dir.repo_id,
-                    default_size = parseInt(app.pageOptions.previewDefaultSize),
-                    ajaxRequest = {},
-                    file_path;
-
-                preview_wrap.css({'width': default_size + 'px', 'height': default_size + 'px'})
-
-                if (cur_path === '/') {
-                    file_path = cur_path + file_name;
-                } else {
-                    file_path = cur_path + '/' + file_name;
-                }
-
-                var timer = setTimeout(function () {
-                        ajaxRequest = $.ajax({
-                            url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
-                            data: {'path': file_path, 'size': default_size},
-                            cache: false,
-                            dataType: 'json',
-                            success: function(data) {
-                                $('#image-preview').attr("src", data.thumbnail_src);
-
-                                var wrap_width = preview_wrap.outerWidth(),
-                                    wrap_padding = parseInt(preview_wrap.css('padding-top')),
-                                    caret_width = parseInt(caret.css('border-top-width'));
-
-                                caret.removeClass('bottom-outer-caret')
-                                     .addClass('right-outer-caret')
-                                     .css({
-                                           'top':(default_size)/2 + wrap_padding - caret_width + 'px',
-                                           'left':default_size + 2 * wrap_padding + 'px'
-                                         });
-
-                                preview_wrap.css({
-                                    'top'  : (thumbnail.offset().top + (thumbnail.height() - wrap_width)/2) + 'px',
-                                    'left' : thumbnail.closest('tr').offset().left - wrap_width - caret_width + 'px'
-                                }).fadeIn();
-                            }
-                        });
-                    }, 200);
-
-                $('.dirent-icon').on('mouseleave', function() {
-                    if (ajaxRequest.hasOwnProperty('abort')) {
-                        ajaxRequest.abort();
-                    }
-                    clearTimeout(timer);
-                    preview_wrap.hide();
-                    $("#image-preview").attr('src', ''); // for ff. In ff, when hover, the last preview image would be shown first, then the right one.
-                });
+                'click #by-time': 'sortByTime'
             },
 
             newDir: function() {
