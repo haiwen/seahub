@@ -1137,7 +1137,6 @@ def myhome(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1163,8 +1162,6 @@ def libraries(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 @login_required
