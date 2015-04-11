@@ -47,7 +47,8 @@ from seahub.settings import SITE_ROOT, SITE_NAME, PREVIEW_DEFAULT_SIZE
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
     gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username, send_html_email, is_org_context
+    calc_file_path_hash, is_valid_username, send_html_email, is_org_context, \
+    get_max_upload_file_size
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
 from seahub.views import is_registered_user
@@ -597,12 +598,15 @@ def group_info(request, group):
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
 
+    max_upload_file_size = get_max_upload_file_size()
+
     return render_to_response("group/group_info.html", {
             "group" : group,
             "is_staff": group.is_staff,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
+            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'max_upload_file_size': max_upload_file_size,
             }, context_instance=RequestContext(request))
 
 @group_check
