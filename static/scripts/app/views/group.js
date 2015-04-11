@@ -91,7 +91,7 @@ define([
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
             this.hideRepoList();
-            this.dirView.showDir('', repo_id, path);
+            this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
 
         createRepo: function() {
@@ -141,6 +141,7 @@ define([
         },
 
         hide: function() {
+            console.log("hide group view");
             this.hideRepoList();
             this.dirView.hide();
         }

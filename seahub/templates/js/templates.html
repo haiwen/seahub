@@ -55,7 +55,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/group/<%= group_id %>/<%= id %>"><%- name %></a></td>
+    <td><a href="#/group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.isGroupStaff) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -77,7 +77,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#org/<%= id %>"><%- name %></a></td>
+    <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (show_unshare_btn) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -146,15 +146,18 @@
     <% } %>
 </script>
 <script type="text/template" id="path-bar-tmpl">
-    <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
-    <% if (category) { %>
-    <a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
+    <% if (context == 'group') { %>
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+    <% } else if (context == 'org') { %>
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else { %>
+        <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
     <% } %>
     <% if (path == '/') { %>
     <%- repo_name %> /
     <% } else { %>
-    <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
+        <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
     <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
         <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
     <% } %>
