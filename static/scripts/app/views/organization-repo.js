@@ -9,7 +9,7 @@ define([
     var OrganizationRepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template($('#organization-repos-tmpl').html()),
+        template: _.template($('#organization-repo-tmpl').html()),
 
         events: {
             'mouseenter': 'showAction',
