@@ -6,17 +6,15 @@ define([
     'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/dir',
-    'app/views/group-nav',
     'app/views/add-pub-repo'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    DirView, GroupNavView, AddPubRepoView) {
+    DirView, AddPubRepoView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
         initialize: function() {
-            Common.prepareApiCsrf();
 
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
@@ -29,10 +27,6 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
-
-            this.groupView = new GroupNavView();
-            Common.initAccountPopup();
-            Common.initNoticePopup();
         },
 
         events: {
@@ -67,20 +61,20 @@ define([
             this.$loadingTip.hide();
         },
 
-        showPublicRepos: function() {
+        showRepoList: function() {
             this.dirView.hide();
             this.$reposDiv.show();
             this.repos.fetch({reset: true});
             this.$loadingTip.show();
         },
 
-        hideRepos: function() {
+        hideRepoList: function() {
             this.$reposDiv.hide();
         },
 
         showDir: function(repo_id, path) {
             var path = path || '/';
-            this.hideRepos();
+            this.hideRepoList();
             this.dirView.showDir('', repo_id, path);
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
@@ -118,6 +112,11 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+        },
+
+        hide: function() {
+            this.hideRepoList();
+            this.dirView.hide();
         }
 
     });
