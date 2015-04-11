@@ -2,11 +2,14 @@ import os
 import json
 import logging
 import urllib2
+import mimetypes
+import datetime
 from StringIO import StringIO
 from PIL import Image
 
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse, Http404
+from django.views.decorators.http import condition
 
 from seaserv import get_file_id_by_path, get_repo, seafile_api
 
@@ -114,6 +117,17 @@ def thumbnail_create(request, repo_id):
     result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
+def latest_entry(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
+    thumbnail_path = os.path.join(THUMBNAIL_ROOT, size, obj_id)
+    last_modified_time = os.path.getmtime(thumbnail_path)
+    try:
+        # convert float to datatime obj
+        return datetime.datetime.fromtimestamp(last_modified_time)
+    except Exception as e:
+        logger.error(e)
+        return None
+
+@condition(last_modified_func=latest_entry)
 def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     # permission check
     token = request.GET.get('t', None)
@@ -132,10 +146,12 @@ def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
             return HttpResponse()
 
     thumbnail_file = os.path.join(THUMBNAIL_ROOT, size, obj_id)
-    try:
-        with open(thumbnail_file, 'rb') as f:
-            thumbnail = f.read()
-        f.close()
-        return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
-    except IOError:
-        return HttpResponse()
+    with open(thumbnail_file, 'rb') as f:
+        file_content = f.read()
+
+    # Prepare response
+    content_type, content_encoding = mimetypes.guess_type(thumbnail_file)
+    response = HttpResponse(content=file_content, mimetype=content_type)
+    if content_encoding:
+        response['Content-Encoding'] = content_encoding
+    return response
