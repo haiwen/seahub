@@ -43,7 +43,7 @@
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
 </script>
-<script type="text/template" id="group-repos-tmpl">
+<script type="text/template" id="group-repo-tmpl">
     <td>
         <% if (encrypted) { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
@@ -55,7 +55,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td><a href="#/group/<%= group_id %>/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.isGroupStaff) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -65,7 +65,7 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
-<script type="text/template" id="organization-repos-tmpl">
+<script type="text/template" id="organization-repo-tmpl">
     <td>
         <% if (encrypted) { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
@@ -77,7 +77,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td><a href="#org/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (show_unshare_btn) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -94,7 +94,7 @@
         </div>
         <ul id="top-nav-grp-list">
             <% for (var i = 0, len = groups.length; i < len; i++) { %>
-            <li class="item" data-url="<%= app.config.siteRoot %>group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
+            <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
                 <%= groups[i].avatar %>
                 <span class="name ellipsis vam"><%= groups[i].name %></span>
                 <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
