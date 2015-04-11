@@ -225,12 +225,20 @@ define([
             },
 
             renderPath: function() {
-                var dir = this.dir,
-                    path = dir.path,
-                    obj = {
+                var dir = this.dir;
+                var path = dir.path;
+                var context = 'my';
+
+                if (dir.category.startsWith('org')) {
+                    context = 'org';
+                } else if (dir.category.startsWith('group')) {
+                    context = 'group';
+                }
+                var obj = {
                         path: path,
                         repo_name: dir.repo_name,
-                        category: dir.category
+                        category: dir.category,
+                        context: context
                     };
 
                 var path_list = path.substr(1).split('/');
