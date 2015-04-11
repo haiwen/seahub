@@ -16,6 +16,7 @@ define([
 
         initialize: function() {
 
+            this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableBody = $('tbody', this.$table);
@@ -62,6 +63,7 @@ define([
         },
 
         showRepoList: function() {
+            this.$sideNav.show();
             this.dirView.hide();
             this.$reposDiv.show();
             this.repos.fetch({reset: true});
@@ -73,6 +75,7 @@ define([
         },
 
         showDir: function(repo_id, path) {
+            this.$sideNav.show();
             var path = path || '/';
             this.hideRepoList();
             this.dirView.showDir('org', repo_id, path);
@@ -83,7 +86,6 @@ define([
 
         sortByName: function() {
             var repos = this.repos;
-            console.log(repos);
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
                 if (el.hasClass('icon-caret-up')) {
@@ -115,6 +117,7 @@ define([
         },
 
         hide: function() {
+            this.$sideNav.hide();
             this.hideRepoList();
             this.dirView.hide();
         }
