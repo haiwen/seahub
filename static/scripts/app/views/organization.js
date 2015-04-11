@@ -75,7 +75,7 @@ define([
         showDir: function(repo_id, path) {
             var path = path || '/';
             this.hideRepoList();
-            this.dirView.showDir('', repo_id, path);
+            this.dirView.showDir('org', repo_id, path);
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);
