@@ -16,12 +16,9 @@ define([
         el: '#main',
 
         initialize: function() {
-
-
-            //_.bindAll(this, 'ajaxLoadingShow', 'ajaxLoadingHide');
-            //this.$el.ajaxStart(this.ajaxLoadingShow).ajaxStop(this.ajaxLoadingHide);
-
             this.$cont = this.$('#right-panel');
+
+            this.$sideNav = $('#myhome-side-nav');
 
             this.reposView = new ReposView();
             this.subReposView = new SubReposView();
@@ -32,6 +29,9 @@ define([
             $('#initial-loading-view').hide();
         },
 
+        showSideNav: function () {
+            this.$sideNav.show();
+        },
 
         ajaxLoadingShow: function() {
             Common.feedback('Loading...', 'info', Common.INFO_TIMEOUT);
@@ -50,24 +50,28 @@ define([
         },
 
         showMyRepos: function() {
+            this.showSideNav();
             this.currentView.hide();
             this.reposView.show();
             this.currentView = this.reposView;
         },
 
         showMySubRepos: function() {
+            this.showSideNav();
             this.currentView.hide();
             this.subReposView.show();
             this.currentView = this.subReposView;
         },
 
         showSharedRepos: function() {
+            this.showSideNav();
             this.currentView.hide();
             this.sharedReposView.show();
             this.currentView = this.sharedReposView;
         },
 
         showDir: function(category, repo_id, path) {
+            this.showSideNav();
             var path = path || '/';
             this.currentView.hide();
             this.dirView.showDir(category, repo_id, path);
@@ -76,8 +80,8 @@ define([
 
         hide: function() {
             this.currentView.hide();
+            this.$sideNav.hide();
         }
-
 
     });
 
