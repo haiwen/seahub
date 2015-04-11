@@ -5,7 +5,7 @@ define([
     'common',
     'app/views/myhome',
     'app/views/group',
-    'app/views/Organization',
+    'app/views/organization',
     'app/views/group-nav',
 ], function($, Backbone, Common, MyHomeView, GroupView, orgView,
     GroupNavView) {
