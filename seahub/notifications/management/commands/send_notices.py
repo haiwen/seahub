@@ -206,7 +206,8 @@ class Command(BaseCommand):
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
             logger.info('Set language code to %s' % user_language)
-            self.stdout.write('Set language code to %s' % user_language)
+            self.stdout.write('[%s] Set language code to %s' % (
+                str(datetime.datetime.now()), user_language))
 
             notices = []
             for notice in unseen_notices:
@@ -251,10 +252,10 @@ class Command(BaseCommand):
                                 None, [to_user])
 
                 logger.info('Successfully sent email to %s' % to_user)
-                self.stdout.write('Successfully sent email to %s' % to_user)
+                self.stdout.write('[%s] Successfully sent email to %s' % (str(datetime.datetime.now()), to_user))
             except Exception as e:
                 logger.error('Failed to send email to %s, error detail: %s' % (to_user, e))
-                self.stderr.write('Failed to send email to %s, error detail: %s' % (to_user, e))
+                self.stderr.write('[%s] Failed to send email to %s, error detail: %s' % (str(datetime.datetime.now()), to_user, e))
 
             # restore current language
             translation.activate(cur_language)
