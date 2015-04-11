@@ -189,12 +189,11 @@ app["pageOptions"] = {
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
         {% endfor %}
         return groups;
-    })(),
-    username: "{{request.user.username}}",
+    })(), // for share
+    username: "{{request.user.username}}", // for lib decrypt
     repo_password_min_length: {{ repo_password_min_length }},
-    enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
-    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
-    repo_password_min_length: {{ repo_password_min_length }}
+    enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %}, // for fileupload
+    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %} // for fileupload
 };
 
 </script>

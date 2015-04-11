@@ -117,7 +117,17 @@
          return false;
      })(),
      csrfToken: "{{csrf_token}}",
-     repo_password_min_length: {{ repo_password_min_length }}
+     groups: (function () {
+         var groups = [];
+         {% for group in request.user.joined_groups %}
+         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
+         {% endfor %}
+         return groups;
+     })(), // for share
+     username: "{{request.user.username}}",
+     repo_password_min_length: {{ repo_password_min_length }},
+     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %}, // for fileupload
+     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %} // for fileupload
  };
 </script>
 {% if debug %}

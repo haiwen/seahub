@@ -1055,7 +1055,6 @@ def myhome(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1548,6 +1547,8 @@ def pubrepo(request):
 
     username = request.user.username
 
+    max_upload_file_size = get_max_upload_file_size()
+
     if request.cloud_mode and request.user.org is not None:
         org_id = request.user.org.org_id
         public_repos = seaserv.list_org_inner_pub_repos(org_id, username)
@@ -1557,6 +1558,8 @@ def pubrepo(request):
         return render_to_response('organizations/pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
+                'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+                'max_upload_file_size': max_upload_file_size,
                 }, context_instance=RequestContext(request))
 
     if not request.cloud_mode:
@@ -1567,6 +1570,8 @@ def pubrepo(request):
         return render_to_response('pubrepo.html', {
                 'public_repos': public_repos,
                 'create_shared_repo': True,
+                'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+                'max_upload_file_size': max_upload_file_size,
                 }, context_instance=RequestContext(request))
 
     raise Http404
