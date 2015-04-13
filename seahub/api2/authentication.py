@@ -1,6 +1,8 @@
 import datetime
 import logging
+from rest_framework import status
 from rest_framework.authentication import BaseAuthentication
+from rest_framework.exceptions import APIException
 
 import seaserv
 from seahub.base.accounts import User
@@ -25,6 +27,14 @@ def within_ten_min(d1, d2):
 HEADER_CLIENT_VERSION = 'HTTP_SEAFILE_CLEINT_VERSION'
 HEADER_PLATFORM_VERSION = 'HTTP_SEAFILE_PLATFORM_VERSION'
 
+class AuthenticationFailed(APIException):
+    status_code = status.HTTP_401_UNAUTHORIZED
+    default_detail = 'Incorrect authentication credentials.'
+
+    def __init__(self, detail=None):
+        self.detail = detail or self.default_detail
+
+
 class TokenAuthentication(BaseAuthentication):
     """
     Simple token based authentication.
@@ -42,13 +52,17 @@ class TokenAuthentication(BaseAuthentication):
 
     def authenticate(self, request):
         auth = request.META.get('HTTP_AUTHORIZATION', '').split()
-        key = None
-        if len(auth) == 2 and auth[0].lower() == "token":
-            key = auth[1]
-
-        if not key:
+        if not auth or auth[0].lower() != 'token':
             return None
 
+        if len(auth) == 1:
+            msg = 'Invalid token header. No credentials provided.'
+            raise AuthenticationFailed(msg)
+        elif len(auth) > 2:
+            msg = 'Invalid token header. Token string should not contain spaces.'
+            raise AuthenticationFailed(msg)
+
+        key = auth[1]
         ret = self.authenticate_v2(request, key)
         if ret:
             return ret
@@ -67,12 +81,12 @@ class TokenAuthentication(BaseAuthentication):
         try:
             token = Token.objects.get(key=key)
         except Token.DoesNotExist:
-            return None
+            raise AuthenticationFailed('Invalid token')
 
         try:
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
-            return None
+            raise AuthenticationFailed('User inactive or deleted')
 
         if MULTI_TENANCY:
             orgs = seaserv.get_orgs_by_user(token.user)
@@ -88,12 +102,12 @@ class TokenAuthentication(BaseAuthentication):
         try:
             token = TokenV2.objects.get(key=key)
         except TokenV2.DoesNotExist:
-            return None
+            raise AuthenticationFailed('Invalid token')
 
         try:
             user = User.objects.get(email=token.user)
         except User.DoesNotExist:
-            return None
+            raise AuthenticationFailed('User inactive or deleted')
 
         if MULTI_TENANCY:
             orgs = seaserv.get_orgs_by_user(token.user)

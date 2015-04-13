@@ -18,9 +18,22 @@ def fake_ccnet_id():
     return randstring(length=40)
 
 class AuthTest(ApiTestBase):
-    """This tests involves creating/deleting api tokens, so for this test we use
-    a specific auth token so that it won't affect other test cases.
+    """This tests involves creating/deleting api tokens, so for this test we
+    use a specific auth token so that it won't affect other test cases.
     """
+    def test_auth_token_missing(self):
+        return self.get(AUTH_PING_URL, token=None, use_token=False,
+                        expected=403)
+
+    def test_auth_token_is_empty(self):
+        return self.get(AUTH_PING_URL, token='', expected=401)
+
+    def test_auth_token_contains_space(self):
+        return self.get(AUTH_PING_URL, token='token with space', expected=401)
+
+    def test_random_auth_token(self):
+        return self.get(AUTH_PING_URL, token='randomtoken', expected=401)
+
     def test_logout_device(self):
         token = self._desktop_login()
         self._do_auth_ping(token, expected=200)
