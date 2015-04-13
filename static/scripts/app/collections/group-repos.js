@@ -17,10 +17,6 @@ define([
         setGroupID: function(group_id) {
             this.group_id = group_id;
         }
-
-        // initialize: function( ) {
-
-        // },
     });
 
     return GroupRepoCollection;
