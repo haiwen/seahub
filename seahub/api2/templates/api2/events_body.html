@@ -9,7 +9,7 @@
             {% if e.etype == "repo-update" %}
             <p class="w100 ovhd">
             <span class="updated-repo fright">{{ e.repo.name }}</span>
-            <span class="cmt-desc"{% if e.commit.more_files %} data-more="true"{% endif %}>{{ e.desc|translate_commit_desc }}</span>
+            <span class="cmt-desc"{% if e.commit.more_files %} data-more="true"{% endif %}>{{ e.desc|translate_commit_desc|safe }}</span>
             </p>
             {% endif %}
 
