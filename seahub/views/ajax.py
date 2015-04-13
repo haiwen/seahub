@@ -32,6 +32,7 @@ from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
 from seahub.message.models import UserMessage
 from seahub.share.models import UploadLinkShare
+from seahub.group.models import PublicGroup
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents_with_perm, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
@@ -39,6 +40,9 @@ from seahub.views import get_repo_dirents_with_perm, validate_owner, \
     get_owned_repo_list, check_folder_permission
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
+from seahub.views.modules import get_enabled_mods_by_group, \
+        get_available_mods_by_group
+from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING
@@ -56,6 +60,7 @@ from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, file_icon_filter
+from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -2415,14 +2420,55 @@ def toggle_group_folder_permission(request, repo_id):
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
 
+def get_group_basic_info(request, group_id):
+    '''
+    Get group basic info for group side nav
+    '''
+    if not request.is_ajax():
+        raise Http404
 
-def get_groups(request):
     content_type = 'application/json; charset=utf-8'
+    result = {}
 
-    groups = request.user.joined_groups
-    group_list = []
-    from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
-    for g in groups:
-        group_list.append({"name": g.group_name, "id": g.id, "avatar": grp_avatar(g.id, 16)})
+    group_id_int = int(group_id) # Checked by URL Conf
+    group = get_group(group_id_int)
+    if not group:
+        result["error"] = _('Group does not exist.')
+        return HttpResponse(json.dumps(result),
+                            status=400, content_type=content_type)
 
-    return HttpResponse(json.dumps({"groups":group_list}), content_type=content_type)
+    group.is_staff = False
+    if PublicGroup.objects.filter(group_id=group.id):
+        group.is_pub = True
+    else:
+        group.is_pub = False
+
+    if not request.user.is_authenticated():
+        if group.is_pub:
+            group.view_perm = "pub"
+
+    joined = is_group_user(group_id_int, request.user.username)
+    if joined:
+        group.view_perm = "joined"
+        group.is_staff = is_group_staff(group, request.user)
+
+    if request.user.is_staff:
+        # viewed by system admin
+        group.view_perm = "sys_admin"
+
+    if group.is_pub:
+        group.view_perm = "pub"
+
+    mods_available = get_available_mods_by_group(group.id)
+    mods_enabled = get_enabled_mods_by_group(group.id)
+
+    return HttpResponse(json.dumps({
+        "id": group.id,
+        "name": group.group_name,
+        "avatar": grp_avatar(group.id, 32),
+        "is_staff": group.is_staff,
+        "is_pub": group.is_pub,
+        "view_perm": group.view_perm,
+        "mods_available": mods_available,
+        "mods_enabled": mods_enabled,
+        }), content_type=content_type)
