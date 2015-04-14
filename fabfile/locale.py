@@ -15,6 +15,8 @@ def make(default=True):
     _inplace_change('locale/en/LC_MESSAGES/django.po', '%%s', '%s')
     _inplace_change('locale/en/LC_MESSAGES/django.po', '%%(', '%(')
 
+    local('django-admin.py makemessages -l en -d djangojs -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" ')
+
 @task
 def push():
     """Push source file to Transifex.
