@@ -12,13 +12,13 @@
 {% if img_prev or img_next %}
 <div id="img-prev-next">
   {% if img_prev %}
-    <a href="{% url 'repo_view_file' repo.id %}?p={{img_prev|urlencode}}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
+    <a href="{% url 'view_lib_file' repo.id img_prev|urlencode %}" id="img-prev" title="{% trans 'you can also press ← ' %}">{% trans "prev" %}</a>
   {% endif %}
   {% if img_prev and img_next %}
     <span>/</span>
   {% endif %}
   {% if img_next %}
-    <a href="{% url 'repo_view_file' repo.id %}?p={{img_next|urlencode}}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
+    <a href="{% url 'view_lib_file' repo.id img_next|urlencode %}" id="img-next" title="{% trans 'you can also press → ' %}">{% trans "next" %}</a>
   {% endif %}
 </div>
 {% endif %}
