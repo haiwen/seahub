@@ -9,11 +9,7 @@
 
     modules: [
         {
-            name: "myhome"
-        },
-
-        {
-            name: "group"
+            name: "main"
         }
     ]
 })
