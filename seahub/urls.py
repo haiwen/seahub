@@ -312,11 +312,3 @@ if TRAFFIC_STATS_ENABLED:
     urlpatterns += patterns('',
         url(r'^sys/trafficadmin/$', sys_traffic_admin, name='sys_trafficadmin'),
     )
-
-js_info_dict = {
-    'packages': ('seahub.settings',),
-}
-
-urlpatterns += patterns('',
-    (r'^jsi18n/$', 'seahub.views.i18n.cached_javascript_catalog', js_info_dict),
-)

@@ -84,6 +84,10 @@ STATICFILES_DIRS = (
 
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
 
+# StaticI18N config
+STATICI18N_ROOT = '%s/static/scripts' % PROJECT_ROOT
+STATICI18N_OUTPUT_DIR = 'i18n'
+
 # List of finder classes that know how to find static files in
 # various locations.
 STATICFILES_FINDERS = (
@@ -170,6 +174,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
+    'django.core.context_processors.static',
     'djblets.util.context_processors.siteRoot',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
@@ -185,6 +190,7 @@ INSTALLED_APPS = (
     'registration',
     'captcha',
     'compressor',
+    'statici18n',
 
     'seahub.api2',
     'seahub.avatar',

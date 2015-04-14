@@ -165,7 +165,7 @@ var app = {
     }
 };
 </script>
-<script type="text/javascript" src="{% url 'seahub.views.i18n.cached_javascript_catalog' %}"></script>
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
 
 {% block extra_script %}{% endblock %}
 
