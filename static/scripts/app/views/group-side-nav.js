@@ -16,9 +16,6 @@ define([
         },
 
         render: function (group_id) {
-            if (this.group_id && this.group_id == group_id) {
-                return;
-            }
             this.group_id = group_id;
             var _this = this;
             $.ajax({
@@ -52,7 +49,6 @@ define([
 
         enableMods: function () {
             var form = $(this.enableModTemplate({
-                'id': this.group_id,
                 'mods_available': this.mods_available,
                 'mods_enabled': this.mods_enabled
             }));
@@ -61,7 +57,29 @@ define([
             $('.checkbox-orig', form).click(function() {
                 $(this).parent().toggleClass('checkbox-checked');
             });
-            // TODO: after form submit, page goes to http://127.0.0.1:8000/
+            var checkbox = $('[name="group_wiki"]');
+            var original_checked = checkbox.prop('checked');
+            var _this = this;
+            form.submit(function() {
+                var cur_checked = checkbox.prop('checked');
+                if (cur_checked == original_checked) {
+                    return false;
+                }
+                Common.ajaxPost({
+                    form: form,
+                    form_id: form.attr('id'),
+                    post_url: Common.getUrl({
+                        'name': 'toggle_group_modules',
+                        'group_id': _this.group_id,
+                    }),
+                    post_data: {'group_wiki': cur_checked },
+                    after_op_success: function () {
+                        $.modal.close();
+                        _this.render(_this.group_id);
+                    }
+                });
+                return false;
+            });
         },
 
         show: function() {
