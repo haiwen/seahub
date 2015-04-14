@@ -102,7 +102,7 @@ class TokenAuthentication(BaseAuthentication):
         try:
             token = TokenV2.objects.get(key=key)
         except TokenV2.DoesNotExist:
-            raise AuthenticationFailed('Invalid token')
+            return None         # Continue authentication in token v1
 
         try:
             user = User.objects.get(email=token.user)
