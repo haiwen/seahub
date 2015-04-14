@@ -483,7 +483,7 @@
     </ul>
 </script>
 <script type="text/template" id="group-mods-enable-form-tmpl">
-<form id="mods-enable-form" method="post" action="{{ SITE_ROOT }}group/<%= id %>/modules/toggle/" class="hide">{% csrf_token%}
+<form id="mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
     <ul>
         <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
