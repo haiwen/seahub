@@ -107,12 +107,14 @@ def thumbnail_create(request, repo_id):
             f = StringIO(open_file.read())
             image = Image.open(f)
             if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
-               image = image.convert("RGB")
+                image = image.convert("RGB")
             image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
             image.save(thumbnail_file, THUMBNAIL_EXTENSION)
         except Exception as e:
             logger.error(e)
-            return HttpResponse(json.dumps({'err_msg': e}), status=500, content_type=content_type)
+            err_msg = _('Failed to create thumbnail.')
+            return HttpResponse(json.dumps({'err_msg': err_msg}), status=500,
+                                content_type=content_type)
 
     result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
     return HttpResponse(json.dumps(result), content_type=content_type)
