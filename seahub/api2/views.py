@@ -6,6 +6,7 @@ import json
 import datetime
 import urllib2
 import re
+from dateutil.relativedelta import relativedelta
 from urllib2 import unquote, quote
 from PIL import Image
 from StringIO import StringIO
@@ -26,6 +27,7 @@ from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.shortcuts import render_to_response
+from django.utils import timezone
 
 from .throttling import ScopedRateThrottle
 from .authentication import TokenAuthentication
@@ -35,7 +37,7 @@ from .utils import is_repo_writable, is_repo_accessible, calculate_repo_info, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
-    json_response
+    json_response, to_python_boolean
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
 from seahub.base.accounts import User
@@ -232,54 +234,125 @@ class Account(APIView):
 
         return Response(info)
 
-    def put(self, request, email, format=None):
-        if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+    def _update_account_profile(self, request, email):
+        name = request.DATA.get("name", None)
+        note = request.DATA.get("note", None)
 
-        # create or update account
+        if name is None and note is None:
+            return
+
+        profile = Profile.objects.get_profile_by_user(email)
+        if profile is None:
+            profile = Profile(user=email)
+
+        if name is not None:
+            # if '/' in name:
+            #     return api_error(status.HTTP_400_BAD_REQUEST, "Nickname should not include '/'")
+            profile.nickname = name
+
+        if note is not None:
+            profile.intro = note
+
+        profile.save()
+
+    def _update_account_quota(self, request, email):
+        storage = request.DATA.get("storage", None)
+        sharing = request.DATA.get("sharing", None)
+
+        if storage is None and sharing is None:
+            return
+
+        if storage is not None:
+            seafile_api.set_user_quota(email, int(storage))
+
+        if sharing is not None:
+            seafile_api.set_user_share_quota(email, int(sharing))
+
+    def _create_account(self, request, email):
         copy = request.DATA.copy()
-        copy.update({'email': email})
+        copy['email'] = email
         serializer = AccountSerializer(data=copy)
         if serializer.is_valid():
-            try:
-                User.objects.get(email=serializer.object['email'])
-                update = True
-            except User.DoesNotExist:
-                update = False
-
             user = User.objects.create_user(serializer.object['email'],
                                             serializer.object['password'],
                                             serializer.object['is_staff'],
                                             serializer.object['is_active'])
 
-            name = request.DATA.get("name", None)
-            note = request.DATA.get("note", None)
-            if name or note:
-                try:
-                    profile = Profile.objects.get(user=user.username)
-                except Profile.DoesNotExist:
-                    profile = Profile()
+            self._update_account_profile(request, user.username)
 
-                profile.user = user.username
-
-                if name:
-                    if '/' in name:
-                        return api_error(status.HTTP_400_BAD_REQUEST, "Nickname should not include '/'")
-                    else:
-                        profile.nickname = name
-                if note:
-                    profile.intro = note
-
-                profile.save()
-
-            if update:
-                resp = Response('success')
-            else:
-                resp = Response('success', status=status.HTTP_201_CREATED)
-                resp['Location'] = reverse('api2-account', args=[email])
+            resp = Response('success', status=status.HTTP_201_CREATED)
+            resp['Location'] = reverse('api2-account', args=[email])
             return resp
         else:
             return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
+
+    def _update_account(self, request, user):
+        password = request.DATA.get("password", None)
+        is_staff = request.DATA.get("is_staff", None)
+        if is_staff is not None:
+            try:
+                is_staff = to_python_boolean(is_staff)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 '%s is not a valid value' % is_staff)
+
+        is_active = request.DATA.get("is_active", None)
+        if is_active is not None:
+            try:
+                is_active = to_python_boolean(is_active)
+            except ValueError:
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                                 '%s is not a valid value' % is_active)
+
+        if password is not None:
+            user.set_password(password)
+
+        if is_staff is not None:
+            user.is_staff = is_staff
+
+        if is_active is not None:
+            user.is_active = is_active
+
+        user.save()
+        self._update_account_profile(request, user.username)
+
+        try:
+            self._update_account_quota(request, user.username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED, 'Failed to set account quota')
+
+        is_trial = request.DATA.get("is_trial", None)
+        if is_trial is not None:
+            try:
+                from seahub_extra.trialaccount.models import TrialAccount
+            except ImportError:
+                pass
+            else:
+                try:
+                    is_trial = to_python_boolean(is_trial)
+                except ValueError:
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     '%s is not a valid value' % is_trial)
+
+                if is_trial is True:
+                    expire_date = timezone.now() + relativedelta(days=7)
+                    TrialAccount.object.create_or_update(user.username,
+                                                         expire_date)
+                else:
+                    TrialAccount.objects.filter(user_or_org=user.username).delete()
+
+        return Response('success')
+
+    def put(self, request, email, format=None):
+        if not is_valid_username(email):
+            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+
+        try:
+            user = User.objects.get(email=email)
+            return self._update_account(request, user)
+        except User.DoesNotExist:
+            return self._create_account(request, email)
 
     def delete(self, request, email, format=None):
         if not is_valid_username(email):

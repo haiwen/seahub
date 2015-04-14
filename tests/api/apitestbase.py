@@ -139,8 +139,8 @@ class ApiTestBase(unittest.TestCase):
         """
         Context manager to create a tmp user, and automatically delete it after use
 
-        with self.tmp_repo() as repo:
-            self.get(repo.file_url + '?p=/')
+        with self.get_tmp_user() as user:
+            ...
         """
         user = self.create_user()
         try:

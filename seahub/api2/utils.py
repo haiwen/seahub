@@ -551,3 +551,13 @@ def get_token_v2(request, username, platform, device_id, device_name,
     return TokenV2.objects.get_or_create_token(
         username, platform, device_id, device_name,
         client_version, platform_version, get_client_ip(request))
+
+def to_python_boolean(string):
+    """Convert a string to boolean.
+    """
+    string = string.lower()
+    if string in ('t', 'true', '1'):
+        return True
+    if string in ('f', 'false', '0'):
+        return False
+    raise ValueError("Invalid boolean value: '%s'" % string)
