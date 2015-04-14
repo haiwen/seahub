@@ -9,8 +9,8 @@ define([
     var GroupSideNavView = Backbone.View.extend({
         el: '#grp-side-nav',
 
-        template: _.template($("#grp-side-nav-tmpl").html()),
-        enableModTemplate: _.template($("#grp-mods-enable-form-tmpl").html()),
+        template: _.template($("#group-side-nav-tmpl").html()),
+        enableModTemplate: _.template($("#group-mods-enable-form-tmpl").html()),
 
         initialize: function() {
         },
@@ -58,7 +58,7 @@ define([
             $('.checkbox-orig', form).click(function() {
                 $(this).parent().toggleClass('checkbox-checked');
             });
-            // TODO: after form submit, page goes to http://127.0.0.1:8000/  
+            // TODO: after form submit, page goes to http://127.0.0.1:8000/
         },
 
         show: function() {

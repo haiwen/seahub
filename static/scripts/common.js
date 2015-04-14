@@ -110,7 +110,7 @@ define([
               case 'repo_set_password': return siteRoot + 'repo/set_password/';
 
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
-              case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic_info/';
+              case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
             }
         },
 
