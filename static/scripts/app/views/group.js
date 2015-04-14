@@ -65,8 +65,13 @@ define([
         },
 
         showSideNav: function () {
-            this.sideNavView.render(this.group_id);
-            this.sideNavView.show();
+            var sideNavView = this.sideNavView;
+            if (sideNavView.group_id && sideNavView.group_id == this.group_id) {
+                sideNavView.show();
+                return;
+            }
+            sideNavView.render(this.group_id);
+            sideNavView.show();
         },
 
         showRepoList: function(group_id) {
