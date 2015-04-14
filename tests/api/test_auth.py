@@ -44,7 +44,7 @@ class AuthTest(ApiTestBase):
 
             self._logout(token)
 
-            self._do_auth_ping(token, expected=403)
+            self._do_auth_ping(token, expected=401)
             # self._get_repo_info(sync_token, repo.repo_id, expected=400)
 
     def _desktop_login(self):
