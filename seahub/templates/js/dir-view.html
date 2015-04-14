@@ -1,7 +1,9 @@
 {% load i18n %}
 <div id="dir-view" class="hide">
     <div class="repo-file-list-topbar">
-        <p class="path"></p>
+        <p><span class="path"></span>
+            <img id="path-loading-tip" class="hide" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+        </p>
         <div class="repo-op"></div>
     </div>
     <table class="repo-file-list">

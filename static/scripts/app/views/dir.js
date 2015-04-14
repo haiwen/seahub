@@ -28,6 +28,7 @@ define([
             initialize: function(options) {
                 this.$dirent_list = this.$('.repo-file-list tbody');
                 this.$path_bar = this.$('.path');
+                this.$path_loading_tip = this.$("#path-loading-tip");
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
 
@@ -104,6 +105,7 @@ define([
                 this.$el.show();
                 this.$dirent_list.empty();
                 var loading_tip = this.$('.loading-tip').show();
+                this.$path_loading_tip.show();
                 var dir = this.dir;
                 dir.setPath(category, repo_id, path);
                 var _this = this;
@@ -252,6 +254,7 @@ define([
                     });
                 }
 
+                this.$path_loading_tip.hide();
                 this.$path_bar.html(this.path_bar_template(obj));
             },
 
