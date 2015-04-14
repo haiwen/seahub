@@ -229,9 +229,10 @@ define([
                 var path = dir.path;
                 var context = 'my';
 
-                if (dir.category.startsWith('org')) {
+                var category_start = dir.category.split('/')[0];
+                if (category_start == 'org') {
                     context = 'org';
-                } else if (dir.category.startsWith('group')) {
+                } else if (category_start == 'group') {
                     context = 'group';
                 }
                 var obj = {
