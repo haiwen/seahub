@@ -318,8 +318,6 @@ def view_lib_file(request, repo_id, path):
     """
     New 'file view' that not put path in parameter
     """
-    # path is like 'xx.c', 'aa/xx.c'
-    path = '/' + path
     return _file_view(request, repo_id, path)
 
 def _file_view(request, repo_id, path):
