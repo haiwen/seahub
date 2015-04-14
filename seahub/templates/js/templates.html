@@ -43,7 +43,7 @@
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
 </script>
-<script type="text/template" id="group-repos-tmpl">
+<script type="text/template" id="group-repo-tmpl">
     <td>
         <% if (encrypted) { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
@@ -55,7 +55,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td><a href="#/group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.isGroupStaff) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -65,7 +65,7 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
-<script type="text/template" id="organization-repos-tmpl">
+<script type="text/template" id="organization-repo-tmpl">
     <td>
         <% if (encrypted) { %>
         <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
@@ -77,7 +77,7 @@
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/lib/<%= id %>"><%- name %></a></td>
+    <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (show_unshare_btn) { %>
     <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
@@ -94,7 +94,7 @@
         </div>
         <ul id="top-nav-grp-list">
             <% for (var i = 0, len = groups.length; i < len; i++) { %>
-            <li class="item" data-url="<%= app.config.siteRoot %>group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
+            <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
                 <%= groups[i].avatar %>
                 <span class="name ellipsis vam"><%= groups[i].name %></span>
                 <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
@@ -146,15 +146,18 @@
     <% } %>
 </script>
 <script type="text/template" id="path-bar-tmpl">
-    <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
-    <% if (category) { %>
-    <a href="#<%= category %>" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
+    <% if (context == 'group') { %>
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+    <% } else if (context == 'org') { %>
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else { %>
+        <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
     <% } %>
     <% if (path == '/') { %>
     <%- repo_name %> /
     <% } else { %>
-    <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
+        <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
     <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
         <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
     <% } %>
@@ -449,4 +452,55 @@
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
     <td><%= mtime_relative %></td>
+</script>
+<script type="text/template" id="group-side-nav-tmpl">
+    <div class="hd w100 ovhd">
+        <h3 class="fleft">
+            <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
+        </h3>
+        <% if (is_staff) { %>
+            <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
+        <% } %>
+        <% if (is_pub) { %>
+            <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
+        <% } %>
+    </div>
+    <ul class="side-tabnav-tabs">
+        <li class="tab tab-cur"><a href="#group/<%= id %>/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/" class="msgs">{% trans "Discussion" %}</a></li>
+
+        <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
+            <% if (mods_enabled[i] == 'group wiki') { %>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/" class="wiki">{% trans "Wiki" %}</a></li>
+            <% } %>
+        <% } %>
+
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/" class="members">{% trans "Members" %}</a></li>
+
+        <% if (is_staff) { %>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/" class="admin">{% trans "Admin" %}</a></li>
+        <% } %>
+    </ul>
+</script>
+<script type="text/template" id="group-mods-enable-form-tmpl">
+<form id="mods-enable-form" method="post" action="{{ SITE_ROOT }}group/<%= id %>/modules/toggle/" class="hide">{% csrf_token%}
+    <h3>{% trans "Enable Modules"%}</h3>
+    <ul>
+        <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
+            <% if (mods_available[i] == 'group wiki') { %>
+            <li>
+            <label class="checkbox-label">
+                <% if (mods_enabled.indexOf(mods_available[i]) != -1) { %>
+                <span class="checkbox checkbox-checked"><input type="checkbox" name="group_wiki" class="checkbox-orig" checked="checked" /></span>
+                <% } else { %>
+                <span class="checkbox"><input type="checkbox" name="group_wiki" class="checkbox-orig" /></span>
+                <% } %>
+                <span class="checkbox-option">{% trans "Wiki" %}</span>
+            </label>
+            </li>
+            <% } %>
+        <% } %>
+    </ul>
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+</form>
 </script>

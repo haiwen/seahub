@@ -23,7 +23,7 @@
 {% endblock %}
 
 {% block left_panel %}
-<div class="side-tabnav">
+<div class="side-tabnav hide" id="myhome-side-nav">
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
         {% if user.permissions.can_add_repo %}
@@ -31,30 +31,42 @@
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="{% url 'myhome' %}#" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
+        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#my-libs/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
         {% if events_enabled %}
-        <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
+        <li class="tab"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
         {% endif %}
         {% for mod in request.user.mods_enabled %}
         {% if mod == 'personal wiki' %}
-        <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
+        <li class="tab"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
         {% endif %}
         {% endfor %}
-        <li class="tab {% block cur_messages %}{% endblock %}"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
-        <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
-        <li class="tab {% block cur_contacts %}{% endblock %}"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
+        <li class="tab"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
+        <li class="tab"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
+        <li class="tab"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
-        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
+        <li class="tab"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
         {% endif %}
-        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
-        <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
+        <li class="tab"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
+        <li class="tab"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
     </ul>
+</div>
+
+<div class="side-tabnav hide" id="org-side-nav">
+    <h3 class="hd">{% trans "Organization" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{% url 'pubgrp' %}" class="group">{% trans "Groups" %}</a></li>
+        <li class="tab"><a href="{% url 'pubuser' %}" class="members">{% trans "Members" %}</a></li>
+    </ul>
+</div>
+
+<div class="side-tabnav hide" id="grp-side-nav">
 </div>
 {% endblock %}
 
@@ -67,12 +79,12 @@
     <div class="hd">
         <ul class="tab-tabs-nav fleft">
             {% if user.permissions.can_add_repo %}
-            <li class="tab"><a href="#my-libs" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
+            <li class="tab"><a href="#my-libs/" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
             {% if sub_lib_enabled %}
-            <li class="tab"><a href="#my-sub-libs" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
+            <li class="tab"><a href="#my-sub-libs/" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
             {% endif %}
             {% endif %}
-            <li class="tab"><a href="#shared-libs" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
+            <li class="tab"><a href="#shared-libs/" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
         </ul>
         <div class="fright">
             <button id="repo-create" class=""><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
@@ -171,6 +183,68 @@
 </form>
 {% endif %}
 
+<div id="group-repo-tabs" class="tab-tabs hide">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#" class="a">{% trans "Libraries" %}</a></li>
+        </ul>
+        {% if user.permissions.can_add_repo %}
+        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        {% endif %}
+    </div>
+
+    <div id="grp-repos">
+        <table style="display:none">
+            <thead>
+                <tr>
+                    <th width="4%"><!--icon--></th>
+                    <th width="38%">{% trans "Name" %} <span class="by-name icon-caret-up cspt"></span></th>
+                    <th width="10%"><!--op--></th>
+                    <th width="14%">{% trans "Size" %}</th>
+                    <th width="18%">{% trans "Last Update" %} <span class="by-time icon-caret-down cspt"></span></th>
+                    <th width="16%">{% trans "Shared By" %}</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+        <div class="empty-tips" style="margin-bottom:150px; display:none;">
+            <h2 class="alc">{% trans "No library is sharing to this group" %}</h2>
+            <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
+            <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+        </div>
+    </div>
+
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+</div>
+
+<div id="organization-repos" class="tab-tabs hide">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Libraries" %}</h3>
+        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
+    </div>
+
+    <table class="repo-list hide">
+        <thead>
+            <tr>
+                <th width="4%"></th>
+                <th width="38%">{% trans "Name"%} <span class="by-name icon-caret-up cspt"></span></th>
+                <th width="10%"><!--op--></th>
+                <th width="14%">{% trans "Size"%}</th>
+                <th width="18%">{% trans "Last Update"%} <span class="by-time icon-caret-down cspt"></span></th>
+                <th width="16%">{% trans "Shared By"%}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No public library" %}</h2>
+        <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
+    </div>
+</div>
+
 {% include "js/dir-view.html" %}
 
 {% endblock %}
@@ -183,6 +257,7 @@ app["pageOptions"] = {
     base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
+    pubReposUrl: "{% url 'api2-pub-repos' %}",
     groups: (function () {
         var groups = [];
         {% for group in request.user.joined_groups %}
@@ -191,6 +266,7 @@ app["pageOptions"] = {
         return groups;
     })(),
     username: "{{request.user.username}}",
+    is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %}
@@ -198,8 +274,8 @@ app["pageOptions"] = {
 
 </script>
 {% if debug %}
-<script data-main="{% static "scripts/myhome.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+<script data-main="{% static "scripts/main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% else %}
-<script data-main="{% static "scripts/dist/myhome.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+<script data-main="{% static "scripts/dist/main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
 {% endif %}
 {% endblock %}

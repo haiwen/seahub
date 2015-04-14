@@ -6,18 +6,17 @@ define([
     'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/dir',
-    'app/views/group-nav',
     'app/views/add-pub-repo'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    DirView, GroupNavView, AddPubRepoView) {
+    DirView, AddPubRepoView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
         initialize: function() {
-            Common.prepareApiCsrf();
 
+            this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableBody = $('tbody', this.$table);
@@ -29,10 +28,6 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
-
-            this.groupView = new GroupNavView();
-            Common.initAccountPopup();
-            Common.initNoticePopup();
         },
 
         events: {
@@ -67,21 +62,23 @@ define([
             this.$loadingTip.hide();
         },
 
-        showPublicRepos: function() {
+        showRepoList: function() {
+            this.$sideNav.show();
             this.dirView.hide();
             this.$reposDiv.show();
             this.repos.fetch({reset: true});
             this.$loadingTip.show();
         },
 
-        hideRepos: function() {
+        hideRepoList: function() {
             this.$reposDiv.hide();
         },
 
         showDir: function(repo_id, path) {
+            this.$sideNav.show();
             var path = path || '/';
-            this.hideRepos();
-            this.dirView.showDir('', repo_id, path);
+            this.hideRepoList();
+            this.dirView.showDir('org', repo_id, path);
             // this.dirent_list = new app.DirentListView({id: id, path: path});
             // $('#my-own-repos table').children().remove();
             // $('#my-own-repos table').append(this.dirent_list.render().el);
@@ -89,7 +86,6 @@ define([
 
         sortByName: function() {
             var repos = this.repos;
-            console.log(repos);
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
                 if (el.hasClass('icon-caret-up')) {
@@ -118,6 +114,12 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+        },
+
+        hide: function() {
+            this.$sideNav.hide();
+            this.hideRepoList();
+            this.dirView.hide();
         }
 
     });

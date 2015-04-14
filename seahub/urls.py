@@ -38,7 +38,7 @@ urlpatterns = patterns('',
 
     (r'^accounts/', include('seahub.base.registration_urls')),
 
-    (r'^$', myhome),
+    url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
@@ -92,6 +92,7 @@ urlpatterns = patterns('',
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
+    url(r'^libs/$', libraries, name='libraries'),
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file/(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
@@ -151,6 +152,7 @@ urlpatterns = patterns('',
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file_op_url/$', get_file_op_url, name='get_file_op_url'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
+    url(r'^ajax/group/(?P<group_id>\d+)/basic-info/$', get_group_basic_info, name='get_group_basic_info'),
     url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),

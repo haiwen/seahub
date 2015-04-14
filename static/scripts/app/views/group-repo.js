@@ -9,23 +9,27 @@ define([
     var GroupRepoView = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template($('#group-repos-tmpl').html()),
+        template: _.template($('#group-repo-tmpl').html()),
 
         events: {
             'mouseenter': 'showAction',
             'mouseleave': 'hideAction',
             'click .cancel-share': 'unshare'
         },
-        
-        initialize: function() {
-            console.log('init GroupRepoView');
+
+        initialize: function(options) {
+            this.group_id = options.group_id;
             Backbone.View.prototype.initialize.apply(this, arguments);
 
             this.listenTo(this.model, 'destroy', this.remove);
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var obj = this.model.toJSON();
+            $.extend(obj, {
+                group_id: this.group_id,
+            });
+            this.$el.html(this.template(obj));
             return this;
         },
 

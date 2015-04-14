@@ -1055,7 +1055,31 @@ def myhome(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@user_mods_check
+def libraries(request):
+    """
+    New URL to replace myhome
+    """
+    username = request.user.username
+
+    # options
+    if request.cloud_mode and request.user.org is None:
+        allow_public_share = False
+    else:
+        allow_public_share = True
+    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
+    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
+    max_upload_file_size = get_max_upload_file_size()
+
+    return render_to_response('libraries.html', {
+            "allow_public_share": allow_public_share,
+            "guide_enabled": guide_enabled,
+            "sub_lib_enabled": sub_lib_enabled,
+            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'max_upload_file_size': max_upload_file_size,
             }, context_instance=RequestContext(request))
 
 @login_required

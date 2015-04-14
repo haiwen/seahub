@@ -5,14 +5,14 @@ define([
     'common',
     'app/collections/group-repos',
     'app/collections/dirents',
-    'app/views/group-repos',
+    'app/views/group-repo',
     'app/views/add-group-repo',
     'app/views/group-recent-change',
     'app/views/dir',
-    'app/views/group-nav',
+    'app/views/group-side-nav'
 ], function($, _, Backbone, Common, GroupRepos, DirentCollection,
-    GroupRepoView, AddGroupRepoView/*, DirentView*/, GroupRecentChangeView,
-    DirView, GroupNavView) {
+    GroupRepoView, AddGroupRepoView, GroupRecentChangeView,
+    DirView, GroupSideNavView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -25,47 +25,25 @@ define([
         },
 
         initialize: function() {
-            Common.prepareApiCsrf();
-
-            this.$cont = this.$('#right-panel');
-
-            this.$tabs = this.$('#tabs');
-            this.$tab = this.$('#tabs div:first-child');
-            this.$table = this.$('#grp-repos table');
+            this.$tabs = this.$('#group-repo-tabs');
+            this.$table = this.$('#grp-repos table', this.$tabs);
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$cont);
-            this.$emptyTip = $('.empty-tips', this.$cont);
-
+            this.$loadingTip = $('.loading-tip', this.$tabs);
+            this.$emptyTip = $('.empty-tips', this.$tabs);
             this.$createForm = this.$('#repo-create-form');
+
+            this.sideNavView = new GroupSideNavView();
+
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
-
-            this.groupView = new GroupNavView();
-            Common.initAccountPopup();
-            Common.initNoticePopup();
-        },
-
-        /*
-        initializeRepos: function() {
-            this.listenTo(Repos, 'add', this.addOne);
-            this.listenTo(Repos, 'reset', this.addAll);
-            // this.listenTo(Repos, 'sync', this.render);
-            this.listenTo(Repos, 'all', this.render); // XXX: really render table when recieve any event ?
-            this.listenTo(Repos, 'all', this.all);
-        },
-        */
-
-        all: function(event) {
-            console.log('event: ' + event);
         },
 
         addOne: function(repo, collection, options) {
-            console.log('add repo: ' + repo.get('name'));
-            var view = new GroupRepoView({model: repo});
+            var view = new GroupRepoView({model: repo, group_id: this.group_id});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
@@ -86,9 +64,17 @@ define([
             }
         },
 
-        showRepoList: function() {
+        showSideNav: function () {
+            this.sideNavView.render(this.group_id);
+            this.sideNavView.show();
+        },
+
+        showRepoList: function(group_id) {
+            this.group_id = group_id;
+            this.showSideNav();
             this.dirView.hide();
             this.$tabs.show();
+            this.repos.setGroupID(group_id);
             this.repos.fetch({reset: true});
             this.$loadingTip.show();
         },
@@ -97,9 +83,11 @@ define([
             this.$tabs.hide();
         },
 
-        showDir: function(repo_id, path) {
+        showDir: function(group_id, repo_id, path) {
+            this.group_id = group_id;
+            this.showSideNav();
             this.hideRepoList();
-            this.dirView.showDir('', repo_id, path);
+            this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
 
         createRepo: function() {
@@ -146,6 +134,12 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+        },
+
+        hide: function() {
+            this.sideNavView.hide();
+            this.hideRepoList();
+            this.dirView.hide();
         }
 
     });

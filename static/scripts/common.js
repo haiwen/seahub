@@ -108,6 +108,9 @@ define([
               case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
 
               case 'repo_set_password': return siteRoot + 'repo/set_password/';
+
+              case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
+              case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
             }
         },
 
