@@ -443,7 +443,7 @@ def list_lib_dir(request, repo_id):
         path = path + '/'
 
     offset = int(request.GET.get('start', 0))
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, head_commit, path, offset, limit=100)
+    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo, head_commit, path, offset, limit=100)
     more_start = None
     if dirent_more:
         more_start = offset + 100
