@@ -16,6 +16,9 @@ define([
         },
 
         render: function (group_id) {
+            if (this.group_id && this.group_id == group_id) {
+                return;
+            }
             this.group_id = group_id;
             var _this = this;
             $.ajax({
