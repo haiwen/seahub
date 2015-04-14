@@ -12,7 +12,7 @@
         {% if not forloop.last %}
         <a href="{% url 'repo' repo.id %}?p={{ link|urlencode }}">{{ name }}</a> /                
         {% else %}
-        <a href="{% url 'repo_view_file' repo.id %}?p={{ link|urlencode }}">{{ name }}</a>
+        <a href="{% url 'view_lib_file' repo.id link|urlencode %}">{{ name }}</a>
         {% endif %}
         {% endfor %}
     </p>

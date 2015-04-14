@@ -5,7 +5,7 @@
     {% for ma in msg.attachments %}
     <li>
     <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="" height="18" class="vam" />
-    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+    <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="vam">{{ ma.name }}</a>
     </li>
     {% endfor %}
 </ul>

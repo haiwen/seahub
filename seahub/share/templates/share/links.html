@@ -26,7 +26,7 @@
             <tr>
                 {% if fs.s_type == 'f' %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-                <td><a href="{% url 'repo_view_file' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+                <td><a href="{% url 'view_lib_file' fs.repo.id fs.path|urlencode %}">{{ fs.filename }}</a></td>
                 {% else %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'repo' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
