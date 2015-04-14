@@ -903,7 +903,7 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
-    
+
     # permission checking
     dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
     if check_folder_permission(src_repo_id, src_path, username) != 'rw' or \
@@ -2420,12 +2420,11 @@ def toggle_group_folder_permission(request, repo_id):
         return HttpResponse(json.dumps({"error": e.msg}), status=500,
                             content_type=content_type)
 
+@login_required_ajax
 def get_group_basic_info(request, group_id):
     '''
     Get group basic info for group side nav
     '''
-    if not request.is_ajax():
-        raise Http404
 
     content_type = 'application/json; charset=utf-8'
     result = {}
@@ -2437,27 +2436,11 @@ def get_group_basic_info(request, group_id):
         return HttpResponse(json.dumps(result),
                             status=400, content_type=content_type)
 
-    group.is_staff = False
+    group.is_staff = is_group_staff(group, request.user)
     if PublicGroup.objects.filter(group_id=group.id):
         group.is_pub = True
     else:
         group.is_pub = False
-
-    if not request.user.is_authenticated():
-        if group.is_pub:
-            group.view_perm = "pub"
-
-    joined = is_group_user(group_id_int, request.user.username)
-    if joined:
-        group.view_perm = "joined"
-        group.is_staff = is_group_staff(group, request.user)
-
-    if request.user.is_staff:
-        # viewed by system admin
-        group.view_perm = "sys_admin"
-
-    if group.is_pub:
-        group.view_perm = "pub"
 
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
@@ -2468,7 +2451,6 @@ def get_group_basic_info(request, group_id):
         "avatar": grp_avatar(group.id, 32),
         "is_staff": group.is_staff,
         "is_pub": group.is_pub,
-        "view_perm": group.view_perm,
         "mods_available": mods_available,
         "mods_enabled": mods_enabled,
         }), content_type=content_type)

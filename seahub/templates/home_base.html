@@ -11,7 +11,7 @@
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{% url 'myhome' %}" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
         {% if events_enabled %}
         <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
@@ -32,7 +32,7 @@
         <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
         {% endif %}
-        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>        
+        <li class="tab {% block cur_share_files %}{% endblock %}"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
     </ul>
 </div>
@@ -52,7 +52,7 @@
       </label>
       </li>
       {% endif %}
-    {% endfor %}    
+    {% endfor %}
     </ul>
     <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit"/>
 </form>
