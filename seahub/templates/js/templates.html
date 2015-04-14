@@ -453,14 +453,14 @@
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
     <td><%= mtime_relative %></td>
 </script>
-<script type="text/template" id="grp-side-nav-tmpl">
+<script type="text/template" id="group-side-nav-tmpl">
     <div class="hd w100 ovhd">
         <h3 class="fleft">
             <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
         </h3>
         <% if (is_staff) { %>
             <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
-            <% } %>
+        <% } %>
         <% if (is_pub) { %>
             <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
         <% } %>
@@ -475,20 +475,14 @@
             <% } %>
         <% } %>
 
-        <% if (app.pageOptions.enable_pubfile && is_pub) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/files/" class="files">{% trans "Files" %}</a></li>
-        <% } %>
-
-        <% if (view_perm != 'pub') { %>
-            <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/" class="members">{% trans "Members" %}</a></li>
-        <% } %>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/" class="members">{% trans "Members" %}</a></li>
 
         <% if (is_staff) { %>
         <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/" class="admin">{% trans "Admin" %}</a></li>
         <% } %>
     </ul>
 </script>
-<script type="text/template" id="grp-mods-enable-form-tmpl">
+<script type="text/template" id="group-mods-enable-form-tmpl">
 <form id="mods-enable-form" method="post" action="{{ SITE_ROOT }}group/<%= id %>/modules/toggle/" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
     <ul>
