@@ -119,6 +119,7 @@ define([
         hide: function() {
             this.$sideNav.hide();
             this.hideRepoList();
+            this.$emptyTip.hide();
             this.dirView.hide();
         }
 
