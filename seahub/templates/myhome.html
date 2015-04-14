@@ -193,8 +193,7 @@ app["pageOptions"] = {
     username: "{{request.user.username}}",
     repo_password_min_length: {{ repo_password_min_length }},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
-    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
-    repo_password_min_length: {{ repo_password_min_length }}
+    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %}
 };
 
 </script>

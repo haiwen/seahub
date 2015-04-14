@@ -9,9 +9,10 @@ define([
     'app/views/add-group-repo',
     'app/views/group-recent-change',
     'app/views/dir',
+    'app/views/group-side-nav'
 ], function($, _, Backbone, Common, GroupRepos, DirentCollection,
     GroupRepoView, AddGroupRepoView, GroupRecentChangeView,
-    DirView) {
+    DirView, GroupSideNavView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -32,25 +33,13 @@ define([
             this.$emptyTip = $('.empty-tips', this.$tabs);
             this.$createForm = this.$('#repo-create-form');
 
+            this.sideNavView = new GroupSideNavView();
+
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = new DirView();
-        },
-
-        /*
-        initializeRepos: function() {
-            this.listenTo(Repos, 'add', this.addOne);
-            this.listenTo(Repos, 'reset', this.addAll);
-            // this.listenTo(Repos, 'sync', this.render);
-            this.listenTo(Repos, 'all', this.render); // XXX: really render table when recieve any event ?
-            this.listenTo(Repos, 'all', this.all);
-        },
-        */
-
-        all: function(event) {
-            console.log('event: ' + event);
         },
 
         addOne: function(repo, collection, options) {
@@ -75,8 +64,14 @@ define([
             }
         },
 
+        showSideNav: function () {
+            this.sideNavView.render(this.group_id);
+            this.sideNavView.show();
+        },
+
         showRepoList: function(group_id) {
             this.group_id = group_id;
+            this.showSideNav();
             this.dirView.hide();
             this.$tabs.show();
             this.repos.setGroupID(group_id);
@@ -90,6 +85,7 @@ define([
 
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
+            this.showSideNav();
             this.hideRepoList();
             this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
@@ -141,7 +137,7 @@ define([
         },
 
         hide: function() {
-            console.log("hide group view");
+            this.sideNavView.hide();
             this.hideRepoList();
             this.dirView.hide();
         }
