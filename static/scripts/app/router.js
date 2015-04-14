@@ -13,6 +13,7 @@ define([
 
     var Router = Backbone.Router.extend({
         routes: {
+            '': 'showMyRepos',
             'my-libs/': 'showMyRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'my-sub-libs/': 'showMySubRepos',

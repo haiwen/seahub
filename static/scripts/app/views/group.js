@@ -73,7 +73,9 @@ define([
             this.group_id = group_id;
             this.showSideNav();
             this.dirView.hide();
+            this.$emptyTip.hide();
             this.$tabs.show();
+            this.$table.hide();
             this.repos.setGroupID(group_id);
             this.repos.fetch({reset: true});
             this.$loadingTip.show();
@@ -140,6 +142,7 @@ define([
             this.sideNavView.hide();
             this.hideRepoList();
             this.dirView.hide();
+            this.$emptyTip.hide();
         }
 
     });
