@@ -92,7 +92,7 @@ urlpatterns = patterns('',
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),
-    url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file/(?P<path>.*)$', view_lib_file, name='view_lib_file'),
+    url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
