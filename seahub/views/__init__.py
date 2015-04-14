@@ -291,7 +291,6 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
 
         view_dir_base = reverse('repo', args=[repo.id])
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
-        view_file_base = reverse('repo_view_file', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
             dirent.last_modified = dirent.mtime
@@ -324,7 +323,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 dirent.starred = False
                 fpath = os.path.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
-                dirent.view_link = view_file_base + '?p=' + urlquote(p_fpath)
+                dirent.view_link = reverse('view_lib_file', args=[repo.id, urlquote(p_fpath)])
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
                 dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
@@ -1024,11 +1023,9 @@ def repo_history_revert(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        url = reverse("repo", args=[repo_id])
+        href = reverse("repo", args=[repo_id]) + '?p=/%s' % urllib2.quote(path.encode('utf-8'))
     else:
-        url = reverse("repo_view_file", args=[repo_id])
-
-    href = url + '?p=/%s' % urllib2.quote(path.encode('utf-8'))
+        href = reverse("view_lib_file", args=[repo_id, urllib2.quote(path.encode('utf-8'))])
 
     return '<a href="%s">%s</a>' % (href, escape(path))
 
@@ -1494,7 +1491,7 @@ def repo_revert_file(request, repo_id):
             msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
             messages.success(request, msg, extra_tags='safe')
         else:
-            file_view_url = reverse('repo_view_file', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
+            file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
             msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
             messages.success(request, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
@@ -1981,10 +1978,10 @@ def convert_cmmt_desc_link(request):
 
         if d.status == 'add' or d.status == 'mod':  # Add or modify file
             return HttpResponseRedirect(
-                reverse('repo_view_file', args=[repo_id]) + '?p=/%s' % urlquote(d.name))
+                reverse('view_lib_file', args=[repo_id, '/' + urlquote(d.name)]))
         elif d.status == 'mov':  # Move or Rename file
             return HttpResponseRedirect(
-                reverse('repo_view_file', args=[repo_id]) + '?p=/%s' % urlquote(d.new_name))
+                reverse('view_lib_file', args=[repo_id, '/' + urlquote(d.new_name)]))
         elif d.status == 'newdir':
             return HttpResponseRedirect(
                 reverse('repo', args=[repo_id]) + '?p=/%s' % urlquote(d.name))

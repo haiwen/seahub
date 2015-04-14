@@ -240,7 +240,7 @@ def convert_md_link(file_content, repo_id, username):
             try:
                 dirent = get_wiki_dirent(repo_id, link_name)
                 path = "/" + dirent.obj_name
-                href = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
+                href = reverse('view_lib_file', args=[repo_id, urlquote(path)])
                 a_tag = '''<a href="%s">%s</a>'''
                 return a_tag % (href, link_alias)
             except (WikiDoesNotExist, WikiPageMissing):
@@ -262,7 +262,7 @@ def convert_md_link(file_content, repo_id, username):
             # convert other types of filelinks to clickable links
             path = "/" + link_name
             icon = file_icon_filter(link_name)
-            s = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
+            s = reverse('view_lib_file', args=[repo_id, urlquote(path)])
             a_tag = '''<img src="%simg/file/%s" alt="%s" class="vam" /> <a href="%s" target="_blank" class="vam">%s</a>'''
             return a_tag % (MEDIA_URL, icon, icon, s, link_name)
 
@@ -954,7 +954,7 @@ def file_edit_submit(request, repo_id):
         wiki_name = os.path.splitext(os.path.basename(path))[0]
         next = reverse('personal_wiki', args=[wiki_name])
     else:
-        next = reverse('repo_view_file', args=[repo_id]) + '?p=' + urlquote(path)
+        next = reverse('view_lib_file', args=[repo_id, urlquote(path)])
 
     parent_dir = os.path.dirname(path).encode('utf-8')
     filename = os.path.basename(path).encode('utf-8')
@@ -1023,7 +1023,7 @@ def file_edit(request, repo_id):
 
     # Redirect to different place according to from page when user click
     # cancel button on file edit page.
-    cancel_url = reverse('repo_view_file', args=[repo.id]) + '?p=' + urlquote(path)
+    cancel_url = reverse('view_lib_file', args=[repo.id, urlquote(path)])
     page_from = request.GET.get('from', '')
     gid = request.GET.get('gid', '')
     wiki_name = os.path.splitext(u_filename)[0]

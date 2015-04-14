@@ -56,12 +56,12 @@
                     {% if ma.attach_type == 'file' %}
                         {% if ma.filetype != 'Image'%}
                         <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="" height="18" class="vam" />
-                        <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                        <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="vam">{{ ma.name }}</a>
                         {% else %}
                             {% if ma.err %}
                             <p class="error">{{ma.err}}</p>
                             {% else %}
-                            <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="img-cont"><img src="{{ma.img_url}}" alt="{{ma.name}}" class="img" /></a>
+                            <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="img-cont"><img src="{{ma.img_url}}" alt="{{ma.name}}" class="img" /></a>
                             {% endif %}
                         {% endif %}
                     {% else %}
@@ -72,7 +72,7 @@
 
                     {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
                     <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="vam">{{ ma.name }}</a>
                     {% endif %}
                     </li>
                 {% endfor %}

@@ -19,7 +19,7 @@
     <tr>
         <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ sfile.path|file_icon_filter }}" alt="{% trans "icon" %}" /></td>
         <td>
-            <a href="{% url 'repo_view_file' sfile.repo.id %}?p={{ sfile.path|urlencode }}">{{ sfile.name }}</a>
+            <a href="{% url 'view_lib_file' sfile.repo.id sfile.path|urlencode %}">{{ sfile.name }}</a>
         </td>
         <td>{{ sfile.repo.name }}</td>
         <td>{{ sfile.last_modified|translate_seahub_time }}</td>
