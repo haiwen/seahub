@@ -1120,24 +1120,7 @@ def get_virtual_repos_by_owner(request):
 @login_required
 @user_mods_check
 def myhome(request):
-    username = request.user.username
-
-    # options
-    if request.cloud_mode and request.user.org is None:
-        allow_public_share = False
-    else:
-        allow_public_share = True
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
-    max_upload_file_size = get_max_upload_file_size()
-
-    return render_to_response('myhome.html', {
-            "allow_public_share": allow_public_share,
-            "guide_enabled": guide_enabled,
-            "sub_lib_enabled": sub_lib_enabled,
-            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
-            'max_upload_file_size': max_upload_file_size,
-            }, context_instance=RequestContext(request))
+    return HttpResponseRedirect(reverse('libraries'))
 
 @login_required
 @user_mods_check
