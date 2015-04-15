@@ -215,6 +215,14 @@ $(window).load(function() {
     setToolbarPos();
 }).resize(setToolbarPos);
 
+function setFileViewAreaHeight() {
+    var file_view = $('#file-view');
+    if ($(window).height() > $('#main').height()) {
+        file_view.outerHeight($(window).height() - file_view.offset().top);
+    }
+}
+$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
+
 // handle discussions after fetch them
 function handleDiscussions(html) {
     $('#discussions-to-grp').html(html)
