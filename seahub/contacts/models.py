@@ -3,6 +3,7 @@ from django import forms
 from django.db import models
 from django.forms import ModelForm
 from django.utils.translation import ugettext as _
+from django.core.exceptions import MultipleObjectsReturned
 
 from seaserv import ccnet_threaded_rpc
 
@@ -30,6 +31,9 @@ class ContactManager(models.Manager):
                                                 contact_email=contact_email)
         except Contact.DoesNotExist:
             c = None
+        except MultipleObjectsReturned:
+            c = super(ContactManager, self).filter(user_email=user_email,
+                                                contact_email=contact_email)[0]
         return c
 
     # def get_registered_contacts_by_user(self, user_email):
