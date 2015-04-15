@@ -12,7 +12,7 @@
 
 {% block left_panel %}
 <div class="side-textnav">
-    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h2>
+    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h3>
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
         <li class="tab tab-cur"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
@@ -32,9 +32,8 @@
 
 {% block right_panel %}
 <div class="lib-setting">
-    <h2>{% trans "Library Settings" %}</h2>
+    <h3 class="hd">{% trans "Transfer Ownership" %}</h3>
     <div id="transfer-ownership" class="setting-item">
-        <h3>{% trans "Transfer Ownership" %}</h3>
         <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
             <p>{% trans "Transfer this library to another user:" %}</p>
             <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
