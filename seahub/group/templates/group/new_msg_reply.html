@@ -25,7 +25,7 @@
                     {% if ma.src == 'recommend' %}
                     {% if ma.attach_type == 'file' %}
                     <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="vam">{{ ma.name }}</a>
                     {% else %}
                     <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
                     <a href="{% url 'repo' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
@@ -34,7 +34,7 @@
 
                     {% if ma.src == 'filecomment' %} {# compatible with comments already exist #}
                     <img src="{{ MEDIA_URL }}img/file/{{ ma.name|file_icon_filter }}" alt="{% trans "File"%}" height="18" class="vam" />
-                    <a href="{% url 'repo_view_file' ma.repo_id %}?p={{ ma.path|urlencode }}" target="_blank" class="vam">{{ ma.name }}</a>
+                    <a href="{% url 'view_lib_file' ma.repo_id ma.path|urlencode %}" target="_blank" class="vam">{{ ma.name }}</a>
                     {% endif %}
                     </li>
                 {% endfor %}

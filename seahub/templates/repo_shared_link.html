@@ -87,7 +87,7 @@
                         <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                         {% else %}
                         <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-                        <td><a href="{% url 'repo_view_file' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                        <td><a href="{% url 'view_lib_file' repo.id link.path|urlencode %}">{{ link.filename }}</a></td>
                         <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                         {% endif %}
                         <td>{{ link.filesize|filesizeformat}}</td>
