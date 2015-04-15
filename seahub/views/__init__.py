@@ -1848,6 +1848,9 @@ def repo_download_dir(request, repo_id):
     if path[-1] != '/':         # Normalize dir path
         path += '/'
 
+    if not seafile_api.get_dir_id_by_path(repo.id, path):
+        return render_error(request, _('"%s" does not exist.') % path)
+
     if len(path) > 1:
         dirname = os.path.basename(path.rstrip('/')) # Here use `rstrip` to cut out last '/' in path
     else:

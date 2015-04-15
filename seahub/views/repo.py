@@ -9,6 +9,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
+from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import seafile_api
@@ -28,7 +29,7 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
-    get_commit_before_new_merge, user_traffic_over_limit
+    get_commit_before_new_merge, user_traffic_over_limit, render_error
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
     ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
@@ -400,6 +401,10 @@ def view_shared_dir(request, token):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
+
+    # Check path still exist, otherwise show error
+    if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
+        return render_error(request, _('"%s" does not exist.') % fileshare.path)
 
     dir_name = os.path.basename(path[:-1])
     current_commit = seaserv.get_commits(repo_id, 0, 1)[0]
