@@ -302,7 +302,9 @@ def can_preview_file(file_name, file_size):
         else:
             return (True, None)
     else:
-        return (False, _(u'This type of file cannot be viewed online.'))
+        # TODO: may need a better way instead of return string, and compare
+        # that string in templates
+        return (False, "invalid extension")
 
 @login_required
 @repo_passwd_set_required
@@ -358,7 +360,6 @@ def view_file(request, repo_id):
 
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(u_filename, fsize)
-
     if can_preview:
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):

@@ -154,7 +154,7 @@ $('video').mediaelementplayer(/* Options */);
 $('audio').mediaelementplayer(/* Options */);
 {% endif %}
 {% if filetype == 'Unknown' %}
-$('#file-view').html('<div id="file-view-tip"><p>{% trans "This type of file cannot be viewed online." %}</p></div>');
+$('#file-view').html('<div id="file-view-tip"></div>');
 {% endif %}
 
 {% endif %}{# 'if not err' ends here. #}

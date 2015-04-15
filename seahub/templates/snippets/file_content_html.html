@@ -58,7 +58,9 @@ For details please refer to 'snippets/file_content_js.html'.
         {% endif %}
     {% else %}
     <div id="file-view-tip">
+        {% if err != 'invalid extension' %}
         <p class="error">{{ err }}</p>
+        {% endif %}
     </div>
     {% endif %}
 </div>

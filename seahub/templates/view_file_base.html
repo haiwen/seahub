@@ -65,9 +65,11 @@
 
         <div id="file-view">
           {% if err %}
-          <div id="file-view-tip">
-            <p class="error">{{ err }}</p>
-          </div>
+            <div id="file-view-tip">
+            {% if err != 'invalid extension' %}
+                <p class="error">{{ err }}</p>
+            {% endif %}
+            </div>
           {% else %}
           {% block file_view %}{% endblock %}
           {% endif %}
