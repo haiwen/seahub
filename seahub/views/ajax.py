@@ -42,7 +42,8 @@ from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group, enable_mod_for_group, \
-    disable_mod_for_group, MOD_GROUP_WIKI
+    disable_mod_for_group, MOD_GROUP_WIKI, MOD_PERSONAL_WIKI, \
+    enable_mod_for_user, disable_mod_for_user
 from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
@@ -2484,3 +2485,19 @@ def toggle_group_modules(request, group_id):
     return HttpResponse(json.dumps({
         "success": True
         }), content_type=content_type)
+
+@login_required_ajax
+def toggle_personal_modules(request):
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    username = request.user.username
+    personal_wiki = request.POST.get('personal_wiki', '')
+    if personal_wiki == 'true':
+        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
+    else:
+        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
+
+    return HttpResponse(json.dumps({ "success": True
+            }), content_type=content_type)
