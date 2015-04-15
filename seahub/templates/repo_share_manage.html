@@ -12,7 +12,7 @@
 
 {% block left_panel %}
 <div class="side-textnav">
-    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h2>
+    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h3>
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
         <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
@@ -32,9 +32,6 @@
 
 {% block right_panel %}
 <div class="lib-setting">
-    <h2>{% trans "Library Settings" %}</h2>
-    <h3>{% trans "Sharing Management" %}</h3>
-    <p>{% trans "View and manage sharing permissions of this library." %}</p>
 
     <div id="tabs" class="tab-tabs">
         <div class="hd ovhd">
@@ -133,7 +130,7 @@ $(function () {
         dataType: 'json',
         success: function(data) {
             var share_list = [];
-            var contacts = data['contacts'], contact_email, group_name, group_name_py;   
+            var contacts = data['contacts'], contact_email, group_name, group_name_py;
             for (var i = 0, len = contacts.length; i < len; i++) {
                 contact_email = contacts[i].email;
                 share_list.push({value:contact_email, label:contact_email});
