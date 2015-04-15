@@ -12,7 +12,7 @@
 
 {% block left_panel %}
 <div class="side-textnav">
-    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h2>
+    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h3>
     <ul class="side-textnav-tabs">
         <li class="tab tab-cur"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
         <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
@@ -32,9 +32,8 @@
 
 {% block right_panel %}
 <div class="lib-setting">
-    <h2>{% trans "Library Settings" %}</h2>
+    <h3 class="hd">{% trans "Basic Info" %}</h3>
     <div id="basic-info" class="setting-item">
-        <h3>{% trans "Basic Info" %}</h3>
         <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
             <label>{% trans "Name" %}</label><br />
             <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
