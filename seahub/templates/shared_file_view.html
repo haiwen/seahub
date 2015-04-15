@@ -71,6 +71,17 @@ $(function() {
     {% endif %}
 });
 
+function setFileViewAreaHeight() {
+    var file_view = $('#file-view');
+    if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
+        file_view.outerHeight($(window).height() - file_view.offset().top);
+    }
+    if ($(document).height() > $(window).height()) {
+        file_view.outerHeight($(document).height() - file_view.offset().top);
+    }
+}
+$(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
+
 {% if request.user.is_authenticated and request.user.username != shared_by %}
 $('#save').click(function() {
     var form = $('#file-save-form'),
