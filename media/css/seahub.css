@@ -2640,8 +2640,8 @@ textarea:-moz-placeholder {/* for FF */
     padding:0;
 }
 #file-view-tip {
-    height: 150px;
-    padding:10px;
+    height:130px;
+    padding:30px 10px 10px;
     width:930px;
     background:#fff;
     text-align:center;
