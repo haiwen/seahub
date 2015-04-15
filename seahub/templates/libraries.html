@@ -24,39 +24,9 @@
 
 {% block left_panel %}
 <div class="side-tabnav hide" id="myhome-side-nav">
-    <div class="hd w100 ovhd">
-        <h3 class="fleft">{% trans "Personal" %}</h3>
-        {% if user.permissions.can_add_repo %}
-        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
-        {% endif %}
-    </div>
-    <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#my-libs/" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
-        {% if events_enabled %}
-        <li class="tab"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
-        {% endif %}
-        {% for mod in request.user.mods_enabled %}
-        {% if mod == 'personal wiki' %}
-        <li class="tab"><a href="{% url 'personal_wiki' %}" class="wiki">{% trans "Personal Wiki" %}</a></li>
-        {% endif %}
-        {% endfor %}
-        <li class="tab"><a href="{% url 'message_list' %}" class="msgs">{% trans "Messages" %}</a></li>
-        <li class="tab"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>
-        <li class="tab"><a href="{% url 'contacts' %}" class="contacts">{% trans "Contacts" %}</a></li>
-    </ul>
-
-    <h3 class="hd">{% trans "Share Admin" %}</h3>
-    <ul class="side-tabnav-tabs">
-        {% if user.permissions.can_add_repo %}
-        <li class="tab"><a href="{% url 'share_admin' %}" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{% url 'list_priv_shared_folders' %}" class="folders">{% trans "Folders" %}</a></li>
-        {% endif %}
-        <li class="tab"><a href="{% url 'list_priv_shared_files' %}" class="files">{% trans "Files" %}</a></li>
-        <li class="tab"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
-    </ul>
 </div>
-
+<div class="side-tabnav hide" id="grp-side-nav">
+</div>
 <div class="side-tabnav hide" id="org-side-nav">
     <h3 class="hd">{% trans "Organization" %}</h3>
     <ul class="side-tabnav-tabs">
@@ -64,9 +34,6 @@
         <li class="tab"><a href="{% url 'pubgrp' %}" class="group">{% trans "Groups" %}</a></li>
         <li class="tab"><a href="{% url 'pubuser' %}" class="members">{% trans "Members" %}</a></li>
     </ul>
-</div>
-
-<div class="side-tabnav hide" id="grp-side-nav">
 </div>
 {% endblock %}
 
@@ -265,7 +232,22 @@ app["pageOptions"] = {
         {% endfor %}
         return groups;
     })(),
+    user_mods_available: (function () {
+        var mods_available = [];
+        {% for mod in request.user.mods_available %}
+        mods_available.push('{{mod}}');
+        {% endfor %}
+        return mods_available;
+    })(),
+    user_mods_enabled: (function () {
+        var mods_enabled = [];
+        {% for mod in request.user.mods_enabled %}
+        mods_enabled.push('{{mod}}');
+        {% endfor %}
+        return mods_enabled;
+    })(),
     username: "{{request.user.username}}",
+    events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},

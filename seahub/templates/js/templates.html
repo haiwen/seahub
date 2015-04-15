@@ -453,6 +453,60 @@
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
     <td><%= mtime_relative %></td>
 </script>
+<script type="text/template" id="myhome-side-nav-tmpl">
+    <div class="hd w100 ovhd">
+        <h3 class="fleft">{% trans "Personal" %}</h3>
+        <img id="myhome-enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+    </div>
+    <ul class="side-tabnav-tabs">
+        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#my-libs/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}starred/" class="star">{% trans "Starred" %}</a></li>
+
+        <% if (events_enabled) { %>
+        <li class="tab"><a href="{{ SITE_ROOT }}activities/" class="activity">{% trans "Activities" %}</a></li>
+        <% } %>
+
+        <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
+            <% if (mods_enabled[i] == 'personal wiki') { %>
+        <li class="tab"><a href="{{ SITE_ROOT }}home/wiki/" class="wiki">{% trans "Personal Wiki" %}</a></li>
+            <% } %>
+        <% } %>
+
+        <li class="tab"><a href="{{ SITE_ROOT }}message/list/" class="msgs">{% trans "Messages" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}devices/" class="clients">{% trans "Devices" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}contacts/" class="contacts">{% trans "Contacts" %}</a></li>
+    </ul>
+
+    <h3 class="hd">{% trans "Share Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab"><a href="{{ SITE_ROOT }}share/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/" class="folders">{% trans "Folders" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/files/" class="files">{% trans "Files" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/links/" class="links">{% trans "Links" %}</a></li>
+    </ul>
+</script>
+<script type="text/template" id="myhome-mods-enable-form-tmpl">
+<form id="myhome-mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
+    <h3>{% trans "Enable Modules"%}</h3>
+    <ul>
+        <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
+            <% if (mods_available[i] == 'personal wiki') { %>
+            <li>
+            <label class="checkbox-label">
+                <% if (mods_enabled.indexOf(mods_available[i]) != -1) { %>
+                <span class="checkbox checkbox-checked"><input type="checkbox" name="personal_wiki" class="checkbox-orig" checked="checked" /></span>
+                <% } else { %>
+                <span class="checkbox"><input type="checkbox" name="personal_wiki" class="checkbox-orig" /></span>
+                <% } %>
+                <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
+            </label>
+            </li>
+            <% } %>
+        <% } %>
+    </ul>
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+</form>
+</script>
 <script type="text/template" id="group-side-nav-tmpl">
     <div class="hd w100 ovhd">
         <h3 class="fleft">

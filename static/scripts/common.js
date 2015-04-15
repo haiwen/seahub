@@ -112,6 +112,7 @@ define([
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
               case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
               case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
+              case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
             }
         },
 
