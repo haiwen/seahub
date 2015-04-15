@@ -2148,6 +2148,7 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
     padding:2px;
 }
+#myhome-mods-enable-form,
 #mods-enable-form {
     width:266px;
 }
@@ -3223,11 +3224,13 @@ textarea:-moz-placeholder {/* for FF */
 #search-user-form .submit {
     margin-left:3.5em;
 }
+#myhome-enable-mods,
 #enable-mods,
 #edit-index {
     color:#d7d7d7;
     margin-top:3px;
 }
+#myhome-enable-mods:hover,
 #enable-mods:hover,
 #edit-index:hover {
     color:#666;
