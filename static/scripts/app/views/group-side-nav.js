@@ -7,7 +7,7 @@ define([
     'use strict';
 
     var GroupSideNavView = Backbone.View.extend({
-        el: '#grp-side-nav',
+        el: '#group-side-nav',
 
         template: _.template($("#group-side-nav-tmpl").html()),
         enableModTemplate: _.template($("#group-mods-enable-form-tmpl").html()),
@@ -70,7 +70,7 @@ define([
                     form_id: form.attr('id'),
                     post_url: Common.getUrl({
                         'name': 'toggle_group_modules',
-                        'group_id': _this.group_id,
+                        'group_id': _this.group_id
                     }),
                     post_data: {'group_wiki': cur_checked },
                     after_op_success: function () {
