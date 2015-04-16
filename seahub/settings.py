@@ -422,8 +422,6 @@ COMPRESS_URL = MEDIA_URL
 COMPRESS_ROOT = MEDIA_ROOT
 COMPRESS_DEBUG_TOGGLE = 'nocompress'
 COMPRESS_CSS_HASHING_METHOD = 'content'
-COMPRESS_OFFLINE = True
-COMPRESS_OFFLINE_CONTEXT = {'MEDIA_URL': MEDIA_URL, 'base_template': 'base.html'}
 COMPRESS_CSS_FILTERS = [
     'compressor.filters.css_default.CssAbsoluteFilter',
     'compressor.filters.cssmin.CSSMinFilter',
