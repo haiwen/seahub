@@ -19,6 +19,7 @@ define([
         render: function() {
             this.$el.html(this.template({
                 'mods_enabled': app.pageOptions.user_mods_enabled,
+                'can_add_repo': app.pageOptions.can_add_repo,
                 'events_enabled': app.pageOptions.events_enabled
             }));
         },
@@ -28,11 +29,11 @@ define([
         },
 
         enableMods: function () {
+            var mods_enabled = app.pageOptions.user_mods_enabled;
             var form = $(this.enableModTemplate({
                     'mods_available': app.pageOptions.user_mods_available,
-                    'mods_enabled': app.pageOptions.user_mods_enabled
+                    'mods_enabled': mods_enabled
                 }));
-
             form.modal();
             $('#simplemodal-container').css('height', 'auto');
 
@@ -43,7 +44,6 @@ define([
             var checkbox = $('[name="personal_wiki"]'),
                 original_checked = checkbox.prop('checked'),
                _this = this;
-
             form.submit(function() {
                 var cur_checked = checkbox.prop('checked');
                 if (cur_checked == original_checked) {
@@ -53,18 +53,16 @@ define([
                     form: form,
                     form_id: form.attr('id'),
                     post_url: Common.getUrl({
-                        'name': 'toggle_personal_modules',
+                        'name': 'toggle_personal_modules'
                     }),
                     post_data: {'personal_wiki': cur_checked },
                     after_op_success: function () {
                         if (cur_checked) {
-                            // enable personal wiki
-                            app.pageOptions.user_mods_enabled.push('personal wiki');
+                            mods_enabled.push('personal wiki');
                         } else {
-                            // disable personal wiki
-                            var index = app.pageOptions.user_mods_enabled.indexOf('personal wiki');
+                            var index = mods_enabled.indexOf('personal wiki');
                             if (index > -1) {
-                                app.pageOptions.user_mods_enabled.splice(index, 1);
+                                mods_enabled.splice(index, 1); // rm the item
                             }
                         }
                         $.modal.close();

@@ -3225,13 +3225,14 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:3.5em;
 }
 #myhome-enable-mods,
-#enable-mods,
+#enable-mods {
+    margin-top:3px;
+    cursor:pointer;
+}
 #edit-index {
     color:#d7d7d7;
     margin-top:3px;
 }
-#myhome-enable-mods:hover,
-#enable-mods:hover,
 #edit-index:hover {
     color:#666;
     cursor:pointer;
