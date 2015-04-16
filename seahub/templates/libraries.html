@@ -25,7 +25,7 @@
 {% block left_panel %}
 <div class="side-tabnav hide" id="myhome-side-nav">
 </div>
-<div class="side-tabnav hide" id="grp-side-nav">
+<div class="side-tabnav hide" id="group-side-nav">
 </div>
 <div class="side-tabnav hide" id="org-side-nav">
     <h3 class="hd">{% trans "Organization" %}</h3>
@@ -248,6 +248,7 @@ app["pageOptions"] = {
     })(),
     username: "{{request.user.username}}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
+    can_add_repo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
