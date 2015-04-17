@@ -46,19 +46,19 @@
 <script type="text/template" id="group-repo-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="<%= app.config.mediaUrl %>img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
         <% } else { %>
             <% if (permission == 'rw') { %>
-        <img src="<%= app.config.mediaUrl %>img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+        <img src="{{ MEDIA_URL }}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
             <% } else { %>
-        <img src="<%= app.config.mediaUrl %>img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+        <img src="{{ MEDIA_URL }}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
             <% } %>
         <% } %>
     </td>
-    <td><a href="#/group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
+    <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.isGroupStaff) { %>
-    <img src="<%= app.config.mediaUrl%>img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
     <% } %>
     </td>
     <td><%= size_formatted %></td>
