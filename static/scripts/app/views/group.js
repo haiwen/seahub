@@ -6,10 +6,9 @@ define([
     'app/collections/group-repos',
     'app/views/group-repo',
     'app/views/add-group-repo',
-    'app/views/dir',
     'app/views/group-side-nav'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, DirView, GroupSideNavView) {
+    AddGroupRepoView, GroupSideNavView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -21,7 +20,7 @@ define([
             'click #grp-repos .by-time': 'sortByTime'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             this.$tabs = this.$('#group-repo-tabs');
             this.$table = this.$('#grp-repos table', this.$tabs);
             this.$tableHead = $('thead', this.$table);
@@ -35,7 +34,7 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.dirView = new DirView();
+            this.dirView = options.dirView;
         },
 
         addOne: function(repo, collection, options) {

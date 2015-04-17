@@ -5,16 +5,15 @@ define([
     'common',
     'app/collections/pub-repos',
     'app/views/organization-repo',
-    'app/views/dir',
     'app/views/add-pub-repo'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    DirView, AddPubRepoView) {
+    AddPubRepoView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
-        initialize: function() {
+        initialize: function(options) {
 
             this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
@@ -27,7 +26,7 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.dirView = new DirView();
+            this.dirView = options.dirView;
         },
 
         events: {
