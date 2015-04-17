@@ -1133,8 +1133,11 @@ def libraries(request):
     else:
         allow_public_share = True
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     max_upload_file_size = get_max_upload_file_size()
+    guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
+    if guide_enabled:
+        # only show guide once
+        UserOptions.objects.disable_user_guide(username)
 
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
