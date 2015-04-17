@@ -6,7 +6,6 @@
 
 {% block extra_style %}
 <style type="text/css">
-{% if need_guide %}
 #guide-for-new {
     padding: 0 20px;
     width: 450px;
@@ -18,7 +17,6 @@
 #guide-for-new .txt {
     margin-left:6.4em;
 }
-{% endif %}
 </style>
 {% endblock %}
 
@@ -121,7 +119,6 @@
     <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
-{% if need_guide %}
 <div id="guide-for-new" class="hide">
     <span class="icon-lightbulb fleft"></span>
     <div class="txt">
@@ -134,7 +131,7 @@
         <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
     </div>
 </div>
-{% endif %}
+
 
 {% if sub_lib_enabled %}
 <form id="sublib-create-form" class="file-choose-form hide">
@@ -250,10 +247,10 @@ app["pageOptions"] = {
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
+    guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %}
 };
-
 </script>
 {% if debug %}
 <script data-main="{% static "scripts/main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
