@@ -87,18 +87,16 @@ define([
             'submit #dir-private-share-form': 'dirPrivateShare'
         },
 
-        highlightCheckbox: function () {
-            var el = event.target || event.srcElement;
-            $(el).addClass('hl');
+        highlightCheckbox: function (e) {
+            $(e.currentTarget).addClass('hl');
         },
 
-        rmHighlightCheckbox: function () {
-            var el = event.target || event.srcElement;
-            $(el).removeClass('hl');
+        rmHighlightCheckbox: function (e) {
+            $(e.currentTarget).removeClass('hl');
         },
 
-        clickCheckbox: function() {
-            var el = event.target || event.srcElement;
+        clickCheckbox: function(e) {
+            var el = e.currentTarget;
             $(el).parent().toggleClass('checkbox-checked');
             // for link options such as 'password', 'expire'
             $(el).closest('.checkbox-label').next().toggleClass('hide');
