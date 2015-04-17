@@ -6,7 +6,7 @@ define([
     'app/views/myhome',
     'app/views/group',
     'app/views/organization',
-    'app/views/group-nav',
+    'app/views/top-group-nav'
 ], function($, Backbone, Common, MyHomeView, GroupView, OrgView,
     GroupNavView) {
     "use strict";
@@ -33,13 +33,17 @@ define([
             Common.prepareApiCsrf();
             Common.initAccountPopup();
             Common.initNoticePopup();
+            Common.getContacts();
 
             this.myHomeView = new MyHomeView();
             this.groupView = new GroupView();
             this.orgView = new OrgView();
+
             this.currentView = this.myHomeView;
 
-            this.groupNavView = new GroupNavView();
+            if (app.pageOptions.top_nav_groups.length > 0) {
+                this.topGroupNavView = new GroupNavView();
+            }
         },
 
         switchCurrentView: function(newView) {
@@ -126,7 +130,6 @@ define([
 
         defaultAction: function(actions) {
             // We have no matching route, lets just log what the URL was
-            console.log('No route:', actions);
 
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showMyRepos();
