@@ -4,15 +4,12 @@ define([
     'backbone',
     'common',
     'app/collections/group-repos',
-    'app/collections/dirents',
     'app/views/group-repo',
     'app/views/add-group-repo',
-    'app/views/group-recent-change',
     'app/views/dir',
     'app/views/group-side-nav'
-], function($, _, Backbone, Common, GroupRepos, DirentCollection,
-    GroupRepoView, AddGroupRepoView, GroupRecentChangeView,
-    DirView, GroupSideNavView) {
+], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
+    AddGroupRepoView, DirView, GroupSideNavView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -31,7 +28,6 @@ define([
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
             this.$emptyTip = $('.empty-tips', this.$tabs);
-            this.$createForm = this.$('#repo-create-form');
 
             this.sideNavView = new GroupSideNavView();
 
@@ -100,15 +96,6 @@ define([
         createRepo: function() {
             var addGroupRepoView = new AddGroupRepoView(this.repos);
             addGroupRepoView.render();
-        },
-
-        showChanges: function() {
-            this.$table.parent().hide(); // XXX: hide or empty ?
-
-            if (!this.recentChangeView) {
-                this.recentChangeView = new GroupRecentChangeView();
-            }
-            this.recentChangeView.show();
         },
 
         sortByName: function() {

@@ -11,8 +11,8 @@ define([
     'app/views/dirent',
     'app/views/fileupload',
     'app/views/share'
-    ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common, FileTree, DirentCollection, DirentView,
-        FileUploadView, ShareView) {
+    ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
+        FileTree, DirentCollection, DirentView, FileUploadView, ShareView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -88,14 +88,6 @@ define([
                                 }
                             });
                         }
-                    }
-                });
-
-                // get contacts for 'share'
-                Common.ajaxGet({
-                    'get_url': Common.getUrl({name: 'get_user_contacts'}),
-                    'after_op_success': function (data) {
-                        app.pageOptions.contacts = data["contacts"];
                     }
                 });
             },

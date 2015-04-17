@@ -1,5 +1,5 @@
 {% extends "base_for_backbone.html" %}
-{% load seahub_tags i18n %}
+{% load seahub_tags group_avatar_tags i18n %}
 {% load staticfiles %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
@@ -226,6 +226,17 @@ app["pageOptions"] = {
         var groups = [];
         {% for group in request.user.joined_groups %}
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
+        {% endfor %}
+        return groups;
+    })(),
+    top_nav_groups: (function () {
+        var groups = [];
+        {% for group in grps %}
+        groups.push({
+            'name': '{{group.group_name}}',
+            'id': '{{group.id}}',
+            'avatar': '{% grp_avatar grp.id 36 %}'
+        });
         {% endfor %}
         return groups;
     })(),

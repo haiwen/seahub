@@ -3,14 +3,13 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/collections/groups',
     'app/views/myhome-repos',
     'app/views/myhome-sub-repos',
     'app/views/myhome-shared-repos',
     'app/views/dir',
     'app/views/myhome-side-nav'
-], function($, _, Backbone, Common, GroupCollection,
-        ReposView, SubReposView, SharedReposView, DirView, MyhomeSideNavView) {
+], function($, _, Backbone, Common, ReposView, SubReposView,
+    SharedReposView, DirView, MyhomeSideNavView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -31,22 +30,6 @@ define([
 
         showSideNav: function () {
             this.sideNavView.show();
-        },
-
-        ajaxLoadingShow: function() {
-            Common.feedback('Loading...', 'info', Common.INFO_TIMEOUT);
-        },
-
-        ajaxLoadingHide: function() {
-            $('.messages .info').hide();
-        },
-
-        hideLoading: function() {
-            this.$cont.find('.loading').hide();
-        },
-
-        showLoading: function() {
-            this.$cont.find('.loading').show();
         },
 
         showMyRepos: function() {
