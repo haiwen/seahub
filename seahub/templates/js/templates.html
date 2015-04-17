@@ -87,7 +87,7 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
-<script type="text/template" id="group-nav-tmpl">
+<script type="text/template" id="top-group-nav-tmpl">
     <div id="top-nav-grp-info" class="top-info-popup hide">
         <div class="outer-caret up-outer-caret">
             <div class="inner-caret"></div>
@@ -97,13 +97,13 @@
             <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
                 <%= groups[i].avatar %>
                 <span class="name ellipsis vam"><%= groups[i].name %></span>
-                <a href="<%= app.config.siteRoot %>group/<%= groups[i].id %>/discuss/" title="Discussion" class="a fright vh">
-                    <img src="<%= app.config.mediaUrl %>img/msgs.png" alt="" />
+                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="a fright vh">
+                    <img src="{{MEDIA_URL}}img/msgs.png" alt="" />
                 </a>
             </li>
             <% } %>
         </ul>
-        <a href="<%= app.config.siteRoot %>groups/" class="item all-grp">All Groups</a>
+        <a href="{{SITE_ROOT}}groups/" class="item all-grp">All Groups</a>
     </div>
 </script>
 <script type="text/template" id="dir-op-bar-tmpl">

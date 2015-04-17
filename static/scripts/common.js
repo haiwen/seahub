@@ -469,6 +469,16 @@ define([
             });
         },
 
+        // get contacts for 'lib/dir/file share'
+        getContacts: function () {
+            this.ajaxGet({
+                'get_url': this.getUrl({name: 'get_user_contacts'}),
+                'after_op_success': function (data) {
+                    app.pageOptions.contacts = data["contacts"];
+                }
+            });
+        },
+
         // check if a file is an image
         imageCheck: function (filename) {
             // no file ext
