@@ -6,9 +6,10 @@ define([
     'app/views/myhome',
     'app/views/group',
     'app/views/organization',
+    'app/views/dir',
     'app/views/top-group-nav'
 ], function($, Backbone, Common, MyHomeView, GroupView, OrgView,
-    GroupNavView) {
+    DirView, GroupNavView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -35,9 +36,11 @@ define([
             Common.initNoticePopup();
             Common.getContacts();
 
-            this.myHomeView = new MyHomeView();
-            this.groupView = new GroupView();
-            this.orgView = new OrgView();
+            this.dirView = new DirView();
+
+            this.myHomeView = new MyHomeView({dirView: this.dirView});
+            this.groupView = new GroupView({dirView: this.dirView});
+            this.orgView = new OrgView({dirView: this.dirView});
 
             this.currentView = this.myHomeView;
 

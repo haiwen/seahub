@@ -6,23 +6,23 @@ define([
     'app/views/myhome-repos',
     'app/views/myhome-sub-repos',
     'app/views/myhome-shared-repos',
-    'app/views/dir',
     'app/views/myhome-side-nav'
 ], function($, _, Backbone, Common, ReposView, SubReposView,
-    SharedReposView, DirView, MyhomeSideNavView) {
+    SharedReposView, MyhomeSideNavView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
         el: '#main',
 
-        initialize: function() {
-            this.$cont = this.$('#right-panel');
-
+        initialize: function(options) {
             this.sideNavView = new MyhomeSideNavView();
+
             this.reposView = new ReposView();
             this.subReposView = new SubReposView();
             this.sharedReposView = new SharedReposView();
-            this.dirView = new DirView();
+
+            this.dirView = options.dirView;
+
             this.currentView = this.reposView;
 
             $('#initial-loading-view').hide();
