@@ -26,7 +26,6 @@ define([
 
           this.dirent_more = data.dirent_more;
           this.more_start = data.more_start;
-          this.share = data.share;
           return data.dirent_list; // return the array
         },
 
