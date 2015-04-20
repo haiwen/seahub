@@ -18,15 +18,15 @@ define([
         },
 
         parse: function (data) {
-          this.repo_name = data.repo_name;
-          this.user_perm = data.user_perm;
-          this.encrypted = data.encrypted;
-          this.is_repo_owner = data.is_repo_owner;
-          this.is_virtual = data.is_virtual;
+            this.repo_name = data.repo_name;
+            this.user_perm = data.user_perm;
+            this.encrypted = data.encrypted;
+            this.is_repo_owner = data.is_repo_owner;
+            this.is_virtual = data.is_virtual;
 
-          this.dirent_more = data.dirent_more;
-          this.more_start = data.more_start;
-          return data.dirent_list; // return the array
+            this.dirent_more = data.dirent_more;
+            this.more_start = data.more_start;
+            return data.dirent_list; // return the array
         },
 
         // category: 'my-libs', 'shared-libs'

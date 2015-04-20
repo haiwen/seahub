@@ -57,7 +57,7 @@
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-    <% if (app.pageOptions.isGroupStaff) { %>
+    <% if (is_staff || share_from_me) { %>
     <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
     <% } %>
     </td>
