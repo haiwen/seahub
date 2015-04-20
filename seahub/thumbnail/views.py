@@ -151,9 +151,4 @@ def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     with open(thumbnail_file, 'rb') as f:
         file_content = f.read()
 
-    # Prepare response
-    content_type, content_encoding = mimetypes.guess_type(thumbnail_file)
-    response = HttpResponse(content=file_content, mimetype=content_type)
-    if content_encoding:
-        response['Content-Encoding'] = content_encoding
-    return response
+    return HttpResponse(content=file_content, mimetype='image/'+THUMBNAIL_EXTENSION)
