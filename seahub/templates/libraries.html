@@ -52,7 +52,7 @@
             <li class="tab"><a href="#shared-libs/" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
         </ul>
         <div class="fright">
-            <button id="repo-create" class=""><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+            <button class="repo-create"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
             {% if sub_lib_enabled %}
             <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
             {% endif %}
@@ -153,7 +153,7 @@
             <li class="tab"><a href="#" class="a">{% trans "Libraries" %}</a></li>
         </ul>
         {% if user.permissions.can_add_repo %}
-        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        <button class="repo-create fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
 
@@ -185,7 +185,7 @@
 <div id="organization-repos" class="tab-tabs hide">
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Libraries" %}</h3>
-        <button id="repo-create" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
+        <button class="repo-create fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
     </div>
 
     <table class="repo-list hide">
