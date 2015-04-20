@@ -30,7 +30,7 @@ define([
         },
 
         events: {
-            'click #repo-create': 'createRepo',
+            'click #organization-repos .repo-create': 'createRepo',
             'click #organization-repos .by-name': 'sortByName',
             'click #organization-repos .by-time': 'sortByTime'
         },

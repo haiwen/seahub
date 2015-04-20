@@ -13,7 +13,7 @@ define([
         el: $('#repo-tabs'),
 
         events: {
-            'click #repo-create': 'createRepo',
+            'click .repo-create': 'createRepo',
             'click #my-own-repos .by-name': 'sortByName',
             'click #my-own-repos .by-time': 'sortByTime'
         },
@@ -25,6 +25,7 @@ define([
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
             this.$emptyTip = $('#my-own-repos .empty-tips');
+            this.$repoCreateBtn = this.$('.repo-create');
 
             this.repos = new RepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
@@ -67,12 +68,12 @@ define([
         },
 
         show: function() {
-            $('#repo-create').show();
+            this.$repoCreateBtn.show();
             this.showMyRepos();
         },
 
         hide: function() {
-            $('#repo-create').hide();
+            this.$repoCreateBtn.hide();
             this.$el.hide();
             this.$table.hide();
             this.$emptyTip.hide();
