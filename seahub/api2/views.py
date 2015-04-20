@@ -2545,7 +2545,7 @@ class SharedRepo(APIView):
         elif share_type == 'public':
             if not CLOUD_MODE:
                 try:
-                    seafile_api.set_inner_pub_repo(repo_id, permission)
+                    seafile_api.add_inner_pub_repo(repo_id, permission)
                 except SearpcError, e:
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                      "Searpc Error: " + e.msg)
