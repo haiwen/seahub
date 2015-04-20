@@ -15,7 +15,7 @@ define([
         el: '#main',
 
         events: {
-            'click #repo-create': 'createRepo',
+            'click #group-repo-tabs .repo-create': 'createRepo',
             'click #grp-repos .by-name': 'sortByName',
             'click #grp-repos .by-time': 'sortByTime'
         },
