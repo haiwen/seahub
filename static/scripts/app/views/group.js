@@ -38,7 +38,11 @@ define([
         },
 
         addOne: function(repo, collection, options) {
-            var view = new GroupRepoView({model: repo, group_id: this.group_id});
+            var view = new GroupRepoView({
+                model: repo,
+                group_id: this.group_id,
+                is_staff: this.repos.is_staff
+            });
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
