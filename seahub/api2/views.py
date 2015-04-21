@@ -3062,6 +3062,8 @@ class GroupRepos(APIView):
         else:
             repos = seaserv.get_group_repos(group.id, username)
 
+        group.is_staff = is_group_staff(group, request.user)
+
         repos_json = []
         for r in repos:
             repo = {
@@ -3075,11 +3077,12 @@ class GroupRepos(APIView):
                 "encrypted": r.encrypted,
                 "permission": check_permission(r.id, username),
                 "owner": r.owner,
-                "owner_nickname": email2nickname(r.owner)
+                "owner_nickname": email2nickname(r.owner),
+                "share_from_me": r.share_from_me,
             }
             repos_json.append(repo)
 
-        return Response(repos_json)
+        return Response({"is_staff":group.is_staff, "repos":repos_json})
 
 class GroupRepo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

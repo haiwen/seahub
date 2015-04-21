@@ -12,14 +12,14 @@ define([
         template: _.template($('#group-repo-tmpl').html()),
 
         events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
+            'mouseenter': 'highlight',
+            'mouseleave': 'rmHighlight',
             'click .cancel-share': 'unshare'
         },
 
         initialize: function(options) {
             this.group_id = options.group_id;
-            Backbone.View.prototype.initialize.apply(this, arguments);
+            this.is_staff = options.is_staff;
 
             this.listenTo(this.model, 'destroy', this.remove);
         },
@@ -28,19 +28,18 @@ define([
             var obj = this.model.toJSON();
             $.extend(obj, {
                 group_id: this.group_id,
+                is_staff: this.is_staff
             });
             this.$el.html(this.template(obj));
             return this;
         },
 
-        showAction: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
+        highlight: function() {
+            this.$el.addClass('hl').find('.op-icon').removeClass('vh');
         },
 
-        hideAction: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
+        rmHighlight: function() {
+            this.$el.removeClass('hl').find('.op-icon').addClass('vh');
         },
 
         unshare: function() {
