@@ -11,58 +11,48 @@ define([
 
         template: _.template($('#organization-repo-tmpl').html()),
 
-        events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
-            'click .cancel-share': 'removeShare'
-        },
-
         initialize: function() {
         },
 
-        removeShare: function(e) {
-            var _this = this,
-                success_callback = function(data) {
-                    Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
-                    _this.$el.remove();
-                    _this.collection.remove(_this.model, {silent: true});
-                    if (_this.collection.length == 0) {
-                        $('#organization-repos table').hide();
-                        $('#organization-repos .empty-tips').show();
-                    };
-                };
-
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'ajax_repo_remove_share'}),
-                'data': {
-                         'repo_id': this.model.get('id'),
-                         'share_type': this.model.get('share_type')
-                        },
-                'after_op_success': success_callback
-            });
-        },
-
         render: function() {
-            var data, show_unshare_btn;
-            if (this.model.get('share_from') == app.pageOptions.current_user || app.pageOptions.is_staff == true) {
-                show_unshare_btn = true;
-            } else {
-                show_unshare_btn = false;
-            };
-            data = $.extend(this.model.toJSON(), {'show_unshare_btn': show_unshare_btn});
-            this.$el.html(this.template(data));
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
 
-        showAction: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
+        events: {
+            'mouseenter': 'highlight',
+            'mouseleave': 'rmHighlight',
+            'click .cancel-share': 'removeShare'
         },
 
-        hideAction: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
+        highlight: function() {
+            this.$el.addClass('hl').find('.op-icon').removeClass('vh');
+        },
+
+        rmHighlight: function() {
+            this.$el.removeClass('hl').find('.op-icon').addClass('vh');
+        },
+
+        removeShare: function(e) {
+            var el = this.$el;
+            Common.ajaxGet({
+                get_url: Common.getUrl({
+                    name:'ajax_unsetinnerpub',
+                    repo_id: this.model.get('id')
+                }),
+                data: {
+                    'permission': this.model.get('permission')
+                },
+                after_op_success: function () {
+                    el.remove();
+                    Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
+                },
+                after_op_error: function() {
+                    // TODO
+                }
+            });
         }
+
     });
 
     return OrganizationRepoView;
