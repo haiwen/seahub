@@ -48,6 +48,8 @@
         <button data-url="{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}&type=d" data-link="{{ dir_shared_link }}" data-token="{{fileshare.token}}" data-upload-url="{% url 'get_shared_upload_link' %}?repo_id={{ repo.id }}&p={{ path|urlencode }}" data-upload-link="{{ dir_shared_upload_link }}" data-upload-token="{{ uploadlink.token }}" class="op-btn" id="share-cur-dir"><span class="sf-icon-share"></span>{% trans "Share"%}</button>
         {% endif %}
         {% endif %}
+
+        <button onclick="location.href='{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}'" class="op-btn"><span class="icon-download"></span>{% trans "Download"%}</button>
     </div>
     <div id="repo-latest-commit" class="clear">
         {% include 'snippets/current_commit.html' %}
