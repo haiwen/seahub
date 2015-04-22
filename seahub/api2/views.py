@@ -3123,6 +3123,7 @@ class GroupRepos(APIView):
             "permission": 'rw',  # Always have read-write permission to owned repo
             "owner": username,
             "owner_nickname": email2nickname(username),
+            "share_from_me": True,
         }
 
         return Response(group_repo, status=200)

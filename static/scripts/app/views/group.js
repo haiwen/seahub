@@ -97,8 +97,7 @@ define([
         },
 
         createRepo: function() {
-            var addGroupRepoView = new AddGroupRepoView(this.repos);
-            addGroupRepoView.render();
+            new AddGroupRepoView(this.repos);
         },
 
         sortByName: function() {

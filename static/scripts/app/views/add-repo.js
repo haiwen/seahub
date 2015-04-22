@@ -15,23 +15,28 @@ define([
 
         initialize: function(repos) {
             this.repos = repos;
-            this.listenTo(repos, 'invalid', this.displayValidationErrors);
-        },
 
-        events: {
-            "submit": "addRepo",
-            "click #encrypt-switch": "togglePasswdInput"
+            this.render();
+            this.$el.modal();
+            $("#simplemodal-container").css({'height':'auto'});
+
+            this.listenTo(repos, 'invalid', this.displayValidationErrors);
         },
 
         render: function() {
             this.$el.html(this.template(this.templateData()));
-            this.$el.modal();
+            return this;
         },
 
         templateData: function() {
             return {
                 showSharePerm: false
             };
+        },
+
+        events: {
+            "submit": "addRepo",
+            "click #encrypt-switch": "togglePasswdInput"
         },
 
         // Generate the attributes for a new GroupRepo item.
@@ -48,19 +53,20 @@ define([
         // TODO: move to common
         displayValidationErrors: function(model, error, options) {
             this.$('.error').html(error).show();
-            $("#simplemodal-container").css({'height':'auto'});
         },
 
         addRepo: function(e) {
             e.preventDefault();
 
-            this.repos.create(this.newAttributes(), {
+            var repos = this.repos;
+            repos.create(this.newAttributes(), {
                 wait: true,
                 validate: true,
                 prepend: true,  // show newly created repo at first line
                 success: function() {
-                    // No need to show feedback
-                    // Common.feedback('Success', 'success', Common.SUCCESS_TIMEOUT);
+                    if (repos.length == 1) {
+                        repos.fetch({reset: true});
+                    }
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     // TODO: handle error gracefully

@@ -36,7 +36,7 @@ define([
         },
 
         createRepo: function() {
-            new AddPubRepoView(this.repos).render();
+            new AddPubRepoView(this.repos);
         },
 
         addOne: function(repo, collection, options) {
