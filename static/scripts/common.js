@@ -115,7 +115,8 @@ define([
 
               case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
 
-              case 'ajax_unsetinnerpub': return siteRoot + 'ajax/repo/unsetinnerpub/' + options.repo_id + '/';
+              case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
+
             }
         },
 

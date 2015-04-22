@@ -37,7 +37,7 @@ define([
             var el = this.$el;
             Common.ajaxGet({
                 get_url: Common.getUrl({
-                    name:'ajax_unsetinnerpub',
+                    name: 'ajax_unset_inner_pub_repo',
                     repo_id: this.model.get('id')
                 }),
                 data: {
@@ -47,9 +47,7 @@ define([
                     el.remove();
                     Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
                 },
-                after_op_error: function() {
-                    // TODO
-                }
+                after_op_error: Common.ajaxErrorHandler
             });
         }
 
