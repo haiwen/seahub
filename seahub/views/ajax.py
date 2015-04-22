@@ -1798,8 +1798,14 @@ def get_file_op_url(request, repo_id):
                             content_type=content_type)
 
     url = ''
-    token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                    op_type, username)
+    if op_type.startswith('update'):
+        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
+                                                        op_type, username)
+    else:
+        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
+                                                        op_type, username,
+                                                        use_onetime=False)
+
     url = gen_file_upload_url(token, op_type + '-aj')
 
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
@@ -1829,7 +1835,8 @@ def get_file_upload_url_ul(request, token):
 
     acc_token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                         'upload',
-                                                        request.user.username)
+                                                        request.user.username,
+                                                        use_onetime=False)
     url = gen_file_upload_url(acc_token, 'upload-aj')
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
