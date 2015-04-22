@@ -2507,7 +2507,7 @@ def toggle_personal_modules(request):
             content_type=content_type)
 
 @login_required_ajax
-def ajax_unsetinnerpub(request, repo_id):
+def ajax_unset_inner_pub_repo(request, repo_id):
     """
     Unshare repos in organization.
 
@@ -2564,7 +2564,7 @@ def ajax_unsetinnerpub(request, repo_id):
             send_perm_audit_msg('delete-repo-perm', username, 'all', \
                                 perm_repo_id, perm_path, perm)
 
-        return HttpResponse(json.dumps({ "success": True }), content_type=content_type)
+        return HttpResponse(json.dumps({"success": True}), content_type=content_type)
     except SearpcError:
-        return HttpResponse(json.dumps({ "success": False }),
+        return HttpResponse(json.dumps({"error": _('Internal server error')}),
                 status=500, content_type=content_type)

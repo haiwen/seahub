@@ -180,7 +180,7 @@ urlpatterns = patterns('',
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
-    url(r'^ajax/repo/unsetinnerpub/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unsetinnerpub, name='unsetinnerpub'),
+    url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
 
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
