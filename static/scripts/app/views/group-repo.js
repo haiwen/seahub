@@ -44,13 +44,21 @@ define([
         },
 
         unshare: function() {
+            var lib_name = this.model.get('name');
             this.model.destroy({
                 wait: true,
-                success: function(model, rep) {
-                    Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
+                success: function() {
+                    var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(lib_name) + '</span>');
+                    Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
-                error: function() {
-                    Common.feedback(gettext('Error'), 'error', Common.ERROR_TIMEOUT);
+                error: function(model, response) {
+                    var err;
+                    if (response.responseText) {
+                        err = $.parseJSON(response.responseText).error_msg;
+                    } else {
+                        err = gettext("Failed. Please check the network.");
+                    }
+                    Common.feedback(err, 'error');
                 }
             });
         },
