@@ -33,8 +33,9 @@ define([
             this.$el.removeClass('hl').find('.op-icon').addClass('vh');
         },
 
-        removeShare: function(e) {
+        removeShare: function() {
             var el = this.$el;
+            var lib_name = this.model.get('name');
             Common.ajaxGet({
                 get_url: Common.getUrl({
                     name: 'ajax_unset_inner_pub_repo',
@@ -45,9 +46,12 @@ define([
                 },
                 after_op_success: function () {
                     el.remove();
-                    Common.feedback(gettext('Success'), 'success', Common.SUCCESS_TIMOUT);
+                    var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(lib_name) + '</span>');
+                    Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
-                after_op_error: Common.ajaxErrorHandler
+                after_op_error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
             });
         }
 
