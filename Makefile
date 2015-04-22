@@ -5,7 +5,7 @@ develop: setup-git
 setup-git:
 	cd .git/hooks && ln -sf ../../hooks/* ./
 
-dist: locale uglify statici18n collectstatic compressstatic
+dist: locale uglify statici18n collectstatic
 
 locale:
 	@echo "--> Compile locales"
