@@ -1787,6 +1787,7 @@ class DirView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to rename a folder.')
 
+            parent_dir = os.path.dirname(path)
             old_dir_name = os.path.basename(path)
 
             newname = request.POST.get('newname', '')
