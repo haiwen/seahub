@@ -3095,8 +3095,7 @@ class GroupRepo(APIView):
         group_id = group.id
 
         if not group.is_staff and not seafile_api.is_repo_owner(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to delete repo.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if seaserv.is_org_group(group_id):
             org_id = seaserv.get_org_id_by_group(group_id)
