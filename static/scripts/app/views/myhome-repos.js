@@ -81,8 +81,7 @@ define([
         },
 
         createRepo: function() {
-            var addRepoView = new AddRepoView(this.repos);
-            addRepoView.render();
+            new AddRepoView(this.repos);
         },
 
         sortByName: function() {
