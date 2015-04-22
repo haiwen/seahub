@@ -1371,7 +1371,7 @@ def repo_access_file(request, repo_id, obj_id):
     if check_repo_access_permission(repo_id, request.user) or \
             get_file_access_permission(repo_id, path, username) or from_shared_link:
         # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, op, username)
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id, op, username)
     else:
         return render_permission_error(request, _(u'Unable to access file'))
 
@@ -1895,10 +1895,10 @@ def repo_download_dir(request, repo_id):
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
             return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        dir_id,
-                                                        'download-dir',
-                                                        request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
 
         if from_shared_link:
             try:
@@ -1979,8 +1979,8 @@ def pdf_full_view(request):
 
     obj_id = request.GET.get('obj_id', '')
     file_name = request.GET.get('file_name', '')
-    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                    request.user.username)
+    token = seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                              'view', request.user.username)
     file_src = gen_file_get_url(token, file_name)
     return render_to_response('pdf_full_view.html', {
             'file_src': file_src,

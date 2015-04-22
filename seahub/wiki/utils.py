@@ -48,10 +48,17 @@ def get_wiki_dirent(repo_id, page_name):
                 return e
     raise WikiPageMissing
 
+def get_file_url(repo, obj_id, file_name):
+    repo_id = repo.id
+    access_token = seaserv.seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                     'view', '')
+    url = gen_file_get_url(access_token, file_name)
+    return url
+
 def get_inner_file_url(repo, obj_id, file_name):
     repo_id = repo.id
-    access_token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                           'view', '')
+    access_token = seaserv.seafserv_rpc.web_get_access_token(repo_id, obj_id,
+                                                     'view', '')
     url = gen_inner_file_get_url(access_token, file_name)
     return url
 
@@ -142,8 +149,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
                 return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
                     (url_prefix + '/' + page_name.replace('/', '-'), page_name)
 
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                            'view', username)
+            token = seaserv.web_get_access_token(repo_id, obj_id, 'view', username)
             ret = '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
             return smart_str(ret)
         else:

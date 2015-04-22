@@ -20,7 +20,7 @@ from django.utils.translation import ungettext
 from seahub.auth.decorators import login_required, login_required_ajax
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafile_api, get_repo, get_group_repos, get_commits, \
+    web_get_access_token, seafile_api, get_repo, get_group_repos, get_commits, \
     is_group_user, get_group, get_group_members, create_repo, \
     get_org_group_repos, check_permission, is_passwd_set, remove_repo, \
     unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
@@ -1344,8 +1344,8 @@ def group_discuss(request, group):
                     if not att.obj_id:
                         att.err = _(u'File does not exist')
                     else:
-                        att.token = seafile_api.get_fileserver_access_token(
-                            att.repo_id, att.obj_id, 'view', username)
+                        att.token = web_get_access_token(att.repo_id, att.obj_id,
+                                                         'view', username)
                         att.img_url = gen_file_get_url(att.token, att.name)
 
             msg.attachments.append(att)

@@ -1900,10 +1900,10 @@ class DirDownloadView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Unable to download directory "%s": size is too large.' % dirname)
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        dir_id,
-                                                        'download-dir',
-                                                        request.user.username)
+        token = seafserv_rpc.web_get_access_token(repo_id,
+                                                  dir_id,
+                                                  'download-dir',
+                                                  request.user.username)
 
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200,

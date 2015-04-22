@@ -31,7 +31,7 @@ from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
-from seaserv import get_repo, send_message, \
+from seaserv import get_repo, web_get_access_token, send_message, \
     get_commits, check_permission, get_shared_groups_by_repo,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
@@ -54,8 +54,8 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit, do_md5
 from seahub.utils.ip import get_remote_ip
-from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, SF, OPENDOCUMENT, VIDEO)
+from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET,
+                                     MARKDOWN, TEXT, SF, OPENDOCUMENT)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.views import check_folder_permission
@@ -160,7 +160,7 @@ def repo_file_get(raw_path, file_enc):
     return err, file_content, encoding
 
 
-def get_file_view_path_and_perm(request, repo_id, obj_id, path, use_onetime=True):
+def get_file_view_path_and_perm(request, repo_id, obj_id, path):
     """ Get path and the permission to view file.
 
     Returns:
@@ -176,8 +176,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path, use_onetime=True
         return ('', '', user_perm)
     else:
         # Get a token to visit file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                        username, use_onetime=use_onetime)
+        token = web_get_access_token(repo_id, obj_id, 'view', username)
         outer_url = gen_file_get_url(token, filename)
         inner_url = gen_inner_file_get_url(token, filename)
         return (outer_url, inner_url, user_perm)
@@ -255,8 +254,7 @@ def convert_md_link(file_content, repo_id, username):
             if not obj_id:
                 return '''<p class="wiki-page-missing">%s</p>''' %  link_name
 
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                            'view', username)
+            token = web_get_access_token(repo_id, obj_id, 'view', username)
             return '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
         else:
             from seahub.base.templatetags.seahub_tags import file_icon_filter
@@ -335,18 +333,12 @@ def view_file(request, repo_id):
     # construct some varibles
     u_filename = os.path.basename(path)
     current_commit = get_commits(repo_id, 0, 1)[0]
-    # get file type and extension
-    filetype, fileext = get_file_type_and_ext(u_filename)
 
     # Check whether user has permission to view file and get file raw path,
     # render error page if permission deny.
-    if filetype == VIDEO or filetype == AUDIO:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path, use_onetime=False)
-    else:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path)
-
+    raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                  repo_id,
+                                                                  obj_id, path)
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
@@ -356,6 +348,9 @@ def view_file(request, repo_id):
         is_repo_owner = True if repo_owner == username else False
     else:
         is_repo_owner = seafile_api.is_repo_owner(username, repo.id)
+
+    # get file type and extension
+    filetype, fileext = get_file_type_and_ext(u_filename)
 
     img_prev = None
     img_next = None
@@ -402,8 +397,6 @@ def view_file(request, repo_id):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
-        else:
-            pass
 
         template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     else:
@@ -519,19 +512,17 @@ def view_history_file_common(request, repo_id, ret_dict):
     current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         raise Http404
-    # get file type and extension
-    filetype, fileext = get_file_type_and_ext(u_filename)
 
     # Check whether user has permission to view file and get file raw path,
     # render error page if permission  deny.
-    if filetype == VIDEO or filetype == AUDIO:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path, use_onetime=True)
-    else:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path)
-
+    raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
+                                                                  repo_id,
+                                                                  obj_id, path)
     request.user_perm = user_perm
+
+    # get file type and extension
+    filetype, fileext = get_file_type_and_ext(u_filename)
+
     if user_perm:
         # Check file size
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
@@ -664,9 +655,8 @@ def view_shared_file(request, token):
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
-    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                           'view', '',
-                                                           use_onetime=False)
+    access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
+                                                     'view', '')
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
 
@@ -770,8 +760,7 @@ def view_raw_shared_file(request, token, obj_id, file_name):
 
     filename = os.path.basename(file_path)
     username = request.user.username
-    token = seafile_api.get_fileserver_access_token(repo_id, real_obj_id, 'view',
-                                                    username, use_onetime=False)
+    token = web_get_access_token(repo_id, real_obj_id, 'view', username)
     outer_url = gen_file_get_url(token, filename)
     return HttpResponseRedirect(outer_url)
 
@@ -802,8 +791,8 @@ def view_file_via_shared_dir(request, token):
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
-    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                           'view', '', use_onetime=False)
+    access_token = seafserv_rpc.web_get_access_token(repo.id, obj_id,
+                                                     'view', '')
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
 
@@ -993,8 +982,7 @@ def file_edit(request, repo_id):
     if not obj_id:
         return render_error(request, _(u'The file does not exist.'))
 
-    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                    request.user.username)
+    token = web_get_access_token(repo_id, obj_id, 'view', request.user.username)
 
     # generate path and link
     zipped = gen_path_link(path, repo.name)
@@ -1141,8 +1129,8 @@ def download_file(request, repo_id, obj_id):
     if check_repo_access_permission(repo_id, request.user) or \
             get_file_access_permission(repo_id, path, username) or from_shared_link:
         # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                        'download', username)
+        token = seafserv_rpc.web_get_access_token(repo_id, obj_id, 'download',
+                                                  username)
     else:
         messages.error(request, _(u'Unable to download file'))
         next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
@@ -1181,9 +1169,10 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
         permission = check_repo_access_permission(repo_id, request.user)
         if permission:
             # Get a token to visit file
-            token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
-                                                            'view',
-                                                            request.user.username)
+            token = seafserv_rpc.web_get_access_token(repo_id,
+                                                      obj_id,
+                                                      'view',
+                                                      request.user.username)
         else:
             return None, 'permission denied'
 
@@ -1403,14 +1392,8 @@ def view_priv_shared_file(request, token):
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
-    if filetype == VIDEO or filetype == AUDIO:
-        access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                               'view', username,
-                                                               use_onetime=False)
-    else:
-        access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                               'view', username)
-
+    access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
+                                                           'view', username)
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
 

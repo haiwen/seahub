@@ -1225,8 +1225,8 @@ def download_enc_file(request, repo_id, file_id):
 
     blklist = blks.split('\n')
     blklist = [i for i in blklist if len(i) == 40]
-    token = seafile_api.get_fileserver_access_token(repo_id, file_id,
-                                                    op, request.user.username)
+    token = seafserv_rpc.web_get_access_token(repo_id, file_id,
+                                              op, request.user.username)
     url = gen_block_get_url(token, None)
     result = {
         'blklist':blklist,
