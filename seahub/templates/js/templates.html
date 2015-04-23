@@ -195,6 +195,9 @@
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+                <% if (is_repo_owner) { %>
+                <li><a class="op set-permission" href="#">{% trans "Permission" %}</a></li>
+                <% } %>
             </ul>
             <% } %>
         </div>
@@ -561,4 +564,97 @@
     </ul>
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
+</script>
+<script type="text/template" id="folder-perm-item-tmpl">
+    <% for (var i = 0, len = perms.length; i < len; i++) { %>
+        <% if (is_user) { %>
+            <tr class="folder-perm-item" data-user="<%= perms[i].user %>" data-perm="<%= perms[i].perm %>">
+            <td><a href="{{ SITE_ROOT }}profile/<%= perms[i].user %>/" target="_blank"><%= perms[i].user %></a></td>
+        <% } else { %>
+            <tr class="folder-perm-item" data-group_id="<%= perms[i].group_id %>" data-perm="<%= perms[i].perm %>">
+            <td><a href="#/group/<%= perms[i].group_id %>/" target="_blank"><%= perms[i].group_name %></a></td>
+        <% } %>
+        <td>
+            <div class="perm-change">
+                <% if (perms[i].perm == 'rw') { %>
+                    <span class="perm-cur-value">{% trans "Read-Write" %}</span>
+                <% } else { %>
+                    <span class="perm-cur-value">{% trans "Read-Only" %}</span>
+                <% } %>
+                <img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+            </div>
+            <select class="perm-toggle-select hide w100">
+                <% if (perms[i].perm == 'rw') { %>
+                    <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
+                    <option value="r" >{% trans "Read-Only" %}</option>
+                <% } else { %>
+                    <option value="rw" >{% trans "Read-Write" %}</option>
+                    <option value="r" selected="selected" >{% trans "Read-Only" %}</option>
+                <% } %>
+            </select>
+        </td>
+        <td>
+            <img src="{{ MEDIA_URL }}img/rm.png" class="perm-delete-btn op-icon vh" title="Delete">
+        </td>
+    </tr>
+    <% } %>
+</script>
+<script type="text/template" id="set-folder-perm-tmpl">
+    <h3 class="hd"><%= title %></h3>
+    <div id="set-folder-perm-tabs" class="left-right-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
+            <li class="tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+        </ul>
+        <div class="fright">
+            <div id="user-folder-perm" class="tabs-panel">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th width="50%">User</th>
+                            <th width="30%">Permission</th>
+                            <th width="20%"></th>
+                        </tr>
+                        <tr id="user-folder-perm-form">
+                            <td>
+                                <input name="email" placeholder="{% trans 'Email' %}" class="w100" />
+                            </td>
+                            <td>
+                                <select name="permission" class="folder-permission-select w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                                    <option value="r">{% trans "Read-Only" %}</option>
+                                </select>
+                            </td>
+                            <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div id="group-folder-perm" class="tabs-panel">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th width="50%">Group</th>
+                            <th width="30%">Permission</th>
+                            <th width="20%"></th>
+                        </tr>
+                        <tr id="group-folder-perm-form">
+                            <td>
+                                <select name="group" placeholder="{% trans 'Group' %}" class="w100" multiple="multiple"></select>
+                            </td>
+                            <td>
+                                <select name="permission" class="folder-permission-select w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                                    <option value="r">{% trans "Read-Only" %}</option>
+                                </select>
+                            </td>
+                            <td>
+                            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </script>

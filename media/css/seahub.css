@@ -2162,11 +2162,13 @@ textarea:-moz-placeholder {/* for FF */
     padding:2px;
 }
 /* file/dir share popup */
+#folder-perm-popup,
 #file-share,
 #share-popup {
     padding:15px;
     min-height:200px;
 }
+#folder-perm-popup .hd
 #file-share .hd,
 #share-popup .hd {
     margin:0 0 8px 4px;
@@ -3493,7 +3495,6 @@ textarea:-moz-placeholder {/* for FF */
 #multi-dirents-op .del-dirents {
     background-position: -57px -5px;
 }
-
 #dir-private-share .label {
     margin:6px 0 8px;
 }
@@ -3519,4 +3520,28 @@ textarea:-moz-placeholder {/* for FF */
     width:202px;
     height:36px;
     margin:21px 0 10px;
+}
+
+/* user & group folder perm */
+#group-folder-perm,
+#user-folder-perm {
+    width:400px;
+}
+#group-folder-perm .folder-permission-select,
+#user-folder-perm .folder-permission-select {
+    position:relative;/*for long text in other lang in 'share admin'*/
+    height:30px;
+    padding:3px 2px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:2px;
+}
+#group-folder-perm .submit,
+#user-folder-perm .submit {
+    margin-top:2px;
+    height:30px;
+}
+#group-folder-perm .select2-choices,
+#user-folder-perm .select2-choices {
+    border-radius:2px;
 }
