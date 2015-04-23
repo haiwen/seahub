@@ -3135,7 +3135,7 @@ class GroupRepos(APIView):
             org_id = request.user.org.org_id
             repos = seaserv.get_org_group_repos(org_id, group.id, username)
         else:
-            repos = seaserv.get_group_repos(group.id, username)
+            repos = seafile_api.get_repos_by_group(group.id)
 
         group.is_staff = is_group_staff(group, request.user)
 
@@ -3151,13 +3151,13 @@ class GroupRepos(APIView):
                 "mtime_relative": translate_seahub_time(r.latest_modify),
                 "encrypted": r.encrypted,
                 "permission": check_permission(r.id, username),
-                "owner": r.owner,
-                "owner_nickname": email2nickname(r.owner),
-                "share_from_me": r.share_from_me,
+                "owner": r.user,
+                "owner_nickname": email2nickname(r.user),
+                "share_from_me": True if username == r.user else False,
             }
             repos_json.append(repo)
 
-        return Response({"is_staff":group.is_staff, "repos":repos_json})
+        return Response({"is_staff": group.is_staff, "repos": repos_json})
 
 class GroupRepo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
