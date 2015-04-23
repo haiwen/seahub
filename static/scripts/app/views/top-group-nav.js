@@ -12,7 +12,7 @@ define([
         popupTemplate: _.template($('#top-group-nav-tmpl').html()),
 
         initialize: function() {
-            var popup = $(this.popupTemplate({groups: app.pageOptions.top_nav_groups}));  
+            var popup = $(this.popupTemplate({groups: app.pageOptions.top_nav_groups}));
             this.$el.append(popup);
             popup.css({'right': ($('#top-nav-grp').outerWidth() - popup.outerWidth())/6 * 5});
             this.popup = popup;
@@ -26,7 +26,7 @@ define([
             'click #top-nav-grp-list .item': 'visitGroup'
         },
 
-        showPopup: function() {
+        showPopup: function(e) {
             this.popup.removeClass('hide');
         },
 
@@ -43,6 +43,7 @@ define([
         },
 
         visitGroup: function(e) {
+            this.hidePopup(e);
             location.href = $(e.currentTarget).attr('data-url');
         }
     });
