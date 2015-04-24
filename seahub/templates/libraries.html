@@ -235,7 +235,7 @@ app["pageOptions"] = {
         groups.push({
             'name': '{{group.group_name}}',
             'id': '{{group.id}}',
-            'avatar': '{% grp_avatar grp.id 36 %}'
+            'avatar': '{% grp_avatar group.id 36 %}'
         });
         {% endfor %}
         return groups;
