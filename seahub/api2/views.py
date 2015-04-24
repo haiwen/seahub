@@ -3110,15 +3110,14 @@ class GroupRepos(APIView):
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)
 
-        calculate_repos_last_modify([repo])
         group_repo = {
             "id": repo.id,
             "name": repo.name,
             "desc": repo.desc,
             "size": repo.size,
             "size_formatted": filesizeformat(repo.size),
-            "mtime": repo.latest_modify,
-            "mtime_relative": translate_seahub_time(repo.latest_modify),
+            "mtime": repo.last_modified,
+            "mtime_relative": translate_seahub_time(repo.last_modified),
             "encrypted": repo.encrypted,
             "permission": 'rw',  # Always have read-write permission to owned repo
             "owner": username,
@@ -3147,17 +3146,21 @@ class GroupRepos(APIView):
                 "desc": r.desc,
                 "size": r.size,
                 "size_formatted": filesizeformat(r.size),
-                "mtime": r.latest_modify,
-                "mtime_relative": translate_seahub_time(r.latest_modify),
+                "mtime": r.last_modified,
+                "mtime_relative": translate_seahub_time(r.last_modified),
                 "encrypted": r.encrypted,
-                "permission": check_permission(r.id, username),
+                "permission": r.permission,
                 "owner": r.user,
                 "owner_nickname": email2nickname(r.user),
                 "share_from_me": True if username == r.user else False,
             }
             repos_json.append(repo)
 
-        return Response({"is_staff": group.is_staff, "repos": repos_json})
+        req_from = request.GET.get('from', "")
+        if req_from == 'web':
+            return Response({"is_staff": group.is_staff, "repos": repos_json})
+        else:
+            return Response(repos_json)
 
 class GroupRepo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
