@@ -47,13 +47,14 @@ from seahub.views.modules import get_enabled_mods_by_group, \
 from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING
+    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
+    ENABLE_FOLDER_PERM
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_org_user_events, get_user_events, get_file_type_and_ext, \
-    is_valid_username, send_perm_audit_msg, get_origin_repo_info
+    is_valid_username, send_perm_audit_msg, get_origin_repo_info, is_pro_version
 from seahub.utils.repo import check_group_folder_perm_args, \
     check_user_folder_perm_args, get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
@@ -2229,6 +2230,10 @@ def get_folder_perm_by_path(request, repo_id):
     result = {}
     content_type = 'application/json; charset=utf-8'
 
+    if not (is_pro_version() and ENABLE_FOLDER_PERM):
+        return HttpResponse(json.dumps({"error": True}),
+                            status=403, content_type=content_type)
+
     path = request.GET.get('path', None)
 
     if not path:
@@ -2273,6 +2278,10 @@ def set_user_folder_perm(request, repo_id):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
+
+    if not (is_pro_version() and ENABLE_FOLDER_PERM):
+        return HttpResponse(json.dumps({"error": True}),
+                            status=403, content_type=content_type)
 
     user = request.POST.get('user', None)
     path = request.POST.get('path', None)
@@ -2345,6 +2354,10 @@ def set_group_folder_perm(request, repo_id):
         raise Http404
 
     content_type = 'application/json; charset=utf-8'
+
+    if not (is_pro_version() and ENABLE_FOLDER_PERM):
+        return HttpResponse(json.dumps({"error": True}),
+                            status=403, content_type=content_type)
 
     group_id = request.POST.get('group_id', None)
     path = request.POST.get('path', None)

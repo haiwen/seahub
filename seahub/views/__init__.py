@@ -54,7 +54,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
     user_traffic_over_limit, send_perm_audit_msg, get_origin_repo_info, \
-    is_org_context, get_max_upload_file_size
+    is_org_context, get_max_upload_file_size, is_pro_version
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
@@ -1139,12 +1139,14 @@ def libraries(request):
         # only show guide once
         UserOptions.objects.disable_user_guide(username)
 
+    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
+            'folder_perm_enabled': folder_perm_enabled,
             }, context_instance=RequestContext(request))
 
 @login_required
