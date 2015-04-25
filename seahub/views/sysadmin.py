@@ -16,7 +16,7 @@ from django.template import RequestContext
 from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_emailusers, \
-    CALC_SHARE_USAGE, seafile_api
+    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -975,6 +975,21 @@ def sys_group_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_admin_group_info(request, group_id):
+
+    group_id = int(group_id)
+    group = get_group(group_id)
+    repos = seafile_api.get_repos_by_group(group_id)
+    members = get_group_members(group_id)
+
+    return render_to_response('sysadmin/sys_admin_group_info.html', {
+            'group': group,
+            'repos': repos,
+            'members': members,
             }, context_instance=RequestContext(request))
 
 @login_required

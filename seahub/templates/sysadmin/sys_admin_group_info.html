@@ -1,0 +1,88 @@
+{% extends "admin_base.html" %}
+{% load i18n group_avatar_tags avatar_tags seahub_tags %}
+{% load url from future %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position:relative; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "back to group list" %}"  href="{% url 'sys_group_admin' %}"><span class="icon-chevron-left"></span></a>
+<div class="side-info">
+    <h3 class="hd">{% trans "Group Info" %}</h3>
+    {% grp_avatar group.id 48 %}
+    <dl>
+        <dt>{% trans "Name" %}</dt>
+        <dd>{{ group.group_name}}</dd>
+
+        <dt>{% trans "Creator" %}</dt>
+        <dd><a href="{% url 'user_info' group.creator_name %}">{{ group.creator_name }}</a></dd>
+    </dl>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#library" class="a">{% trans "Libraries" %}</a></li>
+            <li class="tab"><a href="#member" class="a">{% trans "Members" %}</a></li>
+        </ul>
+    </div>
+
+    <div id="library">
+        {% if repos %}
+        <table class="repo-list">
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="35%">{% trans "Name" %}</th>
+                <th width="20%">{% trans "Size" %}</th>
+                <th width="26%">{% trans "Shared By" %}</th>
+                <th width="15%">{% trans "Operations" %}</th>
+            </tr>
+
+            {% for repo in repos %}
+            <tr>
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+                <td><a href="{{ SITE_ROOT }}repo/{{ repo.id }}/">{{ repo.name }}</a></td>
+                <td>{{ repo.size|filesizeformat }}</td>
+                <td><a href="{% url 'user_info' repo.user %}">{{ repo.user }}</a></td>
+                <td data-id="{{ repo.id }}" data-name="{{repo.name}}">
+                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "No library has shared to this group" %}</h2>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="member">
+        <ul class="user-list">
+            {% for m in members %}
+            <li class="user ovhd">
+                <a href="{% url 'user_info' m.user_name %}" class="pic fleft">{% avatar m.user_name 48 %}</a>
+                <div class="txt fright">
+                    <a class="name" href="{% url 'user_info' m.user_name %}">{{ m.user_name|email2nickname }}</a>{% if m.is_staff %}<span> ({% trans "admin" %})</span>{% endif %}
+                    <p>{{ m.user_name }}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+{% include 'snippets/repo_del_popup.html' %}
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include 'snippets/repo_del_js.html' %}
+</script>
+{% endblock %}
