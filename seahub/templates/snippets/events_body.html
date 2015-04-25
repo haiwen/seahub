@@ -10,7 +10,7 @@
             {% if e.etype == "repo-update" %}
             {% with repo=e.repo commit=e.commit %} 
             <p class="w100 ovhd">
-            <a href="{% url 'repo' repo.id %}" class="updated-repo normal fright">{{ repo.name }}</a>
+            <a href="{% url 'view_common_lib_dir' repo.id '' %}" class="updated-repo normal fright">{{ repo.name }}</a>
             <span class="cmt-desc">
             {{ commit.converted_cmmt_desc|translate_commit_desc_escape|safe }}
             {% if commit.more_files %}
@@ -26,7 +26,7 @@
             {% endif %}
 
             {% if e.etype == "repo-create" %}
-            <p>{% trans "Created library" %} <a href="{% url 'repo' e.repo_id %}" class="normal">{{ e.repo_name }}</a></p>
+            <p>{% trans "Created library" %} <a href="{% url 'view_common_lib_dir' e.repo_id '' %}" class="normal">{{ e.repo_name }}</a></p>
             {% endif %}
 
             {% if e.etype == "repo-delete" %}

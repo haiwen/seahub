@@ -25,7 +25,7 @@
         {% else %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
         {% endif %}
-        <td><a href="{% url 'repo' repo.props.repo_id %}">{{ repo.props.repo_name }}</a></td>
+        <td><a href="{% url 'view_common_lib_dir' repo.props.repo_id '' %}">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.user }}</td>
         <td>
             <div class="share-permission">

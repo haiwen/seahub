@@ -665,7 +665,8 @@ def view_priv_shared_folder(request, repo_id):
     if not repo.is_virtual:
         raise Http404
 
-    url = reverse('repo', args=[repo.origin_repo_id]) + '?p=' + repo.origin_path
+    url = reverse('view_common_lib_dir',
+            args=[repo.origin_repo_id, repo.origin_path.strip('/')])
     return HttpResponseRedirect(url)
 
 @login_required_ajax

@@ -1023,7 +1023,7 @@ def repo_history_revert(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        href = reverse("repo", args=[repo_id]) + '?p=/%s' % urllib2.quote(path.encode('utf-8'))
+        href = reverse("view_common_lib_dir", args=[repo_id, urllib2.quote(path.encode('utf-8')).strip('/')])
     else:
         href = reverse("view_lib_file", args=[repo_id, urllib2.quote(path.encode('utf-8'))])
 
@@ -1990,7 +1990,7 @@ def convert_cmmt_desc_link(request):
                 reverse('view_lib_file', args=[repo_id, '/' + urlquote(d.new_name)]))
         elif d.status == 'newdir':
             return HttpResponseRedirect(
-                reverse('repo', args=[repo_id]) + '?p=/%s' % urlquote(d.name))
+                reverse('view_common_lib_dir', args=[repo_id, urlquote(d.name).strip('/')]))
         else:
             continue
 
@@ -2073,3 +2073,13 @@ def underscore_template(request, template):
 
     return render_to_response(template, {},
                               context_instance=RequestContext(request))
+
+def fake_view(request, **kwargs):
+    """
+    Used for 'view_common_lib_dir' and 'view_group' url
+
+    As the two urls aboved starts with '#',
+    http request will not access this function
+    """
+    pass
+

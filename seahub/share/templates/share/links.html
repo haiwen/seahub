@@ -29,9 +29,9 @@
                 <td><a href="{% url 'view_lib_file' fs.repo.id fs.path|urlencode %}">{{ fs.filename }}</a></td>
                 {% else %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                <td><a href="{% url 'repo' fs.repo.id %}?p={{ fs.path|urlencode }}">{{ fs.filename }}</a></td>
+                <td><a href="{% url 'view_common_lib_dir' fs.repo.id fs.path|urlencode|strip_slash %}">{{ fs.filename }}</a></td>
                 {% endif %}
-                <td><a href="{{ SITE_ROOT }}repo/{{ fs.repo.id }}/">{{ fs.repo.name }}</a></td>
+                <td><a href="{% url 'view_common_lib_dir' fs.repo.id '' %}">{{ fs.repo.name }}</a></td>
                 <td>{{ fs.view_cnt }}</td>
                 <td>
                     <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}" />
@@ -61,8 +61,8 @@
             {% for link in uploadlinks %}
             <tr>
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                <td><a href="{% url 'repo' link.repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
-                <td><a href="{{ SITE_ROOT }}repo/{{ link.repo.id }}/">{{ link.repo.name }}</a></td>
+                <td><a href="{% url 'view_common_lib_dir' link.repo.id link.path|urlencode|strip_slash %}">{{ link.dir_name }}</a></td>
+                <td><a href="{% url 'view_common_lib_dir' link.repo.id '' %}">{{ link.repo.name }}</a></td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
                     <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}" />

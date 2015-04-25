@@ -51,7 +51,7 @@
                     {% for link in uploadlinks %}
                     <tr>
                         <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                        <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.dir_name }}</a></td>
+                        <td><a href="{% url 'view_common_lib_dir' repo.id link.path|urlencode|strip_slash %}">{{ link.dir_name }}</a></td>
                         <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                         <td>--</td>
                         <td>{{ link.view_cnt }}</td>
@@ -78,7 +78,7 @@
                     <tr>
                         {% if link.s_type == 'd'%}
                         <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                        <td><a href="{% url 'repo' repo.id %}?p={{ link.path|urlencode }}">{{ link.filename }}</a></td>
+                        <td><a href="{% url 'view_common_lib_dir' repo.id link.path|urlencode|strip_slash %}">{{ link.filename }}</a></td>
                         <td><a href="{% url 'user_profile' link.username %}">{{ link.username|email2nickname }}</a></td>
                         {% else %}
                         <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ link.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>

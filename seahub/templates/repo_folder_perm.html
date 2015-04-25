@@ -69,7 +69,7 @@
                 {% for perm in user_folder_perms %}
                 <tr class="perm-item" data-user="{{ perm.user }}" data-path="{{ perm.path }}" data-perm="{{ perm.permission }}">
                     <td><a href="{% url 'user_profile' perm.user %}">{{ perm.user }}</a></td>
-                    <td><span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span></td>
+                    <td><span><a href="{% url 'view_common_lib_dir' repo.id perm.path|urlencode|strip_slash %}">{{ perm.folder_name }}</a></span></td>
                     <td>
                         <div class="perm-change">
                           {% if perm.permission == 'rw' %}
@@ -123,10 +123,8 @@
                 {% if group_folder_perms %}
                 {% for perm in group_folder_perms %}
                     <tr class="perm-item" data-group_id="{{ perm.group_id }}" data-path="{{ perm.path }}" data-perm="{{ perm.permission }}">
-                        <td><a href="{% url 'group_info' perm.group_id %}">{{ perm.group_name }}</a></td>
-                        <td>
-                            <span><a href="{{ perm.folder_link }}">{{ perm.folder_name }}</a></span>
-                        </td>
+                        <td><a href="{% url 'view_group' perm.group_id %}">{{ perm.group_name }}</a></td>
+                        <td><span><a href="{% url 'view_common_lib_dir' repo.id perm.path|urlencode|strip_slash %}">{{ perm.folder_name }}</a></span></td>
                         <td>
                             <div class="perm-change">
                               {% if perm.permission == 'rw' %}

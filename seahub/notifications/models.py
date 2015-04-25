@@ -513,7 +513,7 @@ class UserNotification(models.Model):
 
         msg = _(u"%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to you.") %  {
             'user': escape(share_from),
-            'href': reverse('repo', args=[repo.id]),
+            'href': reverse('view_common_lib_dir', args=[repo.id, '']),
             'repo_name': escape(repo.name),
             }
         return msg

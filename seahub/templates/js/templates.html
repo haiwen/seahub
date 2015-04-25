@@ -150,6 +150,8 @@
         <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else if (context == 'org') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+    <% } else if (context == 'common') { %>
+        <a href="#my-libs/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else { %>
         <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
         <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /

@@ -415,12 +415,11 @@ def _file_view(request, repo_id, path):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
-                
+
         template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     else:
         ret_dict['err'] = err_msg
         template = 'view_file_base.html'
-
 
     # generate file path navigator
     zipped = gen_path_link(path, repo.name)
