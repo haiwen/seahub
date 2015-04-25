@@ -17,7 +17,7 @@
     {% for group in groups %}
     <tr>
         <td>
-            <a href="{{ SITE_ROOT }}group/{{ group.props.id }}/">{{ group.props.group_name }}</a>
+            <a href="{% url 'sys_admin_group_info' group.id %}">{{ group.props.group_name }}</a>
             {% if group.org_name %}
             <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' group.org_id %}">({{group.org_name}})</a></p>
             {% endif %}
