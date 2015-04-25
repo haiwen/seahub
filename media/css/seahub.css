@@ -2168,7 +2168,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:15px;
     min-height:200px;
 }
-#folder-perm-popup .hd
+#folder-perm-popup .hd,
 #file-share .hd,
 #share-popup .hd {
     margin:0 0 8px 4px;
@@ -2829,7 +2829,10 @@ textarea:-moz-placeholder {/* for FF */
     display: inline-block;
 }
 .perm-add-perm,
+.user-perm-add-perm,
+.group-perm-add-perm,
 .perm-toggle-select,
+#folder-perm-tabs .perm-select,
 .share-permission-select,
 .user-role-select,
 .user-status-select {
@@ -3396,17 +3399,6 @@ textarea:-moz-placeholder {/* for FF */
 .group-perm-add-tr input {
     padding:2px 5px;
 }
-
-.user-perm-add-perm,
-.group-perm-add-perm,
-.perm-toggle-select,
-.share-permission-select {
-    position:relative;/*for long text in other lang in 'share admin'*/
-    padding:3px 2px;
-    background:#fff;
-    border:1px solid #ddd;
-    border-radius:2px;
-}
 .perm-add-select-folder {
     position:relative;
     right:18px;
@@ -3523,25 +3515,19 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* user & group folder perm */
-#group-folder-perm,
-#user-folder-perm {
+#folder-perm-tabs .tabs-panel {
     width:400px;
 }
-#group-folder-perm .folder-permission-select,
-#user-folder-perm .folder-permission-select {
-    position:relative;/*for long text in other lang in 'share admin'*/
+#folder-perm-tabs .perm-select {
     height:30px;
-    padding:3px 2px;
-    background:#fff;
-    border:1px solid #ddd;
-    border-radius:2px;
 }
-#group-folder-perm .submit,
-#user-folder-perm .submit {
+#folder-perm-tabs .submit {
     margin-top:2px;
     height:30px;
 }
-#group-folder-perm .select2-choices,
-#user-folder-perm .select2-choices {
+#folder-perm-tabs .select2-choices {
     border-radius:2px;
+}
+#folder-perm-tabs table {
+    margin-top:0;
 }

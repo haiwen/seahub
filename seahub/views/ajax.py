@@ -2248,13 +2248,12 @@ def get_folder_perm_by_path(request, repo_id):
             group_result_perm = {
                 "perm": group_perm.permission,
                 "group_id": group_perm.group_id,
-                "group_name": escape(get_group(group_perm.group_id).group_name),
+                "group_name": get_group(group_perm.group_id).group_name,
             }
             group_result_perms.append(group_result_perm)
 
     result['user_perms'] = user_result_perms
     result['group_perms'] = group_result_perms
-    result['success'] = True
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 

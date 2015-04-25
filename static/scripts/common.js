@@ -280,11 +280,6 @@ define([
                 after_op_error = params.after_op_error;
             } else {
                 after_op_error = function(xhr, textStatus, errorThrown) {
-                    if (xhr.responseText) {
-                        _this.feedback($.parseJSON(xhr.responseText).error, 'error');
-                    } else {
-                        _this.feedback(gettext("Failed. Please check the network."), 'error');
-                    }
                 };
             }
             $.ajax({

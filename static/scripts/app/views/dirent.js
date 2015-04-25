@@ -56,18 +56,7 @@ define([
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
-            'click .set-permission': 'setFolderPerm'
-
-        },
-
-        setFolderPerm: function() {
-            var options = {
-                    'obj_name': this.model.get('obj_name'),
-                    'dir_path': this.dir.path,
-                    'repo_id': this.dir.repo_id
-                };
-            new FolderPermView(options);
-            return false;
+            'click .set-folder-permission': 'setFolderPerm'
         },
 
         highlight: function() {
@@ -447,6 +436,16 @@ define([
                 });
                 return false;
             });
+            return false;
+        },
+
+        setFolderPerm: function() {
+            var options = {
+                'obj_name': this.model.get('obj_name'),
+                'dir_path': this.dir.path,
+                'repo_id': this.dir.repo_id
+            };
+            new FolderPermView(options);
             return false;
         }
 
