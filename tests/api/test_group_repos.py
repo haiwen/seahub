@@ -1,3 +1,4 @@
+import time
 from django.core.urlresolvers import reverse
 
 from tests.api.apitestbase import ApiTestBase
@@ -15,7 +16,7 @@ class GroupRepoTest(ApiTestBase):
 
     def test_can_add(self):
         with self.get_tmp_group() as group:
-            resp = self.create_group_repo(group.group_id)
+            resp = self.create_group_repo(group.group_id, permission='rw')
 
             assert resp.status_code == 200
             resp_json = resp.json()
@@ -25,6 +26,14 @@ class GroupRepoTest(ApiTestBase):
             assert resp_json['mtime'] > 0
             assert resp_json['permission'] == 'rw'
             assert '</time>' in resp_json['mtime_relative']
+
+    def test_can_add_read_only(self):
+        with self.get_tmp_group() as group:
+            resp = self.create_group_repo(group.group_id, permission='r')
+
+            assert resp.status_code == 200
+            resp_json = resp.json()
+            assert resp_json['permission'] == 'r'
 
     def test_add_with_wrong_perm(self):
         with self.get_tmp_group() as group:
@@ -49,6 +58,23 @@ class GroupRepoTest(ApiTestBase):
             assert resp_repo['mtime'] > 0
             assert resp_repo['permission'] in ('r', 'rw')
             assert '</time>' in resp_repo['mtime_relative']
+
+    def test_order_by_mtime(self):
+        with self.get_tmp_group() as group:
+            self.create_group_repo(group.group_id)
+            time.sleep(1)
+            self.create_group_repo(group.group_id)
+            time.sleep(1)
+            self.create_group_repo(group.group_id)
+
+            path = apiurl(reverse("api2-grouprepos", args=[group.group_id]))
+            resp = self.get(path)
+
+            assert resp.status_code == 200
+            assert len(resp.json()) == 3
+
+            assert (resp.json()[0]['mtime'] > resp.json()[1]['mtime'] and
+                    resp.json()[1]['mtime'] > resp.json()[2]['mtime'] )
 
     def test_can_delete(self):
         with self.get_tmp_group() as group:
