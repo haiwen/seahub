@@ -19,24 +19,24 @@ def list_dir_by_path(cmmt, path):
 
 def check_user_folder_perm_args(from_user, repo_id, path, to_user, perm=None):
     if not seafile_api.get_repo(repo_id):
-        return {'error': _(u'Library does not exist.'), 'status': 400}
+        return {'error': _(u'Library does not exist'), 'status': 400}
 
-    if check_repo_access_permission(repo_id, from_user) != 'rw':
+    if from_user != seafile_api.get_repo_owner(repo_id):
         return {'error': _('Permission denied'), 'status': 403}
 
     if perm is not None:
         # add or toggle folder perm
-        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-            return {'error': _('Invalid path'), 'status': 400}
-
         if perm != 'r' and perm != 'rw':
-            return {'error': _('Invalid folder permission'), 'status': 400}
+            return {'error': _('Invalid folder permission, should be "rw" or "r"'), 'status': 400}
 
     if not path.startswith('/'):
         return {'error': _('Path should start with "/"'), 'status': 400}
 
     if path != '/' and path.endswith('/'):
         return {'error': _('Path should NOT ends with "/"'), 'status': 400}
+
+    if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+        return {'error': _('Invalid path'), 'status': 400}
 
     try:
         user = User.objects.get(email = to_user)
@@ -52,22 +52,22 @@ def check_group_folder_perm_args(from_user, repo_id, path, group_id, perm = None
     if not seafile_api.get_repo(repo_id):
         return {'error': _(u'Library does not exist.'), 'status': 400}
 
-    if check_repo_access_permission(repo_id, from_user) != 'rw':
+    if from_user != seafile_api.get_repo_owner(repo_id):
         return {'error': _('Permission denied'), 'status': 403}
 
     if perm is not None:
         # add or toggle folder perm
-        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
-            return {'error': _('Invalid path'), 'status': 400}
-
         if perm != 'r' and perm != 'rw':
-            return {'error': _('Invalid folder permission'), 'status': 400}
+            return {'error': _('Invalid folder permission, should be "rw" or "r"'), 'status': 400}
 
     if not path.startswith('/'):
         return {'error': _('Path should start with "/"'), 'status': 400}
 
     if path != '/' and path.endswith('/'):
         return {'error': _('Path should NOT ends with "/"'), 'status': 400}
+
+    if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+        return {'error': _('Invalid path'), 'status': 400}
 
     if not seaserv.get_group(group_id):
         return {'error': _('Invalid group'), 'status': 400}

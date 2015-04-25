@@ -117,6 +117,9 @@ define([
 
               case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
 
+              case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
+              case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
+              case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
             }
         },
 

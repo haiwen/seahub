@@ -4,8 +4,9 @@ define([
     'backbone',
     'common',
     'file-tree',
-    'app/views/share'
-], function($, _, Backbone, Common, FileTree, ShareView) {
+    'app/views/share',
+    'app/views/folder-perm'
+], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView) {
     'use strict';
 
     app = app || {};
@@ -37,6 +38,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 user_perm: dir.user_perm,
+                is_repo_owner: dir.is_repo_owner,
                 repo_encrypted: dir.encrypted
             }));
             return this;
@@ -53,7 +55,8 @@ define([
             'click .delete': 'delete',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
-            'click .cp': 'mvcp'
+            'click .cp': 'mvcp',
+            'click .set-folder-permission': 'setFolderPerm'
         },
 
         highlight: function() {
@@ -433,6 +436,16 @@ define([
                 });
                 return false;
             });
+            return false;
+        },
+
+        setFolderPerm: function() {
+            var options = {
+                'obj_name': this.model.get('obj_name'),
+                'dir_path': this.dir.path,
+                'repo_id': this.dir.repo_id
+            };
+            new FolderPermView(options);
             return false;
         }
 

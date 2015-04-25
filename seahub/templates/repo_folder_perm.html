@@ -234,12 +234,12 @@ $('.perm-toggle-select').on('change', function() {
 
     if (is_user_tab == true) {
         var user = perm_item.attr('data-user'),
-            data = { 'user': user, 'path': path, 'perm': perm },
-            url = '{% url 'toggle_user_folder_permission' repo.id %}';
+            data = {'user': user, 'path': path, 'perm': perm, 'type': 'modify'},
+            url = '{% url 'set_user_folder_perm' repo.id %}';
     } else {
         var group_id = perm_item.attr('data-group_id'),
-            data = { 'group_id': group_id, 'path': path, 'perm': perm },
-            url = '{% url 'toggle_group_folder_permission' repo.id %}';
+            data = {'group_id': group_id, 'path': path, 'perm': perm, 'type': 'modify'},
+            url = '{% url 'set_group_folder_perm' repo.id %}';
     }
 
     perm_toggle(select, data, url)
@@ -251,17 +251,20 @@ $('.perm-delete-btn').on('click', function() {
 
     if (is_user_tab == true) {
         var user = perm_item.attr('data-user'),
-            data = { 'user': user, 'path': path, 'perm': perm },
-            url = '{% url 'remove_user_folder_permission' repo.id %}';
+            data = {'user': user, 'path': path, 'perm': perm, 'type': 'delete'},
+            url = '{% url 'set_user_folder_perm' repo.id %}';
     } else {
         var group_id = perm_item.attr('data-group_id'),
-            data = { 'group_id': group_id, 'path': path, 'perm': perm},
-            url = '{% url 'remove_group_folder_permission' repo.id %}';
+            data = {'group_id': group_id, 'path': path, 'perm': perm, 'type': 'delete'},
+            url = '{% url 'set_group_folder_perm' repo.id %}';
     }
 
     $.ajax({
         url: url,
+        type: 'POST',
+        cache: false,
         dataType: 'json',
+        beforeSend: prepareCSRFToken,
         data: data,
         success: function() {
             perm_item.remove();
@@ -279,8 +282,8 @@ $('.perm-add-submit').click(function() {
 
         var user = user_input.val(),
             perm = $('.user-perm-add-perm').val(),
-            data = { 'user': user, 'path': path, 'perm': perm },
-            url = '{% url 'add_user_folder_permission' repo.id %}';
+            data = {'user': user, 'path': path, 'perm': perm, 'type': 'add'},
+            url = '{% url 'set_user_folder_perm' repo.id %}';
     } else {
         var path = $('.group-perm-add-folder-path').val();
         if (!$.trim(path)) {
@@ -289,8 +292,8 @@ $('.perm-add-submit').click(function() {
 
         var group_id = $('#perm-add-grp-id').val(),
             perm = $('.group-perm-add-perm').val(),
-            data = { 'group_id': group_id, 'path': path, 'perm': perm },
-            url = '{% url 'add_group_folder_permission' repo.id %}';
+            data = {'group_id': group_id, 'path': path, 'perm': perm, 'type': 'add'},
+            url = '{% url 'set_group_folder_perm' repo.id %}';
     }
 
     $.ajax({
