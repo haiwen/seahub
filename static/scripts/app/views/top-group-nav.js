@@ -26,7 +26,7 @@ define([
             'click #top-nav-grp-list .item': 'visitGroup'
         },
 
-        showPopup: function() {
+        showPopup: function(e) {
             this.popup.removeClass('hide');
         },
 
@@ -43,6 +43,7 @@ define([
         },
 
         visitGroup: function(e) {
+            this.hidePopup(e);
             location.href = $(e.currentTarget).attr('data-url');
         }
     });
