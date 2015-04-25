@@ -89,7 +89,7 @@ $('#contact-edit-form').submit(function() {
             'contact_email': form.find('input[name="contact_email"]').val(),
             'contact_name': form.find('input[name="contact_name"]').val(),
             'note': form.find('input[name="note"]').val()
-        },  
+        },
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
@@ -140,7 +140,7 @@ $('#contact-add-form').submit(function() {
             'contact_email': email,
             'contact_name': form.find('input[name="contact_name"]').val(),
             'note': form.find('input[name="note"]').val()
-        },  
+        },
         success: function(data) {
             if (data['success']) {
                 location.reload(true);

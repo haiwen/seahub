@@ -12,7 +12,7 @@ AVATAR_STORAGE_DIR = getattr(settings, 'AVATAR_STORAGE_DIR', 'avatars')
 AVATAR_DEFAULT_URL = getattr(settings, 'AVATAR_DEFAULT_URL', 'avatar/img/default.png')
 AVATAR_DEFAULT_NON_REGISTERED_URL = getattr(settings, 'AVATAR_DEFAULT_NON_REGISTERED_URL', '/avatars/default-non-register.jpg')
 AUTO_GENERATE_AVATAR_SIZES = getattr(settings, 'AUTO_GENERATE_AVATAR_SIZES', (AVATAR_DEFAULT_SIZE,))
-    
+
 ### Group avatars ###
 GROUP_AVATAR_DEFAULT_SIZE = getattr(settings, 'GROUP_AVATAR_DEFAULT_SIZE', 48)
 GROUP_AVATAR_STORAGE_DIR = getattr(settings, 'GROUP_AVATAR_STORAGE_DIR', 'avatars/groups')

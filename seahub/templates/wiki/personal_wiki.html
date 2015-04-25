@@ -32,9 +32,9 @@
         <h2 class="alc">{% trans "You do not have personal wiki" %}</h2>
         <p>{% trans "Seafile Wiki enables you to organize your knowledge in a simple way. The contents of wiki is stored in a normal library with pre-defined file/folder structure. This enables you to edit your wiki in your desktop and then sync back to the server." %}</p>
         <a id="wiki-create" href="#">{% trans "Create Wiki Now" %}</a>
-        {% if owned_repos %} 
+        {% if owned_repos %}
         <br /><a id="wiki-use-lib" href="#">{% trans "Choose a library as wiki" %}</a>
-        {% endif %} 
+        {% endif %}
     </div>
     <form id="wiki-create-form" action="" method="post" class="hide">{% csrf_token %}
         <h3>{% trans "Create Wiki" %}</h3>
@@ -102,11 +102,11 @@ $('#wiki-content')
 .find('h1, h2').hover(
     function() {
         $('.anchor', $(this)).removeClass('vh');
-    },  
+    },
     function() {
         $('.anchor', $(this)).addClass('vh');
     }
-);  
+);
 
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});

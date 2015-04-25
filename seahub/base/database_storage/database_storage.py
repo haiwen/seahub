@@ -235,6 +235,6 @@ class DatabaseStorage(Storage):
         if not row:
             raise ObjectDoesNotExist(
                 "DatabaseStorage file not found: %s" % name)
-        
+
         return row[0]
-    
+

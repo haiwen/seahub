@@ -26,7 +26,7 @@ class ProfileTestCase(TestCase):
         user = User.objects.get(username='testclient')
         self.assertRaises(SiteProfileNotAvailable, user.get_profile)
 
-        # Bad syntax in AUTH_PROFILE_MODULE: 
+        # Bad syntax in AUTH_PROFILE_MODULE:
         settings.AUTH_PROFILE_MODULE = 'foobar'
         self.assertRaises(SiteProfileNotAvailable, user.get_profile)
 

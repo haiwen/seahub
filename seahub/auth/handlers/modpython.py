@@ -10,7 +10,7 @@ def authenhandler(req, **kwargs):
     # that so that the following import works
     os.environ.update(req.subprocess_env)
 
-    # apache 2.2 requires a call to req.get_basic_auth_pw() before 
+    # apache 2.2 requires a call to req.get_basic_auth_pw() before
     # req.user and friends are available.
     req.get_basic_auth_pw()
 
@@ -40,7 +40,7 @@ def authenhandler(req, **kwargs):
             user = User.objects.get(**kwargs)
         except User.DoesNotExist:
             return apache.HTTP_UNAUTHORIZED
-    
+
         # check the password and any permission given
         if user.check_password(req.get_basic_auth_pw()):
             if permission_name:

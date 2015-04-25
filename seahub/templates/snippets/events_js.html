@@ -53,8 +53,8 @@ function reqEvents(start) {
         error: function(jqXHR, textStatus, errorThrown) {
             $('#events-loading').addClass('hide');
             if (!jqXHR.responseText && textStatus != 'abort') {
-                $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
-            }   
+                $('#events-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');
+            }
         }
     });
 }

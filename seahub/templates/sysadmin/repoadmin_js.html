@@ -4,7 +4,7 @@ $('.repo-transfer-btn').click(function(){
         repo_id = btn_ct.data('id'),
         repo_name = btn_ct.attr('data-name'),
         form = $('#repo-transfer-form');
-    
+
     form.modal({appendTo:'#main'});
     $('input[name="repo_id"]', form).val(repo_id);
     var detail = $('.detail', form);

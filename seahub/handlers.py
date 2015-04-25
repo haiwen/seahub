@@ -6,7 +6,7 @@ if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
     def repo_deleted_cb(sender, **kwargs):
         pass
-else:        
+else:
 
     import seafevents
     from utils import SeafEventsSession

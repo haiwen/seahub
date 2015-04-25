@@ -46,27 +46,27 @@ def notification_delete(request, nid):
 def set_primary(request, nid):
     if not request.user.is_staff:
         raise Http404
-    
+
     # TODO: use transaction?
     Notification.objects.filter(primary=1).update(primary=0)
     Notification.objects.filter(id=nid).update(primary=1)
 
     refresh_cache()
-    
+
     return HttpResponseRedirect(reverse('notification_list', args=[]))
 
 ########## user notifications
 @login_required
 def user_notification_list(request):
     """
-    
+
     Arguments:
     - `request`:
     """
     username = request.user.username
     count = 25                  # initial notification count
     limit = 25                   # next a mount of notifications fetched by AJAX
-    
+
     notices = UserNotification.objects.get_user_notifications(username)[:count]
 
     # Add 'msg_from' or 'default_avatar_url' to notice.
@@ -84,7 +84,7 @@ def user_notification_list(request):
 @login_required_ajax
 def user_notification_more(request):
     """Fetch next ``limit`` notifications starts from ``start``.
-    
+
     Arguments:
     - `request`:
     - `start`:
@@ -111,11 +111,11 @@ def user_notification_more(request):
                 'html':html,
                 'notices_more':notices_more,
                 'new_start': new_start}), content_type=ct)
-    
+
 @login_required
 def user_notification_remove(request):
     """
-    
+
     Arguments:
     - `request`:
     """
@@ -129,7 +129,7 @@ def user_notification_remove(request):
 
 def add_notice_from_info(notices):
     '''Add 'msg_from' or 'default_avatar_url' to notice.
-        
+
     '''
     default_avatar_url = get_default_avatar_url()
     for notice in notices:

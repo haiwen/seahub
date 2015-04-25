@@ -31,7 +31,7 @@ class TokenV2Manager(models.Manager):
     def get_user_devices(self, username):
         '''List user devices, most recently used first'''
         devices = super(TokenV2Manager, self).filter(user=username)
-        
+
         platform_priorities = {
             'windows': 0,
             'linux': 0,
@@ -85,7 +85,7 @@ class TokenV2Manager(models.Manager):
                         last_login_ip=last_login_ip)
         token.save()
         return token
-        
+
 
     def delete_device_token(self, username, platform, device_id):
         super(TokenV2Manager, self).filter(user=username, platform=platform, device_id=device_id).delete()

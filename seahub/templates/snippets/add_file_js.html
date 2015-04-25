@@ -1,6 +1,6 @@
 {% load i18n %}
 $('.add-file').click(function(){
-    $('#add-file-popup').modal({focus:false});    
+    $('#add-file-popup').modal({focus:false});
     var file_tree_cont = $('#file-tree');
     $.ajax({
         url: repos_get_url,

@@ -26,9 +26,9 @@ $('.replies-op').hover(
         $(this).children().css({'text-decoration':'none'});
     }
 ).click(function() {
-    var op = $(this), 
-        uf_r = $('.unfold-replies', op), 
-        f_r = $('.fold-replies', op), 
+    var op = $(this),
+        uf_r = $('.unfold-replies', op),
+        f_r = $('.fold-replies', op),
         r_list = op.parent().find('.reply-list'),
         loading = $('.replies-loading-icon', op);
     loading.css({'left': uf_r.outerWidth() - 7});
@@ -68,7 +68,7 @@ $('.replies-op').hover(
             }
         });
     } else {
-        f_r.addClass('hide'); 
+        f_r.addClass('hide');
         uf_r.removeClass('hide');
         r_list.children(':lt(' + (parseInt(uf_r.html()) -3) + ')').each(function() {
             $(this).remove();
@@ -87,8 +87,8 @@ $('.reply-cancel').click(function() {
     p.find('.reply-input').val('').height(20);
 });
 function replyAt() {
-    var r = $(this).parents('.msg-op'); 
-    var r_input = r.find('.reply-input'); 
+    var r = $(this).parents('.msg-op');
+    var r_input = r.find('.reply-input');
     r_input.height(50).val('@' + $(this).attr('data') + ' ');
     r.find('.reply-submit, .reply-cancel').removeClass('hide');
     setCaretPos(r_input[0], r_input.val().length);
@@ -98,7 +98,7 @@ $('.reply-at').click(replyAt);
 $('.reply-form').submit(function() {
     var form = $(this),
         r_input = form.find('.reply-input'),
-        r = $.trim(r_input.val()), 
+        r = $.trim(r_input.val()),
         err = form.find('.error');
 
     if (!r || r.length > 2048) {
@@ -152,14 +152,14 @@ $('.reply-form').submit(function() {
         },
         error:function(jqXHR, textStatus, errorThrown) {
             if (!jqXHR.responseText) {
-                err.html("{% trans "Failed. Please check the network." %}").removeClass('hide'); 
+                err.html("{% trans "Failed. Please check the network." %}").removeClass('hide');
             } else {
                 err.html("{% trans "Failed to post reply." %}").removeClass('hide');
             }
 
             enable(sm);
         }
-    }); 
+    });
     return false;
 });
 {% endif %}

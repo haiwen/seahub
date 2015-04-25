@@ -62,7 +62,7 @@ class PublicGroup(models.Model):
 #             username = member.user_name
 #             if username == from_email:
 #                 continue
-            
+
 #             p = get_first_object_or_none(
 #                 Profile.objects.filter(user=username))
 #             nickname = p.nickname if p else ''

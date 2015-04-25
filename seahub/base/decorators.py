@@ -24,7 +24,7 @@ def sys_staff_required(func):
 def user_mods_check(func):
     """Decorator for views that need user's enabled/available modules.
     Populate modules to ``request.user``.
-    
+
     Arguments:
     - `func`:
     """
@@ -35,7 +35,7 @@ def user_mods_check(func):
         return func(request, *args, **kwargs)
     _decorated.__name__ = func.__name__
     return _decorated
-    
+
 def repo_passwd_set_required(func):
     """
     Decorator for views to redirect user to repo decryption page if repo is
@@ -69,4 +69,4 @@ def repo_passwd_set_required(func):
 
         return func(request, *args, **kwargs)
     return _decorated
-            
+

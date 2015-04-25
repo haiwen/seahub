@@ -47,7 +47,7 @@ from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-########## rpc wrapper    
+########## rpc wrapper
 def is_org_repo_owner(username, repo_id):
     owner = seaserv.seafserv_threaded_rpc.get_org_repo_owner(repo_id)
     return True if owner == username else False
@@ -520,7 +520,7 @@ def list_shared_repos(request):
     """ List user repos shared to users/groups/public.
     """
     share_out_repos = list_share_out_repos(request)
-    
+
     out_repos = []
     for repo in share_out_repos:
         if repo.is_virtual:     # skip virtual repos
@@ -757,7 +757,7 @@ def share_permission_admin(request):
     else:
         return HttpResponse(json.dumps({'success': False}), status=400,
                             content_type=content_type)
-        
+
 # 2 views for anonymous share:
 # - anonymous_share records share infomation to db and sends the mail
 # - anonymous_share_confirm checks the link use clicked and

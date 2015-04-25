@@ -21,9 +21,9 @@
     {% for repo in out_repos %}
     <tr data-repo_name="{{repo.props.repo_name}}" data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
         {% if repo.encrypted %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         {% else %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         {% endif %}
         <td><a href="{% url 'view_common_lib_dir' repo.props.repo_id '' %}">{{ repo.props.repo_name }}</a></td>
         <td>{{ repo.props.user }}</td>
@@ -38,7 +38,7 @@
                 <option value="r">{% trans "Read-Only"%}</option>
                 {% else %}
                 <option value="rw">{% trans "Read-Write"%}</option>
-                {% endif %} 
+                {% endif %}
             </select>
         </td>
         <td>{{ repo.props.repo_desc }}</td>
@@ -106,7 +106,7 @@ $('.share-permission-select').change(function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             cur_perm.removeClass('hide');
-        }   
+        }
     });
 });
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select

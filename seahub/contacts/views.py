@@ -68,7 +68,7 @@ def contact_add_post(request):
         result['success'] = False
         messages.error(request, _(u"%s is already in your contacts.") % contact_email)
         return HttpResponseBadRequest(json.dumps(result), content_type=content_type)
-        
+
     contact_name = request.POST.get('contact_name', '')
     note = request.POST.get('note', '')
 
@@ -94,7 +94,7 @@ def contact_add(request):
     referer = request.META.get('HTTP_REFERER', None)
     if not referer:
         referer = SITE_ROOT
-    
+
     username = request.user.username
     contact_email = request.POST.get('contact_email', '')
     if not is_valid_email(contact_email):
@@ -104,7 +104,7 @@ def contact_add(request):
     if Contact.objects.get_contact_by_user(username, contact_email) is not None:
         messages.error(request, _(u"%s is already in your contacts.") % contact_email)
         return HttpResponseRedirect(referer)
-    
+
     contact_name = request.POST.get('contact_name', '')
     note = request.POST.get('note', '')
 
@@ -140,8 +140,8 @@ def contact_edit(request):
     else:
         return HttpResponseBadRequest(json.dumps(form.errors),
                                       content_type=content_type)
-       
-        
+
+
 @login_required
 def contact_delete(request):
     user_email = request.user.username
@@ -149,5 +149,5 @@ def contact_delete(request):
 
     Contact.objects.filter(user_email=user_email, contact_email=contact_email).delete()
     messages.success(request, _(u'Successfully Deleted %s') % contact_email)
-    
+
     return HttpResponseRedirect(reverse("contact_list"))

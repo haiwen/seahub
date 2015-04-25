@@ -8,19 +8,19 @@
     {% if current_page != 1 or page_next %}
     |
     {% endif %}
-    <span>{% trans "Per page: " %}</span> 
+    <span>{% trans "Per page: " %}</span>
     {% if per_page == 25 %}
-    <span> 25 </span> 
+    <span> 25 </span>
     {% else %}
     <a href="?per_page=25" class="per-page">25</a>
     {% endif %}
     {% if per_page == 50 %}
-    <span> 50 </span> 
+    <span> 50 </span>
     {% else %}
     <a href="?per_page=50" class="per-page">50</a>
     {% endif %}
     {% if per_page == 100 %}
-    <span> 100 </span> 
+    <span> 100 </span>
     {% else %}
     <a href="?per_page=100" class="per-page">100</a>
     {% endif %}

@@ -39,8 +39,8 @@ For details please refer to 'snippets/file_content_js.html'.
             {% endif %}
             <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
         {% endif %}
-        
-        {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
+
+        {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
             {% include 'snippets/office_convert_html.html' %}
         {% endif %}
 

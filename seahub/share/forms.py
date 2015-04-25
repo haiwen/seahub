@@ -24,7 +24,7 @@ class FileLinkShareForm(forms.Form):
     extra_msg = forms.CharField(required=False)
     file_shared_name = forms.CharField()
     file_shared_type = forms.CharField()
-    
+
 class UploadLinkShareForm(forms.Form):
     """
     Form for sharing upload link to emails.

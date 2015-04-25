@@ -17,7 +17,7 @@ function changeAvatar(chg_btn, input, form) {
     input.change(function() {
         chg_btn.css({'background': chg_btn_orig_bg});
         // check file extension
-        var file, filename, ext;    
+        var file, filename, ext;
         var allow = false;
         var allowed_ext = ['jpg','jpeg', 'png', 'gif'];
         if (this.files) { // IE: version lower than 10 doesn't have 'files'
@@ -44,13 +44,13 @@ function changeAvatar(chg_btn, input, form) {
         if (!allow) {
             var err_msg = filename + "{% trans " is not supported. File extensions can only be " %}" + allowed_ext.join(', ');
             feedback(err_msg, 'error');
-            return false;        
+            return false;
         }
 
         // check if file size is less than 1MB
         if (file && file.size > 1024*1024) {
             feedback(filename + "{% trans " is too large. Allowed maximum size is 1MB." %}", 'error');
-            return false;        
+            return false;
         }
 
         form.submit();

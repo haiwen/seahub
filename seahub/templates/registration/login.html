@@ -14,7 +14,7 @@
     text-decoration:none;
 }
 </style>
-{% endblock %} 
+{% endblock %}
 
 {% block nav %}
 <div class="fright" id="lang">
@@ -84,7 +84,7 @@ $('#refresh-captcha').click(function() {
         dataType:'json',
         cache:false,
         success: function(data) {
-            $('.captcha').attr('src', data['image_url']); 
+            $('.captcha').attr('src', data['image_url']);
             $('#id_captcha_0').val(data['key']);
         },
         error: function() {

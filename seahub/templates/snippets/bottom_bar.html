@@ -45,7 +45,7 @@ $('#discuss').click(function() {
         $('[name="path"]', form).val(path);
         // modify attachment dir name
         $('.att-name', form).html($('#cur-dir-name').html());
-    }   
+    }
 
     if (popup.hasClass('hide')) {
         $.ajax({
@@ -60,12 +60,12 @@ $('#discuss').click(function() {
                 popup.removeClass('hide');
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                var err_str = ''; 
+                var err_str = '';
                 if (jqXHR.responseText) {
                     err_str = $.parseJSON(jqXHR.responseText).error;
                     feedback(err_str, 'error');
                 }
-            }   
+            }
         });
     } else {
         popup.addClass('hide');
@@ -81,23 +81,23 @@ $(document).click(function(e) {
     var target = e.target || event.srcElement;
     if (!$('#discuss, #discuss-to-group').is(target) && !($('#discuss, #discuss-to-group').find('*').is(target))) {
         $('#discuss-to-group').addClass('hide');
-    }   
+    }
 });
 
 $('#discuss-submit').click(function() {
     var form = $('#discuss-to-group-form'),
         form_id = form.attr('id');
-    
+
     if (form.find('.checkbox-checked').length == 0) {
         apply_form_error(form_id, "{% trans "Please select at least 1 group." %}");
-        return false;   
+        return false;
     }
 
     if (!$.trim($('#discuss-to-group-form .input').val())) {
         apply_form_error(form_id, "{% trans "Please input a discussion." %}");
-        return false;   
+        return false;
     }
-    form.find('.error').addClass('hide');    
+    form.find('.error').addClass('hide');
 
     var groups = [];
     form.find('.checkbox-checked .checkbox-orig').each(function() {
@@ -128,14 +128,14 @@ $('#discuss-submit').click(function() {
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            var err_str = ''; 
+            var err_str = '';
             if (jqXHR.responseText) {
                 err_str = $.parseJSON(jqXHR.responseText).error;
             } else {
                 err_str = "{% trans "Failed. Please check the network." %}";
-            }   
-            apply_form_error(form_id, err_str); 
-        }   
+            }
+            apply_form_error(form_id, err_str);
+        }
     });
     return false;
 });
@@ -156,6 +156,6 @@ $(document).click(function(e) {
     var target = e.target || event.srcElement;
     if (!$('#click-into-group, #to-group').is(target) && !($('#click-into-group, #to-group').find('*').is(target))) {
         $('#to-group').addClass('hide');
-    }   
+    }
 });
 {% endif %}

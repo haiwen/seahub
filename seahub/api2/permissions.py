@@ -23,7 +23,7 @@ class IsRepoWritable(BasePermission):
         if user and check_permission(repo_id, user) == 'rw':
             return True
         return False
-    
+
 class IsRepoAccessible(BasePermission):
     """
     Check whether user has Read or Write permission to a repo.
@@ -43,4 +43,4 @@ class IsRepoOwner(BasePermission):
         user = request.user.username if request.user else ''
 
         return True if is_repo_owner(user, repo_id) else False
-    
+

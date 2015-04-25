@@ -16,13 +16,13 @@ from fields import LowerCaseCharField
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-class UuidObjidMap(models.Model):    
+class UuidObjidMap(models.Model):
     """
     Model used for store crocdoc uuid and file object id mapping.
     """
     uuid = models.CharField(max_length=40)
     obj_id = models.CharField(max_length=40, unique=True)
-        
+
 class FileDiscuss(models.Model):
     """
     Model used to represents the relationship between group message and file/dir.
@@ -67,7 +67,7 @@ class StarredFile(object):
 class UserStarredFilesManager(models.Manager):
     def get_starred_files_by_username(self, username):
         """Get a user's starred files.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -151,7 +151,7 @@ class GroupEnabledModule(models.Model):
     group_id = models.CharField(max_length=10, db_index=True)
     module_name = models.CharField(max_length=20)
 
-########## misc    
+########## misc
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)
@@ -186,7 +186,7 @@ class InnerPubMsg(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
-    
+
 class InnerPubMsgReply(models.Model):
     reply_to = models.ForeignKey(InnerPubMsg)
     from_email = models.EmailField()

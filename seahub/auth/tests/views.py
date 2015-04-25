@@ -182,7 +182,7 @@ class LoginTest(AuthViewsTestCase):
         site = Site.objects.get_current()
         self.assertEquals(response.context['site'], site)
         self.assertEquals(response.context['site_name'], site.name)
-        self.assert_(isinstance(response.context['form'], AuthenticationForm), 
+        self.assert_(isinstance(response.context['form'], AuthenticationForm),
                      'Login form is not an AuthenticationForm')
 
     def test_security_check(self, password='password'):
@@ -224,7 +224,7 @@ class LoginTest(AuthViewsTestCase):
             self.assertEquals(response.status_code, 302)
             self.assertTrue('/view/?param=%s' % url_ in response['Location'], "/view/?param=%s should be allowed" % url_)
 
-        
+
 class LogoutTest(AuthViewsTestCase):
     urls = 'django.contrib.auth.tests.urls'
 
@@ -249,7 +249,7 @@ class LogoutTest(AuthViewsTestCase):
         self.assert_('Logged out' in response.content)
         self.confirm_logged_out()
 
-    def test_logout_with_next_page_specified(self): 
+    def test_logout_with_next_page_specified(self):
         "Logout with next_page option given redirects to specified resource"
         self.login()
         response = self.client.get('/logout/next_page/')

@@ -37,7 +37,7 @@ class UserMessageManager(models.Manager):
         new_msg.save(using=self._db)
         user_message_sent.send(sender=None, msg=new_msg)
         return new_msg
-    
+
     def update_unread_messages(self, user1, user2):
         """Set ``ifread`` field to 1 for all messages that from ``user1``
         to ``user2``.
@@ -51,7 +51,7 @@ class UserMessageManager(models.Manager):
         """
         return super(UserMessageManager, self).filter(to_email=user,
                                                       ifread=0).count()
-        
+
 
 class UserMessage(models.Model):
     message_id = models.AutoField(primary_key=True)
@@ -83,8 +83,8 @@ class UserMsgAttachmentManager(models.Manager):
         """
 
         return super(UserMsgAttachmentManager, self).filter(user_msg__in=user_msgs)
-        
-        
+
+
 class UserMsgAttachment(models.Model):
     user_msg = models.ForeignKey('UserMessage')
     # Set this field to NULL if file is unshared.

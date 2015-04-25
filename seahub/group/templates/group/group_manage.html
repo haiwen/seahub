@@ -82,7 +82,7 @@
                 {% if group.is_pub %}
                 <li><a href="{% url 'group_revoke_pub' group.id %}">{% trans "Revoke Public" %}</a></li>
                 {% else %}
-                  {% if can_make_group_public %}                  
+                  {% if can_make_group_public %}
                   <li><a href="{% url 'group_make_pub' group.id %}">{% trans "Make Public" %}</a></li>
                   {% endif %}
                 {% endif %}
@@ -116,7 +116,7 @@
 {% block extra_script %}{{block.super}}
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
-var cur_tab = $('.ui-tabs-selected .a');    
+var cur_tab = $('.ui-tabs-selected .a');
 var member_add_btn = $('#group-member-add'),
     admin_add_btn = $('#group-admin-add');
 if (cur_tab.attr('id') == 'members-tab') {

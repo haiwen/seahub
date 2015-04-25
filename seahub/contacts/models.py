@@ -17,7 +17,7 @@ class ContactManager(models.Manager):
                              contact_name=contact_name, note=note)
         contact.save(using=self._db)
         return contact
-        
+
     def get_contacts_by_user(self, user_email):
         """Get a user's contacts.
         """
@@ -63,7 +63,7 @@ class Contact(models.Model):
 
     def __unicode__(self):
         return self.contact_email
-        
+
     # class Meta:
     #     unique_together = ("user_email", "contact_email")
 
@@ -80,7 +80,7 @@ class ContactAddForm(ModelForm):
 class ContactEditForm(ModelForm):
     class Meta:
         model = Contact
-    
+
     def __init__(self, *args, **kwargs):
         super(ContactEditForm, self).__init__(*args, **kwargs)
         self.fields['contact_email'].widget.attrs['readonly'] = True

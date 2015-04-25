@@ -39,12 +39,12 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
             var context = canvas.getContext('2d');
             canvas.height = viewport.height;
             canvas.width = viewport.width;
-            var renderContext = { 
+            var renderContext = {
                 canvasContext: context,
                 viewport: viewport
-            };  
+            };
             page.render(renderContext);
-        }); 
+        });
     };
     PDFJS.getDocument($('#pdf-view').attr('data')).then(function(pdf) {
         $('#page-nums').html(pdf.numPages);

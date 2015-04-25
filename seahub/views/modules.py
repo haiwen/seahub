@@ -12,7 +12,7 @@ def get_available_mods_by_user(username):
     """
     mods_available = [MOD_PERSONAL_WIKI, ]
     return mods_available
-    
+
 def get_enabled_mods_by_user(username):
     """Returns a list of enabled modules for user.
     """
@@ -23,7 +23,7 @@ def get_enabled_mods_by_user(username):
 
     if personal_wiki_enabled:
         mod_enabled.append(MOD_PERSONAL_WIKI)
-        
+
     return mod_enabled
 
 def enable_mod_for_user(username, mod_name):
@@ -43,7 +43,7 @@ def get_available_mods_by_group(group_id):
     """
     mods_available = [MOD_GROUP_WIKI, ]
     return mods_available
-    
+
 def get_enabled_mods_by_group(group_id):
     """Returns a list of enabled modules for group.
     """
@@ -78,4 +78,4 @@ def get_wiki_enabled_group_list(in_group_ids=None):
     if in_group_ids is not None:
         qs = qs.filter(group_id__in=in_group_ids)
     return qs
-    
+

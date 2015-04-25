@@ -34,7 +34,7 @@ $('#add').click(function() {
 $('#group-join-submit').click(function() {
     var self = $(this);
     self.attr('disabled', 'disabled');
-    
+
     $.ajax({
         url: '{% url 'group_joinrequest' group.id %}',
         type: 'POST',

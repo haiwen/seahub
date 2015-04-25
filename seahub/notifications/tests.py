@@ -30,7 +30,7 @@ class NotificationTest(NotificationTestCase):
         # Check that response is 200 OK
         self.assertEqual(r.status_code, 200)
 
-        # now there are no notifications 
+        # now there are no notifications
         self.assertEqual(len(r.context['notes']), 0)
 
         # try add one notification
@@ -48,7 +48,7 @@ class NotificationTest(NotificationTestCase):
         # in top bar
         n = Notification.objects.all()[0]
         self.assertFalse(n.primary)
-        
+
     def test_set_primary(self):
         n = Notification()
         n.message = self.new_notification
@@ -64,7 +64,7 @@ class NotificationTest(NotificationTestCase):
         # now check it's primary
         n = Notification.objects.all()[0]
         self.assertTrue(n.primary)
-        
+
         # check it's showed in top bar
         r = self.client.get('/sys/notificationadmin/')
         self.assert_('This is a new notification!' in str(r))

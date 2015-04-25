@@ -8,7 +8,7 @@
         {% avatar e.author 36 %}
         <div class="txt">
             {% if e.etype == "repo-update" %}
-            {% with repo=e.repo commit=e.commit %} 
+            {% with repo=e.repo commit=e.commit %}
             <p class="w100 ovhd">
             <a href="{% url 'view_common_lib_dir' repo.id '' %}" class="updated-repo normal fright">{{ repo.name }}</a>
             <span class="cmt-desc">

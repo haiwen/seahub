@@ -22,10 +22,10 @@
             <span id="edit-index" class="icon-pencil fright" title="{% trans "Edit" %}"></span>
             {% endif %}
         </div>
-        <div id="wiki-index-con"></div> 
-        {% endif %}    
+        <div id="wiki-index-con"></div>
+        {% endif %}
     </div>
-    {% endif %}    
+    {% endif %}
 {% endblock %}
 
 {% block right_panel %}
@@ -71,7 +71,7 @@
             <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
             {% endif %}
         </ul>
-        
+
         {% if repo_perm == 'rw' %}
         <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
         <button id="page-delete" class="op-btn" data-url="{% url 'group_wiki_page_delete' group.id page %}">{% trans "Delete Page" %}</button>
@@ -110,11 +110,11 @@ $('#wiki-content')
 .find('h1, h2').hover(
     function() {
         $('.anchor', $(this)).removeClass('vh');
-    },  
+    },
     function() {
         $('.anchor', $(this)).addClass('vh');
     }
-);  
+);
 
 $('#page-create').click(function() {
     $('#page-create-form').modal({appendTo: '#main', autoResize: true});
@@ -190,7 +190,7 @@ $('#wiki-create-form').submit(function () {
     return false;
 });
 
-{% if group_repos %} 
+{% if group_repos %}
 var all_repos = [];
 {% for a_repo in group_repos %}
     all_repos.push({
@@ -225,7 +225,7 @@ $('#wiki-index-con').html(converter.makeHtml('{{ index_content|escapejs }}'));
         location.href = "{% url 'group_wiki_page_edit' group.id page_name %}";
         {% endwith %}
     });
-    {% endif %} 
+    {% endif %}
 {% else %}
     {% if repo_perm == 'rw' %}
     $('#create-index').click(function() {
@@ -233,7 +233,7 @@ $('#wiki-index-con').html(converter.makeHtml('{{ index_content|escapejs }}'));
         $('[name="page_name"]', form).val('index');
         form.submit();
     });
-    {% endif %} 
+    {% endif %}
 {% endif %}
 {% endif %}
 </script>

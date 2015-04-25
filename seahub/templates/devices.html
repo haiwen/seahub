@@ -84,13 +84,13 @@ $('.unlink-device').click(function() {
     if (cont.find('.unsync-confirm').length == 1) {
         cfm = cont.find('.unsync-confirm');
     } else {
-        cfm = $('#unsync-cfm-popup').clone().removeAttr('id'); 
+        cfm = $('#unsync-cfm-popup').clone().removeAttr('id');
         cont.append(cfm);
         cfm.css({'right':0, 'top': op.position().top + op.height() + 3, 'white-space':'nowrap'});
     }
     cfm.removeClass('hide');
 
-    var details = $('.details', cfm); 
+    var details = $('.details', cfm);
     details.html(details.html().replace('%s', tr.attr('data-name')));
 
     $('.no',cfm).unbind().click(function() {

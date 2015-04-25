@@ -43,7 +43,7 @@ def avatar_file_path(instance=None, filename=None, size=None, ext=None):
         tmppath.append(instance.group_id)
     else:
         return ""
-    
+
     if not filename:
         # Filename already stored in database
         filename = instance.avatar.name
@@ -79,12 +79,12 @@ class AvatarBase(object):
     """
     def thumbnail_exists(self, size):
         return self.avatar.storage.exists(self.avatar_name(size))
-    
+
     def create_thumbnail(self, size, quality=None):
         # invalidate the cache of the thumbnail with the given size first
         if isinstance(self, Avatar):
             invalidate_cache(self.emailuser, size)
-            
+
         try:
             orig = self.avatar.storage.open(self.avatar.name, 'rb').read()
             image = Image.open(StringIO(orig))
@@ -112,10 +112,10 @@ class AvatarBase(object):
     def avatar_url(self, size):
         return self.avatar.storage.url(self.avatar_name(size))
 
-    @abstractmethod    
+    @abstractmethod
     def save(self, *args, **kwargs):
         pass
-    
+
     def avatar_name(self, size):
         ext = find_extension(AVATAR_THUMB_FORMAT)
         return avatar_file_path(
@@ -132,10 +132,10 @@ class Avatar(models.Model, AvatarBase):
                                storage=get_avatar_file_storage(),
                                blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
-    
+
     def __unicode__(self):
         return _(u'Avatar for %s') % self.emailuser
-    
+
     def save(self, *args, **kwargs):
         avatars = Avatar.objects.filter(emailuser=self.emailuser)
         if self.pk:
@@ -148,7 +148,7 @@ class Avatar(models.Model, AvatarBase):
             avatars.delete()
         invalidate_cache(self.emailuser)
         super(Avatar, self).save(*args, **kwargs)
-    
+
     def delete(self, *args, **kwargs):
         invalidate_cache(self.emailuser)
         super(Avatar, self).delete(*args, **kwargs)
@@ -160,7 +160,7 @@ class GroupAvatar(models.Model, AvatarBase):
                                storage=get_avatar_file_storage(),
                                blank=True)
     date_uploaded = models.DateTimeField(default=datetime.datetime.now)
-    
+
     def __unicode__(self):
         return _(u'Avatar for %s') % self.group_id
 

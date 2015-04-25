@@ -29,7 +29,7 @@
     {% ifnotequal file_content None %}
     <div id="md-view" class="article"></div>
     {% endifnotequal %}
-    
+
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
@@ -50,7 +50,7 @@
             location.search = '?file_enc=' + file_enc;
         } else {
             if (s.indexOf('file_enc') == -1) {
-                location.search += '&file_enc=' + file_enc; 
+                location.search += '&file_enc=' + file_enc;
             } else {
                 var params = s.substr(1).split('&');
                 var param;

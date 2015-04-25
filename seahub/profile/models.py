@@ -33,7 +33,7 @@ class ProfileManager(models.Manager):
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if
         user has no preferred language.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -78,7 +78,7 @@ class DetailedProfileManager(models.Manager):
                                    telephone=telephone)
         d_profile.save(using=self._db)
         return d_profile
-            
+
     def get_detailed_profile_by_user(self, username):
         """Get a user's profile.
         """
@@ -86,18 +86,18 @@ class DetailedProfileManager(models.Manager):
             return super(DetailedProfileManager, self).get(user=username)
         except DetailedProfile.DoesNotExist:
             return None
-    
+
 class DetailedProfile(models.Model):
     user = LowerCaseCharField(max_length=255, db_index=True)
     department = models.CharField(max_length=512)
     telephone = models.CharField(max_length=100)
     objects = DetailedProfileManager()
 
-########## signal handler    
+########## signal handler
 @receiver(user_registered)
 def clean_email_id_cache(sender, **kwargs):
     from seahub.utils import normalize_cache_key
-    
+
     user = kwargs['user']
     key = normalize_cache_key(user.email, EMAIL_ID_CACHE_PREFIX)
     cache.set(key, user.id, EMAIL_ID_CACHE_TIMEOUT)

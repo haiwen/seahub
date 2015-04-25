@@ -4,28 +4,28 @@ $("tr:gt(0)", $('.repo-list')).unbind().hover(
         if ($('.repo-del-cfm:visible', $('.repo-list')).length == 0) {
             $(this).addClass('hl');
             $(this).find('.op-icon, .op').removeClass('vh');
-        }   
-    },  
+        }
+    },
     function() {
         if ($('.repo-del-cfm:visible', $('.repo-list')).length == 0) {
             $(this).find('.op-icon, .op').addClass('vh');
             $(this).removeClass('hl');
-        }   
-    }   
+        }
+    }
 );
 
 $('.repo-delete-btn').click(function() {
     var op = $(this);
     var cont = op.parent().css({'position': 'relative'}),
         cfm;
-    
+
     // only show 1 popup each time.
     $('.repo-del-cfm', op.parents('table')).addClass('hide');
 
     if (cont.find('.repo-del-cfm').length == 1) {
         cfm = cont.find('.repo-del-cfm');
     } else {
-        cfm = $('#repo-del-cfm-popup').clone().removeAttr('id'); 
+        cfm = $('#repo-del-cfm-popup').clone().removeAttr('id');
         cont.append(cfm);
         cfm.css({'left': op.position().left, 'top': op.position().top + op.height() + 2, 'width':202});
     }
@@ -42,9 +42,9 @@ $('.repo-delete-btn').click(function() {
         success: function(data) {
             op.parents('tr').remove();
             feedback("{% trans "Delete succeeded." %}", 'success');
-        },  
+        },
         error: ajaxErrorHandler
-        }); 
-    }); 
+        });
+    });
     return false; // for <a> in some pages
-}); 
+});

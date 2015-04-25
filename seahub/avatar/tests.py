@@ -15,7 +15,7 @@ try:
     dir(Image) # Placate PyFlakes
 except ImportError:
     import Image
-    
+
 
 def upload_helper(o, filename):
     f = open(os.path.join(o.testdatapath, filename), "rb")
@@ -36,52 +36,52 @@ class AvatarTestCase(TestCase):
         response = self.client.post('/accounts/login/', {
             'username': 'lennon@thebeatles.com',
             'password': 'testpassword',
-            }, 
+            },
         )
         self.assertEquals(response.status_code, 302)
-        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))        
-        
+        self.assert_(response['Location'].endswith(settings.LOGIN_REDIRECT_URL))
+
         Image.init()
 
     def tearDown(self):
         self.user.delete()
-        
+
 class AvatarUploadTests(AvatarTestCase):
     def testNonImageUpload(self):
         response = upload_helper(self, "nonimagefile")
         self.failUnlessEqual(response.status_code, 200)
         self.failIfEqual(response.context['upload_avatar_form'].errors, {})
-        
+
     def testNormalImageUpload(self):
         response = upload_helper(self, "test.png")
         self.failUnlessEqual(response.status_code, 200)
         self.failUnlessEqual(len(response.redirect_chain), 1)
         self.failUnlessEqual(response.context['upload_avatar_form'].errors, {})
-        avatar = get_primary_avatar(self.user) 
-       
+        avatar = get_primary_avatar(self.user)
+
         self.failIfEqual(avatar, None)
-        
+
     def testImageWithoutExtension(self):
         # use with AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png')
         response = upload_helper(self, "imagefilewithoutext")
         self.failUnlessEqual(response.status_code, 200)
-        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked        
+        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked
         self.failIfEqual(response.context['upload_avatar_form'].errors, {})
-        
+
     def testImageWithWrongExtension(self):
         # use with AVATAR_ALLOWED_FILE_EXTS = ('.jpg', '.png')
         response = upload_helper(self, "imagefilewithwrongext.ogg")
         self.failUnlessEqual(response.status_code, 200)
-        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked        
+        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked
         self.failIfEqual(response.context['upload_avatar_form'].errors, {})
-        
+
     def testImageTooBig(self):
         # use with AVATAR_MAX_SIZE = 1024 * 1024
         response = upload_helper(self, "testbig.png")
         self.failUnlessEqual(response.status_code, 200)
-        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked        
+        self.failUnlessEqual(len(response.redirect_chain), 0) # Redirect only if it worked
         self.failIfEqual(response.context['upload_avatar_form'].errors, {})
-    
+
     def testDefaultUrl(self):
         response = self.client.get(reverse('avatar_render_primary', kwargs={
            'user': self.user.username,
@@ -97,13 +97,13 @@ class AvatarUploadTests(AvatarTestCase):
     def testNonExistingUser(self):
         a = get_primary_avatar("nonexistinguser@mail.com")
         self.failUnlessEqual(a, None)
-        
+
     def testThereCanBeOnlyOnePrimaryAvatar(self):
         for i in range(1, 10):
             self.testNormalImageUpload()
         count = Avatar.objects.filter(emailuser=self.user, primary=True).count()
         self.failUnlessEqual(count, 1)
-        
+
     # def testDeleteAvatar(self):
     #     self.testNormalImageUpload()
     #     avatar = Avatar.objects.filter(emailuser=self.user)
@@ -115,7 +115,7 @@ class AvatarUploadTests(AvatarTestCase):
     #     self.failUnlessEqual(len(response.redirect_chain), 1)
     #     count = Avatar.objects.filter(emailuser=self.user).count()
     #     self.failUnlessEqual(count, 0)
-        
+
     # def testDeletePrimaryAvatarAndNewPrimary(self):
     #     self.testThereCanBeOnlyOnePrimaryAvatar()
     #     primary = get_primary_avatar(self.emailuser)
@@ -146,5 +146,5 @@ class AvatarUploadTests(AvatarTestCase):
     # def testHashFileName
     # def testHashUserName
     # def testChangePrimaryAvatar
-    # def testDeleteThumbnailAndRecreation    
+    # def testDeleteThumbnailAndRecreation
     # def testAutomaticThumbnailCreation

@@ -83,7 +83,7 @@ def user_msg_list(request, id_or_email):
                 att.path = pfds.path
                 att.name = os.path.basename(pfds.path.rstrip('/'))
                 att.token = pfds.token
-                msg.attachments.append(att) 
+                msg.attachments.append(att)
 
     '''paginate'''
     paginator = Paginator(msgs, 15)
@@ -188,7 +188,7 @@ def message_send(request):
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     # attachment
-    selected = request.POST.getlist('selected') # selected files & dirs: [u'<repo_id><path>', ...] 
+    selected = request.POST.getlist('selected') # selected files & dirs: [u'<repo_id><path>', ...]
     attached_items = []
     if len(selected) > 0:
         for item in selected:
@@ -242,7 +242,7 @@ def message_send(request):
             ctx['msgs'] = msg_info_list(msgs, username)
             html = render_to_string('message/all_msg.html', ctx)
         else:
-            ctx['msg'] = msgs[0]   
+            ctx['msg'] = msgs[0]
             html = render_to_string('message/user_msg.html', ctx, context_instance=RequestContext(request))
         return HttpResponse(json.dumps({"html": html, "error": errors}), content_type=content_type)
     else:
@@ -255,7 +255,7 @@ def msg_count(request):
     """
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
-    
+
     count = UserMessage.objects.count_unread_messages_by_user(username)
     result = {}
     result['count'] = count
