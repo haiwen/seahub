@@ -6,7 +6,7 @@ $(function () {
         dataType: 'json',
         success: function(data) {
             var share_list = [];
-            var contacts = data['contacts'], contact_email, group_name, group_name_py;   
+            var contacts = data['contacts'], contact_email, group_name, group_name_py;
             for (var i = 0, len = contacts.length; i < len; i++) {
                 contact_email = contacts[i].email;
                 share_list.push({value:contact_email, label:contact_email});
@@ -49,10 +49,10 @@ $(function () {
                 $(".checkbox-label", form).unbind().hover(
                     function() {
                         $(this).addClass('hl');
-                    },  
+                    },
                     function() {
                         $(this).removeClass('hl');
-                    }   
+                    }
                 );
                 form.modal({appendTo: "#main", focus:false, containerCss:{"padding": 0}});
                 $('[name="repo_id"]', form).val(repo_id);
@@ -100,7 +100,7 @@ $(function () {
 
 function repoCreateSuccessCallback(data) {
     $.modal.close();
-    var new_repo_item = $('#new-repo .repo-item').clone(true); 
+    var new_repo_item = $('#new-repo .repo-item').clone(true);
     var tds = $('td', new_repo_item);
     var repo_id = data['repo_id'], repo_name = HTMLescape(data['repo_name']);
     if (data['repo_enc']) {
@@ -109,7 +109,7 @@ function repoCreateSuccessCallback(data) {
     $(tds[1]).html('<a href="{{ SITE_ROOT }}repo/' + repo_id + '/">' + repo_name + '</a>');
     $(tds[2]).text(data['repo_desc']);
     $(tds[4]).attr('data-id', repo_id).attr('data-name', repo_name);
-    
+
     var my_own_repos = $('#my-own-repos');
     var empty_tip = $('.empty-tips', my_own_repos);
     if (empty_tip.length == 1) {
@@ -132,7 +132,7 @@ $(function() {
                 $('.loading-tip', shared_ct).hide();
                 $('table', shared_ct).append(data.shared.html).removeClass('hide');
             } else {
-                shared_ct.html(data.shared.html); 
+                shared_ct.html(data.shared.html);
             }
             $('#group-repos').html(data['group']);
             $('.unshare-btn').click(function() {
@@ -142,11 +142,11 @@ $(function() {
                 function() {
                     $(this).addClass('hl');
                     $(this).find('.op-icon').removeClass('vh');
-                },  
+                },
                 function() {
                     $(this).find('.op-icon').addClass('vh');
                     $(this).removeClass('hl');
-                }   
+                }
             );
             $('#tabs').unbind().tabs({cookie:{expires:1}});
         }

@@ -144,7 +144,7 @@ function ajaxErrorHandler(xhr, textStatus, errorThrown) {
         feedback($.parseJSON(xhr.responseText).error, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
-    }    
+    }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}

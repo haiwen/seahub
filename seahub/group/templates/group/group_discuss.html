@@ -184,7 +184,7 @@ $(window).scroll(function() {
     var up_icon = $('#msg-upward');
     var msg_panel =  up_icon.parent();
     var msg_panel_offset = msg_panel.offset();
-    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
+    var msg_panel_bot = msg_panel_offset.top + msg_panel.height();
     var win_st = $(window).scrollTop();
     var win_h = $(window).height() + win_st;
 
@@ -224,7 +224,7 @@ $('#group-message-form').submit(function() {
     if (!$.trim(msg_input.val())) {
         return false;
     }
-    
+
     var sb_btn = $('.submit', form);
     disable(sb_btn);
     $.ajax({
@@ -236,9 +236,9 @@ $('#group-message-form').submit(function() {
         traditional: true,
         success: function(data) {
             var new_msg = $('.new-msg-list .msg').clone(true).attr('data-id', data['msg_id']);
-            $('.msg-hd', new_msg).after(data['msg_con']); 
+            $('.msg-hd', new_msg).after(data['msg_con']);
             if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
-                form.after('<ul class="msg-list"></ul>');    
+                form.after('<ul class="msg-list"></ul>');
             }
             $('.msg-list').prepend(new_msg);
             new_msg.slideDown(400);
@@ -252,7 +252,7 @@ $('#group-message-form').submit(function() {
                 err_msg = $.parseJSON(xhr.responseText).error;
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
-            }    
+            }
             apply_form_error(form.attr('id'), err_msg);
         }
     });

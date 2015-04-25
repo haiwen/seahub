@@ -33,7 +33,7 @@ class AddUserForm(forms.Form):
         match. Note that an error here will end up in
         ``non_field_errors()`` because it doesn't apply to a single
         field.
-        
+
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
@@ -65,7 +65,7 @@ class RepoCreateForm(forms.Form):
             raise forms.ValidationError(error_msg)
         else:
             return repo_name
-        
+
     def clean(self):
         encryption = self.cleaned_data['encryption']
         if int(encryption) == 0:
@@ -155,7 +155,7 @@ class RepoPassowrdForm(forms.Form):
                     raise forms.ValidationError(_(u'Internal server error'))
                 else:
                     raise forms.ValidationError(_(u'Decrypt library error'))
-        
+
 class SetUserQuotaForm(forms.Form):
     """
     Form for setting user quota.

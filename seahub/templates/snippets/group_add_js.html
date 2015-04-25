@@ -9,7 +9,7 @@ $('#group-add-form').submit(function() {
         return false;
     }
 
-    var submit_btn = $(this).children('input[type="submit"]');  
+    var submit_btn = $(this).children('input[type="submit"]');
     disable(submit_btn);
     $.ajax({
         url: '{{ post_url }}',

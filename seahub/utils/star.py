@@ -34,7 +34,7 @@ def unstar_file(email, repo_id, path):
                                              path=path)
     for r in result:
         r.delete()
-            
+
 def is_file_starred(email, repo_id, path, org_id=-1):
     # Should use "get", but here we use "filter" to fix the bug caused by no
     # unique constraint in the table
@@ -52,7 +52,7 @@ def is_file_starred(email, repo_id, path, org_id=-1):
                 r.delete()
         return True
 
-def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1): 
+def get_dir_starred_files(email, repo_id, parent_dir, org_id=-1):
     '''Get starred files under parent_dir.
 
     '''

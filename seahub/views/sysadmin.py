@@ -660,7 +660,7 @@ def user_remove(request, user_id):
 @sys_staff_required
 def remove_trial(request, user_or_org):
     """Remove trial account.
-    
+
     Arguments:
     - `request`:
     """

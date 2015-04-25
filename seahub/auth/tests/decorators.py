@@ -15,7 +15,7 @@ class LoginRequiredTestCase(TestCase):
             def __call__(self, *args, **kwargs):
                 pass
         login_required(CallableView())
-        
+
     def testView(self):
         """
         Check that login_required is assignable to normal views.

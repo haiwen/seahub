@@ -2,11 +2,11 @@ from django.db.models import CharField
 
 class ModifyingFieldDescriptor(object):
     """ Modifies a field when set using the field's (overriden) .to_python() method. """
-    def __init__(self, field):  
-        self.field = field  
+    def __init__(self, field):
+        self.field = field
     def __get__(self, instance, owner=None):
         if instance is None:
-            raise AttributeError('Can only be accessed via an instance.')  
+            raise AttributeError('Can only be accessed via an instance.')
         return instance.__dict__[self.field.name]
     def __set__(self, instance, value):
         instance.__dict__[self.field.name] = self.field.to_python(value)

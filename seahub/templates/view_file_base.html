@@ -7,7 +7,7 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
-<style type="text/css">                                                
+<style type="text/css">
 #header, #footer { display:none; }
 #view-hd { margin-top: 4px; }
 #star {
@@ -76,7 +76,7 @@
         </div>
     </div>
 
-    {% include "snippets/file_share_popup.html" %} 
+    {% include "snippets/file_share_popup.html" %}
 
     <div id="side-toolbar">
         <ul class="side-toolbar">
@@ -180,7 +180,7 @@ $('#star').click(function() {
     } else {
         url_base = '{% url 'repo_unstar_file' repo.id %}';
     }
-    
+
     $.ajax({
         url: url_base + '?file=' + e("{{path}}"),
         cache: false,

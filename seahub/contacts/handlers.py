@@ -5,7 +5,7 @@ def mail_sended_cb(sender, **kwargs):
     """
     Callback function to add email to contacts.
     """
-    
+
     user = kwargs['user']
     email = kwargs['email']
 

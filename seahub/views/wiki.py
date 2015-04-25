@@ -61,7 +61,7 @@ def personal_wiki(request, page_name="home"):
     else:
         url_prefix = reverse('personal_wiki', args=[])
         content = convert_wiki_link(content, url_prefix, repo.id, username)
-        
+
         # fetch file modified time and modifier
         path = '/' + dirent.obj_name
         try:
@@ -80,7 +80,7 @@ def personal_wiki(request, page_name="home"):
         else:
             index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
 
-        return render_to_response("wiki/personal_wiki.html", { 
+        return render_to_response("wiki/personal_wiki.html", {
             "wiki_exists": wiki_exists,
             "content": content,
             "page": os.path.splitext(dirent.obj_name)[0],
@@ -230,7 +230,7 @@ def personal_wiki_page_delete(request, page_name):
         repo = get_personal_wiki_repo(request.user.username)
     except WikiDoesNotExist:
         return render_error(request, _('Wiki is not found.'))
-    
+
     file_name = page_name + '.md'
     username = request.user.username
     if seaserv.del_file(repo.id, '/', file_name, username):

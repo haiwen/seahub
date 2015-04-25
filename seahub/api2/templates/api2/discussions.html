@@ -72,8 +72,8 @@ $(document).scroll(function() {
                 loading_icon.hide();
                 g_loading = false;
                 if (!jqXHR.responseText) {
-                    $('#loading-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
-                }   
+                    $('#loading-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');
+                }
             }
         });
     }

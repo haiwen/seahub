@@ -68,4 +68,4 @@ class WikiCreateForm(forms.Form):
             raise forms.ValidationError(error_msg)
         else:
             return repo_name
-    
+

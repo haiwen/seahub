@@ -105,12 +105,12 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
             var context = canvas.getContext('2d');
             canvas.height = viewport.height;
             canvas.width = viewport.width;
-            var renderContext = { 
+            var renderContext = {
                 canvasContext: context,
                 viewport: viewport
-            };  
+            };
             page.render(renderContext);
-        }); 
+        });
     };
     PDFJS.getDocument($('#pdf-view').attr('data')).then(function(pdf) {
         $('#page-nums').html(pdf.numPages);
@@ -167,7 +167,7 @@ $('#file-view').html('<div id="file-view-tip"></div>');
             location.search = '?file_enc=' + file_enc;
         } else {
             if (s.indexOf('file_enc') == -1) {
-                location.search += '&file_enc=' + file_enc; 
+                location.search += '&file_enc=' + file_enc;
             } else {
                 var params = s.substr(1).split('&');
                 var param;

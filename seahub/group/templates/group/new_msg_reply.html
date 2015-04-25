@@ -41,7 +41,7 @@
                 </ul>
                 {% endif %}
                 <span class="say"></span>
-            </div>  
+            </div>
             <div class="msg-op">
                 <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
                     <span class="unfold-replies">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
@@ -73,7 +73,7 @@
     {% endfor %}
     </ul>
 {% else %}
-<p>{% trans 'None' %}</p>    
+<p>{% trans 'None' %}</p>
 {% endif %}
 {% endblock %}
 

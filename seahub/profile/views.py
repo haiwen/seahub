@@ -37,7 +37,7 @@ def edit_profile(request):
             messages.success(request, _(u'Successfully edited profile.'))
             # refresh nickname cache
             refresh_cache(request.user.username)
-            
+
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
             messages.error(request, _(u'Failed to edit profile'))
@@ -54,13 +54,13 @@ def edit_profile(request):
             init_dict['department'] = d_profile.department
             init_dict['telephone'] = d_profile.telephone
         form = form_class(init_dict)
-        
+
     # common logic
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
     except CryptoOptionNotSetError:
         # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False   
+        server_crypto = False
 
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
 
@@ -84,7 +84,7 @@ def edit_profile(request):
 @login_required
 def user_profile(request, username_or_id):
     # fetch the user by username or id, try id first
-    user = None    
+    user = None
     try:
         user_id = int(username_or_id)
         try:
@@ -133,14 +133,14 @@ def get_user_profile(request, user):
             'user_intro': '',
             'err_msg': '',
             'new_user': ''
-        } 
+        }
     content_type = 'application/json; charset=utf-8'
 
     try:
         user_check = User.objects.get(email=user)
     except User.DoesNotExist:
         user_check = None
-        
+
     if user_check:
         profile = Profile.objects.filter(user=user)
         if profile:

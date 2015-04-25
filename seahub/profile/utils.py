@@ -14,4 +14,4 @@ def refresh_cache(username):
 
     key = normalize_cache_key(username, NICKNAME_CACHE_PREFIX)
     cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
-    
+

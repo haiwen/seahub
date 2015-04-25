@@ -25,7 +25,7 @@ class CryptoOptionNotSetError(Exception):
 class UserOptionsManager(models.Manager):
     def set_user_option(self, username, k, v):
         """
-        
+
         Arguments:
         - `username`:
         - `k`:
@@ -34,7 +34,7 @@ class UserOptionsManager(models.Manager):
         try:
             user_option = super(UserOptionsManager, self).get(email=username,
                                                               option_key=k)
-            user_option.option_val = v            
+            user_option.option_val = v
         except UserOptions.DoesNotExist:
             user_option = self.model(email=username, option_key=k,
                                      option_val=v)
@@ -44,16 +44,16 @@ class UserOptionsManager(models.Manager):
 
     def enable_server_crypto(self, username):
         """
-        
+
         Arguments:
         - `username`:
         """
         return self.set_user_option(username, KEY_SERVER_CRYPTO,
                                     VAL_SERVER_CRYPTO_ENABLED)
-        
+
     def disable_server_crypto(self, username):
         """
-        
+
         Arguments:
         - `username`:
         """
@@ -84,7 +84,7 @@ class UserOptionsManager(models.Manager):
 
     def enable_user_guide(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -94,7 +94,7 @@ class UserOptionsManager(models.Manager):
 
     def disable_user_guide(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -104,7 +104,7 @@ class UserOptionsManager(models.Manager):
 
     def is_user_guide_enabled(self, username):
         """Return ``True`` if user need guide, otherwise ``False``.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -115,11 +115,11 @@ class UserOptionsManager(models.Manager):
             return bool(int(user_option.option_val))
         except UserOptions.DoesNotExist:
             # Assume ``user_guide`` is enabled if this optoin is not set.
-            return True        
+            return True
 
     def enable_sub_lib(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -129,7 +129,7 @@ class UserOptionsManager(models.Manager):
 
     def disable_sub_lib(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -139,7 +139,7 @@ class UserOptionsManager(models.Manager):
 
     def is_sub_lib_enabled(self, username):
         """Return ``True`` if user need guide, otherwise ``False``.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -153,7 +153,7 @@ class UserOptionsManager(models.Manager):
 
     def set_default_repo(self, username, repo_id):
         """Set a user's default library.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -165,7 +165,7 @@ class UserOptionsManager(models.Manager):
         """Get a user's default library.
 
         Returns repo_id if default library is found, otherwise ``None``.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -176,7 +176,7 @@ class UserOptionsManager(models.Manager):
             return user_option.option_val
         except UserOptions.DoesNotExist:
             return None
-        
+
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)

@@ -41,7 +41,7 @@ def tsstr_day(value):
     except:
         return datetime.fromtimestamp(value/1000000).strftime("%Y-%m-%d")
 
-# Supported file extensions and file icon name. 
+# Supported file extensions and file icon name.
 FILEEXT_ICON_MAP = {
     # pdf file
     'pdf' : 'pdf.png',
@@ -92,7 +92,7 @@ def file_icon_filter(value):
         return FILEEXT_ICON_MAP.get('default')
 
 # This way of translation looks silly, but works well.
-COMMIT_MSG_TRANSLATION_MAP = {  
+COMMIT_MSG_TRANSLATION_MAP = {
     'Added' : _('Added'),
     'Deleted' : _('Deleted'),
     'Removed' : _('Removed'),
@@ -111,11 +111,11 @@ def translate_commit_desc(value):
         # Change 'repo' to 'library' in revert commit msg, since 'repo' is
         # only used inside of seafile system.
         value = value.replace('repo', 'library')
-        
+
     # Do nothing if current language is English.
     if translation.get_language() == 'en':
         return value
-    
+
     if value.startswith('Reverted library'):
         return value.replace('Reverted library to status at', _('Reverted library to status at'))
     elif value.startswith('Reverted file'):
@@ -144,14 +144,14 @@ def translate_commit_desc(value):
             if not m:
                 ret_list.append(e)
                 continue
-        
+
             op = m.group(1)     # e.g., "Added"
             op_trans = _(op)
             file_name = m.group(2) # e.g., "foo.txt"
             has_more = m.group(3)  # e.g., "and 3 more files"
             n_files = m.group(4)   # e.g., "3"
             more_type = m.group(5) # e.g., "files"
-    
+
             if has_more:
                 if translation.get_language() == 'zh-cn':
                     typ = u'文件' if more_type == 'files' else u'目录'
@@ -309,7 +309,7 @@ def translate_seahub_time_str(val):
         return ret
     else:
         return _('Just now')
-    
+
 @register.filter(name='email2nickname')
 def email2nickname(value):
     """
@@ -334,7 +334,7 @@ def email2id(value):
     """
     Return the user id of an email. User id can be 0(ldap user),
     positive(registered user) or negtive(unregistered user).
-    
+
     """
     if not value:
         return -1
@@ -356,7 +356,7 @@ def id_or_email(value):
     """
     uid = email2id(value)
     return value if uid == 0 else uid
-    
+
 @register.filter(name='url_target_blank')
 def url_target_blank(text):
     return text.replace('<a ', '<a target="_blank" ')

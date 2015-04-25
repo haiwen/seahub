@@ -8,4 +8,4 @@ def refresh_cache():
     """
     cache.set('CUR_TOPINFO', Notification.objects.all().filter(primary=1),
               NOTIFICATION_CACHE_TIMEOUT)
-    
+

@@ -43,9 +43,9 @@
     </select><br />
     {% endif %}
     <label for="id_password1">{% trans "Password" %}</label><br />
-    <input type="password" name="password1" id="id_password1" class="input" /><br />    
+    <input type="password" name="password1" id="id_password1" class="input" /><br />
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
-    <input type="password" name="password2" id="id_password2" class="input" /><br />    
+    <input type="password" name="password2" id="id_password2" class="input" /><br />
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -101,15 +101,15 @@ $('#add-user-form').submit(function() {
     if (!pwd1) {
         apply_form_error(form_id, "{% trans "Password cannot be blank" %}");
         return false;
-    } 
+    }
     if (!pwd2) {
         apply_form_error(form_id, "{% trans "Please enter the password again" %}");
         return false;
-    } 
+    }
     if (pwd1 != pwd2) {
         apply_form_error(form_id, "{% trans "Passwords do not match" %}");
         return false;
-    } 
+    }
 
     var submit_btn = $(this).find('[type="submit"]');
     disable(submit_btn);
@@ -130,8 +130,8 @@ $('#add-user-form').submit(function() {
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            }   
-        },  
+            }
+        },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
                 apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);

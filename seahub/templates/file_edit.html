@@ -25,7 +25,7 @@
 {% endif %}
 <style type="text/css">
 #main {
-    width:100%; 
+    width:100%;
 }
 #footer {
     display:none;
@@ -450,7 +450,7 @@ var local_toolbar_strs = {
 var editor = new Markdown.Editor(converter, null, { helpButton: { handler: mdEditHelp }, strings: local_toolbar_strs });
 editor.run();
 
-var file_edit = $('#file-edit'); 
+var file_edit = $('#file-edit');
 var file_edit_styles = {'min-height':0, 'padding-bottom':50, 'height':$(window).height() - $('#path-op').outerHeight() - parseInt(file_edit.css('padding-top')) - 51};
 file_edit.css(file_edit_styles).removeClass('hide');
 $('#wmd-input').css({'height':file_edit.height() - $('#file-enc-conf').outerHeight(true) - $('#wmd-button-bar').outerHeight() - parseInt($('#wmd-input').css('padding-top'))*2}).removeClass('hide');
@@ -476,7 +476,7 @@ function mdEditHelp() {
 $('#sf').html(cleanHtmlForXss('{{file_content|escapejs}}'));
 $(function() {
     function initToolbarBootstrapBindings() {
-      var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier', 
+      var fonts = ['Serif', 'Sans', 'Arial', 'Arial Black', 'Courier',
             'Courier New', 'Comic Sans MS', 'Helvetica', 'Impact', 'Lucida Grande', 'Lucida Sans', 'Tahoma', 'Times',
             'Times New Roman', 'Verdana'],
             fontTarget = $('#font-list');
@@ -488,12 +488,12 @@ $(function() {
             .change(function () {$(this).parent('.dropdown-menu').siblings('.dropdown-toggle').dropdown('toggle');})
         .keydown('esc', function () {this.value='';$(this).change();});
 
-      $('[data-role=magic-overlay]').each(function () { 
-        var overlay = $(this), target = $(overlay.data('target')); 
+      $('[data-role=magic-overlay]').each(function () {
+        var overlay = $(this), target = $(overlay.data('target'));
         overlay.css('opacity', 0).css('position', 'absolute').offset(target.offset()).width(target.outerWidth()).height(target.outerHeight());
       });
     };
-    initToolbarBootstrapBindings();  
+    initToolbarBootstrapBindings();
     $('#sf').wysiwyg();
     try {
         document.execCommand('styleWithCss',0, true);
@@ -575,7 +575,7 @@ $('#repo-decrypt-form').submit(function() {
                 repo_id: '{{repo.id}}',
                 password: pwd,
                 username: '{{request.user.username}}'
-            },  
+            },
             success: function(data) {
                 if (data['success']) {
                     $.modal.close();
@@ -585,19 +585,19 @@ $('#repo-decrypt-form').submit(function() {
                     {% if op == 'decrypt' %}
                     location.reload(true);
                     {% endif %}
-                }   
-            },  
+                }
+            },
             error: function(jqXHR, textStatus, errorThrown) {
-                var err_str = ''; 
+                var err_str = '';
                 if (jqXHR.responseText) {
                     err_str = $.parseJSON(jqXHR.responseText).error;
                 } else {
                     err_str = "{% trans "Failed. Please check the network." %}";
-                }   
-                err.html(err_str); 
+                }
+                err.html(err_str);
                 pwd_input.val('');
-            }   
-        }); 
+            }
+        });
     }
     return false;
 });

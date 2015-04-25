@@ -20,7 +20,7 @@ class BaseTestCase(TestCase):
 
     def tearDown(self):
         self.user.delete()
-    
+
 class BasicTest(BaseTestCase):
 
     def login(self):
@@ -29,7 +29,7 @@ class BasicTest(BaseTestCase):
                 'password': 'testpassword',
                 })
         self.assertEqual(response.status_code, 302)
-    
+
     def test_my_home(self):
         self.login()
         r = self.client.get('/home/my/')

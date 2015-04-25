@@ -11,7 +11,7 @@ def dt(value):
     except ValueError:
         # TODO: need a better way to handle 64 bits timestamp.
         return datetime.datetime.utcfromtimestamp(value/1000000)
-    
+
 
 def value_to_db_datetime(value):
     if value is None:

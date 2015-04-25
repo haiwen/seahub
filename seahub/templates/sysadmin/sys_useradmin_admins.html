@@ -67,7 +67,7 @@
             </select>
           {% endif %}
         </td>
-        
+
         <td>
           {% if user.source != 'LDAP' %}
             <div class="user-role">
@@ -142,13 +142,13 @@ $('#add-admin-form').submit(function() {
     var form = $(this),
         cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
         post_data = '',
-        input = $('[name="user_email"]', form); 
+        input = $('[name="user_email"]', form);
         post_data = input.val();
 
     if (!post_data) {
         apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
         return false;
-    }    
+    }
 
     var submit_btn = $('[type="submit"]', form);
     disable(submit_btn);

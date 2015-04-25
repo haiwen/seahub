@@ -69,11 +69,11 @@ def user_msg_to_json(message, msg_from):
 def group_join_request_to_json(username, group_id, join_request_msg):
     return json.dumps({'username': username, 'group_id': group_id,
                        'join_request_msg': join_request_msg})
-    
+
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
         """Add generic user notification.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -86,11 +86,11 @@ class UserNotificationManager(models.Manager):
 
     def get_all_notifications(self, seen=None, time_since=None):
         """Get all notifications of all users.
-        
+
         Arguments:
         - `self`:
         - `seen`:
-        - `time_since`: 
+        - `time_since`:
         """
         qs = super(UserNotificationManager, self).all()
         if seen is not None:
@@ -98,10 +98,10 @@ class UserNotificationManager(models.Manager):
         if time_since is not None:
             qs = qs.filter(timestamp__gt=time_since)
         return qs
-        
+
     def get_user_notifications(self, username, seen=None):
         """Get all notifications(group_msg, grpmsg_reply, etc) of a user.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -113,23 +113,23 @@ class UserNotificationManager(models.Manager):
 
     def remove_user_notifications(self, username):
         """Remove all user notifications.
-        
+
         Arguments:
         - `self`:
         - `username`:
         """
         self.get_user_notifications(username).delete()
-        
+
     def count_unseen_user_notifications(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
         """
         return super(UserNotificationManager, self).filter(
             to_user=username, seen=False).count()
-        
+
     def bulk_add_group_msg_notices(self, to_users, detail):
         """Efficiently add group message notices.
 
@@ -201,10 +201,10 @@ class UserNotificationManager(models.Manager):
         super(UserNotificationManager, self).filter(
             to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG,
             detail=str(group_id)).delete()
-        
+
     def add_group_msg_reply_notice(self, to_user, detail):
         """Added group message reply notice for user.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -215,7 +215,7 @@ class UserNotificationManager(models.Manager):
 
     def get_group_msg_reply_notices(self, to_user, seen=None):
         """Get all group message replies of a user.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -229,7 +229,7 @@ class UserNotificationManager(models.Manager):
 
     def remove_group_msg_reply_notice(self, to_user):
         """Mark all group message replies of a user as seen.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -240,7 +240,7 @@ class UserNotificationManager(models.Manager):
 
     def add_group_join_request_notice(self, to_user, detail):
         """
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -248,10 +248,10 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user,
                                            MSG_TYPE_GROUP_JOIN_REQUEST, detail)
-        
+
     def add_file_uploaded_msg(self, to_user, detail):
         """
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -263,7 +263,7 @@ class UserNotificationManager(models.Manager):
 
     def add_repo_share_msg(self, to_user, detail):
         """Notify ``to_user`` that others shared a repo to him/her.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -274,7 +274,7 @@ class UserNotificationManager(models.Manager):
 
     def add_priv_file_share_msg(self, to_user, detail):
         """Notify ``to_user`` that others shared a file to him/her.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -285,7 +285,7 @@ class UserNotificationManager(models.Manager):
 
     def add_user_message(self, to_user, detail):
         """Notify ``to_user`` that others sent a message to him/her.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -293,7 +293,7 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user,
                                            MSG_TYPE_USER_MESSAGE, detail)
-        
+
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
     msg_type = models.CharField(db_index=True, max_length=30)
@@ -307,7 +307,7 @@ class UserNotification(models.Model):
 
     class Meta:
         ordering = ["-timestamp"]
-    
+
     def __unicode__(self):
         return '%s|%s|%s' % (self.to_user, self.msg_type, self.detail)
 
@@ -316,7 +316,7 @@ class UserNotification(models.Model):
 
         Use this in a template to mark an unseen notice differently the first
         time it is shown.
-        
+
         Arguments:
         - `self`:
         """
@@ -325,10 +325,10 @@ class UserNotification(models.Model):
             self.seen = True
             self.save()
         return seen
-        
+
     def is_group_msg(self):
         """Check whether is a group message notification.
-        
+
         Arguments:
         - `self`:
         """
@@ -336,15 +336,15 @@ class UserNotification(models.Model):
 
     def is_grpmsg_reply(self):
         """Check whether is a group message reply notification.
-        
+
         Arguments:
         - `self`:
         """
         return self.msg_type == MSG_TYPE_GRPMSG_REPLY
-        
+
     def is_file_uploaded_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -352,7 +352,7 @@ class UserNotification(models.Model):
 
     def is_repo_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -360,7 +360,7 @@ class UserNotification(models.Model):
 
     def is_priv_file_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -368,7 +368,7 @@ class UserNotification(models.Model):
 
     def is_user_message(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -376,7 +376,7 @@ class UserNotification(models.Model):
 
     def is_group_join_request(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -387,7 +387,7 @@ class UserNotification(models.Model):
         ``msg_from``.
 
         NOTE: ``msg_from`` may be ``None``.
-        
+
         Arguments:
         - `self`:
 
@@ -420,7 +420,7 @@ class UserNotification(models.Model):
         ``msg_id``, ``reply_from`` and ``reply_msg``.
 
         NOTE: ``reply_from`` and ``reply_msg`` may be ``None``.
-        
+
         Arguments:
         - `self`:
 
@@ -473,7 +473,7 @@ class UserNotification(models.Model):
     ########## functions used in templates
     def format_file_uploaded_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -498,7 +498,7 @@ class UserNotification(models.Model):
 
     def format_repo_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -517,10 +517,10 @@ class UserNotification(models.Model):
             'repo_name': escape(repo.name),
             }
         return msg
-        
+
     def format_priv_file_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -574,7 +574,7 @@ class UserNotification(models.Model):
 
     def format_group_message_title(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -621,7 +621,7 @@ class UserNotification(models.Model):
 
     def format_grpmsg_reply_title(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -679,7 +679,7 @@ class UserNotification(models.Model):
 
     def format_group_join_request(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -738,7 +738,7 @@ def add_share_repo_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     to_user = kwargs.get('to_user', None)
     repo = kwargs.get('repo', None)
-    
+
     assert from_user and to_user and repo is not None, 'Arguments error'
 
     detail = repo_share_msg_to_json(from_user, repo.id)

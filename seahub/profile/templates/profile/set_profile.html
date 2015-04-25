@@ -151,7 +151,7 @@ var all_repos = [];
     all_repos.push({
         'data': '{{ a_repo.props.name }}',
         'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
-    });  
+    });
 {% endfor %}
 $('#default-lib').click(function() {
     var form = $('#default-lib-form'),
@@ -178,14 +178,14 @@ $('#default-lib-form').submit(function() {
     lang_context.click(function() {
         lang_selector.toggleClass('hide');
         return false;
-    }).focus(function() { $(this).blur(); }); 
+    }).focus(function() { $(this).blur(); });
 
     $(document).click(function(e) {
         var element = e.target || e.srcElement;
         if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
             lang_selector.addClass('hide');
-        }   
-    }); 
+        }
+    });
 })();
 </script>
 {% endblock %}

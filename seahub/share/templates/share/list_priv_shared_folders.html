@@ -34,7 +34,7 @@
                 <option value="r">{% trans "Read-Only"%}</option>
                 {% else %}
                 <option value="rw">{% trans "Read-Write"%}</option>
-                {% endif %} 
+                {% endif %}
             </select>
         </td>
         <td>{{ repo.props.repo_desc }}</td>
@@ -99,7 +99,7 @@ $('.share-permission-select').change(function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             select.prev().removeClass('hide');
-        }   
+        }
     });
 });
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select

@@ -2,7 +2,7 @@
 
 def msg_info_list(msgs, user):
     """Group message list by ``from_email`` or ``to_email`` and order by
-    message time. 
+    message time.
 
     **Returns**
 
@@ -26,12 +26,12 @@ def msg_info_list(msgs, user):
                 if msg.timestamp > message[msg.to_email]['last_time']:
                     message[msg.to_email]['last_time'] = msg.timestamp
                     message[msg.to_email]['last_msg'] = msg.message
-                    
+
         else:                   # message others send to the user
             if not message.has_key(msg.from_email):
                 message.setdefault(msg.from_email,{})
-                message[msg.from_email].setdefault('not_read',0) 
-                message[msg.from_email].setdefault('last_msg',msg.message) 
+                message[msg.from_email].setdefault('not_read',0)
+                message[msg.from_email].setdefault('last_msg',msg.message)
                 message[msg.from_email].setdefault('last_time',msg.timestamp)
             else:
                 if msg.timestamp > message[msg.from_email]['last_time']:

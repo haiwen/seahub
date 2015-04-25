@@ -51,11 +51,11 @@ class AnonymousShareTokenGenerator(object):
             ts = base36_to_int(ts_b36)
         except ValueError:
             return None
-        
+
         days = ANONYMOUS_SHARE_LINK_TIMEOUT - (self._num_days(self._today()) - ts)
         if days < 0:
             return None
-        
+
         now = dt.now()
         tomorrow = dt(now.year, now.month, now.day+1)
 
@@ -74,7 +74,7 @@ class AnonymousShareTokenGenerator(object):
                                unicode(random.randint(0, 999999)) +
                                now.strftime('%Y-%m-%d %H:%M:%S') +
                                unicode(timestamp)).hexdigest()[::2]
-        
+
         return "%s-%s" % (ts_b36, hash)
 
     def _num_days(self, dt):

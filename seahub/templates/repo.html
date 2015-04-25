@@ -10,7 +10,7 @@
 {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
 #main { display:none; }
 {% endif %}
-</style>    
+</style>
 <!-- Shim to make HTML5 elements usable in older Internet Explorer versions -->
 <!--[if lt IE 9]><script src="{{ MEDIA_URL}}js/html5shiv.js"></script><![endif]-->
 {% endblock %}
@@ -82,7 +82,7 @@
                 <p class="saving-tip alc clear hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
                 <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
             </div>
-           {% endif %} 
+           {% endif %}
         {% endif %}
     </div>
 
@@ -90,7 +90,7 @@
         <h3 class="hd">{% trans "Update %(file_name)s" %}</h3>
         {% if no_quota %}
         <p class="error">{% trans "The owner of this library has run out of space." %}</p>
-        {% else %}      
+        {% else %}
         <form id="update-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
             <input type="hidden" name="target_file" />
 
@@ -137,15 +137,15 @@
             <label>{% trans "Featured File Type" %}</label><br />
             <button type="button" class="set-file-type" data-filetype="seaf" title="{% trans "Click to choose" %}">seaf</button> <span>{% trans "online Rich Text format." %}</span>
             {% if LANGUAGE_CODE == 'zh-cn' %}
-            <a href="http://www.seafile.com/help/seaf/" target="_blank">{% trans 'Details' %}</a><br /> 
+            <a href="http://www.seafile.com/help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
             {% else %}
-            <a href="http://www.seafile.com/en/help/seaf/" target="_blank">{% trans 'Details' %}</a><br /> 
+            <a href="http://www.seafile.com/en/help/seaf/" target="_blank">{% trans 'Details' %}</a><br />
             {% endif %}
             <button type="button" class="set-file-type" data-filetype="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span>
             {% if LANGUAGE_CODE == 'zh-cn' %}
-            <a href="http://www.seafile.com/help/markdown/" target="_blank">{% trans 'Details' %}</a>            
+            <a href="http://www.seafile.com/help/markdown/" target="_blank">{% trans 'Details' %}</a>
             {% else %}
-            <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>            
+            <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>
             {% endif %}
         </div>
         <label>{% trans "File Name" %}</label><br/>
@@ -158,11 +158,11 @@
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />     
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
             <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />     
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />
             <div id="other-repos-dirs" class="hide"></div>
             {% endif %}
         </div>
@@ -191,7 +191,7 @@
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </form>
-    
+
     {% include "snippets/file_share_popup.html" %}
 
     {% with attach_type='dir' %}
@@ -521,7 +521,7 @@ $('#upload-file-dialog .close').click(function() {
     $('#upload-file-dialog .files').empty();
 });
 
-window.locale = { 
+window.locale = {
     "fileupload": {
         "errors": {
             "maxFileSize": "{% trans "File is too big" %}",
@@ -530,14 +530,14 @@ window.locale = {
             "maxNumberOfFiles": "{% trans "Max number of files exceeded" %}",
             "uploadedBytes": "{% trans "Uploaded bytes exceed file size" %}",
             "emptyResult": "{% trans "Empty file upload result" %}"
-        },  
+        },
         "error": "{% trans "Error" %}",
         "uploaded": "{% trans "uploaded" %}",
         "canceled": "{% trans "canceled" %}",
         "start": "{% trans "Start" %}",
         "cancel": "{% trans "Cancel" %}",
         "destroy": "{% trans "Delete" %}"
-    }   
+    }
 };
 </script>
 {% endif %}
@@ -556,7 +556,7 @@ function reqDirData(url, func) {
         dataType: 'json',
         success: function(data) {
             $('#repo-file-list').html(data['html']);
-            
+
             // both original dir list and new dir list are long
             var repo_top = $('#repo-top'),
                 h = repo_top.offset().top + repo_top.outerHeight(true);
@@ -629,14 +629,14 @@ function decrypt_repo() {
             err.html("{% trans "Please enter the password." %}").removeClass('hide');
             return false;
         }
-        
+
         var magic_str = gen_magic_str('{{repo.id}}', passwd);
         if (magic_str == '{{repo.magic}}') {
             decrypt_form.remove();
             reqDirData('{% url 'repo_dir_data' repo.id %}' + location.search, function() {
                 $('#main').show();
             });
-            
+
             var fileKey = new FileKey(passwd);
             var file_key = fileKey.decrypt('{{repo.random_key}}');
 
@@ -648,7 +648,7 @@ function decrypt_repo() {
                 localStorage[repo_id + '_decrypt_t'] = new Date().getTime();
                 localStorage[repo_id + '_enc_key'] = enc_key;
                 localStorage[repo_id + '_enc_iv'] = enc_iv;
-            } 
+            }
         } else {
             err.html("{% trans "Wrong password" %}").removeClass('hide');
         }
@@ -691,7 +691,7 @@ var del_dirents = function() {
         success: function(data) {
             var deleted_len = data['deleted'].length,
                 msg_s, msg_f;
-            
+
             if (deleted_len > 0) {
                 if (deleted_len == dirents_names.length) {
                     dirents.remove();
@@ -700,7 +700,7 @@ var del_dirents = function() {
                         if ($(this).data('name') in data['deleted']) {
                             $(this).remove();
                         }
-                    }); 
+                    });
                 }
                 if (data['deleted'].length > 1) {
                     msg_s = "{% trans "Successfully deleted %(name)s and %(amount)s other items." %}";
@@ -708,7 +708,7 @@ var del_dirents = function() {
                     msg_s = "{% trans "Successfully deleted %(name)s." %}";
                 }
                 msg_s = msg_s.replace('%(name)s', HTMLescape(data['deleted'][0])).replace('%(amount)s', data['deleted'].length - 1);
-                feedback(msg_s, 'success'); 
+                feedback(msg_s, 'success');
                 updateCmt();
             }
 
@@ -719,7 +719,7 @@ var del_dirents = function() {
                     msg_f = "{% trans "Internal error. Failed to delete %(name)s." %}"
                 }
                 msg_f = msg_f.replace('%(name)s', data['undeleted'][0]).replace('%(amount)s', data['undeleted'].length - 1);
-                feedback(msg_f, 'error'); 
+                feedback(msg_f, 'error');
             }
             $.modal.close();
             $('#dirents-op').addClass('hide');
@@ -776,7 +776,7 @@ function render_jstree_for_cur_path() {
                             children[i].push({
                                 'data': data[i][j],
                                 'state': 'open',
-                                'children': children[i+1] 
+                                'children': children[i+1]
                             });
                         } else {
                             children[i].push({
@@ -790,7 +790,7 @@ function render_jstree_for_cur_path() {
             if (children[0].length > 0) {
                 $.extend(repo_data, {'children': children[0]});
             }
-            json_data.push(repo_data); 
+            json_data.push(repo_data);
 
             loading_tip.hide();
             file_tree.renderDirTree(container, form, json_data);
@@ -989,7 +989,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                     } else { // failed or canceled
                                         if (data['failed']) {
                                             var error_msg = op == 'mv' ? 'Failed to move %(name)s':'Failed to copy %(name)s';
-                                            cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');    
+                                            cancel_btn.after('<p class="error">' + error_msg.replace('%(name)s', obj_name) + '</p>');
                                             end();
                                         }
                                     }
@@ -1002,7 +1002,7 @@ $('#mv-dirents, #cp-dirents').click(function() {
                                 } else {
                                     error = "{% trans "Failed. Please check the network." %}";
                                 }
-                                cancel_btn.after('<p class="error">' + error + '</p>');    
+                                cancel_btn.after('<p class="error">' + error + '</p>');
                                 end();
                             }
                         });
@@ -1077,7 +1077,7 @@ function showMsg(con, type) {
     } else {
         var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
         $('#main').append(html);
-    }   
+    }
     $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
 }
 
@@ -1103,7 +1103,7 @@ function encAndSubmitFile(file, fd, submit_url) {
         var slices = [];
         while(pos < file.size){
           slices.push(file.slice(pos, pos += 1024 * 1024));
-        }     
+        }
         return slices;
     }
     var blocks = sliceFile(file), encrypted_blocks = [];
@@ -1121,7 +1121,7 @@ function encAndSubmitFile(file, fd, submit_url) {
     }
     for (i = 0, len = workers.length; i < len ; i++) {
         workers[i].addEventListener('message', onWorkerMessage, false);
-    } 
+    }
     for (i = 0, len = blocks.length; i < len; i++) {
         workers[i % workers.length].postMessage({
             encrypt: true,
@@ -1141,7 +1141,7 @@ function encAndSubmitFile(file, fd, submit_url) {
             return;
         }
 
-        encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id}); 
+        encrypted_blocks.push({index: e.data.index, block: e.data.block, block_id: e.data.block_id});
         var msg = "{% trans "Encrypting, %(num)s% complete." %}";
         showMsg(msg.replace('%(num)s', (encrypted_blocks.length / blocks.length * 100).toFixed(0)), 'info');
         if (encrypted_blocks.length == blocks.length ) {
@@ -1153,7 +1153,7 @@ function encAndSubmitFile(file, fd, submit_url) {
         var ordered_enc_blocks = [], blk;
         for (var i = 0, len = encrypted_blocks.length; i < len; i++) {
              ordered_enc_blocks[encrypted_blocks[i].index] = {'id': encrypted_blocks[i].block_id, 'block': encrypted_blocks[i].block};
-        } 
+        }
         for (var i = 0, len = ordered_enc_blocks.length; i < len; i++) {
             blk = new Blob([wordArray2ab(ordered_enc_blocks[i].block)], {type:''});
             fd.append('file', blk, ordered_enc_blocks[i].id);
@@ -1202,7 +1202,7 @@ $('.path .dir-link').click(dirlinkClick);
 $('.lsch').unbind().click(function() {
     listCommitDetails($(this).data('url'), $(this).data('time'));
     return false;
-}); 
+});
 
 {% if user_perm == 'rw' %}
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
@@ -1218,7 +1218,7 @@ $('#upload-file').click(function () {
             return false;
         }
         var file = file_input[0].files[0];
-        
+
         // prepare fd
         file_input.remove();// the selected file will not be submitted
         var fd = new FormData(form[0]);// get the fields in the form (e.g. csrf...token)
@@ -1288,7 +1288,7 @@ $('#add-new-dir').click(function () {
     $('#add-new-dir-form').modal({appendTo:'#main'});
     $('#simplemodal-container').css({'height':'auto'});
 });
-  
+
 $('#add-new-file').click(function () {
     $('#add-new-file-form').modal({appendTo:'#main', focus:false, containerCss:{'padding':'20px 25px'}});
     $('#simplemodal-container').css({'height':'auto'});
@@ -1352,7 +1352,7 @@ function sortDirent() {
     var id= $(this).attr('id'), by,
         dir_list = [], file_list = [],
         table = $('.repo-file-list');
-    
+
     switch (id) {
         case 'name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 };break;
         case 'name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 };break;
@@ -1360,7 +1360,7 @@ function sortDirent() {
         case 'time-down': by = function(a, b) { return a.time < b.time ? 1 : -1 };break;
     }
 
-    // when 'name' is like '123', `data('name')` return number 123 
+    // when 'name' is like '123', `data('name')` return number 123
     $('.dir-item').each(function() {
         dir_list.push({'name':$(this).attr('data-name'), 'time':$(this).data('time'), 'element':this});
     });
@@ -1379,7 +1379,7 @@ function sortDirent() {
     $(file_list).each(function(index, item) {
         table.append(item.element);
     });
-  
+
     $(this).addClass('hide');
     var other;
     if (id.indexOf('up') != -1) {
@@ -1471,7 +1471,7 @@ $('.file-download').click(function() {
         download([]);
         return false;
     }
-    
+
     showMsg("{% trans "Downloading..." %}", 'info');
 
     $.ajax({
@@ -1479,7 +1479,7 @@ $('.file-download').click(function() {
         dataType: 'json',
         success: function(data) {
             var block_id_list = data['blklist'],
-                block_get_url_root = data['url']; 
+                block_get_url_root = data['url'];
 
             var blocks = [], decrypted_blocks = [];
 
@@ -1492,9 +1492,9 @@ $('.file-download').click(function() {
                 var bufView = new Uint8Array(buf);
                 for (var i = 0, strLen = str.length; i < strLen; i++) {
                     bufView[i] = str.charCodeAt(i);
-                }   
+                }
                 return buf;
-            }; 
+            };
 
             function reqBlock(index) {
                 $.ajax({
@@ -1524,7 +1524,7 @@ $('.file-download').click(function() {
             }
             for (i = 0; i < workers.length; i++){
                 workers[i].addEventListener('message', onWorkerMessage, false);
-            } 
+            }
             function decrypt(blocks) {
                 showMsg("{% trans "Decrypting..." %}", 'info');
                 for (i = 0; i < blocks.length; i++) {
@@ -1542,7 +1542,7 @@ $('.file-download').click(function() {
                     // error
                     return;
                 }
-                decrypted_blocks.push({index: e.data.index, block: e.data.block}); 
+                decrypted_blocks.push({index: e.data.index, block: e.data.block});
                 var msg = "{% trans "Decrypting, %(num)s% complete." %}";
                 showMsg(msg.replace('%(num)s', (decrypted_blocks.length / block_id_list.length * 100).toFixed(0)), 'info');
                 if (decrypted_blocks.length == block_id_list.length ) {
@@ -1648,7 +1648,7 @@ $('.dir-del, .file-del', context).click(function() {
                 no_file_op_popup = true;// make other items can work normally when hover
                 var msg = "{% trans "Successfully deleted %(name)s" %}";
                 msg = msg.replace('%(name)s', HTMLescape(dirent_name));
-                feedback(msg, 'success'); 
+                feedback(msg, 'success');
                 updateCmt();
             }
         },
@@ -1697,7 +1697,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     } else if (op.hasClass('dir-mv')) {
         form_hd = "{% trans "Move Directory" %}";
     }
-    
+
     if ($(this).hasClass('file-cp') || $(this).hasClass('dir-cp')) {
         op_type = 'cp';
         op_detail = "{% trans "Copy %(name)s to:" %}";
@@ -1718,7 +1718,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
     $('input[name="op"]', form).val(op_type);
     $('input[name="obj_type"]', form).val(obj_type);
     $('input[name="obj_name"]', form).val(obj_name);
-    
+
     form.data('op_obj', dirent);
     render_jstree_for_cur_path();
     return false;
@@ -1727,7 +1727,7 @@ $('.file-cp, .file-mv, .dir-cp, .dir-mv', context).click(function () {
 {% if repo.enc_version == 2 and not server_crypto and repo.encrypted %}
 $('.dir-download', context).click(function() {
     var msg = "{% trans "Directory download is not supported in this library." %}";
-    $('<p class="error">' + msg + '</p>').modal();    
+    $('<p class="error">' + msg + '</p>').modal();
     return false;
 });
 $('.file-update', context).click(function() {
@@ -1826,7 +1826,7 @@ $('.file-update', context).click(function() {
             })
             .bind('fileuploaddone', function(e, data) {
                 if (data.textStatus == 'success') {
-                    upload_success = true; 
+                    upload_success = true;
                     data.result[0].uploaded = true; // for 'template_download' render
                 }
             })
@@ -1858,7 +1858,7 @@ $('.file-star', context).click(function() {
     } else {
         post_url = '{% url 'repo_unstar_file' repo.id %}?file=' + e(cur_path + file_name);
     }
-    
+
     $.ajax({
         url: post_url,
         cache: false,
@@ -1984,7 +1984,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
         }
         post_data['dirent_name'] = dirent_name;
     } else if (form_id == 'rename-form') {
-        var old_name = form.find('input[name="oldname"]').val(), 
+        var old_name = form.find('input[name="oldname"]').val(),
             new_name = $.trim(form.find('input[name="newname"]').val()),
             op_obj = form.data('op_obj');
         if (!new_name) {
@@ -2015,9 +2015,9 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 $('.dirent-name', op_obj).html(HTMLescape(new_name)); // no link for files in client_crypto mode
             }
             $('.dirent-update', op_obj).html("{% trans "Just now" %}");
-            var dld_link; 
+            var dld_link;
             if (op_obj.attr('class') == 'dir-item') {
-                dld_link = $('.dir-download', op_obj), dld_href = dld_link.attr('href'); 
+                dld_link = $('.dir-download', op_obj), dld_href = dld_link.attr('href');
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(path+new_name));
                 $('.dir-share', op_obj).attr({
                         'data-link':'',
@@ -2031,7 +2031,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                     'class': 'icon-star-empty file-star',
                     'data-status': 'unstarred'
                     });
-                dld_link = $('.file-download', op_obj), dld_href = dld_link.attr('href'); 
+                dld_link = $('.file-download', op_obj), dld_href = dld_link.attr('href');
                 dld_link.attr('href', dld_href.substr(0, dld_href.indexOf('?')) + '?p=' + e(cur_path + new_name));
                 $('.file-share', op_obj).attr({'data-link':'', 'data-token':''});
                 var file_history = $('.file-history', op_obj), fh_href = file_history.attr('href');
@@ -2082,7 +2082,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                 updateCmt();
                 feedback(msg, 'success');
             } else {
-                var details = $('#mv-details'), 
+                var details = $('#mv-details'),
                     cancel_btn = $('#cancel-mv'),
                     other_info = $('#mv-other-info');
                 cancel_btn.removeClass('hide');
@@ -2115,7 +2115,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                                 bar.show();
                                 setTimeout(req_progress, 1000);
                             } else if (data['successful']) {
-                                $.modal.close(); 
+                                $.modal.close();
                                 if (op=='mv') {
                                     op_obj.remove();
                                     updateCmt();
@@ -2139,7 +2139,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
                             details.addClass('vh')
                             other_info.html(error).removeClass('hide');
                             cancel_btn.addClass('hide');
-                            setTimeout(function () { $.modal.close(); }, 1000); 
+                            setTimeout(function () { $.modal.close(); }, 1000);
                         }
                     });
                 };
@@ -2186,7 +2186,7 @@ function ajaxPost(params) { // params: {}
         post_data = params.post_data,
         after_op_success = params.after_op_success,
         form_id = params.form_id;
-    var submit_btn = form.children('input[type="submit"]');  
+    var submit_btn = form.children('input[type="submit"]');
     disable(submit_btn);
     $.ajax({
         url: post_url,
@@ -2236,7 +2236,7 @@ $('#mv-dir-list .hd').click(function() {
                             'data': data[i].name,
                             'attr': {'repo_id': data[i].id, 'root_node': true},
                             'state': 'closed'
-                            });  
+                            });
                         }
                     }
                     loading_tip.hide();
@@ -2267,12 +2267,12 @@ $(window).scroll(function() {
 
     if ($(window).scrollTop() > repo_top.offset().top + repo_top.outerHeight(true) + 1) {
         repo_file_list.css({'padding-top': file_topbar_h + list_hd.outerHeight(true)});
-        file_topbar.addClass('fixed-hd').css({'left': repo_top_left});  
-        list_hd.addClass('fixed-hd').css({'left': repo_top_left, 'top':file_topbar_h});  
+        file_topbar.addClass('fixed-hd').css({'left': repo_top_left});
+        list_hd.addClass('fixed-hd').css({'left': repo_top_left, 'top':file_topbar_h});
     } else {
         repo_file_list.css({'padding-top':0});
-        file_topbar.removeClass('fixed-hd');  
-        list_hd.removeClass('fixed-hd');  
+        file_topbar.removeClass('fixed-hd');
+        list_hd.removeClass('fixed-hd');
     }
 
     var ele_more = $('#repo-file-list .dirent-more');
@@ -2299,7 +2299,7 @@ $(window).scroll(function() {
                 );
                 opOnDirent(more_dirents);
                 if (data['dirent_more']) {
-                    ele_more.data('start', data['more_start']); 
+                    ele_more.data('start', data['more_start']);
                 } else {
                     ele_more.remove();
                 }
@@ -2351,7 +2351,7 @@ function updateCmt() {
         var form = $("#repo-share-form"),
             cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
             post_data = '',
-            input = $('[name="email_or_group"]', form); 
+            input = $('[name="email_or_group"]', form);
         switch(cur_tab_id) {
             case '#share-enter':
                 post_data = input.val();
@@ -2360,9 +2360,9 @@ function updateCmt() {
             case '#share-contact-options':
                 $(cur_tab_id + ' .checkbox-checked .checkbox-orig').each(function() {
                     post_data += $(this).val() + ',';
-                }); 
+                });
                 input.val(post_data);
-        }   
+        }
         if (!post_data) {
             apply_form_error(form.attr('id'), "{% trans "Please enter emails or groups, or select some." %}");
             return false;
@@ -2383,7 +2383,7 @@ function updateCmt() {
                     err = jQuery.parseJSON(xhr.responseText).error;
                 } else {
                     err = "{% trans "Failed. Please check the network." %}";
-                } 
+                }
                 apply_form_error(form.attr('id'), err);
             }
         });

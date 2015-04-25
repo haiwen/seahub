@@ -7,7 +7,7 @@
     <div class="avatar-op-con">
     <h3>{% trans "Your current avatar: " %}</h3>
     {% avatar user %}
-    
+
     {% comment %}
     {% if not avatars %}
         <p>{% trans "You haven't uploaded an avatar yet. Please upload one now." %}</p>
@@ -21,7 +21,7 @@
         </form>
     {% endif %}
     {% endcomment %}
-    
+
     <h3 class="upload-new-avatar-hd">上传新头像：</h3>
     <form enctype="multipart/form-data" method="POST" action="{% url avatar_add %}">{% csrf_token %}
         {{ upload_avatar_form.avatar }}<br />

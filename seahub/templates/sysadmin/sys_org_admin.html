@@ -20,9 +20,9 @@
     <label for="id_owner">{% trans "Owner" %}</label><span class="icon-question-sign" title="{% trans "Owner can use admin panel in an organization, must be a new account." %}" style="color:#666; margin-left:3px;"></span><br />
     <input type="text" name="owner" id="id_owner" class="input" /><br />
     <label for="id_password1">{% trans "Password" %}</label><br />
-    <input type="password" name="password1" id="id_password1" class="input" /><br />    
+    <input type="password" name="password1" id="id_password1" class="input" /><br />
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
-    <input type="password" name="password2" id="id_password2" class="input" /><br />    
+    <input type="password" name="password2" id="id_password2" class="input" /><br />
 
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
@@ -95,15 +95,15 @@ $('#add-org-form').submit(function() {
     if (!pwd1) {
         apply_form_error(form_id, "{% trans "Password can not be blank" %}");
         return false;
-    } 
+    }
     if (!pwd2) {
         apply_form_error(form_id, "{% trans "Please enter the password again" %}");
         return false;
-    } 
+    }
     if (pwd1 != pwd2) {
         apply_form_error(form_id, "{% trans "Passwords do not match" %}");
         return false;
-    } 
+    }
 
     disable(submit_btn);
     $.ajax({
@@ -123,7 +123,7 @@ $('#add-org-form').submit(function() {
         success: function(data) {
             if (data['success']) {
                 location.reload(true);
-            }   
+            }
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {

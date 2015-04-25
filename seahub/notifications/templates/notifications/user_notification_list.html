@@ -29,7 +29,7 @@
   <div id="notices-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
   <button id="notices-more-btn" class="{% if not notices_more %}hide{% endif %}">{% trans 'More' %}</button>
   <p id="notices-error" class="error hide"></p>
-</div>    
+</div>
 
 {% endif %}
 {% endblock %}
@@ -86,8 +86,8 @@ $('#notices-more-btn').click(function() {
         error: function(jqXHR, textStatus, errorThrown) {
             $('#notices-loading').addClass('hide');
             if (!jqXHR.responseText && textStatus != 'abort') {
-                $('#notices-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
-            }   
+                $('#notices-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');
+            }
         }
     });
 });

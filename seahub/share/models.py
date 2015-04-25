@@ -117,7 +117,7 @@ class FileShareManager(models.Manager):
     def get_dir_link_by_path(self, username, repo_id, path):
         path = normalize_dir_path(path)
         return self._get_file_share_by_path(username, repo_id, path)
-    
+
     def get_valid_dir_link_by_token(self, token):
         return self._get_valid_file_share_by_token(token)
 
@@ -148,7 +148,7 @@ class FileShare(models.Model):
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
         """Set a share link as org share link.
-        
+
         Arguments:
         - `org_id`:
         - `file_share`:
@@ -156,7 +156,7 @@ class OrgFileShareManager(models.Manager):
         ofs = self.model(org_id=org_id, file_share=file_share)
         ofs.save(using=self._db)
         return ofs
-        
+
 class OrgFileShare(models.Model):
     """
     Model used for organization file or dir shared link.
@@ -232,22 +232,22 @@ class PrivateFileDirShareManager(models.Manager):
         """
         return self.add_private_file_share(from_user, to_user, repo_id,
                                            path, 'r')
-        
+
     def get_private_share_in_file(self, username, repo_id, path):
         """Get a file that private shared to ``username``.
         """
         path = normalize_file_path(path)
-        
+
         ret = super(PrivateFileDirShareManager, self).filter(
             to_user=username, repo_id=repo_id, path=path, s_type='f')
         return ret[0] if len(ret) > 0 else None
-        
+
     def add_private_dir_share(self, from_user, to_user, repo_id, path, perm):
         """
         """
         path = normalize_dir_path(path)
         token = gen_token(max_length=10)
-        
+
         pfs = self.model(from_user=from_user, to_user=to_user, repo_id=repo_id,
                          path=path, s_type='d', token=token, permission=perm)
         pfs.save(using=self._db)
@@ -264,7 +264,7 @@ class PrivateFileDirShareManager(models.Manager):
 
     def get_priv_file_dir_share_by_token(self, token):
         return super(PrivateFileDirShareManager, self).get(token=token)
-        
+
     def delete_private_file_dir_share(self, from_user, to_user, repo_id, path):
         """
         """

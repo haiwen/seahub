@@ -46,7 +46,7 @@ class GroupWiki(models.Model):
 
 ###### signal handlers
 from django.dispatch import receiver
-from seahub.signals import repo_deleted    
+from seahub.signals import repo_deleted
 
 @receiver(repo_deleted)
 def remove_personal_wiki(sender, **kwargs):

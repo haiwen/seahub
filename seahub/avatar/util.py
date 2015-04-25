@@ -61,7 +61,7 @@ def invalidate_group_cache(group_id, size=None):
         sizes.add(size)
     for size in sizes:
         cache.delete(get_grp_cache_key(group_id, size))
-            
+
 def get_default_avatar_url():
     base_url = getattr(settings, 'MEDIA_URL', '')
     # Don't use base_url if the default avatar url starts with http:// of https://
@@ -89,8 +89,8 @@ def get_default_avatar_non_registered_url():
     elif not ends and not begins:
         return '%s/%s' % (base_url, AVATAR_DEFAULT_NON_REGISTERED_URL)
     return '%s%s' % (base_url, AVATAR_DEFAULT_NON_REGISTERED_URL)
-    
-    
+
+
 def get_primary_avatar(user, size=AVATAR_DEFAULT_SIZE):
     if not isinstance(user, User):
         try:
@@ -126,5 +126,5 @@ def get_avatar_file_storage():
             'size_column': 'size',
             }
         return get_storage_class(AVATAR_FILE_STORAGE)(options=dbs_options)
-    
-    
+
+

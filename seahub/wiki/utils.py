@@ -70,13 +70,13 @@ def get_group_wiki_repo(group, username):
         groupwiki = GroupWiki.objects.get(group_id=group.id)
     except GroupWiki.DoesNotExist:
         raise WikiDoesNotExist
-        
+
     repos = seaserv.get_group_repos(group.id, username)
     for repo in repos:
         if repo.id == groupwiki.repo_id:
             return repo
     raise WikiDoesNotExist
-    
+
 def get_personal_wiki_page(username, page_name):
     repo = get_personal_wiki_repo(username)
     dirent = get_wiki_dirent(repo.id, page_name)
@@ -120,7 +120,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
         if len(page_name.split('|')) > 1:
             page_alias = page_name.split('|')[0]
             page_name = page_name.split('|')[1]
-        
+
         filetype, fileext = get_file_type_and_ext(page_name)
         if fileext == '':
             # convert page_name that extension is missing to a markdown page
@@ -149,7 +149,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
         else:
             from seahub.base.templatetags.seahub_tags import file_icon_filter
             from django.conf import settings
-            
+
             # convert other types of filelinks to clickable links
             path = "/" + page_name
             icon = file_icon_filter(page_name)

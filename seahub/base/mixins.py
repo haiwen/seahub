@@ -19,4 +19,4 @@ class LoginRequiredMixin(object):
 #     @method_decorator(ctx_switch_required)
 #     def dispatch(self, *args, **kwargs):
 #         return super(CtxSwitchRequiredMixin, self).dispatch(*args, **kwargs)
-    
+

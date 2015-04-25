@@ -15,7 +15,7 @@
             {'name':'share', 'con':'e001'},
             {'name':'removeformat', 'con':'f1e7'}
         ];
-        var fa_icons = [ 
+        var fa_icons = [
             {'name':'trash', 'con':'f014'},
             {'name':'cog', 'con':'f013'},
             {'name':'cloud-download', 'con':'f0ed'},
@@ -79,14 +79,14 @@
             {'name':'upload-alt', 'con':'f093'},
             {'name':'download', 'con':'f01a'},
             {'name':'archive', 'con':'f187'}
-        ];  
-           
+        ];
+
         $('[class^="sf-icon-"]').each(function() {
             setCon($(this), 'sf-icon-', sf_icons);
-        }); 
+        });
         $('[class^="icon-"], [class$=" icon-"]').each(function() {
             setCon($(this), 'icon-', fa_icons);
-        }); 
+        });
     }
     pseudo_test.remove();
 })();
