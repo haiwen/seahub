@@ -197,7 +197,7 @@
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                <% if (is_repo_owner) { %>
+                <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
                 <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                 <% } %>
             </ul>
