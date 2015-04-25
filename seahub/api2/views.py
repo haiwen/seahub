@@ -3119,7 +3119,7 @@ class GroupRepos(APIView):
             "mtime": repo.last_modified,
             "mtime_relative": translate_seahub_time(repo.last_modified),
             "encrypted": repo.encrypted,
-            "permission": 'rw',  # Always have read-write permission to owned repo
+            "permission": permission,
             "owner": username,
             "owner_nickname": email2nickname(username),
             "share_from_me": True,
@@ -3136,6 +3136,7 @@ class GroupRepos(APIView):
         else:
             repos = seafile_api.get_repos_by_group(group.id)
 
+        repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
         group.is_staff = is_group_staff(group, request.user)
 
         repos_json = []
