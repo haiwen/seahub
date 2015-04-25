@@ -417,3 +417,7 @@ def trim(value, length):
         return value[:length-2] + '...'
     else:
         return value
+
+@register.filter(name='strip_slash')
+def strip_slash(value):
+    return value.strip('/')

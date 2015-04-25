@@ -71,7 +71,7 @@
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'repo' e.repo_id %}?p={{ e.path|urlencode}}">{{e.file_or_dir}}</a></td>
                 {% endif %}
-                <td><a href="{% url 'repo' e.repo_id %}">{{e.repo.name}}</a></td>
+                <td><a href="{% url 'view_common_lib_dir' e.repo_id '' %}">{{e.repo.name}}</a></td>
                 <td>{{e.to_user|email2nickname}}</td>
                 <td>
                     <a href="{% url 'rm_private_file_share' e.token %}" class="op-icon vh" title="{% trans "Unshare" %}">

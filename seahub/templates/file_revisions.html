@@ -12,9 +12,9 @@
 {% trans 'Current Path:' %}
 {% for name, link in zipped %}
 {% if not forloop.last %}
-<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/?p={{ link|urlencode }}">{{ name }}</a> /    
+<a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
 {% else %}
-<a href="{{ SITE_ROOT }}repo/{{ repo.id }}/files/?p={{ path|urlencode }}">{{ name }}</a>
+<a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
 {% endif %}
 {% endfor %}
 </p>

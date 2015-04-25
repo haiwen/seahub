@@ -26,7 +26,7 @@
             <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
             {% endif %}
         </td>
-        <td><a href="{{ SITE_ROOT }}repo/{{ repo.props.id }}/">{{ repo.props.name }}</a></td>
+        <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.name }}</a></td>
         <td>{{ repo.props.desc }}</td>
         <td>
         {% if repo.latest_modify %}

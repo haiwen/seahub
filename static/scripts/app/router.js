@@ -26,6 +26,7 @@ define([
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
 
+            'common/lib/:repo_id(/*path)': 'showCommonDir',
             // Default
             '*actions': 'defaultAction'
         },
@@ -79,6 +80,16 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('my-libs', repo_id, path);
+        },
+
+        showCommonDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.switchCurrentView(this.myHomeView);
+            this.myHomeView.showDir('common', repo_id, path);
         },
 
         showMySubRepoDir: function(repo_id, path) {
