@@ -12,10 +12,9 @@
 <table>
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="20%">{% trans "Name"%} <span id="shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
-        <th width="21%">{% trans "Share To"%}</th>
-        <th width="15%">{% trans "Permission"%}</th>
-        <th width="27%">{% trans "Description"%}</th>
+        <th width="33%">{% trans "Name"%} <span id="shared-repo-list-name-down" class="icon-caret-up cspt"></span> <span id="shared-repo-list-name-up" class="icon-caret-down cspt hide"></span></th>
+        <th width="30%">{% trans "Share To"%}</th>
+        <th width="20%">{% trans "Permission"%}</th>
         <th width="13%">{% trans "Operations"%}</th>
     </tr>
     {% for repo in out_repos %}
@@ -41,7 +40,6 @@
                 {% endif %} 
             </select>
         </td>
-        <td>{{ repo.props.repo_desc }}</td>
         <td>
             {% if repo.props.share_type == 'group' %}
             <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}&permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
