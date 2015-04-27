@@ -9,6 +9,7 @@ from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
+from seahub.utils import within_time_range
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -16,13 +17,6 @@ except ImportError:
 
 logger = logging.getLogger(__name__)
 
-def within_ten_min(d1, d2):
-    '''Return true if two datetime.datetime object differs less than ten minutes'''
-    delta = d2 - d1 if d2 > d1 else d1 - d2
-    interval = 60 * 10
-    # delta.total_seconds() is only available in python 2.7+
-    seconds = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
-    return seconds < interval
 
 HEADER_CLIENT_VERSION = 'HTTP_SEAFILE_CLEINT_VERSION'
 HEADER_PLATFORM_VERSION = 'HTTP_SEAFILE_PLATFORM_VERSION'
@@ -135,7 +129,7 @@ class TokenAuthentication(BaseAuthentication):
                 token.platform_version = platform_version
                 need_save = True
 
-            if not within_ten_min(token.last_accessed, datetime.datetime.now()):
+            if not within_time_range(token.last_accessed, datetime.datetime.now(), 10 * 60):
                 # We only need 10min precision for the last_accessed field
                 need_save = True
 

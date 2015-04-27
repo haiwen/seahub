@@ -37,7 +37,7 @@ from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check
-from seahub.base.models import UserStarredFiles
+from seahub.base.models import UserStarredFiles, ClientLoginToken
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
@@ -165,7 +165,7 @@ def gen_path_link(path, repo_name):
 
 def get_file_download_link(repo_id, obj_id, path):
     """Generate file download link.
-    
+
     Arguments:
     - `repo_id`:
     - `obj_id`:
@@ -2090,3 +2090,26 @@ def image_view(request, filename):
 
 def shib_login(request):
     return HttpResponseRedirect(request.GET.get("next",reverse('myhome')))
+
+def client_token_login(request):
+    """Login from desktop client with a generated token.
+    """
+    tokenstr = request.GET.get('token', '')
+    user = None
+    if len(tokenstr) == 32:
+        try:
+            username = ClientLoginToken.objects.get_username(tokenstr)
+        except ClientLoginToken.DoesNotExist:
+            pass
+        else:
+            try:
+                user = User.objects.get(email=username)
+                for backend in get_backends():
+                    user.backend = "%s.%s" % (backend.__module__, backend.__class__.__name__)
+            except User.DoesNotExist:
+                pass
+
+    if user:
+        auth_login(request, user)
+
+    return HttpResponseRedirect(request.GET.get("next", reverse('myhome')))

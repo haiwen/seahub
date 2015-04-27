@@ -229,6 +229,8 @@ urlpatterns = patterns('',
 
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
+
+    url(r'^client-login/$', client_token_login, name='client_token_login'),
 )
 
 if settings.SERVE_STATIC:
@@ -257,15 +259,15 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
     )
 
 
-if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
-    from seahub_extra.sysadmin_extra.views import sys_login_admin, \
-        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
-    urlpatterns += patterns('',
-        url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
-        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
-        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
-        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
-    )
+# if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
+#     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
+#         sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
+#     urlpatterns += patterns('',
+#         url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
+#         url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
+#         url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
+#         url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
+#     )
 
 if getattr(settings, 'MULTI_TENANCY', False):
     urlpatterns += patterns('',
