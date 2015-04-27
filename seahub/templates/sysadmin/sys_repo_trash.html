@@ -1,5 +1,5 @@
 {% extends "sysadmin/base.html" %}
-{% load i18n %}
+{% load i18n seahub_tags %}
 {% block cur_repo %}tab-cur{% endblock %}
 
 {% block left_panel %}{{block.super}}
@@ -24,13 +24,15 @@
 <table class="repo-list">
     <tr>
         <th width="30%">{% trans "Name" %}</th>
-        <th width="50%">{% trans "Owner" %}</th>
+        <th width="30%">{% trans "Owner" %}</th>
+        <th width="20%">{% trans "Deleted Time" %}</th>
         <th width="20%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
         <td>{{ repo.repo_name }}</td>
         <td><a href="{% url 'user_info' repo.owner_id %}">{{ repo.owner_id }}</a></td>
+        <td>{{ repo.del_time|translate_seahub_time }}</td>
         <td>
             <a href="#" class="repo-delete-btn op vh" data-url="{% url 'sys_repo_trash_remove' repo.repo_id %}" data-target="{{ repo.repo_name }}">{% trans "Delete" %}</a>
             <a href="#" class="repo-restore-btn op vh" data-url="{% url 'sys_repo_trash_restore' repo.repo_id %}" data-target="{{ repo.repo_name }}">{% trans "Restore" %}</a>
