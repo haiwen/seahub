@@ -82,4 +82,5 @@ def base(request):
         'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
         'search_repo_id': search_repo_id,
+        'debug': True,
         }

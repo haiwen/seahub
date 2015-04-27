@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 
 from .views import *
 from .views_misc import ServerInfoView
-from .views_auth import LogoutDeviceView
+from .views_auth import LogoutDeviceView, ClientLoginTokenView
 
 
 urlpatterns = patterns('',
@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^auth-token/', ObtainAuthToken.as_view()),
     url(r'^server-info/$', ServerInfoView.as_view()),
     url(r'^logout-device/$', LogoutDeviceView.as_view()),
+    url(r'^client-login/$', ClientLoginTokenView.as_view()),
 
     # RESTful API
     url(r'^accounts/$', Accounts.as_view(), name="accounts"),
