@@ -29,9 +29,11 @@ class LogoutDeviceView(APIView):
         return {}
 
 class ClientLoginTokenView(APIView):
-    """Removes the api token of a device that has already logged in. If the device
-    is a desktop client, also remove all sync tokens of repos synced on that
-    client .
+    """Generate a token which can be used later to login directly.
+
+    This is used to quickly login to seahub from desktop clients. The token
+    can only be used once, and would only be valid in 30 seconds after
+    creation.
     """
     authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
