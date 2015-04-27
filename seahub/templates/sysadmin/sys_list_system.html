@@ -26,7 +26,7 @@
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.name }}</a></td>
+        <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td>{{ repo.props.desc }}</td>
     </tr>

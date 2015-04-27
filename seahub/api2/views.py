@@ -1062,7 +1062,7 @@ class UploadLinkView(APIView):
 
     def get(self, request, repo_id, format=None):
         parent_dir = request.GET.get('p', '/')
-        if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if check_quota(repo_id) < 0:
@@ -1080,7 +1080,7 @@ class UpdateLinkView(APIView):
 
     def get(self, request, repo_id, format=None):
         parent_dir = request.GET.get('p', '/')
-        if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if check_quota(repo_id) < 0:
@@ -1098,7 +1098,7 @@ class UploadBlksLinkView(APIView):
 
     def get(self, request, repo_id, format=None):
         parent_dir = request.GET.get('p', '/')
-        if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if check_quota(repo_id) < 0:
@@ -1116,7 +1116,7 @@ class UpdateBlksLinkView(APIView):
 
     def get(self, request, repo_id, format=None):
         parent_dir = request.GET.get('p', '/')
-        if check_folder_permission(repo_id, parent_dir, request.user.username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if check_quota(repo_id) < 0:
@@ -1381,7 +1381,7 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
 
-        if check_folder_permission(repo_id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         parent_dir = request.POST.get('p', '/')
@@ -1517,7 +1517,7 @@ class FileView(APIView):
         path = request.GET.get('p', '')
         username = request.user.username
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(repo_id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if not path or path[0] != '/':
@@ -1669,7 +1669,7 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         parent_dir = os.path.dirname(path)
-        if check_folder_permission(repo_id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
@@ -1747,7 +1747,7 @@ class FileRevert(APIView):
 
         parent_dir = os.path.dirname(path)
         username = request.uset.username
-        if check_folder_permission(repo_id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         path = unquote(path.encode('utf-8'))
@@ -1919,7 +1919,7 @@ class DirView(APIView):
                                  'You do not have permission to create folder.')
 
             parent_dir = os.path.dirname(path)
-            if check_folder_permission(repo_id, parent_dir, username) != 'rw':
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
             parent_dir_utf8 = parent_dir.encode('utf-8')
@@ -1944,7 +1944,7 @@ class DirView(APIView):
                     quote(new_dir_name_utf8)
             return resp
         elif operation.lower() == 'rename':
-            if check_folder_permission(repo.id, path, username) != 'rw':
+            if check_folder_permission(request, repo.id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
             if not is_repo_writable(repo.id, username):
@@ -1994,7 +1994,7 @@ class DirView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        if check_folder_permission(repo_id, path, username) != 'rw':
+        if check_folder_permission(request, repo_id, path) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
         if path == '/':         # Can not delete root path.

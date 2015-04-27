@@ -993,7 +993,7 @@ def file_edit(request, repo_id):
     filename = urllib2.quote(u_filename.encode('utf-8'))
     parent_dir = os.path.dirname(path)
 
-    if check_folder_permission(repo.id, parent_dir, request.user.username) != 'rw':
+    if check_folder_permission(request, repo.id, parent_dir) != 'rw':
         return render_permission_error(request, _(u'Unable to edit file'))
 
     head_id = repo.head_cmmt_id

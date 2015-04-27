@@ -24,7 +24,8 @@ from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_access, set_share_link_access
 from seahub.share.forms import SharedLinkPasswordForm
 from seahub.views import gen_path_link, get_repo_dirents, \
-    check_repo_access_permission, get_repo_dirents_with_perm
+    check_repo_access_permission, get_repo_dirents_with_perm, \
+    get_system_default_repo_id
 
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
@@ -221,10 +222,9 @@ def render_repo(request, repo):
     else:
         show_repo_settings = False
 
+    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(
+        request, repo, head_commit, path, offset=0, limit=100)
     more_start = None
-    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo,
-                                                                  head_commit, path,
-                                                                  offset=0, limit=100)
     if dirent_more:
         more_start = 100
     zipped = get_nav_path(path, repo.name)
