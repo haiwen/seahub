@@ -55,6 +55,14 @@
 
             </div>
 
+            {% if not repo.encrypted %}
+            <button id="share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
+            {% endif %}
+
+            {% if user_perm == 'rw' %}
+            <button id="history" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</button>
+            {% endif %}
+
             {% if request.user.is_authenticated %}
                 {% block edit_file %}
                 {% endblock %}
@@ -80,59 +88,9 @@
 
     <div id="side-toolbar">
         <ul class="side-toolbar">
-            {% if groups %}
-            <li class="item" id="file-discuss-icon" title="{% trans "Discussion" %}"><img src="{{MEDIA_URL}}img/discuss.png" alt="{% trans "discuss" %}" /></li>
-            <li id="file-group-icon" class="item" title="{% trans "Go to a group" %}"><img src="{{MEDIA_URL}}img/groups.png" alt="{% trans "group" %}" /></li>
-            {% endif %}
-            {% if not repo.encrypted %}
-            <li id="share" class="item" title="{% trans "Share" %}" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}"><img src="{{MEDIA_URL}}img/share.png" alt="{% trans "share"%}" /></li>
-            {% endif %}
-            {% if user_perm == 'rw' %}
-            <li id="history" class="item" title="{% trans "History" %}" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}"><img src="{{MEDIA_URL}}img/history.png" alt="{% trans "history"%}" />
-            {% endif %}
+            <li class="item hide" id="back-to-top" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li>
         </ul>
-    <div>
-
-    {% if groups %}
-    <div id="discuss-to-group" class="hide">
-        <form action="{% url 'group_recommend' %}" method="post" id="discuss-to-group-form">{% csrf_token %}
-            <h3>{% trans "Post a discussion to group" %}</h3>
-            <div class="groups">
-                {% for group in groups %}
-                <label for="{{ group.id }}" class="checkbox-label">
-                    <span class="checkbox{% if forloop.first and forloop.last %} checkbox-checked{% endif %}"><input type="checkbox" name="groups" value="{{ group.id }}" id="{{ group.id }}" {% if forloop.first and forloop.last %}checked="checked"{% endif %} class="checkbox-orig"></span>
-                    <span class="checkbox-option">{{ group.group_name }}</span>
-                </label>
-                {% endfor %}
-            </div>
-            <textarea name="message" placeholder="{% trans 'discussion' %}" class="input"></textarea>
-            <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-            <input type="hidden" name="path" value="{{ path }}" />
-            <input type="hidden" name="attach_type" value="file" />
-            <p class="error hide"></p>
-            <input type="submit" id="discuss-submit" class="submit" value="{% trans "Submit"%}" />
-            <span class="attachment">
-                {% for name,link in zipped %}
-                {% if forloop.last %}
-                <img src="{{ MEDIA_URL }}img/file/{{ name|file_icon_filter }}" alt="{% trans 'File' %}" height="18" class="vam" />
-                <span class="att-name vam">{{ name }}</span>
-                {% endif %}
-                {% endfor %}
-            </span>
-        </form>
-        <ul id="discussions-to-grp" class="hide"></ul>
-        <img src="{{MEDIA_URL}}img/del.png" alt="{% trans "close" %}" class="close" />
     </div>
-
-    {% if groups|length > 1 %}
-    <div id="to-group" class="hide">
-        <h3>{% trans "Groups" %}</h3>
-        {{ repo_group_str }}
-        <div class="outer-caret"><div class="inner-caret"></div></div>
-    </div>
-    {% endif %}
-
-    {% endif %}
 
 {% endblock %}
 
@@ -192,21 +150,20 @@ $('#star').click(function() {
    });
 });
 
-// set 'side toolbar' & 'groups' popup position
+
+// set 'side toolbar' position
+
 function setToolbarPos() {
     var toolbar = $('#side-toolbar');
 
     // set toolbar pos
     toolbar.css({'top': ($(window).height() - toolbar.outerHeight())/2});
-
-    // set 'groups' popup position
-    $('#to-group').css({'top': parseInt(toolbar.css('top')) + 59});
 }
-$(window).load(function() {
-    var to_top = $('<ul class="side-toolbar hide" style="margin-top:3px;"><li class="item" title="{% trans "Back to top" %}"><img src="{{MEDIA_URL}}img/top.png" alt="{% trans "top" %}" /></li></ul>');
+(function () {
+    var to_top = $('#back-to-top');
     to_top.click(function() {
         $(window).scrollTop(0);
-    }).appendTo($('#side-toolbar'));
+    });
     $(window).scroll(function() {
         if ($(window).scrollTop() > 0) {
             to_top.show();
@@ -214,8 +171,8 @@ $(window).load(function() {
             to_top.hide();
         }
     });
-    setToolbarPos();
-}).resize(setToolbarPos);
+})();
+$(window).load(setToolbarPos).resize(setToolbarPos);
 
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');
@@ -227,121 +184,6 @@ function setFileViewAreaHeight() {
     }
 }
 $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
-
-// handle discussions after fetch them
-function handleDiscussions(html) {
-    $('#discussions-to-grp').html(html)
-    .css({'max-height': parseInt($(window).height() * 0.8 - $('#discuss-to-group-form').outerHeight())})
-    .removeClass('hide');
-    var popup = $('#discuss-to-group');
-    popup.css({'top':($(window).height() - popup.outerHeight())/2});
-    {% include 'group/msg_js.html' %}
-}
-// show discuss popup
-$('#file-discuss-icon').click(function() {
-    var popup = $('#discuss-to-group');
-
-    // get discussions
-    if (popup.hasClass('hide')) {
-        $.ajax({
-            url: $('#discuss-to-group-form').attr('action'),
-            dataType: 'json',
-            data: {
-                'repo_id': '{{ repo.id }}',
-                'path': '{{ path }}'
-            },
-            success: function(data) {
-                handleDiscussions(data['html']);
-                popup.removeClass('hide');
-            },
-            error: ajaxErrorHandler
-        });
-    } else {
-        popup.addClass('hide');
-    }
-});
-// click 'close' to close discuss popup
-$('#discuss-to-group .close').click(function () {
-    $('#discuss-to-group').addClass('hide');
-});
-// submit discussion
-$('#discuss-submit').click(function() {
-    var form = $('#discuss-to-group-form'),
-        form_id = form.attr('id');
-
-    if (form.find('.checkbox-checked').length == 0) {
-        apply_form_error(form_id, "{% trans "Please select at least 1 group." %}");
-        return false;
-    }
-    if (!$.trim($('.input', form).val())) {
-        apply_form_error(form_id, "{% trans "Please input a discussion." %}");
-        return false;
-    }
-
-    $('.error', form).addClass('hide');
-    var groups = [];
-    $('.checkbox-checked .checkbox-orig', form).each(function() {
-        groups.push($(this).val());
-    });
-
-    $.ajax({
-        url: form.attr('action'),
-        type: 'POST',
-        dataType: 'json',
-        beforeSend: prepareCSRFToken,
-        traditional: true,
-        data: {
-            'groups': groups,
-            'message': $('[name="message"]', form).val(),
-            'repo_id': '{{ repo.id }}',
-            'path': $('[name="path"]', form).val(),
-            'attach_type': $('[name="attach_type"]', form).val()
-        },
-        success: function(data) {
-            if (data['success']) {
-                feedback(data['success'], 'success');
-                handleDiscussions(data['html']);
-                $('.input', form).val('');
-            }
-            if (data['error']) {
-                feedback(data['error'], 'error');
-            }
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            var err_str = '';
-            if (jqXHR.responseText) {
-                err_str = $.parseJSON(jqXHR.responseText).error;
-            } else {
-                err_str = "{% trans "Failed. Please check the network." %}";
-            }
-            apply_form_error(form_id, err_str);
-        }
-    });
-    return false;
-});
-
-// click group icon
-$('#file-group-icon').click(function() {
-    {% if groups|length == 1 %}
-    {% for group in groups %}
-    location.href= "{% url 'view_group' group.id %}";
-    {% endfor %}
-
-    {% else %}
-    $('#to-group').toggleClass('hide');
-    {% endif %}
-});
-
-// click other place to close popup
-$(document).click(function(e) {
-    var target = e.target || event.srcElement;
-    if (!$('#file-discuss-icon, #discuss-to-group').is(target) && !($('#file-discuss-icon, #discuss-to-group').find('*').is(target))) {
-        $('#discuss-to-group').addClass('hide');
-    }
-    if (!$('#file-group-icon, #to-group').is(target) && !($('#file-group-icon, #to-group').find('*').is(target))) {
-        $('#to-group').addClass('hide');
-    }
-});
 
 $('#history').click(function () {
     window.open($(this).data('url'));
