@@ -1272,3 +1272,10 @@ def get_origin_repo_info(repo_id):
         return (origin_repo_id, origin_path)
 
     return (None, None)
+
+def within_time_range(d1, d2, maxdiff_seconds):
+    '''Return true if two datetime.datetime object differs less than the given seconds'''
+    delta = d2 - d1 if d2 > d1 else d1 - d2
+    # delta.total_seconds() is only available in python 2.7+
+    diff = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
+    return diff < maxdiff_seconds

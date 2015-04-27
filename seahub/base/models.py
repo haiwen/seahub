@@ -9,20 +9,20 @@ from seaserv import seafile_api
 
 from seahub.auth.signals import user_logged_in
 from seahub.group.models import GroupMessage
-from seahub.utils import calc_file_path_hash
+from seahub.utils import calc_file_path_hash, within_time_range
 from fields import LowerCaseCharField
 
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-class UuidObjidMap(models.Model):    
+class UuidObjidMap(models.Model):
     """
     Model used for store crocdoc uuid and file object id mapping.
     """
     uuid = models.CharField(max_length=40)
     obj_id = models.CharField(max_length=40, unique=True)
-        
+
 class FileDiscuss(models.Model):
     """
     Model used to represents the relationship between group message and file/dir.
@@ -67,7 +67,7 @@ class StarredFile(object):
 class UserStarredFilesManager(models.Manager):
     def get_starred_files_by_username(self, username):
         """Get a user's starred files.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -151,7 +151,7 @@ class GroupEnabledModule(models.Model):
     group_id = models.CharField(max_length=10, db_index=True)
     module_name = models.CharField(max_length=20)
 
-########## misc    
+########## misc
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)
@@ -186,7 +186,7 @@ class InnerPubMsg(models.Model):
 
     class Meta:
         ordering = ['-timestamp']
-    
+
 class InnerPubMsgReply(models.Model):
     reply_to = models.ForeignKey(InnerPubMsg)
     from_email = models.EmailField()
@@ -209,3 +209,29 @@ class DeviceToken(models.Model):
 
     def __unicode__(self):
         return "/".join(self.user, self.token)
+
+_CLIENT_LOGIN_TOKEN_EXPIRATION_SECONDS = 30
+
+class ClientLoginTokenManager(models.Manager):
+    def get_username(self, tokenstr):
+        try:
+            token = super(ClientLoginTokenManager, self).get(token=tokenstr)
+        except ClientLoginToken.DoesNotExist:
+            return None
+        username = token.username
+        token.delete()
+        if not within_time_range(token.timestamp, timezone.now(),
+                                 _CLIENT_LOGIN_TOKEN_EXPIRATION_SECONDS):
+            return None
+        return username
+
+class ClientLoginToken(models.Model):
+    # TODO: update sql/mysql.sql and sql/sqlite3.sql
+    token = models.CharField(max_length=32, primary_key=True)
+    username = models.CharField(max_length=255, db_index=True)
+    timestamp = models.DateTimeField(default=timezone.now)
+
+    objects = ClientLoginTokenManager()
+
+    def __unicode__(self):
+        return "/".join(self.username, self.token)
