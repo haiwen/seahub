@@ -172,10 +172,10 @@
         <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
     </td>
     <td class="star"></td>
-    <% if (dirent.perm == 'rw') { %>
-        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon" %}" /></td>
-    <% } else { %>
+    <% if (dirent.perm == 'r') { %>
         <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-read-only-24.png" alt="{% trans "Directory icon" %}" /></td>
+    <% } else { %>
+        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon" %}" /></td>
     <% } %>
     <td>
         <% if (category) { %>
