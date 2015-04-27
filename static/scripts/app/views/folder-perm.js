@@ -19,7 +19,11 @@ define([
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
             this.dir_path = options.dir_path;
-            this.path = this.dir_path + this.obj_name;
+            if (this.dir_path === '/') {
+                this.path = this.dir_path + this.obj_name;
+            } else {
+                this.path = this.dir_path + '/' + this.obj_name;
+            }
 
             this.render();
 
