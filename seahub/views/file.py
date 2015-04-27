@@ -438,22 +438,6 @@ def _file_view(request, repo_id, path):
     for g in request.user.joined_groups:
         g.avatar = grp_avatar(g.id, 20)
 
-    """List repo groups"""
-    # Get groups this repo is shared.
-    if request.user.org:
-        org_id = request.user.org.org_id
-        repo_shared_groups = get_org_groups_by_repo(org_id, repo_id)
-    else:
-        repo_shared_groups = get_shared_groups_by_repo(repo_id)
-    # Filter out groups that user in joined.
-    groups = [x for x in repo_shared_groups if is_group_user(x.id, username)]
-    if len(groups) > 1:
-        ctx = {}
-        ctx['groups'] = groups
-        repogrp_str = render_to_string("snippets/repo_group_list.html", ctx)
-    else:
-        repogrp_str = ''
-
     file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
 
     # fetch file contributors and latest contributor
@@ -497,12 +481,10 @@ def _file_view(request, repo_id, path):
             'html_exists': ret_dict['html_exists'],
             'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
-            'groups': groups,
             'use_pdfjs': USE_PDFJS,
             'latest_contributor': latest_contributor,
             'last_modified': last_modified,
             'last_commit_id': repo.head_cmmt_id,
-            'repo_group_str': repogrp_str,
             'is_starred': is_starred,
             'user_perm': user_perm,
             'img_prev': img_prev,
