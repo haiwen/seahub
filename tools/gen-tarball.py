@@ -149,9 +149,9 @@ def main():
     if run('tar xf %s' % tmp_tarball) != 0:
         error('failed to uncompress the tarball')
 
-    seahub_dir = os.path.join(tmpdir, 'seahub-%s' % version)
-    if run('./i18n.sh compile-all', cwd=seahub_dir) != 0:
-        error('failed to compile messages')
+    # seahub_dir = os.path.join(tmpdir, 'seahub-%s' % version)
+    # if run('./i18n.sh compile-all', cwd=seahub_dir) != 0:
+    #     error('failed to compile messages')
 
     with open(os.path.join(seahub_dir, 'latest_commit'), 'w') as fp:
         fp.write(latest_commit_info)
