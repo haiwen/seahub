@@ -85,19 +85,6 @@ def sys_repo_admin(request):
 
 @login_required
 @sys_staff_required
-def sys_list_orphan(request):
-    try:
-        repos = seafile_api.get_orphan_repo_list()
-    except Exception as e:
-        logger.error(e)
-        repos = []
-
-    return render_to_response('sysadmin/sys_list_orphan.html', {
-            'repos': repos,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@sys_staff_required
 def sys_list_system(request):
     """List system repos.
     """

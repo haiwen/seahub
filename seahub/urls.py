@@ -204,7 +204,6 @@ urlpatterns = patterns('',
 
     ### system admin ###
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
-    url(r'^sys/seafadmin/orphan/$', sys_list_orphan, name='sys_list_orphan'),
     url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
     url(r'^sys/seafadmin/repo-trash/$', sys_repo_trash, name='sys_repo_trash'),
     url(r'^sys/seafadmin/repo-trash/clear/$', sys_repo_trash_clear, name="sys_repo_trash_clear"),
