@@ -474,6 +474,7 @@ def list_lib_dir(request, repo_id):
         d_['last_update'] = translate_seahub_time(d.last_modified)
         p_dpath = posixpath.join(path, d.obj_name)
         d_['p_dpath'] = p_dpath # for 'view_link' & 'dl_link'
+        d_['perm'] = d.permission
         dirent_list.append(d_)
 
     if not repo.encrypted and ENABLE_THUMBNAIL:
