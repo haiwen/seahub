@@ -1260,7 +1260,7 @@ def get_shared_upload_link(request):
         messages.error(request, _(u'Library does not exist'))
         return HttpResponse(status=400, content_type=content_type)
 
-    user_perm = check_folder_permission(repo.id, path, request.user.username)
+    user_perm = check_folder_permission(request, repo.id, path)
 
     if user_perm == 'rw':
         l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(

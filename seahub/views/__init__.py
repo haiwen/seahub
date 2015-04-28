@@ -99,13 +99,18 @@ def get_system_default_repo_id():
         logger.error(e)
         return None
 
-def check_folder_permission(repo_id, path, username):
-    repo_owner = seafile_api.get_repo_owner(repo_id)
-    if username == repo_owner:
-        return 'rw'
+def check_folder_permission(request, repo_id, path):
+    """Check repo/folder access permission of a user, always return 'rw'
+    when repo is system repo and user is admin.
 
-    if path != '/' and path.endswith('/'):
-        path = path.rstrip('/')
+    Arguments:
+    - `request`:
+    - `repo_id`:
+    - `path`:
+    """
+    username = request.user.username
+    if get_system_default_repo_id() == repo_id and request.user.is_staff:
+        return 'rw'
 
     return seafile_api.check_permission_by_path(repo_id, path, username)
 
@@ -184,6 +189,9 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
     TODO: Some unrelated parts(file sharing, stars, modified info, etc) need
     to be pulled out to multiple functions.
     """
+
+    if get_system_default_repo_id() == repo.id:
+        return get_repo_dirents(request, repo, commit, path, offset, limit)
 
     dir_list = []
     file_list = []
@@ -1464,7 +1472,7 @@ def repo_revert_file(request, repo_id):
         return render_error(request, _(u"Invalid arguments"))
 
     # perm check
-    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+    if check_folder_permission(request, repo.id, path) != 'rw':
         next = request.META.get('HTTP_REFERER', None)
         if not next:
             next = settings.SITE_ROOT
@@ -1515,7 +1523,7 @@ def repo_revert_dir(request, repo_id):
         return render_error(request, _(u"Invalid arguments"))
 
     # perm check
-    if check_folder_permission(repo.id, path, request.user.username) != 'rw':
+    if check_folder_permission(request, repo.id, path) != 'rw':
         next = request.META.get('HTTP_REFERER', None)
         if not next:
             next = settings.SITE_ROOT

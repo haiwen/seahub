@@ -531,7 +531,7 @@ def new_dirent_common(func):
 
         # permission checking
         username = request.user.username
-        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo.id, parent_dir) != 'rw':
             result['error'] = _('Permission denied')
             return HttpResponse(json.dumps(result), status=403,
                                 content_type=content_type)
@@ -629,14 +629,14 @@ def rename_dirent(request, repo_id):
     full_path = os.path.join(parent_dir, oldname)
     if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
         # when dirent is a dir, check current dir perm
-        if check_folder_permission(repo.id, full_path, username) != 'rw':
+        if check_folder_permission(request, repo.id, full_path) != 'rw':
             err_msg = _('Permission denied')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
     if seafile_api.get_file_id_by_path(repo.id, full_path) is not None:
         # when dirent is a file, check parent dir perm
-        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo.id, parent_dir) != 'rw':
             err_msg = _('Permission denied')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
@@ -685,14 +685,14 @@ def delete_dirent(request, repo_id):
 
     if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
         # when dirent is a dir, check current dir perm
-        if check_folder_permission(repo.id, full_path, username) != 'rw':
+        if check_folder_permission(request, repo.id, full_path) != 'rw':
             err_msg = _('Permission denied')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
     if seafile_api.get_file_id_by_path(repo.id, full_path) is not None:
         # when dirent is a file, check parent dir perm
-        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+        if check_folder_permission(request, repo.id, parent_dir) != 'rw':
             err_msg = _('Permission denied')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
@@ -731,7 +731,7 @@ def delete_dirents(request, repo_id):
 
     # permission checking
     username = request.user.username
-    if check_folder_permission(repo.id, parent_dir, username) != 'rw':
+    if check_folder_permission(request, repo.id, parent_dir) != 'rw':
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=403, content_type=content_type)
@@ -749,70 +749,81 @@ def delete_dirents(request, repo_id):
     return HttpResponse(json.dumps({'deleted': deleted, 'undeleted': undeleted}),
                         content_type=content_type)
 
-def copy_move_common(func):
+def copy_move_common():
     """Decorator for common logic in copying/moving dir/file.
     """
-    def _decorated(request, repo_id, *args, **kwargs):
-        if request.method != 'POST':
-            raise Http404
+    def _method_wrapper(view_method):
+        def _arguments_wrapper(request, repo_id, *args, **kwargs):
+            if request.method != 'POST':
+                raise Http404
 
-        result = {}
-        content_type = 'application/json; charset=utf-8'
+            result = {}
+            content_type = 'application/json; charset=utf-8'
 
-        repo = get_repo(repo_id)
-        if not repo:
-            result['error'] = _(u'Library does not exist.')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+            repo = get_repo(repo_id)
+            if not repo:
+                result['error'] = _(u'Library does not exist.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
 
-        # arguments validation
-        path = request.GET.get('path')
-        obj_name = request.GET.get('obj_name')
-        dst_repo_id = request.POST.get('dst_repo')
-        dst_path = request.POST.get('dst_path')
+            # arguments validation
+            path = request.GET.get('path')
+            obj_name = request.GET.get('obj_name')
+            dst_repo_id = request.POST.get('dst_repo')
+            dst_path = request.POST.get('dst_path')
+            if not (path and obj_name and dst_repo_id and dst_path):
+                result['error'] = _('Argument missing')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
 
-        if not (path and obj_name and dst_repo_id and dst_path):
-            result['error'] = _('Argument missing')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+            # check file path
+            if len(dst_path + obj_name) > settings.MAX_PATH:
+                result['error'] = _('Destination path is too long.')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
 
-        # permission checking
-        username = request.user.username
-        if check_folder_permission(repo.id, path, username) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
+            # return error when dst is the same as src
+            if repo_id == dst_repo_id and path == dst_path:
+                result['error'] = _('Invalid destination path')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
 
-        # check file path
-        if len(dst_path+obj_name) > settings.MAX_PATH:
-            result['error'] =  _('Destination path is too long.')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+            # check whether user has write permission to dest repo
+            if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
+                result['error'] = _('Permission denied')
+                return HttpResponse(json.dumps(result), status=403,
+                                    content_type=content_type)
 
-        # check whether user has write permission to dest repo
-        if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
+            # Leave src folder/file permission checking to corresponding
+            # views, only need to check folder permission when perform 'move'
+            # operation, 1), if move file, check parent dir perm, 2), if move
+            # folder, check that folder perm.
 
-        # do nothing when dst is the same as src
-        if repo_id == dst_repo_id and path == dst_path:
-            result['error'] = _('Invalid destination path')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-        return func(repo_id, path, dst_repo_id, dst_path, obj_name, username)
-    return _decorated
+            return view_method(request, repo_id, path, dst_repo_id, dst_path,
+                               obj_name)
+
+        return _arguments_wrapper
+
+    return _method_wrapper
 
 @login_required_ajax
-@copy_move_common
-def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
+@copy_move_common()
+def mv_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    username = request.user.username
+
+    # check parent dir perm
+    if check_folder_permission(request, src_repo_id, src_path) != 'rw':
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-
     try:
         res = seafile_api.move_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
+                                    dst_repo_id, dst_path, new_obj_name,
+                                    username, need_progress=1)
     except SearpcError, e:
         res = None
 
@@ -831,16 +842,17 @@ def mv_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-@copy_move_common
-def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
+@copy_move_common()
+def cp_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    username = request.user.username
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
-
     try:
         res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
+                                    dst_repo_id, dst_path, new_obj_name,
+                                    username, need_progress=1)
     except SearpcError, e:
         res = None
 
@@ -859,32 +871,30 @@ def cp_file(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-@copy_move_common
-def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
+@copy_move_common()
+def mv_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    username = request.user.username
 
     src_dir = os.path.join(src_path, obj_name)
-
-    # permission checking
-    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
-    if check_folder_permission(src_repo_id, src_dir, username) != 'rw' or \
-        check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
     if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
             % {'src': escape(src_dir), 'des': escape(dst_path)}
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
+    # check dir perm
+    if check_folder_permission(request, src_repo_id, src_dir) != 'rw':
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
+    new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
     try:
         res = seafile_api.move_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
+                                    dst_repo_id, dst_path, new_obj_name,
+                                    username, need_progress=1)
     except SearpcError, e:
         res = None
 
@@ -903,18 +913,11 @@ def mv_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-@copy_move_common
-def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
+@copy_move_common()
+def cp_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
-
-    # permission checking
-    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
-    if check_folder_permission(src_repo_id, src_path, username) != 'rw' or \
-        check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
-        result['error'] = _('Permission denied')
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
+    username = request.user.username
 
     src_dir = os.path.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
@@ -927,7 +930,8 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
 
     try:
         res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
-                          dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
+                                    dst_repo_id, dst_path, new_obj_name,
+                                    username, need_progress=1)
     except SearpcError, e:
         res = None
 
@@ -946,72 +950,84 @@ def cp_dir(src_repo_id, src_path, dst_repo_id, dst_path, obj_name, username):
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 
-def dirents_copy_move_common(func):
+def dirents_copy_move_common():
     """
-    Decorator for common logic in copying/moving dirs/files.
+    Decorator for common logic in copying/moving dirs/files in batch.
     """
-    def _decorated(request, repo_id, *args, **kwargs):
+    def _method_wrapper(view_method):
+        def _arguments_wrapper(request, repo_id, *args, **kwargs):
+            if request.method != 'POST':
+                raise Http404
 
-        if request.method != 'POST':
-            raise Http404
+            result = {}
+            content_type = 'application/json; charset=utf-8'
 
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        repo = get_repo(repo_id)
-        if not repo:
-            result['error'] = _(u'Library does not exist.')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
-
-        # arguments validation
-        parent_dir = request.GET.get('parent_dir')
-        obj_file_names = request.POST.getlist('file_names')
-        obj_dir_names = request.POST.getlist('dir_names')
-        dst_repo_id = request.POST.get('dst_repo')
-        dst_path = request.POST.get('dst_path')
-
-        if not (parent_dir and dst_repo_id and dst_path) and not (obj_file_names or obj_dir_names):
-            result['error'] = _('Argument missing')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
-
-        # permission checking
-        username = request.user.username
-        if check_folder_permission(repo.id, parent_dir, username) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
-        # check file path
-        for obj_name in obj_file_names + obj_dir_names:
-            if len(dst_path+obj_name) > settings.MAX_PATH:
-                result['error'] =  _('Destination path is too long for %s.') % escape(obj_name)
+            repo = get_repo(repo_id)
+            if not repo:
+                result['error'] = _(u'Library does not exist.')
                 return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
+                                    content_type=content_type)
 
-        # check whether user has write permission to dest repo
-        if check_repo_access_permission(dst_repo_id, request.user) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
+            # arguments validation
+            parent_dir = request.GET.get('parent_dir')
+            obj_file_names = request.POST.getlist('file_names')
+            obj_dir_names = request.POST.getlist('dir_names')
+            dst_repo_id = request.POST.get('dst_repo')
+            dst_path = request.POST.get('dst_path')
+            if not (parent_dir and dst_repo_id and dst_path) and \
+               not (obj_file_names or obj_dir_names):
+                result['error'] = _('Argument missing')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
 
-        # when dst is the same as src
-        if repo_id == dst_repo_id and parent_dir == dst_path:
-            result['error'] = _('Invalid destination path')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+            # check file path
+            for obj_name in obj_file_names + obj_dir_names:
+                if len(dst_path+obj_name) > settings.MAX_PATH:
+                    result['error'] =  _('Destination path is too long for %s.') % escape(obj_name)
+                    return HttpResponse(json.dumps(result), status=400,
+                                        content_type=content_type)
 
-        return func(repo_id, parent_dir, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username)
-    return _decorated
+            # when dst is the same as src
+            if repo_id == dst_repo_id and parent_dir == dst_path:
+                result['error'] = _('Invalid destination path')
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+            # check whether user has write permission to dest repo
+            if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
+                result['error'] = _('Permission denied')
+                return HttpResponse(json.dumps(result), status=403,
+                                    content_type=content_type)
+
+            # Leave src folder/file permission checking to corresponding
+            # views, only need to check folder permission when perform 'move'
+            # operation, 1), if move file, check parent dir perm, 2), if move
+            # folder, check that folder perm.
+
+            return view_method(request, repo_id, parent_dir, dst_repo_id,
+                               dst_path, obj_file_names, obj_dir_names)
+
+        return _arguments_wrapper
+
+    return _method_wrapper
 
 @login_required_ajax
-@dirents_copy_move_common
-def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+@dirents_copy_move_common()
+def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
+               obj_file_names, obj_dir_names):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    username = request.user.username
     failed = []
+    allowed_files = []
     allowed_dirs = []
-    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
+
+    # check parent dir perm for files
+    if check_folder_permission(request, src_repo_id, src_path) != 'rw':
+        allowed_files = []
+        failed += obj_file_names
+    else:
+        allowed_files = obj_file_names
 
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
@@ -1021,17 +1037,15 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-    # permission checking
-        if check_folder_permission(src_repo_id, obj_name, username) != 'rw' or \
-            check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
+        # check every folder perm
+        if check_folder_permission(request, src_repo_id, src_dir) != 'rw':
             failed.append(obj_name)
         else:
             allowed_dirs.append(obj_name)
 
     success = []
     url = None
-
-    for obj_name in obj_file_names + allowed_dirs:
+    for obj_name in allowed_files + allowed_dirs:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.move_file(src_repo_id, src_path, obj_name,
@@ -1051,14 +1065,10 @@ def mv_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-@dirents_copy_move_common
+@dirents_copy_move_common()
 def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
     result = {}
     content_type = 'application/json; charset=utf-8'
-
-    failed = []
-    allowed_dirs = []
-    dst_repo_owner = seafile_api.get_repo_owner(dst_repo_id)
 
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
@@ -1068,17 +1078,10 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
             result['error'] = error_msg
             return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
-        # permission checking
-        if check_folder_permission(src_repo_id, obj_name, username) != 'rw' or \
-            check_folder_permission(dst_repo_id, dst_path, dst_repo_owner) != 'rw':
-            failed.append(obj_name)
-        else:
-            allowed_dirs.append(obj_name)
-
+    failed = []
     success = []
     url = None
-
-    for obj_name in obj_file_names + allowed_dirs:
+    for obj_name in obj_file_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
@@ -1794,7 +1797,7 @@ def get_file_op_url(request, repo_id):
 
     username = request.user.username
     # permission checking
-    if check_folder_permission(repo.id, path, username) != 'rw':
+    if check_folder_permission(request, repo.id, path) != 'rw':
         err_msg = _(u'Permission denied')
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
