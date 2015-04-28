@@ -1822,7 +1822,7 @@ class FileSharedLinkView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        if path[-1] == '/':
+        if path != '/' and path[-1] == '/':
             path = path[:-1]
 
         if type == 'f':
