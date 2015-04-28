@@ -62,7 +62,8 @@ from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
-from seahub.base.templatetags.seahub_tags import translate_seahub_time, file_icon_filter
+from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
+        file_icon_filter, email2nickname
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 
 # Get an instance of a logger
@@ -1202,7 +1203,11 @@ def get_contacts(request):
         try:
             user = User.objects.get(email=c.contact_email)
             if user.is_active:
-                contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
+                contact_list.append({
+                    "email": c.contact_email,
+                    "avatar": avatar(c.contact_email, 32),
+                    "name": email2nickname(c.contact_email),
+                    })
         except User.DoesNotExist:
             continue
 
@@ -2252,6 +2257,7 @@ def get_folder_perm_by_path(request, repo_id):
             user_result_perm = {
                 "perm": user_perm.permission,
                 "user": user_perm.user,
+                "user_name": email2nickname(user_perm.user),
             }
             user_result_perms.append(user_result_perm)
 
@@ -2307,6 +2313,10 @@ def set_user_folder_perm(request, repo_id):
                 seafile_api.add_folder_user_perm(repo_id, path, perm, user)
                 send_perm_audit_msg('add-repo-perm', request.user.username,
                                     user, repo_id, path, perm)
+                return HttpResponse(json.dumps({
+                    'user': user,
+                    'user_name': email2nickname(user)
+                    }),content_type=content_type)
             except SearpcError as e:
                 logger.error(e)
                 return HttpResponse(json.dumps({"error": _('Operation failed')}),

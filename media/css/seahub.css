@@ -3516,7 +3516,7 @@ textarea:-moz-placeholder {/* for FF */
 
 /* user & group folder perm */
 #folder-perm-tabs .tabs-panel {
-    width:400px;
+    width:550px;
 }
 #folder-perm-tabs .perm-select {
     height:30px;
@@ -3530,4 +3530,14 @@ textarea:-moz-placeholder {/* for FF */
 }
 #folder-perm-tabs table {
     margin-top:0;
+}
+.select2-result-label .text {
+    display:inline-block;
+}
+.select2-results .select2-result-label .avatar {
+    margin-right:10px;
+}
+.select2-result-label .avatar,
+.select2-result-label .text {
+    vertical-align:middle;
 }
