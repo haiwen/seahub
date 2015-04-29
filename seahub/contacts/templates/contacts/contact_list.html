@@ -23,7 +23,7 @@
     <tr>
         <td>{% avatar contact.contact_email 20 %}</td>
         <td><a href="{% url 'user_profile' contact.contact_email|id_or_email%}">{{ contact.contact_email }}</a></td>
-        <td>{{ contact.contact_name }}</td>
+        <td>{{ contact.profile.nickname }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">
             <img src="{{MEDIA_URL}}img/edit.png" alt="" class="contact-edit op-icon vh" title="{% trans "Edit" %}" />
@@ -43,8 +43,6 @@
     <h3>{% trans "Add Contacts"%}</h3>
     <label>{% trans "Email"%}</label><br />
     <input maxlength="255" name="contact_email" type="text" class="input" /><br />
-    <label>{% trans "Name(optional)"%}</label><br />
-    <input maxlength="255" name="contact_name" type="text" class="input" /><br />
     <label>{% trans "Note(optional)"%}</label><br />
     <input maxlength="255" name="note" type="text" class="input" /><br />
     <p class="error hide"></p>
@@ -54,8 +52,6 @@
     <h3>{% trans "Edit Contact"%}</h3>
     <label>{% trans "Email"%}</label><br />
     <input maxlength="255" name="contact_email" readonly="readonly" type="text" class="input" /><br />
-    <label>{% trans "Name(optional)"%}</label><br />
-    <input maxlength="255" name="contact_name" type="text" class="input" /><br />
     <label>{% trans "Note(optional)"%}</label><br />
     <input maxlength="255" name="note" type="text" class="input" /><br />
     <p class="error hide"></p>
@@ -70,7 +66,6 @@ $('.contact-edit').click(function() {
     var contact = $(this).parent();
     var form = $('#contact-edit-form');
     form.find('[name="contact_email"]').val(contact.data('email'));
-    form.find('[name="contact_name"]').val(contact.data('name'));
     form.find('[name="note"]').val(contact.data('note'));
     form.modal({appendTo: '#main'});
     return false;
@@ -87,7 +82,6 @@ $('#contact-edit-form').submit(function() {
         data: {
             'user_email': '{{request.user.username}}',
             'contact_email': form.find('input[name="contact_email"]').val(),
-            'contact_name': form.find('input[name="contact_name"]').val(),
             'note': form.find('input[name="note"]').val()
         },  
         success: function(data) {
@@ -138,7 +132,6 @@ $('#contact-add-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'contact_email': email,
-            'contact_name': form.find('input[name="contact_name"]').val(),
             'note': form.find('input[name="note"]').val()
         },  
         success: function(data) {

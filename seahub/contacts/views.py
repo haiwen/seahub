@@ -14,6 +14,7 @@ from django.utils.translation import ugettext as _
 from models import Contact, ContactAddForm, ContactEditForm
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import user_mods_check
+from seahub.profile.models import Profile
 from seahub.utils import render_error, is_valid_email
 from seaserv import ccnet_rpc, ccnet_threaded_rpc
 from seahub.views import is_registered_user
@@ -26,27 +27,26 @@ logger = logging.getLogger(__name__)
 @user_mods_check
 def contact_list(request):
     contacts = Contact.objects.filter(user_email=request.user.username)
-    # registered_contacts = []
-    # unregistered_contacts = []
-    # for c in contacts:
-    #     if is_registered_user(c.contact_email):
-    #         registered_contacts.append(c)
-    #     else:
-    #         unregistered_contacts.append(c)
+    contacts_emails = [x.contact_email for x in contacts]
+    contacts_profiles = Profile.objects.filter(user__in=contacts_emails)
 
-    form = ContactAddForm({'user_email':request.user.username})
-    edit_init_data = {'user_email':request.user.username,
-                      'contact_email':'',
-                      'contact_name':'',
-                      'note':''}
-    edit_form = ContactEditForm(edit_init_data)
+    for c in contacts:
+        for c_p in contacts_profiles:
+            if c.contact_email == c_p.user:
+                c.profile = c_p
+                break
+
+    # form = ContactAddForm({'user_email':request.user.username})
+    # edit_init_data = {'user_email':request.user.username,
+    #                   'contact_email':'',
+    #                   'contact_name':'',
+    #                   'note':''}
+    # edit_form = ContactEditForm(edit_init_data)
 
     return render_to_response('contacts/contact_list.html', {
         'contacts': contacts,
-        # 'registered_contacts': registered_contacts,
-        # 'unregistered_contacts': unregistered_contacts,
-        'form': form,
-        'edit_form': edit_form,
+        # 'form': form,
+        # 'edit_form': edit_form,
         }, context_instance=RequestContext(request))
 
 @login_required
