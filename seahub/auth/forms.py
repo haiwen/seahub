@@ -7,7 +7,7 @@ from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
-    is_valid_username, is_ldap_user, is_user_password_strong
+    is_valid_username, is_ldap_user, is_user_password_strong, clear_token
 
 from captcha.fields import CaptchaField
 
@@ -156,6 +156,7 @@ class SetPasswordForm(forms.Form):
         self.user.set_password(self.cleaned_data['new_password1'])
         if commit:
             self.user.save()
+        clear_token(self.user.username)
         return self.user
 
 class PasswordChangeForm(SetPasswordForm):

@@ -829,6 +829,7 @@ def user_reset(request, user_id):
             new_password = INIT_PASSWD
         user.set_password(new_password)
         user.save()
+        clear_token(user.username)
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
