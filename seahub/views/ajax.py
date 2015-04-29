@@ -2287,7 +2287,7 @@ def set_user_folder_perm(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not (is_pro_version() and ENABLE_FOLDER_PERM):
-        return HttpResponse(json.dumps({"error": True}),
+        return HttpResponse(json.dumps({"error": _(u"Permission denied")}),
                             status=403, content_type=content_type)
 
     user = request.POST.get('user', None)
