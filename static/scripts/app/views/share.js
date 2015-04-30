@@ -410,7 +410,7 @@ define([
             loading_tip.show();
 
             $('[name="emails"]', form).select2({
-                placeholder: gettext("Select contacts or input"),
+                placeholder: gettext("Enter emails or select contacts"),
                 width: '400px',
                 // with 'tags', the user can directly enter, not just select
                 // tags need `<input type="hidden" />`, not `<select>`

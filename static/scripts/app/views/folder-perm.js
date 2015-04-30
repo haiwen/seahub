@@ -19,11 +19,7 @@ define([
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
             this.dir_path = options.dir_path;
-            if (this.dir_path === '/') {
-                this.path = this.dir_path + this.obj_name;
-            } else {
-                this.path = this.dir_path + '/' + this.obj_name;
-            }
+            this.path = Common.pathJoin([this.dir_path, this.obj_name])
 
             this.render();
 
@@ -94,6 +90,7 @@ define([
 
             // use select2 to 'user' input in 'add user perm'
             $('[name="email"]', $add_user_perm).select2({
+                placeholder: gettext("Enter emails or select contacts"),
                 tags: function () {
                     var contacts = app.pageOptions.contacts || [];
                     var contact_list = [];
@@ -128,6 +125,7 @@ define([
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
             }
             $('[name="group"]', $add_group_perm).html(g_opts).select2({
+                placeholder: gettext("Select groups"),
                 escapeMarkup: function(m) { return m; }
             });
         },
