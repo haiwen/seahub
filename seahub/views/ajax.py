@@ -2423,7 +2423,7 @@ def set_group_folder_perm(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not (is_pro_version() and ENABLE_FOLDER_PERM):
-        return HttpResponse(json.dumps({"error": True}),
+        return HttpResponse(json.dumps({"error": _(u"Permission denied")}),
                             status=403, content_type=content_type)
 
     group_id = request.POST.get('group_id', None)

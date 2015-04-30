@@ -420,7 +420,7 @@ define([
                     for (var i = 0, len = contacts.length; i < len; i++) {
                         contact_list.push({ // 'id' & 'text' are required by the plugin
                             "id": contacts[i].email,
-                            "text": contacts[i].email,
+                            "text": contacts[i].name + contacts[i].email, // for search. both name & email can be searched.
                             "avatar": contacts[i].avatar,
                             "name": contacts[i].name
                         });
@@ -429,13 +429,13 @@ define([
                 },
                 formatResult: function(item) { // format items shown in the drop-down menu
                     if (item.avatar) {
-                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.text + '</span>';
+                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.id + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }
                 },
                 formatSelection: function(item) { // format selected item shown in the input
-                    return item.name || item.text; // if no name, show the email, i.e., when directly input, show the email
+                    return item.name || item.id; // if no name, show the email, i.e., when directly input, show the email
                 },
                 tokenSeparators: [',', ' '],
                 escapeMarkup: function(m) { return m; }
@@ -499,7 +499,7 @@ define([
                     for (var i = 0, len = contacts.length; i < len; i++) {
                         contact_list.push({ // 'id' & 'text' are required by the plugin
                             "id": contacts[i].email,
-                            "text": contacts[i].email,
+                            "text": contacts[i].name + contacts[i].email, // for search. both name & email can be searched.
                             "avatar": contacts[i].avatar,
                             "name": contacts[i].name
                         });
@@ -508,13 +508,13 @@ define([
                 },
                 formatResult: function(item) { // format items shown in the drop-down menu
                     if (item.avatar) {
-                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.text + '</span>';
+                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.id + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }
                 },
                 formatSelection: function(item) { // format selected item shown in the input
-                    return item.name || item.text; // if no name, show the email, i.e., when directly input, show the email
+                    return item.name || item.id; // if no name, show the email, i.e., when directly input, show the email
                 },
                 tokenSeparators: [',', ' '],
                 escapeMarkup: function(m) { return m; }
