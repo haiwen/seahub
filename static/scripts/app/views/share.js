@@ -409,18 +409,33 @@ define([
             var form = this.$('#file-private-share-form');
             loading_tip.show();
 
-            var contacts = app.pageOptions.contacts || [];
             $('[name="emails"]', form).select2({
-                placeholder: gettext("Select contacts or input"),
+                placeholder: gettext("Enter emails or select contacts"),
                 width: '400px',
                 // with 'tags', the user can directly enter, not just select
                 // tags need `<input type="hidden" />`, not `<select>`
                 tags: function () {
+                    var contacts = app.pageOptions.contacts || [];
                     var contact_list = [];
                     for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push(contacts[i].email);
+                        contact_list.push({ // 'id' & 'text' are required by the plugin
+                            "id": contacts[i].email,
+                            "text": contacts[i].email,
+                            "avatar": contacts[i].avatar,
+                            "name": contacts[i].name
+                        });
                     }
                     return contact_list;
+                },
+                formatResult: function(item) { // format items shown in the drop-down menu
+                    if (item.avatar) {
+                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.text + '</span>';
+                    } else {
+                        return; // if no match, show nothing
+                    }
+                },
+                formatSelection: function(item) { // format selected item shown in the input
+                    return item.name || item.text; // if no name, show the email, i.e., when directly input, show the email
                 },
                 tokenSeparators: [',', ' '],
                 escapeMarkup: function(m) { return m; }
@@ -479,11 +494,27 @@ define([
                 placeholder: gettext("Select contacts or input"),
                 width: '400px',
                 tags: function () {
+                    var contacts = app.pageOptions.contacts || [];
                     var contact_list = [];
                     for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push(contacts[i].email);
+                        contact_list.push({ // 'id' & 'text' are required by the plugin
+                            "id": contacts[i].email,
+                            "text": contacts[i].email,
+                            "avatar": contacts[i].avatar,
+                            "name": contacts[i].name
+                        });
                     }
                     return contact_list;
+                },
+                formatResult: function(item) { // format items shown in the drop-down menu
+                    if (item.avatar) {
+                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.text + '</span>';
+                    } else {
+                        return; // if no match, show nothing
+                    }
+                },
+                formatSelection: function(item) { // format selected item shown in the input
+                    return item.name || item.text; // if no name, show the email, i.e., when directly input, show the email
                 },
                 tokenSeparators: [',', ' '],
                 escapeMarkup: function(m) { return m; }

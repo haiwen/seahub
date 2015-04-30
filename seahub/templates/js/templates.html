@@ -573,7 +573,7 @@
 <script type="text/template" id="folder-perm-item-tmpl">
     <% if (is_user_perm) { %>
     <td>
-        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank"><%- user %></a>
+        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank" title="<%- user %>"><%- user_name %></a>
     </td>
     <% } else { %>
     <td>
@@ -616,13 +616,13 @@
             <div id="user-folder-perm" class="tabs-panel">
                 <table>
                     <tr>
-                        <th width="50%">{% trans "User" %}</th>
-                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="55%">{% trans "User" %}</th>
+                        <th width="25%">{% trans "Permission" %}</th>
                         <th width="20%"></th>
                     </tr>
                     <tr id="add-user-folder-perm">
                         <td>
-                            <input name="email" placeholder="{% trans 'Enter or select one' %}" class="w100" />
+                            <input type="hidden" name="email" class="w100" />
                         </td>
                         <td>
                             <select name="permission" class="perm-select w100">
@@ -638,13 +638,13 @@
             <div id="group-folder-perm" class="tabs-panel">
                 <table>
                     <tr>
-                        <th width="50%">{% trans "Group" %}</th>
-                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="55%">{% trans "Group" %}</th>
+                        <th width="25%">{% trans "Permission" %}</th>
                         <th width="20%"></th>
                     </tr>
                     <tr id="add-group-folder-perm">
                         <td>
-                            <select name="group" placeholder="{% trans 'Select one' %}" class="w100" multiple="multiple"></select>
+                            <select name="group" class="w100" multiple="multiple"></select>
                         </td>
                         <td>
                             <select name="permission" class="perm-select w100">

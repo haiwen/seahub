@@ -37,7 +37,7 @@ from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents_with_perm, validate_owner, \
     check_repo_access_permission, get_unencry_rw_repos_by_user, \
     get_system_default_repo_id, get_diff, group_events_data, \
-    get_owned_repo_list, check_folder_permission
+    get_owned_repo_list, check_folder_permission, is_registered_user
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 from seahub.views.modules import get_enabled_mods_by_group, \
@@ -55,14 +55,14 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
     get_org_user_events, get_user_events, get_file_type_and_ext, \
     is_valid_username, send_perm_audit_msg, get_origin_repo_info, is_pro_version
-from seahub.utils.repo import check_group_folder_perm_args, \
-    check_user_folder_perm_args, get_sub_repo_abbrev_origin_path
+from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
-from seahub.base.templatetags.seahub_tags import translate_seahub_time, file_icon_filter
+from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
+        file_icon_filter, email2nickname
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 
 # Get an instance of a logger
@@ -1205,7 +1205,11 @@ def get_contacts(request):
         try:
             user = User.objects.get(email=c.contact_email)
             if user.is_active:
-                contact_list.append({"email": c.contact_email, "avatar": avatar(c.contact_email, 16)})
+                contact_list.append({
+                    "email": c.contact_email,
+                    "avatar": avatar(c.contact_email, 32),
+                    "name": email2nickname(c.contact_email),
+                    })
         except User.DoesNotExist:
             continue
 
@@ -2255,6 +2259,7 @@ def get_folder_perm_by_path(request, repo_id):
             user_result_perm = {
                 "perm": user_perm.permission,
                 "user": user_perm.user,
+                "user_name": email2nickname(user_perm.user),
             }
             user_result_perms.append(user_result_perm)
 
@@ -2284,7 +2289,7 @@ def set_user_folder_perm(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not (is_pro_version() and ENABLE_FOLDER_PERM):
-        return HttpResponse(json.dumps({"error": True}),
+        return HttpResponse(json.dumps({"error": _(u"Permission denied")}),
                             status=403, content_type=content_type)
 
     user = request.POST.get('user', None)
@@ -2292,38 +2297,55 @@ def set_user_folder_perm(request, repo_id):
     perm = request.POST.get('perm', None)
     op_type = request.POST.get('type', None)
 
+    username = request.user.username
+
+    ## check params
     if not user or not path or not perm or \
         op_type != 'add' and op_type != 'modify' and op_type != 'delete':
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400, content_type=content_type)
 
-    result = check_user_folder_perm_args(request.user.username, repo_id, path, user, perm)
-    if 'error' in result:
-        return HttpResponse(json.dumps(result), status=result['status'],
-                            content_type=content_type)
+    if not seafile_api.get_repo(repo_id):
+        return HttpResponse(json.dumps({"error": _('Library does not exist')}),
+                            status=400, content_type=content_type)
+
+    if username != seafile_api.get_repo_owner(repo_id):
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
+
+    if perm is not None:
+        if perm != 'r' and perm != 'rw':
+            return HttpResponse(json.dumps({
+                "error": _('Invalid folder permission, should be "rw" or "r"')
+                }), status=400, content_type=content_type)
+
+    if not path.startswith('/'):
+        return HttpResponse(json.dumps({"error": _('Path should start with "/"')}),
+                            status=400, content_type=content_type)
+
+    if path != '/' and path.endswith('/'):
+        return HttpResponse(json.dumps({"error": _('Path should not end with "/"')}),
+                            status=400, content_type=content_type)
+
+    if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+        return HttpResponse(json.dumps({"error": _('Invalid path')}),
+                            status=400, content_type=content_type)
+
+    ## add perm for user(s)
+    if op_type == 'add':
+        return add_user_folder_perm(request, repo_id, user, path, perm)
+
+    if not is_registered_user(user):
+        return HttpResponse(json.dumps({"error": _('Invalid user, should be registered')}),
+                            status=400, content_type=content_type)
 
     user_folder_perm = seafile_api.get_folder_user_perm(repo_id, path, user)
-
-    if op_type == 'add':
-        if not user_folder_perm:
-            try:
-                seafile_api.add_folder_user_perm(repo_id, path, perm, user)
-                send_perm_audit_msg('add-repo-perm', request.user.username,
-                                    user, repo_id, path, perm)
-            except SearpcError as e:
-                logger.error(e)
-                return HttpResponse(json.dumps({"error": _('Operation failed')}),
-                                    status=500, content_type=content_type)
-        else:
-            return HttpResponse(json.dumps({"error": _('Already add this folder permission')}),
-                                status=400, content_type=content_type)
 
     if op_type == 'modify':
         if user_folder_perm and user_folder_perm != perm:
             try:
                 seafile_api.set_folder_user_perm(repo_id, path, perm, user)
-                send_perm_audit_msg('modify-repo-perm', request.user.username,
-                                    user, repo_id, path, perm)
+                send_perm_audit_msg('modify-repo-perm', username, user, repo_id, path, perm)
             except SearpcError as e:
                 logger.error(e)
                 return HttpResponse(json.dumps({"error": _('Operation failed')}),
@@ -2336,8 +2358,7 @@ def set_user_folder_perm(request, repo_id):
         if user_folder_perm:
             try:
                 seafile_api.rm_folder_user_perm(repo_id, path, user)
-                send_perm_audit_msg('delete-repo-perm', request.user.username,
-                                    user, repo_id, path, perm)
+                send_perm_audit_msg('delete-repo-perm', username, user, repo_id, path, perm)
             except SearpcError as e:
                 logger.error(e)
                 return HttpResponse(json.dumps({"error": _('Operation failed')}),
@@ -2346,8 +2367,53 @@ def set_user_folder_perm(request, repo_id):
             return HttpResponse(json.dumps({"error": _('Please add folder permission first')}),
                                 status=400, content_type=content_type)
 
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+def add_user_folder_perm(request, repo_id, users, path, perm):
+    """
+    Add folder permission for user(s)
+    """
+    content_type = 'application/json; charset=utf-8'
+
+    emails = users.split(',')
+
+    success, failed = [], []
+    username = request.user.username
+
+    for user in [e.strip() for e in emails if e.strip()]:
+        if not is_valid_username(user):
+            failed.append(user)
+            continue
+
+        if not is_registered_user(user):
+            failed.append(user)
+            continue
+
+        user_folder_perm = seafile_api.get_folder_user_perm(repo_id, path, user)
+
+        if user_folder_perm:
+            # Already add this folder permission
+            continue
+
+        try:
+            seafile_api.add_folder_user_perm(repo_id, path, perm, user)
+            send_perm_audit_msg('add-repo-perm', username, user, repo_id, path, perm)
+            success.append({
+                'user': user,
+                'user_name': email2nickname(user)
+                })
+        except SearpcError as e:
+            logger.error(e)
+            failed.append(user)
+
+    if len(success) > 0:
+        data = json.dumps({"success": success, "failed": failed})
+        return HttpResponse(data, content_type=content_type)
+    else:
+        data = json.dumps({
+            "error": _("Please check the email(s) you entered and the contacts you selected")
+            })
+        return HttpResponse(data, status=400, content_type=content_type)
 
 @login_required_ajax
 def set_group_folder_perm(request, repo_id):
@@ -2368,39 +2434,56 @@ def set_group_folder_perm(request, repo_id):
     perm = request.POST.get('perm', None)
     op_type = request.POST.get('type', None)
 
+    username = request.user.username
+
     if not group_id or not path or not perm or \
         op_type != 'add' and op_type != 'modify' and op_type != 'delete':
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400, content_type=content_type)
 
+    ## check params
+    if not seafile_api.get_repo(repo_id):
+        return HttpResponse(json.dumps({"error": _('Library does not exist')}),
+                            status=400, content_type=content_type)
+
+    if username != seafile_api.get_repo_owner(repo_id):
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
+
+    if perm is not None:
+        if perm != 'r' and perm != 'rw':
+            return HttpResponse(json.dumps({
+                "error": _('Invalid folder permission, should be "rw" or "r"')
+                }), status=400, content_type=content_type)
+
+    if not path.startswith('/'):
+        return HttpResponse(json.dumps({"error": _('Path should start with "/"')}),
+                            status=400, content_type=content_type)
+
+    if path != '/' and path.endswith('/'):
+        return HttpResponse(json.dumps({"error": _('Path should not end with "/"')}),
+                            status=400, content_type=content_type)
+
+    if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+        return HttpResponse(json.dumps({"error": _('Invalid path')}),
+                            status=400, content_type=content_type)
+
+    ## add perm for group(s)
+    if op_type == 'add':
+        return add_group_folder_perm(request, repo_id, group_id, path, perm)
+
     group_id = int(group_id)
-    result = check_group_folder_perm_args(request.user.username, repo_id, path, group_id, perm)
-    if 'error' in result:
-        return HttpResponse(json.dumps(result), status=result['status'],
-                            content_type=content_type)
+    if not seaserv.get_group(group_id):
+        return HttpResponse(json.dumps({"error": _('Invalid group')}),
+                            status=400, content_type=content_type)
 
     group_folder_perm = seafile_api.get_folder_group_perm(repo_id, path, group_id)
-
-    if op_type == 'add':
-        if not group_folder_perm:
-            try:
-                seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
-                send_perm_audit_msg('add-repo-perm', request.user.username,
-                                    group_id, repo_id, path, perm)
-            except SearpcError as e:
-                logger.error(e)
-                return HttpResponse(json.dumps({"error": _('Operation failed')}),
-                                    status=500, content_type=content_type)
-        else:
-            return HttpResponse(json.dumps({"error": _('Already add this folder permission')}),
-                                status=400, content_type=content_type)
 
     if op_type == 'modify':
         if group_folder_perm and group_folder_perm != perm:
             try:
                 seafile_api.set_folder_group_perm(repo_id, path, perm, group_id)
-                send_perm_audit_msg('modify-repo-perm', request.user.username,
-                                    group_id, repo_id, path, perm)
+                send_perm_audit_msg('modify-repo-perm', username, group_id, repo_id, path, perm)
             except SearpcError as e:
                 logger.error(e)
                 return HttpResponse(json.dumps({"error": _('Operation failed')}),
@@ -2413,8 +2496,7 @@ def set_group_folder_perm(request, repo_id):
         if group_folder_perm:
             try:
                 seafile_api.rm_folder_group_perm(repo_id, path, group_id)
-                send_perm_audit_msg('delete-repo-perm', request.user.username,
-                                    group_id, repo_id, path, perm)
+                send_perm_audit_msg('delete-repo-perm', username, group_id, repo_id, path, perm)
             except SearpcError as e:
                 logger.error(e)
                 return HttpResponse(json.dumps({"error": _('Operation failed')}),
@@ -2423,8 +2505,47 @@ def set_group_folder_perm(request, repo_id):
             return HttpResponse(json.dumps({"error": _('Please add folder permission first')}),
                                 status=400, content_type=content_type)
 
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
+
+def add_group_folder_perm(request, repo_id, group_ids, path, perm):
+    """
+    Add folder permission for group(s)
+    """
+    content_type = 'application/json; charset=utf-8'
+
+    group_id_list = group_ids.split(',') # 'user'
+
+    success, failed = [], []
+    username = request.user.username
+
+    for group_id in group_id_list:
+        group_id = int(group_id)
+        if not seaserv.get_group(group_id):
+            failed.append(group_id)
+
+        group_folder_perm = seafile_api.get_folder_group_perm(repo_id, path, group_id)
+
+        if group_folder_perm:
+            #Already add this folder permission
+            continue
+
+        try:
+            seafile_api.add_folder_group_perm(repo_id, path, perm, group_id)
+            send_perm_audit_msg('add-repo-perm', username, group_id, repo_id, path, perm)
+            success.append({
+                'group_id': group_id,
+                "group_name": get_group(group_id).group_name,
+                })
+        except SearpcError as e:
+            logger.error(e)
+            failed.append(group_id)
+
+    if len(success) > 0:
+        data = json.dumps({"success": success, "failed": failed})
+        return HttpResponse(data, content_type=content_type)
+    else:
+        data = json.dumps({"error": _("Failed")})
+        return HttpResponse(data, status=400, content_type=content_type)
 
 @login_required_ajax
 def get_group_basic_info(request, group_id):
