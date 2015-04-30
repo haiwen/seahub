@@ -521,7 +521,7 @@ def view_history_file_common(request, repo_id, ret_dict):
     # render error page if permission  deny.
     if filetype == VIDEO or filetype == AUDIO:
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path, use_onetime=True)
+            request, repo_id, obj_id, path, use_onetime=False)
     else:
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
             request, repo_id, obj_id, path)
