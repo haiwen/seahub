@@ -432,16 +432,22 @@ define([
             sortByName: function() {
                 var dirents = this.dir;
                 var el = $('#by-name');
+
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
+                    } else if (a.get('is_file') && b.get('is_dir')) {
+                        return 1;
                     }
+
+                    var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
                     if (el.hasClass('icon-caret-up')) {
-                        return a.get('obj_name').toLowerCase() < b.get('obj_name').toLowerCase() ? 1 : -1;
+                        return -result;
                     } else {
-                        return a.get('obj_name').toLowerCase() < b.get('obj_name').toLowerCase() ? -1 : 1;
+                        return result;
                     }
                 };
+
                 dirents.sort();
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
