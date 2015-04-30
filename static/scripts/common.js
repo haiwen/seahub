@@ -50,11 +50,14 @@ define([
     'jquery',
     'underscore',
     'text',                     // Workaround for r.js, otherwise text.js will not be included
-], function($, _, text) {
+    'pinyin-by-unicode'
+], function($, _, text, PinyinByUnicode) {
     return {
         INFO_TIMEOUT: 10000,     // 10 secs for info msg
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
         ERROR_TIMEOUT: 3000,     // 3 secs for error msg
+
+        strChineseFirstPY: PinyinByUnicode.strChineseFirstPY,
 
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
@@ -499,6 +502,35 @@ define([
             } else {
                 return false;
             }
+        },
+
+        compareTwoWord: function(a_name, b_name) {
+            // compare a_name and b_name at lower case
+            // if a_name >= b_name, return 1
+            // if a_name < b_name, return -1
+
+            var a_val, b_val,
+                a_uni = a_name.charCodeAt(0),
+                b_uni = b_name.charCodeAt(0),
+                strChineseFirstPY = this.strChineseFirstPY;
+
+            if ((19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
+                // both are chinese words
+                a_val = strChineseFirstPY.charAt(a_uni - 19968).toLowerCase();
+                b_val = strChineseFirstPY.charAt(b_uni - 19968).toLowerCase();
+            } else if ((19968 < a_uni && a_uni < 40869) && !(19968 < b_uni && b_uni < 40869)) {
+                // a is chinese and b is english
+                return 1;
+            } else if (!(19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
+                // a is english and b is chinese
+                return -1;
+            } else {
+                // both are english words
+                a_val = a_name.toLowerCase();
+                b_val = b_name.toLowerCase();
+            }
+
+            return a_val >= b_val ? 1 : -1;
         },
 
         fileSizeFormat: function(bytes, precision) {
