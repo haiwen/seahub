@@ -119,6 +119,27 @@
     <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
+<div id="starred-file" class="hide">
+    <h3 class="hd">{% trans "Starred" %}</h3>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="5%"></th>
+                <th width="40%">{% trans "File Name" %}</th>
+                <th width="32%">{% trans "Library" %}</th>
+                <th width="18%">{% trans "Last Update" %}</th>
+                <th width="5%"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
+        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+    </div>
+</div>
+
 <div id="guide-for-new" class="hide">
     <span class="icon-lightbulb fleft"></span>
     <div class="txt">

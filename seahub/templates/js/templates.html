@@ -470,7 +470,7 @@
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#my-libs/" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{{ SITE_ROOT }}starred/" class="star">{% trans "Starred" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}#starred/" class="star">{% trans "Starred" %}</a></li>
 
         <% if (events_enabled) { %>
         <li class="tab"><a href="{{ SITE_ROOT }}activities/" class="activity">{% trans "Activities" %}</a></li>
@@ -659,4 +659,21 @@
             </div>
         </div>
     </div>
+</script>
+<script type="text/template" id="starred-file-item-tmpl">
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
+    <td>
+        <% if (is_img) { %>
+            <a class="normal img-name-link" href="{{ SITE_ROOT }}lib/<%= repo %>/file/<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo %>/raw/<%- encoded_path %>"><%- file_name %></a>
+        <% } else { %>
+            <a href="{{ SITE_ROOT }}lib/<%= repo %>/file/<%- encoded_path %>" target="_blank"><%- file_name %></a>
+        <% } %>
+    </td>
+    <td>
+        <a href="{{ SITE_ROOT }}#my-libs/lib/<%= repo %>"><%- repo_name %></a>
+    </td>
+    <td><%= mtime_relative %></td>
+    <td>
+        <img src="{{MEDIA_URL}}img/rm.png" alt="" class="unstar op-icon vh" title="{% trans "Unstar" %}" />
+    </td>
 </script>

@@ -25,8 +25,8 @@ define([
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
-
             'common/lib/:repo_id(/*path)': 'showCommonDir',
+            'starred/': 'showStarredFile',
             // Default
             '*actions': 'defaultAction'
         },
@@ -70,6 +70,11 @@ define([
         showSharedRepos: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showSharedRepos();
+        },
+
+        showStarredFile: function() {
+            this.switchCurrentView(this.myHomeView);
+            this.myHomeView.showStarredFile();
         },
 
         showMyRepoDir: function(repo_id, path) {
