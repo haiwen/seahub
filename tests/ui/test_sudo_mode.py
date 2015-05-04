@@ -1,5 +1,9 @@
-from tests.common.common import ADMIN_USERNAME, ADMIN_PASSWORD
+import pytest
 
+from tests.common.common import ADMIN_PASSWORD
+
+# TODO: Find a way to test the sudo mode behaviour
+@pytest.mark.xfail
 def test_sudo_mode_required(admin_browser_once):
     b = admin_browser_once
     b.visit('/sys/useradmin/')
