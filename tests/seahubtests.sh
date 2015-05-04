@@ -54,7 +54,18 @@ function start_seahub() {
     sleep 5
 }
 
+function check_phantom_js() {
+    if ! which phantomjs >/dev/null; then
+        echo "Please install phantojs first:"
+        echo
+        echo "  On ubuntu: sudo apt-get install phantomjs"
+        echo "  On MacOSX: Download the binary from http://phantomjs.org/download.html"
+        exit 1
+    fi
+}
+
 function run_tests() {
+    check_phantom_js
     set +e
     py.test $nose_opts
     rvalue=$?
