@@ -1,10 +1,13 @@
-from django.http import Http404
+from django.core.urlresolvers import reverse
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils.http import urlquote
 from seaserv import get_repo, is_passwd_set
 
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 
+from seahub.base.sudo_mode import sudo_mode_check
 from seahub.utils import render_error
 from django.utils.translation import ugettext as _
 from seahub.views.modules import get_enabled_mods_by_user, \
@@ -16,9 +19,12 @@ def sys_staff_required(func):
     Decorator for views that checks the user is system staff.
     """
     def _decorated(request, *args, **kwargs):
-        if request.user.is_staff:
-            return func(request, *args, **kwargs)
-        raise Http404
+        if not request.user.is_staff:
+            raise Http404
+        if not sudo_mode_check(request):
+            return HttpResponseRedirect(
+                reverse('sys_sudo_mode') + '?next=' + urlquote(request.get_full_path()))
+        return func(request, *args, **kwargs)
     return _decorated
 
 def user_mods_check(func):

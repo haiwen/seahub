@@ -1,4 +1,4 @@
-selenium==2.42.1
+splinter==0.7.2
 requests==2.3.0
-pytest
+pytest==2.7.0
 pytest-django==2.8.0

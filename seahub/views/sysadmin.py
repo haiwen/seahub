@@ -10,7 +10,7 @@ import csv, chardet, StringIO
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -22,6 +22,8 @@ from pysearpc import SearpcError
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required
+from seahub.base.sudo_mode import update_sudo_mode_ts
+from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
@@ -647,7 +649,7 @@ def user_remove(request, user_id):
 @sys_staff_required
 def remove_trial(request, user_or_org):
     """Remove trial account.
-    
+
     Arguments:
     - `request`:
     """
@@ -1418,3 +1420,28 @@ def batch_add_user(request):
 
     next = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
     return HttpResponseRedirect(next)
+
+@login_required
+def sys_sudo_mode(request):
+    if request.method not in ('GET', 'POST'):
+        return HttpResponseNotAllowed
+
+    # here we can't use @sys_staff_required
+    if not request.user.is_staff:
+        return Http404
+
+    password_error = False
+    if request.method == 'POST':
+        password = request.POST.get('password')
+        if password:
+            user = authenticate(username=request.user.username, password=password)
+            update_sudo_mode_ts(request)
+            return HttpResponseRedirect(
+                request.GET.get('next', reverse('sys_useradmin')))
+        password_error = True
+
+    return render_to_response(
+        'sysadmin/sudo_mode.html', {
+            'password_error': True,
+        },
+        context_instance=RequestContext(request))
