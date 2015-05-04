@@ -48,16 +48,17 @@ $(function() {
     $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
 });
 
+{% if filetype == 'PDF' and use_pdfjs %}
+{% elif filetype == 'Document' and not html_exists %}
+{% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');
     if ($(window).height() > file_view.outerHeight(true) + file_view.offset().top) {
         file_view.outerHeight($(window).height() - file_view.offset().top);
     }
-    if ($(document).height() > $(window).height()) {
-        file_view.outerHeight($(document).height() - file_view.offset().top);
-    }
 }
 $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
+{% endif %}
 
 {% include "snippets/file_content_js.html" %}
 
