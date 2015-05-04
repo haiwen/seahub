@@ -12,7 +12,7 @@ from seahub.utils import render_error
 from django.utils.translation import ugettext as _
 from seahub.views.modules import get_enabled_mods_by_user, \
     get_available_mods_by_user
-from seahub.settings import FORCE_SERVER_CRYPTO
+from seahub.settings import FORCE_SERVER_CRYPTO, ENABLE_SUDO_MODE
 
 def sys_staff_required(func):
     """
@@ -21,7 +21,7 @@ def sys_staff_required(func):
     def _decorated(request, *args, **kwargs):
         if not request.user.is_staff:
             raise Http404
-        if not sudo_mode_check(request):
+        if ENABLE_SUDO_MODE and not sudo_mode_check(request):
             return HttpResponseRedirect(
                 reverse('sys_sudo_mode') + '?next=' + urlquote(request.get_full_path()))
         return func(request, *args, **kwargs)
