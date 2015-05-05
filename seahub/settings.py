@@ -456,6 +456,11 @@ THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 #####################
 ENABLE_FOLDER_PERM = False
 
+#####################
+# Sudo Mode #
+#####################
+ENABLE_SUDO_MODE = True
+
 #################
 # Email sending #
 #################

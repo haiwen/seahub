@@ -1,0 +1,55 @@
+{% extends base_template %}
+{% load i18n %}
+
+{% block title %}{% trans "Confirm Password" %}{% endblock %}
+
+{% block main_panel %}
+<div class="new-narrow-panel">
+<h2 class="hd">{% trans "Confirm password to continue" %}</h2>
+<form action="" method="post" class="con">{% csrf_token %}
+	<label for="password">{% trans "Password" %}</label>
+	<input type="password" name="password" value="" class="input" autocomplete="off" />
+    {% if password_error %}
+	<p class="error">{% trans "Incorrect password" %}</p>
+    {% else %}
+	<p class="error hide"></p>
+    {% endif %}
+
+    <input type="submit" value="{% trans "Confirm Password" %}" class="submit" />
+    {% if enable_shib_login %}
+    <button id="shib-login" class="submit fright">{% trans "Shibboleth" %}</button>
+    {% endif %}
+
+    <div class="sudo-mode-tip">
+        <p><span class="bold">{% trans "Tip:" %}</span>{% trans "You are entering admin area, we won't ask for your password again for a few hours." %}</p>
+    </div>
+</form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('input[type="submit"]').click(function(){
+    if (!$.trim($('input[name="password"]').val())) {
+        $('.error').removeClass('hide').html("{% trans "Password cannot be blank" %}");
+        return false;
+    }
+});
+// set tabindex
+$(function() {
+    $('input:not([type="hidden"])').each(function(index) {
+        $(this).attr('tabindex', index + 1);
+    });
+});
+
+{% if enable_shib_login %}
+$(function() {
+    $('#shib-login').click(function() {
+        window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
+        return false;
+    });
+});
+{% endif %}
+
+</script>
+{% endblock %}
