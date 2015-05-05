@@ -18,7 +18,8 @@ from seaserv import seafile_api, get_commits, server_repo_size, \
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+    translate_seahub_time, file_icon_filter
 from seahub.contacts.models import Contact
 from seahub.group.models import GroupMessage, MessageReply, \
     MessageAttachment, PublicGroup
@@ -70,8 +71,12 @@ def prepare_starred_files(files):
     for f in files:
         sfile = {'org' : f.org_id,
                  'repo' : f.repo.id,
+                 'repo_name' : f.repo.name,
                  'path' : f.path,
+                 'icon_path' : file_icon_filter(f.path),
+                 'file_name' : os.path.basename(f.path),
                  'mtime' : f.last_modified,
+                 'mtime_relative': translate_seahub_time(f.last_modified),
                  'dir' : f.is_dir
                  }
         if not f.is_dir:

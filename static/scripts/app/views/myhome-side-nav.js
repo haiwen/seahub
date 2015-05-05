@@ -13,15 +13,22 @@ define([
         enableModTemplate: _.template($("#myhome-mods-enable-form-tmpl").html()),
 
         initialize: function() {
-            this.render();
         },
 
-        render: function() {
+        render: function(cur_tab) {
             this.$el.html(this.template({
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
                 'events_enabled': app.pageOptions.events_enabled
             }));
+            this.$el.find('li').removeClass('tab-cur');
+            this.$el.find('a').each(function () {
+                if ($(this).attr('href').match(cur_tab)) {
+                    $(this).parent().addClass('tab-cur');
+                    return;
+                }
+            });
+            return this;
         },
 
         events: {
@@ -73,7 +80,8 @@ define([
             });
         },
 
-        show: function() {
+        show: function(cur_tab) {
+            this.render(cur_tab);
             this.$el.show();
         },
 

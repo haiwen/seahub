@@ -1422,7 +1422,7 @@ class StarredFileView(APIView):
     including add/delete/list starred files.
     """
 
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
