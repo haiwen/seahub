@@ -8,66 +8,13 @@
      * @param {string|undefined} outline The outline content of the converted html.
      *      If html_exists is true, then it is undefined since the outline is already rendered in the HTML.
      */
-    function load_document(html_exists, page_num, outline) {
+    function load_document(html_exists, page_num) {
         $('#convert-loading').remove();
         var base_page_url = "{% url 'office_convert_get_page' obj_id %}/",
             page_urls = [];
 
         for (var i = 1; i < page_num + 1; i++) {
             page_urls.push(base_page_url + i + '.page');
-        }
-
-        if (!html_exists) {
-            $('#outline').html(outline);
-        }
-
-        var has_outline;
-        if (html_exists) {
-            outline_html = $.trim($('#outline').html());
-            has_outline = outline_html;
-        } else {
-            has_outline = $.trim(outline);
-        }
-
-        if (has_outline) {
-            var sidebar = $('#sidebar'),
-                page_container = $('#page-container'),
-                hide_outline, show_outline;
-
-            $('#outline .l').removeAttr('data-dest-detail'); // make the anchor links work
-            sidebar.removeClass('hide');
-
-            try {
-                if (highlight_kw) {
-                    highlight_kw(sidebar[0]);
-                }
-            } catch (e) {
-                // cases: 'highlight_keyword' in file view is False, history file view
-                // there can be an ReferenceError 'highlight_kw is not defined'
-            }
-
-            $('#converted-html').append('<div id="pdf2html-toolbar-1"></div>');
-            var toolbar = $('#pdf2html-toolbar-1');
-            toolbar.append('<span class="icon-caret-left" title="{% trans "hide outline" %}" id="hide-outline"></span>');
-            toolbar.append('<span class="icon-caret-right hide" title="{% trans "show outline" %}" id="show-outline"></span>');
-
-            hide_outline = $('#hide-outline');
-            show_outline = $('#show-outline');
-
-            toolbar.css({'left':250, 'bottom': ($(window).height() + $(window).scrollTop() - $('#file-view').offset().top)/2 - toolbar.height()/2});
-            toolbar.click(function() {
-                if (show_outline.hasClass('hide')) {
-                    sidebar.addClass('hide').removeClass('opened');
-                    hide_outline.addClass('hide');
-                    show_outline.removeClass('hide');
-                    toolbar.css({'left':0});
-                } else {
-                    sidebar.removeClass('hide').addClass('opened');
-                    show_outline.addClass('hide');
-                    hide_outline.removeClass('hide');
-                    toolbar.css({'left':250});
-                }
-            });
         }
 
         new pdf2htmlEX.Viewer({
@@ -136,36 +83,9 @@
         });
     }
 
-    // handle outline(fixed or not) when scroll
-    $(window).scroll(function() {
-        var outline = $('#outline');
-        if (!$.trim(outline.html())) {
-            return;
-        }
-        var toolbar1 = $('#pdf2html-toolbar-1');
-        if ($(window).scrollTop() > $('#page-container').offset().top) {
-            outline.addClass('fixed-outline').css({'height':$(window).height() - parseInt(outline.css('padding-top')) - parseInt(outline.css('padding-bottom'))});
-            toolbar1.css({'bottom':'50%'});
-        } else {
-            outline.removeClass('fixed-outline').removeAttr('style');
-            toolbar1.css({'bottom':($(window).height() + $(window).scrollTop() - $('#file-view').offset().top)/2 - toolbar1.height()/2});
-        }
-    });
-
     {% if html_exists %}
     load_document(true, {{ html_detail.page_num }});
     {% else %}
-
-    var m_page_num;
-    function get_outline() {
-        $.ajax({
-            url: "{% url 'office_convert_get_page' obj_id %}/file.outline",
-            beforeSend: prepareOfficePreviewToken,
-            dataType: 'text'
-        }).done(function(outline) {
-            load_document(false, m_page_num, outline);
-        });
-    }
 
     function get_file_css() {
         var css_href = "{% url 'office_convert_get_page' obj_id %}/file.css";
@@ -180,9 +100,8 @@
             beforeSend: prepareOfficePreviewToken,
             success: function(data) {
                 if (data['success']) {
-                    m_page_num = data['count'];
                     get_file_css();
-                    get_outline();
+                    load_document(false, data['count']);
                 } else {
                     str = "{% trans "Document convertion failed." %}";
                     $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
