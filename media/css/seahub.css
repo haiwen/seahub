@@ -3525,9 +3525,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:2px;
     height:30px;
 }
-#folder-perm-tabs .select2-choices {
-    border-radius:2px;
-}
 #folder-perm-tabs table {
     margin-top:0;
 }
