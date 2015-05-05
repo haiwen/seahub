@@ -1178,6 +1178,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #dir-view .repo-op {
     height:30px;
+    position: relative; /* for '#upload-menu' */
 }
 #right-panel .hd,
 .tabnav,
@@ -2007,8 +2008,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #upload-menu {
     position:absolute;
-    left:0;
-    top:29px;
+    z-index:12; /* make it on top of a checkbox */
     border:1px solid #c5c5c5;
     border-radius:2px;
     box-shadow: 0 0 2px #c5c5c5;
