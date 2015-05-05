@@ -489,6 +489,45 @@ define([
             });
         },
 
+        contactInputOptionsForSelect2: {
+            placeholder: gettext("Enter emails or select contacts"),
+
+            // with 'tags', the user can directly enter, not just select
+            // tags need `<input type="hidden" />`, not `<select>`
+            tags: function () {
+                var contacts = app.pageOptions.contacts || [];
+                var contact_list = [];
+                for (var i = 0, len = contacts.length; i < len; i++) {
+                    contact_list.push({ // 'id' & 'text' are required by the plugin
+                        "id": contacts[i].email,
+                        // for search. both name & email can be searched.
+                        // use ' '(space) to separate name & email
+                        "text": contacts[i].name + ' ' + contacts[i].email,
+                        "avatar": contacts[i].avatar,
+                        "name": contacts[i].name
+                    });
+                }
+                return contact_list;
+            },
+
+            tokenSeparators: [',', ' '],
+
+            // format items shown in the drop-down menu
+            formatResult: function(item) {
+                if (item.avatar) {
+                    return item.avatar + '<span class="text">' + item.name + '<br />' + item.id + '</span>';
+                } else {
+                    return; // if no match, show nothing
+                }
+            },
+
+            // format selected item shown in the input
+            formatSelection: function(item) {
+                return item.name || item.id; // if no name, show the email, i.e., when directly input, show the email
+            },
+            escapeMarkup: function(m) { return m; }
+        },
+
         // check if a file is an image
         imageCheck: function (filename) {
             // no file ext

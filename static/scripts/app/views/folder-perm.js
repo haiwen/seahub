@@ -89,34 +89,7 @@ define([
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', $add_user_perm).select2({
-                placeholder: gettext("Enter emails or select contacts"),
-                tags: function () {
-                    var contacts = app.pageOptions.contacts || [];
-                    var contact_list = [];
-                    for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push({ // 'id' & 'text' are required by the plugin
-                            "id": contacts[i].email,
-                            "text": contacts[i].email,
-                            "avatar": contacts[i].avatar,
-                            "name": contacts[i].name
-                        });
-                    }
-                    return contact_list;
-                },
-                tokenSeparators: [',', ' '],
-                formatResult: function(item) { // format items shown in the drop-down menu
-                    if (item.avatar) {
-                        return item.avatar + '<span class="text">' + item.name + '<br />' + item.text + '</span>';
-                    } else {
-                        return; // if no match, show nothing
-                    }
-                },
-                formatSelection: function(item) { // format selected item shown in the input
-                    return item.name || item.text; // if no name, show the email, i.e., when directly input, show the email
-                },
-                escapeMarkup: function(m) { return m; }
-            });
+            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2);
 
             // use select2 to 'group' input in 'add group perm'
             var groups = app.pageOptions.groups || [],
