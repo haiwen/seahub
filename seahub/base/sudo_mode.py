@@ -24,7 +24,8 @@ def update_sudo_mode_ts(request):
 
 def update_sudo_ts_when_login(**kwargs):
     request = kwargs['request']
-    update_sudo_mode_ts(request)
+    if request.user.is_staff:
+        update_sudo_mode_ts(request)
 
 if ENABLE_SUDO_MODE:
     user_logged_in.connect(update_sudo_ts_when_login)
