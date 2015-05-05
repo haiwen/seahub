@@ -4,6 +4,7 @@ from django.core.exceptions import ImproperlyConfigured
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
 from seahub import auth
+from seahub.base.sudo_mode import update_sudo_mode_ts
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -29,7 +30,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             return
         else:
             #Delete the shib reauth session key if present.
-	        request.session.pop(LOGOUT_SESSION_KEY, None)
+            request.session.pop(LOGOUT_SESSION_KEY, None)
 
         #Locate the remote user header.
         # import pprint; pprint.pprint(request.META)
@@ -45,6 +46,8 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # persisted in the session and we don't need to continue.
         if request.user.is_authenticated():
             if request.user.username == username:
+                if request.user.is_staff:
+                    update_sudo_mode_ts(request)
                 return
 
         # Make sure we have all required Shiboleth elements before proceeding.
