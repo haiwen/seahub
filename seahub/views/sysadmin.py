@@ -1435,13 +1435,16 @@ def sys_sudo_mode(request):
         password = request.POST.get('password')
         if password:
             user = authenticate(username=request.user.username, password=password)
-            update_sudo_mode_ts(request)
-            return HttpResponseRedirect(
-                request.GET.get('next', reverse('sys_useradmin')))
+            if user:
+                update_sudo_mode_ts(request)
+                return HttpResponseRedirect(
+                    request.GET.get('next', reverse('sys_useradmin')))
         password_error = True
 
+    enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
     return render_to_response(
         'sysadmin/sudo_mode.html', {
-            'password_error': True,
+            'password_error': password_error,
+            'enable_shib_login': enable_shib_login,
         },
         context_instance=RequestContext(request))

@@ -17,10 +17,10 @@ _SUDO_MODE_SESSION_KEY = 'sudo_expire_ts'
 
 
 def sudo_mode_check(request):
-    return request.session.get('_SUDO_MODE_SESSION_KEY', 0) > time.time()
+    return request.session.get(_SUDO_MODE_SESSION_KEY, 0) > time.time()
 
 def update_sudo_mode_ts(request):
-    request.session['_SUDO_MODE_SESSION_KEY'] = time.time() + _SUDO_EXPIRE_SECONDS
+    request.session[_SUDO_MODE_SESSION_KEY] = time.time() + _SUDO_EXPIRE_SECONDS
 
 def update_sudo_ts_when_login(**kwargs):
     request = kwargs['request']

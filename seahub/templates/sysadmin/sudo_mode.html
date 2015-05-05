@@ -9,13 +9,17 @@
 <form action="" method="post" class="con">{% csrf_token %}
 	<label for="password">{% trans "Password" %}</label>
 	<input type="password" name="password" value="" class="input" autocomplete="off" />
-    {% if form.errors %}
+    {% if password_error %}
 	<p class="error">{% trans "Incorrect password" %}</p>
     {% else %}
 	<p class="error hide"></p>
     {% endif %}
 
     <input type="submit" value="{% trans "Confirm Password" %}" class="submit" />
+    {% if enable_shib_login %}
+    <button id="shib-login" class="submit fright">{% trans "Shibboleth" %}</button>
+    {% endif %}
+
     <div class="sudo-mode-tip">
         <p><span class="bold">{% trans "Tip:" %}</span>{% trans "You are entering sudo mode, we won't ask for your password again for a few hours." %}</p>
     </div>
@@ -37,6 +41,15 @@ $(function() {
         $(this).attr('tabindex', index + 1);
     });
 });
+
+{% if enable_shib_login %}
+$(function() {
+    $('#shib-login').click(function() {
+        window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
+        return false;
+    });
+});
+{% endif %}
 
 </script>
 {% endblock %}
