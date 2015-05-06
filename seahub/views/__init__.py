@@ -2115,6 +2115,7 @@ def client_token_login(request):
         if request.user.is_authenticated() and request.user.username == user.username:
             pass
         else:
+            request.client_token_login = True
             auth_login(request, user)
 
     return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))

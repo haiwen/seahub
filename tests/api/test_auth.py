@@ -77,6 +77,12 @@ class AuthTest(ApiTestBase):
         r = requests.get(url)
         assert r.url == urljoin(BASE_URL, '/profile/')
 
+    def test_client_login_token_wont_enter_sudo_mode(self):
+        url = self._get_client_login_url(admin=True)
+        url += '&next=/sys/useradmin'
+        r = requests.get(url)
+        assert r.url == urljoin(BASE_URL, '/sys/sudo/?next=/sys/useradmin/')
+
     def _desktop_login(self):
         data = {
             'username': USERNAME,
@@ -106,7 +112,8 @@ class AuthTest(ApiTestBase):
     def _logout(self, token):
         self.post(LOGOUT_DEVICE_URL, token=token)
 
-    def _get_client_login_url(self):
-        token = self.post(CLIENT_LOGIN_TOKEN_URL).json()['token']
+    def _get_client_login_url(self, admin=False):
+        post = self.admin_post if admin else self.post
+        token = post(CLIENT_LOGIN_TOKEN_URL).json()['token']
         assert len(token) == 32
         return urljoin(BASE_URL, 'client-login/') + '?token=' + token
