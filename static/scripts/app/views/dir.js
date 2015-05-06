@@ -62,7 +62,7 @@ define([
                 // initialize common js behavior
                 this.$('th .checkbox-orig').unbind();
 
-                // get 'more'
+                // scroll window: get 'more', fix 'op bar'
                 var _this = this;
                 $(window).scroll(function() {
                     if ($(_this.el).is(':visible')) {
@@ -849,10 +849,12 @@ define([
             },
 
             onWindowScroll: function () {
+                // 'more'
                 var dir = this.dir,
                     start = dir.more_start;
-
-                if (dir.dirent_more && $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) && start != dir.last_start) {
+                if (dir.dirent_more &&
+                        $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) &&
+                        start != dir.last_start) {
                     var loading_tip = this.$('.loading-tip'),
                         _this = this;
                     dir.last_start = start;
@@ -874,7 +876,27 @@ define([
                         }
                     });
                 }
+
+                // fixed 'dir-op-bar'
+                var op_bar = this.$dir_op_bar,
+                    path_bar = this.$path_bar, // the element before op_bar
+                    repo_file_list = this.$('.repo-file-list'); // the element after op_bar
+                var op_bar_top = path_bar.offset().top + path_bar.outerHeight(true);
+                var fixed_styles = {
+                    'position': 'fixed',
+                    'top': 0,
+                    'left': path_bar.offset().left,
+                    'z-index': 12 // make 'op_bar' shown on top of the checkboxes
+                };
+                if ($(window).scrollTop() >= op_bar_top) {
+                    repo_file_list.css({'margin-top':op_bar.outerHeight(true)});
+                    op_bar.outerWidth(this.$el.width()).css(fixed_styles);
+                } else {
+                    repo_file_list.css({'margin-top':0});
+                    op_bar.removeAttr('style');
+                }
             }
+
       });
 
       return DirView;
