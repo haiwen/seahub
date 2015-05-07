@@ -20,6 +20,12 @@
 </style>
 {% endblock %}
 
+{% block main_panel %}
+<div id="initial-loading-view">
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+</div>
+{% endblock %}
+
 {% block left_panel %}
 <div class="side-tabnav hide" id="myhome-side-nav">
 </div>
@@ -36,9 +42,7 @@
 {% endblock %}
 
 {% block right_panel %}
-<div id="initial-loading-view">
-    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
-</div>
+
 
 <div id="repo-tabs" class="tab-tabs hide">
     <div class="hd">
@@ -116,7 +120,7 @@
         </div>
     </div>
 
-    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
 <div id="starred-file" class="hide">
@@ -133,7 +137,7 @@
         </thead>
         <tbody></tbody>
     </table>
-    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
         <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
@@ -158,7 +162,7 @@
 <form id="sublib-create-form" class="file-choose-form hide">
     <h3>{% trans "Choose a directory:" %}</h3>
     <div class="dir-tree-cont">
-        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+        <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
     </div>
     <input type="hidden" name="dst_repo" value="" />
     <input type="hidden" name="dst_path" value="" />
@@ -200,7 +204,7 @@
         </div>
     </div>
 
-    <img class="loading-tip" src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" />
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
 </div>
 
 <div id="organization-repos" class="tab-tabs hide">
@@ -223,7 +227,7 @@
         <tbody>
         </tbody>
     </table>
-    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No public library" %}</h2>
         <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
