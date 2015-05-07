@@ -3,16 +3,23 @@
 Test auth related api, such as login/logout.
 """
 
-import random
-import re
-from urllib import urlencode, quote
+import os
+import time
+import requests
+import pytest
 
-from tests.common.common import USERNAME, PASSWORD, SEAFILE_BASE_URL
+from tests.common.common import USERNAME, PASSWORD, BASE_URL, SEAFILE_BASE_URL
 from tests.common.utils import randstring, urljoin
 from tests.api.urls import (
-    AUTH_PING_URL, TOKEN_URL, DOWNLOAD_REPO_URL, LOGOUT_DEVICE_URL
+    AUTH_PING_URL, TOKEN_URL, DOWNLOAD_REPO_URL, LOGOUT_DEVICE_URL,
+    CLIENT_LOGIN_TOKEN_URL
 )
 from tests.api.apitestbase import ApiTestBase
+
+if not BASE_URL.endswith('/'):
+    BASE_URL = BASE_URL + '/'
+
+TRAVIS = 'TRAVIS' in os.environ
 
 def fake_ccnet_id():
     return randstring(length=40)
@@ -47,6 +54,35 @@ class AuthTest(ApiTestBase):
             self._do_auth_ping(token, expected=401)
             # self._get_repo_info(sync_token, repo.repo_id, expected=400)
 
+    def test_generate_client_login_token(self):
+        url = self._get_client_login_url()
+        r = requests.get(url)
+        assert r.url == BASE_URL
+
+        r = requests.get(url)
+        assert r.url == urljoin(BASE_URL, 'accounts/login/?next=/'), \
+            'a client login token can only be used once'
+
+    @pytest.mark.skipif(not TRAVIS, reason="only run this test on travis builds") # pylint: disable=E1101
+    def test_client_login_token_should_expire_shortly(self):
+        url = self._get_client_login_url()
+        time.sleep(30)
+        r = requests.get(url)
+        assert r.url == urljoin(BASE_URL, 'accounts/login/?next=/'), \
+            'a client login should be expired after 30 seconds'
+
+    def test_client_login_token_redirect_to_next_url(self):
+        url = self._get_client_login_url()
+        url += '&next=/profile/'
+        r = requests.get(url)
+        assert r.url == urljoin(BASE_URL, '/profile/')
+
+    def test_client_login_token_wont_enter_sudo_mode(self):
+        url = self._get_client_login_url(admin=True)
+        url += '&next=/sys/useradmin'
+        r = requests.get(url)
+        assert r.url == urljoin(BASE_URL, '/sys/sudo/?next=/sys/useradmin/')
+
     def _desktop_login(self):
         data = {
             'username': USERNAME,
@@ -75,3 +111,9 @@ class AuthTest(ApiTestBase):
 
     def _logout(self, token):
         self.post(LOGOUT_DEVICE_URL, token=token)
+
+    def _get_client_login_url(self, admin=False):
+        post = self.admin_post if admin else self.post
+        token = post(CLIENT_LOGIN_TOKEN_URL).json()['token']
+        assert len(token) == 32
+        return urljoin(BASE_URL, 'client-login/') + '?token=' + token

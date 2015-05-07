@@ -244,6 +244,8 @@ urlpatterns = patterns('',
 
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
+
+    url(r'^client-login/$', client_token_login, name='client_token_login'),
 )
 
 if settings.SERVE_STATIC:

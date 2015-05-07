@@ -24,7 +24,7 @@ def update_sudo_mode_ts(request):
 
 def update_sudo_ts_when_login(**kwargs):
     request = kwargs['request']
-    if request.user.is_staff:
+    if request.user.is_staff and not getattr(request, 'client_token_login', False):
         update_sudo_mode_ts(request)
 
 if ENABLE_SUDO_MODE:

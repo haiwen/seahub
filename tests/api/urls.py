@@ -34,3 +34,5 @@ DOWNLOAD_REPO_URL = apiurl('api2/repos/%s/download-info/')
 LOGOUT_DEVICE_URL = apiurl('api2/logout-device/')
 
 SERVER_INFO_URL = apiurl('/api2/server-info/')
+
+CLIENT_LOGIN_TOKEN_URL = apiurl('/api2/client-login/')
