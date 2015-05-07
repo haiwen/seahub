@@ -10,7 +10,7 @@
     </li>
     {% if user.permissions.can_view_org %}
     <li class="nav-item">
-        <a href="{% url 'pubrepo' %}" class="a {% block cur_pubinfo %}{% endblock %}">{% trans "Organization" %}</a>
+        <a href="{{ SITE_ROOT }}#org/" class="a {% block cur_pubinfo %}{% endblock %}">{% trans "Organization" %}</a>
     </li>
     {% endif %}
     <li class="nav-item">
