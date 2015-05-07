@@ -11,7 +11,7 @@ define([
         comparator: -'mtime',
 
         url: function() {
-            return Common.getUrl({name: 'group_repos', group_id: this.group_id})+'?from=web';
+            return Common.getUrl({name: 'group_repos', group_id: this.group_id});
         },
 
         parse: function(data) {

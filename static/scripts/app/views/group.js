@@ -81,7 +81,7 @@ define([
             this.$tabs.show();
             this.$table.hide();
             this.repos.setGroupID(group_id);
-            this.repos.fetch({reset: true});
+            this.repos.fetch({reset: true, data: {from: 'web'}});
             this.$loadingTip.show();
         },
 
