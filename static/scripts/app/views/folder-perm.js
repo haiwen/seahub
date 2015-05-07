@@ -89,7 +89,7 @@ define([
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2);
+            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
             var groups = app.pageOptions.groups || [],
