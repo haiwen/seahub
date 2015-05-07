@@ -894,8 +894,14 @@ def user_add(request):
         role = form.cleaned_data['role']
         password = form.cleaned_data['password1']
 
-        user = User.objects.create_user(email, password, is_staff=False,
-                                        is_active=True)
+        try:
+            user = User.objects.create_user(email, password, is_staff=False,
+                                            is_active=True)
+        except User.DoesNotExist as e:
+            logger.error(e)
+            err_msg = _(u'Fail to add user %s.') % email
+            return HttpResponse(json.dumps({'error': err_msg}), status=403, content_type=content_type)
+
         if user:
             User.objects.update_role(email, role)
 
