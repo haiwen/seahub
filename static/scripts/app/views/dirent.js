@@ -270,7 +270,7 @@ define([
             return false;
         },
 
-        mvcp: function() {
+        mvcp: function(event) {
             var dir = this.dir;
             var el = event.target || event.srcElement,
                 op_type = $(el).hasClass('mv') ? 'mv' : 'cp',
