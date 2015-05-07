@@ -54,12 +54,12 @@
         <h3><%= form_title %></h3>
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
             <div id="current-repo-dirs"></div>
             <% if (show_other_repos) { %>
             <div id="other-repos">
                 <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-                <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />
+                <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" style="display:none;" />
                 <div id="other-repos-dirs" class="hide"></div>
             </div>
             <% } %>
@@ -84,7 +84,7 @@
     </div>
     </script>
 
-    {% upload_js %}    
+    {% upload_js %}
 
     <!--script type="text/template" id="upload-file-dialog-template"-->
     <div id="upload-file-dialog" class="hide">
