@@ -19,12 +19,9 @@ INSERT INTO "django_content_type" VALUES(10,'uuid objid map','base','uuidobjidma
 INSERT INTO "django_content_type" VALUES(11,'inner pub msg reply','base','innerpubmsgreply');
 INSERT INTO "django_content_type" VALUES(12,'commands last check','base','commandslastcheck');
 INSERT INTO "django_content_type" VALUES(13,'user enabled module','base','userenabledmodule');
-INSERT INTO "django_content_type" VALUES(14,'dir files last modified info','base','dirfileslastmodifiedinfo');
 INSERT INTO "django_content_type" VALUES(15,'device token','base','devicetoken');
-INSERT INTO "django_content_type" VALUES(16,'file last modified info','base','filelastmodifiedinfo');
 INSERT INTO "django_content_type" VALUES(17,'file discuss','base','filediscuss');
 INSERT INTO "django_content_type" VALUES(18,'inner pub msg','base','innerpubmsg');
-INSERT INTO "django_content_type" VALUES(19,'file contributors','base','filecontributors');
 INSERT INTO "django_content_type" VALUES(20,'user last login','base','userlastlogin');
 INSERT INTO "django_content_type" VALUES(21,'user starred files','base','userstarredfiles');
 INSERT INTO "django_content_type" VALUES(22,'contact','contacts','contact');
@@ -49,6 +46,8 @@ INSERT INTO "django_content_type" VALUES(40,'anonymous share','share','anonymous
 INSERT INTO "django_content_type" VALUES(41,'org file share','share','orgfileshare');
 INSERT INTO "django_content_type" VALUES(42,'group public file','pubfile','grouppublicfile');
 INSERT INTO "django_content_type" VALUES(43,'user login log','sysadmin_extra','userloginlog');
+INSERT INTO "django_content_type" VALUES(44,'client login token','base','clientlogintoken');
+INSERT INTO "django_content_type" VALUES(45,'org member quota','organizations','orgmemberquota');
 CREATE TABLE "django_session" (
     "session_key" varchar(40) NOT NULL PRIMARY KEY,
     "session_data" text NOT NULL,
@@ -342,6 +341,16 @@ CREATE TABLE "sysadmin_extra_userloginlog" (
     "login_date" datetime NOT NULL,
     "login_ip" varchar(20) NOT NULL
 );
+CREATE TABLE "base_clientlogintoken" (
+    "token" varchar(32) NOT NULL PRIMARY KEY,
+    "username" varchar(255) NOT NULL,
+    "timestamp" datetime NOT NULL
+);
+CREATE TABLE "organizations_orgmemberquota" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "org_id" integer NOT NULL,
+    "quota" integer NOT NULL
+);
 CREATE INDEX "django_session_b7b81f0c" ON "django_session" ("expire_date");
 CREATE INDEX "base_filediscuss_12d5396a" ON "base_filediscuss" ("group_message_id");
 CREATE INDEX "base_filediscuss_656b4f4a" ON "base_filediscuss" ("path_hash");
@@ -378,3 +387,5 @@ CREATE INDEX "share_privatefiledirshare_2059abe4" ON "share_privatefiledirshare"
 CREATE INDEX "pubfile_grouppublicfile_dc00373b" ON "pubfile_grouppublicfile" ("group_id");
 CREATE INDEX "sysadmin_extra_userloginlog_ee0cafa2" ON "sysadmin_extra_userloginlog" ("username");
 CREATE INDEX "sysadmin_extra_userloginlog_c8db99ec" ON "sysadmin_extra_userloginlog" ("login_date");
+CREATE INDEX "base_clientlogintoken_ee0cafa2" ON "base_clientlogintoken" ("username");
+CREATE INDEX "organizations_orgmemberquota_944dadb6" ON "organizations_orgmemberquota" ("org_id");

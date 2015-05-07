@@ -70,6 +70,19 @@ CREATE TABLE `avatar_groupavatar` (
 /*!40000 ALTER TABLE `avatar_groupavatar` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `base_clientlogintoken` (
+  `token` varchar(32) NOT NULL,
+  `username` varchar(255) NOT NULL,
+  `timestamp` datetime NOT NULL,
+  PRIMARY KEY (`token`),
+  KEY `base_clientlogintoken_ee0cafa2` (`username`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `base_clientlogintoken` DISABLE KEYS */;
+/*!40000 ALTER TABLE `base_clientlogintoken` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_commandslastcheck` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `command_type` varchar(100) NOT NULL,
@@ -302,11 +315,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'content type','contenttypes','contenttype'),(2,'session','sessions','session'),(3,'registration profile','registration','registrationprofile'),(4,'captcha store','captcha','captchastore'),(5,'token','api2','token'),(6,'token v2','api2','tokenv2'),(7,'avatar','avatar','avatar'),(8,'group avatar','avatar','groupavatar'),(9,'group enabled module','base','groupenabledmodule'),(10,'uuid objid map','base','uuidobjidmap'),(11,'inner pub msg reply','base','innerpubmsgreply'),(12,'commands last check','base','commandslastcheck'),(13,'user enabled module','base','userenabledmodule'),(14,'dir files last modified info','base','dirfileslastmodifiedinfo'),(15,'device token','base','devicetoken'),(16,'file last modified info','base','filelastmodifiedinfo'),(17,'file discuss','base','filediscuss'),(18,'inner pub msg','base','innerpubmsg'),(19,'file contributors','base','filecontributors'),(20,'user last login','base','userlastlogin'),(21,'user starred files','base','userstarredfiles'),(22,'contact','contacts','contact'),(23,'personal wiki','wiki','personalwiki'),(24,'group wiki','wiki','groupwiki'),(25,'public group','group','publicgroup'),(26,'group message','group','groupmessage'),(27,'message attachment','group','messageattachment'),(28,'message reply','group','messagereply'),(29,'user msg attachment','message','usermsgattachment'),(30,'user msg last check','message','usermsglastcheck'),(31,'user message','message','usermessage'),(32,'notification','notifications','notification'),(33,'user notification','notifications','usernotification'),(34,'user options','options','useroptions'),(35,'profile','profile','profile'),(36,'detailed profile','profile','detailedprofile'),(37,'private file dir share','share','privatefiledirshare'),(38,'upload link share','share','uploadlinkshare'),(39,'file share','share','fileshare'),(40,'anonymous share','share','anonymousshare'),(41,'org file share','share','orgfileshare'),(42,'group public file','pubfile','grouppublicfile'),(43,'user login log','sysadmin_extra','userloginlog');
+INSERT INTO `django_content_type` VALUES (1,'content type','contenttypes','contenttype'),(2,'session','sessions','session'),(3,'registration profile','registration','registrationprofile'),(4,'captcha store','captcha','captchastore'),(5,'token','api2','token'),(6,'token v2','api2','tokenv2'),(7,'avatar','avatar','avatar'),(8,'group avatar','avatar','groupavatar'),(9,'group enabled module','base','groupenabledmodule'),(10,'uuid objid map','base','uuidobjidmap'),(11,'inner pub msg reply','base','innerpubmsgreply'),(12,'commands last check','base','commandslastcheck'),(13,'user enabled module','base','userenabledmodule'),(15,'device token','base','devicetoken'),(17,'file discuss','base','filediscuss'),(18,'inner pub msg','base','innerpubmsg'),(20,'user last login','base','userlastlogin'),(21,'user starred files','base','userstarredfiles'),(22,'contact','contacts','contact'),(23,'personal wiki','wiki','personalwiki'),(24,'group wiki','wiki','groupwiki'),(25,'public group','group','publicgroup'),(26,'group message','group','groupmessage'),(27,'message attachment','group','messageattachment'),(28,'message reply','group','messagereply'),(29,'user msg attachment','message','usermsgattachment'),(30,'user msg last check','message','usermsglastcheck'),(31,'user message','message','usermessage'),(32,'notification','notifications','notification'),(33,'user notification','notifications','usernotification'),(34,'user options','options','useroptions'),(35,'profile','profile','profile'),(36,'detailed profile','profile','detailedprofile'),(37,'private file dir share','share','privatefiledirshare'),(38,'upload link share','share','uploadlinkshare'),(39,'file share','share','fileshare'),(40,'anonymous share','share','anonymousshare'),(41,'org file share','share','orgfileshare'),(42,'group public file','pubfile','grouppublicfile'),(43,'user login log','sysadmin_extra','userloginlog'),(44,'client login token','base','clientlogintoken'),(45,'org member quota','organizations','orgmemberquota');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -470,6 +483,19 @@ CREATE TABLE `options_useroptions` (
 
 /*!40000 ALTER TABLE `options_useroptions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `options_useroptions` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `organizations_orgmemberquota` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `quota` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `organizations_orgmemberquota_944dadb6` (`org_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `organizations_orgmemberquota` DISABLE KEYS */;
+/*!40000 ALTER TABLE `organizations_orgmemberquota` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profile_detailedprofile` (
