@@ -1050,7 +1050,8 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         try:
             res = seafile_api.move_file(src_repo_id, src_path, obj_name,
                                   dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             res = None
 
         if not res:
@@ -1066,9 +1067,10 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
 
 @login_required_ajax
 @dirents_copy_move_common()
-def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names, username):
+def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj_dir_names):
     result = {}
     content_type = 'application/json; charset=utf-8'
+    username = request.user.username
 
     for obj_name in obj_dir_names:
         src_dir = os.path.join(src_path, obj_name)
@@ -1081,12 +1083,13 @@ def cp_dirents(src_repo_id, src_path, dst_repo_id, dst_path, obj_file_names, obj
     failed = []
     success = []
     url = None
-    for obj_name in obj_file_names:
+    for obj_name in obj_file_names + obj_dir_names:
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
                                   dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             res = None
 
         if not res:
