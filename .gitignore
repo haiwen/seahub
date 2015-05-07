@@ -18,7 +18,6 @@ setenv.sh
 pylintrc
 .DS_Store
 *.mo
-media/assets
 media/CACHE
 media/avatars/*
 !media/avatars/default-non-register.jpg
