@@ -4,36 +4,28 @@ define([
     'backbone',
     'common',
     'app/collections/repos',
-    'app/views/repo',
-    'app/views/add-repo',
-], function($, _, Backbone, Common, RepoCollection, RepoView, AddRepoView) {
+    'app/views/shared-repo',
+], function($, _, Backbone, Common, RepoCollection, SharedRepoView) {
     'use strict';
 
-    var ReposView = Backbone.View.extend({
+    var SharedReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
-
-        events: {
-            'click .repo-create': 'createRepo',
-            'click #my-own-repos .by-name': 'sortByName',
-            'click #my-own-repos .by-time': 'sortByTime'
-        },
 
         initialize: function(options) {
             this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#my-own-repos table');
+            this.$table = $('#repos-shared-to-me table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('#my-own-repos .empty-tips');
-            this.$repoCreateBtn = this.$('.repo-create');
+            this.$emptyTip = $('#repos-shared-to-me .empty-tips');
 
-            this.repos = new RepoCollection();
+            this.repos = new RepoCollection({type: 'shared'});
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
         },
 
         addOne: function(repo, collection, options) {
-            var view = new RepoView({model: repo});
+            var view = new SharedRepoView({model: repo, collection: this.repos});
             if (options.prepend) {
                 this.$tableBody.prepend(view.render().el);
             } else {
@@ -50,48 +42,48 @@ define([
             } else {
                 this.$emptyTip.show();
                 this.$table.hide();
-                // Show guide popup when there is no owned repos and guide flag is true.
-                if (app.pageOptions.guide_enabled) {
-                    $('#guide-for-new').modal({appendTo: '#main', focus:false});
-                    app.pageOptions.guide_enabled = false;
-                }
             }
             this.$loadingTip.hide();
         },
 
-        showMyRepos: function() {
+        renderPath: function() {
+            //
+        },
+
+        showSharedRepos: function() {
             this.repos.fetch({reset: true});
             this.$tabs.show();
+            //this.$table.parent().show();
             this.$table.hide();
             this.$loadingTip.show();
-            $('#mylib-tab', this.$tabs).parent().addClass('ui-state-active');
+            $('#shared-lib-tab', this.$tabs).parent().addClass('ui-state-active');
         },
 
         show: function() {
-            this.$repoCreateBtn.show();
-            this.showMyRepos();
+            this.showSharedRepos();
         },
 
         hide: function() {
-            this.$repoCreateBtn.hide();
             this.$el.hide();
             this.$table.hide();
             this.$emptyTip.hide();
-            $('#mylib-tab', this.$tabs).parent().removeClass('ui-state-active');
+            $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
-        createRepo: function() {
-            new AddRepoView(this.repos);
+        events: {
+            'click #repos-shared-to-me .by-name': 'sortByName',
+            'click #repos-shared-to-me .by-time': 'sortByTime'
         },
 
         sortByName: function() {
             var repos = this.repos;
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
+                var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                 if (el.hasClass('icon-caret-up')) {
-                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? 1 : -1;
+                    return -result;
                 } else {
-                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? -1 : 1;
+                    return result;
                 }
             };
             repos.sort();
@@ -118,5 +110,5 @@ define([
 
     });
 
-    return ReposView;
+    return SharedReposView;
 });

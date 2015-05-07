@@ -444,13 +444,12 @@ define([
                         $(this).css({'background':'transparent'});
                     }
                 );
-                dirView.$('.repo-op').css({'position': 'relative'});
-                upload_menu.css({
-                    'left': upload_btn.position().left,
-                    'top': parseInt(dirView.$('.repo-op').css('padding-top')) + upload_btn.outerHeight(true)
-                });
                 upload_btn.click(function () {
                     upload_menu.toggleClass('hide');
+                    upload_menu.css({
+                        'left': upload_btn.position().left,
+                        'top': parseInt(dirView.$('.repo-op').css('padding-top')) + upload_btn.outerHeight(true)
+                    });
                 });
             }
         }

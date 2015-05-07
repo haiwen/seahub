@@ -405,28 +405,12 @@ define([
         },
 
         filePrivateSharePanelInit: function() {
-            var loading_tip = this.$('.loading-tip');
             var form = this.$('#file-private-share-form');
-            loading_tip.show();
 
-            var contacts = app.pageOptions.contacts || [];
-            $('[name="emails"]', form).select2({
-                placeholder: gettext("Select contacts or input"),
-                width: '400px',
-                // with 'tags', the user can directly enter, not just select
-                // tags need `<input type="hidden" />`, not `<select>`
-                tags: function () {
-                    var contact_list = [];
-                    for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push(contacts[i].email);
-                    }
-                    return contact_list;
-                },
-                tokenSeparators: [',', ' '],
-                escapeMarkup: function(m) { return m; }
-            });
+            $('[name="emails"]', form).select2($.extend({
+                width: '400px'
+            },Common.contactInputOptionsForSelect2));
            
-            loading_tip.hide(); 
             form.removeClass('hide');
         },
 
@@ -470,24 +454,11 @@ define([
 
         dirPrivateSharePanelInit: function() {
             // no 'share to all'
-            var loading_tip = this.$('.loading-tip');
             var form = this.$('#dir-private-share-form');
-            loading_tip.show();
 
-            var contacts = app.pageOptions.contacts || [];
-            $('[name="emails"]', form).select2({
-                placeholder: gettext("Select contacts or input"),
-                width: '400px',
-                tags: function () {
-                    var contact_list = [];
-                    for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push(contacts[i].email);
-                    }
-                    return contact_list;
-                },
-                tokenSeparators: [',', ' '],
-                escapeMarkup: function(m) { return m; }
-            });
+            $('[name="emails"]', form).select2($.extend({
+                width: '400px'
+            },Common.contactInputOptionsForSelect2));
            
             var groups = app.pageOptions.groups || [];
             var g_opts = '';
@@ -500,7 +471,6 @@ define([
                 escapeMarkup: function(m) { return m; }
             });
 
-            loading_tip.hide(); 
             form.removeClass('hide');
         },
 

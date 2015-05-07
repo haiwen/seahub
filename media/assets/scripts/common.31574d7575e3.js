@@ -50,11 +50,14 @@ define([
     'jquery',
     'underscore',
     'text',                     // Workaround for r.js, otherwise text.js will not be included
-], function($, _, text) {
+    'pinyin-by-unicode'
+], function($, _, text, PinyinByUnicode) {
     return {
         INFO_TIMEOUT: 10000,     // 10 secs for info msg
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
         ERROR_TIMEOUT: 3000,     // 3 secs for error msg
+
+        strChineseFirstPY: PinyinByUnicode.strChineseFirstPY,
 
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
@@ -79,47 +82,35 @@ define([
               case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
               case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
               case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
-
               case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
-
               case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
               case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
               case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
               case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
-
               case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
-
               case 'get_user_contacts': return siteRoot + 'ajax/contacts/';
-
               case 'get_shared_download_link': return siteRoot + 'share/ajax/get-download-link/';
               case 'delete_shared_download_link': return siteRoot + 'share/ajax/link/remove/';
               case 'send_shared_download_link': return siteRoot + 'share/link/send/';
-
               case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
               case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
               case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
-
               case 'private_share_dir': return siteRoot + 'share/ajax/private-share-dir/';
               case 'private_share_file': return siteRoot + 'share/ajax/private-share-file/';
-
               case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
               case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
               case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
               case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
-
               case 'repo_set_password': return siteRoot + 'repo/set_password/';
-
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
               case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
               case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
-
               case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
-
               case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
-
               case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
               case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
               case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
+              case 'starred_files': return siteRoot + 'api2/starredfiles/';
             }
         },
 
@@ -486,6 +477,45 @@ define([
             });
         },
 
+        contactInputOptionsForSelect2: {
+            placeholder: gettext("Enter emails or select contacts"),
+
+            // with 'tags', the user can directly enter, not just select
+            // tags need `<input type="hidden" />`, not `<select>`
+            tags: function () {
+                var contacts = app.pageOptions.contacts || [];
+                var contact_list = [];
+                for (var i = 0, len = contacts.length; i < len; i++) {
+                    contact_list.push({ // 'id' & 'text' are required by the plugin
+                        "id": contacts[i].email,
+                        // for search. both name & email can be searched.
+                        // use ' '(space) to separate name & email
+                        "text": contacts[i].name + ' ' + contacts[i].email,
+                        "avatar": contacts[i].avatar,
+                        "name": contacts[i].name
+                    });
+                }
+                return contact_list;
+            },
+
+            tokenSeparators: [',', ' '],
+
+            // format items shown in the drop-down menu
+            formatResult: function(item) {
+                if (item.avatar) {
+                    return item.avatar + '<span class="text">' + item.name + '<br />' + item.id + '</span>';
+                } else {
+                    return; // if no match, show nothing
+                }
+            },
+
+            // format selected item shown in the input
+            formatSelection: function(item) {
+                return item.name || item.id; // if no name, show the email, i.e., when directly input, show the email
+            },
+            escapeMarkup: function(m) { return m; }
+        },
+
         // check if a file is an image
         imageCheck: function (filename) {
             // no file ext
@@ -499,6 +529,35 @@ define([
             } else {
                 return false;
             }
+        },
+
+        compareTwoWord: function(a_name, b_name) {
+            // compare a_name and b_name at lower case
+            // if a_name >= b_name, return 1
+            // if a_name < b_name, return -1
+
+            var a_val, b_val,
+                a_uni = a_name.charCodeAt(0),
+                b_uni = b_name.charCodeAt(0),
+                strChineseFirstPY = this.strChineseFirstPY;
+
+            if ((19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
+                // both are chinese words
+                a_val = strChineseFirstPY.charAt(a_uni - 19968).toLowerCase();
+                b_val = strChineseFirstPY.charAt(b_uni - 19968).toLowerCase();
+            } else if ((19968 < a_uni && a_uni < 40869) && !(19968 < b_uni && b_uni < 40869)) {
+                // a is chinese and b is english
+                return 1;
+            } else if (!(19968 < a_uni && a_uni < 40869) && (19968 < b_uni && b_uni < 40869)) {
+                // a is english and b is chinese
+                return -1;
+            } else {
+                // both are english words
+                a_val = a_name.toLowerCase();
+                b_val = b_name.toLowerCase();
+            }
+
+            return a_val >= b_val ? 1 : -1;
         },
 
         fileSizeFormat: function(bytes, precision) {

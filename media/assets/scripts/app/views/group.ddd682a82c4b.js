@@ -104,10 +104,11 @@ define([
             var repos = this.repos;
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
+                var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                 if (el.hasClass('icon-caret-up')) {
-                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? 1 : -1;
+                    return -result;
                 } else {
-                    return a.get('name').toLowerCase() < b.get('name').toLowerCase() ? -1 : 1;
+                    return result;
                 }
             };
             repos.sort();

@@ -4,6 +4,7 @@ main.js
 lib/jquery.js
 lib/underscore.js
 lib/text.js
+pinyin-by-unicode.js
 common.js
 lib/backbone.js
 app/models/repo.js
@@ -21,6 +22,11 @@ app/views/sub-lib.js
 app/views/myhome-sub-repos.js
 app/views/shared-repo.js
 app/views/myhome-shared-repos.js
+lib/jquery.magnific-popup.js
+app/views/starred-file-item.js
+app/models/starred-file.js
+app/collections/starred-files.js
+app/views/starred-file.js
 app/views/myhome-side-nav.js
 app/views/myhome.js
 app/models/group-repo.js
@@ -37,7 +43,6 @@ app/views/organization.js
 lib/jquery.ui.core.js
 lib/jquery.ui.widget.1.11.1.js
 lib/jquery.ui.progressbar.js
-lib/jquery.magnific-popup.js
 app/models/dirent.js
 app/collections/dirents.js
 app/views/folder-perm-item.js

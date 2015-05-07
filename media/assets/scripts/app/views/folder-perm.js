@@ -19,11 +19,7 @@ define([
             this.repo_id = options.repo_id;
             this.obj_name = options.obj_name;
             this.dir_path = options.dir_path;
-            if (this.dir_path === '/') {
-                this.path = this.dir_path + this.obj_name;
-            } else {
-                this.path = this.dir_path + '/' + this.obj_name;
-            }
+            this.path = Common.pathJoin([this.dir_path, this.obj_name])
 
             this.render();
 
@@ -93,19 +89,7 @@ define([
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', $add_user_perm).select2({
-                maximumSelectionSize: 1,
-                tags: function () {
-                    var contacts = app.pageOptions.contacts || [];
-                    var contact_list = [];
-                    for (var i = 0, len = contacts.length; i < len; i++) {
-                        contact_list.push(contacts[i].email);
-                    }
-                    return contact_list;
-                },
-                tokenSeparators: [',', ' '],
-                escapeMarkup: function(m) { return m; }
-            });
+            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2);
 
             // use select2 to 'group' input in 'add group perm'
             var groups = app.pageOptions.groups || [],
@@ -114,7 +98,7 @@ define([
                 g_opts += '<option value="' + groups[i].id + '" data-index="' + i + '">' + groups[i].name + '</option>';
             }
             $('[name="group"]', $add_group_perm).html(g_opts).select2({
-                maximumSelectionSize: 1,
+                placeholder: gettext("Select groups"),
                 escapeMarkup: function(m) { return m; }
             });
         },
@@ -147,18 +131,22 @@ define([
                     'perm': perm
                 },
                 'after_op_success': function(data) {
-                    var perm_item = new FolderPermItemView({
-                        'repo_id': _this.repo_id,
-                        'path': _this.path,
-                        'item_data': {
-                            'user': email,
-                            'perm': perm,
-                            'is_user_perm': true
-                        }
+                    $(data.success).each(function(index, item) {
+                        var perm_item = new FolderPermItemView({
+                            'repo_id': _this.repo_id,
+                            'path': _this.path,
+                            'item_data': {
+                                'user': email,
+                                'user_name': item.user_name,
+                                'perm': perm,
+                                'is_user_perm': true
+                            }
+                        });
+                        form.after(perm_item.el);
                     });
-                    form.after(perm_item.el);
 
                     $('[name="email"]', form).select2("val", "");
+                    $('#user-folder-perm .error').addClass('hide');
                 },
                 'after_op_error': function(xhr) {
                     var err;
@@ -175,9 +163,8 @@ define([
         addGroupFolderPerm: function() {
             var _this = this;
             var form = this.$add_group_perm, // pseudo form
-                group_input = $('[name="group"]', form),
-                group_id = group_input.val()[0];
-            if (!group_id) {
+                group_ids = $('[name="group"]', form).val().join(',');
+            if (!group_ids) {
                 return false;
             }
 
@@ -192,21 +179,24 @@ define([
                 'post_data': {
                     'path': this.path,
                     'type': 'add',
-                    'group_id': group_id,
+                    'group_id': group_ids,
                     'perm': perm
                 },
                 'after_op_success': function(data) {
-                    var perm_item = new FolderPermItemView({
-                        'repo_id': _this.repo_id,
-                        'path': _this.path,
-                        'item_data': {
-                            'is_user_perm': false,
-                            'perm': perm,
-                            'group_id': group_id,
-                            'group_name': $('[name="group"]', form).select2('data')[0].text
-                        }
+                    $(data.success).each(function(index, item) {
+                        var perm_item = new FolderPermItemView({
+                            'repo_id': _this.repo_id,
+                            'path': _this.path,
+                            'item_data': {
+                                'is_user_perm': false,
+                                'perm': perm,
+                                'group_id': item.group_id,
+                                'group_name': item.group_name
+                            }
+                        });
+                        form.after(perm_item.el);
+                        $('#group-folder-perm .error').addClass('hide');
                     });
-                    form.after(perm_item.el);
 
                     $('[name="group"]', form).select2("val", "");
                 },
