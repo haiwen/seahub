@@ -131,6 +131,17 @@ define([
                         if (decrypt_lib) {
                             var form = $($('#repo-decrypt-form-template').html());
                             form.modal({containerCss: {'padding': '1px'}});
+                            // rebind close event to navigate to correct view
+                            $('a.simplemodal-close').unbind().
+                                bind('click.simplemodal', function (e) {
+                                    e.preventDefault();
+                                    $.modal.close();
+                                    app.router.navigate(
+                                        category+'/', // need to append '/' at end
+                                        {trigger: true}
+                                    );
+                            });
+
                             $('#simplemodal-container').css({'height':'auto'});
                             form.submit(function() {
                                 var passwd = $.trim($('[name="password"]', form).val());
