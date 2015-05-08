@@ -477,6 +477,31 @@ define([
             });
         },
 
+        closeTopNoticeBar: function () {
+            if (!app.pageOptions.cur_note) {
+                return false;
+            }
+            var new_info_id = app.pageOptions.cur_note.id;
+            $('#info-bar').addClass('hide');
+            if (navigator.cookieEnabled) {
+                var date = new Date(),
+                    cookies = document.cookie.split('; '),
+                    info_id_exist = false;
+                date.setTime(date.getTime() + 14*24*60*60*1000);
+                new_info_id += '; expires=' + date.toGMTString() + '; path=' + app.config.siteRoot;
+                for (var i = 0, len = cookies.length; i < len; i++) {
+                    if (cookies[i].split('=')[0] == 'info_id') {
+                        info_id_exist = true;
+                        document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
+                        break;
+                    }
+                }
+                if (!info_id_exist) {
+                    document.cookie = 'info_id=' + new_info_id;
+                }
+            }
+        },
+
         contactInputOptionsForSelect2: function() {
             var _this = this;
             return {
