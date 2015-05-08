@@ -96,7 +96,6 @@ def share_to_group(request, repo, group, permission):
     """
     repo_id = repo.id
     group_id = group.id
-    group_name = group.group_name
     from_user = request.user.username
 
     if is_org_context(request):
@@ -105,10 +104,6 @@ def share_to_group(request, repo, group, permission):
     else:
         group_repo_ids = seafile_api.get_group_repoids(group.id)
     if repo.id in group_repo_ids:
-        msg = _(u'"%(repo)s" is already in group %(group)s. <a href="%(href)s">View</a>') % {
-            'repo': escape(repo.name), 'group': escape(group.group_name),
-            'href': reverse('group_info', args=[group.id])}
-        messages.error(request, msg, extra_tags='safe')
         return
 
     try:
@@ -121,13 +116,6 @@ def share_to_group(request, repo, group, permission):
                                        permission)
     except Exception, e:
         logger.error(e)
-        msg = _(u'Failed to share %(repo)s to %(group)s, please try again later.') % \
-            {'repo': repo.name, 'group': group_name}
-        messages.error(request, msg)
-    else:
-        msg = _(u'Shared to %(group)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
-            {'group': escape(group_name), 'share': reverse('share_admin')}
-        messages.success(request, msg, extra_tags='safe')
 
 def share_to_user(request, repo, to_user, permission):
     """Share repo to a user with given permission.
@@ -136,21 +124,15 @@ def share_to_user(request, repo, to_user, permission):
     from_user = request.user.username
 
     if from_user == to_user:
-        msg = _(u'You can not share libray to yourself.')
-        messages.error(request, msg)
         return
 
     # permission check
     if is_org_context(request):
         org_id = request.user.org.org_id
         if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, to_user):
-            msg = _(u'Failed to share to %s, user is not found.') % to_user
-            messages.error(request, msg)
             return
     else:
         if not is_registered_user(to_user):
-            msg = _(u'Failed to share to %s, as the email is not registered.') % to_user
-            messages.error(request, msg)
             return
 
     try:
@@ -161,16 +143,11 @@ def share_to_user(request, repo, to_user, permission):
             seafile_api.share_repo(repo_id, from_user, to_user, permission)
     except SearpcError as e:
             logger.error(e)
-            msg = _(u'Failed to share to %s, please try again later.') % to_user
-            messages.error(request, msg)
     else:
         # send a signal when sharing repo successful
         share_repo_to_user_successful.send(sender=None,
                                            from_user=from_user,
                                            to_user=to_user, repo=repo)
-        msg = _(u'Shared to %(email)s successfully, go check it at <a href="%(share)s">Shares</a>.') % \
-            {'email': to_user, 'share': reverse('share_admin')}
-        messages.success(request, msg, extra_tags='safe')
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
     """Check whether user has enough share quota when share repo to
