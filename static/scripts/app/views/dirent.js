@@ -179,20 +179,21 @@ define([
 
         delete: function() {
             var dirent_name = this.model.get('obj_name');
+            var dir = this.dir;
             var options = {
-                repo_id: this.dirView.dir.repo_id,
+                repo_id: dir.repo_id,
                 name: this.model.get('is_dir') ? 'del_dir' : 'del_file'
             };
-            var el = this.$el;
+            var model = this.model;
             $.ajax({
-                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(this.dirView.dir.path)
+                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path)
                 + '&name=' + encodeURIComponent(dirent_name),
                 dataType: 'json',
                 success: function(data) {
-                    el.remove();
+                    dir.remove(model);
                     app.globalState.noFileOpPopup = true; // make other items can work normally when hover
-                    var msg = gettext("Successfully deleted %(name)s");
-                    msg = msg.replace('%(name)s', Common.HTMLescape(dirent_name));
+                    var msg = gettext("Successfully deleted %(name)s")
+                        .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
                 },
                 error: Common.ajaxErrorHandler
