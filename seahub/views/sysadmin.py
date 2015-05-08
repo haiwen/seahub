@@ -29,6 +29,7 @@ from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
 from seahub.utils.rpc import mute_seafile_api
+from seahub.utils.licenseparse import parse_license
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -46,8 +47,43 @@ except:
     ENABLE_TRIAL_ACCOUNT = False
 if ENABLE_TRIAL_ACCOUNT:
     from seahub_extra.trialaccount.models import TrialAccount
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
+
+
+@login_required
+@sys_staff_required
+def sys_info(request):
+    """System info(members, pro, ..) page.
+
+    Arguments:
+    - `request`:
+    """
+    users_count = ccnet_threaded_rpc.count_emailusers('DB')
+    repos_count = len(seafile_api.get_repo_list(-1, -1))
+    groups_count = len(ccnet_threaded_rpc.get_all_groups(-1, -1))
+    if MULTI_TENANCY:
+        org_count = ccnet_threaded_rpc.count_orgs()
+    else:
+        org_count = -1
+
+    is_pro = is_pro_version()
+    if is_pro:
+        license_dict = parse_license('../../../../seafile-license.txt')
+    else:
+        license_dict = {}
+    return render_to_response('sysadmin/sys_info.html', {
+        'users_count': users_count,
+        'repos_count': repos_count,
+        'groups_count': groups_count,
+        'org_count': org_count,
+        'is_pro': is_pro,
+        'license_dict': license_dict,
+    }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
