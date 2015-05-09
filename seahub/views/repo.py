@@ -369,7 +369,7 @@ def view_shared_dir(request, token):
         raise Http404
 
     if fileshare.is_encrypted():
-        if not check_share_link_access(request.user.username, token):
+        if not check_share_link_access(request, token):
             d = {'token': token, 'view_name': 'view_shared_dir', }
             if request.method == 'POST':
                 post_values = request.POST.copy()
@@ -379,7 +379,7 @@ def view_shared_dir(request, token):
                 if form.is_valid():
                     # set cache for non-anonymous user
                     if request.user.is_authenticated():
-                        set_share_link_access(request.user.username, token)
+                        set_share_link_access(request, token)
                 else:
                     return render_to_response('share_access_validation.html', d,
                                               context_instance=RequestContext(request))
