@@ -40,6 +40,7 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
     ENABLE_GUEST
 from seahub.utils import send_html_email, get_user_traffic_list, \
     get_server_id, clear_token
+from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -63,11 +64,26 @@ def sys_info(request):
     Arguments:
     - `request`:
     """
-    users_count = ccnet_threaded_rpc.count_emailusers('DB')
-    repos_count = len(seafile_api.get_repo_list(-1, -1))
-    groups_count = len(ccnet_threaded_rpc.get_all_groups(-1, -1))
+    try:
+        users_count = ccnet_threaded_rpc.count_emailusers('DB')
+    except Exception as e:
+        logger.error(e)
+        users_count = 0
+
+    repos_count = mute_seafile_api.count_repos()
+
+    try:
+        groups_count = len(ccnet_threaded_rpc.get_all_groups(-1, -1))
+    except Exception as e:
+        logger.error(e)
+        groups_count = 0
+
     if MULTI_TENANCY:
-        org_count = ccnet_threaded_rpc.count_orgs()
+        try:
+            org_count = ccnet_threaded_rpc.count_orgs()
+        except Exception as e:
+            logger.error(e)
+            org_count = 0
     else:
         org_count = -1
 
