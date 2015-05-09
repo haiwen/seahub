@@ -169,7 +169,7 @@
 <script type="text/template" id="dirent-tmpl">
     <% if (dirent.is_dir) { %>
     <td class="select">
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <span class="checkbox <% if (dirent.selected) { %>checkbox-checked<% } %>"><input type="checkbox" class="checkbox-orig" /></span>
     </td>
     <td class="star"></td>
     <% if (dirent.perm == 'r') { %>
@@ -218,7 +218,7 @@
     </td>
     <% } else { %>
     <td class="select">
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <span class="checkbox <% if (dirent.selected) { %>checkbox-checked<% } %>"><input type="checkbox" class="checkbox-orig" /></span>
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
