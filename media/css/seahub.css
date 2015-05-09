@@ -2177,6 +2177,23 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .tip {
     max-width:400px;
 }
+.ellipsis-op-target {
+    display:inline-block;
+    vertical-align:bottom;
+}
+#share-popup .op-target {
+    max-width:400px;
+}
+#rename-form .op-target {
+    max-width:280px;
+}
+#mv-form .op-target {
+    max-width:410px;
+}
+#folder-perm-popup .op-target {
+    max-width:540px;
+}
+/* group-join-form */
 /* group-join-form */
 #id_group_join_msg {
     width:260px;
