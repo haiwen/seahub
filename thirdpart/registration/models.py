@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
 from seahub.base.accounts import User
-
+from seahub.utils import send_html_email
 
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
@@ -279,13 +279,10 @@ class RegistrationProfile(models.Model):
                                    ctx_dict)
         # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
-        
-        message = render_to_string('registration/activation_email.txt',
-                                   ctx_dict)
-        
         try:
             user = User.objects.get(id=self.emailuser_id)
-            user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+            send_html_email(subject, 'registration/activation_email.html',
+                            ctx_dict, None, [user.username])
         except User.DoesNotExist:
             pass
 
