@@ -27,15 +27,15 @@ msgstr ""
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:298
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "操作失败。请检查网络是否已连接。"
 
 #: static/scripts/app/models/repo.js:30
-msgid "Name is required"
-msgstr ""
+msgid "Name is required."
+msgstr "名称为必填项。"
 
 #: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:150
 msgid "Please enter password"
-msgstr ""
+msgstr "请输入密码"
 
 #: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:158
 msgid "Please enter the password again"
@@ -85,13 +85,13 @@ msgstr ""
 
 #: static/scripts/app/views/dir.js:146
 msgid "Password is required."
-msgstr ""
+msgstr "请检查网络是否已连接。"
 
 #: static/scripts/app/views/dir.js:301 static/scripts/app/views/dir.js.c:357
 #: static/scripts/app/views/dirent.js:221
 #: static/scripts/app/views/share.js:441
 msgid "It is required."
-msgstr ""
+msgstr "必填项。"
 
 #: static/scripts/app/views/dir.js:315 static/scripts/app/views/dir.js.c:381
 #: static/scripts/app/views/dirent.js:240
@@ -101,15 +101,15 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:334
 #: static/scripts/app/views/myhome-sub-repos.js:131
 msgid "Just now"
-msgstr ""
+msgstr "刚才"
 
 #: static/scripts/app/views/dir.js:363
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "请输入完整的文件名。"
 
 #: static/scripts/app/views/dir.js:504 static/scripts/app/views/dir.js.c:633
 msgid "Processing..."
-msgstr ""
+msgstr "处理中..."
 
 #: static/scripts/app/views/dir.js:540
 msgid "Successfully deleted %(name)s."
