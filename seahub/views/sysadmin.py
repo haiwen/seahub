@@ -29,6 +29,7 @@ from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
 from seahub.utils.rpc import mute_seafile_api
+from seahub.utils.licenseparse import parse_license
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -39,6 +40,7 @@ from seahub.settings import INIT_PASSWD, SITE_NAME, \
     ENABLE_GUEST
 from seahub.utils import send_html_email, get_user_traffic_list, \
     get_server_id, clear_token
+from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.sysinfo import get_platform_name
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
@@ -46,8 +48,58 @@ except:
     ENABLE_TRIAL_ACCOUNT = False
 if ENABLE_TRIAL_ACCOUNT:
     from seahub_extra.trialaccount.models import TrialAccount
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
+
+
+@login_required
+@sys_staff_required
+def sys_info(request):
+    """System info(members, pro, ..) page.
+
+    Arguments:
+    - `request`:
+    """
+    try:
+        users_count = ccnet_threaded_rpc.count_emailusers('DB')
+    except Exception as e:
+        logger.error(e)
+        users_count = 0
+
+    repos_count = mute_seafile_api.count_repos()
+
+    try:
+        groups_count = len(ccnet_threaded_rpc.get_all_groups(-1, -1))
+    except Exception as e:
+        logger.error(e)
+        groups_count = 0
+
+    if MULTI_TENANCY:
+        try:
+            org_count = ccnet_threaded_rpc.count_orgs()
+        except Exception as e:
+            logger.error(e)
+            org_count = 0
+    else:
+        org_count = -1
+
+    is_pro = is_pro_version()
+    if is_pro:
+        license_dict = parse_license('../../../../seafile-license.txt')
+    else:
+        license_dict = {}
+    return render_to_response('sysadmin/sys_info.html', {
+        'users_count': users_count,
+        'repos_count': repos_count,
+        'groups_count': groups_count,
+        'org_count': org_count,
+        'is_pro': is_pro,
+        'license_dict': license_dict,
+    }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required

@@ -5,6 +5,9 @@
 <div class="side-tabnav">
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
+        <li class="tab {% block cur_info %}{% endblock %}">
+            <a href="{{ SITE_ROOT }}sys/info/" class="admin">{% trans "Info" %}</a>
+        </li>
         <li class="tab {% block cur_repo %}{% endblock %}">
             <a href="{{ SITE_ROOT }}sys/seafadmin/" class="lib">{% trans "Libraries" %}</a>
         </li>
