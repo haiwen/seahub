@@ -130,7 +130,19 @@ define([
 
                         if (decrypt_lib) {
                             var form = $($('#repo-decrypt-form-template').html());
-                            form.modal({containerCss: {'padding': '1px'}});
+                            var decrypt_success = false;
+                            form.modal({
+                                containerCss: {'padding': '1px'},
+                                onClose: function () {
+                                    $.modal.close();
+                                    if (!decrypt_success) {
+                                        app.router.navigate(
+                                            category + '/', // need to append '/' at end
+                                            {trigger: true}
+                                        );
+                                    }
+                                }
+                            });
                             $('#simplemodal-container').css({'height':'auto'});
                             form.submit(function() {
                                 var passwd = $.trim($('[name="password"]', form).val());
@@ -148,6 +160,7 @@ define([
                                         username: app.pageOptions.username
                                     },
                                     after_op_success: function() {
+                                        decrypt_success = true;
                                         $.modal.close();
                                         $el_con.show();
                                         _this.showDir(category, repo_id, path);
