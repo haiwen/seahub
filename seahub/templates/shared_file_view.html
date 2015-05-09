@@ -12,8 +12,8 @@
     <h2 id="view-hd">{{ file_name }}</h2>
     <div id="file">
         <div id="file-op">
-            <p class="fleft">
             {% if zipped %}
+            <p class="cur-path fleft ellipsis">
               {% trans "Current path: "%} 
               {% for name, link in zipped %}
                 {% if not forloop.last %}
@@ -22,10 +22,10 @@
                 {{ name }}
                 {% endif %}
               {% endfor %}
+              </p>
             {% else %}
-            {% trans "Shared by: " %}{{ shared_by|email2nickname }}
+            <p class="fleft">{% trans "Shared by: " %}{{ shared_by|email2nickname }}</p>
             {% endif %}
-            </p>
 
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
@@ -69,6 +69,9 @@ $(function() {
     var tip = "{% trans "File download is disabled: the share link traffic of owner is used up." %}";
     $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
     {% endif %}
+});
+$(function () {
+    $('.cur-path').css({'max-width': $('#file-op').width() - $('#save').outerWidth(true) - $('.obv-btn').outerWidth(true) - 10});
 });
 
 {% if filetype == 'PDF' and use_pdfjs %}
