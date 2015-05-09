@@ -214,7 +214,7 @@ define([
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             var op_detail = $('.detail', form);
-            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + Common.HTMLescape(dirent_name) + '</span>'));
+            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(dirent_name) + '">' + Common.HTMLescape(dirent_name) + '</span>'));
 
             var form_id = form.attr('id');
             var _this = this;
@@ -279,7 +279,7 @@ define([
                 obj_type = this.model.get('is_dir') ? 'dir' : 'file';
 
             var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
-            title = title.replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(obj_name) + '</span>');
+            title = title.replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(obj_name) + '">' + Common.HTMLescape(obj_name) + '</span>');
 
             var form = $(this.mvcpTemplate({
                 form_title: title,

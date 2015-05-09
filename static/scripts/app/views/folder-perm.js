@@ -47,7 +47,7 @@ define([
         render: function () {
             this.$el.html(this.template({
                 title: gettext("Set {placeholder}'s permission")
-                    .replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(this.obj_name) + '</span>')
+                    .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>')
             }));
             return this;
         },
