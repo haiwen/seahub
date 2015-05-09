@@ -99,8 +99,6 @@ define([
         starFile: function() {
             var _this = this;
             var dir = this.dirView.dir;
-            //var path = dir.path;
-            //path += (path == '/' ? '' : '/');
             var starred = this.model.get('starred');
             var options = { repo_id: dir.repo_id };
             options.name = starred ? 'unstar_file' : 'star_file';
@@ -117,7 +115,9 @@ define([
                         _this.model.set({'starred':true});
                     }
                 },
-                error: Common.ajaxErrorHandler
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
             });
         },
 
@@ -196,7 +196,9 @@ define([
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
                 },
-                error: Common.ajaxErrorHandler
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
             });
             return false;
         },
