@@ -632,7 +632,10 @@ def repo_shared_link(request, repo_id):
             if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
                 fs.delete()
                 continue
-            fs.filename = os.path.basename(fs.path.rstrip('/'))
+            if fs.path != '/':
+                fs.filename = os.path.basename(fs.path.rstrip('/'))
+            else:
+                fs.filename = fs.path
             fs.shared_link = gen_dir_share_link(fs.token)
 
             path = fs.path
@@ -652,7 +655,10 @@ def repo_shared_link(request, repo_id):
         if seafile_api.get_dir_id_by_path(repo.id, link.path) is None:
             link.delete()
             continue
-        link.dir_name = os.path.basename(link.path.rstrip('/'))
+        if link.path != '/':
+            link.dir_name = os.path.basename(link.path.rstrip('/'))
+        else:
+            link.dir_name = link.path
         link.shared_link = gen_shared_upload_link(link.token)
         p_uploadlinks.append(link)
 
