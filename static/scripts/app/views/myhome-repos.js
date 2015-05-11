@@ -42,6 +42,7 @@ define([
         },
 
         reset: function() {
+            this.$tableHead.html(_.template($('#my-repo-thead-tmpl').html()))
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {

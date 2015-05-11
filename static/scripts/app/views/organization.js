@@ -18,6 +18,7 @@ define([
             this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
+            this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = $('#organization-repos .loading-tip');
             this.$emptyTip = $('#organization-repos .empty-tips');
@@ -49,6 +50,7 @@ define([
         },
 
         reset: function() {
+            this.$tableHead.html(_.template($('#shared-repo-thead-tmpl').html()))
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {

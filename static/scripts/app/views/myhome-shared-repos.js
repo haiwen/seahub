@@ -34,6 +34,7 @@ define([
         },
 
         reset: function() {
+            this.$tableHead.html(_.template($('#shared-repo-thead-tmpl').html()))
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {
@@ -46,14 +47,9 @@ define([
             this.$loadingTip.hide();
         },
 
-        renderPath: function() {
-            //
-        },
-
         showSharedRepos: function() {
             this.repos.fetch({reset: true});
             this.$tabs.show();
-            //this.$table.parent().show();
             this.$table.hide();
             this.$loadingTip.show();
             $('#shared-lib-tab', this.$tabs).parent().addClass('ui-state-active');

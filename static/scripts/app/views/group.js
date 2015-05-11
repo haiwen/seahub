@@ -51,6 +51,7 @@ define([
         },
 
         reset: function() {
+            this.$tableHead.html(_.template($('#shared-repo-thead-tmpl').html()))
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             this.$loadingTip.hide();
