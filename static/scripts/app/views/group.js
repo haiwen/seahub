@@ -103,17 +103,16 @@ define([
         sortByName: function() {
             var repos = this.repos;
             var el = $('.by-name', this.$table);
-            repos.comparator = function(a, b) { // a, b: model
-                var result = Common.compareTwoWord(a.get('name'), b.get('name'));
-                if (el.hasClass('icon-caret-up')) {
-                    return -result;
-                } else {
-                    return result;
-                }
-            };
-            repos.sort();
-            this.$tableBody.empty();
-            repos.each(this.addOne, this);
+            if (el.hasClass('icon-caret-up')) {
+                repos.comparator = function(a, b) { // a, b: model
+                    return -Common.compareTwoWord(a.get('name'), b.get('name'));
+                };
+            } else {
+                repos.comparator = function(a, b) { // a, b: model
+                    return Common.compareTwoWord(a.get('name'), b.get('name'));
+                };
+            }
+            repos.sort().trigger('reset');
             el.toggleClass('icon-caret-up icon-caret-down');
             repos.comparator = null;
 
@@ -122,16 +121,16 @@ define([
         sortByTime: function() {
             var repos = this.repos;
             var el = $('.by-time', this.$table);
-            repos.comparator = function(a, b) { // a, b: model
-                if (el.hasClass('icon-caret-down')) {
+            if (el.hasClass('icon-caret-down')) {
+                repos.comparator = function(a, b) { // a, b: model
                     return a.get('mtime') < b.get('mtime') ? 1 : -1;
-                } else {
+                };
+            } else {
+                repos.comparator = function(a, b) { // a, b: model
                     return a.get('mtime') < b.get('mtime') ? -1 : 1;
-                }
-            };
-            repos.sort();
-            this.$tableBody.empty();
-            repos.each(this.addOne, this);
+                };
+            }
+            repos.sort().trigger('reset');
             el.toggleClass('icon-caret-up icon-caret-down');
             repos.comparator = null;
         },
