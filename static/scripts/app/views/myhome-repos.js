@@ -12,6 +12,8 @@ define([
     var ReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
 
+        reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
+
         events: {
             'click .repo-create': 'createRepo',
             'click #my-own-repos .by-name': 'sortByName',
@@ -41,8 +43,12 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
-            this.$tableHead.html(_.template($('#my-repo-thead-tmpl').html()))
+            this.renderReposHd();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {

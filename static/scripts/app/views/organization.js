@@ -13,6 +13,8 @@ define([
     var OrganizationView = Backbone.View.extend({
         el: '#main',
 
+        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+
         initialize: function(options) {
 
             this.$sideNav = $('#org-side-nav');
@@ -49,8 +51,12 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
-            this.$tableHead.html(_.template($('#shared-repo-thead-tmpl').html()))
+            this.renderReposHd();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {

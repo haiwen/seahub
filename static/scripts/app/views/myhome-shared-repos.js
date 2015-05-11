@@ -11,6 +11,8 @@ define([
     var SharedReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
 
+        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+
         initialize: function(options) {
             this.$tabs = $('#repo-tabs');
             this.$table = $('#repos-shared-to-me table');
@@ -33,8 +35,12 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
-            this.$tableHead.html(_.template($('#shared-repo-thead-tmpl').html()))
+            this.renderReposHd();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {
