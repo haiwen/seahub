@@ -114,10 +114,10 @@ define([
                         var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
                         var $error = _this.$('.error');
                         var err_msg;
-                        var decrypt_lib = false;
+                        var lib_need_decrypt = false;
                         if (response.responseText) {
                             if (response.responseJSON.lib_need_decrypt) {
-                                decrypt_lib = true;
+                                lib_need_decrypt = true;
                             } else {
                                 err_msg = response.responseJSON.error;
                             }
@@ -128,13 +128,14 @@ define([
                             $error.html(err_msg).show();
                         }
 
-                        if (decrypt_lib) {
+                        if (lib_need_decrypt) {
                             var form = $($('#repo-decrypt-form-template').html());
                             var decrypt_success = false;
                             form.modal({
                                 containerCss: {'padding': '1px'},
                                 onClose: function () {
                                     $.modal.close();
+                                    $el_con.show();
                                     if (!decrypt_success) {
                                         app.router.navigate(
                                             category + '/', // need to append '/' at end
@@ -162,7 +163,6 @@ define([
                                     after_op_success: function() {
                                         decrypt_success = true;
                                         $.modal.close();
-                                        $el_con.show();
                                         _this.showDir(category, repo_id, path);
                                     }
                                 });
@@ -465,6 +465,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             sortByTime: function () {
@@ -484,6 +485,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             select: function () {
