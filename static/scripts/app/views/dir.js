@@ -465,6 +465,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             sortByTime: function () {
@@ -484,6 +485,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             select: function () {
