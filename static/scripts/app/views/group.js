@@ -14,6 +14,8 @@ define([
     var GroupView = Backbone.View.extend({
         el: '#main',
 
+        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+
         events: {
             'click #group-repo-tabs .repo-create': 'createRepo',
             'click #grp-repos .by-name': 'sortByName',
@@ -50,7 +52,12 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
+            this.renderReposHd();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             this.$loadingTip.hide();
