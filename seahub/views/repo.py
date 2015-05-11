@@ -234,7 +234,6 @@ def render_repo(request, repo):
                                           {'groups': repo_groups})
     else:
         repo_group_str = ''
-    upload_url = get_upload_url(request, repo.id)
 
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
@@ -267,7 +266,6 @@ def render_repo(request, repo):
             'repo_group_str': repo_group_str,
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,
-            'upload_url': upload_url,
             'fileserver_root': fileserver_root,
             'protocol': protocol,
             'domain': domain,
@@ -480,19 +478,13 @@ def view_shared_upload_link(request, token):
 
     no_quota = True if seaserv.check_quota(repo_id) < 0 else False
 
-    token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                    'upload', request.user.username)
-    ajax_upload_url = gen_file_upload_url(token, 'upload-aj')
-
     return render_to_response('view_shared_upload_link.html', {
             'repo': repo,
-            'token': token,
             'path': path,
             'username': username,
             'dir_name': dir_name,
             'max_upload_file_size': seaserv.MAX_UPLOAD_FILE_SIZE,
             'no_quota': no_quota,
-            'ajax_upload_url': ajax_upload_url,
             'uploadlink': uploadlink,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             }, context_instance=RequestContext(request))
