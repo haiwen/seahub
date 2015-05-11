@@ -51,6 +51,8 @@ define([
         },
 
         reset: function() {
+            this.$('.by-name').addClass('icon-caret-up').removeClass('icon-caret-down');
+            this.$('.by-time').addClass('icon-caret-down').removeClass('icon-caret-up');
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             this.$loadingTip.hide();
