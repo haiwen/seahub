@@ -183,6 +183,7 @@ define([
             },
 
             reset: function() {
+                this.$dirent_list.empty();
                 this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
@@ -446,43 +447,48 @@ define([
                 var dirents = this.dir;
                 var el = $('#by-name');
 
-                dirents.comparator = function(a, b) {
-                    if (a.get('is_dir') && b.get('is_file')) {
-                        return -1;
-                    } else if (a.get('is_file') && b.get('is_dir')) {
-                        return 1;
-                    }
-
-                    var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
-                    if (el.hasClass('icon-caret-up')) {
-                        return -result;
-                    } else {
-                        return result;
-                    }
-                };
-
-                dirents.sort();
-                this.$dirent_list.empty();
-                dirents.each(this.addOne, this);
+                if (el.hasClass('icon-caret-up')) {
+                    dirents.comparator = function(a, b) {
+                        if (a.get('is_dir') && b.get('is_file')) {
+                            return -1;
+                        } else if (a.get('is_file') && b.get('is_dir')) {
+                            return 1;
+                        }
+                        return -Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                    };
+                } else {
+                    dirents.comparator = function(a, b) {
+                        if (a.get('is_dir') && b.get('is_file')) {
+                            return -1;
+                        } else if (a.get('is_file') && b.get('is_dir')) {
+                            return 1;
+                        }
+                        return Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                    };
+                }
+                dirents.sort().trigger('reset');
                 el.toggleClass('icon-caret-up icon-caret-down');
             },
 
             sortByTime: function () {
                 var dirents = this.dir;
                 var el = $('#by-time');
-                dirents.comparator = function(a, b) {
-                    if (a.get('is_dir') && b.get('is_file')) {
-                        return -1;
-                    }
-                    if (el.hasClass('icon-caret-down')) {
+                if (el.hasClass('icon-caret-down')) {
+                    dirents.comparator = function(a, b) {
+                        if (a.get('is_dir') && b.get('is_file')) {
+                            return -1;
+                        }
                         return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
-                    } else {
+                    };
+                } else {
+                    dirents.comparator = function(a, b) {
+                        if (a.get('is_dir') && b.get('is_file')) {
+                            return -1;
+                        }
                         return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
-                    }
-                };
-                dirents.sort();
-                this.$dirent_list.empty();
-                dirents.each(this.addOne, this);
+                    };
+                }
+                dirents.sort().trigger('reset');
                 el.toggleClass('icon-caret-up icon-caret-down');
             },
 
