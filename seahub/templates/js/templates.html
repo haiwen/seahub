@@ -145,7 +145,7 @@
     <% } %>
     <% } %>
 </script>
-<script type="text/template" id="path-bar-tmpl">
+<script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else if (context == 'org') { %>
@@ -166,10 +166,27 @@
     <%- path_list[i] + ' /' %>
     <% } %>
 </script>
+<script type="text/template" id="dirents-hd-tmpl">
+    <tr>
+        <th class="select">
+            <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        </th>
+        <th class="star"></th>
+        <th class="dirent-icon"></th>
+        <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+        <th class="dirent-op"></th>
+        <th class="dirent-size">{% trans "Size"%}</th>
+        <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+    </tr>
+</script>
 <script type="text/template" id="dirent-tmpl">
     <% if (dirent.is_dir) { %>
     <td class="select">
+        <% if (dirent.selected) { %>
+        <span class="checkbox checkbox-checked"><input type="checkbox" class="checkbox-orig" checked="checked" /></span>
+        <% } else { %>
         <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <% } %>
     </td>
     <td class="star"></td>
     <% if (dirent.perm == 'r') { %>
@@ -218,7 +235,11 @@
     </td>
     <% } else { %>
     <td class="select">
+        <% if (dirent.selected) { %>
+        <span class="checkbox checkbox-checked"><input type="checkbox" class="checkbox-orig" checked="checked" /></span>
+        <% } else { %>
         <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <% } %>
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
