@@ -52,7 +52,7 @@ define([
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
             'click .share': 'share',
-            'click .delete': 'delete',
+            'click .delete': 'remove',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
@@ -82,7 +82,7 @@ define([
 
             var dirView = this.dirView;
             var $dirents_op = dirView.$('#multi-dirents-op');
-            var toggle_all_checkbox = dirView.$('th .checkbox'); // TODO: any better variable name?
+            var toggle_all_checkbox = dirView.$('th .checkbox');
             var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;
             if (checked_num > 0) {
                 $dirents_op.css({'display':'inline'});
@@ -177,7 +177,7 @@ define([
             return false;
         },
 
-        delete: function() {
+        remove: function() {
             var dirent_name = this.model.get('obj_name');
             var dir = this.dir;
             var options = {

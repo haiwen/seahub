@@ -18,8 +18,10 @@ define([
         var DirView = Backbone.View.extend({
             el: $('#dir-view'),
 
-            path_bar_template: _.template($('#path-bar-tmpl').html()),
+            path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
+            dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
+
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
             mvcpTemplate: _.template($("#mvcp-form-template").html()),
@@ -58,9 +60,6 @@ define([
                         tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
                     }
                 });
-
-                // initialize common js behavior
-                this.$('th .checkbox-orig').unbind();
 
                 // scroll window: get 'more', fix 'op bar'
                 var _this = this;
@@ -186,6 +185,7 @@ define([
                 this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
+                this.renderDirentsHd();
                 this.fileUploadView.setFileInput();
                 this.getImageThumbnail();
             },
@@ -275,6 +275,10 @@ define([
                     is_repo_owner: dir.is_repo_owner,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
+            },
+
+            renderDirentsHd: function() {
+                this.$('thead').html(this.dirents_hd_template());
             },
 
             // Directory Operations
