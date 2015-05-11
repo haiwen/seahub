@@ -99,6 +99,7 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
         },
 
         sortByTime: function() {
@@ -115,6 +116,7 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
         }
 
     });
