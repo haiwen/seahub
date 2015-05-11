@@ -788,7 +788,7 @@ def view_file_via_shared_dir(request, token):
         raise Http404
     if not path.startswith(fileshare.path): # Can not view upper dir of shared dir
         raise Http404
-    zipped = gen_path_link(path, '')
+    zipped = gen_path_link(path, repo.name)
 
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:

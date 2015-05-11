@@ -23,7 +23,7 @@
                 <a href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" class="obv-btn fright">{% trans "ZIP"%}</a>
                 {% endif %}
             </div>
-            <table class="repo-file-list">
+            <table class="repo-file-list" style="table-layout:fixed;">
                 <tr>
                     <th width="5%"></th>
                     <th width="55%">{% trans "Name"%}</th>

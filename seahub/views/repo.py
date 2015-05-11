@@ -405,11 +405,15 @@ def view_shared_dir(request, token):
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
         return render_error(request, _('"%s" does not exist.') % fileshare.path)
 
-    dir_name = os.path.basename(path[:-1])
+    if path == '/':
+        dir_name = repo.name
+    else:
+        dir_name = os.path.basename(path[:-1])
+
     current_commit = seaserv.get_commits(repo_id, 0, 1)[0]
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
                                                         current_commit, path)
-    zipped = gen_path_link(path, '')
+    zipped = gen_path_link(path, repo.name)
 
     if path == fileshare.path:  # When user view the shared dir..
         # increase shared link view_cnt,
