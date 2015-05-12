@@ -52,7 +52,7 @@ define([
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
             'click .share': 'share',
-            'click .delete': 'remove',
+            'click .delete': 'del', // 'delete' is a preserve word
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
@@ -177,7 +177,7 @@ define([
             return false;
         },
 
-        remove: function() {
+        del: function() {
             var dirent_name = this.model.get('obj_name');
             var dir = this.dir;
             var options = {
