@@ -12,21 +12,21 @@ define([
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        el: '#main',
+        el: '#group-repo-tabs',
 
         events: {
-            'click #group-repo-tabs .repo-create': 'createRepo',
+            'click .repo-create': 'createRepo',
             'click #grp-repos .by-name': 'sortByName',
             'click #grp-repos .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
-            this.$tabs = this.$('#group-repo-tabs');
-            this.$table = this.$('#grp-repos table', this.$tabs);
-            this.$tableHead = $('thead', this.$table);
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('.empty-tips', this.$tabs);
+            this.$tabs = this.$el;
+            this.$table = this.$('table');
+            this.$tableHead = this.$('thead');
+            this.$tableBody = this.$('tbody');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
 
             this.sideNavView = new GroupSideNavView();
 
@@ -51,6 +51,7 @@ define([
         },
 
         reset: function() {
+            this.$('.error').hide();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             this.$loadingTip.hide();
@@ -80,9 +81,31 @@ define([
             this.$emptyTip.hide();
             this.$tabs.show();
             this.$table.hide();
+            var $loadingTip = this.$loadingTip;
+            $loadingTip.show();
+            var _this = this;
             this.repos.setGroupID(group_id);
-            this.repos.fetch({reset: true, data: {from: 'web'}});
-            this.$loadingTip.show();
+            this.repos.fetch({
+                reset: true,
+                data: {from: 'web'},
+                success: function (collection, response, opts) {
+                },  
+                error: function (collection, response, opts) {
+                    $loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $error.html(err_msg).show();
+                }
+            });
         },
 
         hideRepoList: function() {

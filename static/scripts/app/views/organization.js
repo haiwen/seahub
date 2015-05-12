@@ -49,6 +49,7 @@ define([
         },
 
         reset: function() {
+            this.$('.error').hide();
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
             if (this.repos.length) {
@@ -65,8 +66,29 @@ define([
             this.$sideNav.show();
             this.dirView.hide();
             this.$reposDiv.show();
-            this.repos.fetch({reset: true});
-            this.$loadingTip.show();
+            var $loadingTip = this.$loadingTip;
+            $loadingTip.show();
+            var _this = this;
+            this.repos.fetch({
+                reset: true,
+                success: function (collection, response, opts) {
+                },
+                error: function (collection, response, opts) {
+                    $loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $error.html(err_msg).show();
+                }
+            });
         },
 
         hideRepoList: function() {
