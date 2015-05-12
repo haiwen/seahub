@@ -1150,6 +1150,8 @@ def libraries(request):
     max_upload_file_size = get_max_upload_file_size()
     guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     if guide_enabled:
+        if request.user.permissions.can_add_repo():
+            create_default_library(request)
         # only show guide once
         UserOptions.objects.disable_user_guide(username)
 
