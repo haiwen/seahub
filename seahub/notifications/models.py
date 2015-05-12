@@ -485,7 +485,7 @@ class UserNotification(models.Model):
         file_path = uploaded_to + '/' + filename
         file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
 
-        folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(uploaded_to)
+        folder_link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to.lstrip('/'))])
         folder_name = os.path.basename(uploaded_to)
 
         msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your folder <a href='%(folder_link)s'>%(folder)s</a>") % {
