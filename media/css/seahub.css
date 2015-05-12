@@ -245,6 +245,7 @@ p { margin:0.5em 0; }
 .hide { display:none }
 .error { color:red; }
 .errorlist { color: red; }
+.error-tip { text-align:center; margin-top:5em;}
 .ovhd { overflow:hidden; }
 .bold { font-weight:bold; }
 .no-bold { font-weight:normal; }
