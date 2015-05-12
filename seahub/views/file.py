@@ -1107,7 +1107,7 @@ def download_file(request, repo_id, obj_id):
         raise Http404
 
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
+        return HttpResponseRedirect(reverse('view_common_lib_dir', args=[repo_id, '']))
 
     # If vistor's file shared token in url params matches the token in db,
     # then we know the vistor is from file shared link.
