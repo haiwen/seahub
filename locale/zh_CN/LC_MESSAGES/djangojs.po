@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-09 11:49+0800\n"
-"PO-Revision-Date: 2015-05-09 05:35+0000\n"
+"POT-Creation-Date: 2015-05-12 17:14+0800\n"
+"PO-Revision-Date: 2015-05-12 09:36+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -18,16 +18,16 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #: static/scripts/common.js:155 static/scripts/common.js.c:245
-#: static/scripts/app/views/dir.js:795 static/scripts/app/views/dir.js.c:852
-#: static/scripts/app/views/dirent.js:396
-#: static/scripts/app/views/dirent.js:422
+#: static/scripts/app/views/dir.js:801 static/scripts/app/views/dir.js.c:858
+#: static/scripts/app/views/dirent.js:398
+#: static/scripts/app/views/dirent.js:424
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/group-repo.js:58
-#: static/scripts/app/views/myhome-sub-repos.js:101
-#: static/scripts/app/views/myhome-sub-repos.js:142
+#: static/scripts/app/views/myhome-sub-repos.js:123
+#: static/scripts/app/views/myhome-sub-repos.js:164
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:296
 #: static/scripts/app/views/starred-file-item.js:53
 #: static/scripts/app/views/sub-lib.js:79
@@ -58,43 +58,48 @@ msgstr "密码太短"
 msgid "Passwords don't match"
 msgstr "两次输入的密码不一致"
 
-#: static/scripts/app/views/dir.js:43
+#: static/scripts/app/views/dir.js:45
 #: static/scripts/app/views/starred-file.js:29
 msgid "Close (Esc)"
 msgstr "关闭 (Esc)"
 
-#: static/scripts/app/views/dir.js:44
+#: static/scripts/app/views/dir.js:46
 #: static/scripts/app/views/starred-file.js:30
 msgid "Loading..."
 msgstr "加载中..."
 
-#: static/scripts/app/views/dir.js:47
+#: static/scripts/app/views/dir.js:49
 #: static/scripts/app/views/starred-file.js:33
 msgid "Previous (Left arrow key)"
 msgstr "上一张（左方向键）"
 
-#: static/scripts/app/views/dir.js:48
+#: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:34
 msgid "Next (Right arrow key)"
 msgstr "下一张（右方向键）"
 
-#: static/scripts/app/views/dir.js:49
+#: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:35
 msgid "%curr% of %total%"
 msgstr "%curr% / %total%"
 
-#: static/scripts/app/views/dir.js:55
+#: static/scripts/app/views/dir.js:57
 #: static/scripts/app/views/starred-file.js:41
 msgid "Open in New Tab"
 msgstr "在新标签页打开"
 
-#: static/scripts/app/views/dir.js:58
+#: static/scripts/app/views/dir.js:60
 #: static/scripts/app/views/starred-file.js:44
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr "<a href=\"%url%\" target=\"_blank\">图片</a> 无法被加载。"
 
-#: static/scripts/app/views/dir.js:125
+#: static/scripts/app/views/dir.js:124
 #: static/scripts/app/views/group-side-nav.js:39
+#: static/scripts/app/views/group.js:111
+#: static/scripts/app/views/myhome-repos.js:92
+#: static/scripts/app/views/myhome-shared-repos.js:79
+#: static/scripts/app/views/myhome-sub-repos.js:78
+#: static/scripts/app/views/organization.js:95
 msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
 
@@ -102,124 +107,124 @@ msgstr "请检查网络是否已连接。"
 msgid "Password is required."
 msgstr "密码为必填项。"
 
-#: static/scripts/app/views/dir.js:308 static/scripts/app/views/dir.js.c:364
-#: static/scripts/app/views/dirent.js:225
+#: static/scripts/app/views/dir.js:312 static/scripts/app/views/dir.js.c:368
+#: static/scripts/app/views/dirent.js:227
 #: static/scripts/app/views/share.js:423
 msgid "It is required."
 msgstr "必填项。"
 
-#: static/scripts/app/views/dir.js:322 static/scripts/app/views/dir.js.c:388
-#: static/scripts/app/views/dirent.js:244
+#: static/scripts/app/views/dir.js:326 static/scripts/app/views/dir.js.c:392
+#: static/scripts/app/views/dirent.js:246
 #: static/scripts/app/views/fileupload.js:297
 #: static/scripts/app/views/fileupload.js:310
 #: static/scripts/app/views/fileupload.js:322
 #: static/scripts/app/views/fileupload.js:334
-#: static/scripts/app/views/myhome-sub-repos.js:131
+#: static/scripts/app/views/myhome-sub-repos.js:153
 msgid "Just now"
 msgstr "刚才"
 
-#: static/scripts/app/views/dir.js:370
+#: static/scripts/app/views/dir.js:374
 msgid "Only an extension there, please input a name."
 msgstr "请输入完整的文件名。"
 
-#: static/scripts/app/views/dir.js:517 static/scripts/app/views/dir.js.c:646
+#: static/scripts/app/views/dir.js:523 static/scripts/app/views/dir.js.c:652
 msgid "Processing..."
 msgstr "处理中..."
 
-#: static/scripts/app/views/dir.js:553
+#: static/scripts/app/views/dir.js:559
 msgid "Successfully deleted %(name)s."
 msgstr "成功删除 %(name)s。"
 
-#: static/scripts/app/views/dir.js:555
+#: static/scripts/app/views/dir.js:561
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "成功删除 %(name)s 和其他一项内容。"
 
-#: static/scripts/app/views/dir.js:557
+#: static/scripts/app/views/dir.js:563
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "成功删除 %(name)s 和其他 %(amount)s 项内容。"
 
-#: static/scripts/app/views/dir.js:564
+#: static/scripts/app/views/dir.js:570
 msgid "Internal error. Failed to delete %(name)s."
 msgstr "内部错误。删除 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:566
+#: static/scripts/app/views/dir.js:572
 msgid "Internal error. Failed to delete %(name)s and 1 other item."
 msgstr "内部错误。删除 %(name)s 和其他一项内容失败。"
 
-#: static/scripts/app/views/dir.js:568
+#: static/scripts/app/views/dir.js:574
 msgid "Internal error. Failed to delete %(name)s and %(amount)s other items."
 msgstr "内部错误。删除 %(name)s 和其他 %(amount)s 项内容失败。"
 
-#: static/scripts/app/views/dir.js:581
+#: static/scripts/app/views/dir.js:587
 msgid "Delete Items"
 msgstr "删除条目"
 
-#: static/scripts/app/views/dir.js:582
+#: static/scripts/app/views/dir.js:588
 msgid "Are you sure you want to delete these selected items?"
 msgstr "确定要删除选中的条目吗？"
 
-#: static/scripts/app/views/dir.js:641 static/scripts/app/views/dirent.js:321
+#: static/scripts/app/views/dir.js:647 static/scripts/app/views/dirent.js:323
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
-#: static/scripts/app/views/dir.js:689
+#: static/scripts/app/views/dir.js:695
 msgid "Successfully moved %(name)s."
 msgstr "成功移动 %(name)s。"
 
-#: static/scripts/app/views/dir.js:691
+#: static/scripts/app/views/dir.js:697
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "成功移动 %(name)s 和另1项条目。"
 
-#: static/scripts/app/views/dir.js:693
+#: static/scripts/app/views/dir.js:699
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "成功移动 %(name)s 和其他 %(amount)s 项条目。"
 
-#: static/scripts/app/views/dir.js:697
+#: static/scripts/app/views/dir.js:703
 msgid "Successfully copied %(name)s."
 msgstr "成功复制 %(name)s。"
 
-#: static/scripts/app/views/dir.js:699
+#: static/scripts/app/views/dir.js:705
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "成功复制 %(name)s 和另1项条目。"
 
-#: static/scripts/app/views/dir.js:701
+#: static/scripts/app/views/dir.js:707
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "成功复制 %(name)s 和其他 %(amount)s 项条目。"
 
-#: static/scripts/app/views/dir.js:713
+#: static/scripts/app/views/dir.js:719
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "内部错误。移动 %(name)s 和其他 %(amount)s 项内容失败。"
 
-#: static/scripts/app/views/dir.js:715
+#: static/scripts/app/views/dir.js:721
 msgid "Internal error. Failed to move %(name)s."
 msgstr "内部错误。移动 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:719
+#: static/scripts/app/views/dir.js:725
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "内部错误。复制 %(name)s 和其他 %(amount)s 项内容失败。"
 
-#: static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dir.js:727
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "内部错误。复制 %(name)s 失败。"
 
-#: static/scripts/app/views/dir.js:761
+#: static/scripts/app/views/dir.js:767
 msgid "Moving file %(index)s of %(total)s"
 msgstr "正在移动文件 %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:761
+#: static/scripts/app/views/dir.js:767
 msgid "Copying file %(index)s of %(total)s"
 msgstr "正在复制文件  %(index)s / %(total)s"
 
-#: static/scripts/app/views/dir.js:783
+#: static/scripts/app/views/dir.js:789
 msgid "Failed to move %(name)s"
 msgstr "移动 %(name)s 失败"
 
-#: static/scripts/app/views/dir.js:783
+#: static/scripts/app/views/dir.js:789
 msgid "Failed to copy %(name)s"
 msgstr "复制 %(name)s 失败"
 
-#: static/scripts/app/views/dir.js:843 static/scripts/app/views/dirent.js:385
-#: static/scripts/app/views/dirent.js:413
+#: static/scripts/app/views/dir.js:849 static/scripts/app/views/dirent.js:387
+#: static/scripts/app/views/dirent.js:415
 msgid "Canceled."
 msgstr "已取消。"
 
@@ -227,39 +232,39 @@ msgstr "已取消。"
 msgid "Successfully deleted %(name)s"
 msgstr "删除 %(name)s 成功"
 
-#: static/scripts/app/views/dirent.js:206
+#: static/scripts/app/views/dirent.js:208
 msgid "Rename Directory"
 msgstr "重命名目录"
 
-#: static/scripts/app/views/dirent.js:206
+#: static/scripts/app/views/dirent.js:208
 msgid "Rename File"
 msgstr "重命名文件"
 
-#: static/scripts/app/views/dirent.js:229
+#: static/scripts/app/views/dirent.js:231
 msgid "You have not renamed it."
 msgstr "你还没重命名。"
 
-#: static/scripts/app/views/dirent.js:281
+#: static/scripts/app/views/dirent.js:283
 msgid "Move {placeholder} to:"
 msgstr "移动 {placeholder} 到"
 
-#: static/scripts/app/views/dirent.js:281
+#: static/scripts/app/views/dirent.js:283
 msgid "Copy {placeholder} to:"
 msgstr "复制 {placeholder} 到"
 
-#: static/scripts/app/views/dirent.js:355
+#: static/scripts/app/views/dirent.js:357
 msgid "Moving %(name)s"
 msgstr "正在移动 %(name)s"
 
-#: static/scripts/app/views/dirent.js:355
+#: static/scripts/app/views/dirent.js:357
 msgid "Copying %(name)s"
 msgstr "正在复制 %(name)s"
 
-#: static/scripts/app/views/dirent.js:371
+#: static/scripts/app/views/dirent.js:373
 msgid "Saving..."
 msgstr "保存中..."
 
-#: static/scripts/app/views/dirent.js:385
+#: static/scripts/app/views/dirent.js:387
 msgid "Failed."
 msgstr "失败。"
 
@@ -288,6 +293,11 @@ msgid "Empty file upload result"
 msgstr "空文件"
 
 #: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/group.js:108
+#: static/scripts/app/views/myhome-repos.js:89
+#: static/scripts/app/views/myhome-shared-repos.js:76
+#: static/scripts/app/views/myhome-sub-repos.js:75
+#: static/scripts/app/views/organization.js:92
 msgid "Error"
 msgstr "错误"
 
@@ -353,11 +363,19 @@ msgstr "选择群组"
 msgid "Successfully unshared {placeholder}"
 msgstr "成功取消共享 {placeholder}"
 
-#: static/scripts/app/views/myhome-sub-repos.js:93
+#: static/scripts/app/views/group.js:106
+#: static/scripts/app/views/myhome-repos.js:87
+#: static/scripts/app/views/myhome-shared-repos.js:74
+#: static/scripts/app/views/myhome-sub-repos.js:73
+#: static/scripts/app/views/organization.js:90
+msgid "Permission error"
+msgstr ""
+
+#: static/scripts/app/views/myhome-sub-repos.js:115
 msgid "You don't have any library at present."
 msgstr "你目前还没有资料库"
 
-#: static/scripts/app/views/myhome-sub-repos.js:112
+#: static/scripts/app/views/myhome-sub-repos.js:134
 msgid "Please choose a directory"
 msgstr "请选择一个目录"
 
