@@ -18,8 +18,10 @@ define([
         var DirView = Backbone.View.extend({
             el: $('#dir-view'),
 
-            path_bar_template: _.template($('#path-bar-tmpl').html()),
+            path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
+            dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
+
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
             mvcpTemplate: _.template($("#mvcp-form-template").html()),
@@ -58,9 +60,6 @@ define([
                         tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
                     }
                 });
-
-                // initialize common js behavior
-                this.$('th .checkbox-orig').unbind();
 
                 // scroll window: get 'more', fix 'op bar'
                 var _this = this;
@@ -114,10 +113,10 @@ define([
                         var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
                         var $error = _this.$('.error');
                         var err_msg;
-                        var decrypt_lib = false;
+                        var lib_need_decrypt = false;
                         if (response.responseText) {
                             if (response.responseJSON.lib_need_decrypt) {
-                                decrypt_lib = true;
+                                lib_need_decrypt = true;
                             } else {
                                 err_msg = response.responseJSON.error;
                             }
@@ -128,9 +127,22 @@ define([
                             $error.html(err_msg).show();
                         }
 
-                        if (decrypt_lib) {
+                        if (lib_need_decrypt) {
                             var form = $($('#repo-decrypt-form-template').html());
-                            form.modal({containerCss: {'padding': '1px'}});
+                            var decrypt_success = false;
+                            form.modal({
+                                containerCss: {'padding': '1px'},
+                                onClose: function () {
+                                    $.modal.close();
+                                    $el_con.show();
+                                    if (!decrypt_success) {
+                                        app.router.navigate(
+                                            category + '/', // need to append '/' at end
+                                            {trigger: true}
+                                        );
+                                    }
+                                }
+                            });
                             $('#simplemodal-container').css({'height':'auto'});
                             form.submit(function() {
                                 var passwd = $.trim($('[name="password"]', form).val());
@@ -148,8 +160,8 @@ define([
                                         username: app.pageOptions.username
                                     },
                                     after_op_success: function() {
+                                        decrypt_success = true;
                                         $.modal.close();
-                                        $el_con.show();
                                         _this.showDir(category, repo_id, path);
                                     }
                                 });
@@ -173,6 +185,7 @@ define([
                 this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
+                this.renderDirentsHd();
                 this.fileUploadView.setFileInput();
                 this.getImageThumbnail();
             },
@@ -262,6 +275,10 @@ define([
                     is_repo_owner: dir.is_repo_owner,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
+            },
+
+            renderDirentsHd: function() {
+                this.$('thead').html(this.dirents_hd_template());
             },
 
             // Directory Operations
@@ -452,6 +469,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             sortByTime: function () {
@@ -471,6 +489,7 @@ define([
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
+                dirents.comparator = null;
             },
 
             select: function () {

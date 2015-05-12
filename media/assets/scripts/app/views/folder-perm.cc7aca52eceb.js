@@ -47,7 +47,7 @@ define([
         render: function () {
             this.$el.html(this.template({
                 title: gettext("Set {placeholder}'s permission")
-                    .replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(this.obj_name) + '</span>')
+                    .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>')
             }));
             return this;
         },
@@ -89,7 +89,7 @@ define([
             });
 
             // use select2 to 'user' input in 'add user perm'
-            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2);
+            $('[name="email"]', $add_user_perm).select2(Common.contactInputOptionsForSelect2());
 
             // use select2 to 'group' input in 'add group perm'
             var groups = app.pageOptions.groups || [],

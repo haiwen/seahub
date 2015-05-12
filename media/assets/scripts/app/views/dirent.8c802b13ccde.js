@@ -52,7 +52,7 @@ define([
             'click .dir-link': 'visitDir',
             'click .more-op-icon': 'togglePopup',
             'click .share': 'share',
-            'click .delete': 'delete',
+            'click .delete': 'remove',
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
@@ -82,7 +82,7 @@ define([
 
             var dirView = this.dirView;
             var $dirents_op = dirView.$('#multi-dirents-op');
-            var toggle_all_checkbox = dirView.$('th .checkbox'); // TODO: any better variable name?
+            var toggle_all_checkbox = dirView.$('th .checkbox');
             var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;
             if (checked_num > 0) {
                 $dirents_op.css({'display':'inline'});
@@ -99,8 +99,6 @@ define([
         starFile: function() {
             var _this = this;
             var dir = this.dirView.dir;
-            //var path = dir.path;
-            //path += (path == '/' ? '' : '/');
             var starred = this.model.get('starred');
             var options = { repo_id: dir.repo_id };
             options.name = starred ? 'unstar_file' : 'star_file';
@@ -117,7 +115,9 @@ define([
                         _this.model.set({'starred':true});
                     }
                 },
-                error: Common.ajaxErrorHandler
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
             });
         },
 
@@ -177,25 +177,28 @@ define([
             return false;
         },
 
-        delete: function() {
+        remove: function() {
             var dirent_name = this.model.get('obj_name');
+            var dir = this.dir;
             var options = {
-                repo_id: this.dirView.dir.repo_id,
+                repo_id: dir.repo_id,
                 name: this.model.get('is_dir') ? 'del_dir' : 'del_file'
             };
-            var el = this.$el;
+            var model = this.model;
             $.ajax({
-                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(this.dirView.dir.path)
+                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path)
                 + '&name=' + encodeURIComponent(dirent_name),
                 dataType: 'json',
                 success: function(data) {
-                    el.remove();
+                    dir.remove(model);
                     app.globalState.noFileOpPopup = true; // make other items can work normally when hover
-                    var msg = gettext("Successfully deleted %(name)s");
-                    msg = msg.replace('%(name)s', Common.HTMLescape(dirent_name));
+                    var msg = gettext("Successfully deleted %(name)s")
+                        .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
                 },
-                error: Common.ajaxErrorHandler
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
             });
             return false;
         },
@@ -213,7 +216,7 @@ define([
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             var op_detail = $('.detail', form);
-            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target">' + Common.HTMLescape(dirent_name) + '</span>'));
+            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(dirent_name) + '">' + Common.HTMLescape(dirent_name) + '</span>'));
 
             var form_id = form.attr('id');
             var _this = this;
@@ -270,7 +273,7 @@ define([
             return false;
         },
 
-        mvcp: function() {
+        mvcp: function(event) {
             var dir = this.dir;
             var el = event.target || event.srcElement,
                 op_type = $(el).hasClass('mv') ? 'mv' : 'cp',
@@ -278,7 +281,7 @@ define([
                 obj_type = this.model.get('is_dir') ? 'dir' : 'file';
 
             var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
-            title = title.replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(obj_name) + '</span>');
+            title = title.replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(obj_name) + '">' + Common.HTMLescape(obj_name) + '</span>');
 
             var form = $(this.mvcpTemplate({
                 form_title: title,

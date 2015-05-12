@@ -50,7 +50,7 @@ define([
         render: function () {
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
-                    .replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(this.obj_name) + '</span>'),
+                    .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.obj_name) + '">' + Common.HTMLescape(this.obj_name) + '</span>'),
                 is_dir: this.is_dir,
                 is_repo_owner: this.is_repo_owner,
                 is_virtual: this.is_virtual,
@@ -79,11 +79,11 @@ define([
             'submit #send-upload-link-form': 'sendUploadLink',
             'click #cancel-share-upload-link': 'cancelShareUploadLink',
             'click #delete-upload-link': 'deleteUploadLink',
-            
-            // file private share    
+
+            // file private share
             'submit #file-private-share-form': 'filePrivateShare',
 
-            // dir private share    
+            // dir private share
             'submit #dir-private-share-form': 'dirPrivateShare'
         },
 
@@ -263,7 +263,7 @@ define([
                 Common.showFormError(form_id, gettext("Please input at least an email."));
                 return false;
             };
-            
+
             var submit_btn = $('[type="submit"]', form);
             var sending_tip = $('.sending-tip', form);
             Common.disableButton(submit_btn);
@@ -315,10 +315,10 @@ define([
                 other_post_data: {
                     file_shared_link: this.download_link,
                     file_shared_name: this.obj_name,
-                    file_shared_type: this.is_dir ? 'd' : 'f' 
+                    file_shared_type: this.is_dir ? 'd' : 'f'
                 },
                 post_url: Common.getUrl({name: 'send_shared_download_link'})
-            });            
+            });
             return false;
         },
 
@@ -382,7 +382,7 @@ define([
                     shared_upload_link: this.upload_link
                 },
                 post_url: Common.getUrl({name: 'send_shared_upload_link'})
-            });            
+            });
             return false;
         },
 
@@ -409,8 +409,8 @@ define([
 
             $('[name="emails"]', form).select2($.extend({
                 width: '400px'
-            },Common.contactInputOptionsForSelect2));
-           
+            },Common.contactInputOptionsForSelect2()));
+
             form.removeClass('hide');
         },
 
@@ -458,8 +458,8 @@ define([
 
             $('[name="emails"]', form).select2($.extend({
                 width: '400px'
-            },Common.contactInputOptionsForSelect2));
-           
+            },Common.contactInputOptionsForSelect2()));
+
             var groups = app.pageOptions.groups || [];
             var g_opts = '';
             for (var i = 0, len = groups.length; i < len; i++) {

@@ -5,17 +5,148 @@
   var django = globals.django || (globals.django = {});
 
   
-  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  django.pluralidx = function (n) {
+    var v=(n != 1);
+    if (typeof(v) == 'boolean') {
+      return v ? 1 : 0;
+    } else {
+      return v;
+    }
+  };
   
 
   
-  /* gettext identity library */
+  /* gettext library */
 
-  django.gettext = function (msgid) { return msgid; };
-  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.catalog = {
+    "%curr% of %total%": "%curr% de %total%", 
+    "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded.": "<a href=\"%url%\" target=\"_blank\">La imagen</a> no pudo ser cargada.", 
+    "Are you sure you want to delete these selected items?": "\u00bfEst\u00e1 seguro de eliminar los \u00edtems seleccionados?", 
+    "Cancel": "Cancelar", 
+    "Canceled.": "Cancelado.", 
+    "Close (Esc)": "Cerrar (Esc)", 
+    "Copy {placeholder} to:": "Copiar {placeholder} a:", 
+    "Copying %(name)s": "Copiando %(name)s", 
+    "Copying file %(index)s of %(total)s": "Copiando archivo %(index)s de %(total)s", 
+    "Delete": "Eliminar", 
+    "Delete Items": "Eliminar \u00cdtems", 
+    "Delete succeeded.": "Eliminado con \u00e9xito.", 
+    "Empty file upload result": "Archivo subido result\u00f3 vac\u00edo", 
+    "Enter emails or select contacts": "Ingrese e-mails o escoja contactos", 
+    "Error": "Error", 
+    "Failed to copy %(name)s": "Fallo al copiar %(name)s", 
+    "Failed to get update url": "Fallo al obtener url de actualizaci\u00f3n", 
+    "Failed to get upload url": "Fallo al obtener url de subida", 
+    "Failed to move %(name)s": "Fallo al mover %(name)s", 
+    "Failed to send to {placeholder}": "Fallo al enviar a  {placeholder}", 
+    "Failed to share to {placeholder}": "Fallo al compartir con {placeholder}", 
+    "Failed.": "Fall\u00f3.", 
+    "Failed. Please check the network.": "Fallo. Por favor verifique la red.", 
+    "File Upload canceled": "Subida de archivo cancelada", 
+    "File Upload complete": "Archivo subido por completo", 
+    "File Upload failed": "Subida de archivo fall\u00f3", 
+    "File Uploading...": "Subiendo Archivo...", 
+    "File is too big": "El archivo es demasiado grande.", 
+    "File is too small": "El archivo es demasiado chico", 
+    "Filetype not allowed": "Tipo de archivo no permitido", 
+    "Internal error. Failed to copy %(name)s and %(amount)s other item(s).": "Error interno. Fallo al copiar %(name)s y %(amount)s otro(s) \u00edtem(s).", 
+    "Internal error. Failed to copy %(name)s.": "Error interno. Fallo al copiar  %(name)s.", 
+    "Internal error. Failed to delete %(name)s and %(amount)s other items.": "Error interno. Fallo al eliminar %(name)s y  %(amount)s otros \u00edtems.\n ", 
+    "Internal error. Failed to delete %(name)s and 1 other item.": "Error interno. Fallo al eliminar %(name)s y otro \u00edtem.", 
+    "Internal error. Failed to delete %(name)s.": "Error interno. Fallo al eliminar %(name)s.", 
+    "Internal error. Failed to move %(name)s and %(amount)s other item(s).": "Error interno. Fallo al mover %(name)s y %(amount)s otro(s) \u00edtem(s).", 
+    "Internal error. Failed to move %(name)s.": "Error interno. Fallo al mover %(name)s.", 
+    "Invalid destination path": "Ruta de destino inv\u00e1lida", 
+    "It is required.": "Es requerida.", 
+    "Just now": "Ahora", 
+    "Loading...": "Cargando...", 
+    "Max number of files exceeded": "M\u00e1ximo n\u00famero de archivos excedido", 
+    "Move {placeholder} to:": "Mover {placeholder} a:", 
+    "Moving %(name)s": "Moviendo %(name)s", 
+    "Moving file %(index)s of %(total)s": "Moviendo archivo %(index)s de %(total)s", 
+    "Name is required": "Nombre es requerido", 
+    "Next (Right arrow key)": "Siguiente (Flecha derecha)", 
+    "Only an extension there, please input a name.": "S\u00f3lo hay una extensi\u00f3n, por favor ingrese un nombre.", 
+    "Open in New Tab": "Abrir en una nueva pesta\u00f1a", 
+    "Password is required.": "Se requiere contrase\u00f1a.", 
+    "Password is too short": "La contrase\u00f1a es demasiado corta", 
+    "Passwords don't match": "Las contrase\u00f1as no coinciden", 
+    "Please check the network.": "Por favor verifique la red.", 
+    "Please choose a directory": "Por favor escoja una cerpeta", 
+    "Please enter days.": "Por favor ingrese d\u00edas.", 
+    "Please enter password": "Por favor ingrese la contrase\u00f1a", 
+    "Please enter the password again": "Por favor ingrese la contrase\u00f1a nuevamente", 
+    "Please enter valid days": "Por favor ingrese d\u00edas v\u00e1lidos", 
+    "Please input at least an email.": "Por favor ingrese al menos un e-mail.", 
+    "Please select a contact or a group.": "Por favor escoja un contacto o un grupo.", 
+    "Previous (Left arrow key)": "Anterior (Flecha izquierda)", 
+    "Processing...": "Proceasndo...", 
+    "Really want to delete {lib_name}?": "\u00bfRealmente desea eliminar {lib_name}?", 
+    "Rename Directory": "Renombrar Carpeta", 
+    "Rename File": "Renombrar Archivo", 
+    "Replace file {filename}?": "\u00bfReemplazar archivo {filename}?", 
+    "Saving...": "Guardando...", 
+    "Select groups": "Seleccionar grupos", 
+    "Set {placeholder}'s permission": "Establecer permiso de  {placeholder}", 
+    "Share {placeholder}": "Compartir {placeholder}", 
+    "Start": "Iniciar", 
+    "Success": "\u00c9xito", 
+    "Successfully copied %(name)s and %(amount)s other items.": "Copiado con \u00e9xito %(name)s y %(amount)s otros \u00edtems.", 
+    "Successfully copied %(name)s and 1 other item.": "Copiado con \u00e9xito %(name)s y otro \u00edtem.", 
+    "Successfully copied %(name)s.": "Copiado con \u00e9xito %(name)s.", 
+    "Successfully deleted %(name)s": "Eliminado con \u00e9xito %(name)s", 
+    "Successfully deleted %(name)s and %(amount)s other items.": "eliminado con \u00e9xito %(name)s y %(amount)s otros \u00edtems.", 
+    "Successfully deleted %(name)s and 1 other item.": "eliminado con \u00e9xito %(name)s y otro \u00edtem.", 
+    "Successfully deleted %(name)s.": "Eliminado con \u00e9xito %(name)s.", 
+    "Successfully moved %(name)s and %(amount)s other items.": "Movido con \u00e9xito %(name)s y %(amount)s otros \u00edtems.", 
+    "Successfully moved %(name)s and 1 other item.": "Movido con \u00e9xito %(name)s y otro \u00edtem.", 
+    "Successfully moved %(name)s.": "Movido con \u00e9xito %(name)s.", 
+    "Successfully sent to {placeholder}": "Enviado con \u00e9xito a {placeholder}", 
+    "Successfully shared to {placeholder}": "Compartido con \u00e9xito con  {placeholder}", 
+    "Successfully unshared {placeholder}": "Dejado de compartir con \u00e9xito {placeholder}", 
+    "Successfully unstared {placeholder}": "Desmarcado con \u00e9xito {placeholder}", 
+    "Uploaded bytes exceed file size": "La cantidad de bytes subidos excede el tama\u00f1o del archivo", 
+    "You don't have any library at present.": "En este momento no posee ninguna biblioteca.", 
+    "You have not renamed it.": "No lo ha renombrado.", 
+    "canceled": "cancelado", 
+    "uploaded": "subido"
+  };
+
+  django.gettext = function (msgid) {
+    var value = django.catalog[msgid];
+    if (typeof(value) == 'undefined') {
+      return msgid;
+    } else {
+      return (typeof(value) == 'string') ? value : value[0];
+    }
+  };
+
+  django.ngettext = function (singular, plural, count) {
+    var value = django.catalog[singular];
+    if (typeof(value) == 'undefined') {
+      return (count == 1) ? singular : plural;
+    } else {
+      return value[django.pluralidx(count)];
+    }
+  };
+
   django.gettext_noop = function (msgid) { return msgid; };
-  django.pgettext = function (context, msgid) { return msgid; };
-  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+
+  django.pgettext = function (context, msgid) {
+    var value = django.gettext(context + '\x04' + msgid);
+    if (value.indexOf('\x04') != -1) {
+      value = msgid;
+    }
+    return value;
+  };
+
+  django.npgettext = function (context, singular, plural, count) {
+    var value = django.ngettext(context + '\x04' + singular, context + '\x04' + plural, count);
+    if (value.indexOf('\x04') != -1) {
+      value = django.ngettext(singular, plural, count);
+    }
+    return value;
+  };
   
 
   django.interpolate = function (fmt, obj, named) {

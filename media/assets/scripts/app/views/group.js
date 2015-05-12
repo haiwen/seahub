@@ -12,21 +12,23 @@ define([
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        el: '#main',
+        el: '#group-repo-tabs',
+
+        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         events: {
-            'click #group-repo-tabs .repo-create': 'createRepo',
+            'click .repo-create': 'createRepo',
             'click #grp-repos .by-name': 'sortByName',
             'click #grp-repos .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
-            this.$tabs = this.$('#group-repo-tabs');
-            this.$table = this.$('#grp-repos table', this.$tabs);
-            this.$tableHead = $('thead', this.$table);
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('.empty-tips', this.$tabs);
+            this.$tabs = this.$el;
+            this.$table = this.$('table');
+            this.$tableHead = this.$('thead');
+            this.$tableBody = this.$('tbody');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
 
             this.sideNavView = new GroupSideNavView();
 
@@ -50,12 +52,18 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
-            this.$tableBody.empty();
-            this.repos.each(this.addOne, this);
+            this.$('.error').hide();
             this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
+                this.renderReposHd();
+                this.$tableBody.empty();
+                this.repos.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
@@ -80,9 +88,31 @@ define([
             this.$emptyTip.hide();
             this.$tabs.show();
             this.$table.hide();
+            var $loadingTip = this.$loadingTip;
+            $loadingTip.show();
+            var _this = this;
             this.repos.setGroupID(group_id);
-            this.repos.fetch({reset: true});
-            this.$loadingTip.show();
+            this.repos.fetch({
+                reset: true,
+                data: {from: 'web'},
+                success: function (collection, response, opts) {
+                },  
+                error: function (collection, response, opts) {
+                    $loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $error.html(err_msg).show();
+                }
+            });
         },
 
         hideRepoList: function() {
@@ -115,6 +145,8 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
+
         },
 
         sortByTime: function() {
@@ -131,6 +163,7 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
         },
 
         hide: function() {

@@ -11,6 +11,8 @@ define([
     var SharedReposView = Backbone.View.extend({
         el: $('#repo-tabs'),
 
+        reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
+
         initialize: function(options) {
             this.$tabs = $('#repo-tabs');
             this.$table = $('#repos-shared-to-me table');
@@ -33,30 +35,52 @@ define([
             }
         },
 
+        renderReposHd: function() {
+            this.$tableHead.html(this.reposHdTemplate());
+        },
+
         reset: function() {
-            this.$tableBody.empty();
-            this.repos.each(this.addOne, this);
+            this.$('.error').hide();
+            this.$loadingTip.hide();
             if (this.repos.length) {
                 this.$emptyTip.hide();
+                this.renderReposHd();
+                this.$tableBody.empty();
+                this.repos.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
                 this.$table.hide();
             }
-            this.$loadingTip.hide();
-        },
-
-        renderPath: function() {
-            //
         },
 
         showSharedRepos: function() {
-            this.repos.fetch({reset: true});
             this.$tabs.show();
-            //this.$table.parent().show();
+            $('#shared-lib-tab').parent().addClass('ui-state-active');
             this.$table.hide();
-            this.$loadingTip.show();
-            $('#shared-lib-tab', this.$tabs).parent().addClass('ui-state-active');
+            var $loadingTip = this.$loadingTip;
+            $loadingTip.show();
+            var _this = this;
+            this.repos.fetch({
+                reset: true,
+                success: function (collection, response, opts) {
+                },
+                error: function (collection, response, opts) {
+                    $loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $error.html(err_msg).show();
+                }
+            });
         },
 
         show: function() {
@@ -90,6 +114,7 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
         },
 
         sortByTime: function() {
@@ -106,6 +131,7 @@ define([
             this.$tableBody.empty();
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
+            repos.comparator = null;
         }
 
     });

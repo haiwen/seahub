@@ -477,43 +477,71 @@ define([
             });
         },
 
-        contactInputOptionsForSelect2: {
-            placeholder: gettext("Enter emails or select contacts"),
-
-            // with 'tags', the user can directly enter, not just select
-            // tags need `<input type="hidden" />`, not `<select>`
-            tags: function () {
-                var contacts = app.pageOptions.contacts || [];
-                var contact_list = [];
-                for (var i = 0, len = contacts.length; i < len; i++) {
-                    contact_list.push({ // 'id' & 'text' are required by the plugin
-                        "id": contacts[i].email,
-                        // for search. both name & email can be searched.
-                        // use ' '(space) to separate name & email
-                        "text": contacts[i].name + ' ' + contacts[i].email,
-                        "avatar": contacts[i].avatar,
-                        "name": contacts[i].name
-                    });
+        closeTopNoticeBar: function () {
+            if (!app.pageOptions.cur_note) {
+                return false;
+            }
+            var new_info_id = app.pageOptions.cur_note.id;
+            $('#info-bar').addClass('hide');
+            if (navigator.cookieEnabled) {
+                var date = new Date(),
+                    cookies = document.cookie.split('; '),
+                    info_id_exist = false;
+                date.setTime(date.getTime() + 14*24*60*60*1000);
+                new_info_id += '; expires=' + date.toGMTString() + '; path=' + app.config.siteRoot;
+                for (var i = 0, len = cookies.length; i < len; i++) {
+                    if (cookies[i].split('=')[0] == 'info_id') {
+                        info_id_exist = true;
+                        document.cookie = 'info_id=' + cookies[i].split('=')[1] + new_info_id;
+                        break;
+                    }
                 }
-                return contact_list;
-            },
-
-            tokenSeparators: [',', ' '],
-
-            // format items shown in the drop-down menu
-            formatResult: function(item) {
-                if (item.avatar) {
-                    return item.avatar + '<span class="text">' + item.name + '<br />' + item.id + '</span>';
-                } else {
-                    return; // if no match, show nothing
+                if (!info_id_exist) {
+                    document.cookie = 'info_id=' + new_info_id;
                 }
-            },
+            }
+        },
 
-            // format selected item shown in the input
-            formatSelection: function(item) {
-                return item.name || item.id; // if no name, show the email, i.e., when directly input, show the email
-            },
-            escapeMarkup: function(m) { return m; }
+        contactInputOptionsForSelect2: function() {
+            var _this = this;
+            return {
+                placeholder: gettext("Enter emails or select contacts"),
+
+                // with 'tags', the user can directly enter, not just select
+                // tags need `<input type="hidden" />`, not `<select>`
+                tags: function () {
+                    var contacts = app.pageOptions.contacts || [];
+                    var contact_list = [];
+                    for (var i = 0, len = contacts.length; i < len; i++) {
+                        contact_list.push({ // 'id' & 'text' are required by the plugin
+                            "id": contacts[i].email,
+                            // for search. both name & email can be searched.
+                            // use ' '(space) to separate name & email
+                            "text": contacts[i].name + ' ' + contacts[i].email,
+                            "avatar": contacts[i].avatar,
+                            "name": contacts[i].name
+                        });
+                    }
+                    return contact_list;
+                },
+
+                tokenSeparators: [',', ' '],
+
+                // format items shown in the drop-down menu
+                formatResult: function(item) {
+                    if (item.avatar) {
+                        return item.avatar + '<span class="text">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
+                    } else {
+                        return; // if no match, show nothing
+                    }
+                },
+
+                // format selected item shown in the input
+                formatSelection: function(item) {
+                    return _this.HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
+                },
+                escapeMarkup: function(m) { return m; }
+            }
         },
 
         // check if a file is an image
