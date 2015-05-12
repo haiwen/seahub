@@ -15,8 +15,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-09 11:49+0800\n"
-"PO-Revision-Date: 2015-05-09 05:25+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-05-09 13:40+0000\n"
+"Last-Translator: Szabolcs Gyuris <szimszon@oregpreshaz.eu>\n"
 "Language-Team: Hungarian (http://www.transifex.com/projects/p/seahub/language/hu/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -187,7 +187,7 @@ msgstr "Italiano"
 
 #: seahub/settings.py:152
 msgid "日本語"
-msgstr ""
+msgstr "日本語"
 
 #: seahub/settings.py:153
 msgid "한국어"
@@ -3099,7 +3099,7 @@ msgstr "A kötet nem létezik"
 #: seahub/share/views.py:288 seahub/share/views.py:303
 #: seahub/share/views.py:351
 msgid "Invalid argument"
-msgstr ""
+msgstr "Érvénytelen argumentumok"
 
 #: seahub/share/views.py:322 seahub/share/views.py:338
 #: seahub/share/views.py:348 seahub/share/views.py:1259
@@ -3186,7 +3186,7 @@ msgstr "Könyvtárat osztottak meg Önnel itt: %s"
 
 #: seahub/share/views.py:1031 seahub/share/views.py:1328
 msgid "Internal server error, or please check the email(s) you entered"
-msgstr ""
+msgstr "Szerver hiba, vagy ellenőrizd a beadott e-maileket"
 
 #: seahub/share/views.py:1051
 msgid "Please choose a directory."
@@ -3242,11 +3242,11 @@ msgstr "A kötet nem létezik."
 
 #: seahub/share/views.py:1484
 msgid "Directory does not exist."
-msgstr ""
+msgstr "A könyvtár nem létezik."
 
 #: seahub/share/views.py:1572 seahub/share/views.py:1607
 msgid "Please check the email(s) you entered"
-msgstr ""
+msgstr "Ellenőrizd a beadott e-maileket"
 
 #: seahub/share/templates/share/links.html:5
 msgid "Links - Share"
@@ -4225,7 +4225,7 @@ msgstr "Könyvtár kiválasztása:"
 
 #: seahub/templates/libraries.html:199
 msgid "No library is shared to this group"
-msgstr ""
+msgstr "Ehhez a csoporthoz nincs megosztott kötet"
 
 #: seahub/templates/libraries.html:230 seahub/templates/pubrepo.html:45
 msgid "No public library"
@@ -5318,27 +5318,27 @@ msgstr "Vissza a kötethez"
 
 #: seahub/templates/js/lib-op-popups.html:109
 msgid "This library is password protected"
-msgstr ""
+msgstr "Ez a kötet jelszóval van védve"
 
 #: seahub/templates/js/lib-op-popups.html:113
 msgid "*The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "* A jelszó a szerveren 1 órán keresztül tárolva marad."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "A file with the same name already exists in this folder."
-msgstr ""
+msgstr "A fájl ezzel a névvel már létezik a könyvtárban."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "Replacing it will overwrite its content."
-msgstr ""
+msgstr "A cseréje a tartalom felülírásával jár."
 
 #: seahub/templates/js/lib-op-popups.html:121
 msgid "Replace"
-msgstr ""
+msgstr "Csere"
 
 #: seahub/templates/js/lib-op-popups.html:122
 msgid "Don't replace"
-msgstr ""
+msgstr "Ne cserélje"
 
 #: seahub/templates/js/templates.html:8
 #: seahub/templates/snippets/repo_create_form.html:9
@@ -5372,7 +5372,7 @@ msgstr "Jelszó ismét"
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
 msgid "Encrypted"
-msgstr ""
+msgstr "Titkosított"
 
 #: seahub/templates/js/templates.html:117
 #: seahub/templates/snippets/repo_dir_data.html:16
@@ -5384,7 +5384,7 @@ msgstr "Feltöltés"
 
 #: seahub/templates/js/templates.html:132
 msgid "New Folder"
-msgstr ""
+msgstr "Új könyvtár"
 
 #: seahub/templates/js/templates.html:199
 #: seahub/templates/snippets/repo_dirents.html:34
@@ -5398,7 +5398,7 @@ msgstr "További műveletek"
 
 #: seahub/templates/js/templates.html:277
 msgid "Fetch failed"
-msgstr ""
+msgstr "Letöltés sikertelen"
 
 #: seahub/templates/js/templates.html:300
 #: seahub/templates/snippets/file_share_popup.html:6
@@ -5486,19 +5486,19 @@ msgstr "Feltöltési hivatkozás:"
 #: seahub/templates/js/templates.html:395
 #: seahub/templates/js/templates.html:416
 msgid "People:"
-msgstr ""
+msgstr "Emberek:"
 
 #: seahub/templates/js/templates.html:398
 msgid "Groups:"
-msgstr ""
+msgstr "Csoportok:"
 
 #: seahub/templates/js/templates.html:401
 msgid "Permission:"
-msgstr ""
+msgstr "Jogosultság:"
 
 #: seahub/templates/js/templates.html:613
 msgid "Group Permission"
-msgstr ""
+msgstr "Csoport jogosultság"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5962,13 +5962,13 @@ msgstr "Adjon meg legalább egy e-mail címet"
 #: seahub/templates/snippets/shared_link_js.html:378
 #, python-brace-format
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "Sikeresen elküldve ide: {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:205
 #: seahub/templates/snippets/shared_link_js.html:382
 #, python-brace-format
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "Sikertelen küldés ide: {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:273
 msgid "Please enter days"
@@ -6030,29 +6030,29 @@ msgstr "Tulajdonos"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
-msgstr ""
+msgstr "Továbblépéshez erősítsd meg a jelszót"
 
 #: seahub/templates/sysadmin/sudo_mode.html:13
 msgid "Incorrect password"
-msgstr ""
+msgstr "Hibás jelszó"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Tip:"
-msgstr ""
+msgstr "Tipp:"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr ""
+msgstr "Adminisztratív területre lépsz, pár órán keresztül nem fogjuk újrakérni a jelszót."
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:12
 msgid "back to group list"
-msgstr ""
+msgstr "vissza a csoport listához"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:14
 msgid "Group Info"
-msgstr ""
+msgstr "Csoport információ"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:20
 #: seahub/templates/sysadmin/sys_group_admin.html:13
@@ -6063,11 +6063,11 @@ msgstr "Létrehozó"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:60
 msgid "No library has shared to this group"
-msgstr ""
+msgstr "Ehhez a csoporthoz nincs megosztott kötet"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:71
 msgid "admin"
-msgstr ""
+msgstr "adminisztrátor"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
@@ -6333,7 +6333,7 @@ msgstr "Kuka ürítése"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:28
 msgid "Deleted Time"
-msgstr ""
+msgstr "Törlés ideje"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:49
 msgid "No library deleted yet"
@@ -6576,11 +6576,11 @@ msgstr "Titkosított köteteken a bélyegképek nem támogatottak."
 
 #: seahub/thumbnail/views.py:58
 msgid "Wrong path."
-msgstr ""
+msgstr "Hibás útvonal."
 
 #: seahub/thumbnail/views.py:75
 msgid "Please login first."
-msgstr ""
+msgstr "Először jelentkezzen be."
 
 #: seahub/thumbnail/views.py:96
 msgid "Image file is too large."
@@ -6588,7 +6588,7 @@ msgstr "Túl nagy képfájl."
 
 #: seahub/thumbnail/views.py:115
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Bélyegkép készítése sikertelen."
 
 #: seahub/utils/__init__.py:134
 msgid "permission error"
@@ -6686,7 +6686,7 @@ msgstr "Fájl nem érhető el"
 
 #: seahub/views/__init__.py:1435
 msgid "No revisions found"
-msgstr ""
+msgstr "Nem találhatók változatok"
 
 #: seahub/views/__init__.py:1486 seahub/views/__init__.py:1537
 msgid "Failed to restore, please try again later."
@@ -6710,7 +6710,7 @@ msgstr "%(path)s visszaállítása a <a href=\"%(url)s\">gyökérkönyvtárra</a
 #: seahub/views/__init__.py:1832 seahub/views/repo.py:406
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr ""
+msgstr "\"%s\" nem létezik."
 
 #: seahub/views/__init__.py:1873 seahub/views/file.py:889
 msgid "Internal Error"
@@ -6767,12 +6767,12 @@ msgstr "A célútvonal túl hosszú"
 #: seahub/views/ajax.py:837 seahub/views/ajax.py:908
 #, python-format
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "%(name)s sikeresen áthelyezve"
 
 #: seahub/views/ajax.py:865 seahub/views/ajax.py:945
 #, python-format
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "%(name)s másolása sikeres"
 
 #: seahub/views/ajax.py:882 seahub/views/ajax.py:1035
 #, python-format
@@ -6800,11 +6800,11 @@ msgstr "Nincs joga csoportot létrehozni a kötetet."
 
 #: seahub/views/ajax.py:1288
 msgid "Repo not found."
-msgstr ""
+msgstr "A tároló nem található."
 
 #: seahub/views/ajax.py:1316 seahub/views/ajax.py:1340
 msgid "Failed to create sub library, please try again later."
-msgstr ""
+msgstr "Alkötet létrehozás sikertelen, kérem próbálja meg később."
 
 #: seahub/views/ajax.py:1360
 msgid "Failed to get file block list"
@@ -6878,7 +6878,7 @@ msgstr "%(repo_name)s kötet jelszava sikeresen megváltoztatva."
 
 #: seahub/views/ajax.py:2322 seahub/views/ajax.py:2459
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
-msgstr ""
+msgstr "Érvénytelen könyvtár jogosultság, \"rw\" vagy \"r\"-nek kell lennie"
 
 #: seahub/views/ajax.py:2326 seahub/views/ajax.py:2463
 msgid "Path should start with \"/\""
@@ -6886,7 +6886,7 @@ msgstr "Az útvonalnak „/”-rel kell kezdődnie"
 
 #: seahub/views/ajax.py:2330 seahub/views/ajax.py:2467
 msgid "Path should not end with \"/\""
-msgstr ""
+msgstr "Az útvonal nem végződhet \"/\"-tel"
 
 #: seahub/views/ajax.py:2334 seahub/views/ajax.py:2471
 msgid "Invalid path"
@@ -6894,7 +6894,7 @@ msgstr "Érvénytelen útvonal"
 
 #: seahub/views/ajax.py:2342
 msgid "Invalid user, should be registered"
-msgstr ""
+msgstr "Érvénytelen felhasználó, már léteznie kell"
 
 #: seahub/views/ajax.py:2354 seahub/views/ajax.py:2367
 #: seahub/views/ajax.py:2492 seahub/views/ajax.py:2505
@@ -6903,15 +6903,15 @@ msgstr "Sikertelen művelet"
 
 #: seahub/views/ajax.py:2357 seahub/views/ajax.py:2495
 msgid "Wrong folder permission"
-msgstr ""
+msgstr "Hibás könyvtár jogosultság"
 
 #: seahub/views/ajax.py:2370 seahub/views/ajax.py:2508
 msgid "Please add folder permission first"
-msgstr ""
+msgstr "Először adja meg a könyvtár jogosultságot"
 
 #: seahub/views/ajax.py:2417
 msgid "Please check the email(s) you entered and the contacts you selected"
-msgstr ""
+msgstr "Ellenőrizd a beadott e-maileket és a kiválasztott kapcsolatokat"
 
 #: seahub/views/ajax.py:2480
 msgid "Invalid group"
@@ -6924,7 +6924,7 @@ msgstr "Sikertelen"
 
 #: seahub/views/ajax.py:2565 seahub/views/ajax.py:2597
 msgid "Group does not exist."
-msgstr ""
+msgstr "Nem létezik a csoport"
 
 #: seahub/views/file.py:124
 msgid "HTTPError: failed to open file online"
@@ -7097,7 +7097,7 @@ msgstr "Önt meghívták ide: %s"
 #: seahub/views/sysadmin.py:902
 #, python-format
 msgid "Fail to add user %s."
-msgstr ""
+msgstr "Hiba a felhasználó felvételénél: %s."
 
 #: seahub/views/sysadmin.py:915 seahub/views/sysadmin.py:928
 #, python-format

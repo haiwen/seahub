@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-09 11:49+0800\n"
-"PO-Revision-Date: 2015-05-09 05:25+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-05-09 23:02+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -184,7 +184,7 @@ msgstr "Italiano"
 
 #: seahub/settings.py:152
 msgid "日本語"
-msgstr ""
+msgstr "日本語"
 
 #: seahub/settings.py:153
 msgid "한국어"
@@ -3096,7 +3096,7 @@ msgstr "La biblioteca no existe"
 #: seahub/share/views.py:288 seahub/share/views.py:303
 #: seahub/share/views.py:351
 msgid "Invalid argument"
-msgstr ""
+msgstr "Argumento inválido"
 
 #: seahub/share/views.py:322 seahub/share/views.py:338
 #: seahub/share/views.py:348 seahub/share/views.py:1259
@@ -3183,7 +3183,7 @@ msgstr "Una carpeta fue compartida contigo en %s"
 
 #: seahub/share/views.py:1031 seahub/share/views.py:1328
 msgid "Internal server error, or please check the email(s) you entered"
-msgstr ""
+msgstr "Error interno del servidor, o por favor verifique el(los) e-mail(s) ingresado(s)."
 
 #: seahub/share/views.py:1051
 msgid "Please choose a directory."
@@ -3239,11 +3239,11 @@ msgstr "La biblioteca no existe."
 
 #: seahub/share/views.py:1484
 msgid "Directory does not exist."
-msgstr ""
+msgstr "La carpeta no existe."
 
 #: seahub/share/views.py:1572 seahub/share/views.py:1607
 msgid "Please check the email(s) you entered"
-msgstr ""
+msgstr "Por favor verifique el(los) e-mail(s) ingresado(s)"
 
 #: seahub/share/templates/share/links.html:5
 msgid "Links - Share"
@@ -4222,7 +4222,7 @@ msgstr "Elije una carpeta:"
 
 #: seahub/templates/libraries.html:199
 msgid "No library is shared to this group"
-msgstr ""
+msgstr "No se ha compartido ninguna biblioteca con este grupo"
 
 #: seahub/templates/libraries.html:230 seahub/templates/pubrepo.html:45
 msgid "No public library"
@@ -5315,27 +5315,27 @@ msgstr "Regresar a la biblioteca"
 
 #: seahub/templates/js/lib-op-popups.html:109
 msgid "This library is password protected"
-msgstr ""
+msgstr "Esta biblioteca está protegida por contraseña"
 
 #: seahub/templates/js/lib-op-popups.html:113
 msgid "*The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "*La contraseña será mantenida en el servidor solamente durante 1 hora."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "A file with the same name already exists in this folder."
-msgstr ""
+msgstr "Ya existe un archivo con el mismo nombre en esta carpeta."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "Replacing it will overwrite its content."
-msgstr ""
+msgstr "Al reemplazarlo se sobreescribirá su contenido."
 
 #: seahub/templates/js/lib-op-popups.html:121
 msgid "Replace"
-msgstr ""
+msgstr "Reemplazar"
 
 #: seahub/templates/js/lib-op-popups.html:122
 msgid "Don't replace"
-msgstr ""
+msgstr "No reemplazar"
 
 #: seahub/templates/js/templates.html:8
 #: seahub/templates/snippets/repo_create_form.html:9
@@ -5369,7 +5369,7 @@ msgstr "Repetir contraseña"
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
 msgid "Encrypted"
-msgstr ""
+msgstr "Encriptada"
 
 #: seahub/templates/js/templates.html:117
 #: seahub/templates/snippets/repo_dir_data.html:16
@@ -5381,7 +5381,7 @@ msgstr "Subir archivo"
 
 #: seahub/templates/js/templates.html:132
 msgid "New Folder"
-msgstr ""
+msgstr "Nueva Carpeta"
 
 #: seahub/templates/js/templates.html:199
 #: seahub/templates/snippets/repo_dirents.html:34
@@ -5395,7 +5395,7 @@ msgstr "Más Operaciones"
 
 #: seahub/templates/js/templates.html:277
 msgid "Fetch failed"
-msgstr ""
+msgstr "Obtener falló"
 
 #: seahub/templates/js/templates.html:300
 #: seahub/templates/snippets/file_share_popup.html:6
@@ -5483,19 +5483,19 @@ msgstr "Link de Subida:"
 #: seahub/templates/js/templates.html:395
 #: seahub/templates/js/templates.html:416
 msgid "People:"
-msgstr ""
+msgstr "Personas:"
 
 #: seahub/templates/js/templates.html:398
 msgid "Groups:"
-msgstr ""
+msgstr "Grupos:"
 
 #: seahub/templates/js/templates.html:401
 msgid "Permission:"
-msgstr ""
+msgstr "Permiso:"
 
 #: seahub/templates/js/templates.html:613
 msgid "Group Permission"
-msgstr ""
+msgstr "Permiso de grupo"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5959,13 +5959,13 @@ msgstr "Ingresa al menos un correo."
 #: seahub/templates/snippets/shared_link_js.html:378
 #, python-brace-format
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "Enviado con éxito a  {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:205
 #: seahub/templates/snippets/shared_link_js.html:382
 #, python-brace-format
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "Fallo al enviar a  {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:273
 msgid "Please enter days"
@@ -6027,29 +6027,29 @@ msgstr "Propietario"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
-msgstr ""
+msgstr "Confirmar contraseña para continuar"
 
 #: seahub/templates/sysadmin/sudo_mode.html:13
 msgid "Incorrect password"
-msgstr ""
+msgstr "Contraseña incorrecta"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Tip:"
-msgstr ""
+msgstr "Consejo:"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr ""
+msgstr "Está ingresando al área de administración, no se le requerirá la contraseña por unas horas."
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:12
 msgid "back to group list"
-msgstr ""
+msgstr "volver a la lista de grupos"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:14
 msgid "Group Info"
-msgstr ""
+msgstr "Información del Grupo"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:20
 #: seahub/templates/sysadmin/sys_group_admin.html:13
@@ -6060,11 +6060,11 @@ msgstr "Creador"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:60
 msgid "No library has shared to this group"
-msgstr ""
+msgstr "No se ha compartido ninguna biblioteca con este grupo"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:71
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
@@ -6330,7 +6330,7 @@ msgstr "Vaciar Papelera"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:28
 msgid "Deleted Time"
-msgstr ""
+msgstr "Fecha de eliminación"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:49
 msgid "No library deleted yet"
@@ -6573,11 +6573,11 @@ msgstr "Imágenes en miniatura no están disponibles en bibliotecas encriptadas"
 
 #: seahub/thumbnail/views.py:58
 msgid "Wrong path."
-msgstr ""
+msgstr "Ruta incorrecta."
 
 #: seahub/thumbnail/views.py:75
 msgid "Please login first."
-msgstr ""
+msgstr "Por favor ingresar."
 
 #: seahub/thumbnail/views.py:96
 msgid "Image file is too large."
@@ -6585,7 +6585,7 @@ msgstr "El archivo de imagen es demasiado grande."
 
 #: seahub/thumbnail/views.py:115
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Fallo al crear miniatura."
 
 #: seahub/utils/__init__.py:134
 msgid "permission error"
@@ -6683,7 +6683,7 @@ msgstr "Imposible acceder al archivo"
 
 #: seahub/views/__init__.py:1435
 msgid "No revisions found"
-msgstr ""
+msgstr "No se encontraron revisiones"
 
 #: seahub/views/__init__.py:1486 seahub/views/__init__.py:1537
 msgid "Failed to restore, please try again later."
@@ -6707,7 +6707,7 @@ msgstr "Restablecido con éxito %(path)s al <a href=\"%(url)s\">directorio raíz
 #: seahub/views/__init__.py:1832 seahub/views/repo.py:406
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr ""
+msgstr "\"%s\" no existe."
 
 #: seahub/views/__init__.py:1873 seahub/views/file.py:889
 msgid "Internal Error"
@@ -6764,12 +6764,12 @@ msgstr "La ruta de destino es demasiado larga."
 #: seahub/views/ajax.py:837 seahub/views/ajax.py:908
 #, python-format
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "Movido con éxito %(name)s"
 
 #: seahub/views/ajax.py:865 seahub/views/ajax.py:945
 #, python-format
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "Copiado con éxito %(name)s"
 
 #: seahub/views/ajax.py:882 seahub/views/ajax.py:1035
 #, python-format
@@ -6797,11 +6797,11 @@ msgstr "No tienes permiso  para crear una biblioteca"
 
 #: seahub/views/ajax.py:1288
 msgid "Repo not found."
-msgstr ""
+msgstr "Repositorio no encontrado."
 
 #: seahub/views/ajax.py:1316 seahub/views/ajax.py:1340
 msgid "Failed to create sub library, please try again later."
-msgstr ""
+msgstr "Fallo al crear sub-biblioteca, por favor intente mas tarde."
 
 #: seahub/views/ajax.py:1360
 msgid "Failed to get file block list"
@@ -6875,7 +6875,7 @@ msgstr "Actualizado exitosamente la contraseña de la biblioteca %(repo_name)s."
 
 #: seahub/views/ajax.py:2322 seahub/views/ajax.py:2459
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
-msgstr ""
+msgstr "Permiso de carpeta inválido, debe ser \"rw\" o \"r\""
 
 #: seahub/views/ajax.py:2326 seahub/views/ajax.py:2463
 msgid "Path should start with \"/\""
@@ -6883,7 +6883,7 @@ msgstr "La ruta debe comenzar con \"/\""
 
 #: seahub/views/ajax.py:2330 seahub/views/ajax.py:2467
 msgid "Path should not end with \"/\""
-msgstr ""
+msgstr "La ruta no debe terminar con \"/\""
 
 #: seahub/views/ajax.py:2334 seahub/views/ajax.py:2471
 msgid "Invalid path"
@@ -6891,7 +6891,7 @@ msgstr "Ruta inválida"
 
 #: seahub/views/ajax.py:2342
 msgid "Invalid user, should be registered"
-msgstr ""
+msgstr "Usuario inválido, debe estar registrado"
 
 #: seahub/views/ajax.py:2354 seahub/views/ajax.py:2367
 #: seahub/views/ajax.py:2492 seahub/views/ajax.py:2505
@@ -6900,15 +6900,15 @@ msgstr "Operación falló"
 
 #: seahub/views/ajax.py:2357 seahub/views/ajax.py:2495
 msgid "Wrong folder permission"
-msgstr ""
+msgstr "Permiso de carpeta incorrecto"
 
 #: seahub/views/ajax.py:2370 seahub/views/ajax.py:2508
 msgid "Please add folder permission first"
-msgstr ""
+msgstr "Por favor, primero agregue el permiso de la carpeta"
 
 #: seahub/views/ajax.py:2417
 msgid "Please check the email(s) you entered and the contacts you selected"
-msgstr ""
+msgstr "Por favor verifique el(los) e-mail(s) ingresado(s) y el(los) contacto(s) seleccionado(s)"
 
 #: seahub/views/ajax.py:2480
 msgid "Invalid group"
@@ -6921,7 +6921,7 @@ msgstr "Falló"
 
 #: seahub/views/ajax.py:2565 seahub/views/ajax.py:2597
 msgid "Group does not exist."
-msgstr ""
+msgstr "El grupoa no existe."
 
 #: seahub/views/file.py:124
 msgid "HTTPError: failed to open file online"
@@ -7094,7 +7094,7 @@ msgstr "Estás invitado a unirte a %s"
 #: seahub/views/sysadmin.py:902
 #, python-format
 msgid "Fail to add user %s."
-msgstr ""
+msgstr "Fallo al agregar el usuario %s."
 
 #: seahub/views/sysadmin.py:915 seahub/views/sysadmin.py:928
 #, python-format

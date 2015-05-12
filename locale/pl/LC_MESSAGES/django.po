@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-05-09 11:49+0800\n"
-"PO-Revision-Date: 2015-05-09 05:25+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-05-09 19:29+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -185,7 +185,7 @@ msgstr "Italiano"
 
 #: seahub/settings.py:152
 msgid "日本語"
-msgstr ""
+msgstr "日本語"
 
 #: seahub/settings.py:153
 msgid "한국어"
@@ -3103,7 +3103,7 @@ msgstr "Biblioteka nie istnieje"
 #: seahub/share/views.py:288 seahub/share/views.py:303
 #: seahub/share/views.py:351
 msgid "Invalid argument"
-msgstr ""
+msgstr "Nieprawidłowy argument"
 
 #: seahub/share/views.py:322 seahub/share/views.py:338
 #: seahub/share/views.py:348 seahub/share/views.py:1259
@@ -3190,7 +3190,7 @@ msgstr "Został Ci udostępniony folder w %s"
 
 #: seahub/share/views.py:1031 seahub/share/views.py:1328
 msgid "Internal server error, or please check the email(s) you entered"
-msgstr ""
+msgstr "Wewnętrzny błąd serwera lub proszę sprawdzić wpisany e-mail"
 
 #: seahub/share/views.py:1051
 msgid "Please choose a directory."
@@ -3246,11 +3246,11 @@ msgstr "Biblioteka nie istnieje."
 
 #: seahub/share/views.py:1484
 msgid "Directory does not exist."
-msgstr ""
+msgstr "Folder nie istnieje."
 
 #: seahub/share/views.py:1572 seahub/share/views.py:1607
 msgid "Please check the email(s) you entered"
-msgstr ""
+msgstr "Proszę sprawdzić wprowadzony e-mail"
 
 #: seahub/share/templates/share/links.html:5
 msgid "Links - Share"
@@ -4229,7 +4229,7 @@ msgstr "Wybierz folder:"
 
 #: seahub/templates/libraries.html:199
 msgid "No library is shared to this group"
-msgstr ""
+msgstr "Żadna biblioteka nie jest współdzielona w tej grupie"
 
 #: seahub/templates/libraries.html:230 seahub/templates/pubrepo.html:45
 msgid "No public library"
@@ -5322,27 +5322,27 @@ msgstr "Wróć do biblioteki"
 
 #: seahub/templates/js/lib-op-popups.html:109
 msgid "This library is password protected"
-msgstr ""
+msgstr "Ta biblioteka jest chroniona hasłem"
 
 #: seahub/templates/js/lib-op-popups.html:113
 msgid "*The password will be kept in the server for only 1 hour."
-msgstr ""
+msgstr "*Hasło będzie przechowywane na serwerze tylko przez godzinę."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "A file with the same name already exists in this folder."
-msgstr ""
+msgstr "Plik o takiej samej nazwie już istnieje w tym folderze."
 
 #: seahub/templates/js/lib-op-popups.html:120
 msgid "Replacing it will overwrite its content."
-msgstr ""
+msgstr "Zastąpienie go spowoduje nadpisanie jego zawartości."
 
 #: seahub/templates/js/lib-op-popups.html:121
 msgid "Replace"
-msgstr ""
+msgstr "Zastąp"
 
 #: seahub/templates/js/lib-op-popups.html:122
 msgid "Don't replace"
-msgstr ""
+msgstr "Nie zastępuj"
 
 #: seahub/templates/js/templates.html:8
 #: seahub/templates/snippets/repo_create_form.html:9
@@ -5376,7 +5376,7 @@ msgstr "Powtórz hasło"
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
 msgid "Encrypted"
-msgstr ""
+msgstr "Zaszyfrowane"
 
 #: seahub/templates/js/templates.html:117
 #: seahub/templates/snippets/repo_dir_data.html:16
@@ -5388,7 +5388,7 @@ msgstr "Prześlij"
 
 #: seahub/templates/js/templates.html:132
 msgid "New Folder"
-msgstr ""
+msgstr "Nowy folder"
 
 #: seahub/templates/js/templates.html:199
 #: seahub/templates/snippets/repo_dirents.html:34
@@ -5402,7 +5402,7 @@ msgstr "Więcej operacji"
 
 #: seahub/templates/js/templates.html:277
 msgid "Fetch failed"
-msgstr ""
+msgstr "Niepowodzenie pobierania"
 
 #: seahub/templates/js/templates.html:300
 #: seahub/templates/snippets/file_share_popup.html:6
@@ -5490,19 +5490,19 @@ msgstr "Łącze przesyłania: "
 #: seahub/templates/js/templates.html:395
 #: seahub/templates/js/templates.html:416
 msgid "People:"
-msgstr ""
+msgstr "Osoby:"
 
 #: seahub/templates/js/templates.html:398
 msgid "Groups:"
-msgstr ""
+msgstr "Grupy:"
 
 #: seahub/templates/js/templates.html:401
 msgid "Permission:"
-msgstr ""
+msgstr "Uprawnienia:"
 
 #: seahub/templates/js/templates.html:613
 msgid "Group Permission"
-msgstr ""
+msgstr "Uprawnienia grupy:"
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5966,13 +5966,13 @@ msgstr "Proszę podać przynajmniej jeden adres e-mail."
 #: seahub/templates/snippets/shared_link_js.html:378
 #, python-brace-format
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "Pomyślnie wysłano do {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:205
 #: seahub/templates/snippets/shared_link_js.html:382
 #, python-brace-format
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "Nie udało się wysłać do {placeholder}"
 
 #: seahub/templates/snippets/shared_link_js.html:273
 msgid "Please enter days"
@@ -6034,29 +6034,29 @@ msgstr "Właściciel"
 
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
-msgstr ""
+msgstr "Potwierdź hasło, aby kontynuować"
 
 #: seahub/templates/sysadmin/sudo_mode.html:13
 msgid "Incorrect password"
-msgstr ""
+msgstr "Nieprawidłowe hasło"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid "Tip:"
-msgstr ""
+msgstr "Porada:"
 
 #: seahub/templates/sysadmin/sudo_mode.html:24
 msgid ""
 "You are entering admin area, we won't ask for your password again for a few "
 "hours."
-msgstr ""
+msgstr "Wchodzisz do części administracyjnej, nie będziemy już pytać o Twoje hasło przez kilka godzin."
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:12
 msgid "back to group list"
-msgstr ""
+msgstr "wróć do listy grup"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:14
 msgid "Group Info"
-msgstr ""
+msgstr "Informacje o grupie"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:20
 #: seahub/templates/sysadmin/sys_group_admin.html:13
@@ -6067,11 +6067,11 @@ msgstr "Twórca"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:60
 msgid "No library has shared to this group"
-msgstr ""
+msgstr "Żadna biblioteka nie została udostępniona tej grupie"
 
 #: seahub/templates/sysadmin/sys_admin_group_info.html:71
 msgid "admin"
-msgstr ""
+msgstr "admin"
 
 #: seahub/templates/sysadmin/sys_group_admin.html:14
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
@@ -6337,7 +6337,7 @@ msgstr "Opróżnij kosz"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:28
 msgid "Deleted Time"
-msgstr ""
+msgstr "Czas usunięcia"
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:49
 msgid "No library deleted yet"
@@ -6580,11 +6580,11 @@ msgstr "Podgląd obrazów nie jest obsługiwany w szyfrowanych bibliotekach."
 
 #: seahub/thumbnail/views.py:58
 msgid "Wrong path."
-msgstr ""
+msgstr "Nieprawidłowa ścieżka."
 
 #: seahub/thumbnail/views.py:75
 msgid "Please login first."
-msgstr ""
+msgstr "Najpierw się zaloguj."
 
 #: seahub/thumbnail/views.py:96
 msgid "Image file is too large."
@@ -6592,7 +6592,7 @@ msgstr "Plik obrazu jest zbyt duży."
 
 #: seahub/thumbnail/views.py:115
 msgid "Failed to create thumbnail."
-msgstr ""
+msgstr "Nie udało się stworzyć miniaturki."
 
 #: seahub/utils/__init__.py:134
 msgid "permission error"
@@ -6690,7 +6690,7 @@ msgstr "Nie można uzyskać dostępu do pliku"
 
 #: seahub/views/__init__.py:1435
 msgid "No revisions found"
-msgstr ""
+msgstr "Nie odnaleziono rewizji"
 
 #: seahub/views/__init__.py:1486 seahub/views/__init__.py:1537
 msgid "Failed to restore, please try again later."
@@ -6714,7 +6714,7 @@ msgstr "Pomyślnie przywrócono %(path)s do <a href=\"%(url)s\">katalogu główn
 #: seahub/views/__init__.py:1832 seahub/views/repo.py:406
 #, python-format
 msgid "\"%s\" does not exist."
-msgstr ""
+msgstr "\"%s\" nie istnieje."
 
 #: seahub/views/__init__.py:1873 seahub/views/file.py:889
 msgid "Internal Error"
@@ -6771,12 +6771,12 @@ msgstr "Ścieżka docelowa jest zbyt długa."
 #: seahub/views/ajax.py:837 seahub/views/ajax.py:908
 #, python-format
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "Pomyślnie przeniesiono %(name)s"
 
 #: seahub/views/ajax.py:865 seahub/views/ajax.py:945
 #, python-format
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "Pomyślnie skopiowano %(name)s"
 
 #: seahub/views/ajax.py:882 seahub/views/ajax.py:1035
 #, python-format
@@ -6804,11 +6804,11 @@ msgstr "Nie masz uprawnień do tworzenia bibliotek"
 
 #: seahub/views/ajax.py:1288
 msgid "Repo not found."
-msgstr ""
+msgstr "Nie odnaleziono repozytorium."
 
 #: seahub/views/ajax.py:1316 seahub/views/ajax.py:1340
 msgid "Failed to create sub library, please try again later."
-msgstr ""
+msgstr "Nie udało się stworzyć podbiblioteki, proszę spróbować później."
 
 #: seahub/views/ajax.py:1360
 msgid "Failed to get file block list"
@@ -6882,7 +6882,7 @@ msgstr "Pomyślnie zaktualizowano hasło biblioteki %(repo_name)s."
 
 #: seahub/views/ajax.py:2322 seahub/views/ajax.py:2459
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
-msgstr ""
+msgstr "Nieprawidłowe uprawnienia folderu, powinny być \"rw\" lub \"r\""
 
 #: seahub/views/ajax.py:2326 seahub/views/ajax.py:2463
 msgid "Path should start with \"/\""
@@ -6890,7 +6890,7 @@ msgstr "Ścieżka powinna zaczynać się od \"/\""
 
 #: seahub/views/ajax.py:2330 seahub/views/ajax.py:2467
 msgid "Path should not end with \"/\""
-msgstr ""
+msgstr "Ścieżka nie powinna kończyć się znakiem \"/\""
 
 #: seahub/views/ajax.py:2334 seahub/views/ajax.py:2471
 msgid "Invalid path"
@@ -6898,7 +6898,7 @@ msgstr "Nieprawidłowa ścieżka"
 
 #: seahub/views/ajax.py:2342
 msgid "Invalid user, should be registered"
-msgstr ""
+msgstr "Nieprawidłowy użytkownika, powinien być zarejestrowany"
 
 #: seahub/views/ajax.py:2354 seahub/views/ajax.py:2367
 #: seahub/views/ajax.py:2492 seahub/views/ajax.py:2505
@@ -6907,15 +6907,15 @@ msgstr "Operacja zakończona niepowodzeniem"
 
 #: seahub/views/ajax.py:2357 seahub/views/ajax.py:2495
 msgid "Wrong folder permission"
-msgstr ""
+msgstr "Nieprawidłowe uprawnienia folderu"
 
 #: seahub/views/ajax.py:2370 seahub/views/ajax.py:2508
 msgid "Please add folder permission first"
-msgstr ""
+msgstr "Proszę najpierw dodać uprawnienia folderu"
 
 #: seahub/views/ajax.py:2417
 msgid "Please check the email(s) you entered and the contacts you selected"
-msgstr ""
+msgstr "Proszę sprawdzić podany e-mail i wybrane kontakty"
 
 #: seahub/views/ajax.py:2480
 msgid "Invalid group"
@@ -6928,7 +6928,7 @@ msgstr "Niepowodzenie"
 
 #: seahub/views/ajax.py:2565 seahub/views/ajax.py:2597
 msgid "Group does not exist."
-msgstr ""
+msgstr "Grupa nie istnieje."
 
 #: seahub/views/file.py:124
 msgid "HTTPError: failed to open file online"
@@ -7101,7 +7101,7 @@ msgstr "Zostałeś zaproszony do %s"
 #: seahub/views/sysadmin.py:902
 #, python-format
 msgid "Fail to add user %s."
-msgstr ""
+msgstr "Nie udało się dodać użytkownika %s."
 
 #: seahub/views/sysadmin.py:915 seahub/views/sysadmin.py:928
 #, python-format
