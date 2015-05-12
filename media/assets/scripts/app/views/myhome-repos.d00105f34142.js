@@ -59,11 +59,11 @@ define([
             } else {
                 this.$table.hide();
                 this.$emptyTip.show();
-                // Show guide popup when there is no owned repos and guide flag is true.
-                if (app.pageOptions.guide_enabled) {
-                    $('#guide-for-new').modal({appendTo: '#main', focus:false});
-                    app.pageOptions.guide_enabled = false;
-                }
+            }
+
+            if (app.pageOptions.guide_enabled) {
+                $('#guide-for-new').modal({appendTo: '#main', focus:false});
+                app.pageOptions.guide_enabled = false;
             }
         },
 

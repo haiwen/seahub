@@ -2742,7 +2742,7 @@ msgid_plural ""
 "You've got %(num)s new notices on %(site_name)s:\n"
 msgstr[0] "\nУ Вас 1 новое уведомление на %(site_name)s:\n"
 msgstr[1] "\nУ вас %(num)s новых уведомления %(site_name)s:\n"
-msgstr[2] ""
+msgstr[2] "\n"
 msgstr[3] "\nУ вас %(num)s новых уведомлений %(site_name)s:\n"
 
 #: seahub/notifications/templates/notifications/notice_email.html:27
