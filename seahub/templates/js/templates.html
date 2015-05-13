@@ -318,12 +318,14 @@
     <h3 class="hd"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
         <ul class="left-right-tabs-nav fleft"> {# TODO: better var name? #}
+            <% if (!repo_encrypted) { %>
             <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
+            <% } %>
             <% if (!is_dir && is_repo_owner) { %>
             <li class="tab"><a href="#file-private-share" class="a">{% trans "Private Share" %}</a></li>
             <% } %>
             <% if (is_dir) { %>
-                <% if (user_perm == 'rw') { %>
+                <% if (user_perm == 'rw' && !repo_encrypted) { %>
             <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
                 <% } %>
                 <% if (!is_virtual && is_repo_owner) { %>
@@ -334,6 +336,7 @@
 
         <div class="fright">
             <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <% if (!repo_encrypted) { %>
             <div id="download-link-share" class="tabs-panel">
                 <form id="generate-download-link-form" action="" class="hide">
                     <label class="checkbox-label">
@@ -373,9 +376,10 @@
                     </form>
                 </div>
             </div>
+            <% } %>
 
             <% if (is_dir) { %>
-                <% if (user_perm == 'rw') { %>
+                <% if (user_perm == 'rw' && !repo_encrypted) { %>
             <div id="dir-upload-link-share" class="tabs-panel hide">
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <form id="generate-upload-link-form" action="" class="hide">
@@ -411,7 +415,11 @@
                 <% } %>
 
                 <% if (!is_virtual && is_repo_owner) { %>
+                    <% if (!repo_encrypted) { %>
             <div id="dir-private-share" class="tabs-panel hide">
+                    <% } else { %>
+            <div id="dir-private-share" class="tabs-panel"> {# enc lib only has 'dir-private-share' #}
+                    <% } %>
                 <form id="dir-private-share-form" action="" class="hide">
                     <label class="label">{% trans "People:" %}</label><br />
                     <input type="hidden" name="emails" class="w100" /><br />

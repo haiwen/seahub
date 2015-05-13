@@ -169,6 +169,7 @@ define([
                 'is_virtual': dir.is_virtual,
                 'user_perm': dir.user_perm,
                 'repo_id': dir.repo_id,
+                'repo_encrypted': false,
                 'is_dir': this.model.get('is_dir') ? true : false,
                 'dirent_path': dirent_path,
                 'obj_name': obj_name
