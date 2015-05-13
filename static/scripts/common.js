@@ -117,12 +117,11 @@ define([
         showConfirm: function(title, content, yesCallback) {
             var $popup = $("#confirm-popup");
             var $cont = $('#confirm-con');
-            var $container = $('#simplemodal-container');
             var $yesBtn = $('#confirm-yes');
 
             $cont.html('<h3>' + title + '</h3><p>' + content + '</p>');
             $popup.modal({appendTo: '#main'});
-            $container.css({'height':'auto'});
+            $('#simplemodal-container').css({'height':'auto'});
 
             $yesBtn.click(yesCallback);
         },
