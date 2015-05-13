@@ -167,6 +167,7 @@ define([
             var options = {
                 'is_repo_owner': dir.is_repo_owner,
                 'is_virtual': dir.is_virtual,
+                'show_share_link': true,
                 'user_perm': dir.user_perm,
                 'repo_id': dir.repo_id,
                 'is_dir': this.model.get('is_dir') ? true : false,

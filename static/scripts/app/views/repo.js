@@ -89,6 +89,7 @@ define([
         share: function() {
             var options = {
                 'is_repo_owner': true,
+                'show_share_link': this.model.get('encrypted') ? false : true,
                 'is_virtual': this.model.get('virtual'),
                 'user_perm': this.model.get('permission'),
                 'repo_id': this.model.get('id'),
