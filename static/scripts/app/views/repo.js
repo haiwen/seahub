@@ -92,6 +92,7 @@ define([
                 'is_virtual': this.model.get('virtual'),
                 'user_perm': this.model.get('permission'),
                 'repo_id': this.model.get('id'),
+                'repo_encrypted': this.model.get('encrypted'),
                 'is_dir': true,
                 'dirent_path': '/',
                 'obj_name': this.model.get('name')
