@@ -21,6 +21,7 @@ define([
             this.dirent_path = options.dirent_path;
             this.obj_name = options.obj_name;
             this.is_dir = options.is_dir;
+            this.show_share_link = options.show_share_link;
 
             this.render();
 
@@ -33,12 +34,16 @@ define([
 
             this.$("#share-tabs").tabs();
 
-            this.downloadLinkPanelInit();
+            if (this.show_share_link) {
+                this.downloadLinkPanelInit();
+            }
+
             if (!this.is_dir && this.is_repo_owner) {
                 this.filePrivateSharePanelInit();
             }
+
             if (this.is_dir) {
-                if (this.user_perm == 'rw') {
+                if (this.user_perm == 'rw' && this.show_share_link) {
                     this.uploadLinkPanelInit();
                 }
                 if (!this.is_virtual && this.is_repo_owner) {
@@ -54,10 +59,10 @@ define([
                 is_dir: this.is_dir,
                 is_repo_owner: this.is_repo_owner,
                 is_virtual: this.is_virtual,
+                show_share_link: this.show_share_link,
                 user_perm: this.user_perm,
                 repo_id: this.repo_id
             }));
-
             return this;
         },
 
@@ -472,6 +477,7 @@ define([
             });
 
             form.removeClass('hide');
+            this.$('.loading-tip').hide();
         },
 
         dirPrivateShare: function () {
