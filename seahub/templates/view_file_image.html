@@ -10,10 +10,19 @@ html { overflow:hidden; }
     padding:30px 0;
     position:relative;
 }
+.loading-tip {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
 </style>
 {% endblock %}
 
 {% block file_view %}
+<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="loading-tip" />
 <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" />
 {% endblock %}
 
@@ -31,5 +40,8 @@ $(function() {
     setImgMaxHeight();
 });
 $(window).resize(setImgMaxHeight);
+$('#image-view').load(function() {
+    $('#file-view .loading-tip').hide();
+});
 </script>
 {% endblock %}
