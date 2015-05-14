@@ -1,1 +1,1 @@
-请激活您的帐号，完成注册。
+{% load i18n %}{% trans "Account activation on" %} {{ site.name }}
