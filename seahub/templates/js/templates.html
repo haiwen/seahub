@@ -725,3 +725,40 @@
         <th width="16%">{% trans "Shared By" %}</th>
     </tr>
 </script>
+<script type="text/template" id="add-pubrepo-popup-tmpl">
+    <h3 class="hd">{% trans "Add organizaiton library" %}</h3>
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="4%"><!--select--></th>
+                <th width="6%"><!--icon--></th>
+                <th width="40%">{% trans "Name" %}</th>
+                <th width="25%">{% trans "Last Update" %}</th>
+                <th width="25%">{% trans "Permission" %}</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
+</script>
+<script type="text/template" id="add-pubrepo-item-tmpl">
+    <td width="4%" class="select">
+        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+    </td>
+    <td width="6%">
+      <% if (encrypted) { %>
+      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+      <% } else { %>
+      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <% } %>
+    </td>
+    <td width="40%"><a href="#my-libs/lib/<%= id %>" target="_blank"><%- name %></a></td>
+    <td width="25%"><%= mtime_relative %></td>
+    <td width="25%">
+        <select name="permission" class="share-permission-select w100">
+            <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+            <option value="r">{% trans "Read-Only" %}</option>
+        </select>
+    </td>
+</script>

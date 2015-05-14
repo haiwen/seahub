@@ -111,6 +111,7 @@ define([
               case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
               case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
               case 'starred_files': return siteRoot + 'api2/starredfiles/';
+              case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
             }
         },
 

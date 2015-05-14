@@ -3556,3 +3556,21 @@ textarea:-moz-placeholder {/* for FF */
 .select2-result-label .text {
     vertical-align:middle;
 }
+
+/* add repo to public */
+#add-pubrepo-popup {
+    width:500px;
+}
+#add-pubrepo-popup table {
+    margin-bottom:8px;
+}
+#add-pubrepo-popup tbody {
+    display: block;
+    max-height: 150px;
+    width: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+button.add-pub-repo {
+    margin-right:10px;
+}
