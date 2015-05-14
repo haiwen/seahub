@@ -3135,7 +3135,7 @@ class GroupRepos(APIView):
         username = request.user.username
         if is_org_context(request):
             org_id = request.user.org.org_id
-            repos = seaserv.get_org_group_repos(org_id, group.id, username)
+            repos = seafile_api.get_org_group_repos(org_id, group.id)
         else:
             repos = seafile_api.get_repos_by_group(group.id)
 

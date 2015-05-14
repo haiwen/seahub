@@ -1290,7 +1290,11 @@ def sub_repo(request, repo_id):
                             content_type=content_type)
 
     # perm check, only repo owner can create sub repo
-    repo_owner = seafile_api.get_repo_owner(origin_repo.id)
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(origin_repo.id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(origin_repo.id)
+
     is_repo_owner = True if username == repo_owner else False
     if not is_repo_owner:
         result['error'] = _(u"You do not have permission to create library")
@@ -2312,7 +2316,12 @@ def set_user_folder_perm(request, repo_id):
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
 
-    if username != seafile_api.get_repo_owner(repo_id):
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    if username != repo_owner:
         return HttpResponse(json.dumps({"error": _('Permission denied')}),
                             status=403, content_type=content_type)
 
@@ -2449,7 +2458,12 @@ def set_group_folder_perm(request, repo_id):
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
 
-    if username != seafile_api.get_repo_owner(repo_id):
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    if username != repo_owner:
         return HttpResponse(json.dumps({"error": _('Permission denied')}),
                             status=403, content_type=content_type)
 
