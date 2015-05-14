@@ -529,6 +529,9 @@ class Repos(APIView):
             filter_by[f] = True
 
         email = request.user.username
+        if not UserOptions.objects.is_sub_lib_enabled(email):
+            filter_by['sub'] = False
+
         repos_json = []
         if filter_by['mine']:
             owned_repos = get_owned_repo_list(request)
