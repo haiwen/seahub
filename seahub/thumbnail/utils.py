@@ -8,7 +8,7 @@ from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
 
 def get_thumbnail_src(repo_id, obj_id, size):
     return posixpath.join(get_service_url(), "thumbnail", repo_id,
-                          obj_id, size) + "/"
+                          obj_id, str(size)) + "/"
 
 def allow_generate_thumbnail(username, repo, f):
     # check if thumbnail is allowed

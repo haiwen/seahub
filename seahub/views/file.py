@@ -14,6 +14,9 @@ import logging
 import posixpath
 import re
 
+from StringIO import StringIO
+from PIL import Image
+
 from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
@@ -47,6 +50,7 @@ from seahub.share.models import FileShare, PrivateFileDirShare, \
 from seahub.share.forms import SharedLinkPasswordForm
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
+from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils import show_delete_days, render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
     render_permission_error, \
@@ -68,7 +72,9 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT, \
+    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_EXTENSION, \
+    FSIZE_TO_USE_THUMBNAIL, MAX_WIDTH_FOR_THUMBNAIL
 from seahub.views import is_registered_user, check_repo_access_permission, \
     get_unencry_rw_repos_by_user, get_file_access_permission
 
@@ -415,6 +421,37 @@ def _file_view(request, repo_id, path):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
+
+            # print fsize # unit is 'B'
+            # if an image is too large, return a thumbnail of it
+            if ENABLE_THUMBNAIL and fsize > FSIZE_TO_USE_THUMBNAIL:
+                img_max_width = MAX_WIDTH_FOR_THUMBNAIL
+                thumbnail_exists = False
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(img_max_width), obj_id)):
+                    thumbnail_exists = True
+                else:
+                    # create a thumbnail
+                    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(img_max_width))
+                    if not os.path.exists(thumbnail_dir):
+                        os.makedirs(thumbnail_dir)
+                    thumbnail_file = os.path.join(thumbnail_dir, obj_id)
+                    thumbnail_exists = True
+                    if not os.path.exists(thumbnail_file):
+                        try:
+                            f = StringIO(urllib2.urlopen(raw_path).read())
+                            image = Image.open(f)
+                            if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
+                                image = image.convert("RGB")
+                            image.thumbnail((img_max_width, img_max_width), Image.ANTIALIAS)
+                            image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+                            thumbnail_exists = True
+                        except Exception as e:
+                            logger.error(e)
+                            thumbnail_exists = False
+
+                if thumbnail_exists:
+                    raw_path = get_thumbnail_src(repo.id, obj_id, img_max_width) # pseudo raw_path
+
 
         template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     else:

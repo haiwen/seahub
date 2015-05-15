@@ -450,6 +450,10 @@ THUMBNAIL_EXTENSION = 'png'
 THUMBNAIL_DEFAULT_SIZE = '24'
 PREVIEW_DEFAULT_SIZE = '100'
 
+# for image file view
+FSIZE_TO_USE_THUMBNAIL = 1*1024*1024 # 1M. over this size, a thumbnail will be created
+MAX_WIDTH_FOR_THUMBNAIL = 950 # max-width for the created thumbnail
+
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
