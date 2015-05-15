@@ -67,7 +67,7 @@ function check_phantom_js() {
 function run_tests() {
     check_phantom_js
     set +e
-    py.test $nose_opts
+    py.test $nose_opts tests
     rvalue=$?
     if [[ ${TRAVIS} != "" ]]; then
         # On travis-ci, dump seahub logs when test finished
