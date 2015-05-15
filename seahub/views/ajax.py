@@ -423,7 +423,12 @@ def list_lib_dir(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+
+    # perm for current dir
+    user_perm = check_folder_permission(request, repo.id, path)
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -440,10 +445,6 @@ def list_lib_dir(request, repo_id):
         err_msg = _(u'Error: no head commit id')
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
-
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
 
     offset = int(request.GET.get('start', 0))
     file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo, head_commit, path, offset, limit=100)
@@ -474,7 +475,7 @@ def list_lib_dir(request, repo_id):
         d_['last_update'] = translate_seahub_time(d.last_modified)
         p_dpath = posixpath.join(path, d.obj_name)
         d_['p_dpath'] = p_dpath # for 'view_link' & 'dl_link'
-        d_['perm'] = d.permission
+        d_['perm'] = d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
     if not repo.encrypted and ENABLE_THUMBNAIL:
@@ -496,6 +497,7 @@ def list_lib_dir(request, repo_id):
         f_['starred'] = f.starred
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
+        f_['perm'] = f.permission # perm for file in current dir
         if f.is_img:
             f_['is_img'] = f.is_img
         if f.thumbnail_src:
