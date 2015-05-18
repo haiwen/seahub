@@ -62,7 +62,13 @@
                     {% endif %}
 
                     <td>
-                        <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
+                    {% if dirent.is_img and dirent.popup_src %}
+                        <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ dirent.popup_src }}?t={{token}}&p={{path|urlencode}}" data-is-img-popup="true">{{ dirent.props.obj_name }}</a>
+                    {% elif dirent.is_img %}
+		    <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ SITE_ROOT }}repo/{{ repo.props.id }}/raw{{path|urlencode}}{{ dirent.obj_name|urlencode }}" data-is-img-popup="false">{{ dirent.props.obj_name }}</a>
+                    {% else %}
+                        <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="false">{{ dirent.props.obj_name }}</a>
+                    {% endif %}
                     </td>
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>
@@ -80,7 +86,12 @@
     </div>
 {% endblock %}
 
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/magnific-popup.css?t=1431984103" />
+{% endblock %}
 {% block extra_script %}
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.magnific-popup.js?t=1431984103"></script>
+
 <script type="text/javascript">
 $(function() {
     {% if traffic_over_limit %}
@@ -88,6 +99,8 @@ $(function() {
     $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
     {% endif %}
 });
+
+var cur_path = "{{path|escapejs}}";
 
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 // get thumbnails for image files
@@ -121,5 +134,59 @@ $(function() {
     get_thumbnail(0);
 });
 {% endif %}
+
+$(function() {
+    $('.repo-file-list').magnificPopup({
+        type: 'image',
+        delegate: '.img-name-link',
+        tClose: '{% trans "Close (Esc)" %}', // Alt text on close button
+        tLoading: '{% trans "Loading..." %}', // Text that is displayed during loading. Can contain %curr% and %total% keys
+        gallery: {
+            enabled: true,
+            tPrev: '{% trans "Previous (Left arrow key)" %}', // Alt text on left arrow
+            tNext: '{% trans "Next (Right arrow key)" %}', // Alt text on right arrow
+            tCounter: '{% trans "%curr% of %total%" %}' // Markup for "1 of 7" counter
+        },
+{% if not repo.encrypted and ENABLE_THUMBNAIL and ENABLE_THUMBNAIL_POPUP %}
+        callbacks: {
+            elementParse: function(item) {
+
+                // popup thumbnails disabled
+                if (!$(item.el[0]).data('is-img'))
+                    return;
+
+                // popup image already generated
+                if ($(item.el[0]).data('popup-src')) {
+                    item.src = $(item.el[0]).data('popup-src');
+                    return;
+                }
+
+                // render big thumbnail
+                var file_name = item.el[0].innerText;
+                $.ajax({
+                    url: '{% url "thumbnail_popup" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
+                    async: false,
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        item.src = data.thumbnail_src
+                        $(item.el[0]).data('popup-src', item.src);
+                    }
+                });
+            },
+        },
+{% endif %}
+        image: {
+            titleSrc: function(item) {
+                var el = item.el;
+                var img_name = el[0].innerHTML;
+                var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + '{% trans "Open in New Tab" %}' + '</a>';
+                return img_name + '<br />' + img_link;
+            },
+            tError: '{% trans '<a href="%url%" target="_blank">The image</a> could not be loaded.' %}' // Error message when image could not be loaded
+        }
+    });
+});
+
 </script>
 {% endblock %}

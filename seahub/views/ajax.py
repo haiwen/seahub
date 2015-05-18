@@ -58,7 +58,8 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
-from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
+from seahub.thumbnail.utils import get_thumbnail_src, \
+    allow_generate_thumbnail, allow_generate_thumbnail_popup
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
@@ -302,6 +303,8 @@ def list_dir(request, repo_id):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+        if allow_generate_thumbnail_popup(username, repo, f):
+            f.allow_generate_thumbnail_popup = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, POPUP_DEFAULT_SIZE, f.obj_id)):
                 f.popup_src = get_thumbnail_src(repo.id, f.obj_id, POPUP_DEFAULT_SIZE)
 
