@@ -733,14 +733,13 @@ def delete_dirents(request, repo_id):
 
     # permission checking
     username = request.user.username
-    if check_folder_permission(request, repo.id, parent_dir) != 'rw':
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                status=403, content_type=content_type)
-
     deleted = []
     undeleted = []
     for dirent_name in dirents_names:
+        full_path = os.path.join(parent_dir, dirent_name)
+        if check_folder_permission(request, repo.id, full_path) != 'rw':
+            undeleted.append(dirent_name)
+            continue
         try:
             seafile_api.del_file(repo_id, parent_dir, dirent_name, username)
             deleted.append(dirent_name)
