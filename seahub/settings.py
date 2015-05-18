@@ -449,7 +449,6 @@ THUMBNAIL_LARGE = '100'
 
 # for thumbnail: height(px) and width(px)
 THUMBNAIL_DEFAULT_SIZE = '24'
-PREVIEW_DEFAULT_SIZE = '100'
 
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30

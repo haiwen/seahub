@@ -33,7 +33,7 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_commit_before_new_merge, user_traffic_over_limit, render_error
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
-    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
+    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
@@ -277,8 +277,7 @@ def render_repo(request, repo):
             'server_crypto': server_crypto,
             'sub_lib_enabled': sub_lib_enabled,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
-            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -437,8 +436,7 @@ def view_shared_dir(request, token):
             'dir_list': dir_list,
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
-            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL
             }, context_instance=RequestContext(request))
 
 def view_shared_upload_link(request, token):
