@@ -76,7 +76,7 @@ define([
                             // render big thumbnail
                             var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
                             $.ajax({
-                                url: Common.getUrl({name: 'thumbnail_popup', repo_id: repo_id, size: 1024}),
+                                url: Common.getUrl({name: 'thumbnail_popup', repo_id: repo_id}),
                                 data: {'path': cur_img_path},
                                 async: false,
                                 cache: false,
