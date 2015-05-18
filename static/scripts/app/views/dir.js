@@ -56,7 +56,7 @@ define([
                             var repo_id = _this.dir.repo_id,
                                 cur_path = _this.dir.path,
                                 cur_img = _this.dir.find(function(dirent) {
-                                    return dirent.get('obj_name') == item.el[0].innerText;
+                                    return dirent.get('obj_name') == $(item.el[0]).data('name');
                                 });
 
                             // couldn't find file record
