@@ -38,6 +38,7 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
+                var _this = this;
 
                 this.$el.magnificPopup({
                     type: 'image',
@@ -49,6 +50,45 @@ define([
                         tPrev: gettext("Previous (Left arrow key)"), // Alt text on left arrow
                         tNext: gettext("Next (Right arrow key)"), // Alt text on right arrow
                         tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
+                    },
+                    callbacks: {
+                        elementParse: function(item) {
+                            var repo_id = _this.dir.repo_id,
+                                cur_path = _this.dir.path,
+                                cur_img = _this.dir.find(function(dirent) {
+                                    return dirent.get('obj_name') == item.el[0].innerText;
+                                });
+
+                            // couldn't find file record
+                            if (!cur_img)
+                                return;
+
+                            // popup thumbnails disabled
+                            if (!cur_img.get('is_img_popup'))
+                                return;
+
+                            // popup image already generated
+                            if (cur_img.get('popup_src')) {
+                                item.src = cur_img.get('popup_src');
+                                return;
+                            }
+
+                            // render big thumbnail
+                            var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
+                            $.ajax({
+                                url: Common.getUrl({name: 'thumbnail_popup', repo_id: repo_id, size: 1024}),
+                                data: {'path': cur_img_path},
+                                async: false,
+                                cache: false,
+                                dataType: 'json',
+                                success: function(data) {
+                                    item.src = data.thumbnail_src
+                                    cur_img.set({
+                                        'popup_src': data.thumbnail_src
+                                    });
+                                }
+                            });
+                        },
                     },
                     image: {
                         titleSrc: function(item) {

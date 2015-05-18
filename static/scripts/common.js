@@ -83,6 +83,7 @@ define([
               case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
               case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
               case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
+              case 'thumbnail_popup': return siteRoot + 'thumbnail/' + options.repo_id + '/popup/';
               case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
               case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
               case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
