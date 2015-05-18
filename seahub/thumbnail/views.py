@@ -18,7 +18,7 @@ from seahub.views import check_repo_access_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_EXTENSION_LARGE, THUMBNAIL_ROOT, ENABLE_THUMBNAIL, \
     THUMBNAIL_LARGE, THUMBNAIL_IMAGE_SIZE_LIMIT, \
-    ENABLE_THUMBNAIL_POPUP, POPUP_DEFAULT_SIZE
+    ENABLE_THUMBNAIL_LARGE, THUMBNAIL_LARGE_SIZE
 
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.share.models import FileShare
@@ -132,7 +132,7 @@ def thumbnail_create(request, repo_id, default_size = None):
     result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-def thumbnail_popup(request, repo_id):
+def thumbnail_large(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     if not request.is_ajax():
@@ -140,12 +140,12 @@ def thumbnail_popup(request, repo_id):
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
-    if not ENABLE_THUMBNAIL_POPUP:
+    if not ENABLE_THUMBNAIL_LARGE:
         err_msg = _(u"Popup Thumbnail function is not enabled.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
-    return thumbnail_create(request, repo_id, POPUP_DEFAULT_SIZE)
+    return thumbnail_create(request, repo_id, THUMBNAIL_LARGE_SIZE)
 
 def latest_entry(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     thumbnail_path = os.path.join(THUMBNAIL_ROOT, size, obj_id)

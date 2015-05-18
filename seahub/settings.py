@@ -453,9 +453,9 @@ THUMBNAIL_DEFAULT_SIZE = '24'
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
-# use preview images for popup image viewer
-ENABLE_THUMBNAIL_POPUP = True
-POPUP_DEFAULT_SIZE = '1280'
+# use larger preview images for lightbox image viewer
+ENABLE_THUMBNAIL_LARGE = True
+THUMBNAIL_LARGE_SIZE = '1280'
 
 #####################
 # Folder Permission #

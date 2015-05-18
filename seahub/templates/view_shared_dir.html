@@ -62,10 +62,10 @@
                     {% endif %}
 
                     <td>
-                    {% if dirent.is_img and dirent.popup_src %}
-                        <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ dirent.popup_src }}?t={{token}}&p={{path|urlencode}}" data-is-img-popup="true">{{ dirent.props.obj_name }}</a>
+                    {% if dirent.is_img and dirent.thumbnail_large_src %}
+                        <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ dirent.thumbnail_large_src }}?t={{token}}&p={{path|urlencode}}" data-is-thumbnail-large="true">{{ dirent.props.obj_name }}</a>
                     {% elif dirent.is_img %}
-		    <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ SITE_ROOT }}repo/{{ repo.props.id }}/raw{{path|urlencode}}{{ dirent.obj_name|urlencode }}" data-is-img-popup="false">{{ dirent.props.obj_name }}</a>
+                        <a class="normal img-name-link" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="true" data-mfp-src="{{ SITE_ROOT }}repo/{{ repo.props.id }}/raw{{path|urlencode}}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
                     {% else %}
                         <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-is-img="false">{{ dirent.props.obj_name }}</a>
                     {% endif %}
@@ -147,7 +147,7 @@ $(function() {
             tNext: '{% trans "Next (Right arrow key)" %}', // Alt text on right arrow
             tCounter: '{% trans "%curr% of %total%" %}' // Markup for "1 of 7" counter
         },
-{% if not repo.encrypted and ENABLE_THUMBNAIL and ENABLE_THUMBNAIL_POPUP %}
+{% if not repo.encrypted and ENABLE_THUMBNAIL and ENABLE_THUMBNAIL_LARGE %}
         callbacks: {
             elementParse: function(item) {
 
@@ -156,21 +156,21 @@ $(function() {
                     return;
 
                 // popup image already generated
-                if ($(item.el[0]).data('popup-src')) {
-                    item.src = $(item.el[0]).data('popup-src');
+                if ($(item.el[0]).data('is-thumbnail-large')) {
                     return;
                 }
 
                 // render big thumbnail
                 var file_name = item.el[0].innerText;
                 $.ajax({
-                    url: '{% url "thumbnail_popup" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
+                    url: '{% url "thumbnail_large" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
                     async: false,
                     cache: false,
                     dataType: 'json',
                     success: function(data) {
                         item.src = data.thumbnail_src
-                        $(item.el[0]).data('popup-src', item.src);
+                        $(item.el[0]).data('is-thumbnail-large', true);
+                        $(item.el[0]).data('mfp-src', item.src);
                     }
                 });
             },

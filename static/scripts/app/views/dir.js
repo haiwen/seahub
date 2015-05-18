@@ -63,20 +63,20 @@ define([
                             if (!cur_img)
                                 return;
 
-                            // popup thumbnails disabled
-                            if (!cur_img.get('is_img_popup'))
+                            // large thumbnails disabled
+                            if (!cur_img.get('is_thumbnail_large'))
                                 return;
 
-                            // popup image already generated
-                            if (cur_img.get('popup_src')) {
-                                item.src = cur_img.get('popup_src');
+                            // downscaled image already generated
+                            if (cur_img.get('thumbnail_large_src')) {
+                                item.src = cur_img.get('thumbnail_large_src');
                                 return;
                             }
 
                             // render big thumbnail
                             var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
                             $.ajax({
-                                url: Common.getUrl({name: 'thumbnail_popup', repo_id: repo_id}),
+                                url: Common.getUrl({name: 'thumbnail_large', repo_id: repo_id}),
                                 data: {'path': cur_img_path},
                                 async: false,
                                 cache: false,
@@ -84,7 +84,7 @@ define([
                                 success: function(data) {
                                     item.src = data.thumbnail_src
                                     cur_img.set({
-                                        'popup_src': data.thumbnail_src
+                                        'thumbnail_large_src': data.thumbnail_src
                                     });
                                 }
                             });

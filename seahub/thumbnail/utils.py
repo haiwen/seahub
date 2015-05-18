@@ -4,7 +4,7 @@ from seaserv import seafile_api
 
 from seahub.utils import get_service_url, get_file_type_and_ext
 from seahub.utils.file_types import IMAGE
-from seahub.settings import ENABLE_THUMBNAIL, ENABLE_THUMBNAIL_POPUP, \
+from seahub.settings import ENABLE_THUMBNAIL, ENABLE_THUMBNAIL_LARGE, \
     THUMBNAIL_IMAGE_SIZE_LIMIT
 
 def get_thumbnail_src(repo_id, obj_id, size):
@@ -24,8 +24,8 @@ def allow_generate_thumbnail(username, repo, f):
     else:
         return False
 
-def allow_generate_thumbnail_popup(username, repo, f):
-    if allow_generate_thumbnail(username, repo, f) and ENABLE_THUMBNAIL_POPUP:
+def allow_generate_thumbnail_large(username, repo, f):
+    if allow_generate_thumbnail(username, repo, f) and ENABLE_THUMBNAIL_LARGE:
         return True
     else:
         return False

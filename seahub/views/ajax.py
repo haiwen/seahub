@@ -48,7 +48,7 @@ from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
-    ENABLE_FOLDER_PERM, ENABLE_THUMBNAIL_POPUP, POPUP_DEFAULT_SIZE
+    ENABLE_FOLDER_PERM, ENABLE_THUMBNAIL_LARGE, THUMBNAIL_LARGE_SIZE
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
@@ -59,7 +59,7 @@ from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, \
-    allow_generate_thumbnail, allow_generate_thumbnail_popup
+    allow_generate_thumbnail, allow_generate_thumbnail_large
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
@@ -303,10 +303,10 @@ def list_dir(request, repo_id):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
-        if allow_generate_thumbnail_popup(username, repo, f):
-            f.allow_generate_thumbnail_popup = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, POPUP_DEFAULT_SIZE, f.obj_id)):
-                f.popup_src = get_thumbnail_src(repo.id, f.obj_id, POPUP_DEFAULT_SIZE)
+        if allow_generate_thumbnail_large(username, repo, f):
+            f.allow_generate_thumbnail_large = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, f.obj_id)):
+                f.thumbnail_large_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_LARGE_SIZE)
 
     ctx = {
         'repo': repo,
@@ -328,7 +328,7 @@ def list_dir(request, repo_id):
         'current_commit': head_commit,
         'info_commit': info_commit,
         'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-        'ENABLE_THUMBNAIL_POPUP': ENABLE_THUMBNAIL_POPUP,
+        'ENABLE_THUMBNAIL_LARGE': ENABLE_THUMBNAIL_LARGE,
     }
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
@@ -397,8 +397,10 @@ def list_dir_more(request, repo_id):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, POPUP_DEFAULT_SIZE, f.obj_id)):
-                f.popup_src = get_thumbnail_src(repo.id, f.obj_id, POPUP_DEFAULT_SIZE)
+        if allow_generate_thumbnail(username, repo, f):
+            f.allow_generate_thumbnail_large = True
+            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, f.obj_id)):
+                f.thumbnail_large_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_LARGE_SIZE)
 
     ctx = {
         'repo': repo,
@@ -410,7 +412,7 @@ def list_dir_more(request, repo_id):
         'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
         'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-        'ENABLE_THUMBNAIL_POPUP': ENABLE_THUMBNAIL_POPUP,
+        'ENABLE_THUMBNAIL_LARGE': ENABLE_THUMBNAIL_LARGE,
     }
     html = render_to_string('snippets/repo_dirents.html', ctx,
                             context_instance=RequestContext(request))
@@ -496,14 +498,14 @@ def list_lib_dir(request, repo_id):
                 if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
                     f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL_POPUP:
-        size = POPUP_DEFAULT_SIZE
+    if not repo.encrypted and ENABLE_THUMBNAIL_LARGE:
+        size = THUMBNAIL_LARGE_SIZE
         for f in file_list:
             file_type, file_ext = get_file_type_and_ext(f.obj_name)
             if file_type == IMAGE:
-                f.is_img_popup = True
+                f.is_thumbnail_large = True
                 if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.popup_src = get_thumbnail_src(repo.id, f.obj_id, size)
+                    f.thumbnail_large_src = get_thumbnail_src(repo.id, f.obj_id, size)
 
     for f in file_list:
         f_ = {}
@@ -520,10 +522,10 @@ def list_lib_dir(request, repo_id):
             f_['is_img'] = f.is_img
         if f.thumbnail_src:
             f_['thumbnail_src'] = f.thumbnail_src
-        if f.is_img_popup:
-            f_['is_img_popup'] = f.is_img_popup
-        if f.popup_src:
-            f_['popup_src'] = f.popup_src
+        if f.is_thumbnail_large:
+            f_['is_thumbnail_large'] = f.is_thumbnail_large
+        if f.thumbnail_large_src:
+            f_['thumbnail_large_src'] = f.thumbnail_large_src
         dirent_list.append(f_)
 
     result["dirent_list"] = dirent_list
