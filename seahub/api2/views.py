@@ -66,7 +66,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events, calculate_repos_last_modify
+    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -2623,7 +2623,13 @@ class SharedRepo(APIView):
         Share a repo to users/groups/public.
         """
         username = request.user.username
-        if not seafile_api.is_repo_owner(username, repo_id):
+
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if username != repo_owner:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to share library.')
 
@@ -2715,8 +2721,22 @@ class SharedRepo(APIView):
                 try:
                     seafile_api.add_inner_pub_repo(repo_id, permission)
                 except SearpcError, e:
+                    logger.error(e)
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                                     "Searpc Error: " + e.msg)
+                                     'Failed to share library to public.')
+            else:
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    try:
+                        seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(org_id, repo_id, permission)
+                        send_perm_audit_msg('add-repo-perm', username, 'all', repo_id, '/', permission)
+                    except SearpcError, e:
+                        logger.error(e)
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                         'Failed to share library to public.')
+                else:
+                    return api_error(status.HTTP_403_FORBIDDEN,
+                                     'Failed to share library to public.')
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                     'share_type can only be personal or group or public.')
