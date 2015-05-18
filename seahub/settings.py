@@ -445,7 +445,7 @@ else:
 # set mimetype (for small and lage thumbnails >= THUMBMAIL_LARGE)
 THUMBNAIL_EXTENSION = 'png'
 THUMBNAIL_EXTENSION_LARGE = 'jpeg'
-THUMBMAIL_LARGE = '100'
+THUMBNAIL_LARGE = '100'
 
 # for thumbnail: height(px) and width(px)
 THUMBNAIL_DEFAULT_SIZE = '24'
