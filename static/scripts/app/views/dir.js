@@ -93,7 +93,7 @@ define([
                     image: {
                         titleSrc: function(item) {
                             var el = item.el;
-                            var img_name = el[0].innerHTML;
+                            var img_name = $(item.el[0]).data('name');
                             var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
                             return img_name + '<br />' + img_link;
                         },
