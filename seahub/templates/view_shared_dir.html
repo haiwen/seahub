@@ -1,6 +1,7 @@
 {% extends base_template %}
 
 {% load seahub_tags i18n %}
+{% load staticfiles %}
 {% load url from future %}
 
 {% block main_panel %}
@@ -87,10 +88,10 @@
 {% endblock %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/magnific-popup.css?t=1431984103" />
+<link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
 {% endblock %}
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.magnific-popup.js?t=1431984103"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
 
 <script type="text/javascript">
 $(function() {
