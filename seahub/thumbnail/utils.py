@@ -11,21 +11,21 @@ def get_thumbnail_src(repo_id, obj_id, size):
     return posixpath.join(get_service_url(), "thumbnail", repo_id,
                           obj_id, size) + "/"
 
-def allow_generate_thumbnail(username, repo, f):
+def allow_generate_thumbnail(username, repo, file_name, file_size):
     # check if thumbnail is allowed
     if seafile_api.check_repo_access_permission(repo.id, username) is None:
         # user can not access repo
         return False
 
-    file_type, file_ext = get_file_type_and_ext(f.obj_name)
+    file_type, file_ext = get_file_type_and_ext(file_name)
     if not repo.encrypted and file_type == IMAGE and ENABLE_THUMBNAIL \
-        and f.file_size < THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
+        and file_size < THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
         return True
     else:
         return False
 
-def allow_generate_thumbnail_large(username, repo, f):
-    if allow_generate_thumbnail(username, repo, f) and ENABLE_THUMBNAIL_LARGE:
+def allow_generate_thumbnail_large(username, repo, file_name, file_size):
+    if ENABLE_THUMBNAIL_LARGE and allow_generate_thumbnail(username, repo, file_name, file_size):
         return True
     else:
         return False

@@ -244,7 +244,7 @@ def render_repo(request, repo):
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        if allow_generate_thumbnail(username, repo, f.obj_name, f.file_size):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
@@ -428,11 +428,11 @@ def view_shared_dir(request, token):
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
         if file_type == IMAGE:
             f.is_img = True
-        if allow_generate_thumbnail(username, repo, f):
+        if allow_generate_thumbnail(username, repo, f.obj_name, f.file_size):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
-        if allow_generate_thumbnail_large(username, repo, f):
+        if allow_generate_thumbnail_large(username, repo, f.obj_name, f.file_size):
             f.allow_generate_thumbnail_large = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, f.obj_id)):
                 f.thumbnail_large_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_LARGE_SIZE)
