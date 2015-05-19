@@ -37,9 +37,22 @@ For details please refer to 'snippets/file_content_js.html'.
                 {% endif %}
             </div>
             {% endif %}
-            <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
+
+            {% if thumbnail_large_src %}
+            <a class="img-name-link" href="{{ raw_path }}" data-name="{{ file_name }}" data-is-img="true" data-mfp-src="{{ thumbnail_large_src }}?t={{ token }}&p={{ path|urlencode }}" data-is-thumbnail-large="true">
+              <img src="{{ thumbnail_large_src }}" alt="{{ file_name }}" id="image-view" class="vh" />
+            </a>
+            {% elif allow_thumbnail_large %}
+            <a class="img-name-link" href="{{ raw_path }}" data-name="{{ file_name }}" data-is-img="true" data-mfp-src="{{ raw_path }}" data-is-thumbnail-large="false">
+              <img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="{{ file_name }}" id="image-view" />
+            </a>
+            {% else %}
+            <a class="img-name-link" href="{{ raw_path }}" data-name="{{ file_ame }}" data-is-img="true" data-mfp-src="{{ raw_path }}" data-is-thumbnail-large="false">
+              <img src="{{ raw_path }}" alt="{{ file_name }}" id="image-view" class="vh" />
+            </a>
+            {% endif %}
         {% endif %}
-        
+
         {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %} 
             {% include 'snippets/office_convert_html.html' %}
         {% endif %}

@@ -68,9 +68,14 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT, \
+    ENABLE_THUMBNAIL, ENABLE_THUMBNAIL_LARGE, \
+    THUMBNAIL_LARGE_SIZE, THUMBNAIL_ROOT
 from seahub.views import is_registered_user, check_repo_access_permission, \
     get_unencry_rw_repos_by_user, get_file_access_permission
+
+from seahub.thumbnail.utils import get_thumbnail_src, \
+    allow_generate_thumbnail, allow_generate_thumbnail_large
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -666,6 +671,8 @@ def view_shared_file(request, token):
                                                            use_onetime=False)
     raw_path = gen_file_get_url(access_token, filename)
     inner_path = gen_inner_file_get_url(access_token, filename)
+    allow_thumbnail_large = None
+    thumbnail_large_src = None
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
@@ -688,6 +695,11 @@ def view_shared_file(request, token):
                 ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
+        elif filetype == IMAGE:
+            if allow_generate_thumbnail_large(shared_by, repo, filename, file_size):
+                allow_thumbnail_large = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, obj_id)):
+                    thumbnail_large_src = get_thumbnail_src(repo.id, obj_id, THUMBNAIL_LARGE_SIZE)
 
     # Increase file shared link view_cnt, this operation should be atomic
     fileshare.view_cnt = F('view_cnt') + 1
@@ -730,6 +742,10 @@ def view_shared_file(request, token):
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'ENABLE_THUMBNAIL_LARGE': ENABLE_THUMBNAIL_LARGE,
+            'allow_thumbnail_large': allow_thumbnail_large,
+            'thumbnail_large_src': thumbnail_large_src,
             }, context_instance=RequestContext(request))
 
 def view_raw_shared_file(request, token, obj_id, file_name):
@@ -804,6 +820,8 @@ def view_file_via_shared_dir(request, token):
 
     img_prev = None
     img_next = None
+    allow_thumbnail_large = None
+    thumbnail_large_src = None
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
@@ -830,6 +848,11 @@ def view_file_via_shared_dir(request, token):
                                                            current_commit.id, parent_dir)
             if not dirs:
                 raise Http404
+
+            if allow_generate_thumbnail_large(shared_by, repo, filename, file_size):
+                allow_thumbnail_large = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, obj_id)):
+                    thumbnail_large_src = get_thumbnail_src(repo.id, obj_id, THUMBNAIL_LARGE_SIZE)
 
             img_list = []
             for dirent in dirs:
@@ -882,6 +905,10 @@ def view_file_via_shared_dir(request, token):
             'img_prev': img_prev,
             'img_next': img_next,
             'traffic_over_limit': traffic_over_limit,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'ENABLE_THUMBNAIL_LARGE': ENABLE_THUMBNAIL_LARGE,
+            'allow_thumbnail_large': allow_thumbnail_large,
+            'thumbnail_large_src': thumbnail_large_src,
             }, context_instance=RequestContext(request))
 
 def file_edit_submit(request, repo_id):
