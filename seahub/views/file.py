@@ -377,6 +377,8 @@ def _file_view(request, repo_id, path):
 
     img_prev = None
     img_next = None
+    allow_thumbnail_large = None
+    thumbnail_large_src = None
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'html_exists': False,
                 'filetype': filetype}
@@ -405,6 +407,11 @@ def _file_view(request, repo_id, path):
                                                            current_commit.id, parent_dir)
             if not dirs:
                 raise Http404
+
+            if allow_generate_thumbnail_large(username, repo, u_filename, fsize):
+                allow_thumbnail_large = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_LARGE_SIZE, obj_id)):
+                    thumbnail_large_src = get_thumbnail_src(repo.id, obj_id, THUMBNAIL_LARGE_SIZE)
 
             img_list = []
             for dirent in dirs:
@@ -496,6 +503,10 @@ def _file_view(request, repo_id, path):
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
             'office_preview_token': office_preview_token,
+            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'ENABLE_THUMBNAIL_LARGE': ENABLE_THUMBNAIL_LARGE,
+            'allow_thumbnail_large': allow_thumbnail_large,
+            'thumbnail_large_src': thumbnail_large_src,
             }, context_instance=RequestContext(request))
 
 def view_history_file_common(request, repo_id, ret_dict):

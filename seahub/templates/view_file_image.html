@@ -1,8 +1,10 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 {% load url from future %}
+{% load staticfiles %}
 
 {% block extra_style %}{{block.super}}
+<link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
 <style type="text/css">
 #file-view { text-align:center; padding:30px 0; }
 </style>
@@ -23,10 +25,23 @@
 </div>
 {% endif %}
 
-<img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
+{% if thumbnail_large_src %}
+<a class="img-name-link" href="{{ raw_path }}" data-name="{{ filename }}" data-is-img="true" data-mfp-src="{{ thumbnail_large_src }}?t={{ token }}&p={{ path|urlencode }}" data-is-thumbnail-large="true">
+  <img src="{{ thumbnail_large_src }}" alt="{{ filename }}" id="image-view" class="vh" />
+</a>
+{% elif allow_thumbnail_large %}
+<a class="img-name-link" href="{{ raw_path }}" data-name="{{ filename }}" data-is-img="true" data-mfp-src="{{ raw_path }}" data-is-thumbnail-large="false">
+  <img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="{{ filename }}" id="image-view" />
+</a>
+{% else %}
+<a class="img-name-link" href="{{ raw_path }}" data-name="{{ filename }}" data-is-img="true" data-mfp-src="{{ raw_path }}" data-is-thumbnail-large="false">
+  <img src="{{ raw_path }}" alt="{{ filename }}" id="image-view" class="vh" />
+</a>
+{% endif %}
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
 
 <script type="text/javascript">
 {% if img_prev or img_next %}
@@ -52,22 +67,109 @@ $('body').bind('keydown', function(e) {
 })
 {% endif %}
 
-window.onload = function () {
-    var img = $('#image-view');
-    var img_h = img.outerHeight();
-    var file_view_h = parseInt($('#file-view').css('min-height'));
-    {% if img_prev or img_next %}
-    var prev_next_h = $('#img-prev-next').outerHeight(true);
-    {% else %}
-    var prev_next_h = 0;
-    {% endif %}
-    if (img_h < file_view_h - prev_next_h) {
-        img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
-    }
-    if (img.width() > 946) {
-        img.width(946);
-    }
-    img.removeClass('vh');
-}
+var path_file_name = "{{path|escapejs}}",
+    image_view_resize = function () {
+        var img = $('#image-view'),
+            img_h = img.outerHeight(),
+            max_width = 946, //max_width = $(window).width() < 946 ? $(window).width() : 946,
+            file_view_h = parseInt($('#file-view').css('min-height'));
+        {% if img_prev or img_next %}
+        var prev_next_h = $('#img-prev-next').outerHeight(true);
+        {% else %}
+        var prev_next_h = 0;
+        {% endif %}
+        // reset size
+        $(img)
+            .width('auto')
+            .height('auto')
+            .css('margin-top','auto');
+
+        // scale
+        if (img_h < file_view_h - prev_next_h) {
+            img.css({'margin-top':(file_view_h - img_h - prev_next_h)/2});
+        }
+        if (img.width() > max_width) {
+            img.width(max_width);
+        }
+
+        // show
+        img.removeClass('vh');
+    };
+$(window)
+    .load(image_view_resize);
+    // .resize(image_view_resize);
+
+{% if allow_thumbnail_large %}
+$(function() {
+    var img = $('#image-view'),
+        link = $(img).closest('.img-name-link'),
+        file_name = link.data('name');
+
+    // downscaled image already loaded
+    if(link.data('is-thumbnail-large'))
+        return;
+
+    // render large thumbnail
+    $.ajax({
+        url: '{% url "thumbnail_large" repo.id %}?path=' + e(path_file_name) + '&t=' + '{{token}}',
+        cache: false,
+        dataType: 'json',
+        success: function(data) {
+            $(img)
+                .attr('src', data.thumbnail_src)
+                .addClass('vh')
+                .load(image_view_resize);
+            $(link)
+                .data('is-thumbnail-large', true)
+                .data('mfp-src', img.src);
+        }
+    });
+});
+{% endif %}
+
+$(function() {
+    $('#file-view').magnificPopup({
+        type: 'image',
+        delegate: '.img-name-link',
+        tClose: '{% trans "Close (Esc)" %}', // Alt text on close button
+        tLoading: '{% trans "Loading..." %}', // Text that is displayed during loading. Can contain %curr% and %total% keys
+{% if allow_thumbnail_large %}
+        callbacks: {
+            elementParse: function(item) {
+                // popup thumbnails disabled or already generated
+                if (!$(item.el[0]).data('is-img') || $(item.el[0]).data('is-thumbnail-large'))
+                    return;
+
+                // render big thumbnail
+                var file_name = $(item.el[0]).closest('.file-item').data('name');
+                $.ajax({
+                    url: '{% url "thumbnail_large" repo.id %}?path=' + e(path_file_name) + '&t=' + '{{token}}',
+                    async: false,
+                    cache: false,
+                    dataType: 'json',
+                    success: function(data) {
+                        $(img)
+                            .attr('src', data.thumbnail_src)
+                            .addClass('vh')
+                            .load(image_view_resize);
+                        $(link)
+                            .data('is-thumbnail-large', true)
+                            .data('mfp-src', img.src);
+                    }
+                });
+            },
+        },
+{% endif %}
+        image: {
+            titleSrc: function(item) {
+                var el = item.el;
+                var img_name = $(el).data('name');
+                var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + '{% trans "Open in New Tab" %}' + '</a>';
+                return img_name + '<br />' + img_link;
+            },
+            tError: '{% trans '<a href="%url%" target="_blank">The image</a> could not be loaded.' %}' // Error message when image could not be loaded
+        }
+    });
+});
 </script>
 {% endblock %}
