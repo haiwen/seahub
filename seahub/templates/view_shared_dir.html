@@ -162,7 +162,7 @@ $(function() {
                 }
 
                 // render big thumbnail
-                var file_name = item.el[0].innerText;
+                var file_name = $(item.el[0]).closest('.file-item').data('name');
                 $.ajax({
                     url: '{% url "thumbnail_large" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
                     async: false,
