@@ -1,4 +1,6 @@
 import json
+import logging
+
 from django.conf import settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -13,6 +15,9 @@ from seahub.notifications.models import Notification, NotificationForm, \
     UserNotification
 from seahub.notifications.utils import refresh_cache
 from seahub.avatar.util import get_default_avatar_url
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 def notification_list(request):
@@ -135,7 +140,10 @@ def add_notice_from_info(notices):
     for notice in notices:
         if notice.is_user_message():
             d = notice.user_message_detail_to_dict()
-            notice.msg_from = d.get('msg_from')
+            if d.get('msg_from') is not None:
+                notice.msg_from = d.get('msg_from')
+            else:
+                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_group_msg():
             d = notice.group_message_detail_to_dict()
@@ -154,17 +162,21 @@ def add_notice_from_info(notices):
         elif notice.is_file_uploaded_msg():
             notice.default_avatar_url = default_avatar_url
 
-        elif notice.is_repo_share_msg():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['share_from']
-
-        elif notice.is_priv_file_share_msg():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['share_from']
+        elif notice.is_repo_share_msg() or notice.is_priv_file_share_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['share_from']
+            except Exception as e:
+                logger.error(e)
+                notice.default_avatar_url = default_avatar_url
 
         elif notice.is_group_join_request():
-            d = json.loads(notice.detail)
-            notice.msg_from = d['username']
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['username']
+            except Exception as e:
+                logger.error(e)
+                notice.default_avatar_url = default_avatar_url
 
         else:
             pass
