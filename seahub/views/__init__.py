@@ -1337,43 +1337,16 @@ def repo_access_file(request, repo_id, obj_id):
     if op == 'del':
         return repo_del_file(request, repo_id)
 
-    # If vistor's file shared token in url params matches the token in db,
-    # then we know the vistor is from file shared link.
-    share_token = request.GET.get('t', '')
-    fileshare = FileShare.objects.get(token=share_token) if share_token else None
-    shared_by = None
-    if fileshare:
-        from_shared_link = True
-        shared_by = fileshare.username
-    else:
-        from_shared_link = False
-
-    if from_shared_link:
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(fileshare.username):
-            return render_permission_error(request,
-                                           _(u'Unable to access file: share link traffic is used up.'))
-
     username = request.user.username
     path = request.GET.get('p', '')
     if check_repo_access_permission(repo_id, request.user) or \
-            get_file_access_permission(repo_id, path, username) or from_shared_link:
+            get_file_access_permission(repo_id, path, username):
         # Get a token to access file
         token = seafile_api.get_fileserver_access_token(repo_id, obj_id, op, username)
     else:
         return render_permission_error(request, _(u'Unable to access file'))
 
     redirect_url = gen_file_get_url(token, file_name)
-
-    if from_shared_link:
-        # send stats message
-        try:
-            file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version, obj_id)
-            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
-                         (repo.id, shared_by, obj_id, file_size))
-        except Exception, e:
-            logger.error('Error when sending file-download message: %s' % str(e))
-
     return HttpResponseRedirect(redirect_url)
 
 @login_required

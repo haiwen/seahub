@@ -618,9 +618,57 @@ def view_snapshot_file(request, repo_id):
     return render_to_response('view_snapshot_file.html', ret_dict,
                               context_instance=RequestContext(request), )
 
+def _download_file_from_share_link(request, fileshare):
+    """Download shared file or private shared file.
+    `path` need to be provided by frontend, if missing, use `fileshare.path`
+    """
+    next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+
+    username = request.user.username
+    if isinstance(fileshare, PrivateFileDirShare):
+        fileshare.username = fileshare.from_user
+    shared_by = fileshare.username
+    repo = get_repo(fileshare.repo_id)
+    if not repo:
+        raise Http404
+    share_path = fileshare.path  # path for dir share or file share
+    req_path = request.GET.get('p', '')  # path for download file
+    if req_path:
+        if not req_path.startswith(share_path):
+            # permission check
+            messages.error(request, _(u'Unable to download file, invalid file path'))
+            return HttpResponseRedirect(next)
+
+    path = req_path if req_path else share_path
+    filename = os.path.basename(path)
+    obj_id = seafile_api.get_file_id_by_path(repo.id, path)
+    if not obj_id:
+        messages.error(request, _(u'Unable to download file, wrong file path'))
+        return HttpResponseRedirect(next)
+
+    # check whether owner's traffic over the limit
+    if user_traffic_over_limit(fileshare.username):
+        messages.error(request, _(u'Unable to download file, share link traffic is used up.'))
+        return HttpResponseRedirect(next)
+
+    send_file_download_msg(request, repo, path, 'share-link')
+    try:
+        file_size = seafile_api.get_file_size(repo.store_id, repo.version,
+                                              obj_id)
+        send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
+                     (repo.id, shared_by, obj_id, file_size))
+    except Exception as e:
+        logger.error('Error when sending file-download message: %s' % str(e))
+
+    dl_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
+                                                       'download', username)
+    return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
+
 def view_shared_file(request, token):
     """
-    Preview file via shared link.
+    View file via shared link.
+    Download share file if `dl` in request param.
+    View raw share file if `raw` in request param.
     """
     assert token is not None    # Checked by URLconf
 
@@ -647,6 +695,10 @@ def view_shared_file(request, token):
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
 
+    if request.GET.get('dl', '') == '1':
+        # download shared file
+        return _download_file_from_share_link(request, fileshare)
+
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -661,10 +713,16 @@ def view_shared_file(request, token):
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
+
     access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
                                                            'view', '',
                                                            use_onetime=False)
     raw_path = gen_file_get_url(access_token, filename)
+    if request.GET.get('raw', '') == '1':
+        # view raw shared file, directly show/download file depends on
+        # browsers
+        return HttpResponseRedirect(raw_path)
+
     inner_path = gen_inner_file_get_url(access_token, filename)
 
     # get file content
@@ -776,6 +834,10 @@ def view_file_via_shared_dir(request, token):
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if fileshare is None:
         raise Http404
+
+    if request.GET.get('dl', '') == '1':
+        # download shared file
+        return _download_file_from_share_link(request, fileshare)
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
@@ -1093,8 +1155,9 @@ def send_file_download_msg(request, repo, path, dl_type):
         logger.error("Error when sending file-download-%s message: %s" %
                      (dl_type, str(e)))
 
+@login_required
 def download_file(request, repo_id, obj_id):
-    """Download file.
+    """Download file for file/history file  preview.
 
     Arguments:
     - `request`:
@@ -1109,28 +1172,10 @@ def download_file(request, repo_id, obj_id):
     if repo.encrypted and not seafile_api.is_password_set(repo_id, username):
         return HttpResponseRedirect(reverse('view_common_lib_dir', args=[repo_id, '']))
 
-    # If vistor's file shared token in url params matches the token in db,
-    # then we know the vistor is from file shared link.
-    share_token = request.GET.get('t', '')
-    fileshare = FileShare.objects.get(token=share_token) if share_token else None
-    shared_by = None
-    if fileshare:
-        from_shared_link = True
-        shared_by = fileshare.username
-    else:
-        from_shared_link = False
-
-    if from_shared_link:
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(fileshare.username):
-            messages.error(request, _(u'Unable to access file: share link traffic is used up.'))
-            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
-            return HttpResponseRedirect(next)
-
     # Permission check and generate download link
     path = request.GET.get('p', '')
     if check_repo_access_permission(repo_id, request.user) or \
-            get_file_access_permission(repo_id, path, username) or from_shared_link:
+            get_file_access_permission(repo_id, path, username):
         # Get a token to access file
         token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
                                                         'download', username)
@@ -1140,18 +1185,7 @@ def download_file(request, repo_id, obj_id):
         return HttpResponseRedirect(next)
 
     # send stats message
-    if from_shared_link:
-        send_file_download_msg(request, repo, path, 'share-link')
-        try:
-            file_size = seafile_api.get_file_size(repo.store_id, repo.version,
-                                                  obj_id)
-            send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
-                         (repo.id, shared_by, obj_id, file_size))
-        except Exception, e:
-            logger.error('Error when sending file-download message: %s' % str(e))
-    else:
-        # send stats message
-        send_file_download_msg(request, repo, path, 'web')
+    send_file_download_msg(request, repo, path, 'web')
 
     file_name = os.path.basename(path.rstrip('/'))
     redirect_url = gen_file_get_url(token, file_name)
@@ -1385,6 +1419,10 @@ def view_priv_shared_file(request, token):
     username = request.user.username
     if username != pfs.from_user and username != pfs.to_user:
         raise Http404           # permission check
+
+    if request.GET.get('dl', '') == '1':
+        # download private shared file
+        return _download_file_from_share_link(request, pfs)
 
     path = normalize_file_path(pfs.path)
     obj_id = seafile_api.get_file_id_by_path(repo.id, path)
