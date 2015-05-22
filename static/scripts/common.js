@@ -133,7 +133,7 @@ define([
 
         feedback: function(con, type, time) {
             var time = time || 5000;
-            if ($('.messages')[0]) {
+            if ($('.messages').length > 0) {
                 $('.messages').html('<li class="' + type + '">' + con + '</li>');
             } else {
                 var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
@@ -141,6 +141,15 @@ define([
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');
             setTimeout(function() { $('.messages').addClass('hide'); }, time);
+        },
+
+        // for '{% if messages %}'
+        showMsg: function() {
+            var msg = $('.messages');
+            if (msg.length > 0) {
+                msg.css({'left':($(window).width() - msg.width())/2, 'top':10}).removeClass('hide');
+                setTimeout(function() { msg.addClass('hide'); }, 5000);
+            }
         },
 
         showFormError: function(formid, error_msg) {

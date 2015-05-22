@@ -66,9 +66,7 @@ $('#repo-owner-form').submit(function() {
             'repo_owner': new_owner
         },
         success: function(data) {
-            if (data['success']) {
-                location.href = '{% url 'myhome' %}';
-            }
+            location.href = '{% url 'myhome' %}';
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
