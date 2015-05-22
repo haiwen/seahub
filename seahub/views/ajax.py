@@ -2115,12 +2115,11 @@ def ajax_repo_change_basic_info(request, repo_id):
                     }), status=400, content_type=content_type)
 
     repo_name = form.cleaned_data['repo_name']
-    repo_desc = form.cleaned_data['repo_desc']
     days = form.cleaned_data['days']
 
     # Edit library info (name, descryption).
-    if repo.name != repo_name or repo.desc != repo_desc:
-        if not edit_repo(repo_id, repo_name, repo_desc, username):
+    if repo.name != repo_name:
+        if not edit_repo(repo_id, repo_name, '', username): # set desc as ''
             err_msg = _(u'Failed to edit library information.')
             return HttpResponse(json.dumps({'error': err_msg}),
                                 status=500, content_type=content_type)
@@ -2195,7 +2194,7 @@ def ajax_repo_transfer_owner(request, repo_id):
 
     messages.success(request,
                      _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
-                     {'repo_name': repo.name, 'new_owner': repo_owner})
+                     {'repo_name': escape(repo.name), 'new_owner': escape(repo_owner)})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
 

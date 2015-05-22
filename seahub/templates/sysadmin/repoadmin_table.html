@@ -1,11 +1,10 @@
 {% load i18n %}
 <table class="repo-list">
     <tr>
-        <th width="15%">{% trans "Name" %}</th>
+        <th width="35%">{% trans "Name" %}</th>
         <th width="25%">ID</th>
         <th width="25%">{% trans "Owner" %}</th>
-        <th width="22%">{% trans "Description" %}</th>
-        <th width="13%">{% trans "Operations" %}</th>
+        <th width="15%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
@@ -18,7 +17,6 @@
             --
             {% endif %}
         </td>
-        <td>{{ repo.props.desc }}</td>
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>
             <a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a>

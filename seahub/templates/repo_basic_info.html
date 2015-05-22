@@ -12,7 +12,7 @@
 
 {% block left_panel %}
 <div class="side-textnav">
-    <h3 class="hd">{{ repo.name }}'s {% trans "Settings" %}</h3>
+    <h3 class="hd"><span class="op-target">{{ repo.name }}</span>'s {% trans "Settings" %}</h3>
     <ul class="side-textnav-tabs">
         <li class="tab tab-cur"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
         <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
@@ -37,8 +37,6 @@
         <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
             <label>{% trans "Name" %}</label><br />
             <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
-            <label>{% trans "Description" %}</label></br />
-            <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
 
             {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
             <label>{% trans "History" %}</label><br />
@@ -70,15 +68,10 @@ $('#repo-basic-info-form input[name="history"]').change(function() {
 $('#repo-basic-info-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id');
-    var repo_name = $('[name="repo_name"]', form).val(),
-        repo_desc = $('[name="repo_desc"]', form).val();
+    var repo_name = $('[name="repo_name"]', form).val();
 
     if (!$.trim(repo_name)) {
         apply_form_error(form_id, "{% trans "Name is required." %}");
-        return false;
-    }
-    if (!$.trim(repo_desc)) {
-        apply_form_error(form_id, "{% trans "Description is required." %}");
         return false;
     }
 
@@ -102,13 +95,10 @@ $('#repo-basic-info-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'repo_name': repo_name,
-            'repo_desc': repo_desc,
             'days': days
         },
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            }
+            location.reload(true);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {

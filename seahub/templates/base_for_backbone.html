@@ -142,18 +142,19 @@
                 {% block right_panel %}{% endblock %}
             </div>
             <div id="main-panel" class="clear w100 ovhd">
-                {% if messages %}
-                {% autoescape off %}
-                <ul class="messages hide">
-                    {% for message in messages %}
-                    <li class="{{ message.tags }}">{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endautoescape %}
-                {% endif %}
-
                 {% block main_panel %} {% endblock %}
             </div>
+
+            {% if messages %}
+            {% autoescape off %}
+            <ul class="messages hide">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endautoescape %}
+            {% endif %}
+
             <div id="confirm-popup" class="hide">
                 <div id="confirm-con"></div>
                 <button id="confirm-yes" class="btn">{% trans "Yes"%}</button>
