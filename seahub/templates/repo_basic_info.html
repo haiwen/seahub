@@ -37,8 +37,6 @@
         <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
             <label>{% trans "Name" %}</label><br />
             <input type="text" name="repo_name" value="{{ repo.name }}" class="input" /><br />
-            <label>{% trans "Description" %}</label></br />
-            <textarea name="repo_desc" class="textarea">{{ repo.desc }}</textarea><br />
 
             {% if not ENABLE_SUB_LIBRARY or not repo.is_virtual %}
             <label>{% trans "History" %}</label><br />
@@ -70,15 +68,10 @@ $('#repo-basic-info-form input[name="history"]').change(function() {
 $('#repo-basic-info-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id');
-    var repo_name = $('[name="repo_name"]', form).val(),
-        repo_desc = $('[name="repo_desc"]', form).val();
+    var repo_name = $('[name="repo_name"]', form).val();
 
     if (!$.trim(repo_name)) {
         apply_form_error(form_id, "{% trans "Name is required." %}");
-        return false;
-    }
-    if (!$.trim(repo_desc)) {
-        apply_form_error(form_id, "{% trans "Description is required." %}");
         return false;
     }
 
@@ -102,7 +95,6 @@ $('#repo-basic-info-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'repo_name': repo_name,
-            'repo_desc': repo_desc,
             'days': days
         },
         success: function(data) {
