@@ -136,7 +136,7 @@ def get_dirents(request, repo_id):
             dirent.has_subdir = False
 
             if dir_only:
-                dirent_path = os.path.join(path, dirent.obj_name)
+                dirent_path = posixpath.join(path, dirent.obj_name)
                 try:
                     dirent_dirents = seafile_api.list_dir_by_path(repo_id, dirent_path.encode('utf-8'))
                 except SearpcError, e:
@@ -628,7 +628,7 @@ def rename_dirent(request, repo_id):
         return HttpResponse(json.dumps(result), status=400,
                             content_type=content_type)
 
-    full_path = os.path.join(parent_dir, oldname)
+    full_path = posixpath.join(parent_dir, oldname)
     if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
         # when dirent is a dir, check current dir perm
         if check_folder_permission(request, repo.id, full_path) != 'rw':
@@ -682,7 +682,7 @@ def delete_dirent(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                 status=400, content_type=content_type)
 
-    full_path = os.path.join(parent_dir, dirent_name)
+    full_path = posixpath.join(parent_dir, dirent_name)
     username = request.user.username
 
     if seafile_api.get_dir_id_by_path(repo.id, full_path) is not None:
@@ -736,7 +736,7 @@ def delete_dirents(request, repo_id):
     deleted = []
     undeleted = []
     for dirent_name in dirents_names:
-        full_path = os.path.join(parent_dir, dirent_name)
+        full_path = posixpath.join(parent_dir, dirent_name)
         if check_folder_permission(request, repo.id, full_path) != 'rw':
             undeleted.append(dirent_name)
             continue
@@ -878,7 +878,7 @@ def mv_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
-    src_dir = os.path.join(src_path, obj_name)
+    src_dir = posixpath.join(src_path, obj_name)
     if dst_path.startswith(src_dir + '/'):
         error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
             % {'src': escape(src_dir), 'des': escape(dst_path)}
@@ -920,7 +920,7 @@ def cp_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
-    src_dir = os.path.join(src_path, obj_name)
+    src_dir = posixpath.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
         error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
             % {'src': escape(src_dir), 'des': escape(dst_path)}
@@ -1031,7 +1031,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         allowed_files = obj_file_names
 
     for obj_name in obj_dir_names:
-        src_dir = os.path.join(src_path, obj_name)
+        src_dir = posixpath.join(src_path, obj_name)
         if dst_path.startswith(src_dir + '/'):
             error_msg = _(u'Can not move directory %(src)s to its subdirectory %(des)s') \
                 % {'src': escape(src_dir), 'des': escape(dst_path)}
@@ -1074,7 +1074,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     username = request.user.username
 
     for obj_name in obj_dir_names:
-        src_dir = os.path.join(src_path, obj_name)
+        src_dir = posixpath.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
             error_msg = _(u'Can not copy directory %(src)s to its subdirectory %(des)s') \
                 % {'src': escape(src_dir), 'des': escape(dst_path)}

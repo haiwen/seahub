@@ -225,7 +225,7 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
             dirent.sharelink = ''
             dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
-                dpath = os.path.join(path, dirent.obj_name)
+                dpath = posixpath.join(path, dirent.obj_name)
                 if dpath[-1] != '/':
                     dpath += '/'
                 for share in fileshares:
@@ -249,7 +249,7 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
                 else:
                     dirent.file_size = dirent.size
                 dirent.starred = False
-                fpath = os.path.join(path, dirent.obj_name)
+                fpath = posixpath.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
                 dirent.view_link = view_file_base + '?p=' + urlquote(p_fpath)
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
@@ -305,7 +305,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
             dirent.sharelink = ''
             dirent.uploadlink = ''
             if stat.S_ISDIR(dirent.props.mode):
-                dpath = os.path.join(path, dirent.obj_name)
+                dpath = posixpath.join(path, dirent.obj_name)
                 if dpath[-1] != '/':
                     dpath += '/'
                 for share in fileshares:
@@ -329,7 +329,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 else:
                     dirent.file_size = dirent.size
                 dirent.starred = False
-                fpath = os.path.join(path, dirent.obj_name)
+                fpath = posixpath.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
                 dirent.view_link = reverse('view_lib_file', args=[repo.id, urlquote(p_fpath)])
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
