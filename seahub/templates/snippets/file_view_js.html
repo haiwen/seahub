@@ -1,3 +1,4 @@
+{% load staticfiles %}
 {% if filetype == 'Text' %}
 <script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
 {% endif %}
@@ -13,4 +14,7 @@
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
 <script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
+{% endif %}
+{% if filetype == 'Image' %}
+<script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
 {% endif %}

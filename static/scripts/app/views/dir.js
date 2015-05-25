@@ -38,6 +38,7 @@ define([
                 this.listenTo(this.dir, 'reset', this.reset);
 
                 this.fileUploadView = new FileUploadView({dirView: this});
+                var _this = this;
 
                 this.$el.magnificPopup({
                     type: 'image',
@@ -50,10 +51,49 @@ define([
                         tNext: gettext("Next (Right arrow key)"), // Alt text on right arrow
                         tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
                     },
+                    callbacks: {
+                        elementParse: function(item) {
+                            var repo_id = _this.dir.repo_id,
+                                cur_path = _this.dir.path,
+                                cur_img = _this.dir.find(function(dirent) {
+                                    return dirent.get('obj_name') == $(item.el[0]).data('name');
+                                });
+
+                            // couldn't find file record
+                            if (!cur_img)
+                                return;
+
+                            // large thumbnails disabled
+                            if (!cur_img.get('is_thumbnail_large'))
+                                return;
+
+                            // downscaled image already generated
+                            if (cur_img.get('thumbnail_large_src')) {
+                                item.src = cur_img.get('thumbnail_large_src');
+                                return;
+                            }
+
+                            // render big thumbnail
+                            var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
+                            $.ajax({
+                                url: Common.getUrl({name: 'thumbnail_large', repo_id: repo_id}),
+                                data: {'path': cur_img_path},
+                                async: false,
+                                cache: false,
+                                dataType: 'json',
+                                success: function(data) {
+                                    item.src = data.thumbnail_src
+                                    cur_img.set({
+                                        'thumbnail_large_src': data.thumbnail_src
+                                    });
+                                }
+                            });
+                        },
+                    },
                     image: {
                         titleSrc: function(item) {
                             var el = item.el;
-                            var img_name = el[0].innerHTML;
+                            var img_name = $(item.el[0]).data('name');
                             var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
                             return img_name + '<br />' + img_link;
                         },

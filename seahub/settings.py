@@ -442,14 +442,20 @@ if os.path.exists(SEAHUB_DATA_ROOT):
 else:
     THUMBNAIL_ROOT = os.path.join(PROJECT_ROOT, 'seahub/thumbnail/thumb')
 
+# set mimetype (for small and lage thumbnails >= THUMBMAIL_LARGE)
 THUMBNAIL_EXTENSION = 'png'
+THUMBNAIL_EXTENSION_LARGE = 'jpeg'
+THUMBNAIL_LARGE = '100'
 
 # for thumbnail: height(px) and width(px)
 THUMBNAIL_DEFAULT_SIZE = '24'
-PREVIEW_DEFAULT_SIZE = '100'
 
 # for origin image file: size(MB)
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
+
+# use larger preview images for lightbox image viewer
+ENABLE_THUMBNAIL_LARGE = True
+THUMBNAIL_LARGE_SIZE = '1280'
 
 #####################
 # Folder Permission #

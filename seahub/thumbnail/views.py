@@ -16,7 +16,9 @@ from seaserv import get_file_id_by_path, get_repo, seafile_api
 from seahub.views.file import get_file_view_path_and_perm
 from seahub.views import check_repo_access_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
-    THUMBNAIL_ROOT, ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
+    THUMBNAIL_EXTENSION_LARGE, THUMBNAIL_ROOT, ENABLE_THUMBNAIL, \
+    THUMBNAIL_LARGE, THUMBNAIL_IMAGE_SIZE_LIMIT, \
+    ENABLE_THUMBNAIL_LARGE, THUMBNAIL_LARGE_SIZE
 
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.share.models import FileShare
@@ -25,7 +27,7 @@ from seahub.utils import gen_file_get_url
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-def thumbnail_create(request, repo_id):
+def thumbnail_create(request, repo_id, default_size = None):
 
     content_type = 'application/json; charset=utf-8'
     result = {}
@@ -80,8 +82,12 @@ def thumbnail_create(request, repo_id):
             return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                                 content_type=content_type)
 
+    # image size
+    if not default_size:
+        default_size = THUMBNAIL_DEFAULT_SIZE
+    size = request.GET.get('size', default_size)
+
     # get image file from url
-    size = request.GET.get('size', THUMBNAIL_DEFAULT_SIZE)
     file_name = os.path.basename(path)
     access_token = seafile_api.get_fileserver_access_token(repo_id,
                                                            obj_id,
@@ -108,8 +114,15 @@ def thumbnail_create(request, repo_id):
             image = Image.open(f)
             if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
                 image = image.convert("RGB")
+
+            # detect right image type
+            if int(size) >= int(THUMBNAIL_LARGE):
+                extension = THUMBNAIL_EXTENSION_LARGE
+            else:
+                extension = THUMBNAIL_EXTENSION
+
             image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
-            image.save(thumbnail_file, THUMBNAIL_EXTENSION)
+            image.save(thumbnail_file, extension)
         except Exception as e:
             logger.error(e)
             err_msg = _('Failed to create thumbnail.')
@@ -118,6 +131,21 @@ def thumbnail_create(request, repo_id):
 
     result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
     return HttpResponse(json.dumps(result), content_type=content_type)
+
+def thumbnail_large(request, repo_id):
+    content_type = 'application/json; charset=utf-8'
+
+    if not request.is_ajax():
+        err_msg = _(u"Permission denied.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
+    if not ENABLE_THUMBNAIL_LARGE:
+        err_msg = _(u"Popup Thumbnail function is not enabled.")
+        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
+                            content_type=content_type)
+
+    return thumbnail_create(request, repo_id, THUMBNAIL_LARGE_SIZE)
 
 def latest_entry(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     thumbnail_path = os.path.join(THUMBNAIL_ROOT, size, obj_id)
@@ -151,4 +179,9 @@ def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     with open(thumbnail_file, 'rb') as f:
         file_content = f.read()
 
-    return HttpResponse(content=file_content, mimetype='image/'+THUMBNAIL_EXTENSION)
+    # detect right image type
+    mimetype = 'image/'+THUMBNAIL_EXTENSION
+    if int(size) >= int(THUMBNAIL_LARGE):
+        mimetype = 'image/'+THUMBNAIL_EXTENSION_LARGE
+
+    return HttpResponse(content=file_content, mimetype=mimetype)
