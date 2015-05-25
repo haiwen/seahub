@@ -65,7 +65,7 @@ define([
                 prepend: true,  // show newly created repo at first line
                 success: function() {
                     if (repos.length == 1) {
-                        repos.fetch({reset: true});
+                        repos.reset(repos.models);
                     }
                 },
                 error: function(xhr, textStatus, errorThrown) {
