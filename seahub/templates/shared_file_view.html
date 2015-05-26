@@ -33,7 +33,7 @@
               {% endif %}
             {% endif %}
             {% if not traffic_over_limit %}
-            <a href="?p={{path}}&dl=1" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+              <a href="{% if from_shared_dir %}?p={{path}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
         </div>
         {% include 'snippets/file_content_html.html' %}

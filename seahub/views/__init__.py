@@ -1810,6 +1810,7 @@ def i18n(request):
     res.set_cookie(settings.LANGUAGE_COOKIE_NAME, lang, max_age=30*24*60*60)
     return res
 
+@login_required
 def repo_download_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -1827,30 +1828,8 @@ def repo_download_dir(request, repo_id):
     else:
         dirname = repo.name
 
-    allow_download = False
-    fileshare_token = request.GET.get('t', '')
-    from_shared_link = False
-    shared_by = None
-    if fileshare_token:         # download dir from dir shared link
-        try:
-            fileshare = FileShare.objects.get(token=fileshare_token)
-        except FileShare.DoesNotExist:
-            raise Http404
-
-        # Can not download upper dir of shared dir.
-        allow_download = True if path.startswith(fileshare.path) else False
-        from_shared_link = True
-        shared_by = fileshare.username
-    else:
-        allow_download = True if check_repo_access_permission(
-            repo_id, request.user) else False
-
-    if from_shared_link:
-        # check whether owner's traffic over the limit
-        if user_traffic_over_limit(fileshare.username):
-            return render_permission_error(request,
-                                           _(u'Unable to access file: share link traffic is used up.'))
-
+    allow_download = True if check_repo_access_permission(
+        repo_id, request.user) else False
     if allow_download:
         dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.id,
                                                           repo.head_cmmt_id,
@@ -1871,15 +1850,8 @@ def repo_download_dir(request, repo_id):
                                                         'download-dir',
                                                         request.user.username)
 
-        if from_shared_link:
-            try:
-                send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
-                             (repo_id, shared_by, dir_id, total_size))
-            except Exception, e:
-                logger.error('Error when sending dir-download message: %s' % str(e))
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )
-
 
     url = gen_file_get_url(token, dirname)
     return redirect(url)

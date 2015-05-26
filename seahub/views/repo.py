@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import posixpath
 import logging
 
 from django.core.urlresolvers import reverse
@@ -34,7 +35,7 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
     ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
-
+from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 
@@ -359,6 +360,43 @@ def repo_history_view(request, repo_id):
             }, context_instance=RequestContext(request))
 
 ########## shared dir/uploadlink
+def _download_dir_from_share_link(request, fileshare, repo, real_path):
+    # check whether owner's traffic over the limit
+    if user_traffic_over_limit(fileshare.username):
+        return render_error(
+            request, _(u'Unable to access file: share link traffic is used up.'))
+
+    shared_by = fileshare.username
+    if fileshare.path == '/':
+        dirname = repo.name
+    else:
+        dirname = os.path.basename(real_path.rstrip('/'))
+
+    dir_id = seafile_api.get_dir_id_by_path(repo.id, real_path)
+
+    try:
+        total_size = seaserv.seafserv_threaded_rpc.get_dir_size(
+            repo.store_id, repo.version, dir_id)
+    except Exception as e:
+        logger.error(str(e))
+        return render_error(request, _(u'Internal Error'))
+
+    if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
+        return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
+
+    token = seafile_api.get_fileserver_access_token(repo.id,
+                                                    dir_id,
+                                                    'download-dir',
+                                                    request.user.username)
+
+    try:
+        seaserv.send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
+                             (repo.id, shared_by, dir_id, total_size))
+    except Exception as e:
+        logger.error('Error when sending dir-download message: %s' % str(e))
+
+    return HttpResponseRedirect(gen_file_get_url(token, dirname))
+
 def view_shared_dir(request, token):
     assert token is not None    # Checked by URLconf
 
@@ -387,13 +425,19 @@ def view_shared_dir(request, token):
 
     username = fileshare.username
     repo_id = fileshare.repo_id
-    path = request.GET.get('p', '')
-    path = fileshare.path if not path else path
-    if path[-1] != '/':         # Normalize dir path
-        path += '/'
 
-    if not path.startswith(fileshare.path):
-        path = fileshare.path   # Can not view upper dir of shared dir
+    # Get path from frontend, use '/' if missing, and construct request path
+    # with fileshare.path to real path, used to fetch dirents by RPC.
+    req_path = request.GET.get('p', '/')
+    if req_path[-1] != '/':
+        req_path += '/'
+
+    if req_path == '/':
+        real_path = fileshare.path
+    else:
+        real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+    if real_path[-1] != '/':         # Normalize dir path
+        real_path += '/'
 
     repo = get_repo(repo_id)
     if not repo:
@@ -403,17 +447,28 @@ def view_shared_dir(request, token):
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
         return render_error(request, _('"%s" does not exist.') % fileshare.path)
 
-    if path == '/':
+    # download shared dir
+    if request.GET.get('dl', '') == '1':
+        return _download_dir_from_share_link(request, fileshare, repo,
+                                             real_path)
+
+    if fileshare.path == '/':
+        # use repo name as dir name if share whole library
         dir_name = repo.name
     else:
-        dir_name = os.path.basename(path[:-1])
+        dir_name = os.path.basename(real_path[:-1])
 
     current_commit = seaserv.get_commits(repo_id, 0, 1)[0]
     file_list, dir_list, dirent_more = get_repo_dirents(request, repo,
-                                                        current_commit, path)
-    zipped = gen_path_link(path, repo.name)
+                                                        current_commit, real_path)
 
-    if path == fileshare.path:  # When user view the shared dir..
+    # generate dir navigator
+    if fileshare.path == '/':
+        zipped = gen_path_link(req_path, repo.name)
+    else:
+        zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
+
+    if req_path == '/':  # When user view the root of shared dir..
         # increase shared link view_cnt,
         fileshare = FileShare.objects.get(token=token)
         fileshare.view_cnt = F('view_cnt') + 1
@@ -430,7 +485,7 @@ def view_shared_dir(request, token):
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
             'token': token,
-            'path': path,
+            'path': req_path,
             'username': username,
             'dir_name': dir_name,
             'file_list': file_list,

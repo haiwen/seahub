@@ -140,7 +140,7 @@ class FileShare(models.Model):
         return True if self.s_type == 'f' else False
 
     def is_dir_share_link(self):
-        return False if self.is_file_link() else True
+        return False if self.is_file_share_link() else True
 
     def is_encrypted(self):
         return True if self.password is not None else False

@@ -6,6 +6,7 @@
 {% block main_panel %}
     <h2>{{ dir_name }}</h2>
     <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
+
     <div class="repo-file-list-outer-container">
         <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar ovhd">
@@ -13,14 +14,14 @@
                 {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ link|urlencode }}">{{ name }}</a> /
+                <a href="{% url "view_shared_dir" token %}?p={{ link|urlencode }}">{{ name }}</a> /
                 {% else %}
                 {{ name }}
                 {% endif %}
                 {% endfor %}
                 </p>
                 {% if not traffic_over_limit %}
-                <a href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}&t={{ token }}" class="obv-btn fright">{% trans "ZIP"%}</a>
+                <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn fright">{% trans "ZIP"%}</a>
                 {% endif %}
             </div>
             <table class="repo-file-list" style="table-layout:fixed;">
@@ -35,13 +36,13 @@
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>
-                        <a href="{{ SITE_ROOT }}d/{{ token }}/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                        <a href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
                     </td>
 
                     <td></td>
                     <td>
                       {% if not traffic_over_limit %}
-                      <a class="op-icon vh" href="{% url 'repo_download_dir' repo.id %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&t={{token}}" title="{% trans 'Download' %}">
+                      <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}">
                           <img src="{{MEDIA_URL}}img/download.png" alt="" />
                       </a>
                       {% endif %}
@@ -62,7 +63,7 @@
                     {% endif %}
 
                     <td>
-                        <a class="normal" href="{{ SITE_ROOT }}d/{{ token }}/files/?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
+                        <a class="normal" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.props.obj_name }}</a>
                     </td>
 
                     <td>{{ dirent.file_size|filesizeformat }}</td>

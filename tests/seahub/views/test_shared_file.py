@@ -1,3 +1,4 @@
+import os
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -24,21 +25,19 @@ class SharedFileTest(TestCase, Fixtures):
         resp = self.client.get(reverse('view_shared_file', args=[self.fs.token]))
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'shared_file_view.html')
-        self.assertContains(resp, self.file)
 
-        dl_url_param = '?p=%s&dl=1' % self.file
-        self.assertContains(resp, dl_url_param)
+        self.assertContains(resp, os.path.basename(self.file))
+        dl_url_tag = '<a href="?dl=1" class="obv-btn">'
+        self.assertContains(resp, dl_url_tag)
 
     def test_can_download(self):
-        dl_url = reverse('view_shared_file', args=[self.fs.token]) + \
-                 '?p=%s&dl=1' % self.file
+        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
         resp = self.client.get(dl_url)
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
 
     def test_can_view_raw(self):
-        dl_url = reverse('view_shared_file', args=[self.fs.token]) + \
-                 '?p=%s&raw=1' % self.file
+        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?raw=1'
         resp = self.client.get(dl_url)
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
@@ -65,10 +64,10 @@ class FileViaSharedDirTest(TestCase, Fixtures):
         )
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'shared_file_view.html')
-        self.assertContains(resp, self.file)
 
-        dl_url_param = '?p=%s&dl=1' % self.file
-        self.assertContains(resp, dl_url_param)
+        self.assertContains(resp, os.path.basename(self.file))
+        dl_url_tag = '<a href="?p=%s&dl=1" class="obv-btn">' % self.file
+        self.assertContains(resp, dl_url_tag)
 
     def test_can_download(self):
         dl_url = reverse('view_file_via_shared_dir', args=[self.fs.token]) + \

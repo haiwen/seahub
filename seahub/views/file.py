@@ -631,17 +631,20 @@ def _download_file_from_share_link(request, fileshare):
     repo = get_repo(fileshare.repo_id)
     if not repo:
         raise Http404
-    share_path = fileshare.path  # path for dir share or file share
-    req_path = request.GET.get('p', '')  # path for download file
-    if req_path:
-        if not req_path.startswith(share_path):
-            # permission check
+
+    # Construct real file path if download file in shared dir, otherwise, just
+    # use path in DB.
+    if isinstance(fileshare, FileShare) and fileshare.is_dir_share_link():
+        req_path = request.GET.get('p', '')
+        if not req_path:
             messages.error(request, _(u'Unable to download file, invalid file path'))
             return HttpResponseRedirect(next)
+        real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+    else:
+        real_path = fileshare.path
 
-    path = req_path if req_path else share_path
-    filename = os.path.basename(path)
-    obj_id = seafile_api.get_file_id_by_path(repo.id, path)
+    filename = os.path.basename(real_path)
+    obj_id = seafile_api.get_file_id_by_path(repo.id, real_path)
     if not obj_id:
         messages.error(request, _(u'Unable to download file, wrong file path'))
         return HttpResponseRedirect(next)
@@ -651,7 +654,7 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _(u'Unable to download file, share link traffic is used up.'))
         return HttpResponseRedirect(next)
 
-    send_file_download_msg(request, repo, path, 'share-link')
+    send_file_download_msg(request, repo, real_path, 'share-link')
     try:
         file_size = seafile_api.get_file_size(repo.store_id, repo.version,
                                               obj_id)
@@ -845,19 +848,27 @@ def view_file_via_shared_dir(request, token):
     if not repo:
         raise Http404
 
-    path = request.GET.get('p', '').rstrip('/')
-    if not path:
+    # Get file path from frontend, and construct request file path
+    # with fileshare.path to real path, used to fetch file content by RPC.
+    req_path = request.GET.get('p', '').rstrip('/')
+    if not req_path:
         raise Http404
-    if not path.startswith(fileshare.path): # Can not view upper dir of shared dir
-        raise Http404
-    zipped = gen_path_link(path, repo.name)
 
-    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+    real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+
+    # generate dir navigator
+    # generate dir navigator
+    if fileshare.path == '/':
+        zipped = gen_path_link(req_path, repo.name)
+    else:
+        zipped = gen_path_link(req_path, os.path.basename(fileshare.path[:-1]))
+
+    obj_id = seafile_api.get_file_id_by_path(repo_id, real_path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
 
-    filename = os.path.basename(path)
+    filename = os.path.basename(req_path)
     filetype, fileext = get_file_type_and_ext(filename)
     access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
                                                            'view', '', use_onetime=False)
@@ -887,7 +898,7 @@ def view_file_via_shared_dir(request, token):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
-            parent_dir = os.path.dirname(path)
+            parent_dir = os.path.dirname(req_path)
             dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
                                                            current_commit.id, parent_dir)
             if not dirs:
@@ -922,7 +933,8 @@ def view_file_via_shared_dir(request, token):
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
-            'path': path,
+            'from_shared_dir': True,
+            'path': req_path,
             'file_name': filename,
             'file_size': file_size,
             'shared_token': token,
