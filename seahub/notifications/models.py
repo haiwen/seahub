@@ -480,25 +480,32 @@ class UserNotification(models.Model):
         d = json.loads(self.detail)
         filename = d['file_name']
         repo_id = d['repo_id']
-        if d['uploaded_to'] == '/':
-            # current upload path is '/'
-            file_path = '/' + filename
-            link = reverse('view_common_lib_dir', args=[repo_id, ''])
-            name = seafile_api.get_repo(repo_id).name
+        repo = seafile_api.get_repo(repo_id)
+        if repo:
+            if d['uploaded_to'] == '/':
+                # current upload path is '/'
+                file_path = '/' + filename
+                link = reverse('view_common_lib_dir', args=[repo_id, ''])
+                name = repo.name
+            else:
+                uploaded_to = d['uploaded_to'].rstrip('/')
+                file_path = uploaded_to + '/' + filename
+                link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to.lstrip('/'))])
+                name = os.path.basename(uploaded_to)
+
+            file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
+
+            msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
+                'file_link': file_link,
+                'file_name': escape(filename),
+                'link': link,
+                'name': escape(name),
+                }
         else:
-            uploaded_to = d['uploaded_to'].rstrip('/')
-            file_path = uploaded_to + '/' + filename
-            link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to.lstrip('/'))])
-            name = os.path.basename(uploaded_to)
+            msg = _(u"A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted Library</strong>") % {
+                'file_name': escape(filename),
+                }
 
-        file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
-
-        msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
-            'file_link': file_link,
-            'file_name': escape(filename),
-            'link': link,
-            'name': escape(name),
-            }
         return msg
 
     def format_repo_share_msg(self):
