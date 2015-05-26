@@ -3571,8 +3571,11 @@ textarea:-moz-placeholder {/* for FF */
     overflow-y: auto;
     overflow-x: hidden;
 }
+#organization-repos .op-btn {
+    padding:5px 14px;
+}
 button.add-pub-repo {
-    margin-right:10px;
+    margin-right:5px;
 }
 
 /* share popup */
