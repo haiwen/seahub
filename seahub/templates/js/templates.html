@@ -361,13 +361,11 @@
                     <input type="submit" value="{% trans 'Generate'%}" />
                 </form>
                 <div id="download-link-operations" class="hide">
-                    <p>
-                        <span class="vam">{% trans "Link: " %}</span><span id="download-link"></span><br/>
+                        <dt class="vam">{% trans "Link: " %}</dt><dd id="download-link"></dd>
                         <% if (!is_dir) { %>
-                        <span class="vam">{% trans "Direct Link: " %}</span><span id="direct-link"></span>
+                        <dt class="vam">{% trans "Direct Download Link: " %}</dt><dd id="direct-dl-link"></dd>
                         <% } %>
-                        <!--input type="text" readonly="readonly" id="shared-link-text" class="vam" /-->
-                    </p>
+
                     <button id="send-download-link">{% trans 'Send' %}</button>
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
                     <form id="send-download-link-form" action="" class="hide">

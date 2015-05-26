@@ -3574,3 +3574,8 @@ textarea:-moz-placeholder {/* for FF */
 button.add-pub-repo {
     margin-right:10px;
 }
+
+/* share popup */
+#download-link-operations dt {
+    margin: 0;
+}
