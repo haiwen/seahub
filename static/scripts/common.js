@@ -143,15 +143,6 @@ define([
             setTimeout(function() { $('.messages').addClass('hide'); }, time);
         },
 
-        // for '{% if messages %}'
-        showMsg: function() {
-            var msg = $('.messages');
-            if (msg.length > 0) {
-                msg.css({'left':($(window).width() - msg.width())/2, 'top':10}).removeClass('hide');
-                setTimeout(function() { msg.addClass('hide'); }, 5000);
-            }
-        },
-
         showFormError: function(formid, error_msg) {
             $("#" + formid + " .error").html(error_msg).removeClass('hide');
             $("#simplemodal-container").css({'height':'auto'});

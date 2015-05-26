@@ -36,7 +36,6 @@ define([
             Common.initAccountPopup();
             Common.initNoticePopup();
             Common.getContacts();
-            Common.showMsg();
 
             this.dirView = new DirView();
 

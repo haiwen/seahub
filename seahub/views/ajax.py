@@ -2192,11 +2192,7 @@ def ajax_repo_transfer_owner(request, repo_id):
             else:
                 seafile_api.set_repo_owner(repo_id, repo_owner)
 
-    messages.success(request,
-                     _(u'Library %(repo_name)s has been transfered to %(new_owner)s.') %
-                     {'repo_name': escape(repo.name), 'new_owner': escape(repo_owner)})
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
+    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
 def ajax_repo_change_passwd(request, repo_id):
