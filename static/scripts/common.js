@@ -133,7 +133,7 @@ define([
 
         feedback: function(con, type, time) {
             var time = time || 5000;
-            if ($('.messages')[0]) {
+            if ($('.messages').length > 0) {
                 $('.messages').html('<li class="' + type + '">' + con + '</li>');
             } else {
                 var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';

@@ -587,6 +587,16 @@ def repo_transfer_owner(request, repo_id):
             'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 
+def repo_transfer_success(request, repo_id):
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    return render_to_response('repo_transfer_success.html', {
+            'repo': repo,
+            }, context_instance=RequestContext(request))
+
 @login_required
 def repo_change_password(request, repo_id):
     """Change library password.
