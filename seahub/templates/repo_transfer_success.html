@@ -1,0 +1,18 @@
+{% extends "myhome_base.html" %}
+
+{% load i18n seahub_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+
+{% block main_panel %}
+<div class="text-panel">
+    <p></p>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+    $('.text-panel p').html("{% trans "Library {placeholder} has been transfered." %}".replace('{placeholder}', '<span class="op-target">' + "{{repo.name}}" + '</span>'));
+</script>
+{% endblock %}
+
