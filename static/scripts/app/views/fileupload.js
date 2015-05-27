@@ -294,6 +294,7 @@ define([
                             'file_size': Common.fileSizeFormat(file.size, 1),
                             'obj_id': file.id,
                             'file_icon': 'file.png',
+                            'perm': 'rw',
                             'last_update': gettext("Just now"),
                             'starred': false
                         }, {silent: true});
@@ -306,6 +307,7 @@ define([
                         var new_dirent = dirents.add({
                             'is_dir': true,
                             'obj_name': new_name,
+                            'perm': 'rw',
                             'last_modified': now,
                             'last_update': gettext("Just now"),
                             'p_dpath': path + new_name

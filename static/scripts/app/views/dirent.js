@@ -37,7 +37,6 @@ define([
                 encoded_path: Common.encodePath(dirent_path),
                 category: dir.category,
                 repo_id: dir.repo_id,
-                user_perm: this.model.get('perm'),
                 is_repo_owner: dir.is_repo_owner,
                 repo_encrypted: dir.encrypted
             }));
