@@ -130,7 +130,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
                 return a_tag % (smart_str(url_prefix + normalize_page_name(page_name) + '/'), page_alias)
             except (WikiDoesNotExist, WikiPageMissing):
                 a_tag = '''<a href="%s" class="wiki-page-missing">%s</a>'''
-                return a_tag % (smart_str(url_prefix + page_name.replace('/', '-') + '/'), page_alias)
+                return a_tag % (smart_str(url_prefix + normalize_page_name(page_name) + '/'), page_alias)
         elif filetype == IMAGE:
             # load image to wiki page
             path = "/" + page_name
