@@ -142,18 +142,19 @@ define([
                     dataType: 'json',
                     success: function(data) {
                         $.modal.close();
+                        var new_sub_lib = {
+                            'id': data["sub_repo_id"],
+                            'name': data["name"],
+                            'origin_repo_id': ori_repo_id,
+                            'origin_path': path,
+                            'abbrev_origin_path': data["abbrev_origin_path"],
+                            'mtime': new Date().getTime() / 1000,
+                            'mtime_relative': gettext("Just now")
+                        };
                         if (_this.repos.length > 0) {
-                            _this.repos.add({
-                                'id': data["sub_repo_id"],
-                                'name': data["name"],
-                                'origin_repo_id': ori_repo_id,
-                                'origin_path': path,
-                                'abbrev_origin_path': data["abbrev_origin_path"],
-                                'mtime': new Date().getTime() / 1000,
-                                'mtime_relative': gettext("Just now")
-                            }, {prepend: true});
+                            _this.repos.add(new_sub_lib , {prepend: true});
                         } else {
-                            _this.showMyRepos();
+                            _this.repos.reset([new_sub_lib]);
                         }
                     },
                     error: function(xhr, textStatus, errorThrown) {

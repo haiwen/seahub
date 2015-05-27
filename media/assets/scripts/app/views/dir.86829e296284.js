@@ -263,16 +263,16 @@ define([
             },
 
             renderDirOpBar: function() {
-                var dir = this.dir,
-                    user_perm = dir.user_perm;
+                var dir = this.dir;
 
                 this.$dir_op_bar.html($.trim(this.dir_op_bar_template({
-                    user_perm: user_perm,
+                    user_perm: dir.user_perm,
                     encrypted: dir.encrypted,
                     path: dir.path,
                     repo_id: dir.repo_id,
                     site_root: app.pageOptions.site_root,
                     is_repo_owner: dir.is_repo_owner,
+                    is_virtual: dir.is_virtual,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },

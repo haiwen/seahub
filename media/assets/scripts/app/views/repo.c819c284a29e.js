@@ -90,7 +90,7 @@ define([
             var options = {
                 'is_repo_owner': true,
                 'is_virtual': this.model.get('virtual'),
-                'user_perm': this.model.get('permission'),
+                'user_perm': 'rw',
                 'repo_id': this.model.get('id'),
                 'repo_encrypted': this.model.get('encrypted'),
                 'is_dir': true,
