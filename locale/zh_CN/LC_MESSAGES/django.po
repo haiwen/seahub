@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-12 17:13+0800\n"
-"PO-Revision-Date: 2015-05-12 09:38+0000\n"
+"POT-Creation-Date: 2015-05-27 15:19+0800\n"
+"PO-Revision-Date: 2015-05-27 07:26+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -45,20 +45,20 @@ msgstr "描述不能为空"
 msgid "Description is too long (maximum is 100 characters)"
 msgstr "描述太长（不超过100个汉字）"
 
-#: seahub/forms.py:64 seahub/forms.py:182
+#: seahub/forms.py:64 seahub/forms.py:181
 #, python-format
 msgid "Name %s is not valid"
 msgstr "名称 %s 含有无效字符"
 
 #: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:908
-#: seahub/share/views.py:946 seahub/views/__init__.py:1202
-#: seahub/views/ajax.py:379 seahub/views/ajax.py:528 seahub/views/ajax.py:615
-#: seahub/views/ajax.py:775 seahub/views/ajax.py:979 seahub/views/ajax.py:1116
-#: seahub/views/ajax.py:1145 seahub/views/ajax.py:1302
-#: seahub/views/ajax.py:1385 seahub/views/ajax.py:1389
-#: seahub/views/ajax.py:1393 seahub/views/ajax.py:1795
+#: seahub/share/views.py:946 seahub/views/__init__.py:1214
+#: seahub/views/ajax.py:379 seahub/views/ajax.py:530 seahub/views/ajax.py:617
+#: seahub/views/ajax.py:776 seahub/views/ajax.py:980 seahub/views/ajax.py:1117
+#: seahub/views/ajax.py:1146 seahub/views/ajax.py:1307
+#: seahub/views/ajax.py:1390 seahub/views/ajax.py:1394
+#: seahub/views/ajax.py:1398 seahub/views/ajax.py:1800
 #: seahub/views/ajax.py:2251 seahub/views/ajax.py:2308
-#: seahub/views/ajax.py:2444 seahub/views/ajax.py:2654
+#: seahub/views/ajax.py:2449 seahub/views/ajax.py:2664
 msgid "Argument missing"
 msgstr "参数缺失"
 
@@ -100,9 +100,9 @@ msgid "Wrong password"
 msgstr "密码错误"
 
 #: seahub/forms.py:155 seahub/views/__init__.py:509
-#: seahub/views/__init__.py:1208 seahub/views/ajax.py:832
-#: seahub/views/ajax.py:860 seahub/views/ajax.py:903 seahub/views/ajax.py:940
-#: seahub/views/ajax.py:2697
+#: seahub/views/__init__.py:1220 seahub/views/ajax.py:833
+#: seahub/views/ajax.py:861 seahub/views/ajax.py:904 seahub/views/ajax.py:941
+#: seahub/views/ajax.py:2707
 msgid "Internal server error"
 msgstr "服务器内部错误"
 
@@ -130,117 +130,113 @@ msgstr "共享空间配额太小（最小为0）"
 msgid "Library name is required"
 msgstr "资料库名称为必填项"
 
-#: seahub/forms.py:175
-msgid "Library description is required"
-msgstr "资料库描述为必填项"
-
-#: seahub/forms.py:177
+#: seahub/forms.py:176
 msgid "Please enter a number"
 msgstr "请输入数字"
 
 #: seahub/settings.py:141
 msgid "català"
-msgstr ""
+msgstr "català"
 
 #: seahub/settings.py:142
 msgid "Deutsch"
-msgstr ""
+msgstr "Deutsch"
 
 #: seahub/settings.py:143
 msgid "English"
-msgstr ""
+msgstr "English"
 
 #: seahub/settings.py:144
 msgid "Español"
-msgstr ""
+msgstr "Español"
 
 #: seahub/settings.py:145
 msgid "Argentinian Spanish"
-msgstr ""
+msgstr "Argentinian Spanish"
 
 #: seahub/settings.py:146
 msgid "Mexican Spanish"
-msgstr ""
+msgstr "Mexican Spanish"
 
 #: seahub/settings.py:147
 msgid "français"
-msgstr ""
+msgstr "français"
 
 #: seahub/settings.py:148
 msgid "עברית"
-msgstr ""
+msgstr "עברית"
 
 #: seahub/settings.py:149
 msgid "Magyar"
-msgstr ""
+msgstr "Magyar"
 
 #: seahub/settings.py:150
 msgid "Íslenska"
-msgstr ""
+msgstr "Íslenska"
 
 #: seahub/settings.py:151
 msgid "Italiano"
-msgstr ""
+msgstr "Italiano"
 
 #: seahub/settings.py:152
 msgid "日本語"
-msgstr ""
+msgstr "日本語"
 
 #: seahub/settings.py:153
 msgid "한국어"
-msgstr ""
+msgstr "한국어"
 
 #: seahub/settings.py:154
 msgid "Latvian"
-msgstr ""
+msgstr "Latvian"
 
 #: seahub/settings.py:155
 msgid "Nederlands"
-msgstr ""
+msgstr "Nederlands"
 
 #: seahub/settings.py:156
 msgid "Polski"
-msgstr ""
+msgstr "Polski"
 
 #: seahub/settings.py:157
 msgid "Portuguese, Brazil"
-msgstr ""
+msgstr "Portuguese, Brazil"
 
 #: seahub/settings.py:158
 msgid "Русский"
-msgstr ""
+msgstr "Русский"
 
 #: seahub/settings.py:159
 msgid "Slovak"
-msgstr ""
+msgstr "Slovak"
 
 #: seahub/settings.py:160
 msgid "Slovenian"
-msgstr ""
+msgstr "Slovenian"
 
 #: seahub/settings.py:161
 msgid "Svenska"
-msgstr ""
+msgstr "Svenska"
 
 #: seahub/settings.py:162
 msgid "ไทย"
-msgstr ""
+msgstr "ไทย"
 
 #: seahub/settings.py:163
 msgid "Türkçe"
-msgstr ""
+msgstr "Türkçe"
 
 #: seahub/settings.py:164
 msgid "українська мова"
-msgstr ""
+msgstr "українська мова"
 
 #: seahub/settings.py:165
 msgid "简体中文"
-msgstr ""
+msgstr "简体中文"
 
 #: seahub/settings.py:166
 msgid "繁體中文"
-msgstr ""
+msgstr "繁體中文"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
 #: seahub/templates/base_for_backbone.html:9
@@ -253,7 +249,7 @@ msgstr "文件 合作 团队 团体"
 #: seahub/group/templates/group/groups_right_panel.html:19
 #: seahub/templates/base.html:181 seahub/templates/repo.html:216
 #: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:557
+#: seahub/templates/js/templates.html:572
 msgid "Discussion"
 msgstr "讨论"
 
@@ -276,9 +272,9 @@ msgstr "讨论"
 #: seahub/templates/repo_history_view.html:68
 #: seahub/templates/repo_recycle_view.html:86
 #: seahub/templates/repo_shared_link.html:84
-#: seahub/templates/view_shared_dir.html:56
-#: seahub/templates/view_shared_dir.html:58
-#: seahub/templates/view_shared_dir.html:61
+#: seahub/templates/view_shared_dir.html:57
+#: seahub/templates/view_shared_dir.html:59
+#: seahub/templates/view_shared_dir.html:62
 #: seahub/templates/snippets/group_recommend_form.html:28
 #: seahub/templates/snippets/repo_dirents.html:60
 #: seahub/templates/snippets/repo_dirents.html:62
@@ -298,7 +294,7 @@ msgstr "文件"
 #: seahub/share/templates/share/priv_shared_files.html:71
 #: seahub/templates/repo_shared_link.html:53
 #: seahub/templates/repo_shared_link.html:80
-#: seahub/templates/view_shared_dir.html:36
+#: seahub/templates/view_shared_dir.html:37
 #: seahub/templates/js/templates.html:193
 #: seahub/templates/js/templates.html:195
 #: seahub/templates/snippets/group_recommend_form.html:22
@@ -331,10 +327,11 @@ msgstr "暂无讨论"
 #: seahub/templates/activities.html:13 seahub/templates/libraries.html:25
 #: seahub/templates/libraries.html:106 seahub/templates/libraries.html:124
 #: seahub/templates/libraries.html:149 seahub/templates/libraries.html:180
-#: seahub/templates/libraries.html:198 seahub/templates/myhome.html:63
+#: seahub/templates/libraries.html:199 seahub/templates/myhome.html:63
 #: seahub/templates/myhome.html.py:142 seahub/templates/js/dir-view.html:11
-#: seahub/templates/js/lib-op-popups.html:57
-#: seahub/templates/js/lib-op-popups.html:62
+#: seahub/templates/js/lib-op-popups.html:51
+#: seahub/templates/js/lib-op-popups.html:56
+#: seahub/templates/js/templates.html:737
 #: seahub/templates/snippets/repo_dir_data.html:72
 msgid "Loading..."
 msgstr "加载中..."
@@ -354,10 +351,10 @@ msgstr "加载中..."
 #: seahub/templates/repo.html:1061 seahub/templates/repo.html.py:1879
 #: seahub/templates/repo.html:2137 seahub/templates/repo.html.py:2162
 #: seahub/templates/repo.html:2207 seahub/templates/repo.html.py:2312
-#: seahub/templates/repo.html:2385 seahub/templates/repo_basic_info.html:117
+#: seahub/templates/repo.html:2385 seahub/templates/repo_basic_info.html:107
 #: seahub/templates/repo_change_password.html:107
-#: seahub/templates/repo_transfer_owner.html:77
-#: seahub/templates/view_shared_dir.html:154
+#: seahub/templates/repo_transfer_owner.html:75
+#: seahub/templates/view_shared_dir.html:155
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:135
 #: seahub/templates/snippets/events_js.html:56
@@ -426,7 +423,7 @@ msgstr "新回复"
 #: seahub/message/templates/message/user_msg_list.html:4
 #: seahub/share/templates/share/user_share_list.html:24
 #: seahub/templates/home_base.html:24 seahub/templates/myhome.html:44
-#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:521
 msgid "Messages"
 msgstr "消息"
 
@@ -486,10 +483,10 @@ msgid "Username"
 msgstr "用户名"
 
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:183
-#: seahub/base/accounts.py:449 seahub/templates/js/lib-op-popups.html:111
+#: seahub/base/accounts.py:449 seahub/templates/js/lib-op-popups.html:105
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:344
-#: seahub/templates/js/templates.html:387
+#: seahub/templates/js/templates.html:347
+#: seahub/templates/js/templates.html:398
 #: seahub/templates/registration/login.html:36
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:39
@@ -710,7 +707,7 @@ msgstr "当前头像："
 #: seahub/templates/repo.html.py:100 seahub/templates/repo.html:130
 #: seahub/templates/repo.html.py:154 seahub/templates/repo.html:175
 #: seahub/templates/repo.html.py:191 seahub/templates/repo.html:206
-#: seahub/templates/repo_basic_info.html:52
+#: seahub/templates/repo_basic_info.html:50
 #: seahub/templates/repo_change_password.html:46
 #: seahub/templates/repo_folder_perm.html:65
 #: seahub/templates/repo_folder_perm.html:120
@@ -719,19 +716,20 @@ msgstr "当前头像："
 #: seahub/templates/share_access_validation.html:10
 #: seahub/templates/shared_file_view.html:54
 #: seahub/templates/js/lib-op-popups.html:9
-#: seahub/templates/js/lib-op-popups.html:35
-#: seahub/templates/js/lib-op-popups.html:47
-#: seahub/templates/js/lib-op-popups.html:73
-#: seahub/templates/js/lib-op-popups.html:112
+#: seahub/templates/js/lib-op-popups.html:29
+#: seahub/templates/js/lib-op-popups.html:41
+#: seahub/templates/js/lib-op-popups.html:67
+#: seahub/templates/js/lib-op-popups.html:106
 #: seahub/templates/js/templates.html:25
-#: seahub/templates/js/templates.html:370
-#: seahub/templates/js/templates.html:405
-#: seahub/templates/js/templates.html:428
-#: seahub/templates/js/templates.html:440
-#: seahub/templates/js/templates.html:540
-#: seahub/templates/js/templates.html:591
-#: seahub/templates/js/templates.html:654
-#: seahub/templates/js/templates.html:676
+#: seahub/templates/js/templates.html:380
+#: seahub/templates/js/templates.html:416
+#: seahub/templates/js/templates.html:443
+#: seahub/templates/js/templates.html:455
+#: seahub/templates/js/templates.html:555
+#: seahub/templates/js/templates.html:606
+#: seahub/templates/js/templates.html:669
+#: seahub/templates/js/templates.html:691
+#: seahub/templates/js/templates.html:750
 #: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -866,7 +864,7 @@ msgid "Recovered deleted directory"
 msgstr "还原已删除的目录"
 
 #: seahub/base/templatetags/seahub_tags.py:129
-#: seahub/base/templatetags/seahub_tags.py:198 seahub/views/ajax.py:1896
+#: seahub/base/templatetags/seahub_tags.py:198 seahub/views/ajax.py:1901
 msgid "Changed library name or description"
 msgstr "修改了资料库名称或描述"
 
@@ -930,16 +928,18 @@ msgstr[0] "%(seconds)d 秒前"
 #: seahub/templates/repo_share_manage.html:101
 #: seahub/templates/js/templates.html:10 seahub/templates/js/templates.html:33
 #: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:74
-#: seahub/templates/js/templates.html:424
-#: seahub/templates/js/templates.html:451
-#: seahub/templates/js/templates.html:454
-#: seahub/templates/js/templates.html:471
-#: seahub/templates/js/templates.html:473
-#: seahub/templates/js/templates.html:608
-#: seahub/templates/js/templates.html:617
-#: seahub/templates/js/templates.html:620
-#: seahub/templates/js/templates.html:650
-#: seahub/templates/js/templates.html:672
+#: seahub/templates/js/templates.html:439
+#: seahub/templates/js/templates.html:466
+#: seahub/templates/js/templates.html:469
+#: seahub/templates/js/templates.html:486
+#: seahub/templates/js/templates.html:488
+#: seahub/templates/js/templates.html:623
+#: seahub/templates/js/templates.html:632
+#: seahub/templates/js/templates.html:635
+#: seahub/templates/js/templates.html:665
+#: seahub/templates/js/templates.html:687
+#: seahub/templates/js/templates.html:760
+#: seahub/templates/js/templates.html:767
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_shared_repos.html:7
@@ -971,13 +971,14 @@ msgstr "可读写"
 #: seahub/templates/repo_share_manage.html:102
 #: seahub/templates/js/templates.html:11 seahub/templates/js/templates.html:54
 #: seahub/templates/js/templates.html:76
-#: seahub/templates/js/templates.html:425
-#: seahub/templates/js/templates.html:456
-#: seahub/templates/js/templates.html:610
-#: seahub/templates/js/templates.html:618
-#: seahub/templates/js/templates.html:621
-#: seahub/templates/js/templates.html:651
-#: seahub/templates/js/templates.html:673
+#: seahub/templates/js/templates.html:440
+#: seahub/templates/js/templates.html:471
+#: seahub/templates/js/templates.html:625
+#: seahub/templates/js/templates.html:633
+#: seahub/templates/js/templates.html:636
+#: seahub/templates/js/templates.html:666
+#: seahub/templates/js/templates.html:688
+#: seahub/templates/js/templates.html:768
 #: seahub/templates/snippets/my_group_repos.html:30
 #: seahub/templates/snippets/my_shared_repos.html:12
 #: seahub/templates/snippets/repo_create_form.html:12
@@ -1025,7 +1026,7 @@ msgstr "成功删除 %s "
 #: seahub/contacts/templates/contacts/contact_list.html:10
 #: seahub/group/templates/group/grpmember_add_form.html:7
 #: seahub/templates/home_base.html:26 seahub/templates/myhome.html:46
-#: seahub/templates/js/templates.html:508
+#: seahub/templates/js/templates.html:523
 #: seahub/templates/snippets/repo_share_form.html:8
 msgid "Contacts"
 msgstr "通讯录"
@@ -1061,10 +1062,11 @@ msgstr "邮箱"
 #: seahub/templates/repo_recycle_view.html:61
 #: seahub/templates/repo_shared_link.html:44
 #: seahub/templates/repo_shared_link.html:70
-#: seahub/templates/view_shared_dir.html:29
+#: seahub/templates/view_shared_dir.html:30
 #: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:176
-#: seahub/templates/js/templates.html:704
-#: seahub/templates/js/templates.html:713
+#: seahub/templates/js/templates.html:719
+#: seahub/templates/js/templates.html:728
+#: seahub/templates/js/templates.html:743
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
 #: seahub/templates/snippets/repo_create_form.html:4
@@ -1116,9 +1118,9 @@ msgstr "备注"
 #: seahub/templates/repo_shared_link.html:48
 #: seahub/templates/repo_shared_link.html:74
 #: seahub/templates/repo_view_snapshot.html:25
-#: seahub/templates/view_shared_dir.html:31
+#: seahub/templates/view_shared_dir.html:32
 #: seahub/templates/snippets/repo_dir_data.html:67
-#: seahub/templates/sysadmin/repoadmin_table.html:8
+#: seahub/templates/sysadmin/repoadmin_table.html:7
 #: seahub/templates/sysadmin/sys_admin_group_info.html:43
 #: seahub/templates/sysadmin/sys_group_admin.html:15
 #: seahub/templates/sysadmin/sys_org_info_group.html:21
@@ -1145,7 +1147,7 @@ msgstr "操作"
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_sf.html:6
 #: seahub/templates/view_file_text.html:24
-#: seahub/templates/js/templates.html:613
+#: seahub/templates/js/templates.html:628
 #: seahub/templates/sysadmin/sys_org_info_user.html:34
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:62
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:80
@@ -1173,15 +1175,15 @@ msgstr "编辑"
 #: seahub/templates/js/templates.html:114
 #: seahub/templates/js/templates.html:212
 #: seahub/templates/js/templates.html:279
-#: seahub/templates/js/templates.html:363
-#: seahub/templates/js/templates.html:398
-#: seahub/templates/js/templates.html:479
-#: seahub/templates/js/templates.html:626
+#: seahub/templates/js/templates.html:373
+#: seahub/templates/js/templates.html:409
+#: seahub/templates/js/templates.html:494
+#: seahub/templates/js/templates.html:641
 #: seahub/templates/snippets/file_share_popup.html:58
 #: seahub/templates/snippets/file_share_popup.html:96
 #: seahub/templates/snippets/repo_dirents.html:36
 #: seahub/templates/snippets/repo_dirents.html:93
-#: seahub/templates/sysadmin/repoadmin_table.html:24
+#: seahub/templates/sysadmin/repoadmin_table.html:22
 #: seahub/templates/sysadmin/sys_admin_group_info.html:53
 #: seahub/templates/sysadmin/sys_group_admin.html:27
 #: seahub/templates/sysadmin/sys_org_admin.html:54
@@ -1484,9 +1486,9 @@ msgstr "发送成功，请等候管理员处理。"
 msgid "Discussion is required."
 msgstr "讨论为必填项"
 
-#: seahub/group/views.py:1320 seahub/views/__init__.py:801
-#: seahub/views/ajax.py:1407 seahub/views/file.py:346 seahub/views/file.py:659
-#: seahub/views/file.py:795
+#: seahub/group/views.py:1320 seahub/views/__init__.py:811
+#: seahub/views/ajax.py:1412 seahub/views/file.py:346 seahub/views/file.py:714
+#: seahub/views/file.py:868
 msgid "File does not exist"
 msgstr "文件不存在"
 
@@ -1511,8 +1513,8 @@ msgstr "创建维基页面失败，请稍后再试"
 msgid "Unknown"
 msgstr "未知"
 
-#: seahub/group/views.py:1456 seahub/views/__init__.py:795
-#: seahub/views/ajax.py:1970 seahub/views/ajax.py:2034
+#: seahub/group/views.py:1456 seahub/views/__init__.py:805
+#: seahub/views/ajax.py:1975 seahub/views/ajax.py:2039
 #: seahub/views/wiki.py:108
 msgid "Internal Server Error"
 msgstr "服务器内部错误"
@@ -1611,13 +1613,13 @@ msgstr "输入不能为空且应少于2048个字符。"
 #: seahub/templates/shared_file_view.html:55
 #: seahub/templates/view_shared_upload_link.html:90
 #: seahub/templates/js/lib-op-popups.html:10
-#: seahub/templates/js/lib-op-popups.html:36
-#: seahub/templates/js/lib-op-popups.html:48
-#: seahub/templates/js/lib-op-popups.html:74
-#: seahub/templates/js/lib-op-popups.html:83
-#: seahub/templates/js/lib-op-popups.html:123
-#: seahub/templates/js/templates.html:371
-#: seahub/templates/js/templates.html:406
+#: seahub/templates/js/lib-op-popups.html:30
+#: seahub/templates/js/lib-op-popups.html:42
+#: seahub/templates/js/lib-op-popups.html:68
+#: seahub/templates/js/lib-op-popups.html:77
+#: seahub/templates/js/lib-op-popups.html:117
+#: seahub/templates/js/templates.html:381
+#: seahub/templates/js/templates.html:417
 #: seahub/templates/snippets/file_share_popup.html:70
 #: seahub/templates/snippets/file_share_popup.html:106
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
@@ -1630,16 +1632,16 @@ msgstr "取消"
 #: seahub/group/templates/group/group_info.html:12
 #: seahub/group/templates/group/group_info.html:36
 #: seahub/templates/home_base.html:10 seahub/templates/home_base.html.py:44
-#: seahub/templates/myhome.html:30 seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:523
-#: seahub/templates/js/templates.html:549
-#: seahub/templates/js/templates.html:574
+#: seahub/templates/myhome.html:30 seahub/templates/js/templates.html:504
+#: seahub/templates/js/templates.html:538
+#: seahub/templates/js/templates.html:564
+#: seahub/templates/js/templates.html:589
 msgid "Enable Modules"
 msgstr "添加模块"
 
 #: seahub/group/templates/group/group_base.html:18
 #: seahub/group/templates/group/group_info.html:38
-#: seahub/templates/js/templates.html:552
+#: seahub/templates/js/templates.html:567
 msgid "This group is public."
 msgstr "当前群组为公开群组。"
 
@@ -1659,9 +1661,9 @@ msgstr "当前群组为公开群组。"
 #: seahub/templates/js/templates.html:152
 #: seahub/templates/js/templates.html:154
 #: seahub/templates/js/templates.html:156
-#: seahub/templates/js/templates.html:493
-#: seahub/templates/js/templates.html:514
-#: seahub/templates/js/templates.html:556
+#: seahub/templates/js/templates.html:508
+#: seahub/templates/js/templates.html:529
+#: seahub/templates/js/templates.html:571
 #: seahub/templates/sysadmin/base.html:12
 #: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_info.html:19
@@ -1677,15 +1679,15 @@ msgstr "资料库"
 #: seahub/group/templates/group/group_info.html:19
 #: seahub/group/templates/group/group_info.html:47
 #: seahub/group/templates/group/groups_right_panel.html:21
-#: seahub/templates/js/templates.html:561
-#: seahub/templates/js/templates.html:585
+#: seahub/templates/js/templates.html:576
+#: seahub/templates/js/templates.html:600
 msgid "Wiki"
 msgstr "维基"
 
 #: seahub/group/templates/group/group_base.html:32
 #: seahub/group/templates/group/group_info.html:52
 #: seahub/templates/home_base.html:35 seahub/templates/myhome.html:55
-#: seahub/templates/js/templates.html:517
+#: seahub/templates/js/templates.html:532
 msgid "Files"
 msgstr "文件"
 
@@ -1694,7 +1696,7 @@ msgstr "文件"
 #: seahub/group/templates/group/group_manage.html:10
 #: seahub/group/templates/group/group_members.html:8
 #: seahub/templates/libraries.html:39 seahub/templates/pub_base.html:14
-#: seahub/templates/pubrepo.html:17 seahub/templates/js/templates.html:565
+#: seahub/templates/pubrepo.html:17 seahub/templates/js/templates.html:580
 #: seahub/templates/sysadmin/sys_admin_group_info.html:31
 #: seahub/templates/sysadmin/sys_org_info_group.html:8
 #: seahub/templates/sysadmin/sys_org_info_library.html:8
@@ -1706,7 +1708,7 @@ msgstr "成员"
 #: seahub/group/templates/group/group_base.html:40
 #: seahub/group/templates/group/group_info.html:60
 #: seahub/templates/base.html:91 seahub/templates/base_for_backbone.html:124
-#: seahub/templates/js/templates.html:568
+#: seahub/templates/js/templates.html:583
 msgid "Admin"
 msgstr "管理"
 
@@ -1757,7 +1759,7 @@ msgstr "下一页"
 #: seahub/group/templates/group/group_discuss.html:142
 #: seahub/message/templates/message/user_msg_list.html:98
 msgid "↑Top"
-msgstr ""
+msgstr "↑Top"
 
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:195
@@ -1768,8 +1770,8 @@ msgstr "确定要删除这条讨论？"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:195
 #: seahub/message/templates/message/user_msg_list.html:231
-#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:159
-#: seahub/templates/devices.html:47 seahub/templates/js/lib-op-popups.html:130
+#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:150
+#: seahub/templates/devices.html:47 seahub/templates/js/lib-op-popups.html:124
 #: seahub/templates/snippets/repo_del_popup.html:4
 msgid "Yes"
 msgstr "确定"
@@ -1777,8 +1779,8 @@ msgstr "确定"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:195
 #: seahub/message/templates/message/user_msg_list.html:231
-#: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:160
-#: seahub/templates/devices.html:48 seahub/templates/js/lib-op-popups.html:131
+#: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:151
+#: seahub/templates/devices.html:48 seahub/templates/js/lib-op-popups.html:125
 #: seahub/templates/snippets/repo_del_popup.html:5
 msgid "No"
 msgstr "取消"
@@ -1817,10 +1819,10 @@ msgstr "新建资料库"
 #: seahub/templates/repo_recycle_view.html:63
 #: seahub/templates/repo_shared_link.html:46
 #: seahub/templates/repo_shared_link.html:72
-#: seahub/templates/view_shared_dir.html:30
+#: seahub/templates/view_shared_dir.html:31
 #: seahub/templates/js/templates.html:178
-#: seahub/templates/js/templates.html:706
-#: seahub/templates/js/templates.html:715
+#: seahub/templates/js/templates.html:721
+#: seahub/templates/js/templates.html:730
 #: seahub/templates/snippets/repo_dir_data.html:65
 #: seahub/templates/sysadmin/sys_admin_group_info.html:41
 #: seahub/templates/sysadmin/userinfo.html:130
@@ -1835,8 +1837,9 @@ msgstr "大小"
 #: seahub/templates/myhome.html.py:112 seahub/templates/myhome.html:131
 #: seahub/templates/pubrepo.html:36 seahub/templates/starred.html:15
 #: seahub/templates/js/templates.html:179
-#: seahub/templates/js/templates.html:707
-#: seahub/templates/js/templates.html:716
+#: seahub/templates/js/templates.html:722
+#: seahub/templates/js/templates.html:731
+#: seahub/templates/js/templates.html:744
 #: seahub/templates/snippets/my_group_repos.html:10
 #: seahub/templates/snippets/repo_dir_data.html:66
 msgid "Last Update"
@@ -1845,7 +1848,7 @@ msgstr "更新时间"
 #: seahub/group/templates/group/group_info.html:86
 #: seahub/group/templates/group/group_info_for_pub.html:16
 #: seahub/templates/my_group_repos.html:11 seahub/templates/myhome.html:132
-#: seahub/templates/pubrepo.html:37 seahub/templates/js/templates.html:717
+#: seahub/templates/pubrepo.html:37 seahub/templates/js/templates.html:732
 #: seahub/templates/snippets/my_group_repos.html:11
 #: seahub/templates/sysadmin/sys_admin_group_info.html:42
 msgid "Shared By"
@@ -1874,11 +1877,9 @@ msgstr "以可读写方式共享的资料库可以被其他群组成员下载和
 #: seahub/group/templates/group/group_wiki.html:48
 #: seahub/share/templates/share/user_share_list.html:34
 #: seahub/templates/my_group_repos.html:9
-#: seahub/templates/repo_basic_info.html:40
 #: seahub/templates/repo_history.html:26
 #: seahub/templates/snippets/my_group_repos.html:9
 #: seahub/templates/snippets/repo_create_form.html:6
-#: seahub/templates/sysadmin/repoadmin_table.html:7
 #: seahub/templates/sysadmin/sys_list_system.html:25
 #: seahub/templates/sysadmin/sys_org_info_library.html:21
 #: seahub/templates/sysadmin/userinfo.html:80
@@ -1897,9 +1898,9 @@ msgstr "描述"
 #: seahub/templates/my_group_repos.html:25
 #: seahub/templates/my_group_repos.html:28
 #: seahub/templates/my_group_repos.html:30
-#: seahub/templates/js/templates.html:451
-#: seahub/templates/js/templates.html:454
-#: seahub/templates/js/templates.html:456
+#: seahub/templates/js/templates.html:466
+#: seahub/templates/js/templates.html:469
+#: seahub/templates/js/templates.html:471
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_group_repos.html:30
@@ -1997,7 +1998,7 @@ msgid "Make Public"
 msgstr "设为公开"
 
 #: seahub/group/templates/group/group_manage.html:89
-#: seahub/templates/sysadmin/repoadmin_table.html:25
+#: seahub/templates/sysadmin/repoadmin_table.html:23
 msgid "Transfer"
 msgstr "转让"
 
@@ -2177,7 +2178,7 @@ msgstr "新建页面"
 #: seahub/group/templates/group/group_wiki.html:77
 #: seahub/group/templates/group/group_wiki.html:136
 #: seahub/templates/wiki/personal_wiki.html:69
-#: seahub/templates/wiki/personal_wiki.html:128
+#: seahub/templates/wiki/personal_wiki.html:129
 msgid "Delete Page"
 msgstr "删除页面"
 
@@ -2198,19 +2199,18 @@ msgid "Last modified by %(modifier)s, %(modify_time)s"
 msgstr "最近修改：%(modifier)s, %(modify_time)s"
 
 #: seahub/group/templates/group/group_wiki.html:137
-#: seahub/templates/wiki/personal_wiki.html:129
+#: seahub/templates/wiki/personal_wiki.html:130
 msgid "Are you sure you want to delete this page?"
 msgstr "确定要删除该页面？"
 
 #: seahub/group/templates/group/group_wiki.html:158
-#: seahub/templates/repo_basic_info.html:77
-#: seahub/templates/wiki/personal_wiki.html:150
+#: seahub/templates/repo_basic_info.html:74
+#: seahub/templates/wiki/personal_wiki.html:151
 msgid "Name is required."
 msgstr "名称为必填项。"
 
 #: seahub/group/templates/group/group_wiki.html:162
-#: seahub/templates/repo_basic_info.html:81
-#: seahub/templates/wiki/personal_wiki.html:154
+#: seahub/templates/wiki/personal_wiki.html:155
 msgid "Description is required."
 msgstr "描述为必填项"
 
@@ -2624,62 +2624,69 @@ msgstr "请先添加联系人"
 msgid "Send a message..."
 msgstr "发送消息..."
 
-#: seahub/notifications/models.py:491
+#: seahub/notifications/models.py:498
 #, python-format
 msgid ""
-"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to your "
-"folder <a href='%(folder_link)s'>%(folder)s</a>"
-msgstr "文件 <a href='%(file_link)s'>%(file_name)s</a> 已经上传到你的文件夹 <a href='%(folder_link)s'>%(folder)s</a>"
+"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
+"href='%(link)s'>%(name)s</a>"
+msgstr ""
 
-#: seahub/notifications/models.py:514
+#: seahub/notifications/models.py:505
+#, python-format
+msgid ""
+"A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
+"Library</strong>"
+msgstr ""
+
+#: seahub/notifications/models.py:526
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
 msgstr "%(user)s 共享了资料库<a href='%(href)s'>%(repo_name)s</a>给你"
 
-#: seahub/notifications/models.py:532
+#: seahub/notifications/models.py:544
 #, python-format
 msgid ""
 "%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to "
 "you."
 msgstr "%(user)s 共享了文件<a href='%(href)s'>%(file_name)s</a>给你"
 
-#: seahub/notifications/models.py:547 seahub/notifications/models.py:567
-#: seahub/notifications/models.py:584 seahub/notifications/models.py:614
-#: seahub/notifications/models.py:631 seahub/notifications/models.py:655
-#: seahub/notifications/models.py:672 seahub/utils/__init__.py:149
+#: seahub/notifications/models.py:559 seahub/notifications/models.py:579
+#: seahub/notifications/models.py:596 seahub/notifications/models.py:626
+#: seahub/notifications/models.py:643 seahub/notifications/models.py:667
+#: seahub/notifications/models.py:684 seahub/utils/__init__.py:149
 #: seahub/utils/__init__.py:1096
 msgid "Internal error"
 msgstr "内部错误"
 
-#: seahub/notifications/models.py:552
+#: seahub/notifications/models.py:564
 #, python-format
 msgid "You have received a <a href='%(href)s'>new message</a> from %(user)s."
 msgstr "你收到来自 %(user)s 的<a href='%(href)s'>新消息</a>。"
 
-#: seahub/notifications/models.py:595
+#: seahub/notifications/models.py:607
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has a new discussion."
 msgstr "<a href='%(href)s'>%(group_name)s</a> 有新讨论。"
 
-#: seahub/notifications/models.py:599
+#: seahub/notifications/models.py:611
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>."
 msgstr "%(user)s 在群组 <a href='%(href)s'>%(group_name)s</a> 中发布了一个新的讨论。"
 
-#: seahub/notifications/models.py:636
+#: seahub/notifications/models.py:648
 #, python-format
 msgid "One <a href='%(href)s'>group discussion</a> has a new reply."
 msgstr "<a href='%(href)s'>群组讨论</a> 有了新的回复。"
 
-#: seahub/notifications/models.py:640
+#: seahub/notifications/models.py:652
 #, python-format
 msgid "%(user)s replied the <a href='%(href)s'>group discussion</a>."
 msgstr "%(user)s 回复了 <a href='%(href)s'>群组讨论</a>."
 
-#: seahub/notifications/models.py:696
+#: seahub/notifications/models.py:708
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -2687,7 +2694,7 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "用户 <a href='%(user_profile)s'>%(username)s</a> 请求加入到群组 <a href='%(href)s'>%(group_name)s</a>，验证信息：%(join_request_msg)s"
 
-#: seahub/notifications/views.py:124
+#: seahub/notifications/views.py:129
 msgid "Successfully cleared all notices."
 msgstr "成功清空所有通知。"
 
@@ -3074,10 +3081,10 @@ msgstr "共享\"%s\"失败，空间不足。<a href=\"http://seafile.com/\">升�
 
 #: seahub/share/views.py:279 seahub/share/views.py:372
 #: seahub/share/views.py:672 seahub/share/views.py:1243
-#: seahub/views/__init__.py:988 seahub/views/__init__.py:1029
-#: seahub/views/__init__.py:1424 seahub/views/__init__.py:1831
-#: seahub/views/ajax.py:1801 seahub/views/ajax.py:2312
-#: seahub/views/ajax.py:2449 seahub/views/sysadmin.py:1337
+#: seahub/views/__init__.py:998 seahub/views/__init__.py:1039
+#: seahub/views/__init__.py:1409 seahub/views/__init__.py:1817
+#: seahub/views/ajax.py:1806 seahub/views/ajax.py:2312
+#: seahub/views/ajax.py:2454 seahub/views/sysadmin.py:1337
 msgid "Library does not exist"
 msgstr "资料库不存在"
 
@@ -3089,19 +3096,19 @@ msgstr "无效参数"
 #: seahub/share/views.py:322 seahub/share/views.py:338
 #: seahub/share/views.py:348 seahub/share/views.py:1265
 #: seahub/share/views.py:1398 seahub/views/__init__.py:501
-#: seahub/views/__init__.py:997 seahub/views/__init__.py:1485
-#: seahub/views/__init__.py:1536 seahub/views/ajax.py:185
-#: seahub/views/ajax.py:535 seahub/views/ajax.py:633 seahub/views/ajax.py:640
-#: seahub/views/ajax.py:689 seahub/views/ajax.py:696 seahub/views/ajax.py:793
-#: seahub/views/ajax.py:818 seahub/views/ajax.py:889 seahub/views/ajax.py:998
-#: seahub/views/ajax.py:1808 seahub/views/ajax.py:2295
-#: seahub/views/ajax.py:2316 seahub/views/ajax.py:2432
-#: seahub/views/ajax.py:2453 seahub/views/file.py:896
+#: seahub/views/__init__.py:1007 seahub/views/__init__.py:1470
+#: seahub/views/__init__.py:1521 seahub/views/ajax.py:185
+#: seahub/views/ajax.py:537 seahub/views/ajax.py:635 seahub/views/ajax.py:642
+#: seahub/views/ajax.py:691 seahub/views/ajax.py:698 seahub/views/ajax.py:794
+#: seahub/views/ajax.py:819 seahub/views/ajax.py:890 seahub/views/ajax.py:999
+#: seahub/views/ajax.py:1813 seahub/views/ajax.py:2295
+#: seahub/views/ajax.py:2321 seahub/views/ajax.py:2437
+#: seahub/views/ajax.py:2463 seahub/views/file.py:970
 msgid "Permission denied"
 msgstr "没有权限"
 
 #: seahub/share/views.py:367 seahub/share/views.py:387
-#: seahub/views/__init__.py:1222
+#: seahub/views/__init__.py:1234
 msgid "Argument is not valid"
 msgstr "参数无效"
 
@@ -3127,9 +3134,9 @@ msgstr "所有成员"
 
 #: seahub/share/views.py:850 seahub/share/views.py:1229
 #: seahub/share/views.py:1371 seahub/share/views.py:1447
-#: seahub/views/__init__.py:1027 seahub/views/__init__.py:1478
-#: seahub/views/__init__.py:1529 seahub/views/ajax.py:1171
-#: seahub/views/ajax.py:1191 seahub/views/file.py:911
+#: seahub/views/__init__.py:1037 seahub/views/__init__.py:1463
+#: seahub/views/__init__.py:1514 seahub/views/ajax.py:1172
+#: seahub/views/ajax.py:1192 seahub/views/file.py:985
 msgid "Invalid arguments"
 msgstr "非法参数"
 
@@ -3219,9 +3226,9 @@ msgstr "有人在 %s 上共享了一个上传链接给你"
 
 #: seahub/share/views.py:1486 seahub/thumbnail/views.py:45
 #: seahub/views/ajax.py:247 seahub/views/ajax.py:341 seahub/views/ajax.py:421
-#: seahub/views/ajax.py:521 seahub/views/ajax.py:608 seahub/views/ajax.py:671
-#: seahub/views/ajax.py:720 seahub/views/ajax.py:765 seahub/views/ajax.py:967
-#: seahub/views/ajax.py:1227 seahub/views/ajax.py:2648
+#: seahub/views/ajax.py:523 seahub/views/ajax.py:610 seahub/views/ajax.py:673
+#: seahub/views/ajax.py:722 seahub/views/ajax.py:766 seahub/views/ajax.py:968
+#: seahub/views/ajax.py:1228 seahub/views/ajax.py:2658
 msgid "Library does not exist."
 msgstr "资料库不存在"
 
@@ -3307,7 +3314,7 @@ msgstr "文件夹 - 共享"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:10
 #: seahub/templates/home_base.html:33 seahub/templates/myhome.html:53
-#: seahub/templates/js/templates.html:515
+#: seahub/templates/js/templates.html:530
 msgid "Folders"
 msgstr "文件夹"
 
@@ -3325,8 +3332,9 @@ msgstr "共享给"
 #: seahub/templates/repo_share_manage.html:51
 #: seahub/templates/repo_share_manage.html:84
 #: seahub/templates/js/templates.html:222
-#: seahub/templates/js/templates.html:641
-#: seahub/templates/js/templates.html:663
+#: seahub/templates/js/templates.html:656
+#: seahub/templates/js/templates.html:678
+#: seahub/templates/js/templates.html:745
 msgid "Permission"
 msgstr "权限"
 
@@ -3455,7 +3463,7 @@ msgid "Download and Sync"
 msgstr "下载和同步"
 
 #: seahub/share/templates/share/user_share_list.html:59
-#: seahub/templates/js/templates.html:462
+#: seahub/templates/js/templates.html:477
 #: seahub/templates/snippets/my_shared_repos.html:29
 msgid "Leave Share"
 msgstr "退出共享"
@@ -3470,7 +3478,7 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "对不起，你访问的页面不存在。"
 
 #: seahub/templates/activities.html:4 seahub/templates/home_base.html:17
-#: seahub/templates/myhome.html:37 seahub/templates/js/templates.html:497
+#: seahub/templates/myhome.html:37 seahub/templates/js/templates.html:512
 msgid "Activities"
 msgstr "文件活动"
 
@@ -3573,7 +3581,7 @@ msgstr "请输入密码。"
 
 #: seahub/templates/devices.html:5 seahub/templates/devices.html.py:9
 #: seahub/templates/home_base.html:25 seahub/templates/myhome.html:45
-#: seahub/templates/js/templates.html:507
+#: seahub/templates/js/templates.html:522
 msgid "Devices"
 msgstr "设备"
 
@@ -3587,7 +3595,7 @@ msgstr "设备名称"
 
 #: seahub/templates/devices.html:15
 msgid "IP"
-msgstr ""
+msgstr "IP"
 
 #: seahub/templates/devices.html:16
 msgid "Last Access"
@@ -3634,8 +3642,8 @@ msgstr "断开连接成功。"
 #: seahub/templates/view_file_base.html:109
 #: seahub/templates/view_history_file.html:34
 #: seahub/templates/view_history_file.html:48
-#: seahub/templates/view_shared_dir.html:44
-#: seahub/templates/view_shared_dir.html:71
+#: seahub/templates/view_shared_dir.html:45
+#: seahub/templates/view_shared_dir.html:72
 #: seahub/templates/js/templates.html:207
 #: seahub/templates/js/templates.html:274
 #: seahub/templates/snippets/repo_dirents.html:24
@@ -3648,7 +3656,7 @@ msgstr "下载"
 #: seahub/templates/repo_history_view.html:38
 #: seahub/templates/repo_recycle_view.html:24
 #: seahub/templates/shared_file_view.html:17
-#: seahub/templates/view_shared_dir.html:13
+#: seahub/templates/view_shared_dir.html:14
 msgid "Current path: "
 msgstr "当前路径："
 
@@ -3963,7 +3971,7 @@ msgid "Password is required."
 msgstr "密码为必填项"
 
 #: seahub/templates/file_revisions.html:5
-#: seahub/templates/repo_basic_info.html:44
+#: seahub/templates/repo_basic_info.html:42
 #: seahub/templates/repo_history.html:5
 #: seahub/templates/view_file_base.html:63
 #: seahub/templates/js/templates.html:139
@@ -4013,11 +4021,11 @@ msgstr "还原"
 
 #: seahub/templates/file_revisions.html:60
 msgid "Diff"
-msgstr ""
+msgstr "Diff"
 
 #: seahub/templates/finish_payment.html:9
 msgid "Plan"
-msgstr ""
+msgstr "计划"
 
 #: seahub/templates/footer.html:5
 #: seahub/templates/snippets/search_form.html:44
@@ -4049,31 +4057,31 @@ msgid "About Us"
 msgstr "关于我们"
 
 #: seahub/templates/home_base.html:8 seahub/templates/myhome.html:28
-#: seahub/templates/js/templates.html:487
+#: seahub/templates/js/templates.html:502
 msgid "Personal"
 msgstr "个人页面"
 
 #: seahub/templates/home_base.html:15 seahub/templates/libraries.html:111
 #: seahub/templates/myhome.html:35 seahub/templates/starred.html:8
-#: seahub/templates/js/templates.html:494
+#: seahub/templates/js/templates.html:509
 msgid "Starred"
 msgstr "星标文件"
 
 #: seahub/templates/home_base.html:21 seahub/templates/home_base.html.py:51
-#: seahub/templates/myhome.html:41 seahub/templates/js/templates.html:502
-#: seahub/templates/js/templates.html:534
+#: seahub/templates/myhome.html:41 seahub/templates/js/templates.html:517
+#: seahub/templates/js/templates.html:549
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "个人维基"
 
 #: seahub/templates/home_base.html:29 seahub/templates/myhome.html:49
-#: seahub/templates/js/templates.html:511
+#: seahub/templates/js/templates.html:526
 msgid "Share Admin"
 msgstr "共享管理"
 
 #: seahub/templates/home_base.html:36 seahub/templates/myhome.html:56
-#: seahub/templates/js/templates.html:518
+#: seahub/templates/js/templates.html:533
 #: seahub/templates/sysadmin/base.html:29
 msgid "Links"
 msgstr "链接"
@@ -4083,12 +4091,12 @@ msgstr "链接"
 msgid "Upload Folder"
 msgstr "上传目录"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:351
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:354
 #: seahub/templates/snippets/file_share_popup.html:46
 msgid "Add auto expiration"
 msgstr "增加自动过期"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:354
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:357
 #: seahub/templates/snippets/file_share_popup.html:49
 msgid "Days"
 msgstr "天数"
@@ -4167,7 +4175,7 @@ msgid "No library is shared to you"
 msgstr "还没有资料库共享给你"
 
 #: seahub/templates/libraries.html:116 seahub/templates/repo.html:151
-#: seahub/templates/starred.html:13 seahub/templates/js/lib-op-popups.html:32
+#: seahub/templates/starred.html:13 seahub/templates/js/lib-op-popups.html:26
 msgid "File Name"
 msgstr "文件名称"
 
@@ -4211,11 +4219,15 @@ msgstr "选择一个目录："
 msgid "No library is shared to this group"
 msgstr "还没有资料库共享到群组"
 
-#: seahub/templates/libraries.html:195 seahub/templates/pubrepo.html:45
+#: seahub/templates/libraries.html:188
+msgid "Add Library"
+msgstr "添加资料库"
+
+#: seahub/templates/libraries.html:196 seahub/templates/pubrepo.html:45
 msgid "No public library"
 msgstr "当前没有公共资料"
 
-#: seahub/templates/libraries.html:196 seahub/templates/pubrepo.html:46
+#: seahub/templates/libraries.html:197 seahub/templates/pubrepo.html:46
 msgid ""
 "You can create a public library by clicking \"New Library\" button, others "
 "can view and download this library."
@@ -4225,7 +4237,7 @@ msgstr "你可以点击“新建资料库”按钮创建一个公开的资料库
 #: seahub/templates/repo_folder_perm.html:99
 #: seahub/templates/repo_folder_perm.html:106
 #: seahub/templates/repo_share_manage.html:40
-#: seahub/templates/js/templates.html:662
+#: seahub/templates/js/templates.html:677
 #: seahub/templates/snippets/my_group_repos.html:6
 msgid "Group"
 msgstr "群组"
@@ -4271,7 +4283,7 @@ msgstr "数据库"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:16
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:16
 msgid "LDAP"
-msgstr ""
+msgstr "LDAP"
 
 #: seahub/templates/repo.html:23
 msgid "Size: "
@@ -4315,25 +4327,25 @@ msgstr "该资料库拥有者的空间已用完。"
 msgid "Please select a file at first."
 msgstr "请先选择一个文件。"
 
-#: seahub/templates/repo.html:73 seahub/templates/js/lib-op-popups.html:91
+#: seahub/templates/repo.html:73 seahub/templates/js/lib-op-popups.html:85
 msgid "File Upload"
 msgstr "文件上传"
 
-#: seahub/templates/repo.html:76 seahub/templates/js/lib-op-popups.html:94
+#: seahub/templates/repo.html:76 seahub/templates/js/lib-op-popups.html:88
 #: seahub/templates/snippets/group_recommend_form.html:36
 msgid "close"
 msgstr "关闭"
 
 #: seahub/templates/repo.html:80
 #: seahub/templates/view_shared_upload_link.html:43
-#: seahub/templates/js/lib-op-popups.html:98
+#: seahub/templates/js/lib-op-popups.html:92
 msgid "Cancel All"
 msgstr "取消全部"
 
 #: seahub/templates/repo.html:82 seahub/templates/repo.html.py:117
 #: seahub/templates/repo.html:2111
 #: seahub/templates/view_shared_upload_link.html:61
-#: seahub/templates/js/lib-op-popups.html:100
+#: seahub/templates/js/lib-op-popups.html:94
 msgid "Saving..."
 msgstr "保存中..."
 
@@ -4372,11 +4384,10 @@ msgstr "特色文件类型"
 
 #: seahub/templates/repo.html:138 seahub/templates/repo.html.py:144
 #: seahub/templates/js/lib-op-popups.html:19
-#: seahub/templates/js/lib-op-popups.html:25
 msgid "Click to choose"
 msgstr "点击选择"
 
-#: seahub/templates/repo.html:138 seahub/templates/js/lib-op-popups.html:19
+#: seahub/templates/repo.html:138
 msgid "online Rich Text format."
 msgstr "在线富文本格式"
 
@@ -4386,8 +4397,6 @@ msgstr "在线富文本格式"
 #: seahub/templates/repo_view_snapshot.html:45
 #: seahub/templates/js/lib-op-popups.html:21
 #: seahub/templates/js/lib-op-popups.html:23
-#: seahub/templates/js/lib-op-popups.html:27
-#: seahub/templates/js/lib-op-popups.html:29
 #: seahub/templates/js/templates.html:310
 #: seahub/templates/snippets/current_commit.html:4
 #: seahub/templates/snippets/events_body.html:18
@@ -4395,24 +4404,24 @@ msgstr "在线富文本格式"
 msgid "Details"
 msgstr "详情"
 
-#: seahub/templates/repo.html:144 seahub/templates/js/lib-op-popups.html:25
+#: seahub/templates/repo.html:144 seahub/templates/js/lib-op-popups.html:19
 msgid "simple markup format."
 msgstr "简单的标记格式"
 
-#: seahub/templates/repo.html:160 seahub/templates/js/lib-op-popups.html:56
+#: seahub/templates/repo.html:160 seahub/templates/js/lib-op-popups.html:50
 msgid "Current Library"
 msgstr "当前资料库"
 
-#: seahub/templates/repo.html:164 seahub/templates/js/lib-op-popups.html:61
+#: seahub/templates/repo.html:164 seahub/templates/js/lib-op-popups.html:55
 msgid "Other Libraries"
 msgstr "其他资料库"
 
 #: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:53
-#: seahub/templates/js/lib-op-popups.html:72
+#: seahub/templates/js/lib-op-popups.html:66
 msgid "Please click and choose a directory."
 msgstr "请点击选择目标目录。"
 
-#: seahub/templates/repo.html:187 seahub/templates/js/lib-op-popups.html:43
+#: seahub/templates/repo.html:187 seahub/templates/js/lib-op-popups.html:37
 #, python-format
 msgid "Rename %(name)s as:"
 msgstr "重命名 %(name)s 为:"
@@ -4493,7 +4502,7 @@ msgid "Empty file upload result"
 msgstr "空文件"
 
 #: seahub/templates/repo.html:534
-#: seahub/templates/view_shared_upload_link.html:86 seahub/views/ajax.py:1124
+#: seahub/templates/view_shared_upload_link.html:86 seahub/views/ajax.py:1125
 msgid "Error"
 msgstr "错误"
 
@@ -4553,7 +4562,7 @@ msgid "Copy selected directories/files to:"
 msgstr "复制选中的文件/目录到:"
 
 #: seahub/templates/repo.html:848 seahub/templates/repo.html.py:2062
-#: seahub/views/ajax.py:787 seahub/views/ajax.py:992
+#: seahub/views/ajax.py:788 seahub/views/ajax.py:993
 msgid "Invalid destination path"
 msgstr "目标路径无效"
 
@@ -4791,19 +4800,19 @@ msgstr "共享权限"
 msgid "Folder Permission"
 msgstr "目录权限"
 
-#: seahub/templates/repo_basic_info.html:45
+#: seahub/templates/repo_basic_info.html:43
 msgid "Keep full history"
 msgstr "保留所有历史"
 
-#: seahub/templates/repo_basic_info.html:46
+#: seahub/templates/repo_basic_info.html:44
 msgid "Don't keep history"
 msgstr "不保留历史"
 
-#: seahub/templates/repo_basic_info.html:47
+#: seahub/templates/repo_basic_info.html:45
 msgid "Only keep a period of history:"
 msgstr "仅保留一段时间的历史:"
 
-#: seahub/templates/repo_basic_info.html:48
+#: seahub/templates/repo_basic_info.html:46
 msgid "days"
 msgstr "天"
 
@@ -4845,7 +4854,7 @@ msgid "New passwords don't match"
 msgstr "两次输入的新密码不一致"
 
 #: seahub/templates/repo_folder_perm.html:36
-#: seahub/templates/js/templates.html:633
+#: seahub/templates/js/templates.html:648
 msgid "User Permission"
 msgstr "用户权限"
 
@@ -4859,7 +4868,7 @@ msgstr "增加权限"
 
 #: seahub/templates/repo_folder_perm.html:47
 #: seahub/templates/repo_share_manage.html:39
-#: seahub/templates/js/templates.html:640
+#: seahub/templates/js/templates.html:655
 #: seahub/templates/sysadmin/sys_trafficadmin.html:28
 msgid "User"
 msgstr "用户"
@@ -4995,6 +5004,11 @@ msgstr "删除成功。"
 msgid "Transfer this library to another user:"
 msgstr "将该资料库转让给另一个用户："
 
+#: seahub/templates/repo_transfer_success.html:15
+#, python-brace-format
+msgid "Library {placeholder} has been transfered."
+msgstr ""
+
 #: seahub/templates/repo_view_snapshot.html:13
 #: seahub/templates/view_snapshot_file.html:7
 msgid "snapshots"
@@ -5047,12 +5061,13 @@ msgid "Save To:"
 msgstr "保存到："
 
 #: seahub/templates/shared_file_view.html:69
-#: seahub/templates/view_shared_dir.html:87
+#: seahub/templates/view_shared_dir.html:88
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "文件下载已禁用：外链拥有者的流量已用完。"
 
 #: seahub/templates/shared_link_email.html:9
 #: seahub/templates/shared_upload_link_email.html:8
+#: seahub/templates/registration/activation_email.html:9
 #: seahub/templates/registration/password_reset_email.html:9
 #: seahub/templates/sysadmin/user_activation_email.html:9
 #: seahub/templates/sysadmin/user_add_email.html:9
@@ -5080,11 +5095,11 @@ msgstr "你可以到以下页面上传你的文件："
 msgid "Stars"
 msgstr "星标文件"
 
-#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:685
+#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:700
 msgid "icon"
 msgstr "图标"
 
-#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:698
+#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:713
 msgid "Unstar"
 msgstr "取消星标"
 
@@ -5166,7 +5181,7 @@ msgstr "回到顶部"
 #: seahub/templates/view_file_base.html:91
 #: seahub/templates/snippets/bottom_bar.html:15
 msgid "top"
-msgstr ""
+msgstr "top"
 
 #: seahub/templates/view_file_image.html:15
 #: seahub/templates/snippets/file_content_html.html:30
@@ -5236,9 +5251,9 @@ msgstr "在线查看：请使用 firefox, chrome 或 IE 9。"
 msgid "history"
 msgstr "历史"
 
-#: seahub/templates/view_shared_dir.html:23
+#: seahub/templates/view_shared_dir.html:24
 msgid "ZIP"
-msgstr ""
+msgstr "ZIP"
 
 #: seahub/templates/view_shared_upload_link.html:21
 #, python-format
@@ -5276,27 +5291,27 @@ msgstr "单个文件大小应小于 %(max_file_size)s"
 msgid "Back to Library"
 msgstr "返回资料库"
 
-#: seahub/templates/js/lib-op-popups.html:109
+#: seahub/templates/js/lib-op-popups.html:103
 msgid "This library is password protected"
 msgstr "该资料库已加密"
 
-#: seahub/templates/js/lib-op-popups.html:113
+#: seahub/templates/js/lib-op-popups.html:107
 msgid "*The password will be kept in the server for only 1 hour."
 msgstr "* 密码只会在服务器保存1小时。"
 
-#: seahub/templates/js/lib-op-popups.html:120
+#: seahub/templates/js/lib-op-popups.html:114
 msgid "A file with the same name already exists in this folder."
 msgstr "该文件夹下有同名文件。"
 
-#: seahub/templates/js/lib-op-popups.html:120
+#: seahub/templates/js/lib-op-popups.html:114
 msgid "Replacing it will overwrite its content."
 msgstr "替换它会覆盖已有内容。"
 
-#: seahub/templates/js/lib-op-popups.html:121
+#: seahub/templates/js/lib-op-popups.html:115
 msgid "Replace"
 msgstr "替换"
 
-#: seahub/templates/js/lib-op-popups.html:122
+#: seahub/templates/js/lib-op-popups.html:116
 msgid "Don't replace"
 msgstr "不替换"
 
@@ -5311,8 +5326,8 @@ msgid "Encrypt"
 msgstr "加密"
 
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:344
-#: seahub/templates/js/templates.html:387
+#: seahub/templates/js/templates.html:347
+#: seahub/templates/js/templates.html:398
 #: seahub/templates/snippets/file_share_popup.html:39
 #: seahub/templates/snippets/file_share_popup.html:85
 #: seahub/templates/snippets/repo_create_form.html:20
@@ -5321,8 +5336,8 @@ msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(至少%(repo_password_min_length)s个字符)"
 
 #: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:346
-#: seahub/templates/js/templates.html:389
+#: seahub/templates/js/templates.html:349
+#: seahub/templates/js/templates.html:400
 #: seahub/templates/snippets/file_share_popup.html:41
 #: seahub/templates/snippets/file_share_popup.html:87
 #: seahub/templates/snippets/repo_create_form.html:22
@@ -5331,6 +5346,7 @@ msgstr "请再次输入密码"
 
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
+#: seahub/templates/js/templates.html:758
 msgid "Encrypted"
 msgstr "已加密"
 
@@ -5360,105 +5376,128 @@ msgstr "更多操作"
 msgid "Fetch failed"
 msgstr "获取失败"
 
-#: seahub/templates/js/templates.html:321
+#: seahub/templates/js/templates.html:322
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr "下载链接"
 
-#: seahub/templates/js/templates.html:323
-#: seahub/templates/js/templates.html:330
+#: seahub/templates/js/templates.html:325
+#: seahub/templates/js/templates.html:332
 #: seahub/templates/snippets/file_share_popup.html:11
 #: seahub/templates/snippets/file_share_popup.html:14
 msgid "Private Share"
 msgstr "私人共享"
 
-#: seahub/templates/js/templates.html:327
+#: seahub/templates/js/templates.html:329
 #: seahub/templates/snippets/file_share_popup.html:8
 msgid "Upload Link"
 msgstr "上传链接"
 
-#: seahub/templates/js/templates.html:341
-#: seahub/templates/js/templates.html:384
+#: seahub/templates/js/templates.html:344
+#: seahub/templates/js/templates.html:395
 #: seahub/templates/snippets/file_share_popup.html:36
 #: seahub/templates/snippets/file_share_popup.html:82
 msgid "Add password protection"
 msgstr "增加密码保护"
 
-#: seahub/templates/js/templates.html:358
-#: seahub/templates/js/templates.html:393
+#: seahub/templates/js/templates.html:361
+#: seahub/templates/js/templates.html:404
 #: seahub/templates/snippets/file_share_popup.html:54
 #: seahub/templates/snippets/file_share_popup.html:92
 msgid "Generate"
 msgstr "生成链接"
 
-#: seahub/templates/js/templates.html:361
+#: seahub/templates/js/templates.html:365
 #: seahub/templates/snippets/file_share_popup.html:56
 msgid "Link: "
 msgstr "链接："
 
-#: seahub/templates/js/templates.html:362
-#: seahub/templates/js/templates.html:397
+#: seahub/templates/js/templates.html:368
+msgid "Direct Download Link: "
+msgstr "直接下载链接："
+
+#: seahub/templates/js/templates.html:372
+#: seahub/templates/js/templates.html:408
 #: seahub/templates/snippets/file_share_popup.html:57
 #: seahub/templates/snippets/file_share_popup.html:95
 msgid "Send"
 msgstr "发送"
 
-#: seahub/templates/js/templates.html:365
-#: seahub/templates/js/templates.html:400
+#: seahub/templates/js/templates.html:375
+#: seahub/templates/js/templates.html:411
 #: seahub/templates/snippets/file_share_popup.html:61
 #: seahub/templates/snippets/file_share_popup.html:99
 msgid "Send to:"
 msgstr "发送到："
 
-#: seahub/templates/js/templates.html:366
-#: seahub/templates/js/templates.html:401
+#: seahub/templates/js/templates.html:376
+#: seahub/templates/js/templates.html:412
 #: seahub/templates/snippets/file_share_popup.html:62
 #: seahub/templates/snippets/file_share_popup.html:100
 msgid "Emails, Seperated by ','"
 msgstr "输入邮箱，多个以,分隔"
 
-#: seahub/templates/js/templates.html:367
-#: seahub/templates/js/templates.html:402
+#: seahub/templates/js/templates.html:377
+#: seahub/templates/js/templates.html:413
 #: seahub/templates/snippets/file_share_popup.html:66
 #: seahub/templates/snippets/file_share_popup.html:102
 msgid "Message (optional):"
 msgstr "附加消息（可选）："
 
-#: seahub/templates/js/templates.html:372
-#: seahub/templates/js/templates.html:407
+#: seahub/templates/js/templates.html:382
+#: seahub/templates/js/templates.html:418
 #: seahub/templates/snippets/file_share_popup.html:71
 #: seahub/templates/snippets/file_share_popup.html:107
 msgid "Sending..."
 msgstr "发送中..."
 
-#: seahub/templates/js/templates.html:380
+#: seahub/templates/js/templates.html:391
 #: seahub/templates/snippets/file_share_popup.html:78
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "你可以共享生成好的链接给别人，他们就能通过这个链接上传文件到这个文件夹。"
 
-#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:407
 #: seahub/templates/snippets/file_share_popup.html:94
 msgid "Upload Link: "
 msgstr "上传链接："
 
-#: seahub/templates/js/templates.html:416
-#: seahub/templates/js/templates.html:437
+#: seahub/templates/js/templates.html:431
+#: seahub/templates/js/templates.html:452
 msgid "People:"
 msgstr "用户："
 
-#: seahub/templates/js/templates.html:419
+#: seahub/templates/js/templates.html:434
 msgid "Groups:"
 msgstr "群组："
 
-#: seahub/templates/js/templates.html:422
+#: seahub/templates/js/templates.html:437
 msgid "Permission:"
 msgstr "权限："
 
-#: seahub/templates/js/templates.html:634
+#: seahub/templates/js/templates.html:649
 msgid "Group Permission"
 msgstr "群组权限"
+
+#: seahub/templates/js/templates.html:736
+msgid "Add organizaiton library"
+msgstr "添加机构资料库"
+
+#: seahub/templates/registration/activation_email.html:12
+#, python-format
+msgid ""
+"You (or someone pretending to be you) have asked to register an account at "
+"%(site_name)s. If this wasn't you, please ignore this email and your address"
+" will be removed from our records."
+msgstr ""
+
+#: seahub/templates/registration/activation_email.html:14
+#, python-format
+msgid ""
+"To activate this account, please click the following link within the next "
+"%(expiration_days)s days: "
+msgstr ""
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:32
@@ -5493,7 +5532,7 @@ msgstr "%(remember_days)s天内保持登录"
 #: seahub/templates/registration/login.html:66
 #: seahub/templates/sysadmin/sudo_mode.html:20
 msgid "Shibboleth"
-msgstr ""
+msgstr "Shibboleth"
 
 #: seahub/templates/registration/login.html:91
 msgid "Failed to refresh the CAPTCHA, please try again later."
@@ -5886,19 +5925,19 @@ msgstr "音频"
 
 #: seahub/templates/snippets/search_form.html:48
 msgid "svg"
-msgstr ""
+msgstr "svg"
 
 #: seahub/templates/snippets/search_form.html:49
 msgid "pdf"
-msgstr ""
+msgstr "pdf"
 
 #: seahub/templates/snippets/search_form.html:50
 msgid "seaf"
-msgstr ""
+msgstr "seaf"
 
 #: seahub/templates/snippets/search_form.html:51
 msgid "markdown"
-msgstr ""
+msgstr "markdown"
 
 #: seahub/templates/snippets/search_form.html:53
 msgid "Input file extensions here, separate with ','"
@@ -6539,12 +6578,11 @@ msgstr "个人维基页面"
 
 #: seahub/thumbnail/views.py:34 seahub/thumbnail/views.py:70
 #: seahub/thumbnail/views.py:79 seahub/views/ajax.py:254
-#: seahub/views/ajax.py:348 seahub/views/ajax.py:428 seahub/views/ajax.py:735
-#: seahub/views/ajax.py:1165 seahub/views/ajax.py:1185
-#: seahub/views/ajax.py:1234 seahub/views/ajax.py:1553
-#: seahub/views/ajax.py:1571 seahub/views/ajax.py:2603
-#: seahub/views/ajax.py:2623 seahub/views/ajax.py:2665
-#: seahub/views/ajax.py:2672
+#: seahub/views/ajax.py:348 seahub/views/ajax.py:433 seahub/views/ajax.py:1166
+#: seahub/views/ajax.py:1186 seahub/views/ajax.py:1235
+#: seahub/views/ajax.py:1558 seahub/views/ajax.py:1576
+#: seahub/views/ajax.py:2613 seahub/views/ajax.py:2633
+#: seahub/views/ajax.py:2675 seahub/views/ajax.py:2682
 msgid "Permission denied."
 msgstr "没有权限"
 
@@ -6580,139 +6618,135 @@ msgstr "权限错误"
 msgid "Unable to view recycle page"
 msgstr "无法查看文件回收站"
 
-#: seahub/views/__init__.py:755 seahub/views/__init__.py:769
+#: seahub/views/__init__.py:765 seahub/views/__init__.py:779
 msgid "Root Directory"
 msgstr "根目录"
 
-#: seahub/views/__init__.py:797
+#: seahub/views/__init__.py:807
 msgid "Filename contains invalid character"
 msgstr "上传的文件名包含非法字符"
 
-#: seahub/views/__init__.py:799
+#: seahub/views/__init__.py:809
 msgid "Duplicated filename"
 msgstr "已存在同名的文件"
 
-#: seahub/views/__init__.py:803
+#: seahub/views/__init__.py:813
 msgid "File size surpasses the limit"
 msgstr "文件大小超过限制"
 
-#: seahub/views/__init__.py:805
+#: seahub/views/__init__.py:815
 msgid "The space of owner is used up, upload failed"
 msgstr "该资料库所有者的空间已用完，无法上传"
 
-#: seahub/views/__init__.py:807
+#: seahub/views/__init__.py:817
 msgid "An error occurs during file transfer"
 msgstr "文件传输出错"
 
-#: seahub/views/__init__.py:819 seahub/views/__init__.py:841
+#: seahub/views/__init__.py:829 seahub/views/__init__.py:851
 msgid "Invalid url"
 msgstr "非法链接"
 
-#: seahub/views/__init__.py:861
+#: seahub/views/__init__.py:871
 msgid "Unable to view library modification"
 msgstr "无法浏览该资料库修改历史"
 
-#: seahub/views/__init__.py:1021
+#: seahub/views/__init__.py:1031
 msgid "Please specify history ID"
 msgstr "请指定历史记录ID"
 
-#: seahub/views/__init__.py:1031
+#: seahub/views/__init__.py:1041
 msgid "History you specified does not exist"
 msgstr "指定的历史记录不存在"
 
-#: seahub/views/__init__.py:1033
+#: seahub/views/__init__.py:1043
 msgid "Unknown error"
 msgstr "未知错误"
 
-#: seahub/views/__init__.py:1079 seahub/views/__init__.py:1080
-#: seahub/views/__init__.py:1085 seahub/views/__init__.py:1086
+#: seahub/views/__init__.py:1089 seahub/views/__init__.py:1090
+#: seahub/views/__init__.py:1095 seahub/views/__init__.py:1096
 msgid "My Library"
 msgstr "我的资料库"
 
-#: seahub/views/__init__.py:1224
+#: seahub/views/__init__.py:1236
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "取消共享失败，该资料库不存在"
 
-#: seahub/views/__init__.py:1260
+#: seahub/views/__init__.py:1272
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "\"%s\" 取消共享成功"
 
-#: seahub/views/__init__.py:1262
+#: seahub/views/__init__.py:1274
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "\"%s\" 取消共享失败"
 
-#: seahub/views/__init__.py:1296
+#: seahub/views/__init__.py:1308
 msgid "Failed to delete file."
 msgstr "删除文件出错。"
 
-#: seahub/views/__init__.py:1303
+#: seahub/views/__init__.py:1315
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s 删除成功。"
 
-#: seahub/views/__init__.py:1305 seahub/views/ajax.py:707
+#: seahub/views/__init__.py:1317 seahub/views/ajax.py:709
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "内部错误。删除 %s 失败。"
 
-#: seahub/views/__init__.py:1353 seahub/views/__init__.py:1867
-#: seahub/views/file.py:1126
-msgid "Unable to access file: share link traffic is used up."
-msgstr "无法访问文件：外链流量已用尽。"
-
-#: seahub/views/__init__.py:1362
+#: seahub/views/__init__.py:1357
 msgid "Unable to access file"
 msgstr "无法访问文件"
 
-#: seahub/views/__init__.py:1441
+#: seahub/views/__init__.py:1426
 msgid "No revisions found"
 msgstr "未找到历史版本"
 
-#: seahub/views/__init__.py:1492 seahub/views/__init__.py:1543
+#: seahub/views/__init__.py:1477 seahub/views/__init__.py:1528
 msgid "Failed to restore, please try again later."
 msgstr "恢复失败，请稍后尝试。"
 
-#: seahub/views/__init__.py:1510
+#: seahub/views/__init__.py:1495
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(root)s\">根目录。</a>"
 
-#: seahub/views/__init__.py:1514 seahub/views/__init__.py:1565
+#: seahub/views/__init__.py:1499 seahub/views/__init__.py:1550
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "成功还原 <a href=\"%(url)s\">%(path)s</a>"
 
-#: seahub/views/__init__.py:1561
+#: seahub/views/__init__.py:1546
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "成功还原 %(path)s 到<a href=\"%(url)s\">根目录。</a>"
 
-#: seahub/views/__init__.py:1838 seahub/views/repo.py:404
+#: seahub/views/__init__.py:1824 seahub/views/repo.py:448
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" 不存在。"
 
-#: seahub/views/__init__.py:1879 seahub/views/file.py:889
+#: seahub/views/__init__.py:1843 seahub/views/file.py:963
+#: seahub/views/repo.py:382
 msgid "Internal Error"
 msgstr "内部错误"
 
-#: seahub/views/__init__.py:1882
+#: seahub/views/__init__.py:1846 seahub/views/repo.py:385
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "无法下载 \"%s\"：目录大小超过限制。"
 
-#: seahub/views/__init__.py:1896
+#: seahub/views/__init__.py:1854
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "无法下载 \"%s\""
 
-#: seahub/views/__init__.py:2034
+#: seahub/views/__init__.py:1991
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "\"个人维基\"模块添加成功。"
 
-#: seahub/views/__init__.py:2039
+#: seahub/views/__init__.py:1996
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "\"个人维基\"模块删除成功。"
 
@@ -6728,126 +6762,121 @@ msgstr "路径不存在"
 msgid "The group doesn't exist"
 msgstr "该群组不存在"
 
-#: seahub/views/ajax.py:269 seahub/views/ajax.py:363 seahub/views/ajax.py:434
-#: seahub/views/ajax.py:1247
+#: seahub/views/ajax.py:269 seahub/views/ajax.py:363 seahub/views/ajax.py:439
+#: seahub/views/ajax.py:1248
 msgid "Library is encrypted."
 msgstr "该资料库已加密"
 
-#: seahub/views/ajax.py:275 seahub/views/ajax.py:369 seahub/views/ajax.py:440
-#: seahub/views/ajax.py:1253
+#: seahub/views/ajax.py:275 seahub/views/ajax.py:369 seahub/views/ajax.py:445
+#: seahub/views/ajax.py:1254
 msgid "Error: no head commit id"
 msgstr "错误：没有 head commit id。"
 
-#: seahub/views/ajax.py:679 seahub/views/ajax.py:728
+#: seahub/views/ajax.py:681 seahub/views/ajax.py:730
 msgid "Argument missing."
 msgstr "参数缺失"
 
-#: seahub/views/ajax.py:781
+#: seahub/views/ajax.py:782
 msgid "Destination path is too long."
 msgstr "目标路径过长"
 
-#: seahub/views/ajax.py:837 seahub/views/ajax.py:908
+#: seahub/views/ajax.py:838 seahub/views/ajax.py:909
 #, python-format
 msgid "Successfully moved %(name)s"
 msgstr "成功移动 %(name)s"
 
-#: seahub/views/ajax.py:865 seahub/views/ajax.py:945
+#: seahub/views/ajax.py:866 seahub/views/ajax.py:946
 #, python-format
 msgid "Successfully copied %(name)s"
 msgstr "成功拷贝 %(name)s"
 
-#: seahub/views/ajax.py:882 seahub/views/ajax.py:1035
+#: seahub/views/ajax.py:883 seahub/views/ajax.py:1036
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 移动到它的子目录 %(des)s 中"
 
-#: seahub/views/ajax.py:924 seahub/views/ajax.py:1078
+#: seahub/views/ajax.py:925 seahub/views/ajax.py:1079
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "不能把目录 %(src)s 复制到它的子目录 %(des)s 中"
 
-#: seahub/views/ajax.py:986
+#: seahub/views/ajax.py:987
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "目标路径对 %s 来说过长。"
 
-#: seahub/views/ajax.py:1155
+#: seahub/views/ajax.py:1156
 msgid "Cancel failed"
 msgstr "取消失败"
 
-#: seahub/views/ajax.py:1282 seahub/views/ajax.py:1296
-#: seahub/views/ajax.py:1949 seahub/views/ajax.py:2012
+#: seahub/views/ajax.py:1283 seahub/views/ajax.py:1301
+#: seahub/views/ajax.py:1954 seahub/views/ajax.py:2017
 msgid "You do not have permission to create library"
 msgstr "你没有权限创建资料库。"
 
-#: seahub/views/ajax.py:1288
+#: seahub/views/ajax.py:1289
 msgid "Repo not found."
 msgstr "资料库未找到"
 
-#: seahub/views/ajax.py:1316 seahub/views/ajax.py:1340
+#: seahub/views/ajax.py:1321 seahub/views/ajax.py:1345
 msgid "Failed to create sub library, please try again later."
 msgstr "创建子资料库失败，请稍后再试。"
 
-#: seahub/views/ajax.py:1360
+#: seahub/views/ajax.py:1365
 msgid "Failed to get file block list"
 msgstr "获取文件块列表失败"
 
-#: seahub/views/ajax.py:1398
+#: seahub/views/ajax.py:1403
 msgid "Wrong repo id"
 msgstr "错误的repo id"
 
-#: seahub/views/ajax.py:1528
+#: seahub/views/ajax.py:1533
 msgid "System library can not be deleted."
 msgstr "系统资料库无法被删除。"
 
-#: seahub/views/ajax.py:1839
+#: seahub/views/ajax.py:1844
 msgid "Bad upload link token."
 msgstr "无效的上传链接"
 
-#: seahub/views/ajax.py:1845
+#: seahub/views/ajax.py:1850
 msgid "Bad repo id in upload link."
 msgstr "上传链接中含无效的repo id"
 
-#: seahub/views/ajax.py:1899
+#: seahub/views/ajax.py:1904
 msgid "No conflict in the merge."
 msgstr "合并没有冲突。"
 
-#: seahub/views/ajax.py:2119
+#: seahub/views/ajax.py:2123
 msgid "Failed to edit library information."
 msgstr "资料库信息编辑失败。"
 
-#: seahub/views/ajax.py:2128
+#: seahub/views/ajax.py:2132
 msgid "Failed to save settings on server"
 msgstr "设置失败"
 
-#: seahub/views/ajax.py:2131
+#: seahub/views/ajax.py:2135
 msgid "Settings saved."
 msgstr "设置已保存。"
 
-#: seahub/views/ajax.py:2162
+#: seahub/views/ajax.py:2166
 #, python-format
 msgid "Username %s is not valid."
 msgstr "用户名 %s 含有无效字符"
 
-#: seahub/views/ajax.py:2169
+#: seahub/views/ajax.py:2173
 #, python-format
 msgid "User %s is not found."
 msgstr "未找到用户 %s 。"
 
-#: seahub/views/ajax.py:2176
+#: seahub/views/ajax.py:2180
 #, python-format
 msgid "User %s is not in current organization."
 msgstr "%s 用户不在当前机构。"
 
-#: seahub/views/ajax.py:2186
+#: seahub/views/ajax.py:2190
 #, python-format
 msgid "Can not transfer library to organization user %s."
 msgstr "无法将资料库转让给机构用户 %s。"
-
-#: seahub/views/ajax.py:2192
-#, python-format
-msgid "Library %(repo_name)s has been transfered to %(new_owner)s."
-msgstr "资料库 %(repo_name)s 已被转让给 %(new_owner)s。"
 
 #: seahub/views/ajax.py:2219
 msgid "Faied to change password, you are not owner."
@@ -6858,53 +6887,53 @@ msgstr "更改密码失败。"
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr "资料库%(repo_name)s的密码更新成功。"
 
-#: seahub/views/ajax.py:2322 seahub/views/ajax.py:2459
+#: seahub/views/ajax.py:2327 seahub/views/ajax.py:2469
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr "错误的文件夹权限，应该是 \"rw\" 或 \"r\""
 
-#: seahub/views/ajax.py:2326 seahub/views/ajax.py:2463
+#: seahub/views/ajax.py:2331 seahub/views/ajax.py:2473
 msgid "Path should start with \"/\""
 msgstr "路径不应以 \"/\" 开始"
 
-#: seahub/views/ajax.py:2330 seahub/views/ajax.py:2467
+#: seahub/views/ajax.py:2335 seahub/views/ajax.py:2477
 msgid "Path should not end with \"/\""
 msgstr "路径不应该以  \"/\" 结尾"
 
-#: seahub/views/ajax.py:2334 seahub/views/ajax.py:2471
+#: seahub/views/ajax.py:2339 seahub/views/ajax.py:2481
 msgid "Invalid path"
 msgstr "无效的路径"
 
-#: seahub/views/ajax.py:2342
+#: seahub/views/ajax.py:2347
 msgid "Invalid user, should be registered"
 msgstr "无效用户，用户应已注册"
 
-#: seahub/views/ajax.py:2354 seahub/views/ajax.py:2367
-#: seahub/views/ajax.py:2492 seahub/views/ajax.py:2505
+#: seahub/views/ajax.py:2359 seahub/views/ajax.py:2372
+#: seahub/views/ajax.py:2502 seahub/views/ajax.py:2515
 msgid "Operation failed"
 msgstr "操作失败"
 
-#: seahub/views/ajax.py:2357 seahub/views/ajax.py:2495
+#: seahub/views/ajax.py:2362 seahub/views/ajax.py:2505
 msgid "Wrong folder permission"
 msgstr "错误的文件夹权限"
 
-#: seahub/views/ajax.py:2370 seahub/views/ajax.py:2508
+#: seahub/views/ajax.py:2375 seahub/views/ajax.py:2518
 msgid "Please add folder permission first"
 msgstr "请先添加文件夹权限"
 
-#: seahub/views/ajax.py:2417
+#: seahub/views/ajax.py:2422
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr "请检查您所输入的邮箱已经所选择的联系人"
 
-#: seahub/views/ajax.py:2480
+#: seahub/views/ajax.py:2490
 msgid "Invalid group"
 msgstr "无效的组"
 
-#: seahub/views/ajax.py:2550 seahub/views/sysadmin.py:209
+#: seahub/views/ajax.py:2560 seahub/views/sysadmin.py:209
 #: seahub/views/sysadmin.py:226 seahub/views/sysadmin.py:248
 msgid "Failed"
 msgstr "失败"
 
-#: seahub/views/ajax.py:2565 seahub/views/ajax.py:2597
+#: seahub/views/ajax.py:2575 seahub/views/ajax.py:2607
 msgid "Group does not exist."
 msgstr "群组不存在"
 
@@ -6935,33 +6964,49 @@ msgstr "文件大小超过 %s，无法在线查看。"
 msgid "Unable to view file"
 msgstr "无法查看该文件"
 
-#: seahub/views/file.py:394 seahub/views/file.py:552 seahub/views/file.py:688
+#: seahub/views/file.py:394 seahub/views/file.py:552 seahub/views/file.py:749
 msgid "Invalid file format."
 msgstr "错误的文件格式。"
 
-#: seahub/views/file.py:900
+#: seahub/views/file.py:640
+msgid "Unable to download file, invalid file path"
+msgstr ""
+
+#: seahub/views/file.py:649
+msgid "Unable to download file, wrong file path"
+msgstr ""
+
+#: seahub/views/file.py:654
+msgid "Unable to download file, share link traffic is used up."
+msgstr "无法下载文件，共享外链流量已用完。"
+
+#: seahub/views/file.py:974
 msgid "The library does not exist."
 msgstr "资料库不存在"
 
-#: seahub/views/file.py:904
+#: seahub/views/file.py:978
 msgid "The library is encrypted."
 msgstr "该资料库已加密"
 
-#: seahub/views/file.py:979
+#: seahub/views/file.py:1053
 msgid "Unable to edit file"
 msgstr "无法编辑该文件"
 
-#: seahub/views/file.py:985
+#: seahub/views/file.py:1059
 msgid "The file does not exist."
 msgstr "该文件不存在"
 
-#: seahub/views/file.py:1014
+#: seahub/views/file.py:1088
 msgid "Edit online is not offered for this type of file."
 msgstr "该类型文件不能在线编辑。"
 
-#: seahub/views/file.py:1138
+#: seahub/views/file.py:1195
 msgid "Unable to download file"
 msgstr "无法下载文件"
+
+#: seahub/views/repo.py:367
+msgid "Unable to access file: share link traffic is used up."
+msgstr "无法访问文件：外链流量已用尽。"
 
 #: seahub/views/sysadmin.py:168 seahub/views/sysadmin.py:242
 msgid "Invalid username"
