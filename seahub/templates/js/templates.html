@@ -140,7 +140,7 @@
     <% if (user_perm == 'rw') { %>
     <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
     <% } %>
-    <% if (is_repo_owner) { %>
+    <% if (is_repo_owner && !is_virtual) { %>
     <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
     <% } %>
     <% } %>
