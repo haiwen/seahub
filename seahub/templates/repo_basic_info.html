@@ -12,7 +12,7 @@
 
 {% block left_panel %}
 <div class="side-textnav">
-    <h3 class="hd"><span class="op-target">{{ repo.name }}</span>'s {% trans "Settings" %}</h3>
+    <h3 class="hd"><span class="op-target">{{ repo.name }}</span> {% trans "Settings" %}</h3>
     <ul class="side-textnav-tabs">
         <li class="tab tab-cur"><a href="{% url 'repo_basic_info' repo.id %}">{% trans "Basic Info" %}</a></li>
         <li class="tab"><a href="{% url 'repo_transfer_owner' repo.id %}">{% trans "Transfer Ownership" %}</a></li>
