@@ -322,6 +322,7 @@ define([
                         var new_dirent = dir.add({
                             'is_dir': true,
                             'obj_name': data['name'],
+                            'perm': 'rw',
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now"),
                             'p_dpath': data['p_dpath']
@@ -388,6 +389,7 @@ define([
                             'obj_id': '0000000000000000000000000000000000000000',
                             'file_icon': 'file.png',
                             'starred': false,
+                            'perm': 'rw',
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now")
                         }, {silent: true});

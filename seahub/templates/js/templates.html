@@ -208,11 +208,11 @@
                 <% if (!repo_encrypted) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
-                <% if (user_perm == 'rw') { %>
+                <% if (dirent.perm == 'rw') { %>
                 <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
                 <% } %>
             </div>
-            <% if (user_perm == 'rw') { %>
+            <% if (dirent.perm == 'rw') { %>
             <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
@@ -275,11 +275,11 @@
                 <% if (!repo_encrypted) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
-                <% if (user_perm == 'rw') { %>
+                <% if (dirent.perm == 'rw') { %>
                 <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
                 <% } %>
             </div>
-            <% if (user_perm == 'rw') { %>
+            <% if (dirent.perm == 'rw') { %>
             <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
