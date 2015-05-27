@@ -222,6 +222,7 @@ define([
 
                 if (link_type == 'download') {
                     _this.$('#download-link').html(data["download_link"]); // TODO: add 'click & select' func
+                    _this.$('#direct-dl-link').html(data['download_link'] + '?raw=1');
                     _this.download_link = data["download_link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');
