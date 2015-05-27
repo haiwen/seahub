@@ -3576,6 +3576,9 @@ button.add-pub-repo {
 }
 
 /* share popup */
+#download-link-operations dl {
+    margin-top:0;
+}
 #download-link-operations dt {
     margin: 0;
 }
