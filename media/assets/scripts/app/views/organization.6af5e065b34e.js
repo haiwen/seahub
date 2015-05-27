@@ -5,9 +5,10 @@ define([
     'common',
     'app/collections/pub-repos',
     'app/views/organization-repo',
+    'app/views/create-pub-repo',
     'app/views/add-pub-repo'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    AddPubRepoView) {
+    CreatePubRepoView, AddPubRepoView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
@@ -34,11 +35,16 @@ define([
 
         events: {
             'click #organization-repos .repo-create': 'createRepo',
+            'click #organization-repos .add-pub-repo': 'addRepo',
             'click #organization-repos .by-name': 'sortByName',
             'click #organization-repos .by-time': 'sortByTime'
         },
 
         createRepo: function() {
+            new CreatePubRepoView(this.repos);
+        },
+
+        addRepo: function() {
             new AddPubRepoView(this.repos);
         },
 

@@ -18,6 +18,7 @@ define([
             this.is_virtual = options.is_virtual;
             this.user_perm = options.user_perm;
             this.repo_id = options.repo_id;
+            this.repo_encrypted = options.repo_encrypted;
             this.dirent_path = options.dirent_path;
             this.obj_name = options.obj_name;
             this.is_dir = options.is_dir;
@@ -33,12 +34,14 @@ define([
 
             this.$("#share-tabs").tabs();
 
-            this.downloadLinkPanelInit();
+            if (!this.repo_encrypted) {
+                this.downloadLinkPanelInit();
+            }
             if (!this.is_dir && this.is_repo_owner) {
                 this.filePrivateSharePanelInit();
             }
             if (this.is_dir) {
-                if (this.user_perm == 'rw') {
+                if (this.user_perm == 'rw' && !this.repo_encrypted) {
                     this.uploadLinkPanelInit();
                 }
                 if (!this.is_virtual && this.is_repo_owner) {
@@ -55,7 +58,8 @@ define([
                 is_repo_owner: this.is_repo_owner,
                 is_virtual: this.is_virtual,
                 user_perm: this.user_perm,
-                repo_id: this.repo_id
+                repo_id: this.repo_id,
+                repo_encrypted: this.repo_encrypted
             }));
 
             return this;
@@ -110,6 +114,7 @@ define([
                     _this.download_link = data["download_link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link').html(data['download_link']); // TODO:
+                    _this.$('#direct-dl-link').html(data['download_link']+'?raw=1'); // TODO:
                     _this.$('#download-link-operations').removeClass('hide');
                 } else {
                     _this.$('#generate-download-link-form').removeClass('hide');
@@ -472,6 +477,7 @@ define([
             });
 
             form.removeClass('hide');
+            this.$('.loading-tip').hide();
         },
 
         dirPrivateShare: function () {

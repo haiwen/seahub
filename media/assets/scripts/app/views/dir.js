@@ -322,6 +322,7 @@ define([
                         var new_dirent = dir.add({
                             'is_dir': true,
                             'obj_name': data['name'],
+                            'perm': 'rw',
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now"),
                             'p_dpath': data['p_dpath']
@@ -388,6 +389,7 @@ define([
                             'obj_id': '0000000000000000000000000000000000000000',
                             'file_icon': 'file.png',
                             'starred': false,
+                            'perm': 'rw',
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now")
                         }, {silent: true});
@@ -550,7 +552,7 @@ define([
                                     _this.$('#multi-dirents-op').hide();
                                 } else {
                                     $(selected_dirents).each(function() {
-                                        if (this.get('obj_name') in data['deleted']) {
+                                        if (data['deleted'].indexOf(this.get('obj_name')) != -1) {
                                             dirents.remove(this);
                                         }
                                     });
@@ -567,11 +569,11 @@ define([
                             }
                             if (not_del_len > 0) {
                                 if (not_del_len == 1) {
-                                    msg_f = gettext("Internal error. Failed to delete %(name)s.");
+                                    msg_f = gettext("Failed to delete %(name)s.");
                                 } else if (not_del_len == 2) {
-                                    msg_f = gettext("Internal error. Failed to delete %(name)s and 1 other item.");
+                                    msg_f = gettext("Failed to delete %(name)s and 1 other item.");
                                 } else {
-                                    msg_f = gettext("Internal error. Failed to delete %(name)s and %(amount)s other items.");
+                                    msg_f = gettext("Failed to delete %(name)s and %(amount)s other items.");
                                 }
                                 msg_f = msg_f.replace('%(name)s', Common.HTMLescape(data['undeleted'][0])).replace('%(amount)s', not_del_len - 1);
                                 Common.feedback(msg_f, 'error');

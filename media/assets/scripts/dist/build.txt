@@ -38,6 +38,8 @@ app/views/group.js
 app/models/pub-repo.js
 app/collections/pub-repos.js
 app/views/organization-repo.js
+app/views/create-pub-repo.js
+app/views/add-pubrepo-item.js
 app/views/add-pub-repo.js
 app/views/organization.js
 lib/jquery.ui.core.js

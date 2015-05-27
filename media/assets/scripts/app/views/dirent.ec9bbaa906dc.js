@@ -37,7 +37,6 @@ define([
                 encoded_path: Common.encodePath(dirent_path),
                 category: dir.category,
                 repo_id: dir.repo_id,
-                user_perm: dir.user_perm,
                 is_repo_owner: dir.is_repo_owner,
                 repo_encrypted: dir.encrypted
             }));
@@ -167,8 +166,9 @@ define([
             var options = {
                 'is_repo_owner': dir.is_repo_owner,
                 'is_virtual': dir.is_virtual,
-                'user_perm': dir.user_perm,
+                'user_perm': this.model.get('perm'),
                 'repo_id': dir.repo_id,
+                'repo_encrypted': false,
                 'is_dir': this.model.get('is_dir') ? true : false,
                 'dirent_path': dirent_path,
                 'obj_name': obj_name

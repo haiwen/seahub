@@ -8,7 +8,7 @@ define([
 ], function($, simplemodal, _, Backbone, Common, AddRepoView) {
     'use strict';
 
-    var AddPubRepoView = AddRepoView.extend({
+    var CreatePubRepoView = AddRepoView.extend({
         templateData: function() {
             return {
                 showSharePerm: true
@@ -23,5 +23,5 @@ define([
 
     });
 
-    return AddPubRepoView;
+    return CreatePubRepoView;
 });
