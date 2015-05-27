@@ -95,7 +95,11 @@
 <script type="text/javascript">
 {% if wiki_exists %}
 var converter = new Markdown.Converter();
+console.log(converter.makeHtml('{{ content|escapejs }}'));
+ console.log('-----------------');
 {% include 'snippets/md_xss.html' %}
+ console.log(converter.makeHtml('{{ content|escapejs }}'));
+
 Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
 $('#wiki-content')
 .html(addAnchorsToHeaders(converter.makeHtml('{{ content|escapejs }}')))

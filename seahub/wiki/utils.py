@@ -126,10 +126,10 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             # convert page_name that extension is missing to a markdown page
             try:
                 dirent = get_wiki_dirent(repo_id, page_name)
-                a_tag = "<a href='%s'>%s</a>"
+                a_tag = '''<a href="%s">%s</a>'''
                 return a_tag % (smart_str(url_prefix + normalize_page_name(page_name) + '/'), page_alias)
             except (WikiDoesNotExist, WikiPageMissing):
-                a_tag = '''<a class="wiki-page-missing" href='%s'>%s</a>'''
+                a_tag = '''<a href="%s" class="wiki-page-missing">%s</a>'''
                 return a_tag % (smart_str(url_prefix + page_name.replace('/', '-') + '/'), page_alias)
         elif filetype == IMAGE:
             # load image to wiki page
@@ -139,12 +139,12 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             if not obj_id:
                 # Replace '/' in page_name to '-', since wiki name can not
                 # contain '/'.
-                return '''<a class="wiki-page-missing" href='%s'>%s</a>''' % \
+                return '''<a href="%s" class="wiki-page-missing">%s</a>''' % \
                     (url_prefix + '/' + page_name.replace('/', '-'), page_name)
 
             token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
                                                             'view', username)
-            ret = '<img class="wiki-image" src="%s" alt="%s" />' % (gen_file_get_url(token, filename), filename)
+            ret = '<img src="%s" alt="%s" class="wiki-image" />' % (gen_file_get_url(token, filename), filename)
             return smart_str(ret)
         else:
             from seahub.base.templatetags.seahub_tags import file_icon_filter
@@ -154,7 +154,7 @@ def convert_wiki_link(content, url_prefix, repo_id, username):
             path = "/" + page_name
             icon = file_icon_filter(page_name)
             s = reverse('view_lib_file', args=[repo_id, urlquote(path)])
-            a_tag = '''<img src="%simg/file/%s" alt="%s" class="file-icon vam" /> <a href='%s' target='_blank' class="vam">%s</a>'''
+            a_tag = '''<img src="%simg/file/%s" alt="%s" class="file-icon vam" /> <a href="%s" class="vam" target="_blank">%s</a>'''
             ret = a_tag % (settings.MEDIA_URL, icon, icon, smart_str(s), page_name)
             return smart_str(ret)
 
