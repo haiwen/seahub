@@ -52,7 +52,7 @@ class FileViaSharedDirTest(TestCase, Fixtures):
             'password': None,
             'expire_date': None,
         }
-        self.fs = FileShare.objects.create_file_link(**share_file_info)
+        self.fs = FileShare.objects.create_dir_link(**share_file_info)
 
     def tearDown(self):
         self.remove_repo()
@@ -105,10 +105,10 @@ class PrivateSharedFileTest(TestCase, Fixtures):
         )
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'shared_file_view.html')
-        self.assertContains(resp, self.file)
+        self.assertContains(resp, os.path.basename(self.file))
 
-        dl_url_param = '?p=%s&dl=1' % self.file
-        self.assertContains(resp, dl_url_param)
+        dl_url_tag = '<a href="?dl=1" class="obv-btn">'
+        self.assertContains(resp, dl_url_tag)
 
     def test_can_download(self):
         self.client.post(
