@@ -182,10 +182,13 @@
 </div>
 
 <div id="organization-repos" class="tab-tabs hide">
-    <div class="hd ovhd">
+    <div class="hd">
         <h3 class="fleft">{% trans "Libraries" %}</h3>
-        <button class="repo-create fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library"%}</span></button>
-        <button class="add-pub-repo fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Library"%}</span></button>
+        <button id="add-pub-lib" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Library"%}</span></button>
+        <ul id="add-pub-lib-menu" class="hide">
+            <li class="item share-existing">{% trans "Share existing" %}</li>
+            <li class="item create-new">{% trans "Create new" %}</li>
+        </ul>
     </div>
 
     <table class="repo-list hide">

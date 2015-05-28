@@ -31,11 +31,33 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = options.dirView;
+
+            // show/hide 'add lib' menu
+            var $add_lib = $('#add-pub-lib'),
+                $add_lib_menu = $('#add-pub-lib-menu');
+            $add_lib.click(function() {
+                $add_lib_menu.toggleClass('hide');
+                $add_lib_menu.css({
+                    'top': $add_lib.position().top + $add_lib.outerHeight(),
+                    'right': 10 // align right with $add_lib
+                });
+            });
+            $('.item', $add_lib_menu).hover(
+                function() {
+                    $(this).css({'background':'#f3f3f3'});
+                },
+                function() {
+                    $(this).css({'background':'transparent'});
+                }
+            );
+            $(document).click(function(e) {
+                Common.closePopup(e, $add_lib_menu, $add_lib);
+            });
         },
 
         events: {
-            'click #organization-repos .repo-create': 'createRepo',
-            'click #organization-repos .add-pub-repo': 'addRepo',
+            'click #organization-repos .share-existing': 'addRepo',
+            'click #organization-repos .create-new': 'createRepo',
             'click #organization-repos .by-name': 'sortByName',
             'click #organization-repos .by-time': 'sortByTime'
         },

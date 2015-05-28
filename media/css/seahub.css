@@ -1187,6 +1187,9 @@ textarea:-moz-placeholder {/* for FF */
     padding-bottom:0;
     height:39px;
 }
+#organization-repos .hd {
+    position:relative;
+}
 .repo-file-list-topbar {
     margin-bottom:0;
 }
@@ -1233,6 +1236,9 @@ textarea:-moz-placeholder {/* for FF */
     height:29px;
     background:#fff;
     line-height:17px;
+}
+#add-pub-lib {
+   outline:none;
 }
 /* info-bar */
 #info-bar {
@@ -2007,7 +2013,8 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     overflow:hidden;
 }
-#upload-menu {
+#upload-menu,
+#add-pub-lib-menu {
     position:absolute;
     z-index:12; /* make it on top of a checkbox */
     border:1px solid #c5c5c5;
@@ -2015,12 +2022,16 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: 0 0 2px #c5c5c5;
     background:#fff;
 }
-#upload-menu .item {
-    position:relative;
-    text-align:left;
+#upload-menu .item,
+#add-pub-lib-menu .item {
     padding:0 10px;
     height:27px;
     line-height:27px;
+    cursor:pointer;
+}
+#upload-menu .item {
+    position:relative;
+    text-align:left;
     overflow:hidden; /* for 'hover', as long 'input' in it. */
 }
 .fixed-upload-file-dialog {
@@ -3572,9 +3583,6 @@ textarea:-moz-placeholder {/* for FF */
     width: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-}
-button.add-pub-repo {
-    margin-right:10px;
 }
 
 /* share popup */
