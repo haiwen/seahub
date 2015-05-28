@@ -3183,6 +3183,9 @@ textarea:-moz-placeholder {/* for FF */
 .search-results-item .time {
     color:#666;
 }
+.search-results-item .highlight-content {
+    margin:0;
+}
 #plan-form {
     width:260px;
 }
