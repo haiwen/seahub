@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 15:19+0800\n"
-"PO-Revision-Date: 2015-05-27 07:22+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2015-05-28 18:19+0800\n"
+"PO-Revision-Date: 2015-05-27 16:47+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -28,7 +28,7 @@ msgstr ""
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
-#: static/scripts/app/views/myhome-sub-repos.js:164
+#: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
 #: static/scripts/app/views/starred-file-item.js:53
 #: static/scripts/app/views/sub-lib.js:79
@@ -100,7 +100,7 @@ msgstr "<a href=\"%url%\" target=\"_blank\">Obraz</a> nie może być wczytany."
 #: static/scripts/app/views/myhome-repos.js:92
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78
-#: static/scripts/app/views/organization.js:101
+#: static/scripts/app/views/organization.js:123
 msgid "Please check the network."
 msgstr "Proszę sprawdzić sieć."
 
@@ -120,7 +120,7 @@ msgstr "Wymagane."
 #: static/scripts/app/views/fileupload.js:312
 #: static/scripts/app/views/fileupload.js:324
 #: static/scripts/app/views/fileupload.js:336
-#: static/scripts/app/views/myhome-sub-repos.js:153
+#: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr "Przed chwilą"
 
@@ -146,15 +146,15 @@ msgstr "Pomyślnie usunięto %(name)s i %(amount)s innych elementów."
 
 #: static/scripts/app/views/dir.js:572
 msgid "Failed to delete %(name)s."
-msgstr ""
+msgstr "Nie udało się usunąć %(name)s."
 
 #: static/scripts/app/views/dir.js:574
 msgid "Failed to delete %(name)s and 1 other item."
-msgstr ""
+msgstr "Nie udało się usunąć %(name)s i 1 innego elementu."
 
 #: static/scripts/app/views/dir.js:576
 msgid "Failed to delete %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Nie udało się usunąć %(name)s i %(amount)s innych elementów."
 
 #: static/scripts/app/views/dir.js:589
 msgid "Delete Items"
@@ -298,7 +298,7 @@ msgstr "Wynik przesyłania pustego pliku"
 #: static/scripts/app/views/myhome-repos.js:89
 #: static/scripts/app/views/myhome-shared-repos.js:76
 #: static/scripts/app/views/myhome-sub-repos.js:75
-#: static/scripts/app/views/organization.js:98
+#: static/scripts/app/views/organization.js:120
 msgid "Error"
 msgstr "Błąd"
 
@@ -368,7 +368,7 @@ msgstr "Pomyślnie zakończono udostępnianie {placeholder}"
 #: static/scripts/app/views/myhome-repos.js:87
 #: static/scripts/app/views/myhome-shared-repos.js:74
 #: static/scripts/app/views/myhome-sub-repos.js:73
-#: static/scripts/app/views/organization.js:96
+#: static/scripts/app/views/organization.js:118
 msgid "Permission error"
 msgstr "Błąd uprawnień"
 

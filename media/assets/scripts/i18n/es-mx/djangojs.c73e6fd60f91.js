@@ -35,6 +35,9 @@
     "Enter emails or select contacts": "Ingrese e-mails o escoja contactos", 
     "Error": "Error", 
     "Failed to copy %(name)s": "Fallo al copiar %(name)s", 
+    "Failed to delete %(name)s and %(amount)s other items.": "Fallo al eliminar %(name)s y %(amount)s otros \u00edtems.", 
+    "Failed to delete %(name)s and 1 other item.": "Fallo al eliminar %(name)s y otro \u00edtem.", 
+    "Failed to delete %(name)s.": "Fallo al eliminar %(name)s.", 
     "Failed to get update url": "Fallo al obtener url de actualizaci\u00f3n", 
     "Failed to get upload url": "Fallo al obtener url de subida", 
     "Failed to move %(name)s": "Fallo al mover %(name)s", 
@@ -159,7 +162,7 @@
   /* formatting library */
 
   django.formats = {
-    "DATETIME_FORMAT": "j N Y H:i:s", 
+    "DATETIME_FORMAT": "j \\d\\e F \\d\\e Y \\a \\l\\a\\s H:i", 
     "DATETIME_INPUT_FORMATS": [
       "%d/%m/%Y %H:%M:%S", 
       "%d/%m/%Y %H:%M", 
@@ -170,25 +173,26 @@
       "%Y-%m-%d %H:%M", 
       "%Y-%m-%d"
     ], 
-    "DATE_FORMAT": "j N Y", 
+    "DATE_FORMAT": "j \\d\\e F \\d\\e Y", 
     "DATE_INPUT_FORMATS": [
       "%d/%m/%Y", 
       "%d/%m/%y", 
+      "%Y%m%d", 
       "%Y-%m-%d"
     ], 
-    "DECIMAL_SEPARATOR": ",", 
-    "FIRST_DAY_OF_WEEK": "0", 
+    "DECIMAL_SEPARATOR": ".", 
+    "FIRST_DAY_OF_WEEK": "1", 
     "MONTH_DAY_FORMAT": "j \\d\\e F", 
     "NUMBER_GROUPING": "3", 
     "SHORT_DATETIME_FORMAT": "d/m/Y H:i", 
     "SHORT_DATE_FORMAT": "d/m/Y", 
-    "THOUSAND_SEPARATOR": ".", 
+    "THOUSAND_SEPARATOR": "\u00a0", 
     "TIME_FORMAT": "H:i:s", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 
       "%H:%M"
     ], 
-    "YEAR_MONTH_FORMAT": "F Y"
+    "YEAR_MONTH_FORMAT": "F \\d\\e Y"
   };
 
   django.get_format = function (format_type) {
