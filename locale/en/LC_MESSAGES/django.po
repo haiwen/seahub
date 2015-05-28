@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-28 17:53+0800\n"
+"POT-Creation-Date: 2015-05-28 18:19+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4226,11 +4226,11 @@ msgid "Add Library"
 msgstr ""
 
 #: seahub/templates/libraries.html:189
-msgid "Share existing"
+msgid "Share existing libraries"
 msgstr ""
 
 #: seahub/templates/libraries.html:190
-msgid "Create new"
+msgid "Create a new library"
 msgstr ""
 
 #: seahub/templates/libraries.html:199 seahub/templates/pubrepo.html:45
