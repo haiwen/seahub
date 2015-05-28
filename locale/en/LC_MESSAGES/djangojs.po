@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 15:19+0800\n"
+"POT-Creation-Date: 2015-05-28 17:54+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
-#: static/scripts/app/views/myhome-sub-repos.js:164
+#: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
 #: static/scripts/app/views/starred-file-item.js:53
 #: static/scripts/app/views/sub-lib.js:79
@@ -99,7 +99,7 @@ msgstr ""
 #: static/scripts/app/views/myhome-repos.js:92
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78
-#: static/scripts/app/views/organization.js:101
+#: static/scripts/app/views/organization.js:123
 msgid "Please check the network."
 msgstr ""
 
@@ -119,7 +119,7 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:312
 #: static/scripts/app/views/fileupload.js:324
 #: static/scripts/app/views/fileupload.js:336
-#: static/scripts/app/views/myhome-sub-repos.js:153
+#: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr ""
 
@@ -297,7 +297,7 @@ msgstr ""
 #: static/scripts/app/views/myhome-repos.js:89
 #: static/scripts/app/views/myhome-shared-repos.js:76
 #: static/scripts/app/views/myhome-sub-repos.js:75
-#: static/scripts/app/views/organization.js:98
+#: static/scripts/app/views/organization.js:120
 msgid "Error"
 msgstr ""
 
@@ -367,7 +367,7 @@ msgstr ""
 #: static/scripts/app/views/myhome-repos.js:87
 #: static/scripts/app/views/myhome-shared-repos.js:74
 #: static/scripts/app/views/myhome-sub-repos.js:73
-#: static/scripts/app/views/organization.js:96
+#: static/scripts/app/views/organization.js:118
 msgid "Permission error"
 msgstr ""
 
