@@ -39,7 +39,7 @@ define([
                 $add_lib_menu.toggleClass('hide');
                 $add_lib_menu.css({
                     'top': $add_lib.position().top + $add_lib.outerHeight(),
-                    'left': $add_lib.position().left
+                    'right': 10 // align right with $add_lib
                 });
             });
             $('.item', $add_lib_menu).hover(
