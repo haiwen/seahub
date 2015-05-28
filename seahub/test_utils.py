@@ -24,6 +24,13 @@ class Fixtures(Exam):
                                 filename='test.txt',
                                 username='test@test.com')
 
+    @fixture
+    def folder(self):
+        return self.create_folder(repo_id=self.repo.id,
+                                  parent_dir='/',
+                                  dirname='foler',
+                                  username='test@test.com')
+
     def create_user(self, email=None, **kwargs):
         if not email:
             email = uuid4().hex + '@test.com'
@@ -48,3 +55,7 @@ class Fixtures(Exam):
     def create_file(self, **kwargs):
         seafile_api.post_empty_file(**kwargs)
         return kwargs['parent_dir'] + kwargs['filename']
+
+    def create_folder(self, **kwargs):
+        seafile_api.post_dir(**kwargs)
+        return kwargs['parent_dir'] + kwargs['dirname']
