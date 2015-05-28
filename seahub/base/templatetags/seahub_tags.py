@@ -77,9 +77,45 @@ FILEEXT_ICON_MAP = {
     'ico' : 'pic.png',
     # normal file and unknown file
     'default' : 'file.png',
+
+    # for 128 pixel icon
+    # pdf file
+    'pdf-128' : 'pdf-128.png',
+    # document file
+    'doc-128' : 'word-128.png',
+    'docx-128' : 'word-128.png',
+    'ppt-128' : 'ppt-128.png',
+    'pptx-128' : 'ppt-128.png',
+    'xls-128' : 'excel-128.png',
+    'xlsx-128' : 'excel-128.png',
+    'txt-128' : 'txt-128.png',
+    'odt-128' : 'word-128.png',
+    'fodt-128' : 'word-128.png',
+    'ods-128' : 'excel-128.png',
+    'fods-128' : 'excel-128.png',
+    'odp-128' : 'ppt-128.png',
+    'fodp-128' : 'ppt-128.png',
+    # music file
+    'mp3-128' : 'music-128.png',
+    'oga-128' : 'music-128.png',
+    'ogg-128' : 'music-128.png',
+    'flac-128' : 'music-128.png',
+    'aac-128' : 'music-128.png',
+    'ac3-128' : 'music-128.png',
+    'wma-128' : 'music-128.png',
+    # picture file
+    'jpg-128' : 'pic-128.png',
+    'jpeg-128' : 'pic-128.png',
+    'png-128' : 'pic-128.png',
+    'svg-128' : 'pic-128.png',
+    'gif-128' : 'pic-128.png',
+    'bmp-128' : 'pic-128.png',
+    'ico-128' : 'pic-128.png',
+    # normal file and unknown file
+    'default-128' : 'file-128.png',
 }
 @register.filter(name='file_icon_filter')
-def file_icon_filter(value):
+def file_icon_filter(value, size=None):
     """Get file icon according to the file postfix"""
     if value.rfind('.') > 0:
         file_ext = value.split('.')[-1].lower()
@@ -87,9 +123,15 @@ def file_icon_filter(value):
         file_ext = None
 
     if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
-        return FILEEXT_ICON_MAP.get(file_ext)
+        if size == 128:
+            return FILEEXT_ICON_MAP.get(file_ext + '-128')
+        else:
+            return FILEEXT_ICON_MAP.get(file_ext)
     else:
-        return FILEEXT_ICON_MAP.get('default')
+        if size == 128:
+            return FILEEXT_ICON_MAP.get('default-128')
+        else:
+            return FILEEXT_ICON_MAP.get('default')
 
 # This way of translation looks silly, but works well.
 COMMIT_MSG_TRANSLATION_MAP = {  

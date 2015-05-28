@@ -3170,13 +3170,12 @@ textarea:-moz-placeholder {/* for FF */
 }
 #search-results b {
     font-weight: bold;
-    background:#ffe761;
 }
 .search-results-item {
     margin-top:15px;
 }
 .search-results-item .main-con {
-    margin-left:40px;
+    margin-left:45px;
 }
 .search-results-item .avatar {
     vertical-align:middle;
