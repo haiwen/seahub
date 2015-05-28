@@ -3170,19 +3170,21 @@ textarea:-moz-placeholder {/* for FF */
 }
 #search-results b {
     font-weight: bold;
-    background:#ffe761;
 }
 .search-results-item {
     margin-top:15px;
 }
 .search-results-item .main-con {
-    margin-left:40px;
+    margin-left:45px;
 }
 .search-results-item .avatar {
     vertical-align:middle;
 }
 .search-results-item .time {
     color:#666;
+}
+.search-results-item .highlight-content {
+    margin:0;
 }
 #plan-form {
     width:260px;
