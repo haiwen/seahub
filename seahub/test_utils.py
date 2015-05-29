@@ -28,7 +28,7 @@ class Fixtures(Exam):
     def folder(self):
         return self.create_folder(repo_id=self.repo.id,
                                   parent_dir='/',
-                                  dirname='foler',
+                                  dirname='folder',
                                   username='test@test.com')
 
     def create_user(self, email=None, **kwargs):
