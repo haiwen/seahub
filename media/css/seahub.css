@@ -3188,8 +3188,8 @@ textarea:-moz-placeholder {/* for FF */
 .search-results-item .main-con {
     margin-left:45px;
 }
-.search-results-item .avatar {
-    vertical-align:middle;
+.search-results-item .parent-dir-link {
+    color:#888;
 }
 .search-results-item .time {
     color:#666;
