@@ -3990,7 +3990,7 @@ class ThumbnailView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Permission denied.')
 
-        open_file = urllib2.urlopen(raw_path)
+        open_file = urllib2.urlopen(inner_path)
         file_size = int(open_file.info()['Content-Length'])
         if  file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
             # if file is bigger than 30MB
