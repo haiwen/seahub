@@ -65,8 +65,7 @@ def sys_info(request):
     - `request`:
     """
     try:
-        users_count = ccnet_threaded_rpc.count_emailusers('DB') + \
-                      ccnet_threaded_rpc.count_emailusers('LDAP')
+        users_count = ccnet_threaded_rpc.count_emailusers('DB') + ccnet_threaded_rpc.count_emailusers('LDAP')
     except Exception as e:
         logger.error(e)
         users_count = 0
