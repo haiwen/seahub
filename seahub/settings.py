@@ -212,6 +212,8 @@ AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
 )
 
+LOGIN_REDIRECT_URL = '/profile/'
+
 ACCOUNT_ACTIVATION_DAYS = 7
 
 # Enable or disable make group public

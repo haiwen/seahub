@@ -24,6 +24,7 @@ from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChange
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.utils import is_ldap_user
+from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
 from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
     USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
@@ -34,15 +35,8 @@ logger = logging.getLogger(__name__)
 LOGIN_ATTEMPT_PREFIX = 'UserLoginAttempt_'
 
 def log_user_in(request, user, redirect_to):
-    # Light security check -- make sure redirect_to isn't garbage.
-    if not redirect_to or ' ' in redirect_to:
-        redirect_to = settings.LOGIN_REDIRECT_URL
-
-    # Heavier security check -- redirects to http://example.com should
-    # not be allowed, but things like /view/?param=http://example.com
-    # should be allowed. This regex checks if there is a '//' *before* a
-    # question mark.
-    elif '//' in redirect_to and re.match(r'[^\?]*//', redirect_to):
+    # Ensure the user-originating redirection url is safe.
+    if not is_safe_url(url=redirect_to, host=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
     # Okay, security checks complete. Log the user in.
