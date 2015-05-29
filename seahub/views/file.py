@@ -857,7 +857,6 @@ def view_file_via_shared_dir(request, token):
     real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
 
     # generate dir navigator
-    # generate dir navigator
     if fileshare.path == '/':
         zipped = gen_path_link(req_path, repo.name)
     else:
@@ -898,9 +897,10 @@ def view_file_via_shared_dir(request, token):
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
         elif filetype == IMAGE:
             current_commit = get_commits(repo_id, 0, 1)[0]
+            real_parent_dir = os.path.dirname(real_path)
             parent_dir = os.path.dirname(req_path)
             dirs = seafile_api.list_dir_by_commit_and_path(current_commit.repo_id,
-                                                           current_commit.id, parent_dir)
+                                                           current_commit.id, real_parent_dir)
             if not dirs:
                 raise Http404
 
