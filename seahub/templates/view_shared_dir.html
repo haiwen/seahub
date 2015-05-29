@@ -54,7 +54,7 @@
                 <tr class="file-item" data-name="{{dirent.obj_name}}" >
                     {% if dirent.allow_generate_thumbnail %}
                         {% if dirent.thumbnail_src %}
-                            <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}?t={{token}}&p={{path|urlencode}}" alt="{% trans "File"%}" /></td>
+                            <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}?t={{token}}&p={{parent_path|urlencode}}" alt="{% trans "File"%}" /></td>
                         {% else %}
                             <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                         {% endif %}
@@ -92,7 +92,7 @@ $(function() {
 
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 var timer, ajaxRequest = {},
-    cur_path = "{{path|escapejs}}",
+    parent_path = "{{parent_path|escapejs}}",
     default_size = {{PREVIEW_DEFAULT_SIZE}},
     preview_wrap = $('<div id="preview-wrap"><img id="image-preview" src="" alt=""/><div class="outer-caret right-outer-caret"><div class="inner-caret"></div></div></div>')
         .appendTo("body")
@@ -107,13 +107,15 @@ $(".repo-file-list").on({
             file_item = thumbnail.closest('.file-item');
 
         timer = setTimeout(function () {
+            var img_path = e(parent_path + file_item.attr('data-name'));
+
             ajaxRequest = $.ajax({
-                url: '{% url "thumbnail_create" repo.id %}?path=' + e(cur_path+file_item.attr('data-name')) + '&size=' + default_size + '&t=' + '{{token}}',
+                url: '{% url "thumbnail_create" repo.id %}?path=' + img_path + '&size=' + default_size + '&t=' + '{{token}}',
                 cache: false,
                 dataType: 'json',
                 success: function(data) {
                     if (data) {
-                        image_preview.attr("src", data.thumbnail_src + '?t=' + '{{token}}' + '&p=' + e(cur_path));
+                        image_preview.attr("src", data.thumbnail_src + '?t=' + '{{token}}' + '&p=' + e(parent_path));
                         var file_item_offset = file_item.offset(),
                             thumbnail_offset = thumbnail.offset(),
 
@@ -177,14 +179,16 @@ $(function() {
     }
     var get_thumbnail = function(i) {
         var img_icon = $(img_icons[i]),
-            file_name = img_icon.closest('.file-item').attr('data-name');
+            file_name = img_icon.closest('.file-item').attr('data-name'),
+            img_path = parent_path + file_name;
+
         $.ajax({
-            url: '{% url "thumbnail_create" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
+            url: '{% url "thumbnail_create" repo.id %}?path=' + img_path + '&t=' + '{{token}}',
             cache: false,
             dataType: 'json',
             success: function(data) {
                 if (data) {
-                    img_icon.attr("src", data.thumbnail_src + '?t=' + '{{token}}' + '&p=' + e(cur_path)).load(function() {
+                    img_icon.attr("src", data.thumbnail_src + '?t=' + '{{token}}' + '&p=' + e(parent_path)).load(function() {
                         $(this).removeClass("not-thumbnail").addClass("thumbnail");
                     });
                 }

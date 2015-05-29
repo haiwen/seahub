@@ -486,6 +486,7 @@ def view_shared_dir(request, token):
             'repo': repo,
             'token': token,
             'path': req_path,
+            'parent_path': real_path,
             'username': username,
             'dir_name': dir_name,
             'file_list': file_list,
