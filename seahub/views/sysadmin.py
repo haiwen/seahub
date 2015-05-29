@@ -65,7 +65,8 @@ def sys_info(request):
     - `request`:
     """
     try:
-        users_count = ccnet_threaded_rpc.count_emailusers('DB')
+        users_count = ccnet_threaded_rpc.count_emailusers('DB') + \
+                      ccnet_threaded_rpc.count_emailusers('LDAP')
     except Exception as e:
         logger.error(e)
         users_count = 0
@@ -89,7 +90,7 @@ def sys_info(request):
 
     is_pro = is_pro_version()
     if is_pro:
-        license_dict = parse_license('../../../../seafile-license.txt')
+        license_dict = parse_license('../seafile-license.txt')
     else:
         license_dict = {}
     return render_to_response('sysadmin/sys_info.html', {
