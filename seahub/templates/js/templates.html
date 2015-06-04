@@ -250,11 +250,11 @@
     </td>
     <td class="dirent-icon">
         <% if (dirent.is_img) { %>
-        <% if (dirent.thumbnail_src) { %>
-        <img src="<%= dirent.thumbnail_src %>" alt="" />
-        <% } else { %>
-        <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
-        <% } %>
+            <% if (dirent.thumbnail_src) { %>
+            <img src="<%= dirent.thumbnail_src %>" alt="" />
+            <% } else { %>
+            <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+            <% } %>
         <% } else { %>
         <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
         <% } %>
