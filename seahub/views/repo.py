@@ -31,7 +31,8 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
-    get_commit_before_new_merge, user_traffic_over_limit, render_error
+    get_commit_before_new_merge, user_traffic_over_limit, render_error, \
+    get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, \
     ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
@@ -477,6 +478,9 @@ def view_shared_dir(request, token):
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
     for f in file_list:
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f.is_img = True
         if allow_generate_thumbnail(username, repo, f):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
