@@ -3592,3 +3592,16 @@ textarea:-moz-placeholder {/* for FF */
 #download-link-operations dt {
     margin: 0;
 }
+#top-browser-tip {
+    padding:7px 4px;
+    background:#fff1a8;
+    text-align:center;
+    border-bottom:1px solid #ccc;
+    margin:0;
+}
+#top-browser-tip .close {
+    display:inline-block;
+    margin-left:10px;
+    cursor:pointer;
+    color:#15c;
+}
