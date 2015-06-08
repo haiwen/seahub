@@ -37,6 +37,7 @@ For details please refer to 'snippets/file_content_js.html'.
                 {% endif %}
             </div>
             {% endif %}
+            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="loading-tip" />
             <img src="{{ raw_path }}" alt="{{ u_filename}}" id="image-view" class="vh" />
         {% endif %}
         

@@ -58,6 +58,7 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, SF, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
+from seahub.thumbnail.utils import allow_generate_thumbnail, generate_thumbnail
 from seahub.views import check_folder_permission
 
 if HAS_OFFICE_CONVERTER:
@@ -68,7 +69,8 @@ if HAS_OFFICE_CONVERTER:
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT, \
+    MAX_WIDTH_FOR_THUMBNAIL
 from seahub.views import is_registered_user, check_repo_access_permission, \
     get_unencry_rw_repos_by_user, get_file_access_permission
 
@@ -415,6 +417,9 @@ def _file_view(request, repo_id, path):
                     img_prev = posixpath.join(parent_dir, img_list[cur_img_index - 1])
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
+
+            if allow_generate_thumbnail(request, repo_id, path):
+                raw_path = generate_thumbnail(request, repo_id, path, MAX_WIDTH_FOR_THUMBNAIL)
 
         template = 'view_file_%s.html' % ret_dict['filetype'].lower()
     else:

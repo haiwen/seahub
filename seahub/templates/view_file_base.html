@@ -9,7 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">                                                
 #header, #footer { display:none; }
-#view-hd { margin-top: 4px; }
+#view-path-op { margin-top: 8px; }
 #star {
     vertical-align:middle;
     margin-left:3px;
@@ -23,15 +23,8 @@
 {% endblock %}
 
 {% block main_panel %}
-    <div id="view-hd">
-        <h2>{{ filename }}
-            <span id="star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
-        </h2>
-    </div>
-
     <div id="view-path-op">
         <p class="path">
-        {% trans "Current Path: "%}
         {% for name, link in zipped %}
             {% if not forloop.last %}
                 <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
@@ -39,6 +32,7 @@
                 {{ name }}
             {% endif %}
         {% endfor %}
+            <span id="star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
         </p>
     </div>
 

@@ -32,6 +32,7 @@ window.onload = function () {
     if (img.width() > 946) {
         img.width(946);
     }
+    $('#file-view .loading-tip').hide();
     img.removeClass('vh');
 }
     {% if img_prev or img_next %}

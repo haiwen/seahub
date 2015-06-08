@@ -477,7 +477,8 @@ def view_shared_dir(request, token):
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        file_path = posixpath.join(real_path, f.obj_name)
+        if allow_generate_thumbnail(request, repo_id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
                 f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
