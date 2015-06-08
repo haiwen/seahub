@@ -1,29 +1,29 @@
 import os
 import json
 import logging
-import urllib2
 import posixpath
 import datetime
-from StringIO import StringIO
-from PIL import Image
 
 from django.utils.translation import ugettext as _
 from django.http import HttpResponse
 from django.views.decorators.http import condition
 
-from seaserv import get_file_id_by_path, get_repo, seafile_api
+from seaserv import get_repo
 
-from seahub.utils import gen_inner_file_get_url
-from seahub.views import check_repo_access_permission
+from seahub.views import check_folder_permission
 from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
-    THUMBNAIL_ROOT, ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
-from seahub.thumbnail.utils import get_thumbnail_src
+    THUMBNAIL_ROOT
+from seahub.thumbnail.utils import allow_generate_thumbnail, generate_thumbnail
 from seahub.share.models import FileShare
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
 def thumbnail_create(request, repo_id):
+    """
+    generate thumbnail if not exists
+    return thumbnail src to web
+    """
 
     content_type = 'application/json; charset=utf-8'
     result = {}
@@ -33,25 +33,15 @@ def thumbnail_create(request, repo_id):
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
-    if not ENABLE_THUMBNAIL:
-        err_msg = _(u"Thumbnail function is not enabled.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
-                            content_type=content_type)
-
     repo = get_repo(repo_id)
     if not repo:
         err_msg = _(u"Library does not exist.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
 
-    if repo.encrypted:
-        err_msg = _(u"Image thumbnail is not supported in encrypted libraries.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
-                            content_type=content_type)
-
     # permission check
     path = request.GET.get('path', None)
-    image_path = None
+    image_path = path
     if not path or '../' in path:
         err_msg = _(u"Invalid arguments.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
@@ -74,55 +64,25 @@ def thumbnail_create(request, repo_id):
             err_msg = _(u"Please login first.")
             return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                                 content_type=content_type)
-        elif check_repo_access_permission(repo_id, request.user) is None:
+        elif check_folder_permission(request, repo_id, '/') is None:
             err_msg = _(u"Permission denied.")
             return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                                 content_type=content_type)
 
-    if not image_path:
-        image_path = path
-
-    obj_id = get_file_id_by_path(repo_id, image_path)
-    if obj_id is None:
-        err_msg = _(u"Wrong path.")
+    if not allow_generate_thumbnail(request, repo_id, image_path):
+        err_msg = _(u"Not allowed to generate thumbnail.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
                             content_type=content_type)
-
-    username = request.user.username
-    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                    username, use_onetime=True)
-    inner_url = gen_inner_file_get_url(token, os.path.basename(image_path))
-    open_file = urllib2.urlopen(inner_url)
-    file_size = int(open_file.info()['Content-Length'])
-
-    # image file size limit check
-    if file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
-        err_msg = _(u"Image file is too large.")
-        return HttpResponse(json.dumps({"err_msg": err_msg}), status=520,
-                            content_type=content_type)
-
-    size = request.GET.get('size', THUMBNAIL_DEFAULT_SIZE)
-    thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
-    if not os.path.exists(thumbnail_dir):
-        os.makedirs(thumbnail_dir)
-
-    thumbnail_file = os.path.join(thumbnail_dir, obj_id)
-    if not os.path.exists(thumbnail_file):
-        try:
-            f = StringIO(open_file.read())
-            image = Image.open(f)
-            if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
-                image = image.convert("RGB")
-            image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
-            image.save(thumbnail_file, THUMBNAIL_EXTENSION)
-        except Exception as e:
-            logger.error(e)
+    else:
+        size = request.GET.get('size', THUMBNAIL_DEFAULT_SIZE)
+        scr = generate_thumbnail(request, repo_id, image_path, int(size))
+        if scr:
+            result['thumbnail_src'] = scr
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        else:
             err_msg = _('Failed to create thumbnail.')
             return HttpResponse(json.dumps({'err_msg': err_msg}), status=500,
                                 content_type=content_type)
-
-    result['thumbnail_src'] = get_thumbnail_src(repo_id, obj_id, size)
-    return HttpResponse(json.dumps(result), content_type=content_type)
 
 def latest_entry(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     thumbnail_path = os.path.join(THUMBNAIL_ROOT, size, obj_id)
@@ -136,7 +96,11 @@ def latest_entry(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
 
 @condition(last_modified_func=latest_entry)
 def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
-    # permission check
+    """
+    handle thumbnail src
+    return thumbnail file to web
+    """
+
     token = request.GET.get('t', None)
     path = request.GET.get('p', None)
     if token and path:
@@ -148,11 +112,14 @@ def thumbnail_get(request, repo_id, obj_id, size=THUMBNAIL_DEFAULT_SIZE):
     else:
         if not request.user.is_authenticated():
             return HttpResponse()
-        elif check_repo_access_permission(repo_id, request.user) is None:
+        elif check_folder_permission(request, repo_id, '/') is None:
             return HttpResponse()
 
-    thumbnail_file = os.path.join(THUMBNAIL_ROOT, size, obj_id)
-    with open(thumbnail_file, 'rb') as f:
-        file_content = f.read()
-
-    return HttpResponse(content=file_content, mimetype='image/'+THUMBNAIL_EXTENSION)
+    thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
+    try:
+        with open(thumbnail_file, 'rb') as f:
+            thumbnail = f.read()
+        return HttpResponse(content=thumbnail, mimetype='image/'+THUMBNAIL_EXTENSION)
+    except IOError as e:
+        logger.error(e)
+        return HttpResponse()
