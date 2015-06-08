@@ -1131,10 +1131,12 @@ class UpdateBlksLinkView(APIView):
         return Response(url)
 
 def get_dir_entrys_by_id(request, repo, path, dir_id):
+    username = request.user.username
     try:
         dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
-                request.user.username, -1, -1)
+                username, -1, -1)
     except SearpcError, e:
+        logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
                          "Failed to list dir.")
 
@@ -1168,6 +1170,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
     response["oid"] = dir_id
+    response["dir_perm"] = seafile_api.check_permission_by_path(repo.id, path, username)
     return response
 
 def get_shared_link(request, repo_id, path):
