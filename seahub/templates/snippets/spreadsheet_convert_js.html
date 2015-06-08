@@ -9,13 +9,9 @@
         $('#spreadsheet-container').append(iframe);
     }
 
-    {% if html_exists %}
-    load_excel();
-    {% else %}
-
     function check_status () {
         $.ajax({
-            url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
+            url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}&doctype=spreadsheet",
             cache: false,
             dataType: 'json',
             beforeSend: prepareOfficePreviewToken,
@@ -40,4 +36,3 @@
   }
 
   check_status();
-  {% endif %}
