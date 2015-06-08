@@ -49,8 +49,6 @@ $(function() {
 });
 
 {% if filetype == 'PDF' and use_pdfjs %}
-{% elif filetype == 'PDF' and not use_pdfjs and not html_exists %}
-{% elif filetype == 'Document' and not html_exists %}
 {% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');

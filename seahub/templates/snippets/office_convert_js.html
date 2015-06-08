@@ -1,148 +1,158 @@
 {% load i18n %}
-    function prepareOfficePreviewToken(xhr, settings) {
-        xhr.setRequestHeader('X-Seafile-Office-Preview-Token', '{{ office_preview_token }}');
-    }
-    /**
-     * @param {boolean} html_exists True if the html has already been converted.
-     * @param {number} page_num The number of pages of this document
-     * @param {string|undefined} outline The outline content of the converted html.
-     *      If html_exists is true, then it is undefined since the outline is already rendered in the HTML.
-     */
-    function load_document(html_exists, page_num) {
-        $('#convert-loading').remove();
-        var base_page_url = "{% url 'office_convert_get_page' obj_id %}/",
-            page_urls = [];
 
-        for (var i = 1; i < page_num + 1; i++) {
-            page_urls.push(base_page_url + i + '.page');
+var OfficePreviewer = function(file_id, preview_token) {
+    this.file_id = file_id;
+    this.preview_token = preview_token;
+    this.total_pages = null;
+
+    this.orig_page_width = null;
+    this.orig_page_height = null;
+
+    this.server_processed_pages = 0;
+    this.current_loading_page = 1;
+    this.iframes = [];
+
+    this.FIT_TO_WIDTH = 850;    // hardcoded in seafevents
+    this.scale_ratio = 1;
+
+    this.page_status_url = function(page) {
+        return "{% url 'office_convert_query_status' %}?" +
+            $.param({file_id: this.file_id, page: page});
+    }
+    this.page_content_url = function(page) {
+        return "{% url 'office_convert_get_page' obj_id %}/" + page + '.page';
+    }
+};
+
+OfficePreviewer.prototype.start = function() {
+    this.check_page_status();
+    return this;
+};
+
+OfficePreviewer.prototype.check_page_status = function() {
+    var page = this.current_loading_page;
+    if (this.server_processed_pages >= page) {
+        this.load_page(page);
+        return;
+    }
+    $.ajax({
+        context: this,
+        url: this.page_status_url(page),
+        cache: false,
+        dataType: 'json',
+        beforeSend: this.prepareOfficePreviewToken,
+        success: function(data) {
+            var status = data['status'];
+            switch (status) {
+            case 'PROCESSING':
+                setTimeout($.proxy(this.check_page_status, this), 2000);
+                break;
+            case 'ERROR':
+                var str = "{% trans "Document convertion failed." %}";
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                break;
+            case 'DONE':
+                var info = data['info'];
+                if (info) {
+                  this.total_pages = info['final_pages'];
+                  this.server_processed_pages = info['processed_pages'];
+                  this.orig_page_width = info['page_width'];
+                  this.orig_page_height = info['page_height'];
+                }
+                this.load_page(page);
+            }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var str;
+            if (xhr.responseText) {
+                str = "{% trans "Document convertion failed." %}";
+            } else {
+                str = "{% trans "Failed. Please check the network." %}";
+            }
+            $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+        }
+    });
+};
+
+OfficePreviewer.prototype.add_toolbar = function() {
+    $('#convert-loading').remove();
+    $('#file-view').append('<div id="pdf2html-toolbar-2" class="pdf2html-toolbar"></div>');
+    $('#pdf2html-toolbar-2')
+        .append('<span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span>')
+        .css({'left': $(window).width()/2 - $('#pdf2html-toolbar-2').outerWidth(true)/2});
+
+    var scale_ratio_offset = 0.1;
+    $('#zoom-in, #zoom-out').click($.proxy(function(event) {
+        // zoom in/out
+        var scale_ratio = this.scale_ratio;
+        var op = event.target.id;
+        if (op == 'zoom-in') {
+            scale_ratio += scale_ratio_offset;
+        } else {
+            scale_ratio -= scale_ratio_offset;
         }
 
-        new pdf2htmlEX.Viewer({
-            before_send: prepareOfficePreviewToken,
-            container_id : 'page-container',
-            sidebar_id : 'sidebar',
-            outline_id : 'outline',
-            page_urls : page_urls
+        if (scale_ratio <= 0) {
+            return ;
+        }
+        this.scale_ratio = scale_ratio;
+
+        var self = this;
+        $(this.iframes).each(function(index, iframe) {
+            self.scale_iframe(iframe);
         });
 
-        // zoom in, zoom out
-        var scale_ratio = 1,
-            scale_ratio_offset = 0.1;
-        var scale = function(ele, ratio) {
-            ele.css({
-                'transform':'scale(' + ratio + ')',
-                '-webkit-transform':'scale(' + ratio + ')',
-                '-ms-transform':'scale(' + ratio + ')',
-                'transform-origin':'center 0%',
-                '-webkit-transform-origin':'center 0%',
-                '-ms-transform-origin':'center 0%'
-            });
-        };
+        this.set_page_container_size();
 
-        $('#converted-html').append('<div id="pdf2html-toolbar-2" class="pdf2html-toolbar"></div>');
-        $('#pdf2html-toolbar-2').append('<span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span>').css({'left': $(window).width()/2 - $('#pdf2html-toolbar-2').outerWidth(true)/2});
+    }, this));
+}
 
-        var file_cont = $('#file-view'), //file container
-            orig_pg_total_h; 
+OfficePreviewer.prototype.scale_iframe = function(iframe) {
+    iframe.contentWindow.postMessage({scale: this.scale_ratio}, "http://seafile-dev:8000");
+}
 
-        $('#zoom-in, #zoom-out').click(function() {
-            // get orig data before zoom in/out
-            var op = $(this).attr('id'),
-                pg_num = $('.pd').length,
-                orig_win_scrollTop = $(window).scrollTop(),
-                orig_pg_h, cur_pg, pg_h_offset;
+OfficePreviewer.prototype.set_page_container_size = function(elt) {
+    // orig_page_height / h = orig_page_width / this.FIT_TO_WIDTH
+    elt = elt || $('.page-container');
+    var h = this.orig_page_height * this.FIT_TO_WIDTH / this.orig_page_width;
+    elt.css({
+        width: this.FIT_TO_WIDTH * this.scale_ratio,
+        height: h * this.scale_ratio
+    });
+}
 
-            if (!orig_pg_total_h && scale_ratio == 1) {
-                orig_pg_total_h = file_cont.height();
-            }
-
-            orig_pg_h = orig_pg_total_h*scale_ratio/pg_num;
-            cur_pg = (orig_win_scrollTop - $('#page-container').offset().top)/orig_pg_h;
-
-            // zoom in/out
-            if (op == 'zoom-in') {
-                scale_ratio += scale_ratio_offset;
-            } else {
-                scale_ratio -= scale_ratio_offset;
-            }
-            if (scale_ratio <= 0) {
-                return ;
-            }
-            scale($('#page-container'), scale_ratio);
-
-            // modify file container's height
-            file_cont.height(orig_pg_total_h*scale_ratio);
-
-            // scroll to the right cur page
-            pg_h_offset = (orig_pg_total_h * scale_ratio_offset)/pg_num;
-            if (op == 'zoom-in') {
-                $(window).scrollTop(orig_win_scrollTop + cur_pg*pg_h_offset);
-            } else {
-                $(window).scrollTop(orig_win_scrollTop - cur_pg*pg_h_offset);
-            }
-        });
+OfficePreviewer.prototype.load_page = function(index) {
+    if (index == 1) {
+        this.add_toolbar();
+        $('#file-view').css({'height': 'auto'});
     }
 
-    {% if html_exists %}
-    load_document(true, {{ html_detail.page_num }});
-    {% else %}
+    var page_container = $('<div class="page-container"></div>');
+    this.set_page_container_size(page_container);
+    $('#pages').append(page_container);
 
-    function get_file_css() {
-        var css_href = "{% url 'office_convert_get_page' obj_id %}/file.css";
-        $('head').append('<link rel="stylesheet" type="text/css" href="' + css_href + '" />');
+    var iframe = $('<iframe src="' + this.page_content_url(index) + '" />');
+    page_container.append(iframe);
+
+    this.iframes.push(iframe[0]);
+    var self = this;
+    iframe.load(function() {
+        // set proper scale factor when iframe is loaded
+        if (self.scale_ratio != 1) {
+            self.scale_iframe(this);
+        }
+    });
+
+    if (index < this.total_pages) {
+        this.current_loading_page++;
+        this.check_page_status();
     }
+};
 
-    function query_page_num() {
-        $.ajax({
-            url: "{% url 'office_convert_query_page_num' %}?file_id={{ obj_id }}",
-            cache: false,
-            dataType: 'json',
-            beforeSend: prepareOfficePreviewToken,
-            success: function(data) {
-                if (data['success']) {
-                    get_file_css();
-                    load_document(false, data['count']);
-                } else {
-                    str = "{% trans "Document convertion failed." %}";
-                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-                }
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                var str;
-                if (xhr.responseText) {
-                    str = "{% trans "Document convertion failed." %}";
-                } else {
-                    str = "{% trans "Failed. Please check the network." %}";
-                }
-                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-          }
-        });
-    }
+OfficePreviewer.prototype.prepareOfficePreviewToken = function(xhr, settings) {
+    xhr.setRequestHeader('X-Seafile-Office-Preview-Token', this.preview_token);
+};
 
-    function check_status () {
-        $.ajax({
-            url: "{% url 'office_convert_query_status' %}?file_id={{ obj_id }}",
-            cache: false,
-            dataType: 'json',
-            beforeSend: prepareOfficePreviewToken,
-            success: function(data) {
-                var status = data['status'];
-                if (status == 'QUEUED' || status == 'PROCESSING') {
-                    setTimeout(check_status, 2000);
-                } else {
-                    query_page_num();
-                }
-            },
-            error: function(xhr, textStatus, errorThrown) {
-                var str;
-                if (xhr.responseText) {
-                    str = "{% trans "Document convertion failed." %}";
-                } else {
-                    str = "{% trans "Failed. Please check the network." %}";
-                }
-                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-          }
-      });
-  }
-  check_status();
-  {% endif %}
+$(function() {
+    new OfficePreviewer("{{ obj_id }}", "{{ office_preview_token }}").start();
+});
