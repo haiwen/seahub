@@ -478,13 +478,16 @@ def list_lib_dir(request, repo_id):
         d_['perm'] = d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
+
+    for f in file_list:
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f.is_img = True
+
     if not repo.encrypted and ENABLE_THUMBNAIL:
         size = THUMBNAIL_DEFAULT_SIZE
         for f in file_list:
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
+            if f.is_img and os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
                     f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
 
     for f in file_list:
