@@ -242,10 +242,11 @@ def render_repo(request, repo):
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        file_path = posixpath.join(path, f.obj_name)
+        if allow_generate_thumbnail(request, repo.id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
 
     return render_to_response('repo.html', {
             'repo': repo,
@@ -477,10 +478,12 @@ def view_shared_dir(request, token):
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        real_image_path = posixpath.join(real_path, f.obj_name)
+        if allow_generate_thumbnail(request, repo_id, real_image_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+                req_image_path = posixpath.join(req_path, f.obj_name)
+                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, req_image_path)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,

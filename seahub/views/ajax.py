@@ -60,7 +60,6 @@ from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         file_icon_filter, email2nickname
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
@@ -298,10 +297,11 @@ def list_dir(request, repo_id):
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        file_path = posixpath.join(path, f.obj_name)
+        if allow_generate_thumbnail(request, repo_id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
 
     ctx = {
         'repo': repo,
@@ -387,10 +387,11 @@ def list_dir_more(request, repo_id):
         more_start = offset + 100
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
+        file_path = posixpath.join(path, f.obj_name)
+        if allow_generate_thumbnail(request, repo_id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
 
     ctx = {
         'repo': repo,
@@ -481,11 +482,12 @@ def list_lib_dir(request, repo_id):
     if not repo.encrypted and ENABLE_THUMBNAIL:
         size = THUMBNAIL_DEFAULT_SIZE
         for f in file_list:
+            file_path = posixpath.join(path, f.obj_name)
             file_type, file_ext = get_file_type_and_ext(f.obj_name)
             if file_type == IMAGE:
                 f.is_img = True
                 if os.path.exists(os.path.join(THUMBNAIL_ROOT, size, f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, size)
+                    f.thumbnail_src = get_thumbnail_src(repo_id, size, file_path)
 
     for f in file_list:
         f_ = {}
