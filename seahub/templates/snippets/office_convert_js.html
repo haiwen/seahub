@@ -22,6 +22,10 @@ var OfficePreviewer = function(file_id, preview_token) {
     this.page_content_url = function(page) {
         return "{% url 'office_convert_get_page' obj_id %}/" + page + '.page';
     }
+
+    var url = window.location.href;
+    var arr = url.split("/");
+    this.origin = arr[0] + "//" + arr[2];
 };
 
 OfficePreviewer.prototype.start = function() {
@@ -108,7 +112,7 @@ OfficePreviewer.prototype.add_toolbar = function() {
 }
 
 OfficePreviewer.prototype.scale_iframe = function(iframe) {
-    iframe.contentWindow.postMessage({scale: this.scale_ratio}, "http://seafile-dev:8000");
+    iframe.contentWindow.postMessage({scale: this.scale_ratio}, this.origin);
 }
 
 OfficePreviewer.prototype.set_page_container_size = function(elt) {
