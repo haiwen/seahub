@@ -700,9 +700,9 @@
     <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
     <td>
         <% if (is_img) { %>
-            <a class="normal img-name-link" href="{{ SITE_ROOT }}lib/<%= repo %>/file/<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo %>/raw/<%- encoded_path %>"><%- file_name %></a>
+            <a class="normal img-name-link" href="{{ SITE_ROOT }}lib/<%= repo %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo %>/raw<%- encoded_path %>"><%- file_name %></a>
         <% } else { %>
-            <a href="{{ SITE_ROOT }}lib/<%= repo %>/file/<%- encoded_path %>" target="_blank"><%- file_name %></a>
+            <a href="{{ SITE_ROOT }}lib/<%= repo %>/file<%- encoded_path %>" target="_blank"><%- file_name %></a>
         <% } %>
     </td>
     <td>
