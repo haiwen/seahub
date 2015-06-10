@@ -18,7 +18,7 @@ require.config({
                 'jquery'
             ],
             exports: 'Backbone'
-        },
+        }
     },
     paths: {
         'jquery': 'lib/jquery',
