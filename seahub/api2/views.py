@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -40,7 +40,7 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response, to_python_boolean
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
@@ -55,6 +55,7 @@ from seahub.group.utils import BadGroupNameError, ConflictGroupNameError
 from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
+from seahub.contacts.models import Contact
 from seahub.profile.models import Profile
 from seahub.views.modules import get_wiki_enabled_group_list
 from seahub.shortcuts import get_first_object_or_none
@@ -85,7 +86,7 @@ if HAS_OFFICE_CONVERTER:
         query_office_file_pages, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
+        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, ENABLE_GLOBAL_ADDRESSBOOK
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -420,6 +421,88 @@ class RegDevice(APIView):
         if modified:
             token.save()
         return Response("success")
+
+class SearchUser(APIView):
+    """ Search user from contacts/all users
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+
+        username = request.user.username
+        q = request.GET.get('q', '')
+        search_result = []
+
+        if not q:
+            contacts = Contact.objects.get_contacts_by_user(username)
+            for c in contacts:
+                search_result.append(c.contact_email)
+        else:
+            searched_users = []
+            searched_profiles = []
+
+            if request.cloud_mode:
+                if is_org_context(request):
+                    url_prefix = request.user.org.url_prefix
+                    users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
+
+                    searched_users = filter(lambda u: q in u.email, users)
+                    # 'user__in' for only get profile of user in org
+                    # 'nickname__contains' for search by nickname
+                    searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                               Q(nickname__contains=q)).values('user')
+                elif ENABLE_GLOBAL_ADDRESSBOOK:
+                    searched_users = seaserv.ccnet_threaded_rpc.search_emailusers(q, 0, 10)
+                    searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+                else:
+                    users = []
+                    contacts = Contact.objects.get_contacts_by_user(username)
+                    for c in contacts:
+                        c.email = c.contact_email
+                        users.append(c)
+
+                    searched_users = filter(lambda u: q in u.email, users)
+                    # 'user__in' for only get profile of contacts
+                    # 'nickname__contains' for search by nickname
+                    searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                               Q(nickname__contains=q)).values('user')
+            else:
+                searched_users = seaserv.ccnet_threaded_rpc.search_emailusers(q, 0, 10)
+                searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+
+            for u in searched_users[:10]:
+                search_result.append(u.email)
+
+            for p in searched_profiles[:10]:
+                search_result.append(p['user'])
+
+            # remove duplicate emails
+            search_result = {}.fromkeys(search_result).keys()
+
+            # reomve myself
+            if username in search_result:
+                search_result.remove(username)
+
+        formated_result = format_user_result(search_result)[:10]
+        return HttpResponse(json.dumps({"users": formated_result}), status=200,
+                            content_type=json_content_type)
+
+def format_user_result(users):
+    results = []
+    for email in users:
+        try:
+            user = User.objects.get(email = email)
+            if user.is_active:
+                results.append({
+                    "email": email,
+                    "avatar": avatar(email, 32),
+                    "name": email2nickname(email),
+                })
+        except User.DoesNotExist:
+            continue
+    return results
 
 class Search(APIView):
     """ Search all the repos
