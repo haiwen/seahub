@@ -2126,6 +2126,13 @@ class DirSubRepoView(APIView):
 
         path = request.GET.get('p')
         name = request.GET.get('name')
+        password = request.GET.get('password', None)
+
+        repo = get_repo(repo_id)
+        if not repo:
+            result['error'] = 'Repo not found.'
+            return HttpResponse(json.dumps(result), status=404, content_type=json_content_type)
+
         if not (path and name):
             result['error'] = 'Argument missing'
             return HttpResponse(json.dumps(result), status=400, content_type=json_content_type)
@@ -2149,7 +2156,16 @@ class DirSubRepoView(APIView):
             # create a sub-lib
             try:
                 # use name as 'repo_name' & 'repo_desc' for sub_repo
-                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+                if repo.encrypted:
+                    if password:
+                        sub_repo_id = seafile_api.create_virtual_repo(repo_id,
+                                path, name, name, username, password)
+                    else:
+                        result['error'] = 'Password Required.'
+                        return HttpResponse(json.dumps(result), status=403, content_type=json_content_type)
+                else:
+                    sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+
                 result['sub_repo_id'] = sub_repo_id
             except SearpcError, e:
                 result['error'] = e.msg
