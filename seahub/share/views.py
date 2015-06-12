@@ -1367,6 +1367,12 @@ def ajax_get_upload_link(request):
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
+
+        if not request.user.permissions.can_generate_shared_link():
+            err = _('You do not have permission to generate shared link')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=403, content_type=content_type)
+
         repo_id = request.POST.get('repo_id', '')
         path = request.POST.get('p', '')
         use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
@@ -1433,6 +1439,12 @@ def ajax_get_download_link(request):
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
+
+        if not request.user.permissions.can_generate_shared_link():
+            err = _('You do not have permission to generate shared link')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=403, content_type=content_type)
+
         repo_id = request.POST.get('repo_id', '')
         share_type = request.POST.get('type', 'f')  # `f` or `d`
         path = request.POST.get('p', '')

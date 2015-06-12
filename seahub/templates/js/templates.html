@@ -132,7 +132,7 @@
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
-    <% if (!encrypted) { %>
+    <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     <% if (path == '/') { %>
@@ -205,7 +205,7 @@
         <div class="repo-file-op vh">
             <div class="displayed-op">
                 <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
-                <% if (!repo_encrypted) { %>
+                <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
@@ -272,7 +272,7 @@
         <div class="repo-file-op vh">
             <div class="displayed-op">
                 <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
-                <% if (!repo_encrypted) { %>
+                <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
