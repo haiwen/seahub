@@ -675,6 +675,7 @@ class Repos(APIView):
         return Response(repos_json)
 
     def post(self, request, format=None):
+
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
@@ -1817,6 +1818,11 @@ class FileSharedLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
+
+        if not request.user.permissions.can_generate_shared_link():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to generate shared link.')
+
         # generate file shared link
         username = request.user.username
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
