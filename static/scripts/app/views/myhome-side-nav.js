@@ -16,9 +16,16 @@ define([
         },
 
         render: function(cur_tab) {
+            var show_contacts_tab = false;
+
+            if (app.pageOptions.is_cloud_mode && !app.pageOptions.enable_global_addressbook) {
+                show_contacts_tab = true;
+            }
+
             this.$el.html(this.template({
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
+                'show_contacts_tab': show_contacts_tab,
                 'events_enabled': app.pageOptions.events_enabled
             }));
             this.$el.find('li').removeClass('tab-cur');

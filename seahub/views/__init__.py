@@ -1173,6 +1173,7 @@ def libraries(request):
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'enable_global_addressbook': settings.ENABLE_GLOBAL_ADDRESSBOOK,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             }, context_instance=RequestContext(request))

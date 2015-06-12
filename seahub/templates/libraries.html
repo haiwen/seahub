@@ -252,6 +252,8 @@ app["pageOptions"] = {
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     can_add_repo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
+    is_cloud_mode: {% if request.cloud_mode %} true {% else %} false {% endif %},
+    enable_global_addressbook: {% if enable_global_addressbook %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},

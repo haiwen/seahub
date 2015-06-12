@@ -454,7 +454,7 @@ PREVIEW_DEFAULT_SIZE = '100'
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
 #####################
-# Cloud Address #
+# Global AddressBook #
 #####################
 ENABLE_GLOBAL_ADDRESSBOOK = False
 
