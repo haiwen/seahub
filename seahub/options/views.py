@@ -7,6 +7,7 @@ from django.utils.translation import ugettext as _
 
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions
+from seahub.utils import is_pro_version
 from seahub.settings import SITE_ROOT
 
 @login_required
@@ -34,6 +35,9 @@ def save_options(request):
 def sub_lib_enable_set(request):
     """
     """
+    if is_pro_version():
+        raise Http404
+
     username = request.user.username
     enable_sub_lib = request.POST.get('enable-sub-lib', '')
 
@@ -47,5 +51,3 @@ def sub_lib_enable_set(request):
         next = SITE_ROOT
 
     return HttpResponseRedirect(next)
-
- 

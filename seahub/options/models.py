@@ -4,6 +4,7 @@ from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.settings import FORCE_SERVER_CRYPTO
+from seahub.utils import is_pro_version
 
 KEY_SERVER_CRYPTO = "server_crypto"
 VAL_SERVER_CRYPTO_ENABLED = "1"
@@ -138,12 +139,15 @@ class UserOptionsManager(models.Manager):
                                     VAL_SUB_LIB_DISABLED)
 
     def is_sub_lib_enabled(self, username):
-        """Return ``True`` if user need guide, otherwise ``False``.
+        """Return ``True`` if is not pro version AND sub lib enabled, otherwise ``False``.
         
         Arguments:
         - `self`:
         - `username`:
         """
+        if is_pro_version():
+            return False
+
         try:
             user_option = super(UserOptionsManager, self).get(
                 email=username, option_key=KEY_SUB_LIB)
