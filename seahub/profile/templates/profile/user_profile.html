@@ -24,10 +24,6 @@
     {% endif %}
 </div>
 
-{% if add_to_contacts %}
-<button class="add-to-contacts w100" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
-{% endif %}
-
 {% if user %}
 <button id="send-msg" class="w100">{% trans "Send message" %}</button>
 {% endif %}
@@ -53,10 +49,6 @@
     {% endif %}
 </dl>
 
-{% if add_to_contacts %}
-{% include 'snippets/add_to_contacts_form.html' %}
-{% endif %}
-
 {% endblock %}
 
 {% block extra_script %}
@@ -67,5 +59,4 @@ $('#send-msg').click(function() {
 });
 {% endif %}
 </script>
-{% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

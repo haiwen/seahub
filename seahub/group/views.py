@@ -613,17 +613,6 @@ def group_members(request, group):
     # Get all group members.
     members = get_group_members(group.id)
 
-    user = request.user.username
-    contacts = Contact.objects.filter(user_email=user)
-    contact_emails = []
-    for c in contacts:
-        contact_emails.append(c.contact_email)
-    for m in members:
-        if m.user_name == user or m.user_name in contact_emails:
-            m.can_be_contact = False
-        else:
-            m.can_be_contact = True
-
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)

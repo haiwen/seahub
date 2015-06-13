@@ -1755,17 +1755,6 @@ def pubuser(request):
     show_paginator = True if len(page_range) > 1 else False
 
     users = users_plus_one[:per_page]
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-    contact_emails = []
-    for c in contacts:
-        contact_emails.append(c.contact_email)
-    for u in users:
-        if u.email == username or u.email in contact_emails:
-            u.can_be_contact = False
-        else:
-            u.can_be_contact = True
-
     users = filter(lambda u: u.is_active, users)
 
     return render_to_response('pubuser.html', {
