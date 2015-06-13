@@ -468,16 +468,6 @@ define([
             });
         },
 
-        // get contacts for 'lib/dir/file share'
-        getContacts: function () {
-            this.ajaxGet({
-                'get_url': this.getUrl({name: 'get_user_contacts'}),
-                'after_op_success': function (data) {
-                    app.pageOptions.contacts = data["contacts"];
-                }
-            });
-        },
-
         closeTopNoticeBar: function () {
             if (!app.pageOptions.cur_note) {
                 return false;
@@ -506,13 +496,15 @@ define([
         contactInputOptionsForSelect2: function() {
             var _this = this;
             return {
-                placeholder: gettext("Enter emails or select contacts"),
+                placeholder: gettext("Search users"),
 
                 // with 'tags', the user can directly enter, not just select
                 // tags need `<input type="hidden" />`, not `<select>`
-                tags: true,
+                tags: [],
 
                 tokenSeparators: [",", " "],
+
+                minimumInputLength: 1, // input at least 1 character
 
                 ajax: {
                     url: _this.getUrl({name: 'search_user'}),

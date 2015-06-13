@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext as _
 
 from models import Contact, ContactAddForm, ContactEditForm
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import user_mods_check
 from seahub.profile.models import Profile
 from seahub.utils import render_error, is_valid_email
@@ -49,7 +49,7 @@ def contact_list(request):
         # 'edit_form': edit_form,
         }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 def contact_add(request):
     """
     Handle ajax post to add a contact.
@@ -86,7 +86,7 @@ def contact_add(request):
         messages.error(request, _(u"Failed to add %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
-@login_required
+@login_required_ajax
 def contact_edit(request):
     """
     Ajax post to edit contact info.

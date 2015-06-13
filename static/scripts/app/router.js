@@ -35,7 +35,6 @@ define([
             Common.prepareApiCsrf();
             Common.initAccountPopup();
             Common.initNoticePopup();
-            Common.getContacts();
 
             this.dirView = new DirView();
 
