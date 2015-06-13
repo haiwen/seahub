@@ -456,7 +456,7 @@ THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 #####################
 # Global AddressBook #
 #####################
-ENABLE_GLOBAL_ADDRESSBOOK = False
+ENABLE_GLOBAL_ADDRESSBOOK = True
 
 #####################
 # Folder Permission #
