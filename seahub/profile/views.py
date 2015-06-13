@@ -15,7 +15,7 @@ from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import is_org_context, clear_token
+from seahub.utils import is_org_context, clear_token, is_pro_version
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -79,6 +79,7 @@ def edit_profile(request):
             'force_server_crypto': settings.FORCE_SERVER_CRYPTO,
             'default_repo': default_repo,
             'owned_repos': owned_repos,
+            'is_pro': is_pro_version(),
             }, context_instance=RequestContext(request))
 
 @login_required
