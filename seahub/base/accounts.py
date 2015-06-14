@@ -84,6 +84,7 @@ class UserManager(object):
 
         user = User(emailuser.email)
         user.id = emailuser.id
+        user.enc_password = emailuser.password
         user.is_staff = emailuser.is_staff
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime
