@@ -58,6 +58,7 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
+from seahub.utils.licenseparse import SeafileLicenseInfo
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 from seahub.utils.devices import get_user_devices, do_unlink_device
@@ -1167,7 +1168,12 @@ def libraries(request):
         # only show guide once
         UserOptions.objects.disable_user_guide(username)
 
-    folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
+    license = SeafileLicenseInfo.instance()
+
+    folder_perm_enabled = True if is_pro_version() \
+                          and ENABLE_FOLDER_PERM \
+                          and (license is None or license.is_enterprise_edition()) \
+                          else False
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,

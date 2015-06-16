@@ -29,7 +29,7 @@ from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
 from seahub.utils.rpc import mute_seafile_api
-from seahub.utils.licenseparse import parse_license
+from seahub.utils.licenseparse import SeafileLicenseInfo
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
@@ -89,16 +89,16 @@ def sys_info(request):
 
     is_pro = is_pro_version()
     if is_pro:
-        license_dict = parse_license('../seafile-license.txt')
+        license = SeafileLicenseInfo.instance()
     else:
-        license_dict = {}
+        license = None
     return render_to_response('sysadmin/sys_info.html', {
         'users_count': users_count,
         'repos_count': repos_count,
         'groups_count': groups_count,
         'org_count': org_count,
         'is_pro': is_pro,
-        'license_dict': license_dict,
+        'license': license,
     }, context_instance=RequestContext(request))
 
 @login_required
