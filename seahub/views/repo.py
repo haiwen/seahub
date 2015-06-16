@@ -414,9 +414,7 @@ def view_shared_dir(request, token):
                 form = SharedLinkPasswordForm(post_values)
                 d['form'] = form
                 if form.is_valid():
-                    # set cache for non-anonymous user
-                    if request.user.is_authenticated():
-                        set_share_link_access(request, token)
+                    set_share_link_access(request, token)
                 else:
                     return render_to_response('share_access_validation.html', d,
                                               context_instance=RequestContext(request))

@@ -13,6 +13,10 @@ class Fixtures(Exam):
         return self.create_user('test@test.com')
 
     @fixture
+    def admin(self):
+        return self.create_user('admin@test.com', is_staff=True)
+
+    @fixture
     def repo(self):
         r = seafile_api.get_repo(self.create_repo())
         return r
