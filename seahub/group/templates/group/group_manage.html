@@ -170,7 +170,7 @@ $("#group-member-add, #group-admin-add").click(function() {
 
 $('[name="user_name"]', $('#group-member-add-form, #group-admin-add-form')).select2($.extend({
     width: '268px',
-    placeholder: "{% trans "Search users" %}"
+    placeholder: "{% trans "Search users or enter emails" %}"
 }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 $('#group-member-add-form, #group-admin-add-form').submit(function() {
@@ -214,7 +214,8 @@ $('#group-transfer').click(function() {
 });
 $('[name="email"]', $('#group-transfer-form')).select2($.extend({
     width: '268px',
-    placeholder: "{% trans "Search user" %}"
+    maximumSelectionSize: 1,
+    placeholder: "{% trans "Search user or enter email" %}"
 }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 $('#group-transfer-form').submit(function() {
