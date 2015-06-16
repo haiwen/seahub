@@ -5,23 +5,8 @@
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
-<style type="text/css">
-/* custom select2 */
-.select2-container-multi .select2-choices {
-    border-color: #ddd;
-    border-radius: 2px;
-    background-image: none; /* rm the shadow */
-}
-.select2-container-multi .select2-choices .select2-search-field input {
-    padding:2px 2px 2px 5px;
-}
-.select2-container-multi .select2-choices .select2-search-choice {
-    border:none;
-    border-radius:0;
-    background:#eee;
-}
-</style>
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 {% endblock %}
 
 {% block left_panel %}
@@ -198,61 +183,10 @@ group_id = '{{ group.id }}';
 group_list.push({value:group_id, label:group_name});
 {% endfor %}
 
-user_input.select2({
+user_input.select2($.extend({
     width: '203px',
-    placeholder: "{% trans "Search user" %}",
-
-    tags: [],
-
-    tokenSeparators: [",", " "],
-
-    minimumInputLength: 1, // input at least 1 character
-
-    ajax: {
-        url: '{% url 'search-user' %}',
-        dataType: 'json',
-        delay: 250,
-        cache: true,
-        data: function (params) {
-            return {
-                q: params
-            };
-        },
-        results: function (data) {
-            var user_list = [], users = data['users'];
-
-            for (var i = 0, len = users.length; i < len; i++) {
-                user_list.push({ // 'id' & 'text' are required by the plugin
-                    "id": users[i].email,
-                    // for search. both name & email can be searched.
-                    // use ' '(space) to separate name & email
-                    "text": users[i].name + ' ' + users[i].email,
-                    "avatar": users[i].avatar,
-                    "name": users[i].name
-                });
-            }
-
-            return {
-                results: user_list
-            };
-        }
-    },
-
-    // format items shown in the drop-down menu
-    formatResult: function(item) {
-        if (item.avatar) {
-            return item.avatar + '<span class="text">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
-        } else {
-            return; // if no match, show nothing
-        }
-    },
-
-    // format selected item shown in the input
-    formatSelection: function(item) {
-        return HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
-    },
-    escapeMarkup: function(m) { return m; }
-});
+    placeholder: "{% trans "Search user" %}"
+}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 group_input.bind('autocompleteopen', function(e, ui) {
                var widget = group_input.autocomplete('widget');

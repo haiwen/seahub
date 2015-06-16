@@ -1,5 +1,10 @@
 {% extends 'group/group_base.html' %}
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
 
 {% block cur_admin %}tab-cur{% endblock %}
 
@@ -104,16 +109,28 @@
 
 <form id="group-rename-form" method="post" action="{% url 'group_rename' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Rename Group To"%}</h3>
-    <input type="text" name="new_name" value="" class="input" />
-    <br />
+    <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}" />
 </form>
 
-{% include 'group/grpmember_add_form.html' %} {# for member/admin add #}
+<form id="group-member-add-form" method="post" action="{% url 'group_add_member' group.id %}" class="hide">
+    <h3>{% trans "Add members" %}</h3>
+    <input type="hidden" name="user_name" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit"%}" />
+</form>
+
+<form id="group-admin-add-form" method="post" action="{% url 'group_add_admin' group.id %}" class="hide">
+    <h3>{% trans "Add administrators" %}</h3>
+    <input type="hidden" name="user_name" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit"%}" />
+</form>
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
 var cur_tab = $('.ui-tabs-selected .a');    
@@ -146,14 +163,51 @@ addConfirmTo($(".rm-member"), {
         'title':"{% trans "Delete Member" %}",
         'con':"{% trans "Really want to delete %s ?" %}"
 });
-var contact_list = [], contact_email;
-{% for contact in contacts %}
-contact_email = '{{ contact.contact_email }}';
-contact_list.push({value:contact_email, label:contact_email});
-{% endfor %}
 
-{# for member/admin add #}
-{% include 'group/grpmember_add_js.html' %}
+$("#group-member-add, #group-admin-add").click(function() {
+    $('#' + $(this).attr('id') + '-form').modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('[name="user_name"]', $('#group-member-add-form, #group-admin-add-form')).select2($.extend({
+    width: '268px',
+    placeholder: "{% trans "Search users" %}"
+}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
+$('#group-member-add-form, #group-admin-add-form').submit(function() {
+    var form = $(this);
+    var user_name = $('[name="user_name"]', form).val();
+    if (!$.trim(user_name)) {
+        return false;
+    }
+
+    var submit_btn = $('[type="submit"]', form);
+    disable(submit_btn);
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'user_name': user_name
+        },
+        success: function() {
+            location.reload(true);
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            var error;
+            if (xhr.responseText) {
+                error = $.parseJSON(xhr.responseText).error;
+            } else {
+                error = "{% trans "Failed. Please check the network." %}";
+            }
+            $('.error', form).html(error).removeClass('hide');
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
 
 $('#group-transfer').click(function() {
     $('#group-transfer-form').modal({appendTo: "#main", focus:false});

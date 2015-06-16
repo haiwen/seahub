@@ -812,3 +812,56 @@ function HTMLescape(html){
         .parentNode
         .innerHTML;
 }
+
+function userInputOPtionsForSelect2(user_search_url) {
+    return {
+        tags: [],
+
+        tokenSeparators: [",", " "],
+
+        minimumInputLength: 1, // input at least 1 character
+
+        ajax: {
+            url: user_search_url,
+            dataType: 'json',
+            delay: 250,
+            cache: true,
+            data: function (params) {
+                return {
+                    q: params
+                };
+            },
+            results: function (data) {
+                var user_list = [], users = data['users'];
+                for (var i = 0, len = users.length; i < len; i++) {
+                    user_list.push({ // 'id' & 'text' are required by the plugin
+                        "id": users[i].email,
+                        // for search. both name & email can be searched.
+                        // use ' '(space) to separate name & email
+                        "text": users[i].name + ' ' + users[i].email,
+                        "avatar": users[i].avatar,
+                        "name": users[i].name
+                    });
+                }
+                return {
+                    results: user_list
+                };
+            }
+        },
+
+        // format items shown in the drop-down menu
+        formatResult: function(item) {
+            if (item.avatar) {
+                return item.avatar + '<span class="text">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
+            } else {
+                return; // if no match, show nothing
+            }
+        },
+
+        // format selected item shown in the input
+        formatSelection: function(item) {
+            return HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
+        },
+        escapeMarkup: function(m) { return m; }
+    };
+}
