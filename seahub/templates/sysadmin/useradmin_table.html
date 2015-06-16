@@ -43,11 +43,11 @@
                 {% else %}
                     <span class="user-role-cur-value">{% trans "Default" %}</span>
                 {% endif %}
-                {% if enable_guest %}
+                {% if is_pro %}
                 <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
                 {% endif %}
             </div>
-            {% if enable_guest %}
+            {% if is_pro %}
             <select name="role" class="user-role-select hide">
                 <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
                 <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
