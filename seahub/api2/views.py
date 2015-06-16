@@ -500,6 +500,9 @@ class SearchUser(APIView):
         if username in search_result:
             search_result.remove(username)
 
+        if is_valid_username(q) and q not in search_result:
+            search_result.insert(0, q)
+
         formated_result = format_user_result(search_result)[:10]
         return HttpResponse(json.dumps({"users": formated_result}), status=200,
                             content_type=json_content_type)
