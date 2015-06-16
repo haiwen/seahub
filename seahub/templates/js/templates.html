@@ -335,7 +335,7 @@
         </ul>
 
         <div class="fright">
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
             <% if (!repo_encrypted) { %>
             <div id="download-link-share" class="tabs-panel">
                 <form id="generate-download-link-form" action="" class="hide">
@@ -509,7 +509,7 @@
         <li class="tab"><a href="{{ SITE_ROOT }}#starred/" class="star">{% trans "Starred" %}</a></li>
 
         <% if (events_enabled) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}activities/" class="activity">{% trans "Activities" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}#activities/" class="activity">{% trans "Activities" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
@@ -768,4 +768,50 @@
             <option value="r">{% trans "Read-Only" %}</option>
         </select>
     </td>
+<script type="text/template" id="activities-date-tmpl">
+    <div>
+        <h4 class="event-group-hd"><%= date %></h4>
+        <ol class="event-group-bd"></ol>
+    </div>
+</script>
+<script type="text/template" id="activity-item-tmpl">
+    <%= activity.avatar %>
+    <div class="txt">
+        <% if (activity.etype == "repo-update") { %>
+        <p class="w100 ovhd">
+        <a href="#common/lib/<%= activity.repo_id %>/" class="updated-repo normal fright"><%- activity.repo_name %></a>
+        <span class="cmt-desc">
+            <%= activity.converted_cmmt_desc %>
+            <% if (activity.more_files) { %>
+                <% if (!activity.repo_encrypted) { %>
+                    <a class="lsch cspt">{% trans 'Details' %}</a>
+                <% } %>
+            <% } %>
+        </span>
+        </p>
+        <% } %>
+
+        <% if (activity.etype == "repo-create") { %>
+        <p>{% trans "Created library" %} <a href="#common/lib/<%= activity.repo_id %>/" class="normal"><%- activity.repo_name %></a></p>
+        <% } %>
+
+        <% if (activity.etype == "repo-delete") { %>
+        <p>{% trans "Deleted library" %} <%- activity.repo_name %></p>
+        <% } %>
+
+        <p><a class="normal" href="{{ SITE_ROOT }}profile/<%- activity.author %>/"><%- activity.nick %></a> <span class="time"><%= activity.time_relative %></span></p>
+    </div>
+</script>
+<script type="text/template" id="details-popup-tmpl">
+    <h3>{% trans "Modification Details"%}</h3>
+    <p class="commit-time"></p>
+    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+</script>
+<script type="text/template" id="details-item-tmpl">
+    <h4><%= details_title %></h4>
+    <ul>
+    <% for (var i = 0, len = details.length; i < len; i++) { %>
+        <li><%= details[i] %></li>
+    <% } %>
+    </ul>
 </script>
