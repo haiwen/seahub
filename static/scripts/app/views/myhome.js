@@ -7,9 +7,10 @@ define([
     'app/views/myhome-sub-repos',
     'app/views/myhome-shared-repos',
     'app/views/starred-file',
+    'app/views/activity',
     'app/views/myhome-side-nav'
 ], function($, _, Backbone, Common, ReposView, SubReposView,
-    SharedReposView, StarredFileView, MyhomeSideNavView) {
+    SharedReposView, StarredFileView, ActivityView, MyhomeSideNavView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -17,11 +18,11 @@ define([
 
         initialize: function(options) {
             this.sideNavView = new MyhomeSideNavView();
-
             this.reposView = new ReposView();
             this.subReposView = new SubReposView();
             this.sharedReposView = new SharedReposView();
             this.starredFileView = new StarredFileView();
+            this.activityView = new ActivityView();
 
             this.dirView = options.dirView;
 
@@ -56,6 +57,13 @@ define([
             this.currentView.hide();
             this.starredFileView.show();
             this.currentView = this.starredFileView;
+        },
+
+        showActivity: function() {
+            this.sideNavView.show('activities');
+            this.currentView.hide();
+            this.activityView.show();
+            this.currentView = this.activityView;
         },
 
         showDir: function(category, repo_id, path) {

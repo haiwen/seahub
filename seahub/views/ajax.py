@@ -62,7 +62,7 @@ from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
-        file_icon_filter, email2nickname
+        file_icon_filter, email2nickname, tsstr_sec
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 
 # Get an instance of a logger
@@ -1905,6 +1905,8 @@ def repo_history_changes(request, repo_id):
     else:
         # A commit is a merge only if it has two parents.
         changes['cmt_desc'] = _('No conflict in the merge.')
+
+    changes['date_time'] = tsstr_sec(c.ctime)
 
     return HttpResponse(json.dumps(changes), content_type=content_type)
 

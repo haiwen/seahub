@@ -40,13 +40,13 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response, to_python_boolean
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
 from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_commit_desc, translate_seahub_time
+    translate_commit_desc, translate_seahub_time, translate_commit_desc_escape
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check, remove_group_common, \
@@ -66,7 +66,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg
+    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
+    convert_cmmt_desc_link
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -2780,7 +2781,7 @@ class GroupAndContacts(APIView):
         return Response(res)
 
 class EventsView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -2823,6 +2824,9 @@ class EventsView(APIView):
                 d['repo_id'] = e.repo.id
                 d['repo_name'] = e.repo.name
                 d['commit_id'] = e.commit.id
+                d['converted_cmmt_desc'] = translate_commit_desc_escape(convert_cmmt_desc_link(e.commit))
+                d['more_files'] = e.commit.more_files
+                d['repo_encrypted'] = e.repo.encrypted
             else:
                 d['repo_id'] = e.repo_id
                 d['repo_name'] = e.repo_name
@@ -2837,6 +2841,9 @@ class EventsView(APIView):
                 d['time'] = time_diff.seconds + (time_diff.days * 24 * 3600)
 
             d['nick'] = email2nickname(d['author'])
+            d['avatar'] = avatar(d['author'], 36)
+            d['time_relative'] = translate_seahub_time(utc_to_local(e.timestamp))
+            d['date'] = utc_to_local(e.timestamp).strftime("%Y-%m-%d")
 
         ret = {
             'events': l,
