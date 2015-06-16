@@ -60,7 +60,7 @@ define([
                     Common.feedback(err, 'error');
                 }
             });
-        },
+        }
 
     });
 
