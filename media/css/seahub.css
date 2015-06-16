@@ -1901,13 +1901,6 @@ textarea:-moz-placeholder {/* for FF */
     width:500px;
     padding:10px 20px;
 }
-.perm-dir-tree-cont {
-    padding:5px;
-    height:100px;
-    overflow:auto;
-    border:1px solid #eee;
-    margin:5px 0 10px;
-}
 .file-tree-cont, .dir-tree-cont {
     padding:5px;
     height:280px;
@@ -3434,12 +3427,6 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     right:18px;
     cursor:pointer;
-}
-.perm-add-jstree-select {
-    margin-top:8px;
-}
-#perm-add-jstree-wrap {
-    background:#fcfcfc;
 }
 
 /* file audit*/

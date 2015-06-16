@@ -1173,6 +1173,7 @@ def libraries(request):
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'enable_global_addressbook': settings.ENABLE_GLOBAL_ADDRESSBOOK,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             }, context_instance=RequestContext(request))
@@ -1754,17 +1755,6 @@ def pubuser(request):
     show_paginator = True if len(page_range) > 1 else False
 
     users = users_plus_one[:per_page]
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-    contact_emails = []
-    for c in contacts:
-        contact_emails.append(c.contact_email)
-    for u in users:
-        if u.email == username or u.email in contact_emails:
-            u.can_be_contact = False
-        else:
-            u.can_be_contact = True
-
     users = filter(lambda u: u.is_active, users)
 
     return render_to_response('pubuser.html', {

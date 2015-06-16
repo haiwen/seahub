@@ -125,7 +125,7 @@ $('#contact-add-form').submit(function() {
     }
 
     $.ajax({
-        url: '{% url 'contact_add_post' %}',
+        url: '{% url 'contact_add' %}',
         type: 'POST',
         dataType: 'json',
         cache: 'false',
