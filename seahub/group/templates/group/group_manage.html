@@ -101,8 +101,7 @@
 
 <form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Transfer Group To"%}</h3>
-    <input type="text" name="email" value="" placeholder="{% trans "email"%}" class="input" />
-    <p class="tip">{% trans "Tip: the email should be already registered."%}</p>
+    <input type="text" name="email" value="" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}" />
 </form>
@@ -213,6 +212,11 @@ $('#group-transfer').click(function() {
     $('#group-transfer-form').modal({appendTo: "#main", focus:false});
     return false;
 });
+$('[name="email"]', $('#group-transfer-form')).select2($.extend({
+    width: '268px',
+    placeholder: "{% trans "Search user" %}"
+}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
 $('#group-transfer-form').submit(function() {
     if (!$.trim($('[name="email"]', $(this)).val())) {
         return false;
