@@ -476,23 +476,21 @@ class SearchUser(APIView):
             searched_users = get_searched_users(q)
             searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
 
-        # remove inactive users
-        searched_users = filter(lambda u: u.is_active, searched_users)
-        for p in searched_profiles:
+
+        # remove inactive users and add to result
+        for u in searched_users[:10]:
+            if u.is_active:
+                search_result.append(u.email)
+
+        for p in searched_profiles[:10]:
             try:
                 user = User.objects.get(email = p['user'])
             except User.DoesNotExist:
-                searched_profiles.remove(p)
                 continue
 
             if not user.is_active:
-                searched_profiles.remove(p)
+                continue
 
-        # add to result
-        for u in searched_users[:10]:
-            search_result.append(u.email)
-
-        for p in searched_profiles[:10]:
             search_result.append(p['user'])
 
         # remove duplicate emails
