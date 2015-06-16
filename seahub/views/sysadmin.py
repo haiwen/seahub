@@ -1279,7 +1279,10 @@ def user_search(request):
     """
     email = request.GET.get('email', '')
 
-    users = ccnet_threaded_rpc.search_emailusers(email, -1, -1)
+    users = ccnet_threaded_rpc.search_emailusers('DB', email, -1, -1)
+    ldap_users = ccnet_threaded_rpc.search_emailusers('LDAP', email, -1, -1)
+    users.extend(ldap_users)
+
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     if ENABLE_TRIAL_ACCOUNT:
         trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])

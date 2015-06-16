@@ -431,59 +431,76 @@ class SearchUser(APIView):
 
     def get(self, request, format=None):
 
-        username = request.user.username
-        q = request.GET.get('q', '')
-        search_result = []
+        q = request.GET.get('q', None)
 
         if not q:
-            contacts = Contact.objects.get_contacts_by_user(username)
-            for c in contacts:
-                search_result.append(c.contact_email)
-        else:
-            searched_users = []
-            searched_profiles = []
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Argument missing.')
 
-            if request.cloud_mode:
-                if is_org_context(request):
-                    url_prefix = request.user.org.url_prefix
-                    users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
+        username = request.user.username
+        search_result = []
+        searched_users = []
+        searched_profiles = []
 
-                    searched_users = filter(lambda u: q in u.email, users)
-                    # 'user__in' for only get profile of user in org
-                    # 'nickname__contains' for search by nickname
-                    searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                               Q(nickname__contains=q)).values('user')
-                elif ENABLE_GLOBAL_ADDRESSBOOK:
-                    searched_users = seaserv.ccnet_threaded_rpc.search_emailusers(q, 0, 10)
-                    searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
-                else:
-                    users = []
-                    contacts = Contact.objects.get_contacts_by_user(username)
-                    for c in contacts:
-                        c.email = c.contact_email
-                        users.append(c)
+        if request.cloud_mode:
+            if is_org_context(request):
+                url_prefix = request.user.org.url_prefix
+                users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
 
-                    searched_users = filter(lambda u: q in u.email, users)
-                    # 'user__in' for only get profile of contacts
-                    # 'nickname__contains' for search by nickname
-                    searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                               Q(nickname__contains=q)).values('user')
-            else:
-                searched_users = seaserv.ccnet_threaded_rpc.search_emailusers(q, 0, 10)
+                searched_users = filter(lambda u: q in u.email, users)
+                # 'user__in' for only get profile of user in org
+                # 'nickname__contains' for search by nickname
+                searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                           Q(nickname__contains=q)).values('user')
+            elif ENABLE_GLOBAL_ADDRESSBOOK:
+                searched_users = get_searched_users(q)
                 searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+            else:
+                users = []
+                contacts = Contact.objects.get_contacts_by_user(username)
+                for c in contacts:
+                    try:
+                        user = User.objects.get(email = c.contact_email)
+                        c.is_active = user.is_active
+                    except User.DoesNotExist:
+                        continue
 
-            for u in searched_users[:10]:
-                search_result.append(u.email)
+                    c.email = c.contact_email
+                    users.append(c)
 
-            for p in searched_profiles[:10]:
-                search_result.append(p['user'])
+                searched_users = filter(lambda u: q in u.email, users)
+                # 'user__in' for only get profile of contacts
+                # 'nickname__contains' for search by nickname
+                searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                           Q(nickname__contains=q)).values('user')
+        else:
+            searched_users = get_searched_users(q)
+            searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
 
-            # remove duplicate emails
-            search_result = {}.fromkeys(search_result).keys()
+        # remove inactive users
+        searched_users = filter(lambda u: u.is_active, searched_users)
+        for p in searched_profiles:
+            try:
+                user = User.objects.get(email = p['user'])
+            except User.DoesNotExist:
+                searched_profiles.remove(p)
+                continue
 
-            # reomve myself
-            if username in search_result:
-                search_result.remove(username)
+            if not user.is_active:
+                searched_profiles.remove(p)
+
+        # add to result
+        for u in searched_users[:10]:
+            search_result.append(u.email)
+
+        for p in searched_profiles[:10]:
+            search_result.append(p['user'])
+
+        # remove duplicate emails
+        search_result = {}.fromkeys(search_result).keys()
+
+        # reomve myself
+        if username in search_result:
+            search_result.remove(username)
 
         formated_result = format_user_result(search_result)[:10]
         return HttpResponse(json.dumps({"users": formated_result}), status=200,
@@ -492,17 +509,28 @@ class SearchUser(APIView):
 def format_user_result(users):
     results = []
     for email in users:
-        try:
-            user = User.objects.get(email = email)
-            if user.is_active:
-                results.append({
-                    "email": email,
-                    "avatar": avatar(email, 32),
-                    "name": email2nickname(email),
-                })
-        except User.DoesNotExist:
-            continue
+        results.append({
+            "email": email,
+            "avatar": avatar(email, 32),
+            "name": email2nickname(email),
+        })
     return results
+
+def get_searched_users(q):
+    searched_users = []
+    searched_db_users = []
+    searched_ldap_users  = []
+
+    searched_db_users = seaserv.ccnet_threaded_rpc.search_emailusers('DB', q, 0, 10)
+
+    count = len(searched_db_users)
+    if count < 10:
+        searched_ldap_users = seaserv.ccnet_threaded_rpc.search_emailusers('LDAP', q, 0, 10 - count)
+
+    searched_users.extend(searched_db_users)
+    searched_users.extend(searched_ldap_users)
+
+    return searched_users
 
 class Search(APIView):
     """ Search all the repos
