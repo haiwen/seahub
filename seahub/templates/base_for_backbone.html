@@ -25,6 +25,9 @@
 
 <body>
     <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+        <!--[if lt IE 10]>
+        <p id="top-browser-tip">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span class="close">{% trans "Close" %}</span></p>
+        <![endif]-->
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
