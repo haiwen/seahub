@@ -539,7 +539,7 @@ define([
                 // format items shown in the drop-down menu
                 formatResult: function(item) {
                     if (item.avatar) {
-                        return item.avatar + '<span class="text">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
+                        return item.avatar + '<span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }

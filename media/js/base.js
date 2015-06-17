@@ -852,7 +852,7 @@ function userInputOPtionsForSelect2(user_search_url) {
         // format items shown in the drop-down menu
         formatResult: function(item) {
             if (item.avatar) {
-                return item.avatar + '<span class="text">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
+                return item.avatar + '<span class="text ellipsis">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
             } else {
                 return; // if no match, show nothing
             }

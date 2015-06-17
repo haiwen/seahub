@@ -3551,6 +3551,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .select2-result-label .text {
     display:inline-block;
+    width:calc(100% - 42px);
 }
 .select2-results .select2-result-label .avatar {
     margin-right:10px;
