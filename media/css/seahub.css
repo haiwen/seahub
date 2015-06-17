@@ -3423,6 +3423,9 @@ textarea:-moz-placeholder {/* for FF */
 .group-perm-add-tr input {
     padding:2px 5px;
 }
+#perm-add-grp-name {
+    width: 95%;
+}
 .perm-add-select-folder {
     position:relative;
     right:18px;

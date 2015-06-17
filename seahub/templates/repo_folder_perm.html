@@ -43,21 +43,21 @@
         <div id="user-tab">
             <table>
                 <tr>
-                    <th width="30%">{% trans "User" %}</th>
+                    <th width="40%">{% trans "User" %}</th>
                     <th width="30%">{% trans "Folder" %}</th>
-                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="20%">{% trans "Permission" %}</th>
                     <th width="10%"></th>
                 </tr>
                 <tr class="user-perm-add-tr hide">
-                    <td><input id="perm-add-user" type="hidden" /></td>
+                    <td><input id="perm-add-user" type="hidden" class="w100" /></td>
                     <td>
                         <input class="user-perm-add-folder-name" placeholder="{% trans "Select a folder"%}" type="text" /><img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="perm-add-select-folder add vam" />
                         <input class="user-perm-add-folder-path" type="hidden" />
                     </td>
                     <td>
-                        <select name="permission" class="user-perm-add-perm">
-                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-                        <option value="r">{% trans "Read-Only"%}</option>
+                        <select name="permission" class="user-perm-add-perm w100">
+                            <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                            <option value="r">{% trans "Read-Only"%}</option>
                         </select>
                     </td>
                     <td>
@@ -95,14 +95,14 @@
         <div id="group-tab" class="hide">
             <table>
                 <tr>
-                    <th width="30%">{% trans "Group" %}</th>
+                    <th width="40%">{% trans "Group" %}</th>
                     <th width="30%">{% trans "Folder" %}</th>
-                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="20%">{% trans "Permission" %}</th>
                     <th width="10%"></th>
                 </tr>
                 <tr class="group-perm-add-tr hide">
                     <td>
-                        <input id="perm-add-grp-name" placeholder="{% trans "Group"%}" />
+                        <input id="perm-add-grp-name" placeholder="{% trans "Group"%}" type="text" />
                         <input id="perm-add-grp-id" type="hidden" />
                     </td>
                     <td>
@@ -110,7 +110,7 @@
                         <input class="group-perm-add-folder-path" type="hidden" />
                     </td>
                     <td>
-                        <select name="permission" class="group-perm-add-perm">
+                        <select name="permission" class="group-perm-add-perm w100">
                         <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
                         <option value="r">{% trans "Read-Only"%}</option>
                         </select>
@@ -184,8 +184,8 @@ group_list.push({value:group_id, label:group_name});
 {% endfor %}
 
 user_input.select2($.extend({
-    width: '203px',
-    placeholder: "{% trans "Search user" %}"
+    width: '270px',
+    placeholder: "{% trans "Search users or enter emails" %}"
 }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 group_input.bind('autocompleteopen', function(e, ui) {
