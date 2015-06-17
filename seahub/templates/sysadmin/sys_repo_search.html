@@ -31,13 +31,6 @@
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
-
-$('[name="email"]', $('#repo-transfer-form')).select2($.extend({
-    width: '268px',
-    maximumSelectionSize: 1,
-    placeholder: "{% trans "Search user" %}"
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
-
 $('#search-repo-form').submit(function() {
     var form = $(this),
         name = $.trim($('[name="name"]', form).val()),

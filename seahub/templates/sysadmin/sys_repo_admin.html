@@ -36,12 +36,6 @@
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
-$('[name="email"]', $('#repo-transfer-form')).select2($.extend({
-    width: '268px',
-    maximumSelectionSize: 1,
-    placeholder: "{% trans "Search user" %}"
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
-
 {% include "sysadmin/repoadmin_js.html" %}
 </script>
 {% endblock %}

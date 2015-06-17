@@ -52,7 +52,7 @@
 $('[name="email"]', $('#repo-owner-form')).select2($.extend({
     width: '268px',
     maximumSelectionSize: 1,
-    placeholder: "{% trans "Search user" %}"
+    placeholder: "{% trans "Search user or enter email" %}"
 }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 $('#repo-owner-form').submit(function() {
