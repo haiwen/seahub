@@ -4,7 +4,7 @@ $('.repo-transfer-btn').click(function(){
         repo_id = btn_ct.data('id'),
         repo_name = btn_ct.attr('data-name'),
         form = $('#repo-transfer-form');
-    
+
     form.modal({appendTo:'#main'});
     $('input[name="repo_id"]', form).val(repo_id);
     var detail = $('.detail', form);
@@ -18,7 +18,7 @@ $('#repo-transfer-form').submit(function() {
         email = $.trim(form.children('[name="email"]').val());
 
     if (!email) {
-        apply_form_error(form_id, "{% trans "Email cannot be blank" %}");
+        apply_form_error(form_id, "{% trans "Please select or enter an email" %}");
         return false;
     }
 });

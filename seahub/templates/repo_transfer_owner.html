@@ -1,10 +1,12 @@
 {% extends "myhome_base.html" %}
 
-{% load i18n avatar_tags seahub_tags %}
+{% load i18n avatar_tags seahub_tags staticfiles %}
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 <style type="text/css">
 #left-panel { position: relative; }
 </style>
@@ -36,7 +38,7 @@
     <div id="transfer-ownership" class="setting-item">
         <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
             <p>{% trans "Transfer this library to another user:" %}</p>
-            <input type="text" name="repo_owner" value="" placeholder="{% trans "Email" %}" class="input" /><br />
+            <input type="text" name="email" value="" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>
@@ -45,11 +47,18 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
+$('[name="email"]', $('#repo-owner-form')).select2($.extend({
+    width: '268px',
+    maximumSelectionSize: 1,
+    placeholder: "{% trans "Search user" %}"
+}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
 $('#repo-owner-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
-        new_owner = $('[name="repo_owner"]', form).val(),
+        new_owner = $('[name="email"]', form).val(),
         submit_btn = $('input[type="submit"]', form);
 
     if (!$.trim(new_owner)) {

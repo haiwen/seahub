@@ -1,6 +1,11 @@
 {% extends "sysadmin/base.html" %}
-{% load i18n %}
+{% load i18n staticfiles %}
 {% block cur_repo %}tab-cur{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+{% endblock %}
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form">
@@ -29,8 +34,14 @@
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
+$('[name="email"]', $('#repo-transfer-form')).select2($.extend({
+    width: '268px',
+    maximumSelectionSize: 1,
+    placeholder: "{% trans "Search user" %}"
+}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
 {% include "sysadmin/repoadmin_js.html" %}
 </script>
 {% endblock %}
- 
