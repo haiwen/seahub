@@ -7,9 +7,6 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
-<style type="text/css">
-#left-panel { position: relative; }
-</style>
 {% endblock %}
 
 {% block left_panel %}
@@ -136,29 +133,29 @@
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
-$(".repo-share-btn").click(function() {
-    $('#dir-private-share').modal({appendTo: "#main", focus:false});
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-});
-
-$('[name="emails"]', $('#dir-private-share')).select2($.extend({
-    placeholder: "{% trans "Search users or enter emails" %}",
-    width: '400px'
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
-
 var g_opts = '';
 {% for group in request.user.joined_groups %}
 g_opts += '<option value="' + '{{ group.id}}'+ '" data-index="' + '{{forloop.counter0}}' + '">' + '{{ group.group_name}}' + '</option>';
 {% endfor %}
 
-$('[name="groups"]', $('#dir-private-share')).html(g_opts).select2({
-    placeholder: "{% trans "Select groups" %}",
-    width: '400px',
-    escapeMarkup: function(m) { return m; }
+$(".repo-share-btn").click(function() {
+    var form = $('#dir-private-share');
+    form.modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $('[name="emails"]', $('#dir-private-share')).select2($.extend({
+        placeholder: "{% trans "Search users or enter emails" %}",
+        width: '400px'
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
+    $('[name="groups"]', $('#dir-private-share')).html(g_opts).select2({
+        placeholder: "{% trans "Select groups" %}",
+        width: '400px',
+        escapeMarkup: function(m) { return m; }
+    });
 });
 
 $('.submit', $('#dir-private-share')).click(function() {
-
     var form = $("#dir-private-share"),
         emails = $('[name="emails"]', form).val(), // string
         groups = $('[name="groups"]', form).val(), // null or [group.id]

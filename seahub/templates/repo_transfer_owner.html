@@ -7,9 +7,6 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
-<style type="text/css">
-#left-panel { position: relative; }
-</style>
 {% endblock %}
 
 {% block left_panel %}
@@ -38,7 +35,7 @@
     <div id="transfer-ownership" class="setting-item">
         <form id="repo-owner-form" action="" method="post" class="form">{% csrf_token %}
             <p>{% trans "Transfer this library to another user:" %}</p>
-            <input type="text" name="email" value="" /><br />
+            <input type="hidden" name="email" /><br />
             <p class="error hide"></p>
             <input type="submit" value="{% trans "Submit" %}" class="submit" />
         </form>

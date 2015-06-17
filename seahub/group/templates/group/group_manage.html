@@ -101,7 +101,7 @@
 
 <form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Transfer Group To"%}</h3>
-    <input type="text" name="email" value="" /><br />
+    <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit"%}" />
 </form>
@@ -164,14 +164,15 @@ addConfirmTo($(".rm-member"), {
 });
 
 $("#group-member-add, #group-admin-add").click(function() {
-    $('#' + $(this).attr('id') + '-form').modal({appendTo: "#main", focus:false});
+    var form = $('#' + $(this).attr('id') + '-form');
+    form.modal({appendTo: "#main", focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-});
 
-$('[name="user_name"]', $('#group-member-add-form, #group-admin-add-form')).select2($.extend({
-    width: '268px',
-    placeholder: "{% trans "Search users or enter emails" %}"
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+    $('[name="user_name"]', form).select2($.extend({
+        width: '268px',
+        placeholder: "{% trans "Search users or enter emails" %}"
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+});
 
 $('#group-member-add-form, #group-admin-add-form').submit(function() {
     var form = $(this);
@@ -209,14 +210,18 @@ $('#group-member-add-form, #group-admin-add-form').submit(function() {
 });
 
 $('#group-transfer').click(function() {
-    $('#group-transfer-form').modal({appendTo: "#main", focus:false});
+    var form = $('#group-transfer-form');
+    form.modal({appendTo: "#main", focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $('[name="email"]', form).select2($.extend({
+        width: '268px',
+        maximumSelectionSize: 1,
+        placeholder: "{% trans "Search user or enter email" %}"
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
     return false;
 });
-$('[name="email"]', $('#group-transfer-form')).select2($.extend({
-    width: '268px',
-    maximumSelectionSize: 1,
-    placeholder: "{% trans "Search user or enter email" %}"
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
 $('#group-transfer-form').submit(function() {
     if (!$.trim($('[name="email"]', $(this)).val())) {

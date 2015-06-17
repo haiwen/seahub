@@ -1,11 +1,5 @@
 {% load i18n%}
 
-$('[name="email"]', $('#repo-transfer-form')).select2($.extend({
-    width: '268px',
-    maximumSelectionSize: 1,
-    placeholder: "{% trans "Search user or enter email" %}"
-}, userInputOPtionsForSelect2('{% url 'search-user' %}')));
-
 $('.repo-transfer-btn').click(function(){
     var btn_ct = $(this).parents('td'),
         repo_id = btn_ct.data('id'),
@@ -13,9 +7,18 @@ $('.repo-transfer-btn').click(function(){
         form = $('#repo-transfer-form');
 
     form.modal({appendTo:'#main'});
-    $('input[name="repo_id"]', form).val(repo_id);
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
     var detail = $('.detail', form);
     detail.html(detail.html().replace('%(lib_name)s', '<span class="op-target">' + HTMLescape(repo_name) + '</span>'));
+
+    $('[name="email"]', $('#repo-transfer-form')).select2($.extend({
+        width: '268px',
+        maximumSelectionSize: 1,
+        placeholder: "{% trans "Search user or enter email" %}"
+    }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
+
+    $('input[name="repo_id"]', form).val(repo_id);
     return false;
 });
 
@@ -25,7 +28,6 @@ $('#repo-transfer-form').submit(function() {
         email = $.trim(form.children('[name="email"]').val());
 
     if (!email) {
-        apply_form_error(form_id, "{% trans "Please select or enter an email" %}");
         return false;
     }
 });
