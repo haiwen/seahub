@@ -1710,22 +1710,31 @@ class FileDetailView(APIView):
             try:
                 obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
                     repo.id, commit_id, path)
-                c = get_commit(repo.id, repo.version, commit_id)
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 'Failed to get file id.')
         else:
             try:
                 obj_id = seafile_api.get_file_id_by_path(repo_id,
                                                          path.encode('utf-8'))
-                commits = seafserv_threaded_rpc.list_file_revisions(repo_id,
-                                                                    path,
-                                                                    -1, -1)
-                c = commits[0]
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 'Failed to get file id.')
 
         if not obj_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        # fetch file contributors and latest contributor
+        try:
+            # get real path for sub repo
+            real_path = repo.origin_path + path if repo.origin_path else path
+            dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except SearpcError as e:
+            logger.error(e)
+            latest_contributor, last_modified = None, 0
 
         entry = {}
         try:
@@ -1736,7 +1745,7 @@ class FileDetailView(APIView):
         entry["type"] = "file"
         entry["name"] = os.path.basename(path)
         entry["id"] = obj_id
-        entry["mtime"] = c.ctime
+        entry["mtime"] = last_modified
 
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
