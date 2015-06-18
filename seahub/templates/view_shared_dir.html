@@ -123,6 +123,7 @@ $('.repo-file-list').magnificPopup({
 
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 // get thumbnails for image files
+var cur_path = "{{path|escapejs}}";
 $(function() {
     var img_icons = $('.not-thumbnail');
     if (img_icons.length == 0) {
