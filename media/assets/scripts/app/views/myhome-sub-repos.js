@@ -14,7 +14,7 @@ define([
         el: $('#repo-tabs'),
 
         events: {
-            'click #sub-lib-create': 'createRepo',
+            'click #sub-lib-create': 'createRepo'
         },
 
         initialize: function(options) {

@@ -7,7 +7,7 @@ define([
 
     var GroupRepo = Repo.extend({
         defaults: {
-            permission: "r",
+            permission: "r"
         }
     });
 

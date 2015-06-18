@@ -56,7 +56,7 @@ define([
         hideAction: function() {
             this.$el.removeClass('hl');
             this.$el.find('.op-icon').addClass('vh');
-        },
+        }
     });
 
     return SharedRepoView;

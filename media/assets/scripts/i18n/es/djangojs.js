@@ -32,7 +32,6 @@
     "Delete Items": "Eliminar \u00cdtems", 
     "Delete succeeded.": "Eliminado con \u00e9xito.", 
     "Empty file upload result": "Archivo subido result\u00f3 vac\u00edo", 
-    "Enter emails or select contacts": "Ingrese e-mails o escoja contactos", 
     "Error": "Error", 
     "Failed to copy %(name)s": "Fallo al copiar %(name)s", 
     "Failed to delete %(name)s and %(amount)s other items.": "Fallo al eliminar %(name)s y %(amount)s otros \u00edtems.", 

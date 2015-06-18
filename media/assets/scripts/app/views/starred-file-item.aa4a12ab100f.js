@@ -21,11 +21,10 @@ define([
         },
 
         render: function () {
-            var data = this.model.toJSON(),
-                file_name = data['file_name'];
+            var data = this.model.toJSON();
 
-            data['is_img'] = Common.imageCheck(file_name);
-            data['encoded_path'] = Common.encodePath(file_name);
+            data['is_img'] = Common.imageCheck(data['file_name']);
+            data['encoded_path'] = Common.encodePath(data['path']);
 
             this.$el.html(this.template(data));
             return this;

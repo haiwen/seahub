@@ -32,7 +32,6 @@
     "Delete Items": "Eliminar \u00cdtems", 
     "Delete succeeded.": "Eliminado con \u00e9xito.", 
     "Empty file upload result": "Archivo subido result\u00f3 vac\u00edo", 
-    "Enter emails or select contacts": "Ingrese e-mails o escoja contactos", 
     "Error": "Error", 
     "Failed to copy %(name)s": "Fallo al copiar %(name)s", 
     "Failed to delete %(name)s and %(amount)s other items.": "Fallo al eliminar %(name)s y %(amount)s otros \u00edtems.", 
@@ -177,15 +176,16 @@
     "DATE_INPUT_FORMATS": [
       "%d/%m/%Y", 
       "%d/%m/%y", 
+      "%Y%m%d", 
       "%Y-%m-%d"
     ], 
-    "DECIMAL_SEPARATOR": ",", 
+    "DECIMAL_SEPARATOR": ".", 
     "FIRST_DAY_OF_WEEK": "1", 
     "MONTH_DAY_FORMAT": "j \\d\\e F", 
     "NUMBER_GROUPING": "3", 
     "SHORT_DATETIME_FORMAT": "d/m/Y H:i", 
     "SHORT_DATE_FORMAT": "d/m/Y", 
-    "THOUSAND_SEPARATOR": ".", 
+    "THOUSAND_SEPARATOR": "\u00a0", 
     "TIME_FORMAT": "H:i:s", 
     "TIME_INPUT_FORMATS": [
       "%H:%M:%S", 

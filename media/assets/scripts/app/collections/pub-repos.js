@@ -9,7 +9,7 @@ define([
         model: PubRepo,
         url: app.pageOptions.pubReposUrl,
 
-        comparator: -'mtime',
+        comparator: -'mtime'
 
     });
 

@@ -608,7 +608,7 @@ define([
                     op_type: op,
                     obj_type: '',
                     obj_name: '',
-                    show_other_repos: !dir.encrypted,
+                    show_other_repos: !dir.encrypted
                 }));
                 form.modal({appendTo:'#main', autoResize:true, focus:false});
                 $('#simplemodal-container').css({'width':'auto', 'height':'auto'});

@@ -35,7 +35,6 @@ define([
             Common.prepareApiCsrf();
             Common.initAccountPopup();
             Common.initNoticePopup();
-            Common.getContacts();
 
             this.dirView = new DirView();
 
@@ -50,6 +49,9 @@ define([
             }
 
             $('#info-bar .close').click(Common.closeTopNoticeBar);
+            $('#top-browser-tip .close').click(function () {
+                $('#top-browser-tip').addClass('hide');
+            });
         },
 
         switchCurrentView: function(newView) {
