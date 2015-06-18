@@ -810,10 +810,14 @@ def view_raw_shared_file(request, token, obj_id, file_name):
         raise Http404
 
     # Normalize file path based on file or dir share link
-    if fileshare.is_file_share_link():
-        file_path = fileshare.path.rstrip('/')
+    req_path = request.GET.get('p', '').rstrip('/')
+    if req_path:
+        file_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
     else:
-        file_path = fileshare.path.rstrip('/') + '/' + file_name
+        if fileshare.is_file_share_link():
+            file_path = fileshare.path.rstrip('/')
+        else:
+            file_path = fileshare.path.rstrip('/') + '/' + file_name
 
     real_obj_id = seafile_api.get_file_id_by_path(repo_id, file_path)
     if not real_obj_id:
