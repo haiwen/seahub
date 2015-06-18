@@ -68,7 +68,7 @@
 
                     <td>
                         {% if dirent.is_img %}
-                        <a class="normal img-name-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}"  data-mfp-src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}">{{ dirent.obj_name }}</a>
+                        <a class="normal img-name-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
                         {% else %}
                         <a class="normal" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
                         {% endif %}
