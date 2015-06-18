@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 10:11+0800\n"
+"POT-Creation-Date: 2015-06-18 10:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,6 @@ msgstr ""
 #: seahub/views/ajax.py:1401 seahub/views/ajax.py:1803
 #: seahub/views/ajax.py:2254 seahub/views/ajax.py:2311
 #: seahub/views/ajax.py:2452 seahub/views/ajax.py:2667
-#: seahub42-0612/views.py:920 seahub42-0612/views.py:958
 msgid "Argument missing"
 msgstr ""
 
@@ -756,7 +755,6 @@ msgstr ""
 #: seahub/templates/wiki/personal_wiki.html:56
 #: seahub/templates/wiki/personal_wiki.html:86
 #: seahub/templates/wiki/personal_wiki_pages.html:31
-#: seahub42-0612/shared_file_view.html:66
 msgid "Submit"
 msgstr ""
 
@@ -954,8 +952,7 @@ msgstr[1] ""
 #: seahub/templates/snippets/repo_share_form.html:25
 #: seahub/templates/sysadmin/sys_admin_group_info.html:48
 #: seahub/templates/sysadmin/userinfo.html:86
-#: seahub/templates/sysadmin/userinfo.html:112 seahub42-0612/views.py:508
-#: seahub42-0612/views.py:622
+#: seahub/templates/sysadmin/userinfo.html:112
 msgid "Read-Write"
 msgstr ""
 
@@ -991,7 +988,6 @@ msgstr ""
 #: seahub/templates/snippets/my_shared_repos.html:12
 #: seahub/templates/snippets/repo_create_form.html:12
 #: seahub/templates/snippets/repo_share_form.html:26
-#: seahub42-0612/views.py:510 seahub42-0612/views.py:624
 msgid "Read-Only"
 msgstr ""
 
@@ -1277,7 +1273,7 @@ msgid "Permission error: only group staff can add member"
 msgstr ""
 
 #: seahub/group/error_msg.py:16 seahub/group/error_msg.py:22
-#: seahub/share/views.py:314 seahub42-0612/views.py:310
+#: seahub/share/views.py:314
 msgid "Group does not exist"
 msgstr ""
 
@@ -1490,8 +1486,7 @@ msgstr ""
 
 #: seahub/group/views.py:1306 seahub/views/__init__.py:811
 #: seahub/views/ajax.py:1415 seahub/views/file.py:346 seahub/views/file.py:712
-#: seahub/views/file.py:865 seahub42-0612/file.py:346
-#: seahub42-0612/file.py:746 seahub42-0612/file.py:902
+#: seahub/views/file.py:865
 msgid "File does not exist"
 msgstr ""
 
@@ -1627,7 +1622,6 @@ msgstr ""
 #: seahub/templates/snippets/file_share_popup.html:91
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
 #: seahub/templates/wiki/personal_wiki.html:57
-#: seahub42-0612/shared_file_view.html:67
 msgid "Cancel"
 msgstr ""
 
@@ -3039,22 +3033,21 @@ msgstr ""
 msgid "Please enter a correct password."
 msgstr ""
 
-#: seahub/share/views.py:88 seahub42-0612/views.py:89
+#: seahub/share/views.py:88
 msgid "Failed to share to all members, please try again later."
 msgstr ""
 
-#: seahub/share/views.py:90 seahub42-0612/views.py:91
+#: seahub/share/views.py:90
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
 msgstr ""
 
 #: seahub/share/views.py:218 seahub/share/views.py:1544
-#: seahub42-0612/views.py:214 seahub42-0612/views.py:1564
 msgid "Only the owner of the library has permission to share it."
 msgstr ""
 
-#: seahub/share/views.py:254 seahub42-0612/views.py:250
+#: seahub/share/views.py:254
 #, python-format
 msgid ""
 "Failed to share \"%s\", no enough quota. <a href=\"http://seafile.com/"
@@ -3067,14 +3060,11 @@ msgstr ""
 #: seahub/views/__init__.py:1411 seahub/views/__init__.py:1808
 #: seahub/views/ajax.py:1809 seahub/views/ajax.py:2315
 #: seahub/views/ajax.py:2457 seahub/views/sysadmin.py:1340
-#: seahub42-0612/views.py:280 seahub42-0612/views.py:373
-#: seahub42-0612/views.py:674 seahub42-0612/views.py:1255
 msgid "Library does not exist"
 msgstr ""
 
 #: seahub/share/views.py:293 seahub/share/views.py:308
-#: seahub/share/views.py:356 seahub42-0612/views.py:289
-#: seahub42-0612/views.py:304 seahub42-0612/views.py:352
+#: seahub/share/views.py:356
 msgid "Invalid argument"
 msgstr ""
 
@@ -3089,36 +3079,31 @@ msgstr ""
 #: seahub/views/ajax.py:1816 seahub/views/ajax.py:2298
 #: seahub/views/ajax.py:2324 seahub/views/ajax.py:2440
 #: seahub/views/ajax.py:2466 seahub/views/file.py:968
-#: seahub42-0612/file.py:1005 seahub42-0612/views.py:323
-#: seahub42-0612/views.py:339 seahub42-0612/views.py:349
-#: seahub42-0612/views.py:1277 seahub42-0612/views.py:1410
 msgid "Permission denied"
 msgstr ""
 
 #: seahub/share/views.py:372 seahub/share/views.py:392
-#: seahub/views/__init__.py:1236 seahub42-0612/views.py:368
-#: seahub42-0612/views.py:388
+#: seahub/views/__init__.py:1236
 msgid "Argument is not valid"
 msgstr ""
 
 #: seahub/share/views.py:395 seahub/share/views.py:416
-#: seahub42-0612/views.py:391 seahub42-0612/views.py:412
 msgid "Failed to remove share"
 msgstr ""
 
-#: seahub/share/views.py:408 seahub42-0612/views.py:404
+#: seahub/share/views.py:408
 msgid "group id is not valid"
 msgstr ""
 
-#: seahub/share/views.py:412 seahub42-0612/views.py:408
+#: seahub/share/views.py:412
 msgid "Failed to unshare: the group doesn't exist."
 msgstr ""
 
-#: seahub/share/views.py:426 seahub42-0612/views.py:422
+#: seahub/share/views.py:426
 msgid "Successfully removed share"
 msgstr ""
 
-#: seahub/share/views.py:493 seahub42-0612/views.py:489
+#: seahub/share/views.py:493
 msgid "all members"
 msgstr ""
 
@@ -3127,97 +3112,89 @@ msgstr ""
 #: seahub/views/__init__.py:1037 seahub/views/__init__.py:1465
 #: seahub/views/__init__.py:1516 seahub/views/ajax.py:1175
 #: seahub/views/ajax.py:1195 seahub/views/file.py:983
-#: seahub42-0612/file.py:1020 seahub42-0612/views.py:852
-#: seahub42-0612/views.py:1241 seahub42-0612/views.py:1383
-#: seahub42-0612/views.py:1468
 msgid "Invalid arguments"
 msgstr ""
 
 #: seahub/share/views.py:860 seahub/share/views.py:1239
-#: seahub42-0612/views.py:857 seahub42-0612/views.py:1246
 msgid "You cannot share the library in this way."
 msgstr ""
 
 #: seahub/share/views.py:899 seahub/share/views.py:938
-#: seahub42-0612/views.py:906 seahub42-0612/views.py:945
 msgid "Removed successfully"
 msgstr ""
 
 #: seahub/share/views.py:922 seahub/share/views.py:960
-#: seahub42-0612/views.py:929 seahub42-0612/views.py:967
 msgid "The link doesn't exist"
 msgstr ""
 
-#: seahub/share/views.py:975 seahub42-0612/views.py:982
+#: seahub/share/views.py:975
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please "
 "contact administrator."
 msgstr ""
 
-#: seahub/share/views.py:1021 seahub42-0612/views.py:1028
+#: seahub/share/views.py:1021
 msgid "file"
 msgstr ""
 
-#: seahub/share/views.py:1022 seahub42-0612/views.py:1029
+#: seahub/share/views.py:1022
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr ""
 
-#: seahub/share/views.py:1028 seahub42-0612/views.py:1035
+#: seahub/share/views.py:1028
 msgid "directory"
 msgstr ""
 
-#: seahub/share/views.py:1029 seahub42-0612/views.py:1036
+#: seahub/share/views.py:1029
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr ""
 
 #: seahub/share/views.py:1042 seahub/share/views.py:1339
-#: seahub42-0612/views.py:1049 seahub42-0612/views.py:1346
 msgid "Internal server error, or please check the email(s) you entered"
 msgstr ""
 
-#: seahub/share/views.py:1062 seahub42-0612/views.py:1069
+#: seahub/share/views.py:1062
 msgid "Please choose a directory."
 msgstr ""
 
 #: seahub/share/views.py:1080 seahub/share/views.py:1172
-#: seahub42-0612/views.py:1087 seahub42-0612/views.py:1179
 msgid "Successfully saved."
 msgstr ""
 
-#: seahub/share/views.py:1099 seahub42-0612/views.py:1106
+#: seahub/share/views.py:1099
 #, python-format
 msgid "Failed to share to \"%s\", user not found."
 msgstr ""
 
-#: seahub/share/views.py:1113 seahub42-0612/views.py:1120
+#: seahub/share/views.py:1113
 #, python-format
 msgid "Successfully shared %s."
 msgstr ""
 
-#: seahub/share/views.py:1137 seahub42-0612/views.py:1144
+#: seahub/share/views.py:1137
 #, python-format
 msgid "Successfully unshared \"%s\"."
 msgstr ""
 
-#: seahub/share/views.py:1139 seahub42-0612/views.py:1146
+#: seahub/share/views.py:1139
 #, python-format
 msgid "You don't have permission to unshare %s."
 msgstr ""
 
-#: seahub/share/views.py:1175 seahub42-0612/views.py:1182
+#: seahub/share/views.py:1175
 #, python-format
 msgid "You don't have permission to save %s."
 msgstr ""
 
-#: seahub/share/views.py:1285 seahub42-0612/views.py:1292
+#: seahub/share/views.py:1285
 msgid ""
 "Sending shared upload link failed. Email service is not properly configured, "
 "please contact administrator."
 msgstr ""
 
-#: seahub/share/views.py:1326 seahub42-0612/views.py:1333
+#: seahub/share/views.py:1326
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr ""
@@ -3227,16 +3204,14 @@ msgstr ""
 #: seahub/views/ajax.py:526 seahub/views/ajax.py:613 seahub/views/ajax.py:676
 #: seahub/views/ajax.py:725 seahub/views/ajax.py:769 seahub/views/ajax.py:971
 #: seahub/views/ajax.py:1231 seahub/views/ajax.py:2661
-#: seahub42-0612/views.py:1511
 msgid "Library does not exist."
 msgstr ""
 
-#: seahub/share/views.py:1495 seahub42-0612/views.py:1515
+#: seahub/share/views.py:1495
 msgid "Directory does not exist."
 msgstr ""
 
 #: seahub/share/views.py:1587 seahub/share/views.py:1622
-#: seahub42-0612/views.py:1603 seahub42-0612/views.py:1638
 msgid "Please check the email(s) you entered"
 msgstr ""
 
@@ -3660,8 +3635,6 @@ msgstr ""
 #: seahub/templates/snippets/repo_dirents.html:24
 #: seahub/templates/snippets/repo_dirents.html:81
 #: seahub/templates/sysadmin/userinfo.html:147
-#: seahub42-0612/shared_file_view.html:48
-#: seahub42-0612/shared_file_view.html:77
 msgid "Download"
 msgstr ""
 
@@ -3670,7 +3643,6 @@ msgstr ""
 #: seahub/templates/repo_recycle_view.html:24
 #: seahub/templates/shared_file_view.html:17
 #: seahub/templates/view_shared_dir.html:18
-#: seahub42-0612/shared_file_view.html:18
 msgid "Current path: "
 msgstr ""
 
@@ -4437,7 +4409,6 @@ msgstr ""
 
 #: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:53
 #: seahub/templates/js/lib-op-popups.html:66
-#: seahub42-0612/shared_file_view.html:65
 msgid "Please click and choose a directory."
 msgstr ""
 
@@ -5086,23 +5057,19 @@ msgstr ""
 
 #: seahub/templates/shared_file_view.html:27
 #: seahub/templates/view_shared_dir.html:12
-#: seahub42-0612/shared_file_view.html:28
 msgid "Shared by: "
 msgstr ""
 
 #: seahub/templates/shared_file_view.html:32
-#: seahub42-0612/shared_file_view.html:42
 msgid "Save to..."
 msgstr ""
 
 #: seahub/templates/shared_file_view.html:44
-#: seahub42-0612/shared_file_view.html:56
 msgid "Save To:"
 msgstr ""
 
 #: seahub/templates/shared_file_view.html:69
 #: seahub/templates/view_shared_dir.html:97
-#: seahub42-0612/shared_file_view.html:81
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr ""
 
@@ -6793,7 +6760,7 @@ msgid "\"%s\" does not exist."
 msgstr ""
 
 #: seahub/views/__init__.py:1834 seahub/views/file.py:961
-#: seahub/views/repo.py:383 seahub42-0612/file.py:998
+#: seahub/views/repo.py:383
 msgid "Internal Error"
 msgstr ""
 
@@ -7002,77 +6969,70 @@ msgstr ""
 msgid "Group does not exist."
 msgstr ""
 
-#: seahub/views/file.py:124 seahub42-0612/file.py:124
+#: seahub/views/file.py:124
 msgid "HTTPError: failed to open file online"
 msgstr ""
 
-#: seahub/views/file.py:128 seahub42-0612/file.py:128
+#: seahub/views/file.py:128
 msgid "URLError: failed to open file online"
 msgstr ""
 
-#: seahub/views/file.py:135 seahub42-0612/file.py:135
+#: seahub/views/file.py:135
 msgid "The encoding you chose is not proper."
 msgstr ""
 
-#: seahub/views/file.py:152 seahub/views/file.py:155 seahub42-0612/file.py:152
-#: seahub42-0612/file.py:155
+#: seahub/views/file.py:152 seahub/views/file.py:155
 msgid "Unknown file encoding"
 msgstr ""
 
 #: seahub/views/file.py:279 seahub/views/file.py:286 seahub/views/file.py:534
-#: seahub/views/file.py:539 seahub42-0612/file.py:279
-#: seahub42-0612/file.py:286 seahub42-0612/file.py:534
-#: seahub42-0612/file.py:539
+#: seahub/views/file.py:539
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr ""
 
 #: seahub/views/file.py:364 seahub/views/file.py:574 seahub/views/file.py:589
-#: seahub/views/file.py:611 seahub42-0612/file.py:364
-#: seahub42-0612/file.py:574 seahub42-0612/file.py:589
-#: seahub42-0612/file.py:611
+#: seahub/views/file.py:611
 msgid "Unable to view file"
 msgstr ""
 
 #: seahub/views/file.py:394 seahub/views/file.py:552 seahub/views/file.py:747
-#: seahub42-0612/file.py:394 seahub42-0612/file.py:552
-#: seahub42-0612/file.py:781
 msgid "Invalid file format."
 msgstr ""
 
-#: seahub/views/file.py:640 seahub42-0612/file.py:640
+#: seahub/views/file.py:640
 msgid "Unable to download file, invalid file path"
 msgstr ""
 
-#: seahub/views/file.py:649 seahub42-0612/file.py:649
+#: seahub/views/file.py:649
 msgid "Unable to download file, wrong file path"
 msgstr ""
 
-#: seahub/views/file.py:654 seahub42-0612/file.py:654
+#: seahub/views/file.py:654
 msgid "Unable to download file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:972 seahub42-0612/file.py:1009
+#: seahub/views/file.py:972
 msgid "The library does not exist."
 msgstr ""
 
-#: seahub/views/file.py:976 seahub42-0612/file.py:1013
+#: seahub/views/file.py:976
 msgid "The library is encrypted."
 msgstr ""
 
-#: seahub/views/file.py:1051 seahub42-0612/file.py:1088
+#: seahub/views/file.py:1051
 msgid "Unable to edit file"
 msgstr ""
 
-#: seahub/views/file.py:1057 seahub42-0612/file.py:1094
+#: seahub/views/file.py:1057
 msgid "The file does not exist."
 msgstr ""
 
-#: seahub/views/file.py:1086 seahub42-0612/file.py:1123
+#: seahub/views/file.py:1086
 msgid "Edit online is not offered for this type of file."
 msgstr ""
 
-#: seahub/views/file.py:1193 seahub42-0612/file.py:1230
+#: seahub/views/file.py:1193
 msgid "Unable to download file"
 msgstr ""
 
@@ -7268,77 +7228,4 @@ msgstr ""
 
 #: seahub/views/wiki.py:133
 msgid "You do not have permission to create wiki"
-msgstr ""
-
-#: seahub42-0612/models.py:180
-msgid "Approved"
-msgstr ""
-
-#: seahub42-0612/models.py:182
-msgid "Verifing"
-msgstr ""
-
-#: seahub42-0612/models.py:184
-msgid "Rejected"
-msgstr ""
-
-#: seahub42-0612/models.py:192
-msgid "Your share link is verified."
-msgstr ""
-
-#: seahub42-0612/models.py:194
-msgid "Your share link is waiting for verify."
-msgstr ""
-
-#: seahub42-0612/models.py:196
-msgid "Your share link is rejected."
-msgstr ""
-
-#: seahub42-0612/models.py:207
-msgid "No revisers found. Please contact system admin."
-msgstr ""
-
-#: seahub42-0612/models.py:421
-msgid "Awaiting DLP verifing"
-msgstr ""
-
-#: seahub42-0612/models.py:423
-msgid "DLP passed"
-msgstr ""
-
-#: seahub42-0612/models.py:425
-msgid "DLP veto"
-msgstr ""
-
-#: seahub42-0612/models.py:427
-#, python-format
-msgid "department head (%(name)s %(email)s)"
-msgstr ""
-
-#: seahub42-0612/models.py:432 seahub42-0612/models.py:445
-#, python-format
-msgid "Awaiting %s verifing"
-msgstr ""
-
-#: seahub42-0612/models.py:434 seahub42-0612/models.py:447
-#, python-format
-msgid "%s passed"
-msgstr ""
-
-#: seahub42-0612/models.py:436 seahub42-0612/models.py:449
-#, python-format
-msgid "%s veto"
-msgstr ""
-
-#: seahub42-0612/models.py:438
-#, python-format
-msgid "revisers (%(name1)s %(email1)s, %(name2)s %(email2)s)"
-msgstr ""
-
-#: seahub42-0612/shared_file_view.html:36
-msgid "Approve"
-msgstr ""
-
-#: seahub42-0612/shared_file_view.html:37
-msgid "Veto"
 msgstr ""
