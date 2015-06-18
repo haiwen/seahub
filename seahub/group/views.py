@@ -613,17 +613,6 @@ def group_members(request, group):
     # Get all group members.
     members = get_group_members(group.id)
 
-    user = request.user.username
-    contacts = Contact.objects.filter(user_email=user)
-    contact_emails = []
-    for c in contacts:
-        contact_emails.append(c.contact_email)
-    for m in members:
-        if m.user_name == user or m.user_name in contact_emails:
-            m.can_be_contact = False
-        else:
-            m.can_be_contact = True
-
     # get available modules(wiki, etc)
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
@@ -776,8 +765,6 @@ def group_manage(request, group_id):
     members_all = ccnet_threaded_rpc.get_group_members(group.id)
     admins = [m for m in members_all if m.is_staff]
 
-    contacts = Contact.objects.get_contacts_by_user(request.user.username)
-
     if PublicGroup.objects.filter(group_id=group.id):
         group.is_pub = True
     else:
@@ -798,7 +785,6 @@ def group_manage(request, group_id):
             'group': group,
             'members': members_all,
             'admins': admins,
-            'contacts': contacts,
             'is_staff': True,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
@@ -868,8 +854,8 @@ def group_add_admin(request, group_id):
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
     messages.success(request, _(u'Operation succeeded.'))
-    return HttpResponse(json.dumps('success'), status=200,
-                        content_type=content_type)
+    result['success'] = True
+    return HttpResponse(json.dumps(result), status=200, content_type=content_type)
 
 @login_required
 @group_staff_required

@@ -103,8 +103,9 @@ def share_to_group(request, repo, group, permission):
         group_repo_ids = seafile_api.get_org_group_repoids(org_id, group.id)
     else:
         group_repo_ids = seafile_api.get_group_repoids(group.id)
+
     if repo.id in group_repo_ids:
-        return
+        return False
 
     try:
         if is_org_context(request):
@@ -114,8 +115,10 @@ def share_to_group(request, repo, group, permission):
         else:
             seafile_api.set_group_repo(repo_id, group_id, from_user,
                                        permission)
+        return True
     except Exception, e:
         logger.error(e)
+        return False
 
 def share_to_user(request, repo, to_user, permission):
     """Share repo to a user with given permission.
@@ -124,16 +127,16 @@ def share_to_user(request, repo, to_user, permission):
     from_user = request.user.username
 
     if from_user == to_user:
-        return
+        return False
 
     # permission check
     if is_org_context(request):
         org_id = request.user.org.org_id
         if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, to_user):
-            return
+            return False
     else:
         if not is_registered_user(to_user):
-            return
+            return False
 
     try:
         if is_org_context(request):
@@ -142,12 +145,14 @@ def share_to_user(request, repo, to_user, permission):
         else:
             seafile_api.share_repo(repo_id, from_user, to_user, permission)
     except SearpcError as e:
+            return False
             logger.error(e)
     else:
         # send a signal when sharing repo successful
         share_repo_to_user_successful.send(sender=None,
                                            from_user=from_user,
                                            to_user=to_user, repo=repo)
+        return True
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
     """Check whether user has enough share quota when share repo to
@@ -252,16 +257,16 @@ def share_repo(request):
         return HttpResponseRedirect(next)
 
     for group in share_to_groups:
-        share_to_group(request, repo, group, permission)
-        send_perm_audit_msg('add-repo-perm', username, group.id, \
-                            perm_repo_id, perm_path, permission)
+        if share_to_group(request, repo, group, permission):
+            send_perm_audit_msg('add-repo-perm', username, group.id, \
+                                perm_repo_id, perm_path, permission)
 
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        share_to_user(request, repo, email, permission)
-        send_perm_audit_msg('add-repo-perm', username, email, \
-                            perm_repo_id, perm_path, permission)
+        if share_to_user(request, repo, email, permission):
+            send_perm_audit_msg('add-repo-perm', username, email, \
+                                perm_repo_id, perm_path, permission)
 
     return HttpResponseRedirect(next)
 
@@ -1561,12 +1566,16 @@ def ajax_private_share_dir(request):
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        share_to_user(request, shared_repo, email, perm)
-        shared_success.append(email)
+        if share_to_user(request, shared_repo, email, perm):
+            shared_success.append(email)
+        else:
+            shared_failed.append(email)
 
     for group in share_to_groups:
-        share_to_group(request, shared_repo, group, perm)
-        shared_success.append(group.group_name)
+        if share_to_group(request, shared_repo, group, perm):
+            shared_success.append(group.group_name)
+        else:
+            shared_failed.append(email)
 
     if len(shared_success) > 0:
         return HttpResponse(json.dumps({

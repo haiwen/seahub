@@ -12,7 +12,7 @@ from django.contrib import messages
 from django.utils.translation import ugettext as _
 
 from models import Contact, ContactAddForm, ContactEditForm
-from seahub.auth.decorators import login_required
+from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.decorators import user_mods_check
 from seahub.profile.models import Profile
 from seahub.utils import render_error, is_valid_email
@@ -49,11 +49,14 @@ def contact_list(request):
         # 'edit_form': edit_form,
         }, context_instance=RequestContext(request))
 
-@login_required
-def contact_add_post(request):
+@login_required_ajax
+def contact_add(request):
     """
     Handle ajax post to add a contact.
     """
+    if request.method != 'POST':
+        raise Http404
+
     result = {}
     content_type = 'application/json; charset=utf-8'
 
@@ -68,7 +71,7 @@ def contact_add_post(request):
         result['success'] = False
         messages.error(request, _(u"%s is already in your contacts.") % contact_email)
         return HttpResponseBadRequest(json.dumps(result), content_type=content_type)
-        
+
     contact_name = request.POST.get('contact_name', '')
     note = request.POST.get('note', '')
 
@@ -83,41 +86,7 @@ def contact_add_post(request):
         messages.error(request, _(u"Failed to add %s to contacts.") % contact_email)
         return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
-@login_required
-def contact_add(request):
-    """
-    Handle normal request to add a contact.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    if not referer:
-        referer = SITE_ROOT
-    
-    username = request.user.username
-    contact_email = request.POST.get('contact_email', '')
-    if not is_valid_email(contact_email):
-        messages.error(request, _(u"%s is not a valid email.") % contact_email)
-        return HttpResponseRedirect(referer)
-
-    if Contact.objects.get_contact_by_user(username, contact_email) is not None:
-        messages.error(request, _(u"%s is already in your contacts.") % contact_email)
-        return HttpResponseRedirect(referer)
-    
-    contact_name = request.POST.get('contact_name', '')
-    note = request.POST.get('note', '')
-
-    try:
-        Contact.objects.add_contact(username, contact_email, contact_name, note)
-        messages.success(request, _(u"Successfully added %s to contacts.") % contact_email)
-    except Exception as e:
-        logger.error(e)
-        messages.error(request, _(u"Failed to add %s to contacts.") % contact_email)
-
-    return HttpResponseRedirect(referer)
-
-@login_required
+@login_required_ajax
 def contact_edit(request):
     """
     Ajax post to edit contact info.

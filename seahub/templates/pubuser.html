@@ -35,9 +35,6 @@
     <div class="txt fright">
         <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
         <p>{{ e }}</p>
-        {% if u.can_be_contact %}
-        <button class="add-to-contacts" data-email="{{e}}">{% trans "Add to Contacts" %}</button>
-        {% endif %}
     </div>
     </li>
     {% endwith %}
@@ -64,10 +61,4 @@
 {% else %}
 <p>{% trans "None"%}</p>
 {% endif %}
-
-{% include 'snippets/add_to_contacts_form.html' %}
-{% endblock %}
-
-{% block extra_script %}
-{% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}
