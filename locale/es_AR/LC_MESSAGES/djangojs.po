@@ -10,9 +10,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-28 18:19+0800\n"
-"PO-Revision-Date: 2015-05-27 16:00+0000\n"
-"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
+"POT-Creation-Date: 2015-06-18 10:25+0800\n"
+"PO-Revision-Date: 2015-06-18 02:13+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/projects/p/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Language: es_AR\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/scripts/common.js:155 static/scripts/common.js.c:245
+#: static/scripts/common.js:156 static/scripts/common.js.c:246
 #: static/scripts/app/views/dir.js:803 static/scripts/app/views/dir.js.c:860
 #: static/scripts/app/views/dirent.js:398
 #: static/scripts/app/views/dirent.js:424
@@ -32,14 +32,14 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
-#: static/scripts/app/views/starred-file-item.js:53
+#: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "Fallo. Por favor, verifica la red."
 
-#: static/scripts/common.js:508
-msgid "Enter emails or select contacts"
-msgstr "Ingrese e-mails o escoja contactos"
+#: static/scripts/common.js:499
+msgid "Search users or enter emails"
+msgstr ""
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
@@ -430,6 +430,6 @@ msgstr "Por favor escoja un contacto o un grupo."
 msgid "Success"
 msgstr "Éxito"
 
-#: static/scripts/app/views/starred-file-item.js:46
+#: static/scripts/app/views/starred-file-item.js:45
 msgid "Successfully unstared {placeholder}"
 msgstr "Desmarcado con éxito {placeholder}"
