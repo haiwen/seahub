@@ -664,7 +664,8 @@ def _download_file_from_share_link(request, fileshare):
         logger.error('Error when sending file-download message: %s' % str(e))
 
     dl_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                       'download', username)
+                                                       'download', username,
+                                                       use_onetime=False)
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
 def view_shared_file(request, token):
