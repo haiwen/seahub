@@ -504,8 +504,6 @@ ENABLE_PUBFILE = False
 
 ENABLE_SUB_LIBRARY = True
 
-ENABLE_GUEST = False
-
 ############################
 # Settings for Seahub Priv #
 ############################

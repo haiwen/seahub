@@ -273,6 +273,7 @@ define([
                     site_root: app.pageOptions.site_root,
                     is_repo_owner: dir.is_repo_owner,
                     is_virtual: dir.is_virtual,
+                    can_generate_shared_link: app.pageOptions.can_generate_shared_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },
