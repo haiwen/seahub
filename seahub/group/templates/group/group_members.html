@@ -7,7 +7,7 @@
 <div class="hd">
 <h3 class="fleft">{% trans "Members" %}</h3>
 {% if group.view_perm != 'pub' and not is_staff %}
-<button id="quit-group" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</button>
+<button id="quit-group" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Leave Group" %}</button>
 {% endif %}
 </div>
 <ul class="user-list">
