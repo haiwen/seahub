@@ -37,7 +37,7 @@ define([
                 'data': {
                          'repo_id': this.model.get('id'),
                          'from': this.model.get('owner'),
-                         'share_type': this.model.get('share_type')
+                         'permission': this.model.get('permission')
                         },
                 'after_op_success': success_callback
             });
