@@ -14,7 +14,7 @@ define([
 
     var Router = Backbone.Router.extend({
         routes: {
-            '': 'showMyRepos',
+            '': 'showRepos',
             'my-libs/': 'showMyRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'my-sub-libs/': 'showMySubRepos',
@@ -58,6 +58,15 @@ define([
             if (this.currentView != newView) {
                 this.currentView.hide();
                 this.currentView = newView;
+            }
+        },
+
+        showRepos: function() {
+            this.switchCurrentView(this.myHomeView);
+            if (app.pageOptions.can_add_repo) {
+                this.myHomeView.showMyRepos();
+            } else {
+                this.myHomeView.showSharedRepos();
             }
         },
 

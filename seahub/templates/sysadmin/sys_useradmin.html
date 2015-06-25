@@ -35,7 +35,7 @@
     <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />
-    {% if enable_guest %}
+    {% if is_pro %}
     <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
     <select name="role" class="w100">
         <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
@@ -88,7 +88,7 @@ $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
-        {% if enable_guest %}
+        {% if is_pro %}
         role = $('select[name="role"]', form).val(),
         {% endif %}
         pwd1 = $.trim(form.children('[name="password1"]').val()),
@@ -121,7 +121,7 @@ $('#add-user-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,
-            {% if enable_guest %}
+            {% if is_pro %}
             'role': role,
             {% endif %}
             'password1': pwd1,

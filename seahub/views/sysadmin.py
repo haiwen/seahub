@@ -36,8 +36,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
-    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_GUEST
+    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
 from seahub.utils import send_html_email, get_user_traffic_list, \
     get_server_id, clear_token
 from seahub.utils.rpc import mute_seafile_api
@@ -393,7 +392,7 @@ def sys_user_admin(request):
             'server_id': server_id[:8],
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
-            'enable_guest': ENABLE_GUEST,
+            'is_pro': is_pro_version(),
             'pro_server': pro_server,
         }, context_instance=RequestContext(request))
 
@@ -437,7 +436,7 @@ def sys_user_admin_ldap(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'enable_guest': ENABLE_GUEST,
+            'is_pro': is_pro_version(),
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
         },
         context_instance=RequestContext(request))
@@ -486,7 +485,7 @@ def sys_user_admin_admins(request):
             'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
-            'enable_guest': ENABLE_GUEST,
+            'is_pro': is_pro_version(),
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -840,7 +839,7 @@ def user_toggle_role(request, email):
         return HttpResponse(json.dumps({'success': False}), status=400,
                             content_type=content_type)
 
-    if not ENABLE_GUEST:
+    if not is_pro_version():
         return HttpResponse(json.dumps({'success': False}), status=403,
                             content_type=content_type)
 
@@ -1313,7 +1312,7 @@ def user_search(request):
             'email': email,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
-            'enable_guest': ENABLE_GUEST,
+            'is_pro': is_pro_version(),
             }, context_instance=RequestContext(request))
 
 @login_required
