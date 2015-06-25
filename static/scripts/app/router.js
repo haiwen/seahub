@@ -28,7 +28,7 @@ define([
             'common/lib/:repo_id(/*path)': 'showCommonDir',
             'starred/': 'showStarredFile',
             // Default
-            '*actions': 'defaultAction'
+            '*actions': 'showRepos'
         },
 
         initialize: function() {
@@ -158,14 +158,8 @@ define([
             }
             this.switchCurrentView(this.orgView);
             this.orgView.showDir(repo_id, path);
-        },
-
-        defaultAction: function(actions) {
-            // We have no matching route, lets just log what the URL was
-
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showMyRepos();
         }
+
     });
 
     return Router;
