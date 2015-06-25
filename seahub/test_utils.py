@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 from exam.decorators import fixture
@@ -63,3 +64,7 @@ class Fixtures(Exam):
     def create_folder(self, **kwargs):
         seafile_api.post_dir(**kwargs)
         return kwargs['parent_dir'] + kwargs['dirname']
+
+    def remove_folder(self):
+        seafile_api.del_file(self.repo.id, os.path.dirname(self.folder),
+                             os.path.basename(self.folder), self.user.username)
