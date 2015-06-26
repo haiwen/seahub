@@ -16,7 +16,8 @@ from django.contrib import messages
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
-from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
+from seaserv.api import seafile_api
+from seaserv import seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
     get_user_quota_usage, get_user_share_usage, edit_repo, \
@@ -2708,3 +2709,86 @@ def ajax_unset_inner_pub_repo(request, repo_id):
     except SearpcError:
         return HttpResponse(json.dumps({"error": _('Internal server error')}),
                 status=500, content_type=content_type)
+
+@login_required_ajax
+def get_dir_user_share_items(request, repo_id):
+    """
+    Get share items for a dir: share to users
+    """
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    repo = get_repo(repo_id)
+    if not repo:
+        result["error"] = _('Library does not exist.')
+        return HttpResponse(json.dumps(result),
+                            status=400, content_type=content_type)
+
+    path = request.GET.get('p', None)
+    if not path:
+        result["error"] = _(u'Argument missing')
+        return HttpResponse(json.dumps(result),
+                status=400, content_type=content_type)
+
+    user = request.user.username
+    try:
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_to(user, repo_id)
+        else:
+            share_items = seafile_api.get_shared_users_for_subdir(repo_id, path, user)
+
+        share_items_ = []
+        for item in share_items:
+            share_item = {
+                "user": item.user,
+                "user_name": email2nickname(item.user),
+                "perm": item.perm,
+            }
+            share_items_.append(share_item)
+        return HttpResponse(json.dumps(share_items_), content_type=content_type)
+    except SearpcError, e:
+        logger.error(e)
+        result["error"] = _('Internal server error')
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+@login_required_ajax
+def get_dir_group_share_items(request, repo_id):
+    """
+    Get share items for a dir: share to groups
+
+    """
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    repo = get_repo(repo_id)
+    if not repo:
+        result["error"] = _('Library does not exist.')
+        return HttpResponse(json.dumps(result),
+                            status=400, content_type=content_type)
+
+    path = request.GET.get('p', None)
+    if not path:
+        result["error"] = _(u'Argument missing')
+        return HttpResponse(json.dumps(result),
+                status=400, content_type=content_type)
+
+    user = request.user.username
+    try:
+        if path == '/':
+            share_items = seafile_api.list_repo_shared_group(user, repo_id)
+        else:
+            share_items = seafile_api.get_shared_groups_for_subdir(repo_id, path, user)
+
+        share_items_ = []
+        for item in share_items:
+            share_item = {
+                "group_id": item.group_id,
+                "group_name": get_group(item.group_id).group_name,
+                "perm": item.perm,
+            }
+            share_items_.append(share_item)
+        return HttpResponse(json.dumps(share_items_), content_type=content_type)
+    except SearpcError, e:
+        logger.error(e)
+        result["error"] = _('Internal server error')
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)

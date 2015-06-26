@@ -3545,16 +3545,20 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* user & group folder perm */
+#share-popup .tabs-panel,
 #folder-perm-tabs .tabs-panel {
     width:550px;
 }
+#share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {
     height:30px;
 }
+#share-popup .submit,
 #folder-perm-tabs .submit {
     margin-top:2px;
     height:30px;
 }
+#share-popup table,
 #folder-perm-tabs table {
     margin-top:0;
 }

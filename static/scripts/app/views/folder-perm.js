@@ -72,7 +72,7 @@ define([
                         var perm_item = new FolderPermItemView({
                             'repo_id': _this.repo_id,
                             'path': _this.path,
-                            'item_data':$.extend(item, {'is_user_perm': true})
+                            'item_data':$.extend(item, {'for_user': true})
                         });
                         $add_user_perm.after(perm_item.el);
                     });
@@ -81,7 +81,7 @@ define([
                         var perm_item = new FolderPermItemView({
                             'repo_id': _this.repo_id,
                             'path': _this.path,
-                            'item_data':$.extend(item, {'is_user_perm': false})
+                            'item_data':$.extend(item, {'for_user': false})
                         });
                         $add_group_perm.after(perm_item.el);
                     });
@@ -139,7 +139,7 @@ define([
                                 'user': email,
                                 'user_name': item.user_name,
                                 'perm': perm,
-                                'is_user_perm': true
+                                'for_user': true
                             }
                         });
                         form.after(perm_item.el);
@@ -188,7 +188,7 @@ define([
                             'repo_id': _this.repo_id,
                             'path': _this.path,
                             'item_data': {
-                                'is_user_perm': false,
+                                'for_user': false,
                                 'perm': perm,
                                 'group_id': item.group_id,
                                 'group_name': item.group_name

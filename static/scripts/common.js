@@ -113,6 +113,9 @@ define([
               case 'starred_files': return siteRoot + 'api2/starredfiles/';
               case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
               case 'search_user': return siteRoot + 'api2/search-user/';
+              case 'share_permission_admin': return siteRoot + 'share/permission_admin/';
+              case 'get_dir_user_share_items': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir-user-share-items/';
+              case 'get_dir_group_share_items': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir-group-share-items/';
             }
         },
 
