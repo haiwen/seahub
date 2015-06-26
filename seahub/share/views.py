@@ -1587,7 +1587,7 @@ def ajax_private_share_dir(request):
         if share_to_group(request, shared_repo, group, perm):
             shared_success.append(group.group_name)
         else:
-            shared_failed.append(email)
+            shared_failed.append(group.group_name)
 
     if len(shared_success) > 0:
         return HttpResponse(json.dumps({

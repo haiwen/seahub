@@ -350,7 +350,7 @@ def sys_user_admin(request):
     else:
         trial_users = []
     for user in users:
-        if user.props.id == request.user.id:
+        if user.email == request.user.email:
             user.is_self = True
 
         _populate_user_quota_usage(user)
@@ -398,6 +398,53 @@ def sys_user_admin(request):
 
 @login_required
 @sys_staff_required
+def sys_user_admin_ldap_imported(request):
+    """List all users from LDAP imported.
+    """
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+    users_plus_one = get_emailusers('LDAPImport', per_page * (current_page - 1), per_page + 1)
+    if len(users_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    users = users_plus_one[:per_page]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        if user.email == request.user.email:
+            user.is_self = True
+
+        _populate_user_quota_usage(user)
+
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+
+    return render_to_response(
+        'sysadmin/sys_user_admin_ldap_imported.html', {
+            'users': users,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
+            'have_ldap': have_ldap,
+            'is_pro': is_pro_version(),
+        }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
 def sys_user_admin_ldap(request):
     """List all users from LDAP.
     """
@@ -417,7 +464,7 @@ def sys_user_admin_ldap(request):
     users = users_plus_one[:per_page]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
-        if user.props.id == request.user.id:
+        if user.email == request.user.email:
             user.is_self = True
 
         _populate_user_quota_usage(user)
@@ -444,13 +491,15 @@ def sys_user_admin_ldap(request):
 @login_required
 @sys_staff_required
 def sys_user_admin_admins(request):
-    """List all admins from database.
+    """List all admins from database and ldap imported
     """
-    users = get_emailusers('DB', -1, -1)
+    db_users = get_emailusers('DB', -1, -1)
+    ldpa_imported_users = get_emailusers('LDAPImport', -1, -1)
 
     admin_users = []
     not_admin_users = []
-    for user in users:
+
+    for user in db_users + ldpa_imported_users:
         if user.is_staff is True:
             admin_users.append(user)
         else:
@@ -459,16 +508,18 @@ def sys_user_admin_admins(request):
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admin_users])
 
     for user in admin_users:
-        if user.props.id == request.user.id:
+        if user.email == request.user.email:
             user.is_self = True
 
         _populate_user_quota_usage(user)
 
-        # check user's role
-        if user.role == GUEST_USER:
-            user.is_guest = True
-        else:
-            user.is_guest = False
+        # check db user's role
+        if user.source == "DB":
+            if user.role == GUEST_USER:
+                user.is_guest = True
+            else:
+                user.is_guest = False
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -479,7 +530,7 @@ def sys_user_admin_admins(request):
 
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {
-            'admin_users': admin_users,
+            'users': admin_users,
             'not_admin_users': not_admin_users,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
@@ -670,13 +721,13 @@ def sys_org_set_quota(request, org_id):
 
 @login_required
 @sys_staff_required
-def user_remove(request, user_id):
+def user_remove(request, email):
     """Remove user"""
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
 
     try:
-        user = User.objects.get(id=int(user_id))
+        user = User.objects.get(email=email)
         org = ccnet_threaded_rpc.get_orgs_by_user(user.email)
         if org:
             if org[0].creator == user.email:
@@ -734,10 +785,10 @@ def user_make_admin(request, user_id):
 
 @login_required
 @sys_staff_required
-def user_remove_admin(request, user_id):
+def user_remove_admin(request, email):
     """Unset user admin."""
     try:
-        user = User.objects.get(id=int(user_id))
+        user = User.objects.get(email=email)
         user.is_staff = False
         user.save()
         messages.success(request, _(u'Successfully revoke the admin permission of %s') % user.username)
@@ -872,10 +923,10 @@ def send_user_reset_email(request, email, password):
 
 @login_required
 @sys_staff_required
-def user_reset(request, user_id):
+def user_reset(request, email):
     """Reset password for user."""
     try:
-        user = User.objects.get(id=int(user_id))
+        user = User.objects.get(email=email)
         if isinstance(INIT_PASSWD, FunctionType):
             new_password = INIT_PASSWD()
         else:
@@ -1163,7 +1214,7 @@ def sys_org_info_user(request, org_id):
     users = org_basic_info["users"]
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
-        if user.id == request.user.id:
+        if user.email == request.user.email:
             user.is_self = True
         try:
             user.self_usage =seafserv_threaded_rpc. \
@@ -1419,15 +1470,8 @@ def batch_user_make_admin(request):
             failed.append(email)
             continue
 
-        if user.source == 'DB':
-            # check if is DB user first
-            user.is_staff = True
-            user.save()
-        else:
-            # if is LDAP user, add this 'email' as a DB user first
-            # then set admin
-            ccnet_threaded_rpc.add_emailuser(email, '!', 1, 1)
-
+        user.is_staff = True
+        user.save()
         success.append(email)
 
     for item in success:
