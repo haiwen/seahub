@@ -3,67 +3,53 @@
 {% load seahub_tags i18n upload_tags avatar_tags %}
 {% load url from future %}
 
-{% block extra_style %}
-<style type="text/css">
-    .wide-panel {
-        width:600px;
-        padding:10px 20px 20px;
-    }
-    .avatar {
-        vertical-align:middle;
-    }
-</style>
-{% endblock %}
-
 {% block main_panel %}
-<div class="wide-panel">
-    <div id="upload-file-dialog">
-        <h3>{% blocktrans %}Upload files to <span class="op-target">{{ dir_name }}</span>{% endblocktrans %}</h3>
-        <p>{% trans "shared by:" %} {{username|email2nickname}} {% avatar username 16 %} </p>
-        {% if no_quota %}
-        <p class="error">{% trans "The owner of this library has run out of space." %}</p>
-        {% else %}
-        <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-            <div class="row fileupload-buttonbar">
-                <div>
-                    <span class="fileinput-button vam" id="add-file">
-                        <span class="icon-plus"></span>
-                        <span>{% trans "Add Files" %}</span>
-                        <input type="file" name="file" multiple />
-                    </span>
-                    {% if enable_upload_folder %}
-                    <span class="fileinput-button vam" id="add-folder" style="display:none;">
-                        <span class="icon-plus"></span>
-                        <span>{% trans "Add folder" %}</span>
-                        <input type="file" name="file" multiple directory webkitdirectory />
-                    </span>
-                    {% endif %}
-                    <button type="reset" class="cancel vam">
-                        <span class="icon-ban-circle"></span>
-                        <span>{% trans "Cancel All" %}</span>
-                    </button>
-                </div>
-                <ol class="tip">
-                    <li>{% trans "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
-                    {% if enable_upload_folder %}
-                    <li>{% trans "Folder Drag & Drop is supported for Chrome" %}</li>
-                    {% endif %}
-                    {% if max_upload_file_size %}
-                    <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}File size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
-                    {% endif %}
-                </ol>
-                <div class="fileupload-progress fade">
-                    <div class="progress progress-success progres-striped active">
-                        <div class="bar" style="width:0%"></div>
-                    </div>
-                    <div class="progress-extended"></div>
-                </div>
-                <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+<div class="wide-panel" id="upload-link-panel">
+    <h3>{% blocktrans %}Upload files to <span class="op-target">{{ dir_name }}</span>{% endblocktrans %}</h3>
+    <p>{% trans "shared by:" %} {{username|email2nickname}} {% avatar username 16 %} </p>
+    {% if no_quota %}
+    <p class="error">{% trans "The owner of this library has run out of space." %}</p>
+    {% else %}
+    <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+        <div class="row fileupload-buttonbar">
+            <div>
+                <span class="fileinput-button vam" id="add-file">
+                    <span class="icon-plus"></span>
+                    <span>{% trans "Add Files" %}</span>
+                    <input type="file" name="file" multiple />
+                </span>
+                {% if enable_upload_folder %}
+                <span class="fileinput-button vam" id="add-folder" style="display:none;">
+                    <span class="icon-plus"></span>
+                    <span>{% trans "Add folder" %}</span>
+                    <input type="file" name="file" multiple directory webkitdirectory />
+                </span>
+                {% endif %}
+                <button type="reset" class="cancel vam">
+                    <span class="icon-ban-circle"></span>
+                    <span>{% trans "Cancel All" %}</span>
+                </button>
             </div>
-            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
-        </form>
+            <ol class="tip">
+                <li>{% trans "File Drag & Drop is supported for Chrome, Safari 5.0+, Firefox 4.0+, IE 10.0+" %}</li>
+                {% if enable_upload_folder %}
+                <li>{% trans "Folder Drag & Drop is supported for Chrome" %}</li>
+                {% endif %}
+                {% if max_upload_file_size %}
+                <li>{% blocktrans with max_file_size=max_upload_file_size|filesizeformat %}File size should be smaller than {{ max_file_size }}{% endblocktrans %}</li>
+                {% endif %}
+            </ol>
+            <div class="fileupload-progress fade">
+                <div class="progress progress-success progres-striped active">
+                    <div class="bar" style="width:0%"></div>
+                </div>
+                <div class="progress-extended"></div>
+            </div>
+            <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+        </div>
+        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+    </form>
     {% endif %}
-    </div>
 </div>
 {% endblock %}
 

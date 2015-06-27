@@ -1,22 +1,8 @@
 {% extends "profile/profile_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
-{% block extra_style %}
-<style type="text/css">
-.avatar-cont {
-    padding:25px;
-    border:2px solid #ddd;
-    border-radius:3px;
-    text-align:center;
-}
-#send-msg {
-    margin-top:8px;
-}
-</style>
-{% endblock %}
-
 {% block left_panel %}
-<div class="avatar-cont">
+<div class="profile-avatar-container">
     {% if user %}
     {% avatar user.username 80 %}
     {% else %}

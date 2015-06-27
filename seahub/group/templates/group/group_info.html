@@ -4,9 +4,6 @@
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
-{% block extra_style %}
-{% endblock %}
-
 {% block main_panel %}
 <form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
   <h3>{% trans "Enable Modules"%}</h3>
