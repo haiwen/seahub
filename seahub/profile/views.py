@@ -143,6 +143,9 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request):
+    if request.method != 'POST':
+        raise Http404
+
     username = request.user.username
 
     if username == 'demo@seafile.com':
