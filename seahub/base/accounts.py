@@ -91,6 +91,7 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+        user.source = emailuser.source
 
         return user
 
@@ -172,7 +173,12 @@ class User(object):
         When delete user, we should also delete group relationships.
         """
         # TODO: what about repos and groups?
-        ccnet_threaded_rpc.remove_emailuser(self.username)
+        if self.source == "DB":
+            source = "DB"
+        else:
+            source = "LDAP"
+
+        ccnet_threaded_rpc.remove_emailuser(source, self.username)
         Profile.objects.delete_profile_by_user(self.username)
 
     def get_and_delete_messages(self):

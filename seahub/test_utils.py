@@ -51,8 +51,8 @@ class Fixtures(Exam):
 
         return User.objects.create_user(password='secret', **kwargs)
 
-    def remove_user(self, email):
-        ccnet_threaded_rpc.remove_emailuser(email)
+    def remove_user(self, email, source="DB"):
+        ccnet_threaded_rpc.remove_emailuser(email, source)
 
     def create_repo(self, **kwargs):
         repo_id = seafile_api.create_repo('test-repo', '',
