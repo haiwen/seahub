@@ -14,6 +14,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
         {% if have_ldap %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
         {% endif %}
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
@@ -37,93 +38,9 @@
     </div>
 </form>
 
-<table>
-    <tr>
-        {% if is_pro %}
-        <th width="24%">{% trans "Email" %}</th>
-        <th width="12%">{% trans "Status" %}</th>
-        <th width="12%">{% trans "Role" %}</th>
-        {% else %}
-        <th width="36%">{% trans "Email" %}</th>
-        <th width="12%">{% trans "Status" %}</th>
-        {% endif %}
-        <th width="16%">{% trans "Space Used" %}</th>
-        <th width="22%">{% trans "Create At / Last Login" %}</th>
-        <th width="14%">{% trans "Operations" %}</th>
-    </tr>
-
-    {% for user in admin_users %}
-    <tr data-userid="{{user.email}}">
-        <td data="{{user.id}}"><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a></td>
-
-        <td>
-          {% if user.source != 'LDAP' %}
-            <div class="user-status">
-              {% if user.is_active %}
-                <span class="user-status-cur-value">{% trans "Active" %}</span>
-              {% else %}
-                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
-              {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
-            </div>
-            <select name="permission" class="user-status-select hide">
-                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
-                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
-            </select>
-          {% endif %}
-        </td>
-
-        {% if is_pro %}
-        <td>
-          {% if user.source != 'LDAP' %}
-            <div class="user-role">
-                {% if user.is_guest %}
-                    <span class="user-role-cur-value">{% trans "Guest" %}</span>
-                {% else %}
-                    <span class="user-role-cur-value">{% trans "Default" %}</span>
-                {% endif %}
-                {% if is_pro %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
-                {% endif %}
-            </div>
-            {% if id_pro %}
-            <select name="role" class="user-role-select hide">
-                <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
-                <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
-            </select>
-            {% endif %}
-          {% endif %}
-        </td>
-        {% endif %}
-
-        <td style="font-size:11px;">
-            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
-            {% if not user.org %}
-            {% if CALC_SHARE_USAGE %}
-            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
-            {% endif %}
-            {% endif %}
-        </td>
-        <td>
-            {% if user.source != 'LDAP' %}
-            {{ user.ctime|tsstr_sec }} /<br />
-            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
-            {% endif %}
-        </td>
-        <td>
-          {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op vh" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
-          <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
-          {% if user.is_staff %}
-          <a href="#" data-url="{% url 'user_remove_admin' user.id %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op vh">{% trans "Revoke Admin" %}</a>
-          {% else %}
-          <a href="#" data-url="{% url 'user_make_admin' user.id %}" data-target="{{ user.props.email }}" class="set-admin-btn op vh">{% trans "Set Admin" %}</a>
-          {% endif %}
-          {% endif %}
-        </td>
-    </tr>
-    {% endfor %}
-</table>
+{% with is_admin_page=True%}
+{% include "sysadmin/useradmin_table.html" %}
+{% endwith %}
 
 <div id="activate-msg" class="hide">
     <p>{% trans "Activating..., please wait" %}</p>

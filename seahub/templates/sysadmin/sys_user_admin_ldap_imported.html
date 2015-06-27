@@ -1,0 +1,86 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n %}
+{% block cur_users %}tab-cur{% endblock %}
+{% block extra_style %}
+{% endblock %}
+
+{% block left_panel %}{{block.super}}
+<form action="{% url 'user_search' %}" method="get" class="side-search-form">
+    <input type="text" name="email" class="input" value="" placeholder="{% trans "Search users..." %}" />
+</form>
+{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
+    </ul>
+</div>
+
+{% if users %}
+<table>
+    <tr>
+        <th width="36%">{% trans "Email" %}</th>
+        <th width="12%">{% trans "Status" %}</th>
+        <th width="16%">{% trans "Space Used" %}</th>
+        <th width="18%">{% trans "Last Login" %}</th>
+        <th width="18%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr data-userid="{{user.email}}">
+        <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
+        </td>
+        <td>
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+            </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+            </select>
+        </td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
+            {% if not user.org %}
+            {% if CALC_SHARE_USAGE %}
+            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
+            {% endif %}
+            {% endif %}
+        </td>
+        <td>
+            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        </td>
+        <td>
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op vh" data-url="{% url 'user_remove' user.email %}" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% include "snippets/admin_paginator.html" %}
+{% else %}
+<div class="empty-tips">
+    <h2 class="alc">{% trans "No LDAP users have been imported" %}</h2>
+</div>
+{% endif %}
+
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+{% include "sysadmin/useradmin_js.html" %}
+</script>
+{% endblock %}

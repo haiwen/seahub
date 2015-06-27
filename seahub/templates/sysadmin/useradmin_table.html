@@ -16,16 +16,17 @@
 
     {% for user in users %}
     <tr data-userid="{{user.email}}">
-        <td><a href="{{ SITE_ROOT }}useradmin/info/{{ user.props.email }}/">{{ user.email }}</a>
+        <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
+        {% if not is_admin_page %}
         {% if user.org %}
         <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' user.org.org_id %}">({{user.org.org_name}})</a></p>
         {% endif %}
         {% if user.trial_info %}
         <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ user.email }}" data-url="{% url 'remove_trial' user.email %}">X</a>)</p>
         {% endif %}
+        {% endif %}
         </td>
         <td>
-          {% if user.source != 'LDAP' %}
             <div class="user-status">
               {% if user.is_active %}
                 <span class="user-status-cur-value">{% trans "Active" %}</span>
@@ -38,11 +39,10 @@
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
                 <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
             </select>
-          {% endif %}
         </td>
         {% if is_pro %}
         <td>
-          {% if user.source != 'LDAP' %}
+        {% if user.source == "DB" %}
             <div class="user-role">
                 {% if user.is_guest %}
                     <span class="user-role-cur-value">{% trans "Guest" %}</span>
@@ -55,7 +55,9 @@
                 <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
                 <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
             </select>
-          {% endif %}
+        {% else %}
+        --
+        {% endif %}
         </td>
         {% endif %}
 
@@ -68,16 +70,21 @@
             {% endif %}
         </td>
         <td>
-            {% if user.source != 'LDAP' %}
+            {% if user.source == "DB" %}
             {{ user.ctime|tsstr_sec }} /<br />
-            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+            {% else %}
+            -- /
             {% endif %}
+            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
-          {% if user.source != 'LDAP' %}
           {% if not user.is_self %}
-          <a href="#" class="remove-user-btn op vh" data-url="{{ SITE_ROOT }}useradmin/remove/{{ user.props.id }}/" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
-          <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.id %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          <a href="#" class="remove-user-btn op vh" data-url="{% url 'user_remove' user.email %}" data-target="{{ user.props.email }}">{% trans "Delete" %}</a>
+          {% if user.source == "DB" %}
+          <a href="#" class="reset-user-btn op vh" data-url="{% url 'user_reset' user.email %}" data-target="{{ user.props.email }}">{% trans "ResetPwd" %}</a>
+          {% endif %}
+          {% if is_admin_page %}
+          <a href="#" data-url="{% url 'user_remove_admin' user.email %}" data-target="{{ user.props.email }}" class="revoke-admin-btn op vh">{% trans "Revoke Admin" %}</a>
           {% endif %}
           {% endif %}
         </td>

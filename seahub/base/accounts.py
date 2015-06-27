@@ -151,7 +151,14 @@ class User(object):
         if emailuser:
             if not hasattr(self, 'password'):
                 self.set_unusable_password()
-            ccnet_threaded_rpc.update_emailuser(emailuser.id,
+
+            if emailuser.source == "DB":
+                source = "DB"
+            else:
+                source = "LDAP"
+
+            ccnet_threaded_rpc.update_emailuser(source,
+                                                emailuser.id,
                                                 self.password,
                                                 int(self.is_staff),
                                                 int(self.is_active))
