@@ -428,8 +428,6 @@ def sys_user_admin_ldap_imported(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
-
     return render_to_response(
         'sysadmin/sys_user_admin_ldap_imported.html', {
             'users': users,
@@ -439,7 +437,6 @@ def sys_user_admin_ldap_imported(request):
             'per_page': per_page,
             'page_next': page_next,
             'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
-            'have_ldap': have_ldap,
             'is_pro': is_pro_version(),
         }, context_instance=RequestContext(request))
 
