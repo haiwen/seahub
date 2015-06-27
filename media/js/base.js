@@ -232,6 +232,7 @@ if ($.browser.msie) {
  * e.g: addConfirmTo($('.user-del'), {'title': 'Delete user', 'con':'Really del user %s ?'});
  */
 function addConfirmTo(op_ele, popup) {
+    // handle GET request
     op_ele.click(function() {
         var con = '';
         if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
@@ -244,6 +245,40 @@ function addConfirmTo(op_ele, popup) {
         $('#simplemodal-container').css({'height':'auto'});
         $('#confirm-yes').data('url', $(this).data('url')).click(function() {
             location.href = $(this).data('url');
+        });
+        return false;//in case op_ele is '<a>'
+    });
+}
+
+function addConfirmToPOST(op_ele, popup, successHandler) {
+    // handle POST request
+    op_ele.click(function() {
+        var con = '';
+        if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
+            con = popup['con'].replace('%s', '<span class="op-target">' + HTMLescape($(this).data('target')) + '</span>');
+        } else {
+            con = popup['con'];
+        }
+        $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + con + '</p>');
+        $('#confirm-popup').modal({appendTo:'#main'});
+        $('#simplemodal-container').css({'height':'auto'});
+        $('#confirm-yes').data('url', $(this).data('url')).click(function() {
+            var url = $(this).data('url');
+            $.ajax({
+                url: url,
+                type: 'POST',
+                beforeSend: prepareCSRFToken,
+                success: function(data) {
+                    if (typeof successHandler != 'undefined' ) {
+                        $.modal.close();
+                        successHandler(data);
+                    } else {
+                        location.reload(true);
+                    }
+                },
+                error: ajaxErrorHandler
+            });
+
         });
         return false;//in case op_ele is '<a>'
     });
