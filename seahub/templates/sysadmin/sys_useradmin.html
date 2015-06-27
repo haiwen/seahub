@@ -1,14 +1,6 @@
 {% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 {% block cur_users %}tab-cur{% endblock %}
-{% block extra_style %}
-<style type="text/css">
-#upload-file-btn .icon-upload-alt {
-    color:#777;
-    margin-right:3px;
-}
-</style>
-{% endblock %}
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'user_search' %}" method="get" class="side-search-form">
@@ -26,7 +18,7 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <div class="fright">
-        <button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
+        <button id="import-users-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
         <button id="add-user-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
     </div>
 </div>
@@ -143,7 +135,7 @@ $('#add-user-form').submit(function() {
     });
     return false;
 });
-$('#upload-file-btn').click(function () {
+$('#import-users-btn').click(function () {
     $('#upload-csv-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });

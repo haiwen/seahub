@@ -3,19 +3,6 @@
 
 {% block title %}{% trans "Log In" %}{% endblock %}
 
-{% block extra_style %}
-<style type="text/css">
-#lang {
-    font-weight:normal;
-    font-size:13px;
-    margin-top:12px;
-}
-#lang-context:hover {
-    text-decoration:none;
-}
-</style>
-{% endblock %} 
-
 {% block nav %}
 <div class="fright" id="lang">
     <a href="#" id="lang-context" data-lang="{{ LANGUAGE_CODE }}">{{ LANGUAGE_CODE|language_name_local }} <span class="icon-caret-down"></span></a>
@@ -115,7 +102,10 @@ $(function() {
         lang_selector = $('#lang-context-selector');
 
     lang_context.parent().css({'position':'relative'});
-    lang_selector.css({'top': lang_context.position().top + lang_context.height() + 3});
+    lang_selector.css({
+        'top': lang_context.position().top + lang_context.height() + 5,
+        'right': 0
+        });
 
     lang_context.click(function() {
         lang_selector.toggleClass('hide');
