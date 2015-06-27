@@ -23,11 +23,6 @@
     {% avatar "" 80 %}
     {% endif %}
 </div>
-
-{% if user %}
-<button id="send-msg" class="w100">{% trans "Send message" %}</button>
-{% endif %}
-
 {% endblock %}
 
 {% block right_panel %}
@@ -53,10 +48,5 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-{% if user %}
-$('#send-msg').click(function() {
-    location.href = "{% url 'user_msg_list' username_or_id %}";
-});
-{% endif %}
 </script>
 {% endblock %}
