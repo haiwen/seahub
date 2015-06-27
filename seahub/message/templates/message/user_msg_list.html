@@ -40,10 +40,10 @@
     {% for msg in person_msgs.object_list %}
         {% if msg.to_email == request.user.email %}
         <li class="msg msg-received w100" data-id="{{msg.message_id}}">
-        <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
+        <a href="{% url 'user_profile' msg.from_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
         {% else %}        
         <li class="msg msg-send w100" data-id="{{msg.message_id}}">
-        <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
+        <a href="{% url 'user_profile' msg.from_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
         {% endif %}
         <div class="txt">
             <div class="msg-main">
@@ -53,7 +53,7 @@
                     {% else %}
                     <span class="re-msg-del op fright vh">{% trans "Delete" %}</span>
                     {% endif %}
-                    <a class="author" href="{% url 'user_profile' msg.from_email|id_or_email %}">{{ msg.from_email|email2nickname }}</a>
+                    <a class="author" href="{% url 'user_profile' msg.from_email %}">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>

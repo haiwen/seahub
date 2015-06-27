@@ -43,7 +43,7 @@
                 {% if commit.creator_name %}
                 <td>
                     {% avatar commit.creator_name 16 %}
-                    <a href="{% url 'user_profile' commit.creator_name|id_or_email %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
+                    <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
                 </td>
                 {% else %}
                 <td>{% trans 'Unknown' %}</td>

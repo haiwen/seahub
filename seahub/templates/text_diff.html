@@ -3,7 +3,7 @@
 {% load url from future %}
 
 {% block main_panel %}
-<h2 class="file-modification-hd"><span class="op-target">{{ u_filename }}</span> {% trans "modification details" %} <a href="{% url 'user_profile' current_commit.creator_name|id_or_email %}">{% avatar current_commit.creator_name 16 %}</a><span class="modifier">{{ current_commit.creator_name|email2nickname }}</span><span class="time">{{ current_commit.ctime|translate_seahub_time }}</span></h2>
+<h2 class="file-modification-hd"><span class="op-target">{{ u_filename }}</span> {% trans "modification details" %} <a href="{% url 'user_profile' current_commit.creator_name %}">{% avatar current_commit.creator_name 16 %}</a><span class="modifier">{{ current_commit.creator_name|email2nickname }}</span><span class="time">{{ current_commit.ctime|translate_seahub_time }}</span></h2>
     <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
 
     <p class="path">

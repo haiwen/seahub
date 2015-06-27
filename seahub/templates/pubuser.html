@@ -29,7 +29,7 @@
 {% if users %}
 <ul class="user-list">
     {% for u in users %}
-    {% with e=u.email id=u.email|id_or_email %}
+    {% with e=u.email id=u.email %}
     <li class="user ovhd">
     <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">

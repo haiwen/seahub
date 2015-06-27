@@ -7,6 +7,6 @@ urlpatterns = patterns('seahub.profile.views',
     url(r'^delete/$', 'delete_user_account', name="delete_user_account"),
     url(r'^default-repo/$', 'default_repo', name="default_repo"),
 
-    url(r'^(?P<username_or_id>[^/]+)/$', 'user_profile', name="user_profile"),
+    url(r'^(?P<username>[^/]+)/$', 'user_profile', name="user_profile"),
 #    url(r'^logout/$', 'logout_relay', name="logout_relay"),
 )

@@ -22,7 +22,7 @@
     {% for contact in contacts %}
     <tr>
         <td>{% avatar contact.contact_email 20 %}</td>
-        <td><a href="{% url 'user_profile' contact.contact_email|id_or_email%}">{{ contact.contact_email }}</a></td>
+        <td><a href="{% url 'user_profile' contact.contact_email %}">{{ contact.contact_email }}</a></td>
         <td>{{ contact.profile.nickname }}</td>
         <td>{{ contact.note }}</td>
         <td data-email="{{ contact.contact_email }}" data-name="{{ contact.contact_name }}" data-note="{{ contact.note }}">

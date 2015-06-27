@@ -763,22 +763,22 @@ def remove_trial(request, user_or_org):
     messages.success(request, _('Successfully remove trial for: %s') % user_or_org)
     return HttpResponseRedirect(next)
 
-@login_required
-@sys_staff_required
-def user_make_admin(request, user_id):
-    """Set user as system admin."""
-    try:
-        user = User.objects.get(id=int(user_id))
-        user.is_staff = True
-        user.save()
-        messages.success(request, _(u'Successfully set %s as admin') % user.username)
-    except User.DoesNotExist:
-        messages.error(request, _(u'Failed to set admin: the user does not exist'))
+# @login_required
+# @sys_staff_required
+# def user_make_admin(request, user_id):
+#     """Set user as system admin."""
+#     try:
+#         user = User.objects.get(id=int(user_id))
+#         user.is_staff = True
+#         user.save()
+#         messages.success(request, _(u'Successfully set %s as admin') % user.username)
+#     except User.DoesNotExist:
+#         messages.error(request, _(u'Failed to set admin: the user does not exist'))
 
-    referer = request.META.get('HTTP_REFERER', None)
-    next = reverse('sys_useradmin') if referer is None else referer
+#     referer = request.META.get('HTTP_REFERER', None)
+#     next = reverse('sys_useradmin') if referer is None else referer
 
-    return HttpResponseRedirect(next)
+#     return HttpResponseRedirect(next)
 
 @login_required
 @sys_staff_required
@@ -797,39 +797,39 @@ def user_remove_admin(request, email):
 
     return HttpResponseRedirect(next)
 
-@login_required
-@sys_staff_required
-def user_activate(request, user_id):
-    try:
-        user = User.objects.get(id=int(user_id))
-        user.is_active = True
-        user.save()
-        messages.success(request, _(u'Successfully activated "%s".') % user.email)
-    except User.DoesNotExist:
-        messages.success(request, _(u'Failed to activate: user does not exist.'))
+# @login_required
+# @sys_staff_required
+# def user_activate(request, user_id):
+#     try:
+#         user = User.objects.get(id=int(user_id))
+#         user.is_active = True
+#         user.save()
+#         messages.success(request, _(u'Successfully activated "%s".') % user.email)
+#     except User.DoesNotExist:
+#         messages.success(request, _(u'Failed to activate: user does not exist.'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_useradmin')
+#     next = request.META.get('HTTP_REFERER', None)
+#     if not next:
+#         next = reverse('sys_useradmin')
 
-    return HttpResponseRedirect(next)
+#     return HttpResponseRedirect(next)
 
-@login_required
-@sys_staff_required
-def user_deactivate(request, user_id):
-    try:
-        user = User.objects.get(id=int(user_id))
-        user.is_active = False
-        user.save()
-        messages.success(request, _(u'Successfully deactivated "%s".') % user.email)
-    except User.DoesNotExist:
-        messages.success(request, _(u'Failed to deactivate: user does not exist.'))
+# @login_required
+# @sys_staff_required
+# def user_deactivate(request, user_id):
+#     try:
+#         user = User.objects.get(id=int(user_id))
+#         user.is_active = False
+#         user.save()
+#         messages.success(request, _(u'Successfully deactivated "%s".') % user.email)
+#     except User.DoesNotExist:
+#         messages.success(request, _(u'Failed to deactivate: user does not exist.'))
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_useradmin')
+#     next = request.META.get('HTTP_REFERER', None)
+#     if not next:
+#         next = reverse('sys_useradmin')
 
-    return HttpResponseRedirect(next)
+#     return HttpResponseRedirect(next)
 
 def email_user_on_activation(user):
     """Send an email to user when admin activate his/her account.

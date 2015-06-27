@@ -12,7 +12,7 @@
 </div>
 <ul class="user-list">
     {% for m in members %}
-    {% with e=m.user_name id=m.user_name|id_or_email %}
+    {% with e=m.user_name id=m.user_name %}
     <li class="user ovhd">
     <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">

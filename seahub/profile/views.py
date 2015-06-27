@@ -83,20 +83,11 @@ def edit_profile(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def user_profile(request, username_or_id):
-    # fetch the user by username or id, try id first
-    user = None
+def user_profile(request, username):
     try:
-        user_id = int(username_or_id)
-        try:
-            user = User.objects.get(id=user_id)
-        except:
-            pass
-    except ValueError:
-        try:
-            user = User.objects.get(email=username_or_id)
-        except User.DoesNotExist:
-            pass
+        user = User.objects.get(email=username)
+    except User.DoesNotExist:
+        user = None
 
     nickname = '' if user is None else email2nickname(user.username)
 
@@ -110,7 +101,6 @@ def user_profile(request, username_or_id):
         d_profile = None
 
     return render_to_response('profile/user_profile.html', {
-            'username_or_id': username_or_id,
             'user': user,
             'nickname': nickname,
             'intro': intro,

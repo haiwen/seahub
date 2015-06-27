@@ -6,7 +6,7 @@
         <span class="meta-info split">
             {% if info_commit.props.creator_name %}
                 {% avatar info_commit.props.creator_name 20 %}
-                <a class="vam" href="{% url 'user_profile' info_commit.creator_name|id_or_email %}">{{ info_commit.creator_name|email2nickname }}</a>   
+                <a class="vam" href="{% url 'user_profile' info_commit.creator_name %}">{{ info_commit.creator_name|email2nickname }}</a>
             {% else %}
                 <span class="vam">{% trans "Unknown"%}</span>
             {% endif %}
