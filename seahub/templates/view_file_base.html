@@ -56,7 +56,9 @@
             </div>
 
             {% if not repo.encrypted %}
+            {% if request.user.permissions.can_add_repo %}
             <button id="share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
+            {% endif %}
             {% endif %}
 
             {% if user_perm == 'rw' %}
