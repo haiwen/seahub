@@ -36,6 +36,11 @@ class Fixtures(Exam):
                                   dirname='folder',
                                   username='test@test.com')
 
+    @fixture
+    def group(self):
+        return self.create_group(group_name='test_group',
+                                 username=self.user.username)
+
     def create_user(self, email=None, **kwargs):
         if not email:
             email = uuid4().hex + '@test.com'
@@ -68,3 +73,12 @@ class Fixtures(Exam):
     def remove_folder(self):
         seafile_api.del_file(self.repo.id, os.path.dirname(self.folder),
                              os.path.basename(self.folder), self.user.username)
+
+    def create_group(self, **kwargs):
+        group_name = kwargs['group_name']
+        username = kwargs['username']
+        group_id = ccnet_threaded_rpc.create_group(group_name, username)
+        return ccnet_threaded_rpc.get_group(group_id)
+
+    def remove_group(self):
+        return ccnet_threaded_rpc.remove_group(self.group.id, self.user.username)

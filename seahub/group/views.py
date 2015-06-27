@@ -1234,6 +1234,9 @@ def group_add_discussion(request, group):
 
 @group_check
 def group_discuss(request, group):
+    if group.is_pub:
+        raise Http404
+
     username = request.user.username
     form = MessageForm()
 

@@ -20,7 +20,9 @@
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_library %}{% endblock%}"><a href="{{ SITE_ROOT }}#group/{{ group.id }}/" class="lib">{% trans "Libraries" %}</a></li>
 
+        {% if not group.is_pub %}
         <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}" class="msgs">{% trans "Discussion" %}</a></li>
+        {% endif %}
 
         {% for mod in mods_enabled %}
         {% if mod == 'group wiki' %}

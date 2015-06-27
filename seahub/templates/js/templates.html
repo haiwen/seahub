@@ -567,7 +567,10 @@
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab tab-cur"><a href="#group/<%= id %>/" class="lib">{% trans "Libraries" %}</a></li>
+
+        <% if (!is_pub) { %>
         <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/" class="msgs">{% trans "Discussion" %}</a></li>
+        <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'group wiki') { %>
