@@ -507,11 +507,21 @@ define([
             var post_url = Common.getUrl({name: 'private_share_dir'});
             var after_op_success = function(data) {
                 $.modal.close();
-                var msg = gettext("Successfully shared to {placeholder}")
-                    .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
-                Common.feedback(msg, 'success');
-                if (data['shared_failed'].length > 0) {
-                    msg += '<br />' + gettext("Failed to share to {placeholder}")
+                var msg;
+                if (data['shared_success'].length > 0 && data['shared_failed'].length <= 0) {
+                    msg = gettext("Successfully shared to {placeholder}")
+                        .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
+                    Common.feedback(msg, 'success');
+                }
+                if (data['shared_success'].length <= 0 && data['shared_failed'].length > 0) {
+                    msg = gettext("Failed shared to {placeholder}")
+                        .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
+                    Common.feedback(msg, 'error');
+                }
+                if (data['shared_success'].length > 0 && data['shared_failed'].length > 0) {
+                    msg = gettext("Successfully shared to {placeholder}")
+                        .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
+                    msg += '<br />' + gettext("Failed shared to {placeholder}")
                         .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
                     Common.feedback(msg, 'info');
                 }
