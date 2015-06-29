@@ -14,7 +14,7 @@ define([
 
     var Router = Backbone.Router.extend({
         routes: {
-            '': 'showMyRepos',
+            '': 'showRepos',
             'my-libs/': 'showMyRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
             'my-sub-libs/': 'showMySubRepos',
@@ -28,7 +28,7 @@ define([
             'common/lib/:repo_id(/*path)': 'showCommonDir',
             'starred/': 'showStarredFile',
             // Default
-            '*actions': 'defaultAction'
+            '*actions': 'showRepos'
         },
 
         initialize: function() {
@@ -58,6 +58,15 @@ define([
             if (this.currentView != newView) {
                 this.currentView.hide();
                 this.currentView = newView;
+            }
+        },
+
+        showRepos: function() {
+            this.switchCurrentView(this.myHomeView);
+            if (app.pageOptions.can_add_repo) {
+                this.myHomeView.showMyRepos();
+            } else {
+                this.myHomeView.showSharedRepos();
             }
         },
 
@@ -149,14 +158,8 @@ define([
             }
             this.switchCurrentView(this.orgView);
             this.orgView.showDir(repo_id, path);
-        },
-
-        defaultAction: function(actions) {
-            // We have no matching route, lets just log what the URL was
-
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showMyRepos();
         }
+
     });
 
     return Router;
