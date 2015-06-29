@@ -99,7 +99,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    list_inner_pub_repos_by_owner, \
+    list_inner_pub_repos_by_owner, is_group_user, \
     remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
@@ -3299,6 +3299,11 @@ class GroupRepos(APIView):
     @api_group_check
     def get(self, request, group, format=None):
         username = request.user.username
+
+        if group.is_pub:
+            if not request.user.is_staff or not is_group_user(group.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if is_org_context(request):
             org_id = request.user.org.org_id
             repos = seafile_api.get_org_group_repos(org_id, group.id)
