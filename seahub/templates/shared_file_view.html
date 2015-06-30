@@ -3,39 +3,13 @@
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
-<style type="text/css">
-#header { display:none; }
-#logo {
-    display:block;
-    margin:2em auto 0;
-}
-#file-name {
-    font-weight:normal;
-}
-#view-hd .cur-path,
-#view-hd .share-by {
-    margin:0;
-}
-#save,
-.obv-btn {
-    padding:7px;
-    margin-top:11px;
-}
-#file {
-    margin-top:0;
-}
-#file-view {
-    margin-top:7px;
-}
-.CodeMirror { margin-bottom:0; }
-</style>
 {% endblock %}
 
 {% block main_panel %}
-    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" id="logo" />
-    <div id="view-hd" class="ovhd">
+    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" id="shared-file-view-logo" />
+    <div id="shared-file-view-hd" class="ovhd">
         <div class="fleft">
-            <h2 id="file-name" class="ellipsis" title="{{ file_name }}">{{ file_name }}</h2>
+            <h2 class="ellipsis no-bold" title="{{ file_name }}">{{ file_name }}</h2>
             {% if zipped %}
             <p class="cur-path ellipsis">
               {% trans "Current path: "%} 
@@ -55,7 +29,7 @@
         <div class="fright">
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
-              <button data="{{save_to_link}}" id="save">{% trans "Save to..."%}</button>
+              <button data="{{save_to_link}}" id="save" class="btn">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
             {% if not traffic_over_limit %}
