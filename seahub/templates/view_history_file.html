@@ -4,16 +4,6 @@
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
-<style type="text/css">
-#header { display:none; }
-#view-hd {
-    margin-top:4px;
-}
-#file {
-    margin-top:0;
-}
-.path { margin-top:.5em; }
-</style>
 {% endblock %}
 
 {% block main_panel %}
@@ -28,11 +18,11 @@
 
     <div id="file">
         <div id="file-op">
-            <p class="path fleft">
+            <p class="history-file-path fleft">
               {% block file_path %}
                 {% trans "Current Path: "%}
                 {% for name, link in zipped %}
-                  {% if not forloop.last %} {{ name }} / {% else %} {{ name }} {% endif %}
+                    {% if not forloop.last %} {{ name }} / {% else %} {{ name }} {% endif %}
                 {% endfor %}
               {% endblock %}
             </p>

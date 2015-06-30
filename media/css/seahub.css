@@ -2677,7 +2677,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:3px;
     color:#666;
 }
-#file,
 #text-diff-output {
     padding:3px;
     background:#dedede;
@@ -3645,4 +3644,18 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+/* shared file view */
+#shared-file-view-logo {
+    display:block;
+    margin:2em auto 0;
+}
+#shared-file-view-hd .cur-path,
+#shared-file-view-hd .share-by {
+    margin:0;
+}
+#shared-file-view-hd .btn,
+#shared-file-view-hd .obv-btn {
+    padding:7px;
+    margin-top:11px;
 }
