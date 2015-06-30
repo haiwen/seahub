@@ -3301,7 +3301,7 @@ class GroupRepos(APIView):
         username = request.user.username
 
         if group.is_pub:
-            if not request.user.is_staff or not is_group_user(group.id, username):
+            if not request.user.is_staff and not is_group_user(group.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if is_org_context(request):
