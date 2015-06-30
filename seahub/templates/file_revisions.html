@@ -55,7 +55,7 @@
                     <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&from=file_revisions" class="op vh">{% trans 'Restore' %}</a>
                     {% endif %}
                     <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&op=download" class="op vh">{% trans 'Download' %}</a>
-                    <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh">{% trans 'View' %}</a>
+                    <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
                     {% if can_compare and not forloop.last %}
                     <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
                     {% endif %}
