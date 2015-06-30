@@ -5,18 +5,24 @@
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
 <style type="text/css">
+#header { display:none; }
+#view-hd {
+    margin-top:4px;
+}
+#file {
+    margin-top:0;
+}
 .path { margin-top:.5em; }
 </style>
 {% endblock %}
 
 {% block main_panel %}
-    <div id="view-hd" class="w100 ovhd">
+    <div id="view-hd">
       {% block view_hd %}
-        <h2 class="fleft">
-          {{repo.props.name}} {% trans "history"%}
+        <h2>
+          {{file_name}}
           <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
         </h2>
-        <button class="fright" data="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" id="back">{% trans "Back to file versions"%}</button>
       {% endblock %}
     </div>
 
@@ -62,9 +68,5 @@ $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
 
 {% include "snippets/file_content_js.html" %}
-
-$('#back').click(function() {
-        location.href = $(this).attr('data');
-});
 </script>
 {% endblock %}
