@@ -984,12 +984,24 @@ if HAS_OFFICE_CONVERTER:
         
         return json.loads(ret)
 
-    def delegate_query_office_convert_status(file_id, page):
+    def delegate_query_office_convert_status(file_id):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
-        url += '?file_id=%s&page=%s' % (file_id, page)
+        url += '?file_id=' + file_id
         headers = { 
             'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
         }
+        ret = do_urlopen(url, headers=headers).read()
+        
+        return json.loads(ret)
+
+    def delegate_query_office_file_pages(file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/page-num/')
+        url += '?file_id=' + file_id
+        
+        headers = { 
+            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
+        }
+
         ret = do_urlopen(url, headers=headers).read()
         
         return json.loads(ret)
@@ -1029,35 +1041,66 @@ if HAS_OFFICE_CONVERTER:
         rpc = _get_office_converter_rpc()
         d = rpc.add_task(file_id, doctype, raw_path)
         return {
-            'exists': False,
+            'exists': d.exists
         }
 
     @cluster_delegate(delegate_query_office_convert_status)
-    def query_office_convert_status(file_id, page):
+    def query_office_convert_status(file_id):
         rpc = _get_office_converter_rpc()
-        d = rpc.query_convert_status(file_id, page)
+        d = rpc.query_convert_status(file_id)
         ret = {}
         if d.error:
             ret['error'] = d.error
-            ret['status'] = 'ERROR'
         else:
             ret['success'] = True
             ret['status'] = d.status
-            ret['info'] = d.info
         return ret
-
+            
+    @cluster_delegate(delegate_query_office_file_pages)
+    def query_office_file_pages(file_id):
+        rpc = _get_office_converter_rpc()
+        d = rpc.query_file_pages(file_id)
+        ret = {}
+        if d.error:
+            ret['error'] = d.error
+        else:
+            ret['success'] = True
+            ret['count'] = d.count
+        return ret
+        
     @cluster_delegate(delegate_get_office_converted_page)
     def get_office_converted_page(request, path, file_id):
         return django_static_serve(request, path, document_root=OFFICE_HTML_DIR)
 
+    def get_converted_html_detail(file_id):
+        d = {}
+        outline_file = os.path.join(OFFICE_HTML_DIR, file_id, 'file.outline')
+
+        with open(outline_file, 'r') as fp:
+            outline = fp.read()
+
+        page_num = query_office_file_pages(file_id)['count']
+
+        d['outline'] = outline
+        d['page_num'] = page_num
+
+        return d
+
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
         ret_dict['office_preview_token'] = do_md5(obj_id + seahub.settings.SECRET_KEY)
         try:
-            add_office_convert_task(obj_id, doctype, raw_path)
+            ret = add_office_convert_task(obj_id, doctype, raw_path)
+            exists = ret.get('exists', False)
         except:
             logging.exception('failed to add_office_convert_task:')
-            return _(u'Internal error')
-        return None
+            return _(u'Internal error'), False
+        else:
+            if (not CLUSTER_MODE) and exists and (doctype not in ('xls', 'xlsx')):
+                try:
+                    ret_dict['html_detail'] = get_converted_html_detail(obj_id)
+                except:
+                    pass
+            return None, False
 
 # search realted
 HAS_FILE_SEARCH = False
