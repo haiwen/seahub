@@ -1175,6 +1175,7 @@ def libraries(request):
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
+            'is_pro': True if is_pro_version() else False,
             }, context_instance=RequestContext(request))
 
 @login_required

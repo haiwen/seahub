@@ -244,6 +244,7 @@ app["pageOptions"] = {
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
     folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
+    is_pro: {% if is_pro %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
 };
 </script>

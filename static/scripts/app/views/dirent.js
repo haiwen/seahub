@@ -39,6 +39,7 @@ define([
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
                 can_generate_shared_link: app.pageOptions.can_generate_shared_link,
+                is_pro: app.pageOptions.is_pro,
                 repo_encrypted: dir.encrypted
             }));
             return this;
