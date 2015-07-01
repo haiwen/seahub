@@ -62,7 +62,7 @@ from seahub.views import check_folder_permission
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, query_office_file_pages, add_office_convert_task,
+        query_office_convert_status, add_office_convert_task,
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
     )
 
@@ -201,10 +201,9 @@ def handle_textual_file(request, filetype, raw_path, ret_dict):
 
 def handle_document(raw_path, obj_id, fileext, ret_dict):
     if HAS_OFFICE_CONVERTER:
-        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
+        err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         # populate return value dict
         ret_dict['err'] = err
-        ret_dict['html_exists'] = html_exists
     else:
         ret_dict['filetype'] = 'Unknown'
 
@@ -216,11 +215,10 @@ def handle_pdf(raw_path, obj_id, fileext, ret_dict):
         # use pdfjs to preview PDF
         pass
     elif HAS_OFFICE_CONVERTER:
-        # use flash to prefiew PDF
-        err, html_exists = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
+        # use pdf2htmlEX to prefiew PDF
+        err = prepare_converted_html(raw_path, obj_id, fileext, ret_dict)
         # populate return value dict
         ret_dict['err'] = err
-        ret_dict['html_exists'] = html_exists
     else:
         # can't preview PDF
         ret_dict['filetype'] = 'Unknown'
@@ -373,8 +371,7 @@ def _file_view(request, repo_id, path):
     img_prev = None
     img_next = None
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'html_exists': False,
-                'filetype': filetype}
+                'file_encoding_list': [], 'filetype': filetype}
 
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(u_filename, fsize)
@@ -478,8 +475,6 @@ def _file_view(request, repo_id, path):
             'file_enc': ret_dict['file_enc'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list': ret_dict['file_encoding_list'],
-            'html_exists': ret_dict['html_exists'],
-            'html_detail': ret_dict.get('html_detail', {}),
             'filetype': ret_dict['filetype'],
             'use_pdfjs': USE_PDFJS,
             'latest_contributor': latest_contributor,
@@ -729,8 +724,7 @@ def view_shared_file(request, token):
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'html_exists': False,
-                'filetype': filetype}
+                'file_encoding_list': [], 'filetype': filetype}
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
         ret_dict['err'] = err_msg
@@ -782,8 +776,6 @@ def view_shared_file(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'html_exists': ret_dict['html_exists'],
-            'html_detail': ret_dict.get('html_detail', {}),
             'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
@@ -882,8 +874,7 @@ def view_file_via_shared_dir(request, token):
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'html_exists': False,
-                'filetype': filetype}
+                'file_encoding_list': [], 'filetype': filetype}
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
     if exceeds_limit:
         ret_dict['err'] = err_msg
@@ -950,8 +941,6 @@ def view_file_via_shared_dir(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'html_exists': ret_dict['html_exists'],
-            'html_detail': ret_dict.get('html_detail', {}),
             'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
@@ -1352,13 +1341,23 @@ def office_convert_query_status(request, internal=False):
     ret = {'success': False}
 
     file_id = request.GET.get('file_id', '')
+    page = request.GET.get('page', '')
+    doctype = request.GET.get('doctype', None)
+    if doctype == 'spreadsheet':
+        page = 0
+    else:
+        try:
+            page = int(page)
+        except ValueError:
+            return HttpResponseBadRequest('invalid params')
+
     if len(file_id) != 40:
         ret['error'] = 'invalid param'
     elif request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
         return HttpResponseForbidden()
     else:
         try:
-            ret = query_office_convert_status(file_id, internal=internal)
+            ret = query_office_convert_status(file_id, page, internal=internal)
         except Exception, e:
             logging.exception('failed to call query_office_convert_status')
             ret['error'] = str(e)
@@ -1383,38 +1382,15 @@ def office_convert_get_page(request, path, internal=False):
         return HttpResponseForbidden()
 
     file_id = m.group(1)
-    if path.endswith('file.css'):
-        pass
-    else:
-        if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-            return HttpResponseForbidden()
+    # if path.endswith('file.css'):
+    #     pass
+    # else:
+    #     if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
+    #         return HttpResponseForbidden()
 
-    return get_office_converted_page(request, path, file_id, internal=internal)
-
-@check_office_token
-def office_convert_query_page_num(request, internal=False):
-    if not HAS_OFFICE_CONVERTER:
-        raise Http404
-    if not internal and not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
-    ret = {'success': False}
-
-    file_id = request.GET.get('file_id', '')
-    if len(file_id) != 40:
-        ret['error'] = 'invalid param'
-    elif request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-        return HttpResponseForbidden()
-    else:
-        try:
-            ret = query_office_file_pages(file_id, internal=internal)
-        except Exception, e:
-            logging.exception('failed to call query_office_file_pages')
-            ret['error'] = str(e)
-
-    return HttpResponse(json.dumps(ret), content_type=content_type)
+    resp = get_office_converted_page(request, path, file_id, internal=internal)
+    resp['Content-Type'] = 'text/html'
+    return resp
 
 ###### private file/dir shares
 @login_required
@@ -1459,8 +1435,7 @@ def view_priv_shared_file(request, token):
 
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'html_exists': False,
-                'filetype': filetype}
+                'file_encoding_list': [], 'filetype': filetype}
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
     if exceeds_limit:
@@ -1495,8 +1470,6 @@ def view_priv_shared_file(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'html_exists': ret_dict['html_exists'],
-            'html_detail': ret_dict.get('html_detail', {}),
             'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
