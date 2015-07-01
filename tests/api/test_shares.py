@@ -92,8 +92,8 @@ class DirSharedItemsTest(TestCase, Fixtures):
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert 'a@a.com' in json_resp['shared_success']
-        assert 'b@b.com' in json_resp['shared_success']
+        assert len(json_resp['success']) == 2
+        assert json_resp['success'][0]['permission'] == 'r'
 
     def test_can_update(self):
         self._login_as(self.user)
@@ -116,7 +116,7 @@ class DirSharedItemsTest(TestCase, Fixtures):
         ))
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp[0]['success'] is True
+        assert json_resp['success'] is True
 
         resp = self.client.get('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user,group' % (
             self.repo.id,

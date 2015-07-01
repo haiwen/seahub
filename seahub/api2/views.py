@@ -2270,7 +2270,7 @@ class DirSharedItemsView(APIView):
                     "name": item.user,
                     "nickname": email2nickname(item.user),
                 },
-                "perm": item.perm,
+                "permission": item.perm,
             })
         return ret
 
@@ -2402,7 +2402,14 @@ class DirSharedItemsView(APIView):
                                                        from_user=username,
                                                        to_user=to_user,
                                                        repo=shared_repo)
-                    success.append(to_user)
+                    success.append({
+                        "share_type": "user",
+                        "user_info": {
+                            "name": to_user,
+                            "nickname": email2nickname(to_user),
+                        },
+                        "permission": permission
+                    })
                 except SearpcError as e:
                     logger.error(e)
                     failed.append(to_user)
@@ -2412,8 +2419,8 @@ class DirSharedItemsView(APIView):
             pass
 
         return HttpResponse(json.dumps({
-            "shared_success": success,
-            "shared_failed": failed
+            "success": success,
+            "failed": failed
         }), status=200, content_type=json_content_type)
 
     def delete(self, request, repo_id, format=None):
@@ -2455,7 +2462,7 @@ class DirSharedItemsView(APIView):
         if shared_to_group:
             pass
 
-        return HttpResponse(json.dumps([{'success': True}]), status=200,
+        return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 
 
