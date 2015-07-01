@@ -474,18 +474,24 @@ define([
                 path = this.dirent_path;
             Common.ajaxGet({
                 'get_url': Common.getUrl({
-                    name: 'get_dir_user_share_items',
+                    name: 'dir_shared_items',
                     repo_id: repo_id
                 }), 
-                'data': {'p': path},
+                'data': {
+                    'p': path,
+                    'share_type': 'user'
+                },
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
                             'path': path,
-                            'item_data':$.extend(item, {
+                            'item_data': {
+                                "user": item.user_info.name,
+                                "user_name": item.user_info.nickname,
+                                "perm": item.permission,
                                 'for_user': true
-                            })
+                            }
                         }); 
                         $add_item.after(new_item.el);
                     }); 
@@ -516,19 +522,25 @@ define([
                 path = this.dirent_path;
             Common.ajaxGet({
                 'get_url': Common.getUrl({
-                    name: 'get_dir_group_share_items',
+                    name: 'dir_shared_items',
                     repo_id: repo_id
-                }), 
-                'data': {'p': path},
+                }),
+                'data': {
+                    'p': path,
+                    'share_type': 'group'
+                },
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
                             'path': path,
-                            'item_data': $.extend(item, {
+                            'item_data': {
+                                "group_id": item.group_info.id,
+                                "group_name": item.group_info.name,
+                                "perm": item.permission,
                                 'for_user': false
-                            })
-                        }); 
+                            }
+                        });
                         $add_item.after(new_item.el);
                     });
                 }   
@@ -539,8 +551,7 @@ define([
         },
 
         dirUserShare: function () {
-            var form = this.$('#add-dir-user-share-item'),
-                form_id = form.attr('id');
+            var form = this.$('#add-dir-user-share-item');
 
             var emails_input = $('[name="emails"]', form),
                 emails = emails_input.val(); // string
@@ -552,40 +563,46 @@ define([
             var repo_id = this.repo_id, 
                 path = this.dirent_path;
             var perm = $('[name="permission"]', form).val();
-            var post_data = {
-                'repo_id': repo_id,
-                'path': path,
-                'emails': emails,
-                'perm': perm 
-            };
-            var post_url = Common.getUrl({name: 'private_share_dir'}); // TODO: modify url
-            var after_op_success = function(data) {
-                $(data).each(function(index, item) {
-                    var new_item = new FolderShareItemView({
-                        'repo_id': repo_id,
-                        'path': path,
-                        'item_data': $.extend(item, {
-                            'for_user': false
-                        })
-                    }); 
-                    $add_item.after(new_item.el);
-                });
-                emails_input.select2("val", "");
-            };
 
-            Common.ajaxPost({
-                'form': form,
-                'post_url': post_url,
-                'post_data': post_data,
-                'after_op_success': after_op_success,
-                'form_id': form_id
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }) + '?p=' + encodeURIComponent(path),
+                dataType: 'json',
+                method: 'PUT',
+                beforeSend: Common.prepareCSRFToken,
+                trandition: true,
+                data: {
+                    'share_type': 'user',
+                    'username': emails.split(','),
+                    'permission': perm
+                },
+                success: function(data) {
+                    // todo: those failed to share to
+                    $(data.success).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "user": item.user_info.name,
+                                "user_name": item.user_info.nickname,
+                                "perm": item.permission,
+                                'for_user': true
+                            }
+                        });
+                        $add_item.after(new_item.el);
+                    });
+                    emails_input.select2("val", "");
+                },
+                error: function(xhr) {
+                    // todo
+                }
             });
-            return false;
         },
 
         dirGroupShare: function () {
-            var form = this.$('#add-dir-group-share-item'),
-                form_id = form.attr('id');
+            var form = this.$('#add-dir-group-share-item');
 
             var groups_input = $('[name="groups"]', form),
                 groups = groups_input.val(); // null or [group.id]
@@ -598,35 +615,42 @@ define([
             var repo_id = this.repo_id, 
                 path = this.dirent_path;
             var perm = $('[name="permission"]', form).val();
-            var post_data = {
-                'repo_id': repo_id,
-                'path': path,
-                'groups': groups.join(','),
-                'perm': perm 
-            };
-            var post_url = Common.getUrl({name: 'private_share_dir'}); // TODO: modify url
-            var after_op_success = function(data) {
-                $(data).each(function(index, item) {
-                    var new_item = new FolderShareItemView({
-                        'repo_id': repo_id,
-                        'path': path,
-                        'item_data': $.extend(item, {
-                            'for_user': false
-                        })
-                    }); 
-                    $add_item.after(new_item.el);
-                });
-                groups_input.select2("val", "");
-            };
 
-            Common.ajaxPost({
-                'form': form,
-                'post_url': post_url,
-                'post_data': post_data,
-                'after_op_success': after_op_success,
-                'form_id': form_id
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }) + '?p=' + encodeURIComponent(path),
+                dataType: 'json',
+                method: 'PUT',
+                beforeSend: Common.prepareCSRFToken,
+                trandition: true,
+                data: {
+                    'share_type': 'group',
+                    'group_id': groups,
+                    'permission': perm
+                },
+                success: function(data) {
+                    // todo: those failed to share to 
+                    $(data.success).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "group_id": item.group_info.id,
+                                "group_name": item.group_info.name,
+                                "perm": item.permission,
+                                'for_user': false
+                            }
+                        });
+                        $add_item.after(new_item.el);
+                    });
+                    groups_input.select2("val", "");
+                },
+                error: function(xhr) {
+                    // todo 
+                }
             });
-            return false;
         }
 
     });

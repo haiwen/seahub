@@ -88,6 +88,29 @@ define([
         },
 
         del: function () {
+            var _this = this;
+            var item_data = this.item_data;
+            var url = Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: this.repo_id
+                }) + '?p=' + encodeURIComponent(this.path);
+            if (item_data.for_user) {
+                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
+            } else {
+                url += '&share_type=group&username=' + encodeURIComponent(item_data.group_id);
+            }
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: 'DELETE',
+                beforeSend: Common.prepareCSRFToken,
+                success: function () {
+                    _this.remove();
+                },
+                error: {
+                    // TODO
+                }
+            });
         }
 
     });
