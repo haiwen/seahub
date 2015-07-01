@@ -113,6 +113,7 @@ if HAS_OFFICE_CONVERTER:
     )
     urlpatterns += patterns('',
         url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
+        url(r'^office-convert/page-num/$', OfficeConvertQueryPageNum.as_view()),
     )
     urlpatterns += patterns('',
         url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),

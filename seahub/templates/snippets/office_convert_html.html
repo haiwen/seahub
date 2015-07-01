@@ -5,6 +5,11 @@
 </div>
 <div id="converted-html">
   <div id="sidebar" class="hide">
+    <div id="outline">
+      {% if html_exists %}
+      {{ html_detail.outline|safe }}
+      {% endif %}
+    </div>
   </div>
-  <div id="pages"></div>
+  <div id="page-container"></div>
 </div>

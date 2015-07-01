@@ -81,7 +81,8 @@ if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
-    from seahub.utils import query_office_convert_status, prepare_converted_html
+    from seahub.utils import query_office_convert_status, \
+        query_office_file_pages, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
         ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
@@ -3877,6 +3878,37 @@ class OfficeConvertQueryStatus(APIView):
 
         return HttpResponse(json.dumps(ret), content_type=content_type)
 
+# based on views/file.py::office_convert_query_page_num
+class OfficeConvertQueryPageNum(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        if not HAS_OFFICE_CONVERTER:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
+
+        content_type = 'application/json; charset=utf-8'
+
+        ret = {'success': False}
+
+        file_id = request.GET.get('file_id', '')
+        if len(file_id) != 40:
+            ret['error'] = 'invalid param'
+        else:
+            try:
+                d = query_office_file_pages(file_id)
+                if d.error:
+                    ret['error'] = d.error
+                else:
+                    ret['success'] = True
+                    ret['count'] = d.count
+            except Exception, e:
+                logging.exception('failed to call query_office_file_pages')
+                ret['error'] = str(e)
+
+        return HttpResponse(json.dumps(ret), content_type=content_type)
+
 # based on views/file.py::view_file and views/file.py::handle_document
 class OfficeGenerateView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -3926,9 +3958,10 @@ class OfficeGenerateView(APIView):
 
         ret_dict = {}
         if HAS_OFFICE_CONVERTER:
-            err = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
+            err, html_exists = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
             # populate return value dict
             ret_dict['err'] = err
+            ret_dict['html_exists'] = html_exists
             ret_dict['obj_id'] = obj_id
         else:
             ret_dict['filetype'] = 'Unknown'
