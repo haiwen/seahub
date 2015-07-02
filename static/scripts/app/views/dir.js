@@ -250,7 +250,7 @@ define([
                     };
 
                 var path_list = path.substr(1).split('/');
-                var path_list_encoded = path_list.map(function(e) { return encodeURIComponent(e); });
+                var path_list_encoded = Common.encodePath(path.substr(1)).split('/');
                 if (path != '/') {
                     $.extend(obj, {
                        path_list: path_list,
