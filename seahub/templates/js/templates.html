@@ -323,9 +323,6 @@
             <% if (!repo_encrypted) { %>
             <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
             <% } %>
-            <% if (!is_dir && is_repo_owner) { %>
-            <li class="tab"><a href="#file-private-share" class="a">{% trans "Private Share" %}</a></li>
-            <% } %>
             <% if (is_dir) { %>
                 <% if (user_perm == 'rw' && !repo_encrypted) { %>
             <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
@@ -529,7 +526,6 @@
         <li class="tab"><a href="{{ SITE_ROOT }}share/" class="lib">{% trans "Libraries" %}</a></li>
         <li class="tab"><a href="{{ SITE_ROOT }}share/folders/" class="folders">{% trans "Folders" %}</a></li>
         <% } %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/files/" class="files">{% trans "Files" %}</a></li>
         <li class="tab"><a href="{{ SITE_ROOT }}share/links/" class="links">{% trans "Links" %}</a></li>
     </ul>
 </script>
