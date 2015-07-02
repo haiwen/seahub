@@ -90,6 +90,14 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
+try:
+    from seahub.settings import ORG_MEMBER_QUOTA_DEFAULT
+except ImportError:
+    ORG_MEMBER_QUOTA_DEFAULT = None
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
@@ -101,7 +109,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     list_inner_pub_repos_by_owner, is_group_user, \
     remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
+    create_org
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -4164,6 +4173,60 @@ class RepoTokensView(APIView):
 
         return tokens
 
+class OrganizationView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, format=None):
+
+        if not CLOUD_MODE or not MULTI_TENANCY:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        org_name = request.POST.get('org_name', None)
+        prefix = request.POST.get('prefix', None)
+        quota = request.POST.get('quota', None)
+        member_limit = request.POST.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
+
+        if not org_name or not username or not password or \
+                not prefix or not quota or not member_limit:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        if not is_valid_username(username):
+            return api_error(status.HTTP_400_BAD_REQUEST, "Email is not valid")
+
+        try:
+            User.objects.get(email = username)
+            user_exist = True
+        except User.DoesNotExist:
+            user_exist = False
+
+        if user_exist:
+            return api_error(status.HTTP_400_BAD_REQUEST, "A user with this email already exists")
+
+        slug_re = re.compile(r'^[-a-zA-Z0-9_]+$')
+        if not slug_re.match(prefix):
+            return api_error(status.HTTP_400_BAD_REQUEST, "URL prefix can only be letters(a-z), numbers, and the underscore character")
+
+        if ccnet_threaded_rpc.get_org_by_url_prefix(prefix):
+            return api_error(status.HTTP_400_BAD_REQUEST, "An organization with this prefix already exists")
+
+        try:
+            User.objects.create_user(username, password, is_staff=False, is_active=True)
+            create_org(org_name, prefix, username)
+            new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
+            quota_mb = int(quota)
+            quota = quota_mb * (1 << 20)
+
+            from seahub_extra.organizations.models import OrgMemberQuota
+            OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
+            seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)
+            return Response('success', status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
 
 #Following is only for debug
 # from seahub.auth.decorators import login_required

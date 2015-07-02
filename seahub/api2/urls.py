@@ -52,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
     url(r'^repo-tokens/$', RepoTokensView.as_view()),
 
+    url(r'^organization/$', OrganizationView.as_view()),
 
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),
     url(r'^s/f/(?P<token>[a-f0-9]{10})/detail/$', PrivateSharedFileDetailView.as_view()),
