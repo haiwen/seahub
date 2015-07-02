@@ -177,11 +177,8 @@ urlpatterns = patterns('',
 
     url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
 
-
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
-    url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir-user-share-items/$', get_dir_user_share_items, name='get_dir_user_share_items'),
-    url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir-group-share-items/$', get_dir_group_share_items, name='get_dir_group_share_items'),
 
     url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
 

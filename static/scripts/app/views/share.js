@@ -551,6 +551,7 @@ define([
         },
 
         dirUserShare: function () {
+            var panel = $('#dir-user-share');
             var form = this.$('#add-dir-user-share-item');
 
             var emails_input = $('[name="emails"]', form),
@@ -572,14 +573,13 @@ define([
                 dataType: 'json',
                 method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
-                trandition: true,
+                traditional: true,
                 data: {
                     'share_type': 'user',
                     'username': emails.split(','),
                     'permission': perm
                 },
                 success: function(data) {
-                    // todo: those failed to share to
                     $(data.success).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -594,14 +594,26 @@ define([
                         $add_item.after(new_item.el);
                     });
                     emails_input.select2("val", "");
+                    if (data.failed) {
+                        var err_msg = gettext("Failed to share to {placeholder}")
+                            .replace('{placeholder}', Common.HTMLescape(data.failed.join(', ')));
+                        $('.error', panel).html(err_msg).removeClass('hide');
+                    }
                 },
                 error: function(xhr) {
-                    // todo
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = gettext("Share failed");
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.")
+                    }
+                    $('.error', panel).html(err_msg).removeClass('hide');
                 }
             });
         },
 
         dirGroupShare: function () {
+            var panel = $('#dir-group-share');
             var form = this.$('#add-dir-group-share-item');
 
             var groups_input = $('[name="groups"]', form),
@@ -624,14 +636,13 @@ define([
                 dataType: 'json',
                 method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
-                trandition: true,
+                traditional: true,
                 data: {
                     'share_type': 'group',
                     'group_id': groups,
                     'permission': perm
                 },
                 success: function(data) {
-                    // todo: those failed to share to 
                     $(data.success).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -648,7 +659,13 @@ define([
                     groups_input.select2("val", "");
                 },
                 error: function(xhr) {
-                    // todo 
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = gettext("Share failed");
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.")
+                    }
+                    $('.error', panel).html(err_msg).removeClass('hide');
                 }
             });
         }

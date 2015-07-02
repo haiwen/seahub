@@ -49,39 +49,39 @@ define([
         editPerm: function (e) {
             var _this = this;
             var item_data = this.item_data;
-            var for_user = item_data.for_user;
-            var share_type = for_user ? 'personal' : 'group';
+            var url = Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: this.repo_id
+                }) + '?p=' + encodeURIComponent(this.path);
+            if (item_data.for_user) {
+                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
+            } else {
+                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
+            }
             var perm = $(e.currentTarget).val();
-            var post_data = {
-                repo_id: this.repo_id,
-                email_or_group: for_user ? item_data.user : item_data.group_id,
-                permission: perm 
-            };
-
             $.ajax({
-                url: Common.getUrl({
-                    name: 'share_permission_admin' 
-                }) + '?share_type=' + share_type,
-                type: 'POST',
+                url: url,
                 dataType: 'json',
-                cache: false,
+                method: 'POST',
                 beforeSend: Common.prepareCSRFToken,
-                data: post_data,
-                success: function() {
+                data: {
+                    'permission': perm
+                },
+                success: function () {
                     item_data.perm = perm;
                     _this.render();
                 },
                 error: function(xhr) {
-                    var err;
+                    var err_msg;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
+                        err_msg = gettext("Edit failed");
                     } else {
-                        err = gettext("Failed. Please check the network.");
+                        err_msg = gettext("Failed. Please check the network.");
                     }
-                    if (share_type == 'personal') {
-                        $('#dir-user-share .error').html(err).removeClass('hide');
+                    if (item_data.for_user) {
+                        $('#dir-user-share .error').html(err_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-group .error').html(err).removeClass('hide');
+                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
                     }
                 }
             });
@@ -97,7 +97,7 @@ define([
             if (item_data.for_user) {
                 url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
             } else {
-                url += '&share_type=group&username=' + encodeURIComponent(item_data.group_id);
+                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
             }
             $.ajax({
                 url: url,
@@ -107,8 +107,18 @@ define([
                 success: function () {
                     _this.remove();
                 },
-                error: {
-                    // TODO
+                error: function (xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = gettext("Delete failed");
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.");
+                    }
+                    if (item_data.for_user) {
+                        $('#dir-user-share .error').html(err_msg).removeClass('hide');
+                    } else {
+                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
+                    }
                 }
             });
         }
