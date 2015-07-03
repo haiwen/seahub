@@ -47,7 +47,8 @@
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
 .icon-chevron-left:before         { content: "\f053"; }
-
+.icon-building:before          { content: "\f0f7";}
+.icon-mobile:before          {content: "\f10b";}
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -3645,4 +3646,55 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+/* profile for new */
+#profile-items {
+    width: 290px;
+    box-shadow: 0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5;
+    margin-left: 70px;
+    border-radius: 3px;
+}
+#profile-items p {
+    font-family: 'FontAwesome';
+    padding: 8px 15px;
+    margin: 0;
+}
+#profile-items p:last-child {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.wg {
+    background: #F2F2F2 none repeat scroll 0% 0%;
+    height: 39px;
+    line-height: 39px;
+    border-radius: 4px;
+    padding: 0 8px 0;
+}
+.big-font {
+      color: rgba(0,0,0,.85);
+      font-size: 18px;
+      height: 23px;
+      line-height: 23px;
+}
+.font-light {
+    color: rgba(0,0,0,.4);
+}
+.with-border-top {
+    border-top: 1px solid #eee;
+}
+.with-dist, .with-dist2 {
+    position: relative;
+    left: 6px;
+}
+.with-dist {
+    top: -3px;
+}
+.with-dist2 {
+    top: -1px;
+}
+.fa-1x {
+    font-size: 16px;
+}
+.fa-2x {
+  font-size: 26px;
 }
