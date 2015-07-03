@@ -19,6 +19,7 @@ urlpatterns = patterns('',
     url(r'^account/info/$', AccountInfo.as_view()),
     url(r'^regdevice/$', RegDevice.as_view(), name="regdevice"),
     url(r'^search/$', Search.as_view(), name='api_search'),
+    url(r'^search-user/$', SearchUser.as_view(), name='search-user'),
     url(r'^repos/$', Repos.as_view(), name="api2-repos"),
     url(r'^repos/public/$', PubRepos.as_view(), name="api2-pub-repos"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/$', Repo.as_view(), name="api2-repo"),
@@ -51,6 +52,7 @@ urlpatterns = patterns('',
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
     url(r'^repo-tokens/$', RepoTokensView.as_view()),
 
+    url(r'^organization/$', OrganizationView.as_view()),
 
     url(r'^s/f/(?P<token>[a-f0-9]{10})/$', PrivateSharedFileView.as_view()),
     url(r'^s/f/(?P<token>[a-f0-9]{10})/detail/$', PrivateSharedFileDetailView.as_view()),
@@ -113,7 +115,6 @@ if HAS_OFFICE_CONVERTER:
     )
     urlpatterns += patterns('',
         url(r'^office-convert/status/$', OfficeConvertQueryStatus.as_view()),
-        url(r'^office-convert/page-num/$', OfficeConvertQueryPageNum.as_view()),
     )
     urlpatterns += patterns('',
         url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),

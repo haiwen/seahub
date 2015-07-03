@@ -23,7 +23,7 @@ from rest_framework.views import APIView
 
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
-from django.db.models import F
+from django.db.models import F, Q
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
@@ -40,7 +40,7 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response, to_python_boolean
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
@@ -55,6 +55,7 @@ from seahub.group.utils import BadGroupNameError, ConflictGroupNameError
 from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
+from seahub.contacts.models import Contact
 from seahub.profile.models import Profile
 from seahub.views.modules import get_wiki_enabled_group_list
 from seahub.shortcuts import get_first_object_or_none
@@ -81,15 +82,22 @@ if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
 from seahub.utils import HAS_OFFICE_CONVERTER
 if HAS_OFFICE_CONVERTER:
-    from seahub.utils import query_office_convert_status, \
-        query_office_file_pages, prepare_converted_html
+    from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT
+        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, ENABLE_GLOBAL_ADDRESSBOOK
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
+try:
+    from seahub.settings import ORG_MEMBER_QUOTA_DEFAULT
+except ImportError:
+    ORG_MEMBER_QUOTA_DEFAULT = None
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
@@ -98,10 +106,11 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     list_personal_repos_by_owner, check_quota, \
     list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    list_inner_pub_repos_by_owner, \
+    list_inner_pub_repos_by_owner, is_group_user, \
     remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
+    create_org
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -421,6 +430,117 @@ class RegDevice(APIView):
             token.save()
         return Response("success")
 
+class SearchUser(APIView):
+    """ Search user from contacts/all users
+    """
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+
+        q = request.GET.get('q', None)
+
+        if not q:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Argument missing.')
+
+        username = request.user.username
+        search_result = []
+        searched_users = []
+        searched_profiles = []
+
+        if request.cloud_mode:
+            if is_org_context(request):
+                url_prefix = request.user.org.url_prefix
+                users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
+
+                searched_users = filter(lambda u: q in u.email, users)
+                # 'user__in' for only get profile of user in org
+                # 'nickname__contains' for search by nickname
+                searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                           Q(nickname__contains=q)).values('user')
+            elif ENABLE_GLOBAL_ADDRESSBOOK:
+                searched_users = get_searched_users(q)
+                searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+            else:
+                users = []
+                contacts = Contact.objects.get_contacts_by_user(username)
+                for c in contacts:
+                    try:
+                        user = User.objects.get(email = c.contact_email)
+                        c.is_active = user.is_active
+                    except User.DoesNotExist:
+                        continue
+
+                    c.email = c.contact_email
+                    users.append(c)
+
+                searched_users = filter(lambda u: q in u.email, users)
+                # 'user__in' for only get profile of contacts
+                # 'nickname__contains' for search by nickname
+                searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
+                                                           Q(nickname__contains=q)).values('user')
+        else:
+            searched_users = get_searched_users(q)
+            searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+
+
+        # remove inactive users and add to result
+        for u in searched_users[:10]:
+            if u.is_active:
+                search_result.append(u.email)
+
+        for p in searched_profiles[:10]:
+            try:
+                user = User.objects.get(email = p['user'])
+            except User.DoesNotExist:
+                continue
+
+            if not user.is_active:
+                continue
+
+            search_result.append(p['user'])
+
+        # remove duplicate emails
+        search_result = {}.fromkeys(search_result).keys()
+
+        # reomve myself
+        if username in search_result:
+            search_result.remove(username)
+
+        if is_valid_username(q) and q not in search_result:
+            search_result.insert(0, q)
+
+        formated_result = format_user_result(search_result)[:10]
+        return HttpResponse(json.dumps({"users": formated_result}), status=200,
+                            content_type=json_content_type)
+
+def format_user_result(users):
+    results = []
+    for email in users:
+        results.append({
+            "email": email,
+            "avatar": avatar(email, 32),
+            "name": email2nickname(email),
+        })
+    return results
+
+def get_searched_users(q):
+    searched_users = []
+    searched_db_users = []
+    searched_ldap_users  = []
+
+    searched_db_users = seaserv.ccnet_threaded_rpc.search_emailusers('DB', q, 0, 10)
+
+    count = len(searched_db_users)
+    if count < 10:
+        searched_ldap_users = seaserv.ccnet_threaded_rpc.search_emailusers('LDAP', q, 0, 10 - count)
+
+    searched_users.extend(searched_db_users)
+    searched_users.extend(searched_ldap_users)
+
+    return searched_users
+
 class Search(APIView):
     """ Search all the repos
     """
@@ -675,6 +795,7 @@ class Repos(APIView):
         return Response(repos_json)
 
     def post(self, request, format=None):
+
         if not request.user.permissions.can_add_repo():
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to create library.')
@@ -1710,22 +1831,31 @@ class FileDetailView(APIView):
             try:
                 obj_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(
                     repo.id, commit_id, path)
-                c = get_commit(repo.id, repo.version, commit_id)
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'Revision not found.')
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 'Failed to get file id.')
         else:
             try:
                 obj_id = seafile_api.get_file_id_by_path(repo_id,
                                                          path.encode('utf-8'))
-                commits = seafserv_threaded_rpc.list_file_revisions(repo_id,
-                                                                    path,
-                                                                    -1, -1)
-                c = commits[0]
-            except:
-                return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 'Failed to get file id.')
 
         if not obj_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'File not found.')
+
+        # fetch file contributors and latest contributor
+        try:
+            # get real path for sub repo
+            real_path = repo.origin_path + path if repo.origin_path else path
+            dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        except SearpcError as e:
+            logger.error(e)
+            latest_contributor, last_modified = None, 0
 
         entry = {}
         try:
@@ -1736,7 +1866,7 @@ class FileDetailView(APIView):
         entry["type"] = "file"
         entry["name"] = os.path.basename(path)
         entry["id"] = obj_id
-        entry["mtime"] = c.ctime
+        entry["mtime"] = last_modified
 
         return HttpResponse(json.dumps(entry), status=200,
                             content_type=json_content_type)
@@ -1817,6 +1947,11 @@ class FileSharedLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
+
+        if not request.user.permissions.can_generate_shared_link():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to generate shared link.')
+
         # generate file shared link
         username = request.user.username
         path = unquote(request.DATA.get('p', '').encode('utf-8'))
@@ -3172,6 +3307,11 @@ class GroupRepos(APIView):
     @api_group_check
     def get(self, request, group, format=None):
         username = request.user.username
+
+        if group.is_pub:
+            if not request.user.is_staff and not is_group_user(group.id, username):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if is_org_context(request):
             org_id = request.user.org.org_id
             repos = seafile_api.get_org_group_repos(org_id, group.id)
@@ -3878,37 +4018,6 @@ class OfficeConvertQueryStatus(APIView):
 
         return HttpResponse(json.dumps(ret), content_type=content_type)
 
-# based on views/file.py::office_convert_query_page_num
-class OfficeConvertQueryPageNum(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        if not HAS_OFFICE_CONVERTER:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Office converter not enabled.')
-
-        content_type = 'application/json; charset=utf-8'
-
-        ret = {'success': False}
-
-        file_id = request.GET.get('file_id', '')
-        if len(file_id) != 40:
-            ret['error'] = 'invalid param'
-        else:
-            try:
-                d = query_office_file_pages(file_id)
-                if d.error:
-                    ret['error'] = d.error
-                else:
-                    ret['success'] = True
-                    ret['count'] = d.count
-            except Exception, e:
-                logging.exception('failed to call query_office_file_pages')
-                ret['error'] = str(e)
-
-        return HttpResponse(json.dumps(ret), content_type=content_type)
-
 # based on views/file.py::view_file and views/file.py::handle_document
 class OfficeGenerateView(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -3958,10 +4067,9 @@ class OfficeGenerateView(APIView):
 
         ret_dict = {}
         if HAS_OFFICE_CONVERTER:
-            err, html_exists = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
+            err = prepare_converted_html(inner_path, obj_id, fileext, ret_dict)
             # populate return value dict
             ret_dict['err'] = err
-            ret_dict['html_exists'] = html_exists
             ret_dict['obj_id'] = obj_id
         else:
             ret_dict['filetype'] = 'Unknown'
@@ -4065,6 +4173,60 @@ class RepoTokensView(APIView):
 
         return tokens
 
+class OrganizationView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAdminUser, )
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request, format=None):
+
+        if not CLOUD_MODE or not MULTI_TENANCY:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        username = request.POST.get('username', None)
+        password = request.POST.get('password', None)
+        org_name = request.POST.get('org_name', None)
+        prefix = request.POST.get('prefix', None)
+        quota = request.POST.get('quota', None)
+        member_limit = request.POST.get('member_limit', ORG_MEMBER_QUOTA_DEFAULT)
+
+        if not org_name or not username or not password or \
+                not prefix or not quota or not member_limit:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Missing argument")
+
+        if not is_valid_username(username):
+            return api_error(status.HTTP_400_BAD_REQUEST, "Email is not valid")
+
+        try:
+            User.objects.get(email = username)
+            user_exist = True
+        except User.DoesNotExist:
+            user_exist = False
+
+        if user_exist:
+            return api_error(status.HTTP_400_BAD_REQUEST, "A user with this email already exists")
+
+        slug_re = re.compile(r'^[-a-zA-Z0-9_]+$')
+        if not slug_re.match(prefix):
+            return api_error(status.HTTP_400_BAD_REQUEST, "URL prefix can only be letters(a-z), numbers, and the underscore character")
+
+        if ccnet_threaded_rpc.get_org_by_url_prefix(prefix):
+            return api_error(status.HTTP_400_BAD_REQUEST, "An organization with this prefix already exists")
+
+        try:
+            User.objects.create_user(username, password, is_staff=False, is_active=True)
+            create_org(org_name, prefix, username)
+            new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
+            quota_mb = int(quota)
+            quota = quota_mb * (1 << 20)
+
+            from seahub_extra.organizations.models import OrgMemberQuota
+            OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
+            seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)
+            return Response('success', status=status.HTTP_201_CREATED)
+        except Exception as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
 
 #Following is only for debug
 # from seahub.auth.decorators import login_required

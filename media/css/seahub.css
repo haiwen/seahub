@@ -1366,6 +1366,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     padding:5px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    white-space:nowrap;
 }
 #lang-context-selector a,
 #to-group a {
@@ -1547,6 +1548,14 @@ textarea:-moz-placeholder {/* for FF */
 
 /*** for separate pages ***/
 /* login */
+#lang {
+    font-weight:normal;
+    font-size:13px;
+    margin-top:12px;
+}
+#lang-context:hover {
+    text-decoration:none;
+}
 .captcha {
     float:right;
 }
@@ -1900,13 +1909,6 @@ textarea:-moz-placeholder {/* for FF */
 .file-choose-form {
     width:500px;
     padding:10px 20px;
-}
-.perm-dir-tree-cont {
-    padding:5px;
-    height:100px;
-    overflow:auto;
-    border:1px solid #eee;
-    margin:5px 0 10px;
 }
 .file-tree-cont, .dir-tree-cont {
     padding:5px;
@@ -3430,16 +3432,13 @@ textarea:-moz-placeholder {/* for FF */
 .group-perm-add-tr input {
     padding:2px 5px;
 }
+#perm-add-grp-name {
+    width: 95%;
+}
 .perm-add-select-folder {
     position:relative;
     right:18px;
     cursor:pointer;
-}
-.perm-add-jstree-select {
-    margin-top:8px;
-}
-#perm-add-jstree-wrap {
-    background:#fcfcfc;
 }
 
 /* file audit*/
@@ -3561,6 +3560,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .select2-result-label .text {
     display:inline-block;
+    width:calc(100% - 42px);
 }
 .select2-results .select2-result-label .avatar {
     margin-right:10px;
@@ -3591,4 +3591,58 @@ textarea:-moz-placeholder {/* for FF */
 }
 #download-link-operations dt {
     margin: 0;
+}
+#top-browser-tip {
+    padding:7px 4px;
+    background:#fff1a8;
+    text-align:center;
+    border-bottom:1px solid #ccc;
+    margin:0;
+}
+#top-browser-tip .close {
+    display:inline-block;
+    margin-left:10px;
+    cursor:pointer;
+    color:#15c;
+}
+
+/* user profile */
+.profile-avatar-container {
+    padding:25px;
+    border:2px solid #ddd;
+    border-radius:3px;
+    text-align:center;
+    line-height:0;
+    margin-bottom:10px;
+}
+/* shared upload link */
+#upload-link-panel {
+    width:600px;
+    padding:10px 20px 20px;
+}
+#upload-link-panel .avatar {
+    vertical-align: middle;
+}
+/* sysadmin */
+#import-users-btn .icon-upload-alt {
+    color:#777;
+    margin-right:3px;
+}
+#traffic-month-form {
+    margin-top:10px;
+}
+#traffic-month-form .input {
+    width:100px;
+}
+/* guide for new */
+#guide-for-new {
+    padding: 0 20px;
+    width: 450px;
+}
+#guide-for-new .icon-lightbulb {
+    font-size:6em;
+    color:#feac74;
+}
+#guide-for-new .txt {
+    margin-left:6.4em;
 }

@@ -1,32 +1,50 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
-import sys
-from hashlib import md5, sha1
-from base64 import urlsafe_b64encode as b64encode
+"""Lifted from https://github.com/django/django/blob/master/django/core/management/commands/startproject.py#L30
+"""
+import hashlib
 import random
-random.seed()
+import sys
+import time
 
-def random_string():
-    """
-    Generate a random string (currently a random number as a string)
-    """
-    return str(random.randint(0,100000))
+# Use the system PRNG if possible
+try:
+    random = random.SystemRandom()
+    using_sysrandom = True
+except NotImplementedError:
+    import warnings
+    warnings.warn('A secure pseudo-random number generator is not available '
+                  'on your system. Falling back to Mersenne Twister.')
+    using_sysrandom = False
 
-def generate_key(max_length, data, encoder=b64encode, digester=md5):
+def get_random_string(length=12,
+                      allowed_chars='abcdefghijklmnopqrstuvwxyz'
+                                    'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'):
     """
-    Generate a Base64-encoded 'random' key by hashing the data.
-    data is a tuple of seeding values. Pass arbitrary encoder and
-    digester for specific hashing and formatting of keys
+    Returns a securely generated random string.
+
+    The default length of 12 with the a-z, A-Z, 0-9 character set returns
+    a 71-bit value. log_2((26+26+10)^12) =~ 71 bits
     """
-    base = ''
-    for arg in data:
-        base += str(arg)
-    key = encoder(digester(base).digest())
-    return key[:max_length]
+    if not using_sysrandom:
+        # This is ugly, and a hack, but it makes things better than
+        # the alternative of predictability. This re-seeds the PRNG
+        # using a value that is hard for an attacker to predict, every
+        # time a random string is required. This may change the
+        # properties of the chosen random sequence slightly, but this
+        # is better than absolute predictability.
+        random.seed(
+            hashlib.sha256(
+                ("%s%s%s" % (
+                    random.getstate(),
+                    time.time(),
+                    '')).encode('utf-8')
+            ).digest())
+    return ''.join(random.choice(allowed_chars) for i in range(length))
 
 if __name__ == "__main__":
-    key = generate_key(40, (random_string(),))
+    chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*(-_=+)'
+    key = get_random_string(50, chars)
     if len(sys.argv) == 2:
         fp = open(sys.argv[1], 'w')
         fp.write("SECRET_KEY = \"%s\"\n" % key)

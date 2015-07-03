@@ -83,20 +83,11 @@ def edit_profile(request):
             }, context_instance=RequestContext(request))
 
 @login_required
-def user_profile(request, username_or_id):
-    # fetch the user by username or id, try id first
-    user = None    
+def user_profile(request, username):
     try:
-        user_id = int(username_or_id)
-        try:
-            user = User.objects.get(id=user_id)
-        except:
-            pass
-    except ValueError:
-        try:
-            user = User.objects.get(email=username_or_id)
-        except User.DoesNotExist:
-            pass
+        user = User.objects.get(email=username)
+    except User.DoesNotExist:
+        user = None
 
     nickname = '' if user is None else email2nickname(user.username)
 
@@ -105,24 +96,14 @@ def user_profile(request, username_or_id):
         intro = profile.intro if profile else ''
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
             user.username)
-
-        if user.username == request.user.username:
-            add_to_contacts = False
-        else:
-            c = Contact.objects.get_contact_by_user(request.user.username,
-                                                    user.username)
-            add_to_contacts = True if c is None else False
     else:
         intro = _(u'Has not accepted invitation yet')
         d_profile = None
-        add_to_contacts = False
 
     return render_to_response('profile/user_profile.html', {
-            'username_or_id': username_or_id,
             'user': user,
             'nickname': nickname,
             'intro': intro,
-            'add_to_contacts': add_to_contacts,
             'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 
@@ -162,6 +143,9 @@ def get_user_profile(request, user):
 
 @login_required
 def delete_user_account(request):
+    if request.method != 'POST':
+        raise Http404
+
     username = request.user.username
 
     if username == 'demo@seafile.com':

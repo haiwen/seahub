@@ -273,6 +273,7 @@ define([
                     site_root: app.pageOptions.site_root,
                     is_repo_owner: dir.is_repo_owner,
                     is_virtual: dir.is_virtual,
+                    can_generate_shared_link: app.pageOptions.can_generate_shared_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },
@@ -608,7 +609,7 @@ define([
                     op_type: op,
                     obj_type: '',
                     obj_name: '',
-                    show_other_repos: !dir.encrypted,
+                    show_other_repos: !dir.encrypted
                 }));
                 form.modal({appendTo:'#main', autoResize:true, focus:false});
                 $('#simplemodal-container').css({'width':'auto', 'height':'auto'});

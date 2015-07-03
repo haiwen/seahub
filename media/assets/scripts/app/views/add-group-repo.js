@@ -19,7 +19,7 @@ define([
             var baseAttrs = AddRepoView.prototype.newAttributes.apply(this);
 
             return _.extend(baseAttrs, {'permission': $('select[name=permission]', this.$el).val()});
-        },
+        }
 
     });
 

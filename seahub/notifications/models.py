@@ -2,6 +2,7 @@
 import datetime
 import os
 import json
+import logging
 
 from django.db import models
 from django.db.models.signals import post_save
@@ -16,6 +17,8 @@ from seaserv import seafile_api
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
 
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 ########## system notification
 class Notification(models.Model):
@@ -477,7 +480,12 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
         """
-        d = json.loads(self.detail)
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
         filename = d['file_name']
         repo_id = d['repo_id']
         repo = seafile_api.get_repo(repo_id)
@@ -514,7 +522,12 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
         """
-        d = json.loads(self.detail)
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
         share_from = email2nickname(d['share_from'])
         repo_id = d['repo_id']
 
@@ -536,7 +549,12 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
         """
-        d = json.loads(self.detail)
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
         share_from = email2nickname(d['share_from'])
         file_name = d['file_name']
         priv_share_token = d['priv_share_token']
@@ -695,7 +713,12 @@ class UserNotification(models.Model):
         Arguments:
         - `self`:
         """
-        d = json.loads(self.detail)
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
         username = d['username']
         group_id = d['group_id']
         join_request_msg = d['join_request_msg']

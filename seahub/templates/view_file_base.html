@@ -5,7 +5,6 @@
 {% block sub_title %}{{filename}} - {% endblock %}
 
 {% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/select2.css?t=1393578720" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 <style type="text/css">                                                
 #header, #footer { display:none; }
@@ -45,7 +44,7 @@
     <div id="file">
         <div id="file-op">
             <div class="commit fleft">
-                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor|id_or_email %}" class="name">{{ latest_contributor|email2nickname }}</a>
+                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a>
                 <span class="time">{{ last_modified|translate_seahub_time}}</span>
                 {% block update_detail %}
                 {% if last_commit_id %}
@@ -56,7 +55,9 @@
             </div>
 
             {% if not repo.encrypted %}
+            {% if request.user.permissions.can_generate_shared_link %}
             <button id="share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
+            {% endif %}
             {% endif %}
 
             {% if user_perm == 'rw' %}
@@ -95,7 +96,6 @@
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 {% if highlight_keyword %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
@@ -175,8 +175,6 @@ function setToolbarPos() {
 $(window).load(setToolbarPos).resize(setToolbarPos);
 
 {% if filetype == 'PDF' and use_pdfjs %}
-{% elif filetype == 'PDF' and not use_pdfjs and not html_exists %}
-{% elif filetype == 'Document' and not html_exists %}
 {% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');

@@ -4,22 +4,6 @@
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
 
-{% block extra_style %}
-<style type="text/css">
-#guide-for-new {
-    padding: 0 20px;
-    width: 450px;
-}
-#guide-for-new .icon-lightbulb {
-    font-size:6em;
-    color:#feac74;
-}
-#guide-for-new .txt {
-    margin-left:6.4em;
-}
-</style>
-{% endblock %}
-
 {% block main_panel %}
 <div id="initial-loading-view">
     <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
@@ -56,7 +40,9 @@
             <li class="tab"><a href="#shared-libs/" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
         </ul>
         <div class="fright">
+            {% if user.permissions.can_add_repo %}
             <button class="repo-create"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+            {% endif %}
             {% if sub_lib_enabled %}
             <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
             {% endif %}
@@ -251,6 +237,7 @@ app["pageOptions"] = {
     username: "{{request.user.username}}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     can_add_repo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
+    can_generate_shared_link: {% if user.permissions.can_generate_shared_link %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},

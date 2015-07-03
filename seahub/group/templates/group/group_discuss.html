@@ -37,14 +37,14 @@
     <ul class="msg-list">
     {% for msg in group_msgs.object_list %}
         <li class="msg w100 ovhd" data-id="{{msg.id}}">
-        <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
+        <a href="{% url 'user_profile' msg.from_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
                     {% if is_staff or msg.from_email == request.user.username %}
                     <span class="msg-del op fright vh">{% trans "Delete" %}</span>
                     {% endif %}
-                    <a href="{% url 'user_profile' msg.from_email|id_or_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
+                    <a href="{% url 'user_profile' msg.from_email %}" class="author">{{ msg.from_email|email2nickname }}</a>
                     <span class="time">{{ msg.timestamp|translate_seahub_time }}</span>
                 </div>
                 <p class="msg-con">{{ msg.message|seahub_urlize|find_at|linebreaksbr }}</p>
@@ -92,7 +92,7 @@
                 <ul class="reply-list">
                     {% for r in msg.replies %}
                     <li class="reply w100 ovhd">
-                    {% with id=r.from_email|id_or_email name=r.from_email|email2nickname %}
+                    {% with id=r.from_email name=r.from_email|email2nickname %}
                     <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
                     <div class="txt">
                         <a href="{% url 'user_profile' id %}">{{ name }}</a>
@@ -145,12 +145,12 @@
     {% if request.user.is_authenticated %}
     <ul class="new-msg-list hide">
         <li class="msg w100 ovhd hide">
-        <a href="{% url 'user_profile' request.user.username|id_or_email %}" class="pic fleft">{% avatar request.user.username 48 %}</a>
+        <a href="{% url 'user_profile' request.user.username %}" class="pic fleft">{% avatar request.user.username 48 %}</a>
         <div class="txt">
             <div class="msg-main">
                 <div class="msg-hd w100 ovhd">
                     <span class="msg-del op fright vh">{% trans "Delete" %}</span>
-                    <a href="{% url 'user_profile' request.user.username|id_or_email %}" class="author">{{ request.user.username|email2nickname }}</a>
+                    <a href="{% url 'user_profile' request.user.username %}" class="author">{{ request.user.username|email2nickname }}</a>
                     <span class="time">{% trans "Just now" %}</span>
                 </div>
                 <span class="say"></span>

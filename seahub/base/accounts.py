@@ -84,12 +84,14 @@ class UserManager(object):
 
         user = User(emailuser.email)
         user.id = emailuser.id
+        user.enc_password = emailuser.password
         user.is_staff = emailuser.is_staff
         user.is_active = emailuser.is_active
         user.ctime = emailuser.ctime
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
+        user.source = emailuser.source
 
         return user
 
@@ -101,6 +103,9 @@ class UserPermissions(object):
         return True
 
     def can_add_group(self):
+        return True
+
+    def can_generate_shared_link(self):
         return True
 
     def can_view_org(self):
@@ -147,7 +152,14 @@ class User(object):
         if emailuser:
             if not hasattr(self, 'password'):
                 self.set_unusable_password()
-            ccnet_threaded_rpc.update_emailuser(emailuser.id,
+
+            if emailuser.source == "DB":
+                source = "DB"
+            else:
+                source = "LDAP"
+
+            ccnet_threaded_rpc.update_emailuser(source,
+                                                emailuser.id,
                                                 self.password,
                                                 int(self.is_staff),
                                                 int(self.is_active))
@@ -161,7 +173,12 @@ class User(object):
         When delete user, we should also delete group relationships.
         """
         # TODO: what about repos and groups?
-        ccnet_threaded_rpc.remove_emailuser(self.username)
+        if self.source == "DB":
+            source = "DB"
+        else:
+            source = "LDAP"
+
+        ccnet_threaded_rpc.remove_emailuser(source, self.username)
         Profile.objects.delete_profile_by_user(self.username)
 
     def get_and_delete_messages(self):

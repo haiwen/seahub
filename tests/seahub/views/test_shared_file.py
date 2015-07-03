@@ -1,7 +1,9 @@
 # encoding: utf-8
 import os
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
+import requests
 
 from seahub.share.models import FileShare, PrivateFileDirShare
 from seahub.test_utils import Fixtures
@@ -37,11 +39,48 @@ class SharedFileTest(TestCase, Fixtures):
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
 
+    def test_dl_link_can_use_more_times(self):
+        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
+        resp = self.client.get(dl_url)
+        self.assertEqual(302, resp.status_code)
+
+        dl_link = resp.get('location')
+        res = requests.get(dl_link)
+        self.assertEqual(200, res.status_code)
+
+        res = requests.get(dl_link)
+        self.assertEqual(200, res.status_code)
+
     def test_can_view_raw(self):
         dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?raw=1'
         resp = self.client.get(dl_url)
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
+
+    def test_can_render_when_remove_parent_dir(self):
+        """Issue https://github.com/haiwen/seafile/issues/1283
+        """
+        # create a file in a folder
+        self.create_file(repo_id=self.repo.id,
+                         parent_dir=self.folder,
+                         filename='file.txt',
+                         username=self.user.username)
+        # share that file
+        share_file_info = {
+            'username': self.user.username,
+            'repo_id': self.repo.id,
+            'path': os.path.join(self.folder, 'file.txt'),
+            'password': None,
+            'expire_date': None,
+        }
+        fs = FileShare.objects.create_file_link(**share_file_info)
+        resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
+        self.assertEqual(200, resp.status_code)
+
+        # then delete parent folder, see whether it raises error
+        self.remove_folder()
+        resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
+        self.assertEqual(200, resp.status_code)
 
 
 class FileViaSharedDirTest(TestCase, Fixtures):

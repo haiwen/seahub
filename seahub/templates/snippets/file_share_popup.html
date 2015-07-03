@@ -7,27 +7,12 @@
                 {% if user_perm == 'rw' %}
                 <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Upload Link" %}</a></li>{# for dir #}
                 {% endif %}
-                {% if is_repo_owner %}
-                <li class="tab" id="private-share-tab"><a href="#private-share" class="a">{% trans "Private Share" %}</a></li> {# for file #}
-                {% endif %}
                 {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
                 <li class="tab" id="syncable-share-tab"><a href="#syncable-share" class="a">{% trans "Private Share" %}</a></li> {# for dir #}
                 {% endif %}
             </ul>
 
             <div class="fright">
-            {% if is_repo_owner %}
-            <div id="private-share" class="tabs-panel">
-                <form id="private-share-form" method="post" action="{% url 'gen_private_file_share' repo.id %}">{% csrf_token %}
-                    <select name="emails" class="w100" multiple="multiple"></select><br />
-                    <input type="hidden" name="repo_id" value="" />
-                    <input type="hidden" name="s_type" value="" />
-                    <input type="hidden" name="path" value="" />
-                    <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Submit"%}" />
-                </form>
-            </div>
-            {% endif %}
 
             <div id="link-share" class="tabs-panel">
                 <div id="link-options">

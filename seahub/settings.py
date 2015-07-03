@@ -454,6 +454,11 @@ PREVIEW_DEFAULT_SIZE = '100'
 THUMBNAIL_IMAGE_SIZE_LIMIT = 30
 
 #####################
+# Global AddressBook #
+#####################
+ENABLE_GLOBAL_ADDRESSBOOK = True
+
+#####################
 # Folder Permission #
 #####################
 ENABLE_FOLDER_PERM = False
@@ -498,8 +503,6 @@ get_events_conf_file()
 ENABLE_PUBFILE = False
 
 ENABLE_SUB_LIBRARY = True
-
-ENABLE_GUEST = False
 
 ############################
 # Settings for Seahub Priv #

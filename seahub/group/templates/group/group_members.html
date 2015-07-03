@@ -7,26 +7,22 @@
 <div class="hd">
 <h3 class="fleft">{% trans "Members" %}</h3>
 {% if group.view_perm != 'pub' and not is_staff %}
-<button id="quit-group" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Quit" %}</button>
+<button id="quit-group" data-url="{% url 'group_quit' group.id %}" class="fright">{% trans "Leave group" %}</button>
 {% endif %}
 </div>
 <ul class="user-list">
     {% for m in members %}
-    {% with e=m.user_name id=m.user_name|id_or_email %}
+    {% with e=m.user_name id=m.user_name %}
     <li class="user ovhd">
     <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar e 48 %}</a>
     <div class="txt fright">
         <a class="name" href="{% url 'user_profile' id %}">{{ e|email2nickname }}</a>
         <p>{{ e }}</p>
-        {% if m.can_be_contact %}
-        <button class="add-to-contacts" data-email="{{ e }}">{% trans "Add to Contacts" %}</button>
-        {% endif %}
     </div>
     </li>
     {% endwith %}
     {% endfor %}
 </ul>
-{% include 'snippets/add_to_contacts_form.html' %}
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
@@ -37,5 +33,4 @@ addConfirmTo($('#quit-group'), {
 });
 </script>
 
-{% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

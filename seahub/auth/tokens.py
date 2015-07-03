@@ -1,7 +1,7 @@
 from datetime import date
 from django.conf import settings
 from django.utils.http import int_to_base36, base36_to_int
-from django.utils.crypto import salted_hmac
+from django.utils.crypto import constant_time_compare, salted_hmac
 from django.utils import six
 
 from seahub.base.models import UserLastLogin
@@ -34,7 +34,7 @@ class PasswordResetTokenGenerator(object):
             return False
 
         # Check that the timestamp/uid has not been tampered with
-        if self._make_token_with_timestamp(user, ts) != token:
+        if not constant_time_compare(self._make_token_with_timestamp(user, ts), token):
             return False
 
         # Check the timestamp is within limit
@@ -65,8 +65,8 @@ class PasswordResetTokenGenerator(object):
             login_dt = dt(user.ctime)
         login_timestamp = login_dt.replace(microsecond=0, tzinfo=None)
 
-        value = (six.text_type(user.id) +
-                six.text_type(login_timestamp) + six.text_type(timestamp))
+        value = (six.text_type(user.id) + user.enc_password +
+                 six.text_type(login_timestamp) + six.text_type(timestamp))
         hash = salted_hmac(key_salt, value).hexdigest()[::2]
         return "%s-%s" % (ts_b36, hash)
 

@@ -32,7 +32,6 @@
     "Delete Items": "Usu\u0144 elementy", 
     "Delete succeeded.": "Usuni\u0119to pomy\u015blnie.", 
     "Empty file upload result": "Wynik przesy\u0142ania pustego pliku", 
-    "Enter emails or select contacts": "Podaj adresy e-mail lub wybierz kontakty", 
     "Error": "B\u0142\u0105d", 
     "Failed to copy %(name)s": "Nie mo\u017cna skopiowa\u0107 %(name)s", 
     "Failed to delete %(name)s and %(amount)s other items.": "Nie uda\u0142o si\u0119 usun\u0105\u0107 %(name)s i %(amount)s innych element\u00f3w.", 

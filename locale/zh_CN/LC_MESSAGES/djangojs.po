@@ -4,12 +4,13 @@
 # 
 # Translators:
 # Alfred <alfredhuang211@qq.com>, 2015
+# zheng xie <xiez1989@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-27 15:19+0800\n"
-"PO-Revision-Date: 2015-05-27 07:22+0000\n"
+"POT-Creation-Date: 2015-06-18 10:25+0800\n"
+"PO-Revision-Date: 2015-06-18 02:37+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Chinese (China) (http://www.transifex.com/projects/p/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -18,7 +19,7 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-#: static/scripts/common.js:155 static/scripts/common.js.c:245
+#: static/scripts/common.js:156 static/scripts/common.js.c:246
 #: static/scripts/app/views/dir.js:803 static/scripts/app/views/dir.js.c:860
 #: static/scripts/app/views/dirent.js:398
 #: static/scripts/app/views/dirent.js:424
@@ -28,16 +29,16 @@ msgstr ""
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
-#: static/scripts/app/views/myhome-sub-repos.js:164
+#: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
-#: static/scripts/app/views/starred-file-item.js:53
+#: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "操作失败。请检查网络是否已连接。"
 
-#: static/scripts/common.js:508
-msgid "Enter emails or select contacts"
-msgstr "输入邮箱或选择联系人"
+#: static/scripts/common.js:499
+msgid "Search users or enter emails"
+msgstr "搜索用户或输入邮箱"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
@@ -100,7 +101,7 @@ msgstr "<a href=\"%url%\" target=\"_blank\">图片</a> 无法被加载。"
 #: static/scripts/app/views/myhome-repos.js:92
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78
-#: static/scripts/app/views/organization.js:101
+#: static/scripts/app/views/organization.js:123
 msgid "Please check the network."
 msgstr "请检查网络是否已连接。"
 
@@ -120,7 +121,7 @@ msgstr "必填项。"
 #: static/scripts/app/views/fileupload.js:312
 #: static/scripts/app/views/fileupload.js:324
 #: static/scripts/app/views/fileupload.js:336
-#: static/scripts/app/views/myhome-sub-repos.js:153
+#: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr "刚才"
 
@@ -146,15 +147,15 @@ msgstr "成功删除 %(name)s 和其他 %(amount)s 项内容。"
 
 #: static/scripts/app/views/dir.js:572
 msgid "Failed to delete %(name)s."
-msgstr ""
+msgstr "删除 %(name)s 失败。"
 
 #: static/scripts/app/views/dir.js:574
 msgid "Failed to delete %(name)s and 1 other item."
-msgstr ""
+msgstr "删除 %(name)s 以及另外1项失败。"
 
 #: static/scripts/app/views/dir.js:576
 msgid "Failed to delete %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "删除 %(name)s 以及另外 %(amount)s 项失败。"
 
 #: static/scripts/app/views/dir.js:589
 msgid "Delete Items"
@@ -298,7 +299,7 @@ msgstr "空文件"
 #: static/scripts/app/views/myhome-repos.js:89
 #: static/scripts/app/views/myhome-shared-repos.js:76
 #: static/scripts/app/views/myhome-sub-repos.js:75
-#: static/scripts/app/views/organization.js:98
+#: static/scripts/app/views/organization.js:120
 msgid "Error"
 msgstr "错误"
 
@@ -368,7 +369,7 @@ msgstr "成功取消共享 {placeholder}"
 #: static/scripts/app/views/myhome-repos.js:87
 #: static/scripts/app/views/myhome-shared-repos.js:74
 #: static/scripts/app/views/myhome-sub-repos.js:73
-#: static/scripts/app/views/organization.js:96
+#: static/scripts/app/views/organization.js:118
 msgid "Permission error"
 msgstr "权限错误"
 
@@ -428,6 +429,6 @@ msgstr "请选择联系人或群组"
 msgid "Success"
 msgstr "成功"
 
-#: static/scripts/app/views/starred-file-item.js:46
+#: static/scripts/app/views/starred-file-item.js:45
 msgid "Successfully unstared {placeholder}"
 msgstr "成功取消星标 {placeholder}"

@@ -70,6 +70,7 @@ class TokenAuthentication(BaseAuthentication):
             user.permissions.can_add_repo = lambda: False
             user.permissions.can_add_group = lambda: False
             user.permissions.can_view_org = lambda: False
+            user.permissions.can_generate_shared_link = lambda: False
 
     def authenticate_v1(self, request, key):
         try:

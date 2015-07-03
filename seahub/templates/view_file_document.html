@@ -1,5 +1,6 @@
 {% extends 'view_file_base.html' %}
 {% load i18n%}
+{% load staticfiles %}
 
 {% block extra_style %}{{ block.super }}
 {% if not err %}
@@ -15,7 +16,6 @@
 
 {% block extra_script %}{{ block.super }}
 {% if not err %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/pdf2html.js"></script>
 <script type="text/javascript">
     {% include 'snippets/office_convert_js.html' %}
 </script>

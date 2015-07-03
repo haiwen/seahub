@@ -1,14 +1,6 @@
 {% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
 {% block cur_users %}tab-cur{% endblock %}
-{% block extra_style %}
-<style type="text/css">
-#upload-file-btn .icon-upload-alt {
-    color:#777;
-    margin-right:3px;
-}
-</style>
-{% endblock %}
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'user_search' %}" method="get" class="side-search-form">
@@ -22,11 +14,12 @@
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin' %}">{% trans "Database" %}</a></li>
         {% if have_ldap %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap' %}">{% trans "LDAP" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
         {% endif %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
     <div class="fright">
-        <button id="upload-file-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
+        <button id="import-users-btn"><span class="icon-upload-alt"></span>{% trans "Import users" %}</button>
         <button id="add-user-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add user" %}</span></button>
     </div>
 </div>
@@ -35,7 +28,7 @@
     <h3>{% trans "Add user" %}</h3>
     <label for="id_email">{% trans "Email" %}</label><br />
     <input type="text" name="email" id="id_email" class="input" /><br />
-    {% if enable_guest %}
+    {% if is_pro %}
     <label>{% trans "Role"%}</label><span class="icon-question-sign" title="{% trans "You can also add a user as a guest, who will not be allowed to create libraries and groups." %}" style="color:#666; margin-left:3px;"></span>
     <select name="role" class="w100">
         <option value={{default_user}} selected="selected">{% trans "Default"%}</option>
@@ -43,9 +36,9 @@
     </select><br />
     {% endif %}
     <label for="id_password1">{% trans "Password" %}</label><br />
-    <input type="password" name="password1" id="id_password1" class="input" /><br />    
+    <input type="password" name="password1" id="id_password1" class="input" /><br />
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
-    <input type="password" name="password2" id="id_password2" class="input" /><br />    
+    <input type="password" name="password2" id="id_password2" class="input" /><br />
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
@@ -58,7 +51,9 @@
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
-{% include "sysadmin/useradmin_table.html"%}
+{% with is_admin_page=False%}
+{% include "sysadmin/useradmin_table.html" %}
+{% endwith %}
 {% include "snippets/admin_paginator.html" %}
 
 <div id="activate-msg" class="hide">
@@ -88,7 +83,7 @@ $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
         email = $.trim(form.children('[name="email"]').val()),
-        {% if enable_guest %}
+        {% if is_pro %}
         role = $('select[name="role"]', form).val(),
         {% endif %}
         pwd1 = $.trim(form.children('[name="password1"]').val()),
@@ -121,7 +116,7 @@ $('#add-user-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,
-            {% if enable_guest %}
+            {% if is_pro %}
             'role': role,
             {% endif %}
             'password1': pwd1,
@@ -143,7 +138,7 @@ $('#add-user-form').submit(function() {
     });
     return false;
 });
-$('#upload-file-btn').click(function () {
+$('#import-users-btn').click(function () {
     $('#upload-csv-form').modal();
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });

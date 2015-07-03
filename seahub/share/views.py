@@ -103,8 +103,9 @@ def share_to_group(request, repo, group, permission):
         group_repo_ids = seafile_api.get_org_group_repoids(org_id, group.id)
     else:
         group_repo_ids = seafile_api.get_group_repoids(group.id)
+
     if repo.id in group_repo_ids:
-        return
+        return False
 
     try:
         if is_org_context(request):
@@ -114,8 +115,10 @@ def share_to_group(request, repo, group, permission):
         else:
             seafile_api.set_group_repo(repo_id, group_id, from_user,
                                        permission)
+        return True
     except Exception, e:
         logger.error(e)
+        return False
 
 def share_to_user(request, repo, to_user, permission):
     """Share repo to a user with given permission.
@@ -124,16 +127,16 @@ def share_to_user(request, repo, to_user, permission):
     from_user = request.user.username
 
     if from_user == to_user:
-        return
+        return False
 
     # permission check
     if is_org_context(request):
         org_id = request.user.org.org_id
         if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, to_user):
-            return
+            return False
     else:
         if not is_registered_user(to_user):
-            return
+            return False
 
     try:
         if is_org_context(request):
@@ -142,12 +145,14 @@ def share_to_user(request, repo, to_user, permission):
         else:
             seafile_api.share_repo(repo_id, from_user, to_user, permission)
     except SearpcError as e:
+            return False
             logger.error(e)
     else:
         # send a signal when sharing repo successful
         share_repo_to_user_successful.send(sender=None,
                                            from_user=from_user,
                                            to_user=to_user, repo=repo)
+        return True
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
     """Check whether user has enough share quota when share repo to
@@ -252,16 +257,16 @@ def share_repo(request):
         return HttpResponseRedirect(next)
 
     for group in share_to_groups:
-        share_to_group(request, repo, group, permission)
-        send_perm_audit_msg('add-repo-perm', username, group.id, \
-                            perm_repo_id, perm_path, permission)
+        if share_to_group(request, repo, group, permission):
+            send_perm_audit_msg('add-repo-perm', username, group.id, \
+                                perm_repo_id, perm_path, permission)
 
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        share_to_user(request, repo, email, permission)
-        send_perm_audit_msg('add-repo-perm', username, email, \
-                            perm_repo_id, perm_path, permission)
+        if share_to_user(request, repo, email, permission):
+            send_perm_audit_msg('add-repo-perm', username, email, \
+                                perm_repo_id, perm_path, permission)
 
     return HttpResponseRedirect(next)
 
@@ -1174,44 +1179,44 @@ def save_private_file_share(request, token):
         next = SITE_ROOT
     return HttpResponseRedirect(next)
 
-@login_required
-def user_share_list(request, id_or_email):
-    """List sharing repos with ``to_email``.
-    """
-    try:
-        uid = int(id_or_email)
-        try:
-            user = User.objects.get(id=uid)
-        except User.DoesNotExist:
-            user = None
-        if not user:
-            return render_to_response("user_404.html", {},
-                                      context_instance=RequestContext(request))
-        to_email = user.email
-    except ValueError:
-        to_email = id_or_email
+# @login_required
+# def user_share_list(request, id_or_email):
+#     """List sharing repos with ``to_email``.
+#     """
+#     try:
+#         uid = int(id_or_email)
+#         try:
+#             user = User.objects.get(id=uid)
+#         except User.DoesNotExist:
+#             user = None
+#         if not user:
+#             return render_to_response("user_404.html", {},
+#                                       context_instance=RequestContext(request))
+#         to_email = user.email
+#     except ValueError:
+#         to_email = id_or_email
 
-    share_list = []
-    username = request.user.username
-    share_in = seafile_api.get_share_in_repo_list(username, -1, -1)
-    for e in share_in:
-        if e.share_type == 'personal' and e.user == to_email:
-            e.share_in = True
-            share_list.append(e)
-    share_out = seafile_api.get_share_out_repo_list(username, -1, -1)
-    for e in share_out:
-        if e.share_type == 'personal' and e.user == to_email:
-            e.share_out = True
-            share_list.append(e)
+#     share_list = []
+#     username = request.user.username
+#     share_in = seafile_api.get_share_in_repo_list(username, -1, -1)
+#     for e in share_in:
+#         if e.share_type == 'personal' and e.user == to_email:
+#             e.share_in = True
+#             share_list.append(e)
+#     share_out = seafile_api.get_share_out_repo_list(username, -1, -1)
+#     for e in share_out:
+#         if e.share_type == 'personal' and e.user == to_email:
+#             e.share_out = True
+#             share_list.append(e)
 
-    c = Contact.objects.get_contact_by_user(username, to_email)
-    add_to_contacts = True if c is None else False
+#     c = Contact.objects.get_contact_by_user(username, to_email)
+#     add_to_contacts = True if c is None else False
 
-    return render_to_response('share/user_share_list.html', {
-            'to_email': to_email,
-            'share_list': share_list,
-            'add_to_contacts': add_to_contacts,
-            }, context_instance=RequestContext(request))
+#     return render_to_response('share/user_share_list.html', {
+#             'to_email': to_email,
+#             'share_list': share_list,
+#             'add_to_contacts': add_to_contacts,
+#             }, context_instance=RequestContext(request))
 
 @login_required_ajax
 def get_shared_upload_link(request):
@@ -1362,6 +1367,12 @@ def ajax_get_upload_link(request):
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
+
+        if not request.user.permissions.can_generate_shared_link():
+            err = _('You do not have permission to generate shared link')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=403, content_type=content_type)
+
         repo_id = request.POST.get('repo_id', '')
         path = request.POST.get('p', '')
         use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
@@ -1428,6 +1439,12 @@ def ajax_get_download_link(request):
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
+
+        if not request.user.permissions.can_generate_shared_link():
+            err = _('You do not have permission to generate shared link')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=403, content_type=content_type)
+
         repo_id = request.POST.get('repo_id', '')
         share_type = request.POST.get('type', 'f')  # `f` or `d`
         path = request.POST.get('p', '')
@@ -1561,12 +1578,16 @@ def ajax_private_share_dir(request):
     for email in share_to_users:
         # Add email to contacts.
         mail_sended.send(sender=None, user=request.user.username, email=email)
-        share_to_user(request, shared_repo, email, perm)
-        shared_success.append(email)
+        if share_to_user(request, shared_repo, email, perm):
+            shared_success.append(email)
+        else:
+            shared_failed.append(email)
 
     for group in share_to_groups:
-        share_to_group(request, shared_repo, group, perm)
-        shared_success.append(group.group_name)
+        if share_to_group(request, shared_repo, group, perm):
+            shared_success.append(group.group_name)
+        else:
+            shared_failed.append(group.group_name)
 
     if len(shared_success) > 0:
         return HttpResponse(json.dumps({

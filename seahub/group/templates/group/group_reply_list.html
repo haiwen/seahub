@@ -2,7 +2,7 @@
 {% load url from future %}
 
 {% for r in replies %}
-{% with id=r.from_email|id_or_email name=r.from_email|email2nickname %}
+{% with id=r.from_email name=r.from_email|email2nickname %}
 <li class="reply w100 ovhd">
 <a href="{% url 'user_profile' id %}" class="pic fleft">{% avatar r.from_email 28 %}</a>
 <div class="txt">

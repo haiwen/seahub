@@ -1,37 +1,14 @@
 {% extends "profile/profile_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
-{% block extra_style %}
-<style type="text/css">
-.avatar-cont {
-    padding:25px;
-    border:2px solid #ddd;
-    border-radius:3px;
-    text-align:center;
-}
-.add-to-contacts, #send-msg {
-    margin-top:8px;
-}
-</style>
-{% endblock %}
-
 {% block left_panel %}
-<div class="avatar-cont">
+<div class="profile-avatar-container">
     {% if user %}
     {% avatar user.username 80 %}
     {% else %}
     {% avatar "" 80 %}
     {% endif %}
 </div>
-
-{% if add_to_contacts %}
-<button class="add-to-contacts w100" data-email="{{user.username}}">{% trans "Add to Contacts" %}</button>
-{% endif %}
-
-{% if user %}
-<button id="send-msg" class="w100">{% trans "Send message" %}</button>
-{% endif %}
-
 {% endblock %}
 
 {% block right_panel %}
@@ -53,19 +30,9 @@
     {% endif %}
 </dl>
 
-{% if add_to_contacts %}
-{% include 'snippets/add_to_contacts_form.html' %}
-{% endif %}
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-{% if user %}
-$('#send-msg').click(function() {
-    location.href = "{% url 'user_msg_list' username_or_id %}";
-});
-{% endif %}
 </script>
-{% include 'snippets/add_to_contacts_js.html' %}
 {% endblock %}

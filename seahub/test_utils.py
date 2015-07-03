@@ -1,3 +1,4 @@
+import os
 from uuid import uuid4
 
 from exam.decorators import fixture
@@ -11,6 +12,10 @@ class Fixtures(Exam):
     @fixture
     def user(self):
         return self.create_user('test@test.com')
+
+    @fixture
+    def admin(self):
+        return self.create_user('admin@test.com', is_staff=True)
 
     @fixture
     def repo(self):
@@ -31,6 +36,11 @@ class Fixtures(Exam):
                                   dirname='folder',
                                   username='test@test.com')
 
+    @fixture
+    def group(self):
+        return self.create_group(group_name='test_group',
+                                 username=self.user.username)
+
     def create_user(self, email=None, **kwargs):
         if not email:
             email = uuid4().hex + '@test.com'
@@ -41,8 +51,8 @@ class Fixtures(Exam):
 
         return User.objects.create_user(password='secret', **kwargs)
 
-    def remove_user(self, email):
-        ccnet_threaded_rpc.remove_emailuser(email)
+    def remove_user(self, email, source="DB"):
+        ccnet_threaded_rpc.remove_emailuser(email, source)
 
     def create_repo(self, **kwargs):
         repo_id = seafile_api.create_repo('test-repo', '',
@@ -59,3 +69,16 @@ class Fixtures(Exam):
     def create_folder(self, **kwargs):
         seafile_api.post_dir(**kwargs)
         return kwargs['parent_dir'] + kwargs['dirname']
+
+    def remove_folder(self):
+        seafile_api.del_file(self.repo.id, os.path.dirname(self.folder),
+                             os.path.basename(self.folder), self.user.username)
+
+    def create_group(self, **kwargs):
+        group_name = kwargs['group_name']
+        username = kwargs['username']
+        group_id = ccnet_threaded_rpc.create_group(group_name, username)
+        return ccnet_threaded_rpc.get_group(group_id)
+
+    def remove_group(self):
+        return ccnet_threaded_rpc.remove_group(self.group.id, self.user.username)
