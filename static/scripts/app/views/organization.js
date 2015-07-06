@@ -58,11 +58,9 @@ define([
         events: {
             'click #organization-repos .share-existing': 'addRepo',
             'click #organization-repos .create-new': 'createRepo',
-            'click #organization-repos .by-name': 'sortByName',
-            'mouseover .show-name': 'showName',
+            'click #organization-repos .show-name': 'sortByName',
             'mouseout .show-name': 'ifShowName',
-            'click #organization-repos .by-time': 'sortByTime',
-            'mouseover .show-time': 'showTime',
+            'click #organization-repos .show-time': 'sortByTime',
             'mouseout .show-time': 'ifShowTime'
 
         },
@@ -158,12 +156,8 @@ define([
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down');
+            el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
-        },
-
-        showName: function() {
-            $('.by-name').show();
         },
 
         ifShowName: function() {
@@ -186,13 +180,9 @@ define([
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down');
+            el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
         },
-
-        showTime: function() {
-            $('.by-time').show();
-            },
 
         ifShowTime: function() {
             if($('.by-name').css('display')=='inline'){

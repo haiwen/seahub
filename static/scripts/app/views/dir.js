@@ -293,11 +293,9 @@ define([
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
-                'click #by-name': 'sortByName',
-                'mouseover .show-name': 'showName',
+                'click .show-name': 'sortByName',
                 'mouseout .show-name': 'ifShowName',
-                'click #by-time': 'sortByTime',
-                'mouseover .show-time': 'showTime',
+                'click .show-time': 'sortByTime',
                 'mouseout .show-time': 'ifShowTime'
             },
 
@@ -476,12 +474,8 @@ define([
                 dirents.sort();
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
-                el.toggleClass('icon-caret-up icon-caret-down');
+                el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
-            },
-
-            showName: function() {
-                $('#by-name').show();
             },
 
             ifShowName: function() {
@@ -507,12 +501,8 @@ define([
                 dirents.sort();
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
-                el.toggleClass('icon-caret-up icon-caret-down');
+                el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
-            },
-
-            showTime: function() {
-                $('#by-time').show();
             },
 
             ifShowTime: function() {

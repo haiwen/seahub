@@ -351,6 +351,7 @@ define([
             var rdm_pwd=Math.random().toString(36).substr(2,8);
             $("input[name=password]").val(rdm_pwd);
             $("input[name=password_again]").val(rdm_pwd);
+            Common.feedback(gettext("random password generated"), 'success');
         },
 
         uploadLinkPanelInit: function() {

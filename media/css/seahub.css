@@ -49,6 +49,9 @@
 .icon-chevron-left:before         { content: "\f053"; }
 .icon-lock:before                 { content: "\f023"; }
 .icon-arrow-right:before          { content: "\f178"; }
+.icon-building:before             { content: "\f0f7"; }
+.icon-mobile:before               { content: "\f10b"; }
+.icon-magic:before                { content: "\f0d0"; }
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -757,7 +760,7 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    z-index:15; /* for repo.html: to show on top of fixed-hd */
+    z-index:1566; /* for repo.html: to show on top of fixed-hd */
 }
 .messages .info {
     padding:5px;
@@ -3598,7 +3601,7 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff1a8;
     text-align:center;
     border-bottom:1px solid #ccc;
-    margin:0;
+    margin: 0;
 }
 #top-browser-tip .close {
     display:inline-block;
@@ -3649,12 +3652,80 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* add random password */
 #generate-download-link-form .randompwd {
-    height: 28px;
-    line-height: 0.8;
-    margin-left: 8px;
-    cursor: pointer;
+    height:26px;
+    width:36px;
+    display:inline-block;
+    line-height:0.8;
+    cursor:pointer;
+    border:1px solid #ccc;
+    border-radius:4px;
+    position:relative;
+    left:8px;
+    top:-8px;
+}
+#generate-download-link-form .randompwd i {
+    position:relative;
+    left:12px;
+    top:10px;
 }
 /*switch sorting method */
-.by-name, #by-name {
-    display: none;
+.by-name, 
+#by-name {
+    display:none;
+}
+.show-name, 
+.show-time {
+    cursor:pointer;
+}
+/* profile for new */
+#profile-items {
+    width:290px;
+    box-shadow:0 1px 3px 0 #d4d4d5,0 0 0 1px #d4d4d5;
+    margin-left:70px;
+    border-radius:3px;
+}
+#profile-items p {
+    font-family:'FontAwesome';
+    padding:8px 15px;
+    margin:0;
+}
+#profile-items p:last-child {
+    padding-top:0;
+    padding-bottom:0;
+}
+.wg {
+    background:#F2F2F2 none repeat scroll 0% 0%;
+    height:39px;
+    line-height:39px;
+    border-radius:4px;
+    padding:0 8px 0;
+}
+.big-font {
+    color:rgba(0,0,0,.85);
+    font-size:18px;
+    height:23px;
+    line-height:23px;
+}
+.font-light {
+    color:rgba(0,0,0,.4);
+}
+.with-border-top {
+    border-top:1px solid #eee;
+}
+.with-dist, 
+.with-dist2 {
+    position: relative;
+    left:6px;
+}
+.with-dist {
+    top:-3px;
+}
+.with-dist2 {
+    top:-1px;
+}
+.fa-1x {
+    font-size:16px;
+}
+.fa-2x {
+    font-size:26px;
 }
