@@ -17,7 +17,11 @@ define([
         events: {
             'click .repo-create': 'createRepo',
             'click #my-own-repos .by-name': 'sortByName',
-            'click #my-own-repos .by-time': 'sortByTime'
+            'mouseover #my-own-repos .show-name': 'showName',
+            'mouseout #my-own-repos .show-name': 'ifShowName',
+            'click #my-own-repos .by-time': 'sortByTime',
+            'mouseover #my-own-repos .show-time': 'showTime',
+            'mouseout #my-own-repos .show-time': 'ifShowTime'
         },
 
         initialize: function(options) {
@@ -114,6 +118,7 @@ define([
         },
 
         sortByName: function() {
+            $('.by-time').hide();
             var repos = this.repos;
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
@@ -131,7 +136,18 @@ define([
             repos.comparator = null;
         },
 
+        showName: function() {
+            $('.by-name').show();
+        },
+
+        ifShowName: function() {
+            if($('.by-time').css('display')=='inline'){
+                $('.by-name').hide();
+            }
+        },
+
         sortByTime: function() {
+            $('.by-name').hide();
             var repos = this.repos;
             var el = $('.by-time', this.$table);
             repos.comparator = function(a, b) { // a, b: model
@@ -146,6 +162,16 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down');
             repos.comparator = null;
+        },
+
+        showTime: function() {
+            $('.by-time').show();
+        },
+
+        ifShowTime: function() {
+            if($('.by-name').css('display')=='inline'){
+                $('.by-time').hide();
+            }
         }
 
     });

@@ -59,7 +59,12 @@ define([
             'click #organization-repos .share-existing': 'addRepo',
             'click #organization-repos .create-new': 'createRepo',
             'click #organization-repos .by-name': 'sortByName',
-            'click #organization-repos .by-time': 'sortByTime'
+            'mouseover .show-name': 'showName',
+            'mouseout .show-name': 'ifShowName',
+            'click #organization-repos .by-time': 'sortByTime',
+            'mouseover .show-time': 'showTime',
+            'mouseout .show-time': 'ifShowTime'
+
         },
 
         createRepo: function() {
@@ -139,6 +144,7 @@ define([
         },
 
         sortByName: function() {
+            $('.by-time').hide();
             var repos = this.repos;
             var el = $('.by-name', this.$table);
             repos.comparator = function(a, b) { // a, b: model
@@ -156,7 +162,18 @@ define([
             repos.comparator = null;
         },
 
+        showName: function() {
+            $('.by-name').show();
+        },
+
+        ifShowName: function() {
+            if($('.by-time').css('display')=='inline'){
+                $('.by-name').hide();
+            }
+         },
+
         sortByTime: function() {
+            $('.by-name').hide();
             var repos = this.repos;
             var el = $('.by-time', this.$table);
             repos.comparator = function(a, b) { // a, b: model
@@ -172,6 +189,16 @@ define([
             el.toggleClass('icon-caret-up icon-caret-down');
             repos.comparator = null;
         },
+
+        showTime: function() {
+            $('.by-time').show();
+            },
+
+        ifShowTime: function() {
+            if($('.by-name').css('display')=='inline'){
+                $('.by-time').hide();
+            }
+         },
 
         hide: function() {
             this.$sideNav.hide();

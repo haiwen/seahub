@@ -47,7 +47,8 @@
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
 .icon-chevron-left:before         { content: "\f053"; }
-
+.icon-lock:before                 { content: "\f023"; }
+.icon-arrow-right:before          { content: "\f178"; }
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -3645,4 +3646,15 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+/* add random password */
+#generate-download-link-form .randompwd {
+    height: 28px;
+    line-height: 0.8;
+    margin-left: 8px;
+    cursor: pointer;
+}
+/*switch sorting method */
+.by-name, #by-name {
+    display: none;
 }

@@ -294,7 +294,11 @@ define([
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click #by-name': 'sortByName',
-                'click #by-time': 'sortByTime'
+                'mouseover .show-name': 'showName',
+                'mouseout .show-name': 'ifShowName',
+                'click #by-time': 'sortByTime',
+                'mouseover .show-time': 'showTime',
+                'mouseout .show-time': 'ifShowTime'
             },
 
             newDir: function() {
@@ -450,6 +454,7 @@ define([
             },
 
             sortByName: function() {
+                $('#by-time').hide();
                 var dirents = this.dir;
                 var el = $('#by-name');
 
@@ -475,7 +480,18 @@ define([
                 dirents.comparator = null;
             },
 
+            showName: function() {
+                $('#by-name').show();
+            },
+
+            ifShowName: function() {
+                if($('#by-time').css('display')=='inline'){
+                    $('#by-name').hide();
+                    }
+            },
+
             sortByTime: function () {
+                $('#by-name').hide();
                 var dirents = this.dir;
                 var el = $('#by-time');
                 dirents.comparator = function(a, b) {
@@ -493,6 +509,16 @@ define([
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down');
                 dirents.comparator = null;
+            },
+
+            showTime: function() {
+                $('#by-time').show();
+            },
+
+            ifShowTime: function() {
+                if($('#by-name').css('display')=='inline'){
+                    $('#by-time').hide();
+                    }
             },
 
             select: function () {

@@ -76,6 +76,7 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
+            'click .randompwd': 'randomPassword',
 
             // upload link
             'submit #generate-upload-link-form': 'generateUploadLink',
@@ -344,6 +345,12 @@ define([
                 'data': { 't': _this.download_link_token },
                 'after_op_success': after_op_success
             });
+        },
+        
+        randomPassword:function(){
+            var rdm_pwd=Math.random().toString(36).substr(2,8);
+            $("input[name=password]").val(rdm_pwd);
+            $("input[name=password_again]").val(rdm_pwd);
         },
 
         uploadLinkPanelInit: function() {
