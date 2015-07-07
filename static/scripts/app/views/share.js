@@ -76,6 +76,8 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
+            'click .randompwd': 'randomPassword',
+            'mouseover .cvt_class': 'convertClass',
 
             // upload link
             'submit #generate-upload-link-form': 'generateUploadLink',
@@ -344,6 +346,19 @@ define([
                 'data': { 't': _this.download_link_token },
                 'after_op_success': after_op_success
             });
+        },
+
+        randomPassword: function() {
+            $('input[name=password]').val('');
+            $('input[name=password]').attr('type','text');
+            $('input[name=password_again]').val('');
+            var rdm_pwd=Math.random().toString(36).substr(2,8);
+            $('input[name=password]').val(rdm_pwd);
+            $('input[name=password_again]').val(rdm_pwd);
+        },
+
+        convertClass: function() {
+            $('input[name=password]').attr('type','password');
         },
 
         uploadLinkPanelInit: function() {
