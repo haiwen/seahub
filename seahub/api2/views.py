@@ -4198,6 +4198,12 @@ class OrganizationView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, "Email is not valid")
 
         try:
+            quota_mb = int(quota)
+        except ValueError as e:
+            logger.error(e)
+            return api_error(status.HTTP_400_BAD_REQUEST, "Quota is not valid")
+
+        try:
             User.objects.get(email = username)
             user_exist = True
         except User.DoesNotExist:
@@ -4216,13 +4222,17 @@ class OrganizationView(APIView):
         try:
             User.objects.create_user(username, password, is_staff=False, is_active=True)
             create_org(org_name, prefix, username)
-            new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
-            quota_mb = int(quota)
-            quota = quota_mb * (1 << 20)
 
+            new_org = ccnet_threaded_rpc.get_org_by_url_prefix(prefix)
+
+            # set member limit
             from seahub_extra.organizations.models import OrgMemberQuota
             OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
+
+            # set quota
+            quota = quota_mb * (1 << 20)
             seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)
+
             return Response('success', status=status.HTTP_201_CREATED)
         except Exception as e:
             logger.error(e)
