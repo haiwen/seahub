@@ -1582,7 +1582,7 @@ class StarredFileView(APIView):
     def delete(self, request, format=None):
         # remove starred file
         repo_id = request.GET.get('repo_id', '')
-        path = unquote(request.GET.get('p', '').encode('utf-8'))
+        path = request.GET.get('p', '')
         if not (repo_id and path):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Repo_id or path is missing.')
