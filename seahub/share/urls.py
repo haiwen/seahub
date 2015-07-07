@@ -5,7 +5,6 @@ from views import *
 urlpatterns = patterns('',
     url(r'^$', list_shared_repos, name='share_admin'),
     url(r'^links/$', list_shared_links, name='list_shared_links'),
-    url(r'^files/$', list_priv_shared_files, name='list_priv_shared_files'),
     url(r'^folders/$', list_priv_shared_folders, name='list_priv_shared_folders'),
     url(r'^folders/(?P<repo_id>[-0-9a-f]{36})/$', view_priv_shared_folder, name='view_priv_shared_folder'),
 
@@ -36,6 +35,5 @@ urlpatterns = patterns('',
     url(r'^ajax/repo_remove_share/$', ajax_repo_remove_share, name='ajax_repo_remove_share'),
     url(r'^ajax/get-download-link/$', ajax_get_download_link, name='ajax_get_download_link'),
     url(r'^ajax/get-upload-link/$', ajax_get_upload_link, name='ajax_get_upload_link'),
-    url(r'^ajax/private-share-file/$', ajax_private_share_file, name='ajax_private_share_file'),
     url(r'^ajax/private-share-dir/$', ajax_private_share_dir, name='ajax_private_share_dir'),
 )

@@ -445,17 +445,6 @@
                 <% } %>
             <% } %>
 
-            <% if (!is_dir && is_repo_owner) { %>
-            <div id="file-private-share" class="tabs-panel hide">
-                <form id="file-private-share-form" action="" class="hide">
-                    <label>{% trans "People:" %}</label><br />
-                    <input type="hidden" name="emails" class="w100" /><br />
-                    <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Submit" %}" />
-                </form>
-            </div>
-            <% } %>
-
         </div>
     </div>
 </script>

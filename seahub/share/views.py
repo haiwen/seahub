@@ -585,29 +585,6 @@ def list_shared_links(request):
 
 @login_required
 @user_mods_check
-def list_priv_shared_files(request):
-    """List private shared files.
-    """
-    username = request.user.username
-
-    # Private share out/in files.
-    priv_share_out = PrivateFileDirShare.objects.list_private_share_out_by_user(username)
-    for e in priv_share_out:
-        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-        e.repo = seafile_api.get_repo(e.repo_id)
-
-    priv_share_in = PrivateFileDirShare.objects.list_private_share_in_by_user(username)
-    for e in priv_share_in:
-        e.file_or_dir = os.path.basename(e.path.rstrip('/'))
-        e.repo = seafile_api.get_repo(e.repo_id)
-
-    return render_to_response('share/priv_shared_files.html', {
-            "priv_share_out": priv_share_out,
-            "priv_share_in": priv_share_in,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@user_mods_check
 def list_priv_shared_folders(request):
     """List private shared folders.
 
@@ -1596,40 +1573,5 @@ def ajax_private_share_dir(request):
             }), content_type=content_type)
     else:
         # for case: only share to users and the emails are not valid
-        data = json.dumps({"error": _("Please check the email(s) you entered")})
-        return HttpResponse(data, status=400, content_type=content_type)
-
-@login_required_ajax
-@require_POST
-def ajax_private_share_file(request):
-    content_type = 'application/json; charset=utf-8'
-
-    emails_string = request.POST.get('emails', '')
-    repo_id = request.POST.get('repo_id', '')
-    path = request.POST.get('path', '')
-    username = request.user.username
-    emails = emails_string.split(',')
-
-    shared_success, shared_failed = [], []
-
-    for email in [e.strip() for e in emails if e.strip()]:
-        if not is_valid_username(email):
-            shared_failed.append(email)
-            continue
-
-        if not is_registered_user(email):
-            shared_failed.append(email)
-            continue
-
-        pfds = PrivateFileDirShare.objects.add_read_only_priv_file_share(username, email, repo_id, path)
-        shared_success.append(email)
-
-        # send a signal when sharing file successful
-        share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
-
-    if len(shared_success) > 0:
-        data = json.dumps({"shared_success": shared_success, "shared_failed": shared_failed})
-        return HttpResponse(data, content_type=content_type)
-    else:
         data = json.dumps({"error": _("Please check the email(s) you entered")})
         return HttpResponse(data, status=400, content_type=content_type)
