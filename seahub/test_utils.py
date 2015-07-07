@@ -1,11 +1,14 @@
 import os
 from uuid import uuid4
 
+from django.core.urlresolvers import reverse
+from django.test import TestCase
 from exam.decorators import fixture
 from exam.cases import Exam
 from seaserv import seafile_api, ccnet_threaded_rpc
 
 from seahub.base.accounts import User
+
 
 class Fixtures(Exam):
 
@@ -82,3 +85,11 @@ class Fixtures(Exam):
 
     def remove_group(self):
         return ccnet_threaded_rpc.remove_group(self.group.id, self.user.username)
+
+
+class BaseTestCase(TestCase, Fixtures):
+    def login_as(self, user):
+        self.client.post(
+            reverse('auth_login'), {'username': user.username,
+                                    'password': 'secret'}
+        )
