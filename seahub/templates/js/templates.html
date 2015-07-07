@@ -221,7 +221,9 @@
                 <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
                 <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                 <% } %>
-                <li><a class="op open-locally" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>/" target="_blank">{% trans "Open Locally" %}</a></li>
+                <% if (is_pro) { %>
+                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>/">{% trans "Open via Client" %}</a></li>
+                <% } %>
             </ul>
             <% } %>
         </div>
@@ -287,7 +289,9 @@
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "History" %}</a></li>
-                <li><a class="op open-locally" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>" target="_blank">{% trans "Open Locally" %}</a></li>
+                <% if (is_pro) { %>
+                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>">{% trans "Open via Client" %}</a></li>
+                <% } %>
             </ul>
             <% } %>
         </div>
