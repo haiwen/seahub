@@ -152,18 +152,35 @@ class GroupEnabledModule(models.Model):
     module_name = models.CharField(max_length=20)
 
 ########## misc
+class UserLastLoginManager(models.Manager):
+    def get_by_username(self, username):
+        """Return last login record for a user, delete duplicates if there are
+        duplicated records.
+        """
+        try:
+            return self.get(username=username)
+        except UserLastLogin.DoesNotExist:
+            return None
+        except UserLastLogin.MultipleObjectsReturned:
+            dups = self.filter(username=username)
+            ret = dups[0]
+            for dup in dups[1:]:
+                dup.delete()
+                logger.warn('Delete duplicate user last login record: %s' % username)
+            return ret
+
 class UserLastLogin(models.Model):
     username = models.CharField(max_length=255, db_index=True)
     last_login = models.DateTimeField(default=timezone.now)
+    objects = UserLastLoginManager()
 
 def update_last_login(sender, user, **kwargs):
     """
     A signal receiver which updates the last_login date for
     the user logging in.
     """
-    try:
-        user_last_login = UserLastLogin.objects.get(username=user.username)
-    except UserLastLogin.DoesNotExist:
+    user_last_login = UserLastLogin.objects.get_by_username(user.username)
+    if user_last_login is None:
         user_last_login = UserLastLogin(username=user.username)
     user_last_login.last_login = timezone.now()
     user_last_login.save()

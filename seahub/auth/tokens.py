@@ -57,12 +57,12 @@ class PasswordResetTokenGenerator(object):
         key_salt = "django.contrib.auth.tokens.PasswordResetTokenGenerator"
 
         # Ensure results are consistent across DB backends
-        try:
-            user_last_login = UserLastLogin.objects.get(username=user.email)
-            login_dt = user_last_login.last_login
-        except UserLastLogin.DoesNotExist:
+        user_last_login = UserLastLogin.objects.get_by_username(user.username)
+        if user_last_login is None:
             from seahub.utils.timeutils import dt
             login_dt = dt(user.ctime)
+        else:
+            login_dt = user_last_login.last_login
         login_timestamp = login_dt.replace(microsecond=0, tzinfo=None)
 
         value = (six.text_type(user.id) + user.enc_password +
