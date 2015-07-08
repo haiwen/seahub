@@ -1382,11 +1382,11 @@ def office_convert_get_page(request, path, internal=False):
         return HttpResponseForbidden()
 
     file_id = m.group(1)
-    # if path.endswith('file.css'):
-    #     pass
-    # else:
-    #     if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-    #         return HttpResponseForbidden()
+    if path.endswith('file.css'):
+        pass
+    else:
+        if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
+            return HttpResponseForbidden()
 
     resp = get_office_converted_page(request, path, file_id, internal=internal)
     resp['Content-Type'] = 'text/html'

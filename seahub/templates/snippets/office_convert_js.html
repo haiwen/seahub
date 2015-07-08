@@ -20,7 +20,8 @@ var OfficePreviewer = function(file_id, preview_token) {
             $.param({file_id: this.file_id, page: page});
     }
     this.page_content_url = function(page) {
-        return "{% url 'office_convert_get_page' obj_id %}/" + page + '.page';
+        return "{% url 'office_convert_get_page' obj_id %}/"
+            + page + '.page?office_preview_token=' + this.preview_token;
     }
 
     var url = window.location.href;
