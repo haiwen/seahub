@@ -266,6 +266,13 @@
             <% } else { %>
             <a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
+            <% if (is_pro) { %>
+                <% if (dirent.is_locked) { %>
+                <img class="file-locked-icon cspt" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="locked" title="{% trans 'Locked by' %} <%- dirent.lock_owner %>"/>
+                <% } else { %>
+                <img class="file-locked-icon hide" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="locked" />
+                <% } %>
+            <% } %>
         </span>
     </td>
     <td class="dirent-op">
@@ -276,16 +283,33 @@
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                    <% if (!dirent.is_locked) { %>
+                    <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                    <% } else { %>
+                        <% if (dirent.locked_by_me) { %>
+                        <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                        <% } %>
+                    <% } %>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
             <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
             <ul class="hidden-op hide">
+                <% if (!dirent.is_locked) { %>
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                <% } else { %>
+                    <% if (dirent.locked_by_me) { %>
+                    <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+                    <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+                    <% } %>
+                <% } %>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "History" %}</a></li>
+                <% if (is_pro) { %>
+                <li><a class="op file-lock" href="#">{% trans "Lock" %}</a></li>
+                <li><a class="op file-unlock" href="#">{% trans "Unlock" %}</a></li>
+                <% } %>
             </ul>
             <% } %>
         </div>

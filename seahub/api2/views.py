@@ -85,7 +85,8 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, ENABLE_GLOBAL_ADDRESSBOOK
+        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, \
+        ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -1274,6 +1275,14 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
             else:
                 entry["size"] = dirent.size
 
+            entry["is_locked"] = dirent.is_locked
+            entry["lock_owner"] = dirent.lock_owner
+            entry["lock_time"] = dirent.lock_time
+            if username == dirent.lock_owner:
+                entry["locked_by_me"] = True
+            else:
+                entry["locked_by_me"] = False
+
         entry["type"] = dtype
         entry["name"] = dirent.obj_name
         entry["id"] = dirent.obj_id
@@ -1599,7 +1608,7 @@ class FileView(APIView):
     including create/delete/rename/view, etc.
     """
 
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -1622,7 +1631,8 @@ class FileView(APIView):
         try:
             file_id = seafile_api.get_file_id_by_path(repo_id,
                                                       path.encode('utf-8'))
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get file id by path.")
 
@@ -1656,6 +1666,9 @@ class FileView(APIView):
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to rename file.')
+
+            if seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
+                return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
             newname = request.POST.get('newname', '')
             if not newname:
@@ -1693,6 +1706,9 @@ class FileView(APIView):
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
+
+            if seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
+                return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
             src_dir = os.path.dirname(path)
             src_dir_utf8 = src_dir.encode('utf-8')
@@ -1776,9 +1792,39 @@ class FileView(APIView):
                              "Operation can only be rename, create or move.")
 
     def put(self, request, repo_id, format=None):
-        # update file
-        # TODO
-        pass
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
+
+        path = request.DATA.get('p', '')
+        file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        if not path or not file_id:
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             'Path is missing or invalid.')
+
+        username = request.user.username
+        # check file access permission
+        if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        operation = request.DATA.get('operation', '')
+        if operation.lower() == 'lock':
+            # lock file
+            expire = request.DATA.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+            try:
+                seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
+                return Response('success', status=status.HTTP_200_OK)
+            except SearpcError, e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+        if operation.lower() == 'unlock':
+            # unlock file
+            try:
+                seafile_api.unlock_file(repo_id, path.lstrip('/'))
+                return Response('success', status=status.HTTP_200_OK)
+            except SearpcError, e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
 
     def delete(self, request, repo_id, format=None):
         # delete file
@@ -1795,6 +1841,9 @@ class FileView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
+        if seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
+
         parent_dir = os.path.dirname(path)
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
@@ -1806,7 +1855,8 @@ class FileView(APIView):
             seafile_api.del_file(repo_id, parent_dir_utf8,
                                  file_name_utf8,
                                  request.user.username)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
@@ -1881,8 +1931,11 @@ class FileRevert(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        parent_dir = os.path.dirname(path)
         username = request.uset.username
+        if seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
+            return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
+
+        parent_dir = os.path.dirname(path)
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
@@ -1891,7 +1944,8 @@ class FileRevert(APIView):
         try:
             ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
                             path, request.user.username)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
 
         return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)

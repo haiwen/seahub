@@ -1174,6 +1174,7 @@ def libraries(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
+            'is_pro': True if is_pro_version() else False,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             }, context_instance=RequestContext(request))
@@ -1465,8 +1466,10 @@ def repo_revert_file(request, repo_id):
     if not (commit_id and path and from_page):
         return render_error(request, _(u"Invalid arguments"))
 
+    username = request.user.username
     # perm check
-    if check_folder_permission(request, repo.id, path) != 'rw':
+    if check_folder_permission(request, repo.id, path) != 'rw' or \
+        seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
         next = request.META.get('HTTP_REFERER', None)
         if not next:
             next = settings.SITE_ROOT
@@ -1474,7 +1477,7 @@ def repo_revert_file(request, repo_id):
         return HttpResponseRedirect(next)
 
     try:
-        ret = seafile_api.revert_file(repo_id, commit_id, path, request.user.username)
+        ret = seafile_api.revert_file(repo_id, commit_id, path, username)
     except Exception as e:
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
