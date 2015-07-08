@@ -37,7 +37,7 @@ define([
                 path = this.model.get('path');
 
             $.ajax({
-                url: Common.getUrl({name: 'starred_files'}) + '?p=' + path + '&repo_id=' + repo_id,
+                url: Common.getUrl({name: 'starred_files'}) + '?p=' + encodeURIComponent(path) + '&repo_id=' + repo_id,
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {

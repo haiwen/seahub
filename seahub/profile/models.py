@@ -1,3 +1,5 @@
+import logging
+
 from django.conf import settings
 from django.db import models
 from django.core.cache import cache
@@ -6,6 +8,9 @@ from django.dispatch import receiver
 from seahub.base.fields import LowerCaseCharField
 from seahub.profile.settings import EMAIL_ID_CACHE_PREFIX, EMAIL_ID_CACHE_TIMEOUT
 from registration.signals import user_registered
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 class ProfileManager(models.Manager):
     def add_or_update(self, username, nickname, intro='', lang_code=None):
@@ -78,15 +83,21 @@ class DetailedProfileManager(models.Manager):
                                    telephone=telephone)
         d_profile.save(using=self._db)
         return d_profile
-            
+
     def get_detailed_profile_by_user(self, username):
         """Get a user's profile.
         """
-        try:
-            return super(DetailedProfileManager, self).get(user=username)
-        except DetailedProfile.DoesNotExist:
+        ret = list(super(DetailedProfileManager, self).filter(user=username))
+        if len(ret) == 0:
             return None
-    
+        elif len(ret) == 1:
+            return ret[0]
+        else:
+            # XXX: got multiple records, delete them all.
+            super(DetailedProfileManager, self).filter(user=username).delete()
+            logger.warn('Remove multiple detailed profile records for user %s' % username)
+            return None
+
 class DetailedProfile(models.Model):
     user = LowerCaseCharField(max_length=255, db_index=True)
     department = models.CharField(max_length=512)

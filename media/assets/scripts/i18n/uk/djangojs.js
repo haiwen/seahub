@@ -5,7 +5,14 @@
   var django = globals.django || (globals.django = {});
 
   
-  django.pluralidx = function (count) { return (count == 1) ? 0 : 1; };
+  django.pluralidx = function (n) {
+    var v=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);
+    if (typeof(v) == 'boolean') {
+      return v ? 1 : 0;
+    } else {
+      return v;
+    }
+  };
   
 
   

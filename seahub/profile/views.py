@@ -15,7 +15,8 @@ from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import is_org_context, clear_token, is_pro_version
+from seahub.utils import is_org_context, clear_token, is_pro_version, \
+    is_valid_username
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -84,9 +85,12 @@ def edit_profile(request):
 
 @login_required
 def user_profile(request, username):
-    try:
-        user = User.objects.get(email=username)
-    except User.DoesNotExist:
+    if is_valid_username(username):
+        try:
+            user = User.objects.get(email=username)
+        except User.DoesNotExist:
+            user = None
+    else:
         user = None
 
     nickname = '' if user is None else email2nickname(user.username)
