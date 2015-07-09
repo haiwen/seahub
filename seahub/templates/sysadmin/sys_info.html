@@ -9,7 +9,12 @@
 <dl>
     <dt>{% trans "System Info" %}</dt>
     <dd>{% if is_pro %}
-        {% trans "Professional Edition" %} {% if license_dict %} {% trans "expires on" %} {{ license_dict.Expiration}}{% endif %}
+        {% if license.lic_type == "Enterprise Edition" %}
+        {% trans "Enterprise Edition" %}
+        {% else %}
+        {% trans "Professional Edition" %}
+        {% endif %}
+        {% if license %} {% trans "expires on" %} {{ license.expiration }}{% endif %}
         {% else %}
         {% trans "Community Edition" %}
         <a href="http://manual{% if LANGUAGE_CODE == 'zh-cn' %}-cn{% endif %}.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{% trans "Upgrade to Pro Edition" %}</a>

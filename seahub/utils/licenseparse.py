@@ -1,37 +1,43 @@
+import os
 import logging
+from StringIO import StringIO
+from ConfigParser import ConfigParser
+
 logger = logging.getLogger(__name__)
 
-def parse_license(file_path):
-    """Parse license file and return dict.
+_lic = None
 
-    Arguments:
-    - `file_path`:
+class SeafileLicenseInfo(object):
+    def __init__(self, max_users, expiration, lic_type):
+        self.max_users = max_users
+        self.expiration = expiration
+        self.lic_type = lic_type
 
-    Returns:
-    e.g.
+    def is_enterprise_edition(self):
+        return self.lic_type == 'Enterprise Edition'
 
-    {'Hash': 'fdasfjl',
-    'Name': 'seafile official',
-    'Licencetype': 'User',
-    'LicenceKEY': '123',
-    'Expiration': '2016-3-2',
-    'MaxUsers': '1000000',
-    'ProductID': 'Seafile server for Windows'
-    }
+    @staticmethod
+    def instance():
+        global _lic
+        if _lic is None:
+            _lic = SeafileLicenseInfo.from_file('../seafile-license.txt')
+        return _lic
 
-    """
-    ret = {}
-    lines = []
-    try:
-        with open(file_path) as f:
-            lines = f.readlines()
-    except Exception as e:
-        logger.warn(e)
-        return {}
+    @classmethod
+    def from_file(cls, fpath):
+        if not os.path.exists(fpath):
+            return None
+        cp = ConfigParser()
+        with open(fpath, 'r') as fp:
+            content = fp.read()
 
-    for line in lines:
-        if len(line.split('=')) == 2:
-            k, v = line.split('=')
-            ret[k.strip()] = v.strip().strip('"')
+        content = '[license]\r\n' + content
+        cp.readfp(StringIO(content))
 
-    return ret
+        get = lambda key: cp.get('license', key).strip('"')
+
+        max_users = get('MaxUsers')
+        expiration = get('Expiration')
+        lic_type = get('Licencetype')
+
+        return cls(max_users, expiration, lic_type)
