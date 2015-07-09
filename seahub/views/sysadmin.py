@@ -88,7 +88,8 @@ def sys_info(request):
 
     is_pro = is_pro_version()
     if is_pro:
-        license_dict = parse_license('../seafile-license.txt')
+        license_file = os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
+        license_dict = parse_license(license_file)
     else:
         license_dict = {}
     return render_to_response('sysadmin/sys_info.html', {
