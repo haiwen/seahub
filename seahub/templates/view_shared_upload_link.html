@@ -25,7 +25,7 @@
                     <input type="file" name="file" multiple directory webkitdirectory />
                 </span>
                 {% endif %}
-                <button type="reset" class="cancel vam">
+                <button type="reset" class="cancel vam" id="cancel-all">
                     <span class="icon-ban-circle"></span>
                     <span>{% trans "Cancel All" %}</span>
                 </button>
@@ -57,6 +57,15 @@
 {% if not no_quota %}
 {% upload_js %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery.fileupload.min.js"></script>
+<!--[if lt IE 8]>
+<script type="text/javascript">
+    $('#add-file')
+    .html('<button type="button">{% trans "Add Files" %}</button><input type="file" name="file" multiple />')
+    .css({'border':0, 'padding':0})
+    .find('input').height($('#add-file').outerHeight());
+    $('#cancel-all .icon-ban-circle').remove();
+</script>
+<![endif]-->
 <script type="text/javascript">
 // for file upload
 window.locale = { 
@@ -193,7 +202,7 @@ if ('webkitdirectory' in $('input[type="file"]', $('#add-file'))[0]) {
 form.fileupload(
     'option',
     'redirect',
-    window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{MEDIA_URL}}cors/result.html?%s')
+    window.location.href.replace(location.pathname, '{{MEDIA_URL}}cors/result.html?%s')
 );
 </script>
 {% endif %}
