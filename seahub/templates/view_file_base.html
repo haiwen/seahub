@@ -6,7 +6,7 @@
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
-<style type="text/css">                                                
+<style type="text/css">
 #header, #footer { display:none; }
 #view-hd { margin-top: 4px; }
 #star {
@@ -25,6 +25,9 @@
     <div id="view-hd">
         <h2>{{ filename }}
             <span id="star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
+            {% if file_locked %}
+            <img class="file-locked-icon" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="locked"/>
+            {% endif %}
         </h2>
     </div>
 
@@ -64,7 +67,7 @@
             <button id="history" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</button>
             {% endif %}
 
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and not file_locked %}
                 {% block edit_file %}
                 {% endblock %}
             {% endif %}
@@ -85,7 +88,7 @@
         </div>
     </div>
 
-    {% include "snippets/file_share_popup.html" %} 
+    {% include "snippets/file_share_popup.html" %}
 
     <div id="side-toolbar">
         <ul class="side-toolbar">
@@ -138,7 +141,7 @@ $('#star').click(function() {
     } else {
         url_base = '{% url 'repo_unstar_file' repo.id %}';
     }
-    
+
     $.ajax({
         url: url_base + '?file=' + e("{{path}}"),
         cache: false,

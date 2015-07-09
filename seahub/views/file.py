@@ -361,6 +361,10 @@ def _file_view(request, repo_id, path):
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
+    file_locked = False
+    if seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
+        file_locked = True
+
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo.id)
@@ -482,6 +486,7 @@ def _file_view(request, repo_id, path):
             'last_commit_id': repo.head_cmmt_id,
             'is_starred': is_starred,
             'user_perm': user_perm,
+            'file_locked': file_locked,
             'img_prev': img_prev,
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
@@ -957,8 +962,13 @@ def file_edit_submit(request, repo_id):
                             status=400,
                             content_type=content_type)
 
+    path = request.GET.get('p')
     username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
+    parent_dir = os.path.dirname(path)
+
+    # edit file, so check parent_dir's permission
+    if check_folder_permission(request, repo_id, parent_dir) != 'rw' or \
+        seafile_api.check_file_lock(repo_id, path.lstrip('/'), username):
         return error_json(_(u'Permission denied'))
 
     repo = get_repo(repo_id)
@@ -971,7 +981,6 @@ def file_edit_submit(request, repo_id):
 
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
-    path = request.GET.get('p')
 
     if content is None or not path or encoding not in ["gbk", "utf-8"]:
         return error_json(_(u'Invalid arguments'))

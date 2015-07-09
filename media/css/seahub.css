@@ -3646,3 +3646,8 @@ textarea:-moz-placeholder {/* for FF */
 #guide-for-new .txt {
     margin-left:6.4em;
 }
+
+/* file lock  */
+#view-hd .file-locked-icon {
+    vertical-align: middle;
+}

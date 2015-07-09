@@ -501,6 +501,13 @@ def list_lib_dir(request, repo_id):
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
+        f_['is_locked'] = True if f.is_locked else False
+        f_['lock_owner'] = f.lock_owner
+        if username == f.lock_owner:
+            f_['locked_by_me'] = True
+        else:
+            f_['locked_by_me'] = False
+
         if f.is_img:
             f_['is_img'] = f.is_img
         if f.thumbnail_src:
@@ -646,6 +653,11 @@ def rename_dirent(request, repo_id):
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
+        if seafile_api.check_file_lock(repo_id, full_path.lstrip('/'), username):
+            err_msg = _('File is locked')
+            return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                                content_type=content_type)
+
     if newname == oldname:
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
@@ -699,6 +711,11 @@ def delete_dirent(request, repo_id):
         # when dirent is a file, check parent dir perm
         if check_folder_permission(request, repo.id, parent_dir) != 'rw':
             err_msg = _('Permission denied')
+            return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                                content_type=content_type)
+
+        if seafile_api.check_file_lock(repo_id, full_path.lstrip('/'), username):
+            err_msg = _('File is locked')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
@@ -823,12 +840,20 @@ def mv_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
         return HttpResponse(json.dumps(result), status=403,
                             content_type=content_type)
 
+    file_path = posixpath.join(src_path, obj_name)
+    if seafile_api.check_file_lock(src_repo_id, file_path.lstrip('/'), username):
+        err_msg = _('File is locked')
+        return HttpResponse(json.dumps({'error': err_msg}), status=403,
+                            content_type=content_type)
+
+
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
     try:
         res = seafile_api.move_file(src_repo_id, src_path, obj_name,
                                     dst_repo_id, dst_path, new_obj_name,
                                     username, need_progress=1)
-    except SearpcError, e:
+    except SearpcError as e:
+        logger.error(e)
         res = None
 
     # res can be None or an object
