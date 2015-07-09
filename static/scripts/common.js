@@ -96,7 +96,6 @@ define([
               case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
               case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
               case 'private_share_dir': return siteRoot + 'share/ajax/private-share-dir/';
-              case 'private_share_file': return siteRoot + 'share/ajax/private-share-file/';
               case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
               case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
               case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';

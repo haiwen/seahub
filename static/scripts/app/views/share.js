@@ -37,9 +37,6 @@ define([
             if (!this.repo_encrypted) {
                 this.downloadLinkPanelInit();
             }
-            if (!this.is_dir && this.is_repo_owner) {
-                this.filePrivateSharePanelInit();
-            }
             if (this.is_dir) {
                 if (this.user_perm == 'rw' && !this.repo_encrypted) {
                     this.uploadLinkPanelInit();
@@ -408,54 +405,6 @@ define([
                 'data': { 't': _this.upload_link_token },
                 'after_op_success': after_op_success
             });
-        },
-
-        filePrivateSharePanelInit: function() {
-            var form = this.$('#file-private-share-form');
-
-            $('[name="emails"]', form).select2($.extend({
-                width: '400px'
-            },Common.contactInputOptionsForSelect2()));
-
-            form.removeClass('hide');
-        },
-
-        filePrivateShare: function () {
-            var form = this.$('#file-private-share-form'),
-                form_id = form.attr('id');
-
-            var emails = $('[name="emails"]', form).val();
-            if (!emails) {
-                Common.showFormError(form_id, gettext("It is required."));
-                return false;
-            }
-
-            var post_data = {
-                'repo_id': this.repo_id,
-                'path': this.dirent_path,
-                'emails': emails
-            };
-            var post_url = Common.getUrl({name: 'private_share_file'});
-            var after_op_success = function (data) {
-                $.modal.close();
-                var msg = gettext("Successfully shared to {placeholder}")
-                    .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
-                Common.feedback(msg, 'success');
-                if (data['shared_failed'].length > 0) {
-                    msg += '<br />' + gettext("Failed to share to {placeholder}")
-                        .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
-                    Common.feedback(msg, 'info');
-                }
-            };
-
-            Common.ajaxPost({
-                'form': form,
-                'post_url': post_url,
-                'post_data': post_data,
-                'after_op_success': after_op_success,
-                'form_id': form_id
-            });
-            return false;
         },
 
         dirPrivateSharePanelInit: function() {
