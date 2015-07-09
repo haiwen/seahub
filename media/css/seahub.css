@@ -47,7 +47,8 @@
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
 .icon-chevron-left:before         { content: "\f053"; }
-
+.icon-building:before             { content: "\f0f7"; }
+.icon-phone:before                { content: "\f095"; }
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -69,7 +70,9 @@
 .icon-undo:before                 { content: "\f0e2"; }
 .icon-repeat:before               { content: "\f01e"; }
 .icon-question-sign:before        { content: "\f059"; }
-
+.fa-1x {
+    font-size: 1.3em;
+}
 /****** sf-icon-xx ********/
 @font-face {
     font-family: 'seafile-font';
@@ -3645,4 +3648,29 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+
+/* profile for new */
+#new-user-profile {
+    width: 290px;
+    border: 1px solid #eee;
+    border-radius: 3px;
+    margin: 0 auto;
+}
+#new-user-profile p {
+    padding: 8px 15px;
+    margin: 0;
+}
+#new-user-profile .nickname {
+    font-size: 18px;
+}
+#new-user-profile .intro {
+    color: #888;
+    padding-top: 0;
+}
+#new-user-profile .profile-item {
+    border-top: 1px solid #eee;
+}
+#new-user-profile .info-detail {
+    padding-left: 6px;
 }
