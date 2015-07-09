@@ -173,10 +173,10 @@
         </th>
         <th class="star"></th>
         <th class="dirent-icon"></th>
-        <th><span class="dirent-name">{% trans "Name"%} <span id="by-name" class="icon-caret-up cspt"></span></span></th>
+        <th class="by-name cspt"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></th>
         <th class="dirent-op"></th>
         <th class="dirent-size">{% trans "Size"%}</th>
-        <th class="dirent-update">{% trans "Last Update" %} <span id="by-time" class="icon-caret-down cspt"></span></th>
+        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide"></span></th>
     </tr>
 </script>
 <script type="text/template" id="dirent-tmpl">
@@ -719,19 +719,19 @@
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
        <th width="4%"><!--icon--></th>
-       <th width="46%">{% trans "Name" %} <span class="by-name icon-caret-up cspt"></span></th>
+       <th class="by-name cspt" width="46%">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
        <th width="10%"><!--op--></th>
        <th width="20%">{% trans "Size" %}</th>
-       <th width="20%">{% trans "Last Update" %} <span class="by-time icon-caret-down cspt"></span></th>
+       <th class="by-time cspt" width="20%">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
    </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="40%">{% trans "Name" %} <span class="by-name icon-caret-up cspt"></span></th>
+        <th class="by-name cspt" width="40%">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
         <th width="8%"><!--op--></th>
         <th width="14%">{% trans "Size" %}</th>
-        <th width="18%">{% trans "Last Update" %} <span class="by-time icon-caret-down cspt"></span></th>
+        <th class="by-time cspt"  width="18%">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
         <th width="16%">{% trans "Shared By" %}</th>
     </tr>
 </script>

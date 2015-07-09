@@ -18,8 +18,8 @@ define([
 
         events: {
             'click .repo-create': 'createRepo',
-            'click #grp-repos .by-name': 'sortByName',
-            'click #grp-repos .by-time': 'sortByTime'
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
@@ -131,8 +131,9 @@ define([
         },
 
         sortByName: function() {
+            $('.by-time .sort-icon').hide();
             var repos = this.repos;
-            var el = $('.by-name', this.$table);
+            var el = $('.by-name .sort-icon', this.$table);
             repos.comparator = function(a, b) { // a, b: model
                 var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                 if (el.hasClass('icon-caret-up')) {
@@ -144,14 +145,15 @@ define([
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down');
+            el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
 
         },
 
         sortByTime: function() {
+            $('.by-name .sort-icon').hide();
             var repos = this.repos;
-            var el = $('.by-time', this.$table);
+            var el = $('.by-time .sort-icon', this.$table);
             repos.comparator = function(a, b) { // a, b: model
                 if (el.hasClass('icon-caret-down')) {
                     return a.get('mtime') < b.get('mtime') ? 1 : -1;
@@ -162,7 +164,7 @@ define([
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down');
+            el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
         },
 
