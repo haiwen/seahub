@@ -2,7 +2,7 @@
 {% load avatar_tags i18n seahub_tags %}
 
 {% block main_panel %}
-<div id="new-user-profile">
+<div id="user-profile">
     {% if user %}
     {% avatar user.username 290 %}
     {% else %}
@@ -14,22 +14,17 @@
     {% endif %}
     {% if d_profile %}
         {% if d_profile.department %}
-        <p title="{{ d_profile.department }}" class="profile-item ellipsis">
+        <p title="{{ d_profile.department }}" class="info ellipsis">
             <span class="icon-building fa-1x vam"></span>
             <span class="info-detail vam">{{ d_profile.department }}</span>
         </p>
         {% endif %}
         {% if d_profile.telephone %}
-        <p title="{{ d_profile.telephone }}" class="profile-item ellipsis">
+        <p title="{{ d_profile.telephone }}" class="info ellipsis">
             <span class="icon-phone fa-1x vam"></span>
             <span class="info-detail vam">{{ d_profile.telephone }}</span>
         </p>
         {% endif %}
     {% endif %}
 </div>
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-</script>
 {% endblock %}
