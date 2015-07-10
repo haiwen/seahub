@@ -106,7 +106,6 @@ PREVIEW_FILEEXT = {
     PDF: ('pdf',),
     OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp', 'ods', 'fods'),
     MARKDOWN: ('markdown', 'md'),
-    SF: ('seaf',),
     VIDEO: ('mp4', 'ogv', 'webm', 'flv', 'wmv'),
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
@@ -796,7 +795,7 @@ def is_textual_file(file_type):
     """
     Check whether a file type is a textual file.
     """
-    if file_type == TEXT or file_type == MARKDOWN or file_type == SF:
+    if file_type == TEXT or file_type == MARKDOWN:
         return True
     else:
         return False

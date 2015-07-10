@@ -55,7 +55,7 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     user_traffic_over_limit, do_md5
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
-                                     MARKDOWN, TEXT, SF, OPENDOCUMENT, VIDEO)
+                                     MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.views import check_folder_permission
@@ -1063,7 +1063,7 @@ def file_edit(request, repo_id):
     file_content = None
     encoding = None
     file_encoding_list = FILE_ENCODING_LIST
-    if filetype == TEXT or filetype == MARKDOWN or filetype == SF:
+    if filetype == TEXT or filetype == MARKDOWN:
         if repo.encrypted:
             repo.password_set = seafile_api.is_password_set(repo_id, request.user.username)
             if not repo.password_set:

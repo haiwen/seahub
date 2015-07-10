@@ -75,13 +75,6 @@ window.onload = function () {
     {% endifnotequal %}
 {% endif %}
 
-{% if filetype == 'Sf' %}
-    {% ifnotequal file_content None %}
-    {% include 'snippets/xss.html' %}
-    $('#sf').html(cleanHtmlForXss('{{file_content|escapejs}}'));
-    {% endifnotequal %}
-{% endif %}
-
 {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}
     {% include 'snippets/office_convert_js.html' %}
 {% endif %}
@@ -159,7 +152,7 @@ $('#file-view').html('<div id="file-view-tip"></div>');
 
 {% endif %}{# 'if not err' ends here. #}
 
-{% if filetype == 'Text' or filetype == 'Sf' or filetype == 'Markdown' %}
+{% if filetype == 'Text' or filetype == 'Markdown' %}
     $('#file-enc').change(function() {
         var file_enc = $(this).val();
         var s = location.search;
