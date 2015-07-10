@@ -47,7 +47,9 @@
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
 .icon-chevron-left:before         { content: "\f053"; }
-
+.icon-magic:before                { content: "\f0d0"; }
+.icon-rotate-left:before                { content: "\f0e2"; }
+.icon-asterisk:before                { content: "\f069"; }
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -3645,4 +3647,40 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+/* random password */
+#generate-download-link-form .randompwd {
+    height:26px;
+    width:36px;
+    display:inline-block;
+    line-height:0.8;
+    cursor:pointer;
+    border:1px solid #ccc;
+    border-radius:4px;
+    position:relative;
+    left:8px;
+    top:-8px;
+}
+#generate-download-link-form .randompwd i {
+    position:relative;
+    left:12px;
+    top:10px;
+}
+#first-password {
+    width: 210px;
+    border-right: none;
+}
+#generate-download-link-form .show-hide {
+    border: 1px solid #ddd;
+    padding: 3px 0 4px;
+    width: 48px;
+    border-left: none;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    display: inline-block;
+    margin-left: -4px;
+    background: #fff;
+}
+#generate-download-link-form .show-hide i {
+    padding-left: 18px;
 }

@@ -342,7 +342,9 @@
                     </label>
                     <div class="hide">
                         <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" name="password" class="input" /><br />
+                        <input id="first-password" type="password" name="password" class="input" />
+                        <span title="switch to clear text"  class="show-hide cspt"><i class="icon-rotate-left"></i></span>
+                        <span title="click to create a random password" class="randompwd"><i class="icon-magic vam"></i></span><br />
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="password_again" class="input" />
                     </div>
