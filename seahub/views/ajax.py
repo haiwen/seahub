@@ -1854,8 +1854,7 @@ def get_file_upload_url_ul(request, token):
                             status=403, content_type=content_type)
 
     acc_token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        'upload',
-                                                        request.user.username,
+                                                        'upload', '',
                                                         use_onetime=False)
     url = gen_file_upload_url(acc_token, 'upload-aj')
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
