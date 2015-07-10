@@ -347,9 +347,9 @@
                     </label>
                     <div class="hide">
                         <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" style="display:none">
-                        <input type="password" name="password" class="input" />
-                        <span class="randompwd"><i class="icon-magic"></i></span><br />
+                        <input id="first-password" type="password" name="password" class="input" />
+                        <span title="switch to clear text"  class="show-hide cspt"><i class="icon-rotate-left"></i></span>
+                        <span title="click to create a random password" class="randompwd"><i class="icon-magic vam"></i></span><br />
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="password_again" class="input" />
                     </div>
@@ -362,7 +362,7 @@
                         <input type="text" name="expire_days" class="input" />
                     </div>
                     <p class="error hide"></p>
-                    <input type="submit" class="cvt_class" value="{% trans 'Generate'%}" />
+                    <input type="submit" value="{% trans 'Generate'%}" />
                 </form>
                 <div id="download-link-operations" class="hide">
                     <dl>

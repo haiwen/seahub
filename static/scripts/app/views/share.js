@@ -78,6 +78,7 @@ define([
             'click #delete-download-link': 'deleteDownloadLink',
             'click .randompwd': 'randomPassword',
             'mouseover .cvt_class': 'convertClass',
+            'click .show-hide' : 'switchTo',
 
             // upload link
             'submit #generate-upload-link-form': 'generateUploadLink',
@@ -349,16 +350,31 @@ define([
         },
 
         randomPassword: function() {
+            $('.show-hide i').removeClass('icon-rotate-left');
+            $('.show-hide i').addClass('icon-asterisk');
             $('input[name=password]').val('');
             $('input[name=password]').attr('type','text');
+            $('input[name=password_again]').attr('type','text');
             $('input[name=password_again]').val('');
             var rdm_pwd=Math.random().toString(36).substr(2,8);
             $('input[name=password]').val(rdm_pwd);
             $('input[name=password_again]').val(rdm_pwd);
         },
 
-        convertClass: function() {
-            $('input[name=password]').attr('type','password');
+        switchTo: function() {
+            if($('.show-hide i').hasClass('icon-asterisk')){
+                $('.show-hide i').removeClass('icon-asterisk');
+                $('.show-hide i').addClass('icon-rotate-left');
+                $('.show-hide').attr('title','switch to clear text');            
+                $('input[name=password]').attr('type','password');
+                $('input[name=password_again]').attr('type','password');
+            }else if($('.show-hide i').hasClass('icon-rotate-left')){
+                $('.show-hide i').removeClass('icon-rotate-left');
+                $('.show-hide i').addClass('icon-asterisk');
+                $('.show-hide').attr('title','switch to cipher text');
+                $('input[name=password]').attr('type','text');
+                $('input[name=password_again]').attr('type','text');
+            }
         },
 
         uploadLinkPanelInit: function() {
