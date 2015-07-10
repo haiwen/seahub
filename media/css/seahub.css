@@ -47,7 +47,8 @@
 .icon-copy:before                 { content: "\f0c5"; }
 .icon-lightbulb:before            { content: "\f0eb"; }
 .icon-chevron-left:before         { content: "\f053"; }
-
+.icon-building:before             { content: "\f0f7"; }
+.icon-phone:before                { content: "\f095"; }
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -69,7 +70,9 @@
 .icon-undo:before                 { content: "\f0e2"; }
 .icon-repeat:before               { content: "\f01e"; }
 .icon-question-sign:before        { content: "\f059"; }
-
+.fa-1x {
+    font-size: 1.3em;
+}
 /****** sf-icon-xx ********/
 @font-face {
     font-family: 'seafile-font';
@@ -2280,20 +2283,6 @@ textarea:-moz-placeholder {/* for FF */
 .member .name {
     vertical-align:middle;
 }
-#user-profile {
-    width:318px;
-    position:absolute;
-    left:365px;
-    top:50px;
-    z-index:10;
-    padding:15px;
-    min-height:130px;
-    border:1px solid #ddd;
-    background:#fff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
 .grp-profile {
     margin-top:2px;
 }
@@ -3605,16 +3594,6 @@ textarea:-moz-placeholder {/* for FF */
     cursor:pointer;
     color:#15c;
 }
-
-/* user profile */
-.profile-avatar-container {
-    padding:25px;
-    border:2px solid #ddd;
-    border-radius:3px;
-    text-align:center;
-    line-height:0;
-    margin-bottom:10px;
-}
 /* shared upload link */
 #upload-link-panel {
     width:600px;
@@ -3645,4 +3624,32 @@ textarea:-moz-placeholder {/* for FF */
 }
 #guide-for-new .txt {
     margin-left:6.4em;
+}
+/* user profile */
+#user-profile {
+    width: 290px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    overflow: hidden; /* for avatar */
+    margin: 0 auto;
+}
+#user-profile .avatar {
+    border-radius: 0;
+}
+#user-profile p {
+    padding: 8px 15px;
+    margin: 0;
+}
+#user-profile .nickname {
+    font-size: 18px;
+}
+#user-profile .intro {
+    color: #888;
+    padding-top: 0;
+}
+#user-profile .info {
+    border-top: 1px solid #eee;
+}
+#user-profile .info-detail {
+    padding-left: 6px;
 }

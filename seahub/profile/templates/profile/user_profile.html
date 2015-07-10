@@ -1,38 +1,30 @@
 {% extends "profile/profile_base.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
-{% block left_panel %}
-<div class="profile-avatar-container">
+{% block main_panel %}
+<div id="user-profile">
     {% if user %}
-    {% avatar user.username 80 %}
+    {% avatar user.username 290 %}
     {% else %}
-    {% avatar "" 80 %}
+    {% avatar "" 290 %}
+    {% endif %}
+    <p title="{{ nickname }}" class="nickname ellipsis">{{ nickname }}</p>
+    {% if intro %}
+    <p class="intro">{{ intro }}</p>
+    {% endif %}
+    {% if d_profile %}
+        {% if d_profile.department %}
+        <p title="{{ d_profile.department }}" class="info ellipsis">
+            <span class="icon-building fa-1x vam"></span>
+            <span class="info-detail vam">{{ d_profile.department }}</span>
+        </p>
+        {% endif %}
+        {% if d_profile.telephone %}
+        <p title="{{ d_profile.telephone }}" class="info ellipsis">
+            <span class="icon-phone fa-1x vam"></span>
+            <span class="info-detail vam">{{ d_profile.telephone }}</span>
+        </p>
+        {% endif %}
     {% endif %}
 </div>
-{% endblock %}
-
-{% block right_panel %}
-<h3 class="hd">{% trans "Info" %}</h3>
-
-<dl>
-    <dt>{% trans "Name" context "true name" %}</dt>
-    <dd>{{ nickname }}</dd>
-
-    <dt>{% trans "Self-introduction" %}</dt>
-    <dd>{{ intro }}</dd>
-
-    {% if d_profile %}
-    <dt>{% trans "Department" %}</dt>
-    <dd>{{ d_profile.department }}</dd>
-
-    <dt>{% trans "Telephone" %}</dt>
-    <dd>{{ d_profile.telephone }}</dd>
-    {% endif %}
-</dl>
-
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-</script>
 {% endblock %}
