@@ -1,13 +1,21 @@
+#header,
+#footer {
+    display:none;
+}
 #main {
     width:100%;
     min-height:0;
 }
 #view-hd,
+#shared-file-view-hd,
 #view-path-op,
 #file-op,
 #sf-commit-op {
     width:950px;
     margin:0 auto;
+}
+#view-hd {
+    margin-top:4px;
 }
 #file-op {
     padding:0;
@@ -29,20 +37,11 @@
 #file-op .contributors {
     margin-left:8px;
 }
-#file {
-    padding:0;
-    background:#fff;
-}
 #file-view {
     padding:30px 0 15px;
     background:#f4f4f4;
     border:1px solid #ededed;
     margin-top:12px;
-}
-.CodeMirror {
-    color:#000;
-    width:950px;
-    background:#fff;
 }
 #sf,
 #md-view,
@@ -58,4 +57,27 @@
 }
 #md-view img {
     max-width: 100%;
+}
+.CodeMirror {
+    color:#000;
+    width:950px;
+    background:#fff;
+    margin-bottom:40px;
+}
+#file-view .CodeMirror-scroll {
+    min-height:400px;
+}
+#file-star {
+    vertical-align:middle;
+    margin-left:3px;
+    color:#a4a4a4;
+}
+.file-path {
+    margin: 0 0 9px;
+}
+#file-op .avatar {
+    border-radius:1000px;
+}
+.history-file-path {
+    margin:.5em 0 0;
 }

@@ -1,13 +1,7 @@
-{% comment %}used by repo_view_file.html, history_file_view.html, view_shared_file.html{% endcomment %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
-<style type="text/css">                                                
-#footer { display:none; }                                              
-</style>
 {% if filetype == 'Text' %}                                            
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
 <style type="text/css">
-.CodeMirror-scroll { min-height:400px; }                               
-.CodeMirror { margin-bottom:40px; }                                    
     {% if fileext == 'txt' or fileext == 'text' %}
 .CodeMirror { width:624px; padding:40px 96px; }
     {% endif %}
