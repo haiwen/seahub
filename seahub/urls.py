@@ -185,7 +185,6 @@ urlpatterns = patterns('',
     ### Organizaion ###
     url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
     url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
-    url(r'^pubinfo/groups/$', pubgrp, name='pubgrp'),
     url(r'^pubinfo/users/$', pubuser, name='pubuser'),
 
     ### Apps ###
@@ -264,11 +263,10 @@ if getattr(settings, 'CLOUD_MODE', False):
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
-    from seahub_extra.search.views import search, pubuser_search, pubgrp_search
+    from seahub_extra.search.views import search, pubuser_search
     urlpatterns += patterns('',
         url(r'^search/$', search, name='search'),
         url(r'^pubinfo/users/search/$', pubuser_search, name='pubuser_search'),
-        url(r'^pubinfo/groups/search/$', pubgrp_search, name='pubgrp_search'),
     )
 
 if getattr(settings, 'ENABLE_PAYMENT', False):
