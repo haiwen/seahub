@@ -3,8 +3,7 @@
 {% load url from future %}
 
 {% block view_hd %}
-  <h2 class="fleft">{{repo.props.name}} {% trans "'s trash" %}</h2>
-  <button class="fright" data="{% url 'repo' repo.id %}" id="back">{% trans "Back to Library"%}</button>
+    <h2>{{file_name}}</h2>
 {% endblock %}
 
 {% block file_path %}

@@ -3,17 +3,15 @@
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
-<style type="text/css">
-.CodeMirror { margin-bottom:0; }
-</style>
 {% endblock %}
 
 {% block main_panel %}
-    <h2 id="view-hd">{{ file_name }}</h2>
-    <div id="file">
-        <div id="file-op">
+    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" id="shared-file-view-logo" />
+    <div id="shared-file-view-hd" class="ovhd">
+        <div class="fleft">
+            <h2 class="ellipsis no-bold" title="{{ file_name }}">{{ file_name }}</h2>
             {% if zipped %}
-            <p class="cur-path fleft ellipsis">
+            <p class="cur-path ellipsis">
               {% trans "Current path: "%} 
               {% for name, link in zipped %}
                 {% if not forloop.last %}
@@ -24,18 +22,23 @@
               {% endfor %}
               </p>
             {% else %}
-            <p class="fleft">{% trans "Shared by: " %}{{ shared_by|email2nickname }}</p>
+            <p class="share-by ellipsis">{% trans "Shared by: " %}{{ shared_by|email2nickname }}</p>
             {% endif %}
+        </div>
 
+        <div class="fright">
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
-              <button data="{{save_to_link}}" id="save">{% trans "Save to..."%}</button>
+              <button data="{{save_to_link}}" id="save" class="btn">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
             {% if not traffic_over_limit %}
               <a href="{% if from_shared_dir %}?p={{path}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
         </div>
+    </div>
+
+    <div id="file">
         {% include 'snippets/file_content_html.html' %}
     </div>
 
@@ -71,7 +74,7 @@ $(function() {
     {% endif %}
 });
 $(function () {
-    $('.cur-path').css({'max-width': $('#file-op').width() - $('#save').outerWidth(true) - $('.obv-btn').outerWidth(true) - 10});
+    $('#view-hd .ellipsis').css({'max-width': $('#view-hd').width() - $('#view-hd .fright').outerWidth(true) - 10});
 });
 
 {% if filetype == 'PDF' and use_pdfjs %}
