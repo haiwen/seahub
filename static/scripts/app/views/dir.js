@@ -293,8 +293,8 @@ define([
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
-                'click #by-name': 'sortByName',
-                'click #by-time': 'sortByTime'
+                'click .by-name': 'sortByName',
+                'click .by-time': 'sortByTime'
             },
 
             newDir: function() {
@@ -450,8 +450,9 @@ define([
             },
 
             sortByName: function() {
+                $('.by-time .sort-icon').hide();
                 var dirents = this.dir;
-                var el = $('#by-name');
+                var el = $('.by-name .sort-icon');
 
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
@@ -467,17 +468,17 @@ define([
                         return result;
                     }
                 };
-
                 dirents.sort();
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
-                el.toggleClass('icon-caret-up icon-caret-down');
+                el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
             },
 
             sortByTime: function () {
+                $('.by-name .sort-icon').hide();
                 var dirents = this.dir;
-                var el = $('#by-time');
+                var el = $('.by-time .sort-icon');
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
@@ -491,7 +492,7 @@ define([
                 dirents.sort();
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
-                el.toggleClass('icon-caret-up icon-caret-down');
+                el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
             },
 
