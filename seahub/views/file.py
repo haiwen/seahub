@@ -51,7 +51,7 @@ from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
-    render_permission_error, \
+    render_permission_error, is_pro_version, \
     is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit, do_md5
@@ -60,7 +60,7 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
-from seahub.views import check_folder_permission
+from seahub.views import check_folder_permission, check_file_lock
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -461,6 +461,20 @@ def _file_view(request, repo_id, path):
 
     office_preview_token = ret_dict.get('office_preview_token', '')
 
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    file_perm = seafile_api.check_permission_by_path(repo_id, path, username)
+
+    can_edit_file = True
+    if file_perm == 'r':
+        can_edit_file = False
+    elif is_locked and not locked_by_me:
+        can_edit_file = False
+
+    if is_pro_version() and file_perm == 'rw':
+        can_lock_unlock_file = True
+    else:
+        can_lock_unlock_file = False
+
     return render_to_response(template, {
             'repo': repo,
             'is_repo_owner': is_repo_owner,
@@ -487,6 +501,11 @@ def _file_view(request, repo_id, path):
             'last_commit_id': repo.head_cmmt_id,
             'is_starred': is_starred,
             'user_perm': user_perm,
+            'file_locked': is_locked,
+            'is_pro': is_pro_version(),
+            'locked_by_me': locked_by_me,
+            'can_edit_file': can_edit_file,
+            'can_lock_unlock_file': can_lock_unlock_file,
             'img_prev': img_prev,
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
@@ -962,8 +981,14 @@ def file_edit_submit(request, repo_id):
                             status=400,
                             content_type=content_type)
 
+    path = request.GET.get('p')
     username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
+    parent_dir = os.path.dirname(path)
+
+    # edit file, so check parent_dir's permission
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    if check_folder_permission(request, repo_id, parent_dir) != 'rw' or \
+        (is_locked and not locked_by_me):
         return error_json(_(u'Permission denied'))
 
     repo = get_repo(repo_id)
@@ -976,7 +1001,6 @@ def file_edit_submit(request, repo_id):
 
     content = request.POST.get('content')
     encoding = request.POST.get('encoding')
-    path = request.GET.get('p')
 
     if content is None or not path or encoding not in ["gbk", "utf-8"]:
         return error_json(_(u'Invalid arguments'))

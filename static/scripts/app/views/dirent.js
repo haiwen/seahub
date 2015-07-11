@@ -42,6 +42,18 @@ define([
                 is_pro: app.pageOptions.is_pro,
                 repo_encrypted: dir.encrypted
             }));
+
+            if (this.model.get('is_locked')) {
+                if (this.model.get('locked_by_me')) {
+                    this.$('.file-lock').hide();
+                } else {
+                    this.$('.file-lock').hide();
+                    this.$('.file-unlock').hide();
+                }
+            } else {
+                this.$('.file-unlock').hide();
+            }
+
             return this;
         },
 
@@ -57,7 +69,59 @@ define([
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
+            'click .file-lock': 'fileLock',
+            'click .file-unlock': 'fileUnlock',
             'click .set-folder-permission': 'setFolderPerm'
+        },
+
+        fileLock: function() {
+            var dir = this.dirView.dir,
+                _this = this,
+                filepath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
+
+            $.ajax({
+                url: Common.getUrl({name: 'file_lock', repo_id: dir.repo_id}),
+                type: 'PUT',
+                dataType: 'json',
+                data: {'operation': 'lock', 'p': filepath},
+                cache: 'false',
+                beforeSend: Common.prepareCSRFToken,
+                success: function(data) {
+                    _this.$('.file-locked-icon').show();
+                    _this.$('.file-unlock').show();
+                    _this.$('.file-lock').hide();
+                },
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+
+            return false;
+        },
+
+        fileUnlock: function() {
+            var dir = this.dirView.dir,
+                _this = this,
+                filepath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
+
+            $.ajax({
+                url: Common.getUrl({name: 'file_lock', repo_id: dir.repo_id}),
+                type: 'PUT',
+                dataType: 'json',
+                data: {'operation': 'unlock', 'p': filepath},
+                cache: 'false',
+                beforeSend: Common.prepareCSRFToken,
+                success: function(data) {
+                    _this.$('.file-locked-icon').hide();
+                    _this.$('.file-lock').show();
+                    _this.$('.file-unlock').hide();
+                },
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+
+            return false;
         },
 
         highlight: function() {

@@ -27,8 +27,7 @@ from seaserv import get_repo, get_commits, is_valid_filename, \
     seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
     is_passwd_set, get_file_size, get_group, get_session_info, get_commit, \
     MAX_DOWNLOAD_DIR_SIZE, send_message, ccnet_threaded_rpc, \
-    get_personal_groups_by_user
-from seaserv import seafile_api
+    get_personal_groups_by_user, seafile_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
@@ -131,6 +130,29 @@ def check_file_permission(request, repo_id, path):
         return 'rw'
 
     return seafile_api.check_permission_by_path(repo_id, path, username)
+
+def check_file_lock(repo_id, file_path, username):
+    """ check if file is locked to current user
+    according to returned value of seafile_api.check_file_lock:
+
+    0: not locked
+    1: locked by other
+    2: locked by me
+    -1: error
+
+    return (is_locked, locked_by_me)
+    """
+    return_value = seafile_api.check_file_lock(repo_id,
+            file_path.lstrip('/'), username)
+
+    if return_value == 0:
+        return (False, False)
+    elif return_value == 1:
+        return (True , False)
+    elif return_value == 2:
+        return (True, True)
+    else:
+        return None
 
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
@@ -1196,6 +1218,7 @@ def libraries(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
+            'is_pro': True if is_pro_version() else False,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             }, context_instance=RequestContext(request))
@@ -1464,6 +1487,14 @@ def render_file_revisions (request, repo_id):
 
     zipped = gen_path_link(path, repo.name)
 
+    can_revert_file = True
+    username = request.user.username
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    print (repo_id, path, username)
+    if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
+        (is_locked and not locked_by_me):
+        can_revert_file = False
+
     return render_to_response('file_revisions.html', {
         'repo': repo,
         'path': path,
@@ -1472,6 +1503,7 @@ def render_file_revisions (request, repo_id):
         'commits': commits,
         'is_owner': is_owner,
         'can_compare': can_compare,
+        'can_revert_file': can_revert_file,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -1487,21 +1519,22 @@ def repo_revert_file(request, repo_id):
     if not (commit_id and path and from_page):
         return render_error(request, _(u"Invalid arguments"))
 
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    username = request.user.username
     # perm check
-    if check_folder_permission(request, repo.id, path) != 'rw':
-        next = request.META.get('HTTP_REFERER', None)
-        if not next:
-            next = settings.SITE_ROOT
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    if check_folder_permission(request, repo.id, path) != 'rw' or \
+        (is_locked and not locked_by_me):
         messages.error(request, _("Permission denied"))
         return HttpResponseRedirect(next)
 
     try:
-        ret = seafile_api.revert_file(repo_id, commit_id, path, request.user.username)
+        ret = seafile_api.revert_file(repo_id, commit_id, path, username)
     except Exception as e:
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
-        referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
     else:
         if from_page == 'repo_history':
@@ -1511,12 +1544,11 @@ def repo_revert_file(request, repo_id):
             # When revert from recycle page, redirect to recycle page.
             url = reverse('repo_recycle_view', args=[repo_id])
         else:
-            # When revert file from file history, we redirect to parent dir of this file
-            parent_dir = os.path.dirname(path)
-            url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
+            # When revert file from file history, we reload page
+            url = next
 
         if ret == 1:
-            root_url = reverse('repo', args=[repo_id]) + u'?p=/'
+            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
             msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
             messages.success(request, msg, extra_tags='safe')
         else:

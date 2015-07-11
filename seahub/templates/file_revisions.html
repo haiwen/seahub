@@ -52,7 +52,9 @@
                 <td>{{ commit.rev_file_size|filesizeformat }} </td>
                 <td>
                     {% if commit.id != repo.head_cmmt_id %}
+                    {% if can_revert_file %}
                     <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&from=file_revisions" class="op vh">{% trans 'Restore' %}</a>
+                    {% endif %}
                     {% endif %}
                     <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&op=download" class="op vh">{% trans 'Download' %}</a>
                     <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>

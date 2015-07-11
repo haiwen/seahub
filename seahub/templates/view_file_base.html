@@ -12,6 +12,9 @@
     <div id="view-hd">
         <h2>{{ filename }}
             <span id="file-star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
+            {% if is_pro %}
+            <img class="file-locked-icon cspt {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "Locked" %}" title="{% trans "Locked" %}"/>
+            {% endif %}
         </h2>
     </div>
 
@@ -41,6 +44,16 @@
 
             </div>
 
+            {% if can_lock_unlock_file %}
+                {% if not file_locked %}
+                    <button id="lock-file">{% trans "Lock" %}</button>
+                    <button id="unlock-file" class="hide">{% trans "Unlock" %}</button>
+                {% elif locked_by_me %}
+                    <button id="unlock-file">{% trans "Unlock" %}</button>
+                    <button id="lock-file" class="hide">{% trans "Lock" %}</button>
+                {% endif %}
+            {% endif %}
+
             {% if not repo.encrypted %}
             {% if request.user.permissions.can_generate_shared_link %}
             <button id="share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
@@ -51,7 +64,7 @@
             <button id="history" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</button>
             {% endif %}
 
-            {% if request.user.is_authenticated %}
+            {% if request.user.is_authenticated and can_edit_file %}
                 {% block edit_file %}
                 {% endblock %}
             {% endif %}
@@ -72,7 +85,7 @@
         </div>
     </div>
 
-    {% include "snippets/file_share_popup.html" %} 
+    {% include "snippets/file_share_popup.html" %}
 
     <div id="side-toolbar">
         <ul class="side-toolbar">
@@ -125,7 +138,7 @@ $('#file-star').click(function() {
     } else {
         url_base = '{% url 'repo_unstar_file' repo.id %}';
     }
-    
+
     $.ajax({
         url: url_base + '?file=' + e("{{path|escapejs}}"),
         cache: false,
@@ -137,6 +150,42 @@ $('#file-star').click(function() {
    });
 });
 
+{% if can_lock_unlock_file %}
+// lock file
+$('#lock-file').click(function() {
+    $.ajax({
+        url: '{% url 'FileView' repo.id %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {'operation': 'lock', 'p': '{{path}}'},
+        success: function() {
+            $('#lock-file').hide();
+            $('#unlock-file').show();
+            $('.file-locked-icon').show();
+        },
+        error: ajaxErrorHandler
+    });
+});
+
+$('#unlock-file').click(function() {
+    $.ajax({
+        url: '{% url 'FileView' repo.id %}',
+        type: 'PUT',
+        dataType: 'json',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {'operation': 'unlock', 'p': '{{path}}'},
+        success: function() {
+            $('#lock-file').show();
+            $('#unlock-file').hide();
+            $('.file-locked-icon').hide();
+        },
+        error: ajaxErrorHandler
+    });
+});
+{% endif %}
 
 // set 'side toolbar' position
 
