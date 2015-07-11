@@ -1851,7 +1851,7 @@ class FileView(APIView):
 
         parent_dir = os.path.dirname(path)
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')

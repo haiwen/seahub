@@ -1218,7 +1218,6 @@ def libraries(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'max_upload_file_size': max_upload_file_size,
-            'is_pro': True if is_pro_version() else False,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             }, context_instance=RequestContext(request))
@@ -1490,7 +1489,6 @@ def render_file_revisions (request, repo_id):
     can_revert_file = True
     username = request.user.username
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    print (repo_id, path, username)
     if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
         (is_locked and not locked_by_me):
         can_revert_file = False
