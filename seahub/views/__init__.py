@@ -1664,29 +1664,6 @@ def pubrepo(request):
 
     raise Http404
 
-@login_required
-def pubgrp(request):
-    """
-    Show public groups.
-    """
-    if not request.user.permissions.can_view_org():
-        raise Http404
-
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        groups = seaserv.get_org_groups(org_id, -1, -1)
-        return render_to_response('organizations/pubgrp.html', {
-                'groups': groups,
-                }, context_instance=RequestContext(request))
-
-    if not request.cloud_mode:
-        groups = seaserv.get_personal_groups(-1, -1)
-        return render_to_response('pubgrp.html', {
-                'groups': groups,
-                }, context_instance=RequestContext(request))
-
-    raise Http404
-
 def get_pub_users(request, start, limit):
     if is_org_context(request):
         url_prefix = request.user.org.url_prefix
