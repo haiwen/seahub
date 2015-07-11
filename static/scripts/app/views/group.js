@@ -131,9 +131,9 @@ define([
         },
 
         sortByName: function() {
-            $('.by-time .sort-icon').hide();
+            this.$('.by-time .sort-icon').hide();
             var repos = this.repos;
-            var el = $('.by-name .sort-icon', this.$table);
+            var el = this.$('.by-name .sort-icon');
             repos.comparator = function(a, b) { // a, b: model
                 var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                 if (el.hasClass('icon-caret-up')) {
@@ -147,13 +147,12 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
-
         },
 
         sortByTime: function() {
-            $('.by-name .sort-icon').hide();
+            this.$('.by-name .sort-icon').hide();
             var repos = this.repos;
-            var el = $('.by-time .sort-icon', this.$table);
+            var el = this.$('.by-time .sort-icon');
             repos.comparator = function(a, b) { // a, b: model
                 if (el.hasClass('icon-caret-down')) {
                     return a.get('mtime') < b.get('mtime') ? 1 : -1;

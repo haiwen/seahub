@@ -139,7 +139,7 @@ define([
         },
 
         sortByName: function() {
-            $('.by-time .sort-icon').hide();
+            $('.by-time .sort-icon', this.$table).hide();
             var repos = this.repos;
             var el = $('.by-name .sort-icon', this.$table);
             repos.comparator = function(a, b) { // a, b: model
@@ -158,7 +158,7 @@ define([
         },
 
         sortByTime: function() {
-            $('.by-name .sort-icon').hide();
+            $('.by-name .sort-icon', this.$table).hide();
             var repos = this.repos;
             var el = $('.by-time .sort-icon', this.$table);
             repos.comparator = function(a, b) { // a, b: model

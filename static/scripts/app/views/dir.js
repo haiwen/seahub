@@ -450,9 +450,10 @@ define([
             },
 
             sortByName: function() {
-                $('.by-time .sort-icon').hide();
+                this.$('.by-time .sort-icon').hide();
+
                 var dirents = this.dir;
-                var el = $('.by-name .sort-icon');
+                var el = this.$('.by-name .sort-icon');
 
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
@@ -476,9 +477,10 @@ define([
             },
 
             sortByTime: function () {
-                $('.by-name .sort-icon').hide();
+                this.$('.by-name .sort-icon').hide();
+
                 var dirents = this.dir;
-                var el = $('.by-time .sort-icon');
+                var el = this.$('.by-time .sort-icon');
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
