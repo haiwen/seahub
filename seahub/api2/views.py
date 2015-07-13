@@ -1852,7 +1852,10 @@ class FileDetailView(APIView):
             # get real path for sub repo
             real_path = repo.origin_path + path if repo.origin_path else path
             dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
-            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = None, 0
         except SearpcError as e:
             logger.error(e)
             latest_contributor, last_modified = None, 0

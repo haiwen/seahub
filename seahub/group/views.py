@@ -1396,7 +1396,10 @@ def group_wiki(request, group, page_name="home"):
         path = '/' + dirent.obj_name
         try:
             dirent = seafile_api.get_dirent_by_path(repo.id, path)
-            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = None, 0
         except SearpcError as e:
             logger.error(e)
             latest_contributor, last_modified = None, 0

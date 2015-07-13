@@ -120,7 +120,10 @@ class UserStarredFilesManager(models.Manager):
                 real_path = sfile.repo.origin_path + sfile.path if sfile.repo.origin_path else sfile.path
                 dirent = seafile_api.get_dirent_by_path(sfile.repo.store_id,
                                                         real_path)
-                sfile.last_modified = dirent.mtime
+                if dirent:
+                    sfile.last_modified = dirent.mtime
+                else:
+                    sfile.last_modified = 0
             except SearpcError as e:
                 logger.error(e)
                 sfile.last_modified = 0

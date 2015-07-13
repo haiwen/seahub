@@ -374,6 +374,9 @@ def _download_dir_from_share_link(request, fileshare, repo, real_path):
         dirname = os.path.basename(real_path.rstrip('/'))
 
     dir_id = seafile_api.get_dir_id_by_path(repo.id, real_path)
+    if not dir_id:
+        return render_error(
+            request, _(u'Unable to download: folder not found.'))
 
     try:
         total_size = seaserv.seafserv_threaded_rpc.get_dir_size(
