@@ -1330,7 +1330,6 @@ def check_office_token(func):
             if referer:
                 token = urlparse.parse_qs(
                     urlparse.urlparse(referer).query).get('office_preview_token', [''])[0]
-                print 'token from referer:', token
 
         request.office_preview_token = token
 
