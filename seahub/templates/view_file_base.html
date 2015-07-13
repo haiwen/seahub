@@ -13,7 +13,7 @@
         <h2>{{ filename }}
             <span id="file-star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
             {% if is_pro %}
-            <img class="file-locked-icon cspt {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "Locked" %}" title="{% trans "Locked" %}"/>
+            <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" />
             {% endif %}
         </h2>
     </div>
@@ -151,44 +151,27 @@ $('#file-star').click(function() {
 });
 
 {% if can_lock_unlock_file %}
-// lock file
-$('#lock-file').click(function() {
+// lock/unlock file
+$('#lock-file, #unlock-file').click(function() {
+    var op = $(this).attr('id') == 'lock-file' ? 'lock' : 'unlock';
     $.ajax({
         url: '{% url 'FileView' repo.id %}',
         type: 'PUT',
         dataType: 'json',
         cache: 'false',
         beforeSend: prepareCSRFToken,
-        data: {'operation': 'lock', 'p': '{{path}}'},
+        data: {'operation': op, 'p': '{{path|escapejs}}'},
         success: function() {
-            $('#lock-file').hide();
-            $('#unlock-file').show();
-            $('.file-locked-icon').show();
+            $('#lock-file, #unlock-file, .file-locked-icon').toggleClass('hide');
         },
-        error: ajaxErrorHandler
-    });
-});
-
-$('#unlock-file').click(function() {
-    $.ajax({
-        url: '{% url 'FileView' repo.id %}',
-        type: 'PUT',
-        dataType: 'json',
-        cache: 'false',
-        beforeSend: prepareCSRFToken,
-        data: {'operation': 'unlock', 'p': '{{path}}'},
-        success: function() {
-            $('#lock-file').show();
-            $('#unlock-file').hide();
-            $('.file-locked-icon').hide();
-        },
-        error: ajaxErrorHandler
+        error: function () {
+            feedback("{% trans "Failed" %}", 'error');
+        }
     });
 });
 {% endif %}
 
 // set 'side toolbar' position
-
 function setToolbarPos() {
     var toolbar = $('#side-toolbar');
 

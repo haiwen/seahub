@@ -3655,10 +3655,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #user-profile .info-detail {
     padding-left: 6px;
-
-/* file lock  */
-#view-hd .file-locked-icon {
-    vertical-align: middle;
 }
 /* shared file view */
 #shared-file-view-logo {
