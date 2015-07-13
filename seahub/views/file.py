@@ -13,6 +13,8 @@ import chardet
 import logging
 import posixpath
 import re
+import mimetypes
+import urlparse
 
 from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
@@ -1322,6 +1324,14 @@ def check_office_token(func):
         if not token:
             token = request.GET.get('office_preview_token', '')
 
+        if not token:
+            # Work around for the images embedded in excel files
+            referer = request.META.get('HTTP_REFERER', '')
+            if referer:
+                token = urlparse.parse_qs(
+                    urlparse.urlparse(referer).query).get('office_preview_token', [''])[0]
+                print 'token from referer:', token
+
         request.office_preview_token = token
 
         return func(request, *args, **kwargs)
@@ -1371,7 +1381,7 @@ def office_convert_query_status(request, internal=False):
 # 1.page
 # 2.page
 # ...
-_OFFICE_PAGE_PATTERN = re.compile(r'^([0-9a-f]{40})/([\d]+\.page|file\.css|file\.outline|index.html)$')
+_OFFICE_PAGE_PATTERN = re.compile(r'^([0-9a-f]{40})/([\d]+\.page|file\.css|file\.outline|index.html|index_html_(.*).png)$')
 @check_office_token
 def office_convert_get_page(request, path, internal=False):
     if not HAS_OFFICE_CONVERTER:
@@ -1389,7 +1399,11 @@ def office_convert_get_page(request, path, internal=False):
     #         return HttpResponseForbidden()
 
     resp = get_office_converted_page(request, path, file_id, internal=internal)
-    resp['Content-Type'] = 'text/html'
+    if path.endswith('.page'):
+        content_type = 'text/html'
+    else:
+        content_type = mimetypes.guess_type(path)[0] or 'text/html'
+    resp['Content-Type'] = content_type
     return resp
 
 ###### private file/dir shares
