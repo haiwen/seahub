@@ -3582,8 +3582,17 @@ def html_events(request):
             }, context_instance=RequestContext(request))
 
     email = request.user.username
+    start = 0
     events_count = 15
-    events, events_more_offset = get_user_events(email, 0, events_count)
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        events, events_more_offset = get_org_user_events(org_id, email,
+                                                         start, events_count)
+    else:
+        events, events_more_offset = get_user_events(email, start,
+                                                     events_count)
+
     events_more = True if len(events) == events_count else False
     event_groups = group_events_data(events)
     prepare_events(event_groups)
