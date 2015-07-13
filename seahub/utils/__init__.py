@@ -101,10 +101,10 @@ PREVIEW_FILEEXT = {
     TEXT: ('ac', 'am', 'bat', 'c', 'cc', 'cmake', 'cpp', 'cs', 'css', 'diff', 'el', 'h', 'html', 'htm', 'java', 'js', 'json', 'less', 'make', 'org', 'php', 'pl', 'properties', 'py', 'rb', 'scala', 'script', 'sh', 'sql', 'txt', 'text', 'tex', 'vi', 'vim', 'xhtml', 'xml', 'log', 'csv', 'groovy', 'rst', 'patch', 'go'),
     IMAGE: ('gif', 'jpeg', 'jpg', 'png', 'ico', 'bmp'),
     DOCUMENT: ('doc', 'docx', 'ppt', 'pptx'),
-    SPREADSHEET: ('xls', 'xlsx'),
+    SPREADSHEET: ('xls', 'xlsx', 'ods', 'fods'),
     # SVG: ('svg',),
     PDF: ('pdf',),
-    OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp', 'ods', 'fods'),
+    OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp'),
     MARKDOWN: ('markdown', 'md'),
     SF: ('seaf',),
     VIDEO: ('mp4', 'ogv', 'webm', 'flv', 'wmv'),
@@ -935,6 +935,12 @@ if HAS_OFFICE_CONVERTER:
 
     OFFICE_HTML_DIR = get_office_converter_html_dir()
     OFFICE_PREVIEW_MAX_SIZE, OFFICE_PREVIEW_MAX_PAGES = get_office_converter_limit()
+
+    all_doc_types = PREVIEW_FILEEXT[DOCUMENT] + PREVIEW_FILEEXT[OPENDOCUMENT]
+    PREVIEW_FILEEXT[DOCUMENT] = all_doc_types
+    PREVIEW_FILEEXT.pop(OPENDOCUMENT)
+
+    FILEEXT_TYPE_MAP = gen_fileext_type_map()
 
     from seafevents.office_converter import OfficeConverterRpcClient
 
