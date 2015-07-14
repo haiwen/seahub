@@ -5,6 +5,7 @@ import stat
 import json
 import datetime
 import urllib2
+import posixpath
 import re
 from dateutil.relativedelta import relativedelta
 from urllib2 import unquote, quote
@@ -21,6 +22,7 @@ from rest_framework.response import Response
 from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 
+from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.db.models import F, Q
@@ -60,14 +62,16 @@ from seahub.profile.models import Profile
 from seahub.views.modules import get_wiki_enabled_group_list
 from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import repo_created, share_file_to_user_successful
-from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare
+from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare, \
+    UploadLinkShare
 from seahub.share.views import list_shared_repos
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
-    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg
+    get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
+    gen_shared_upload_link
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -1256,6 +1260,7 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
     try:
         dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
                 username, -1, -1)
+        dirs = dirs if dirs else []
     except SearpcError, e:
         logger.error(e)
         return api_error(HTTP_520_OPERATION_FAILED,
@@ -1475,7 +1480,8 @@ class OpMoveView(APIView):
                 seafile_api.move_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       username, 0, synchronous=1)
-            except SearpcError,e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to move file.")
 
@@ -1499,7 +1505,7 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to copy file.')
 
-        parent_dir = request.GET.get('p', None)
+        parent_dir = request.POST.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
@@ -1510,15 +1516,6 @@ class OpCopyView(APIView):
 
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
-
-        parent_dir = request.POST.get('p', '/')
-        dst_repo = request.POST.get('dst_repo', None)
-        dst_dir = request.POST.get('dst_dir', None)
-        file_names = request.POST.get("file_names", None)
-
-        if not parent_dir or not file_names or not dst_repo or not dst_dir:
-            return api_error(status.HTTP_400_BAD_REQUEST,
-                             'Missing argument.')
 
         if not get_repo(dst_repo):
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
@@ -1536,7 +1533,8 @@ class OpCopyView(APIView):
                 seafile_api.copy_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
                                       username, 0, synchronous=1)
-            except SearpcError,e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  "Failed to copy file.")
 
@@ -1930,7 +1928,8 @@ class FileHistory(APIView):
         try:
             commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
                                                                 -1, -1)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Server error')
 
         if not commits:
@@ -1942,51 +1941,91 @@ class FileSharedLinkView(APIView):
     """
     Support uniform interface for file shared link.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
 
-        if not request.user.permissions.can_generate_shared_link():
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to generate shared link.')
+        repo = seaserv.get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, "Library does not exist")
 
-        # generate file shared link
-        username = request.user.username
-        path = unquote(request.DATA.get('p', '').encode('utf-8'))
-        type = unquote(request.DATA.get('type', 'f').encode('utf-8'))
-
-        if type not in ('d', 'f'):
-            return api_error(status.HTTP_400_BAD_REQUEST, 'invalid type')
-
+        path = request.DATA.get('p', None)
         if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing')
 
-        if path != '/' and path[-1] == '/':
-            path = path[:-1]
+        username = request.user.username
+        password = request.DATA.get('password', None)
+        share_type = request.DATA.get('share_type', 'download')
 
-        if type == 'f':
-            fs = FileShare.objects.get_file_link_by_path(username, repo_id,
-                                                         path)
-            if fs is None:
-                fs = FileShare.objects.create_file_link(username, repo_id,
-                                                        path)
-                if is_org_context(request):
-                    org_id = request.user.org.org_id
-                    OrgFileShare.objects.set_org_file_share(org_id, fs)
+        if share_type.lower() == 'download':
+
+            if check_folder_permission(request, repo_id, path) is None:
+                return api_error(status.HTTP_403_FORBIDDEN, 'permission denied')
+
+            # generate download link
+            link_type = request.DATA.get('type', 'f')
+            expire = request.DATA.get('expire', None)
+
+            if link_type not in ('d', 'f'):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid type')
+
+            if expire:
+                try:
+                    expire_days = int(expire)
+                except ValueError:
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid expiration days')
+                else:
+                    expire_date = timezone.now() + relativedelta(days=expire_days)
+            else:
+                expire_date = None
+
+            if link_type == 'f':
+                if not seafile_api.get_file_id_by_path(repo_id, path):
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+
+                fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
+                if fs is None:
+                    fs = FileShare.objects.create_file_link(username, repo_id, path,
+                                                            password, expire_date)
+                    if is_org_context(request):
+                        org_id = request.user.org.org_id
+                        OrgFileShare.objects.set_org_file_share(org_id, fs)
+            else:
+                if not seafile_api.get_dir_id_by_path(repo_id, path):
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+
+                fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
+                if fs is None:
+                    fs = FileShare.objects.create_dir_link(username, repo_id, path,
+                                                           password, expire_date)
+                    if is_org_context(request):
+                        org_id = request.user.org.org_id
+                        OrgFileShare.objects.set_org_file_share(org_id, fs)
+
+            token = fs.token
+            shared_link = gen_shared_link(token, fs.s_type)
+
+        elif share_type.lower() == 'upload':
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+
+            if check_folder_permission(request, repo_id, path) != 'rw':
+                return api_error(status.HTTP_403_FORBIDDEN, 'permission denied')
+
+            # generate upload link
+            uls = UploadLinkShare.objects.get_upload_link_by_path(username, repo_id, path)
+            if uls is None:
+                uls = UploadLinkShare.objects.create_upload_link_share(
+                    username, repo_id, path, password)
+
+            token = uls.token
+            shared_link = gen_shared_upload_link(token)
+
         else:
-            fs = FileShare.objects.get_dir_link_by_path(username, repo_id,
-                                                        path)
-            if fs is None:
-                fs = FileShare.objects.create_dir_link(username, repo_id,
-                                                       path)
-                if is_org_context(request):
-                    org_id = request.user.org.org_id
-                    OrgFileShare.objects.set_org_file_share(org_id, fs)
-
-        token = fs.token
-        shared_link = gen_shared_link(token, fs.s_type)
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                             "Operation can only be download or upload.")
 
         resp = Response(status=status.HTTP_201_CREATED)
         resp['Location'] = shared_link
@@ -2518,8 +2557,6 @@ class SharedFileView(APIView):
         return get_repo_file(request, repo_id, file_id, file_name, op)
 
 class SharedFileDetailView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, token, format=None):
@@ -2530,7 +2567,15 @@ class SharedFileDetailView(APIView):
         except FileShare.DoesNotExist:
             return api_error(status.HTTP_404_NOT_FOUND, "Token not found")
 
-        shared_by = fileshare.username
+        if fileshare.is_encrypted():
+            password = request.GET.get('password', '')
+
+            if not password:
+                return api_error(status.HTTP_403_FORBIDDEN, "Password is required")
+
+            if not check_password(password, fileshare.password):
+                return api_error(status.HTTP_403_FORBIDDEN, "Invalid Password")
+
         repo_id = fileshare.repo_id
         repo = get_repo(repo_id)
         if not repo:
@@ -2556,7 +2601,8 @@ class SharedFileDetailView(APIView):
         entry = {}
         try:
             entry["size"] = get_file_size(repo.store_id, repo.version, file_id)
-        except Exception, e:
+        except Exception as e:
+            logger.error(e)
             entry["size"] = 0
 
         entry["type"] = "file"
@@ -2638,7 +2684,7 @@ class FileShareEncoder(json.JSONEncoder):
                 's_type':obj.s_type}
 
 class SharedLinksView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -2672,9 +2718,99 @@ class SharedLinksView(APIView):
         return HttpResponse(json.dumps({"fileshares": p_fileshares}, cls=FileShareEncoder), status=200, content_type=json_content_type)
 
     def delete(self, request, format=None):
-        token = request.GET.get('t')
-        FileShare.objects.filter(token=token).delete()
+        token = request.GET.get('t', None)
+        if not token:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Token is missing')
+
+        username = request.user.username
+        share = FileShare.objects.filter(token=token).filter(username=username) or \
+                UploadLinkShare.objects.filter(token=token).filter(username=username)
+
+        if not share:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid token')
+
+        share.delete()
+
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+
+class SharedDirView(APIView):
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, token, format=None):
+        """List dirents in dir download shared link
+        """
+        fileshare = FileShare.objects.get_valid_dir_link_by_token(token)
+        if not fileshare:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Invalid token")
+
+        repo_id = fileshare.repo_id
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Invalid token")
+
+        if fileshare.is_encrypted():
+            password = request.GET.get('password', '')
+
+            if not password:
+                return api_error(status.HTTP_403_FORBIDDEN, "Password is required")
+
+            if not check_password(password, fileshare.password):
+                return api_error(status.HTTP_403_FORBIDDEN, "Invalid Password")
+
+        req_path = request.GET.get('p', '/')
+
+        if req_path[-1] != '/':
+            req_path += '/'
+
+        if req_path == '/':
+            real_path = fileshare.path
+        else:
+            real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
+
+        if real_path[-1] != '/':         # Normalize dir path
+            real_path += '/'
+
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, real_path)
+        if not dir_id:
+            return api_error(status.HTTP_400_BAD_REQUEST, "Invalid path")
+
+        username = fileshare.username
+        try:
+            dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, real_path, dir_id,
+                    username, -1, -1)
+            dirs = dirs if dirs else []
+        except SearpcError, e:
+            logger.error(e)
+            return api_error(HTTP_520_OPERATION_FAILED, "Failed to list dir.")
+
+        dir_list, file_list = [], []
+        for dirent in dirs:
+            dtype = "file"
+            entry = {}
+            if stat.S_ISDIR(dirent.mode):
+                dtype = "dir"
+            else:
+                if repo.version == 0:
+                    entry["size"] = get_file_size(repo.store_id, repo.version,
+                                                  dirent.obj_id)
+                else:
+                    entry["size"] = dirent.size
+
+            entry["type"] = dtype
+            entry["name"] = dirent.obj_name
+            entry["id"] = dirent.obj_id
+            entry["mtime"] = dirent.mtime
+            if dtype == 'dir':
+                dir_list.append(entry)
+            else:
+                file_list.append(entry)
+
+        dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+        dentrys = dir_list + file_list
+
+        content_type = 'application/json; charset=utf-8'
+        return HttpResponse(json.dumps(dentrys), status=200, content_type=content_type)
 
 class DefaultRepoView(APIView):
     """
