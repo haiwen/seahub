@@ -58,6 +58,7 @@ urlpatterns = patterns('',
     url(r'^s/f/(?P<token>[a-f0-9]{10})/detail/$', PrivateSharedFileDetailView.as_view()),
     url(r'^f/(?P<token>[a-f0-9]{10})/$', SharedFileView.as_view()),
     url(r'^f/(?P<token>[a-f0-9]{10})/detail/$', SharedFileDetailView.as_view()),
+    url(r'^d/(?P<token>[a-f0-9]{10})/dir/$', SharedDirView.as_view()),
 
     url(r'^groupandcontacts/$', GroupAndContacts.as_view()),
     url(r'^events/$', EventsView.as_view()),

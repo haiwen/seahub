@@ -168,6 +168,18 @@ class OrgFileShare(models.Model):
     objects = OrgFileShareManager()
 
 class UploadLinkShareManager(models.Manager):
+    def _get_upload_link_by_path(self, username, repo_id, path):
+        ufs = list(super(UploadLinkShareManager, self).filter(repo_id=repo_id).filter(
+            username=username).filter(path=path))
+        if len(ufs) > 0:
+            return ufs[0]
+        else:
+            return None
+
+    def get_upload_link_by_path(self, username, repo_id, path):
+        path = normalize_dir_path(path)
+        return self._get_upload_link_by_path(username, repo_id, path)
+
     def create_upload_link_share(self, username, repo_id, path,
                                  password=None, expire_date=None):
         path = normalize_dir_path(path)
