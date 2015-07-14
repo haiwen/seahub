@@ -298,10 +298,13 @@ if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
 if HAS_OFFICE_CONVERTER:
-    from seahub.views.file import office_convert_query_status, \
-        office_convert_add_task, office_convert_get_page
+    from seahub.views.file import (
+        office_convert_query_status, office_convert_get_page, office_convert_add_task
+    )
     urlpatterns += patterns('',
-        url(r'^office-convert/static/(?P<path>.*)$', office_convert_get_page, name='office_convert_get_page'),
+        url(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.+)/(?P<filename>[^/]+)/$',
+            office_convert_get_page,
+            name='office_convert_get_page'),
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
     )
 

@@ -2,6 +2,10 @@
 """
 import unicodedata
 import urlparse
+import json
+
+from functools import wraps
+from django.http import HttpResponse
 
 def is_safe_url(url, host=None):
     """
@@ -35,3 +39,15 @@ def is_safe_url(url, host=None):
         return False
     return ((not url_info.netloc or url_info.netloc == host) and
             (not url_info.scheme or url_info.scheme in ['http', 'https']))
+
+JSON_CONTENT_TYPE = 'application/json; charset=utf-8'
+def json_response(func):
+    @wraps(func)
+    def wrapped(*a, **kw):
+        result = func(*a, **kw)
+        if isinstance(result, HttpResponse):
+            return result
+        else:
+            return HttpResponse(json.dumps(result), status=200,
+                                content_type=JSON_CONTENT_TYPE)
+    return wrapped

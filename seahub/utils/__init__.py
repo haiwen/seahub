@@ -1053,10 +1053,9 @@ if HAS_OFFICE_CONVERTER:
 
     @cluster_delegate(delegate_get_office_converted_page)
     def get_office_converted_page(request, path, file_id):
-        return django_static_serve(request, path, document_root=OFFICE_HTML_DIR)
+        return django_static_serve(request, os.path.join(file_id, path), document_root=OFFICE_HTML_DIR)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
-        ret_dict['office_preview_token'] = do_md5(obj_id + seahub.settings.SECRET_KEY)
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
         except:

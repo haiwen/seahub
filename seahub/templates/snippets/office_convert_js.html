@@ -1,8 +1,8 @@
 {% load i18n %}
 
-var OfficePreviewer = function(file_id, preview_token) {
-    this.file_id = file_id;
-    this.preview_token = preview_token;
+var OfficePreviewer = function(repo_id, path) {
+    this.repo_id = repo_id;
+    this.path = path;
     this.total_pages = null;
 
     this.orig_page_width = null;
@@ -14,10 +14,15 @@ var OfficePreviewer = function(file_id, preview_token) {
 
     this.FIT_TO_WIDTH = 850;    // hardcoded in seafevents
     this.scale_ratio = 1;
+    this.static_prefix = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/';
 
     this.page_status_url = function(page) {
         return "{% url 'office_convert_query_status' %}?" +
-            $.param({file_id: this.file_id, page: page});
+            $.param({
+                repo_id: repo_id,
+                path: path,
+                page: page
+            });
     }
     this.page_content_url = function(page) {
         return "{% url 'office_convert_get_page' obj_id %}/"
@@ -26,6 +31,7 @@ var OfficePreviewer = function(file_id, preview_token) {
 
     var url = window.location.href;
     var arr = url.split("/");
+    // need the current domain to post message to iframe (for zoom in/out)
     this.origin = arr[0] + "//" + arr[2];
 };
 
@@ -45,7 +51,6 @@ OfficePreviewer.prototype.check_page_status = function() {
         url: this.page_status_url(page),
         cache: false,
         dataType: 'json',
-        beforeSend: this.prepareOfficePreviewToken,
         success: function(data) {
             var status = data['status'];
             switch (status) {
@@ -154,10 +159,6 @@ OfficePreviewer.prototype.load_page = function(index) {
     }
 };
 
-OfficePreviewer.prototype.prepareOfficePreviewToken = function(xhr, settings) {
-    xhr.setRequestHeader('X-Seafile-Office-Preview-Token', this.preview_token);
-};
-
 $(function() {
-    new OfficePreviewer("{{ obj_id }}", "{{ office_preview_token }}").start();
+    new OfficePreviewer('{{ repo.id }}', '{{ path }}').start();
 });
