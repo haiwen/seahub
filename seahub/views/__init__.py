@@ -92,12 +92,15 @@ def is_registered_user(email):
 
     return True if user else False
 
+_default_repo_id = None
 def get_system_default_repo_id():
-    try:
-        return seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
-    except SearpcError as e:
-        logger.error(e)
-        return None
+    global _default_repo_id
+    if not _default_repo_id:
+        try:
+            _default_repo_id = seaserv.seafserv_threaded_rpc.get_system_default_repo_id()
+        except SearpcError as e:
+            logger.error(e)
+    return _default_repo_id
 
 def check_folder_permission(request, repo_id, path):
     """Check repo/folder access permission of a user, always return 'rw'
@@ -109,7 +112,7 @@ def check_folder_permission(request, repo_id, path):
     - `path`:
     """
     username = request.user.username
-    if get_system_default_repo_id() == repo_id and request.user.is_staff:
+    if request.user.is_staff and get_system_default_repo_id() == repo_id:
         return 'rw'
 
     return seafile_api.check_permission_by_path(repo_id, path, username)
@@ -122,7 +125,7 @@ def check_repo_access_permission(repo_id, user):
     - `repo_id`:
     - `user`:
     """
-    if get_system_default_repo_id() == repo_id and user.is_staff:
+    if user.is_staff and get_system_default_repo_id() == repo_id:
         return 'rw'
     else:
         return seafile_api.check_repo_access_permission(repo_id, user.username)
