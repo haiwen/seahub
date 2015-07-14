@@ -1,5 +1,4 @@
 import time
-from django.core.urlresolvers import reverse
 
 from tests.api.apitestbase import ApiTestBase
 from tests.common.utils import apiurl
@@ -7,7 +6,8 @@ from tests.common.utils import apiurl
 
 class GroupRepoTest(ApiTestBase):
     def create_group_repo(self, group_id, expected=None, *args, **kwargs):
-        path = apiurl(reverse("api2-grouprepos", args=[group_id]))
+        path = apiurl('/api2/groups/%s/repos/' % group_id)
+
         data = {"name": 'grepo-test'}
         data.update(kwargs)
         resp = self.post(path, data=data, expected=expected)
@@ -45,7 +45,7 @@ class GroupRepoTest(ApiTestBase):
         with self.get_tmp_group() as group:
             self.create_group_repo(group.group_id)
 
-            path = apiurl(reverse("api2-grouprepos", args=[group.group_id]))
+            path = apiurl('/api2/groups/%s/repos/' % group.group_id)
             resp = self.get(path)
 
             assert resp.status_code == 200
@@ -67,7 +67,7 @@ class GroupRepoTest(ApiTestBase):
             time.sleep(1)
             self.create_group_repo(group.group_id)
 
-            path = apiurl(reverse("api2-grouprepos", args=[group.group_id]))
+            path = apiurl('/api2/groups/%s/repos/' % group.group_id)
             resp = self.get(path)
 
             assert resp.status_code == 200
@@ -81,6 +81,6 @@ class GroupRepoTest(ApiTestBase):
             resp = self.create_group_repo(group.group_id)
 
             repo_id = resp.json()['id']
-            path = apiurl(reverse("api2-grouprepo", args=[group.group_id, repo_id]))
+            path = apiurl('/api2/groups/%s/repos/%s/' % (group.group_id, repo_id))
             resp = self.delete(path)
             assert resp.status_code == 200
