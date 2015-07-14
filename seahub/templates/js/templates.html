@@ -221,6 +221,9 @@
                 <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
                 <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                 <% } %>
+                <% if (is_pro) { %>
+                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>/">{% trans "Open via Client" %}</a></li>
+                <% } %>
             </ul>
             <% } %>
         </div>
@@ -302,6 +305,7 @@
                     <% } else { %>
                     <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                     <% } %>
+                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<%- encoded_path %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
             </ul>
             <% } %>
