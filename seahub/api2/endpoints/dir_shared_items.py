@@ -13,17 +13,24 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub.utils import is_org_context, is_valid_username
 from seahub.share.signals import share_repo_to_user_successful
+from seahub.share.views import check_user_share_quota
+from seahub.utils import (is_org_context, is_valid_username,
+                          send_perm_audit_msg)
+
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 class DirSharedItemsEndpoint(APIView):
+    """Support uniform interface(list, share, unshare, modify) for sharing
+    library/folder to users/groups.
+    """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, IsRepoAccessible)
     throttle_classes = (UserRateThrottle, )
 
     def list_user_shared_items(self, request, repo_id, path):
@@ -63,9 +70,6 @@ class DirSharedItemsEndpoint(APIView):
                 "permission": item.perm,
             })
         return ret
-
-    # def add_user_shared_item(self, request, repo_id, path):
-    #     pass
 
     def handle_shared_to_args(self, request):
         share_type = request.GET.get('share_type', None)
@@ -120,6 +124,8 @@ class DirSharedItemsEndpoint(APIView):
         return sub_repo
 
     def get(self, request, repo_id, format=None):
+        """List shared items(shared to users/groups) for a folder/library.
+        """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
@@ -184,6 +190,9 @@ class DirSharedItemsEndpoint(APIView):
                 seafile_api.set_share_permission(shared_repo.id, username,
                                                  shared_to, permission)
 
+            send_perm_audit_msg('modify-repo-perm', username, shared_to,
+                                shared_repo.id, path, permission)
+
         if shared_to_group:
             gid = request.GET.get('group_id')
             try:
@@ -202,6 +211,9 @@ class DirSharedItemsEndpoint(APIView):
                 seafile_api.set_group_repo_permission(gid, shared_repo.id,
                                                       permission)
 
+            send_perm_audit_msg('modify-repo-perm', username, gid,
+                                shared_repo.id, path, permission)
+
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 
@@ -210,8 +222,6 @@ class DirSharedItemsEndpoint(APIView):
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
-
-        # TODO: perm check, quota check
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
@@ -239,12 +249,20 @@ class DirSharedItemsEndpoint(APIView):
         if share_type == 'user':
             share_to_users = request.DATA.getlist('username')
             for to_user in share_to_users:
+                if not check_user_share_quota(username, shared_repo, users=[to_user]):
+                    return api_error(status.HTTP_403_FORBIDDEN,
+                                     'Failed to share: No enough quota.')
+
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
-                        # org_share_repo(org_id, shared_repo.id, username, to_user, permission)
+                        seaserv.seafserv_threaded_rpc.org_add_share(
+                            org_id, shared_repo.id, username, to_user,
+                            permission)
                     else:
-                        seafile_api.share_repo(shared_repo.repo_id, username, to_user, permission)
+                        seafile_api.share_repo(shared_repo.id, username,
+                                               to_user, permission)
+
                     # send a signal when sharing repo successful
                     share_repo_to_user_successful.send(sender=None,
                                                        from_user=username,
@@ -258,6 +276,9 @@ class DirSharedItemsEndpoint(APIView):
                         },
                         "permission": permission
                     })
+
+                    send_perm_audit_msg('add-repo-perm', username, to_user,
+                                        shared_repo.id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     failed.append(to_user)
@@ -274,6 +295,10 @@ class DirSharedItemsEndpoint(APIView):
                 if not group:
                     return api_error(status.HTTP_400_BAD_REQUEST, 'Group not found: %s' % gid)
 
+                if not check_user_share_quota(username, shared_repo, groups=[group]):
+                    return api_error(status.HTTP_403_FORBIDDEN,
+                                     'Failed to share: No enough quota.')
+
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
@@ -283,7 +308,6 @@ class DirSharedItemsEndpoint(APIView):
                     else:
                         seafile_api.set_group_repo(shared_repo.repo_id, gid,
                                                    username, permission)
-                        # todo: perm audit msg
 
                     success.append({
                         "share_type": "group",
@@ -293,6 +317,9 @@ class DirSharedItemsEndpoint(APIView):
                         },
                         "permission": permission
                     })
+
+                    send_perm_audit_msg('add-repo-perm', username, gid,
+                                        shared_repo.id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     failed.append(group.group_name)
@@ -335,9 +362,15 @@ class DirSharedItemsEndpoint(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                # org_remove_share(org_id, repo_id, from_email, shared_to)
+                seaserv.seafserv_threaded_rpc.org_remove_share(
+                    org_id, shared_repo.id, username, shared_to)
             else:
                 seaserv.remove_share(shared_repo.id, username, shared_to)
+
+            permission = seafile_api.check_permission_by_path(repo.id, path,
+                                                              shared_to)
+            send_perm_audit_msg('delete-repo-perm', username, shared_to,
+                                shared_repo.id, path, permission)
 
         if shared_to_group:
             group_id = request.GET.get('group_id')
@@ -346,11 +379,21 @@ class DirSharedItemsEndpoint(APIView):
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Bad group id')
 
+            # hacky way to get group repo permission
+            permission = ''
+            for e in seafile_api.list_repo_shared_group(username, shared_repo.id):
+                if e.group_id == group_id:
+                    permission = e.perm
+                    break
+
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 seaserv.del_org_group_repo(shared_repo.id, org_id, group_id)
             else:
                 seafile_api.unset_group_repo(shared_repo.id, group_id, username)
+
+            send_perm_audit_msg('delete-repo-perm', username, group_id,
+                                shared_repo.id, path, permission)
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)

@@ -61,7 +61,7 @@ class Fixtures(Exam):
 
     def create_repo(self, **kwargs):
         repo_id = seafile_api.create_repo('test-repo', '',
-                                          'test@test.com', None)
+                                          self.user.username, None)
         return repo_id
 
     def remove_repo(self, repo_id=None):
