@@ -458,7 +458,8 @@ define([
                 dirents.comparator = function(a, b) {
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
-                    } else if (a.get('is_file') && b.get('is_dir')) {
+                    }
+                    if (a.get('is_file') && b.get('is_dir')) {
                         return 1;
                     }
 
@@ -485,6 +486,9 @@ define([
                     if (a.get('is_dir') && b.get('is_file')) {
                         return -1;
                     }
+                    if (a.get('is_file') && b.get('is_dir')) {
+                        return 1;
+                    }
                     if (el.hasClass('icon-caret-down')) {
                         return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
                     } else {
@@ -492,6 +496,7 @@ define([
                     }
                 };
                 dirents.sort();
+
                 this.$dirent_list.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down').show();
