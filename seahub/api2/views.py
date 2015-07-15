@@ -78,7 +78,8 @@ from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.utils.timeutils import utc_to_local
 from seahub.views import validate_owner, is_registered_user, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
-    list_inner_pub_repos, get_virtual_repos_by_owner, check_folder_permission
+    list_inner_pub_repos, get_virtual_repos_by_owner, \
+    check_folder_permission, check_file_permission
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
     get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_download_msg
@@ -1961,16 +1962,10 @@ class FileSharedLinkView(APIView):
 
         if share_type.lower() == 'download':
 
-            if check_folder_permission(request, repo_id, path) is None:
+            if check_file_permission(request, repo_id, path) is None:
                 return api_error(status.HTTP_403_FORBIDDEN, 'permission denied')
 
-            # generate download link
-            link_type = request.DATA.get('type', 'f')
             expire = request.DATA.get('expire', None)
-
-            if link_type not in ('d', 'f'):
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid type')
-
             if expire:
                 try:
                     expire_days = int(expire)
@@ -1981,25 +1976,30 @@ class FileSharedLinkView(APIView):
             else:
                 expire_date = None
 
-            if link_type == 'f':
-                if not seafile_api.get_file_id_by_path(repo_id, path):
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+            try:
+                dirent = seafile_api.get_dirent_by_path(repo_id, path)
+            except Exception as e:
+                logger.error(e)
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
 
-                fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
-                if fs is None:
-                    fs = FileShare.objects.create_file_link(username, repo_id, path,
-                                                            password, expire_date)
-                    if is_org_context(request):
-                        org_id = request.user.org.org_id
-                        OrgFileShare.objects.set_org_file_share(org_id, fs)
-            else:
-                if not seafile_api.get_dir_id_by_path(repo_id, path):
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+            if stat.S_ISDIR(dirent.mode):
+                # generate dir download link
 
                 fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
                 if fs is None:
                     fs = FileShare.objects.create_dir_link(username, repo_id, path,
                                                            password, expire_date)
+                    if is_org_context(request):
+                        org_id = request.user.org.org_id
+                        OrgFileShare.objects.set_org_file_share(org_id, fs)
+
+            else:
+                # generate file download link
+
+                fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
+                if fs is None:
+                    fs = FileShare.objects.create_file_link(username, repo_id, path,
+                                                            password, expire_date)
                     if is_org_context(request):
                         org_id = request.user.org.org_id
                         OrgFileShare.objects.set_org_file_share(org_id, fs)

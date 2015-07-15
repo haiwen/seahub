@@ -36,16 +36,6 @@ class FileSharedLinkApiTest(BaseTestCase):
     def tearDown(self):
         self.remove_repo()
 
-    def test_create_file_shared_link_with_invalid_type(self):
-        self.login_as(self.user)
-
-        resp = self.client.put(
-            '/api2/repos/%s/file/shared-link/' % (self.repo.id),
-            "p=%s&type=sf" % (self.file),
-            'application/x-www-form-urlencoded',
-        )
-        self.assertEqual(400, resp.status_code)
-
     def test_create_file_shared_link_with_invalid_path(self):
         self.login_as(self.user)
 
