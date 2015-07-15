@@ -508,6 +508,7 @@ def list_lib_dir(request, repo_id):
         if is_pro_version():
             f_['is_locked'] = True if f.is_locked else False
             f_['lock_owner'] = f.lock_owner
+            f_['lock_owner_name'] = email2nickname(f.lock_owner)
             if username == f.lock_owner:
                 f_['locked_by_me'] = True
             else:

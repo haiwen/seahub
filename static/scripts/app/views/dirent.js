@@ -55,7 +55,7 @@ define([
                 enable_some_op: enable_some_op,
                 repo_encrypted: dir.encrypted
             }));
-            this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', Common.HTMLescape(this.model.get('lock_owner'))));
+            this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
 
             return this;
         },
@@ -503,7 +503,7 @@ define([
                     _this.model.set({
                         'is_locked': true,
                         'locked_by_me': true,
-                        'lock_owner': app.pageOptions.username
+                        'lock_owner_name': app.pageOptions.name
                     });
                     app.globalState.noFileOpPopup = true;
                     _this.$el.removeClass('hl');
