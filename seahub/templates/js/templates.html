@@ -639,7 +639,7 @@
 <script type="text/template" id="folder-perm-item-tmpl">
     <% if (for_user) { %>
     <td>
-        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank" title="<%- user %>"><%- user_name %></a>
+        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank"><%- user_name %></a>
     </td>
     <% } else { %>
     <td>

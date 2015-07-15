@@ -48,6 +48,15 @@ define([
                 if (!this.is_virtual && this.is_repo_owner) {
                     this.dirUserSharePanelInit();
                     this.dirGroupSharePanelInit();
+
+                    var _this = this;
+                    $(document).on('click', function(e) {
+                        var target = e.target || event.srcElement;
+                        if (!_this.$('.perm-edit-icon, .perm-toggle-select').is(target)) {
+                            _this.$('.perm').removeClass('hide');
+                            _this.$('.perm-toggle-select').addClass('hide');
+                        }
+                    });
                 }
             }
         },
@@ -594,7 +603,7 @@ define([
                         $add_item.after(new_item.el);
                     });
                     emails_input.select2("val", "");
-                    if (data.failed) {
+                    if (data.failed.length > 0) {
                         var err_msg = gettext("Failed to share to {placeholder}")
                             .replace('{placeholder}', Common.HTMLescape(data.failed.join(', ')));
                         $('.error', panel).html(err_msg).removeClass('hide');
