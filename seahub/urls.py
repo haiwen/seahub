@@ -302,7 +302,7 @@ if HAS_OFFICE_CONVERTER:
         office_convert_query_status, office_convert_get_page, office_convert_add_task
     )
     urlpatterns += patterns('',
-        url(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.+)/(?P<filename>[^/]+)/$',
+        url(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.+)/(?P<filename>[^/].+)$',
             office_convert_get_page,
             name='office_convert_get_page'),
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),

@@ -1,9 +1,10 @@
 {% load i18n %}
 
-var OfficePreviewer = function(repo_id, path) {
+var OfficePreviewer = function(repo_id, path, token) {
     this.repo_id = repo_id;
     this.path = path;
     this.total_pages = null;
+    this.token = token;
 
     this.orig_page_width = null;
     this.orig_page_height = null;
@@ -17,16 +18,19 @@ var OfficePreviewer = function(repo_id, path) {
     this.static_prefix = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/';
 
     this.page_status_url = function(page) {
-        return "{% url 'office_convert_query_status' %}?" +
-            $.param({
-                repo_id: repo_id,
-                path: path,
-                page: page
-            });
+        var params = {
+            repo_id: repo_id,
+            path: path,
+            page: page
+        };
+        if (this.token) {
+            params['token'] = this.token;
+        }
+        return "{% url 'office_convert_query_status' %}?" + $.param(params);
     }
     this.page_content_url = function(page) {
-        return "{% url 'office_convert_get_page' obj_id %}/"
-            + page + '.page?office_preview_token=' + this.preview_token;
+        var url = this.static_prefix + page + '.page';
+        return this.token ? url + '?token=' + this.token : url;
     }
 
     var url = window.location.href;
@@ -160,5 +164,5 @@ OfficePreviewer.prototype.load_page = function(index) {
 };
 
 $(function() {
-    new OfficePreviewer('{{ repo.id }}', '{{ path }}').start();
+    new OfficePreviewer('{{ repo.id }}', '{{ path }}', '{{ shared_token }}').start();
 });

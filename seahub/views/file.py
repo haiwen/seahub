@@ -1307,6 +1307,23 @@ def office_convert_add_task(request):
 
     return HttpResponse(json.dumps(resp), content_type=content_type)
 
+def _check_office_convert_perm(request, repo_id, path):
+    token = request.GET.get('token', '')
+    if not token:
+        # Work around for the images embedded in excel files
+        referer = request.META.get('HTTP_REFERER', '')
+        if referer:
+            token = urlparse.parse_qs(
+                urlparse.urlparse(referer).query).get('token', [''])[0]
+    if token:
+        fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+        if not fileshare or fileshare.repo_id != repo_id or fileshare.path != path:
+            return False
+        return True
+    else:
+        return request.user.is_authenticated() and \
+            check_folder_permission(request, repo_id, '/') is not None
+
 @json_response
 def office_convert_query_status(request, internal=False):
     if not HAS_OFFICE_CONVERTER:
@@ -1330,15 +1347,11 @@ def office_convert_query_status(request, internal=False):
         except ValueError:
             return HttpResponseBadRequest('invalid params')
 
-    if not request.user.is_authenticated():
-        return HttpResponse()
-    elif check_folder_permission(request, repo_id, '/') is None:
+    if not _check_office_convert_perm(request, repo_id, path):
         return HttpResponseForbidden()
 
     file_id = get_file_id_by_path(repo_id, path)
-
     ret = {'success': False}
-
     try:
         ret = query_office_convert_status(file_id, page, internal=internal)
     except Exception, e:
@@ -1356,17 +1369,14 @@ def office_convert_get_page(request, repo_id, path, filename, internal=False):
     if not HAS_OFFICE_CONVERTER:
         raise Http404
 
-    m = _OFFICE_PAGE_PATTERN.match(filename)
-    if not m:
+    if not _OFFICE_PAGE_PATTERN.match(filename):
         return HttpResponseForbidden()
 
-    if not request.user.is_authenticated():
-        return HttpResponse()
-    elif check_folder_permission(request, repo_id, '/') is None:
+    path = u'/' + path
+    if not _check_office_convert_perm(request, repo_id, path):
         return HttpResponseForbidden()
 
-    file_id = get_file_id_by_path(repo_id, u'/' + path)
-
+    file_id = get_file_id_by_path(repo_id, path)
     resp = get_office_converted_page(request, filename, file_id, internal=internal)
     if filename.endswith('.page'):
         content_type = 'text/html'

@@ -2,7 +2,7 @@
     function load_excel() {
         $('#convert-loading').remove();
         var iframe = document.createElement('iframe');
-        iframe.src = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/index.html';
+        iframe.src = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/index.html?token=' + '{{ shared_token }}';
         $('#spreadsheet-container').append(iframe);
     }
 
@@ -10,6 +10,7 @@
         var url = "{% url 'office_convert_query_status' %}?" + $.param({
             repo_id: '{{ repo.id }}',
             path: '{{ path }}',
+            token: '{{ shared_token }}',
             doctype: 'spreadsheet'
         });
         $.ajax({
