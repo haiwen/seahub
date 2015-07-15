@@ -325,8 +325,9 @@
                 <% if (user_perm == 'rw' && !repo_encrypted) { %>
             <li class="tab"><a href="#dir-upload-link-share" class="a">{% trans "Upload Link" %}</a></li>
                 <% } %>
-                <% if (!is_virtual && is_repo_owner) { %>
-            <li class="tab"><a href="#dir-private-share" class="a">{% trans "Private Share" %}</a></li>
+            <% if (!is_virtual && is_repo_owner) { %> {# dir private share #}
+            <li class="tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
+            <li class="tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
                 <% } %>
             <% } %>
         </ul>
@@ -420,28 +421,56 @@
 
                 <% if (!is_virtual && is_repo_owner) { %>
                     <% if (!repo_encrypted) { %>
-            <div id="dir-private-share" class="tabs-panel hide">
+            <div id="dir-user-share" class="tabs-panel hide">
                     <% } else { %>
-            <div id="dir-private-share" class="tabs-panel"> {# enc lib only has 'dir-private-share' #}
+            <div id="dir-user-share" class="tabs-panel">
                     <% } %>
-                <form id="dir-private-share-form" action="" class="hide">
-                    <label class="label">{% trans "People:" %}</label><br />
-                    <input type="hidden" name="emails" class="w100" /><br />
-
-                    <label class="label">{% trans "Groups:" %}</label><br />
-                    <select name="groups" class="w100" multiple="multiple"></select><br />
-
-                    <label class="label">{% trans "Permission:" %}</label><br />
-                    <select name="permission" class="share-permission-select w100">
-                        <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-                        <option value="r">{% trans "Read-Only"%}</option>
-                    </select>
-                    <p class="error hide"></p>
-                    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-                </form>
+                <table>
+                    <tr>
+                        <th width="55%">{% trans "User" %}</th>
+                        <th width="25%">{% trans "Permission" %}</th>
+                        <th width="20%"></th>
+                    </tr>
+                    <tr id="add-dir-user-share-item">
+                        <td>
+                            <input type="hidden" name="emails" class="w100" />
+                        </td>
+                        <td>
+                            <select name="permission" class="share-permission-select w100">
+                                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                                <option value="r">{% trans "Read-Only" %}</option>
+                            </select>
+                        </td>
+                        <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
+                    </tr>
+                </table>
+                <p class="error hide"></p>
             </div>
-                <% } %>
-            <% } %>
+
+            <div id="dir-group-share" class="tabs-panel hide">
+                <table>
+                    <tr>
+                        <th width="55%">{% trans "Group" %}</th>
+                        <th width="25%">{% trans "Permission" %}</th>
+                        <th width="20%"></th>
+                    </tr>
+                    <tr id="add-dir-group-share-item">
+                        <td>
+                            <select name="groups" class="w100" multiple="multiple"></select>
+                        </td>
+                        <td>
+                            <select name="permission" class="share-permission-select w100">
+                                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                                <option value="r">{% trans "Read-Only" %}</option>
+                            </select>
+                        </td>
+                        <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
+                    </tr>
+                </table>
+                <p class="error hide"></p>
+            </div>
+                <% } %> {# if (!is_virtual && is_repo_owner) #}
+            <% } %> {# if is_dir #}
 
         </div>
     </div>
@@ -593,9 +622,9 @@
 </form>
 </script>
 <script type="text/template" id="folder-perm-item-tmpl">
-    <% if (is_user_perm) { %>
+    <% if (for_user) { %>
     <td>
-        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank" title="<%- user %>"><%- user_name %></a>
+        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank"><%- user_name %></a>
     </td>
     <% } else { %>
     <td>
@@ -624,7 +653,7 @@
         </select>
     </td>
     <td>
-        <img src="{{ MEDIA_URL }}img/rm.png" class="perm-delete-icon op-icon vh" alt="" title="{% trans "Delete" %}" />
+        <img src="{{ MEDIA_URL }}img/rm.png" class="delete-icon op-icon vh" alt="" title="{% trans "Delete" %}" />
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">

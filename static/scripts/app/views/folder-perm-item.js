@@ -29,7 +29,7 @@ define([
             'mouseleave': 'hidePermOpIcons',
             'click .perm-edit-icon': 'editIconClick',
             'change .perm-toggle-select': 'editPerm',
-            'click .perm-delete-icon': 'deletePerm'
+            'click .delete-icon': 'deletePerm'
         },
 
         showPermOpIcons: function () {
@@ -54,15 +54,15 @@ define([
                 'path': this.path,
                 'type': 'modify'
             };
-            var is_user_perm = this.item_data.is_user_perm;
-            if (is_user_perm) {
+            var for_user = this.item_data.for_user;
+            if (for_user) {
                 $.extend(post_data, {'user': this.item_data.user});
             } else {
                 $.extend(post_data, {'group_id': this.item_data.group_id});
             }
             $.ajax({
                 url: Common.getUrl({
-                    name: is_user_perm ? 'set_user_folder_perm' : 'set_group_folder_perm',
+                    name: for_user ? 'set_user_folder_perm' : 'set_group_folder_perm',
                     repo_id: this.repo_id
                 }),
                 type: 'POST',
@@ -81,7 +81,7 @@ define([
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
-                    if (is_user_perm) {
+                    if (for_user) {
                         $('#user-folder-perm .error').html(err).removeClass('hide');
                     } else {
                         $('#group-folder-perm .error').html(err).removeClass('hide');
@@ -97,15 +97,15 @@ define([
                 'path': this.path,
                 'type': 'delete'
             };
-            var is_user_perm = this.item_data.is_user_perm;
-            if (is_user_perm) {
+            var for_user = this.item_data.for_user;
+            if (for_user) {
                 $.extend(post_data, {'user': this.item_data.user});
             } else {
                 $.extend(post_data, {'group_id': this.item_data.group_id});
             }
             $.ajax({
                 url: Common.getUrl({
-                    name: is_user_perm ? 'set_user_folder_perm' : 'set_group_folder_perm',
+                    name: for_user ? 'set_user_folder_perm' : 'set_group_folder_perm',
                     repo_id: this.repo_id
                 }),
                 type: 'POST',
@@ -123,7 +123,7 @@ define([
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
-                    if (is_user_perm) {
+                    if (for_user) {
                         $('#user-folder-perm .error').html(err).removeClass('hide');
                     } else {
                         $('#group-folder-perm .error').html(err).removeClass('hide');

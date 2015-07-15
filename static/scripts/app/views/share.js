@@ -4,8 +4,9 @@ define([
     'backbone',
     'common',
     'jquery.ui.tabs',
-    'select2'
-], function($, _, Backbone, Common, Tabs, Select2) {
+    'select2',
+    'app/views/folder-share-item'
+], function($, _, Backbone, Common, Tabs, Select2, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({
@@ -42,7 +43,17 @@ define([
                     this.uploadLinkPanelInit();
                 }
                 if (!this.is_virtual && this.is_repo_owner) {
-                    this.dirPrivateSharePanelInit();
+                    this.dirUserSharePanelInit();
+                    this.dirGroupSharePanelInit();
+
+                    var _this = this;
+                    $(document).on('click', function(e) {
+                        var target = e.target || event.srcElement;
+                        if (!_this.$('.perm-edit-icon, .perm-toggle-select').is(target)) {
+                            _this.$('.perm').removeClass('hide');
+                            _this.$('.perm-toggle-select').addClass('hide');
+                        }
+                    });
                 }
             }
         },
@@ -81,11 +92,9 @@ define([
             'click #cancel-share-upload-link': 'cancelShareUploadLink',
             'click #delete-upload-link': 'deleteUploadLink',
 
-            // file private share
-            'submit #file-private-share-form': 'filePrivateShare',
-
             // dir private share
-            'submit #dir-private-share-form': 'dirPrivateShare'
+            'click #add-dir-user-share-item .submit': 'dirUserShare',
+            'click #add-dir-group-share-item .submit': 'dirGroupShare'
         },
 
         highlightCheckbox: function (e) {
@@ -407,13 +416,49 @@ define([
             });
         },
 
-        dirPrivateSharePanelInit: function() {
-            // no 'share to all'
-            var form = this.$('#dir-private-share-form');
+        dirUserSharePanelInit: function() {
+            var form = this.$('#dir-user-share');
 
             $('[name="emails"]', form).select2($.extend({
-                width: '400px'
+                width: '297px'
             },Common.contactInputOptionsForSelect2()));
+
+            // show existing items
+            var $add_item = $('#add-dir-user-share-item');
+            var repo_id = this.repo_id, 
+                path = this.dirent_path;
+            Common.ajaxGet({
+                'get_url': Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }), 
+                'data': {
+                    'p': path,
+                    'share_type': 'user'
+                },
+                'after_op_success': function (data) {
+                    $(data).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "user": item.user_info.name,
+                                "user_name": item.user_info.nickname,
+                                "perm": item.permission,
+                                'for_user': true
+                            }
+                        }); 
+                        $add_item.after(new_item.el);
+                    }); 
+                }
+            }); 
+
+            form.removeClass('hide');
+            this.$('.loading-tip').hide();
+        },
+
+        dirGroupSharePanelInit: function() {
+            var form = this.$('#dir-group-share');
 
             var groups = app.pageOptions.groups || [];
             var g_opts = '';
@@ -422,59 +467,164 @@ define([
             }
             $('[name="groups"]', form).html(g_opts).select2({
                 placeholder: gettext("Select groups"),
-                width: '400px',
+                width: '297px',
                 escapeMarkup: function(m) { return m; }
             });
+
+            // show existing items
+            var $add_item = $('#add-dir-group-share-item');
+            var repo_id = this.repo_id, 
+                path = this.dirent_path;
+            Common.ajaxGet({
+                'get_url': Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }),
+                'data': {
+                    'p': path,
+                    'share_type': 'group'
+                },
+                'after_op_success': function (data) {
+                    $(data).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "group_id": item.group_info.id,
+                                "group_name": item.group_info.name,
+                                "perm": item.permission,
+                                'for_user': false
+                            }
+                        });
+                        $add_item.after(new_item.el);
+                    });
+                }   
+            }); 
 
             form.removeClass('hide');
             this.$('.loading-tip').hide();
         },
 
-        dirPrivateShare: function () {
-            var form = this.$('#dir-private-share-form'),
-                form_id = form.attr('id');
+        dirUserShare: function () {
+            var panel = $('#dir-user-share');
+            var form = this.$('#add-dir-user-share-item');
 
-            var emails = $('[name="emails"]', form).val(), // string
-                groups = $('[name="groups"]', form).val(); // null or [group.id]
-
-            if (!emails && !groups) {
-                Common.showFormError(form_id, gettext("Please select a contact or a group."));
+            var emails_input = $('[name="emails"]', form),
+                emails = emails_input.val(); // string
+            if (!emails) {
                 return false;
             }
 
-            var post_data = {
-                'repo_id': this.repo_id,
-                'path': this.dirent_path
-            };
-            if (emails) {
-                post_data['emails'] = emails;
-            }
-            if (groups) {
-                post_data['groups'] = groups.join(',');
-            }
-            post_data['perm'] = $('[name="permission"]', form).val();
-            var post_url = Common.getUrl({name: 'private_share_dir'});
-            var after_op_success = function(data) {
-                $.modal.close();
-                var msg = gettext("Successfully shared to {placeholder}")
-                    .replace('{placeholder}', Common.HTMLescape(data['shared_success'].join(', ')));
-                Common.feedback(msg, 'success');
-                if (data['shared_failed'].length > 0) {
-                    msg += '<br />' + gettext("Failed to share to {placeholder}")
-                        .replace('{placeholder}', Common.HTMLescape(data['shared_failed'].join(', ')));
-                    Common.feedback(msg, 'info');
-                }
-            };
+            var $add_item = $('#add-dir-user-share-item');
+            var repo_id = this.repo_id, 
+                path = this.dirent_path;
+            var perm = $('[name="permission"]', form).val();
 
-            Common.ajaxPost({
-                'form': form,
-                'post_url': post_url,
-                'post_data': post_data,
-                'after_op_success': after_op_success,
-                'form_id': form_id
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }) + '?p=' + encodeURIComponent(path),
+                dataType: 'json',
+                method: 'PUT',
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: {
+                    'share_type': 'user',
+                    'username': emails.split(','),
+                    'permission': perm
+                },
+                success: function(data) {
+                    $(data.success).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "user": item.user_info.name,
+                                "user_name": item.user_info.nickname,
+                                "perm": item.permission,
+                                'for_user': true
+                            }
+                        });
+                        $add_item.after(new_item.el);
+                    });
+                    emails_input.select2("val", "");
+                    if (data.failed.length > 0) {
+                        var err_msg = gettext("Failed to share to {placeholder}")
+                            .replace('{placeholder}', Common.HTMLescape(data.failed.join(', ')));
+                        $('.error', panel).html(err_msg).removeClass('hide');
+                    }
+                },
+                error: function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = gettext("Share failed");
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.")
+                    }
+                    $('.error', panel).html(err_msg).removeClass('hide');
+                }
             });
-            return false;
+        },
+
+        dirGroupShare: function () {
+            var panel = $('#dir-group-share');
+            var form = this.$('#add-dir-group-share-item');
+
+            var groups_input = $('[name="groups"]', form),
+                groups = groups_input.val(); // null or [group.id]
+
+            if (!groups) {
+                return false;
+            }
+
+            var $add_item = $('#add-dir-group-share-item');
+            var repo_id = this.repo_id, 
+                path = this.dirent_path;
+            var perm = $('[name="permission"]', form).val();
+
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'dir_shared_items',
+                    repo_id: repo_id
+                }) + '?p=' + encodeURIComponent(path),
+                dataType: 'json',
+                method: 'PUT',
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: {
+                    'share_type': 'group',
+                    'group_id': groups,
+                    'permission': perm
+                },
+                success: function(data) {
+                    $(data.success).each(function(index, item) {
+                        var new_item = new FolderShareItemView({
+                            'repo_id': repo_id,
+                            'path': path,
+                            'item_data': {
+                                "group_id": item.group_info.id,
+                                "group_name": item.group_info.name,
+                                "perm": item.permission,
+                                'for_user': false
+                            }
+                        });
+                        $add_item.after(new_item.el);
+                    });
+                    groups_input.select2("val", "");
+                },
+                error: function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = gettext("Share failed");
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.")
+                    }
+                    $('.error', panel).html(err_msg).removeClass('hide');
+                }
+            });
         }
+
     });
 
     return SharePopupView;

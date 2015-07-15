@@ -217,6 +217,8 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
     else:
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo.id, path)
+            if not dir_id:
+                return ([], [], False)
             dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path,
                                                             dir_id, username,
                                                             offset, limit)
@@ -300,6 +302,8 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
             dirs = seafile_api.list_dir_by_commit_and_path(commit.repo_id,
                                                            commit.id, path,
                                                            offset, limit)
+            if not dirs:
+                return ([], [], False)
         except SearpcError as e:
             logger.error(e)
             return ([], [], False)

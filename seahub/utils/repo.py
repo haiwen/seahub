@@ -15,7 +15,8 @@ def list_dir_by_path(cmmt, path):
     if cmmt.root_id == EMPTY_SHA1:
         return []
     else:
-        return seafile_api.list_dir_by_commit_and_path(cmmt.repo_id, cmmt.id, path)
+        dirs = seafile_api.list_dir_by_commit_and_path(cmmt.repo_id, cmmt.id, path)
+        return dirs if dirs else []
 
 def get_sub_repo_abbrev_origin_path(repo_name, origin_path):
     """Return abbrev path for sub repo based on `repo_name` and `origin_path`.

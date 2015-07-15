@@ -444,7 +444,10 @@ def _file_view(request, repo_id, path):
         # get real path for sub repo
         real_path = repo.origin_path + path if repo.origin_path else path
         dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
-        latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        if dirent:
+            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+        else:
+            latest_contributor, last_modified = None, 0
     except SearpcError as e:
         logger.error(e)
         latest_contributor, last_modified = None, 0
@@ -1391,11 +1394,11 @@ def office_convert_get_page(request, path, internal=False):
         return HttpResponseForbidden()
 
     file_id = m.group(1)
-    # if path.endswith('file.css'):
-    #     pass
-    # else:
-    #     if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-    #         return HttpResponseForbidden()
+    if path.endswith('file.css'):
+        pass
+    else:
+        if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
+            return HttpResponseForbidden()
 
     resp = get_office_converted_page(request, path, file_id, internal=internal)
     if path.endswith('.page'):

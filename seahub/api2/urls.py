@@ -3,6 +3,7 @@ from django.conf.urls.defaults import *
 from .views import *
 from .views_misc import ServerInfoView
 from .views_auth import LogoutDeviceView, ClientLoginTokenView
+from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 
 
 urlpatterns = patterns('',
@@ -40,6 +41,7 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/$', DirView.as_view(), name='DirView'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/sub_repo/$', DirSubRepoView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/share/$', DirShareView.as_view()),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/shared_items/$', DirSharedItemsEndpoint.as_view(), name="api2-dir-shared-items"),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/dir/download/$', DirDownloadView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/thumbnail/$', ThumbnailView.as_view(), name='api2-thumbnail'),
     url(r'^starredfiles/', StarredFileView.as_view(), name='starredfiles'),

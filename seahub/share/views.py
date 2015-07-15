@@ -359,7 +359,7 @@ def ajax_repo_remove_share(request):
 @login_required
 def repo_remove_share(request):
     """
-    If repo is shared from one person to another person, only these two peson
+    If repo is shared from one person to another person, only these two person
     can remove share.
     If repo is shared from one person to a group, then only the one share the
     repo and group staff can remove share.

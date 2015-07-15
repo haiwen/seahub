@@ -64,6 +64,7 @@ from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import repo_created, share_file_to_user_successful
 from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare, \
     UploadLinkShare
+from seahub.share.signals import share_repo_to_user_successful
 from seahub.share.views import list_shared_repos
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
@@ -1851,7 +1852,10 @@ class FileDetailView(APIView):
             # get real path for sub repo
             real_path = repo.origin_path + path if repo.origin_path else path
             dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
-            latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            if dirent:
+                latest_contributor, last_modified = dirent.modifier, dirent.mtime
+            else:
+                latest_contributor, last_modified = None, 0
         except SearpcError as e:
             logger.error(e)
             latest_contributor, last_modified = None, 0
@@ -2283,6 +2287,7 @@ class DirShareView(APIView):
             # send a signal when sharing file successful
             share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+
 
 class DirSubRepoView(APIView):
     authentication_classes = (TokenAuthentication, )

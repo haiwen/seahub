@@ -98,6 +98,8 @@ def get_wiki_pages(repo):
     return pages in hashtable {normalized_name: page_name}
     """
     dir_id = seaserv.seafserv_threaded_rpc.get_dir_id_by_path(repo.id, '/')
+    if not dir_id:
+        return {}
     dirs = seafile_api.list_dir_by_dir_id(repo.id, dir_id)
     pages = {}
     for e in dirs:

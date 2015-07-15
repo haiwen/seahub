@@ -95,7 +95,6 @@ define([
               case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
               case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
               case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
-              case 'private_share_dir': return siteRoot + 'share/ajax/private-share-dir/';
               case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
               case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
               case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
@@ -112,6 +111,7 @@ define([
               case 'starred_files': return siteRoot + 'api2/starredfiles/';
               case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
               case 'search_user': return siteRoot + 'api2/search-user/';
+              case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
             }
         },
 
