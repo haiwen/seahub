@@ -114,6 +114,21 @@ def check_folder_permission(request, repo_id, path):
 
     return seafile_api.check_permission_by_path(repo_id, path, username)
 
+def check_file_permission(request, repo_id, path):
+    """Check file access permission of a user, always return 'rw'
+    when repo is system repo and user is admin.
+
+    Arguments:
+    - `request`:
+    - `repo_id`:
+    - `path`:
+    """
+    username = request.user.username
+    if get_system_default_repo_id() == repo_id and request.user.is_staff:
+        return 'rw'
+
+    return seafile_api.check_permission_by_path(repo_id, path, username)
+
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
     system repo and user is admin.
