@@ -1371,7 +1371,7 @@ def office_convert_get_page(request, repo_id, path, filename, internal=False):
     if filename.endswith('.page'):
         content_type = 'text/html'
     else:
-        content_type = mimetypes.guess_type(path)[0] or 'text/html'
+        content_type = mimetypes.guess_type(filename)[0] or 'text/html'
     resp['Content-Type'] = content_type
     return resp
 
