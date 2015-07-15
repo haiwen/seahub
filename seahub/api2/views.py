@@ -4,13 +4,10 @@ import os
 import stat
 import json
 import datetime
-import urllib2
 import posixpath
 import re
 from dateutil.relativedelta import relativedelta
 from urllib2 import unquote, quote
-from PIL import Image
-from StringIO import StringIO
 
 from rest_framework import parsers
 from rest_framework import status
@@ -54,6 +51,7 @@ from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check, remove_group_common, \
     rename_group_with_new_name
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError
+from seahub.thumbnail.utils import allow_generate_thumbnail, generate_thumbnail
 from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
@@ -91,7 +89,7 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, ENABLE_GLOBAL_ADDRESSBOOK
+        ENABLE_GLOBAL_ADDRESSBOOK
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -4227,7 +4225,7 @@ class OfficeGenerateView(APIView):
         return HttpResponse(json.dumps(ret_dict), status=200, content_type=json_content_type)
 
 class ThumbnailView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -4235,68 +4233,35 @@ class ThumbnailView(APIView):
 
         repo = get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND,
-                             'Library not found.')
-
-        if repo.encrypted:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Image thumbnail is not supported in encrypted libraries.')
-
-        if not ENABLE_THUMBNAIL:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Thumbnail function is not enabled.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         size = request.GET.get('size', None)
         path = request.GET.get('p', None)
         if size is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
 
-        if path is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-
         obj_id = get_file_id_by_path(repo_id, path)
+        if path is None or obj_id is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
 
-        if obj_id is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path')
+        if check_folder_permission(request, repo_id, path) is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(request,
-                                                                      repo_id,
-                                                                      obj_id, path)
-
-        if user_perm is None:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Permission denied.')
-
-        open_file = urllib2.urlopen(inner_path)
-        file_size = int(open_file.info()['Content-Length'])
-        if  file_size > THUMBNAIL_IMAGE_SIZE_LIMIT * 1024**2:
-            # if file is bigger than 30MB
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Image file is too large.')
-
-        thumbnail_dir = os.path.join(THUMBNAIL_ROOT, size)
-        if not os.path.exists(thumbnail_dir):
-            os.makedirs(thumbnail_dir)
-
-        thumbnail_file = os.path.join(thumbnail_dir, obj_id)
-        if not os.path.exists(thumbnail_file):
-            try:
-                f = StringIO(open_file.read())
-                image = Image.open(f)
-                if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
-                   image = image.convert("RGB")
-                image.thumbnail((int(size), int(size)), Image.ANTIALIAS)
-                image.save(thumbnail_file, THUMBNAIL_EXTENSION)
-            except IOError as e:
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
-
-        try:
-            with open(thumbnail_file, 'rb') as f:
-                thumbnail = f.read()
-            f.close()
-            return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
-        except IOError as e:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, str(e))
+        if not allow_generate_thumbnail(request, repo_id, path):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Not allowed to generate thumbnail.')
+        else:
+            if generate_thumbnail(request, repo_id, size, path):
+                thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
+                thumbnail_file = os.path.join(thumbnail_dir, obj_id)
+                try:
+                    with open(thumbnail_file, 'rb') as f:
+                        thumbnail = f.read()
+                    return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
+                except IOError as e:
+                    logger.error(e)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get thumbnail.')
+            else:
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to generate thumbnail.')
 
 _REPO_ID_PATTERN = re.compile(r'[-0-9a-f]{36}')
 
