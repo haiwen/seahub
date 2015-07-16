@@ -1211,10 +1211,12 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     """Send repo permission audit msg.
 
     Arguments:
-    - `request`:
-    - `repo`:
-    - `obj_id`:
-    - `dl_type`: web or api
+    - `etype`: add/modify/delete-repo-perm
+    - `from_user`: email
+    - `to`: email or group_id or all(public)
+    - `repo_id`: origin repo id
+    - `path`: dir path
+    - `perm`: r or rw
     """
     msg = 'perm-update\t%s\t%s\t%s\t%s\t%s\t%s' % \
         (etype, from_user, to, repo_id, path, perm)
