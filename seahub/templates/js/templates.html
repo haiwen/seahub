@@ -36,8 +36,8 @@
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
       <div class="op-container">
-        <img src="{{ MEDIA_URL }}img/share-orange.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
-        <img src="{{ MEDIA_URL }}img/delete-orange.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+        <span class="sf2-icon-share repo-share-btn op-icon vh sf2-special sf2-margin" alt="" title="{% trans "Share" %}"></span>
+        <span class="sf2-icon-delete-o repo-delete-btn op-icon vh sf2-special sf2-margin" title="{% trans "Delete" %}"></span>
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -58,7 +58,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (is_staff || share_from_me) { %>
-    <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-special sf2-margin" alt="" title="{% trans "Unshare" %}"></span>   
     <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -80,7 +80,7 @@
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-special sf2-margin" alt="" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -271,12 +271,12 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download op-icon sf2-special" alt=""></span></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+                <a class="op share" href="#" title="{% trans "Share" %}"><span class="sf2-icon-share op-icon sf2-special" alt=""></span></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                <a class="op delete" href="#" title="{% trans "Delete" %}"><span class="sf2-icon-delete-o op-icon sf2-special" alt=""></span></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
@@ -477,7 +477,7 @@
     <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
         <div class="op-container">
-            <img src="{{MEDIA_URL}}img/delete-orange.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+            <span class="sf2-icon-delete-o op-icon vh sf2-special sf2-margin" title="{% trans "Delete" %}"></span>
         </div>
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
@@ -696,7 +696,7 @@
     </td>
     <td><%= mtime_relative %></td>
     <td>
-        <img src="{{MEDIA_URL}}img/rm.png" alt="" class="unstar op-icon vh" title="{% trans "Unstar" %}" />
+        <span alt="" class="sf2-icon-delete-o sf2-special2 unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
