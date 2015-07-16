@@ -1,8 +1,10 @@
 {% load i18n %}
+$(function() {
+    var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
     function load_excel() {
         $('#convert-loading').remove();
         var iframe = document.createElement('iframe');
-        iframe.src = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/index.html?token=' + '{{ shared_token }}';
+        iframe.src = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/index.html?token=' + '{{ shared_token }}';
         $('#spreadsheet-container').append(iframe);
     }
 
@@ -11,6 +13,7 @@
             repo_id: '{{ repo.id }}',
             path: '{{ path }}',
             token: '{{ shared_token }}',
+            commit_id: commit_id,
             doctype: 'spreadsheet'
         });
         $.ajax({
@@ -38,3 +41,4 @@
   }
 
   check_status();
+});

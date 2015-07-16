@@ -1,10 +1,12 @@
 {% load i18n %}
 
-var OfficePreviewer = function(repo_id, path, token) {
+var OfficePreviewer = function(repo_id, path, token, commit_id) {
     this.repo_id = repo_id;
     this.path = path;
     this.total_pages = null;
+    // only non-null when viewing in shared links
     this.token = token;
+    this.commit_id = commit_id;
 
     this.orig_page_width = null;
     this.orig_page_height = null;
@@ -15,11 +17,12 @@ var OfficePreviewer = function(repo_id, path, token) {
 
     this.FIT_TO_WIDTH = 850;    // hardcoded in seafevents
     this.scale_ratio = 1;
-    this.static_prefix = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}{{ path|urlencode }}/';
+    this.static_prefix = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}/' + this.commit_id + '{{ path|urlencode }}/';
 
     this.page_status_url = function(page) {
         var params = {
             repo_id: repo_id,
+            commit_id: this.commit_id,
             path: path,
             page: page
         };
@@ -30,7 +33,11 @@ var OfficePreviewer = function(repo_id, path, token) {
     }
     this.page_content_url = function(page) {
         var url = this.static_prefix + page + '.page';
-        return this.token ? url + '?token=' + this.token : url;
+        var params = {};
+        if (this.token) {
+            params['token'] = token;
+        }
+        return params ? url + '?' + $.param(params) : url;
     }
 
     var url = window.location.href;
@@ -164,5 +171,6 @@ OfficePreviewer.prototype.load_page = function(index) {
 };
 
 $(function() {
-    new OfficePreviewer('{{ repo.id }}', '{{ path }}', '{{ shared_token }}').start();
+    var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
+    new OfficePreviewer('{{ repo.id }}', '{{ path }}', '{{ shared_token }}', commit_id).start();
 });

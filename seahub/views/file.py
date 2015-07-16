@@ -1333,8 +1333,9 @@ def office_convert_query_status(request, internal=False):
         raise Http404
 
     repo_id = request.GET.get('repo_id', '')
+    commit_id = request.GET.get('commit_id', '')
     path = request.GET.get('path', '')
-    if not (repo_id and path):
+    if not (repo_id and path and commit_id):
         return HttpResponseBadRequest('invalid params')
 
     page = request.GET.get('page', '')
@@ -1350,7 +1351,8 @@ def office_convert_query_status(request, internal=False):
     if not _check_office_convert_perm(request, repo_id, path):
         return HttpResponseForbidden()
 
-    file_id = get_file_id_by_path(repo_id, path)
+    file_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
+
     ret = {'success': False}
     try:
         ret = query_office_convert_status(file_id, page, internal=internal)
@@ -1365,7 +1367,7 @@ def office_convert_query_status(request, internal=False):
 # * 1.page 2.page for pdf/doc/ppt
 # * index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
 _OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png$')
-def office_convert_get_page(request, repo_id, path, filename, internal=False):
+def office_convert_get_page(request, repo_id, commit_id, path, filename, internal=False):
     if not HAS_OFFICE_CONVERTER:
         raise Http404
 
@@ -1376,7 +1378,7 @@ def office_convert_get_page(request, repo_id, path, filename, internal=False):
     if not _check_office_convert_perm(request, repo_id, path):
         return HttpResponseForbidden()
 
-    file_id = get_file_id_by_path(repo_id, path)
+    file_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
     resp = get_office_converted_page(request, filename, file_id, internal=internal)
     if filename.endswith('.page'):
         content_type = 'text/html'
