@@ -481,17 +481,7 @@ def list_lib_dir(request, repo_id):
         d_['perm'] = d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
-    if not repo.encrypted and ENABLE_THUMBNAIL:
-        size = THUMBNAIL_DEFAULT_SIZE
-        for f in file_list:
-            file_path = posixpath.join(path, f.obj_name)
-            file_type, file_ext = get_file_type_and_ext(f.obj_name)
-            if file_type == IMAGE:
-                f.is_img = True
-                if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
-                    src = get_thumbnail_src(repo_id, size, file_path)
-                    f.encoded_thumbnail_src = urlquote(src)
-
+    size = THUMBNAIL_DEFAULT_SIZE
     for f in file_list:
         f_ = {}
         f_['is_file'] = True
@@ -503,10 +493,18 @@ def list_lib_dir(request, repo_id):
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
-        if f.is_img:
-            f_['is_img'] = f.is_img
-        if f.encoded_thumbnail_src:
-            f_['encoded_thumbnail_src'] = f.encoded_thumbnail_src
+
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f_['is_img'] = True
+
+            if not repo.encrypted and ENABLE_THUMBNAIL and \
+                os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
+
+                file_path = posixpath.join(path, f.obj_name)
+                src = get_thumbnail_src(repo_id, size, file_path)
+                f_['encoded_thumbnail_src'] = urlquote(src)
+
         dirent_list.append(f_)
 
     result["dirent_list"] = dirent_list

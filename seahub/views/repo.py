@@ -37,6 +37,7 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 from seahub.utils import gen_file_get_url
+from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src, \
     allow_generate_thumbnail, get_share_link_thumbnail_src
 
@@ -480,6 +481,11 @@ def view_shared_dir(request, token):
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
     for f in file_list:
+
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f.is_img = True
+
         real_image_path = posixpath.join(real_path, f.obj_name)
         if allow_generate_thumbnail(request, repo_id, real_image_path):
              f.allow_generate_thumbnail = True
