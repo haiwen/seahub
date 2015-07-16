@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 import seaserv
 from seaserv import seafile_api
@@ -246,7 +247,8 @@ def render_repo(request, repo):
         if allow_generate_thumbnail(request, repo.id, file_path):
              f.allow_generate_thumbnail = True
              if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('repo.html', {
             'repo': repo,
@@ -483,7 +485,8 @@ def view_shared_dir(request, token):
              f.allow_generate_thumbnail = True
              if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
                 req_image_path = posixpath.join(req_path, f.obj_name)
-                f.thumbnail_src = get_share_link_thumbnail_src(token, THUMBNAIL_DEFAULT_SIZE, req_image_path)
+                src = get_share_link_thumbnail_src(token, THUMBNAIL_DEFAULT_SIZE, req_image_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,

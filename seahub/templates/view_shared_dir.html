@@ -57,8 +57,8 @@
                 {% for dirent in file_list %}
                 <tr class="file-item" data-name="{{dirent.obj_name}}" >
                     {% if dirent.allow_generate_thumbnail %}
-                        {% if dirent.thumbnail_src %}
-                            <td class="dirent-icon"><img class="thumbnail" src="{{SITE_ROOT}}{{ dirent.thumbnail_src|urlencode }}" alt="{% trans "File"%}" /></td>
+                        {% if dirent.encoded_thumbnail_src %}
+                            <td class="dirent-icon"><img class="thumbnail" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="{% trans "File"%}" /></td>
                         {% else %}
                             <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                         {% endif %}
@@ -138,7 +138,7 @@ $(function() {
             dataType: 'json',
             success: function(data) {
                 if (data) {
-                    img_icon.attr("src", '{{SITE_ROOT}}' + e(data.thumbnail_src)).load(function() {
+                    img_icon.attr("src", '{{ SITE_ROOT }}' + data.encoded_thumbnail_src).load(function() {
                         $(this).removeClass("not-thumbnail").addClass("thumbnail");
                     });
                 }

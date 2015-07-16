@@ -301,7 +301,8 @@ def list_dir(request, repo_id):
         if allow_generate_thumbnail(request, repo_id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     ctx = {
         'repo': repo,
@@ -391,7 +392,8 @@ def list_dir_more(request, repo_id):
         if allow_generate_thumbnail(request, repo_id, file_path):
             f.allow_generate_thumbnail = True
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     ctx = {
         'repo': repo,
@@ -487,7 +489,8 @@ def list_lib_dir(request, repo_id):
             if file_type == IMAGE:
                 f.is_img = True
                 if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
-                    f.thumbnail_src = get_thumbnail_src(repo_id, size, file_path)
+                    src = get_thumbnail_src(repo_id, size, file_path)
+                    f.encoded_thumbnail_src = urlquote(src)
 
     for f in file_list:
         f_ = {}
@@ -502,8 +505,8 @@ def list_lib_dir(request, repo_id):
         f_['perm'] = f.permission # perm for file in current dir
         if f.is_img:
             f_['is_img'] = f.is_img
-        if f.thumbnail_src:
-            f_['thumbnail_src'] = f.thumbnail_src
+        if f.encoded_thumbnail_src:
+            f_['encoded_thumbnail_src'] = f.encoded_thumbnail_src
         dirent_list.append(f_)
 
     result["dirent_list"] = dirent_list

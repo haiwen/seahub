@@ -4240,6 +4240,12 @@ class ThumbnailView(APIView):
         if size is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
 
+        try:
+            size = int(size)
+        except ValueError as e:
+            logger.error(e)
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid size.')
+
         obj_id = get_file_id_by_path(repo_id, path)
         if path is None or obj_id is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
