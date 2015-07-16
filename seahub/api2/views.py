@@ -1980,13 +1980,23 @@ class FileSharedLinkView(APIView):
             else:
                 expire_date = None
 
-            try:
-                dirent = seafile_api.get_dirent_by_path(repo_id, path)
-            except Exception as e:
-                logger.error(e)
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+            is_dir = False
+            if path == '/':
+                is_dir = True
+            else:
+                try:
+                    dirent = seafile_api.get_dirent_by_path(repo_id, path)
+                except SearpcError as e:
+                    logger.error(e)
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
 
-            if stat.S_ISDIR(dirent.mode):
+                if not dirent:
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid path')
+
+                if stat.S_ISDIR(dirent.mode):
+                    is_dir = True
+
+            if is_dir:
                 # generate dir download link
 
                 fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
