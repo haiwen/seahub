@@ -447,11 +447,11 @@ else:
 THUMBNAIL_EXTENSION = 'png'
 
 # for thumbnail: height(px) and width(px)
-THUMBNAIL_DEFAULT_SIZE = '24'
-PREVIEW_DEFAULT_SIZE = '100'
+THUMBNAIL_DEFAULT_SIZE = 24
 
-# for origin image file: size(MB)
-THUMBNAIL_IMAGE_SIZE_LIMIT = 30
+# size(MB) limit for generate thumbnail
+THUMBNAIL_IMAGE_COMPRESSED_SIZE_LIMIT = 1
+THUMBNAIL_IMAGE_ORIGINAL_SIZE_LIMIT = 256
 
 #####################
 # Global AddressBook #

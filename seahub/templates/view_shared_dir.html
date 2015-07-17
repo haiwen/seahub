@@ -57,8 +57,8 @@
                 {% for dirent in file_list %}
                 <tr class="file-item" data-name="{{dirent.obj_name}}" >
                     {% if dirent.allow_generate_thumbnail %}
-                        {% if dirent.thumbnail_src %}
-                            <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}?t={{token}}&p={{path|urlencode}}" alt="{% trans "File"%}" /></td>
+                        {% if dirent.encoded_thumbnail_src %}
+                            <td class="dirent-icon"><img class="thumbnail" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="{% trans "File"%}" /></td>
                         {% else %}
                             <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                         {% endif %}
@@ -133,12 +133,12 @@ $(function() {
         var img_icon = $(img_icons[i]),
             file_name = img_icon.closest('.file-item').attr('data-name');
         $.ajax({
-            url: '{% url "thumbnail_create" repo.id %}?path=' + e(cur_path + file_name) + '&t=' + '{{token}}',
+            url: '{% url "share_link_thumbnail_create" token %}?path=' + e(cur_path + file_name),
             cache: false,
             dataType: 'json',
             success: function(data) {
                 if (data) {
-                    img_icon.attr("src", data.thumbnail_src + '?t=' + '{{token}}' + '&p=' + e(cur_path)).load(function() {
+                    img_icon.attr("src", '{{ SITE_ROOT }}' + data.encoded_thumbnail_src).load(function() {
                         $(this).removeClass("not-thumbnail").addClass("thumbnail");
                     });
                 }

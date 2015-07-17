@@ -193,7 +193,7 @@ define([
             getImageThumbnail: function() {
                 var images_with_no_thumbnail = this.dir.filter(function(dirent) {
                     // 'dirent' is a model
-                    return dirent.get('is_img') && !dirent.get('thumbnail_src');
+                    return dirent.get('is_img') && !dirent.get('encoded_thumbnail_src');
                 });
                 if (images_with_no_thumbnail.length == 0) {
                     return ;
@@ -213,7 +213,7 @@ define([
                         dataType: 'json',
                         success: function(data) {
                             cur_img.set({
-                                'thumbnail_src': data.thumbnail_src
+                                'encoded_thumbnail_src': data.encoded_thumbnail_src
                             });
                         },
                         complete: function() {

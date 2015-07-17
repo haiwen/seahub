@@ -11,6 +11,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
+from django.utils.http import urlquote
 
 import seaserv
 from seaserv import seafile_api
@@ -34,11 +35,11 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_commit_before_new_merge, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
-    ENABLE_UPLOAD_FOLDER, \
-    ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, PREVIEW_DEFAULT_SIZE
+    ENABLE_UPLOAD_FOLDER, ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
+from seahub.thumbnail.utils import get_thumbnail_src, \
+    allow_generate_thumbnail, get_share_link_thumbnail_src
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -243,10 +244,12 @@ def render_repo(request, repo):
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     for f in file_list:
-        if allow_generate_thumbnail(username, repo, f):
-            f.allow_generate_thumbnail = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+        file_path = posixpath.join(path, f.obj_name)
+        if allow_generate_thumbnail(request, repo.id, file_path):
+             f.allow_generate_thumbnail = True
+             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
+                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('repo.html', {
             'repo': repo,
@@ -280,7 +283,6 @@ def render_repo(request, repo):
             'sub_lib_enabled': sub_lib_enabled,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -479,13 +481,18 @@ def view_shared_dir(request, token):
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
     for f in file_list:
+
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
         if file_type == IMAGE:
             f.is_img = True
-        if allow_generate_thumbnail(username, repo, f):
-            f.allow_generate_thumbnail = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, f.obj_id)):
-                f.thumbnail_src = get_thumbnail_src(repo.id, f.obj_id, THUMBNAIL_DEFAULT_SIZE)
+
+        real_image_path = posixpath.join(real_path, f.obj_name)
+        if allow_generate_thumbnail(request, repo_id, real_image_path):
+             f.allow_generate_thumbnail = True
+             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
+                req_image_path = posixpath.join(req_path, f.obj_name)
+                src = get_share_link_thumbnail_src(token, THUMBNAIL_DEFAULT_SIZE, req_image_path)
+                f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,
@@ -498,7 +505,6 @@ def view_shared_dir(request, token):
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-            'PREVIEW_DEFAULT_SIZE': PREVIEW_DEFAULT_SIZE,
             }, context_instance=RequestContext(request))
 
 def view_shared_upload_link(request, token):
