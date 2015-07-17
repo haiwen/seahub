@@ -15,7 +15,9 @@ import posixpath
 import re
 import mimetypes
 import urlparse
+import datetime
 
+from django.core import signing
 from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
@@ -60,12 +62,12 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
-from seahub.utils.http import json_response
+from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
 from seahub.views import check_folder_permission
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, add_office_convert_task,
+        query_office_convert_status, add_office_convert_task, office_convert_cluster_token,
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
     )
 
@@ -1283,29 +1285,22 @@ def text_diff(request, repo_id):
 ########## office related
 @require_POST
 @csrf_exempt
+@json_response
 def office_convert_add_task(request):
-    if not HAS_OFFICE_CONVERTER:
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
     try:
-        sec_token = request.POST.get('sec_token')
         file_id = request.POST.get('file_id')
         doctype = request.POST.get('doctype')
         raw_path = request.POST.get('raw_path')
     except KeyError:
         return HttpResponseBadRequest('invalid params')
 
-    if sec_token != do_md5(settings.SECRET_KEY):
+    if not _check_cluster_internal_token(request, file_id):
         return HttpResponseForbidden()
 
     if len(file_id) != 40:
         return HttpResponseBadRequest('invalid params')
 
-    resp = add_office_convert_task(file_id, doctype, raw_path, internal=True)
-
-    return HttpResponse(json.dumps(resp), content_type=content_type)
+    return add_office_convert_task(file_id, doctype, raw_path, internal=True)
 
 def _check_office_convert_perm(request, repo_id, path):
     token = request.GET.get('token', '')
@@ -1324,50 +1319,63 @@ def _check_office_convert_perm(request, repo_id, path):
         return request.user.is_authenticated() and \
             check_folder_permission(request, repo_id, '/') is not None
 
-@json_response
-def office_convert_query_status(request, internal=False):
-    if not HAS_OFFICE_CONVERTER:
-        raise Http404
+def _check_cluster_internal_token(request, file_id):
+    token = request.META.get('Seafile-Office-Preview-Token', '')
+    if not token:
+        return HttpResponseForbidden()
+    try:
+        s = '-'.join([file_id, datetime.datetime.now().strftime('%Y%m%d')])
+        return signing.Signer().unsign(token) == s
+    except signing.BadSignature:
+        return False
 
-    if not internal and not request.is_ajax():
-        raise Http404
+def _office_convert_get_file_id_internal(request):
+    file_id = request.GET.get('file_id', '')
+    if len(file_id) != 40:
+        raise BadRequestException()
+    if not _check_cluster_internal_token(request, file_id):
+        raise RequestForbbiddenException()
+    return file_id
 
-    repo_id = request.GET.get('repo_id', '')
-    commit_id = request.GET.get('commit_id', '')
-    path = request.GET.get('path', '')
+def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None):
+    repo_id = repo_id or request.GET.get('repo_id', '')
+    commit_id = commit_id or request.GET.get('commit_id', '')
+    path = path or request.GET.get('path', '')
     if not (repo_id and path and commit_id):
-        return HttpResponseBadRequest('invalid params')
-
-    page = request.GET.get('page', '')
-    doctype = request.GET.get('doctype', None)
-    if doctype == 'spreadsheet':
-        page = 0
-    else:
-        try:
-            page = int(page)
-        except ValueError:
-            return HttpResponseBadRequest('invalid params')
+        raise BadRequestException()
 
     if not _check_office_convert_perm(request, repo_id, path):
-        return HttpResponseForbidden()
+        raise BadRequestException()
 
-    file_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
+    return seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
+
+@json_response
+def office_convert_query_status(request, cluster_internal=False):
+    if not cluster_internal and not request.is_ajax():
+        raise Http404
+
+    doctype = request.GET.get('doctype', None)
+    page = 0 if doctype == 'spreadsheet' else int_param(request, 'page')
+    if cluster_internal:
+        file_id = _office_convert_get_file_id_internal(request)
+    else:
+        file_id = _office_convert_get_file_id(request)
 
     ret = {'success': False}
     try:
-        ret = query_office_convert_status(file_id, page, internal=internal)
+        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
     except Exception, e:
         logging.exception('failed to call query_office_convert_status')
         ret['error'] = str(e)
 
     return ret
 
-
-# Valid static file path inclueds:
-# * 1.page 2.page for pdf/doc/ppt
-# * index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
 _OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png$')
-def office_convert_get_page(request, repo_id, commit_id, path, filename, internal=False):
+def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster_internal=False):
+    """Valid static file path inclueds:
+    - "1.page" "2.page" for pdf/doc/ppt
+    - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
+    """
     if not HAS_OFFICE_CONVERTER:
         raise Http404
 
@@ -1375,11 +1383,13 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, interna
         return HttpResponseForbidden()
 
     path = u'/' + path
-    if not _check_office_convert_perm(request, repo_id, path):
-        return HttpResponseForbidden()
+    if cluster_internal:
+        file_id = _office_convert_get_file_id_internal(request)
+    else:
+        file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
 
-    file_id = seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
-    resp = get_office_converted_page(request, filename, file_id, internal=internal)
+    resp = get_office_converted_page(
+        request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)
     if filename.endswith('.page'):
         content_type = 'text/html'
     else:

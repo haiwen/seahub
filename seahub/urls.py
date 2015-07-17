@@ -311,8 +311,9 @@ if HAS_OFFICE_CONVERTER:
     if CLUSTER_MODE and OFFICE_CONVERTOR_NODE:
         urlpatterns += patterns('',
             url(r'^office-convert/internal/add-task/$', office_convert_add_task),
-            url(r'^office-convert/internal/status/$', office_convert_query_status, {'internal': True}),
-            url(r'^office-convert/internal/static/(?P<path>.*)$', office_convert_get_page, {'internal': True}),
+            url(r'^office-convert/internal/status/$', office_convert_query_status, {'cluster_internal': True}),
+            url(r'^office-convert/internal/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
+                office_convert_get_page, {'cluster_internal': True}),
         )
 
 if TRAFFIC_STATS_ENABLED:
