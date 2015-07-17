@@ -96,10 +96,10 @@
 /****** sf2-icon-xx ********/
 @font-face {
     font-family: 'seafile-font2';
-    src:url('sf_font2/myFont.eot');
-    src:url('sf_font2/myFont.eot?#iefix') format('embedded-opentype'),
-        url('sf_font2/myFont.woff') format('woff'),
-        url('sf_font2/myFont.ttf') format('truetype');
+    src:url('sf_font2/seafile-font2.eot');
+    src:url('sf_font2/seafile-font2.eot?#iefix') format('embedded-opentype'),
+        url('sf_font2/seafile-font2.woff') format('woff'),
+        url('sf_font2/seafile-font2.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
@@ -119,28 +119,27 @@
 .sf2-icon-circle:before { content:"\e605"; }
 .sf2-icon-delete-o:before { content:"\e606"; }
 .sf2-icon-folder:before { content:"\e607"; }
-.sf2-special:before, .sf2-special2:before, .sf2-special3:before {
-    font-size:32px;
-    position:relative;
-    left:-10px;
-}
-.sf2-special, .sf2-special2, .sf2-special3 {
-    width:16px;
-    height:16px;
-    display:inline-block;
-}
-.sf2-special:before {
+.sf2-orange {
     color:#fd9b69;
-    top:-7px;
 }
-.sf2-special2:before, .sf2-special3:before {
+.sf2-gray {
     color:#a3a3a3;
 }
-.sf2-special2:before {
-    top:-6px;
+.sf2-small {
+    width:16px;
+    height:16px;
 }
-.sf2-special3:before {
-    top:-8px;
+.sf2-small:before {
+    
+}
+.sf2-middle {
+    width:20px;
+    height:20px;
+}
+.sf2-middle:before {
+    font-size:37px;
+    float: left;
+    padding-left: 30px;
 }
 .sf2-margin {
     margin-top:4px;
@@ -171,7 +170,7 @@ ol { padding-left:2em; }
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; }
 dd { margin-bottom:.8em; color:#222; }
-a { color:#eb8205; text-decoration:none; font-weight:bold; outline:none }
+a { color:#eb8205; text-decoration:none; font-weight:bold; }
 a.normal {font-weight: normal;}
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
