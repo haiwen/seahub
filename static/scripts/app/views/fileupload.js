@@ -212,6 +212,7 @@ define([
                             }
                         }
                     });
+                    $('#simplemodal-container').css({'height':'auto'});
                     $('.yes', confirm_popup).click(function() {
                         file.choose_to_update = true;
                         $.modal.close();
