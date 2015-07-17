@@ -49,6 +49,10 @@
 .icon-chevron-left:before         { content: "\f053"; }
 .icon-building:before             { content: "\f0f7"; }
 .icon-phone:before                { content: "\f095"; }
+.icon-magic:before                { content: "\f0d0"; }
+.icon-eye:before                  { content: "\f06e"; }
+.icon-eye-slash:before            { content: "\f070"; }
+
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
 .icon-tint:before                 { content: "\f043"; }
@@ -3670,3 +3674,39 @@ textarea:-moz-placeholder {/* for FF */
     padding:7px;
     margin-top:11px;
 }
+/*random password */
+#generate-upload-link-form .first-password,
+#generate-download-link-form .first-password {
+    width:188px;
+    padding-right:74px;
+}
+#generate-upload-link-form .generate-random-password,
+#generate-download-link-form .generate-random-password,
+#generate-upload-link-form .show-or-hide-password,
+#generate-download-link-form .show-or-hide-password {
+    text-align:center;
+    width:36px;
+    height:26px;
+    line-height:26px;
+    opacity:0.65;
+    float:right;
+    position:relative;
+    top:4px;
+    left:-133px;
+}
+#generate-upload-link-form .generate-random-password,
+#generate-download-link-form .generate-random-password {
+    background:#ccc;
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+}
+#generate-upload-link-form .show-or-hide-password,
+#generate-download-link-form .show-or-hide-password {
+    background:#fff;
+}
+#generate-upload-link-form .generate-random-password:hover,
+#generate-download-link-form .generate-random-password:hover,
+#generate-upload-link-form .show-or-hide-password:hover,
+#generate-download-link-form .show-or-hide-password:hover {
+    opacity:1;
+} 
