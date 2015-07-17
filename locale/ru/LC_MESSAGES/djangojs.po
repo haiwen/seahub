@@ -5,58 +5,62 @@
 # Translators:
 # Denis Baranov <baranov@itlibertas.com>, 2015
 # Michael Klimenko <michaelkl@mail.ru>, 2015
+# Vladimir <pash.vld@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 10:25+0800\n"
-"PO-Revision-Date: 2015-06-21 17:11+0000\n"
-"Last-Translator: Denis Baranov <baranov@itlibertas.com>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/seahub/language/ru/)\n"
+"POT-Creation-Date: 2015-07-16 15:14+0800\n"
+"PO-Revision-Date: 2015-07-16 07:21+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/p/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: ru\n"
 "Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: static/scripts/common.js:156 static/scripts/common.js.c:246
-#: static/scripts/app/views/dir.js:803 static/scripts/app/views/dir.js.c:860
-#: static/scripts/app/views/dirent.js:398
-#: static/scripts/app/views/dirent.js:424
+#: static/scripts/common.js:155 static/scripts/common.js.c:245
+#: static/scripts/app/views/dir.js:812 static/scripts/app/views/dir.js.c:869
+#: static/scripts/app/views/dirent.js:400
+#: static/scripts/app/views/dirent.js:426
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
 #: static/scripts/app/views/folder-perm.js:208
+#: static/scripts/app/views/folder-share-item.js:79
+#: static/scripts/app/views/folder-share-item.js:115
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:308
+#: static/scripts/app/views/share.js:563 static/scripts/app/views/share.js:621
 #: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "Не удалось. Пожалуйста, проверьте сеть."
 
-#: static/scripts/common.js:499
+#: static/scripts/common.js:508
 msgid "Search users or enter emails"
-msgstr "Найдите пользователя или введите email"
+msgstr "Найти пользователей или ввести email адреса"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
-msgstr "Имя необходимо"
+msgstr "Имя обязательно"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:153
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:159
 msgid "Please enter password"
-msgstr "Пожалуйста введите пароль"
+msgstr "Пожалуйста, введите пароль"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:161
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:167
 msgid "Please enter the password again"
-msgstr "Пожалуйста введите пароль ещё раз"
+msgstr "Пожалуйста, введите пароль еще раз"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:157
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:163
 msgid "Password is too short"
 msgstr "Пароль слишком короткий"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:165
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:171
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
@@ -78,7 +82,7 @@ msgstr "Назад (←)"
 #: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:34
 msgid "Next (Right arrow key)"
-msgstr "Вперёд (→)"
+msgstr "Вперед (→)"
 
 #: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:35
@@ -109,14 +113,13 @@ msgstr "Пожалуйста, проверьте сеть."
 msgid "Password is required."
 msgstr "Требуется пароль."
 
-#: static/scripts/app/views/dir.js:312 static/scripts/app/views/dir.js.c:369
-#: static/scripts/app/views/dirent.js:227
-#: static/scripts/app/views/share.js:429
+#: static/scripts/app/views/dir.js:313 static/scripts/app/views/dir.js.c:370
+#: static/scripts/app/views/dirent.js:229
 msgid "It is required."
 msgstr "Обязательное."
 
-#: static/scripts/app/views/dir.js:327 static/scripts/app/views/dir.js.c:394
-#: static/scripts/app/views/dirent.js:246
+#: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
+#: static/scripts/app/views/dirent.js:248
 #: static/scripts/app/views/fileupload.js:298
 #: static/scripts/app/views/fileupload.js:312
 #: static/scripts/app/views/fileupload.js:324
@@ -125,148 +128,148 @@ msgstr "Обязательное."
 msgid "Just now"
 msgstr "Прямо сейчас"
 
-#: static/scripts/app/views/dir.js:375
+#: static/scripts/app/views/dir.js:376
 msgid "Only an extension there, please input a name."
 msgstr "Здесь только расширение, пожалуйста, введите название."
 
-#: static/scripts/app/views/dir.js:525 static/scripts/app/views/dir.js.c:654
+#: static/scripts/app/views/dir.js:534 static/scripts/app/views/dir.js.c:663
 msgid "Processing..."
 msgstr "Обработка ..."
 
-#: static/scripts/app/views/dir.js:561
+#: static/scripts/app/views/dir.js:570
 msgid "Successfully deleted %(name)s."
-msgstr "Успешно удален %(name)s."
-
-#: static/scripts/app/views/dir.js:563
-msgid "Successfully deleted %(name)s and 1 other item."
-msgstr "Успешно пемещен %(name)s и еще 1 объект."
-
-#: static/scripts/app/views/dir.js:565
-msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr "Успешно удален %(name)s и еще %(amount)s других объектов."
+msgstr "Успешно удалено %(name)s."
 
 #: static/scripts/app/views/dir.js:572
+msgid "Successfully deleted %(name)s and 1 other item."
+msgstr "Успешно перемещено %(name)s и еще 1 объект."
+
+#: static/scripts/app/views/dir.js:574
+msgid "Successfully deleted %(name)s and %(amount)s other items."
+msgstr "Успешно удалено %(name)s и еще %(amount)s других объектов."
+
+#: static/scripts/app/views/dir.js:581
 msgid "Failed to delete %(name)s."
 msgstr "Не удалось удалить %(name)s."
 
-#: static/scripts/app/views/dir.js:574
+#: static/scripts/app/views/dir.js:583
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "Не удалось удалить %(name)s и еще 1 объект."
 
-#: static/scripts/app/views/dir.js:576
+#: static/scripts/app/views/dir.js:585
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "Не удалось удалить %(name)s и еще %(amount)s других объектов."
 
-#: static/scripts/app/views/dir.js:589
+#: static/scripts/app/views/dir.js:598
 msgid "Delete Items"
 msgstr "Удаление элементов"
 
-#: static/scripts/app/views/dir.js:590
+#: static/scripts/app/views/dir.js:599
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Вы уверены, что хотите удалить выбранные элементы?"
 
-#: static/scripts/app/views/dir.js:649 static/scripts/app/views/dirent.js:323
+#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:325
 msgid "Invalid destination path"
 msgstr "Путь назначения указан неверно"
 
-#: static/scripts/app/views/dir.js:697
+#: static/scripts/app/views/dir.js:706
 msgid "Successfully moved %(name)s."
-msgstr "Успешно перемещен %(name)s."
+msgstr "Успешно перемещено %(name)s."
 
-#: static/scripts/app/views/dir.js:699
+#: static/scripts/app/views/dir.js:708
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr "Успешно пемещен %(name)s и еще 1 объект."
+msgstr "Успешно перемещено %(name)s и еще 1 объект."
 
-#: static/scripts/app/views/dir.js:701
+#: static/scripts/app/views/dir.js:710
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr "Успешно пемещен %(name)s и еще %(amount)s других объектов."
+msgstr "Успешно перемещено %(name)s и еще %(amount)s других объектов."
 
-#: static/scripts/app/views/dir.js:705
+#: static/scripts/app/views/dir.js:714
 msgid "Successfully copied %(name)s."
-msgstr "Успешно скопирован %(name)s."
+msgstr "Успешно скопировано %(name)s."
 
-#: static/scripts/app/views/dir.js:707
+#: static/scripts/app/views/dir.js:716
 msgid "Successfully copied %(name)s and 1 other item."
-msgstr "Успешно скопирован %(name)s и еще 1 объект."
+msgstr "Успешно скопировано %(name)s и еще 1 объект."
 
-#: static/scripts/app/views/dir.js:709
+#: static/scripts/app/views/dir.js:718
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr "Успешно скопирован %(name)s и еще %(amount)s других объектов."
+msgstr "Успешно скопировано %(name)s и еще %(amount)s других объектов."
 
-#: static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dir.js:730
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Внутренняя ошибка. Не удалось переместить %(name)s и еще %(amount)s других объектов."
 
-#: static/scripts/app/views/dir.js:723
+#: static/scripts/app/views/dir.js:732
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Внутренняя ошибка. Не удалось переместить %(name)s."
 
-#: static/scripts/app/views/dir.js:727
+#: static/scripts/app/views/dir.js:736
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Внутренняя ошибка. Не удалось скопировать %(name)s и еще %(amount)s других объектов."
 
-#: static/scripts/app/views/dir.js:729
+#: static/scripts/app/views/dir.js:738
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Внутренняя ошибка. Не удалось скопировать %(name)s."
 
-#: static/scripts/app/views/dir.js:769
+#: static/scripts/app/views/dir.js:778
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Перемещается файл %(index)s из %(total)s"
 
-#: static/scripts/app/views/dir.js:769
+#: static/scripts/app/views/dir.js:778
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Копируется файл %(index)s из %(total)s"
 
-#: static/scripts/app/views/dir.js:791
+#: static/scripts/app/views/dir.js:800
 msgid "Failed to move %(name)s"
 msgstr "Не удалось переместить %(name)s"
 
-#: static/scripts/app/views/dir.js:791
+#: static/scripts/app/views/dir.js:800
 msgid "Failed to copy %(name)s"
 msgstr "Не удалось скопировать %(name)s"
 
-#: static/scripts/app/views/dir.js:851 static/scripts/app/views/dirent.js:387
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:389
+#: static/scripts/app/views/dirent.js:417
 msgid "Canceled."
 msgstr "Отменено."
 
-#: static/scripts/app/views/dirent.js:195
+#: static/scripts/app/views/dirent.js:197
 msgid "Successfully deleted %(name)s"
-msgstr "Успешно удален %(name)s"
+msgstr "Успешно удалено %(name)s"
 
-#: static/scripts/app/views/dirent.js:208
+#: static/scripts/app/views/dirent.js:210
 msgid "Rename Directory"
 msgstr "Переименовать каталог"
 
-#: static/scripts/app/views/dirent.js:208
+#: static/scripts/app/views/dirent.js:210
 msgid "Rename File"
 msgstr "Переименовать файл"
 
-#: static/scripts/app/views/dirent.js:231
+#: static/scripts/app/views/dirent.js:233
 msgid "You have not renamed it."
 msgstr "Вы не переименовали его."
 
-#: static/scripts/app/views/dirent.js:283
+#: static/scripts/app/views/dirent.js:285
 msgid "Move {placeholder} to:"
 msgstr "Переместить {placeholder} в:"
 
-#: static/scripts/app/views/dirent.js:283
+#: static/scripts/app/views/dirent.js:285
 msgid "Copy {placeholder} to:"
 msgstr "Копировать {placeholder} в:"
 
-#: static/scripts/app/views/dirent.js:357
+#: static/scripts/app/views/dirent.js:359
 msgid "Moving %(name)s"
 msgstr "Перемещение %(name)s"
 
-#: static/scripts/app/views/dirent.js:357
+#: static/scripts/app/views/dirent.js:359
 msgid "Copying %(name)s"
 msgstr "Копирование %(name)s"
 
-#: static/scripts/app/views/dirent.js:373
+#: static/scripts/app/views/dirent.js:375
 msgid "Saving..."
 msgstr "Сохранение..."
 
-#: static/scripts/app/views/dirent.js:387
+#: static/scripts/app/views/dirent.js:389
 msgid "Failed."
 msgstr "Не удачно."
 
@@ -280,7 +283,7 @@ msgstr "Файл слишком маленький"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr "Тип файла не разрешён"
+msgstr "Тип файла не разрешен"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Max number of files exceeded"
@@ -317,7 +320,7 @@ msgstr "Начать"
 
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr "Отмена"
+msgstr "Отменить"
 
 #: static/scripts/app/views/fileupload.js:22
 msgid "Delete"
@@ -353,12 +356,20 @@ msgstr "Заменить файл {filename}?"
 
 #: static/scripts/app/views/folder-perm.js:49
 msgid "Set {placeholder}'s permission"
-msgstr "Установить права доступа к {placeholder} "
+msgstr "Установить права доступа к {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:475
+#: static/scripts/app/views/share.js:469
 msgid "Select groups"
 msgstr "Выберите группу"
+
+#: static/scripts/app/views/folder-share-item.js:77
+msgid "Edit failed"
+msgstr ""
+
+#: static/scripts/app/views/folder-share-item.js:113
+msgid "Delete failed"
+msgstr ""
 
 #: static/scripts/app/views/group-repo.js:50
 #: static/scripts/app/views/organization-repo.js:49
@@ -389,41 +400,37 @@ msgstr "Действительно хотите удалить {lib_name}?"
 msgid "Delete succeeded."
 msgstr "Успешно удалено."
 
-#: static/scripts/app/views/share.js:55
+#: static/scripts/app/views/share.js:63
 msgid "Share {placeholder}"
 msgstr "Открыть общий доступ к {placeholder}"
 
-#: static/scripts/app/views/share.js:178
+#: static/scripts/app/views/share.js:184
 msgid "Please enter days."
-msgstr "Пожалуйста введите день."
+msgstr "Пожалуйста, введите дни."
 
-#: static/scripts/app/views/share.js:182
+#: static/scripts/app/views/share.js:188
 msgid "Please enter valid days"
-msgstr "Пожалуйста введите корректный день"
+msgstr "Пожалуйста, введите корректные дни"
 
-#: static/scripts/app/views/share.js:269
+#: static/scripts/app/views/share.js:275
 msgid "Please input at least an email."
-msgstr "Пожалуйста, введите по крайней мере, E-mail."
+msgstr "Пожалуйста, введите по крайней мере, email."
 
-#: static/scripts/app/views/share.js:286
+#: static/scripts/app/views/share.js:292
 msgid "Successfully sent to {placeholder}"
 msgstr "Успешно отправлено в {placeholder}"
 
-#: static/scripts/app/views/share.js:290
+#: static/scripts/app/views/share.js:296
 msgid "Failed to send to {placeholder}"
 msgstr "Ошибка отправки в {placeholder}"
 
-#: static/scripts/app/views/share.js:441 static/scripts/app/views/share.js:510
-msgid "Successfully shared to {placeholder}"
-msgstr "Успешно открыт доступ к {placeholder}"
-
-#: static/scripts/app/views/share.js:445 static/scripts/app/views/share.js:514
+#: static/scripts/app/views/share.js:553
 msgid "Failed to share to {placeholder}"
-msgstr "Не удалось открыть общий доступ {placeholder}"
+msgstr "Не удалось открыть общий доступ к {placeholder}"
 
-#: static/scripts/app/views/share.js:492
-msgid "Please select a contact or a group."
-msgstr "Пожалуйста, выберите контакт или группу."
+#: static/scripts/app/views/share.js:561 static/scripts/app/views/share.js:619
+msgid "Share failed"
+msgstr ""
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"

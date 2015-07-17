@@ -3,59 +3,64 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# eddelac <edg.delac@gmail.com>, 2013
+# Hector Colina <hcolina@gmail.com>, 2013
 # Rodolfo Cossalter <rcoss@dm.uba.ar>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-18 10:25+0800\n"
-"PO-Revision-Date: 2015-06-18 02:13+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
-"Language-Team: Spanish (http://www.transifex.com/projects/p/seahub/language/es/)\n"
+"POT-Creation-Date: 2015-07-16 15:14+0800\n"
+"PO-Revision-Date: 2015-07-16 14:58+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
+"Language-Team: Spanish (http://www.transifex.com/p/seahub/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: es\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/scripts/common.js:156 static/scripts/common.js.c:246
-#: static/scripts/app/views/dir.js:803 static/scripts/app/views/dir.js.c:860
-#: static/scripts/app/views/dirent.js:398
-#: static/scripts/app/views/dirent.js:424
+#: static/scripts/common.js:155 static/scripts/common.js.c:245
+#: static/scripts/app/views/dir.js:812 static/scripts/app/views/dir.js.c:869
+#: static/scripts/app/views/dirent.js:400
+#: static/scripts/app/views/dirent.js:426
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
 #: static/scripts/app/views/folder-perm.js:208
+#: static/scripts/app/views/folder-share-item.js:79
+#: static/scripts/app/views/folder-share-item.js:115
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:302
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:308
+#: static/scripts/app/views/share.js:563 static/scripts/app/views/share.js:621
 #: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
-msgstr "Fallo. Por favor verifique la red."
+msgstr "Fallo. Por favor, verifica la red."
 
-#: static/scripts/common.js:499
+#: static/scripts/common.js:508
 msgid "Search users or enter emails"
-msgstr ""
+msgstr "Buscar usuarios o ingresar emails"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
-msgstr "Nombre es requerido"
+msgstr "Nombre requerido"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:153
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:159
 msgid "Please enter password"
-msgstr "Por favor ingrese la contraseña"
+msgstr "Ingresa una contraseña"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:161
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:167
 msgid "Please enter the password again"
-msgstr "Por favor ingrese la contraseña nuevamente"
+msgstr "Ingresa la contraseña nuevamente"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:157
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:163
 msgid "Password is too short"
-msgstr "La contraseña es demasiado corta"
+msgstr "Contraseña demasiado corta"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:165
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:171
 msgid "Passwords don't match"
 msgstr "Las contraseñas no coinciden"
 
@@ -106,16 +111,15 @@ msgstr "Por favor verifique la red."
 
 #: static/scripts/app/views/dir.js:150
 msgid "Password is required."
-msgstr "Se requiere contraseña."
+msgstr "Contraseña requerida"
 
-#: static/scripts/app/views/dir.js:312 static/scripts/app/views/dir.js.c:369
-#: static/scripts/app/views/dirent.js:227
-#: static/scripts/app/views/share.js:429
+#: static/scripts/app/views/dir.js:313 static/scripts/app/views/dir.js.c:370
+#: static/scripts/app/views/dirent.js:229
 msgid "It is required."
-msgstr "Es requerida."
+msgstr "Es requerido."
 
-#: static/scripts/app/views/dir.js:327 static/scripts/app/views/dir.js.c:394
-#: static/scripts/app/views/dirent.js:246
+#: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
+#: static/scripts/app/views/dirent.js:248
 #: static/scripts/app/views/fileupload.js:298
 #: static/scripts/app/views/fileupload.js:312
 #: static/scripts/app/views/fileupload.js:324
@@ -124,158 +128,158 @@ msgstr "Es requerida."
 msgid "Just now"
 msgstr "Ahora"
 
-#: static/scripts/app/views/dir.js:375
+#: static/scripts/app/views/dir.js:376
 msgid "Only an extension there, please input a name."
-msgstr "Sólo hay una extensión, por favor ingrese un nombre."
+msgstr "Define un nombre, no solamente la extensión."
 
-#: static/scripts/app/views/dir.js:525 static/scripts/app/views/dir.js.c:654
+#: static/scripts/app/views/dir.js:534 static/scripts/app/views/dir.js.c:663
 msgid "Processing..."
-msgstr "Proceasndo..."
+msgstr "Procesando…"
 
-#: static/scripts/app/views/dir.js:561
+#: static/scripts/app/views/dir.js:570
 msgid "Successfully deleted %(name)s."
-msgstr "Eliminado con éxito %(name)s."
+msgstr "%(name)s eliminado con éxito."
 
-#: static/scripts/app/views/dir.js:563
+#: static/scripts/app/views/dir.js:572
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "eliminado con éxito %(name)s y otro ítem."
 
-#: static/scripts/app/views/dir.js:565
+#: static/scripts/app/views/dir.js:574
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr "eliminado con éxito %(name)s y %(amount)s otros ítems."
+msgstr "%(name)s y otros %(amount)s elementos eliminados con éxito."
 
-#: static/scripts/app/views/dir.js:572
+#: static/scripts/app/views/dir.js:581
 msgid "Failed to delete %(name)s."
 msgstr "Fallo al eliminar %(name)s."
 
-#: static/scripts/app/views/dir.js:574
+#: static/scripts/app/views/dir.js:583
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "Fallo al eliminar %(name)s y otro ítem."
 
-#: static/scripts/app/views/dir.js:576
+#: static/scripts/app/views/dir.js:585
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "Fallo al eliminar %(name)s y %(amount)s otros ítems."
 
-#: static/scripts/app/views/dir.js:589
+#: static/scripts/app/views/dir.js:598
 msgid "Delete Items"
-msgstr "Eliminar Ítems"
+msgstr "Eliminar elementos"
 
-#: static/scripts/app/views/dir.js:590
+#: static/scripts/app/views/dir.js:599
 msgid "Are you sure you want to delete these selected items?"
-msgstr "¿Está seguro de eliminar los ítems seleccionados?"
+msgstr "¿Seguro que deseas eliminar los elementos selecionados?"
 
-#: static/scripts/app/views/dir.js:649 static/scripts/app/views/dirent.js:323
+#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:325
 msgid "Invalid destination path"
 msgstr "Ruta de destino inválida"
 
-#: static/scripts/app/views/dir.js:697
+#: static/scripts/app/views/dir.js:706
 msgid "Successfully moved %(name)s."
-msgstr "Movido con éxito %(name)s."
+msgstr "%(name)s movido con éxito."
 
-#: static/scripts/app/views/dir.js:699
+#: static/scripts/app/views/dir.js:708
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr "Movido con éxito %(name)s y otro ítem."
+msgstr "%(name)s y 1 otro ítem movidos con éxito."
 
-#: static/scripts/app/views/dir.js:701
+#: static/scripts/app/views/dir.js:710
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr "Movido con éxito %(name)s y %(amount)s otros ítems."
+msgstr "%(name)s y otros %(amount)s elementos movidos con éxito."
 
-#: static/scripts/app/views/dir.js:705
+#: static/scripts/app/views/dir.js:714
 msgid "Successfully copied %(name)s."
-msgstr "Copiado con éxito %(name)s."
+msgstr "%(name)s copiados con éxito."
 
-#: static/scripts/app/views/dir.js:707
+#: static/scripts/app/views/dir.js:716
 msgid "Successfully copied %(name)s and 1 other item."
-msgstr "Copiado con éxito %(name)s y otro ítem."
+msgstr "%(name)s y 1 otro ítem copiados con éxito."
 
-#: static/scripts/app/views/dir.js:709
+#: static/scripts/app/views/dir.js:718
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr "Copiado con éxito %(name)s y %(amount)s otros ítems."
+msgstr "%(name)s y otros %(amount)s elementos copiados con éxito."
 
-#: static/scripts/app/views/dir.js:721
+#: static/scripts/app/views/dir.js:730
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Error interno. Fallo al mover %(name)s y %(amount)s otro(s) ítem(s)."
 
-#: static/scripts/app/views/dir.js:723
+#: static/scripts/app/views/dir.js:732
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Error interno. Fallo al mover %(name)s."
 
-#: static/scripts/app/views/dir.js:727
+#: static/scripts/app/views/dir.js:736
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Error interno. Fallo al copiar %(name)s y %(amount)s otro(s) ítem(s)."
 
-#: static/scripts/app/views/dir.js:729
+#: static/scripts/app/views/dir.js:738
 msgid "Internal error. Failed to copy %(name)s."
-msgstr "Error interno. Fallo al copiar  %(name)s."
+msgstr "Error interno. Fallo al copiar %(name)s."
 
-#: static/scripts/app/views/dir.js:769
+#: static/scripts/app/views/dir.js:778
 msgid "Moving file %(index)s of %(total)s"
-msgstr "Moviendo archivo %(index)s de %(total)s"
+msgstr "Moviendo archivo  %(index)s de %(total)s"
 
-#: static/scripts/app/views/dir.js:769
+#: static/scripts/app/views/dir.js:778
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Copiando archivo %(index)s de %(total)s"
 
-#: static/scripts/app/views/dir.js:791
+#: static/scripts/app/views/dir.js:800
 msgid "Failed to move %(name)s"
 msgstr "Fallo al mover %(name)s"
 
-#: static/scripts/app/views/dir.js:791
+#: static/scripts/app/views/dir.js:800
 msgid "Failed to copy %(name)s"
 msgstr "Fallo al copiar %(name)s"
 
-#: static/scripts/app/views/dir.js:851 static/scripts/app/views/dirent.js:387
-#: static/scripts/app/views/dirent.js:415
+#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:389
+#: static/scripts/app/views/dirent.js:417
 msgid "Canceled."
 msgstr "Cancelado."
 
-#: static/scripts/app/views/dirent.js:195
+#: static/scripts/app/views/dirent.js:197
 msgid "Successfully deleted %(name)s"
-msgstr "Eliminado con éxito %(name)s"
+msgstr "Eliminados con éxito %(name)s"
 
-#: static/scripts/app/views/dirent.js:208
+#: static/scripts/app/views/dirent.js:210
 msgid "Rename Directory"
 msgstr "Renombrar Carpeta"
 
-#: static/scripts/app/views/dirent.js:208
+#: static/scripts/app/views/dirent.js:210
 msgid "Rename File"
 msgstr "Renombrar Archivo"
 
-#: static/scripts/app/views/dirent.js:231
+#: static/scripts/app/views/dirent.js:233
 msgid "You have not renamed it."
-msgstr "No lo ha renombrado."
+msgstr "No se ha renombrado."
 
-#: static/scripts/app/views/dirent.js:283
+#: static/scripts/app/views/dirent.js:285
 msgid "Move {placeholder} to:"
 msgstr "Mover {placeholder} a:"
 
-#: static/scripts/app/views/dirent.js:283
+#: static/scripts/app/views/dirent.js:285
 msgid "Copy {placeholder} to:"
 msgstr "Copiar {placeholder} a:"
 
-#: static/scripts/app/views/dirent.js:357
+#: static/scripts/app/views/dirent.js:359
 msgid "Moving %(name)s"
 msgstr "Moviendo %(name)s"
 
-#: static/scripts/app/views/dirent.js:357
+#: static/scripts/app/views/dirent.js:359
 msgid "Copying %(name)s"
 msgstr "Copiando %(name)s"
 
-#: static/scripts/app/views/dirent.js:373
+#: static/scripts/app/views/dirent.js:375
 msgid "Saving..."
 msgstr "Guardando..."
 
-#: static/scripts/app/views/dirent.js:387
+#: static/scripts/app/views/dirent.js:389
 msgid "Failed."
 msgstr "Falló."
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr "El archivo es demasiado grande."
+msgstr "Archivo demasiado grande"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr "El archivo es demasiado chico"
+msgstr "Archivo demasiado pequeño"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
@@ -283,15 +287,15 @@ msgstr "Tipo de archivo no permitido"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Max number of files exceeded"
-msgstr "Máximo número de archivos excedido"
+msgstr "Número máximo de archivos excedido"
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr "La cantidad de bytes subidos excede el tamaño del archivo"
+msgstr "Bytes actuales exceden el tamaño máximo"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr "Archivo subido resultó vacío"
+msgstr "Resultado de subida incompleto"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/group.js:108
@@ -312,7 +316,7 @@ msgstr "cancelado"
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr "Iniciar"
+msgstr "Inicio"
 
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
@@ -320,23 +324,23 @@ msgstr "Cancelar"
 
 #: static/scripts/app/views/fileupload.js:22
 msgid "Delete"
-msgstr "Eliminar"
+msgstr "Borrar"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
-msgstr "Subiendo Archivo..."
+msgstr "Subiendo archivo..."
 
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Upload complete"
-msgstr "Archivo subido por completo"
+msgstr "Subir archivo completado"
 
 #: static/scripts/app/views/fileupload.js:48
 msgid "File Upload canceled"
-msgstr "Subida de archivo cancelada"
+msgstr "Subir archivo cancelado"
 
 #: static/scripts/app/views/fileupload.js:49
 msgid "File Upload failed"
-msgstr "Subida de archivo falló"
+msgstr "Subir archivo falló"
 
 #: static/scripts/app/views/fileupload.js:153
 msgid "Failed to get upload url"
@@ -355,9 +359,17 @@ msgid "Set {placeholder}'s permission"
 msgstr "Establecer permiso de  {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:475
+#: static/scripts/app/views/share.js:469
 msgid "Select groups"
 msgstr "Seleccionar grupos"
+
+#: static/scripts/app/views/folder-share-item.js:77
+msgid "Edit failed"
+msgstr "Editar falló"
+
+#: static/scripts/app/views/folder-share-item.js:113
+msgid "Delete failed"
+msgstr "Eliminar falló"
 
 #: static/scripts/app/views/group-repo.js:50
 #: static/scripts/app/views/organization-repo.js:49
@@ -386,43 +398,39 @@ msgstr "¿Realmente desea eliminar {lib_name}?"
 
 #: static/scripts/app/views/repo.js:71 static/scripts/app/views/sub-lib.js:69
 msgid "Delete succeeded."
-msgstr "Eliminado con éxito."
+msgstr "Borrado con éxito."
 
-#: static/scripts/app/views/share.js:55
+#: static/scripts/app/views/share.js:63
 msgid "Share {placeholder}"
 msgstr "Compartir {placeholder}"
 
-#: static/scripts/app/views/share.js:178
+#: static/scripts/app/views/share.js:184
 msgid "Please enter days."
 msgstr "Por favor ingrese días."
 
-#: static/scripts/app/views/share.js:182
+#: static/scripts/app/views/share.js:188
 msgid "Please enter valid days"
-msgstr "Por favor ingrese días válidos"
+msgstr "Ingresa cantidad válida de días"
 
-#: static/scripts/app/views/share.js:269
+#: static/scripts/app/views/share.js:275
 msgid "Please input at least an email."
-msgstr "Por favor ingrese al menos un e-mail."
+msgstr "Ingresa al menos un correo."
 
-#: static/scripts/app/views/share.js:286
+#: static/scripts/app/views/share.js:292
 msgid "Successfully sent to {placeholder}"
-msgstr "Enviado con éxito a {placeholder}"
+msgstr "Enviado con éxito a  {placeholder}"
 
-#: static/scripts/app/views/share.js:290
+#: static/scripts/app/views/share.js:296
 msgid "Failed to send to {placeholder}"
 msgstr "Fallo al enviar a  {placeholder}"
 
-#: static/scripts/app/views/share.js:441 static/scripts/app/views/share.js:510
-msgid "Successfully shared to {placeholder}"
-msgstr "Compartido con éxito con  {placeholder}"
-
-#: static/scripts/app/views/share.js:445 static/scripts/app/views/share.js:514
+#: static/scripts/app/views/share.js:553
 msgid "Failed to share to {placeholder}"
 msgstr "Fallo al compartir con {placeholder}"
 
-#: static/scripts/app/views/share.js:492
-msgid "Please select a contact or a group."
-msgstr "Por favor escoja un contacto o un grupo."
+#: static/scripts/app/views/share.js:561 static/scripts/app/views/share.js:619
+msgid "Share failed"
+msgstr "Compartir falló"
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"
