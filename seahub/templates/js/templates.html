@@ -36,8 +36,8 @@
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
       <div class="op-container">
-        <span class="sf2-icon-share repo-share-btn op-icon sf2-orange vh sf2-small" title="{% trans "Share" %}"></span>
-        <span class="sf2-icon-delete-o repo-delete-btn op-icon sf2-orange vh sf2-small" title="{% trans "Delete" %}"></span>
+        <span class="sf2-icon-share sf2-orange sf2-small repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+        <span class="sf2-icon-delete-o sf2-small sf2-orange repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -58,7 +58,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (is_staff || share_from_me) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-medium sf2-gray" title="{% trans "Unshare" %}"></span>   
+    <span class="sf2-icon-delete-o sf2-medium sf2-gray cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>   
     <% } %>
     </td>
     <td><%= size_formatted %></td>
