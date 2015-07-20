@@ -89,7 +89,6 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_THUMBNAIL, THUMBNAIL_IMAGE_SIZE_LIMIT, \
         ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS
 try:
     from seahub.settings import CLOUD_MODE
@@ -1667,6 +1666,9 @@ class FileView(APIView):
                                  'You do not have permission to rename file.')
 
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            if (is_locked, locked_by_me) == (None, None):
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
+
             if is_locked and not locked_by_me:
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
@@ -1708,6 +1710,9 @@ class FileView(APIView):
                                  'You do not have permission to move file.')
 
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            if (is_locked, locked_by_me) == (None, None):
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
+
             if is_locked and not locked_by_me:
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
@@ -1846,6 +1851,9 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
         is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        if (is_locked, locked_by_me) == (None, None):
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
+
         if is_locked and not locked_by_me:
             return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
@@ -1941,6 +1949,9 @@ class FileRevert(APIView):
 
         username = request.uset.username
         is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+        if (is_locked, locked_by_me) == (None, None):
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
+
         if is_locked and not locked_by_me:
             return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 

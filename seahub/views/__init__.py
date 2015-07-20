@@ -142,8 +142,12 @@ def check_file_lock(repo_id, file_path, username):
 
     return (is_locked, locked_by_me)
     """
-    return_value = seafile_api.check_file_lock(repo_id,
+    try:
+        return_value = seafile_api.check_file_lock(repo_id,
             file_path.lstrip('/'), username)
+    except SearpcError as e:
+        logger.error(e)
+        return (None, None)
 
     if return_value == 0:
         return (False, False)
@@ -152,7 +156,7 @@ def check_file_lock(repo_id, file_path, username):
     elif return_value == 2:
         return (True, True)
     else:
-        return None
+        return (None, None)
 
 def check_repo_access_permission(repo_id, user):
     """Check repo access permission of a user, always return 'rw' when repo is
@@ -1488,7 +1492,12 @@ def render_file_revisions (request, repo_id):
 
     can_revert_file = True
     username = request.user.username
+
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    if (is_locked, locked_by_me) == (None, None):
+        # check file lock error
+        can_revert_file = False
+
     if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
         (is_locked and not locked_by_me):
         can_revert_file = False
@@ -1522,10 +1531,17 @@ def repo_revert_file(request, repo_id):
 
     username = request.user.username
     # perm check
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    if check_folder_permission(request, repo.id, path) != 'rw' or \
-        (is_locked and not locked_by_me):
+    if check_folder_permission(request, repo.id, path) != 'rw':
         messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
+
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    if (is_locked, locked_by_me) == (None, None):
+        messages.error(request, _("Check file lock error"))
+        return HttpResponseRedirect(next)
+
+    if is_locked and not locked_by_me:
+        messages.error(request, _("File is locked"))
         return HttpResponseRedirect(next)
 
     try:

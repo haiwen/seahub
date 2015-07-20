@@ -986,10 +986,15 @@ def file_edit_submit(request, repo_id):
     parent_dir = os.path.dirname(path)
 
     # edit file, so check parent_dir's permission
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    if check_folder_permission(request, repo_id, parent_dir) != 'rw' or \
-        (is_locked and not locked_by_me):
+    if check_folder_permission(request, repo_id, parent_dir) != 'rw':
         return error_json(_(u'Permission denied'))
+
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+    if (is_locked, locked_by_me) == (None, None):
+        return error_json(_(u'Check file lock errror'))
+
+    if is_locked and not locked_by_me:
+        return error_json(_(u'File is locked'))
 
     repo = get_repo(repo_id)
     if not repo:
