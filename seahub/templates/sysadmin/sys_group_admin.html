@@ -24,7 +24,7 @@
         </td>
         <td>{{ group.props.creator_name }}</td>
         <td>{{ group.props.timestamp|tsstr_sec }}</td>
-        <td><span class="sf2-icon-delete-o sf2-special2 rm-grp op-icon vh" alt="" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.props.group_name }}" title="{% trans "Delete" %}"></span></td>
+        <td><span class="sf2-icon-delete-o sf2-middle sf2-gray rm-grp op-icon vh" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.props.group_name }}" title="{% trans "Delete" %}"></span></td>
     </tr>
     {% endfor %}
 </table>

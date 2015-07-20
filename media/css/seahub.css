@@ -128,21 +128,27 @@
 .sf2-small {
     width:16px;
     height:16px;
+    display:inline-block;
 }
 .sf2-small:before {
-    
+    font-size:30px;
+    position:relative;
+    left:-8px;
+    bottom:4px;
 }
 .sf2-middle {
     width:20px;
     height:20px;
+    display:inline-block;
 }
 .sf2-middle:before {
-    font-size:37px;
-    float: left;
-    padding-left: 30px;
+    font-size:34px;
+    position:relative;
+    left:-8px;
+    bottom:4px;
 }
-.sf2-margin {
-    margin-top:4px;
+.sf2-with-margin {
+    margin-top:-2px;
 }
 /******* tags **********/
 html { background:#fff; }
