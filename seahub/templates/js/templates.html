@@ -80,7 +80,7 @@
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-small sf2-orange " alt="" title="{% trans "Unshare" %}"></span>
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-small sf2-orange" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -271,7 +271,7 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download sf2-with-margin op-icon sf2-small  sf2-orange"></span></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download sf2-with-margin op-icon sf2-small sf2-orange"></span></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><span class="sf2-icon-share op-icon sf2-small sf2-orange"></span></a>
                 <% } %>
@@ -477,7 +477,7 @@
     <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
         <div class="op-container">
-            <span class="sf2-icon-delete-o op-icon vh sf2-medium sf2-gray " title="{% trans "Delete" %}"></span>
+            <span class="sf2-icon-delete-o op-icon vh sf2-medium sf2-gray" title="{% trans "Delete" %}"></span>
         </div>
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
@@ -696,7 +696,7 @@
     </td>
     <td><%= mtime_relative %></td>
     <td>
-        <span alt="" class="sf2-icon-delete-o sf2-medium sf2-gray unstar op-icon vh" title="{% trans "Unstar" %}"></span>
+        <span class="sf2-icon-delete-o sf2-medium sf2-gray unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
