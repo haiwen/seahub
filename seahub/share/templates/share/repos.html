@@ -48,7 +48,7 @@
             <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><span class="sf2-icon-delete-o sf2-middle sf2-margin op-icon vh"></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><span class="sf2-icon-delete-o sf2-middle sf2-gray sf2-margin op-icon vh"></a>
+            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><span class="sf2-icon-delete-o sf2-big sf2-gray sf2-margin op-icon vh"></a>
             {% endif %}
         </td>
     </tr>

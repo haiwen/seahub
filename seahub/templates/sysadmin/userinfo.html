@@ -87,7 +87,7 @@
                 <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.name }}</a></td>
                 <td>{{ repo.props.desc }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><span class="sf2-icon-delete-o sf2-middle sf2-gray op-icon vh"></span></a></div>
+                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><span class="sf2-icon-delete-o sf2-big sf2-gray op-icon vh"></span></a></div>
                 </td>
             </tr>
             {% endfor %}

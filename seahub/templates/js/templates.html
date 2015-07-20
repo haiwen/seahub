@@ -271,7 +271,7 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download op-icon sf2-small  sf2-orange"></span></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download sf2-with-margin op-icon sf2-small  sf2-orange"></span></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <a class="op share" href="#" title="{% trans "Share" %}"><span class="sf2-icon-share op-icon sf2-small sf2-orange"></span></a>
                 <% } %>

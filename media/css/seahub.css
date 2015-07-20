@@ -3713,18 +3713,19 @@ textarea:-moz-placeholder {/* for FF */
 .sf2-small {
     width:17px;
     height:17px;
-    line-height: 17px;
+    line-height: 22px;
     display:inline-block;
+    margin-right: -1px;
 }
 .sf2-small:before {
-    font-size:30px;
-/*    position:relative;
-    left:-8px;*/
+    font-size:31px;
+    position:relative;
+    left:-8px;
 }
 .sf2-middle {
     width:20px;
     height:20px;
-    line-height: 20px;
+    line-height: 25px;
     display:inline-block;
 }
 .sf2-middle:before {
@@ -3732,6 +3733,18 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
     left:-8px;
 }
-.sf2-with-margin {
-    margin-top:-2px;
+.sf2-big {
+    width:22px;
+    height:22px;
+    line-height: 28px;
+    display:inline-block;
 }
+.sf2-big:before {
+    font-size:36px;
+    position:relative;
+    left:-8px;
+}
+/*.sf2-with-margin {
+    margin-top:-1px;
+}
+*/
