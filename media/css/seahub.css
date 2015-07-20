@@ -3697,38 +3697,32 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:11px;
 }
 /****** sf2-icon-details ********/
-.sf2-orange {
+.sf2-orange, .sf2-orange:hover {
     color:#fd9b69;
 }
-.sf2-gray {
+.sf2-gray, .sf2-gray:hover {
     color:#a3a3a3;
 }
-.sf2-orange:hover {
-    color:#fd9b69;
-}
-.sf2-gray:hover {
-    color:#a3a3a3;
-}
-.sf2-small, .sf2-middle {
+.sf2-small, .sf2-medium {
     display:inline-block;
+}
+.sf2-small:before, .sf2-medium:before {
+    position:relative;
+    left:-8px;    
 }
 .sf2-small {
     width:17px;
     height:17px;
-    line-height: 22px;
+    line-height:22px;
 }
 .sf2-small:before {
-    font-size:31px;
-    position:relative;
-    left:-8px;
+    font-size:32px;
 }
-.sf2-middle {
+.sf2-medium {
     width:20px;
     height:20px;
-    line-height: 25px;
+    line-height:27px;
 }
-.sf2-middle:before {
-    font-size:34px;
-    position:relative;
-    left:-8px;
+.sf2-medium:before {
+    font-size:36px;
 }

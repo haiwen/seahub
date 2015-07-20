@@ -35,7 +35,7 @@
                 <td>{{ fs.view_cnt }}</td>
                 <td>
                     <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}" />
-                    <span class="sf2-icon-delete-o sf2-gray sf2-middle rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}"></span>
+                    <span class="sf2-icon-delete-o sf2-gray sf2-medium rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}
@@ -66,7 +66,7 @@
                 <td>{{ link.view_cnt }}</td>
                 <td>
                     <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}" />
-                    <span class="sf2-icon-delete-o sf2-middle sf2-gray rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}"></span>
+                    <span class="sf2-icon-delete-o sf2-medium sf2-gray rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}
