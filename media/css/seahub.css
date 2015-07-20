@@ -3713,24 +3713,24 @@ textarea:-moz-placeholder {/* for FF */
 .sf2-small {
     width:17px;
     height:17px;
+    line-height: 17px;
     display:inline-block;
 }
 .sf2-small:before {
     font-size:30px;
-    position:relative;
-    left:-8px;
-    top:-34%;
+/*    position:relative;
+    left:-8px;*/
 }
 .sf2-middle {
     width:20px;
     height:20px;
+    line-height: 20px;
     display:inline-block;
 }
 .sf2-middle:before {
     font-size:34px;
     position:relative;
     left:-8px;
-    top:-32%;
 }
 .sf2-with-margin {
     margin-top:-2px;
