@@ -84,7 +84,7 @@ define([
             'submit #send-download-link-form': 'sendDownloadLink',
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
-            'click #generate-download-link-form .generate-random-password': 'downloadRandomPasswordGeneration',
+            'click #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
 
             // upload link
@@ -93,7 +93,7 @@ define([
             'submit #send-upload-link-form': 'sendUploadLink',
             'click #cancel-share-upload-link': 'cancelShareUploadLink',
             'click #delete-upload-link': 'deleteUploadLink',
-            'click #generate-upload-link-form .generate-random-password': 'uploadRandomPasswordGeneration',
+            'click #generate-upload-link-form .generate-random-password': 'generateRandomUploadPassword',
             'click #generate-upload-link-form .show-or-hide-password': 'showOrHideUploadPassword',
 
             // dir private share
@@ -140,6 +140,39 @@ define([
                 },
                 'after_op_success': after_op_success
             });
+        },
+
+        generateRandomPassword: function(form) {
+            var random_password = '';
+            var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+            for (var i = 0; i < 8; i++) {
+                random_password += possible.charAt(Math.floor(Math.random() * possible.length));
+            }
+            $('input[name=password], input[name=password_again]', form).attr('type', 'text').val(random_password);
+            $('.show-or-hide-password', form)
+            .attr('title', gettext('Hide'))
+            .removeClass('icon-eye').addClass('icon-eye-slash');
+        },
+
+        generateRandomDownloadPassword: function() {
+            this.generateRandomPassword($('#generate-download-link-form'));
+        },
+
+        showOrHidePassword: function(form) {
+            var icon = $('.show-or-hide-password', form),
+                passwd_input = $('input[name=password], input[name=password_again]', form);
+            icon.toggleClass('icon-eye icon-eye-slash');
+            if (icon.hasClass('icon-eye')) {
+                icon.attr('title', gettext('Show'));
+                passwd_input.attr('type', 'password');
+            } else {
+                icon.attr('title', gettext('Hide'));
+                passwd_input.attr('type', 'text');
+            }
+        },
+
+        showOrHideDownloadPassword: function() {
+            this.showOrHidePassword($('#generate-download-link-form'));
         },
 
         generateLink: function(options) {
@@ -356,56 +389,6 @@ define([
             });
         },
 
-        generateRandomPassword: function(context) {
-            $('.show-or-hide-password', context)
-            .attr('title', gettext('Hide')).children('i')
-            .removeClass('icon-eye')
-            .addClass('icon-eye-slash');
-            $('input[name=password], input[name=password_again]', context).attr('type', 'text');
-            var random_password_value = function() {
-                var text = "";
-                var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789";
-                for ( var i = 0; i < 8; i++ ) {
-                    text += possible.charAt(Math.floor(Math.random() * possible.length));
-                }
-                return text;
-            }();
-            $('input[name=password], input[name=password_again]', context).val(random_password_value);
-        },
-
-        downloadRandomPasswordGeneration: function() {
-            this.generateRandomPassword($('#generate-download-link-form'));        
-        },
-
-        uploadRandomPasswordGeneration: function() {
-            this.generateRandomPassword($('#generate-upload-link-form')); 
-        },
-
-        showOrHidePassword: function(context) {
-            if ($('.show-or-hide-password i', context).hasClass('icon-eye-slash')) {
-                $('.show-or-hide-password', context)
-                .attr('title', gettext('Show'))
-                .children('i').removeClass('icon-eye-slash')
-                .addClass('icon-eye');         
-                $('input[name=password], input[name=password_again]', context)
-                .attr('type', 'password');
-            } else {
-                $('.show-or-hide-password', context)
-                .attr('title', gettext('Hide')).children('i')
-                .removeClass('icon-eye')
-                .addClass('icon-eye-slash');
-                $('input[name=password], input[name=password_again]', context).attr('type', 'text');
-            }
-        },
-
-        showOrHideDownloadPassword: function() {
-            this.showOrHidePassword($('#generate-download-link-form'));
-        },
-
-        showOrHideUploadPassword: function() {
-            this.showOrHidePassword($('#generate-upload-link-form'));
-        },
-
         uploadLinkPanelInit: function() {
             var _this = this;
             var after_op_success = function(data) {
@@ -424,6 +407,14 @@ define([
                 'data': {'repo_id': this.repo_id, 'p': this.dirent_path},
                 'after_op_success': after_op_success
             });
+        },
+
+        generateRandomUploadPassword: function() {
+            this.generateRandomPassword($('#generate-upload-link-form'));
+        },
+
+        showOrHideUploadPassword: function() {
+            this.showOrHidePassword($('#generate-upload-link-form'));
         },
 
         generateUploadLink: function(e) {

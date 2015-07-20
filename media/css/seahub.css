@@ -3675,38 +3675,33 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:11px;
 }
 /*random password */
-#generate-upload-link-form .first-password,
-#generate-download-link-form .first-password {
-    width:188px;
-    padding-right:74px;
+#share-popup .passwd-wrapper {
+    position:relative;
+    width:268px;
 }
-#generate-upload-link-form .generate-random-password,
-#generate-download-link-form .generate-random-password,
-#generate-upload-link-form .show-or-hide-password,
-#generate-download-link-form .show-or-hide-password {
-    text-align:center;
+#share-popup .passwd {
+    width:188px;
+    padding-right:75px;
+}
+#share-popup .generate-random-password,
+#share-popup .show-or-hide-password {
+    position:absolute;
+    top:4px;
+    right:0;
     width:36px;
     height:26px;
     line-height:26px;
+    text-align:center;
     opacity:0.65;
-    float:right;
-    position:relative;
-    top:4px;
-    left:-133px;
 }
-#generate-upload-link-form .generate-random-password,
-#generate-download-link-form .generate-random-password {
-    background:#ccc;
-    border-top-right-radius:2px;
-    border-bottom-right-radius:2px;
-}
-#generate-upload-link-form .show-or-hide-password,
-#generate-download-link-form .show-or-hide-password {
+#share-popup .show-or-hide-password {
+    right:36px;
     background:#fff;
 }
-#generate-upload-link-form .generate-random-password:hover,
-#generate-download-link-form .generate-random-password:hover,
-#generate-upload-link-form .show-or-hide-password:hover,
-#generate-download-link-form .show-or-hide-password:hover {
+#share-popup .generate-random-password {
+    background:#ccc;
+}
+#share-popup .generate-random-password:hover,
+#share-popup .show-or-hide-password:hover {
     opacity:1;
-} 
+}

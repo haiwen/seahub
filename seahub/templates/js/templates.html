@@ -342,11 +342,13 @@
                         <span class="checkbox-option">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" name="password" class="first-password input" />
-                        <span title="{% trans "Generate a random password" %}" class="generate-random-password cspt"><i class="icon-magic"></i></span>
-                        <span title="{% trans "Show" %}" class="show-or-hide-password cspt"><i class="icon-eye"></i></span><br />
-                        <label>{% trans "Password again"%}</label><br />
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span>
+                        <div class="passwd-wrapper">
+                            <input type="password" name="password" class="passwd input" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                        </div>
+                        <label>{% trans "Password again" %}</label><br />
                         <input type="password" name="password_again" class="input" />
                     </div>
                     <label class="checkbox-label">
@@ -395,10 +397,12 @@
                         <span class="checkbox-option">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" name="password" class="first-password input" />
-                        <span title="{% trans "Generate a random password" %}" class="generate-random-password cspt"><i class="icon-magic"></i></span>
-                        <span title="{% trans "Show" %}" class="show-or-hide-password cspt"><i class="icon-eye"></i></span><br />
+                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span>
+                        <div class="passwd-wrapper">
+                            <input type="password" name="password" class="passwd input" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                        </div>
                         <label>{% trans "Password again"%}</label><br />
                         <input type="password" name="password_again" class="input" />
                     </div>
