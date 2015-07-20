@@ -58,7 +58,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (is_staff || share_from_me) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-medium sf2-gray " alt="" title="{% trans "Unshare" %}"></span>   
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-medium sf2-gray" title="{% trans "Unshare" %}"></span>   
     <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -80,7 +80,7 @@
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-small sf2-orange" title="{% trans "Unshare" %}"></span>
+    <span class="sf2-icon-delete-o sf2-small sf2-orange cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -271,12 +271,12 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download sf2-with-margin op-icon sf2-small sf2-orange"></span></a>
+                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><span class="sf2-icon-download sf2-small sf2-orange sf2-with-margin op-icon"></span></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a class="op share" href="#" title="{% trans "Share" %}"><span class="sf2-icon-share op-icon sf2-small sf2-orange"></span></a>
+                <a class="op share" href="#" title="{% trans "Share" %}"><span class="sf2-icon-share sf2-small sf2-orange op-icon"></span></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a class="op delete" href="#" title="{% trans "Delete" %}"><span class="sf2-icon-delete-o op-icon sf2-small sf2-orange"></span></a>
+                <a class="op delete" href="#" title="{% trans "Delete" %}"><span class="sf2-icon-delete-o sf2-small sf2-orange op-icon"></span></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
@@ -477,7 +477,7 @@
     <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
         <div class="op-container">
-            <span class="sf2-icon-delete-o op-icon vh sf2-medium sf2-gray" title="{% trans "Delete" %}"></span>
+            <span class="sf2-icon-delete-o sf2-medium sf2-gray op-icon vh" title="{% trans "Delete" %}"></span>
         </div>
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
