@@ -36,8 +36,8 @@
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
       <div class="op-container">
-        <span class="sf2-icon-share repo-share-btn op-icon vh sf2-small" title="{% trans "Share" %}"></span>
-        <span class="sf2-icon-delete-o repo-delete-btn op-icon vh sf2-small" title="{% trans "Delete" %}"></span>
+        <span class="sf2-icon-share repo-share-btn op-icon sf2-orange vh sf2-small" title="{% trans "Share" %}"></span>
+        <span class="sf2-icon-delete-o repo-delete-btn op-icon sf2-orange vh sf2-small" title="{% trans "Delete" %}"></span>
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -58,7 +58,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (is_staff || share_from_me) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-special sf2-margin" alt="" title="{% trans "Unshare" %}"></span>   
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-middle sf2-gray sf2-margin" alt="" title="{% trans "Unshare" %}"></span>   
     <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -80,7 +80,7 @@
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-middle sf2-margin" alt="" title="{% trans "Unshare" %}"></span>
+    <span class="sf2-icon-delete-o cancel-share op-icon vh sf2-small sf2-orange sf2-margin" alt="" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -460,7 +460,7 @@
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-        <span class="sf2-icon-delete-o sf2-middle unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+        <span class="sf2-icon-delete-o sf2-middle sf2-gray unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -477,7 +477,7 @@
     <td><a href="#my-sub-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
         <div class="op-container">
-            <span class="sf2-icon-delete-o op-icon vh sf2-middle sf2-margin" title="{% trans "Delete" %}"></span>
+            <span class="sf2-icon-delete-o op-icon vh sf2-middle sf2-gray sf2-margin" title="{% trans "Delete" %}"></span>
         </div>
     </td>
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
