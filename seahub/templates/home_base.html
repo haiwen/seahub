@@ -23,7 +23,7 @@
         {% endfor %}
 
         {% if user.permissions.can_add_repo %}
-        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="share-admin">{% trans "Share Admin" %}</a></li>
+        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}" class="admin">{% trans "Share Admin" %}</a></li>
         {% endif %}
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}" class="links">{% trans "Links" %}</a></li>
         <li class="tab {% block cur_devices %}{% endblock %}"><a href="{% url 'devices' %}" class="clients">{% trans "Devices" %}</a></li>

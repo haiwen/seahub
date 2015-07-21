@@ -611,11 +611,11 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur .contacts {
     background-position: 11px -814px;
 }
-.side-tabnav-tabs .tab .share-admin {
-    background-position: 10px -439px;
+.side-tabnav-tabs .tab .folders {
+    background-position: 11px -275px;
 }
-.side-tabnav-tabs .tab-cur .share-admin {
-    background-position: 10px -1052px;
+.side-tabnav-tabs .tab-cur .folders {
+    background-position: 11px -855px;
 }
 .side-tabnav-tabs .tab .files {
     background-position: 13px -316px;

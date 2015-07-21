@@ -518,6 +518,7 @@ def list_shared_repos(request):
         out_repos.append(repo)
 
     out_repos.sort(lambda x, y: cmp(x.repo_name, y.repo_name))
+    out_repos.sort(key=lambda repo: repo.is_virtual)
 
     return render_to_response('share/repos.html', {
             "out_repos": out_repos,
