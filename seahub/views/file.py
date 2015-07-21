@@ -1302,7 +1302,7 @@ def office_convert_add_task(request):
 
     return add_office_convert_task(file_id, doctype, raw_path, internal=True)
 
-def _check_office_convert_perm(request, repo_id, path):
+def _check_office_convert_perm(request, repo_id, path, ret):
     token = request.GET.get('token', '')
     if not token:
         # Work around for the images embedded in excel files
@@ -1312,9 +1312,14 @@ def _check_office_convert_perm(request, repo_id, path):
                 urlparse.urlparse(referer).query).get('token', [''])[0]
     if token:
         fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-        if not fileshare or fileshare.repo_id != repo_id or fileshare.path != path:
+        if not fileshare or fileshare.repo_id != repo_id:
             return False
-        return True
+        if fileshare.is_file_share_link() and fileshare.path == path:
+            return True
+        if fileshare.is_dir_share_link():
+            ret['dir_share_path'] = fileshare.path
+            return True
+        return False
     else:
         return request.user.is_authenticated() and \
             check_folder_permission(request, repo_id, '/') is not None
@@ -1343,10 +1348,15 @@ def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None
     path = path or request.GET.get('path', '')
     if not (repo_id and path and commit_id):
         raise BadRequestException()
-
-    if not _check_office_convert_perm(request, repo_id, path):
+    if '../' in path:
         raise BadRequestException()
 
+    ret = {'dir_share_path': None}
+    if not _check_office_convert_perm(request, repo_id, path, ret):
+        raise BadRequestException()
+
+    if ret['dir_share_path']:
+        path = posixpath.join(ret['dir_share_path'], path.lstrip('/'))
     return seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
 
 @json_response
