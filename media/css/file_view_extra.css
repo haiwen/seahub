@@ -14,7 +14,8 @@
     width:950px;
     margin:0 auto;
 }
-#view-hd {
+#view-hd,
+#shared-file-view-hd {
     margin-top:4px;
 }
 #file-op {

@@ -3661,10 +3661,6 @@ textarea:-moz-placeholder {/* for FF */
     padding-left: 6px;
 }
 /* shared file view */
-#shared-file-view-logo {
-    display:block;
-    margin:2em auto 0;
-}
 #shared-file-view-hd .cur-path,
 #shared-file-view-hd .share-by {
     margin:0;
