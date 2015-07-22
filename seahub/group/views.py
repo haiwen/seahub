@@ -139,8 +139,8 @@ def group_check(func):
             return func(request, group, *args, **kwargs)
 
         # Return group public info page.
-        return render_to_response('group/group_pubinfo.html', {
-                'group': group,
+        return render_to_response('error.html', {
+                'error_msg': _('Permission denied'),
                 }, context_instance=RequestContext(request))
 
     return _decorated
@@ -1093,46 +1093,6 @@ def create_group_repo(request, group_id):
         else:
             return HttpResponse(json.dumps({'success': True}),
                                 content_type=content_type)
-
-@login_required_ajax
-def group_joinrequest(request, group_id):
-    """
-    Handle post request to join a group.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    group = get_group(int(group_id))
-    if not group:
-        raise Http404
-
-    username = request.user.username
-    if is_group_user(group_id, username):
-        # Already in the group. Normally, this case should not happen.
-        err = _(u'You are already in the group.')
-        return HttpResponseBadRequest(json.dumps({'error': err}),
-                                      content_type=content_type)
-    else:
-        form = GroupJoinMsgForm(request.POST)
-        if form.is_valid():
-            members_all = ccnet_threaded_rpc.get_group_members(group.id)
-            staffs = [ m.user_name for m in members_all if m.is_staff ]
-
-            join_request_msg = form.cleaned_data['group_join_msg']
-
-            group_join_request.send(sender=None, staffs=staffs,
-                                    username=username, group=group,
-                                    join_request_msg=join_request_msg)
-
-            messages.success(request, _(u'Sent successfully, the group admin will handle it.'))
-            return HttpResponse(json.dumps('success'),
-                                content_type=content_type)
-        else:
-            return HttpResponseBadRequest(json.dumps(form.errors),
-                                          content_type=content_type)
 
 @login_required_ajax
 def attention(request):
