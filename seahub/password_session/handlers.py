@@ -1,14 +1,15 @@
 from django.conf import settings
-from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
 from hashlib import md5
+
+from seahub.auth.signals import user_logged_in
 
 PASSWORD_HASH_KEY = getattr(settings, 'PASSWORD_SESSION_PASSWORD_HASH_KEY', 'password_session_password_hash_key')
 
 
 def get_password_hash(user):
     """Returns a string of crypted password hash"""
-    password = user.password or ''
+    password = user.enc_password or ''
     return md5(
         md5(password.encode()).hexdigest().encode() + settings.SECRET_KEY.encode()
     ).hexdigest()
