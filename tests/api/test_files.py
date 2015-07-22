@@ -5,7 +5,7 @@ Test file/dir operations.
 
 import random
 import re
-from urllib import urlencode, quote
+from urllib import urlencode, quote, quote
 
 from tests.common.utils import randstring, urljoin
 from tests.api.urls import DEFAULT_REPO_URL, REPOS_URL
@@ -48,6 +48,22 @@ class FilesApiTest(ApiTestBase):
             fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=/'
             data = {
                 'file_names': fname,
+                'dst_repo': repo.repo_id,
+                'dst_dir': dpath,
+            }
+            res = self.post(fopurl, data=data)
+            self.assertEqual(res.text, '"success"')
+
+            # create tmp file in sub folder(dpath)
+            tmp_file = 'tmp_file.txt'
+            furl = repo.get_filepath_url(dpath + '/' + tmp_file)
+            data = {'operation': 'create'}
+            res = self.post(furl, data=data, expected=201)
+
+            # copy tmp file(in dpath) to dst dir
+            fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=' + quote(dpath)
+            data = {
+                'file_names': tmp_file,
                 'dst_repo': repo.repo_id,
                 'dst_dir': dpath,
             }
