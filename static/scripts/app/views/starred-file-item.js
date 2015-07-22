@@ -32,12 +32,12 @@ define([
 
         removeShare: function() {
             var _this = this,
-                repo_id = this.model.get('repo'),
+                repo_id = this.model.get('repo_id'),
                 file_name = this.model.get('file_name'),
                 path = this.model.get('path');
 
             $.ajax({
-                url: Common.getUrl({name: 'starred_files'}) + '?p=' + encodeURIComponent(path) + '&repo_id=' + repo_id,
+                url: Common.getUrl({name: 'starred_files'}) + '?p=' + encodeURIComponent(path) + '&repo_id=' + encodeURIComponent(repo_id),
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {

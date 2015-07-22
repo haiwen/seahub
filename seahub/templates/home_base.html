@@ -12,7 +12,7 @@
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{% url 'starred' %}" class="star">{% trans "Starred" %}</a></li>
+        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{{ SITE_ROOT }}#starred/" class="star">{% trans "Starred" %}</a></li>
         {% if events_enabled %}
         <li class="tab {% block cur_activities %}{% endblock %}"><a href="{% url 'activities' %}" class="activity">{% trans "Activities" %}</a></li>
         {% endif %}
