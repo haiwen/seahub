@@ -13,21 +13,18 @@ define([
         enableModTemplate: _.template($("#myhome-mods-enable-form-tmpl").html()),
 
         initialize: function() {
-        },
-
-        render: function(cur_tab) {
-            this.$el.html(this.template({
+            this.default_cur_tab = 'libs';
+            this.data = {
+                'cur_tab': this.default_cur_tab,
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
                 'events_enabled': app.pageOptions.events_enabled
-            }));
-            this.$el.find('li').removeClass('tab-cur');
-            this.$el.find('a').each(function () {
-                if ($(this).attr('href').match(cur_tab)) {
-                    $(this).parent().addClass('tab-cur');
-                    return;
-                }
-            });
+            };
+            this.render();
+        },
+
+        render: function() {
+            this.$el.html(this.template(this.data));
             return this;
         },
 
@@ -80,8 +77,16 @@ define([
             });
         },
 
-        show: function(cur_tab) {
-            this.render(cur_tab);
+        show: function(options) {
+            if (options && options.cur_tab) {
+                this.data.cur_tab = options.cur_tab;
+                this.render();
+            } else {
+                if (this.data.cur_tab != this.default_cur_tab) {
+                    this.data.cur_tab = this.default_cur_tab;
+                    this.render();
+                }
+            }
             this.$el.show();
         },
 

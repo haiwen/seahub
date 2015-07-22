@@ -31,35 +31,35 @@ define([
         },
 
         showMyRepos: function() {
-            this.sideNavView.show('my-libs');
+            this.sideNavView.show();
             this.currentView.hide();
             this.reposView.show();
             this.currentView = this.reposView;
         },
 
         showMySubRepos: function() {
-            this.sideNavView.show('my-libs');
+            this.sideNavView.show();
             this.currentView.hide();
             this.subReposView.show();
             this.currentView = this.subReposView;
         },
 
         showSharedRepos: function() {
-            this.sideNavView.show('my-libs');
+            this.sideNavView.show();
             this.currentView.hide();
             this.sharedReposView.show();
             this.currentView = this.sharedReposView;
         },
 
         showStarredFile: function() {
-            this.sideNavView.show('starred');
+            this.sideNavView.show({'cur_tab': 'starred'});
             this.currentView.hide();
             this.starredFileView.show();
             this.currentView = this.starredFileView;
         },
 
         showDir: function(category, repo_id, path) {
-            this.sideNavView.show('my-libs');
+            this.sideNavView.show();
             var path = path || '/';
             this.currentView.hide();
             this.dirView.showDir(category, repo_id, path);
