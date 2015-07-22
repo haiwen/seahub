@@ -117,6 +117,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.auth.middleware.AuthenticationMiddleware',
     'seahub.base.middleware.BaseMiddleware',
     'seahub.base.middleware.InfobarMiddleware',
+    'seahub.password_session.middleware.CheckPasswordHash'
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -205,6 +206,7 @@ INSTALLED_APPS = (
     'seahub.share',
     'seahub.help',
     'seahub.thumbnail',
+    'seahub.password_session',
 )
 
 
