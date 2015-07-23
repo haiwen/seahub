@@ -557,6 +557,10 @@ def list_shared_links(request):
                 fs.filename = fs.path
             fs.shared_link = gen_dir_share_link(fs.token)
         fs.repo = r
+
+        if fs.expire_date is not None and timezone.now() > fs.expire_date:
+            fs.is_expired = True
+
         p_fileshares.append(fs)
 
     # upload links

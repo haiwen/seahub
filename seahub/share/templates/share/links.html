@@ -17,10 +17,11 @@
         <table>
             <tr>
                 <th width="4%"><!--icon--></th>
-                <th width="44%">{% trans "Name"%}</th>
-                <th width="25%">{% trans "Library"%}</th>
-                <th width="12%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
+                <th width="40%">{% trans "Name"%}</th>
+                <th width="24%">{% trans "Library"%}</th>
+                <th width="10%">{% trans "Visits"%}</th>
+                <th width="12%">{% trans "Expiration"%}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
             {% for fs in fileshares %}
             <tr>
@@ -33,6 +34,15 @@
                 {% endif %}
                 <td><a href="{% url 'view_common_lib_dir' fs.repo.id '' %}">{{ fs.repo.name }}</a></td>
                 <td>{{ fs.view_cnt }}</td>
+                {% if fs.expire_date %}
+                {% if fs.is_expired %}
+                <td class='error'>{{ fs.expire_date|date:'Y-m-d' }}</td>
+                {% else %}
+                <td>{{ fs.expire_date|date:'Y-m-d' }}</td>
+                {% endif %}
+                {% else %}
+                <td>--</td>
+                {% endif %}
                 <td>
                     <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}" />
                     <img src="{{ MEDIA_URL }}img/rm.png" alt="" class="rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}" />
