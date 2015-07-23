@@ -1514,7 +1514,7 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to copy file.')
 
-        parent_dir = request.POST.get('p', '/')
+        parent_dir = request.GET.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
