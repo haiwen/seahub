@@ -991,7 +991,7 @@ def file_edit_submit(request, repo_id):
 
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
     if (is_locked, locked_by_me) == (None, None):
-        return error_json(_(u'Check file lock errror'))
+        return error_json(_(u'Check file lock error'))
 
     if is_locked and not locked_by_me:
         return error_json(_(u'File is locked'))
