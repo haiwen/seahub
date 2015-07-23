@@ -2,7 +2,7 @@ from django.conf.urls.defaults import *
 
 from views import group_info, group_members, group_member_operations, group_add_admin, \
     group_manage, msg_reply, msg_reply_new, group_recommend, \
-    create_group_repo, group_joinrequest, attention, group_message_remove, \
+    create_group_repo, attention, group_message_remove, \
     group_remove_admin, group_discuss, group_wiki, group_wiki_create, \
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_wiki_use_lib, group_remove, group_dismiss, group_quit, \
@@ -38,7 +38,6 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/admin/remove/$', group_remove_admin, name='group_remove_admin'),
     url(r'^recommend/$', group_recommend, name='group_recommend'),
     #url(r'^attention/$', attention, name='group_attention'),
-    url(r'^joinrequest/(?P<group_id>[\d]+)/$', group_joinrequest, name='group_joinrequest'),
     url(r'^(?P<group_id>\d+)/modules/toggle/$', group_toggle_modules, name='group_toggle_modules'),
     url(r'^(?P<group_id>\d+)/discussion/add/$', group_add_discussion, name='group_add_discussion'),
     url(r'^add/$', group_add, name='group_add'),
