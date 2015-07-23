@@ -29,6 +29,8 @@ from seahub.utils.ip import get_remote_ip
 from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
     USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
 
+from seahub.password_session import update_session_auth_hash
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -352,6 +354,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
+            update_session_auth_hash(request, request.user)
             return HttpResponseRedirect(post_change_redirect)
     else:
         form = password_change_form(user=request.user)
