@@ -41,6 +41,7 @@ class AuthTest(ApiTestBase):
     def test_random_auth_token(self):
         return self.get(AUTH_PING_URL, token='randomtoken', expected=401)
 
+    @pytest.mark.xfail
     def test_logout_device(self):
         token = self._desktop_login()
         self._do_auth_ping(token, expected=200)

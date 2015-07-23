@@ -2,7 +2,7 @@
 """
 Test repos api.
 """
-
+import pytest
 import uuid
 import unittest
 
@@ -162,6 +162,7 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(repo['auto_sync'])
             #self.assertIsNotNone(repo['relay_id'])
 
+    @pytest.mark.xfail
     def test_generate_repo_tokens(self):
         with self.get_tmp_repo() as ra:
             with self.get_tmp_repo() as rb:

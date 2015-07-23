@@ -1,5 +1,6 @@
 import json
 import unittest
+import pytest
 import requests
 
 from django.test import TestCase
@@ -27,6 +28,7 @@ class MiscApiTest(ApiTestBase, TestCase):
         self.assertTrue('seafile-basic' in info['features'])
         self.assertFalse('disable-sync-with-any-folder' in info['features'])
 
+    @pytest.mark.xfail
     def test_server_info_with_disable_sync(self):
         settings.DISABLE_SYNC_WITH_ANY_FOLDER = True
 
