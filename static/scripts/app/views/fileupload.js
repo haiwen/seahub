@@ -216,8 +216,13 @@ define([
                     $('.yes', confirm_popup).click(function() {
                         var selected_file = dirents.findWhere({'obj_name': file.name});
                         if (selected_file.get('is_locked')) {
-                            $('.error', confirm_popup).html(gettext("File is locked")).removeClass('hide');
-                            Common.disableButton($(this));
+                            if (selected_file.get('locked_by_me')) {
+                                file.choose_to_update = true;
+                                $.modal.close();
+                            } else {
+                                $('.error', confirm_popup).html(gettext("File is locked")).removeClass('hide');
+                                Common.disableButton($(this));
+                            }
                         } else {
                             file.choose_to_update = true;
                             $.modal.close();
