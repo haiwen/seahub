@@ -22,6 +22,7 @@
 }
 .repo-file-list .hidden-op {
     min-width: 100px;
+    white-space:nowrap;
 }
 .displayed-op .op {
     margin-left:5px;
