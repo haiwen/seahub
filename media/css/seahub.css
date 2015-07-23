@@ -2299,44 +2299,12 @@ textarea:-moz-placeholder {/* for FF */
 .grp-profile .name {
     vertical-align:middle;
 }
-.group-basic-info [class^="icon-"] {
-    margin-left:8px;
-}
-.group-basic-info .avatar {
-    float:left;
-}
-.group-basic-info .txt {
-    margin-left:63px;
-}
 #grp-member-add {
     margin-top:2px;
 }
 
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
-
-/*user-profile*/
-.user-profile .pic {
-    width:80px;
-    text-align:center;
-}
-.user-profile .avatar {
-    border-radius:4px;
-    -moz-border-radius:4px;
-    margin-bottom:5px;
-}
-.user-profile .txt {
-    width:225px;
-    word-wrap:break-word;
-}
-.user-profile .txt p {
-    margin-bottom:4px;
-}
-.user-profile .intro {
-    color:#444;
-    font-size:12px;
-    margin-top:10px;
-}
 
 /* group message and replies */
 #grp-repos-commits td {

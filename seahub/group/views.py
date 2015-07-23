@@ -138,7 +138,6 @@ def group_check(func):
             group.view_perm = "pub"
             return func(request, group, *args, **kwargs)
 
-        # Return group public info page.
         return render_to_response('error.html', {
                 'error_msg': _('Permission denied'),
                 }, context_instance=RequestContext(request))
