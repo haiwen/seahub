@@ -8,20 +8,20 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-16 15:14+0800\n"
-"PO-Revision-Date: 2015-07-16 07:21+0000\n"
+"POT-Creation-Date: 2015-07-23 12:12+0800\n"
+"PO-Revision-Date: 2015-07-23 04:03+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
-"Language-Team: Icelandic (http://www.transifex.com/p/seahub/language/is/)\n"
+"Language-Team: Icelandic (http://www.transifex.com/projects/p/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: is\n"
 "Plural-Forms: nplurals=2; plural=(n % 10 == 1 || n % 100 != 11);\n"
 
-#: static/scripts/common.js:155 static/scripts/common.js.c:245
+#: static/scripts/common.js:156 static/scripts/common.js.c:246
 #: static/scripts/app/views/dir.js:812 static/scripts/app/views/dir.js.c:869
-#: static/scripts/app/views/dirent.js:400
-#: static/scripts/app/views/dirent.js:426
+#: static/scripts/app/views/dirent.js:417
+#: static/scripts/app/views/dirent.js:443
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
@@ -31,14 +31,14 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:308
-#: static/scripts/app/views/share.js:563 static/scripts/app/views/share.js:621
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:345
+#: static/scripts/app/views/share.js:608 static/scripts/app/views/share.js:666
 #: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "Mistókst. Vinsamlegast veldu netkerfi."
 
-#: static/scripts/common.js:508
+#: static/scripts/common.js:509
 msgid "Search users or enter emails"
 msgstr "Leiða að notendum eða sláðu inn netföng"
 
@@ -46,19 +46,19 @@ msgstr "Leiða að notendum eða sláðu inn netföng"
 msgid "Name is required"
 msgstr "Nafn er skilyrði"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:159
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:196
 msgid "Please enter password"
 msgstr "Vinsamlegast sláðu inn lykilorð"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:167
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:204
 msgid "Please enter the password again"
 msgstr "Vinsamlegast sláðu inn lykilorðið aftur"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:163
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:200
 msgid "Password is too short"
 msgstr "Lykilorðið er of stutt"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:171
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:208
 msgid "Passwords don't match"
 msgstr "Lykilorðin stemma ekki"
 
@@ -112,16 +112,16 @@ msgid "Password is required."
 msgstr "Lykilorðs er krafist."
 
 #: static/scripts/app/views/dir.js:313 static/scripts/app/views/dir.js.c:370
-#: static/scripts/app/views/dirent.js:229
+#: static/scripts/app/views/dirent.js:246
 msgid "It is required."
 msgstr "Þess er krafist."
 
 #: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
-#: static/scripts/app/views/dirent.js:248
-#: static/scripts/app/views/fileupload.js:298
-#: static/scripts/app/views/fileupload.js:312
-#: static/scripts/app/views/fileupload.js:324
-#: static/scripts/app/views/fileupload.js:336
+#: static/scripts/app/views/dirent.js:265
+#: static/scripts/app/views/fileupload.js:305
+#: static/scripts/app/views/fileupload.js:319
+#: static/scripts/app/views/fileupload.js:331
+#: static/scripts/app/views/fileupload.js:343
 #: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr "Rétt í þessu"
@@ -166,7 +166,7 @@ msgstr "Eyddum atriðum"
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Ertu viss um að þú viljir eyða þessum völdu atriðum?"
 
-#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:325
+#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:342
 msgid "Invalid destination path"
 msgstr "Röng lokaslóð"
 
@@ -226,48 +226,52 @@ msgstr "Mistókst að færa %(name)s"
 msgid "Failed to copy %(name)s"
 msgstr "Mistókst að afrita %(name)s"
 
-#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:389
-#: static/scripts/app/views/dirent.js:417
+#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:406
+#: static/scripts/app/views/dirent.js:434
 msgid "Canceled."
 msgstr "Hætt við"
 
-#: static/scripts/app/views/dirent.js:197
+#: static/scripts/app/views/dirent.js:58
+msgid "locked by {placeholder}"
+msgstr ""
+
+#: static/scripts/app/views/dirent.js:214
 msgid "Successfully deleted %(name)s"
 msgstr "Giftursamlega eyddi %(name)s"
 
-#: static/scripts/app/views/dirent.js:210
+#: static/scripts/app/views/dirent.js:227
 msgid "Rename Directory"
 msgstr "Endurnefna Skráasafn"
 
-#: static/scripts/app/views/dirent.js:210
+#: static/scripts/app/views/dirent.js:227
 msgid "Rename File"
 msgstr "Endurnefna Skrá"
 
-#: static/scripts/app/views/dirent.js:233
+#: static/scripts/app/views/dirent.js:250
 msgid "You have not renamed it."
 msgstr "Þú hefur ekki endurnefnt það."
 
-#: static/scripts/app/views/dirent.js:285
+#: static/scripts/app/views/dirent.js:302
 msgid "Move {placeholder} to:"
 msgstr "Fæara {placeholder} til:"
 
-#: static/scripts/app/views/dirent.js:285
+#: static/scripts/app/views/dirent.js:302
 msgid "Copy {placeholder} to:"
 msgstr "Afrita {placeholder} til:"
 
-#: static/scripts/app/views/dirent.js:359
+#: static/scripts/app/views/dirent.js:376
 msgid "Moving %(name)s"
 msgstr "Færi %(name)s"
 
-#: static/scripts/app/views/dirent.js:359
+#: static/scripts/app/views/dirent.js:376
 msgid "Copying %(name)s"
 msgstr "Afrita %(name)s"
 
-#: static/scripts/app/views/dirent.js:375
+#: static/scripts/app/views/dirent.js:392
 msgid "Saving..."
 msgstr "Vista..."
 
-#: static/scripts/app/views/dirent.js:389
+#: static/scripts/app/views/dirent.js:406
 msgid "Failed."
 msgstr "Mistókst."
 
@@ -352,12 +356,16 @@ msgstr "Mistókst að sækja uppfærsluslóð"
 msgid "Replace file {filename}?"
 msgstr "Skipta út skránni {filename}?"
 
+#: static/scripts/app/views/fileupload.js:219
+msgid "File is locked"
+msgstr ""
+
 #: static/scripts/app/views/folder-perm.js:49
 msgid "Set {placeholder}'s permission"
 msgstr "Setja réttindi {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:469
+#: static/scripts/app/views/share.js:514
 msgid "Select groups"
 msgstr "Veldu hópa"
 
@@ -402,31 +410,39 @@ msgstr "Eyðing tókst."
 msgid "Share {placeholder}"
 msgstr "Deila {placeholder}"
 
-#: static/scripts/app/views/share.js:184
+#: static/scripts/app/views/share.js:153 static/scripts/app/views/share.js:169
+msgid "Hide"
+msgstr ""
+
+#: static/scripts/app/views/share.js:166
+msgid "Show"
+msgstr ""
+
+#: static/scripts/app/views/share.js:221
 msgid "Please enter days."
 msgstr "Vinsamlegast sláðu inn daga."
 
-#: static/scripts/app/views/share.js:188
+#: static/scripts/app/views/share.js:225
 msgid "Please enter valid days"
 msgstr "Vinsamlegast sláðu inn löglega daga"
 
-#: static/scripts/app/views/share.js:275
+#: static/scripts/app/views/share.js:312
 msgid "Please input at least an email."
 msgstr "Vindamlegast settu inn amk eitt netfang."
 
-#: static/scripts/app/views/share.js:292
+#: static/scripts/app/views/share.js:329
 msgid "Successfully sent to {placeholder}"
 msgstr "Tókst að senda til {placeholder}"
 
-#: static/scripts/app/views/share.js:296
+#: static/scripts/app/views/share.js:333
 msgid "Failed to send to {placeholder}"
 msgstr "Mistókst að senda til {placeholder}"
 
-#: static/scripts/app/views/share.js:553
+#: static/scripts/app/views/share.js:598
 msgid "Failed to share to {placeholder}"
 msgstr "Mistókst að deila með {placeholder}"
 
-#: static/scripts/app/views/share.js:561 static/scripts/app/views/share.js:619
+#: static/scripts/app/views/share.js:606 static/scripts/app/views/share.js:664
 msgid "Share failed"
 msgstr ""
 

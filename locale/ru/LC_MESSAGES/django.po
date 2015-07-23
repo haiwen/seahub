@@ -23,10 +23,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-16 15:14+0800\n"
-"PO-Revision-Date: 2015-07-16 07:21+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.com/p/seahub/language/ru/)\n"
+"POT-Creation-Date: 2015-07-23 12:12+0800\n"
+"PO-Revision-Date: 2015-07-23 04:22+0000\n"
+"Last-Translator: Vladimir <pash.vld@gmail.com>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -62,15 +62,16 @@ msgstr "Слишком длинное описание (максимум 100 с�
 msgid "Name %s is not valid"
 msgstr "Имя %s недействительно"
 
-#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:890
-#: seahub/share/views.py:928 seahub/views/__init__.py:1239
-#: seahub/views/ajax.py:379 seahub/views/ajax.py:533 seahub/views/ajax.py:620
-#: seahub/views/ajax.py:779 seahub/views/ajax.py:983 seahub/views/ajax.py:1120
-#: seahub/views/ajax.py:1149 seahub/views/ajax.py:1310
-#: seahub/views/ajax.py:1393 seahub/views/ajax.py:1397
-#: seahub/views/ajax.py:1401 seahub/views/ajax.py:1803
-#: seahub/views/ajax.py:2253 seahub/views/ajax.py:2310
-#: seahub/views/ajax.py:2451 seahub/views/ajax.py:2666
+#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:894
+#: seahub/share/views.py:932 seahub/views/__init__.py:1265
+#: seahub/views/ajax.py:381 seahub/views/ajax.py:542 seahub/views/ajax.py:629
+#: seahub/views/ajax.py:812 seahub/views/ajax.py:1030
+#: seahub/views/ajax.py:1167 seahub/views/ajax.py:1196
+#: seahub/views/ajax.py:1357 seahub/views/ajax.py:1440
+#: seahub/views/ajax.py:1444 seahub/views/ajax.py:1448
+#: seahub/views/ajax.py:1850 seahub/views/ajax.py:2300
+#: seahub/views/ajax.py:2357 seahub/views/ajax.py:2498
+#: seahub/views/ajax.py:2713
 msgid "Argument missing"
 msgstr "Пропущен аргумент"
 
@@ -111,10 +112,10 @@ msgstr "Неверный формат URL"
 msgid "Wrong password"
 msgstr "Неверный пароль"
 
-#: seahub/forms.py:155 seahub/views/__init__.py:531
-#: seahub/views/__init__.py:1245 seahub/views/ajax.py:836
-#: seahub/views/ajax.py:864 seahub/views/ajax.py:907 seahub/views/ajax.py:944
-#: seahub/views/ajax.py:2709
+#: seahub/forms.py:155 seahub/views/__init__.py:557
+#: seahub/views/__init__.py:1271 seahub/views/ajax.py:883
+#: seahub/views/ajax.py:911 seahub/views/ajax.py:954 seahub/views/ajax.py:991
+#: seahub/views/ajax.py:2756
 msgid "Internal server error"
 msgstr "Внутренняя ошибка сервера"
 
@@ -146,107 +147,107 @@ msgstr "Требуется название библиотеки"
 msgid "Please enter a number"
 msgstr "Пожалуйста, введите число"
 
-#: seahub/settings.py:141
+#: seahub/settings.py:142
 msgid "català"
 msgstr "català"
 
-#: seahub/settings.py:142
+#: seahub/settings.py:143
 msgid "Deutsch"
 msgstr "Deutsch"
 
-#: seahub/settings.py:143
+#: seahub/settings.py:144
 msgid "English"
 msgstr "English"
 
-#: seahub/settings.py:144
+#: seahub/settings.py:145
 msgid "Español"
 msgstr "Español"
 
-#: seahub/settings.py:145
+#: seahub/settings.py:146
 msgid "Argentinian Spanish"
 msgstr "Argentinian Spanish"
 
-#: seahub/settings.py:146
+#: seahub/settings.py:147
 msgid "Mexican Spanish"
 msgstr "Mexican Spanish"
 
-#: seahub/settings.py:147
+#: seahub/settings.py:148
 msgid "français"
 msgstr "français"
 
-#: seahub/settings.py:148
+#: seahub/settings.py:149
 msgid "עברית"
 msgstr "עברית"
 
-#: seahub/settings.py:149
+#: seahub/settings.py:150
 msgid "Magyar"
 msgstr "Magyar"
 
-#: seahub/settings.py:150
+#: seahub/settings.py:151
 msgid "Íslenska"
 msgstr "Íslenska"
 
-#: seahub/settings.py:151
+#: seahub/settings.py:152
 msgid "Italiano"
 msgstr "Italiano"
 
-#: seahub/settings.py:152
+#: seahub/settings.py:153
 msgid "日本語"
 msgstr "日本語"
 
-#: seahub/settings.py:153
+#: seahub/settings.py:154
 msgid "한국어"
 msgstr "한국어"
 
-#: seahub/settings.py:154
+#: seahub/settings.py:155
 msgid "Latvian"
 msgstr "Latvian"
 
-#: seahub/settings.py:155
+#: seahub/settings.py:156
 msgid "Nederlands"
 msgstr "Nederlands"
 
-#: seahub/settings.py:156
+#: seahub/settings.py:157
 msgid "Polski"
 msgstr "Polski"
 
-#: seahub/settings.py:157
+#: seahub/settings.py:158
 msgid "Portuguese, Brazil"
 msgstr "Portuguese, Brazil"
 
-#: seahub/settings.py:158
+#: seahub/settings.py:159
 msgid "Русский"
 msgstr "Русский"
 
-#: seahub/settings.py:159
+#: seahub/settings.py:160
 msgid "Slovak"
 msgstr "Slovak"
 
-#: seahub/settings.py:160
+#: seahub/settings.py:161
 msgid "Slovenian"
 msgstr "Slovenian"
 
-#: seahub/settings.py:161
+#: seahub/settings.py:162
 msgid "Svenska"
 msgstr "Svenska"
 
-#: seahub/settings.py:162
+#: seahub/settings.py:163
 msgid "ไทย"
 msgstr "ไทย"
 
-#: seahub/settings.py:163
+#: seahub/settings.py:164
 msgid "Türkçe"
 msgstr "Türkçe"
 
-#: seahub/settings.py:164
+#: seahub/settings.py:165
 msgid "українська мова"
 msgstr "українська мова"
 
-#: seahub/settings.py:165
+#: seahub/settings.py:166
 msgid "简体中文"
 msgstr "简体中文"
 
-#: seahub/settings.py:166
+#: seahub/settings.py:167
 msgid "繁體中文"
 msgstr "繁體中文"
 
@@ -261,7 +262,7 @@ msgstr "Совместный файл сообщества"
 #: seahub/group/templates/group/groups_right_panel.html:19
 #: seahub/templates/base.html:181 seahub/templates/repo.html:216
 #: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:586
+#: seahub/templates/js/templates.html:611
 msgid "Discussion"
 msgstr "Обсуждение"
 
@@ -279,7 +280,7 @@ msgstr "Обсуждение"
 #: seahub/group/templates/group/new_msg_reply.html:36
 #: seahub/message/templates/message/user_msg.html:17
 #: seahub/message/templates/message/user_msg_list.html:64
-#: seahub/share/templates/share/links.html:28
+#: seahub/share/templates/share/links.html:29
 #: seahub/share/templates/share/priv_shared_files.html:68
 #: seahub/templates/repo_history_view.html:68
 #: seahub/templates/repo_recycle_view.html:80
@@ -301,8 +302,8 @@ msgstr "Файл"
 #: seahub/api2/templates/api2/new_msg_reply.html:37
 #: seahub/group/templates/group/group_discuss.html:68
 #: seahub/group/templates/group/new_msg_reply.html:30
-#: seahub/share/templates/share/links.html:31
-#: seahub/share/templates/share/links.html:63
+#: seahub/share/templates/share/links.html:32
+#: seahub/share/templates/share/links.html:73
 #: seahub/share/templates/share/priv_shared_files.html:71
 #: seahub/templates/repo_shared_link.html:47
 #: seahub/templates/repo_shared_link.html:74
@@ -344,7 +345,7 @@ msgstr "Нет обсуждений."
 #: seahub/templates/js/dir-view.html:11
 #: seahub/templates/js/lib-op-popups.html:51
 #: seahub/templates/js/lib-op-popups.html:56
-#: seahub/templates/js/templates.html:752
+#: seahub/templates/js/templates.html:775
 #: seahub/templates/snippets/repo_dir_data.html:72
 msgid "Loading..."
 msgstr "Загрузка..."
@@ -493,8 +494,8 @@ msgstr "Имя пользователя"
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:183
 #: seahub/base/accounts.py:466 seahub/templates/js/lib-op-popups.html:105
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:345
-#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:362
+#: seahub/templates/js/templates.html:417
 #: seahub/templates/registration/login.html:23
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:24
@@ -576,15 +577,15 @@ msgstr "Ваш старый пароль был введен неправиль�
 msgid "Password (again)"
 msgstr "Пароль (еще раз)"
 
-#: seahub/auth/views.py:240
+#: seahub/auth/views.py:242
 msgid "Logged out"
 msgstr "Выйти"
 
-#: seahub/auth/views.py:288
+#: seahub/auth/views.py:290
 msgid "Failed to send email, please contact administrator."
 msgstr "Невозможно отправить сообщение. Пожалуйста, обратитесь к администратору."
 
-#: seahub/auth/views.py:349
+#: seahub/auth/views.py:351
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Не удалось изменить пароль. Обратитесь к администратору службы LDAP."
 
@@ -724,22 +725,22 @@ msgstr "Текущий аватар: "
 #: seahub/templates/repo_share_manage.html:128
 #: seahub/templates/repo_transfer_owner.html:40
 #: seahub/templates/share_access_validation.html:10
-#: seahub/templates/shared_file_view.html:57
+#: seahub/templates/shared_file_view.html:56
 #: seahub/templates/js/lib-op-popups.html:9
 #: seahub/templates/js/lib-op-popups.html:29
 #: seahub/templates/js/lib-op-popups.html:41
 #: seahub/templates/js/lib-op-popups.html:67
 #: seahub/templates/js/lib-op-popups.html:106
 #: seahub/templates/js/templates.html:25
-#: seahub/templates/js/templates.html:378
-#: seahub/templates/js/templates.html:414
-#: seahub/templates/js/templates.html:444
-#: seahub/templates/js/templates.html:467
-#: seahub/templates/js/templates.html:567
-#: seahub/templates/js/templates.html:621
-#: seahub/templates/js/templates.html:684
-#: seahub/templates/js/templates.html:706
-#: seahub/templates/js/templates.html:765
+#: seahub/templates/js/templates.html:399
+#: seahub/templates/js/templates.html:439
+#: seahub/templates/js/templates.html:469
+#: seahub/templates/js/templates.html:492
+#: seahub/templates/js/templates.html:592
+#: seahub/templates/js/templates.html:646
+#: seahub/templates/js/templates.html:709
+#: seahub/templates/js/templates.html:731
+#: seahub/templates/js/templates.html:788
 #: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -872,7 +873,7 @@ msgid "Recovered deleted directory"
 msgstr "Восстановлено удаленных файлов"
 
 #: seahub/base/templatetags/seahub_tags.py:171
-#: seahub/base/templatetags/seahub_tags.py:240 seahub/views/ajax.py:1903
+#: seahub/base/templatetags/seahub_tags.py:240 seahub/views/ajax.py:1950
 msgid "Changed library name or description"
 msgstr "Изменено название или описание библиотеки"
 
@@ -927,7 +928,7 @@ msgstr[3] "%(seconds)d секунд назад"
 
 #: seahub/base/templatetags/seahub_tags.py:450
 #: seahub/group/templates/group/group_info_for_pub.html:24
-#: seahub/share/views.py:512 seahub/share/views.py:602
+#: seahub/share/views.py:512 seahub/share/views.py:606
 #: seahub/share/templates/share/list_priv_shared_folders.html:22
 #: seahub/share/templates/share/list_priv_shared_folders.html:35
 #: seahub/share/templates/share/repos.html:23
@@ -949,19 +950,19 @@ msgstr[3] "%(seconds)d секунд назад"
 #: seahub/templates/repo_share_manage.html:124
 #: seahub/templates/js/templates.html:10 seahub/templates/js/templates.html:33
 #: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:74
-#: seahub/templates/js/templates.html:440
-#: seahub/templates/js/templates.html:463
-#: seahub/templates/js/templates.html:481
-#: seahub/templates/js/templates.html:484
-#: seahub/templates/js/templates.html:501
-#: seahub/templates/js/templates.html:503
-#: seahub/templates/js/templates.html:638
-#: seahub/templates/js/templates.html:647
-#: seahub/templates/js/templates.html:650
-#: seahub/templates/js/templates.html:680
-#: seahub/templates/js/templates.html:702
-#: seahub/templates/js/templates.html:775
-#: seahub/templates/js/templates.html:782
+#: seahub/templates/js/templates.html:465
+#: seahub/templates/js/templates.html:488
+#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:509
+#: seahub/templates/js/templates.html:526
+#: seahub/templates/js/templates.html:528
+#: seahub/templates/js/templates.html:663
+#: seahub/templates/js/templates.html:672
+#: seahub/templates/js/templates.html:675
+#: seahub/templates/js/templates.html:705
+#: seahub/templates/js/templates.html:727
+#: seahub/templates/js/templates.html:798
+#: seahub/templates/js/templates.html:805
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_shared_repos.html:7
@@ -976,7 +977,7 @@ msgstr "Чтение-запись"
 
 #: seahub/base/templatetags/seahub_tags.py:452
 #: seahub/group/templates/group/group_info_for_pub.html:26
-#: seahub/share/views.py:514 seahub/share/views.py:604
+#: seahub/share/views.py:514 seahub/share/views.py:608
 #: seahub/share/templates/share/list_priv_shared_folders.html:33
 #: seahub/share/templates/share/repos.html:37
 #: seahub/share/templates/share/user_share_list.html:44
@@ -994,15 +995,15 @@ msgstr "Чтение-запись"
 #: seahub/templates/repo_share_manage.html:125
 #: seahub/templates/js/templates.html:11 seahub/templates/js/templates.html:54
 #: seahub/templates/js/templates.html:76
-#: seahub/templates/js/templates.html:441
-#: seahub/templates/js/templates.html:464
-#: seahub/templates/js/templates.html:486
-#: seahub/templates/js/templates.html:640
-#: seahub/templates/js/templates.html:648
-#: seahub/templates/js/templates.html:651
-#: seahub/templates/js/templates.html:681
-#: seahub/templates/js/templates.html:703
-#: seahub/templates/js/templates.html:783
+#: seahub/templates/js/templates.html:466
+#: seahub/templates/js/templates.html:489
+#: seahub/templates/js/templates.html:511
+#: seahub/templates/js/templates.html:665
+#: seahub/templates/js/templates.html:673
+#: seahub/templates/js/templates.html:676
+#: seahub/templates/js/templates.html:706
+#: seahub/templates/js/templates.html:728
+#: seahub/templates/js/templates.html:806
 #: seahub/templates/snippets/my_group_repos.html:30
 #: seahub/templates/snippets/my_shared_repos.html:12
 #: seahub/templates/snippets/repo_create_form.html:12
@@ -1069,7 +1070,7 @@ msgstr "Email "
 #: seahub/group/templates/group/group_wiki_pages.html:30
 #: seahub/message/templates/message/all_msg_list.html:22
 #: seahub/share/templates/share/links.html:20
-#: seahub/share/templates/share/links.html:56
+#: seahub/share/templates/share/links.html:66
 #: seahub/share/templates/share/list_priv_shared_folders.html:15
 #: seahub/share/templates/share/priv_shared_files.html:22
 #: seahub/share/templates/share/priv_shared_files.html:60
@@ -1083,9 +1084,9 @@ msgstr "Email "
 #: seahub/templates/repo_shared_link.html:64
 #: seahub/templates/view_shared_dir.html:34
 #: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:176
-#: seahub/templates/js/templates.html:734
-#: seahub/templates/js/templates.html:743
-#: seahub/templates/js/templates.html:758
+#: seahub/templates/js/templates.html:757
+#: seahub/templates/js/templates.html:766
+#: seahub/templates/js/templates.html:781
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
 #: seahub/templates/snippets/repo_create_form.html:4
@@ -1122,8 +1123,7 @@ msgstr "Примечание"
 #: seahub/group/templates/group/group_manage.html:54
 #: seahub/group/templates/group/group_manage.html:84
 #: seahub/notifications/templates/notifications/notification_list.html:21
-#: seahub/share/templates/share/links.html:23
-#: seahub/share/templates/share/links.html:59
+#: seahub/share/templates/share/links.html:69
 #: seahub/share/templates/share/list_priv_shared_folders.html:18
 #: seahub/share/templates/share/priv_shared_files.html:25
 #: seahub/share/templates/share/priv_shared_files.html:63
@@ -1165,7 +1165,7 @@ msgstr "Операции"
 #: seahub/templates/repo_share_manage.html:97
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_text.html:22
-#: seahub/templates/js/templates.html:643
+#: seahub/templates/js/templates.html:668
 #: seahub/templates/sysadmin/sys_org_info_user.html:34
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:36
@@ -1192,11 +1192,11 @@ msgstr "Редактировать"
 #: seahub/templates/js/templates.html:40
 #: seahub/templates/js/templates.html:114
 #: seahub/templates/js/templates.html:212
-#: seahub/templates/js/templates.html:279
-#: seahub/templates/js/templates.html:371
-#: seahub/templates/js/templates.html:407
-#: seahub/templates/js/templates.html:509
-#: seahub/templates/js/templates.html:656
+#: seahub/templates/js/templates.html:284
+#: seahub/templates/js/templates.html:392
+#: seahub/templates/js/templates.html:432
+#: seahub/templates/js/templates.html:534
+#: seahub/templates/js/templates.html:681
 #: seahub/templates/snippets/file_share_popup.html:43
 #: seahub/templates/snippets/file_share_popup.html:81
 #: seahub/templates/snippets/repo_dirents.html:36
@@ -1503,9 +1503,9 @@ msgstr "Успешно отправлено на рассмотрение адм
 msgid "Discussion is required."
 msgstr "Обсуждение обязательно."
 
-#: seahub/group/views.py:1309 seahub/views/__init__.py:833
-#: seahub/views/ajax.py:1415 seahub/views/file.py:346 seahub/views/file.py:713
-#: seahub/views/file.py:867
+#: seahub/group/views.py:1309 seahub/views/__init__.py:859
+#: seahub/views/ajax.py:1462 seahub/views/file.py:346 seahub/views/file.py:732
+#: seahub/views/file.py:886
 msgid "File does not exist"
 msgstr "Файл не существует"
 
@@ -1530,8 +1530,8 @@ msgstr "Не удалось создать wiki-страницу. Повтори
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: seahub/group/views.py:1448 seahub/views/__init__.py:827
-#: seahub/views/ajax.py:1977 seahub/views/ajax.py:2041
+#: seahub/group/views.py:1448 seahub/views/__init__.py:853
+#: seahub/views/ajax.py:2024 seahub/views/ajax.py:2088
 #: seahub/views/wiki.py:112
 msgid "Internal Server Error"
 msgstr "Внутренняя ошибка сервера"
@@ -1626,16 +1626,16 @@ msgstr "Значение не может быть пустым и должно �
 #: seahub/templates/repo.html:192 seahub/templates/repo.html.py:538
 #: seahub/templates/repo_folder_perm.html:155
 #: seahub/templates/repo_recycle_view.html:109
-#: seahub/templates/shared_file_view.html:58
+#: seahub/templates/shared_file_view.html:57
 #: seahub/templates/view_shared_upload_link.html:85
 #: seahub/templates/js/lib-op-popups.html:10
 #: seahub/templates/js/lib-op-popups.html:30
 #: seahub/templates/js/lib-op-popups.html:42
 #: seahub/templates/js/lib-op-popups.html:68
 #: seahub/templates/js/lib-op-popups.html:77
-#: seahub/templates/js/lib-op-popups.html:117
-#: seahub/templates/js/templates.html:379
-#: seahub/templates/js/templates.html:415
+#: seahub/templates/js/lib-op-popups.html:118
+#: seahub/templates/js/templates.html:400
+#: seahub/templates/js/templates.html:440
 #: seahub/templates/snippets/file_share_popup.html:55
 #: seahub/templates/snippets/file_share_popup.html:91
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
@@ -1648,16 +1648,16 @@ msgstr "Отмена"
 #: seahub/group/templates/group/group_info.html:9
 #: seahub/group/templates/group/group_info.html:33
 #: seahub/templates/home_base.html:10 seahub/templates/home_base.html.py:41
-#: seahub/templates/js/templates.html:519
-#: seahub/templates/js/templates.html:550
-#: seahub/templates/js/templates.html:576
-#: seahub/templates/js/templates.html:604
+#: seahub/templates/js/templates.html:544
+#: seahub/templates/js/templates.html:575
+#: seahub/templates/js/templates.html:601
+#: seahub/templates/js/templates.html:629
 msgid "Enable Modules"
 msgstr "Включить Модули"
 
 #: seahub/group/templates/group/group_base.html:18
 #: seahub/group/templates/group/group_info.html:35
-#: seahub/templates/js/templates.html:579
+#: seahub/templates/js/templates.html:604
 msgid "This group is public."
 msgstr "Это публичная группа"
 
@@ -1675,9 +1675,9 @@ msgstr "Это публичная группа"
 #: seahub/templates/js/templates.html:152
 #: seahub/templates/js/templates.html:154
 #: seahub/templates/js/templates.html:156
-#: seahub/templates/js/templates.html:523
-#: seahub/templates/js/templates.html:542
-#: seahub/templates/js/templates.html:583
+#: seahub/templates/js/templates.html:548
+#: seahub/templates/js/templates.html:567
+#: seahub/templates/js/templates.html:608
 #: seahub/templates/sysadmin/base.html:12
 #: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_info.html:19
@@ -1693,8 +1693,8 @@ msgstr "Библиотеки"
 #: seahub/group/templates/group/group_info.html:16
 #: seahub/group/templates/group/group_info.html:44
 #: seahub/group/templates/group/groups_right_panel.html:21
-#: seahub/templates/js/templates.html:591
-#: seahub/templates/js/templates.html:615
+#: seahub/templates/js/templates.html:616
+#: seahub/templates/js/templates.html:640
 msgid "Wiki"
 msgstr "Wiki"
 
@@ -1708,7 +1708,7 @@ msgstr "Файлы"
 #: seahub/group/templates/group/group_manage.html:15
 #: seahub/group/templates/group/group_members.html:8
 #: seahub/templates/libraries.html:22 seahub/templates/pub_base.html:13
-#: seahub/templates/pubrepo.html:13 seahub/templates/js/templates.html:595
+#: seahub/templates/pubrepo.html:13 seahub/templates/js/templates.html:620
 #: seahub/templates/sysadmin/sys_admin_group_info.html:31
 #: seahub/templates/sysadmin/sys_org_info_group.html:8
 #: seahub/templates/sysadmin/sys_org_info_library.html:8
@@ -1720,7 +1720,7 @@ msgstr "Участники"
 #: seahub/group/templates/group/group_base.html:42
 #: seahub/group/templates/group/group_info.html:57
 #: seahub/templates/base.html:91 seahub/templates/base_for_backbone.html:127
-#: seahub/templates/js/templates.html:598
+#: seahub/templates/js/templates.html:623
 msgid "Admin"
 msgstr "Администратор"
 
@@ -1783,7 +1783,7 @@ msgstr "Вы действительно хотите удалить это об�
 #: seahub/message/templates/message/user_msg_list.html:194
 #: seahub/message/templates/message/user_msg_list.html:230
 #: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:153
-#: seahub/templates/devices.html:47 seahub/templates/js/lib-op-popups.html:124
+#: seahub/templates/devices.html:47 seahub/templates/js/lib-op-popups.html:125
 #: seahub/templates/snippets/repo_del_popup.html:4
 msgid "Yes"
 msgstr "Да"
@@ -1792,7 +1792,7 @@ msgstr "Да"
 #: seahub/message/templates/message/user_msg_list.html:194
 #: seahub/message/templates/message/user_msg_list.html:230
 #: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:154
-#: seahub/templates/devices.html:48 seahub/templates/js/lib-op-popups.html:125
+#: seahub/templates/devices.html:48 seahub/templates/js/lib-op-popups.html:126
 #: seahub/templates/snippets/repo_del_popup.html:5
 msgid "No"
 msgstr "Нет"
@@ -1831,8 +1831,8 @@ msgstr "Новая библиотека"
 #: seahub/templates/repo_shared_link.html:66
 #: seahub/templates/view_shared_dir.html:35
 #: seahub/templates/js/templates.html:178
-#: seahub/templates/js/templates.html:736
-#: seahub/templates/js/templates.html:745
+#: seahub/templates/js/templates.html:759
+#: seahub/templates/js/templates.html:768
 #: seahub/templates/snippets/repo_dir_data.html:65
 #: seahub/templates/sysadmin/sys_admin_group_info.html:41
 #: seahub/templates/sysadmin/userinfo.html:130
@@ -1845,9 +1845,9 @@ msgstr "Размер"
 #: seahub/templates/libraries.html:70 seahub/templates/libraries.html:103
 #: seahub/templates/my_group_repos.html:10 seahub/templates/pubrepo.html:32
 #: seahub/templates/starred.html:15 seahub/templates/js/templates.html:179
-#: seahub/templates/js/templates.html:737
-#: seahub/templates/js/templates.html:746
-#: seahub/templates/js/templates.html:759
+#: seahub/templates/js/templates.html:760
+#: seahub/templates/js/templates.html:769
+#: seahub/templates/js/templates.html:782
 #: seahub/templates/snippets/my_group_repos.html:10
 #: seahub/templates/snippets/repo_dir_data.html:66
 msgid "Last Update"
@@ -1856,7 +1856,7 @@ msgstr "Последнее обновление"
 #: seahub/group/templates/group/group_info.html:83
 #: seahub/group/templates/group/group_info_for_pub.html:16
 #: seahub/templates/my_group_repos.html:11 seahub/templates/pubrepo.html:33
-#: seahub/templates/js/templates.html:747
+#: seahub/templates/js/templates.html:770
 #: seahub/templates/snippets/my_group_repos.html:11
 #: seahub/templates/sysadmin/sys_admin_group_info.html:42
 msgid "Shared By"
@@ -1906,9 +1906,9 @@ msgstr "Описание"
 #: seahub/templates/my_group_repos.html:25
 #: seahub/templates/my_group_repos.html:28
 #: seahub/templates/my_group_repos.html:30
-#: seahub/templates/js/templates.html:481
-#: seahub/templates/js/templates.html:484
-#: seahub/templates/js/templates.html:486
+#: seahub/templates/js/templates.html:506
+#: seahub/templates/js/templates.html:509
+#: seahub/templates/js/templates.html:511
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_group_repos.html:30
@@ -1992,7 +1992,7 @@ msgstr "Изменить"
 
 #: seahub/group/templates/group/group_manage.html:86
 #: seahub/templates/js/templates.html:218
-#: seahub/templates/js/templates.html:285
+#: seahub/templates/js/templates.html:292
 #: seahub/templates/snippets/repo_dirents.html:37
 #: seahub/templates/snippets/repo_dirents.html:95
 msgid "Rename"
@@ -2062,7 +2062,7 @@ msgstr "Искать пользователя или ввести email адре
 
 #: seahub/group/templates/group/group_members.html:10
 msgid "Leave group"
-msgstr ""
+msgstr "Покинуть группу"
 
 #: seahub/group/templates/group/group_members.html:31
 msgid "Quit Group"
@@ -3021,7 +3021,7 @@ msgid ""
 "href=\"%s\">Shares</a>."
 msgstr "Успешно предоставлен общий доступ для всех участников, для проверки перейдите к <a href=\"%s\">доступу</a>."
 
-#: seahub/share/views.py:218 seahub/share/views.py:1533
+#: seahub/share/views.py:218 seahub/share/views.py:1537
 msgid "Only the owner of the library has permission to share it."
 msgstr "Только владелец библиотеки имеет право дать общий доступ к ней."
 
@@ -3033,11 +3033,11 @@ msgid ""
 msgstr "Общий доступ к \"%s\" не возможен, т.к. ограничен квотой. <a href=\"http://seafile.com/\">Обновите аккаунт.</a>"
 
 #: seahub/share/views.py:284 seahub/share/views.py:377
-#: seahub/share/views.py:654 seahub/share/views.py:1225
-#: seahub/views/__init__.py:1020 seahub/views/__init__.py:1061
-#: seahub/views/__init__.py:1434 seahub/views/__init__.py:1808
-#: seahub/views/ajax.py:1809 seahub/views/ajax.py:2314
-#: seahub/views/ajax.py:2456 seahub/views/sysadmin.py:1388
+#: seahub/share/views.py:658 seahub/share/views.py:1229
+#: seahub/views/__init__.py:1046 seahub/views/__init__.py:1087
+#: seahub/views/__init__.py:1460 seahub/views/__init__.py:1854
+#: seahub/views/ajax.py:1856 seahub/views/ajax.py:2361
+#: seahub/views/ajax.py:2503 seahub/views/sysadmin.py:1388
 msgid "Library does not exist"
 msgstr "Библиотека не существует"
 
@@ -3047,21 +3047,21 @@ msgid "Invalid argument"
 msgstr "Недопустимые аргументы"
 
 #: seahub/share/views.py:327 seahub/share/views.py:343
-#: seahub/share/views.py:353 seahub/share/views.py:1247
-#: seahub/share/views.py:1386 seahub/views/__init__.py:523
-#: seahub/views/__init__.py:1029 seahub/views/__init__.py:1495
-#: seahub/views/__init__.py:1546 seahub/views/ajax.py:185
-#: seahub/views/ajax.py:540 seahub/views/ajax.py:638 seahub/views/ajax.py:645
-#: seahub/views/ajax.py:694 seahub/views/ajax.py:701 seahub/views/ajax.py:797
-#: seahub/views/ajax.py:822 seahub/views/ajax.py:893 seahub/views/ajax.py:1002
-#: seahub/views/ajax.py:1816 seahub/views/ajax.py:2297
-#: seahub/views/ajax.py:2323 seahub/views/ajax.py:2439
-#: seahub/views/ajax.py:2465 seahub/views/file.py:967
+#: seahub/share/views.py:353 seahub/share/views.py:1251
+#: seahub/share/views.py:1390 seahub/views/__init__.py:549
+#: seahub/views/__init__.py:1055 seahub/views/__init__.py:1535
+#: seahub/views/__init__.py:1592 seahub/views/ajax.py:185
+#: seahub/views/ajax.py:549 seahub/views/ajax.py:647 seahub/views/ajax.py:654
+#: seahub/views/ajax.py:715 seahub/views/ajax.py:722 seahub/views/ajax.py:830
+#: seahub/views/ajax.py:855 seahub/views/ajax.py:940 seahub/views/ajax.py:1049
+#: seahub/views/ajax.py:1863 seahub/views/ajax.py:2344
+#: seahub/views/ajax.py:2370 seahub/views/ajax.py:2486
+#: seahub/views/ajax.py:2512 seahub/views/file.py:990
 msgid "Permission denied"
 msgstr "Доступ запрещен"
 
 #: seahub/share/views.py:372 seahub/share/views.py:392
-#: seahub/views/__init__.py:1259
+#: seahub/views/__init__.py:1285
 msgid "Argument is not valid"
 msgstr "Аргумент недействителен"
 
@@ -3085,115 +3085,116 @@ msgstr "Общий доступ успешно закрыт"
 msgid "all members"
 msgstr "все участники"
 
-#: seahub/share/views.py:832 seahub/share/views.py:1211
-#: seahub/share/views.py:1359 seahub/share/views.py:1441
-#: seahub/views/__init__.py:1059 seahub/views/__init__.py:1488
-#: seahub/views/__init__.py:1539 seahub/views/ajax.py:1175
-#: seahub/views/ajax.py:1195 seahub/views/file.py:982
+#: seahub/share/views.py:836 seahub/share/views.py:1215
+#: seahub/share/views.py:1363 seahub/share/views.py:1445
+#: seahub/views/__init__.py:1085 seahub/views/__init__.py:1527
+#: seahub/views/__init__.py:1585 seahub/views/ajax.py:1222
+#: seahub/views/ajax.py:1242 seahub/views/file.py:1011
 msgid "Invalid arguments"
 msgstr "Недопустимые аргументы"
 
-#: seahub/share/views.py:837 seahub/share/views.py:1216
+#: seahub/share/views.py:841 seahub/share/views.py:1220
 msgid "You cannot share the library in this way."
 msgstr "У вас нет доступа к этой библиотеке"
 
-#: seahub/share/views.py:876 seahub/share/views.py:915
+#: seahub/share/views.py:880 seahub/share/views.py:919
 msgid "Removed successfully"
 msgstr "Успешно удалено"
 
-#: seahub/share/views.py:899 seahub/share/views.py:937
+#: seahub/share/views.py:903 seahub/share/views.py:941
 msgid "The link doesn't exist"
 msgstr "Группа не существует"
 
-#: seahub/share/views.py:952
+#: seahub/share/views.py:956
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please"
 " contact administrator."
 msgstr "Отправка ссылки общего доступа не удалось. Услуги электронной почты не настроены должным образом. Пожалуйста, свяжитесь с администрацией."
 
-#: seahub/share/views.py:998
+#: seahub/share/views.py:1002
 msgid "file"
 msgstr "файл"
 
-#: seahub/share/views.py:999
+#: seahub/share/views.py:1003
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr "Пользователь поделился с вами файлом на %s"
 
-#: seahub/share/views.py:1005
+#: seahub/share/views.py:1009
 msgid "directory"
 msgstr "каталог"
 
-#: seahub/share/views.py:1006
+#: seahub/share/views.py:1010
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr "Пользователь поделился с вами каталогом на %s"
 
-#: seahub/share/views.py:1019 seahub/share/views.py:1316
+#: seahub/share/views.py:1023 seahub/share/views.py:1320
 msgid "Internal server error, or please check the email(s) you entered"
 msgstr "Внутренняя ошибка сервера, или неправильно введены email адреса"
 
-#: seahub/share/views.py:1039
+#: seahub/share/views.py:1043
 msgid "Please choose a directory."
 msgstr "Пожалуйста, выберите папку."
 
-#: seahub/share/views.py:1057 seahub/share/views.py:1149
+#: seahub/share/views.py:1061 seahub/share/views.py:1153
 msgid "Successfully saved."
 msgstr "Успешно добавлен."
 
-#: seahub/share/views.py:1076
+#: seahub/share/views.py:1080
 #, python-format
 msgid "Failed to share to \"%s\", user not found."
 msgstr "Невозможно отправить сообщение для %s, пользователь не найден."
 
-#: seahub/share/views.py:1090
+#: seahub/share/views.py:1094
 #, python-format
 msgid "Successfully shared %s."
 msgstr "Успешно открыт доступ к %s."
 
-#: seahub/share/views.py:1114
+#: seahub/share/views.py:1118
 #, python-format
 msgid "Successfully unshared \"%s\"."
 msgstr "Успешно закрыт доступ к \"%s\"."
 
-#: seahub/share/views.py:1116
+#: seahub/share/views.py:1120
 #, python-format
 msgid "You don't have permission to unshare %s."
 msgstr "У вас нет прав отменить общий доступ к %s."
 
-#: seahub/share/views.py:1152
+#: seahub/share/views.py:1156
 #, python-format
 msgid "You don't have permission to save %s."
 msgstr "У вас нет прав на доступ к %s."
 
-#: seahub/share/views.py:1262
+#: seahub/share/views.py:1266
 msgid ""
 "Sending shared upload link failed. Email service is not properly configured,"
 " please contact administrator."
 msgstr "Отправка ссылки общего доступа не удалось. Служба электронной почты не настроена должным образом. Пожалуйста, свяжитесь с администратором."
 
-#: seahub/share/views.py:1303
+#: seahub/share/views.py:1307
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr "Вам доступна ссылка для загрузки на %s"
 
-#: seahub/share/views.py:1349 seahub/share/views.py:1421
+#: seahub/share/views.py:1353 seahub/share/views.py:1425
 msgid "You do not have permission to generate shared link"
-msgstr ""
+msgstr "У вас нет прав для создания общедоступной ссылки"
 
-#: seahub/share/views.py:1480 seahub/thumbnail/views.py:43
-#: seahub/views/ajax.py:247 seahub/views/ajax.py:341 seahub/views/ajax.py:421
-#: seahub/views/ajax.py:526 seahub/views/ajax.py:613 seahub/views/ajax.py:676
-#: seahub/views/ajax.py:725 seahub/views/ajax.py:769 seahub/views/ajax.py:971
-#: seahub/views/ajax.py:1231 seahub/views/ajax.py:2660
+#: seahub/share/views.py:1484 seahub/thumbnail/views.py:39
+#: seahub/thumbnail/views.py:126 seahub/views/ajax.py:247
+#: seahub/views/ajax.py:343 seahub/views/ajax.py:425 seahub/views/ajax.py:535
+#: seahub/views/ajax.py:622 seahub/views/ajax.py:697 seahub/views/ajax.py:758
+#: seahub/views/ajax.py:802 seahub/views/ajax.py:1018
+#: seahub/views/ajax.py:1278 seahub/views/ajax.py:2707
 msgid "Library does not exist."
 msgstr "Библиотека не существует"
 
-#: seahub/share/views.py:1484
+#: seahub/share/views.py:1488
 msgid "Directory does not exist."
 msgstr "Каталог не существует"
 
-#: seahub/share/views.py:1576
+#: seahub/share/views.py:1580
 msgid "Please check the email(s) you entered"
 msgstr "Пожалуйста, проверьте введенные email адреса"
 
@@ -3212,7 +3213,7 @@ msgid "Upload Links"
 msgstr "Ссылки для загрузки"
 
 #: seahub/share/templates/share/links.html:21
-#: seahub/share/templates/share/links.html:57
+#: seahub/share/templates/share/links.html:67
 #: seahub/share/templates/share/priv_shared_files.html:23
 #: seahub/share/templates/share/priv_shared_files.html:61
 #: seahub/templates/activities.html:19 seahub/templates/file_edit.html:167
@@ -3221,22 +3222,26 @@ msgid "Library"
 msgstr "Библиотека"
 
 #: seahub/share/templates/share/links.html:22
-#: seahub/share/templates/share/links.html:58
+#: seahub/share/templates/share/links.html:68
 #: seahub/templates/repo_shared_link.html:41
 #: seahub/templates/repo_shared_link.html:67
 #: seahub/templates/sysadmin/userinfo.html:132
 msgid "Visits"
 msgstr "Посещения"
 
-#: seahub/share/templates/share/links.html:37
-#: seahub/share/templates/share/links.html:68
-#: seahub/templates/file_revisions.html:58 seahub/templates/repo.html:914
+#: seahub/share/templates/share/links.html:23
+msgid "Expiration"
+msgstr "Истечение"
+
+#: seahub/share/templates/share/links.html:47
+#: seahub/share/templates/share/links.html:78
+#: seahub/templates/file_revisions.html:60 seahub/templates/repo.html:914
 #: seahub/templates/repo_view_snapshot.html:49
 msgid "View"
 msgstr "Просмотр"
 
-#: seahub/share/templates/share/links.html:38
-#: seahub/share/templates/share/links.html:69
+#: seahub/share/templates/share/links.html:48
+#: seahub/share/templates/share/links.html:79
 #: seahub/templates/repo_shared_link.html:53
 #: seahub/templates/repo_shared_link.html:85
 #: seahub/templates/sysadmin/sys_publink_admin.html:25
@@ -3245,21 +3250,21 @@ msgstr "Просмотр"
 msgid "Remove"
 msgstr "Удалить"
 
-#: seahub/share/templates/share/links.html:45
+#: seahub/share/templates/share/links.html:55
 msgid "You don't have any download link"
 msgstr "У Вас нет ссылок для скачивания"
 
-#: seahub/share/templates/share/links.html:46
+#: seahub/share/templates/share/links.html:56
 msgid ""
 "You can generate a download link for a folder or a file. People receive this"
 " link can view the folder or the file online."
 msgstr "Вы можете создать ссылку на загрузку для папки или файла. Люди, получающие эту ссылку, могут просматривать эту папку или файл онлайн."
 
-#: seahub/share/templates/share/links.html:76
+#: seahub/share/templates/share/links.html:86
 msgid "You don't have any upload link"
 msgstr "У Вас нет ссылок на загрузки"
 
-#: seahub/share/templates/share/links.html:77
+#: seahub/share/templates/share/links.html:87
 msgid ""
 "You can generate an upload link from any folder. People receive this link "
 "can upload files to this folder."
@@ -3270,7 +3275,7 @@ msgid "Folders - Share"
 msgstr "Общие папки"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:10
-#: seahub/templates/home_base.html:31 seahub/templates/js/templates.html:543
+#: seahub/templates/home_base.html:31 seahub/templates/js/templates.html:568
 msgid "Folders"
 msgstr "Папки"
 
@@ -3288,11 +3293,11 @@ msgstr "Общий доступ для"
 #: seahub/templates/repo_share_manage.html:50
 #: seahub/templates/repo_share_manage.html:83
 #: seahub/templates/js/templates.html:222
-#: seahub/templates/js/templates.html:431
-#: seahub/templates/js/templates.html:454
-#: seahub/templates/js/templates.html:671
-#: seahub/templates/js/templates.html:693
-#: seahub/templates/js/templates.html:760
+#: seahub/templates/js/templates.html:456
+#: seahub/templates/js/templates.html:479
+#: seahub/templates/js/templates.html:696
+#: seahub/templates/js/templates.html:718
+#: seahub/templates/js/templates.html:783
 msgid "Permission"
 msgstr "Доступ"
 
@@ -3421,7 +3426,7 @@ msgid "Download and Sync"
 msgstr "Скачать и синхронизировать"
 
 #: seahub/share/templates/share/user_share_list.html:59
-#: seahub/templates/js/templates.html:492
+#: seahub/templates/js/templates.html:517
 #: seahub/templates/snippets/my_shared_repos.html:29
 msgid "Leave Share"
 msgstr "Оставить общий доступ"
@@ -3436,7 +3441,7 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Извините, но запрошенная страница не может быть найдена."
 
 #: seahub/templates/activities.html:4 seahub/templates/home_base.html:17
-#: seahub/templates/js/templates.html:527
+#: seahub/templates/js/templates.html:552
 msgid "Activities"
 msgstr "Активность"
 
@@ -3549,7 +3554,7 @@ msgid "Please enter the password."
 msgstr "Пожалуйста введите пароль"
 
 #: seahub/templates/devices.html:5 seahub/templates/devices.html.py:9
-#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:536
+#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:561
 msgid "Devices"
 msgstr "Устройства"
 
@@ -3602,18 +3607,18 @@ msgstr "Ваши клиенты (Desktop/Android/iOS) будут перечис�
 msgid "Successfully unlinked."
 msgstr "Успешно удалено."
 
-#: seahub/templates/download.html:4 seahub/templates/file_revisions.html:57
+#: seahub/templates/download.html:4 seahub/templates/file_revisions.html:59
 #: seahub/templates/repo.html:27 seahub/templates/repo_history_view.html:73
-#: seahub/templates/shared_file_view.html:36
-#: seahub/templates/shared_file_view.html:68
-#: seahub/templates/view_file_base.html:59
-#: seahub/templates/view_file_base.html:96
+#: seahub/templates/shared_file_view.html:35
+#: seahub/templates/shared_file_view.html:67
+#: seahub/templates/view_file_base.html:72
+#: seahub/templates/view_file_base.html:109
 #: seahub/templates/view_history_file.html:30
 #: seahub/templates/view_history_file.html:44
 #: seahub/templates/view_shared_dir.html:49
 #: seahub/templates/view_shared_dir.html:80
 #: seahub/templates/js/templates.html:207
-#: seahub/templates/js/templates.html:274
+#: seahub/templates/js/templates.html:278
 #: seahub/templates/snippets/repo_dirents.html:24
 #: seahub/templates/snippets/repo_dirents.html:81
 #: seahub/templates/sysadmin/userinfo.html:147
@@ -3623,7 +3628,7 @@ msgstr "Скачать"
 #: seahub/templates/file_edit.html:77
 #: seahub/templates/repo_history_view.html:38
 #: seahub/templates/repo_recycle_view.html:18
-#: seahub/templates/shared_file_view.html:15
+#: seahub/templates/shared_file_view.html:14
 #: seahub/templates/view_shared_dir.html:18
 msgid "Current path: "
 msgstr " "
@@ -3837,9 +3842,9 @@ msgstr "Требуется пароль."
 #: seahub/templates/file_revisions.html:5
 #: seahub/templates/repo_basic_info.html:36
 #: seahub/templates/repo_history.html:5
-#: seahub/templates/view_file_base.html:51
+#: seahub/templates/view_file_base.html:64
 #: seahub/templates/js/templates.html:139
-#: seahub/templates/js/templates.html:288
+#: seahub/templates/js/templates.html:296
 #: seahub/templates/snippets/current_commit.html:15
 #: seahub/templates/snippets/repo_dirents.html:98
 msgid "History"
@@ -3873,7 +3878,7 @@ msgstr "(текущая версия)"
 msgid "(Renamed or moved from %(old_path)s)"
 msgstr "(Переименовано или перемещено от %(old_path)s)"
 
-#: seahub/templates/file_revisions.html:55
+#: seahub/templates/file_revisions.html:56
 #: seahub/templates/repo_history_view.html:62
 #: seahub/templates/repo_history_view.html:72
 #: seahub/templates/repo_recycle_view.html:68
@@ -3883,7 +3888,7 @@ msgstr "(Переименовано или перемещено от %(old_path)
 msgid "Restore"
 msgstr "Восстановить"
 
-#: seahub/templates/file_revisions.html:60
+#: seahub/templates/file_revisions.html:62
 msgid "Diff"
 msgstr "Разница"
 
@@ -3920,28 +3925,28 @@ msgstr "Seafile"
 msgid "About Us"
 msgstr "О проекте"
 
-#: seahub/templates/home_base.html:8 seahub/templates/js/templates.html:517
+#: seahub/templates/home_base.html:8 seahub/templates/js/templates.html:542
 msgid "Personal"
 msgstr "Личные"
 
 #: seahub/templates/home_base.html:15 seahub/templates/libraries.html:96
-#: seahub/templates/starred.html:8 seahub/templates/js/templates.html:524
+#: seahub/templates/starred.html:8 seahub/templates/js/templates.html:549
 msgid "Starred"
 msgstr "Отмеченные"
 
 #: seahub/templates/home_base.html:21 seahub/templates/home_base.html.py:48
-#: seahub/templates/js/templates.html:532
-#: seahub/templates/js/templates.html:561
+#: seahub/templates/js/templates.html:557
+#: seahub/templates/js/templates.html:586
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "Персональная Wiki"
 
-#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:539
+#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:564
 msgid "Share Admin"
 msgstr "Предоставленные ресурсы"
 
-#: seahub/templates/home_base.html:33 seahub/templates/js/templates.html:545
+#: seahub/templates/home_base.html:33 seahub/templates/js/templates.html:570
 #: seahub/templates/sysadmin/base.html:29
 msgid "Links"
 msgstr "Ссылки"
@@ -3951,12 +3956,12 @@ msgstr "Ссылки"
 msgid "Upload Folder"
 msgstr "Загрузить папку"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:352
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:373
 #: seahub/templates/snippets/file_share_popup.html:31
 msgid "Add auto expiration"
 msgstr "Добавить авто истечение срока действия"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:355
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:376
 #: seahub/templates/snippets/file_share_popup.html:34
 msgid "Days"
 msgstr "Дней"
@@ -4098,8 +4103,8 @@ msgstr "Вы можете создать публичную библиотеку
 #: seahub/templates/repo_folder_perm.html:98
 #: seahub/templates/repo_folder_perm.html:105
 #: seahub/templates/repo_share_manage.html:39
-#: seahub/templates/js/templates.html:453
-#: seahub/templates/js/templates.html:692
+#: seahub/templates/js/templates.html:478
+#: seahub/templates/js/templates.html:717
 #: seahub/templates/snippets/my_group_repos.html:6
 msgid "Group"
 msgstr "Группа"
@@ -4146,7 +4151,7 @@ msgstr "Корзина"
 
 #: seahub/templates/repo.html:52 seahub/templates/js/templates.html:112
 #: seahub/templates/js/templates.html:219
-#: seahub/templates/js/templates.html:286
+#: seahub/templates/js/templates.html:293
 #: seahub/templates/snippets/repo_dirents.html:38
 #: seahub/templates/snippets/repo_dirents.html:96
 msgid "Move"
@@ -4154,7 +4159,7 @@ msgstr "Переместить"
 
 #: seahub/templates/repo.html:53 seahub/templates/js/templates.html:113
 #: seahub/templates/js/templates.html:220
-#: seahub/templates/js/templates.html:287
+#: seahub/templates/js/templates.html:295
 #: seahub/templates/snippets/repo_dirents.html:39
 #: seahub/templates/snippets/repo_dirents.html:97
 msgid "Copy"
@@ -4245,7 +4250,7 @@ msgstr "Онлайновый Rich Text формат."
 #: seahub/templates/repo_view_snapshot.html:45
 #: seahub/templates/js/lib-op-popups.html:21
 #: seahub/templates/js/lib-op-popups.html:23
-#: seahub/templates/js/templates.html:310
+#: seahub/templates/js/templates.html:327
 #: seahub/templates/snippets/current_commit.html:4
 #: seahub/templates/snippets/events_body.html:18
 #: seahub/templates/snippets/events_body.html:20
@@ -4264,7 +4269,7 @@ msgstr "Текущая библиотека"
 msgid "Other Libraries"
 msgstr "Другие библиотеки"
 
-#: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:56
+#: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:55
 #: seahub/templates/js/lib-op-popups.html:66
 msgid "Please click and choose a directory."
 msgstr "Нажмите для выбора каталога"
@@ -4350,7 +4355,7 @@ msgid "Empty file upload result"
 msgstr "Результат загрузки пустого файла"
 
 #: seahub/templates/repo.html:534
-#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1128
+#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1175
 msgid "Error"
 msgstr "Ошибка"
 
@@ -4410,7 +4415,7 @@ msgid "Copy selected directories/files to:"
 msgstr "Скопировать выбранные папки/файлы в:"
 
 #: seahub/templates/repo.html:848 seahub/templates/repo.html.py:2062
-#: seahub/views/ajax.py:791 seahub/views/ajax.py:996
+#: seahub/views/ajax.py:824 seahub/views/ajax.py:1043
 msgid "Invalid destination path"
 msgstr "Неправильный путь назначения"
 
@@ -4702,7 +4707,7 @@ msgid "New passwords don't match"
 msgstr "Новые пароли не совпадают"
 
 #: seahub/templates/repo_folder_perm.html:35
-#: seahub/templates/js/templates.html:663
+#: seahub/templates/js/templates.html:688
 msgid "User Permission"
 msgstr "Разрешения пользователя"
 
@@ -4716,8 +4721,8 @@ msgstr "Добавить разрешение"
 
 #: seahub/templates/repo_folder_perm.html:46
 #: seahub/templates/repo_share_manage.html:38
-#: seahub/templates/js/templates.html:430
-#: seahub/templates/js/templates.html:670
+#: seahub/templates/js/templates.html:455
+#: seahub/templates/js/templates.html:695
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
 msgstr "Пользователь"
@@ -4907,20 +4912,20 @@ msgid ""
 "And the password will be kept on the server for only 1 hour."
 msgstr "Введите пароль, если вы хотите просмотреть файл или каталог. Пароль будет храниться на сервере не более 1 часа."
 
-#: seahub/templates/shared_file_view.html:25
+#: seahub/templates/shared_file_view.html:24
 #: seahub/templates/view_shared_dir.html:12
 msgid "Shared by: "
 msgstr "Общий доступ: "
 
-#: seahub/templates/shared_file_view.html:32
+#: seahub/templates/shared_file_view.html:31
 msgid "Save to..."
 msgstr "Сохранить..."
 
-#: seahub/templates/shared_file_view.html:47
+#: seahub/templates/shared_file_view.html:46
 msgid "Save To:"
 msgstr "Доступно для"
 
-#: seahub/templates/shared_file_view.html:72
+#: seahub/templates/shared_file_view.html:71
 #: seahub/templates/view_shared_dir.html:97
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr "Скачивание файла недоступно: трафик по ссылке превышен."
@@ -4955,11 +4960,11 @@ msgstr "Перейдите по ссылке, чтобы загрузить фа
 msgid "Stars"
 msgstr "Пометки"
 
-#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:715
+#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:740
 msgid "icon"
 msgstr "иконка"
 
-#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:728
+#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:751
 msgid "Unstar"
 msgstr "Снять отметку"
 
@@ -5008,39 +5013,62 @@ msgstr "для"
 msgid "Sorry, this user is not registered yet."
 msgstr "К сожалению, этот пользователь не зарегистрирован."
 
-#: seahub/templates/view_file_base.html:20
+#: seahub/templates/view_file_base.html:16
+#: seahub/templates/js/templates.html:263
+msgid "locked"
+msgstr "заблокирован"
+
+#: seahub/templates/view_file_base.html:23
 #: seahub/templates/view_history_file.html:23
 #: seahub/templates/view_snapshot_file.html:13
 #: seahub/templates/view_trash_file.html:10
 msgid "Current Path: "
 msgstr " "
 
-#: seahub/templates/view_file_base.html:38
+#: seahub/templates/view_file_base.html:41
 #: seahub/templates/view_file_markdown.html:7
 #: seahub/templates/view_file_text.html:16
 msgid "updated this file"
 msgstr "этот файл обновлен"
 
-#: seahub/templates/view_file_base.html:46
+#: seahub/templates/view_file_base.html:49
+#: seahub/templates/view_file_base.html:53
+#: seahub/templates/js/templates.html:303
+msgid "Lock"
+msgstr "Заблокировать"
+
+#: seahub/templates/view_file_base.html:50
+#: seahub/templates/view_file_base.html:52
+#: seahub/templates/js/templates.html:300
+msgid "Unlock"
+msgstr "Разблокировать"
+
+#: seahub/templates/view_file_base.html:59
 #: seahub/templates/js/templates.html:39
 #: seahub/templates/js/templates.html:136
 #: seahub/templates/js/templates.html:209
-#: seahub/templates/js/templates.html:276
+#: seahub/templates/js/templates.html:280
 #: seahub/templates/snippets/repo_dir_data.html:48
 #: seahub/templates/snippets/repo_dirents.html:28
 #: seahub/templates/snippets/repo_dirents.html:85
 msgid "Share"
 msgstr "Общий доступ"
 
-#: seahub/templates/view_file_base.html:79
+#: seahub/templates/view_file_base.html:92
 #: seahub/templates/snippets/bottom_bar.html:15
 msgid "Back to top"
 msgstr "Вернуться к началу"
 
-#: seahub/templates/view_file_base.html:79
+#: seahub/templates/view_file_base.html:92
 #: seahub/templates/snippets/bottom_bar.html:15
 msgid "top"
 msgstr "вверх"
+
+#: seahub/templates/view_file_base.html:168 seahub/views/ajax.py:2609
+#: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:226
+#: seahub/views/sysadmin.py:248
+msgid "Failed"
+msgstr "Не удалось"
 
 #: seahub/templates/view_file_image.html:15
 #: seahub/templates/snippets/file_content_html.html:26
@@ -5183,11 +5211,11 @@ msgstr "Файл с таким именем уже существует в эт�
 msgid "Replacing it will overwrite its content."
 msgstr "Замена приведет к его перезаписи."
 
-#: seahub/templates/js/lib-op-popups.html:115
+#: seahub/templates/js/lib-op-popups.html:116
 msgid "Replace"
 msgstr "Заменить"
 
-#: seahub/templates/js/lib-op-popups.html:116
+#: seahub/templates/js/lib-op-popups.html:117
 msgid "Don't replace"
 msgstr "Не заменять"
 
@@ -5202,8 +5230,8 @@ msgid "Encrypt"
 msgstr "Шифровать"
 
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:345
-#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:362
+#: seahub/templates/js/templates.html:417
 #: seahub/templates/snippets/file_share_popup.html:24
 #: seahub/templates/snippets/file_share_popup.html:70
 #: seahub/templates/snippets/repo_create_form.html:20
@@ -5212,8 +5240,8 @@ msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(не менее %(repo_password_min_length)s символов)"
 
 #: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:347
-#: seahub/templates/js/templates.html:398
+#: seahub/templates/js/templates.html:368
+#: seahub/templates/js/templates.html:423
 #: seahub/templates/snippets/file_share_popup.html:26
 #: seahub/templates/snippets/file_share_popup.html:72
 #: seahub/templates/snippets/repo_create_form.html:22
@@ -5222,7 +5250,7 @@ msgstr "Подтвердите пароль"
 
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
-#: seahub/templates/js/templates.html:773
+#: seahub/templates/js/templates.html:796
 msgid "Encrypted"
 msgstr "Зашифровано"
 
@@ -5243,108 +5271,118 @@ msgstr "Новая папка"
 msgid "More operations"
 msgstr "Больше операций"
 
-#: seahub/templates/js/templates.html:283
+#: seahub/templates/js/templates.html:289
 #: seahub/templates/snippets/repo_dirents.html:91
 msgid "More Operations"
 msgstr "Больше операций"
 
-#: seahub/templates/js/templates.html:298
+#: seahub/templates/js/templates.html:315
 msgid "Fetch failed"
 msgstr "Ошибка извлечения"
 
-#: seahub/templates/js/templates.html:322
+#: seahub/templates/js/templates.html:339
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr "Ссылка для скачивания"
 
-#: seahub/templates/js/templates.html:326
+#: seahub/templates/js/templates.html:343
 #: seahub/templates/snippets/file_share_popup.html:8
 msgid "Upload Link"
 msgstr "Ссылка для загрузки"
 
-#: seahub/templates/js/templates.html:329
+#: seahub/templates/js/templates.html:346
 msgid "Share to user"
-msgstr ""
+msgstr "Общий доступ для пользователя"
 
-#: seahub/templates/js/templates.html:330
+#: seahub/templates/js/templates.html:347
 msgid "Share to group"
-msgstr ""
+msgstr "Общий доступ для группы"
 
-#: seahub/templates/js/templates.html:342
-#: seahub/templates/js/templates.html:393
+#: seahub/templates/js/templates.html:359
+#: seahub/templates/js/templates.html:414
 #: seahub/templates/snippets/file_share_popup.html:21
 #: seahub/templates/snippets/file_share_popup.html:67
 msgid "Add password protection"
 msgstr "Защитить паролем"
 
-#: seahub/templates/js/templates.html:359
-#: seahub/templates/js/templates.html:402
+#: seahub/templates/js/templates.html:365
+#: seahub/templates/js/templates.html:420
+msgid "Show"
+msgstr "Показать"
+
+#: seahub/templates/js/templates.html:366
+#: seahub/templates/js/templates.html:421
+msgid "Generate a random password"
+msgstr "Сгенерировать пароль"
+
+#: seahub/templates/js/templates.html:380
+#: seahub/templates/js/templates.html:427
 #: seahub/templates/snippets/file_share_popup.html:39
 #: seahub/templates/snippets/file_share_popup.html:77
 msgid "Generate"
 msgstr "Создать"
 
-#: seahub/templates/js/templates.html:363
+#: seahub/templates/js/templates.html:384
 #: seahub/templates/snippets/file_share_popup.html:41
 msgid "Link: "
 msgstr "Ссылка: "
 
-#: seahub/templates/js/templates.html:366
+#: seahub/templates/js/templates.html:387
 msgid "Direct Download Link: "
 msgstr "Прямая ссылка для скачивания:"
 
-#: seahub/templates/js/templates.html:370
-#: seahub/templates/js/templates.html:406
+#: seahub/templates/js/templates.html:391
+#: seahub/templates/js/templates.html:431
 #: seahub/templates/snippets/file_share_popup.html:42
 #: seahub/templates/snippets/file_share_popup.html:80
 msgid "Send"
 msgstr "Отправить"
 
-#: seahub/templates/js/templates.html:373
-#: seahub/templates/js/templates.html:409
+#: seahub/templates/js/templates.html:394
+#: seahub/templates/js/templates.html:434
 #: seahub/templates/snippets/file_share_popup.html:46
 #: seahub/templates/snippets/file_share_popup.html:84
 msgid "Send to:"
 msgstr "Отправить: "
 
-#: seahub/templates/js/templates.html:374
-#: seahub/templates/js/templates.html:410
+#: seahub/templates/js/templates.html:395
+#: seahub/templates/js/templates.html:435
 #: seahub/templates/snippets/file_share_popup.html:47
 #: seahub/templates/snippets/file_share_popup.html:85
 msgid "Emails, Seperated by ','"
 msgstr "Email(ы), разделенные ','"
 
-#: seahub/templates/js/templates.html:375
-#: seahub/templates/js/templates.html:411
+#: seahub/templates/js/templates.html:396
+#: seahub/templates/js/templates.html:436
 #: seahub/templates/snippets/file_share_popup.html:51
 #: seahub/templates/snippets/file_share_popup.html:87
 msgid "Message (optional):"
 msgstr "Сообщение (необязательно):"
 
-#: seahub/templates/js/templates.html:380
-#: seahub/templates/js/templates.html:416
+#: seahub/templates/js/templates.html:401
+#: seahub/templates/js/templates.html:441
 #: seahub/templates/snippets/file_share_popup.html:56
 #: seahub/templates/snippets/file_share_popup.html:92
 msgid "Sending..."
 msgstr "Отправка ..."
 
-#: seahub/templates/js/templates.html:389
+#: seahub/templates/js/templates.html:410
 #: seahub/templates/snippets/file_share_popup.html:63
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Вы можете поделиться сгенерированной ссылкой с другими людьми, и они смогут загружать файлы в эту папку."
 
-#: seahub/templates/js/templates.html:405
+#: seahub/templates/js/templates.html:430
 #: seahub/templates/snippets/file_share_popup.html:79
 msgid "Upload Link: "
 msgstr "Ссылка для загрузки: "
 
-#: seahub/templates/js/templates.html:664
+#: seahub/templates/js/templates.html:689
 msgid "Group Permission"
 msgstr "Разрешения группы"
 
-#: seahub/templates/js/templates.html:751
+#: seahub/templates/js/templates.html:774
 msgid "Select libraries to share"
 msgstr "Выберите библиотеки, общий доступ к которым вы хотите предоставить"
 
@@ -6293,15 +6331,15 @@ msgstr "Поиск пользователей..."
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:17
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 msgid "LDAP(imported)"
-msgstr ""
+msgstr "LDAP(импортировано)"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:29
 msgid "Last Login"
-msgstr ""
+msgstr "Последний вход"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:73
 msgid "No LDAP users have been imported"
-msgstr ""
+msgstr "Нет LDAP пользователей для импорта"
 
 #: seahub/templates/sysadmin/sys_useradmin.html:22
 msgid "Import users"
@@ -6476,181 +6514,178 @@ msgstr "персональная wiki"
 msgid "Personal Wiki Pages"
 msgstr "Персональные Wiki страницы"
 
-#: seahub/thumbnail/views.py:32 seahub/thumbnail/views.py:64
-#: seahub/thumbnail/views.py:78 seahub/views/ajax.py:254
-#: seahub/views/ajax.py:348 seahub/views/ajax.py:433 seahub/views/ajax.py:1169
-#: seahub/views/ajax.py:1189 seahub/views/ajax.py:1238
-#: seahub/views/ajax.py:1561 seahub/views/ajax.py:1579
-#: seahub/views/ajax.py:2615 seahub/views/ajax.py:2635
-#: seahub/views/ajax.py:2677 seahub/views/ajax.py:2684
-msgid "Permission denied."
-msgstr "Доступ запрещен"
-
-#: seahub/thumbnail/views.py:37
-msgid "Thumbnail function is not enabled."
-msgstr "Функция создания эскизов отключена."
-
-#: seahub/thumbnail/views.py:48
-msgid "Image thumbnail is not supported in encrypted libraries."
-msgstr "Эскизы изображений в зашифрованных библиотеках не поддерживаются."
-
-#: seahub/thumbnail/views.py:56
+#: seahub/thumbnail/views.py:44 seahub/thumbnail/views.py:132
 msgid "Invalid arguments."
 msgstr "Недопустимые аргументы"
 
-#: seahub/thumbnail/views.py:74
-msgid "Please login first."
-msgstr "Пожалуйста, сначала войдите"
+#: seahub/thumbnail/views.py:49 seahub/views/ajax.py:254
+#: seahub/views/ajax.py:350 seahub/views/ajax.py:437 seahub/views/ajax.py:1216
+#: seahub/views/ajax.py:1236 seahub/views/ajax.py:1285
+#: seahub/views/ajax.py:1608 seahub/views/ajax.py:1626
+#: seahub/views/ajax.py:2662 seahub/views/ajax.py:2682
+#: seahub/views/ajax.py:2724 seahub/views/ajax.py:2731
+msgid "Permission denied."
+msgstr "Доступ запрещен"
 
-#: seahub/thumbnail/views.py:87
-msgid "Wrong path."
-msgstr "Неправильный путь."
+#: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:142
+msgid "Not allowed to generate thumbnail."
+msgstr "Не разрешено создавать эскизы."
 
-#: seahub/thumbnail/views.py:100
-msgid "Image file is too large."
-msgstr "Изображение слишком велико."
-
-#: seahub/thumbnail/views.py:120
+#: seahub/thumbnail/views.py:64 seahub/thumbnail/views.py:152
 msgid "Failed to create thumbnail."
 msgstr "Не удалось создать эскиз."
+
+#: seahub/thumbnail/views.py:119
+msgid "Invalid token."
+msgstr "Неверный токен"
 
 #: seahub/utils/__init__.py:133
 msgid "permission error"
 msgstr "ошибка доступа"
 
-#: seahub/views/__init__.py:496
+#: seahub/views/__init__.py:522
 msgid "Unable to view recycle page"
 msgstr "Не удается просмотреть страницу"
 
-#: seahub/views/__init__.py:787 seahub/views/__init__.py:801
+#: seahub/views/__init__.py:813 seahub/views/__init__.py:827
 msgid "Root Directory"
 msgstr "Основная папка"
 
-#: seahub/views/__init__.py:829
+#: seahub/views/__init__.py:855
 msgid "Filename contains invalid character"
 msgstr "Имя файла содержит недопустимый символ"
 
-#: seahub/views/__init__.py:831
+#: seahub/views/__init__.py:857
 msgid "Duplicated filename"
 msgstr "Дубликат файла"
 
-#: seahub/views/__init__.py:835
+#: seahub/views/__init__.py:861
 msgid "File size surpasses the limit"
 msgstr "Размер файла превышает лимит"
 
-#: seahub/views/__init__.py:837
+#: seahub/views/__init__.py:863
 msgid "The space of owner is used up, upload failed"
 msgstr "Все пространство использовано, загрузить не удалось"
 
-#: seahub/views/__init__.py:839
+#: seahub/views/__init__.py:865
 msgid "An error occurs during file transfer"
 msgstr "Произошла ошибка во время передачи файлов"
 
-#: seahub/views/__init__.py:851 seahub/views/__init__.py:873
+#: seahub/views/__init__.py:877 seahub/views/__init__.py:899
 msgid "Invalid url"
 msgstr "Неправильный URL"
 
-#: seahub/views/__init__.py:893
+#: seahub/views/__init__.py:919
 msgid "Unable to view library modification"
 msgstr "Не удается просмотреть библиотеку"
 
-#: seahub/views/__init__.py:1053
+#: seahub/views/__init__.py:1079
 msgid "Please specify history ID"
 msgstr "Пожалуйста создайте ID истории"
 
-#: seahub/views/__init__.py:1063
+#: seahub/views/__init__.py:1089
 msgid "History you specified does not exist"
 msgstr "Указанная история не существует"
 
-#: seahub/views/__init__.py:1065
+#: seahub/views/__init__.py:1091
 msgid "Unknown error"
 msgstr "неизвестная ошибка"
 
-#: seahub/views/__init__.py:1113 seahub/views/__init__.py:1114
-#: seahub/views/__init__.py:1119 seahub/views/__init__.py:1120
+#: seahub/views/__init__.py:1139 seahub/views/__init__.py:1140
+#: seahub/views/__init__.py:1145 seahub/views/__init__.py:1146
 msgid "My Library"
 msgstr "Моя библиотека"
 
-#: seahub/views/__init__.py:1261
+#: seahub/views/__init__.py:1287
 msgid "Failed to unshare the library, as it does not exist."
 msgstr "Не удалось запретить совместное использование библиотек,так как они не существует."
 
-#: seahub/views/__init__.py:1297
+#: seahub/views/__init__.py:1323
 #, python-format
 msgid "Unshare \"%s\" successfully."
 msgstr "Запрещено совместное использование \"%s\"."
 
-#: seahub/views/__init__.py:1299
+#: seahub/views/__init__.py:1325
 #, python-format
 msgid "Failed to unshare \"%s\"."
 msgstr "Запрещение совместного использования \"%s\" не удалось."
 
-#: seahub/views/__init__.py:1333
+#: seahub/views/__init__.py:1359
 msgid "Failed to delete file."
 msgstr "Не удалось удалить файл."
 
-#: seahub/views/__init__.py:1340
+#: seahub/views/__init__.py:1366
 #, python-format
 msgid "%s successfully deleted."
 msgstr "%s Успешно удален."
 
-#: seahub/views/__init__.py:1342 seahub/views/ajax.py:712
+#: seahub/views/__init__.py:1368 seahub/views/ajax.py:745
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Внутренняя ошибка. Файл %s не удален."
 
-#: seahub/views/__init__.py:1382
+#: seahub/views/__init__.py:1408
 msgid "Unable to access file"
 msgstr "Невозможно получить доступ к файлу."
 
-#: seahub/views/__init__.py:1451
+#: seahub/views/__init__.py:1477
 msgid "No revisions found"
 msgstr "Изменений не найдено"
 
-#: seahub/views/__init__.py:1502 seahub/views/__init__.py:1553
+#: seahub/views/__init__.py:1540 seahub/views/ajax.py:661
+#: seahub/views/ajax.py:729 seahub/views/ajax.py:863 seahub/views/file.py:994
+msgid "Check file lock error"
+msgstr "Проверить ошибку блокировки файла"
+
+#: seahub/views/__init__.py:1544 seahub/views/ajax.py:666
+#: seahub/views/ajax.py:734 seahub/views/ajax.py:868 seahub/views/file.py:997
+msgid "File is locked"
+msgstr "Файл заблокирован"
+
+#: seahub/views/__init__.py:1551 seahub/views/__init__.py:1599
 msgid "Failed to restore, please try again later."
 msgstr "Не удалось восстановить, пожалуйста, попробуйте позже."
 
-#: seahub/views/__init__.py:1520
+#: seahub/views/__init__.py:1566
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(root)s\">root directory.</a>"
 msgstr "Успешно возвращено %(path)s в <a href=\"%(root)s\">основную директорию.</a>"
 
-#: seahub/views/__init__.py:1524 seahub/views/__init__.py:1575
+#: seahub/views/__init__.py:1570 seahub/views/__init__.py:1621
 #, python-format
 msgid "Successfully revert <a href=\"%(url)s\">%(path)s</a>"
 msgstr "Успешно возвращено <a href=\"%(url)s\">%(path)s</a>"
 
-#: seahub/views/__init__.py:1571
+#: seahub/views/__init__.py:1617
 #, python-format
 msgid "Successfully revert %(path)s to <a href=\"%(url)s\">root directory.</a>"
 msgstr "Успешно возвращено %(path)s в <a href=\"%(url)s\">основную директорию.</a>"
 
-#: seahub/views/__init__.py:1815 seahub/views/repo.py:450
+#: seahub/views/__init__.py:1861 seahub/views/repo.py:452
 #, python-format
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" не существует."
 
-#: seahub/views/__init__.py:1834 seahub/views/file.py:960
-#: seahub/views/repo.py:386
+#: seahub/views/__init__.py:1880 seahub/views/file.py:979
+#: seahub/views/repo.py:388
 msgid "Internal Error"
 msgstr "Внутренняя ошибка"
 
-#: seahub/views/__init__.py:1837 seahub/views/repo.py:389
+#: seahub/views/__init__.py:1883 seahub/views/repo.py:391
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Не удается загрузить каталог \"%s\": размер слишком велик."
 
-#: seahub/views/__init__.py:1845
+#: seahub/views/__init__.py:1891
 #, python-format
 msgid "Unable to download \"%s\""
 msgstr "Не удается загрузить \"%s\""
 
-#: seahub/views/__init__.py:1982
+#: seahub/views/__init__.py:2028
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Модуль \"Личной Wiki\" включен."
 
-#: seahub/views/__init__.py:1987
+#: seahub/views/__init__.py:2033
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Модуль \"Личной Wiki\" выключен."
 
@@ -6666,178 +6701,173 @@ msgstr "Нет пути."
 msgid "The group doesn't exist"
 msgstr "Группа не существует"
 
-#: seahub/views/ajax.py:269 seahub/views/ajax.py:363 seahub/views/ajax.py:439
-#: seahub/views/ajax.py:1251
+#: seahub/views/ajax.py:269 seahub/views/ajax.py:365 seahub/views/ajax.py:443
+#: seahub/views/ajax.py:1298
 msgid "Library is encrypted."
 msgstr "Библиотека зашифрована."
 
-#: seahub/views/ajax.py:275 seahub/views/ajax.py:369 seahub/views/ajax.py:445
-#: seahub/views/ajax.py:1257
+#: seahub/views/ajax.py:275 seahub/views/ajax.py:371 seahub/views/ajax.py:449
+#: seahub/views/ajax.py:1304
 msgid "Error: no head commit id"
 msgstr "Ошибка: неверный путь."
 
-#: seahub/views/ajax.py:684 seahub/views/ajax.py:733
+#: seahub/views/ajax.py:705 seahub/views/ajax.py:766
 msgid "Argument missing."
 msgstr "Аргумент пропущен."
 
-#: seahub/views/ajax.py:785
+#: seahub/views/ajax.py:818
 msgid "Destination path is too long."
 msgstr "Путь назначения слишком длинный."
 
-#: seahub/views/ajax.py:841 seahub/views/ajax.py:912
+#: seahub/views/ajax.py:888 seahub/views/ajax.py:959
 #, python-format
 msgid "Successfully moved %(name)s"
 msgstr "Успешно перемещено %(name)s."
 
-#: seahub/views/ajax.py:869 seahub/views/ajax.py:949
+#: seahub/views/ajax.py:916 seahub/views/ajax.py:996
 #, python-format
 msgid "Successfully copied %(name)s"
 msgstr "Успешно скопировано %(name)s."
 
-#: seahub/views/ajax.py:886 seahub/views/ajax.py:1039
+#: seahub/views/ajax.py:933 seahub/views/ajax.py:1086
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Не удается переместить каталог %(src)s в подкаталог %(des)s"
 
-#: seahub/views/ajax.py:928 seahub/views/ajax.py:1082
+#: seahub/views/ajax.py:975 seahub/views/ajax.py:1129
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Невозможно скопировать папку %(src)s в ее подпапку %(des)s"
 
-#: seahub/views/ajax.py:990
+#: seahub/views/ajax.py:1037
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Путь назначения для %s слишком длинный."
 
-#: seahub/views/ajax.py:1159
+#: seahub/views/ajax.py:1206
 msgid "Cancel failed"
 msgstr "Не удалось отменить"
 
-#: seahub/views/ajax.py:1286 seahub/views/ajax.py:1304
-#: seahub/views/ajax.py:1956 seahub/views/ajax.py:2019
+#: seahub/views/ajax.py:1333 seahub/views/ajax.py:1351
+#: seahub/views/ajax.py:2003 seahub/views/ajax.py:2066
 msgid "You do not have permission to create library"
 msgstr "У вас нет прав для создания библиотеки"
 
-#: seahub/views/ajax.py:1292
+#: seahub/views/ajax.py:1339
 msgid "Repo not found."
 msgstr "Repo не найден"
 
-#: seahub/views/ajax.py:1324 seahub/views/ajax.py:1348
+#: seahub/views/ajax.py:1371 seahub/views/ajax.py:1395
 msgid "Failed to create sub library, please try again later."
 msgstr "Не удалось создать суб-библиотеку, пожалуйста, попробуйте позже"
 
-#: seahub/views/ajax.py:1368
+#: seahub/views/ajax.py:1415
 msgid "Failed to get file block list"
 msgstr "Невозможно получить список блокировки файлов"
 
-#: seahub/views/ajax.py:1406
+#: seahub/views/ajax.py:1453
 msgid "Wrong repo id"
 msgstr "Неверный repo id"
 
-#: seahub/views/ajax.py:1536
+#: seahub/views/ajax.py:1583
 msgid "System library can not be deleted."
 msgstr "Системная библиотека не может быть удалена."
 
-#: seahub/views/ajax.py:1847
+#: seahub/views/ajax.py:1894
 msgid "Bad upload link token."
 msgstr "Плохой токен ссылки загрузки."
 
-#: seahub/views/ajax.py:1853
+#: seahub/views/ajax.py:1900
 msgid "Bad repo id in upload link."
 msgstr "Плохой repo id в ссылке загрузки."
 
-#: seahub/views/ajax.py:1906
+#: seahub/views/ajax.py:1953
 msgid "No conflict in the merge."
 msgstr "Нет конфликта при слиянии."
 
-#: seahub/views/ajax.py:2125
+#: seahub/views/ajax.py:2172
 msgid "Failed to edit library information."
 msgstr "Не удалось изменить информацию о библиотеке."
 
-#: seahub/views/ajax.py:2134
+#: seahub/views/ajax.py:2181
 msgid "Failed to save settings on server"
 msgstr "Не удалось сохранить настройки на сервере"
 
-#: seahub/views/ajax.py:2137
+#: seahub/views/ajax.py:2184
 msgid "Settings saved."
 msgstr "Настройки сохранены."
 
-#: seahub/views/ajax.py:2168
+#: seahub/views/ajax.py:2215
 #, python-format
 msgid "Username %s is not valid."
 msgstr "Имя %s недействительно."
 
-#: seahub/views/ajax.py:2175
+#: seahub/views/ajax.py:2222
 #, python-format
 msgid "User %s is not found."
 msgstr "Пользователь %s не найден."
 
-#: seahub/views/ajax.py:2182
+#: seahub/views/ajax.py:2229
 #, python-format
 msgid "User %s is not in current organization."
 msgstr "Пользователь %s не в текущем сообществе."
 
-#: seahub/views/ajax.py:2192
+#: seahub/views/ajax.py:2239
 #, python-format
 msgid "Can not transfer library to organization user %s."
 msgstr "Невозможно передать библиотеку сообществу пользователя %s."
 
-#: seahub/views/ajax.py:2221
+#: seahub/views/ajax.py:2268
 msgid "Faied to change password, you are not owner."
 msgstr "Не удалось изменить пароль, вы не владелец."
 
-#: seahub/views/ajax.py:2233
+#: seahub/views/ajax.py:2280
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr "Пароль для библиотеки %(repo_name)s изменен."
 
-#: seahub/views/ajax.py:2329 seahub/views/ajax.py:2471
+#: seahub/views/ajax.py:2376 seahub/views/ajax.py:2518
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr "Неверные права папки, должно быть \"rw\" или \"r\""
 
-#: seahub/views/ajax.py:2333 seahub/views/ajax.py:2475
+#: seahub/views/ajax.py:2380 seahub/views/ajax.py:2522
 msgid "Path should start with \"/\""
 msgstr "Путь должен начинаться с \"/\""
 
-#: seahub/views/ajax.py:2337 seahub/views/ajax.py:2479
+#: seahub/views/ajax.py:2384 seahub/views/ajax.py:2526
 msgid "Path should not end with \"/\""
 msgstr "Путь не должен заканчиваться на \"/\""
 
-#: seahub/views/ajax.py:2341 seahub/views/ajax.py:2483
+#: seahub/views/ajax.py:2388 seahub/views/ajax.py:2530
 msgid "Invalid path"
 msgstr "Недопустимый путь"
 
-#: seahub/views/ajax.py:2349
+#: seahub/views/ajax.py:2396
 msgid "Invalid user, should be registered"
 msgstr "Неверный пользователь, должен быть зарегистрирован"
 
-#: seahub/views/ajax.py:2361 seahub/views/ajax.py:2374
-#: seahub/views/ajax.py:2504 seahub/views/ajax.py:2517
+#: seahub/views/ajax.py:2408 seahub/views/ajax.py:2421
+#: seahub/views/ajax.py:2551 seahub/views/ajax.py:2564
 msgid "Operation failed"
 msgstr "Ошибка операции"
 
-#: seahub/views/ajax.py:2364 seahub/views/ajax.py:2507
+#: seahub/views/ajax.py:2411 seahub/views/ajax.py:2554
 msgid "Wrong folder permission"
 msgstr "Неправильные права папки"
 
-#: seahub/views/ajax.py:2377 seahub/views/ajax.py:2520
+#: seahub/views/ajax.py:2424 seahub/views/ajax.py:2567
 msgid "Please add folder permission first"
 msgstr "Пожалуйста, сначала добавьте права папки"
 
-#: seahub/views/ajax.py:2424
+#: seahub/views/ajax.py:2471
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr "Пожалуйста, проверьте email адреса и контакты, которые вы выбрали"
 
-#: seahub/views/ajax.py:2492
+#: seahub/views/ajax.py:2539
 msgid "Invalid group"
 msgstr "Неверная группа"
 
-#: seahub/views/ajax.py:2562 seahub/views/sysadmin.py:209
-#: seahub/views/sysadmin.py:226 seahub/views/sysadmin.py:248
-msgid "Failed"
-msgstr "Не удалось"
-
-#: seahub/views/ajax.py:2577 seahub/views/ajax.py:2609
+#: seahub/views/ajax.py:2624 seahub/views/ajax.py:2656
 msgid "Group does not exist."
 msgstr "Группа не найдена"
 
@@ -6857,64 +6887,64 @@ msgstr "Выбранный режим кодирования не являетс
 msgid "Unknown file encoding"
 msgstr "Неизвестная кодировка файла."
 
-#: seahub/views/file.py:279 seahub/views/file.py:286 seahub/views/file.py:534
-#: seahub/views/file.py:539
+#: seahub/views/file.py:279 seahub/views/file.py:286 seahub/views/file.py:553
+#: seahub/views/file.py:558
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Размер файла превышает %s, и не может быть открыт в онлайн режиме."
 
-#: seahub/views/file.py:364 seahub/views/file.py:574 seahub/views/file.py:589
-#: seahub/views/file.py:611
+#: seahub/views/file.py:364 seahub/views/file.py:593 seahub/views/file.py:608
+#: seahub/views/file.py:630
 msgid "Unable to view file"
 msgstr "Не удается посмотреть файл"
 
-#: seahub/views/file.py:393 seahub/views/file.py:552 seahub/views/file.py:747
+#: seahub/views/file.py:393 seahub/views/file.py:571 seahub/views/file.py:766
 msgid "Invalid file format."
 msgstr "Неверный формат файла."
 
-#: seahub/views/file.py:640
+#: seahub/views/file.py:659
 msgid "Unable to download file, invalid file path"
 msgstr "Невозможно скачать файл, неверный путь"
 
-#: seahub/views/file.py:649
+#: seahub/views/file.py:668
 msgid "Unable to download file, wrong file path"
 msgstr "Невозможно скачать файл, неправильный путь"
 
-#: seahub/views/file.py:654
+#: seahub/views/file.py:673
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Невозможно скачать файл, трафик по ссылке превышен."
 
-#: seahub/views/file.py:971
+#: seahub/views/file.py:1001
 msgid "The library does not exist."
 msgstr "Библиотека не существует."
 
-#: seahub/views/file.py:975
+#: seahub/views/file.py:1005
 msgid "The library is encrypted."
 msgstr "Библиотека зашифрована."
 
-#: seahub/views/file.py:1050
+#: seahub/views/file.py:1079
 msgid "Unable to edit file"
 msgstr "Невозможно отредактировать файл."
 
-#: seahub/views/file.py:1056
+#: seahub/views/file.py:1085
 msgid "The file does not exist."
 msgstr "Файл не существует."
 
-#: seahub/views/file.py:1085
+#: seahub/views/file.py:1114
 msgid "Edit online is not offered for this type of file."
 msgstr "Редактирование онлайн не предполагается для этого типа файлов."
 
-#: seahub/views/file.py:1192
+#: seahub/views/file.py:1221
 msgid "Unable to download file"
 msgstr "Не удается скачать файл"
 
-#: seahub/views/repo.py:368
+#: seahub/views/repo.py:370
 msgid "Unable to access file: share link traffic is used up."
 msgstr "Доступ к файлу невозможен, трафик по ссылке превышен."
 
-#: seahub/views/repo.py:379
+#: seahub/views/repo.py:381
 msgid "Unable to download: folder not found."
-msgstr ""
+msgstr "Не удается скачать: папка не найдена."
 
 #: seahub/views/sysadmin.py:168 seahub/views/sysadmin.py:242
 msgid "Invalid username"
