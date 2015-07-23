@@ -191,7 +191,7 @@ class DirSharedItemsEndpoint(APIView):
                                                  shared_to, permission)
 
             send_perm_audit_msg('modify-repo-perm', username, shared_to,
-                                shared_repo.id, path, permission)
+                                repo_id, path, permission)
 
         if shared_to_group:
             gid = request.GET.get('group_id')
@@ -212,7 +212,7 @@ class DirSharedItemsEndpoint(APIView):
                                                       permission)
 
             send_perm_audit_msg('modify-repo-perm', username, gid,
-                                shared_repo.id, path, permission)
+                                repo_id, path, permission)
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
@@ -278,7 +278,7 @@ class DirSharedItemsEndpoint(APIView):
                     })
 
                     send_perm_audit_msg('add-repo-perm', username, to_user,
-                                        shared_repo.id, path, permission)
+                                        repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     failed.append(to_user)
@@ -319,7 +319,7 @@ class DirSharedItemsEndpoint(APIView):
                     })
 
                     send_perm_audit_msg('add-repo-perm', username, gid,
-                                        shared_repo.id, path, permission)
+                                        repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
                     failed.append(group.group_name)
@@ -370,7 +370,7 @@ class DirSharedItemsEndpoint(APIView):
             permission = seafile_api.check_permission_by_path(repo.id, path,
                                                               shared_to)
             send_perm_audit_msg('delete-repo-perm', username, shared_to,
-                                shared_repo.id, path, permission)
+                                repo_id, path, permission)
 
         if shared_to_group:
             group_id = request.GET.get('group_id')
@@ -393,7 +393,7 @@ class DirSharedItemsEndpoint(APIView):
                 seafile_api.unset_group_repo(shared_repo.id, group_id, username)
 
             send_perm_audit_msg('delete-repo-perm', username, group_id,
-                                shared_repo.id, path, permission)
+                                repo_id, path, permission)
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
