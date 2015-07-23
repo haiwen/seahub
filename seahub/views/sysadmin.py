@@ -738,7 +738,6 @@ def user_remove(request, email):
                 seafile_api.remove_repo(repo.id)
 
         user.delete()
-        clear_token(user.email)
         messages.success(request, _(u'Successfully deleted %s') % user.username)
     except User.DoesNotExist:
         messages.error(request, _(u'Failed to delete: the user does not exist'))

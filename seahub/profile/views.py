@@ -15,8 +15,7 @@ from forms import DetailedProfileForm
 from models import Profile, DetailedProfile
 from utils import refresh_cache
 from seahub.auth.decorators import login_required
-from seahub.utils import is_org_context, clear_token, is_pro_version, \
-    is_valid_username
+from seahub.utils import is_org_context, is_pro_version, is_valid_username
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
@@ -159,7 +158,6 @@ def delete_user_account(request):
 
     user = User.objects.get(email=username)
     user.delete()
-    clear_token(username)
 
     if is_org_context(request):
         org_id = request.user.org.org_id
