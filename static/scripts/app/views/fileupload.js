@@ -214,8 +214,14 @@ define([
                     });
                     $('#simplemodal-container').css({'height':'auto'});
                     $('.yes', confirm_popup).click(function() {
-                        file.choose_to_update = true;
-                        $.modal.close();
+                        var selected_file = dirents.findWhere({'obj_name': file.name});
+                        if (selected_file.get('is_locked')) {
+                            $('.error', confirm_popup).html(gettext("File is locked")).removeClass('hide');
+                            Common.disableButton($(this));
+                        } else {
+                            file.choose_to_update = true;
+                            $.modal.close();
+                        }
                     });
                     $('.no', confirm_popup).click(function() {
                         file.choose_to_upload = true;

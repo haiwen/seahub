@@ -1,4 +1,12 @@
 /* lib view */
+.repo-file-list .dirent-icon {
+    position:relative;
+}
+.repo-file-list .file-locked-icon {
+   position:absolute;
+   right:0;
+   bottom:0;
+}
 .repo-file-list .dirent-name {
     width:220px;
 }

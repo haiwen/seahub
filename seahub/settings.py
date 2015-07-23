@@ -314,6 +314,8 @@ MAX_UPLOAD_FILE_NAME_LEN    = 255
 MAX_FILE_NAME 		    = MAX_UPLOAD_FILE_NAME_LEN
 MAX_PATH 		    = 4096
 
+FILE_LOCK_EXPIRATION_DAYS = 0
+
 # Whether or not activate user when registration complete.
 # If set to ``False``, new user will be activated by admin or via activate link.
 ACTIVATE_AFTER_REGISTRATION = True

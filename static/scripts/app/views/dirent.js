@@ -31,6 +31,18 @@ define([
         render: function() {
             var dir = this.dir;
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
+            var is_pro = app.pageOptions.is_pro;
+
+            // for 'file lock'
+            var enable_some_op = false; // op: 'del', 'rename', 'mv'
+            if (!is_pro) {
+                enable_some_op = true;
+            } else {
+                if (!this.model.get('is_locked') || this.model.get('locked_by_me')) {
+                    enable_some_op = true;
+                }
+            }
+
             this.$el.html(this.template({
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
@@ -39,9 +51,12 @@ define([
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
                 can_generate_shared_link: app.pageOptions.can_generate_shared_link,
-                is_pro: app.pageOptions.is_pro,
+                is_pro: is_pro,
+                enable_some_op: enable_some_op,
                 repo_encrypted: dir.encrypted
             }));
+            this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
+
             return this;
         },
 
@@ -57,7 +72,9 @@ define([
             'click .rename': 'rename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
-            'click .set-folder-permission': 'setFolderPerm'
+            'click .set-folder-permission': 'setFolderPerm',
+            'click .lock-file': 'lockFile',
+            'click .unlock-file': 'unlockFile'
         },
 
         highlight: function() {
@@ -452,8 +469,63 @@ define([
             };
             new FolderPermView(options);
             return false;
-        }
+        },
 
+        lockOrUnlockFile: function(params) {
+            var dir = this.dir,
+                filepath = Common.pathJoin([dir.path, this.model.get('obj_name')]),
+                callback = params.after_success;
+
+            $.ajax({
+                url: Common.getUrl({name: 'lock_or_unlock_file', repo_id: dir.repo_id}),
+                type: 'PUT',
+                dataType: 'json',
+                data: {
+                    'operation': params.op,
+                    'p': filepath
+                },
+                cache: false,
+                beforeSend: Common.prepareCSRFToken,
+                success: function() {
+                    callback();
+                },
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+        },
+
+        lockFile: function() {
+            var _this = this;
+            this.lockOrUnlockFile({
+                'op': 'lock',
+                'after_success': function() {
+                    _this.model.set({
+                        'is_locked': true,
+                        'locked_by_me': true,
+                        'lock_owner_name': app.pageOptions.name
+                    });
+                    app.globalState.noFileOpPopup = true;
+                    _this.$el.removeClass('hl');
+                }
+            });
+            return false;
+        },
+
+        unlockFile: function() {
+            var _this = this;
+            this.lockOrUnlockFile({
+                'op': 'unlock',
+                'after_success': function() {
+                    _this.model.set({
+                        'is_locked': false
+                    });
+                    app.globalState.noFileOpPopup = true;
+                    _this.$el.removeClass('hl');
+                }
+            });
+            return false;
+        }
     });
 
     return DirentView;
