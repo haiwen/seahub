@@ -15,7 +15,9 @@ import posixpath
 import re
 import mimetypes
 import urlparse
+import datetime
 
+from django.core import signing
 from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
@@ -60,11 +62,12 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
+from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
 from seahub.views import check_folder_permission, check_file_lock
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, add_office_convert_task,
+        query_office_convert_status, add_office_convert_task, office_convert_cluster_token,
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
     )
 
@@ -459,8 +462,6 @@ def _file_view(request, repo_id, path):
         org_id = request.user.org.org_id
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
 
-    office_preview_token = ret_dict.get('office_preview_token', '')
-
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
     file_perm = seafile_api.check_permission_by_path(repo_id, path, username)
 
@@ -509,7 +510,6 @@ def _file_view(request, repo_id, path):
             'img_prev': img_prev,
             'img_next': img_next,
             'highlight_keyword': settings.HIGHLIGHT_KEYWORD,
-            'office_preview_token': office_preview_token,
             }, context_instance=RequestContext(request))
 
 def view_history_file_common(request, repo_id, ret_dict):
@@ -783,8 +783,6 @@ def view_shared_file(request, token):
     save_to_link = reverse('save_shared_link') + '?t=' + token
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
-    office_preview_token = ret_dict.get('office_preview_token', '')
-
     return render_to_response('shared_file_view.html', {
             'repo': repo,
             'obj_id': obj_id,
@@ -800,7 +798,6 @@ def view_shared_file(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'accessible_repos': accessible_repos,
@@ -946,7 +943,6 @@ def view_file_via_shared_dir(request, token):
                 logger.error('Error when sending file-view message: %s' % str(e))
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
-    office_preview_token = ret_dict.get('office_preview_token', '')
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -965,7 +961,6 @@ def view_file_via_shared_dir(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'zipped': zipped,
@@ -1319,121 +1314,125 @@ def text_diff(request, repo_id):
 ########## office related
 @require_POST
 @csrf_exempt
+@json_response
 def office_convert_add_task(request):
-    if not HAS_OFFICE_CONVERTER:
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-
     try:
-        sec_token = request.POST.get('sec_token')
         file_id = request.POST.get('file_id')
         doctype = request.POST.get('doctype')
         raw_path = request.POST.get('raw_path')
     except KeyError:
         return HttpResponseBadRequest('invalid params')
 
-    if sec_token != do_md5(settings.SECRET_KEY):
+    if not _check_cluster_internal_token(request, file_id):
         return HttpResponseForbidden()
 
     if len(file_id) != 40:
         return HttpResponseBadRequest('invalid params')
 
-    resp = add_office_convert_task(file_id, doctype, raw_path, internal=True)
+    return add_office_convert_task(file_id, doctype, raw_path, internal=True)
 
-    return HttpResponse(json.dumps(resp), content_type=content_type)
+def _check_office_convert_perm(request, repo_id, path, ret):
+    token = request.GET.get('token', '')
+    if not token:
+        # Work around for the images embedded in excel files
+        referer = request.META.get('HTTP_REFERER', '')
+        if referer:
+            token = urlparse.parse_qs(
+                urlparse.urlparse(referer).query).get('token', [''])[0]
+    if token:
+        fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+        if not fileshare or fileshare.repo_id != repo_id:
+            return False
+        if fileshare.is_file_share_link() and fileshare.path == path:
+            return True
+        if fileshare.is_dir_share_link():
+            ret['dir_share_path'] = fileshare.path
+            return True
+        return False
+    else:
+        return request.user.is_authenticated() and \
+            check_folder_permission(request, repo_id, '/') is not None
 
-def check_office_token(func):
-    '''Set the `office_convert_add_task` attr on the request object for office
-    preview related requests
+def _check_cluster_internal_token(request, file_id):
+    token = request.META.get('Seafile-Office-Preview-Token', '')
+    if not token:
+        return HttpResponseForbidden()
+    try:
+        s = '-'.join([file_id, datetime.datetime.now().strftime('%Y%m%d')])
+        return signing.Signer().unsign(token) == s
+    except signing.BadSignature:
+        return False
 
-    '''
-    def newfunc(request, *args, **kwargs):
-        token = request.META.get('HTTP_X_SEAFILE_OFFICE_PREVIEW_TOKEN', '')
-        if token and len(token) != 32:
-            return HttpResponseForbidden()
+def _office_convert_get_file_id_internal(request):
+    file_id = request.GET.get('file_id', '')
+    if len(file_id) != 40:
+        raise BadRequestException()
+    if not _check_cluster_internal_token(request, file_id):
+        raise RequestForbbiddenException()
+    return file_id
 
-        if not token:
-            token = request.GET.get('office_preview_token', '')
+def _office_convert_get_file_id(request, repo_id=None, commit_id=None, path=None):
+    repo_id = repo_id or request.GET.get('repo_id', '')
+    commit_id = commit_id or request.GET.get('commit_id', '')
+    path = path or request.GET.get('path', '')
+    if not (repo_id and path and commit_id):
+        raise BadRequestException()
+    if '../' in path:
+        raise BadRequestException()
 
-        if not token:
-            # Work around for the images embedded in excel files
-            referer = request.META.get('HTTP_REFERER', '')
-            if referer:
-                token = urlparse.parse_qs(
-                    urlparse.urlparse(referer).query).get('office_preview_token', [''])[0]
+    ret = {'dir_share_path': None}
+    if not _check_office_convert_perm(request, repo_id, path, ret):
+        raise BadRequestException()
 
-        request.office_preview_token = token
+    if ret['dir_share_path']:
+        path = posixpath.join(ret['dir_share_path'], path.lstrip('/'))
+    return seafserv_threaded_rpc.get_file_id_by_commit_and_path(repo_id, commit_id, path)
 
-        return func(request, *args, **kwargs)
-
-    return newfunc
-
-@check_office_token
-def office_convert_query_status(request, internal=False):
-    if not HAS_OFFICE_CONVERTER:
+@json_response
+def office_convert_query_status(request, cluster_internal=False):
+    if not cluster_internal and not request.is_ajax():
         raise Http404
 
-    if not internal and not request.is_ajax():
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
+    doctype = request.GET.get('doctype', None)
+    page = 0 if doctype == 'spreadsheet' else int_param(request, 'page')
+    if cluster_internal:
+        file_id = _office_convert_get_file_id_internal(request)
+    else:
+        file_id = _office_convert_get_file_id(request)
 
     ret = {'success': False}
+    try:
+        ret = query_office_convert_status(file_id, page, cluster_internal=cluster_internal)
+    except Exception, e:
+        logging.exception('failed to call query_office_convert_status')
+        ret['error'] = str(e)
 
-    file_id = request.GET.get('file_id', '')
-    page = request.GET.get('page', '')
-    doctype = request.GET.get('doctype', None)
-    if doctype == 'spreadsheet':
-        page = 0
-    else:
-        try:
-            page = int(page)
-        except ValueError:
-            return HttpResponseBadRequest('invalid params')
+    return ret
 
-    if len(file_id) != 40:
-        ret['error'] = 'invalid param'
-    elif request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-        return HttpResponseForbidden()
-    else:
-        try:
-            ret = query_office_convert_status(file_id, page, internal=internal)
-        except Exception, e:
-            logging.exception('failed to call query_office_convert_status')
-            ret['error'] = str(e)
-
-    return HttpResponse(json.dumps(ret), content_type=content_type)
-
-
-# valid static file path inclueds:
-# file.css
-# file.outline
-# 1.page
-# 2.page
-# ...
-_OFFICE_PAGE_PATTERN = re.compile(r'^([0-9a-f]{40})/([\d]+\.page|file\.css|file\.outline|index.html|index_html_(.*).png)$')
-@check_office_token
-def office_convert_get_page(request, path, internal=False):
+_OFFICE_PAGE_PATTERN = re.compile(r'^[\d]+\.page|file\.css|file\.outline|index.html|index_html_.*.png$')
+def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster_internal=False):
+    """Valid static file path inclueds:
+    - "1.page" "2.page" for pdf/doc/ppt
+    - index.html for spreadsheets and index_html_xxx.png for images embedded in spreadsheets
+    """
     if not HAS_OFFICE_CONVERTER:
         raise Http404
 
-    m = _OFFICE_PAGE_PATTERN.match(path)
-    if not m:
+    if not _OFFICE_PAGE_PATTERN.match(filename):
         return HttpResponseForbidden()
 
-    file_id = m.group(1)
-    if path.endswith('file.css'):
-        pass
+    path = u'/' + path
+    if cluster_internal:
+        file_id = _office_convert_get_file_id_internal(request)
     else:
-        if request.office_preview_token != do_md5(file_id + settings.SECRET_KEY):
-            return HttpResponseForbidden()
+        file_id = _office_convert_get_file_id(request, repo_id, commit_id, path)
 
-    resp = get_office_converted_page(request, path, file_id, internal=internal)
-    if path.endswith('.page'):
+    resp = get_office_converted_page(
+        request, repo_id, commit_id, path, filename, file_id, cluster_internal=cluster_internal)
+    if filename.endswith('.page'):
         content_type = 'text/html'
     else:
-        content_type = mimetypes.guess_type(path)[0] or 'text/html'
+        content_type = mimetypes.guess_type(filename)[0] or 'text/html'
     resp['Content-Type'] = content_type
     return resp
 
@@ -1499,7 +1498,6 @@ def view_priv_shared_file(request, token):
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_private_file_share', args=[pfs.token])
-    office_preview_token = ret_dict.get('office_preview_token', '')
 
     return render_to_response('shared_file_view.html', {
             'repo': repo,
@@ -1515,7 +1513,6 @@ def view_priv_shared_file(request, token):
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
             'file_encoding_list':ret_dict['file_encoding_list'],
-            'office_preview_token': office_preview_token,
             'filetype': ret_dict['filetype'],
             'use_pdfjs':USE_PDFJS,
             'accessible_repos': accessible_repos,

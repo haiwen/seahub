@@ -298,18 +298,22 @@ if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
 if HAS_OFFICE_CONVERTER:
-    from seahub.views.file import office_convert_query_status, \
-        office_convert_add_task, office_convert_get_page
+    from seahub.views.file import (
+        office_convert_query_status, office_convert_get_page, office_convert_add_task
+    )
     urlpatterns += patterns('',
-        url(r'^office-convert/static/(?P<path>.*)$', office_convert_get_page, name='office_convert_get_page'),
+        url(r'^office-convert/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
+            office_convert_get_page,
+            name='office_convert_get_page'),
         url(r'^office-convert/status/$', office_convert_query_status, name='office_convert_query_status'),
     )
 
     if CLUSTER_MODE and OFFICE_CONVERTOR_NODE:
         urlpatterns += patterns('',
             url(r'^office-convert/internal/add-task/$', office_convert_add_task),
-            url(r'^office-convert/internal/status/$', office_convert_query_status, {'internal': True}),
-            url(r'^office-convert/internal/static/(?P<path>.*)$', office_convert_get_page, {'internal': True}),
+            url(r'^office-convert/internal/status/$', office_convert_query_status, {'cluster_internal': True}),
+            url(r'^office-convert/internal/static/(?P<repo_id>[-0-9a-f]{36})/(?P<commit_id>[0-9a-f]{40})/(?P<path>.+)/(?P<filename>[^/].+)$',
+                office_convert_get_page, {'cluster_internal': True}),
         )
 
 if TRAFFIC_STATS_ENABLED:

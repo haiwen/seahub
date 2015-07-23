@@ -952,6 +952,16 @@ if HAS_OFFICE_CONVERTER:
 
         return office_converter_rpc
 
+    def office_convert_cluster_token(file_id):
+        from django.core import signing
+        s = '-'.join([file_id, datetime.now().strftime('%Y%m%d')])
+        return signing.Signer().sign(s)
+
+    def _office_convert_token_header(file_id):
+        return {
+            'X-Seafile-Office-Preview-Token': office_convert_cluster_token(file_id),
+        }
+
     def cluster_delegate(delegate_func):
         '''usage:
         
@@ -966,44 +976,42 @@ if HAS_OFFICE_CONVERTER:
         '''
         def decorated(func):
             def real_func(*args, **kwargs):
-                internal = kwargs.pop('internal', False)
-                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not internal:
+                cluster_internal = kwargs.pop('cluster_internal', False)
+                if CLUSTER_MODE and not OFFICE_CONVERTOR_NODE and not cluster_internal:
                     return delegate_func(*args)
                 else:
                     return func(*args)
             return real_func
-            
+
         return decorated
 
     def delegate_add_office_convert_task(file_id, doctype, raw_path):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/add-task/')
-        sec_token = do_md5(seahub.settings.SECRET_KEY)
         data = urllib.urlencode({
-            'sec_token': sec_token,
             'file_id': file_id,
             'doctype': doctype,
             'raw_path': raw_path,
         })
-        
-        ret = do_urlopen(url, data=data).read()
-        
+
+        headers = _office_convert_token_header(file_id)
+        ret = do_urlopen(url, data=data, headers=headers).read()
+
         return json.loads(ret)
 
     def delegate_query_office_convert_status(file_id, page):
         url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/status/')
         url += '?file_id=%s&page=%s' % (file_id, page)
-        headers = { 
-            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
-        }
+        headers = _office_convert_token_header(file_id)
         ret = do_urlopen(url, headers=headers).read()
-        
+
         return json.loads(ret)
 
-    def delegate_get_office_converted_page(request, path, file_id):
-        url = urljoin(OFFICE_CONVERTOR_ROOT, '/office-convert/internal/static/' + path)
-        headers = {
-            'X-Seafile-Office-Preview-Token': do_md5(file_id + seahub.settings.SECRET_KEY),
-        }
+    def delegate_get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+        url = urljoin(OFFICE_CONVERTOR_ROOT,
+                      '/office-convert/internal/static/%s/%s%s/%s' % (
+                          repo_id, commit_id, urlquote(path), urlquote(static_filename)))
+        url += '?file_id=' + file_id
+        headers = _office_convert_token_header(file_id)
         timestamp = request.META.get('HTTP_IF_MODIFIED_SINCE')
         if timestamp:
             headers['If-Modified-Since'] = timestamp
@@ -1023,12 +1031,11 @@ if HAS_OFFICE_CONVERTER:
             content_type = mimetypes.types_map.get(ext, 'application/octet-stream')
 
         resp = HttpResponse(data, content_type=content_type)
-
-        if ret.headers.has_key('last-modified'):
+        if 'last-modified' in ret.headers:
             resp['Last-Modified'] = ret.headers.get('last-modified')
 
         return resp
-        
+
     @cluster_delegate(delegate_add_office_convert_task)
     def add_office_convert_task(file_id, doctype, raw_path):
         rpc = _get_office_converter_rpc()
@@ -1052,11 +1059,12 @@ if HAS_OFFICE_CONVERTER:
         return ret
 
     @cluster_delegate(delegate_get_office_converted_page)
-    def get_office_converted_page(request, path, file_id):
-        return django_static_serve(request, path, document_root=OFFICE_HTML_DIR)
+    def get_office_converted_page(request, repo_id, commit_id, path, static_filename, file_id):
+        return django_static_serve(request,
+                                   os.path.join(file_id, static_filename),
+                                   document_root=OFFICE_HTML_DIR)
 
     def prepare_converted_html(raw_path, obj_id, doctype, ret_dict):
-        ret_dict['office_preview_token'] = do_md5(obj_id + seahub.settings.SECRET_KEY)
         try:
             add_office_convert_task(obj_id, doctype, raw_path)
         except:
