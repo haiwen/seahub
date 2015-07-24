@@ -70,6 +70,7 @@ def prepare_starred_files(files):
     array = []
     for f in files:
         sfile = {'org' : f.org_id,
+                 'repo' : f.repo.id,
                  'repo_id' : f.repo.id,
                  'repo_name' : f.repo.name,
                  'path' : f.path,
