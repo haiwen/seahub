@@ -76,16 +76,22 @@
         <table class="repo-list">
             <tr>
                 <th width="4%"><!--icon--></th>
-                <th width="30%">{% trans "Name" %}</th>
-                <th width="46%">{% trans "Description" %}</th>
+                <th width="35%">{% trans "Name" %}</th>
+                <th width="16%">{% trans "Size"%}</th>
+                <th width="25%">{% trans "Last Update"%}</th>
                 <th width="20%">{% trans "Operations" %}</th>
             </tr>
 
             {% for repo in owned_repos %}
             <tr>
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" /></td>
+                {% if repo.encrypted %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                {% else %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                {% endif %}
                 <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.name }}</a></td>
-                <td>{{ repo.props.desc }}</td>
+                <td>{{ repo.size|filesizeformat }}</td>
+                <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
                     <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
                 </td>
@@ -104,15 +110,23 @@
                 <th width="4%"><!--icon--></th>
                 <th width="30%">{% trans "Name" %}</th>
                 <th width="26%">{% trans "Share From" %}</th>
-                <th width="40%">{% trans "Description" %}</th>
+                <th width="15%">{% trans "Size"%}</th>
+                <th width="25%">{% trans "Last Update"%}</th>
             </tr>
 
             {% for repo in in_repos %}
             <tr>
-                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="library icon" /></td>
+                {% if repo.encrypted %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                {% elif repo.permission == 'r' %}
+                <td><img src="{{MEDIA_URL}}img/folder-no-write-20.png" title="{% trans "Read-Only"%}" alt="{% trans "library icon" %}" /></td>
+                {% else %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                {% endif %}
                 <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.repo_name }}</a></td>
                 <td>{{ repo.props.user }}</td>
-                <td>{{ repo.props.repo_desc }}</td>
+                <td>{{ repo.size|filesizeformat }}</td>
+                <td>{{ repo.last_modify|translate_seahub_time }}</td>
             </tr>
             {% endfor %}
         </table>
