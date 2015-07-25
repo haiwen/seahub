@@ -17,9 +17,11 @@
     {% for group in groups %}
     <tr>
         <td>
-            <a href="{% url 'sys_admin_group_info' group.id %}">{{ group.props.group_name }}</a>
-            {% if group.org_name %}
+            {% if group.org_id %}
+            <a href="{% url 'sys_admin_group_info' group.id %}?org_id={{group.org_id}}">{{ group.props.group_name }}</a>
             <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' group.org_id %}">({{group.org_name}})</a></p>
+            {% else %}
+            <a href="{% url 'sys_admin_group_info' group.id %}">{{ group.props.group_name }}</a>
             {% endif %}
         </td>
         <td>{{ group.props.creator_name }}</td>

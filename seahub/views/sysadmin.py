@@ -1078,7 +1078,11 @@ def sys_admin_group_info(request, group_id):
 
     group_id = int(group_id)
     group = get_group(group_id)
-    repos = seafile_api.get_repos_by_group(group_id)
+    org_id = request.GET.get('org_id', None)
+    if org_id:
+        repos = seafile_api.get_org_group_repos(org_id, group_id)
+    else:
+        repos = seafile_api.get_repos_by_group(group_id)
     members = get_group_members(group_id)
 
     return render_to_response('sysadmin/sys_admin_group_info.html', {
