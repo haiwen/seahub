@@ -10,10 +10,12 @@ from seahub.auth.models import get_hexdigest
 from seahub.auth import login
 from registration import signals
 #from registration.forms import RegistrationForm
-from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set
+from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
+    seafile_api
 
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.utils import is_valid_username, is_user_password_strong
+from seahub.utils import is_valid_username, is_user_password_strong, \
+    clear_token
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -172,12 +174,24 @@ class User(object):
         """
         When delete user, we should also delete group relationships.
         """
-        # TODO: what about repos and groups?
         if self.source == "DB":
             source = "DB"
         else:
             source = "LDAP"
 
+        owned_repos = []
+        orgs = ccnet_threaded_rpc.get_orgs_by_user(self.username)
+        if orgs:
+            for org in orgs:
+                owned_repos += seafile_api.get_org_owned_repo_list(org.org_id,
+                                                                   self.username)
+        else:
+            owned_repos += seafile_api.get_owned_repo_list(self.username)
+
+        for r in owned_repos:
+            seafile_api.remove_repo(r.id)
+
+        clear_token(self.username)
         ccnet_threaded_rpc.remove_emailuser(source, self.username)
         Profile.objects.delete_profile_by_user(self.username)
 
