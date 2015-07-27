@@ -35,6 +35,23 @@ class ProfileManager(models.Manager):
         except Profile.DoesNotExist:
             return None
 
+    def get_contact_email_by_user(self, username):
+        """Get a user's contact email, use username(login email) if not found.
+        """
+        p = self.get_profile_by_user(username)
+        if p and p.contact_email != '':
+            return p.contact_email
+        else:
+            return username
+
+    def get_username_by_login_id(self, login_id):
+        """Convert a user's login id to username(login email).
+        """
+        try:
+            return super(ProfileManager, self).get(login_id=login_id).user
+        except Profile.DoesNotExist:
+            return None
+
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if
         user has no preferred language.
@@ -60,6 +77,11 @@ class Profile(models.Model):
     nickname = models.CharField(max_length=64, blank=True)
     intro = models.TextField(max_length=256, blank=True)
     lang_code = models.TextField(max_length=50, null=True, blank=True)
+    # Login id can be email or anything else used to login.
+    login_id = models.TextField(max_length=225, unique=True, null=True, blank=True)
+    # Contact email is used to receive emails.
+    contact_email = models.EmailField(max_length=225, db_index=True, null=True, blank=True)
+    institution = models.TextField(max_length=225, db_index=True, null=True, blank=True)
     objects = ProfileManager()
 
     def set_lang_code(self, lang_code):

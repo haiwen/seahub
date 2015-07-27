@@ -7,8 +7,8 @@
 <div class="new-narrow-panel">
 <h2 class="hd">{% trans "Log In" %}</h2>
 <form action="" method="post" class="con">{% csrf_token %}
-    <label for="username">{% trans "Email" %}</label>
-	<input type="text" name="username" value="" class="input" />
+    <label for="login">{% trans "Email or Username" %}</label>
+        <input type="text" name="login" value="" class="input" />
 	<label for="password">{% trans "Password" %}</label>
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "(forgot password)" %}</a>
 	<input type="password" name="password" value="" class="input" autocomplete="off" />
@@ -70,8 +70,8 @@ $('#refresh-captcha').click(function() {
     return false;
 });
 $('input[type="submit"]').click(function(){
-    if (!$.trim($('input[name="username"]').val())) {
-        $('.error').removeClass('hide').html("{% trans "Email cannot be blank" %}");
+    if (!$.trim($('input[name="login"]').val())) {
+        $('.error').removeClass('hide').html("{% trans "Email or username cannot be blank" %}");
         return false;
     }
     if (!$.trim($('input[name="password"]').val())) {

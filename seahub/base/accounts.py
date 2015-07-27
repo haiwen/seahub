@@ -279,14 +279,27 @@ class User(object):
             unset_repo_passwd(r.id, self.email)
 
 class AuthBackend(object):
-    def get_user(self, username):
+    def get_username_by_login(self, login):
+        """Convert login id to username(login email). Return login id if there
+        is no login_id <-> username record in user profile; Otherwise, return
+        username.
+        """
+        username = Profile.objects.get_username_by_login_id(login)
+        if username is None:
+            return login
+        else:
+            return username
+
+    def get_user(self, login):
+        username = self.get_username_by_login(login)
         try:
             user = User.objects.get(email=username)
         except User.DoesNotExist:
             user = None
         return user
 
-    def authenticate(self, username=None, password=None):
+    def authenticate(self, login=None, password=None):
+        username = self.get_username_by_login(login)
         try:
             user = User.objects.get(email=username)
             if user.check_password(password):

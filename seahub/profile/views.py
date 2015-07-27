@@ -51,6 +51,8 @@ def edit_profile(request):
         if profile:
             init_dict['nickname'] = profile.nickname
             init_dict['intro'] = profile.intro
+            init_dict['login_id'] = profile.login_id
+            init_dict['contact_email'] = profile.contact_email
         if d_profile:
             init_dict['department'] = d_profile.department
             init_dict['telephone'] = d_profile.telephone

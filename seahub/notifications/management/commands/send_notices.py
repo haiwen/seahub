@@ -193,10 +193,11 @@ class Command(BaseCommand):
 
         email_ctx = {}
         for notice in unseen_notices:
+            to_email = Profile.objects.get_contact_email_by_user(notice.to_user)
             if notice.to_user in email_ctx:
-                email_ctx[notice.to_user] += 1
+                email_ctx[to_email] += 1
             else:
-                email_ctx[notice.to_user] = 1
+                email_ctx[to_email] = 1
 
         for to_user, count in email_ctx.items():
             # save current language

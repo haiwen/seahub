@@ -45,6 +45,19 @@
         <span class="error">{{ error|escape }}</span>
         {% endfor %}
         <br/>
+
+        {% if form.data.login_id %}
+        <label>{% trans "Username:" %}</label><input type="text" name="username" value="{{form.data.login_id}}" class="input" disabled />
+        <span>{% trans "You can use this field at login." %}</span>
+        <br/>
+        {% endif %}
+
+        {% if form.data.contact_email %}
+        <label>{% trans "Contact Email:" %}</label><input type="text" name="contact_email" value="{{form.data.contact_email}}" class="input" disabled />
+        <span>{% trans "Your notifications will be sent to this email." %}</span>
+        <br/>
+        {% endif %}
+
         <label>{% trans "About me:" %}</label><textarea name="intro" class="textarea">{{ form.data.intro }}</textarea>
         {% for error in form.intro.errors %}
         <span class="error">{{ error|escape }}</span>

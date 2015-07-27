@@ -19,7 +19,7 @@ class AuthenticationForm(forms.Form):
     Base class for authenticating users. Extend this to get a form that accepts
     username/password logins.
     """
-    username = forms.CharField(label=_("Username"), max_length=255)
+    login = forms.CharField(label=_("Email or Username"), max_length=255)
     password = forms.CharField(label=_("Password"), widget=forms.PasswordInput)
 
     def __init__(self, request=None, *args, **kwargs):
@@ -33,20 +33,18 @@ class AuthenticationForm(forms.Form):
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
-    def clean_username(self):
-        username = self.cleaned_data['username']
-        if not is_valid_username(username):
-            raise forms.ValidationError(_("Enter a valid email address."))
-        return self.cleaned_data['username']
+    def clean_login(self):
+        return self.cleaned_data['login'].strip()
 
     def clean(self):
-        username = self.cleaned_data.get('username')
+        login = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
 
-        if username and password:
-            self.user_cache = authenticate(username=username, password=password)
+        if login and password:
+            self.user_cache = authenticate(login=login,
+                                           password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct username and password. Note that both fields are case-sensitive."))
+                raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
             elif not self.user_cache.is_active:
                 raise forms.ValidationError(_("This account is inactive."))
 

@@ -146,13 +146,13 @@ def login(request, template_name='registration/login.html',
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
-                username = urlquote(request.REQUEST.get('username', '').strip())
-                failed_attempt = _incr_login_faied_attempts(username=username,
+                login = urlquote(request.REQUEST.get('login', '').strip())
+                failed_attempt = _incr_login_faied_attempts(username=login,
                                                             ip=ip)
 
                 if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
-                    logger.warn('Login attempt limit reached, username: %s, ip: %s, attemps: %d' %
-                                (username, ip, failed_attempt))
+                    logger.warn('Login attempt limit reached, email/username: %s, ip: %s, attemps: %d' %
+                                (login, ip, failed_attempt))
                     form = CaptchaAuthenticationForm()
                 else:
                     form = authentication_form(data=request.POST)
