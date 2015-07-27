@@ -3366,27 +3366,6 @@ textarea:-moz-placeholder {/* for FF */
     line-height:16px;
 }
 
-/* image thumbnail */
-.file-item .thumbnail {
-    cursor: pointer;
-}
-#image-preview {
-    position:absolute;
-    top:0;
-    right:0;
-    bottom:0;
-    left:0;
-    margin:auto;
-}
-#preview-wrap {
-    position:absolute;
-    padding:10px;
-    border:1px solid #c9c9c9;
-    border-radius:5px;
-    background:#fff;
-    z-index:100;
-}
-
 /* repo setting */
 .user-perm-add-tr input,
 .group-perm-add-tr input {
@@ -3668,4 +3647,10 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .generate-random-password:hover,
 #share-popup .show-or-hide-password:hover {
     opacity:1;
+}
+
+/* image thumbnail */
+img.thumbnail {
+    max-width: 24px;
+    max-height: 24px;
 }
