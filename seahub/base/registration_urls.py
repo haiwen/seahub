@@ -50,8 +50,4 @@ if ENABLE_SIGNUP:
                 template_name='registration/registration_complete.html',
                 extra_context={ 'send_mail': settings.REGISTRATION_SEND_MAIL } ),
             name='registration_complete'),
-        url(r'^register/closed/$',
-            TemplateView.as_view(template_name='registration/registration_closed.html'),
-            name='registration_disallowed'),
 )
-
