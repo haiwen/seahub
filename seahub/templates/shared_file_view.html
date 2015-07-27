@@ -1,8 +1,14 @@
-{% extends "myhome_base.html" %}
+{% extends "base.html" %}
 {% load seahub_tags i18n %}
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
+<style type="text/css">
+    #header {
+        display:block;
+        margin-bottom:12px;
+    }
+</style>
 {% endblock %}
 
 {% block main_panel %}
