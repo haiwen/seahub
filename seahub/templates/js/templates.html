@@ -252,6 +252,7 @@
         <% } %>
     </td>
     <td class="dirent-icon">
+        <div class="pos-rel">
         <% if (dirent.is_img) { %>
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
@@ -265,6 +266,7 @@
         <% if (is_pro && dirent.is_locked) { %>
         <img class="file-locked-icon" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" />
         <% } %>
+        </div>
     </td>
     <td>
         <span class="dirent-name">

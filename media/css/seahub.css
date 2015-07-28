@@ -277,6 +277,7 @@ p { margin:0.5em 0; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
 .cspt { cursor:pointer; }
+.pos-rel { position:relative; }
 /** for input, textarea in form **/ /* e.g repo-create */
 .input, .textarea {
     width:260px;
