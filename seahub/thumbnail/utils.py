@@ -70,6 +70,12 @@ def generate_thumbnail(request, repo_id, size, path):
     """ generate and save thumbnail if not exist
     """
 
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
+        return False
+
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
