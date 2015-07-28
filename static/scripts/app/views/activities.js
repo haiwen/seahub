@@ -8,29 +8,30 @@ define([
 ], function($, _, Backbone, Common, ActivityCollection, ActivityItemView) {
     'use strict';
 
-    var EventView = Backbone.View.extend({
+    var ActivitiesView = Backbone.View.extend({
 
-        el: $('#events'),
+        el: $('#activities'),
 
-        template: _.template($('#activities-date-tmpl').html()),
+        activityGroupTemplate: _.template($('#activity-group-tmpl').html()),
 
         events: {
-            'click #events-more': 'getMoreActivites'
+            'click #activities-more': 'getMoreActivities'
         },
 
         initialize: function () {
             this.activities = new ActivityCollection();
 
-            this.$eventsBody = this.$('#events-body');
-            this.$eventsMore = this.$('#events-more');
+            this.$activitiesBody = this.$('#activities-body');
+            this.$activitiesMore = this.$('#activities-more');
             this.$loadingTip = this.$('.loading-tip');
 
             this.moreOffset = 0;
         },
 
-        getMoreActivites: function () {
+        getMoreActivities: function () {
             var _this = this;
             this.$loadingTip.show();
+            this.$activitiesMore.hide();
             this.activities.fetch({
                 remove: false,
                 data: {'start': _this.moreOffset},
@@ -47,9 +48,9 @@ define([
                 allActivities = [];
 
             this.$loadingTip.hide();
-            this.$eventsMore.hide();
+            this.$activitiesMore.hide();
             this.moreOffset = activitiesJson[len-1]['more_offset'];
-            this.$eventsBody.empty().show();
+            this.$activitiesBody.empty().show();
 
             for (var i = 0; i < len; i++) {
                 allActivities = allActivities.concat(activitiesJson[i]['events']);
@@ -58,19 +59,19 @@ define([
             var groupedActivities = _.groupBy(allActivities, 'date');
 
             for (var date in groupedActivities) {
-                var $activitiesDate = $(this.template({'date': date})),
+                var $activityGroup = $(this.activityGroupTemplate({'date': date})),
                     activityList = groupedActivities[date];
 
-                this.$eventsBody.append($activitiesDate);
+                this.$activitiesBody.append($activityGroup);
 
                 _.each(activityList, function (activity) {
                     var view = new ActivityItemView(activity);
-                    $activitiesDate.children('ol').append(view.render().el);
+                    $activityGroup.children('ol').append(view.render().el);
                 });
             }
 
             if (more) {
-                this.$eventsMore.show();
+                this.$activitiesMore.show();
             }
 
         },
@@ -81,6 +82,8 @@ define([
 
         show: function () {
             this.$el.show();
+            this.$activitiesBody.hide();
+            this.$activitiesMore.hide();
             this.$loadingTip.show();
 
             var _this = this;
@@ -95,5 +98,5 @@ define([
 
     });
 
-    return EventView;
+    return ActivitiesView;
 });

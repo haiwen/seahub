@@ -1639,6 +1639,7 @@ textarea:-moz-placeholder {/* for FF */
 #repo-create-form .checkbox-label { /* for "Encrypt" */
     margin:10px 0 0;
 }
+.activity-group-hd,
 .event-group-hd {
     padding: 8px;
     color: #444;
@@ -1646,6 +1647,7 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom: 1px solid #e5e5e5;
     margin:0;
 }
+.activity-group-bd,
 .event-group-bd {
     list-style-type: none;
     font-size:15px;
@@ -1676,11 +1678,13 @@ textarea:-moz-placeholder {/* for FF */
 }
 #events-loading,
 #notices-loading,
+#activities-more,
 #events-more,
 #notices-more-btn {
     text-align:center;
     width:100%;
 }
+#activities-more,
 #events-more,
 #notices-more-btn {
     color:#777;
@@ -1688,6 +1692,7 @@ textarea:-moz-placeholder {/* for FF */
     border:0;
     background: #efefef;
 }
+#activities-more:hover,
 #events-more:hover,
 #notices-more-btn:hover {
     color:#000;

@@ -2,9 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common',
-    'app/views/details-item'
-], function($, _, Backbone, Common, DetailsItemView) {
+    'common'
+], function($, _, Backbone, Common) {
     'use strict';
 
     var DetailsView = Backbone.View.extend({
@@ -12,6 +11,7 @@ define([
         id: 'ls-ch',
 
         template: _.template($('#details-popup-tmpl').html()),
+        detailItemTemplate: _.template($('#detail-item-tmpl').html()),
 
         initialize: function (options) {
             this.repo_id = options['repo_id'];
@@ -24,9 +24,8 @@ define([
         },
 
         getDetails: function () {
-            var repo_id = this.repo_id,
-                cmmt_id = this.cmmt_id,
-                details_title,
+            var repo_id = this.repo_id, cmmt_id = this.cmmt_id,
+                details_title, item_data, item_html,
                 _this = this;
 
             Common.ajaxGet({
@@ -37,7 +36,9 @@ define([
                     _this.$('.commit-time').html(data['date_time']);
 
                     for (var item in data) {
-                        if (data[item].length > 0 && item != 'date_time') {
+                        if (item == "cmt_desc") {
+                            _this.$el.append(data[item]);
+                        } else if (data[item].length > 0 && item != 'date_time') {
                             if (item == "new") { details_title = gettext("New files") }
                             if (item == "removed") { details_title = gettext("Deleted files") }
                             if (item == "renamed") { details_title = gettext("Renamed or Moved files") }
@@ -45,14 +46,16 @@ define([
                             if (item == "newdir") { details_title = gettext("New directories") }
                             if (item == "deldir") { details_title = gettext("Deleted directories") }
 
-                            var view = new DetailsItemView({details_title: details_title, details: data[item]});
-                            _this.$el.append(view.render().el);
+                            item_data = {"details_title": details_title, "details": data[item]};
+                            item_html = _this.detailItemTemplate(item_data);
+                            _this.$el.append(item_html);
                         }
                     }
                     $(window).resize();
                 },
-                after_op_error: function(xhr) {
-                    Common.ajaxErrorHandler(xhr);
+                after_op_error: function() {
+                    $('#ls-ch').html(gettext("Unknown error"));
+                    setTimeout(function() { $.modal.close(); }, 2500);
                 }
             });
         }

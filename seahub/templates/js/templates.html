@@ -813,10 +813,10 @@
         </select>
     </td>
 </script>
-<script type="text/template" id="activities-date-tmpl">
+<script type="text/template" id="activity-group-tmpl">
     <div>
-        <h4 class="event-group-hd"><%= date %></h4>
-        <ol class="event-group-bd"></ol>
+        <h4 class="activity-group-hd"><%= date %></h4>
+        <ol class="activity-group-bd"></ol>
     </div>
 </script>
 <script type="text/template" id="activity-item-tmpl">
@@ -844,7 +844,7 @@
         <p>{% trans "Deleted library" %} <%- activity.repo_name %></p>
         <% } %>
 
-        <p><a class="normal" href="{{ SITE_ROOT }}profile/<%- activity.author %>/"><%- activity.nick %></a> <span class="time"><%= activity.time_relative %></span></p>
+        <p><a class="normal" href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(activity.author)); %>/"><%- activity.name %></a> <span class="time"><%= activity.time_relative %></span></p>
     </div>
 </script>
 <script type="text/template" id="details-popup-tmpl">
@@ -852,7 +852,7 @@
     <p class="commit-time"></p>
     <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
 </script>
-<script type="text/template" id="details-item-tmpl">
+<script type="text/template" id="detail-item-tmpl">
     <h4><%= details_title %></h4>
     <ul>
     <% for (var i = 0, len = details.length; i < len; i++) { %>

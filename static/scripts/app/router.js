@@ -27,7 +27,7 @@ define([
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
             'common/lib/:repo_id(/*path)': 'showCommonDir',
             'starred/': 'showStarredFile',
-            'activities/': 'showEvent',
+            'activities/': 'showActivities',
             // Default
             '*actions': 'showRepos'
         },
@@ -91,9 +91,9 @@ define([
             this.myHomeView.showStarredFile();
         },
 
-        showEvent: function() {
+        showActivities: function() {
             this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showActivity();
+            this.myHomeView.showActivities();
         },
 
         showMyRepoDir: function(repo_id, path) {
