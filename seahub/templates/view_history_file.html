@@ -27,7 +27,7 @@
               {% endblock %}
             </p>
 
-            <button data-url="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</button>
+            <a class="btn-link" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
@@ -36,11 +36,8 @@
 {% block extra_script %}
 {% include "snippets/file_view_js.html" %}
 <script type="text/javascript">
-$('#download').click(function() {
-    window.open($(this).data('url'));
-});
 $(function() {
-    var dld_url = $('#download').data('url');
+    var dld_url = $('#download').attr('href');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
 });
 

@@ -61,7 +61,7 @@
             {% endif %}
 
             {% if user_perm == 'rw' %}
-            <button id="history" data-url="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</button>
+            <a class="btn-link" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</a>
             {% endif %}
 
             {% if request.user.is_authenticated and can_edit_file %}
@@ -69,7 +69,7 @@
                 {% endblock %}
             {% endif %}
 
-            <button data-url="{% url 'download_file' repo.id obj_id%}?p={{path|urlencode}}" id="download">{% trans "Download"%}</button>
+            <a class="btn-link" href="{% url 'download_file' repo.id obj_id%}?p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
         </div>
 
         <div id="file-view">
@@ -105,11 +105,8 @@ $('#header').remove();
 
 // download
 $(function() {
-    var dld_url = $('#download').data('url');
+    var dld_url = $('#download').attr('href');
     $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
-});
-$('#download').click(function() {
-    location.href = $(this).data('url');
 });
 
 // share link
@@ -125,9 +122,6 @@ $('#share').click(function() {
     return false;
 });
 
-$('#edit').click(function() {
-    location.href = $(this).attr('data');
-});
 
 // star file
 $('#file-star').click(function() {
@@ -204,10 +198,6 @@ function setFileViewAreaHeight() {
 $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 {% endif %}
 
-
-$('#history').click(function () {
-    window.open($(this).data('url'));
-});
 
 {% if highlight_keyword %}
 var ref_list = document.referrer.split('?');
