@@ -144,6 +144,7 @@ button,
 input[type=submit],
 input[type=button],
 input.submit,
+.btn-link,
 .fileinput-button,
 select {
     padding:5px 6px;
@@ -155,6 +156,17 @@ select {
 }
 select {
     outline:none;
+}
+.btn-link {
+    color:#333;
+    line-height:19px;
+    display:inline-block;
+    text-decoration:none;
+    font-weight:normal;
+}
+.btn-link:hover {
+    color:#333;
+    text-decoration:none;
 }
 input[type=radio] {
     height:auto;
@@ -208,6 +220,7 @@ input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover,
 button:hover,
+.btn-link:hover,
 .fileinput-button:hover {
     cursor:pointer;
     background:#fff;
@@ -2651,7 +2664,8 @@ textarea:-moz-placeholder {/* for FF */
     text-align:right;
     border:1px solid #ccc;
 }
-#file-op button {
+#file-op button,
+#file-op .btn-link {
     padding:2px 8px;
 }
 #file-enc-cont {
