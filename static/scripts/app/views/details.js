@@ -24,37 +24,76 @@ define([
         },
 
         getDetails: function () {
-            var repo_id = this.repo_id, cmmt_id = this.cmmt_id,
-                details_title, item_data, item_html,
-                _this = this;
+            var _this = this;
 
             Common.ajaxGet({
-                get_url: Common.getUrl({ name:'get_history_changes', repo_id: repo_id}),
-                data: {'commit_id': cmmt_id},
+                get_url: Common.getUrl({
+                    name:'get_history_changes',
+                    repo_id: this.repo_id
+                }),
+                data: {'commit_id': this.cmmt_id},
                 after_op_success: function (data) {
                     _this.$('.loading-tip').hide();
                     _this.$('.commit-time').html(data['date_time']);
 
-                    for (var item in data) {
-                        if (item == "cmt_desc") {
-                            _this.$el.append(data[item]);
-                        } else if (data[item].length > 0 && item != 'date_time') {
-                            if (item == "new") { details_title = gettext("New files") }
-                            if (item == "removed") { details_title = gettext("Deleted files") }
-                            if (item == "renamed") { details_title = gettext("Renamed or Moved files") }
-                            if (item == "modified") { details_title = gettext("Modified files") }
-                            if (item == "newdir") { details_title = gettext("New directories") }
-                            if (item == "deldir") { details_title = gettext("Deleted directories") }
-
-                            item_data = {"details_title": details_title, "details": data[item]};
-                            item_html = _this.detailItemTemplate(item_data);
-                            _this.$el.append(item_html);
-                        }
+                    var showDetails = function(params) {
+                        _this.$el.append(_this.detailItemTemplate({
+                            "details_title": params.title,
+                            "details": params.content
+                        }));
+                    };
+                    if (data['new'].length > 0) {
+                        showDetails({
+                            'title': gettext("New files"),
+                            'content': data['new']
+                        });
                     }
+                    if (data['removed'].length > 0) {
+                        showDetails({
+                            'title': gettext("Deleted files"),
+                            'content': data['removed']
+                        });
+                    }
+                    if (data['renamed'].length > 0) {
+                        showDetails({
+                            'title': gettext("Renamed or Moved files"),
+                            'content': data['renamed']
+                        });
+                    }
+                    if (data['modified'].length > 0) {
+                        showDetails({
+                            'title': gettext("Modified files"),
+                            'content': data['modified']
+                        });
+                    }
+                    if (data['newdir'].length > 0) {
+                        showDetails({
+                            'title': gettext("New directories"),
+                            'content': data['newdir']
+                        });
+                    }
+                    if (data['deldir'].length > 0) {
+                        showDetails({
+                            'title': gettext("Deleted directories"),
+                            'content': data['deldir']
+                        });
+                    }
+
+                    // most of the time, no 'cmt_desc'
+                    if (data['cmt_desc']) {
+                        _this.$el.append('<p>' + Common.HTMLescape(data['cmt_desc']) + '</p>');
+                    }
+
                     $(window).resize();
                 },
-                after_op_error: function() {
-                    $('#ls-ch').html(gettext("Unknown error"));
+                after_op_error: function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.");
+                    }
+                    _this.$el.html('<p class="error">' + err_msg + '</p>');
                     setTimeout(function() { $.modal.close(); }, 2500);
                 }
             });

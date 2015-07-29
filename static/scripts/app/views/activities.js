@@ -12,11 +12,8 @@ define([
 
         el: $('#activities'),
 
-        activityGroupTemplate: _.template($('#activity-group-tmpl').html()),
-
-        events: {
-            'click #activities-more': 'getMoreActivities'
-        },
+        activityGroupHdTemplate: _.template($('#activity-group-hd-tmpl').html()),
+        activityGroupBdTemplate: _.template($('#activity-group-bd-tmpl').html()),
 
         initialize: function () {
             this.activities = new ActivityCollection();
@@ -26,6 +23,10 @@ define([
             this.$loadingTip = this.$('.loading-tip');
 
             this.moreOffset = 0;
+        },
+
+        events: {
+            'click #activities-more': 'getMoreActivities'
         },
 
         getMoreActivities: function () {
@@ -56,18 +57,20 @@ define([
                 allActivities = allActivities.concat(activitiesJson[i]['events']);
             }
 
+            // return sth. like {2015-07-27: [{...},], 2015-06-04: [{...}] ...}
             var groupedActivities = _.groupBy(allActivities, 'date');
 
+            var $groupDate, $groupActivities;
             for (var date in groupedActivities) {
-                var $activityGroup = $(this.activityGroupTemplate({'date': date})),
-                    activityList = groupedActivities[date];
+                $groupDate = $(this.activityGroupHdTemplate({'date': date}));
+                $groupActivities = $(this.activityGroupBdTemplate());
 
-                this.$activitiesBody.append($activityGroup);
-
-                _.each(activityList, function (activity) {
+                _.each(groupedActivities[date], function(activity) {
                     var view = new ActivityItemView(activity);
-                    $activityGroup.children('ol').append(view.render().el);
+                    $groupActivities.append(view.render().el);
                 });
+
+                this.$activitiesBody.append($groupDate).append($groupActivities);
             }
 
             if (more) {

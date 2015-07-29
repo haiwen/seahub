@@ -1913,14 +1913,18 @@ def repo_history_changes(request, repo_id):
 
     repo = get_repo(repo_id)
     if not repo:
-        return HttpResponse(json.dumps(changes), content_type=content_type)
+        err_msg = _(u'Library does not exist.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                status=400, content_type=content_type)
 
     # perm check
     if check_repo_access_permission(repo.id, request.user) is None:
         if request.user.is_staff is True:
             pass # Allow system staff to check repo changes
         else:
-            return HttpResponse(json.dumps(changes), content_type=content_type)
+            err_msg = _(u"Permission denied")
+            return HttpResponse(json.dumps({"error": err_msg}), status=403,
+                            content_type=content_type)
 
     username = request.user.username
     try:
@@ -1932,11 +1936,15 @@ def repo_history_changes(request, repo_id):
     if repo.encrypted and \
             (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
             and not is_passwd_set(repo_id, username):
-        return HttpResponse(json.dumps(changes), content_type=content_type)
+        err_msg = _(u'Library is encrypted.')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return HttpResponse(json.dumps(changes), content_type=content_type)
+        err_msg = _(u'Argument missing')
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=400, content_type=content_type)
 
     changes = get_diff(repo_id, '', commit_id)
 
