@@ -46,7 +46,7 @@ def allow_generate_thumbnail(request, repo_id, path):
 
     # get image memory cost
     token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view',
-                                                    '', use_onetime = False)
+                                                    '', use_onetime = True)
 
     inner_path = gen_inner_file_get_url(token, obj_name)
     try:
@@ -70,6 +70,12 @@ def generate_thumbnail(request, repo_id, size, path):
     """ generate and save thumbnail if not exist
     """
 
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
+        return False
+
     thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
     if not os.path.exists(thumbnail_dir):
         os.makedirs(thumbnail_dir)
@@ -81,7 +87,7 @@ def generate_thumbnail(request, repo_id, size, path):
         return True
 
     token = seafile_api.get_fileserver_access_token(repo_id, file_id, 'view',
-                                                    '', use_onetime = False)
+                                                    '', use_onetime = True)
 
     inner_path = gen_inner_file_get_url(token, os.path.basename(path))
     try:
