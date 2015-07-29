@@ -88,6 +88,12 @@ def thumbnail_get(request, repo_id, size, path):
     return thumbnail file to web
     """
 
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
+        return HttpResponse()
+
     if check_folder_permission(request, repo_id, path) is None:
         return HttpResponse()
 
@@ -183,6 +189,12 @@ def share_link_thumbnail_get(request, token, size, path):
 
     return thumbnail file to web
     """
+
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
+        return HttpResponse()
 
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if not fileshare:
