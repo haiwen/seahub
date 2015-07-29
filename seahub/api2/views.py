@@ -1815,6 +1815,11 @@ class FileView(APIView):
 
         operation = request.DATA.get('operation', '')
         if operation.lower() == 'lock':
+
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            if is_locked:
+                return api_error(status.HTTP_403_FORBIDDEN, 'File is already locked')
+
             # lock file
             expire = request.DATA.get('expire', FILE_LOCK_EXPIRATION_DAYS)
             try:
@@ -1824,6 +1829,13 @@ class FileView(APIView):
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
         if operation.lower() == 'unlock':
+
+            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+            if not is_locked:
+                return api_error(status.HTTP_403_FORBIDDEN, 'File is not locked')
+            if not locked_by_me:
+                return api_error(status.HTTP_403_FORBIDDEN, 'You can not unlock this file')
+
             # unlock file
             try:
                 seafile_api.unlock_file(repo_id, path.lstrip('/'))
