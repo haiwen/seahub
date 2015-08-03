@@ -1455,20 +1455,13 @@ class OpMoveView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request, repo_id, format=None):
+
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
         username = request.user.username
-        if not is_repo_writable(repo.id, username):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to move file.')
-
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
-        parent_dir = request.GET.get('p', None)
+        parent_dir = request.GET.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
         file_names = request.POST.get("file_names", None)
@@ -1476,6 +1469,13 @@ class OpMoveView(APIView):
         if not parent_dir or not file_names or not dst_repo or not dst_dir:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
+
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to move file of this folder.')
+
+        if check_folder_permission(request, dst_repo, dst_dir) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to move file to destination folder.')
+
         if repo_id == dst_repo and parent_dir == dst_dir:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'The destination directory is the same as the source.')
@@ -1510,10 +1510,6 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
 
         username = request.user.username
-        if not is_repo_writable(repo.id, username):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to copy file.')
-
         parent_dir = request.GET.get('p', '/')
         dst_repo = request.POST.get('dst_repo', None)
         dst_dir = request.POST.get('dst_dir', None)
@@ -1523,8 +1519,11 @@ class OpCopyView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Missing argument.')
 
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
+        if check_folder_permission(request, repo_id, parent_dir) is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to copy file of this folder.')
+
+        if check_folder_permission(request, dst_repo, dst_dir) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to copy file to destination folder.')
 
         if not get_repo(dst_repo):
             return api_error(status.HTTP_404_NOT_FOUND, 'Repo not found.')
