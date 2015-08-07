@@ -57,7 +57,7 @@
         </div>
         {% endif %}
     </div>
-
+    <p class="messages"><span class=""></span></p>
     <div id="upload-links" class="hide">
         {% if uploadlinks %}
         <table>
@@ -102,13 +102,24 @@ $(".view-link").click(function() {
     .modal({focus:false});
     $('#shared-link').prev().remove();
 });
-// rm shared_link
-$('.rm-link').click(function() {
-    location.href = '{% url 'remove_shared_link' %}?t=' + $(this).attr('data-token');
-});
-// rm shared_upload_link
-$('.rm-upload-link').click(function() {
-    location.href = '{% url 'remove_shared_upload_link' %}?t=' + $(this).attr('data-token');
+// rm shared_links
+$('.rm-link, .rm-upload-link').click(function() {
+    var get_url = $(this).attr('class').indexOf('upload') == -1 ? '{% url 'ajax_remove_shared_link' %}' : '{% url 'ajax_remove_shared_upload_link' %}',
+    data = { 't': $(this).attr('data-token') },
+    tr_toberemoved = $(this).parent().parent();
+    $.ajax({
+        url: get_url,
+        type: 'GET',
+        cache: false,
+        dataType: 'json',
+        data: data,
+        success: function() {
+            tr_toberemoved.remove();
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            $('.messages span').addClass('error').html('Failed');
+        }
+    });
 });
 $('#shared-link').click(function() {
     $(this).select();
