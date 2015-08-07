@@ -1,0 +1,21 @@
+{% extends "sysadmin/base.html" %}
+{% load seahub_tags i18n %}
+
+{% block cur_settings %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "Settings" %}</h3>
+
+<form method="post" action=".">{% csrf_token %}
+    {% for k,v in config_dict.items %}
+    <label>{{ k }}</label>
+    <input type="text" name="{{ k }}" value="{{v.0}}" class="input" />
+    <span>*{{v.1}}</span>
+    <br>
+    {% endfor %}
+
+    <input type="submit" value="{% trans "Submit" %}" />
+</form>
+
+{% endblock %}
+

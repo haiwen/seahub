@@ -11,13 +11,12 @@ import locale
 import ConfigParser
 import mimetypes
 import contextlib
-
 from datetime import datetime
 from urlparse import urlparse, urljoin
-
 import json
 
 import ccnet
+from constance import config
 
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
@@ -36,7 +35,7 @@ from seaserv import seafile_api, send_message, seafserv_rpc, \
     CCNET_SERVER_ADDR, CCNET_SERVER_PORT, get_org_by_id, is_org_staff, \
     get_org_id_by_group, get_personal_groups_by_user, \
     list_personal_repos_by_owner, get_group_repos, \
-    list_inner_pub_repos, CCNET_CONF_PATH, SERVICE_URL
+    list_inner_pub_repos, CCNET_CONF_PATH
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
     USER_PASSWORD_STRENGTH_LEVEL, USER_PASSWORD_MIN_LENGTH
@@ -167,12 +166,7 @@ def get_fileserver_root():
     Returns:
     	Constructed fileserver root.
     """
-
-    from seahub.settings import FILE_SERVER_ROOT
-
-    assert FILE_SERVER_ROOT is not None, "SERVICE_URL is not set in ccnet.conf."
-
-    return FILE_SERVER_ROOT
+    return config.FILE_SERVER_ROOT
 
 def get_inner_fileserver_root():
     """Construct inner seafile fileserver address and port.
@@ -725,7 +719,7 @@ def calc_file_path_hash(path, bits=12):
 def get_service_url():
     """Get service url from seaserv.
     """
-    return SERVICE_URL
+    return config.SERVICE_URL
 
 def get_server_id():
     """Get server id from seaserv.

@@ -7,7 +7,7 @@ import re
 import random
 import string
 
-from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -192,6 +192,8 @@ INSTALLED_APPS = (
     'captcha',
     'compressor',
     'statici18n',
+    'constance',
+    'constance.backends.database',
 
     'seahub.api2',
     'seahub.avatar',
@@ -209,6 +211,8 @@ INSTALLED_APPS = (
     'seahub.password_session',
 )
 
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
@@ -603,3 +607,12 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
+CONSTANCE_CONFIG = {
+    'SERVICE_URL': (SERVICE_URL, gettext_noop(
+        "This is outside URL for Seahub(Seafile Web).The domain part (i.e., "
+        "www.example.com) will be used in generating share links and "
+        "download/upload file via web. Note: Outside URL means if you use "
+        "Nginx, it should be the Nginx's address")),
+    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT, gettext_noop('URL for seafile fileserver')),
+}

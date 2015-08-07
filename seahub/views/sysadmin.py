@@ -1656,3 +1656,36 @@ def sys_sudo_mode(request):
             'enable_shib_login': enable_shib_login,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_settings(request):
+    """List and change seahub settings in admin panel.
+
+    Arguments:
+    - `request`:
+    """
+    from constance import config
+    from seahub.settings import CONSTANCE_CONFIG
+
+    if request.method == "POST":
+        for k in request.POST.keys():
+            if k == 'csrfmiddlewaretoken':
+                continue
+            try:
+                setattr(config, k, request.POST.get(k))
+            except AttributeError:
+                continue
+
+        messages.success(request, _('Success'))
+        return HttpResponseRedirect(reverse('sys_settings'))
+
+    config_dict = {}
+    for k in dir(config):
+        val = getattr(config, k)
+        help_text = _(CONSTANCE_CONFIG[k][1])
+        config_dict[k] = (val, help_text)
+
+    return render_to_response('sysadmin/settings.html', {
+        'config_dict': config_dict,
+    }, context_instance=RequestContext(request))
