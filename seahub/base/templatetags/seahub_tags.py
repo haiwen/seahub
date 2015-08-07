@@ -145,6 +145,7 @@ COMMIT_MSG_TRANSLATION_MAP = {
     'Removed directory' : _('Removed directory'),
     'Renamed directory' : _('Renamed directory'),
     'Moved directory' : _('Moved directory'),
+    'Added or modified' : _('Added or modified'),
 }
 @register.filter(name='translate_commit_desc')
 def translate_commit_desc(value):
