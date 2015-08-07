@@ -1858,11 +1858,6 @@ def get_file_uploaded_bytes(request, repo_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    if check_folder_permission(request, repo.id, parent_dir) != 'rw':
-        err_msg = _(u'Permission denied')
-        return HttpResponse(json.dumps({"error": err_msg}), status=403,
-                            content_type=content_type)
-    
     file_path = os.path.join(parent_dir, file_name)
     uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
     return HttpResponse(json.dumps({"uploadedBytes": uploadedBytes}),
