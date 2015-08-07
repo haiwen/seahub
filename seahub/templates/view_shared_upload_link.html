@@ -87,12 +87,13 @@ window.locale = {
     }   
 };
 
+var enable_upload_folder = {% if enable_upload_folder %}true{% else %}false{% endif %};
+var enable_resumable_fileupload = {% if enable_resumable_fileupload %}true{% else %}false{% endif %};
 var form = $('#upload-file-form');
 var saving_tip = $('.saving-tip', form);
 
 // Initialize the jQuery File Upload widget:
 form.fileupload({
-    formData: {'parent_dir': "{{path|escapejs}}"},
     // customize it for 'done'
     getFilesFromResponse: function (data) {
         if (data.result) {
@@ -107,7 +108,16 @@ form.fileupload({
     sequentialUploads: true
 })
 .bind('fileuploadadd', function(e, data) {
-    {% if enable_upload_folder %}
+    form.fileupload('option', {
+        'formData': {
+            'parent_dir': "{{path|escapejs}}"
+        },
+        'maxChunkSize': undefined,
+        'uploadedBytes': undefined
+    });
+    if (!enable_upload_folder) {
+        return;
+    }
     // when add folder, a subdirectory will be shown as '.'. rm it.
     var file = data.files[0];
     if (file.name == '.') {
@@ -120,7 +130,6 @@ form.fileupload({
     if (file.relativePath) { // for 'folder drag & drop'
         file.relative_path = file.relativePath + file.name;
     }
-    {% endif %}
 })
 .bind('fileuploadsubmit', function(e, data) {
     if (data.files.length == 0) {
@@ -130,23 +139,47 @@ form.fileupload({
     // get url(token) for every file
     if (!file.error) {
         $.ajax({
-            url: '{% url 'get_file_upload_url_ul' uploadlink.token %}?&r={{uploadlink.repo_id }}',
+            url: '{% url 'get_file_upload_url_ul' uploadlink.token %}?r={{uploadlink.repo_id }}',
             cache: false,
             dataType: 'json',
             success: function(ret) {
-                {% if enable_upload_folder %}
-                var file_path = file.relative_path,
-                    r_path;
-                if (file_path) { // 'add folder'
-                    r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
-                }
-                var formData = form.fileupload('option', 'formData');
-                formData.relative_path = r_path || '';
-                form.fileupload('option', 'formData', formData);
-                {% endif %}
+                if (enable_upload_folder && file.relative_path) { // 'add folder'
+                    var file_path = file.relative_path,
+                        r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1),
+                        formData = form.fileupload('option', 'formData');
+                    formData.relative_path = r_path;
+                    form.fileupload('option', {
+                        'formData': formData
+                    });
+                    data.url = ret['url'];
+                    data.jqXHR = form.fileupload('send', data);
 
-                data.url = ret['url'];
-                data.jqXHR = form.fileupload('send', data);
+                } else {
+                    var block_size = 1024 * 1024;
+                    if (enable_resumable_fileupload &&
+                            file.size && file.size > block_size) {
+                        form.fileupload('option', 'maxChunkSize', block_size);
+                        $.ajax({
+                            url: '{% url 'get_file_uploaded_bytes' uploadlink.repo_id %}',
+                            data: {
+                                'parent_dir': "{{path|escapejs}}",
+                                'file_name': file.name
+                            },
+                            cache: false,
+                            dataType: 'json',
+                            success: function(file_uploaded_data) {
+                                form.fileupload('option', 'uploadedBytes', file_uploaded_data.uploadedBytes);
+                                data.url = ret['url'];
+                                data.jqXHR = form.fileupload('send', data);
+                            }
+                        });
+
+                    } else {
+                        data.url = ret['url'];
+                        data.jqXHR = form.fileupload('send', data);
+                    }
+                }
+
             },
             error: function() {
                 file.error = "{% trans "Failed to get upload url" %}";

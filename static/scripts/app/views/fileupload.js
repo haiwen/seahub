@@ -53,6 +53,8 @@ define([
             var updated_files = [];
 
             var enable_upload_folder = app.pageOptions.enable_upload_folder;
+            var enable_resumable_fileupload = app.pageOptions.enable_resumable_fileupload;
+
             var new_dir_names = [];
             var dirs_to_update = [];
 
@@ -80,9 +82,14 @@ define([
                 popup.removeClass('hide');
                 cancel_all_btn.removeClass('hide');
                 close_icon.addClass('hide');
+
                 var path = dirents.path;
-                popup.fileupload('option', 'formData', {
-                    'parent_dir': path == '/' ? path : path + '/'
+                popup.fileupload('option', {
+                    'formData': {
+                        'parent_dir': path == '/' ? path : path + '/'
+                    },
+                    'maxChunkSize': undefined,
+                    'uploadedBytes': undefined
                 });
 
                 if (!enable_upload_folder) {
@@ -136,18 +143,45 @@ define([
                         cache: false,
                         dataType: 'json',
                         success: function(ret) {
-                            if (enable_upload_folder) {
+                            if (enable_upload_folder && file.relative_path) { // 'add folder'
                                 var file_path = file.relative_path,
-                                    r_path;
-                                if (file_path) { // 'add folder'
-                                    r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1);
+                                    r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1),
+                                    formData = popup.fileupload('option', 'formData');
+                                formData.relative_path = r_path;
+                                popup.fileupload('option', {
+                                    'formData': formData
+                                });
+                                data.url = ret['url'];
+                                data.jqXHR = popup.fileupload('send', data);
+
+                            } else {
+                                var block_size = 1024 * 1024;
+                                if (enable_resumable_fileupload &&
+                                        file.size && file.size > block_size) {
+                                    popup.fileupload('option', 'maxChunkSize', block_size);
+                                    $.ajax({
+                                        url: Common.getUrl({
+                                            name: 'get_file_uploaded_bytes',
+                                            repo_id: dirents.repo_id
+                                        }),
+                                        data: {
+                                            'parent_dir': dirents.path,
+                                            'file_name': file.name
+                                        },
+                                        cache: false,
+                                        dataType: 'json',
+                                        success: function(file_uploaded_data) {
+                                            popup.fileupload('option', 'uploadedBytes', file_uploaded_data.uploadedBytes);
+                                            data.url = ret['url'];
+                                            data.jqXHR = popup.fileupload('send', data);
+                                        }
+                                    });
+
+                                } else {
+                                    data.url = ret['url'];
+                                    data.jqXHR = popup.fileupload('send', data);
                                 }
-                                var formData = popup.fileupload('option', 'formData');
-                                formData.relative_path = r_path || '';
-                                popup.fileupload('option', 'formData', formData);
                             }
-                            data.url = ret['url'];
-                            data.jqXHR = popup.fileupload('send', data);
                         },
                         error: function() {
                             file.error = gettext("Failed to get upload url");

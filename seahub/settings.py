@@ -227,6 +227,9 @@ SHOW_REPO_DOWNLOAD_BUTTON = False
 # enable 'upload folder' or not
 ENABLE_UPLOAD_FOLDER = False
 
+# enable resumable fileupload or not
+ENABLE_RESUMABLE_FILEUPLOAD = False
+
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 8
 

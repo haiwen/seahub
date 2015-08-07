@@ -1221,6 +1221,7 @@ def libraries(request):
             "guide_enabled": guide_enabled,
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,

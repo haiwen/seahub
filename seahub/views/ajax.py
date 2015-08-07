@@ -1838,6 +1838,36 @@ def my_shared_and_group_repos(request):
     }
     return HttpResponse(json.dumps(ret), content_type=content_type)
 
+def get_file_uploaded_bytes(request, repo_id):
+    """
+    For resumable fileupload
+    """
+    content_type = 'application/json; charset=utf-8'
+
+    parent_dir = request.GET.get('parent_dir')
+    file_name = request.GET.get('file_name')
+
+    if not parent_dir or not file_name:
+        err_msg = _(u'Argument missing')
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
+                            content_type=content_type)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        err_msg = _(u'Library does not exist')
+        return HttpResponse(json.dumps({"error": err_msg}), status=400,
+                            content_type=content_type)
+
+    if check_folder_permission(request, repo.id, parent_dir) != 'rw':
+        err_msg = _(u'Permission denied')
+        return HttpResponse(json.dumps({"error": err_msg}), status=403,
+                            content_type=content_type)
+    
+    file_path = os.path.join(parent_dir, file_name)
+    uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
+    return HttpResponse(json.dumps({"uploadedBytes": uploadedBytes}),
+            content_type=content_type)
+
 @login_required_ajax
 def get_file_op_url(request, repo_id):
     """Get file upload/update url for AJAX.
