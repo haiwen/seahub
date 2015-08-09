@@ -80,6 +80,7 @@ define([
               case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
               case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
               case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
+              case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
               case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
               case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
               case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
