@@ -297,14 +297,6 @@ def list_dir(request, repo_id):
     uploadlink = get_uploadlink(repo.id, username, path)
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
-    for f in file_list:
-        file_path = posixpath.join(path, f.obj_name)
-        if allow_generate_thumbnail(request, repo_id, file_path):
-            f.allow_generate_thumbnail = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
-                f.encoded_thumbnail_src = urlquote(src)
-
     ctx = {
         'repo': repo,
         'zipped': zipped,
@@ -324,7 +316,6 @@ def list_dir(request, repo_id):
         'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
         'current_commit': head_commit,
         'info_commit': info_commit,
-        'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
     }
     html = render_to_string('snippets/repo_dir_data.html', ctx,
                             context_instance=RequestContext(request))
@@ -388,14 +379,6 @@ def list_dir_more(request, repo_id):
     if dirent_more:
         more_start = offset + 100
 
-    for f in file_list:
-        file_path = posixpath.join(path, f.obj_name)
-        if allow_generate_thumbnail(request, repo_id, file_path):
-            f.allow_generate_thumbnail = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
-                f.encoded_thumbnail_src = urlquote(src)
-
     ctx = {
         'repo': repo,
         'user_perm': user_perm,
@@ -405,7 +388,6 @@ def list_dir_more(request, repo_id):
         'file_list': file_list,
         'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
         'sub_lib_enabled': sub_lib_enabled,
-        'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
     }
     html = render_to_string('snippets/repo_dirents.html', ctx,
                             context_instance=RequestContext(request))
