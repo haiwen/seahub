@@ -3512,7 +3512,8 @@ textarea:-moz-placeholder {/* for FF */
 #folder-perm-tabs .perm-select {
     height:30px;
 }
-#share-popup .submit,
+#dir-user-share .submit,
+#dir-group-share .submit,
 #folder-perm-tabs .submit {
     margin-top:2px;
     height:30px;
