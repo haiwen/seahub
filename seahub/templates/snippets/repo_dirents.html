@@ -55,15 +55,9 @@
             <span title="{% trans 'unstarred' %}" class="icon-star-empty file-star" data-status="unstarred"></span>
             {% endif %}
         </td>
-        {% if dirent.allow_generate_thumbnail %}
-            {% if dirent.thumbnail_src %}
-                <td class="dirent-icon"><img class="thumbnail" src="{{ dirent.thumbnail_src }}" alt="{% trans "File"%}" /></td>
-            {% else %}
-                <td class="dirent-icon"><img class="not-thumbnail" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-            {% endif %}
-        {% else %}
-            <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
-        {% endif %}
+        <td class="dirent-icon">
+            <img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" />
+        </td>
         <td>
             {% if repo.encrypted and repo.enc_version == 2 and not server_crypto %}
             <span class="dirent-name">{{ dirent.obj_name }}</span>

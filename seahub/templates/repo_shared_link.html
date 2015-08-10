@@ -107,6 +107,7 @@ $('#shared-links .rm-link').click(function() {
     }
     $.ajax({
         url: ajax_url + '?t=' + e(link_token),
+        cache: false,
         dataType: 'json',
         success: function(data) {
             op.parents('tr').remove();
