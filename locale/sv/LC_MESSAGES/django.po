@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-10 11:05+0800\n"
-"PO-Revision-Date: 2015-08-10 03:08+0000\n"
+"POT-Creation-Date: 2015-08-11 16:32+0800\n"
+"PO-Revision-Date: 2015-08-11 08:34+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
@@ -50,14 +50,14 @@ msgstr "Namn %s är inte giltigt"
 
 #: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:894
 #: seahub/share/views.py:932 seahub/views/__init__.py:1265
-#: seahub/views/ajax.py:381 seahub/views/ajax.py:542 seahub/views/ajax.py:629
-#: seahub/views/ajax.py:812 seahub/views/ajax.py:1030
-#: seahub/views/ajax.py:1167 seahub/views/ajax.py:1196
-#: seahub/views/ajax.py:1357 seahub/views/ajax.py:1440
-#: seahub/views/ajax.py:1444 seahub/views/ajax.py:1448
-#: seahub/views/ajax.py:1850 seahub/views/ajax.py:2300
-#: seahub/views/ajax.py:2357 seahub/views/ajax.py:2498
-#: seahub/views/ajax.py:2713
+#: seahub/views/ajax.py:372 seahub/views/ajax.py:524 seahub/views/ajax.py:611
+#: seahub/views/ajax.py:794 seahub/views/ajax.py:1012
+#: seahub/views/ajax.py:1149 seahub/views/ajax.py:1178
+#: seahub/views/ajax.py:1339 seahub/views/ajax.py:1422
+#: seahub/views/ajax.py:1426 seahub/views/ajax.py:1430
+#: seahub/views/ajax.py:1832 seahub/views/ajax.py:2282
+#: seahub/views/ajax.py:2339 seahub/views/ajax.py:2480
+#: seahub/views/ajax.py:2695
 msgid "Argument missing"
 msgstr "Argument saknas"
 
@@ -99,9 +99,9 @@ msgid "Wrong password"
 msgstr "Fel lösenord"
 
 #: seahub/forms.py:155 seahub/views/__init__.py:557
-#: seahub/views/__init__.py:1271 seahub/views/ajax.py:883
-#: seahub/views/ajax.py:911 seahub/views/ajax.py:954 seahub/views/ajax.py:991
-#: seahub/views/ajax.py:2756
+#: seahub/views/__init__.py:1271 seahub/views/ajax.py:865
+#: seahub/views/ajax.py:893 seahub/views/ajax.py:936 seahub/views/ajax.py:973
+#: seahub/views/ajax.py:2738
 msgid "Internal server error"
 msgstr "Internt serverfel"
 
@@ -275,9 +275,7 @@ msgstr "Diskussion"
 #: seahub/templates/view_shared_dir.html:63
 #: seahub/templates/view_shared_dir.html:66
 #: seahub/templates/snippets/group_recommend_form.html:28
-#: seahub/templates/snippets/repo_dirents.html:60
-#: seahub/templates/snippets/repo_dirents.html:62
-#: seahub/templates/snippets/repo_dirents.html:65
+#: seahub/templates/snippets/repo_dirents.html:59
 #: seahub/templates/sysadmin/userinfo.html:153
 msgid "File"
 msgstr "Fil"
@@ -350,9 +348,9 @@ msgstr "Laddar"
 #: seahub/templates/base.html:155 seahub/templates/file_edit.html:456
 #: seahub/templates/repo.html:594 seahub/templates/repo.html.py:1003
 #: seahub/templates/repo.html:1061 seahub/templates/repo.html.py:1879
-#: seahub/templates/repo.html:2137 seahub/templates/repo.html.py:2162
-#: seahub/templates/repo.html:2207 seahub/templates/repo.html.py:2312
-#: seahub/templates/repo.html:2385 seahub/templates/repo_basic_info.html:101
+#: seahub/templates/repo.html:2103 seahub/templates/repo.html.py:2128
+#: seahub/templates/repo.html:2173 seahub/templates/repo.html.py:2278
+#: seahub/templates/repo.html:2351 seahub/templates/repo_basic_info.html:101
 #: seahub/templates/repo_change_password.html:101
 #: seahub/templates/repo_transfer_owner.html:81
 #: seahub/templates/snippets/add_file_js.html:23
@@ -841,69 +839,73 @@ msgstr "Omdöpt katalog"
 msgid "Moved directory"
 msgstr "Flyttad katalog"
 
-#: seahub/base/templatetags/seahub_tags.py:162
-#: seahub/base/templatetags/seahub_tags.py:231
+#: seahub/base/templatetags/seahub_tags.py:148
+msgid "Added or modified"
+msgstr ""
+
+#: seahub/base/templatetags/seahub_tags.py:163
+#: seahub/base/templatetags/seahub_tags.py:232
 msgid "Reverted library to status at"
 msgstr "Backade katalogens status till "
 
-#: seahub/base/templatetags/seahub_tags.py:165
-#: seahub/base/templatetags/seahub_tags.py:234
+#: seahub/base/templatetags/seahub_tags.py:166
+#: seahub/base/templatetags/seahub_tags.py:235
 #, python-format
 msgid "Reverted file \"%(file)s\" to status at %(time)s."
 msgstr "Backade filen \"%(file)s\" till status kl. %(time)s."
 
-#: seahub/base/templatetags/seahub_tags.py:169
-#: seahub/base/templatetags/seahub_tags.py:238
+#: seahub/base/templatetags/seahub_tags.py:170
+#: seahub/base/templatetags/seahub_tags.py:239
 msgid "Recovered deleted directory"
 msgstr "Återskapade borttagen katalog"
 
-#: seahub/base/templatetags/seahub_tags.py:171
-#: seahub/base/templatetags/seahub_tags.py:240 seahub/views/ajax.py:1950
+#: seahub/base/templatetags/seahub_tags.py:172
+#: seahub/base/templatetags/seahub_tags.py:241 seahub/views/ajax.py:1932
 msgid "Changed library name or description"
 msgstr "Ändrade katalognamn eller beskrivning"
 
-#: seahub/base/templatetags/seahub_tags.py:173
-#: seahub/base/templatetags/seahub_tags.py:242
+#: seahub/base/templatetags/seahub_tags.py:174
+#: seahub/base/templatetags/seahub_tags.py:243
 msgid "Auto merge by seafile system"
 msgstr "Automatisk ihopslagning av seafile-systemet"
 
-#: seahub/base/templatetags/seahub_tags.py:317
-#: seahub/base/templatetags/seahub_tags.py:353
+#: seahub/base/templatetags/seahub_tags.py:318
+#: seahub/base/templatetags/seahub_tags.py:354
 #: seahub/group/templates/group/group_discuss.html:154
 #: seahub/templates/repo.html:262 seahub/templates/repo.html.py:448
-#: seahub/templates/repo.html:466 seahub/templates/repo.html.py:2017
+#: seahub/templates/repo.html:466 seahub/templates/repo.html.py:1983
 msgid "Just now"
 msgstr "Precis nyss"
 
-#: seahub/base/templatetags/seahub_tags.py:328
+#: seahub/base/templatetags/seahub_tags.py:329
 #, python-format
 msgid "%(days)d day ago"
 msgid_plural "%(days)d days ago"
 msgstr[0] "%(days)d dag sedan"
 msgstr[1] "%(days)d dagar sedan"
 
-#: seahub/base/templatetags/seahub_tags.py:335
+#: seahub/base/templatetags/seahub_tags.py:336
 #, python-format
 msgid "%(hours)d hour ago"
 msgid_plural "%(hours)d hours ago"
 msgstr[0] "%(hours)d timme sedan"
 msgstr[1] "%(hours)d timmar sedan"
 
-#: seahub/base/templatetags/seahub_tags.py:342
+#: seahub/base/templatetags/seahub_tags.py:343
 #, python-format
 msgid "%(minutes)d minute ago"
 msgid_plural "%(minutes)d minutes ago"
 msgstr[0] ""
 msgstr[1] "%"
 
-#: seahub/base/templatetags/seahub_tags.py:348
+#: seahub/base/templatetags/seahub_tags.py:349
 #, python-format
 msgid "%(seconds)d second ago"
 msgid_plural "%(seconds)d seconds ago"
 msgstr[0] "%(seconds)d sekund sedan"
 msgstr[1] "%(seconds)d sekunder sedan"
 
-#: seahub/base/templatetags/seahub_tags.py:450
+#: seahub/base/templatetags/seahub_tags.py:451
 #: seahub/group/templates/group/group_info_for_pub.html:24
 #: seahub/share/views.py:512 seahub/share/views.py:606
 #: seahub/share/templates/share/list_priv_shared_folders.html:22
@@ -952,7 +954,7 @@ msgstr[1] "%(seconds)d sekunder sedan"
 msgid "Read-Write"
 msgstr "Read-Write"
 
-#: seahub/base/templatetags/seahub_tags.py:452
+#: seahub/base/templatetags/seahub_tags.py:453
 #: seahub/group/templates/group/group_info_for_pub.html:26
 #: seahub/share/views.py:514 seahub/share/views.py:608
 #: seahub/share/templates/share/list_priv_shared_folders.html:33
@@ -1179,7 +1181,7 @@ msgstr "Ändra"
 #: seahub/templates/snippets/file_share_popup.html:43
 #: seahub/templates/snippets/file_share_popup.html:81
 #: seahub/templates/snippets/repo_dirents.html:36
-#: seahub/templates/snippets/repo_dirents.html:93
+#: seahub/templates/snippets/repo_dirents.html:87
 #: seahub/templates/sysadmin/repoadmin_table.html:22
 #: seahub/templates/sysadmin/sys_admin_group_info.html:59
 #: seahub/templates/sysadmin/sys_group_admin.html:29
@@ -1319,12 +1321,12 @@ msgstr "\"%s\" är inte ett giltigt namn"
 #: seahub/share/views.py:1251 seahub/share/views.py:1390
 #: seahub/views/__init__.py:549 seahub/views/__init__.py:1055
 #: seahub/views/__init__.py:1535 seahub/views/__init__.py:1592
-#: seahub/views/ajax.py:185 seahub/views/ajax.py:549 seahub/views/ajax.py:647
-#: seahub/views/ajax.py:654 seahub/views/ajax.py:715 seahub/views/ajax.py:722
-#: seahub/views/ajax.py:830 seahub/views/ajax.py:855 seahub/views/ajax.py:940
-#: seahub/views/ajax.py:1049 seahub/views/ajax.py:1863
-#: seahub/views/ajax.py:2344 seahub/views/ajax.py:2370
-#: seahub/views/ajax.py:2486 seahub/views/ajax.py:2512
+#: seahub/views/ajax.py:185 seahub/views/ajax.py:531 seahub/views/ajax.py:629
+#: seahub/views/ajax.py:636 seahub/views/ajax.py:697 seahub/views/ajax.py:704
+#: seahub/views/ajax.py:812 seahub/views/ajax.py:837 seahub/views/ajax.py:922
+#: seahub/views/ajax.py:1031 seahub/views/ajax.py:1845
+#: seahub/views/ajax.py:2326 seahub/views/ajax.py:2352
+#: seahub/views/ajax.py:2468 seahub/views/ajax.py:2494
 #: seahub/views/file.py:985
 msgid "Permission denied"
 msgstr "Åtkomst nekas"
@@ -1488,7 +1490,7 @@ msgid "Discussion is required."
 msgstr ""
 
 #: seahub/group/views.py:1268 seahub/views/__init__.py:859
-#: seahub/views/ajax.py:1462 seahub/views/file.py:349 seahub/views/file.py:732
+#: seahub/views/ajax.py:1444 seahub/views/file.py:349 seahub/views/file.py:732
 #: seahub/views/file.py:883
 msgid "File does not exist"
 msgstr "Filen existerar inte"
@@ -1515,7 +1517,7 @@ msgid "Unknown"
 msgstr "Okänd"
 
 #: seahub/group/views.py:1407 seahub/views/__init__.py:853
-#: seahub/views/ajax.py:2024 seahub/views/ajax.py:2088
+#: seahub/views/ajax.py:2006 seahub/views/ajax.py:2070
 #: seahub/views/wiki.py:112
 msgid "Internal Server Error"
 msgstr "Internt serverproblem"
@@ -1796,7 +1798,7 @@ msgstr "Misslyckades att radera"
 #: seahub/group/templates/group/group_discuss.html:292
 #: seahub/message/templates/message/user_msg_list.html:215
 #: seahub/message/templates/message/user_msg_list.html:251
-#: seahub/templates/repo.html:1179 seahub/templates/repo.html.py:2126
+#: seahub/templates/repo.html:1179 seahub/templates/repo.html.py:2092
 msgid "Failed."
 msgstr "Misslyckades"
 
@@ -1978,7 +1980,7 @@ msgstr "Ändra"
 #: seahub/templates/js/templates.html:218
 #: seahub/templates/js/templates.html:297
 #: seahub/templates/snippets/repo_dirents.html:37
-#: seahub/templates/snippets/repo_dirents.html:95
+#: seahub/templates/snippets/repo_dirents.html:89
 msgid "Rename"
 msgstr "Döp om"
 
@@ -2875,7 +2877,7 @@ msgid "Password:"
 msgstr "Lösenord"
 
 #: seahub/profile/templates/profile/set_profile.html:40
-#: seahub/templates/snippets/repo_dirents.html:94
+#: seahub/templates/snippets/repo_dirents.html:88
 msgid "Update"
 msgstr "Uppdatera"
 
@@ -2997,8 +2999,8 @@ msgstr "Misslyckades att dela \"%s\", inte tillräcklig quota.<a href=\"http://s
 #: seahub/share/views.py:658 seahub/share/views.py:1229
 #: seahub/views/__init__.py:1046 seahub/views/__init__.py:1087
 #: seahub/views/__init__.py:1460 seahub/views/__init__.py:1854
-#: seahub/views/ajax.py:1856 seahub/views/ajax.py:2361
-#: seahub/views/ajax.py:2503 seahub/views/sysadmin.py:1391
+#: seahub/views/ajax.py:1838 seahub/views/ajax.py:2343
+#: seahub/views/ajax.py:2485 seahub/views/sysadmin.py:1391
 msgid "Library does not exist"
 msgstr "Katalogen existerar inte"
 
@@ -3035,8 +3037,8 @@ msgstr "alla medlemmar"
 #: seahub/share/views.py:836 seahub/share/views.py:1215
 #: seahub/share/views.py:1363 seahub/share/views.py:1445
 #: seahub/views/__init__.py:1085 seahub/views/__init__.py:1527
-#: seahub/views/__init__.py:1585 seahub/views/ajax.py:1222
-#: seahub/views/ajax.py:1242 seahub/views/file.py:1006
+#: seahub/views/__init__.py:1585 seahub/views/ajax.py:1204
+#: seahub/views/ajax.py:1224 seahub/views/file.py:1006
 msgid "Invalid arguments"
 msgstr "Ogiltiga argument"
 
@@ -3130,10 +3132,10 @@ msgstr ""
 
 #: seahub/share/views.py:1484 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:132 seahub/views/ajax.py:247
-#: seahub/views/ajax.py:343 seahub/views/ajax.py:425 seahub/views/ajax.py:535
-#: seahub/views/ajax.py:622 seahub/views/ajax.py:697 seahub/views/ajax.py:758
-#: seahub/views/ajax.py:802 seahub/views/ajax.py:1018
-#: seahub/views/ajax.py:1278 seahub/views/ajax.py:2707
+#: seahub/views/ajax.py:334 seahub/views/ajax.py:407 seahub/views/ajax.py:517
+#: seahub/views/ajax.py:604 seahub/views/ajax.py:679 seahub/views/ajax.py:740
+#: seahub/views/ajax.py:784 seahub/views/ajax.py:1000
+#: seahub/views/ajax.py:1260 seahub/views/ajax.py:2689
 msgid "Library does not exist."
 msgstr "Katalogen existerar inte"
 
@@ -3567,7 +3569,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:207
 #: seahub/templates/js/templates.html:283
 #: seahub/templates/snippets/repo_dirents.html:24
-#: seahub/templates/snippets/repo_dirents.html:81
+#: seahub/templates/snippets/repo_dirents.html:75
 #: seahub/templates/sysadmin/userinfo.html:161
 msgid "Download"
 msgstr "Ladda ner"
@@ -3793,7 +3795,7 @@ msgstr "Lösenord krävs"
 #: seahub/templates/js/templates.html:139
 #: seahub/templates/js/templates.html:301
 #: seahub/templates/snippets/current_commit.html:15
-#: seahub/templates/snippets/repo_dirents.html:98
+#: seahub/templates/snippets/repo_dirents.html:92
 msgid "History"
 msgstr "Historik"
 
@@ -4100,7 +4102,7 @@ msgstr "Papperskorg"
 #: seahub/templates/js/templates.html:219
 #: seahub/templates/js/templates.html:298
 #: seahub/templates/snippets/repo_dirents.html:38
-#: seahub/templates/snippets/repo_dirents.html:96
+#: seahub/templates/snippets/repo_dirents.html:90
 msgid "Move"
 msgstr "Flytta"
 
@@ -4108,7 +4110,7 @@ msgstr "Flytta"
 #: seahub/templates/js/templates.html:220
 #: seahub/templates/js/templates.html:300
 #: seahub/templates/snippets/repo_dirents.html:39
-#: seahub/templates/snippets/repo_dirents.html:97
+#: seahub/templates/snippets/repo_dirents.html:91
 msgid "Copy"
 msgstr "Kopiera"
 
@@ -4143,7 +4145,7 @@ msgid "Cancel All"
 msgstr "Avbryt alla"
 
 #: seahub/templates/repo.html:82 seahub/templates/repo.html.py:117
-#: seahub/templates/repo.html:2111
+#: seahub/templates/repo.html:2077
 #: seahub/templates/view_shared_upload_link.html:48
 #: seahub/templates/js/lib-op-popups.html:94
 msgid "Saving..."
@@ -4245,7 +4247,7 @@ msgid "group"
 msgstr ""
 
 #: seahub/templates/repo.html:255 seahub/templates/repo.html.py:1869
-#: seahub/templates/repo.html:2030 seahub/templates/js/templates.html:251
+#: seahub/templates/repo.html:1996 seahub/templates/js/templates.html:251
 #: seahub/templates/snippets/repo_dirents.html:55
 msgid "unstarred"
 msgstr "favorit borttagen"
@@ -4302,7 +4304,7 @@ msgid "Empty file upload result"
 msgstr "Uppladdning resulterade i en tom fil"
 
 #: seahub/templates/repo.html:534
-#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1175
+#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1157
 msgid "Error"
 msgstr "Fel"
 
@@ -4361,8 +4363,8 @@ msgstr "Flytta valda kataloger/filer till:"
 msgid "Copy selected directories/files to:"
 msgstr "Kopiera valda kataloger/filer till:"
 
-#: seahub/templates/repo.html:848 seahub/templates/repo.html.py:2062
-#: seahub/views/ajax.py:824 seahub/views/ajax.py:1043
+#: seahub/templates/repo.html:848 seahub/templates/repo.html.py:2028
+#: seahub/views/ajax.py:806 seahub/views/ajax.py:1025
 msgid "Invalid destination path"
 msgstr "Felaktig destination"
 
@@ -4426,8 +4428,8 @@ msgstr ""
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: seahub/templates/repo.html:1052 seahub/templates/repo.html.py:2126
-#: seahub/templates/repo.html:2153
+#: seahub/templates/repo.html:1052 seahub/templates/repo.html.py:2092
+#: seahub/templates/repo.html:2119
 msgid "Canceled."
 msgstr ""
 
@@ -4518,42 +4520,42 @@ msgstr "Denna katalog kan inte laddas ned"
 msgid "starred"
 msgstr "favorit skapad"
 
-#: seahub/templates/repo.html:1951 seahub/templates/repo.html.py:1991
+#: seahub/templates/repo.html:1917 seahub/templates/repo.html.py:1957
 msgid "It is required."
 msgstr "Det krävs"
 
-#: seahub/templates/repo.html:1957
+#: seahub/templates/repo.html:1923
 msgid "Only an extension there, please input a name."
 msgstr "Bara en ändelse, vänligen ange ett namn"
 
-#: seahub/templates/repo.html:1967
+#: seahub/templates/repo.html:1933
 msgid "Creating..."
 msgstr "Skapar..."
 
-#: seahub/templates/repo.html:1995
+#: seahub/templates/repo.html:1961
 msgid "You have not renamed it."
 msgstr "Du har inte döpt om det"
 
-#: seahub/templates/repo.html:2041
+#: seahub/templates/repo.html:2007
 #, python-format
 msgid "Successfully renamed %(old_name)s to %(new_name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:2095
+#: seahub/templates/repo.html:2061
 #, python-format
 msgid "Moving %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:2095
+#: seahub/templates/repo.html:2061
 #, python-format
 msgid "Copying %(name)s"
 msgstr ""
 
-#: seahub/templates/repo.html:2255
+#: seahub/templates/repo.html:2221
 msgid "Please select at least one contact."
 msgstr "Vänligen ange minst en kontakt"
 
-#: seahub/templates/repo.html:2367
+#: seahub/templates/repo.html:2333
 #: seahub/templates/snippets/myhome_extra_script.html:86
 msgid "Please enter emails or groups, or select some."
 msgstr "Vänligen ange email eller grupper, eller välj"
@@ -4809,7 +4811,7 @@ msgstr ""
 msgid "Created By"
 msgstr ""
 
-#: seahub/templates/repo_shared_link.html:113
+#: seahub/templates/repo_shared_link.html:114
 msgid "Removed successfully."
 msgstr ""
 
@@ -4997,7 +4999,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:285
 #: seahub/templates/snippets/repo_dir_data.html:48
 #: seahub/templates/snippets/repo_dirents.html:28
-#: seahub/templates/snippets/repo_dirents.html:85
+#: seahub/templates/snippets/repo_dirents.html:79
 msgid "Share"
 msgstr "Dela"
 
@@ -5011,7 +5013,7 @@ msgstr ""
 msgid "top"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:162 seahub/views/ajax.py:2609
+#: seahub/templates/view_file_base.html:162 seahub/views/ajax.py:2591
 #: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:226
 #: seahub/views/sysadmin.py:248
 msgid "Failed"
@@ -5227,7 +5229,7 @@ msgid "Open via Client"
 msgstr ""
 
 #: seahub/templates/js/templates.html:294
-#: seahub/templates/snippets/repo_dirents.html:91
+#: seahub/templates/snippets/repo_dirents.html:85
 msgid "More Operations"
 msgstr "Fler åtgärder"
 
@@ -6482,11 +6484,11 @@ msgid "Invalid arguments."
 msgstr ""
 
 #: seahub/thumbnail/views.py:49 seahub/views/ajax.py:254
-#: seahub/views/ajax.py:350 seahub/views/ajax.py:437 seahub/views/ajax.py:1216
-#: seahub/views/ajax.py:1236 seahub/views/ajax.py:1285
-#: seahub/views/ajax.py:1608 seahub/views/ajax.py:1626
-#: seahub/views/ajax.py:2662 seahub/views/ajax.py:2682
-#: seahub/views/ajax.py:2724 seahub/views/ajax.py:2731
+#: seahub/views/ajax.py:341 seahub/views/ajax.py:419 seahub/views/ajax.py:1198
+#: seahub/views/ajax.py:1218 seahub/views/ajax.py:1267
+#: seahub/views/ajax.py:1590 seahub/views/ajax.py:1608
+#: seahub/views/ajax.py:2644 seahub/views/ajax.py:2664
+#: seahub/views/ajax.py:2706 seahub/views/ajax.py:2713
 msgid "Permission denied."
 msgstr "Åtkomst nekas"
 
@@ -6582,7 +6584,7 @@ msgstr "Misslyckades att ta bort fil"
 msgid "%s successfully deleted."
 msgstr "%s togs bort."
 
-#: seahub/views/__init__.py:1368 seahub/views/ajax.py:745
+#: seahub/views/__init__.py:1368 seahub/views/ajax.py:727
 #, python-format
 msgid "Internal error. Failed to delete %s."
 msgstr "Internt fel. Misslyckades ta bort %s."
@@ -6595,13 +6597,13 @@ msgstr "Misslyckades att komma åt filen"
 msgid "No revisions found"
 msgstr ""
 
-#: seahub/views/__init__.py:1540 seahub/views/ajax.py:661
-#: seahub/views/ajax.py:729 seahub/views/ajax.py:863 seahub/views/file.py:989
+#: seahub/views/__init__.py:1540 seahub/views/ajax.py:643
+#: seahub/views/ajax.py:711 seahub/views/ajax.py:845 seahub/views/file.py:989
 msgid "Check file lock error"
 msgstr ""
 
-#: seahub/views/__init__.py:1544 seahub/views/ajax.py:666
-#: seahub/views/ajax.py:734 seahub/views/ajax.py:868 seahub/views/file.py:992
+#: seahub/views/__init__.py:1544 seahub/views/ajax.py:648
+#: seahub/views/ajax.py:716 seahub/views/ajax.py:850 seahub/views/file.py:992
 msgid "File is locked"
 msgstr ""
 
@@ -6664,173 +6666,173 @@ msgstr "Ingen sökväg."
 msgid "The group doesn't exist"
 msgstr "Gruppen finns ej"
 
-#: seahub/views/ajax.py:269 seahub/views/ajax.py:365 seahub/views/ajax.py:443
-#: seahub/views/ajax.py:1298
+#: seahub/views/ajax.py:269 seahub/views/ajax.py:356 seahub/views/ajax.py:425
+#: seahub/views/ajax.py:1280
 msgid "Library is encrypted."
 msgstr "Katalogen är krypterad"
 
-#: seahub/views/ajax.py:275 seahub/views/ajax.py:371 seahub/views/ajax.py:449
-#: seahub/views/ajax.py:1304
+#: seahub/views/ajax.py:275 seahub/views/ajax.py:362 seahub/views/ajax.py:431
+#: seahub/views/ajax.py:1286
 msgid "Error: no head commit id"
 msgstr "Fel: ingen sökväg."
 
-#: seahub/views/ajax.py:705 seahub/views/ajax.py:766
+#: seahub/views/ajax.py:687 seahub/views/ajax.py:748
 msgid "Argument missing."
 msgstr "Argument saknas"
 
-#: seahub/views/ajax.py:818
+#: seahub/views/ajax.py:800
 msgid "Destination path is too long."
 msgstr "Destinationens sökväg är för lång"
 
-#: seahub/views/ajax.py:888 seahub/views/ajax.py:959
+#: seahub/views/ajax.py:870 seahub/views/ajax.py:941
 #, python-format
 msgid "Successfully moved %(name)s"
 msgstr ""
 
-#: seahub/views/ajax.py:916 seahub/views/ajax.py:996
+#: seahub/views/ajax.py:898 seahub/views/ajax.py:978
 #, python-format
 msgid "Successfully copied %(name)s"
 msgstr ""
 
-#: seahub/views/ajax.py:933 seahub/views/ajax.py:1086
+#: seahub/views/ajax.py:915 seahub/views/ajax.py:1068
 #, python-format
 msgid "Can not move directory %(src)s to its subdirectory %(des)s"
 msgstr "Kan inte flytta katalog %(src)s till dess underkatalog %(des)s"
 
-#: seahub/views/ajax.py:975 seahub/views/ajax.py:1129
+#: seahub/views/ajax.py:957 seahub/views/ajax.py:1111
 #, python-format
 msgid "Can not copy directory %(src)s to its subdirectory %(des)s"
 msgstr "Kan inte kopiera katalog %(src)s till dess underkatalog %(des)s"
 
-#: seahub/views/ajax.py:1037
+#: seahub/views/ajax.py:1019
 #, python-format
 msgid "Destination path is too long for %s."
 msgstr "Målsökvägen är för lång för %s."
 
-#: seahub/views/ajax.py:1206
+#: seahub/views/ajax.py:1188
 msgid "Cancel failed"
 msgstr ""
 
-#: seahub/views/ajax.py:1333 seahub/views/ajax.py:1351
-#: seahub/views/ajax.py:2003 seahub/views/ajax.py:2066
+#: seahub/views/ajax.py:1315 seahub/views/ajax.py:1333
+#: seahub/views/ajax.py:1985 seahub/views/ajax.py:2048
 msgid "You do not have permission to create library"
 msgstr ""
 
-#: seahub/views/ajax.py:1339
+#: seahub/views/ajax.py:1321
 msgid "Repo not found."
 msgstr ""
 
-#: seahub/views/ajax.py:1371 seahub/views/ajax.py:1395
+#: seahub/views/ajax.py:1353 seahub/views/ajax.py:1377
 msgid "Failed to create sub library, please try again later."
 msgstr ""
 
-#: seahub/views/ajax.py:1415
+#: seahub/views/ajax.py:1397
 msgid "Failed to get file block list"
 msgstr "Det gick inte att få filblockerings lista"
 
-#: seahub/views/ajax.py:1453
+#: seahub/views/ajax.py:1435
 msgid "Wrong repo id"
 msgstr "Fel repo id"
 
-#: seahub/views/ajax.py:1583
+#: seahub/views/ajax.py:1565
 msgid "System library can not be deleted."
 msgstr "System bibliotek kan inte raderas."
 
-#: seahub/views/ajax.py:1894
+#: seahub/views/ajax.py:1876
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:1900
+#: seahub/views/ajax.py:1882
 msgid "Bad repo id in upload link."
 msgstr ""
 
-#: seahub/views/ajax.py:1953
+#: seahub/views/ajax.py:1935
 msgid "No conflict in the merge."
 msgstr "Ingen konflikt i sammanslagningen"
 
-#: seahub/views/ajax.py:2172
+#: seahub/views/ajax.py:2154
 msgid "Failed to edit library information."
 msgstr "Misslyckades att ändra kataloginformation"
 
-#: seahub/views/ajax.py:2181
+#: seahub/views/ajax.py:2163
 msgid "Failed to save settings on server"
 msgstr "Misslyckades att spara inställningar"
 
-#: seahub/views/ajax.py:2184
+#: seahub/views/ajax.py:2166
 msgid "Settings saved."
 msgstr "Inställningar sparade"
 
-#: seahub/views/ajax.py:2215
+#: seahub/views/ajax.py:2197
 #, python-format
 msgid "Username %s is not valid."
 msgstr "Användarnamnet %s är inte giltigt"
 
-#: seahub/views/ajax.py:2222
+#: seahub/views/ajax.py:2204
 #, python-format
 msgid "User %s is not found."
 msgstr "Kan inte hitta användare %s"
 
-#: seahub/views/ajax.py:2229
+#: seahub/views/ajax.py:2211
 #, python-format
 msgid "User %s is not in current organization."
 msgstr ""
 
-#: seahub/views/ajax.py:2239
+#: seahub/views/ajax.py:2221
 #, python-format
 msgid "Can not transfer library to organization user %s."
 msgstr ""
 
-#: seahub/views/ajax.py:2268
+#: seahub/views/ajax.py:2250
 msgid "Faied to change password, you are not owner."
 msgstr ""
 
-#: seahub/views/ajax.py:2280
+#: seahub/views/ajax.py:2262
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr ""
 
-#: seahub/views/ajax.py:2376 seahub/views/ajax.py:2518
+#: seahub/views/ajax.py:2358 seahub/views/ajax.py:2500
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr ""
 
-#: seahub/views/ajax.py:2380 seahub/views/ajax.py:2522
+#: seahub/views/ajax.py:2362 seahub/views/ajax.py:2504
 msgid "Path should start with \"/\""
 msgstr ""
 
-#: seahub/views/ajax.py:2384 seahub/views/ajax.py:2526
+#: seahub/views/ajax.py:2366 seahub/views/ajax.py:2508
 msgid "Path should not end with \"/\""
 msgstr ""
 
-#: seahub/views/ajax.py:2388 seahub/views/ajax.py:2530
+#: seahub/views/ajax.py:2370 seahub/views/ajax.py:2512
 msgid "Invalid path"
 msgstr ""
 
-#: seahub/views/ajax.py:2396
+#: seahub/views/ajax.py:2378
 msgid "Invalid user, should be registered"
 msgstr ""
 
-#: seahub/views/ajax.py:2408 seahub/views/ajax.py:2421
-#: seahub/views/ajax.py:2551 seahub/views/ajax.py:2564
+#: seahub/views/ajax.py:2390 seahub/views/ajax.py:2403
+#: seahub/views/ajax.py:2533 seahub/views/ajax.py:2546
 msgid "Operation failed"
 msgstr ""
 
-#: seahub/views/ajax.py:2411 seahub/views/ajax.py:2554
+#: seahub/views/ajax.py:2393 seahub/views/ajax.py:2536
 msgid "Wrong folder permission"
 msgstr ""
 
-#: seahub/views/ajax.py:2424 seahub/views/ajax.py:2567
+#: seahub/views/ajax.py:2406 seahub/views/ajax.py:2549
 msgid "Please add folder permission first"
 msgstr ""
 
-#: seahub/views/ajax.py:2471
+#: seahub/views/ajax.py:2453
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr ""
 
-#: seahub/views/ajax.py:2539
+#: seahub/views/ajax.py:2521
 msgid "Invalid group"
 msgstr ""
 
-#: seahub/views/ajax.py:2624 seahub/views/ajax.py:2656
+#: seahub/views/ajax.py:2606 seahub/views/ajax.py:2638
 msgid "Group does not exist."
 msgstr ""
 
