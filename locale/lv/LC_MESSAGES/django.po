@@ -8,10 +8,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-23 12:12+0800\n"
-"PO-Revision-Date: 2015-07-23 04:13+0000\n"
+"POT-Creation-Date: 2015-08-10 11:05+0800\n"
+"PO-Revision-Date: 2015-08-10 03:08+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
-"Language-Team: Latvian (http://www.transifex.com/projects/p/seahub/language/lv/)\n"
+"Language-Team: Latvian (http://www.transifex.com/haiwen/seahub/language/lv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -149,12 +149,12 @@ msgid "Español"
 msgstr "Español"
 
 #: seahub/settings.py:146
-msgid "Argentinian Spanish"
-msgstr "Argentinian Spanish"
+msgid "Español de Argentina"
+msgstr ""
 
 #: seahub/settings.py:147
-msgid "Mexican Spanish"
-msgstr "Mexican Spanish"
+msgid "Español de México"
+msgstr ""
 
 #: seahub/settings.py:148
 msgid "français"
@@ -245,9 +245,9 @@ msgstr "Datņu koplietošana"
 #: seahub/group/templates/group/group_base.html:24
 #: seahub/group/templates/group/group_info.html:40
 #: seahub/group/templates/group/groups_right_panel.html:19
-#: seahub/templates/base.html:181 seahub/templates/repo.html:216
+#: seahub/templates/base.html:190 seahub/templates/repo.html:216
 #: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:611
+#: seahub/templates/js/templates.html:617
 msgid "Discussion"
 msgstr "Sarunas"
 
@@ -277,7 +277,7 @@ msgstr "Sarunas"
 #: seahub/templates/snippets/repo_dirents.html:60
 #: seahub/templates/snippets/repo_dirents.html:62
 #: seahub/templates/snippets/repo_dirents.html:65
-#: seahub/templates/sysadmin/userinfo.html:139
+#: seahub/templates/sysadmin/userinfo.html:153
 msgid "File"
 msgstr "Datne"
 
@@ -298,8 +298,8 @@ msgstr "Datne"
 #: seahub/templates/snippets/group_recommend_form.html:22
 #: seahub/templates/snippets/repo_dirents.html:9
 #: seahub/templates/snippets/repo_dirents.html:11
-#: seahub/templates/sysadmin/userinfo.html:143
-#: seahub/templates/sysadmin/userinfo.html:153
+#: seahub/templates/sysadmin/userinfo.html:157
+#: seahub/templates/sysadmin/userinfo.html:167
 msgid "Directory icon"
 msgstr "Mapes attēls"
 
@@ -330,7 +330,7 @@ msgstr "Nav sarunu"
 #: seahub/templates/js/dir-view.html:11
 #: seahub/templates/js/lib-op-popups.html:51
 #: seahub/templates/js/lib-op-popups.html:56
-#: seahub/templates/js/templates.html:775
+#: seahub/templates/js/templates.html:781
 #: seahub/templates/snippets/repo_dir_data.html:72
 msgid "Loading..."
 msgstr "Ielāde... "
@@ -346,7 +346,7 @@ msgstr "Ielāde... "
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:179
 #: seahub/notifications/templates/notifications/user_notification_list.html:89
-#: seahub/templates/base.html:146 seahub/templates/file_edit.html:456
+#: seahub/templates/base.html:155 seahub/templates/file_edit.html:456
 #: seahub/templates/repo.html:594 seahub/templates/repo.html.py:1003
 #: seahub/templates/repo.html:1061 seahub/templates/repo.html.py:1879
 #: seahub/templates/repo.html:2137 seahub/templates/repo.html.py:2162
@@ -357,15 +357,15 @@ msgstr "Ielāde... "
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:135
 #: seahub/templates/snippets/events_js.html:56
-#: seahub/templates/snippets/office_convert_js.html:75
+#: seahub/templates/snippets/office_convert_js.html:91
 #: seahub/templates/snippets/repo_decrypt_js.html:35
 #: seahub/templates/snippets/shared_link_js.html:224
 #: seahub/templates/snippets/shared_link_js.html:401
-#: seahub/templates/snippets/spreadsheet_convert_js.html:31
+#: seahub/templates/snippets/spreadsheet_convert_js.html:36
 #: seahub/templates/sysadmin/sys_org_admin.html:132
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:35
 #: seahub/templates/sysadmin/sys_useradmin.html:134
-#: seahub/templates/sysadmin/userinfo.html:220
+#: seahub/templates/sysadmin/userinfo.html:234
 msgid "Failed. Please check the network."
 msgstr "Neizdevās. Lūdzu, pārbaudiet tīkla pieslēgumu."
 
@@ -472,16 +472,16 @@ msgstr "Mainīt paroli: %s"
 msgid "Please log in."
 msgstr "Lūdzu, piesakieties."
 
-#: seahub/auth/forms.py:22 seahub/base/accounts.py:462
+#: seahub/auth/forms.py:22 seahub/base/accounts.py:476
 msgid "Username"
 msgstr "Lietotājvārds"
 
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:183
-#: seahub/base/accounts.py:466 seahub/templates/js/lib-op-popups.html:105
+#: seahub/base/accounts.py:480 seahub/templates/js/lib-op-popups.html:105
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:362
-#: seahub/templates/js/templates.html:417
-#: seahub/templates/registration/login.html:23
+#: seahub/templates/js/templates.html:368
+#: seahub/templates/js/templates.html:423
+#: seahub/templates/registration/login.html:12
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:24
 #: seahub/templates/snippets/file_share_popup.html:70
@@ -492,7 +492,7 @@ msgstr "Lietotājvārds"
 msgid "Password"
 msgstr "Parole"
 
-#: seahub/auth/forms.py:39 seahub/base/accounts.py:473
+#: seahub/auth/forms.py:39 seahub/base/accounts.py:487
 msgid "Enter a valid email address."
 msgstr "Ievadiet derīgu e-pasta adresi."
 
@@ -546,7 +546,7 @@ msgid "New password confirmation"
 msgstr "Apstiprināt paroli"
 
 #: seahub/auth/forms.py:152 seahub/auth/forms.py:195
-#: seahub/base/accounts.py:513
+#: seahub/base/accounts.py:527
 msgid "The two password fields didn't match."
 msgstr "Paroļu lauki nesakrīt"
 
@@ -558,7 +558,7 @@ msgstr "Vecā parole"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Vecā parole ievadīta kļudaini. Lūdzu atkārtojiet."
 
-#: seahub/auth/forms.py:184 seahub/base/accounts.py:468
+#: seahub/auth/forms.py:184 seahub/base/accounts.py:482
 msgid "Password (again)"
 msgstr "Parole (vēlreiz)"
 
@@ -677,7 +677,6 @@ msgstr "Pašreizējais avatars:"
 #: seahub/group/templates/group/group_manage.html:113
 #: seahub/group/templates/group/group_manage.html:120
 #: seahub/group/templates/group/group_manage.html:127
-#: seahub/group/templates/group/group_pubinfo.html:24
 #: seahub/group/templates/group/group_wiki.html:51
 #: seahub/group/templates/group/group_wiki.html:61
 #: seahub/group/templates/group/group_wiki.html:94
@@ -710,22 +709,22 @@ msgstr "Pašreizējais avatars:"
 #: seahub/templates/repo_share_manage.html:128
 #: seahub/templates/repo_transfer_owner.html:40
 #: seahub/templates/share_access_validation.html:10
-#: seahub/templates/shared_file_view.html:56
+#: seahub/templates/shared_file_view.html:62
 #: seahub/templates/js/lib-op-popups.html:9
 #: seahub/templates/js/lib-op-popups.html:29
 #: seahub/templates/js/lib-op-popups.html:41
 #: seahub/templates/js/lib-op-popups.html:67
 #: seahub/templates/js/lib-op-popups.html:106
 #: seahub/templates/js/templates.html:25
-#: seahub/templates/js/templates.html:399
-#: seahub/templates/js/templates.html:439
-#: seahub/templates/js/templates.html:469
-#: seahub/templates/js/templates.html:492
-#: seahub/templates/js/templates.html:592
-#: seahub/templates/js/templates.html:646
-#: seahub/templates/js/templates.html:709
-#: seahub/templates/js/templates.html:731
-#: seahub/templates/js/templates.html:788
+#: seahub/templates/js/templates.html:405
+#: seahub/templates/js/templates.html:445
+#: seahub/templates/js/templates.html:475
+#: seahub/templates/js/templates.html:498
+#: seahub/templates/js/templates.html:598
+#: seahub/templates/js/templates.html:652
+#: seahub/templates/js/templates.html:715
+#: seahub/templates/js/templates.html:737
+#: seahub/templates/js/templates.html:794
 #: seahub/templates/registration/password_change_form.html:21
 #: seahub/templates/registration/password_reset_confirm.html:19
 #: seahub/templates/registration/password_reset_form.html:13
@@ -765,35 +764,35 @@ msgstr "<a href=\"%(user_url)s\">%(avatar_creator)s</a> ir atjaunināts uz avata
 msgid "You have updated your avatar <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 msgstr "Esat atjauninājis avataru <a href=\"%(avatar_url)s\">%(avatar)s</a>."
 
-#: seahub/base/accounts.py:457
+#: seahub/base/accounts.py:471
 msgid "Email address"
 msgstr "E-pasta adrese"
 
-#: seahub/base/accounts.py:463
+#: seahub/base/accounts.py:477
 msgid "This value must be of length 40"
 msgstr "Vērtībai ir jābūt 40"
 
-#: seahub/base/accounts.py:479
+#: seahub/base/accounts.py:493
 msgid "A user with this email already"
 msgstr "Lietotājs ar šādu e-pasta adresi jau pastāv"
 
-#: seahub/base/accounts.py:483
+#: seahub/base/accounts.py:497
 msgid "Invalid user id."
 msgstr "Nederīgs lietotāja ID"
 
-#: seahub/base/accounts.py:534
+#: seahub/base/accounts.py:548
 msgid "name"
 msgstr "vārds"
 
-#: seahub/base/accounts.py:537
+#: seahub/base/accounts.py:551
 msgid "department"
 msgstr "nodaļas"
 
-#: seahub/base/accounts.py:540
+#: seahub/base/accounts.py:554
 msgid "telephone"
 msgstr "telefons"
 
-#: seahub/base/accounts.py:543
+#: seahub/base/accounts.py:557
 msgid "note"
 msgstr "Piezīme"
 
@@ -931,28 +930,28 @@ msgstr[2] "%(seconds)d sekundēm"
 #: seahub/templates/repo_share_manage.html:124
 #: seahub/templates/js/templates.html:10 seahub/templates/js/templates.html:33
 #: seahub/templates/js/templates.html:52 seahub/templates/js/templates.html:74
-#: seahub/templates/js/templates.html:465
-#: seahub/templates/js/templates.html:488
-#: seahub/templates/js/templates.html:506
-#: seahub/templates/js/templates.html:509
-#: seahub/templates/js/templates.html:526
-#: seahub/templates/js/templates.html:528
-#: seahub/templates/js/templates.html:663
-#: seahub/templates/js/templates.html:672
-#: seahub/templates/js/templates.html:675
-#: seahub/templates/js/templates.html:705
-#: seahub/templates/js/templates.html:727
-#: seahub/templates/js/templates.html:798
-#: seahub/templates/js/templates.html:805
+#: seahub/templates/js/templates.html:471
+#: seahub/templates/js/templates.html:494
+#: seahub/templates/js/templates.html:512
+#: seahub/templates/js/templates.html:515
+#: seahub/templates/js/templates.html:532
+#: seahub/templates/js/templates.html:534
+#: seahub/templates/js/templates.html:669
+#: seahub/templates/js/templates.html:678
+#: seahub/templates/js/templates.html:681
+#: seahub/templates/js/templates.html:711
+#: seahub/templates/js/templates.html:733
+#: seahub/templates/js/templates.html:804
+#: seahub/templates/js/templates.html:811
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_shared_repos.html:7
 #: seahub/templates/snippets/my_shared_repos.html:10
 #: seahub/templates/snippets/repo_create_form.html:11
 #: seahub/templates/snippets/repo_share_form.html:25
-#: seahub/templates/sysadmin/sys_admin_group_info.html:48
-#: seahub/templates/sysadmin/userinfo.html:86
-#: seahub/templates/sysadmin/userinfo.html:112
+#: seahub/templates/sysadmin/sys_admin_group_info.html:53
+#: seahub/templates/sysadmin/userinfo.html:90
+#: seahub/templates/sysadmin/userinfo.html:124
 msgid "Read-Write"
 msgstr "Lasīt-Rakstīt"
 
@@ -976,19 +975,21 @@ msgstr "Lasīt-Rakstīt"
 #: seahub/templates/repo_share_manage.html:125
 #: seahub/templates/js/templates.html:11 seahub/templates/js/templates.html:54
 #: seahub/templates/js/templates.html:76
-#: seahub/templates/js/templates.html:466
-#: seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:511
-#: seahub/templates/js/templates.html:665
-#: seahub/templates/js/templates.html:673
-#: seahub/templates/js/templates.html:676
-#: seahub/templates/js/templates.html:706
-#: seahub/templates/js/templates.html:728
-#: seahub/templates/js/templates.html:806
+#: seahub/templates/js/templates.html:472
+#: seahub/templates/js/templates.html:495
+#: seahub/templates/js/templates.html:517
+#: seahub/templates/js/templates.html:671
+#: seahub/templates/js/templates.html:679
+#: seahub/templates/js/templates.html:682
+#: seahub/templates/js/templates.html:712
+#: seahub/templates/js/templates.html:734
+#: seahub/templates/js/templates.html:812
 #: seahub/templates/snippets/my_group_repos.html:30
 #: seahub/templates/snippets/my_shared_repos.html:12
 #: seahub/templates/snippets/repo_create_form.html:12
 #: seahub/templates/snippets/repo_share_form.html:26
+#: seahub/templates/sysadmin/sys_admin_group_info.html:51
+#: seahub/templates/sysadmin/userinfo.html:122
 msgid "Read-Only"
 msgstr "Tikai lasīt"
 
@@ -997,8 +998,8 @@ msgstr "Tikai lasīt"
 msgid "Email is required."
 msgstr "Nepieciešams e-pasts"
 
-#: seahub/contacts/views.py:67 seahub/group/views.py:868
-#: seahub/group/views.py:896
+#: seahub/contacts/views.py:67 seahub/group/views.py:867
+#: seahub/group/views.py:895
 #, python-format
 msgid "%s is not a valid email."
 msgstr "%s nav derīga e-pasta adrese."
@@ -1065,9 +1066,9 @@ msgstr "E-pasts"
 #: seahub/templates/repo_shared_link.html:64
 #: seahub/templates/view_shared_dir.html:34
 #: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:176
-#: seahub/templates/js/templates.html:757
-#: seahub/templates/js/templates.html:766
-#: seahub/templates/js/templates.html:781
+#: seahub/templates/js/templates.html:763
+#: seahub/templates/js/templates.html:772
+#: seahub/templates/js/templates.html:787
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/snippets/my_group_repos.html:8
 #: seahub/templates/snippets/repo_create_form.html:4
@@ -1085,8 +1086,8 @@ msgstr "E-pasts"
 #: seahub/templates/sysadmin/sys_repo_search.html:16
 #: seahub/templates/sysadmin/sys_repo_trash.html:26
 #: seahub/templates/sysadmin/userinfo.html:79
-#: seahub/templates/sysadmin/userinfo.html:105
-#: seahub/templates/sysadmin/userinfo.html:129
+#: seahub/templates/sysadmin/userinfo.html:111
+#: seahub/templates/sysadmin/userinfo.html:143
 #: seahub/templates/wiki/personal_wiki.html:41
 #: seahub/templates/wiki/personal_wiki.html:83
 #: seahub/templates/wiki/personal_wiki_pages.html:28
@@ -1130,8 +1131,8 @@ msgstr "Piezīme"
 #: seahub/templates/sysadmin/sys_repo_trash.html:29
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
 #: seahub/templates/sysadmin/useradmin_table.html:14
-#: seahub/templates/sysadmin/userinfo.html:81
-#: seahub/templates/sysadmin/userinfo.html:133
+#: seahub/templates/sysadmin/userinfo.html:82
+#: seahub/templates/sysadmin/userinfo.html:147
 msgid "Operations"
 msgstr "Darbības"
 
@@ -1146,7 +1147,7 @@ msgstr "Darbības"
 #: seahub/templates/repo_share_manage.html:97
 #: seahub/templates/view_file_markdown.html:13
 #: seahub/templates/view_file_text.html:22
-#: seahub/templates/js/templates.html:668
+#: seahub/templates/js/templates.html:674
 #: seahub/templates/sysadmin/sys_org_info_user.html:34
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:36
@@ -1173,18 +1174,18 @@ msgstr "Rediģēt"
 #: seahub/templates/js/templates.html:40
 #: seahub/templates/js/templates.html:114
 #: seahub/templates/js/templates.html:212
-#: seahub/templates/js/templates.html:284
-#: seahub/templates/js/templates.html:392
-#: seahub/templates/js/templates.html:432
-#: seahub/templates/js/templates.html:534
-#: seahub/templates/js/templates.html:681
+#: seahub/templates/js/templates.html:289
+#: seahub/templates/js/templates.html:398
+#: seahub/templates/js/templates.html:438
+#: seahub/templates/js/templates.html:540
+#: seahub/templates/js/templates.html:687
 #: seahub/templates/snippets/file_share_popup.html:43
 #: seahub/templates/snippets/file_share_popup.html:81
 #: seahub/templates/snippets/repo_dirents.html:36
 #: seahub/templates/snippets/repo_dirents.html:93
 #: seahub/templates/sysadmin/repoadmin_table.html:22
-#: seahub/templates/sysadmin/sys_admin_group_info.html:53
-#: seahub/templates/sysadmin/sys_group_admin.html:27
+#: seahub/templates/sysadmin/sys_admin_group_info.html:59
+#: seahub/templates/sysadmin/sys_group_admin.html:29
 #: seahub/templates/sysadmin/sys_org_admin.html:54
 #: seahub/templates/sysadmin/sys_org_info_group.html:28
 #: seahub/templates/sysadmin/sys_org_info_library.html:38
@@ -1192,7 +1193,7 @@ msgstr "Rediģēt"
 #: seahub/templates/sysadmin/sys_repo_trash.html:37
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:64
 #: seahub/templates/sysadmin/useradmin_table.html:82
-#: seahub/templates/sysadmin/userinfo.html:90
+#: seahub/templates/sysadmin/userinfo.html:96
 msgid "Delete"
 msgstr "Dzēst"
 
@@ -1210,7 +1211,7 @@ msgstr "Pievienojiet draugu kontaktiem, lai tam ātri sniegtu pieeju bibliotēk�
 #: seahub/contacts/templates/contacts/contact_list.html:53
 #: seahub/group/templates/group/group_manage.html:29
 #: seahub/group/templates/group/group_manage.html:53
-#: seahub/templates/registration/login.html:21
+#: seahub/templates/registration/login.html:10
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/sysadmin/sys_org_info_user.html:17
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:26
@@ -1238,7 +1239,7 @@ msgstr "Dzēst kontaktu"
 
 #: seahub/contacts/templates/contacts/contact_list.html:109
 #: seahub/notifications/templates/notifications/notification_list.html:52
-#: seahub/templates/sysadmin/sys_group_admin.html:43
+#: seahub/templates/sysadmin/sys_group_admin.html:45
 #: seahub/templates/sysadmin/sys_org_info_group.html:44
 #: seahub/templates/sysadmin/sys_org_info_user.html:72
 #: seahub/templates/sysadmin/useradmin_js.html:4
@@ -1316,86 +1317,101 @@ msgstr "Pārbaudes ziņojums ir pārāk garš (maksimāli var būt 255 rakstzīm
 msgid "\"%s\" is not a valid name"
 msgstr "\"%s\" nav derīgs nosaukums"
 
-#: seahub/group/views.py:161
+#: seahub/group/views.py:142 seahub/share/views.py:327
+#: seahub/share/views.py:343 seahub/share/views.py:353
+#: seahub/share/views.py:1251 seahub/share/views.py:1390
+#: seahub/views/__init__.py:549 seahub/views/__init__.py:1055
+#: seahub/views/__init__.py:1535 seahub/views/__init__.py:1592
+#: seahub/views/ajax.py:185 seahub/views/ajax.py:549 seahub/views/ajax.py:647
+#: seahub/views/ajax.py:654 seahub/views/ajax.py:715 seahub/views/ajax.py:722
+#: seahub/views/ajax.py:830 seahub/views/ajax.py:855 seahub/views/ajax.py:940
+#: seahub/views/ajax.py:1049 seahub/views/ajax.py:1863
+#: seahub/views/ajax.py:2344 seahub/views/ajax.py:2370
+#: seahub/views/ajax.py:2486 seahub/views/ajax.py:2512
+#: seahub/views/file.py:985
+msgid "Permission denied"
+msgstr "Pieeja liegta"
+
+#: seahub/group/views.py:160
 msgid "You do not have permission to create group."
 msgstr "Jums nav atļaujas veidot grupu."
 
-#: seahub/group/views.py:170
+#: seahub/group/views.py:169
 #, python-format
 msgid ""
 "You can only create %d groups.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr "Jūs varat izveidot tikai %d grupas.<a href=\"http://seafile.com/\">Atjaunotiet kontu.</a>"
 
-#: seahub/group/views.py:190 seahub/group/views.py:330
+#: seahub/group/views.py:189 seahub/group/views.py:329
 msgid "There is already a group with that name."
 msgstr "Šāda grupa jau pastāv"
 
-#: seahub/group/views.py:274
+#: seahub/group/views.py:273
 msgid "Failed to dismiss group, pleaes retry later."
 msgstr "Neizdevās noraidīt grupu, mēģiniet vēlreiz vēlāk."
 
-#: seahub/group/views.py:276
+#: seahub/group/views.py:275
 msgid "Successfully dismissed group."
 msgstr "Veiksmīgi noraidīta grupa."
 
-#: seahub/group/views.py:328
+#: seahub/group/views.py:327
 msgid ""
 "Failed to rename group, group name can only contain letters, numbers or "
 "underscore"
 msgstr "Neizdevās pārdēvēt grupu, grupas nosaukumā var būt tikai burti, cipari vai pasvītrojums"
 
-#: seahub/group/views.py:332
+#: seahub/group/views.py:331
 #, python-format
 msgid "Successfully renamed group to \"%s\"."
 msgstr "Veiksmīgi pārdēvēta grupa uz \"%s\"."
 
-#: seahub/group/views.py:349
+#: seahub/group/views.py:348
 #, python-format
 msgid "Email %s is not valid."
 msgstr "E-pasts %s nav derīgs."
 
-#: seahub/group/views.py:381 seahub/group/views.py:403
+#: seahub/group/views.py:380 seahub/group/views.py:402
 msgid "Only administrators can make the group public"
 msgstr "Padarīt grupu publisku var tikai administrators"
 
-#: seahub/group/views.py:449 seahub/message/views.py:121
+#: seahub/group/views.py:448 seahub/message/views.py:121
 #: seahub/message/views.py:147
 msgid "The message doesn't exist"
 msgstr "Ziņa nepastāv"
 
-#: seahub/group/views.py:459 seahub/message/views.py:133
+#: seahub/group/views.py:458 seahub/message/views.py:133
 #: seahub/message/views.py:159
 msgid "You don't have the permission."
 msgstr "Jums nav pieejas tiesību"
 
-#: seahub/group/views.py:635
+#: seahub/group/views.py:634
 #, python-format
 msgid "You are invited to join a group on %s"
 msgstr "Jūs esat uzaicināts pievienoties grupai %s"
 
-#: seahub/group/views.py:648
+#: seahub/group/views.py:647
 msgid "The group does not exist."
 msgstr "Grupa nepastāv."
 
-#: seahub/group/views.py:676
+#: seahub/group/views.py:675
 #, python-format
 msgid "Failed to add, %s is not in current organization."
 msgstr "Neizdevās pievienot, %s nav šajā iestādē."
 
-#: seahub/group/views.py:694 seahub/group/views.py:843
+#: seahub/group/views.py:693 seahub/group/views.py:842
 #, python-format
 msgid ""
 "You can only invite %d members.<a href=\"http://seafile.com/\">Upgrade "
 "account.</a>"
 msgstr "Jūs varat aicināt tikai %d biedrus.<a href=\"http://seafile.com/\">Atjaunot kontu.</a>"
 
-#: seahub/group/views.py:732
+#: seahub/group/views.py:731
 #, python-format
 msgid "Failed to add, %s is not registerd."
 msgstr "Neizdevās pievienot, %s nav reģistrēts."
 
-#: seahub/group/views.py:747
+#: seahub/group/views.py:746
 #, python-format
 msgid "Successfully added. An email has been sent."
 msgid_plural "Successfully added. %(count)s emails have been sent."
@@ -1403,106 +1419,98 @@ msgstr[0] "Veiksmīgi pievienots. %(count)s e-pasti ir nosūtīti."
 msgstr[1] "Veiksmīgi pievienots.E-pasts ir nosūtīts."
 msgstr[2] "Veiksmīgi pievienots. %(count)s e-pasti ir nosūtīti."
 
-#: seahub/group/views.py:754
+#: seahub/group/views.py:753
 msgid "Successfully added."
 msgstr "Veiksmīgi pievienots"
 
-#: seahub/group/views.py:814
+#: seahub/group/views.py:813
 #, python-format
 msgid "Failed to add, %s is not a valid email."
 msgstr "Neizdevās pievienot, %s nav derīga e-pasta adrese."
 
-#: seahub/group/views.py:824
+#: seahub/group/views.py:823
 #, python-format
 msgid "Failed to add, %s is not registrated."
 msgstr "Neizdevās pievienot. %s nav reģistrēts"
 
-#: seahub/group/views.py:856 seahub/group/views.py:873
-#: seahub/group/views.py:904
+#: seahub/group/views.py:855 seahub/group/views.py:872
+#: seahub/group/views.py:903
 msgid "Operation succeeded."
 msgstr "Darbība veiksmīga"
 
-#: seahub/group/views.py:906
+#: seahub/group/views.py:905
 #, python-format
 msgid "Failed：%s"
 msgstr "Neizdevās %s"
 
-#: seahub/group/views.py:936
+#: seahub/group/views.py:935
 msgid "Error: wrong group id"
 msgstr "Kļūda: nepareizs grupas ID"
 
-#: seahub/group/views.py:942
+#: seahub/group/views.py:941
 msgid "Error: the group does not exist."
 msgstr "Kļūda: grupa nepastāv."
 
-#: seahub/group/views.py:975
+#: seahub/group/views.py:974
 #, python-format
 msgid "Successfully posted to %(groups)s."
 msgstr "Veiksmigi nosūtīta uz %(groups)s."
 
-#: seahub/group/views.py:978
+#: seahub/group/views.py:977
 #, python-format
 msgid "Error: you are not in group %s."
 msgstr "Kļūda: jūs neesat grupā %s."
 
-#: seahub/group/views.py:990
+#: seahub/group/views.py:989
 msgid "Error: the library does not exist."
 msgstr "Kļūda: bibliotēka nepastāv."
 
-#: seahub/group/views.py:993
+#: seahub/group/views.py:992
 msgid "Error: no path."
 msgstr "Kļūda: nav norādīts ceļš."
 
-#: seahub/group/views.py:1031
+#: seahub/group/views.py:1030
 msgid "Failed to create: the group does not exist."
 msgstr "Neizdevās izveidot: grupa nepastāv."
 
-#: seahub/group/views.py:1036
+#: seahub/group/views.py:1035
 msgid "Failed to create: you are not in the group."
 msgstr "Neizdevās izveidot: jūs neesat grupā."
 
-#: seahub/group/views.py:1064 seahub/group/views.py:1086
-#: seahub/group/views.py:1497 seahub/views/wiki.py:152
+#: seahub/group/views.py:1063 seahub/group/views.py:1085
+#: seahub/group/views.py:1456 seahub/views/wiki.py:152
 msgid "Failed to create"
 msgstr "Neizdevās izveidot"
 
-#: seahub/group/views.py:1071 seahub/group/views.py:1092
-#: seahub/group/views.py:1503
+#: seahub/group/views.py:1070 seahub/group/views.py:1091
+#: seahub/group/views.py:1462
 msgid "Failed to create: internal error."
 msgstr "Neizdevās izveidot: iekšēja kļūda."
 
-#: seahub/group/views.py:1115
-msgid "You are already in the group."
-msgstr "Jūs jau esat šajā grupā."
-
-#: seahub/group/views.py:1130
-msgid "Sent successfully, the group admin will handle it."
-msgstr "Veiksmīgi nosūtīts, grupas administrators to nokārtos."
-
-#: seahub/group/views.py:1203
+#: seahub/group/views.py:1162
 msgid "Discussion is required."
 msgstr "Diskusija ir nepieciešama"
 
-#: seahub/group/views.py:1309 seahub/views/__init__.py:859
-#: seahub/views/ajax.py:1462 seahub/views/file.py:346 seahub/views/file.py:732
-#: seahub/views/file.py:886
+#: seahub/group/views.py:1268 seahub/views/__init__.py:859
+#: seahub/views/ajax.py:1462 seahub/views/file.py:349 seahub/views/file.py:732
+#: seahub/views/file.py:883
 msgid "File does not exist"
 msgstr "Šāda datne nepastāv"
 
-#: seahub/group/views.py:1345
+#: seahub/group/views.py:1304
 msgid "Successfully enable \"Wiki\"."
 msgstr "Veiksmīgi aktivizēts \"Wiki\"."
 
-#: seahub/group/views.py:1350
+#: seahub/group/views.py:1309
 msgid "Successfully disable \"Wiki\"."
 msgstr "Veiksmīgi deaktivizēts \"Wiki\"."
 
-#: seahub/group/views.py:1389 seahub/group/views.py:1565
+#: seahub/group/views.py:1348 seahub/group/views.py:1524
 #: seahub/views/wiki.py:59 seahub/views/wiki.py:208
 msgid "Failed to create wiki page. Please retry later."
 msgstr "Neizdevās izveidot Wiki lapu. Lūdzu, mēģiniet vēlreiz vēlāk."
 
-#: seahub/group/views.py:1426 seahub/templates/file_revisions.html:49
+#: seahub/group/views.py:1385 seahub/templates/file_revisions.html:49
 #: seahub/templates/repo_history.html:36
 #: seahub/templates/repo_history_view.html:21
 #: seahub/templates/repo_view_snapshot.html:39
@@ -1510,42 +1518,42 @@ msgstr "Neizdevās izveidot Wiki lapu. Lūdzu, mēģiniet vēlreiz vēlāk."
 msgid "Unknown"
 msgstr "Nezināms"
 
-#: seahub/group/views.py:1448 seahub/views/__init__.py:853
+#: seahub/group/views.py:1407 seahub/views/__init__.py:853
 #: seahub/views/ajax.py:2024 seahub/views/ajax.py:2088
 #: seahub/views/wiki.py:112
 msgid "Internal Server Error"
 msgstr "Iekšējā servera kļūda"
 
-#: seahub/group/views.py:1450 seahub/views/wiki.py:114
+#: seahub/group/views.py:1409 seahub/views/wiki.py:114
 msgid "Wiki does not exists."
 msgstr "Wiki nepastāv."
 
-#: seahub/group/views.py:1510 seahub/group/views.py:1535
+#: seahub/group/views.py:1469 seahub/group/views.py:1494
 #: seahub/views/wiki.py:159 seahub/views/wiki.py:182
 msgid "Failed to create home page. Please retry later"
 msgstr "Neizdevās izveidot mājas lapu. Lūdzu, mēģiniet vēlāk."
 
-#: seahub/group/views.py:1526 seahub/views/wiki.py:173
+#: seahub/group/views.py:1485 seahub/views/wiki.py:173
 msgid "Failed to set wiki library."
 msgstr "Neizdevās iestatīt wiki bibliotēku."
 
-#: seahub/group/views.py:1555 seahub/group/views.py:1581
-#: seahub/group/views.py:1599 seahub/views/wiki.py:198
+#: seahub/group/views.py:1514 seahub/group/views.py:1540
+#: seahub/group/views.py:1558 seahub/views/wiki.py:198
 #: seahub/views/wiki.py:221 seahub/views/wiki.py:236
 msgid "Wiki is not found."
 msgstr "Wiki nav atrasts."
 
-#: seahub/group/views.py:1562 seahub/views/wiki.py:205
+#: seahub/group/views.py:1521 seahub/views/wiki.py:205
 #, python-format
 msgid "Page \"%s\" already exists."
 msgstr "Lapa \"%s\" jau pastāv."
 
-#: seahub/group/views.py:1604
+#: seahub/group/views.py:1563
 #, python-format
 msgid "Successfully deleted \"%s\"."
 msgstr "Veiksmīgi dzēsts \"%s\"."
 
-#: seahub/group/views.py:1606
+#: seahub/group/views.py:1565
 #, python-format
 msgid "Failed to delete \"%s\". Please retry later."
 msgstr "Neizdevās dzēst \"%s\". Lūdzu, mēģiniet vēlāk."
@@ -1606,7 +1614,7 @@ msgstr "Lauks nevar būt tukšs, un nedrīkst būt garāks par 2048 rakstzīmēm
 #: seahub/templates/repo.html:192 seahub/templates/repo.html.py:538
 #: seahub/templates/repo_folder_perm.html:155
 #: seahub/templates/repo_recycle_view.html:109
-#: seahub/templates/shared_file_view.html:57
+#: seahub/templates/shared_file_view.html:63
 #: seahub/templates/view_shared_upload_link.html:85
 #: seahub/templates/js/lib-op-popups.html:10
 #: seahub/templates/js/lib-op-popups.html:30
@@ -1614,8 +1622,8 @@ msgstr "Lauks nevar būt tukšs, un nedrīkst būt garāks par 2048 rakstzīmēm
 #: seahub/templates/js/lib-op-popups.html:68
 #: seahub/templates/js/lib-op-popups.html:77
 #: seahub/templates/js/lib-op-popups.html:118
-#: seahub/templates/js/templates.html:400
-#: seahub/templates/js/templates.html:440
+#: seahub/templates/js/templates.html:406
+#: seahub/templates/js/templates.html:446
 #: seahub/templates/snippets/file_share_popup.html:55
 #: seahub/templates/snippets/file_share_popup.html:91
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
@@ -1628,16 +1636,16 @@ msgstr "Atcelt"
 #: seahub/group/templates/group/group_info.html:9
 #: seahub/group/templates/group/group_info.html:33
 #: seahub/templates/home_base.html:10 seahub/templates/home_base.html.py:41
-#: seahub/templates/js/templates.html:544
-#: seahub/templates/js/templates.html:575
-#: seahub/templates/js/templates.html:601
-#: seahub/templates/js/templates.html:629
+#: seahub/templates/js/templates.html:550
+#: seahub/templates/js/templates.html:581
+#: seahub/templates/js/templates.html:607
+#: seahub/templates/js/templates.html:635
 msgid "Enable Modules"
 msgstr "Aktivizēt moduļus"
 
 #: seahub/group/templates/group/group_base.html:18
 #: seahub/group/templates/group/group_info.html:35
-#: seahub/templates/js/templates.html:604
+#: seahub/templates/js/templates.html:610
 msgid "This group is public."
 msgstr "Šī grupa ir publiska"
 
@@ -1655,9 +1663,9 @@ msgstr "Šī grupa ir publiska"
 #: seahub/templates/js/templates.html:152
 #: seahub/templates/js/templates.html:154
 #: seahub/templates/js/templates.html:156
-#: seahub/templates/js/templates.html:548
-#: seahub/templates/js/templates.html:567
-#: seahub/templates/js/templates.html:608
+#: seahub/templates/js/templates.html:554
+#: seahub/templates/js/templates.html:573
+#: seahub/templates/js/templates.html:614
 #: seahub/templates/sysadmin/base.html:12
 #: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_info.html:19
@@ -1673,8 +1681,8 @@ msgstr "Bibliotēkas"
 #: seahub/group/templates/group/group_info.html:16
 #: seahub/group/templates/group/group_info.html:44
 #: seahub/group/templates/group/groups_right_panel.html:21
-#: seahub/templates/js/templates.html:616
-#: seahub/templates/js/templates.html:640
+#: seahub/templates/js/templates.html:622
+#: seahub/templates/js/templates.html:646
 msgid "Wiki"
 msgstr "Wiki"
 
@@ -1688,7 +1696,7 @@ msgstr "Datnes"
 #: seahub/group/templates/group/group_manage.html:15
 #: seahub/group/templates/group/group_members.html:8
 #: seahub/templates/libraries.html:22 seahub/templates/pub_base.html:13
-#: seahub/templates/pubrepo.html:13 seahub/templates/js/templates.html:620
+#: seahub/templates/pubrepo.html:13 seahub/templates/js/templates.html:626
 #: seahub/templates/sysadmin/sys_admin_group_info.html:31
 #: seahub/templates/sysadmin/sys_org_info_group.html:8
 #: seahub/templates/sysadmin/sys_org_info_library.html:8
@@ -1700,7 +1708,7 @@ msgstr "Biedri"
 #: seahub/group/templates/group/group_base.html:42
 #: seahub/group/templates/group/group_info.html:57
 #: seahub/templates/base.html:91 seahub/templates/base_for_backbone.html:127
-#: seahub/templates/js/templates.html:623
+#: seahub/templates/js/templates.html:629
 msgid "Admin"
 msgstr "Administrators"
 
@@ -1762,7 +1770,7 @@ msgstr "Tiešām vēlaties dzēst šo sarunu?"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:194
 #: seahub/message/templates/message/user_msg_list.html:230
-#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:153
+#: seahub/templates/base.html:139 seahub/templates/base_for_backbone.html:153
 #: seahub/templates/devices.html:47 seahub/templates/js/lib-op-popups.html:125
 #: seahub/templates/snippets/repo_del_popup.html:4
 msgid "Yes"
@@ -1771,7 +1779,7 @@ msgstr "Jā"
 #: seahub/group/templates/group/group_discuss.html:271
 #: seahub/message/templates/message/user_msg_list.html:194
 #: seahub/message/templates/message/user_msg_list.html:230
-#: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:154
+#: seahub/templates/base.html:140 seahub/templates/base_for_backbone.html:154
 #: seahub/templates/devices.html:48 seahub/templates/js/lib-op-popups.html:126
 #: seahub/templates/snippets/repo_del_popup.html:5
 msgid "No"
@@ -1811,11 +1819,13 @@ msgstr "Jauna bibliotēka"
 #: seahub/templates/repo_shared_link.html:66
 #: seahub/templates/view_shared_dir.html:35
 #: seahub/templates/js/templates.html:178
-#: seahub/templates/js/templates.html:759
-#: seahub/templates/js/templates.html:768
+#: seahub/templates/js/templates.html:765
+#: seahub/templates/js/templates.html:774
 #: seahub/templates/snippets/repo_dir_data.html:65
 #: seahub/templates/sysadmin/sys_admin_group_info.html:41
-#: seahub/templates/sysadmin/userinfo.html:130
+#: seahub/templates/sysadmin/userinfo.html:80
+#: seahub/templates/sysadmin/userinfo.html:113
+#: seahub/templates/sysadmin/userinfo.html:144
 msgid "Size"
 msgstr "Izmērs "
 
@@ -1825,18 +1835,20 @@ msgstr "Izmērs "
 #: seahub/templates/libraries.html:70 seahub/templates/libraries.html:103
 #: seahub/templates/my_group_repos.html:10 seahub/templates/pubrepo.html:32
 #: seahub/templates/starred.html:15 seahub/templates/js/templates.html:179
-#: seahub/templates/js/templates.html:760
-#: seahub/templates/js/templates.html:769
-#: seahub/templates/js/templates.html:782
+#: seahub/templates/js/templates.html:766
+#: seahub/templates/js/templates.html:775
+#: seahub/templates/js/templates.html:788
 #: seahub/templates/snippets/my_group_repos.html:10
 #: seahub/templates/snippets/repo_dir_data.html:66
+#: seahub/templates/sysadmin/userinfo.html:81
+#: seahub/templates/sysadmin/userinfo.html:114
 msgid "Last Update"
 msgstr "Atjaunots"
 
 #: seahub/group/templates/group/group_info.html:83
 #: seahub/group/templates/group/group_info_for_pub.html:16
 #: seahub/templates/my_group_repos.html:11 seahub/templates/pubrepo.html:33
-#: seahub/templates/js/templates.html:770
+#: seahub/templates/js/templates.html:776
 #: seahub/templates/snippets/my_group_repos.html:11
 #: seahub/templates/sysadmin/sys_admin_group_info.html:42
 msgid "Shared By"
@@ -1870,8 +1882,6 @@ msgstr "Bibliotēkas dalīta, kā rakstāma var lejupielādēt un sinhronizēt a
 #: seahub/templates/snippets/repo_create_form.html:6
 #: seahub/templates/sysadmin/sys_list_system.html:25
 #: seahub/templates/sysadmin/sys_org_info_library.html:21
-#: seahub/templates/sysadmin/userinfo.html:80
-#: seahub/templates/sysadmin/userinfo.html:107
 #: seahub/templates/wiki/personal_wiki.html:43
 msgid "Description"
 msgstr "Apraksts"
@@ -1886,17 +1896,15 @@ msgstr "Apraksts"
 #: seahub/templates/my_group_repos.html:25
 #: seahub/templates/my_group_repos.html:28
 #: seahub/templates/my_group_repos.html:30
-#: seahub/templates/js/templates.html:506
-#: seahub/templates/js/templates.html:509
-#: seahub/templates/js/templates.html:511
+#: seahub/templates/js/templates.html:512
+#: seahub/templates/js/templates.html:515
+#: seahub/templates/js/templates.html:517
 #: seahub/templates/snippets/my_group_repos.html:25
 #: seahub/templates/snippets/my_group_repos.html:28
 #: seahub/templates/snippets/my_group_repos.html:30
 #: seahub/templates/snippets/my_shared_repos.html:7
 #: seahub/templates/snippets/my_shared_repos.html:10
 #: seahub/templates/snippets/my_shared_repos.html:12
-#: seahub/templates/sysadmin/sys_admin_group_info.html:48
-#: seahub/templates/sysadmin/userinfo.html:86
 msgid "directory icon"
 msgstr "Mapes attēls"
 
@@ -1972,7 +1980,7 @@ msgstr "Mainīt"
 
 #: seahub/group/templates/group/group_manage.html:86
 #: seahub/templates/js/templates.html:218
-#: seahub/templates/js/templates.html:292
+#: seahub/templates/js/templates.html:297
 #: seahub/templates/snippets/repo_dirents.html:37
 #: seahub/templates/snippets/repo_dirents.html:95
 msgid "Rename"
@@ -2051,31 +2059,6 @@ msgstr "Pamest grupu"
 #: seahub/group/templates/group/group_members.html:32
 msgid "Are you sure you want to quit this group?"
 msgstr "Tiešām pārtraukt"
-
-#: seahub/group/templates/group/group_pubinfo.html:9
-msgid "Join Group"
-msgstr "Iekļauties grupā"
-
-#: seahub/group/templates/group/group_pubinfo.html:13
-msgid "Name: "
-msgstr "Vārds: "
-
-#: seahub/group/templates/group/group_pubinfo.html:14
-#: seahub/group/templates/group/groups_right_panel.html:15
-msgid "Creator: "
-msgstr "Izveidojis: "
-
-#: seahub/group/templates/group/group_pubinfo.html:15
-msgid "Create at: "
-msgstr "Izveidots: "
-
-#: seahub/group/templates/group/group_pubinfo.html:16
-msgid "Members: "
-msgstr "Biedri: "
-
-#: seahub/group/templates/group/group_pubinfo.html:21
-msgid "Verification Message"
-msgstr "Apstiprinājuma ziņa"
 
 #: seahub/group/templates/group/group_wiki.html:13
 #: seahub/group/templates/group/group_wiki.html:20
@@ -2230,6 +2213,10 @@ msgstr "Manas grupas"
 msgid "New Group"
 msgstr "Jauna grupa"
 
+#: seahub/group/templates/group/groups_right_panel.html:15
+msgid "Creator: "
+msgstr "Izveidojis: "
+
 #: seahub/group/templates/group/groups_right_panel.html:16
 msgid "Time: "
 msgstr "Laiks: "
@@ -2267,9 +2254,9 @@ msgstr "Grupa:"
 #: seahub/templates/repo_view_snapshot.html:36
 #: seahub/templates/sysadmin/sys_list_system.html:36
 #: seahub/templates/sysadmin/sys_repo_admin.html:30
-#: seahub/templates/sysadmin/userinfo.html:96
-#: seahub/templates/sysadmin/userinfo.html:120
-#: seahub/templates/sysadmin/userinfo.html:166
+#: seahub/templates/sysadmin/userinfo.html:102
+#: seahub/templates/sysadmin/userinfo.html:134
+#: seahub/templates/sysadmin/userinfo.html:180
 msgid "None"
 msgstr "Neviens"
 
@@ -2591,7 +2578,7 @@ msgstr "Sūtīt ziņu..."
 #: seahub/notifications/models.py:644 seahub/notifications/models.py:661
 #: seahub/notifications/models.py:685 seahub/notifications/models.py:702
 #: seahub/notifications/models.py:720 seahub/utils/__init__.py:148
-#: seahub/utils/__init__.py:1064
+#: seahub/utils/__init__.py:1072
 msgid "Internal error"
 msgstr "Iekšējā kļūda"
 
@@ -2761,7 +2748,7 @@ msgid "Set to current"
 msgstr "Iestatīt pašreizējo"
 
 #: seahub/notifications/templates/notifications/notification_list.html:39
-#: seahub/templates/sysadmin/sys_group_admin.html:35
+#: seahub/templates/sysadmin/sys_group_admin.html:37
 #: seahub/templates/sysadmin/sys_publink_admin.html:35
 msgid "Empty"
 msgstr "Tukšs"
@@ -2823,31 +2810,31 @@ msgstr ""
 msgid "Nickname should not include ' / '"
 msgstr "Segvārds nedrīkst ietvert ' / '"
 
-#: seahub/profile/views.py:38
+#: seahub/profile/views.py:37
 msgid "Successfully edited profile."
 msgstr "Veiksmīgi rediģēts profils."
 
-#: seahub/profile/views.py:44
+#: seahub/profile/views.py:43
 msgid "Failed to edit profile"
 msgstr "Neizdevās rediģēt profilu"
 
-#: seahub/profile/views.py:104 seahub/profile/views.py:137
+#: seahub/profile/views.py:103 seahub/profile/views.py:136
 msgid "Has not accepted invitation yet"
 msgstr "Vēl nav pieņēmis uzaicinājumu"
 
-#: seahub/profile/views.py:156
+#: seahub/profile/views.py:155
 msgid "Demo account can not be deleted."
 msgstr "Demo kontu nevar dzēst."
 
-#: seahub/profile/views.py:183
+#: seahub/profile/views.py:181
 msgid "Failed to set default library."
 msgstr "Neizdevās iestatīt noklusēto bibliotēku."
 
-#: seahub/profile/views.py:187
+#: seahub/profile/views.py:185
 msgid "Can not set encrypted library as default library."
 msgstr "Nevar iestatīt šifrētu bibliotēku, kā noklusēto bibliotēku."
 
-#: seahub/profile/views.py:192
+#: seahub/profile/views.py:190
 #, python-format
 msgid "Successfully set \"%s\" as your default library."
 msgstr "Veiksmīgi iestatīts \"%s\" kā jūsu noklusētā bibliotēka."
@@ -3016,7 +3003,7 @@ msgstr ""
 #: seahub/views/__init__.py:1046 seahub/views/__init__.py:1087
 #: seahub/views/__init__.py:1460 seahub/views/__init__.py:1854
 #: seahub/views/ajax.py:1856 seahub/views/ajax.py:2361
-#: seahub/views/ajax.py:2503 seahub/views/sysadmin.py:1388
+#: seahub/views/ajax.py:2503 seahub/views/sysadmin.py:1391
 msgid "Library does not exist"
 msgstr "Bibliotēka nepastāv"
 
@@ -3024,20 +3011,6 @@ msgstr "Bibliotēka nepastāv"
 #: seahub/share/views.py:356
 msgid "Invalid argument"
 msgstr "Nederīgs argumnents"
-
-#: seahub/share/views.py:327 seahub/share/views.py:343
-#: seahub/share/views.py:353 seahub/share/views.py:1251
-#: seahub/share/views.py:1390 seahub/views/__init__.py:549
-#: seahub/views/__init__.py:1055 seahub/views/__init__.py:1535
-#: seahub/views/__init__.py:1592 seahub/views/ajax.py:185
-#: seahub/views/ajax.py:549 seahub/views/ajax.py:647 seahub/views/ajax.py:654
-#: seahub/views/ajax.py:715 seahub/views/ajax.py:722 seahub/views/ajax.py:830
-#: seahub/views/ajax.py:855 seahub/views/ajax.py:940 seahub/views/ajax.py:1049
-#: seahub/views/ajax.py:1863 seahub/views/ajax.py:2344
-#: seahub/views/ajax.py:2370 seahub/views/ajax.py:2486
-#: seahub/views/ajax.py:2512 seahub/views/file.py:990
-msgid "Permission denied"
-msgstr "Pieeja liegta"
 
 #: seahub/share/views.py:372 seahub/share/views.py:392
 #: seahub/views/__init__.py:1285
@@ -3068,7 +3041,7 @@ msgstr "visi biedri"
 #: seahub/share/views.py:1363 seahub/share/views.py:1445
 #: seahub/views/__init__.py:1085 seahub/views/__init__.py:1527
 #: seahub/views/__init__.py:1585 seahub/views/ajax.py:1222
-#: seahub/views/ajax.py:1242 seahub/views/file.py:1011
+#: seahub/views/ajax.py:1242 seahub/views/file.py:1006
 msgid "Invalid arguments"
 msgstr "Nederīgi argumnenti"
 
@@ -3161,7 +3134,7 @@ msgid "You do not have permission to generate shared link"
 msgstr ""
 
 #: seahub/share/views.py:1484 seahub/thumbnail/views.py:39
-#: seahub/thumbnail/views.py:126 seahub/views/ajax.py:247
+#: seahub/thumbnail/views.py:132 seahub/views/ajax.py:247
 #: seahub/views/ajax.py:343 seahub/views/ajax.py:425 seahub/views/ajax.py:535
 #: seahub/views/ajax.py:622 seahub/views/ajax.py:697 seahub/views/ajax.py:758
 #: seahub/views/ajax.py:802 seahub/views/ajax.py:1018
@@ -3204,7 +3177,7 @@ msgstr "Bibliotēka"
 #: seahub/share/templates/share/links.html:68
 #: seahub/templates/repo_shared_link.html:41
 #: seahub/templates/repo_shared_link.html:67
-#: seahub/templates/sysadmin/userinfo.html:132
+#: seahub/templates/sysadmin/userinfo.html:146
 msgid "Visits"
 msgstr "Apmeklējumi"
 
@@ -3224,8 +3197,8 @@ msgstr "Skatīt"
 #: seahub/templates/repo_shared_link.html:53
 #: seahub/templates/repo_shared_link.html:85
 #: seahub/templates/sysadmin/sys_publink_admin.html:25
-#: seahub/templates/sysadmin/userinfo.html:150
-#: seahub/templates/sysadmin/userinfo.html:159
+#: seahub/templates/sysadmin/userinfo.html:164
+#: seahub/templates/sysadmin/userinfo.html:173
 msgid "Remove"
 msgstr "Aizvākt"
 
@@ -3254,7 +3227,7 @@ msgid "Folders - Share"
 msgstr "Mapes - Koplietot"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:10
-#: seahub/templates/home_base.html:31 seahub/templates/js/templates.html:568
+#: seahub/templates/home_base.html:31 seahub/templates/js/templates.html:574
 msgid "Folders"
 msgstr "Mapes"
 
@@ -3272,11 +3245,11 @@ msgstr "Dalīts ar"
 #: seahub/templates/repo_share_manage.html:50
 #: seahub/templates/repo_share_manage.html:83
 #: seahub/templates/js/templates.html:222
-#: seahub/templates/js/templates.html:456
-#: seahub/templates/js/templates.html:479
-#: seahub/templates/js/templates.html:696
-#: seahub/templates/js/templates.html:718
-#: seahub/templates/js/templates.html:783
+#: seahub/templates/js/templates.html:462
+#: seahub/templates/js/templates.html:485
+#: seahub/templates/js/templates.html:702
+#: seahub/templates/js/templates.html:724
+#: seahub/templates/js/templates.html:789
 msgid "Permission"
 msgstr "Tiesības"
 
@@ -3405,7 +3378,7 @@ msgid "Download and Sync"
 msgstr "Lejuplādēt un sinhronizēt"
 
 #: seahub/share/templates/share/user_share_list.html:59
-#: seahub/templates/js/templates.html:517
+#: seahub/templates/js/templates.html:523
 #: seahub/templates/snippets/my_shared_repos.html:29
 msgid "Leave Share"
 msgstr "Atļauja koplietojumam"
@@ -3420,7 +3393,7 @@ msgid "Sorry, but the requested page could not be found."
 msgstr "Atvainojiet, bet pieprasīto lapu nevarēja atrast."
 
 #: seahub/templates/activities.html:4 seahub/templates/home_base.html:17
-#: seahub/templates/js/templates.html:552
+#: seahub/templates/js/templates.html:558
 msgid "Activities"
 msgstr "Aktivitātes"
 
@@ -3461,7 +3434,7 @@ msgstr "Iziet"
 msgid "System Admin"
 msgstr "Administratora logs"
 
-#: seahub/templates/base.html:184
+#: seahub/templates/base.html:193
 #: seahub/templates/sysadmin/sys_group_admin.html:7
 msgid "All Groups"
 msgstr "Visas grupas"
@@ -3496,7 +3469,7 @@ msgid "Help"
 msgstr "Palīdzība"
 
 #: seahub/templates/choose_register.html:13
-#: seahub/templates/registration/login.html:49
+#: seahub/templates/registration/login.html:38
 #: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "Reģistrēties"
@@ -3533,7 +3506,7 @@ msgid "Please enter the password."
 msgstr "Lūdzu, ievadiet paroli."
 
 #: seahub/templates/devices.html:5 seahub/templates/devices.html.py:9
-#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:561
+#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:567
 msgid "Devices"
 msgstr "Ierīces"
 
@@ -3588,26 +3561,26 @@ msgstr "Veiksmīgi noņemta saite."
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:59
 #: seahub/templates/repo.html:27 seahub/templates/repo_history_view.html:73
-#: seahub/templates/shared_file_view.html:35
-#: seahub/templates/shared_file_view.html:67
+#: seahub/templates/shared_file_view.html:41
+#: seahub/templates/shared_file_view.html:73
 #: seahub/templates/view_file_base.html:72
 #: seahub/templates/view_file_base.html:109
 #: seahub/templates/view_history_file.html:30
-#: seahub/templates/view_history_file.html:44
+#: seahub/templates/view_history_file.html:41
 #: seahub/templates/view_shared_dir.html:49
 #: seahub/templates/view_shared_dir.html:80
 #: seahub/templates/js/templates.html:207
-#: seahub/templates/js/templates.html:278
+#: seahub/templates/js/templates.html:283
 #: seahub/templates/snippets/repo_dirents.html:24
 #: seahub/templates/snippets/repo_dirents.html:81
-#: seahub/templates/sysadmin/userinfo.html:147
+#: seahub/templates/sysadmin/userinfo.html:161
 msgid "Download"
 msgstr "Lejuplādēt"
 
 #: seahub/templates/file_edit.html:77
 #: seahub/templates/repo_history_view.html:38
 #: seahub/templates/repo_recycle_view.html:18
-#: seahub/templates/shared_file_view.html:14
+#: seahub/templates/shared_file_view.html:20
 #: seahub/templates/view_shared_dir.html:18
 msgid "Current path: "
 msgstr "Atrodaties mapē: "
@@ -3823,7 +3796,7 @@ msgstr "Parole ir nepieciešama."
 #: seahub/templates/repo_history.html:5
 #: seahub/templates/view_file_base.html:64
 #: seahub/templates/js/templates.html:139
-#: seahub/templates/js/templates.html:296
+#: seahub/templates/js/templates.html:301
 #: seahub/templates/snippets/current_commit.html:15
 #: seahub/templates/snippets/repo_dirents.html:98
 msgid "History"
@@ -3904,28 +3877,28 @@ msgstr "Seafile"
 msgid "About Us"
 msgstr "Par mums"
 
-#: seahub/templates/home_base.html:8 seahub/templates/js/templates.html:542
+#: seahub/templates/home_base.html:8 seahub/templates/js/templates.html:548
 msgid "Personal"
 msgstr "Privāts"
 
 #: seahub/templates/home_base.html:15 seahub/templates/libraries.html:96
-#: seahub/templates/starred.html:8 seahub/templates/js/templates.html:549
+#: seahub/templates/starred.html:8 seahub/templates/js/templates.html:555
 msgid "Starred"
 msgstr "Zvaigžņotas"
 
 #: seahub/templates/home_base.html:21 seahub/templates/home_base.html.py:48
-#: seahub/templates/js/templates.html:557
-#: seahub/templates/js/templates.html:586
+#: seahub/templates/js/templates.html:563
+#: seahub/templates/js/templates.html:592
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "Privāts Wiki"
 
-#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:564
+#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:570
 msgid "Share Admin"
 msgstr "Koplietošanā"
 
-#: seahub/templates/home_base.html:33 seahub/templates/js/templates.html:570
+#: seahub/templates/home_base.html:33 seahub/templates/js/templates.html:576
 #: seahub/templates/sysadmin/base.html:29
 msgid "Links"
 msgstr "Saites"
@@ -3935,12 +3908,12 @@ msgstr "Saites"
 msgid "Upload Folder"
 msgstr "Augšuplādēt mapi"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:373
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:379
 #: seahub/templates/snippets/file_share_popup.html:31
 msgid "Add auto expiration"
 msgstr "Pievienot automātisko izbeigšanos"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:376
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:382
 #: seahub/templates/snippets/file_share_popup.html:34
 msgid "Days"
 msgstr "Dienas"
@@ -4082,8 +4055,8 @@ msgstr "Varat izveidot publisko bibliotēku, noklikšķinot uz pogu \"Jauna bibl
 #: seahub/templates/repo_folder_perm.html:98
 #: seahub/templates/repo_folder_perm.html:105
 #: seahub/templates/repo_share_manage.html:39
-#: seahub/templates/js/templates.html:478
-#: seahub/templates/js/templates.html:717
+#: seahub/templates/js/templates.html:484
+#: seahub/templates/js/templates.html:723
 #: seahub/templates/snippets/my_group_repos.html:6
 msgid "Group"
 msgstr "Grupa"
@@ -4130,7 +4103,7 @@ msgstr "Miskaste"
 
 #: seahub/templates/repo.html:52 seahub/templates/js/templates.html:112
 #: seahub/templates/js/templates.html:219
-#: seahub/templates/js/templates.html:293
+#: seahub/templates/js/templates.html:298
 #: seahub/templates/snippets/repo_dirents.html:38
 #: seahub/templates/snippets/repo_dirents.html:96
 msgid "Move"
@@ -4138,7 +4111,7 @@ msgstr "Pārvietot"
 
 #: seahub/templates/repo.html:53 seahub/templates/js/templates.html:113
 #: seahub/templates/js/templates.html:220
-#: seahub/templates/js/templates.html:295
+#: seahub/templates/js/templates.html:300
 #: seahub/templates/snippets/repo_dirents.html:39
 #: seahub/templates/snippets/repo_dirents.html:97
 msgid "Copy"
@@ -4229,7 +4202,7 @@ msgstr "tiešsaistes Rich Text formāts."
 #: seahub/templates/repo_view_snapshot.html:45
 #: seahub/templates/js/lib-op-popups.html:21
 #: seahub/templates/js/lib-op-popups.html:23
-#: seahub/templates/js/templates.html:327
+#: seahub/templates/js/templates.html:333
 #: seahub/templates/snippets/current_commit.html:4
 #: seahub/templates/snippets/events_body.html:18
 #: seahub/templates/snippets/events_body.html:20
@@ -4248,7 +4221,7 @@ msgstr "Pašreizējā bibliotēka"
 msgid "Other Libraries"
 msgstr "Cita bibliotēka"
 
-#: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:55
+#: seahub/templates/repo.html:174 seahub/templates/shared_file_view.html:61
 #: seahub/templates/js/lib-op-popups.html:66
 msgid "Please click and choose a directory."
 msgstr "Lūdzu, izvēlieties mapi un noklikšķiniet."
@@ -4277,7 +4250,7 @@ msgid "group"
 msgstr "grupa"
 
 #: seahub/templates/repo.html:255 seahub/templates/repo.html.py:1869
-#: seahub/templates/repo.html:2030 seahub/templates/js/templates.html:248
+#: seahub/templates/repo.html:2030 seahub/templates/js/templates.html:251
 #: seahub/templates/snippets/repo_dirents.html:55
 msgid "unstarred"
 msgstr "bez zvaigzīnes"
@@ -4545,7 +4518,7 @@ msgstr "Pārvietot %(name)s uz:"
 msgid "Directory download is not supported in this library."
 msgstr "Mapes lejupielāde netiek atbalstīts šajā bibliotēkā."
 
-#: seahub/templates/repo.html:1871 seahub/templates/js/templates.html:246
+#: seahub/templates/repo.html:1871 seahub/templates/js/templates.html:249
 #: seahub/templates/snippets/repo_dirents.html:53
 msgid "starred"
 msgstr "zvaigžņotas"
@@ -4686,7 +4659,7 @@ msgid "New passwords don't match"
 msgstr "Jaunā parole nesakrīt"
 
 #: seahub/templates/repo_folder_perm.html:35
-#: seahub/templates/js/templates.html:688
+#: seahub/templates/js/templates.html:694
 msgid "User Permission"
 msgstr "Lietotāja tiesības"
 
@@ -4700,8 +4673,8 @@ msgstr "Pievienot tiesības"
 
 #: seahub/templates/repo_folder_perm.html:46
 #: seahub/templates/repo_share_manage.html:38
-#: seahub/templates/js/templates.html:455
-#: seahub/templates/js/templates.html:695
+#: seahub/templates/js/templates.html:461
+#: seahub/templates/js/templates.html:701
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
 msgstr "Lietotājs"
@@ -4808,7 +4781,7 @@ msgstr "Pirms 1 mēneša"
 
 #: seahub/templates/repo_setting_extra_js.html:46 seahub/views/sysadmin.py:206
 #: seahub/views/sysadmin.py:223 seahub/views/sysadmin.py:250
-#: seahub/views/sysadmin.py:1147 seahub/views/sysadmin.py:1172
+#: seahub/views/sysadmin.py:1150 seahub/views/sysadmin.py:1175
 msgid "Success"
 msgstr "Veiksme"
 
@@ -4891,20 +4864,20 @@ msgid ""
 "And the password will be kept on the server for only 1 hour."
 msgstr "Lūdzu, ievadi paroli, ja vēlaties pārlūkot koplietojamo datni/mapi. Parole tiks uzglabāta serverī tikai 1 stundu."
 
-#: seahub/templates/shared_file_view.html:24
+#: seahub/templates/shared_file_view.html:30
 #: seahub/templates/view_shared_dir.html:12
 msgid "Shared by: "
 msgstr "Dalās: "
 
-#: seahub/templates/shared_file_view.html:31
+#: seahub/templates/shared_file_view.html:37
 msgid "Save to..."
 msgstr "Saglabāt..."
 
-#: seahub/templates/shared_file_view.html:46
+#: seahub/templates/shared_file_view.html:52
 msgid "Save To:"
 msgstr "Saglabāt uz:"
 
-#: seahub/templates/shared_file_view.html:71
+#: seahub/templates/shared_file_view.html:77
 #: seahub/templates/view_shared_dir.html:97
 msgid "File download is disabled: the share link traffic of owner is used up."
 msgstr ""
@@ -4939,11 +4912,11 @@ msgstr "Jūs varat apmeklēt šo lapu un augšupielādēt datnes:"
 msgid "Stars"
 msgstr "Zvaigznīte"
 
-#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:740
+#: seahub/templates/starred.html:20 seahub/templates/js/templates.html:746
 msgid "icon"
 msgstr "ikona"
 
-#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:751
+#: seahub/templates/starred.html:27 seahub/templates/js/templates.html:757
 msgid "Unstar"
 msgstr "Bez zvaigznītes"
 
@@ -4993,7 +4966,7 @@ msgid "Sorry, this user is not registered yet."
 msgstr "Atvainojiet, šis lietotājs vēl nav reģistrēts."
 
 #: seahub/templates/view_file_base.html:16
-#: seahub/templates/js/templates.html:263
+#: seahub/templates/js/templates.html:267
 msgid "locked"
 msgstr ""
 
@@ -5012,13 +4985,13 @@ msgstr "atjaunināt šo datni"
 
 #: seahub/templates/view_file_base.html:49
 #: seahub/templates/view_file_base.html:53
-#: seahub/templates/js/templates.html:303
+#: seahub/templates/js/templates.html:308
 msgid "Lock"
 msgstr ""
 
 #: seahub/templates/view_file_base.html:50
 #: seahub/templates/view_file_base.html:52
-#: seahub/templates/js/templates.html:300
+#: seahub/templates/js/templates.html:305
 msgid "Unlock"
 msgstr ""
 
@@ -5026,7 +4999,7 @@ msgstr ""
 #: seahub/templates/js/templates.html:39
 #: seahub/templates/js/templates.html:136
 #: seahub/templates/js/templates.html:209
-#: seahub/templates/js/templates.html:280
+#: seahub/templates/js/templates.html:285
 #: seahub/templates/snippets/repo_dir_data.html:48
 #: seahub/templates/snippets/repo_dirents.html:28
 #: seahub/templates/snippets/repo_dirents.html:85
@@ -5043,7 +5016,7 @@ msgstr "Atpakaļ uz augšu"
 msgid "top"
 msgstr "augšā"
 
-#: seahub/templates/view_file_base.html:168 seahub/views/ajax.py:2609
+#: seahub/templates/view_file_base.html:162 seahub/views/ajax.py:2609
 #: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:226
 #: seahub/views/sysadmin.py:248
 msgid "Failed"
@@ -5209,8 +5182,8 @@ msgid "Encrypt"
 msgstr "Šifrēt"
 
 #: seahub/templates/js/templates.html:19
-#: seahub/templates/js/templates.html:362
-#: seahub/templates/js/templates.html:417
+#: seahub/templates/js/templates.html:368
+#: seahub/templates/js/templates.html:423
 #: seahub/templates/snippets/file_share_popup.html:24
 #: seahub/templates/snippets/file_share_popup.html:70
 #: seahub/templates/snippets/repo_create_form.html:20
@@ -5219,8 +5192,8 @@ msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(vismaz %(repo_password_min_length)s rakstāmzīmes)"
 
 #: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:368
-#: seahub/templates/js/templates.html:423
+#: seahub/templates/js/templates.html:374
+#: seahub/templates/js/templates.html:429
 #: seahub/templates/snippets/file_share_popup.html:26
 #: seahub/templates/snippets/file_share_popup.html:72
 #: seahub/templates/snippets/repo_create_form.html:22
@@ -5229,7 +5202,10 @@ msgstr "Atkārtot paroli"
 
 #: seahub/templates/js/templates.html:31 seahub/templates/js/templates.html:49
 #: seahub/templates/js/templates.html:71
-#: seahub/templates/js/templates.html:796
+#: seahub/templates/js/templates.html:802
+#: seahub/templates/sysadmin/sys_admin_group_info.html:49
+#: seahub/templates/sysadmin/userinfo.html:88
+#: seahub/templates/sysadmin/userinfo.html:120
 msgid "Encrypted"
 msgstr "Šifrēt"
 
@@ -5237,7 +5213,7 @@ msgstr "Šifrēt"
 #: seahub/templates/snippets/repo_dir_data.html:16
 #: seahub/templates/snippets/repo_dir_data.html:19
 #: seahub/templates/snippets/repo_dir_data.html:22
-#: seahub/templates/sysadmin/userinfo.html:156
+#: seahub/templates/sysadmin/userinfo.html:170
 msgid "Upload"
 msgstr "Augšuplādēt"
 
@@ -5250,118 +5226,123 @@ msgstr "Jauna mape"
 msgid "More operations"
 msgstr "Vairāk darbības"
 
-#: seahub/templates/js/templates.html:289
+#: seahub/templates/js/templates.html:225
+#: seahub/templates/js/templates.html:310
+msgid "Open via Client"
+msgstr ""
+
+#: seahub/templates/js/templates.html:294
 #: seahub/templates/snippets/repo_dirents.html:91
 msgid "More Operations"
 msgstr "Vairāk darbības"
 
-#: seahub/templates/js/templates.html:315
+#: seahub/templates/js/templates.html:321
 msgid "Fetch failed"
 msgstr "Atnest neizdevās"
 
-#: seahub/templates/js/templates.html:339
+#: seahub/templates/js/templates.html:345
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr "Lejupielādēt saiti"
 
-#: seahub/templates/js/templates.html:343
+#: seahub/templates/js/templates.html:349
 #: seahub/templates/snippets/file_share_popup.html:8
 msgid "Upload Link"
 msgstr "Augšupielādēt saiti"
 
-#: seahub/templates/js/templates.html:346
+#: seahub/templates/js/templates.html:352
 msgid "Share to user"
 msgstr ""
 
-#: seahub/templates/js/templates.html:347
+#: seahub/templates/js/templates.html:353
 msgid "Share to group"
 msgstr ""
 
-#: seahub/templates/js/templates.html:359
-#: seahub/templates/js/templates.html:414
+#: seahub/templates/js/templates.html:365
+#: seahub/templates/js/templates.html:420
 #: seahub/templates/snippets/file_share_popup.html:21
 #: seahub/templates/snippets/file_share_popup.html:67
 msgid "Add password protection"
 msgstr "Pievienot paroles aizsardzību"
 
-#: seahub/templates/js/templates.html:365
-#: seahub/templates/js/templates.html:420
+#: seahub/templates/js/templates.html:371
+#: seahub/templates/js/templates.html:426
 msgid "Show"
 msgstr ""
 
-#: seahub/templates/js/templates.html:366
-#: seahub/templates/js/templates.html:421
+#: seahub/templates/js/templates.html:372
+#: seahub/templates/js/templates.html:427
 msgid "Generate a random password"
 msgstr ""
 
-#: seahub/templates/js/templates.html:380
-#: seahub/templates/js/templates.html:427
+#: seahub/templates/js/templates.html:386
+#: seahub/templates/js/templates.html:433
 #: seahub/templates/snippets/file_share_popup.html:39
 #: seahub/templates/snippets/file_share_popup.html:77
 msgid "Generate"
 msgstr "Izveidot"
 
-#: seahub/templates/js/templates.html:384
+#: seahub/templates/js/templates.html:390
 #: seahub/templates/snippets/file_share_popup.html:41
 msgid "Link: "
 msgstr "Saite: "
 
-#: seahub/templates/js/templates.html:387
+#: seahub/templates/js/templates.html:393
 msgid "Direct Download Link: "
 msgstr ""
 
-#: seahub/templates/js/templates.html:391
-#: seahub/templates/js/templates.html:431
+#: seahub/templates/js/templates.html:397
+#: seahub/templates/js/templates.html:437
 #: seahub/templates/snippets/file_share_popup.html:42
 #: seahub/templates/snippets/file_share_popup.html:80
 msgid "Send"
 msgstr "Sūtīt"
 
-#: seahub/templates/js/templates.html:394
-#: seahub/templates/js/templates.html:434
+#: seahub/templates/js/templates.html:400
+#: seahub/templates/js/templates.html:440
 #: seahub/templates/snippets/file_share_popup.html:46
 #: seahub/templates/snippets/file_share_popup.html:84
 msgid "Send to:"
 msgstr "Sūtīt uz:"
 
-#: seahub/templates/js/templates.html:395
-#: seahub/templates/js/templates.html:435
+#: seahub/templates/js/templates.html:401
+#: seahub/templates/js/templates.html:441
 #: seahub/templates/snippets/file_share_popup.html:47
 #: seahub/templates/snippets/file_share_popup.html:85
 msgid "Emails, Seperated by ','"
 msgstr "E-pasti, atdalīti ar ','"
 
-#: seahub/templates/js/templates.html:396
-#: seahub/templates/js/templates.html:436
+#: seahub/templates/js/templates.html:402
+#: seahub/templates/js/templates.html:442
 #: seahub/templates/snippets/file_share_popup.html:51
 #: seahub/templates/snippets/file_share_popup.html:87
 msgid "Message (optional):"
 msgstr "Ziņa (nav obligāti)"
 
-#: seahub/templates/js/templates.html:401
-#: seahub/templates/js/templates.html:441
+#: seahub/templates/js/templates.html:407
+#: seahub/templates/js/templates.html:447
 #: seahub/templates/snippets/file_share_popup.html:56
 #: seahub/templates/snippets/file_share_popup.html:92
 msgid "Sending..."
 msgstr "Sūta..."
 
-#: seahub/templates/js/templates.html:410
+#: seahub/templates/js/templates.html:416
 #: seahub/templates/snippets/file_share_popup.html:63
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr ""
 
-#: seahub/templates/js/templates.html:430
+#: seahub/templates/js/templates.html:436
 #: seahub/templates/snippets/file_share_popup.html:79
 msgid "Upload Link: "
 msgstr "Augšupielādēt saiti: "
 
-#: seahub/templates/js/templates.html:689
+#: seahub/templates/js/templates.html:695
 msgid "Group Permission"
 msgstr "Grupas tiesības"
 
-#: seahub/templates/js/templates.html:774
+#: seahub/templates/js/templates.html:780
 msgid "Select libraries to share"
 msgstr ""
 
@@ -5381,51 +5362,51 @@ msgid ""
 msgstr ""
 
 #: seahub/templates/registration/login.html:4
-#: seahub/templates/registration/login.html:19
-#: seahub/templates/registration/login.html:47
+#: seahub/templates/registration/login.html:8
+#: seahub/templates/registration/login.html:36
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
 msgid "Log In"
 msgstr "Pieslēgties"
 
-#: seahub/templates/registration/login.html:24
+#: seahub/templates/registration/login.html:13
 msgid "(forgot password)"
 msgstr "(aizmirst paroli)"
 
-#: seahub/templates/registration/login.html:27
+#: seahub/templates/registration/login.html:16
 msgid "CAPTCHA"
 msgstr "CAPTCHA"
 
-#: seahub/templates/registration/login.html:29
+#: seahub/templates/registration/login.html:18
 msgid "Not clear? Refresh it."
 msgstr "Neskaidrs? Atjauniniet."
 
-#: seahub/templates/registration/login.html:36
+#: seahub/templates/registration/login.html:25
 msgid "Incorrect email or password"
 msgstr "Nepareizs e-pasts vai parole"
 
-#: seahub/templates/registration/login.html:44
+#: seahub/templates/registration/login.html:33
 #, python-format
 msgid "Remember me for %(remember_days)s days "
 msgstr "Atcerēties mani %(remember_days)s dienas"
 
-#: seahub/templates/registration/login.html:53
+#: seahub/templates/registration/login.html:42
 #: seahub/templates/sysadmin/sudo_mode.html:20
 msgid "Shibboleth"
 msgstr "Shibboleth"
 
-#: seahub/templates/registration/login.html:78
+#: seahub/templates/registration/login.html:67
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Neizdevās atsvaidzināt CAPTCHA. Lūdzu, mēģiniet vēlreiz vēlāk."
 
-#: seahub/templates/registration/login.html:85
+#: seahub/templates/registration/login.html:74
 #: seahub/templates/registration/registration_form.html:84
 #: seahub/templates/sysadmin/sys_useradmin.html:93
 msgid "Email cannot be blank"
 msgstr "E-pasts nevar būt tukšs"
 
-#: seahub/templates/registration/login.html:89
+#: seahub/templates/registration/login.html:78
 #: seahub/templates/registration/password_change_form.html:61
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
@@ -5514,6 +5495,7 @@ msgid "Successfully reset password."
 msgstr "Parole veiksmīgi nomainīta"
 
 #: seahub/templates/registration/password_reset_confirm.html:4
+#: seahub/templates/registration/password_reset_done.html:4
 #: seahub/templates/registration/password_reset_form.html:4
 #: seahub/templates/registration/password_reset_form.html:7
 #: seahub/templates/sysadmin/sys_org_info_user.html:75
@@ -5536,10 +5518,6 @@ msgstr "Apstiprināt paroli"
 #: seahub/templates/registration/password_reset_confirm.html:26
 msgid "Failed to reset password: this link is no longer available."
 msgstr "Neizdevās nnomainīt paroli: šī saite vairs nav derīgai."
-
-#: seahub/templates/registration/password_reset_done.html:4
-msgid "Password Reset Successfully"
-msgstr "Paroles maiņa sekmīga"
 
 #: seahub/templates/registration/password_reset_done.html:8
 msgid "We've sent a password reset email to your mailbox."
@@ -5680,9 +5658,9 @@ msgstr "Kļūda"
 msgid "The file is being processed, please wait..."
 msgstr "Datne tiek apstrādāta... Lūdzu, gaidiet!"
 
-#: seahub/templates/snippets/office_convert_js.html:56
-#: seahub/templates/snippets/office_convert_js.html:73
-#: seahub/templates/snippets/spreadsheet_convert_js.html:29
+#: seahub/templates/snippets/office_convert_js.html:72
+#: seahub/templates/snippets/office_convert_js.html:89
+#: seahub/templates/snippets/spreadsheet_convert_js.html:34
 msgid "Document convertion failed."
 msgstr "Dokumentu konvertēšanas kļūme."
 
@@ -5961,11 +5939,22 @@ msgstr "Grupas info"
 msgid "Creator"
 msgstr "Autors"
 
-#: seahub/templates/sysadmin/sys_admin_group_info.html:60
+#: seahub/templates/sysadmin/sys_admin_group_info.html:49
+#: seahub/templates/sysadmin/sys_admin_group_info.html:51
+#: seahub/templates/sysadmin/sys_admin_group_info.html:53
+#: seahub/templates/sysadmin/userinfo.html:88
+#: seahub/templates/sysadmin/userinfo.html:90
+#: seahub/templates/sysadmin/userinfo.html:120
+#: seahub/templates/sysadmin/userinfo.html:122
+#: seahub/templates/sysadmin/userinfo.html:124
+msgid "library icon"
+msgstr ""
+
+#: seahub/templates/sysadmin/sys_admin_group_info.html:66
 msgid "No library has shared to this group"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_admin_group_info.html:71
+#: seahub/templates/sysadmin/sys_admin_group_info.html:77
 msgid "admin"
 msgstr "Administrators"
 
@@ -5975,7 +5964,7 @@ msgstr "Administrators"
 msgid "Create At"
 msgstr "Izveidots"
 
-#: seahub/templates/sysadmin/sys_group_admin.html:42
+#: seahub/templates/sysadmin/sys_group_admin.html:44
 #: seahub/templates/sysadmin/sys_org_info_group.html:43
 msgid "Delete Group"
 msgstr "Dzēst grupu"
@@ -6136,12 +6125,12 @@ msgid "Max User Number"
 msgstr "Maksimālais lietotāju skaits"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1166
+#: seahub/views/sysadmin.py:1169
 msgid "Input should be a number"
 msgstr "Jāievada skaitlis"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1176
+#: seahub/views/sysadmin.py:1179
 msgid "Input number should be greater than 0"
 msgstr "Ievades numuram jābūt lielākam par 0"
 
@@ -6465,19 +6454,19 @@ msgstr "Koplietošana"
 msgid "Set user storage limit"
 msgstr "Iestatīt lietotāju krātuves limitu"
 
-#: seahub/templates/sysadmin/userinfo.html:106
+#: seahub/templates/sysadmin/userinfo.html:112
 msgid "Share From"
 msgstr "Koplietojums no "
 
-#: seahub/templates/sysadmin/userinfo.html:131
+#: seahub/templates/sysadmin/userinfo.html:145
 msgid "Type"
 msgstr "Tips"
 
-#: seahub/templates/sysadmin/userinfo.html:189
+#: seahub/templates/sysadmin/userinfo.html:203
 msgid "Space Quota can't be empty"
 msgstr "Kvotu lauks nevar būt tukšs"
 
-#: seahub/templates/sysadmin/userinfo.html:198
+#: seahub/templates/sysadmin/userinfo.html:212
 msgid "Share Quota can't be empty"
 msgstr ""
 
@@ -6493,7 +6482,7 @@ msgstr "privāts-wiki"
 msgid "Personal Wiki Pages"
 msgstr "Privātās Wiki Lapas"
 
-#: seahub/thumbnail/views.py:44 seahub/thumbnail/views.py:132
+#: seahub/thumbnail/views.py:44 seahub/thumbnail/views.py:138
 msgid "Invalid arguments."
 msgstr ""
 
@@ -6506,15 +6495,15 @@ msgstr ""
 msgid "Permission denied."
 msgstr "Pieeja liegta."
 
-#: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:142
+#: seahub/thumbnail/views.py:54 seahub/thumbnail/views.py:148
 msgid "Not allowed to generate thumbnail."
 msgstr ""
 
-#: seahub/thumbnail/views.py:64 seahub/thumbnail/views.py:152
+#: seahub/thumbnail/views.py:64 seahub/thumbnail/views.py:158
 msgid "Failed to create thumbnail."
 msgstr "Neizdevās izveidot sīktēlu."
 
-#: seahub/thumbnail/views.py:119
+#: seahub/thumbnail/views.py:125
 msgid "Invalid token."
 msgstr ""
 
@@ -6612,12 +6601,12 @@ msgid "No revisions found"
 msgstr ""
 
 #: seahub/views/__init__.py:1540 seahub/views/ajax.py:661
-#: seahub/views/ajax.py:729 seahub/views/ajax.py:863 seahub/views/file.py:994
+#: seahub/views/ajax.py:729 seahub/views/ajax.py:863 seahub/views/file.py:989
 msgid "Check file lock error"
 msgstr ""
 
 #: seahub/views/__init__.py:1544 seahub/views/ajax.py:666
-#: seahub/views/ajax.py:734 seahub/views/ajax.py:868 seahub/views/file.py:997
+#: seahub/views/ajax.py:734 seahub/views/ajax.py:868 seahub/views/file.py:992
 msgid "File is locked"
 msgstr ""
 
@@ -6645,7 +6634,7 @@ msgstr "Veiksmīgi nomainīts %(path)s uz <a href=\"%(url)s\"> saknes mapi.</a>"
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" nepastāv."
 
-#: seahub/views/__init__.py:1880 seahub/views/file.py:979
+#: seahub/views/__init__.py:1880 seahub/views/file.py:974
 #: seahub/views/repo.py:388
 msgid "Internal Error"
 msgstr "Iekšējā kļūda"
@@ -6850,34 +6839,34 @@ msgstr "Nederīga grupa"
 msgid "Group does not exist."
 msgstr "Grupa nepastāv."
 
-#: seahub/views/file.py:126
+#: seahub/views/file.py:129
 msgid "HTTPError: failed to open file online"
 msgstr "HTTPError: neizdevās atvērt datni tiešsaistē"
 
-#: seahub/views/file.py:130
+#: seahub/views/file.py:133
 msgid "URLError: failed to open file online"
 msgstr "URLError: neizdevās atvērt datni tiešsaistē"
 
-#: seahub/views/file.py:137
+#: seahub/views/file.py:140
 msgid "The encoding you chose is not proper."
 msgstr "Atlasītais kodējums nav pareizs."
 
-#: seahub/views/file.py:154 seahub/views/file.py:157
+#: seahub/views/file.py:157 seahub/views/file.py:160
 msgid "Unknown file encoding"
 msgstr "Nezināms datnes kodējums"
 
-#: seahub/views/file.py:279 seahub/views/file.py:286 seahub/views/file.py:553
+#: seahub/views/file.py:282 seahub/views/file.py:289 seahub/views/file.py:553
 #: seahub/views/file.py:558
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Datnes lielums pārsniedz %s, nevar atvērt tiešsaistes režīmā.."
 
-#: seahub/views/file.py:364 seahub/views/file.py:593 seahub/views/file.py:608
+#: seahub/views/file.py:367 seahub/views/file.py:593 seahub/views/file.py:608
 #: seahub/views/file.py:630
 msgid "Unable to view file"
 msgstr "Nevar apskatīt datni"
 
-#: seahub/views/file.py:393 seahub/views/file.py:571 seahub/views/file.py:766
+#: seahub/views/file.py:396 seahub/views/file.py:571 seahub/views/file.py:766
 msgid "Invalid file format."
 msgstr "Nederīgs datnes formāts"
 
@@ -6893,27 +6882,27 @@ msgstr "Nevar lejupielādēt datni, nepareizs datnes ceļš"
 msgid "Unable to download file, share link traffic is used up."
 msgstr ""
 
-#: seahub/views/file.py:1001
+#: seahub/views/file.py:996
 msgid "The library does not exist."
 msgstr "Bibliotēka nepastāv."
 
-#: seahub/views/file.py:1005
+#: seahub/views/file.py:1000
 msgid "The library is encrypted."
 msgstr "Bibliotēka ir šifrēta."
 
-#: seahub/views/file.py:1079
+#: seahub/views/file.py:1074
 msgid "Unable to edit file"
 msgstr "Nevar rediģēt datni"
 
-#: seahub/views/file.py:1085
+#: seahub/views/file.py:1080
 msgid "The file does not exist."
 msgstr "Datne nepastāv."
 
-#: seahub/views/file.py:1114
+#: seahub/views/file.py:1109
 msgid "Edit online is not offered for this type of file."
 msgstr "Rediģēšana tiešsaistē netiek piedāvāta šī tipa datnēm."
 
-#: seahub/views/file.py:1221
+#: seahub/views/file.py:1216
 msgid "Unable to download file"
 msgstr "Nevar lejupielādēt datni"
 
@@ -6942,59 +6931,59 @@ msgstr "Neizdevās iestatīt kvotas: iekšējā servera kļūda"
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Neizdevās dzēst: lietotājs ir organizācijas veidotājs"
 
-#: seahub/views/sysadmin.py:742
+#: seahub/views/sysadmin.py:741
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Veiksmīgi dzēsts %s"
 
-#: seahub/views/sysadmin.py:744
+#: seahub/views/sysadmin.py:743
 msgid "Failed to delete: the user does not exist"
 msgstr "Neizdevās dzēst: lietotājs neeksistē"
 
-#: seahub/views/sysadmin.py:764
+#: seahub/views/sysadmin.py:763
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "Veiksmīgi noņemts trial: %s"
 
-#: seahub/views/sysadmin.py:792
+#: seahub/views/sysadmin.py:791
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Veiksmīgi anulēt administratora atļaujas %s"
 
-#: seahub/views/sysadmin.py:794
+#: seahub/views/sysadmin.py:793
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Neizdevās atsaukt administratoru: lietotājs neeksistē"
 
-#: seahub/views/sysadmin.py:841
+#: seahub/views/sysadmin.py:840
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Jūsu konts %s ir aktivizēts"
 
-#: seahub/views/sysadmin.py:919
+#: seahub/views/sysadmin.py:918
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Parole ir atiestatīta uz %s"
 
-#: seahub/views/sysadmin.py:940
+#: seahub/views/sysadmin.py:939
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Veiksmīgi atiestatīta parole %(passwd)s, e-pasta ziņa ir nosūtīta %(user)s."
 
-#: seahub/views/sysadmin.py:945
+#: seahub/views/sysadmin.py:944
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Veiksmīgi atiestatīta parole %(passwd)s, tomēr neizdevās nosūtīt e-pastu %(user)s, pārbaudiet savu e-pasta konfigurāciju."
 
-#: seahub/views/sysadmin.py:949
+#: seahub/views/sysadmin.py:948
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Veiksmīgi atiestatīta parole %(passwd)s lietotājam %(user)s."
 
-#: seahub/views/sysadmin.py:952
+#: seahub/views/sysadmin.py:951
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -7002,85 +6991,85 @@ msgid ""
 "configured."
 msgstr "Veiksmīgi atiestatīta parole %(passwd)s lietotājam %(user)s. Taču e-pasta ziņojumu nevar nosūtīt, jo e-pasta pakalpojums nav pareizi konfigurēts."
 
-#: seahub/views/sysadmin.py:955
+#: seahub/views/sysadmin.py:954
 msgid "Failed to reset password: user does not exist"
 msgstr "Neizdevās atiestatīt paroli: lietotājs neeksistē"
 
-#: seahub/views/sysadmin.py:971
+#: seahub/views/sysadmin.py:970
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Jums ir uzaicinājums pievienoties %s"
 
-#: seahub/views/sysadmin.py:1002
+#: seahub/views/sysadmin.py:1001
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Neizdevās pievienot lietotāju %s."
 
-#: seahub/views/sysadmin.py:1015 seahub/views/sysadmin.py:1028
+#: seahub/views/sysadmin.py:1014 seahub/views/sysadmin.py:1027
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Veiksmīgi pievienots lietotājs %s. E-pasta paziņojums ir nosūtīts."
 
-#: seahub/views/sysadmin.py:1018 seahub/views/sysadmin.py:1031
+#: seahub/views/sysadmin.py:1017 seahub/views/sysadmin.py:1030
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Veiksmīgi pievienots lietotājs %s. Gadījās kļūda nosūtot e-pasta paziņojumu, lūdzu, pārbaudiet e-pasta konfigurāciju."
 
-#: seahub/views/sysadmin.py:1020 seahub/views/sysadmin.py:1033
+#: seahub/views/sysadmin.py:1019 seahub/views/sysadmin.py:1032
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Veiksmīgi pievienots lietotājs %s."
 
-#: seahub/views/sysadmin.py:1035
+#: seahub/views/sysadmin.py:1034
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Veiksmīgi pievienots lietotājs %s. Taču e-pasta ziņojumu nevar nosūtīt, jo e-pasta pakalpojums nav pareizi konfigurēts."
 
-#: seahub/views/sysadmin.py:1150
+#: seahub/views/sysadmin.py:1153
 msgid "Failed to rename organization"
 msgstr "Neizdevās pārsaukt organizāciju"
 
-#: seahub/views/sysadmin.py:1383
+#: seahub/views/sysadmin.py:1386
 msgid "Failed to transfer, invalid arguments."
 msgstr "Neizdevās pārsūtīt, nederīgi argumenti."
 
-#: seahub/views/sysadmin.py:1394
+#: seahub/views/sysadmin.py:1397
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "Neizdevās pārsūtīt, lietotājs %s nav atrasts"
 
-#: seahub/views/sysadmin.py:1399
+#: seahub/views/sysadmin.py:1402
 msgid "Can not transfer organization library"
 msgstr "Nevar pārsūtīt organizācijas bibliotēkas"
 
-#: seahub/views/sysadmin.py:1403
+#: seahub/views/sysadmin.py:1406
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr "Nevar pārsūtīt bibliotēku organizācijas lietotājam %s"
 
-#: seahub/views/sysadmin.py:1409
+#: seahub/views/sysadmin.py:1412
 msgid "Successfully transfered."
 msgstr "Veiksmīgi pārsūtīts."
 
-#: seahub/views/sysadmin.py:1476
+#: seahub/views/sysadmin.py:1479
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "Veiksmīgi iestatīts %s, kā administrators."
 
-#: seahub/views/sysadmin.py:1478
+#: seahub/views/sysadmin.py:1481
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Neizdevās iestatīt %s, kā administratoru: lietotājs neeksistē."
 
-#: seahub/views/sysadmin.py:1519
+#: seahub/views/sysadmin.py:1522
 msgid "Import succeeded"
 msgstr "Imports veiksmīgs"
 
-#: seahub/views/sysadmin.py:1521
+#: seahub/views/sysadmin.py:1524
 msgid "Please select a csv file first."
 msgstr "Lūdzu, atlasiet .csv datni, vispirms."
 
