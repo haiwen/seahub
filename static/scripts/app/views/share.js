@@ -143,9 +143,10 @@ define([
         },
 
         generateRandomPassword: function(form) {
+            var random_password_length = app.pageOptions.repo_password_min_length;
             var random_password = '';
             var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
-            for (var i = 0; i < 8; i++) {
+            for (var i = 0; i < random_password_length; i++) {
                 random_password += possible.charAt(Math.floor(Math.random() * possible.length));
             }
             $('input[name=password], input[name=password_again]', form).attr('type', 'text').val(random_password);
