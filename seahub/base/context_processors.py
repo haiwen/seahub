@@ -10,7 +10,7 @@ RequestContext.
 import re
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
-    SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH
+    SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH, SHARE_LINK_PASSWORD_MIN_LENGTH
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -76,6 +76,7 @@ def base(request):
         'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
         'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
+        'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
