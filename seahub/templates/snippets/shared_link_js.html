@@ -250,7 +250,7 @@ $('#gen-link-btn').click(function() {
             apply_form_error(form_id, "{% trans "Please enter password" %}");
             return false;
         }
-        if ($.trim(passwd).length < {{repo_password_min_length}}) {
+        if ($.trim(passwd).length < {{share_link_password_min_length}}) {
             apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
@@ -423,7 +423,7 @@ $('#gen-upload-link-btn').click(function() {
             apply_form_error(form_id, "{% trans "Please enter password" %}");
             return false;
         }
-        if ($.trim(passwd).length < {{repo_password_min_length}}) {
+        if ($.trim(passwd).length < {{share_link_password_min_length}}) {
             apply_form_error(form_id, "{% trans "Password is too short" %}");
             return false;
         }
