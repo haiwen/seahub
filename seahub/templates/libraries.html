@@ -246,6 +246,7 @@ app["pageOptions"] = {
     can_generate_shared_link: {% if user.permissions.can_generate_shared_link %} true {% else %} false {% endif %},
     is_staff: {% if request.user.is_staff %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
+    share_link_password_min_length: {{ share_link_password_min_length }},
     guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     enable_resumable_fileupload: {% if enable_resumable_fileupload %} true {% else %} false {% endif %},

@@ -233,6 +233,9 @@ ENABLE_RESUMABLE_FILEUPLOAD = False
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 8
 
+# mininum length for the password of a share link
+SHARE_LINK_PASSWORD_MIN_LENGTH = 8
+
 # mininum length for user's password
 USER_PASSWORD_MIN_LENGTH = 6
 
