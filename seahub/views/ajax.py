@@ -1839,14 +1839,19 @@ def get_file_op_url(request, repo_id):
         return HttpResponse(json.dumps({"error": err_msg}), status=400,
                             content_type=content_type)
 
-    username = request.user.username
     # permission checking
     if check_folder_permission(request, repo.id, path) != 'rw':
         err_msg = _(u'Permission denied')
         return HttpResponse(json.dumps({"error": err_msg}), status=403,
                             content_type=content_type)
 
-    url = ''
+    username = request.user.username
+    if op_type == 'upload':
+        if request.user.is_staff and get_system_default_repo_id() == repo.id:
+            # Set username to 'system' to let fileserver release permission
+            # check.
+            username = 'system'
+
     if op_type.startswith('update'):
         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                         op_type, username)
