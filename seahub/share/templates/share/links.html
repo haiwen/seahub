@@ -17,18 +17,27 @@
         <table>
             <tr>
                 <th width="4%"><!--icon--></th>
-                <th width="40%">{% trans "Name"%}</th>
+                <th class="cspt by-name-down" width="40%">{% trans "Name"%}<span class="icon-caret-up hide"></span></th>
                 <th width="24%">{% trans "Library"%}</th>
                 <th width="10%">{% trans "Visits"%}</th>
-                <th width="12%">{% trans "Expiration"%}</th>
+                <th class="cspt by-time-down" width="12%">{% trans "Expiration"%}<span class="icon-caret-up hide"></span></th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             {% for fs in fileshares %}
-            <tr>
                 {% if fs.s_type == 'f' %}
+                {% if fs.expire_date %}
+                <tr class="file-item" name={{ fs.filename }} data-time={{ fs.expire_date|date:'Y-m-d' }}>
+                {% else %}
+                <tr class="file-item" name={{ fs.filename }} data-time='--'>
+                {% endif %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                 <td><a href="{% url 'view_lib_file' fs.repo.id fs.path|urlencode %}">{{ fs.filename }}</a></td>
                 {% else %}
+                {% if fs.expire_date %}
+                <tr class="dir-item" name={{ fs.filename }} data-time={{ fs.expire_date|date:'Y-m-d' }}>
+                {% else %}
+                <tr class="dir-item" name={{ fs.filename }} data-time='--'>
+                {% endif %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'view_common_lib_dir' fs.repo.id fs.path|urlencode|strip_slash %}">{{ fs.filename }}</a></td>
                 {% endif %}
@@ -113,6 +122,61 @@ $('.rm-upload-link').click(function() {
 $('#shared-link').click(function() {
     $(this).select();
 });
+//sort by name||time
+$('.by-name-down, .by-name-up, .by-time-up, .by-time-down').click(sortLinks);
+$('#download-links tr:first span').css({'margin-left': '3px'});
+function __toString(str) {
+    return str == '--' ? 'seahub' : str;
+};
+function sortLinks() {
+    var th_class = $(this).attr('class').substr(5), by,
+    dir_list = [], file_list = [],
+    table = $('#download-links table');
+
+    switch (th_class) {
+        case 'by-name-down': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1 };break;
+        case 'by-name-up': by = function(a, b) { return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1 };break;
+        case 'by-time-up': by = function(a, b) { return __toString(a.time) < __toString(b.time) ? -1 : 1 };break;
+        case 'by-time-down': by = function(a, b) { return __toString(a.time) < __toString(b.time) ? 1 : -1 };break;
+    }
+ 
+    $('.dir-item').each(function() {
+        dir_list.push({'name':$(this).attr('name'), 'time':$(this).data('time'), 'element':this});
+    });
+    $('.file-item').each(function() {
+        file_list.push({'name':$(this).attr('name'), 'time':$(this).data('time'), 'element':this});
+    });
+
+    dir_list.sort(by);
+    file_list.sort(by);
+
+    $('.dir-item, .file-item').detach();
+
+    $(dir_list).each(function(index, item) {
+        table.append(item.element);
+    });
+    $(file_list).each(function(index, item) {
+        table.append(item.element);
+    });
+
+    $('tr:first span',table).hide();
+    $(this).children('span').show();
+
+    if (th_class.indexOf('time') == -1) {
+        if (th_class.indexOf('down') == -1) {
+            $(this).removeClass('by-name-up').addClass('by-name-down').children('span').attr('class', 'icon-caret-up');
+        } else {
+            $(this).removeClass('by-name-down').addClass('by-name-up').children('span').attr('class', 'icon-caret-down');
+        }
+    } else {
+        if (th_class.indexOf('down') == -1) {
+            $(this).removeClass('by-time-up').addClass('by-time-down').children('span').attr('class', 'icon-caret-up');
+        } else {
+            $(this).removeClass('by-time-down').addClass('by-time-up').children('span').attr('class', 'icon-caret-down');
+        }
+    }
+}
+
 {% endif %}
 </script>
 {% endblock %}
