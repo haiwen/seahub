@@ -1946,27 +1946,6 @@ def group_events_data(events):
 
     return event_groups
 
-def pdf_full_view(request):
-    '''For pdf view with pdf.js.'''
-
-    repo_id = request.GET.get('repo_id', '')
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
-        raise Http404
-
-    obj_id = request.GET.get('obj_id', '')
-    file_name = request.GET.get('file_name', '')
-    token = seafile_api.get_fileserver_access_token(repo_id, obj_id, 'view',
-                                                    request.user.username)
-    file_src = gen_file_get_url(token, file_name)
-    return render_to_response('pdf_full_view.html', {
-            'file_src': file_src,
-           }, context_instance=RequestContext(request))
-
 @login_required
 def convert_cmmt_desc_link(request):
     """Return user to file/directory page based on the changes in commit.

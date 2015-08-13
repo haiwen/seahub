@@ -27,54 +27,43 @@
 <script type="text/javascript">
 if (!($.browser.msie && parseInt($.browser.version) < 10)) {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
-    $('#file-view').html('<div id="pdf"><div id="pdf-op-bar" class="vh"><span id="pdf-page-left"><button id="prev">{% trans "Previous" %}</button></span>{% blocktrans %}<span id="pdf-page"><label for="page-number">Page</label> <input type="number" id="page-number" value="1" min="1"></input> / <span id="page-nums"></span></span>{% endblocktrans %}<span id="pdf-page-right"><button id="next" style="margin-right:15px;">{% trans "Next" %}</button><button id="full-screen">{% trans "Full Screen" %}</button></span></div><img src="{{ MEDIA_URL }}pdf_full_view/images/loading-icon.gif" alt="{% trans "loading..." %}" id="pdf-loading" style="margin:20px 0;" /><canvas data="{{ raw_path }}" id="pdf-view" class="hide"></canvas></div>').css({'text-align':'center'});
-    $('#pdf-page-left, #pdf-page-right').css('display', 'inline-block');
-    $('#pdf-page-left').css({'text-align':'right', 'width': $('#pdf-page-right').width()});
-    $('#pdf-op-bar').removeClass('vh');
-    var seahub_getPage = function (pdf, page_number) {
-        pdf.getPage(page_number).then(function(page) {
-            var scale = 1.5;
-            var viewport = page.getViewport(scale);
-            var canvas = $('#pdf-view')[0];
-            var context = canvas.getContext('2d');
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
-            var renderContext = { 
-                canvasContext: context,
-                viewport: viewport
-            };  
-            page.render(renderContext);
-        }); 
-    };
-    PDFJS.getDocument($('#pdf-view').attr('data')).then(function(pdf) {
-        $('#page-nums').html(pdf.numPages);
-        $('#page-number').attr('max', pdf.numPages).css('width', String(pdf.numPages).length * 6 + 10);
-        seahub_getPage(pdf, 1);
-        $('#pdf-loading').addClass('hide');
-        $('#pdf-view').removeClass('hide');
-        $('#page-number').change(function() {
-            seahub_getPage(pdf, $(this).val());
-        });
-        $('#prev').click(function() {
-            var current = $('#page-number').val();
-            if (current > 1) {
-                seahub_getPage(pdf, --current);
-                $('#page-number').val(current);
-            }
-        });
-        $('#next').click(function() {
-            var current = $('#page-number').val();
-            if (current < pdf.numPages) {
-                seahub_getPage(pdf, ++current);
-                $('#page-number').val(current);
-            }
-        });
-        $('#full-screen').click(function() {
-            window.open('{{ SITE_ROOT }}pdf_full_view/?repo_id={{ repo.id }}&obj_id={{obj_id}}&file_name=' + e('{{ file_name }}'));
-        });
+    $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="loading-tip" /></div>');
+    PDFJS.getDocument("{{ raw_path|escapejs }}").then(function(pdf) {
+        var $loadingTip = $('#pdf .loading-tip');
+
+        // show at most 50 pages
+        var shownPageCount = pdf.numPages < 50 ? pdf.numPages : 50;
+
+        var getPageAndRender = function (pageNumber) {
+            pdf.getPage(pageNumber).then(function(page) {
+                var scale = 1.5;
+                var viewport = page.getViewport(scale);
+                var $canvas = $('<canvas class="pdf-page"></canvas>').attr({
+                    'height': viewport.height,
+                    'width': viewport.width
+                });
+                $loadingTip.before($canvas);
+                page.render({
+                    canvasContext: $canvas[0].getContext('2d'),
+                    viewport: viewport
+                });
+
+                if (pageNumber < shownPageCount) {
+                    pageNumber++;
+                    getPageAndRender(pageNumber);
+                } else {
+                    // the last page
+                    $loadingTip.hide();
+                }
+            });
+        };
+
+        // start from page 1
+        getPageAndRender(1);
     });
+
 } else {
-    var tip = "{% trans "You can use IE 10 or other browsers, for example, firefox, to view it online." %}";
+    var tip = "{% trans "You can use IE 10 or other browsers, for example, Firefox, to view it online." %}";
     $('#file-view').html('<div id="file-view-tip"><p>' + tip + '</p></div>');
 }
 </script>

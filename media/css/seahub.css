@@ -2707,7 +2707,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #docu-view,
 #svg-view,
-#pdf,
 #md-view,
 #md-edit {
     background:#fff;
@@ -2757,33 +2756,14 @@ textarea:-moz-placeholder {/* for FF */
     width:950px;
     margin:0 auto;
 }
+.pdf-page {
+    display:block;
+    max-width:950px;
+    margin:0 auto 20px;
+}
 #doc-view {
     min-height:700px;
     _height:700px;
-}
-#pdf-op-bar {
-    padding:10px 0 7px;
-    margin-bottom:3px;
-    border-bottom:1px solid #ddd;
-}
-#pdf-op-bar button {
-    color:#000;
-    border-color:#aaa;
-    margin:0 5px;
-}
-#pdf-page {
-    margin:0 10px;
-}
-#page-number {
-    padding:0 3px;
-    min-width:16px;
-    width:30px;
-    text-align:right;
-    border-radius:3px;
-    -moz-border-radius:3px;
-}
-#pdf-view {
-    max-width:950px;
 }
 #op-after-edit {
     margin-top:.9em;
