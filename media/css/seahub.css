@@ -389,10 +389,6 @@ textarea:-moz-placeholder {/* for FF */
 .avatar {
     border-radius:3px;
 }
-.pdf-view {
-    max-width:950px;
-    margin-bottom:10px;
-}
 .empty-tips {
     padding: 30px 40px;
     background-color: #FAFAFA;
@@ -2754,6 +2750,11 @@ textarea:-moz-placeholder {/* for FF */
 #pdf {
     width:950px;
     margin:0 auto;
+}
+.pdf-page {
+    display:block;
+    max-width:950px;
+    margin:0 auto 20px;
 }
 #doc-view {
     min-height:700px;
