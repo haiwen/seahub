@@ -516,6 +516,11 @@ define([
 
                 minimumInputLength: 1, // input at least 1 character
 
+                formatInputTooShort: gettext("Please enter 1 or more character"),
+                formatNoMatches: gettext("No matches"),
+                formatSearching: gettext("Searching..."),
+                formatAjaxError: gettext("Loading Failed"),
+
                 ajax: {
                     url: _this.getUrl({name: 'search_user'}),
                     dataType: 'json',
