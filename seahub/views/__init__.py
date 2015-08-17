@@ -1448,6 +1448,13 @@ def validate_filename(request):
 
 def render_file_revisions (request, repo_id):
     """List all history versions of a file."""
+
+    days_str = request.GET.get('days', '')
+    try:
+        days = int(days_str)
+    except ValueError:
+        days = 7
+
     path = request.GET.get('p', '/')
     if path[-1] == '/':
         path = path[:-1]
@@ -1468,8 +1475,7 @@ def render_file_revisions (request, repo_id):
         can_compare = False
 
     try:
-        commits = seafserv_threaded_rpc.list_file_revisions(repo_id, path,
-                                                            -1, -1)
+        commits = seafile_api.get_file_revisions(repo_id, path, -1, -1, days)
     except SearpcError, e:
         logger.error(e.msg)
         return render_error(request, e.msg)
@@ -1512,6 +1518,7 @@ def render_file_revisions (request, repo_id):
         'is_owner': is_owner,
         'can_compare': can_compare,
         'can_revert_file': can_revert_file,
+        'days': days,
         }, context_instance=RequestContext(request))
 
 @login_required
