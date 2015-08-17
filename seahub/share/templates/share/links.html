@@ -93,6 +93,9 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+{% if fileshares %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/ChinesePinYinInitials.js"></script>
+{% endif %}
 <script type="text/javascript">
 {% if fileshares or uploadlinks %}
 $(".view-link").click(function() {
@@ -157,10 +160,38 @@ $('.by-name, .by-time').click(function() {
 
     // define 'sort by' functions
     var by_name_up = function (a, b) {
-        return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var b_name_code = b.name.charCodeAt(0);
+        if ((a_name_code >= 19968 && a_name_code <= 40869) &&
+            (b_name_code >= 19968 && b_name_code <= 40869)) {
+            var a_name_pinyin = ChinesePinYinInitials.charAt(a_name_code - 19968); // get the first letter of the name's first charater's pinyin
+            var b_name_pinyin = ChinesePinYinInitials.charAt(b_name_code - 19968);
+            if (a_name_pinyin == b_name_pinyin) {
+                return 0;
+            } else {
+                return a_name_pinyin < b_name_pinyin ? -1 : 1;
+            }
+
+        } else {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        }
     };
     var by_name_down = function (a, b) {
-        return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1;
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var b_name_code = b.name.charCodeAt(0);
+        if ((a_name_code >= 19968 && a_name_code <= 40869) &&
+            (b_name_code >= 19968 && b_name_code <= 40869)) {
+            var a_name_pinyin = ChinesePinYinInitials.charAt(a_name_code - 19968); // get the first letter of the name's first charater's pinyin
+            var b_name_pinyin = ChinesePinYinInitials.charAt(b_name_code - 19968);
+            if (a_name_pinyin == b_name_pinyin) {
+                return 0;
+            } else {
+                return a_name_pinyin < b_name_pinyin ? 1 : -1;
+            }
+
+        } else {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1;
+        }
     };
     var by_time_up = function (a, b) {
         if (!a.time && !b.time) {
