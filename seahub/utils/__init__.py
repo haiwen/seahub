@@ -683,6 +683,18 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
+    def get_virus_record(repo_id=None, start=-1, limit=-1):
+        with _get_seafevents_session() as session:
+            r = seafevents.get_virus_record(session, repo_id, start, limit)
+        return r if r else []
+
+    def handle_virus_record(vid):
+        with _get_seafevents_session() as session:
+            return True if seafevents.handle_virus_record(session, vid) == 0 else False
+
+    def get_virus_record_by_id(vid):
+        with _get_seafevents_session() as session:
+            return seafevents.get_virus_record_by_id(session, vid)
 else:
     EVENTS_ENABLED = False
     def get_user_events():
@@ -694,6 +706,12 @@ else:
     def get_file_update_events():
         pass
     def get_perm_audit_events():
+        pass
+    def get_virus_record():
+        pass
+    def handle_virus_record():
+        pass
+    def get_virus_record_by_id(vid):
         pass
 
 def calc_file_path_hash(path, bits=12):

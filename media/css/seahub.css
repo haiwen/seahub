@@ -677,6 +677,12 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur .org {
     background-position: 11px -1247px;
 }
+.side-tabnav-tabs .tab .security {
+    background-position: 10px -1285px;
+}
+.side-tabnav-tabs .tab-cur .security {
+    background-position: 10px -1322px;
+}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;

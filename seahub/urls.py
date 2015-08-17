@@ -25,7 +25,8 @@ from seahub.views.ajax import *
 #from django.contrib import admin
 #admin.autodiscover()
 
-urlpatterns = patterns('',
+urlpatterns = patterns(
+    '',
     # Example:
     # (r'^seahub/', include('seahub.foo.urls')),
 
@@ -248,7 +249,16 @@ urlpatterns = patterns('',
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
+
 )
+
+from seahub.utils import EVENTS_ENABLED
+if EVENTS_ENABLED:
+    urlpatterns += patterns(
+        '',
+        url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
+        url(r'^sys/virus_scan_records/delete/(?P<vid>[\d+])/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
+    )
 
 if settings.SERVE_STATIC:
     media_url = settings.MEDIA_URL.strip('/')

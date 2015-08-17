@@ -38,6 +38,11 @@
             <a href="{{ SITE_ROOT }}sys/loginadmin/" class="activity">{% trans "Logs" %}</a>
         </li>
         {% endif %}
+        {% if events_enabled %}
+        <li class="tab {% block cur_virus_scan %}{% endblock %}">
+            <a href="{{ SITE_ROOT }}sys/virus_scan_records/" class="security">{% trans "Virus Scan" %}</a>
+        </li>
+        {% endif %}
     </ul>
 </div>
 {% endblock %}
