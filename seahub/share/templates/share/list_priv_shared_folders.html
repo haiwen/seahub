@@ -14,14 +14,14 @@
         <th width="4%"><!--icon--></th>
         <th width="33%">{% trans "Name"%}</th>
         <th width="30%">{% trans "Share To"%}</th>
-        <th width="20%">{% trans "Permission"%}</th>
-        <th width="13%">{% trans "Operations"%}</th>
+        <th width="27%">{% trans "Permission"%}</th>
+        <th width="6%"></th>
     </tr>
     {% for repo in shared_folders %}
     <tr data="{{repo.props.share_type}}">
         <td><img src="{{MEDIA_URL}}img/folder-icon-24.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         <td data="{{ repo.props.repo_id }}"><a href="{% url 'view_priv_shared_folder' repo.repo_id %}">{{ repo.props.repo_name }}</a></td>
-        <td data="{{repo.props.user_info}}">{{ repo.props.user }}</td>
+        <td data="{{repo.props.user_info}}" title="{{ repo.props.user }}">{{ repo.props.user | email2nickname }}</td>
         <td>
             <div class="share-permission">
                 <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
