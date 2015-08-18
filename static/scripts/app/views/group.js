@@ -154,7 +154,7 @@ define([
             var repos = this.repos;
             var el = this.$('.by-time .sort-icon');
             repos.comparator = function(a, b) { // a, b: model
-                if (el.hasClass('icon-caret-down')) {
+                if (el.hasClass('icon-caret-up')) {
                     return a.get('mtime') < b.get('mtime') ? 1 : -1;
                 } else {
                     return a.get('mtime') < b.get('mtime') ? -1 : 1;

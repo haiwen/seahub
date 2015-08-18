@@ -489,7 +489,7 @@ define([
                     if (a.get('is_file') && b.get('is_dir')) {
                         return 1;
                     }
-                    if (el.hasClass('icon-caret-down')) {
+                    if (el.hasClass('icon-caret-up')) {
                         return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
                     } else {
                         return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
