@@ -17,14 +17,14 @@
         <table>
             <tr>
                 <th width="4%"><!--icon--></th>
-                <th width="40%">{% trans "Name"%}</th>
+                <th width="40%" class="by-name cspt">{% trans "Name"%} <span class="sort-icon hide"></span></th>
                 <th width="24%">{% trans "Library"%}</th>
                 <th width="10%">{% trans "Visits"%}</th>
-                <th width="12%">{% trans "Expiration"%}</th>
+                <th width="12%" class="by-time cspt">{% trans "Expiration"%} <span class="sort-icon hide"></span></th>
                 <th width="10%"><!--Operations--></th>
             </tr>
             {% for fs in fileshares %}
-            <tr>
+            <tr data-type="{{fs.s_type}}" data-name="{{ fs.filename }}" data-time="{{ fs.expire_date|date:'Y-m-d' }}">
                 {% if fs.s_type == 'f' %}
                 <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                 <td><a href="{% url 'view_lib_file' fs.repo.id fs.path|urlencode %}">{{ fs.filename }}</a></td>
@@ -93,6 +93,9 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
+{% if fileshares %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/ChinesePinYinInitials.js"></script>
+{% endif %}
 <script type="text/javascript">
 {% if fileshares or uploadlinks %}
 $(".view-link").click(function() {
@@ -120,6 +123,130 @@ $('.rm-link, .rm-upload-link').click(function() {
 
 $('#shared-link').click(function() {
     $(this).select();
+});
+{% endif %}
+
+{% if fileshares %}
+// sort download links
+$('.by-name, .by-time').click(function() {
+    var $table = $(this).closest('table');
+
+    // handle sort-icon
+    $('.sort-icon', $table).hide();
+    var $sort_icon = $('.sort-icon', $(this)).show();
+    if ($sort_icon.hasClass('icon-caret-up') ||
+        $sort_icon.hasClass('icon-caret-down')) {
+        $sort_icon.toggleClass('icon-caret-up icon-caret-down');
+    } else {
+        $sort_icon.addClass('icon-caret-up');
+    }
+
+    // prepare data
+    var dir_item_list = [],
+        file_item_list = [],
+        $items = $('tr:gt(0)', $table);
+    $items.each(function(index, item) {
+        var obj = {
+            'element': item,
+            'name': $(item).attr('data-name'),
+            'time': $(item).attr('data-time')
+        };
+        if ($(item).data('type') == 'd') {
+            dir_item_list.push(obj);
+        } else {
+            file_item_list.push(obj);
+        }
+    });
+
+    // define 'sort by' functions
+    var by_name_up = function (a, b) {
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var b_name_code = b.name.charCodeAt(0);
+        if ((a_name_code >= 19968 && a_name_code <= 40869) &&
+            (b_name_code >= 19968 && b_name_code <= 40869)) {
+            var a_name_pinyin = ChinesePinYinInitials.charAt(a_name_code - 19968); // get the first letter of the name's first charater's pinyin
+            var b_name_pinyin = ChinesePinYinInitials.charAt(b_name_code - 19968);
+            if (a_name_pinyin == b_name_pinyin) {
+                return 0;
+            } else {
+                return a_name_pinyin < b_name_pinyin ? -1 : 1;
+            }
+
+        } else {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;
+        }
+    };
+    var by_name_down = function (a, b) {
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var b_name_code = b.name.charCodeAt(0);
+        if ((a_name_code >= 19968 && a_name_code <= 40869) &&
+            (b_name_code >= 19968 && b_name_code <= 40869)) {
+            var a_name_pinyin = ChinesePinYinInitials.charAt(a_name_code - 19968); // get the first letter of the name's first charater's pinyin
+            var b_name_pinyin = ChinesePinYinInitials.charAt(b_name_code - 19968);
+            if (a_name_pinyin == b_name_pinyin) {
+                return 0;
+            } else {
+                return a_name_pinyin < b_name_pinyin ? 1 : -1;
+            }
+
+        } else {
+            return a.name.toLowerCase() < b.name.toLowerCase() ? 1 : -1;
+        }
+    };
+    var by_time_up = function (a, b) {
+        if (!a.time && !b.time) {
+            return 0;
+        }
+        if (!a.time && b.time) {
+            return 1;
+        }
+        if (a.time && !b.time) {
+            return -1;
+        }
+        return a.time < b.time ? -1 : 1;
+    };
+    var by_time_down = function (a, b) {
+        if (!a.time && !b.time) {
+            return 0;
+        }
+        if (!a.time && b.time) {
+            return -1;
+        }
+        if (a.time && !b.time) {
+            return 1;
+        }
+        return a.time < b.time ? 1 : -1;
+    };
+
+    // sort
+    if ($(this).hasClass('by-name')) {
+        // by name
+        if ($sort_icon.hasClass('icon-caret-up')) {
+            dir_item_list.sort(by_name_up);
+            file_item_list.sort(by_name_up);
+        } else {
+            dir_item_list.sort(by_name_down);
+            file_item_list.sort(by_name_down);
+        }
+    } else {
+        // by time
+        if ($sort_icon.hasClass('icon-caret-up')) {
+            dir_item_list.sort(by_time_up);
+            file_item_list.sort(by_time_up);
+        } else {
+            dir_item_list.sort(by_time_down);
+            file_item_list.sort(by_time_down);
+        }
+    }
+
+    // DOM op
+    $items.detach();
+    $(dir_item_list).each(function(index, item) {
+        $table.append(item.element);
+    });
+    $(file_item_list).each(function(index, item) {
+        $table.append(item.element);
+    });
 });
 {% endif %}
 </script>
