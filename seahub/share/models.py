@@ -145,6 +145,12 @@ class FileShare(models.Model):
     def is_encrypted(self):
         return True if self.password is not None else False
 
+    def is_expired(self):
+        if self.expire_date is not None and timezone.now() > self.expire_date:
+            return True
+        else:
+            return False
+
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
         """Set a share link as org share link.
