@@ -1838,9 +1838,7 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-not-show {
     padding-left:10px;
 }
-.commit-list-inner-container .commit-list-topbar {
-    padding:8px 10px;
-}
+.commit-list-inner-container .commit-list-topbar,
 .repo-file-list-inner-container .repo-file-list-topbar {
     padding:8px 10px;
 }

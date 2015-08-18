@@ -9,8 +9,8 @@
 <p class="tip">{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
-        <div class="commit-list-topbar">
-            <span class="path">
+        <div class="commit-list-topbar ovhd">
+            <p class="path fleft">
                 {% trans 'Current Path:' %}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
@@ -19,7 +19,7 @@
                 <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
                 {% endif %}
                 {% endfor %}
-            </span>
+            </p>
 
             <span class="fright">
                 {% if days != 7 %}
