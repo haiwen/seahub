@@ -1191,6 +1191,7 @@ textarea:-moz-placeholder {/* for FF */
 #right-panel .hd,
 .tabnav,
 .repo-file-list-topbar,
+.commit-list-topbar,
 #dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
@@ -1211,6 +1212,7 @@ textarea:-moz-placeholder {/* for FF */
 #organization-repos .hd {
     position:relative;
 }
+.commit-list-topbar,
 .repo-file-list-topbar {
     margin-bottom:0;
 }
@@ -1825,9 +1827,13 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-not-show {
     padding-left:10px;
 }
+.commit-list-inner-container .commit-list-topbar {
+    padding:8px 10px;
+}
 .repo-file-list-inner-container .repo-file-list-topbar {
     padding:8px 10px;
 }
+.commit-list-topbar .path,
 .repo-file-list-topbar .path {
     font-size:14px;
     line-height:25px;

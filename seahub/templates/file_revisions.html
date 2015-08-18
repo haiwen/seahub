@@ -7,19 +7,38 @@
 {% block main_panel %}
 <h2>{{ u_filename }}{% trans "'s Version History" %}</h2>
 <p class="tip">{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
-
-<p class="path">
-{% trans 'Current Path:' %}
-{% for name, link in zipped %}
-{% if not forloop.last %}
-<a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
-{% else %}
-<a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
-{% endif %}
-{% endfor %}
-</p>
 <div class="commit-list-outer-container">
     <div class="commit-list-inner-container">
+        <div class="commit-list-topbar">
+            <span class="path">
+                {% trans 'Current Path:' %}
+                {% for name, link in zipped %}
+                {% if not forloop.last %}
+                <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
+                {% else %}
+                <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
+                {% endif %}
+                {% endfor %}
+            </span>
+
+            <span class="fright">
+                {% if days != 7 %}
+                <a href="?p={{path|urlencode}}&days=7">{% trans "a week" %}</a> /
+                {% else %}
+                {% trans "a week" %} /
+                {% endif %}
+                {% if days != 30 %}
+                <a href="?p={{path|urlencode}}&days=30">{% trans "a month" %}</a> /
+                {% else %}
+                {% trans "a month" %} /
+                {% endif %}
+                {% if days != -1 %}
+                <a href="?p={{path|urlencode}}&days=-1">{% trans "all" %}</a>
+                {% else %}
+                {% trans "all" %}
+                {% endif %}
+            </span>
+        </div>
         <table class="commit-list">
             <tr>
                 <th width="30%" class="time">{% trans 'Time' %}</th>
