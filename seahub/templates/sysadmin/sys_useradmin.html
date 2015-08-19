@@ -36,7 +36,11 @@
     </select><br />
     {% endif %}
     <label for="id_password1">{% trans "Password" %}</label><br />
-    <input type="password" name="password1" id="id_password1" class="input" /><br />
+    <div class="passwd-wrapper">
+        <input type="password" name="password1" id="id_password1" class="passwd input" />
+        <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
+        <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span><br />
+    </div>
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
     <input type="password" name="password2" id="id_password2" class="input" /><br />
     <p class="error hide"></p>
@@ -79,6 +83,29 @@ $(function(){
         }
     });
 });
+$('.show-or-hide-password').click(function() {
+    var icon = $('.show-or-hide-password'),
+        passwd_input = $('input[name=password1], input[name=password2 ]');
+    icon.toggleClass('icon-eye icon-eye-slash');
+    if (icon.hasClass('icon-eye')) {
+        icon.attr('title', '{% trans "Show" %}');
+        passwd_input.prop('type', 'password');
+    } else {
+        icon.attr('title', '{% trans "Hide" %}');
+        passwd_input.prop('type', 'text');
+    }
+});
+$('.generate-random-password').click(function() {
+    var random_password = '';
+    var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
+    for (var i = 0; i < 8; i++) {
+        random_password += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    $('input[name=password1], input[name=password2]').prop('type', 'text').val(random_password);
+    $('.show-or-hide-password')
+    .attr('title', '{% trans "Hide" %}')
+    .removeClass('icon-eye').addClass('icon-eye-slash');
+});
 $('#add-user-form').submit(function() {
     var form = $(this),
         form_id = $(this).attr('id'),
@@ -86,7 +113,7 @@ $('#add-user-form').submit(function() {
         {% if is_pro %}
         role = $('select[name="role"]', form).val(),
         {% endif %}
-        pwd1 = $.trim(form.children('[name="password1"]').val()),
+        pwd1 = $.trim(form.find('[name="password1"]').val()),
         pwd2 = $.trim(form.children('[name="password2"]').val());
 
     if (!email) {

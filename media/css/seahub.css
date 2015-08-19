@@ -3625,16 +3625,16 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:11px;
 }
 /*random password */
-#share-popup .passwd-wrapper {
+.passwd-wrapper {
     position:relative;
     width:268px;
 }
-#share-popup .passwd {
+.passwd {
     width:188px;
     padding-right:75px;
 }
-#share-popup .generate-random-password,
-#share-popup .show-or-hide-password {
+.generate-random-password,
+.show-or-hide-password {
     position:absolute;
     top:4px;
     right:0;
@@ -3644,15 +3644,15 @@ textarea:-moz-placeholder {/* for FF */
     text-align:center;
     opacity:0.65;
 }
-#share-popup .show-or-hide-password {
+.show-or-hide-password {
     right:36px;
     background:#fff;
 }
-#share-popup .generate-random-password {
+.generate-random-password {
     background:#ccc;
 }
-#share-popup .generate-random-password:hover,
-#share-popup .show-or-hide-password:hover {
+.generate-random-password:hover,
+.show-or-hide-password:hover {
     opacity:1;
 }
 
