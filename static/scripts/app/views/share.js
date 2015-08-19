@@ -123,18 +123,14 @@ define([
                 _this.$('.loading-tip').hide();
 
                 if (data['download_link']) {
-                    if (data['is_expired']) {
-                        _this.$('#send-download-link').addClass('hide');
-                        _this.$('#download-link').html(data['download_link'] + ' ' + gettext('(Expired)'))
-                                                 .addClass('error');
-                        _this.$('#direct-dl-link').html(data['download_link']+'?raw=1' + ' ' + gettext('(Expired)'))
-                                                  .addClass('error');
-                    } else {
-                        _this.$('#download-link').html(data['download_link']); // TODO:
-                        _this.$('#direct-dl-link').html(data['download_link']+'?raw=1'); // TODO:
-                    }
                     _this.download_link = data["download_link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
+                    _this.$('#download-link').html(data['download_link']);
+                    _this.$('#direct-dl-link').html(data['download_link']+'?raw=1');
+                    if (data['is_expired']) {
+                        _this.$('#send-download-link').addClass('hide');
+                        _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
+                    }
                     _this.$('#download-link-operations').removeClass('hide');
                 } else {
                     _this.$('#generate-download-link-form').removeClass('hide');
