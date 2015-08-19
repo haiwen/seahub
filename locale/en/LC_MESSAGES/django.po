@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-11 16:32+0800\n"
+"POT-Creation-Date: 2015-08-19 18:05+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -53,9 +53,9 @@ msgstr ""
 #: seahub/views/ajax.py:1149 seahub/views/ajax.py:1178
 #: seahub/views/ajax.py:1339 seahub/views/ajax.py:1422
 #: seahub/views/ajax.py:1426 seahub/views/ajax.py:1430
-#: seahub/views/ajax.py:1832 seahub/views/ajax.py:2282
-#: seahub/views/ajax.py:2339 seahub/views/ajax.py:2480
-#: seahub/views/ajax.py:2695
+#: seahub/views/ajax.py:1832 seahub/views/ajax.py:2287
+#: seahub/views/ajax.py:2344 seahub/views/ajax.py:2485
+#: seahub/views/ajax.py:2700
 msgid "Argument missing"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 #: seahub/forms.py:155 seahub/views/__init__.py:557
 #: seahub/views/__init__.py:1271 seahub/views/ajax.py:865
 #: seahub/views/ajax.py:893 seahub/views/ajax.py:936 seahub/views/ajax.py:973
-#: seahub/views/ajax.py:2738
+#: seahub/views/ajax.py:2743
 msgid "Internal server error"
 msgstr ""
 
@@ -338,7 +338,7 @@ msgstr ""
 #: seahub/contacts/templates/contacts/contact_list.html:101
 #: seahub/contacts/templates/contacts/contact_list.html:146
 #: seahub/group/templates/group/group_discuss.html:254
-#: seahub/group/templates/group/group_manage.html:203
+#: seahub/group/templates/group/group_manage.html:207
 #: seahub/group/templates/group/msg_js.html:155
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:179
@@ -350,7 +350,7 @@ msgstr ""
 #: seahub/templates/repo.html:2173 seahub/templates/repo.html.py:2278
 #: seahub/templates/repo.html:2351 seahub/templates/repo_basic_info.html:101
 #: seahub/templates/repo_change_password.html:101
-#: seahub/templates/repo_transfer_owner.html:81
+#: seahub/templates/repo_transfer_owner.html:86
 #: seahub/templates/snippets/add_file_js.html:23
 #: seahub/templates/snippets/bottom_bar.html:135
 #: seahub/templates/snippets/events_js.html:56
@@ -858,7 +858,7 @@ msgid "Recovered deleted directory"
 msgstr ""
 
 #: seahub/base/templatetags/seahub_tags.py:172
-#: seahub/base/templatetags/seahub_tags.py:241 seahub/views/ajax.py:1932
+#: seahub/base/templatetags/seahub_tags.py:241 seahub/views/ajax.py:1937
 msgid "Changed library name or description"
 msgstr ""
 
@@ -1103,10 +1103,8 @@ msgstr ""
 #: seahub/group/templates/group/group_manage.html:84
 #: seahub/notifications/templates/notifications/notification_list.html:21
 #: seahub/share/templates/share/links.html:69
-#: seahub/share/templates/share/list_priv_shared_folders.html:18
 #: seahub/share/templates/share/priv_shared_files.html:25
 #: seahub/share/templates/share/priv_shared_files.html:63
-#: seahub/share/templates/share/repos.html:18
 #: seahub/share/templates/share/user_share_list.html:36
 #: seahub/templates/file_revisions.html:28
 #: seahub/templates/repo_history_view.html:54
@@ -1322,9 +1320,9 @@ msgstr ""
 #: seahub/views/ajax.py:185 seahub/views/ajax.py:531 seahub/views/ajax.py:629
 #: seahub/views/ajax.py:636 seahub/views/ajax.py:697 seahub/views/ajax.py:704
 #: seahub/views/ajax.py:812 seahub/views/ajax.py:837 seahub/views/ajax.py:922
-#: seahub/views/ajax.py:1031 seahub/views/ajax.py:1845
-#: seahub/views/ajax.py:2326 seahub/views/ajax.py:2352
-#: seahub/views/ajax.py:2468 seahub/views/ajax.py:2494
+#: seahub/views/ajax.py:1031 seahub/views/ajax.py:1844
+#: seahub/views/ajax.py:2331 seahub/views/ajax.py:2357
+#: seahub/views/ajax.py:2473 seahub/views/ajax.py:2499
 #: seahub/views/file.py:985
 msgid "Permission denied"
 msgstr ""
@@ -1515,7 +1513,7 @@ msgid "Unknown"
 msgstr ""
 
 #: seahub/group/views.py:1407 seahub/views/__init__.py:853
-#: seahub/views/ajax.py:2006 seahub/views/ajax.py:2070
+#: seahub/views/ajax.py:2011 seahub/views/ajax.py:2075
 #: seahub/views/wiki.py:112
 msgid "Internal Server Error"
 msgstr ""
@@ -2037,10 +2035,54 @@ msgstr ""
 msgid "Search users or enter emails"
 msgstr ""
 
-#: seahub/group/templates/group/group_manage.html:220
+#: seahub/group/templates/group/group_manage.html:174
+#: seahub/group/templates/group/group_manage.html:225
+#: seahub/templates/repo_folder_perm.html:189
+#: seahub/templates/repo_share_manage.html:149
+#: seahub/templates/repo_transfer_owner.html:53
+#: seahub/templates/sysadmin/repoadmin_js.html:19
+msgid "Please enter 1 or more character"
+msgstr ""
+
+#: seahub/group/templates/group/group_manage.html:175
+#: seahub/group/templates/group/group_manage.html:226
+#: seahub/templates/repo_folder_perm.html:190
+#: seahub/templates/repo_share_manage.html:150
+#: seahub/templates/repo_share_manage.html:159
+#: seahub/templates/repo_transfer_owner.html:54
+#: seahub/templates/sysadmin/repoadmin_js.html:20
+msgid "No matches"
+msgstr ""
+
+#: seahub/group/templates/group/group_manage.html:176
+#: seahub/group/templates/group/group_manage.html:227
+#: seahub/templates/repo_folder_perm.html:191
+#: seahub/templates/repo_share_manage.html:151
+#: seahub/templates/repo_transfer_owner.html:55
+#: seahub/templates/sysadmin/repoadmin_js.html:21
+msgid "Searching..."
+msgstr ""
+
+#: seahub/group/templates/group/group_manage.html:177
+#: seahub/group/templates/group/group_manage.html:228
+#: seahub/templates/repo_folder_perm.html:192
+#: seahub/templates/repo_share_manage.html:152
+#: seahub/templates/repo_transfer_owner.html:56
+#: seahub/templates/sysadmin/repoadmin_js.html:22
+msgid "Loading failed"
+msgstr ""
+
+#: seahub/group/templates/group/group_manage.html:224
 #: seahub/templates/repo_transfer_owner.html:52
 #: seahub/templates/sysadmin/repoadmin_js.html:18
 msgid "Search user or enter email"
+msgstr ""
+
+#: seahub/group/templates/group/group_manage.html:229
+#: seahub/templates/repo_share_manage.html:153
+#: seahub/templates/repo_transfer_owner.html:57
+#: seahub/templates/sysadmin/repoadmin_js.html:23
+msgid "You cannot select any more choices"
 msgstr ""
 
 #: seahub/group/templates/group/group_members.html:10
@@ -2982,7 +3024,7 @@ msgid ""
 "Shared to all members successfully, go check it at <a href=\"%s\">Shares</a>."
 msgstr ""
 
-#: seahub/share/views.py:218 seahub/share/views.py:1537
+#: seahub/share/views.py:218 seahub/share/views.py:1538
 msgid "Only the owner of the library has permission to share it."
 msgstr ""
 
@@ -2997,8 +3039,8 @@ msgstr ""
 #: seahub/share/views.py:658 seahub/share/views.py:1229
 #: seahub/views/__init__.py:1046 seahub/views/__init__.py:1087
 #: seahub/views/__init__.py:1460 seahub/views/__init__.py:1854
-#: seahub/views/ajax.py:1838 seahub/views/ajax.py:2343
-#: seahub/views/ajax.py:2485 seahub/views/sysadmin.py:1391
+#: seahub/views/ajax.py:1838 seahub/views/ajax.py:2348
+#: seahub/views/ajax.py:2490 seahub/views/sysadmin.py:1391
 msgid "Library does not exist"
 msgstr ""
 
@@ -3033,7 +3075,7 @@ msgid "all members"
 msgstr ""
 
 #: seahub/share/views.py:836 seahub/share/views.py:1215
-#: seahub/share/views.py:1363 seahub/share/views.py:1445
+#: seahub/share/views.py:1363 seahub/share/views.py:1446
 #: seahub/views/__init__.py:1085 seahub/views/__init__.py:1527
 #: seahub/views/__init__.py:1585 seahub/views/ajax.py:1204
 #: seahub/views/ajax.py:1224 seahub/views/file.py:1006
@@ -3124,24 +3166,24 @@ msgstr ""
 msgid "An upload link is shared to you on %s"
 msgstr ""
 
-#: seahub/share/views.py:1353 seahub/share/views.py:1425
+#: seahub/share/views.py:1353 seahub/share/views.py:1426
 msgid "You do not have permission to generate shared link"
 msgstr ""
 
-#: seahub/share/views.py:1484 seahub/thumbnail/views.py:39
+#: seahub/share/views.py:1485 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:132 seahub/views/ajax.py:247
 #: seahub/views/ajax.py:334 seahub/views/ajax.py:407 seahub/views/ajax.py:517
 #: seahub/views/ajax.py:604 seahub/views/ajax.py:679 seahub/views/ajax.py:740
 #: seahub/views/ajax.py:784 seahub/views/ajax.py:1000
-#: seahub/views/ajax.py:1260 seahub/views/ajax.py:2689
+#: seahub/views/ajax.py:1260 seahub/views/ajax.py:2694
 msgid "Library does not exist."
 msgstr ""
 
-#: seahub/share/views.py:1488
+#: seahub/share/views.py:1489
 msgid "Directory does not exist."
 msgstr ""
 
-#: seahub/share/views.py:1580
+#: seahub/share/views.py:1581
 msgid "Please check the email(s) you entered"
 msgstr ""
 
@@ -4685,7 +4727,7 @@ msgstr ""
 msgid "Select a folder"
 msgstr ""
 
-#: seahub/templates/repo_folder_perm.html:260
+#: seahub/templates/repo_folder_perm.html:264
 msgid "Delete succeeded"
 msgstr ""
 
@@ -4796,11 +4838,11 @@ msgstr ""
 msgid "Permission:"
 msgstr ""
 
-#: seahub/templates/repo_share_manage.html:152
+#: seahub/templates/repo_share_manage.html:157
 msgid "Select groups"
 msgstr ""
 
-#: seahub/templates/repo_share_manage.html:168
+#: seahub/templates/repo_share_manage.html:174
 msgid "Please select a email or a group."
 msgstr ""
 
@@ -5011,7 +5053,7 @@ msgstr ""
 msgid "top"
 msgstr ""
 
-#: seahub/templates/view_file_base.html:162 seahub/views/ajax.py:2591
+#: seahub/templates/view_file_base.html:162 seahub/views/ajax.py:2596
 #: seahub/views/sysadmin.py:209 seahub/views/sysadmin.py:226
 #: seahub/views/sysadmin.py:248
 msgid "Failed"
@@ -5401,7 +5443,7 @@ msgid "Email cannot be blank"
 msgstr ""
 
 #: seahub/templates/registration/login.html:78
-#: seahub/templates/registration/password_change_form.html:61
+#: seahub/templates/registration/password_change_form.html:77
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
 #: seahub/templates/sysadmin/sys_useradmin.html:97
@@ -5450,7 +5492,7 @@ msgstr ""
 msgid "Confirm Password"
 msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:32
+#: seahub/templates/registration/password_change_form.html:35
 #: seahub/templates/registration/registration_form.html:58
 #, python-format
 msgid ""
@@ -5458,11 +5500,11 @@ msgid ""
 "the following: uppercase letters, lowercase letters, numbers, and symbols."
 msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:57
+#: seahub/templates/registration/password_change_form.html:73
 msgid "Current password cannot be blank"
 msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:65
+#: seahub/templates/registration/password_change_form.html:81
 #: seahub/templates/registration/registration_form.html:92
 #: seahub/templates/snippets/repo_create_js.html:54
 #: seahub/templates/snippets/shared_link_js.html:258
@@ -5472,7 +5514,7 @@ msgstr ""
 msgid "Please enter the password again"
 msgstr ""
 
-#: seahub/templates/registration/password_change_form.html:69
+#: seahub/templates/registration/password_change_form.html:85
 #: seahub/templates/registration/registration_form.html:96
 #: seahub/templates/snippets/repo_create_js.html:58
 #: seahub/templates/snippets/shared_link_js.html:262
@@ -6484,8 +6526,8 @@ msgstr ""
 #: seahub/views/ajax.py:341 seahub/views/ajax.py:419 seahub/views/ajax.py:1198
 #: seahub/views/ajax.py:1218 seahub/views/ajax.py:1267
 #: seahub/views/ajax.py:1590 seahub/views/ajax.py:1608
-#: seahub/views/ajax.py:2644 seahub/views/ajax.py:2664
-#: seahub/views/ajax.py:2706 seahub/views/ajax.py:2713
+#: seahub/views/ajax.py:2649 seahub/views/ajax.py:2669
+#: seahub/views/ajax.py:2711 seahub/views/ajax.py:2718
 msgid "Permission denied."
 msgstr ""
 
@@ -6712,7 +6754,7 @@ msgid "Cancel failed"
 msgstr ""
 
 #: seahub/views/ajax.py:1315 seahub/views/ajax.py:1333
-#: seahub/views/ajax.py:1985 seahub/views/ajax.py:2048
+#: seahub/views/ajax.py:1990 seahub/views/ajax.py:2053
 msgid "You do not have permission to create library"
 msgstr ""
 
@@ -6736,101 +6778,101 @@ msgstr ""
 msgid "System library can not be deleted."
 msgstr ""
 
-#: seahub/views/ajax.py:1876
+#: seahub/views/ajax.py:1881
 msgid "Bad upload link token."
 msgstr ""
 
-#: seahub/views/ajax.py:1882
+#: seahub/views/ajax.py:1887
 msgid "Bad repo id in upload link."
 msgstr ""
 
-#: seahub/views/ajax.py:1935
+#: seahub/views/ajax.py:1940
 msgid "No conflict in the merge."
 msgstr ""
 
-#: seahub/views/ajax.py:2154
+#: seahub/views/ajax.py:2159
 msgid "Failed to edit library information."
 msgstr ""
 
-#: seahub/views/ajax.py:2163
+#: seahub/views/ajax.py:2168
 msgid "Failed to save settings on server"
 msgstr ""
 
-#: seahub/views/ajax.py:2166
+#: seahub/views/ajax.py:2171
 msgid "Settings saved."
 msgstr ""
 
-#: seahub/views/ajax.py:2197
+#: seahub/views/ajax.py:2202
 #, python-format
 msgid "Username %s is not valid."
 msgstr ""
 
-#: seahub/views/ajax.py:2204
+#: seahub/views/ajax.py:2209
 #, python-format
 msgid "User %s is not found."
 msgstr ""
 
-#: seahub/views/ajax.py:2211
+#: seahub/views/ajax.py:2216
 #, python-format
 msgid "User %s is not in current organization."
 msgstr ""
 
-#: seahub/views/ajax.py:2221
+#: seahub/views/ajax.py:2226
 #, python-format
 msgid "Can not transfer library to organization user %s."
 msgstr ""
 
-#: seahub/views/ajax.py:2250
+#: seahub/views/ajax.py:2255
 msgid "Faied to change password, you are not owner."
 msgstr ""
 
-#: seahub/views/ajax.py:2262
+#: seahub/views/ajax.py:2267
 #, python-format
 msgid "Successfully updated the password of Library %(repo_name)s."
 msgstr ""
 
-#: seahub/views/ajax.py:2358 seahub/views/ajax.py:2500
+#: seahub/views/ajax.py:2363 seahub/views/ajax.py:2505
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr ""
 
-#: seahub/views/ajax.py:2362 seahub/views/ajax.py:2504
+#: seahub/views/ajax.py:2367 seahub/views/ajax.py:2509
 msgid "Path should start with \"/\""
 msgstr ""
 
-#: seahub/views/ajax.py:2366 seahub/views/ajax.py:2508
+#: seahub/views/ajax.py:2371 seahub/views/ajax.py:2513
 msgid "Path should not end with \"/\""
 msgstr ""
 
-#: seahub/views/ajax.py:2370 seahub/views/ajax.py:2512
+#: seahub/views/ajax.py:2375 seahub/views/ajax.py:2517
 msgid "Invalid path"
 msgstr ""
 
-#: seahub/views/ajax.py:2378
+#: seahub/views/ajax.py:2383
 msgid "Invalid user, should be registered"
 msgstr ""
 
-#: seahub/views/ajax.py:2390 seahub/views/ajax.py:2403
-#: seahub/views/ajax.py:2533 seahub/views/ajax.py:2546
+#: seahub/views/ajax.py:2395 seahub/views/ajax.py:2408
+#: seahub/views/ajax.py:2538 seahub/views/ajax.py:2551
 msgid "Operation failed"
 msgstr ""
 
-#: seahub/views/ajax.py:2393 seahub/views/ajax.py:2536
+#: seahub/views/ajax.py:2398 seahub/views/ajax.py:2541
 msgid "Wrong folder permission"
 msgstr ""
 
-#: seahub/views/ajax.py:2406 seahub/views/ajax.py:2549
+#: seahub/views/ajax.py:2411 seahub/views/ajax.py:2554
 msgid "Please add folder permission first"
 msgstr ""
 
-#: seahub/views/ajax.py:2453
+#: seahub/views/ajax.py:2458
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr ""
 
-#: seahub/views/ajax.py:2521
+#: seahub/views/ajax.py:2526
 msgid "Invalid group"
 msgstr ""
 
-#: seahub/views/ajax.py:2606 seahub/views/ajax.py:2638
+#: seahub/views/ajax.py:2611 seahub/views/ajax.py:2643
 msgid "Group does not exist."
 msgstr ""
 
