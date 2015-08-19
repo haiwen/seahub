@@ -519,7 +519,7 @@ define([
                 formatInputTooShort: gettext("Please enter 1 or more character"),
                 formatNoMatches: gettext("No matches"),
                 formatSearching: gettext("Searching..."),
-                formatAjaxError: gettext("Loading Failed"),
+                formatAjaxError: gettext("Loading failed"),
 
                 ajax: {
                     url: _this.getUrl({name: 'search_user'}),

@@ -15,7 +15,12 @@ $('.repo-transfer-btn').click(function(){
     $('[name="email"]', $('#repo-transfer-form')).select2($.extend({
         width: '268px',
         maximumSelectionSize: 1,
-        placeholder: "{% trans "Search user or enter email" %}"
+        placeholder: "{% trans "Search user or enter email" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}",
+        formatSelectionTooBig: "{% trans "You cannot select any more choices" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
     $('input[name="repo_id"]', form).val(repo_id);
