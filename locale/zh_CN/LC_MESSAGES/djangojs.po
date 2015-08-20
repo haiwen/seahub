@@ -5,15 +5,16 @@
 # Translators:
 # Alfred <alfredhuang211@qq.com>, 2015
 # imwhatiam <imwhatiam123@gmail.com>, 2015
+# Lingtao Pan <freeplant@gmail.com>, 2015
 # zheng xie <xiez1989@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-23 12:12+0800\n"
-"PO-Revision-Date: 2015-07-23 04:18+0000\n"
-"Last-Translator: imwhatiam <imwhatiam123@gmail.com>\n"
-"Language-Team: Chinese (China) (http://www.transifex.com/projects/p/seahub/language/zh_CN/)\n"
+"POT-Creation-Date: 2015-08-19 18:05+0800\n"
+"PO-Revision-Date: 2015-08-20 02:54+0000\n"
+"Last-Translator: Lingtao Pan <freeplant@gmail.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/haiwen/seahub/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,8 +34,8 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:345
-#: static/scripts/app/views/share.js:608 static/scripts/app/views/share.js:666
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:351
+#: static/scripts/app/views/share.js:614 static/scripts/app/views/share.js:672
 #: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
@@ -44,23 +45,39 @@ msgstr "操作失败。请检查网络是否已连接。"
 msgid "Search users or enter emails"
 msgstr "搜索用户或输入邮箱"
 
+#: static/scripts/common.js:519
+msgid "Please enter 1 or more character"
+msgstr "请输入 1 个或更多字符"
+
+#: static/scripts/common.js:520
+msgid "No matches"
+msgstr "没有匹配项"
+
+#: static/scripts/common.js:521
+msgid "Searching..."
+msgstr "搜索中..."
+
+#: static/scripts/common.js:522
+msgid "Loading failed"
+msgstr "加载失败"
+
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
 msgstr "名称为必填项"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:196
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:202
 msgid "Please enter password"
 msgstr "请输入密码"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:204
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:210
 msgid "Please enter the password again"
 msgstr "请再次输入密码"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:200
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:206
 msgid "Password is too short"
 msgstr "密码太短"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:208
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:214
 msgid "Passwords don't match"
 msgstr "两次输入的密码不一致"
 
@@ -120,10 +137,10 @@ msgstr "必填项。"
 
 #: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
 #: static/scripts/app/views/dirent.js:265
-#: static/scripts/app/views/fileupload.js:305
-#: static/scripts/app/views/fileupload.js:319
-#: static/scripts/app/views/fileupload.js:331
-#: static/scripts/app/views/fileupload.js:343
+#: static/scripts/app/views/fileupload.js:310
+#: static/scripts/app/views/fileupload.js:324
+#: static/scripts/app/views/fileupload.js:336
+#: static/scripts/app/views/fileupload.js:348
 #: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr "刚才"
@@ -358,7 +375,7 @@ msgstr "无法获得更新链接"
 msgid "Replace file {filename}?"
 msgstr "覆盖文件 {filename} ？"
 
-#: static/scripts/app/views/fileupload.js:219
+#: static/scripts/app/views/fileupload.js:223
 msgid "File is locked"
 msgstr "文件已锁定"
 
@@ -367,7 +384,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "设置 {placeholder} 权限"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:514
+#: static/scripts/app/views/share.js:520
 msgid "Select groups"
 msgstr "选择群组"
 
@@ -412,39 +429,43 @@ msgstr "删除成功。"
 msgid "Share {placeholder}"
 msgstr "共享 {placeholder}"
 
-#: static/scripts/app/views/share.js:153 static/scripts/app/views/share.js:169
+#: static/scripts/app/views/share.js:132
+msgid "Expired"
+msgstr "已过期"
+
+#: static/scripts/app/views/share.js:159 static/scripts/app/views/share.js:175
 msgid "Hide"
 msgstr "隐藏"
 
-#: static/scripts/app/views/share.js:166
+#: static/scripts/app/views/share.js:172
 msgid "Show"
 msgstr "显示"
 
-#: static/scripts/app/views/share.js:221
+#: static/scripts/app/views/share.js:227
 msgid "Please enter days."
 msgstr "请输入天数。"
 
-#: static/scripts/app/views/share.js:225
+#: static/scripts/app/views/share.js:231
 msgid "Please enter valid days"
 msgstr "请输入有效的天数"
 
-#: static/scripts/app/views/share.js:312
+#: static/scripts/app/views/share.js:318
 msgid "Please input at least an email."
 msgstr "请输入至少一个邮箱。"
 
-#: static/scripts/app/views/share.js:329
+#: static/scripts/app/views/share.js:335
 msgid "Successfully sent to {placeholder}"
 msgstr "成功发送给 {placeholder}"
 
-#: static/scripts/app/views/share.js:333
+#: static/scripts/app/views/share.js:339
 msgid "Failed to send to {placeholder}"
 msgstr "发送给 {placeholder} 失败"
 
-#: static/scripts/app/views/share.js:598
+#: static/scripts/app/views/share.js:604
 msgid "Failed to share to {placeholder}"
 msgstr "共享给 {placeholder} 失败"
 
-#: static/scripts/app/views/share.js:606 static/scripts/app/views/share.js:664
+#: static/scripts/app/views/share.js:612 static/scripts/app/views/share.js:670
 msgid "Share failed"
 msgstr "共享失败"
 

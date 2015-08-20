@@ -10,10 +10,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-23 12:12+0800\n"
-"PO-Revision-Date: 2015-07-23 04:17+0000\n"
+"POT-Creation-Date: 2015-08-19 18:05+0800\n"
+"PO-Revision-Date: 2015-08-19 11:24+0000\n"
 "Last-Translator: Vladimir <pash.vld@gmail.com>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/seahub/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/haiwen/seahub/language/ru/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -33,8 +33,8 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:345
-#: static/scripts/app/views/share.js:608 static/scripts/app/views/share.js:666
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:351
+#: static/scripts/app/views/share.js:614 static/scripts/app/views/share.js:672
 #: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
@@ -44,23 +44,39 @@ msgstr "Не удалось. Пожалуйста, проверьте сеть."
 msgid "Search users or enter emails"
 msgstr "Найти пользователей или ввести email адреса"
 
+#: static/scripts/common.js:519
+msgid "Please enter 1 or more character"
+msgstr "Пожалуйста, введите 1 или более символов"
+
+#: static/scripts/common.js:520
+msgid "No matches"
+msgstr "Нет совпадений"
+
+#: static/scripts/common.js:521
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: static/scripts/common.js:522
+msgid "Loading failed"
+msgstr "Не удалось загрузить"
+
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
 msgstr "Имя обязательно"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:196
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:202
 msgid "Please enter password"
 msgstr "Пожалуйста, введите пароль"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:204
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:210
 msgid "Please enter the password again"
 msgstr "Пожалуйста, введите пароль еще раз"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:200
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:206
 msgid "Password is too short"
 msgstr "Пароль слишком короткий"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:208
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:214
 msgid "Passwords don't match"
 msgstr "Пароли не совпадают"
 
@@ -120,10 +136,10 @@ msgstr "Обязательное."
 
 #: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
 #: static/scripts/app/views/dirent.js:265
-#: static/scripts/app/views/fileupload.js:305
-#: static/scripts/app/views/fileupload.js:319
-#: static/scripts/app/views/fileupload.js:331
-#: static/scripts/app/views/fileupload.js:343
+#: static/scripts/app/views/fileupload.js:310
+#: static/scripts/app/views/fileupload.js:324
+#: static/scripts/app/views/fileupload.js:336
+#: static/scripts/app/views/fileupload.js:348
 #: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
 msgstr "Прямо сейчас"
@@ -358,7 +374,7 @@ msgstr "Не удалось получить ссылку для загрузк�
 msgid "Replace file {filename}?"
 msgstr "Заменить файл {filename}?"
 
-#: static/scripts/app/views/fileupload.js:219
+#: static/scripts/app/views/fileupload.js:223
 msgid "File is locked"
 msgstr "Файл заблокирован"
 
@@ -367,7 +383,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Установить права доступа к {placeholder}"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:514
+#: static/scripts/app/views/share.js:520
 msgid "Select groups"
 msgstr "Выберите группу"
 
@@ -412,39 +428,43 @@ msgstr "Успешно удалено."
 msgid "Share {placeholder}"
 msgstr "Открыть общий доступ к {placeholder}"
 
-#: static/scripts/app/views/share.js:153 static/scripts/app/views/share.js:169
+#: static/scripts/app/views/share.js:132
+msgid "Expired"
+msgstr "Истекло"
+
+#: static/scripts/app/views/share.js:159 static/scripts/app/views/share.js:175
 msgid "Hide"
 msgstr "Скрыть"
 
-#: static/scripts/app/views/share.js:166
+#: static/scripts/app/views/share.js:172
 msgid "Show"
 msgstr "Показать"
 
-#: static/scripts/app/views/share.js:221
+#: static/scripts/app/views/share.js:227
 msgid "Please enter days."
 msgstr "Пожалуйста, введите дни."
 
-#: static/scripts/app/views/share.js:225
+#: static/scripts/app/views/share.js:231
 msgid "Please enter valid days"
 msgstr "Пожалуйста, введите корректные дни"
 
-#: static/scripts/app/views/share.js:312
+#: static/scripts/app/views/share.js:318
 msgid "Please input at least an email."
 msgstr "Пожалуйста, введите по крайней мере, email."
 
-#: static/scripts/app/views/share.js:329
+#: static/scripts/app/views/share.js:335
 msgid "Successfully sent to {placeholder}"
 msgstr "Успешно отправлено в {placeholder}"
 
-#: static/scripts/app/views/share.js:333
+#: static/scripts/app/views/share.js:339
 msgid "Failed to send to {placeholder}"
 msgstr "Ошибка отправки в {placeholder}"
 
-#: static/scripts/app/views/share.js:598
+#: static/scripts/app/views/share.js:604
 msgid "Failed to share to {placeholder}"
 msgstr "Не удалось открыть общий доступ к {placeholder}"
 
-#: static/scripts/app/views/share.js:606 static/scripts/app/views/share.js:664
+#: static/scripts/app/views/share.js:612 static/scripts/app/views/share.js:670
 msgid "Share failed"
 msgstr "Не удалось открыть общий доступ"
 
