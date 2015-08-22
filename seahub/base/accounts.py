@@ -110,6 +110,9 @@ class UserPermissions(object):
     def can_generate_shared_link(self):
         return True
 
+    def can_use_global_address_book(self):
+        return True
+
     def can_view_org(self):
         if MULTI_TENANCY:
             return True if self.user.org is not None else False
