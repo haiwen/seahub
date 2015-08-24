@@ -225,11 +225,10 @@ define([
 
         rename: function() {
             var dirent_name = this.model.get('obj_name');
-            var cancel_rename_title = gettext("Cancel Rename");
             var max_file_name = app.pageOptions.max_file_name;
             $('.normal, .hidden-op', this.el).hide();
             $('.dirent-op', this.el).html('');
-            var rename_group = '<input type="text" class="rename-input" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><button class="rename-btn">save</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + cancel_rename_title + '"></span>';
+            var rename_group = '<input type="text" class="rename-input" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><button class="rename-btn">' + gettext("sa5ve") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
             app.globalState.noFileOpPopup = false;
             return false;
