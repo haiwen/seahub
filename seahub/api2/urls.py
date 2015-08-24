@@ -122,3 +122,9 @@ if HAS_OFFICE_CONVERTER:
     urlpatterns += patterns('',
         url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
     )
+
+from seahub import settings
+if getattr(settings, 'ENABLE_OFFICE_WEB_APP', False):
+    urlpatterns += patterns('',
+        (r'^wopi/', include('seahub_extra.wopi.urls')),
+    )
