@@ -592,7 +592,11 @@ def user_info(request, email):
                     fs.delete()
                     continue
 
-                fs.filename = os.path.basename(fs.path.rstrip('/'))
+                if fs.path == '/':
+                    fs.filename = '/'
+                else:
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+
                 path = fs.path
                 if path[-1] != '/':         # Normalize dir path
                     path += '/'
@@ -624,7 +628,12 @@ def user_info(request, email):
             if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
                 link.delete()
                 continue
-            link.dir_name = os.path.basename(link.path.rstrip('/'))
+
+            if link.path == '/':
+                link.dir_name = '/'
+            else:
+                link.dir_name = os.path.basename(link.path.rstrip('/'))
+
             link.is_upload = True
             p_uploadlinks.append(link)
         except SearpcError as e:
