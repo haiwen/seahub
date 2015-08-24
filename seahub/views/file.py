@@ -378,20 +378,17 @@ def _file_view(request, repo_id, path):
         return render_permission_error(request, _(u'Unable to view file'))
 
     # check if use wopi host page according to filetype
-    if ENABLE_OFFICE_WEB_APP:
-        if filetype in (DOCUMENT, SPREADSHEET, OPENDOCUMENT) or \
-            fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+    if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+        try:
+            from seahub_extra.wopi.utils import get_wopi_dict
+        except ImportError:
+            wopi_dict = None
+        else:
+            wopi_dict = get_wopi_dict(username, repo_id, path)
 
-            try:
-                from seahub_extra.wopi.utils import get_wopi_dict
-            except ImportError:
-                wopi_dict = None
-            else:
-                wopi_dict = get_wopi_dict(username, repo_id, path)
-
-            if wopi_dict:
-                return render_to_response('view_wopi_file.html', wopi_dict,
-                          context_instance=RequestContext(request))
+        if wopi_dict:
+            return render_to_response('view_wopi_file.html', wopi_dict,
+                      context_instance=RequestContext(request))
 
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
