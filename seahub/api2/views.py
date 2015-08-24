@@ -443,6 +443,10 @@ class SearchUser(APIView):
 
     def get(self, request, format=None):
 
+        if not request.user.permissions.can_use_global_address_book():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Guest user can not use global address book.')
+
         q = request.GET.get('q', None)
 
         if not q:
