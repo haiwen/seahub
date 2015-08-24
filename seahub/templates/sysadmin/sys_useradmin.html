@@ -66,7 +66,7 @@
 $(function(){
     // check if server version is the latest one
     $.ajax({
-        url: 'http://seafile.com/ajax/check_server_version/?v=' + e('{{seafile_version}}') + '&p=' + e('{{platform}}') + '&id=' + '{{server_id}}' + '&pro=' + '{{pro_server}}',
+        url: 'https://www.seafile.com/ajax/check_server_version/?v=' + e('{{seafile_version}}') + '&p=' + e('{{platform}}') + '&id=' + '{{server_id}}' + '&pro=' + '{{pro_server}}',
         dataType: 'jsonp',
         jsonpCallback: 'xx',
         crossDomain: true,
