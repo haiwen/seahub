@@ -74,6 +74,17 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
+
+try:
+    from seahub.settings import ENABLE_OFFICE_WEB_APP
+except ImportError:
+    ENABLE_OFFICE_WEB_APP = False
+
+try:
+    from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
+except ImportError:
+    OFFICE_WEB_APP_FILE_EXTENSION = ()
+
 from seahub.views import is_registered_user, check_repo_access_permission, \
     get_unencry_rw_repos_by_user, get_file_access_permission
 
@@ -365,6 +376,22 @@ def _file_view(request, repo_id, path):
 
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view file'))
+
+    # check if use wopi host page according to filetype
+    if ENABLE_OFFICE_WEB_APP:
+        if filetype in (DOCUMENT, SPREADSHEET, OPENDOCUMENT) or \
+            fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+
+            try:
+                from seahub_extra.wopi.utils import get_wopi_dict
+            except ImportError:
+                wopi_dict = None
+            else:
+                wopi_dict = get_wopi_dict(username, repo_id, path)
+
+            if wopi_dict:
+                return render_to_response('view_wopi_file.html', wopi_dict,
+                          context_instance=RequestContext(request))
 
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
