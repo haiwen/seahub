@@ -3676,6 +3676,13 @@ img.thumbnail {
 }
 
 /* rename */
+.rename-btn-group {
+    width:500px;
+    height:26px;
+    position:absolute;
+    top:0;
+    margin:0.5em 0 0;
+}
 .rename-input {
     width:213px;
     height:24px;
@@ -3683,27 +3690,22 @@ img.thumbnail {
     border-radius:2px;
     font-size:14px;
     padding-left:6px;
-}
-.rename-btn-group {
-    width:1234px;
-    height:26px;
-    position:absolute;
-    left:233px;
-    top:0;
+    float:left;
+    margin-top:-3px;
 }
 .rename-btn {
     height:26px;
     line-height:13px;
     outline:none;
     float:left;
-    margin-top:1px;
+    margin:-3px 0 0 6px;
     padding:0 8px;
 }
 .cancel-rename {
     color:#aaa;
-    margin-left:4px;
-    padding:0 6px;
     float:left;
+    margin:-3px 0 0 2px;
+    padding:0 6px;
 }
 .cancel-rename:hover {
     color:#777;

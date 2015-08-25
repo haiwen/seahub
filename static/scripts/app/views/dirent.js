@@ -224,17 +224,13 @@ define([
         },
 
         rename: function() {
-            var _this = this;
             var dirent_name = this.model.get('obj_name');
             var max_file_name = app.pageOptions.max_file_name;
             $('.normal, .hidden-op', this.el).hide();
             $('.dirent-op', this.el).html('');
-            var rename_group = '<input type="text" class="rename-input aaa" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><p class="rename-btn-group aaa"><button class="rename-btn">' + gettext("save") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
+            var rename_group = '<p class="rename-btn-group"><input type="text" class="rename-input" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><button class="rename-btn">' + gettext("save") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
             app.globalState.noFileOpPopup = false;
-            if ($(this.el).hasClass('hl')) {
-                this.cancelRename();
-            }
             return false;
         },
 
@@ -287,6 +283,7 @@ define([
                 Common.feedback(rename_failed_msg, 'error', 1500);
                 _this.cancelRename();
             };
+            Common.disableButton(rename_btn);
             Common.ajaxPost({
                 'form': form,
                 'post_url': post_url,
@@ -294,7 +291,6 @@ define([
                 'after_op_success': after_op_success,
                 'after_op_error': after_op_error
             });
-            Common.disableButton(rename_btn);
             return false;
         },
 
@@ -307,7 +303,6 @@ define([
                 'sharetoken': ''
             };
             this.model.set({'obj_name': ''}).set(original_dirent_data);
-            return false;
         },
 
         mvcp: function(event) {
