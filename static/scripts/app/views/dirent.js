@@ -224,13 +224,17 @@ define([
         },
 
         rename: function() {
+            var _this = this;
             var dirent_name = this.model.get('obj_name');
             var max_file_name = app.pageOptions.max_file_name;
             $('.normal, .hidden-op', this.el).hide();
             $('.dirent-op', this.el).html('');
-            var rename_group = '<input type="text" class="rename-input" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><button class="rename-btn">' + gettext("sa5ve") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span>';
+            var rename_group = '<input type="text" class="rename-input aaa" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><p class="rename-btn-group aaa"><button class="rename-btn">' + gettext("save") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
             app.globalState.noFileOpPopup = false;
+            if ($(this.el).hasClass('hl')) {
+                this.cancelRename();
+            }
             return false;
         },
 
@@ -303,6 +307,7 @@ define([
                 'sharetoken': ''
             };
             this.model.set({'obj_name': ''}).set(original_dirent_data);
+            return false;
         },
 
         mvcp: function(event) {

@@ -3684,21 +3684,26 @@ img.thumbnail {
     font-size:14px;
     padding-left:6px;
 }
+.rename-btn-group {
+    width:1234px;
+    height:26px;
+    position:absolute;
+    left:233px;
+    top:0;
+}
 .rename-btn {
     height:26px;
     line-height:13px;
     outline:none;
-    position:absolute;
-    left:233px;
-    top:8px;
+    float:left;
+    margin-top:1px;
     padding:0 8px;
 }
 .cancel-rename {
     color:#aaa;
-    position:absolute;
-    left:287px;
-    top:4px;
-    padding:3px 1px;
+    margin-left:4px;
+    padding:0 6px;
+    float:left;
 }
 .cancel-rename:hover {
     color:#777;
