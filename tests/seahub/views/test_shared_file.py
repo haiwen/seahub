@@ -57,6 +57,23 @@ class SharedFileTest(TestCase, Fixtures):
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
 
+    def test_view_count(self):
+        """Issue https://github.com/haiwen/seahub/issues/742
+        """
+        resp = self.client.get(reverse('view_shared_file', args=[self.fs.token]))
+        self.assertEqual(200, resp.status_code)
+        self.assertEqual(1, FileShare.objects.get(token=self.fs.token).view_cnt)
+
+        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?raw=1'
+        resp = self.client.get(dl_url)
+        self.assertEqual(302, resp.status_code)
+        self.assertEqual(2, FileShare.objects.get(token=self.fs.token).view_cnt)
+
+        dl_url = reverse('view_shared_file', args=[self.fs.token]) + '?dl=1'
+        resp = self.client.get(dl_url)
+        self.assertEqual(302, resp.status_code)
+        self.assertEqual(3, FileShare.objects.get(token=self.fs.token).view_cnt)
+
     def test_can_render_when_remove_parent_dir(self):
         """Issue https://github.com/haiwen/seafile/issues/1283
         """

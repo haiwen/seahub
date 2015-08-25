@@ -716,24 +716,36 @@ def view_shared_file(request, token):
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
 
-    if request.GET.get('dl', '') == '1':
-        # download shared file
-        return _download_file_from_share_link(request, fileshare)
-
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
 
-    path = fileshare.path.rstrip('/') # Normalize file path
+    path = fileshare.path.rstrip('/')  # Normalize file path
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
-    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
 
     filename = os.path.basename(path)
     filetype, fileext = get_file_type_and_ext(filename)
+
+    # Increase file shared link view_cnt, this operation should be atomic
+    fileshare.view_cnt = F('view_cnt') + 1
+    fileshare.save()
+
+    # send statistic messages
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
+    if filetype != 'Unknown':
+        try:
+            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
+                         (repo.id, shared_by, obj_id, file_size))
+        except SearpcError, e:
+            logger.error('Error when sending file-view message: %s' % str(e))
+
+    if request.GET.get('dl', '') == '1':
+        # download shared file
+        return _download_file_from_share_link(request, fileshare)
 
     access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
                                                            'view', '',
@@ -744,8 +756,6 @@ def view_shared_file(request, token):
         # browsers
         return HttpResponseRedirect(raw_path)
 
-    inner_path = gen_inner_file_get_url(access_token, filename)
-
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
@@ -754,7 +764,7 @@ def view_shared_file(request, token):
         ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
-
+        inner_path = gen_inner_file_get_url(access_token, filename)
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
@@ -766,18 +776,6 @@ def view_shared_file(request, token):
                 ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
-
-    # Increase file shared link view_cnt, this operation should be atomic
-    fileshare.view_cnt = F('view_cnt') + 1
-    fileshare.save()
-
-    # send statistic messages
-    if ret_dict['filetype'] != 'Unknown':
-        try:
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, file_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -797,9 +795,9 @@ def view_shared_file(request, token):
             'err': ret_dict['err'],
             'file_content': ret_dict['file_content'],
             'encoding': ret_dict['encoding'],
-            'file_encoding_list':ret_dict['file_encoding_list'],
+            'file_encoding_list': ret_dict['file_encoding_list'],
             'filetype': ret_dict['filetype'],
-            'use_pdfjs':USE_PDFJS,
+            'use_pdfjs': USE_PDFJS,
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             'traffic_over_limit': traffic_over_limit,
