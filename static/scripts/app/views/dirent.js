@@ -244,7 +244,7 @@ define([
             var new_name = $.trim($('.rename-input', this.el).val());
             if (!new_name) {
                 var empty_error_msg = gettext("The name should not be empty");
-                Common.feedback(empty_error_msg, 'error', 1500);
+                Common.feedback(empty_error_msg, 'error', 2000);
                 return false;
             };
             if (new_name == dirent_name) {
@@ -280,8 +280,8 @@ define([
                 _this.model.set(renamed_dirent_data); // it will trigger 'change' event
             };
             var after_op_error = function() {
-                var rename_failed_msg = gettext("Rename " + Common.HTMLescape(dirent_name) + " failed");
-                Common.feedback(rename_failed_msg, 'error', 1500);
+                var rename_failed_msg = gettext("Rename {placeholder} failed").replace('{placeholder}', Common.HTMLescape(dirent_name));
+                Common.feedback(rename_failed_msg, 'error', 2000);
                 _this.cancelRename();
             };
             Common.disableButton(rename_btn);
