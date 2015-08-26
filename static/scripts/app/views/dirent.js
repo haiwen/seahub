@@ -228,7 +228,10 @@ define([
             var max_file_name = app.pageOptions.max_file_name;
             $('.normal, .hidden-op', this.el).hide();
             $('.dirent-op', this.el).html('');
-            var rename_group = '<p class="rename-btn-group"><input type="text" class="rename-input" value="' + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name + ' autocomplete="off"/><button class="rename-btn">' + gettext("save") + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
+            var rename_group = '<p class="rename-btn-group"><input type="text" class="rename-input" value="'
+                + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name
+                + ' autocomplete="off"/><button class="rename-btn">' + gettext("save")
+                + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
             app.globalState.noFileOpPopup = false;
             return false;
