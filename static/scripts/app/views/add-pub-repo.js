@@ -20,7 +20,6 @@ define([
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$table = this.$('table');
-            this.$tableBody = this.$('tbody');
             this.$loadingTip = this.$('.loading-tip');
 
             this.myRepos = new RepoCollection();
@@ -70,7 +69,7 @@ define([
 
         addOne: function(model) {
             var view = new AddPubrepoItem({model: model});
-            this.$tableBody.append(view.render().el);
+            this.$table.append(view.render().el);
         },
 
         reset: function() {
