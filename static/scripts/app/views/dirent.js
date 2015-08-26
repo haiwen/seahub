@@ -239,11 +239,12 @@ define([
             var dir = this.dirView.dir;
             var is_dir = this.model.get('is_dir');
             var dirent_name = this.model.get('obj_name');
-            var form = $('.dirent-name', this.el);
+            var form = $('.rename-btn-group', this.el);
             var rename_btn = $('.rename-btn', this.el);
             var new_name = $.trim($('.rename-input', this.el).val());
             if (!new_name) {
-                Common.feedback('The name should not be empty', 'error', 1500);
+                var empty_error_msg = gettext("The name should not be empty");
+                Common.feedback(empty_error_msg, 'error', 1500);
                 return false;
             };
             if (new_name == dirent_name) {
@@ -276,10 +277,10 @@ define([
                         'starred': false
                     });
                 };
-                 _this.model.set(renamed_dirent_data); // it will trigger 'change' event
+                _this.model.set(renamed_dirent_data); // it will trigger 'change' event
             };
             var after_op_error = function() {
-                var rename_failed_msg = "Rename " + dirent_name + " failed";
+                var rename_failed_msg = gettext("Rename " + Common.HTMLescape(dirent_name) + " failed");
                 Common.feedback(rename_failed_msg, 'error', 1500);
                 _this.cancelRename();
             };
