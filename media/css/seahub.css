@@ -52,6 +52,7 @@
 .icon-magic:before                { content: "\f0d0"; }
 .icon-eye:before                  { content: "\f06e"; }
 .icon-eye-slash:before            { content: "\f070"; }
+.icon-plus-square:before          { content: "\f0fe"; }
 
 .icon-font:before                 { content: "\f031"; }
 .icon-text-height:before          { content: "\f034"; }
@@ -97,6 +98,44 @@
 }
 .sf-icon-share:before { content:"\e001"; }
 .sf-icon-removeformat:before { content:"\f1e7"; }
+/****** sf2-icon-xx ********/
+@font-face {
+    font-family: 'seafile-font2';
+    src:url('sf_font2/seafile-font2.eot');
+    src:url('sf_font2/seafile-font2.eot?#iefix') format('embedded-opentype'),
+        url('sf_font2/seafile-font2.woff') format('woff'),
+        url('sf_font2/seafile-font2.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+[class^="sf2-icon-"] {
+    font-family: 'seafile-font2';
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    -webkit-font-smoothing: antialiased;
+}
+.sf2-icon-histograms:before { content:"\e000"; }
+.sf2-icon-system:before { content:"\e001"; }
+.sf2-icon-activities:before { content:"\e002"; }
+.sf2-icon-bells:before { content:"\e003"; }
+.sf2-icon-contacts:before { content:"\e004"; }
+.sf2-icon-trash:before { content:"\e005"; }
+.sf2-icon-delete:before { content:"\e006"; }
+.sf2-icon-devices:before { content:"\e007"; }
+.sf2-icon-download:before { content:"\e008"; }
+.sf2-icon-files:before { content:"\e009"; }
+.sf2-icon-folders:before { content:"\e00a"; }
+.sf2-icon-notifications:before { content:"\e00b"; }
+.sf2-icon-groups:before { content:"\e00c"; }
+.sf2-icon-libraries:before { content:"\e00d"; }
+.sf2-icon-links:before { content:"\e00e"; }
+.sf2-icon-users:before { content:"\e00f"; }
+.sf2-icon-organizations:before { content:"\e010"; }
+.sf2-icon-share:before { content:"\e011"; }
+.sf2-icon-starred:before { content:"\e012"; }
+.sf2-icon-wiki:before { content:"\e013"; }
 /******* tags **********/
 html { background:#fff; }
 body,
@@ -156,6 +195,9 @@ select {
 }
 select {
     outline:none;
+}
+button span.icon-plus-square {
+    color:#a3a3a3;
 }
 .btn-link {
     color:#333;
@@ -356,7 +398,6 @@ input.btn-disabled:hover {/*for input*/
     background-position: 0 -15px; /* to rm background-image */
 }
 .op-list li,
-.side-tabnav-tabs .tab a,
 .checkbox,
 .checkbox-checked,
 .modalCloseImg {
@@ -566,7 +607,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav .hd .avatar { /*for 'group'*/
     vertical-align:middle;
-	border-radius:1000px;
+    border-radius:1000px;
     margin:0 6px 0 4px;
 }
 .side-tabnav .grp-name { /*for 'group'*/
@@ -580,111 +621,17 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
     overflow:hidden;
 }
+.side-tabnav-tabs .tab:hover {
+    background-color:#feefb8;
+}
 .side-tabnav-tabs .tab a { /* for IE 11: no border-radius here */
     display:block;
     font-size:15px;
-    padding:5px 4px 5px 47px;
+    padding:5px 4px 3px 6px;
     color:#333;
     font-weight:normal;
 }
-.side-tabnav-tabs .tab .lib {
-    background-position: 11px -20px;
-}
-.side-tabnav-tabs .tab-cur .lib {
-    background-position: 11px -554px;
-}
-.side-tabnav-tabs .tab .star {
-    background-position: 9px -48px;
-}
-.side-tabnav-tabs .tab-cur .star {
-    background-position: 9px -596px;
-}
-.side-tabnav-tabs .tab .activity {
-    background-position: 10px -82px;
-}
-.side-tabnav-tabs .tab-cur .activity {
-    background-position: 10px -636px;
-}
-.side-tabnav-tabs .tab .wiki {
-    background-position: 12px -122px;
-}
-.side-tabnav-tabs .tab-cur .wiki {
-    background-position: 12px -680px;
-}
-.side-tabnav-tabs .tab .msgs {
-    background-position: 10px -160px;
-}
-.side-tabnav-tabs .tab-cur .msgs {
-    background-position: 10px -728px;
-}
-.side-tabnav-tabs .tab .clients {
-    background-position: 10px -198px;
-}
-.side-tabnav-tabs .tab-cur .clients {
-    background-position: 10px -772px;
-}
-.side-tabnav-tabs .tab .contacts {
-    background-position: 11px -238px;
-}
-.side-tabnav-tabs .tab-cur .contacts {
-    background-position: 11px -814px;
-}
-.side-tabnav-tabs .tab .folders {
-    background-position: 11px -275px;
-}
-.side-tabnav-tabs .tab-cur .folders {
-    background-position: 11px -855px;
-}
-.side-tabnav-tabs .tab .files {
-    background-position: 13px -316px;
-}
-.side-tabnav-tabs .tab-cur .files {
-    background-position: 13px -899px;
-}
-.side-tabnav-tabs .tab .links {
-    background-position: 11px -357px;
-}
-.side-tabnav-tabs .tab-cur .links {
-    background-position: 11px -940px;
-}
-.side-tabnav-tabs .tab .members {
-    background-position: 13px -398px;
-}
-.side-tabnav-tabs .tab-cur .members {
-    background-position: 13px -977px;
-}
-.side-tabnav-tabs .tab .admin {
-    background-position: 10px -439px;
-}
-.side-tabnav-tabs .tab-cur .admin {
-    background-position: 10px -1052px;
-}
-.side-tabnav-tabs .tab .group {
-    background-position: 11px -475px;
-}
-.side-tabnav-tabs .tab-cur .group {
-    background-position: 11px -1014px;
-}
-.side-tabnav-tabs .tab .traffic {
-    background-position: 13px -515px;
-}
-.side-tabnav-tabs .tab-cur .traffic {
-    background-position: 13px -1091px;
-}
-.side-tabnav-tabs .tab .org {
-    background-position: 11px -1209px;
-}
-.side-tabnav-tabs .tab-cur .org {
-    background-position: 11px -1247px;
-}
-.side-tabnav-tabs .tab .security {
-    background-position: 10px -1285px;
-}
-.side-tabnav-tabs .tab-cur .security {
-    background-position: 10px -1322px;
-}
 .side-tabnav-tabs .tab a:hover {
-    background-color:#feefb8;
     text-decoration:none;
 }
 .side-tabnav-tabs .tab [class*="icon-"],
@@ -707,13 +654,22 @@ textarea:-moz-placeholder {/* for FF */
     font-weight:bold;
     color:#fff;
 }
+.side-tabnav-tabs .tab-cur [class*="sf2-icon-"] {
+    font-weight:normal;
+}
+.side-tabnav-tabs .tab span {
+    padding:0 13px 0 3px;
+}
+.side-tabnav-tabs .tab .sf2-medium {
+    font-size:24px;
+}
 .side-textnav .hd {
-	margin:2em 0 .5em;
+    margin:2em 0 .5em;
 }
 .side-textnav-tabs .tab a {
-	display:block;
+    display:block;
     padding:10px 0;
-	font-weight:normal;
+    font-weight:normal;
     color:#999;
     border-bottom:1px solid #eee;
     margin-bottom:3px;
@@ -721,7 +677,7 @@ textarea:-moz-placeholder {/* for FF */
 .side-textnav-tabs .tab-cur a,
 .side-textnav-tabs .tab a:hover {
     color:#de3f1c;
-	text-decoration:none;
+    text-decoration:none;
 }
 .side-info dt {
     margin-top:15px;
@@ -1292,7 +1248,7 @@ textarea:-moz-placeholder {/* for FF */
 /* top-bar */
 #msg-count {
     position:relative;
-    margin:10px 32px 0 25px;
+    margin:3px 28px 0 25px;
 }
 #msg-count .num {
     position:absolute;
@@ -1457,6 +1413,10 @@ textarea:-moz-placeholder {/* for FF */
 .top-info-popup a.item {
     color:#333;
     font-weight:normal;
+}
+.top-info-popup .sf2-icon-notifications {
+    float:left;
+    margin-top:-8px;
 }
 #top-nav-grp-list .item {
     padding:5px 10px;
@@ -1916,7 +1876,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .displayed-op {
     display:inline;
-    margin-right:8px;
+    margin-right:5px;
 }
 .displayed-op .dir-download,
 .displayed-op .file-download {
@@ -2291,7 +2251,7 @@ textarea:-moz-placeholder {/* for FF */
     color:#666;
 }
 .group .fast .a {
-    margin:8px 12px 0 0;
+    margin:0 8px -5px 0;
     display:inline-block;
     vertical-align:middle;
 }
@@ -3569,7 +3529,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* sysadmin */
 #import-users-btn .icon-upload-alt {
-    color:#777;
+    color:#a3a3a3;
     margin-right:3px;
 }
 #traffic-month-form {
@@ -3672,4 +3632,20 @@ textarea:-moz-placeholder {/* for FF */
 img.thumbnail {
     max-width: 24px;
     max-height: 24px;
+}
+/****** sf2-icon-details ********/
+.sf2-orange, .sf2-orange:hover {
+    color:#fd9b69;
+}
+.sf2-gray, .sf2-gray:hover {
+    color:#a3a3a3;
+}
+.sf2-small {
+    font-size:20px;
+}
+.sf2-medium {
+    font-size:24px;
+}
+.sf2-huge {
+    font-size:26px;
 }
