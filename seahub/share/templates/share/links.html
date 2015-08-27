@@ -44,8 +44,8 @@
                 <td>--</td>
                 {% endif %}
                 <td>
-                    <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}" />
-                    <img src="{{ MEDIA_URL }}img/rm.png" alt="" class="rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}" />
+                    <span class="sf2-icon-links sf2-gray sf2-small vam view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}"></span>
+                    <span class="sf2-icon-delete sf2-gray sf2-small vam rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}
@@ -75,8 +75,8 @@
                 <td><a href="{% url 'view_common_lib_dir' link.repo.id '' %}">{{ link.repo.name }}</a></td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
-                    <img src="{{ MEDIA_URL }}img/link.png" alt="" class="view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}" />
-                    <img src="{{ MEDIA_URL }}img/rm.png" alt="" class="rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}" />
+                    <span class="sf2-icon-links sf2-gray sf2-small vam view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}"></span>
+                    <span class="sf2-icon-delete sf2-gray sf2-small vam rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}"></span>
                 </td>
             </tr>
             {% endfor %}

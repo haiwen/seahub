@@ -6,36 +6,36 @@
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_info %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/info/" class="admin">{% trans "Info" %}</a>
+            <a href="{{ SITE_ROOT }}sys/info/"><span class="sf2-icon-system sf2-medium vam"></span>{% trans "Info" %}</a>
         </li>
         <li class="tab {% block cur_repo %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/seafadmin/" class="lib">{% trans "Libraries" %}</a>
+            <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-libraries sf2-medium vam"></span>{% trans "Libraries" %}</a>
         </li>
         <li class="tab {% block cur_users %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/useradmin/" class="members">{% trans "Users" %}</a>
+            <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="sf2-icon-users sf2-medium vam"></span>{% trans "Users" %}</a>
         </li>
         <li class="tab {% block cur_groups %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/groupadmin/" class="group">{% trans "Groups" %}</a>
+            <a href="{{ SITE_ROOT }}sys/groupadmin/"><span class="sf2-icon-groups sf2-medium vam"></span>{% trans "Groups" %}</a>
         </li>
         {% if multi_tenancy %}
         <li class="tab {% block cur_org %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/orgadmin/" class="org">{% trans "Organizations" %}</a>
+            <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organizations sf2-medium vam"></span>{% trans "Organizations" %}</a>
         </li>
         {% endif %}
         <li class="tab {% block cur_notice %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/notificationadmin/" class="msgs">{% trans "Notifications" %}</a>
+            <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="sf2-icon-notifications sf2-medium vam"></span>{% trans "Notifications" %}</a>
         </li>
         <li class="tab {% block cur_links %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/publinkadmin/" class="links">{% trans "Links" %}</a>
+            <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="sf2-icon-links sf2-medium vam"></span>{% trans "Links" %}</a>
         </li>
         {% if traffic_stats_enabled %}
         <li class="tab {% block cur_traffic %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/trafficadmin/" class="traffic">{% trans "Traffic" %}</a>
+            <a href="{{ SITE_ROOT }}sys/trafficadmin/"><span class="sf2-icon-histograms sf2-medium vam"></span>{% trans "Traffic" %}</a>
         </li>
         {% endif %}
         {% if sysadmin_extra_enabled %}
         <li class="tab {% block cur_log %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/loginadmin/" class="activity">{% trans "Logs" %}</a>
+            <a href="{{ SITE_ROOT }}sys/loginadmin/"><span class="sf2-icon-activities sf2-medium vam"></span>{% trans "Logs" %}</a>
         </li>
         {% endif %}
         {% if events_enabled %}

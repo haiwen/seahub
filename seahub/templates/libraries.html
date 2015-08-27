@@ -18,8 +18,8 @@
 <div class="side-tabnav hide" id="org-side-nav">
     <h3 class="hd">{% trans "Organization" %}</h3>
     <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{% url 'pubuser' %}" class="members">{% trans "Members" %}</a></li>
+        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-libraries sf2-medium vam"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{% url 'pubuser' %}"><span class="sf2-icon-users sf2-medium vam"></span>{% trans "Members" %}</a></li>
     </ul>
 </div>
 {% endblock %}
@@ -40,7 +40,7 @@
         </ul>
         <div class="fright">
             {% if user.permissions.can_add_repo %}
-            <button class="repo-create"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+            <button class="repo-create"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
             {% endif %}
             {% if sub_lib_enabled %}
             <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
@@ -151,7 +151,7 @@
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Libraries" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <button class="repo-create fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Library" %}</span></button>
+        <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
 
@@ -175,7 +175,7 @@
 <div id="organization-repos" class="tab-tabs hide">
     <div class="hd">
         <h3 class="fleft">{% trans "Libraries" %}</h3>
-        <button id="add-pub-lib" class="fright"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Library"%}</span></button>
+        <button id="add-pub-lib" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
         <ul id="add-pub-lib-menu" class="hide">
             <li class="item share-existing">{% trans "Share existing libraries" %}</li>
             <li class="item create-new">{% trans "Create a new library" %}</li>

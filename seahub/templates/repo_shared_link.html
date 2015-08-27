@@ -50,7 +50,7 @@
                         <td>--</td>
                         <td>{{ link.view_cnt }}</td>
                         <td>
-                            <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="upload" title="{% trans "Remove"%}"></span>
+                            <span class="sf2-icon-delete sf2-gray sf2-small vam op-icon vh rm-link" data-token={{ link.token }} data-type="upload" title="{% trans "Remove"%}"></span>
                         </td>
                     </tr>
                     {% endfor %}
@@ -82,7 +82,7 @@
                         <td>{{ link.filesize|filesizeformat}}</td>
                         <td>{{ link.view_cnt }}</td>
                         <td>
-                            <span class="icon-trash op-icon vh rm-link" data-token={{ link.token }} data-type="download" title="{% trans "Remove"%}"></span>
+                            <span class="sf2-icon-delete sf2-gray sf2-small vam op-icon vh rm-link" data-token={{ link.token }} data-type="download" title="{% trans "Remove"%}"></span>
                         </td>
                     </tr>
                     {% endfor %}
