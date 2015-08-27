@@ -1,13 +1,13 @@
 {% load i18n%}
-addConfirmTo($('.remove-user-btn'), {
+addConfirmTo_POST($('.remove-user-btn'), {
         'title':"{% trans "Delete User" %}",
         'con':"{% trans "Are you sure you want to delete %s ?" %}"
 });
-addConfirmTo($('.reset-user-btn'), {
+addConfirmTo_POST($('.reset-user-btn'), {
         'title':"{% trans "Password Reset" %}",
         'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
 });
-addConfirmTo($('.revoke-admin-btn'), {
+addConfirmTo_POST($('.revoke-admin-btn'), {
         'title':"{% trans "Revoke Admin" %}",
         'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}"
 });

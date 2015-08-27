@@ -249,6 +249,29 @@ function addConfirmTo(op_ele, popup) {
     });
 }
 
+// Similar to ``addConfirmto``, instead using form post when user confirms.
+function addConfirmTo_POST(op_ele, popup) {
+    op_ele.click(function() {
+        var con = '';
+        if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
+            con = popup['con'].replace('%s', '<span class="op-target">' + HTMLescape($(this).data('target')) + '</span>');
+        } else {
+            con = popup['con'];
+        }
+        $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + con + '</p>');
+        $('#confirm-popup').modal({appendTo:'#main'});
+        $('#simplemodal-container').css({'height':'auto'});
+        $('#confirm-yes').data('url', $(this).data('url')).click(function() {
+            $('<form>', {
+                "method": 'POST',
+                "action": $(this).data('url'),
+                "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+            }).appendTo(document.body).submit();
+        });
+        return false;//in case op_ele is '<a>'
+    });
+}
+
 /*
  * func: add autocomplete to some input ele
  * @param ele_id: autocomplete is added to this ele(ment), e.g-'#xxx'
@@ -477,22 +500,23 @@ function e(str) {
     return encodeURIComponent(str);
 }
 
-function prepareCSRFToken(xhr, settings) {
-    function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie != '') {
-            var cookies = document.cookie.split(';');
-            for (var i = 0; i < cookies.length; i++) {
-                var cookie = jQuery.trim(cookies[i]);
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie != '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
             }
         }
-        return cookieValue;
     }
+    return cookieValue;
+}
+
+function prepareCSRFToken(xhr, settings) {
     if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
         // Only send the token to relative URLs i.e. locally.
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
