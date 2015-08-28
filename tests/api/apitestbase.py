@@ -184,6 +184,8 @@ class ApiTestBase(unittest.TestCase):
         self.admin_delete(user_url)
 
     def create_file(self, repo, fname=None):
+        if isinstance(repo, basestring):
+            repo = _Repo(repo)
         fname = fname or ('文件 %s.txt' % randstring())
         furl = repo.get_filepath_url('/' + fname)
         data = {'operation': 'create'}
