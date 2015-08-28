@@ -1441,7 +1441,7 @@ class OpDeleteView(APIView):
 
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
+            file_name = file_name.encode('utf-8')
             try:
                 seafile_api.del_file(repo_id, parent_dir_utf8,
                                      file_name, username)
@@ -1486,7 +1486,7 @@ class OpMoveView(APIView):
 
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
+            file_name = file_name.encode('utf-8')
             new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
                                                            file_name)
             try:
@@ -1538,7 +1538,7 @@ class OpCopyView(APIView):
 
         parent_dir_utf8 = parent_dir.encode('utf-8')
         for file_name in file_names.split(':'):
-            file_name = unquote(file_name.encode('utf-8'))
+            file_name = file_name.encode('utf-8')
             new_filename = check_filename_with_rename_utf8(dst_repo, dst_dir,
                                                            file_name)
             try:
@@ -1573,7 +1573,7 @@ class StarredFileView(APIView):
     def post(self, request, format=None):
         # add starred file
         repo_id = request.POST.get('repo_id', '')
-        path = unquote(request.POST.get('p', '').encode('utf-8'))
+        path = request.POST.get('p', '').encode('utf-8')
         if not (repo_id and path):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Repo_id or path is missing.')
@@ -1679,7 +1679,7 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'Newname is missing')
-            newname = unquote(newname.encode('utf-8'))
+            newname = newname.encode('utf-8')
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Newname too long')
 
