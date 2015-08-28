@@ -24,7 +24,7 @@
         <td>{{ sfile.repo.name }}</td>
         <td>{{ sfile.last_modified|translate_seahub_time }}</td>
         <td>
-            <span data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path}}" class="sf2-icon-delete sf2-gray sf2-small vam unstar op-icon vh" title="{% trans "Unstar" %}"></span>
+            <span data-repoid="{{sfile.repo.id}}" data-path="{{sfile.path}}" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
         </td>
     </tr>
     {% endfor %}

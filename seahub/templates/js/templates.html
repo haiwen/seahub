@@ -604,22 +604,22 @@
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-libraries sf2-medium vam"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-libraries"></span>{% trans "Libraries" %}</a></li>
 
         <% if (!is_pub) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-notifications sf2-medium vam"></span>{% trans "Discussion" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-notifications"></span>{% trans "Discussion" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'group wiki') { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/"><span class="sf2-icon-wiki sf2-medium vam"></span>{% trans "Wiki" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Wiki" %}</a></li>
             <% } %>
         <% } %>
 
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-users sf2-medium vam"></span>{% trans "Members" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-users"></span>{% trans "Members" %}</a></li>
 
         <% if (is_staff) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-system sf2-medium vam"></span>{% trans "Admin" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-system"></span>{% trans "Admin" %}</a></li>
         <% } %>
     </ul>
 </script>
@@ -677,7 +677,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete sf2-gray sf2-small vam delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -747,7 +747,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete sf2-gray sf2-small vam unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
