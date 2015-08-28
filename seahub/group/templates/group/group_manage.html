@@ -36,7 +36,7 @@
                 <td>{{ member.user_name }}</td>
                 <td>
                     {% if member.user_name != request.user.username %}
-                    <span class="sf2-icon-delete sf2-gray sf2-small vam rm-member op-icon vh" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" title="{% trans "Delete" %}"></span> 
+                    <span class="sf2-icon-delete rm-member op-icon vh" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" title="{% trans "Delete" %}"></span> 
                     {% endif %}
                 </td>
             </tr>
@@ -60,7 +60,7 @@
                 <td>{{ member.user_name }}</td>
                 <td>
                     {% if member.user_name != request.user.username %}
-                    <span class="sf2-icon-delete sf2-gray sf2-small vam rm-member op-icon vh" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" title="{% trans "Delete"%}"></span> 
+                    <span class="sf2-icon-delete rm-member op-icon vh" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" title="{% trans "Delete"%}"></span> 
                     {% endif %}
                 </td>
             </tr>
