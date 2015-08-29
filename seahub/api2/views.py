@@ -820,24 +820,23 @@ class Repos(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
         repo_desc = request.DATA.get("desc", '')
-        passwd = request.DATA.get("passwd", None)
-        if not passwd:
-            passwd = None
-
-        # create a repo
         org_id = -1
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        repo_id = request.DATA.get('repo_id', '')
         try:
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
-                                                      username, passwd, org_id)
+            if repo_id:
+                # client generates magic and random key
+                repo_id, error = self._create_enc_repo(request, repo_id, repo_name, repo_desc, username, org_id)
             else:
-                repo_id = seafile_api.create_repo(repo_name, repo_desc,
-                                                  username, passwd)
+                repo_id, error = self._create_repo(request, repo_name, repo_desc, username, org_id)
         except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
+        if error is not None:
+            return error
         if not repo_id:
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
@@ -854,6 +853,40 @@ class Repos(APIView):
             # with a corresponding location header
             # resp['Location'] = reverse('api2-repo', args=[repo_id])
             return resp
+
+    def _create_repo(self, request, repo_name, repo_desc, username, org_id):
+        passwd = request.DATA.get("passwd", None) or None
+        if org_id > 0:
+            repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
+                                                  username, passwd, org_id)
+        else:
+            repo_id = seafile_api.create_repo(repo_name, repo_desc,
+                                                username, passwd)
+        return repo_id, None
+
+    def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
+        if not _REPO_ID_PATTERN.match(repo_id):
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
+        magic = request.DATA.get('magic', '')
+        random_key = request.DATA.get('random_key', '')
+        try:
+            enc_version = int(request.DATA.get('enc_version', 0))
+        except ValueError:
+            return None, api_error(status.HTTP_400_BAD_REQUEST,
+                             'Invalid enc_version param.')
+        if len(magic) != 64 or len(random_key) != 96 or enc_version < 0:
+            return None, api_error(status.HTTP_400_BAD_REQUEST,
+                             'You must provide magic, random_key and enc_version.')
+
+        if org_id > 0:
+            repo_id = seafile_api.create_org_enc_repo(repo_id, repo_name, repo_desc,
+                                                      username, magic, random_key, enc_version, org_id)
+        else:
+            repo_id = seafile_api.create_enc_repo(
+                repo_id, repo_name, repo_desc, username,
+                magic, random_key, enc_version)
+        return repo_id, None
+
 
 class PubRepos(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

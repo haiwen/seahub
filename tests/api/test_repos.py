@@ -188,31 +188,32 @@ class ReposApiTest(ApiTestBase):
                       'repo/%s/permission-check/?op=upload' % repo_id)
         self.get(url, use_token=False, headers=headers, **kwargs)
 
-    @pytest.mark.xfail
-    def create_encrypted_repo(self):
+    # @pytest.mark.xfail
+    def test_create_encrypted_repo(self):
         """Test create an encrypted repo with the secure keys generated on client
         side.
         """
         repo_id = str(uuid.uuid4())
         password = randstring(16)
-        magic, random_key = seafile_api.generate_magic_and_random_key(repo_id, password).split('\t')
+        enc_version = 2
+        enc_info = seafile_api.generate_magic_and_random_key(enc_version, repo_id, password)
         data = {
             'name': 'enc-test',
-            'encrypted': '1',
             'repo_id': repo_id,
-            'magic': magic,
-            'random_key': random_key,
+            'enc_version': enc_version,
+            'magic': enc_info.magic,
+            'random_key': enc_info.random_key,
         }
         res = self.post(REPOS_URL, data=data)
         repo = res.json()
         assert repo['repo_id'] == repo_id
         assert repo['encrypted']
-        assert repo['magic'] == magic
-        assert repo['random_key'] == random_key
+        assert repo['magic'] == enc_info.magic
+        assert repo['random_key'] == enc_info.random_key
 
         # validate the password on server
         set_password_url = apiurl('/api2/repos/{}/'.format(repo['repo_id']))
         self.post(set_password_url, data={'password': password})
 
         # do some file operation
-        self.create_file(repo)
+        self.create_file(repo['repo_id'])
