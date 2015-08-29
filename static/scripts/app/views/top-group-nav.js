@@ -35,11 +35,11 @@ define([
         },
 
         highlightGroupItem: function(e) {
-            $(e.currentTarget).addClass('hl').children('.a').removeClass('vh');
+            $(e.currentTarget).addClass('hl').children('a').removeClass('vh');
         },
 
         rmHighlightGroupItem: function(e) {
-            $(e.currentTarget).removeClass('hl').children('.a').addClass('vh');
+            $(e.currentTarget).removeClass('hl').children('a').addClass('vh');
         },
 
         visitGroup: function(e) {

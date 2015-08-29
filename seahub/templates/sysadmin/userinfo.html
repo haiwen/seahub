@@ -93,7 +93,7 @@
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><span class="sf2-icon-delete sf2-gray sf2-small vam"></span></a></div>
+                    <div><span class="repo-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span></div>
                 </td>
             </tr>
             {% endfor %}

@@ -53,28 +53,6 @@
 .icon-eye:before                  { content: "\f06e"; }
 .icon-eye-slash:before            { content: "\f070"; }
 .icon-plus-square:before          { content: "\f0fe"; }
-
-.icon-font:before                 { content: "\f031"; }
-.icon-text-height:before          { content: "\f034"; }
-.icon-tint:before                 { content: "\f043"; }
-.icon-bold:before                 { content: "\f032"; }
-.icon-italic:before               { content: "\f033"; }
-.icon-strikethrough:before        { content: "\f0cc"; }
-.icon-underline:before            { content: "\f0cd"; }
-.icon-list-ul:before              { content: "\f0ca"; }
-.icon-list-ol:before              { content: "\f0cb"; }
-.icon-indent-left:before          { content: "\f03b"; }
-.icon-indent-right:before         { content: "\f03c"; }
-.icon-align-left:before           { content: "\f036"; }
-.icon-align-center:before         { content: "\f037"; }
-.icon-align-right:before          { content: "\f038"; }
-.icon-align-justify:before        { content: "\f039"; }
-.icon-link:before                 { content: "\f0c1"; }
-.icon-cut:before                  { content: "\f0c4"; }
-.icon-picture:before              { content: "\f03e"; }
-.icon-undo:before                 { content: "\f0e2"; }
-.icon-repeat:before               { content: "\f01e"; }
-.icon-question-sign:before        { content: "\f059"; }
 .fa-1x {
     font-size: 1.3em;
 }
@@ -98,6 +76,7 @@
 }
 .sf-icon-share:before { content:"\e001"; }
 .sf-icon-removeformat:before { content:"\f1e7"; }
+
 /****** sf2-icon-xx ********/
 @font-face {
     font-family: 'seafile-font2';
@@ -108,7 +87,8 @@
     font-weight: normal;
     font-style: normal;
 }
-[class^="sf2-icon-"] {
+[class^="sf2-icon-"],
+[class*=" sf2-icon-"] {
     font-family: 'seafile-font2';
     speak: none;
     font-weight: normal;
@@ -119,7 +99,7 @@
 .sf2-icon-histograms:before { content:"\e000"; }
 .sf2-icon-system:before { content:"\e001"; }
 .sf2-icon-activities:before { content:"\e002"; }
-.sf2-icon-bells:before { content:"\e003"; }
+.sf2-icon-bell:before { content:"\e003"; }
 .sf2-icon-contacts:before { content:"\e004"; }
 .sf2-icon-trash:before { content:"\e005"; }
 .sf2-icon-delete:before { content:"\e006"; }
@@ -136,6 +116,7 @@
 .sf2-icon-share:before { content:"\e011"; }
 .sf2-icon-starred:before { content:"\e012"; }
 .sf2-icon-wiki:before { content:"\e013"; }
+
 /******* tags **********/
 html { background:#fff; }
 body,
@@ -195,9 +176,6 @@ select {
 }
 select {
     outline:none;
-}
-button span.icon-plus-square {
-    color:#a3a3a3;
 }
 .btn-link {
     color:#333;
@@ -359,6 +337,10 @@ p { margin:0.5em 0; }
     margin-right:3px;
     vertical-align:middle;
 }
+.op-icon.sf2-x,
+.op-icon.sf2-x:hover {
+    color:#f89a68;
+}
 .op-icon:hover {/** for <a> **/
     color:#888;
     text-decoration:none;
@@ -409,7 +391,7 @@ input.btn-disabled:hover {/*for input*/
     background-position:0 3px;
 }
 .add {
-    color:#555;
+    color:#909090;
     margin-right:3px;
 }
 .jstree a {
@@ -621,47 +603,37 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:2px;
     overflow:hidden;
 }
-.side-tabnav-tabs .tab:hover {
-    background-color:#feefb8;
-}
 .side-tabnav-tabs .tab a { /* for IE 11: no border-radius here */
     display:block;
     font-size:15px;
-    padding:5px 4px 3px 6px;
+    padding:4px 4px 4px 0;
     color:#333;
     font-weight:normal;
 }
 .side-tabnav-tabs .tab a:hover {
+    background-color:#feefb8;
     text-decoration:none;
 }
-.side-tabnav-tabs .tab [class*="icon-"],
-.side-tabnav-tabs .tab [class*="sf2-icon-"] {
+.side-tabnav-tabs .tab [class^="sf2-icon-"] {
     display:inline-block;
-    width:20px;
-    font-size:16px;
-    color:#999;
-    line-height:24px;
-    text-align:center;
+    width:42px;
     margin-right:5px;
+    text-align:center;
+    vertical-align:middle;
+    font-size:24px;
+    line-height:1;
+    color:#999;
 }
 .side-tabnav-tabs .tab-cur a,
 .side-tabnav-tabs .tab-cur a:hover {
     background-color:#feac74;
 }
-.side-tabnav-tabs .tab-cur [class*="icon-"],
-.side-tabnav-tabs .tab-cur [class*="sf2-icon-"],
+.side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
 .side-tabnav-tabs .tab-cur a {
-    font-weight:bold;
     color:#fff;
 }
-.side-tabnav-tabs .tab-cur [class*="sf2-icon-"] {
-    font-weight:normal;
-}
-.side-tabnav-tabs .tab span {
-    padding:0 13px 0 3px;
-}
-.side-tabnav-tabs .tab .sf2-medium {
-    font-size:24px;
+.side-tabnav-tabs .tab-cur a {
+    font-weight:bold;
 }
 .side-textnav .hd {
     margin:2em 0 .5em;
@@ -1248,7 +1220,12 @@ textarea:-moz-placeholder {/* for FF */
 /* top-bar */
 #msg-count {
     position:relative;
-    margin:3px 28px 0 25px;
+    margin:10px 32px 0 25px;
+}
+#msg-count .sf2-icon-bell {
+    font-size:24px;
+    line-height:1;
+    color:#999;
 }
 #msg-count .num {
     position:absolute;
@@ -1414,10 +1391,6 @@ textarea:-moz-placeholder {/* for FF */
     color:#333;
     font-weight:normal;
 }
-.top-info-popup .sf2-icon-notifications {
-    float:left;
-    margin-top:-8px;
-}
 #top-nav-grp-list .item {
     padding:5px 10px;
     border:none;
@@ -1428,7 +1401,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #top-nav-grp-list .name {
     display:inline-block;
-    width:143px;
+    width:142px;
 }
 .top-info-popup a.item:hover {
     background:#fafafa;
@@ -1439,8 +1412,10 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:5px;
     vertical-align:middle;
 }
-#top-nav-grp-info .a {
-    margin-top:7px;
+#top-nav-grp-info .op-icon {
+    font-size:24px;
+    color:#999;
+    margin:0;
 }
 #top-nav-grp-info .all-grp {
     padding-left:50px;
@@ -2251,9 +2226,10 @@ textarea:-moz-placeholder {/* for FF */
     color:#666;
 }
 .group .fast .a {
-    margin:0 8px -5px 0;
+    margin:8px 12px 0 0;
     display:inline-block;
-    vertical-align:middle;
+    font-size:24px;
+    color:#999;
 }
 .group .fast .a:hover {
     text-decoration:none;
@@ -3528,10 +3504,6 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align: middle;
 }
 /* sysadmin */
-#import-users-btn .icon-upload-alt {
-    color:#a3a3a3;
-    margin-right:3px;
-}
 #traffic-month-form {
     margin-top:10px;
 }
@@ -3632,20 +3604,4 @@ textarea:-moz-placeholder {/* for FF */
 img.thumbnail {
     max-width: 24px;
     max-height: 24px;
-}
-/****** sf2-icon-details ********/
-.sf2-orange, .sf2-orange:hover {
-    color:#fd9b69;
-}
-.sf2-gray, .sf2-gray:hover {
-    color:#a3a3a3;
-}
-.sf2-small {
-    font-size:20px;
-}
-.sf2-medium {
-    font-size:24px;
-}
-.sf2-huge {
-    font-size:26px;
 }
