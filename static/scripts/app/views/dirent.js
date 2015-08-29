@@ -25,6 +25,16 @@ define([
 
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
+
+            $(document).click(function(e) {
+                var target =  e.target || event.srcElement;
+                var rename_container = $('.rename-input, .rename-btn, .cancel-rename');
+                if (!rename_container.length&&!rename_container.is(target)) {
+                    alert('suc');
+                } else {
+                    // alert('fai');
+                }
+            })
         },
 
         render: function() {
@@ -233,6 +243,7 @@ define([
                 + ' autocomplete="off"/><button class="rename-btn">' + gettext("save")
                 + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
+            app.globalState.popup_tr = $('.dirent-op', this.el).parent();
             app.globalState.noFileOpPopup = false;
             return false;
         },
@@ -246,11 +257,12 @@ define([
             var rename_btn = $('.rename-btn', this.el);
             var new_name = $.trim($('.rename-input', this.el).val());
             if (!new_name) {
-                var empty_error_msg = gettext("The name should not be empty");
+                var empty_error_msg = gettext("File name should not be empty");
                 Common.feedback(empty_error_msg, 'error', 2000);
                 return false;
             };
             if (new_name == dirent_name) {
+                _this.cancelRename();
                 return false;
             };
             var post_data = {
@@ -295,6 +307,8 @@ define([
                 'after_op_success': after_op_success,
                 'after_op_error': after_op_error
             });
+            app.globalState.popup_tr = '';
+            app.globalState.noFileOpPopup = true;
             return false;
         },
 
@@ -307,6 +321,8 @@ define([
                 'sharetoken': ''
             };
             this.model.set({'obj_name': ''}).set(original_dirent_data);
+            app.globalState.popup_tr = '';
+            app.globalState.noFileOpPopup = true;
         },
 
         mvcp: function(event) {
