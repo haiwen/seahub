@@ -25,16 +25,6 @@ define([
 
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
-
-            $(document).click(function(e) {
-                var target =  e.target || event.srcElement;
-                var rename_container = $('.rename-input, .rename-btn, .cancel-rename');
-                if (!rename_container.length&&!rename_container.is(target)) {
-                    alert('suc');
-                } else {
-                    // alert('fai');
-                }
-            })
         },
 
         render: function() {
@@ -234,6 +224,7 @@ define([
         },
 
         rename: function() {
+            var _this = this;
             var dirent_name = this.model.get('obj_name');
             var max_file_name = app.pageOptions.max_file_name;
             $('.normal, .hidden-op', this.el).hide();
@@ -243,8 +234,12 @@ define([
                 + ' autocomplete="off"/><button class="rename-btn">' + gettext("save")
                 + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
             $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
-            app.globalState.popup_tr = $('.dirent-op', this.el).parent();
-            app.globalState.noFileOpPopup = false;
+            $(document).click(function(e) {
+                var target =  e.target || event.srcElement;
+                if (!$('.rename-input').is(target)&&app.globalState.noFileOpPopup&&$('.rename-input').length) {
+                    $('.cancel-rename', _this.el).click();
+                }
+            });
             return false;
         },
 
@@ -307,7 +302,6 @@ define([
                 'after_op_success': after_op_success,
                 'after_op_error': after_op_error
             });
-            app.globalState.popup_tr = '';
             app.globalState.noFileOpPopup = true;
             return false;
         },
@@ -321,8 +315,8 @@ define([
                 'sharetoken': ''
             };
             this.model.set({'obj_name': ''}).set(original_dirent_data);
-            app.globalState.popup_tr = '';
             app.globalState.noFileOpPopup = true;
+            return false;
         },
 
         mvcp: function(event) {

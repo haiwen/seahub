@@ -74,11 +74,6 @@ define([
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
                     var popup = $('.hidden-op');
-                    var rename_container = $('.rename-input');
-                    if (rename_container.length&&!rename_container.is(target)) {
-                        
-
-                    }
                     if (!app.globalState.noFileOpPopup &&
                         !$('.more-op-icon, .hidden-op').is(target) &&
                         !popup.find('*').is(target)) {
