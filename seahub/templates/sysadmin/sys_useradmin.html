@@ -35,11 +35,11 @@
         <option value={{guest_user}}>{% trans "Guest"%}</option>
     </select><br />
     {% endif %}
-    <label for="id_password1">{% trans "Password" %}</label><br />
+    <label for="id_password1">{% trans "Password" %}</label>
     <div class="passwd-wrapper">
         <input type="password" name="password1" id="id_password1" class="passwd input" />
         <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
-        <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span><br />
+        <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
     </div>
     <label for="id_password2">{% trans "Confirm Password" %}</label><br />
     <input type="password" name="password2" id="id_password2" class="input" /><br />
@@ -84,8 +84,9 @@ $(function(){
     });
 });
 $('.show-or-hide-password').click(function() {
-    var icon = $('.show-or-hide-password'),
-        passwd_input = $('input[name=password1], input[name=password2 ]');
+    var form = $(this).closest('form');
+    var icon = $('.show-or-hide-password', form),
+        passwd_input = $('input[name=password1], input[name=password2 ]', form);
     icon.toggleClass('icon-eye icon-eye-slash');
     if (icon.hasClass('icon-eye')) {
         icon.attr('title', '{% trans "Show" %}');
@@ -96,13 +97,14 @@ $('.show-or-hide-password').click(function() {
     }
 });
 $('.generate-random-password').click(function() {
+    var form = $(this).closest('form');
     var random_password = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
     for (var i = 0; i < 8; i++) {
         random_password += possible.charAt(Math.floor(Math.random() * possible.length));
     }
-    $('input[name=password1], input[name=password2]').prop('type', 'text').val(random_password);
-    $('.show-or-hide-password')
+    $('input[name=password1], input[name=password2]', form).prop('type', 'text').val(random_password);
+    $('.show-or-hide-password', form)
     .attr('title', '{% trans "Hide" %}')
     .removeClass('icon-eye').addClass('icon-eye-slash');
 });
