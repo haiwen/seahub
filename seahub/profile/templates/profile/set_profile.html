@@ -37,7 +37,9 @@
     </div>
 
     <form action="" method="post">{% csrf_token %}
+        {% if not is_ldap_user %}
         <label>{% trans "Password:" %}</label><a href="{{ SITE_ROOT }}accounts/password/change/">{% trans "Update" %}</a><br/>
+        {% endif %}
         <label>{% trans "Name:" context "true name" %}</label><input type="text" name="nickname" value="{{ form.data.nickname }}" class="input" />
         {% for error in form.nickname.errors %}
         <span class="error">{{ error|escape }}</span>

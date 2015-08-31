@@ -20,6 +20,7 @@ from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.utils import is_ldap_user
 from seahub.views import get_owned_repo_list
 
 @login_required
@@ -80,6 +81,7 @@ def edit_profile(request):
             'default_repo': default_repo,
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),
+            'is_ldap_user': is_ldap_user(request.user),
             }, context_instance=RequestContext(request))
 
 @login_required
