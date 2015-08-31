@@ -101,7 +101,7 @@
 .sf2-icon-activities:before { content:"\e002"; }
 .sf2-icon-bell:before { content:"\e003"; }
 .sf2-icon-contacts:before { content:"\e004"; }
-.sf2-icon-trash:before { content:"\e005"; }
+.sf2-icon-recycle:before { content:"\e005"; }
 .sf2-icon-delete:before { content:"\e006"; }
 .sf2-icon-devices:before { content:"\e007"; }
 .sf2-icon-download:before { content:"\e008"; }
@@ -116,6 +116,12 @@
 .sf2-icon-share:before { content:"\e011"; }
 .sf2-icon-starred:before { content:"\e012"; }
 .sf2-icon-wiki:before { content:"\e013"; }
+.sf2-icon-history:before { content:"\e014"; }
+.sf2-icon-settings:before { content:"\e015"; }
+.sf2-icon-trash:before { content:"\e016"; }
+.sf2-icon-anti-virus:before { content:"\e017"; }
+.sf2-icon-edit:before { content:"\e018"; }
+.sf2-icon-eye:before { content:"\e019"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -3348,33 +3354,22 @@ textarea:-moz-placeholder {/* for FF */
     font-size: 14px;
 }
 /* multi repo operation */
-.repo-setting-icon,
-.repo-trash-icon,
-.repo-history-icon {
+.repo-op .op-link {
     width:30px;
     height:30px;
-    background-image: url('../img/multi-repo-op.png');
-    background-repeat: no-repeat;
-    display:inline-block;
+    text-align:center;
     margin-right:10px;
+    color:#8a8a8a;
     outline:none; /* removing the dotted outline for FireFox */
 }
-.repo-setting-icon:hover {
-    background-position: 0 -30px;
+.repo-op .op-link:hover {
+    color:#eb8205;
+    text-decoration:none;
 }
-.repo-trash-icon {
-    background-position: 0 -60px;
+.repo-op .op-link [class^="sf2-icon-"] {
+    font-size:22px;
+    line-height:31px;
 }
-.repo-trash-icon:hover {
-    background-position: 0 -90px;
-}
-.repo-history-icon {
-    background-position: 0 -120px;
-}
-.repo-history-icon:hover {
-    background-position: 0 -150px;
-}
-
 /* multi dirents operation */
 #multi-dirents-op {
     padding: 0 10px;
