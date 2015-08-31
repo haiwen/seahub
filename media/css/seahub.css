@@ -119,7 +119,7 @@
 .sf2-icon-history:before { content:"\e014"; }
 .sf2-icon-settings:before { content:"\e015"; }
 .sf2-icon-trash:before { content:"\e016"; }
-.sf2-icon-anti-virus:before { content:"\e017"; }
+.sf2-icon-security:before { content:"\e017"; }
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-eye:before { content:"\e019"; }
 
@@ -3355,20 +3355,16 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* multi repo operation */
 .repo-op .op-link {
-    width:30px;
+    display:inline-block;
     height:30px;
-    text-align:center;
-    margin-right:10px;
+    margin-right:15px;
     color:#8a8a8a;
+    font-size:22px;
     outline:none; /* removing the dotted outline for FireFox */
 }
 .repo-op .op-link:hover {
     color:#eb8205;
     text-decoration:none;
-}
-.repo-op .op-link [class^="sf2-icon-"] {
-    font-size:22px;
-    line-height:31px;
 }
 /* multi dirents operation */
 #multi-dirents-op {
