@@ -28,7 +28,6 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
-from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
@@ -730,6 +729,9 @@ def sys_org_set_quota(request, org_id):
 @sys_staff_required
 def user_remove(request, email):
     """Remove user"""
+    if request.method != 'POST':
+        raise Http404
+
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
 
@@ -793,6 +795,9 @@ def remove_trial(request, user_or_org):
 @sys_staff_required
 def user_remove_admin(request, email):
     """Unset user admin."""
+    if request.method != 'POST':
+        raise Http404
+
     try:
         user = User.objects.get(email=email)
         user.is_staff = False
@@ -931,6 +936,9 @@ def send_user_reset_email(request, email, password):
 @sys_staff_required
 def user_reset(request, email):
     """Reset password for user."""
+    if request.method != 'POST':
+        raise Http404
+
     try:
         user = User.objects.get(email=email)
         if isinstance(INIT_PASSWD, FunctionType):
