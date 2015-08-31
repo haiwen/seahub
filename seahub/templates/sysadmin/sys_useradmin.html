@@ -83,21 +83,25 @@ $(function(){
         }
     });
 });
-$('.show-or-hide-password').click(function() {
-    var form = $(this).closest('form');
-    var icon = $('.show-or-hide-password', form),
-        passwd_input = $('input[name=password1], input[name=password2 ]', form);
+
+$('#add-user-btn').click(function() {
+    $('#add-user-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#add-user-form .show-or-hide-password').click(function() {
+    var icon = $(this),
+        passwd_input = $('input[name=password1], input[name=password2]', $('#add-user-form'));
     icon.toggleClass('icon-eye icon-eye-slash');
     if (icon.hasClass('icon-eye')) {
-        icon.attr('title', '{% trans "Show" %}');
+        icon.attr('title', "{% trans "Show" %}");
         passwd_input.prop('type', 'password');
     } else {
-        icon.attr('title', '{% trans "Hide" %}');
+        icon.attr('title', "{% trans "Hide" %}");
         passwd_input.prop('type', 'text');
     }
 });
-$('.generate-random-password').click(function() {
-    var form = $(this).closest('form');
+$('#add-user-form .generate-random-password').click(function() {
+    var form = $('#add-user-form');
     var random_password = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
     for (var i = 0; i < 8; i++) {
@@ -105,7 +109,7 @@ $('.generate-random-password').click(function() {
     }
     $('input[name=password1], input[name=password2]', form).prop('type', 'text').val(random_password);
     $('.show-or-hide-password', form)
-    .attr('title', '{% trans "Hide" %}')
+    .attr('title', "{% trans "Hide" %}")
     .removeClass('icon-eye').addClass('icon-eye-slash');
 });
 $('#add-user-form').submit(function() {

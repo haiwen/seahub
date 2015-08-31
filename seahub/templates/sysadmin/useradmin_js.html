@@ -16,10 +16,6 @@ addConfirmTo($('.unset-trial'), {
         'con':"{% trans "Are you sure you want to remove trial for %s ?" %}"
 });
 
-$('#add-user-btn').click(function() {
-        $('#add-user-form').modal();
-        $('#simplemodal-container').css({'width':'auto'});
-});
 $('tr:gt(0)').hover(
     function() {
         $(this).find('.user-status-edit-icon, .user-role-edit-icon').removeClass('vh');
