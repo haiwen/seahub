@@ -134,12 +134,12 @@
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     <% if (path == '/') { %>
-    <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
+    <a class="op-link fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"><span class="sf2-icon-history"></span></a>
     <% if (user_perm == 'rw') { %>
-    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
+    <a class="op-link fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"><span class="sf2-icon-trash"></span></a>
     <% } %>
     <% if (is_repo_owner && !is_virtual) { %>
-    <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+    <a class="op-link fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"><span class="sf2-icon-settings"></span></a>
     <% } %>
     <% } %>
 </script>
