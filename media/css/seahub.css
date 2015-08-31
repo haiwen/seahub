@@ -3629,16 +3629,20 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:11px;
 }
 /*random password */
-#share-popup .passwd-wrapper {
+#share-popup .passwd-wrapper,
+#add-user-form .passwd-wrapper {
     position:relative;
     width:268px;
 }
-#share-popup .passwd {
+#share-popup .passwd,
+#add-user-form .passwd {
     width:188px;
     padding-right:75px;
 }
 #share-popup .generate-random-password,
-#share-popup .show-or-hide-password {
+#add-user-form .generate-random-password,
+#share-popup .show-or-hide-password,
+#add-user-form .show-or-hide-password {
     position:absolute;
     top:4px;
     right:0;
@@ -3648,15 +3652,19 @@ textarea:-moz-placeholder {/* for FF */
     text-align:center;
     opacity:0.65;
 }
-#share-popup .show-or-hide-password {
+#share-popup .show-or-hide-password,
+#add-user-form .show-or-hide-password {
     right:36px;
     background:#fff;
 }
-#share-popup .generate-random-password {
+#share-popup .generate-random-password,
+#add-user-form .generate-random-password {
     background:#ccc;
 }
 #share-popup .generate-random-password:hover,
-#share-popup .show-or-hide-password:hover {
+#add-user-form .generate-random-password:hover,
+#share-popup .show-or-hide-password:hover,
+#add-user-form .show-or-hide-password:hover {
     opacity:1;
 }
 
