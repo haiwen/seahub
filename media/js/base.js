@@ -227,7 +227,7 @@ if ($.browser.msie) {
 }
 
 /*
- * add op confirm popup
+ * add confirm to an operation, using a popup
  * e.g: <button data-url="" data-target="">xxx</button>
  * e.g: addConfirmTo($('.user-del'), {'title': 'Delete user', 'con':'Really del user %s ?'});
  */
@@ -243,30 +243,15 @@ function addConfirmTo(op_ele, popup) {
         $('#confirm-popup').modal({appendTo:'#main'});
         $('#simplemodal-container').css({'height':'auto'});
         $('#confirm-yes').data('url', $(this).data('url')).click(function() {
-            location.href = $(this).data('url');
-        });
-        return false;//in case op_ele is '<a>'
-    });
-}
-
-// Similar to ``addConfirmto``, instead using form post when user confirms.
-function addConfirmTo_POST(op_ele, popup) {
-    op_ele.click(function() {
-        var con = '';
-        if ($(this).data('target') && popup['con'].indexOf('%s') != -1) {
-            con = popup['con'].replace('%s', '<span class="op-target">' + HTMLescape($(this).data('target')) + '</span>');
-        } else {
-            con = popup['con'];
-        }
-        $('#confirm-con').html('<h3>' + popup['title'] + '</h3><p>' + con + '</p>');
-        $('#confirm-popup').modal({appendTo:'#main'});
-        $('#simplemodal-container').css({'height':'auto'});
-        $('#confirm-yes').data('url', $(this).data('url')).click(function() {
-            $('<form>', {
-                "method": 'POST',
-                "action": $(this).data('url'),
-                "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
-            }).appendTo(document.body).submit();
+            if (popup.post) { // use form post
+                $('<form>', {
+                    "method": 'POST',
+                    "action": $(this).data('url'),
+                    "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+                }).appendTo(document.body).submit();
+            } else { // default
+                location.href = $(this).data('url');
+            }
         });
         return false;//in case op_ele is '<a>'
     });
