@@ -151,7 +151,18 @@ define([
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                this.feedback($.parseJSON(xhr.responseText).error, 'error');
+
+                var parsed_resp = $.parseJSON(xhr.responseText);
+
+                if (parsed_resp.hasOwnProperty('error')) {
+                    /* error msg from seahub ajax */
+                    this.feedback(parsed_resp.error, 'error');
+                } else if (parsed_resp.hasOwnProperty('error_msg')) {
+                    /* error msg from seahub api */
+                    this.feedback(parsed_resp.error_msg, 'error');
+                } else {
+                    this.feedback(gettext("Error"), 'error');
+                }
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
             }
