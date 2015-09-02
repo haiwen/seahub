@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.http import urlquote
@@ -75,4 +75,11 @@ def repo_passwd_set_required(func):
 
         return func(request, *args, **kwargs)
     return _decorated
-            
+
+
+def require_POST(func):
+    def decorated(request, *args, **kwargs):
+        if request.method != 'POST':
+            return HttpResponseNotAllowed('Only POST here')
+        return func(request, *args, **kwargs)
+    return decorated

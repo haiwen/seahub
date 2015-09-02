@@ -21,7 +21,7 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
-from seahub.base.decorators import sys_staff_required
+from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
@@ -727,11 +727,9 @@ def sys_org_set_quota(request, org_id):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_remove(request, email):
     """Remove user"""
-    if request.method != 'POST':
-        raise Http404
-
     referer = request.META.get('HTTP_REFERER', None)
     next = reverse('sys_useradmin') if referer is None else referer
 
@@ -793,11 +791,9 @@ def remove_trial(request, user_or_org):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_remove_admin(request, email):
     """Unset user admin."""
-    if request.method != 'POST':
-        raise Http404
-
     try:
         user = User.objects.get(email=email)
         user.is_staff = False
@@ -934,11 +930,9 @@ def send_user_reset_email(request, email, password):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_reset(request, email):
     """Reset password for user."""
-    if request.method != 'POST':
-        raise Http404
-
     try:
         user = User.objects.get(email=email)
         if isinstance(INIT_PASSWD, FunctionType):
@@ -1386,12 +1380,10 @@ def user_search(request):
 
 @login_required
 @sys_staff_required
+@require_POST
 def sys_repo_transfer(request):
     """Transfer a repo to others.
     """
-    if request.method != 'POST':
-        raise Http404
-
     repo_id = request.POST.get('repo_id', None)
     new_owner = request.POST.get('email', None)
 
