@@ -22,7 +22,7 @@
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
-            <a class="op-icon sf2-icon-delete vh" href="{% url 'remove_shared_link' %}?t={{ publink.token }}" title="{% trans "Remove" %}"></a>
+            <a href="{% url 'remove_shared_link' %}?t={{ publink.token }}" class="op vh">{% trans "Remove" %}</a>
         </td>
     </tr>
     {% endfor %}
