@@ -25,7 +25,7 @@
         <td>
             <div class="share-permission">
                 <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="share-permission-edit-icon op-icon vh" />
+                <span title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="permission" class="share-permission-select hide">
                 <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
