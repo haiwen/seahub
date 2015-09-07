@@ -44,14 +44,8 @@ define([
                     _this.remove();
                     Common.feedback(gettext("Successfully unstared {placeholder}").replace('{placeholder}', Common.HTMLescape(file_name)), 'success');
                 },
-                error: function(xhr) {
-                    var err;
-                    if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
-                    } else {
-                        err = gettext("Failed. Please check the network.");
-                    }
-                    Common.feedback(err, 'error');
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
         },
