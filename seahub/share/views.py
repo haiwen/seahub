@@ -499,14 +499,12 @@ def list_share_out_repos(request):
 @login_required
 @user_mods_check
 def list_shared_repos(request):
-    """ List user repos shared to users/groups/public.
+    """ List user repos/dir shared to users/groups/public.
     """
     share_out_repos = list_share_out_repos(request)
-    
+
     out_repos = []
     for repo in share_out_repos:
-        if repo.is_virtual:     # skip virtual repos
-            continue
 
         if repo.props.permission == 'rw':
             repo.share_permission = _(u'Read-Write')
@@ -520,6 +518,7 @@ def list_shared_repos(request):
         out_repos.append(repo)
 
     out_repos.sort(lambda x, y: cmp(x.repo_name, y.repo_name))
+    out_repos.sort(key=lambda repo: repo.is_virtual)
 
     return render_to_response('share/repos.html', {
             "out_repos": out_repos,
@@ -585,38 +584,6 @@ def list_shared_links(request):
     return render_to_response('share/links.html', {
             "fileshares": p_fileshares,
             "uploadlinks": p_uploadlinks,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@user_mods_check
-def list_priv_shared_folders(request):
-    """List private shared folders.
-
-    Arguments:
-    - `request`:
-    """
-    share_out_repos = list_share_out_repos(request)
-
-    shared_folders = []
-    for repo in share_out_repos:
-        if not repo.is_virtual:     # skip non-virtual repos
-            continue
-
-        if repo.props.permission == 'rw':
-            repo.share_permission = _(u'Read-Write')
-        elif repo.props.permission == 'r':
-            repo.share_permission = _(u'Read-Only')
-        else:
-            repo.share_permission = ''
-
-        if repo.props.share_type == 'personal':
-            repo.props.user_info = repo.props.user
-        shared_folders.append(repo)
-
-    shared_folders.sort(lambda x, y: cmp(x.repo_id, y.repo_id))
-
-    return render_to_response('share/list_priv_shared_folders.html', {
-            'shared_folders': shared_folders,
             }, context_instance=RequestContext(request))
 
 @login_required
