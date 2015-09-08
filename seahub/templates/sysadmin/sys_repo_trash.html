@@ -23,13 +23,15 @@
 {% if repos %}
 <table class="repo-list">
     <tr>
+        <th width="4%"><!--icon--></th>
         <th width="30%">{% trans "Name" %}</th>
         <th width="30%">{% trans "Owner" %}</th>
         <th width="20%">{% trans "Deleted Time" %}</th>
-        <th width="20%">{% trans "Operations" %}</th>
+        <th width="16%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
     <tr>
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         <td>{{ repo.repo_name }}</td>
         <td><a href="{% url 'user_info' repo.owner_id %}">{{ repo.owner_id }}</a></td>
         <td>{{ repo.del_time|translate_seahub_time }}</td>

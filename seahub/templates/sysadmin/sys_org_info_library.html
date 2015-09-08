@@ -15,14 +15,19 @@
 {% if org_repos %}
     <table class="repo-list">
         <tr>
-            <th width="15%">{% trans "Name" %}</th>
+            <th width="4%"><!--icon--></th>
+            <th width="31%">{% trans "Name" %}</th>
             <th width="25%">ID</th>
             <th width="25%">{% trans "Owner" %}</th>
-            <th width="22%">{% trans "Description" %}</th>
-            <th width="13%">{% trans "Operations" %}</th>
+            <th width="15%">{% trans "Operations" %}</th>
         </tr>
         {% for repo in org_repos %}
         <tr>
+            {% if repo.encrypted %}
+            <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "directory icon" %}" /></td>
+            {% else %}
+            <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+            {% endif %}
             <td>{{ repo.name }}</td>
             <td style="font-size:11px;">{{ repo.id }}</td>
             <td>
@@ -32,7 +37,6 @@
                 --
                 {% endif %}
             </td>
-            <td>{{ repo.desc }}</td>
             <td data-id="{{ repo.id }}" data-name="{{ repo.name }}">
                 <div>
                 <a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
