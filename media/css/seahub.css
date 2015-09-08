@@ -123,6 +123,7 @@
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-eye:before { content:"\e019"; }
 .sf2-icon-drop-down:before { content:"\e01a"; }
+.sf2-icon-enable-modules:before { content:"\e01b"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -3193,8 +3194,11 @@ textarea:-moz-placeholder {/* for FF */
 }
 #myhome-enable-mods,
 #enable-mods {
-    margin-top:3px;
+    margin-top:4px;
     cursor:pointer;
+    color:#ccc;
+    line-height:1;
+    font-size:16px;
 }
 #edit-index {
     color:#d7d7d7;

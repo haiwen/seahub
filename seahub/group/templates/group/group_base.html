@@ -13,7 +13,7 @@
         {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="grp-name ellipsis vam">{{ group.group_name }}</span>
         </h3>
         {% if is_staff %}
-        <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
+        <span id="enable-mods" class="sf2-icon-enable-modules fright" title="{% trans "Enable Modules" %}" style="margin:8px 0 0 5px;"></span>
         {% endif %}
         {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />{% endif %}
     </div>
