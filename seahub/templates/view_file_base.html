@@ -60,7 +60,7 @@
             {% endif %}
             {% endif %}
 
-            {% if user_perm == 'rw' %}
+            {% if file_perm == 'rw' %}
             <a class="btn-link" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</a>
             {% endif %}
 
