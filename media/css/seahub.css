@@ -122,6 +122,7 @@
 .sf2-icon-security:before { content:"\e017"; }
 .sf2-icon-edit:before { content:"\e018"; }
 .sf2-icon-eye:before { content:"\e019"; }
+.sf2-icon-drop-down:before { content:"\e01a"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -362,6 +363,10 @@ p { margin:0.5em 0; }
 .op-icon:hover {/** for <a> **/
     color:#888;
     text-decoration:none;
+}
+.more-op-icon {
+    font-size:12px;
+    color:#525252;
 }
 .big-more-btn {
     padding:.5em 0;
