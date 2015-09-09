@@ -867,7 +867,10 @@ def user_toggle_status(request, email):
     try:
         user = User.objects.get(email)
         user.is_active = bool(user_status)
-        user.save()
+        result_code = user.save()
+        if result_code == -1:
+            return HttpResponse(json.dumps({'success': False}), status=403,
+                                content_type=content_type)
 
         if user.is_active is True:
             try:
