@@ -292,10 +292,15 @@ class Account(APIView):
         copy['email'] = email
         serializer = AccountSerializer(data=copy)
         if serializer.is_valid():
-            user = User.objects.create_user(serializer.object['email'],
-                                            serializer.object['password'],
-                                            serializer.object['is_staff'],
-                                            serializer.object['is_active'])
+            try:
+                user = User.objects.create_user(serializer.object['email'],
+                                                serializer.object['password'],
+                                                serializer.object['is_staff'],
+                                                serializer.object['is_active'])
+            except User.DoesNotExist as e:
+                logger.error(e)
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'Fail to add user.')
 
             self._update_account_profile(request, user.username)
 
@@ -332,7 +337,11 @@ class Account(APIView):
         if is_active is not None:
             user.is_active = is_active
 
-        user.save()
+        result_code = user.save()
+        if result_code == -1:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Fail to update user.')
+
         self._update_account_profile(request, user.username)
 
         try:

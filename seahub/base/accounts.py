@@ -160,15 +160,18 @@ class User(object):
             else:
                 source = "LDAP"
 
-            ccnet_threaded_rpc.update_emailuser(source,
-                                                emailuser.id,
-                                                self.password,
-                                                int(self.is_staff),
-                                                int(self.is_active))
+            result_code = ccnet_threaded_rpc.update_emailuser(source,
+                                                              emailuser.id,
+                                                              self.password,
+                                                              int(self.is_staff),
+                                                              int(self.is_active))
         else:
-            ccnet_threaded_rpc.add_emailuser(self.username, self.password,
-                                             int(self.is_staff),
-                                             int(self.is_active))
+            result_code = ccnet_threaded_rpc.add_emailuser(self.username,
+                                                           self.password,
+                                                           int(self.is_staff),
+                                                           int(self.is_active))
+        # -1 stands for failed; 0 stands for success
+        return result_code
 
     def delete(self):
         """
