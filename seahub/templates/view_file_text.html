@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block edit_file %}
-{% if user_perm == 'rw' and not err%}
+{% if file_perm == 'rw' and not err%}
 <a class="btn-link" href="{{ SITE_ROOT }}repo/{{ repo.id }}/file/edit/?p={{ path|urlencode }}&file_enc={{file_enc}}" id="edit">{% trans "Edit"%}</a>
 {% endif %}
 {% endblock %}

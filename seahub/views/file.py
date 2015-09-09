@@ -363,7 +363,8 @@ def _file_view(request, repo_id, path):
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
             request, repo_id, obj_id, path)
 
-    if not user_perm:
+    file_perm = seafile_api.check_permission_by_path(repo_id, path, username)
+    if not file_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
     # check if the user is the owner or not, for 'private share'
@@ -463,7 +464,6 @@ def _file_view(request, repo_id, path):
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
 
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    file_perm = seafile_api.check_permission_by_path(repo_id, path, username)
 
     can_edit_file = True
     if file_perm == 'r':
@@ -502,6 +502,7 @@ def _file_view(request, repo_id, path):
             'last_commit_id': repo.head_cmmt_id,
             'is_starred': is_starred,
             'user_perm': user_perm,
+            'file_perm': file_perm,
             'file_locked': is_locked,
             'is_pro': is_pro_version(),
             'locked_by_me': locked_by_me,

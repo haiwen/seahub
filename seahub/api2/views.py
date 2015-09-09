@@ -1629,14 +1629,13 @@ class FileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
         path = request.GET.get('p', None)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-        file_name = os.path.basename(path)
+
+        if check_folder_permission(request, repo_id, path) is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                    'You do not have permission to access this file.')
 
         file_id = None
         try:
@@ -1653,6 +1652,7 @@ class FileView(APIView):
         # send stats message
         send_file_download_msg(request, repo, path, 'api')
 
+        file_name = os.path.basename(path)
         op = request.GET.get('op', 'download')
         return get_repo_file(request, repo_id, file_id, file_name, op)
 
@@ -1663,19 +1663,16 @@ class FileView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         path = request.GET.get('p', '')
-        username = request.user.username
-        parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN,
-                    'You do not have permission to access this folder.')
-
         if not path or path[0] != '/':
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Path is missing or invalid.')
 
+        username = request.user.username
+        parent_dir = os.path.dirname(path)
         operation = request.POST.get('operation', '')
+
         if operation.lower() == 'rename':
-            if not is_repo_writable(repo.id, username):
+            if check_folder_permission(request, repo_id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to rename file.')
 
@@ -1694,7 +1691,6 @@ class FileView(APIView):
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
 
-            parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             oldname = os.path.basename(path)
             if oldname == newname:
@@ -1719,7 +1715,7 @@ class FileView(APIView):
                 return resp
 
         elif operation.lower() == 'move':
-            if not is_repo_writable(repo.id, username):
+            if check_folder_permission(request, repo_id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
 
@@ -1745,6 +1741,10 @@ class FileView(APIView):
 
             if src_repo_id == dst_repo_id and src_dir == dst_dir:
                 return Response('success', status=status.HTTP_200_OK)
+
+            if check_folder_permission(request, dst_repo_id, dst_dir) != 'rw':
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to move file.')
 
             # names = obj_names.split(':')
             # names = map(lambda x: unquote(x).decode('utf-8'), names)
@@ -1781,11 +1781,10 @@ class FileView(APIView):
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
         elif operation.lower() == 'create':
-            if not is_repo_writable(repo.id, username):
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
-            parent_dir = os.path.dirname(path)
             parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
             new_file_name_utf8 = check_filename_with_rename_utf8(repo_id,
@@ -1824,7 +1823,7 @@ class FileView(APIView):
 
         username = request.user.username
         # check file access permission
-        if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw':
+        if check_folder_permission(request, repo_id, path) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         operation = request.DATA.get('operation', '')
@@ -1867,25 +1866,21 @@ class FileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        username = request.user.username
-        if not is_repo_writable(repo.id, username):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to delete file.')
-
         path = request.GET.get('p', None)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
+        parent_dir = os.path.dirname(path)
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        username = request.user.username
         is_locked, locked_by_me = check_file_lock(repo_id, path, username)
         if (is_locked, locked_by_me) == (None, None):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
 
         if is_locked and not locked_by_me:
             return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
-
-        parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')
@@ -2158,18 +2153,17 @@ class DirView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
-
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
 
+        if check_folder_permission(request, repo_id, path) is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
+
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id,
                                                     path.encode('utf-8'))
-        except SearpcError, e:
+        except SearpcError as e:
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get dir id by path.")
@@ -2205,10 +2199,6 @@ class DirView(APIView):
         operation = request.POST.get('operation', '')
 
         if operation.lower() == 'mkdir':
-            if not is_repo_writable(repo.id, username):
-                return api_error(status.HTTP_403_FORBIDDEN,
-                                 'You do not have permission to create folder.')
-
             parent_dir = os.path.dirname(path)
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
@@ -2237,10 +2227,6 @@ class DirView(APIView):
         elif operation.lower() == 'rename':
             if check_folder_permission(request, repo.id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
-
-            if not is_repo_writable(repo.id, username):
-                return api_error(status.HTTP_403_FORBIDDEN,
-                                 'You do not have permission to rename a folder.')
 
             parent_dir = os.path.dirname(path)
             old_dir_name = os.path.basename(path)
@@ -2276,11 +2262,6 @@ class DirView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        username = request.user.username
-        if not is_repo_writable(repo.id, username):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to delete folder.')
-
         path = request.GET.get('p', None)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
@@ -2298,10 +2279,12 @@ class DirView(APIView):
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')
 
+        username = request.user.username
         try:
             seafile_api.del_file(repo_id, parent_dir_utf8,
                                  file_name_utf8, username)
-        except SearpcError, e:
+        except SearpcError as e:
+            logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to delete file.")
 
