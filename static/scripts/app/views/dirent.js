@@ -67,13 +67,13 @@ define([
         },
 
         highlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (app.globalState.noFileOpPopup && !$('#rename-form').length) {
                 this.$el.addClass('hl').find('.repo-file-op').removeClass('vh');
             }
         },
 
         rmHighlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (app.globalState.noFileOpPopup && !$('#rename-form').length) {
                 this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
             }
         },
@@ -236,6 +236,8 @@ define([
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
+
+                _this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
             };
             $('.cancel', form).click(cancelRename);
 

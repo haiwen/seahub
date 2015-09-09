@@ -89,6 +89,16 @@ define([
                         }
                     }
                 });
+
+                // hide 'rename form'
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var $form = $('#rename-form');
+                    if ($form.length && !$form.find('*').is(target)) {
+                        $('.cancel', $form).click();
+                    }
+                });
+
             },
 
             showDir: function(category, repo_id, path) {
