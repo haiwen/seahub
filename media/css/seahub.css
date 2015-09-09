@@ -53,6 +53,7 @@
 .icon-eye:before                  { content: "\f06e"; }
 .icon-eye-slash:before            { content: "\f070"; }
 .icon-plus-square:before          { content: "\f0fe"; }
+.icon-check:before                { content: "\f00c"; }
 .fa-1x {
     font-size: 1.3em;
 }
@@ -1936,9 +1937,23 @@ textarea:-moz-placeholder {/* for FF */
 #mv-dir-list .icon-caret-right {
     margin-right:15px;
 }
-#rename-form .new-name {
-    min-width:180px;
-    margin-top:6px;
+#rename-form .input {
+    font-size:14px;
+}
+#rename-form .submit {
+    color:green;
+}
+#rename-form .cancel {
+    color:#666;
+}
+#rename-form .input,
+#rename-form .submit {
+    margin:0;
+}
+#rename-form .submit,
+#rename-form .cancel {
+    font-size:16px;
+    line-height:1;
 }
 .repo-top-op-btn {
     font-size:14px;
