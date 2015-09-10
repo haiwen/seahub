@@ -97,10 +97,17 @@ OfficePreviewer.prototype.check_page_status = function() {
 
 OfficePreviewer.prototype.add_toolbar = function() {
     $('#convert-loading').remove();
-    $('#file-view').append('<div id="pdf2html-toolbar-2" class="pdf2html-toolbar"></div>');
-    $('#pdf2html-toolbar-2')
-        .append('<span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span>')
-        .css({'left': $(window).width()/2 - $('#pdf2html-toolbar-2').outerWidth(true)/2});
+
+    var $toolbar = $('<div id="pdf2html-toolbar-2" class="pdf2html-toolbar"></div>')
+        .append('<div class="inner"><span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span></div>')
+        .appendTo($('#file-view'));
+    $toolbar.css({'left': $(window).width()/2 - $toolbar.outerWidth(true)/2});
+
+    setTimeout(function () { $toolbar.css({'opacity':0}); }, 4000);
+    $toolbar.hover(
+        function() { $(this).css({'opacity': 1}); },
+        function() { $(this).css({'opacity': 0}); }
+    );
 
     var scale_ratio_offset = 0.1;
     $('#zoom-in, #zoom-out').click($.proxy(function(event) {

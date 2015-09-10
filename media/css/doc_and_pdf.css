@@ -22,6 +22,9 @@
     position:fixed;
     left:50%;
     bottom:0;
+    padding:20px 50px 0;
+}
+.pdf2html-toolbar .inner {
     padding:2px 5px;
     background: #000;
     opacity:0.75;
@@ -36,14 +39,4 @@
     color:#fff;
     cursor:pointer;
     margin: 0 0.3em;
-}
-#pdf2html-toolbar-1 {
-    position:fixed;
-    bottom:0;
-    padding:30px 8px;
-    color:#333;
-    cursor:pointer;
-    background:#fff;
-    border:1px solid #e8e8e8;
-    border-radius:0 3px 3px 0;
 }
