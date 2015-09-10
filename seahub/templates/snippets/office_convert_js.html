@@ -96,8 +96,6 @@ OfficePreviewer.prototype.check_page_status = function() {
 };
 
 OfficePreviewer.prototype.add_toolbar = function() {
-    $('#convert-loading').remove();
-
     var $toolbar = $('<div id="pdf2html-toolbar-2" class="pdf2html-toolbar"></div>')
         .append('<div class="inner"><span class="icon-zoom-out" id="zoom-out"></span><span class="icon-zoom-in" id="zoom-in"></span></div>')
         .appendTo($('#file-view'));
@@ -150,14 +148,16 @@ OfficePreviewer.prototype.set_page_container_size = function(elt) {
 }
 
 OfficePreviewer.prototype.load_page = function(index) {
+    var $pagesContainer = $('#pages');
     if (index == 1) {
         this.add_toolbar();
         $('#file-view').css({'height': 'auto'});
+        $pagesContainer.removeClass('hide');
     }
 
     var page_container = $('<div class="page-container"></div>');
     this.set_page_container_size(page_container);
-    $('#pages').append(page_container);
+    $pagesContainer.append(page_container);
 
     var iframe = $('<iframe src="' + this.page_content_url(index) + '" />');
     page_container.append(iframe);
@@ -174,6 +174,8 @@ OfficePreviewer.prototype.load_page = function(index) {
     if (index < this.total_pages) {
         this.current_loading_page++;
         this.check_page_status();
+    } else {
+        $('#file-view .loading-tip').hide();
     }
 };
 
