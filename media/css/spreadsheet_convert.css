@@ -1,10 +1,8 @@
-
 #spreadsheet-container iframe {
     width: 950px;
     background:#fff;
-    border:none;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 6px #ccc;
     margin: auto;
     min-height: 500px;
-    max-height: 1000px;
-    overflow: auto;
 };

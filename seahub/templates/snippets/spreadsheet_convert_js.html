@@ -2,10 +2,13 @@
 $(function() {
     var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
     function load_excel() {
-        $('#convert-loading').remove();
+        $('#file-view').css({'height': 'auto'}).find('.loading-tip').hide();
         var iframe = document.createElement('iframe');
         iframe.src = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}/' + commit_id + '{{ path|urlencode }}/index.html?token=' + '{{ shared_token }}';
         $('#spreadsheet-container').append(iframe);
+        iframe.onload = function () {
+            this.height = this.contentDocument.body.scrollHeight;
+        };
     }
 
     function check_status () {
@@ -36,9 +39,9 @@ $(function() {
                     str = "{% trans "Failed. Please check the network." %}";
                 }
                 $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-          }
-      });
-  }
+            }
+        });
+    }
 
-  check_status();
+    check_status();
 });
