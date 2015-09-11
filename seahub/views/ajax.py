@@ -49,7 +49,7 @@ from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
-    ENABLE_FOLDER_PERM
+    ENABLE_FOLDER_PERM, SHOW_TRAFFIC
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
@@ -1684,6 +1684,7 @@ def space_and_traffic(request):
         "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
         "show_quota_help": not CALC_SHARE_USAGE,
         "rates": rates,
+        "SHOW_TRAFFIC": SHOW_TRAFFIC,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,
         "traffic_stat": traffic_stat,
         "ENABLE_PAYMENT": ENABLE_PAYMENT,

@@ -218,6 +218,9 @@ LOGIN_REDIRECT_URL = '/profile/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+# show traffic on the UI
+SHOW_TRAFFIC = True
+
 # Enable or disable make group public
 ENABLE_MAKE_GROUP_PUBLIC = False
 
