@@ -1494,10 +1494,6 @@ def render_file_revisions (request, repo_id):
     username = request.user.username
 
     is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-    if (is_locked, locked_by_me) == (None, None):
-        # check file lock error
-        can_revert_file = False
-
     if seafile_api.check_permission_by_path(repo_id, path, username) != 'rw' or \
         (is_locked and not locked_by_me):
         can_revert_file = False
