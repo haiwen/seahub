@@ -637,18 +637,6 @@ def rename_dirent(request, repo_id):
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
-        is_locked, locked_by_me = check_file_lock(repo_id, full_path, username)
-        if (is_locked, locked_by_me) == (None, None):
-            # check file lock error
-            err_msg = _('Check file lock error')
-            return HttpResponse(json.dumps({'error': err_msg}), status=500,
-                                content_type=content_type)
-
-        if is_locked and not locked_by_me:
-            err_msg = _('File is locked')
-            return HttpResponse(json.dumps({'error': err_msg}), status=403,
-                                content_type=content_type)
-
     if newname == oldname:
         return HttpResponse(json.dumps({'success': True}),
                             content_type=content_type)
@@ -702,18 +690,6 @@ def delete_dirent(request, repo_id):
         # when dirent is a file, check parent dir perm
         if check_folder_permission(request, repo.id, parent_dir) != 'rw':
             err_msg = _('Permission denied')
-            return HttpResponse(json.dumps({'error': err_msg}), status=403,
-                                content_type=content_type)
-
-        is_locked, locked_by_me = check_file_lock(repo_id, full_path, username)
-        if (is_locked, locked_by_me) == (None, None):
-            # check file lock error
-            err_msg = _('Check file lock error')
-            return HttpResponse(json.dumps({'error': err_msg}), status=500,
-                                content_type=content_type)
-
-        if is_locked and not locked_by_me:
-            err_msg = _('File is locked')
             return HttpResponse(json.dumps({'error': err_msg}), status=403,
                                 content_type=content_type)
 
@@ -836,19 +812,6 @@ def mv_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     if check_folder_permission(request, src_repo_id, src_path) != 'rw':
         result['error'] = _('Permission denied')
         return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
-    file_path = posixpath.join(src_path, obj_name)
-    is_locked, locked_by_me = check_file_lock(src_repo_id, file_path, username)
-    if (is_locked, locked_by_me) == (None, None):
-        # check file lock error
-        err_msg = _('Check file lock error')
-        return HttpResponse(json.dumps({'error': err_msg}), status=500,
-                            content_type=content_type)
-
-    if is_locked and not locked_by_me:
-        err_msg = _('File is locked')
-        return HttpResponse(json.dumps({'error': err_msg}), status=403,
                             content_type=content_type)
 
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)

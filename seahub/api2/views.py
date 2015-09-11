@@ -1685,13 +1685,6 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to rename file.')
 
-            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-            if (is_locked, locked_by_me) == (None, None):
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
-
-            if is_locked and not locked_by_me:
-                return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
-
             newname = request.POST.get('newname', '')
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
@@ -1727,13 +1720,6 @@ class FileView(APIView):
             if check_folder_permission(request, repo_id, path) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
-
-            is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-            if (is_locked, locked_by_me) == (None, None):
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
-
-            if is_locked and not locked_by_me:
-                return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
             src_dir = os.path.dirname(path)
             src_dir_utf8 = src_dir.encode('utf-8')
@@ -1850,8 +1836,8 @@ class FileView(APIView):
             except SearpcError, e:
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
-        if operation.lower() == 'unlock':
 
+        if operation.lower() == 'unlock':
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
             if not is_locked:
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is not locked')
@@ -1882,14 +1868,6 @@ class FileView(APIView):
         parent_dir = os.path.dirname(path)
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-        username = request.user.username
-        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-        if (is_locked, locked_by_me) == (None, None):
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
-
-        if is_locked and not locked_by_me:
-            return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
 
         parent_dir_utf8 = os.path.dirname(path).encode('utf-8')
         file_name_utf8 = os.path.basename(path).encode('utf-8')
@@ -1977,7 +1955,7 @@ class FileRevert(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        username = request.uset.username
+        username = request.user.username
         is_locked, locked_by_me = check_file_lock(repo_id, path, username)
         if (is_locked, locked_by_me) == (None, None):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
@@ -1987,13 +1965,14 @@ class FileRevert(APIView):
 
         parent_dir = os.path.dirname(path)
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN, 'You do not have permission to access this folder.')
+            return api_error(status.HTTP_403_FORBIDDEN,
+                   'You do not have permission to access this folder.')
 
         path = unquote(path.encode('utf-8'))
         commit_id = unquote(request.DATA.get('commit_id', '').encode('utf-8'))
         try:
-            ret = seafserv_threaded_rpc.revert_file (repo_id, commit_id,
-                            path, request.user.username)
+            ret = seafserv_threaded_rpc.revert_file(repo_id, commit_id,
+                                                    path, username)
         except SearpcError as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
