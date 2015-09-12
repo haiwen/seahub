@@ -1592,10 +1592,23 @@ class StarredFileView(APIView):
     def post(self, request, format=None):
         # add starred file
         repo_id = request.POST.get('repo_id', '')
-        path = unquote(request.POST.get('p', '').encode('utf-8'))
+        path = request.POST.get('p', '')
+
         if not (repo_id and path):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library ID or path is missing.')
+
+        if check_folder_permission(request, repo_id, path) is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
         if path[-1] == '/':     # Should not contain '/' at the end of path.
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid file path.')
@@ -1612,9 +1625,22 @@ class StarredFileView(APIView):
         # remove starred file
         repo_id = request.GET.get('repo_id', '')
         path = request.GET.get('p', '')
+
         if not (repo_id and path):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library ID or path is missing.')
+
+        if check_folder_permission(request, repo_id, path) is None:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
+
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal error')
+
+        if not file_id:
+            return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
         if path[-1] == '/':     # Should not contain '/' at the end of path.
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid file path.')
