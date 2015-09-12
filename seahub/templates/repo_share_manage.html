@@ -61,7 +61,7 @@
                           {% else %}
                             <span class="share-perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
-                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit vam cspt vh"></span>
+                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
                         </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
@@ -94,7 +94,7 @@
                           {% else %}
                             <span class="perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
-                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit vam cspt vh"></span>
+                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
                         </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>

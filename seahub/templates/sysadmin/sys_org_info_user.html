@@ -31,7 +31,7 @@
               {% else %}
                 <span class="user-status-cur-value">{% trans "Inactive" %}</span>
               {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+                <span title="{% trans "Edit"%}" class="user-status-edit-icon op-icon sf2-icon-edit vh"></span>
             </div>
             <select name="permission" class="user-status-select hide">
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
