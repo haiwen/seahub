@@ -213,7 +213,7 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-drop-down cspt vam" title="{% trans "More operations" %}"></span>
+            <span class="more-op-icon sf2-icon-drop-down op-icon" title="{% trans "More operations" %}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -289,7 +289,7 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-drop-down cspt vam" title="{% trans "More Operations"%}"></span>
+            <span class="more-op-icon sf2-icon-drop-down op-icon" title="{% trans "More Operations"%}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -543,7 +543,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
         <% if (can_add_repo) { %>
-        <span id="myhome-enable-mods" class="sf2-icon-enable-modules fright" title="{% trans "Enable Modules" %}"></span>
+        <span id="myhome-enable-mods" class="sf2-icon-enable-modules op-icon fright" title="{% trans "Enable Modules" %}"></span>
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
@@ -599,7 +599,7 @@
             <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
         </h3>
         <% if (is_staff) { %>
-            <span id="enable-mods" class="sf2-icon-enable-modules fright" title="{% trans "Enable Modules" %}" style="margin:8px 0 0 5px;"></span>
+            <span id="enable-mods" class="sf2-icon-enable-modules op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
         <% } %>
         <% if (is_pub) { %>
             <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
