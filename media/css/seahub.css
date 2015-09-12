@@ -349,16 +349,11 @@ p { margin:0.5em 0; }
 .op-icon.sf2-x:hover {
     color:#f89a68;
 }
-.op-icon.sf2-icon-edit,
-.user-status-edit-icon.sf2-icon-edit,
-.perm-edit-icon.sf2-icon-edit {
+.sf2-icon-edit {
     font-size:16px;
-    color:#888;
-    opacity:0.5;
+    opacity:0.7;
 }
-.op-icon.sf2-icon-edit:hover,
-.user-status-edit-icon.sf2-icon-edit:hover,
-.perm-edit-icon.sf2-icon-edit:hover {
+.sf2-icon-edit:hover {
     opacity:1;
 }
 .op-icon:hover {/** for <a> **/
