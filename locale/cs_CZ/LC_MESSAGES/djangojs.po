@@ -9,9 +9,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-10 11:06+0800\n"
-"PO-Revision-Date: 2015-08-10 14:02+0000\n"
-"Last-Translator: Amplituda\n"
+"POT-Creation-Date: 2015-09-12 10:29+0800\n"
+"PO-Revision-Date: 2015-09-12 02:36+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Czech (Czech Republic) (http://www.transifex.com/haiwen/seahub/language/cs_CZ/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,10 +19,10 @@ msgstr ""
 "Language: cs_CZ\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 
-#: static/scripts/common.js:156 static/scripts/common.js.c:246
+#: static/scripts/common.js:157 static/scripts/common.js.c:247
 #: static/scripts/app/views/dir.js:812 static/scripts/app/views/dir.js.c:869
-#: static/scripts/app/views/dirent.js:417
-#: static/scripts/app/views/dirent.js:443
+#: static/scripts/app/views/dirent.js:406
+#: static/scripts/app/views/dirent.js:432
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
@@ -32,34 +32,49 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:345
-#: static/scripts/app/views/share.js:608 static/scripts/app/views/share.js:666
-#: static/scripts/app/views/starred-file-item.js:52
+#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:351
+#: static/scripts/app/views/share.js:614 static/scripts/app/views/share.js:672
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "Chyba. Prosím zkontrolujte síť."
 
-#: static/scripts/common.js:509
+#: static/scripts/common.js:510
 msgid "Search users or enter emails"
 msgstr "Hledejte uživatele nebo zadejte email"
+
+#: static/scripts/common.js:520
+msgid "Please enter 1 or more character"
+msgstr ""
+
+#: static/scripts/common.js:521
+msgid "No matches"
+msgstr ""
+
+#: static/scripts/common.js:522
+msgid "Searching..."
+msgstr ""
+
+#: static/scripts/common.js:523
+msgid "Loading failed"
+msgstr ""
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
 msgstr "Vyžadováno jméno"
 
-#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:196
+#: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:202
 msgid "Please enter password"
 msgstr "Zadejte prosím heslo"
 
-#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:204
+#: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:210
 msgid "Please enter the password again"
 msgstr "Zadejte prosím heslo znovu"
 
-#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:200
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:206
 msgid "Password is too short"
 msgstr "Heslo je příliž krátké"
 
-#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:208
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:214
 msgid "Passwords don't match"
 msgstr "Hesla se neshodují"
 
@@ -113,12 +128,12 @@ msgid "Password is required."
 msgstr "Heslo je vyžadováno."
 
 #: static/scripts/app/views/dir.js:313 static/scripts/app/views/dir.js.c:370
-#: static/scripts/app/views/dirent.js:246
+#: static/scripts/app/views/dirent.js:235
 msgid "It is required."
 msgstr "Vyžadováno."
 
 #: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
-#: static/scripts/app/views/dirent.js:265
+#: static/scripts/app/views/dirent.js:254
 #: static/scripts/app/views/fileupload.js:310
 #: static/scripts/app/views/fileupload.js:324
 #: static/scripts/app/views/fileupload.js:336
@@ -167,7 +182,15 @@ msgstr "Vymazat položky"
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Opravdu chcete smazat tyto položky?"
 
-#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:342
+#: static/scripts/app/views/dir.js:613
+msgid "Move selected item(s) to:"
+msgstr ""
+
+#: static/scripts/app/views/dir.js:613
+msgid "Copy selected item(s) to:"
+msgstr ""
+
+#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:331
 msgid "Invalid destination path"
 msgstr "Neplatná cílová cesta"
 
@@ -227,52 +250,52 @@ msgstr "Chyba při přesunu %(name)s"
 msgid "Failed to copy %(name)s"
 msgstr "Chyba při kopírování %(name)s"
 
-#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:406
-#: static/scripts/app/views/dirent.js:434
+#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:395
+#: static/scripts/app/views/dirent.js:423
 msgid "Canceled."
 msgstr "Zrušeno."
 
-#: static/scripts/app/views/dirent.js:58
+#: static/scripts/app/views/dirent.js:47
 msgid "locked by {placeholder}"
 msgstr "uzamčeno {placeholder}"
 
-#: static/scripts/app/views/dirent.js:214
+#: static/scripts/app/views/dirent.js:203
 msgid "Successfully deleted %(name)s"
 msgstr "Úspěšně smazán %(name)s"
 
-#: static/scripts/app/views/dirent.js:227
+#: static/scripts/app/views/dirent.js:216
 msgid "Rename Directory"
 msgstr "Přejmenovat adresář"
 
-#: static/scripts/app/views/dirent.js:227
+#: static/scripts/app/views/dirent.js:216
 msgid "Rename File"
 msgstr "Přejmenovat soubor"
 
-#: static/scripts/app/views/dirent.js:250
+#: static/scripts/app/views/dirent.js:239
 msgid "You have not renamed it."
 msgstr "Není přejmenován."
 
-#: static/scripts/app/views/dirent.js:302
+#: static/scripts/app/views/dirent.js:291
 msgid "Move {placeholder} to:"
 msgstr "Přesun {placeholder} do:"
 
-#: static/scripts/app/views/dirent.js:302
+#: static/scripts/app/views/dirent.js:291
 msgid "Copy {placeholder} to:"
 msgstr "Kopírovat {placeholder} do:"
 
-#: static/scripts/app/views/dirent.js:376
+#: static/scripts/app/views/dirent.js:365
 msgid "Moving %(name)s"
 msgstr "Přesunování %(name)s"
 
-#: static/scripts/app/views/dirent.js:376
+#: static/scripts/app/views/dirent.js:365
 msgid "Copying %(name)s"
 msgstr "Kopírování %(name)s"
 
-#: static/scripts/app/views/dirent.js:392
+#: static/scripts/app/views/dirent.js:381
 msgid "Saving..."
 msgstr "Ukládám..."
 
-#: static/scripts/app/views/dirent.js:406
+#: static/scripts/app/views/dirent.js:395
 msgid "Failed."
 msgstr "Chyba."
 
@@ -366,7 +389,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Nastavení {placeholder}'s oprávnění"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:514
+#: static/scripts/app/views/share.js:520
 msgid "Select groups"
 msgstr "Vyberte skupiny"
 
@@ -411,39 +434,43 @@ msgstr "Mazání dokončeno."
 msgid "Share {placeholder}"
 msgstr "Sdílení {placeholder}"
 
-#: static/scripts/app/views/share.js:153 static/scripts/app/views/share.js:169
+#: static/scripts/app/views/share.js:132
+msgid "Expired"
+msgstr ""
+
+#: static/scripts/app/views/share.js:159 static/scripts/app/views/share.js:175
 msgid "Hide"
 msgstr "Skrýt"
 
-#: static/scripts/app/views/share.js:166
+#: static/scripts/app/views/share.js:172
 msgid "Show"
 msgstr "Zobraz"
 
-#: static/scripts/app/views/share.js:221
+#: static/scripts/app/views/share.js:227
 msgid "Please enter days."
 msgstr "Prosím zadejte dnů."
 
-#: static/scripts/app/views/share.js:225
+#: static/scripts/app/views/share.js:231
 msgid "Please enter valid days"
 msgstr "Prosím zadejte platné dny"
 
-#: static/scripts/app/views/share.js:312
+#: static/scripts/app/views/share.js:318
 msgid "Please input at least an email."
 msgstr "Prosím zadejte nejméně email."
 
-#: static/scripts/app/views/share.js:329
+#: static/scripts/app/views/share.js:335
 msgid "Successfully sent to {placeholder}"
 msgstr "Úspěšně nahráno do {placeholder}"
 
-#: static/scripts/app/views/share.js:333
+#: static/scripts/app/views/share.js:339
 msgid "Failed to send to {placeholder}"
 msgstr "Chyba při odesílání do {placeholder}"
 
-#: static/scripts/app/views/share.js:598
+#: static/scripts/app/views/share.js:604
 msgid "Failed to share to {placeholder}"
 msgstr "Chyba při sdílení do {placeholder}"
 
-#: static/scripts/app/views/share.js:606 static/scripts/app/views/share.js:664
+#: static/scripts/app/views/share.js:612 static/scripts/app/views/share.js:670
 msgid "Share failed"
 msgstr "sdílení selhalo"
 

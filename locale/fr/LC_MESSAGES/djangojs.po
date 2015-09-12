@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-19 18:05+0800\n"
-"PO-Revision-Date: 2015-08-19 10:08+0000\n"
+"POT-Creation-Date: 2015-09-12 10:29+0800\n"
+"PO-Revision-Date: 2015-09-12 02:36+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: French (http://www.transifex.com/haiwen/seahub/language/fr/)\n"
 "MIME-Version: 1.0\n"
@@ -18,10 +18,10 @@ msgstr ""
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: static/scripts/common.js:156 static/scripts/common.js.c:246
+#: static/scripts/common.js:157 static/scripts/common.js.c:247
 #: static/scripts/app/views/dir.js:812 static/scripts/app/views/dir.js.c:869
-#: static/scripts/app/views/dirent.js:417
-#: static/scripts/app/views/dirent.js:443
+#: static/scripts/app/views/dirent.js:406
+#: static/scripts/app/views/dirent.js:432
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
@@ -33,30 +33,29 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:351
 #: static/scripts/app/views/share.js:614 static/scripts/app/views/share.js:672
-#: static/scripts/app/views/starred-file-item.js:52
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
 msgstr "Échec. Vérifiez le réseau"
 
-#: static/scripts/common.js:509
+#: static/scripts/common.js:510
 msgid "Search users or enter emails"
 msgstr "Rechercher des utilisateurs ou saisir des adresses mail"
 
-#: static/scripts/common.js:519
-msgid "Please enter 1 or more character"
-msgstr ""
-
 #: static/scripts/common.js:520
-msgid "No matches"
-msgstr ""
+msgid "Please enter 1 or more character"
+msgstr "Recherche en cours..."
 
 #: static/scripts/common.js:521
-msgid "Searching..."
-msgstr ""
+msgid "No matches"
+msgstr "Pas de correspondance"
 
 #: static/scripts/common.js:522
+msgid "Searching..."
+msgstr "Recherche en cours..."
+
+#: static/scripts/common.js:523
 msgid "Loading failed"
-msgstr ""
+msgstr "Le chargement a échoué"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
@@ -128,12 +127,12 @@ msgid "Password is required."
 msgstr "Le mot de passe est obligatoire"
 
 #: static/scripts/app/views/dir.js:313 static/scripts/app/views/dir.js.c:370
-#: static/scripts/app/views/dirent.js:246
+#: static/scripts/app/views/dirent.js:235
 msgid "It is required."
 msgstr "c'est obligatoire."
 
 #: static/scripts/app/views/dir.js:328 static/scripts/app/views/dir.js.c:395
-#: static/scripts/app/views/dirent.js:265
+#: static/scripts/app/views/dirent.js:254
 #: static/scripts/app/views/fileupload.js:310
 #: static/scripts/app/views/fileupload.js:324
 #: static/scripts/app/views/fileupload.js:336
@@ -182,7 +181,15 @@ msgstr "Supprimer les éléments"
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Voulez vraiment supprimer les éléments sélectionnés ?"
 
-#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:342
+#: static/scripts/app/views/dir.js:613
+msgid "Move selected item(s) to:"
+msgstr ""
+
+#: static/scripts/app/views/dir.js:613
+msgid "Copy selected item(s) to:"
+msgstr ""
+
+#: static/scripts/app/views/dir.js:658 static/scripts/app/views/dirent.js:331
 msgid "Invalid destination path"
 msgstr "Chemin de destination invalide"
 
@@ -242,52 +249,52 @@ msgstr "Échec du déplacement de %(name)s"
 msgid "Failed to copy %(name)s"
 msgstr "Échec de la copie de %(name)s"
 
-#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:406
-#: static/scripts/app/views/dirent.js:434
+#: static/scripts/app/views/dir.js:860 static/scripts/app/views/dirent.js:395
+#: static/scripts/app/views/dirent.js:423
 msgid "Canceled."
 msgstr "Annulé."
 
-#: static/scripts/app/views/dirent.js:58
+#: static/scripts/app/views/dirent.js:47
 msgid "locked by {placeholder}"
 msgstr "Verrouillé par {placeholder}"
 
-#: static/scripts/app/views/dirent.js:214
+#: static/scripts/app/views/dirent.js:203
 msgid "Successfully deleted %(name)s"
 msgstr "%(name)s supprimé avec succès"
 
-#: static/scripts/app/views/dirent.js:227
+#: static/scripts/app/views/dirent.js:216
 msgid "Rename Directory"
 msgstr "Renommer le répertoire"
 
-#: static/scripts/app/views/dirent.js:227
+#: static/scripts/app/views/dirent.js:216
 msgid "Rename File"
 msgstr "Renommer le fichier"
 
-#: static/scripts/app/views/dirent.js:250
+#: static/scripts/app/views/dirent.js:239
 msgid "You have not renamed it."
 msgstr "Vous ne l'avez pas renommé."
 
-#: static/scripts/app/views/dirent.js:302
+#: static/scripts/app/views/dirent.js:291
 msgid "Move {placeholder} to:"
 msgstr "Déplacer {placeholder} vers :"
 
-#: static/scripts/app/views/dirent.js:302
+#: static/scripts/app/views/dirent.js:291
 msgid "Copy {placeholder} to:"
 msgstr "Copier {placeholder} vers:"
 
-#: static/scripts/app/views/dirent.js:376
+#: static/scripts/app/views/dirent.js:365
 msgid "Moving %(name)s"
 msgstr "Déplacement de %(name)s"
 
-#: static/scripts/app/views/dirent.js:376
+#: static/scripts/app/views/dirent.js:365
 msgid "Copying %(name)s"
 msgstr "Copie de %(name)s"
 
-#: static/scripts/app/views/dirent.js:392
+#: static/scripts/app/views/dirent.js:381
 msgid "Saving..."
 msgstr "Enregistrement..."
 
-#: static/scripts/app/views/dirent.js:406
+#: static/scripts/app/views/dirent.js:395
 msgid "Failed."
 msgstr "Échec."
 
@@ -428,7 +435,7 @@ msgstr "Partage {placeholder}"
 
 #: static/scripts/app/views/share.js:132
 msgid "Expired"
-msgstr ""
+msgstr "Expiré"
 
 #: static/scripts/app/views/share.js:159 static/scripts/app/views/share.js:175
 msgid "Hide"
