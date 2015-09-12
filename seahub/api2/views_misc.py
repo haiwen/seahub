@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 
-from seahub.api2.utils import json_response
+from seahub.api2.utils import json_response, is_seafile_pro
 from seahub import settings
 from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH
 try:
@@ -21,7 +21,7 @@ class ServerInfoView(APIView):
 
         features = ['seafile-basic']
 
-        if any(['seahub_extra' in app for app in settings.INSTALLED_APPS]):
+        if is_seafile_pro():
             features.append('seafile-pro')
 
         if HAS_OFFICE_CONVERTER:
