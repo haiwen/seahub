@@ -5,6 +5,7 @@ Test file/dir operations.
 
 import random
 import re
+import pytest
 from urllib import urlencode, quote, quote
 
 from tests.common.utils import randstring, urljoin
@@ -221,3 +222,24 @@ class FilesApiTest(ApiTestBase):
                 }
                 res = self.post(share_dir_url, data=data)
                 self.assertEqual(res.text, u'{}')
+
+    @pytest.mark.xfail
+    def test_create_dir_with_parents(self):
+        with self.get_tmp_repo() as repo:
+            path = u'/level1/level 2/level_3/目录4'
+            self.create_dir_with_parents(repo, path)
+
+    def create_dir_with_parents(self, repo, path):
+        data = {'operation': 'mkdir', 'create_parents': 'true'}
+        durl = repo.get_dirpath_url(path.encode('utf-8'))
+        self.post(durl, data=data, expected=201)
+        curpath = ''
+        # check the parents are created along the way
+        parts = path.split('/')
+        for i, name in enumerate(parts):
+            curpath += '/' + name
+            url = repo.get_dirpath_url(curpath.encode('utf-8'))
+            if i < len(parts) - 1:
+                assert self.get(url).json()[0]['name'] == parts[i+1]
+            else:
+                assert self.get(url).json() == []

@@ -38,7 +38,7 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_groups, get_group_and_contacts, prepare_events, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
-    json_response, to_python_boolean
+    json_response, to_python_boolean, is_seafile_pro
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -2192,28 +2192,40 @@ class DirView(APIView):
 
         username = request.user.username
         operation = request.POST.get('operation', '')
+        parent_dir = os.path.dirname(path)
+        parent_dir_utf8 = parent_dir.encode('utf-8')
 
         if operation.lower() == 'mkdir':
             if not is_repo_writable(repo.id, username):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create folder.')
 
-            parent_dir = os.path.dirname(path)
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN, 'Forbid to access this folder.')
 
-            parent_dir_utf8 = parent_dir.encode('utf-8')
-            new_dir_name = os.path.basename(path)
-            new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
-                                                                parent_dir,
-                                                                new_dir_name)
-
-            try:
-                seafile_api.post_dir(repo_id, parent_dir,
-                                     new_dir_name_utf8, username)
-            except SearpcError, e:
-                return api_error(HTTP_520_OPERATION_FAILED,
-                                 'Failed to make directory.')
+            create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
+            if not create_parents:
+                new_dir_name = os.path.basename(path)
+                new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
+                                                                    parent_dir,
+                                                                    new_dir_name)
+                try:
+                    seafile_api.post_dir(repo_id, parent_dir,
+                                        new_dir_name_utf8, username)
+                except SearpcError, e:
+                    return api_error(HTTP_520_OPERATION_FAILED,
+                                    'Failed to make directory.')
+            else:
+                if not is_seafile_pro():
+                    return api_error(HTTP_400_BAD_REQUEST,
+                                    'Feature not supported.')
+                try:
+                    seafile_api.mkdir_with_parents(repo_id, '/',
+                                                   path[1:], username)
+                except SearpcError, e:
+                    return api_error(HTTP_520_OPERATION_FAILED,
+                                    'Failed to make directory.')
+                new_dir_name_utf8 = os.path.basename(path).encode('utf-8')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 resp = reloaddir(request, repo, parent_dir)

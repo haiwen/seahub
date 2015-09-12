@@ -8,6 +8,7 @@ import re
 
 from collections import defaultdict
 from functools import wraps
+from seahub import settings
 
 from django.core.paginator import EmptyPage, InvalidPage
 from django.http import HttpResponse
@@ -554,3 +555,6 @@ def to_python_boolean(string):
     if string in ('f', 'false', '0'):
         return False
     raise ValueError("Invalid boolean value: '%s'" % string)
+
+def is_seafile_pro():
+    return any(['seahub_extra' in app for app in settings.INSTALLED_APPS])
