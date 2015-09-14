@@ -191,6 +191,10 @@ define([
             },
 
             getImageThumbnail: function() {
+                if (!app.pageOptions.enable_thumbnail || this.dir.encrypted) {
+                    return false;
+                }
+
                 var images_with_no_thumbnail = this.dir.filter(function(dirent) {
                     // 'dirent' is a model
                     return dirent.get('is_img') && !dirent.get('encoded_thumbnail_src');
