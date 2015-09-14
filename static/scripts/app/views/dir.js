@@ -187,7 +187,9 @@ define([
                 this.renderDirOpBar();
                 this.renderDirentsHd();
                 this.fileUploadView.setFileInput();
-                this.getImageThumbnail();
+                if (!this.dir.encrypted) {
+                    this.getImageThumbnail();
+                }
             },
 
             getImageThumbnail: function() {
