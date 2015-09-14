@@ -170,7 +170,11 @@ $("#group-member-add, #group-admin-add").click(function() {
 
     $('[name="user_name"]', form).select2($.extend({
         width: '268px',
-        placeholder: "{% trans "Search users or enter emails" %}"
+        placeholder: "{% trans "Search users or enter emails" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 });
 
@@ -217,7 +221,12 @@ $('#group-transfer').click(function() {
     $('[name="email"]', form).select2($.extend({
         width: '268px',
         maximumSelectionSize: 1,
-        placeholder: "{% trans "Search user or enter email" %}"
+        placeholder: "{% trans "Search user or enter email" %}",
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}",
+        formatSelectionTooBig: "{% trans "You cannot select any more choices" %}"
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
     return false;

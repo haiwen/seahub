@@ -88,10 +88,17 @@ def thumbnail_get(request, repo_id, size, path):
     return thumbnail file to web
     """
 
-    if check_folder_permission(request, repo_id, path) is None:
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
         return HttpResponse()
 
     obj_id = get_file_id_by_path(repo_id, path)
+    if check_folder_permission(request, repo_id, path) is None \
+        or obj_id is None:
+        return HttpResponse()
+
     thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
 
     if not os.path.exists(thumbnail_file) and \
@@ -184,13 +191,14 @@ def share_link_thumbnail_get(request, token, size, path):
     return thumbnail file to web
     """
 
-    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-    if not fileshare:
+    try:
+        size = int(size)
+    except ValueError as e:
+        logger.error(e)
         return HttpResponse()
 
-    repo_id = fileshare.repo_id
-    repo = get_repo(repo_id)
-    if not repo:
+    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
+    if not fileshare:
         return HttpResponse()
 
     if fileshare.path == '/':
@@ -198,7 +206,12 @@ def share_link_thumbnail_get(request, token, size, path):
     else:
         image_path = posixpath.join(fileshare.path, path.lstrip('/'))
 
+    repo_id = fileshare.repo_id
+    repo = get_repo(repo_id)
     obj_id = get_file_id_by_path(repo_id, image_path)
+    if not repo or not obj_id:
+        return HttpResponse()
+
     thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
 
     if not os.path.exists(thumbnail_file) and \

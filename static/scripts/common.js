@@ -154,7 +154,8 @@ define([
 
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
-                this.feedback($.parseJSON(xhr.responseText).error, 'error');
+                var parsed_resp = $.parseJSON(xhr.responseText);
+                this.feedback(parsed_resp.error||parsed_resp.error_msg, 'error');
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
             }
@@ -518,6 +519,11 @@ define([
                 tokenSeparators: [",", " "],
 
                 minimumInputLength: 1, // input at least 1 character
+
+                formatInputTooShort: gettext("Please enter 1 or more character"),
+                formatNoMatches: gettext("No matches"),
+                formatSearching: gettext("Searching..."),
+                formatAjaxError: gettext("Loading failed"),
 
                 ajax: {
                     url: _this.getUrl({name: 'search_user'}),

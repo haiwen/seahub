@@ -145,12 +145,18 @@ $(".repo-share-btn").click(function() {
 
     $('[name="emails"]', $('#dir-private-share')).select2($.extend({
         placeholder: "{% trans "Search users or enter emails" %}",
-        width: '400px'
+        width: '400px',
+        formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
+        formatNoMatches: "{% trans "No matches" %}",
+        formatSearching: "{% trans "Searching..." %}",
+        formatAjaxError: "{% trans "Loading failed" %}",
+        formatSelectionTooBig: "{% trans "You cannot select any more choices" %}" 
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
     $('[name="groups"]', $('#dir-private-share')).html(g_opts).select2({
         placeholder: "{% trans "Select groups" %}",
         width: '400px',
+        formatNoMatches: "{% trans "No matches" %}",
         escapeMarkup: function(m) { return m; }
     });
 });

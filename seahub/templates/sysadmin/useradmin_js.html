@@ -1,15 +1,18 @@
 {% load i18n%}
 addConfirmTo($('.remove-user-btn'), {
-        'title':"{% trans "Delete User" %}",
-        'con':"{% trans "Are you sure you want to delete %s ?" %}"
+    'title':"{% trans "Delete User" %}",
+    'con':"{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true // post request
 });
 addConfirmTo($('.reset-user-btn'), {
-        'title':"{% trans "Password Reset" %}",
-        'con':"{% trans "Are you sure you want to reset the password of %s ?" %}"
+    'title':"{% trans "Password Reset" %}",
+    'con':"{% trans "Are you sure you want to reset the password of %s ?" %}",
+    'post': true // post request
 });
 addConfirmTo($('.revoke-admin-btn'), {
-        'title':"{% trans "Revoke Admin" %}",
-        'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}"
+    'title':"{% trans "Revoke Admin" %}",
+    'con':"{% trans "Are you sure you want to revoke the admin permission of %s ?" %}",
+    'post': true // post request
 });
 addConfirmTo($('.unset-trial'), {
         'title':"{% trans "Remove Trial" %}",

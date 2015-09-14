@@ -53,7 +53,7 @@ class UserResetTest(TestCase, Fixtures):
         )
 
         old_passwd = self.user.enc_password
-        resp = self.client.get(
+        resp = self.client.post(
             reverse('user_reset', args=[self.user.email])
         )
         self.assertEqual(302, resp.status_code)
@@ -112,9 +112,10 @@ class UserRemoveTest(TestCase, Fixtures):
         # create one user
         username = self.user.username
 
-        resp = self.client.get(
+        resp = self.client.post(
             reverse('user_remove', args=[username])
         )
 
+        self.assertEqual(302, resp.status_code)
         assert 'Successfully deleted %s' % username in parse_cookie(resp.cookies)['messages']
         assert len(ccnet_threaded_rpc.search_emailusers('DB', username, -1, -1))  == 0

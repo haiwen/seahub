@@ -33,16 +33,6 @@ define([
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             var is_pro = app.pageOptions.is_pro;
 
-            // for 'file lock'
-            var enable_some_op = false; // op: 'del', 'rename', 'mv'
-            if (!is_pro) {
-                enable_some_op = true;
-            } else {
-                if (!this.model.get('is_locked') || this.model.get('locked_by_me')) {
-                    enable_some_op = true;
-                }
-            }
-
             this.$el.html(this.template({
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
@@ -52,7 +42,6 @@ define([
                 is_repo_owner: dir.is_repo_owner,
                 can_generate_shared_link: app.pageOptions.can_generate_shared_link,
                 is_pro: is_pro,
-                enable_some_op: enable_some_op,
                 repo_encrypted: dir.encrypted
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));

@@ -21,14 +21,13 @@ from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
-from seahub.base.decorators import sys_staff_required
+from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
-from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
@@ -63,20 +62,18 @@ def sys_info(request):
     Arguments:
     - `request`:
     """
-    try:
-        users_count = ccnet_threaded_rpc.count_emailusers('DB') + ccnet_threaded_rpc.count_emailusers('LDAP')
-    except Exception as e:
-        logger.error(e)
-        users_count = 0
 
+    # count repos
     repos_count = mute_seafile_api.count_repos()
 
+    # count groups
     try:
         groups_count = len(ccnet_threaded_rpc.get_all_groups(-1, -1))
     except Exception as e:
         logger.error(e)
         groups_count = 0
 
+    # count orgs
     if MULTI_TENANCY:
         try:
             org_count = ccnet_threaded_rpc.count_orgs()
@@ -86,14 +83,47 @@ def sys_info(request):
     else:
         org_count = -1
 
+    # count users
+    try:
+        active_db_users = ccnet_threaded_rpc.count_emailusers('DB')
+    except Exception as e:
+        logger.error(e)
+        active_db_users = 0
+
+    try:
+        active_ldap_users = ccnet_threaded_rpc.count_emailusers('LDAP')
+    except Exception as e:
+        logger.error(e)
+        active_ldap_users = 0
+
+    try:
+        inactive_db_users = ccnet_threaded_rpc.count_inactive_emailusers('DB')
+    except Exception as e:
+        logger.error(e)
+        inactive_db_users = 0
+
+    try:
+        inactive_ldap_users = ccnet_threaded_rpc.count_inactive_emailusers('LDAP')
+    except Exception as e:
+        logger.error(e)
+        inactive_ldap_users = 0
+
+    active_users = active_db_users + active_ldap_users if active_ldap_users > 0 \
+            else active_db_users
+
+    inactive_users = inactive_db_users + inactive_ldap_users if inactive_ldap_users > 0 \
+            else inactive_db_users
+
     is_pro = is_pro_version()
     if is_pro:
         license_file = os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
         license_dict = parse_license(license_file)
     else:
         license_dict = {}
+
     return render_to_response('sysadmin/sys_info.html', {
-        'users_count': users_count,
+        'users_count': active_users + inactive_users,
+        'active_users_count': active_users,
         'repos_count': repos_count,
         'groups_count': groups_count,
         'org_count': org_count,
@@ -592,7 +622,11 @@ def user_info(request, email):
                     fs.delete()
                     continue
 
-                fs.filename = os.path.basename(fs.path.rstrip('/'))
+                if fs.path == '/':
+                    fs.filename = '/'
+                else:
+                    fs.filename = os.path.basename(fs.path.rstrip('/'))
+
                 path = fs.path
                 if path[-1] != '/':         # Normalize dir path
                     path += '/'
@@ -624,7 +658,12 @@ def user_info(request, email):
             if seafile_api.get_dir_id_by_path(r.id, link.path) is None:
                 link.delete()
                 continue
-            link.dir_name = os.path.basename(link.path.rstrip('/'))
+
+            if link.path == '/':
+                link.dir_name = '/'
+            else:
+                link.dir_name = os.path.basename(link.path.rstrip('/'))
+
             link.is_upload = True
             p_uploadlinks.append(link)
         except SearpcError as e:
@@ -719,6 +758,7 @@ def sys_org_set_quota(request, org_id):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_remove(request, email):
     """Remove user"""
     referer = request.META.get('HTTP_REFERER', None)
@@ -782,6 +822,7 @@ def remove_trial(request, user_or_org):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_remove_admin(request, email):
     """Unset user admin."""
     try:
@@ -857,7 +898,10 @@ def user_toggle_status(request, email):
     try:
         user = User.objects.get(email)
         user.is_active = bool(user_status)
-        user.save()
+        result_code = user.save()
+        if result_code == -1:
+            return HttpResponse(json.dumps({'success': False}), status=403,
+                                content_type=content_type)
 
         if user.is_active is True:
             try:
@@ -920,6 +964,7 @@ def send_user_reset_email(request, email, password):
 
 @login_required
 @sys_staff_required
+@require_POST
 def user_reset(request, email):
     """Reset password for user."""
     try:
@@ -1369,12 +1414,10 @@ def user_search(request):
 
 @login_required
 @sys_staff_required
+@require_POST
 def sys_repo_transfer(request):
     """Transfer a repo to others.
     """
-    if request.method != 'POST':
-        raise Http404
-
     repo_id = request.POST.get('repo_id', None)
     new_owner = request.POST.get('email', None)
 

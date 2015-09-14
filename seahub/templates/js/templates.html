@@ -285,18 +285,14 @@
                 <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                    <% if (enable_some_op) { %>
-                    <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
-                    <% } %>
+                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
             <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
             <ul class="hidden-op hide">
-                <% if (enable_some_op) { %>
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
-                <% } %>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "History" %}</a></li>
                 <% if (is_pro) { %>
@@ -459,8 +455,8 @@
                 <table>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
-                        <th width="25%">{% trans "Permission" %}</th>
-                        <th width="20%"></th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="15%"></th>
                     </tr>
                     <tr id="add-dir-user-share-item">
                         <td>
@@ -482,8 +478,8 @@
                 <table>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
-                        <th width="25%">{% trans "Permission" %}</th>
-                        <th width="20%"></th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="15%"></th>
                     </tr>
                     <tr id="add-dir-group-share-item">
                         <td>
@@ -699,8 +695,8 @@
                 <table>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
-                        <th width="25%">{% trans "Permission" %}</th>
-                        <th width="20%"></th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="15%"></th>
                     </tr>
                     <tr id="add-user-folder-perm">
                         <td>
@@ -721,8 +717,8 @@
                 <table>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
-                        <th width="25%">{% trans "Permission" %}</th>
-                        <th width="20%"></th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="15%"></th>
                     </tr>
                     <tr id="add-group-folder-perm">
                         <td>
@@ -780,33 +776,30 @@
     <h3 class="hd">{% trans "Select libraries to share" %}</h3>
     <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
     <table class="hide">
-        <thead>
-            <tr>
-                <th width="4%"><!--select--></th>
-                <th width="6%"><!--icon--></th>
-                <th width="40%">{% trans "Name" %}</th>
-                <th width="25%">{% trans "Last Update" %}</th>
-                <th width="25%">{% trans "Permission" %}</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
+        <tr>
+            <th width="3%"><!--select--></th>
+            <th width="6%"><!--icon--></th>
+            <th width="35%">{% trans "Name" %}</th>
+            <th width="25%">{% trans "Last Update" %}</th>
+            <th width="31%">{% trans "Permission" %}</th>
+        </tr>
     </table>
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </script>
 <script type="text/template" id="add-pubrepo-item-tmpl">
-    <td width="4%" class="select">
+    <td class="select">
         <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
     </td>
-    <td width="6%">
+    <td>
       <% if (encrypted) { %>
       <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
       <% } else { %>
       <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
       <% } %>
     </td>
-    <td width="40%"><a href="#my-libs/lib/<%= id %>" target="_blank"><%- name %></a></td>
-    <td width="25%"><%= mtime_relative %></td>
-    <td width="25%">
+    <td><a href="#my-libs/lib/<%= id %>" target="_blank"><%- name %></a></td>
+    <td><%= mtime_relative %></td>
+    <td>
         <select name="permission" class="share-permission-select w100">
             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
             <option value="r">{% trans "Read-Only" %}</option>

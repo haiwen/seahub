@@ -610,7 +610,7 @@ define([
                 var dir = this.dir;
                 var op = params.op;
 
-                var title = op == 'mv' ? "Move selected item(s) to:" : "Copy selected item(s) to:";
+                var title = op == 'mv' ? gettext("Move selected item(s) to:") : gettext("Copy selected item(s) to:");
 
                 var form = $(this.mvcpTemplate({
                     form_title: title,

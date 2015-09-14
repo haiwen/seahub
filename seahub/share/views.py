@@ -1413,6 +1413,7 @@ def ajax_get_download_link(request):
             data = {
                     'download_link': gen_shared_link(token, l[0].s_type),
                     'token': token,
+                    'is_expired': l[0].is_expired(),
                    }
         else:
             data = {}

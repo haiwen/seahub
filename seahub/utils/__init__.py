@@ -258,7 +258,7 @@ def is_valid_username(username):
 def is_ldap_user(user):
     """Check whether user is a LDAP user.
     """
-    return user.source == 'LDAP'
+    return user.source == 'LDAP' or user.source == 'LDAPImport'
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
     cmmts = get_commits(repo_id, 0, 1)

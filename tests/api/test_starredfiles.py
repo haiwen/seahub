@@ -13,6 +13,10 @@ class StarredFileTest(BaseTestCase, Fixtures):
         UserStarredFiles(email=self.user.username, org_id=-1,
                          repo_id=self.repo.id, path=self.file,
                          is_dir=False).save()
+        self.unicode_file = self.create_file(repo_id=self.repo.id,
+                                             parent_dir='/',
+                                             filename=u'März_中文_%2F_FG2_SW#1a.jpg',
+                                             username=self.user.username)
 
     def tearDown(self):
         self.remove_repo()
@@ -20,6 +24,7 @@ class StarredFileTest(BaseTestCase, Fixtures):
     def js_encodeURIComponent(self, string):
         return urllib2.quote(string.encode('utf-8'), safe='~()*!.\'')
 
+    ########## test cases ##########
     def test_can_list(self):
         self.login_as(self.user)
 
@@ -38,6 +43,15 @@ class StarredFileTest(BaseTestCase, Fixtures):
         self.assertEqual(201, resp.status_code)
         self.assertEqual('"success"', resp.content)
 
+    def test_cannot_add_random_filename(self):
+        self.login_as(self.user)
+
+        resp = self.client.post(reverse('starredfiles'), {
+            'repo_id': self.repo.id,
+            'p': 'some_random_filename'
+        })
+        self.assertEqual(404, resp.status_code)
+
     def test_can_delete(self):
         self.login_as(self.user)
 
@@ -46,12 +60,19 @@ class StarredFileTest(BaseTestCase, Fixtures):
         self.assertEqual(200, resp.status_code)
         self.assertEqual(0, len(UserStarredFiles.objects.all()))
 
+    def test_cannot_delete_random_filename(self):
+        self.login_as(self.user)
+
+        resp = self.client.delete(reverse('starredfiles') + '?repo_id=' +
+                                  self.repo.id + '&p=' + 'some_random_filename')
+        self.assertEqual(404, resp.status_code)
+
     def test_can_add_unicode(self):
         self.login_as(self.user)
 
         resp = self.client.post(reverse('starredfiles'), {
             'repo_id': self.repo.id,
-            'p': self.js_encodeURIComponent(u'März_中文_%2F_FG2_SW#1a.jpg'),
+            'p': self.unicode_file,
         })
         self.assertEqual(201, resp.status_code)
         self.assertEqual('"success"', resp.content)
@@ -62,13 +83,13 @@ class StarredFileTest(BaseTestCase, Fixtures):
 
         resp = self.client.post(reverse('starredfiles'), {
             'repo_id': self.repo.id,
-            'p': self.js_encodeURIComponent(u'März_中文_%2F_FG2_SW#1a.jpg')
+            'p': self.unicode_file,
         })
         self.assertEqual(201, resp.status_code)
         self.assertEqual(2, len(UserStarredFiles.objects.all()))
 
         resp = self.client.delete(reverse('starredfiles') + '?repo_id=' +
                                   self.repo.id + '&p=' +
-                                  self.js_encodeURIComponent(u'März_中文_%2F_FG2_SW#1a.jpg'))
+                                  urllib2.quote(self.unicode_file.encode('utf-8')))
         self.assertEqual(200, resp.status_code)
         self.assertEqual(1, len(UserStarredFiles.objects.all()))
