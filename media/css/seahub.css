@@ -1190,10 +1190,12 @@ textarea:-moz-placeholder {/* for FF */
     float:right;
     width:710px;
 }
+#main-panel h3:first-child,
 #right-panel h3:first-child,
 #left-panel h3:first-child {
     margin-top: 0px;
 }
+#main-panel .hd,
 #right-panel .hd,
 .tabnav,
 .repo-file-list-topbar,
@@ -1209,6 +1211,7 @@ textarea:-moz-placeholder {/* for FF */
     height:30px;
     position: relative; /* for '#upload-menu' */
 }
+#main-panel .hd,
 #right-panel .hd,
 .tabnav,
 .wiki-top {
@@ -1226,6 +1229,7 @@ textarea:-moz-placeholder {/* for FF */
     background:none;
     padding:0;
 }
+#main-panel .hd,
 #right-panel .hd h3,
 #right-panel h3.hd {
     line-height:30px;
@@ -2181,14 +2185,26 @@ textarea:-moz-placeholder {/* for FF */
 #back {
     margin-top:3px;
 }
+.commit-list-container {
+    margin-top:12px;
+}
 .commit-list {
     margin:0 0 20px;
 }
 .commit-list .time {
-    padding-left:10px;
+    height:24px;
 }
 .commit-list .avatar {
     border-radius:2px;
+}
+/*file-revision*/
+.file-revision-container .tip span.icon-lightbulb {
+    font-size:1.6em;
+    padding:0 5px 0 2px;
+}
+.file-revision-container .path {
+    padding-left:3px;
+    margin:0;
 }
 /*repo-share-form*/
 #email_or_group,

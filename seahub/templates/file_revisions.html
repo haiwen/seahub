@@ -5,85 +5,82 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block main_panel %}
-<h2>{{ u_filename }}{% trans "'s Version History" %}</h2>
-<p class="tip">{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
-<div class="commit-list-outer-container">
-    <div class="commit-list-inner-container">
-        <div class="commit-list-topbar ovhd">
-            <p class="path fleft">
-                {% trans 'Current Path:' %}
-                {% for name, link in zipped %}
-                {% if not forloop.last %}
-                <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
-                {% else %}
-                <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
-                {% endif %}
-                {% endfor %}
-            </p>
-
-            <span class="fright">
-                {% if days != 7 %}
-                <a href="?p={{path|urlencode}}&days=7">{% trans "a week" %}</a> /
-                {% else %}
-                {% trans "a week" %} /
-                {% endif %}
-                {% if days != 30 %}
-                <a href="?p={{path|urlencode}}&days=30">{% trans "a month" %}</a> /
-                {% else %}
-                {% trans "a month" %} /
-                {% endif %}
-                {% if days != -1 %}
-                <a href="?p={{path|urlencode}}&days=-1">{% trans "all" %}</a>
-                {% else %}
-                {% trans "all" %}
-                {% endif %}
-            </span>
-        </div>
-        <table class="commit-list">
-            <tr>
-                <th width="30%" class="time">{% trans 'Time' %}</th>
-                <th width="20%">{% trans 'Modifier' %}</th>
-                <th width="20%">{% trans 'Size' %}</th>
-                <th width="30%">{% trans 'Operations' %}</th>
-            </tr>
-            {% for commit in commits %}
-            <tr>
-                <td class="time">
-                    {{ commit.props.ctime|translate_seahub_time }}
-                    {% if commit.is_current_version %}
-                    {% trans '(current version)' %}
-                    {% endif %}
-
-                    {% if commit.rev_renamed_old_path %}
-                    <br /><span class="tip">{% blocktrans with old_path=commit.rev_renamed_old_path %}(Renamed or moved from {{ old_path }}){% endblocktrans %}</span>
-                    {% endif %}
-                </td>
-
-                {% if commit.creator_name %}
-                <td>
-                    {% avatar commit.creator_name 16 %}
-                    <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
-                </td>
-                {% else %}
-                <td>{% trans 'Unknown' %}</td>
+<div class="hd">
+    <h3 class="fleft"><span class="op-target">{{ u_filename }}</span>{% trans "'s Version History" %}</h3>
+    <span class="fright">
+        {% if days != 7 %}
+        <a href="?p={{path|urlencode}}&days=7">{% trans "a week" %}</a> /
+        {% else %}
+        {% trans "a week" %} /
+        {% endif %}
+        {% if days != 30 %}
+        <a href="?p={{path|urlencode}}&days=30">{% trans "a month" %}</a> /
+        {% else %}
+        {% trans "a month" %} /
+        {% endif %}
+        {% if days != -1 %}
+        <a href="?p={{path|urlencode}}&days=-1">{% trans "all" %}</a>
+        {% else %}
+        {% trans "all" %}
+        {% endif %}
+    </span>
+</div>
+<div class="file-revision-container">
+    <p class="tip"><span class="icon-lightbulb vam"></span>{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
+    <p class="path">
+        {% trans 'Current Path:' %}
+        {% for name, link in zipped %}
+        {% if not forloop.last %}
+        <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
+        {% else %}
+        <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
+        {% endif %}
+        {% endfor %}
+    </p>
+    <table class="commit-list">
+        <tr>
+            <th width="22%">{% trans 'Time' %}</th>
+            <th width="26%">{% trans 'Modifier' %}</th>
+            <th width="18%">{% trans 'Size' %}</th>
+            <th width="34%">{% trans 'Operations' %}</th>
+        </tr>
+        {% for commit in commits %}
+        <tr>
+            <td class="time">
+                {{ commit.props.ctime|translate_seahub_time }}
+                {% if commit.is_current_version %}
+                {% trans '(current version)' %}
                 {% endif %}
 
-                <td>{{ commit.rev_file_size|filesizeformat }} </td>
-                <td>
-                    {% if commit.id != repo.head_cmmt_id %}
-                    {% if can_revert_file %}
-                    <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&from=file_revisions" class="op vh">{% trans 'Restore' %}</a>
-                    {% endif %}
-                    {% endif %}
-                    <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&op=download" class="op vh">{% trans 'Download' %}</a>
-                    <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
-                    {% if can_compare and not forloop.last %}
-                    <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
+                {% if commit.rev_renamed_old_path %}
+                <br /><span class="tip">{% blocktrans with old_path=commit.rev_renamed_old_path %}(Renamed or moved from {{ old_path }}){% endblocktrans %}</span>
+                {% endif %}
+            </td>
+
+            {% if commit.creator_name %}
+            <td>
+                {% avatar commit.creator_name 16 %}
+                <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
+            </td>
+            {% else %}
+            <td>{% trans 'Unknown' %}</td>
+            {% endif %}
+
+            <td>{{ commit.rev_file_size|filesizeformat }} </td>
+            <td>
+                {% if commit.id != repo.head_cmmt_id %}
+                {% if can_revert_file %}
+                <a href="{{ SITE_ROOT }}repo/revert_file/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&from=file_revisions" class="op vh">{% trans 'Restore' %}</a>
+                {% endif %}
+                {% endif %}
+                <a href="{{ SITE_ROOT }}repo/file_revisions/{{ repo.id }}/?commit={{ commit.id }}&p={{commit.path|urlencode}}&op=download" class="op vh">{% trans 'Download' %}</a>
+                <a href="{% url 'view_history_file' repo.id %}?obj_id={{ commit.rev_file_id }}&commit_id={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh" target="_blank">{% trans 'View' %}</a>
+                {% if can_compare and not forloop.last %}
+                <a href="{% url 'text_diff' repo.id %}?p={{commit.path|urlencode}}&commit={{commit.id}}" class="op vh">{% trans 'Diff' %}</a>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>  
 </div>
 {% endblock %}
