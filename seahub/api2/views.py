@@ -50,7 +50,8 @@ from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added
 from seahub.group.views import group_check, remove_group_common, \
     rename_group_with_new_name
-from seahub.group.utils import BadGroupNameError, ConflictGroupNameError
+from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
+    validate_group_name
 from seahub.thumbnail.utils import allow_generate_thumbnail, generate_thumbnail
 from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
@@ -3341,6 +3342,11 @@ class Groups(APIView):
                                     content_type=content_type)
 
         group_name = request.DATA.get('group_name', None)
+        group_name = group_name.strip()
+        if not validate_group_name(group_name):
+            result['error'] = 'Failed to rename group, group name can only contain letters, numbers, blank, hyphen or underscore.'
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
 
         # Check whether group name is duplicated.
         if request.cloud_mode:

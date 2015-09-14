@@ -46,3 +46,45 @@ class GroupsApiTest(ApiTestBase):
         groups = self.get(GROUPS_URL).json()['groups']
         for group in groups:
             self.assertNotEqual(group['id'], group_id)
+
+    def test_add_remove_group_with_blank(self):
+        data = {'group_name': randstring(4) + ' ' + randstring(4)}
+        info = self.put(GROUPS_URL, data=data).json()
+        self.assertTrue(info['success'])
+        group_id = info['group_id']
+        self.assertGreater(group_id, 0)
+        url = urljoin(GROUPS_URL, str(group_id))
+        self.delete(url)
+
+        # check group is really removed
+        groups = self.get(GROUPS_URL).json()['groups']
+        for group in groups:
+
+            self.assertNotEqual(group['id'], group_id)
+    def test_add_remove_group_with_hyphen(self):
+        data = {'group_name': randstring(4) + '-' + randstring(4)}
+        info = self.put(GROUPS_URL, data=data).json()
+        self.assertTrue(info['success'])
+        group_id = info['group_id']
+        self.assertGreater(group_id, 0)
+        url = urljoin(GROUPS_URL, str(group_id))
+        self.delete(url)
+
+        # check group is really removed
+        groups = self.get(GROUPS_URL).json()['groups']
+        for group in groups:
+            self.assertNotEqual(group['id'], group_id)
+
+    def test_add_remove_group_with_blank_and_hyphen(self):
+        data = {'group_name': randstring(4) + '-' + randstring(4) + ' ' + randstring(4)}
+        info = self.put(GROUPS_URL, data=data).json()
+        self.assertTrue(info['success'])
+        group_id = info['group_id']
+        self.assertGreater(group_id, 0)
+        url = urljoin(GROUPS_URL, str(group_id))
+        self.delete(url)
+
+        # check group is really removed
+        groups = self.get(GROUPS_URL).json()['groups']
+        for group in groups:
+            self.assertNotEqual(group['id'], group_id)
