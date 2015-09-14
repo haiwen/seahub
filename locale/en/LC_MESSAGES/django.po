@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 14:58+0800\n"
+"POT-Creation-Date: 2015-09-14 15:39+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1135,6 +1135,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_publink_admin.html:16
 #: seahub/templates/sysadmin/sys_repo_trash.html:30
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:30
+#: seahub/templates/sysadmin/sys_virus_scan_records.html:14
 #: seahub/templates/sysadmin/useradmin_table.html:14
 #: seahub/templates/sysadmin/userinfo.html:82
 #: seahub/templates/sysadmin/userinfo.html:147
@@ -6456,10 +6457,6 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:13
 msgid "Virus File"
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_virus_scan_records.html:14
-msgid "Operation"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:25
