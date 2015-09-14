@@ -3673,3 +3673,39 @@ img.thumbnail {
     max-width: 24px;
     max-height: 24px;
 }
+
+/* rename */
+.rename-btn-group {
+    width:376px;
+    height:26px;
+    position:absolute;
+    top:0;
+    margin:0.5em 0 0;
+}
+.rename-input {
+    width:213px;
+    height:24px;
+    border:1px solid #c5c5c5;
+    border-radius:2px;
+    font-size:14px;
+    padding-left:6px;
+    float:left;
+    margin-top:-3px;
+}
+.rename-btn {
+    height:26px;
+    line-height:13px;
+    outline:none;
+    float:left;
+    margin:-3px 0 0 6px;
+    padding:0 8px;
+}
+.cancel-rename {
+    color:#aaa;
+    float:left;
+    margin:-3px 0 0 2px;
+    padding:0 6px;
+}
+.cancel-rename:hover {
+    color:#777;
+}

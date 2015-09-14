@@ -16,7 +16,6 @@ define([
         tagName: 'tr',
 
         template: _.template($('#dirent-tmpl').html()),
-        renameTemplate: _.template($("#rename-form-template").html()),
         mvcpTemplate: _.template($("#mvcp-form-template").html()),
         mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
@@ -26,6 +25,15 @@ define([
 
             this.listenTo(this.model, "change", this.render);
             this.listenTo(this.model, 'remove', this.remove); // for multi dirents: delete, mv
+
+            // hide 'rename-btn-group'
+            app.globalState.renameDialog = false;
+            $(document).click(function(e) {
+                var target = e.target || event.srcElement;
+                if (!$('.rename-input').is(target) && app.globalState.renameDialog) {
+                    $('.cancel-rename').closest('tr').removeClass('hl').find('.cancel-rename').click();
+                }
+            });
         },
 
         render: function() {
@@ -59,6 +67,8 @@ define([
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
             'click .rename': 'rename',
+            'click .rename-btn': 'doRename',
+            'click .cancel-rename': 'cancelRename',
             'click .mv': 'mvcp',
             'click .cp': 'mvcp',
             'click .set-folder-permission': 'setFolderPerm',
@@ -67,13 +77,13 @@ define([
         },
 
         highlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (app.globalState.noFileOpPopup && !app.globalState.renameDialog) {
                 this.$el.addClass('hl').find('.repo-file-op').removeClass('vh');
             }
         },
 
         rmHighlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (app.globalState.noFileOpPopup && !app.globalState.renameDialog) {
                 this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
             }
         },
@@ -212,72 +222,93 @@ define([
         },
 
         rename: function() {
-            var is_dir = this.model.get('is_dir');
-            var title = is_dir ? gettext("Rename Directory") : gettext("Rename File");
             var dirent_name = this.model.get('obj_name');
+            var max_file_name = app.pageOptions.max_file_name;
+            $('.normal, .hidden-op', this.el).hide();
+            $('.dirent-op', this.el).html('');
+            var rename_group = '<p class="rename-btn-group"><input type="text" class="rename-input" value="'
+                + Common.HTMLescape(dirent_name) + '" maxlength=' + max_file_name
+                + ' autocomplete="off"/><button class="rename-btn">' + gettext("save")
+                + '</button><span class="icon-remove fa-1x cancel-rename cspt" title="' + gettext("Cancel") + '"></span></p>';
+            $('.dirent-name', this.el).parent().addClass('pos-rel').html(rename_group);
+            app.globalState.renameDialog = true;
+            app.globalState.noFileOpPopup = true;
+            return false;
+        },
 
-            var form = $(this.renameTemplate({
-                form_title: title,
-                dirent_name: dirent_name
-            }));
-            form.modal({focus:false}); // For 'newname' input: if use the default 'focus:true', text in it will be selected.
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-
-            var op_detail = $('.detail', form);
-            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(dirent_name) + '">' + Common.HTMLescape(dirent_name) + '</span>'));
-
-            var form_id = form.attr('id');
+        doRename: function() {
             var _this = this;
             var dir = this.dirView.dir;
-            form.submit(function() {
-                var new_name = $.trim($('[name="newname"]', form).val());
-                if (!new_name) {
-                    Common.showFormError(form_id, gettext("It is required."));
-                    return false;
-                }
-                if (new_name == dirent_name) {
-                    Common.showFormError(form_id, gettext("You have not renamed it."));
-                    return false;
-                }
-                var post_data = {
-                    'oldname': dirent_name,
-                    'newname': new_name
-                };
-                var post_url = Common.getUrl({
-                    name: is_dir ? 'rename_dir' : 'rename_file',
-                    repo_id: dir.repo_id
-                }) + '?parent_dir=' + encodeURIComponent(dir.path);
-                var after_op_success = function (data) {
-                    var renamed_dirent_data = {
-                        'obj_name': data['newname'],
-                        'last_modified': new Date().getTime()/1000,
-                        'last_update': gettext("Just now"),
-                        'sharelink': '',
-                        'sharetoken': ''
-                    };
-                    if (is_dir) {
-                        /*
-                        $.extend(renamed_dirent_data, {
-                            'p_dpath': data['p_dpath']
-                        });
-                        */
-                    } else {
-                        $.extend(renamed_dirent_data, {
-                            'starred': false
-                        });
-                    }
-                    $.modal.close();
-                    _this.model.set(renamed_dirent_data); // it will trigger 'change' event
-                };
-                Common.ajaxPost({
-                    'form': form,
-                    'post_url': post_url,
-                    'post_data': post_data,
-                    'after_op_success': after_op_success,
-                    'form_id': form_id
-                });
+            var is_dir = this.model.get('is_dir');
+            var dirent_name = this.model.get('obj_name');
+            var form = $('.rename-btn-group', this.el);
+            var rename_btn = $('.rename-btn', this.el);
+            var new_name = $.trim($('.rename-input', this.el).val());
+            if (!new_name) {
+                var empty_error_msg = gettext("File name should not be empty");
+                Common.feedback(empty_error_msg, 'error', 2000);
                 return false;
+            };
+            if (new_name == dirent_name) {
+                _this.cancelRename();
+                return false;
+            };
+            var post_data = {
+                'oldname': dirent_name,
+                'newname': new_name
+            };
+            var post_url = Common.getUrl({
+                name: is_dir ? 'rename_dir' : 'rename_file',
+                repo_id: dir.repo_id
+            }) + '?parent_dir=' + encodeURIComponent(dir.path);
+            var after_op_success = function(data) {
+                var renamed_dirent_data = {
+                    'obj_name': data['newname'],
+                    'last_modified': new Date().getTime()/1000,
+                    'last_update': gettext("Just now"),
+                    'sharelink': '',
+                    'sharetoken': ''
+                };
+                if (is_dir) {
+                    /*
+                    $.extend(renamed_dirent_data, {
+                        'p_dpath': data['p_dpath']
+                    });
+                    */
+                } else {
+                    $.extend(renamed_dirent_data, {
+                        'starred': false
+                    });
+                };
+                _this.model.set(renamed_dirent_data); // it will trigger 'change' event
+            };
+            var after_op_error = function() {
+                var rename_failed_msg = gettext("Rename {placeholder} failed").replace('{placeholder}', Common.HTMLescape(dirent_name));
+                Common.feedback(rename_failed_msg, 'error', 2000);
+                _this.cancelRename();
+            };
+            Common.disableButton(rename_btn);
+            Common.ajaxPost({
+                'form': form,
+                'post_url': post_url,
+                'post_data': post_data,
+                'after_op_success': after_op_success,
+                'after_op_error': after_op_error
             });
+            app.globalState.renameDialog = false;
+            return false;
+        },
+
+        cancelRename: function() {
+            var original_dirent_data = {
+                'obj_name': this.model.get('obj_name'),
+                'last_modified': this.model.get('last_modified'),
+                'last_update': this.model.get('last_update'),
+                'sharelink': '',
+                'sharetoken': ''
+            };
+            this.model.set({'obj_name': ''}).set(original_dirent_data);
+            app.globalState.renameDialog = false;
             return false;
         },
 
