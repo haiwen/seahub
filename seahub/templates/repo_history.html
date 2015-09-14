@@ -5,74 +5,76 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block main_panel %}
-<h2><span class="op-target">{{repo.props.name}}</span> {% trans "modification history" %}</h2>
+<h3 class="hd"><span class="op-target">{{repo.props.name}}</span> {% trans "modification history" %}</h3>
 
-{% if user_perm == 'rw' %}
-<p class="tip">{% trans "Tip: A snapshot will be generated after modification, which records the library state before this modification."%}<a href="{% url 'repo_view_snapshot' repo.props.id %}">{% trans "View Snapshot"%}</a></p>
-{% endif %}
+<div class="commit-list-container">
+    <table class="commit-list">
+        <tr>
+            <th width="46%">{% trans "Description"%}</th>
+            <th width="15%">{% trans "Time" %}</th>
+            <th width="22%">{% trans "Modifier"%}</th>
+            <th width="17%">{% trans "Operation"%}</th>
+        </tr>
 
-<div class="commit-list-outer-container">
-    <div class="commit-list-inner-container">
-        <table class="commit-list">
-            <tr>
-                <th width="20%" class="time">{% trans "Time" %}</th>
-                <th width="20%">{% trans "Modifier"%}</th>
-                <th width="60%">{% trans "Description"%}</th>
-            </tr>
-
-            {% for commit in commits %}
-            {% if commit.show %}
-            <tr>
-                <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
-                <td>
-                {% if commit.creator_name %}
-                    {% if not commit.second_parent_id %}
-                    {% avatar commit.creator_name 16 %}
-                    <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
-                    {% else %}
-                    {% trans "None"%}
-                    {% endif %}
-                {% else %}
-                    {% trans "Unknown"%}
+        {% for commit in commits %}
+        {% if commit.show %}
+        <tr>
+            <td>
+                {{ commit.props.desc|translate_commit_desc }}
+                {% if page_next or not forloop.last %}
+                <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
                 {% endif %}
-                </td>
-                <td>
-                    {{ commit.props.desc|translate_commit_desc }}
-                    {% if page_next or not forloop.last %}
-                    <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
-                    {% endif %}
-                </td>
-            </tr>
-            {% endif %}
-            {% endfor %}
-        </table>
-        <div id="paginator">
-            {% if current_page != 1 %}
-            <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>
-            {% endif %}
-            {% if page_next %}
-            <a href="?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
-            {% endif %}
-            {% if current_page != 1 or page_next %}
-            |
-            {% endif %}
-            <span>{% trans "Per page: "%}</span>
-            {% if per_page == 25 %}
-            <span> 25 </span>
+            </td>
+            <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
+            <td>
+            {% if commit.creator_name %}
+                {% if not commit.second_parent_id %}
+                {% avatar commit.creator_name 16 %}
+                <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
+                {% else %}
+                {% trans "None"%}
+                {% endif %}
             {% else %}
-            <a href="?per_page=25" class="per-page">25</a>
+                {% trans "Unknown"%}
             {% endif %}
-            {% if per_page == 50 %}
-            <span> 50 </span>
-            {% else %}
-            <a href="?per_page=50" class="per-page">50</a>
-            {% endif %}
-            {% if per_page == 100 %}
-            <span> 100 </span> 
-            {% else %}
-            <a href="?per_page=100" class="per-page">100</a>
-            {% endif %}
-        </div>
+            </td>
+            <td>
+                {% if current_page != 1 or not forloop.first %}
+                <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh">{% trans "View Snapshot"%}</a>
+                {% else %}
+                <span class="op vh">{% trans "Current Version"%}</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+    <div id="paginator">
+        {% if current_page != 1 %}
+        <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous"%}</a>
+        {% endif %}
+        {% if page_next %}
+        <a href="?page={{ next_page }}&per_page={{ per_page }}">{% trans "Next"%}</a>
+        {% endif %}
+        {% if current_page != 1 or page_next %}
+        |
+        {% endif %}
+        <span>{% trans "Per page: "%}</span>
+        {% if per_page == 25 %}
+        <span> 25 </span>
+        {% else %}
+        <a href="?per_page=25" class="per-page">25</a>
+        {% endif %}
+        {% if per_page == 50 %}
+        <span> 50 </span>
+        {% else %}
+        <a href="?per_page=50" class="per-page">50</a>
+        {% endif %}
+        {% if per_page == 100 %}
+        <span> 100 </span> 
+        {% else %}
+        <a href="?per_page=100" class="per-page">100</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}
