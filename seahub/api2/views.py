@@ -2265,20 +2265,22 @@ class DirView(APIView):
                                                                     new_dir_name)
                 try:
                     seafile_api.post_dir(repo_id, parent_dir,
-                                        new_dir_name_utf8, username)
-                except SearpcError, e:
+                                         new_dir_name_utf8, username)
+                except SearpcError as e:
+                    logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
-                                    'Failed to make directory.')
+                                     'Failed to make directory.')
             else:
                 if not is_seafile_pro():
-                    return api_error(HTTP_400_BAD_REQUEST,
-                                    'Feature not supported.')
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     'Feature not supported.')
                 try:
                     seafile_api.mkdir_with_parents(repo_id, '/',
                                                    path[1:], username)
-                except SearpcError, e:
+                except SearpcError as e:
+                    logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
-                                    'Failed to make directory.')
+                                     'Failed to make directory.')
                 new_dir_name_utf8 = os.path.basename(path).encode('utf-8')
 
             if request.GET.get('reloaddir', '').lower() == 'true':
