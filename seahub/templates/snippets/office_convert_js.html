@@ -69,8 +69,13 @@ OfficePreviewer.prototype.check_page_status = function() {
                 setTimeout($.proxy(this.check_page_status, this), 2000);
                 break;
             case 'ERROR':
-                var str = "{% trans "Document convertion failed." %}";
-                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                if (page == 1) {
+                    var str = "{% trans "Document convertion failed." %}";
+                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                } else {
+                    $('.page-container:last').clone().css({'background':'#fff'}).html('<p class="error alc" style="margin-top:6em;">' + "{% trans "Failed to load this page." %}" + '</p>').appendTo($('#pages'));
+                    $('#file-view .loading-tip').hide();
+                }
                 break;
             case 'DONE':
                 var info = data['info'];
@@ -90,7 +95,12 @@ OfficePreviewer.prototype.check_page_status = function() {
             } else {
                 str = "{% trans "Failed. Please check the network." %}";
             }
-            $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+            if (page == 1) {
+                $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+            } else {
+                $('.page-container:last').clone().css({'background':'#fff'}).html('<p class="error alc" style="margin-top:6em;">' + str + '</p>').appendTo($('#pages'));
+                $('#file-view .loading-tip').hide();
+            }
         }
     });
 };
