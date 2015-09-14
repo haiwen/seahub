@@ -318,13 +318,14 @@ def group_rename(request, group_id):
         raise Http404
 
     new_name = request.POST.get('new_name', '')
+    new_name = new_name.strip()
     next = request.META.get('HTTP_REFERER', SITE_ROOT)
     group_id = int(group_id)
 
     try:
         rename_group_with_new_name(request, group_id, new_name)
     except BadGroupNameError:
-        messages.error(request, _('Failed to rename group, group name can only contain letters, numbers or underscore'))
+        messages.error(request, _('Failed to rename group, group name can only contain letters, numbers, blank, hyphen or underscore'))
     except ConflictGroupNameError:
         messages.error(request, _('There is already a group with that name.'))
     else:

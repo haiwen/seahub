@@ -22,6 +22,50 @@ class GroupAddTest(TestCase, Fixtures):
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         assert json.loads(resp.content)['success'] is True
 
+    def test_can_add_with_blank(self):
+        self.client.post(
+            reverse('auth_login'), {'username': self.user.username,
+                                    'password': 'secret'}
+        )
+
+        resp = self.client.post(reverse('group_add'), {
+            'group_name': 'test group %s' % randstring(6)
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        assert json.loads(resp.content)['success'] is True
+
+    def test_can_add_with_hyphen(self):
+        self.client.post(
+            reverse('auth_login'), {'username': self.user.username,
+                                    'password': 'secret'}
+        )
+
+        resp = self.client.post(reverse('group_add'), {
+            'group_name': 'test-group-%s' % randstring(6)
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        assert json.loads(resp.content)['success'] is True
+
+    def test_can_add_with_blank_and_hyphen(self):
+        self.client.post(
+            reverse('auth_login'), {'username': self.user.username,
+                                    'password': 'secret'}
+        )
+
+        resp = self.client.post(reverse('group_add'), {
+            'group_name': 'test-group %s' % randstring(6)
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        assert json.loads(resp.content)['success'] is True
+
+    def test_can_not_add_with_invalid_name(self):
+        self.client.post(
+            reverse('auth_login'), {'username': self.user.username,
+                                    'password': 'secret'}
+        )
+
+        resp = self.client.post(reverse('group_add'), {
+            'group_name': 'test*group(name)'
+        }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        self.assertEqual(400, resp.status_code)
+
 class GroupDiscussTest(TestCase, Fixtures):
     def setUp(self):
         grp = self.group
