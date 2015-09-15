@@ -70,18 +70,18 @@ define([
                 });
 
                 // hide 'hidden-op' popup
-                app.globalState.noFileOpPopup = true;
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
-                    var popup = $('.hidden-op');
-                    if (!app.globalState.noFileOpPopup &&
-                        !$('.more-op-icon, .hidden-op').is(target) &&
-                        !popup.find('*').is(target)) {
-                        popup.addClass('hide');
-                        app.globalState.noFileOpPopup = true;
-                        if (!app.globalState.popup_tr.find('*').is(target)) {
-                            app.globalState.popup_tr.removeClass('hl').find('.repo-file-op').addClass('vh'); // clicked place: the first tr, place out of the table
-                            $('.repo-file-list tr:gt(0)').each(function() { // when other tr is clicked
+                    var $popup = $('.hidden-op:visible');
+                    if ($popup.length > 0 &&  // There is a visible popup
+                        !$('.more-op-icon', $popup.closest('tr')).is(target) &&
+                        !$popup.is(target) &&
+                        !$popup.find('*').is(target)) {
+                        $popup.addClass('hide');
+                        var $tr = $popup.closest('tr');
+                        if (!$tr.find('*').is(target)) {
+                            $tr.removeClass('hl').find('.repo-file-op').addClass('vh');
+                            $('.repo-file-list tr:gt(0)').each(function() {
                                 if ($(this).find('*').is(target)) {
                                     $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
                                 }

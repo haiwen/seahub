@@ -67,13 +67,13 @@ define([
         },
 
         highlight: function() {
-            if (app.globalState.noFileOpPopup && !$('#rename-form').length) {
+            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
                 this.$el.addClass('hl').find('.repo-file-op').removeClass('vh');
             }
         },
 
         rmHighlight: function() {
-            if (app.globalState.noFileOpPopup && !$('#rename-form').length) {
+            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
                 this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
             }
         },
@@ -147,7 +147,6 @@ define([
                 popup = this.$('.hidden-op');
 
             if (popup.hasClass('hide')) { // the popup is not shown
-
                 popup.css({'left': icon.position().left});
                 if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
                     // below the icon
@@ -155,14 +154,9 @@ define([
                 } else {
                     popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
                 }
-
                 popup.removeClass('hide');
-                app.globalState.noFileOpPopup = false;
-                app.globalState.popup_tr = icon.parents('tr');
             } else {
                 popup.addClass('hide');
-                app.globalState.noFileOpPopup = true;
-                app.globalState.popup_tr = '';
             }
         },
 
@@ -199,7 +193,6 @@ define([
                 dataType: 'json',
                 success: function(data) {
                     dir.remove(model);
-                    app.globalState.noFileOpPopup = true; // make other items can work normally when hover
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
@@ -515,7 +508,6 @@ define([
                         'locked_by_me': true,
                         'lock_owner_name': app.pageOptions.name
                     });
-                    app.globalState.noFileOpPopup = true;
                     _this.$el.removeClass('hl');
                 }
             });
@@ -530,7 +522,6 @@ define([
                     _this.model.set({
                         'is_locked': false
                     });
-                    app.globalState.noFileOpPopup = true;
                     _this.$el.removeClass('hl');
                 }
             });
