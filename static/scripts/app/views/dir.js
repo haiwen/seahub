@@ -95,10 +95,18 @@ define([
                     var target =  e.target || event.srcElement;
                     var $form = $('#rename-form');
                     if ($form.length && !$form.find('*').is(target)) {
+                        var $tr = $form.closest('tr'); // get $tr before $form removed in `.cancel click()`
                         $('.cancel', $form).click();
+                        if (!$tr.find('*').is(target)) {
+                            $tr.removeClass('hl').find('.repo-file-op').addClass('vh');
+                            $('.repo-file-list tr:gt(0)').each(function() {
+                                if ($(this).find('*').is(target)) {
+                                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+                                }
+                            });
+                        }
                     }
                 });
-
             },
 
             showDir: function(category, repo_id, path) {

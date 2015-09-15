@@ -222,6 +222,8 @@ define([
             $op.hide();
             $name.hide();
 
+            this.$('.hidden-op').addClass('hide');
+
             var cancelRename = function() {
                 form.remove();
                 $op.show();
@@ -229,8 +231,7 @@ define([
                 $td.attr('colspan', 1).css({
                     'width': $name.width()
                 });
-
-                _this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
+                return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
             $('.cancel', form).click(cancelRename);
 
