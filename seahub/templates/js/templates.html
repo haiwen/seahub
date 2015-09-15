@@ -136,12 +136,12 @@
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     <% if (path == '/') { %>
-    <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
+    <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}"></a>
     <% if (user_perm == 'rw') { %>
-    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
+    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
     <% } %>
     <% if (is_repo_owner && !is_virtual) { %>
-    <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+    <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" title="{% trans 'Settings' %}"></a>
     <% } %>
     <% } %>
 </script>
@@ -294,7 +294,7 @@
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "History" %}</a></li>
+                <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
                 <% if (is_pro) { %>
                     <% if (dirent.is_locked) { %>
                         <% if (dirent.locked_by_me) { %>
