@@ -1,0 +1,28 @@
+{% load seahub_tags i18n %}
+<table>
+    <tr>
+        <th width="26%">{% trans "Name" %}</th>
+        <th width="25%">{% trans "Creator" %}</th>
+        <th width="17%">{% trans "Space Used" %}</th>
+        <th width="20%">{% trans "Created At / Expiration" %}</th>
+        <th width="12%">{% trans "Operations" %}</th>
+    </tr>
+    {% for org in orgs %}
+    <tr>
+        <td>
+            <a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a>
+            {% if org.trial_info %}
+            <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ org.org_name }}" data-url="{% url 'remove_trial' org.org_id %}">X</a>)</p>
+            {% endif %}
+        </td>
+        <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
+        <td>
+            {{ org.quota_usage|filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|filesizeformat }} {% endif %}
+        </td>
+        <td>{{ org.ctime|tsstr_sec }} <br/>
+            <span class="{% if org.is_expired %}error{% endif %}">{% if org.expiration %}{{ org.expiration|date:'Y-m-d H:i:s' }}{% else %}--{% endif %}</span>
+        </td>
+        <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td>
+    </tr>
+    {% endfor %}
+</table>

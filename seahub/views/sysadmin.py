@@ -13,6 +13,7 @@ from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_emailusers, \
@@ -1159,10 +1160,22 @@ def sys_org_admin(request):
         org.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
         org.total_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
 
+        from seahub_extra.organizations.settings import ORG_TRIAL_DAYS
+        if ORG_TRIAL_DAYS > 0:
+            from datetime import timedelta
+            org.expiration = datetime.datetime.fromtimestamp(org.ctime / 1e6) + timedelta(days=ORG_TRIAL_DAYS)
+
         org.trial_info = None
         for trial_org in trial_orgs:
             if trial_org.user_or_org == str(org.org_id):
                 org.trial_info = {'expire_date': trial_org.expire_date}
+                if trial_org.expire_date:
+                    org.expiration = trial_org.expire_date
+
+        if org.expiration:
+            org.is_expired = True if org.expiration < timezone.now() else False
+        else:
+            org.is_expired = False
 
     if len(orgs_plus_one) == per_page + 1:
         page_next = True
@@ -1177,6 +1190,39 @@ def sys_org_admin(request):
             'per_page': per_page,
             'page_next': page_next,
             }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_org_search(request):
+    org_name = request.GET.get('name', '').lower()
+    creator = request.GET.get('creator', '').lower()
+    if not org_name and not creator:
+        return HttpResponseRedirect(reverse('sys_org_admin'))
+
+    orgs = []
+    orgs_all = ccnet_threaded_rpc.get_all_orgs(-1, -1)
+
+    if org_name and creator:
+        for o in orgs_all:
+            if org_name in o.org_name.lower() and creator in o.creator.lower():
+                orgs.append(o)
+    else:
+        if org_name:
+            for o in orgs_all:
+                if org_name in o.org_name.lower():
+                    orgs.append(o)
+
+        if creator:
+            for o in orgs_all:
+                if creator in o.creator.lower():
+                    orgs.append(o)
+
+    return render_to_response(
+        'sysadmin/sys_org_search.html', {
+            'orgs': orgs,
+            'name': org_name,
+            'creator': creator,
+        }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
