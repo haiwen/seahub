@@ -570,13 +570,14 @@ def sys_user_admin_admins(request):
 @login_required
 @sys_staff_required
 def user_info(request, email):
-    owned_repos = mute_seafile_api.get_owned_repo_list(email)
     org_name = None
     space_quota = space_usage = 0
     share_quota = share_usage = 0
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
     if not org:
+        owned_repos = mute_seafile_api.get_owned_repo_list(email)
+        in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
         space_usage = mute_seafile_api.get_user_self_usage(email)
         space_quota = mute_seafile_api.get_user_quota(email)
         if CALC_SHARE_USAGE:
@@ -588,9 +589,8 @@ def user_info(request, email):
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
                                                                      email)
         space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, email)
-
-    # Repos that are share to user
-    in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
+        owned_repos = seafile_api.get_org_owned_repo_list(org_id, email)
+        in_repos = seafile_api.get_org_share_in_repo_list(org_id, email, -1, -1)
 
     # get user profile
     profile = Profile.objects.get_profile_by_user(email)
