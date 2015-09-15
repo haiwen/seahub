@@ -33,5 +33,11 @@ class ServerInfoView(APIView):
         if DISABLE_SYNC_WITH_ANY_FOLDER:
             features.append('disable-sync-with-any-folder')
 
+        if hasattr(settings, 'DESKTOP_CUSTOM_LOGO'):
+            info['desktop-custom-logo'] = settings.MEDIA_URL + getattr(settings, 'DESKTOP_CUSTOM_LOGO')
+
+        if hasattr(settings, 'DESKTOP_CUSTOM_BRAND'):
+            info['desktop-custom-brand'] = getattr(settings, 'DESKTOP_CUSTOM_BRAND')
+
         info['features'] = features
         return info
