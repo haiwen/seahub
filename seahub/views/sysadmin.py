@@ -362,6 +362,33 @@ def _populate_user_quota_usage(user):
 def sys_user_admin(request):
     """List all users from database.
     """
+    try:
+        from seahub_extra.plan.models import UserPlan
+        enable_user_plan = True
+    except ImportError:
+        enable_user_plan = False
+
+    if enable_user_plan and request.GET.get('filter', '') == 'paid':
+        # show paid users
+        users = []
+        ups = UserPlan.objects.all()
+        for up in ups:
+            u = User.objects.get(up.username)
+            _populate_user_quota_usage(u)
+            users.append(u)
+
+        last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
+        for u in users:
+            for e in last_logins:
+                if e.username == u.username:
+                    u.last_login = e.last_login
+
+        return render_to_response('sysadmin/sys_useradmin_paid.html', {
+            'users': users,
+            'enable_user_plan': enable_user_plan,
+        }, context_instance=RequestContext(request))
+
+    ### List all users
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -426,6 +453,7 @@ def sys_user_admin(request):
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
             'pro_server': pro_server,
+            'enable_user_plan': enable_user_plan,
         }, context_instance=RequestContext(request))
 
 @login_required
@@ -1148,14 +1176,44 @@ def sys_org_admin(request):
         current_page = 1
         per_page = 25
 
+    try:
+        from seahub_extra.plan.models import OrgPlan
+        enable_org_plan = True
+    except ImportError:
+        enable_org_plan = False
+
+    if enable_org_plan and request.GET.get('filter', '') == 'paid':
+        orgs = []
+        ops = OrgPlan.objects.all()
+        for e in ops:
+            o = ccnet_threaded_rpc.get_org_by_id(e.org_id)
+            o.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(o.org_id)
+            o.total_quota = seafserv_threaded_rpc.get_org_quota(o.org_id)
+            o.expiration = e.expire_date
+            o.is_expired = True if e.expire_date < timezone.now() else False
+            orgs.append(o)
+
+        return render_to_response('sysadmin/sys_org_admin.html', {
+            'orgs': orgs,
+            'enable_org_plan': enable_org_plan,
+            'hide_paginator': True,
+            'paid_page': True,
+            }, context_instance=RequestContext(request))
+
     orgs_plus_one = ccnet_threaded_rpc.get_all_orgs(per_page * (current_page - 1),
                                                     per_page + 1)
+    if len(orgs_plus_one) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
     orgs = orgs_plus_one[:per_page]
 
     if ENABLE_TRIAL_ACCOUNT:
         trial_orgs = TrialAccount.objects.filter(user_or_org__in=[x.org_id for x in orgs])
     else:
         trial_orgs = []
+
     for org in orgs:
         org.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(org.org_id)
         org.total_quota = seafserv_threaded_rpc.get_org_quota(org.org_id)
@@ -1177,11 +1235,6 @@ def sys_org_admin(request):
         else:
             org.is_expired = False
 
-    if len(orgs_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
     return render_to_response('sysadmin/sys_org_admin.html', {
             'orgs': orgs,
             'current_page': current_page,
@@ -1189,6 +1242,8 @@ def sys_org_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'enable_org_plan': enable_org_plan,
+            'all_page': True,
             }, context_instance=RequestContext(request))
 
 @login_required

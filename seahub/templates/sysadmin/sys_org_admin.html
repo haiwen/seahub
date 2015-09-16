@@ -9,8 +9,13 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="hd ovhd">
-    <h3 class="fleft">{% trans "All Organizations" %}</h3>
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab {% if all_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}">{% trans "All" %}</a></li>
+        {% if enable_org_plan %}
+        <li class="tabnav-tab {% if paid_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}?filter=paid">{% trans "Paid" %}</a></li>
+        {% endif %}
+    </ul>
     <button id="add-btn" class="fright">{% trans "Add organization" %}</button>
 </div>
 
@@ -34,11 +39,16 @@
 </form>
 
 {% if orgs %}
+
 {% include "sysadmin/org_admin_table.html" %}
-{% include "snippets/admin_paginator.html" %}
+
+  {% if not hide_paginator %}
+  {% include "snippets/admin_paginator.html" %}
+  {% endif %}
 {% else %}
 <p>{% trans "None." %}</p>
 {% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
