@@ -610,7 +610,8 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Share failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.")
                     }
@@ -668,7 +669,8 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Share failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.")
                     }
