@@ -96,7 +96,7 @@
     text-transform: none;
     -webkit-font-smoothing: antialiased;
 }
-.sf2-icon-histograms:before { content:"\e000"; }
+.sf2-icon-histogram:before { content:"\e000"; }
 .sf2-icon-system:before { content:"\e001"; }
 .sf2-icon-activities:before { content:"\e002"; }
 .sf2-icon-bell:before { content:"\e003"; }
@@ -124,6 +124,10 @@
 .sf2-icon-eye:before { content:"\e019"; }
 .sf2-icon-drop-down:before { content:"\e01a"; }
 .sf2-icon-enable-modules:before { content:"\e01b"; }
+.sf2-icon-minus:before { content:"\e01c"; }
+.sf2-icon-x1:before { content:"\e01d"; }
+.sf2-icon-tick:before { content:"\e01e"; }
+.sf2-icon-x2:before { content:"\e01f"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -2048,6 +2052,11 @@ textarea:-moz-placeholder {/* for FF */
     position:absolute;
     top:10px;
     right:10px;
+}
+.fixed-upload-file-dialog .op-icon {
+    font-size:18px;
+    color: #b8b8b8;
+    margin:0; 
 }
 .fixed-upload-file-dialog .close,
 .fileupload-buttonbar .cancel {
