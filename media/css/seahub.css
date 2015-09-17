@@ -1227,10 +1227,12 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
 }
 #info-bar .close {
-    cursor:pointer;
     position:absolute;
     right:5px;
     top:5px;
+    color:#d6ba8f;
+    font-size:16px;
+    margin:0;
 }
 #info-bar-info {
     margin:3px 0;
@@ -1290,6 +1292,11 @@ textarea:-moz-placeholder {/* for FF */
     top:.5em;
     right:10px;
     cursor:pointer;
+}
+#notice-popup .close {
+    font-size:16px;
+    color:#b9b9b9;
+    margin:0;
 }
 #notice-popup li {
     padding:9px 0 3px;

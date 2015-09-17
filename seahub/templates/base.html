@@ -22,7 +22,7 @@
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
-            <img src="{{ MEDIA_URL }}img/del.png" class="close" data="{{ request.cur_note.id }}" />
+            <span class="close sf2-icon-x1 op-icon" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -59,7 +59,7 @@
                             <ul class="hide" id="notice-list" data-url="{% url 'set_notice_seen_by_id' %}"></ul>
                             <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
                         </div>
-                        <img src="{{ MEDIA_URL }}img/del.png" class="close" data-url="{% url 'set_notices_seen' %}" />
+                        <span class="close sf2-icon-x1 op-icon" data-url="{% url 'set_notices_seen' %}" title="{% trans "Close" %}"></span>
                     </div>
                 </div>
 
