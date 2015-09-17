@@ -10,7 +10,7 @@
 <div class="commit-list-container">
     <table class="commit-list">
         <tr>
-            <th width="46%">{% trans "Description"%}</th>
+            <th width="46%" class="description">{% trans "Description"%}</th>
             <th width="15%">{% trans "Time" %}</th>
             <th width="22%">{% trans "Modifier"%}</th>
             <th width="17%">{% trans "Operation"%}</th>
@@ -19,13 +19,13 @@
         {% for commit in commits %}
         {% if commit.show %}
         <tr>
-            <td>
+            <td class="description">
                 {{ commit.props.desc|translate_commit_desc }}
                 {% if page_next or not forloop.last %}
                 <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
                 {% endif %}
             </td>
-            <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
+            <td>{{ commit.ctime|translate_seahub_time }}</td>
             <td>
             {% if commit.creator_name %}
                 {% if not commit.second_parent_id %}

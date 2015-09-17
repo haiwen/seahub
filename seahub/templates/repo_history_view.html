@@ -6,56 +6,57 @@
 {% block extra_style %}
 <style type="text/css">
 #main { position: relative; }
-.go-back { top:6px; }
+.go-back { top:-3px; }
 </style>
 {% endblock %}
 
 {% block main_panel %}
+    <h2>
+        <span class="op-target">{{repo.props.name}}</span> {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
+    </h2>
+
+    {% if path == '/' %}
+    <div id="repo-latest-commit">
+        <p class="commit-msg">
+            <span class="author">
+                {% if current_commit.props.creator_name %}
+                <a class="name" href="{% url 'user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|email2nickname }}</a>
+                {% else %}
+                {% trans "Unknown"%}
+                {% endif %}
+            </span>
+            {{ current_commit.props.desc|translate_commit_desc }}
+            <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
+        </p>
+    </div>
+    {% endif %}
+
     <a href="{{ SITE_ROOT }}repo/history/{{ repo.props.id }}/" class="go-back" title="{% trans "Back to modification history"%}">
         <span class="icon-chevron-left"></span>
     </a>
+
     <div class="hd">
-        <h3 class="fleft">
-            <span class="op-target">{{repo.props.name}}</span> {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span>
-        </h3>
+        <p class="fleft path">
+            {% trans "Current path: "%}
+            {% for name, link in zipped %}
+            {% if not forloop.last %}
+            <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
+            {% else %}
+            {{ name }}
+            {% endif %}
+            {% endfor %}
+        </p>
         {% if is_repo_owner %}
         <button data-url="{% url 'seahub.views.repo_history_revert' repo.id %}?commit_id={{ current_commit.id }}" class="repo-revert fright">{% trans "Restore"%}</button>
         {% endif %}
     </div>
     
     <div class="repo-file-list-container">
-        {% if path == '/' %}
-        <div id="repo-latest-commit">
-            <p class="commit-msg">
-                <span class="author">
-                    {% if current_commit.props.creator_name %}
-                    {% avatar current_commit.props.creator_name 20 %}
-                    <a class="name" href="{% url 'user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|email2nickname }}</a>
-                    {% else %}
-                    {% trans "Unknown"%}
-                    {% endif %}
-                </span>
-                {{ current_commit.props.desc|translate_commit_desc }}
-                <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
-            </p>
-        </div>
-        {% endif %}
-
         {% if not user_perm %}
         <div class="repo-file-list-not-show">
             <p class="access-notice">{% trans "Can't view this library"%}</p>
         </div>
         {% else %}
-        <p class="path">
-        {% trans "Current path: "%}
-        {% for name, link in zipped %}
-        {% if not forloop.last %}
-        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ current_commit.id }}&p={{ link|urlencode }}">{{ name }}</a> /                 
-        {% else %}
-        {{ name }}
-        {% endif %}
-        {% endfor %}
-        </p>
         <!-- /.repo-file-list-topbar -->
         <table class="repo-file-list">
             <tr>
