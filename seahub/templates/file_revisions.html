@@ -5,8 +5,19 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block main_panel %}
+<h2><span class="op-target">{{ u_filename }}</span>{% trans " Version History" %}</h2>
+<p class="tip"><span class="icon-lightbulb vam"></span>{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
 <div class="hd">
-    <h3 class="fleft"><span class="op-target">{{ u_filename }}</span>{% trans "'s Version History" %}</h3>
+    <p class="fleft path">
+        {% trans 'Current Path:' %}
+        {% for name, link in zipped %}
+        {% if not forloop.last %}
+        <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
+        {% else %}
+        <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
+        {% endif %}
+        {% endfor %}
+    </p>
     <span class="fright">
         {% if days != 7 %}
         <a href="?p={{path|urlencode}}&days=7">{% trans "a week" %}</a> /
@@ -25,21 +36,10 @@
         {% endif %}
     </span>
 </div>
-<div class="file-revision-container">
-    <p class="tip"><span class="icon-lightbulb vam"></span>{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
-    <p class="path">
-        {% trans 'Current Path:' %}
-        {% for name, link in zipped %}
-        {% if not forloop.last %}
-        <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
-        {% else %}
-        <a href="{% url 'view_lib_file' repo.id path|urlencode %}" target="_blank" >{{ name }}</a>
-        {% endif %}
-        {% endfor %}
-    </p>
+<div class="commit-list-container">
     <table class="commit-list">
         <tr>
-            <th width="22%">{% trans 'Time' %}</th>
+            <th width="22%" class="time">{% trans 'Time' %}</th>
             <th width="26%">{% trans 'Modifier' %}</th>
             <th width="18%">{% trans 'Size' %}</th>
             <th width="34%">{% trans 'Operations' %}</th>
