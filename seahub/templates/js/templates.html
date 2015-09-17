@@ -97,7 +97,7 @@
             <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
                 <%= groups[i].avatar %>
                 <span class="name ellipsis vam"><%= groups[i].name %></span>
-                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="op-icon sf2-icon-notifications vh"></a>
+                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="op-icon sf2-icon-msgs vh"></a>
             </li>
             <% } %>
         </ul>
@@ -136,7 +136,7 @@
     <% if (path == '/') { %>
         <div class="fright">
             <% if (is_repo_owner && !is_virtual) { %>
-            <a class="op-link sf2-icon-settings" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+            <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
             <% } %>
             <% if (user_perm == 'rw') { %>
             <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
@@ -213,7 +213,7 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-drop-down op-icon" title="{% trans "More operations" %}"></span>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -289,7 +289,7 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-drop-down op-icon" title="{% trans "More Operations"%}"></span>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -543,14 +543,14 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
         <% if (can_add_repo) { %>
-        <span id="myhome-enable-mods" class="sf2-icon-enable-modules op-icon fright" title="{% trans "Enable Modules" %}"></span>
+        <span id="myhome-enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#"><span class="sf2-icon-libraries"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-starred"></span>{% trans "Starred" %}</a></li>
+        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
         <% if (events_enabled) { %>
-        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-activities"></span>{% trans "Activities" %}</a></li>
+        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
@@ -559,16 +559,16 @@
             <% } %>
         <% } %>
 
-        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-devices"></span>{% trans "Devices" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <% if (can_add_repo) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/"><span class="sf2-icon-libraries"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/"><span class="sf2-icon-folders"></span>{% trans "Folders" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
         <% } %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/links/"><span class="sf2-icon-links"></span>{% trans "Links" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/links/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
     </ul>
 </script>
 <script type="text/template" id="myhome-mods-enable-form-tmpl">
@@ -599,17 +599,17 @@
             <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
         </h3>
         <% if (is_staff) { %>
-            <span id="enable-mods" class="sf2-icon-enable-modules op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
+            <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
         <% } %>
         <% if (is_pub) { %>
             <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-libraries"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
 
         <% if (!is_pub) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-notifications"></span>{% trans "Discussion" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-msgs"></span>{% trans "Discussion" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
@@ -618,10 +618,10 @@
             <% } %>
         <% } %>
 
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-users"></span>{% trans "Members" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
 
         <% if (is_staff) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-system"></span>{% trans "Admin" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-wrench"></span>{% trans "Admin" %}</a></li>
         <% } %>
     </ul>
 </script>
