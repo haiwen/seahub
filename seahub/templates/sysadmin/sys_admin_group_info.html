@@ -56,7 +56,7 @@
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td><a href="{% url 'user_info' repo.user %}">{{ repo.user }}</a></td>
                 <td data-id="{{ repo.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
+                    <div><span class="sf2-icon-delete repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span></div>
                 </td>
             </tr>
             {% endfor %}

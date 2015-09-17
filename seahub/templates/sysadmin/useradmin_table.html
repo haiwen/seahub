@@ -33,7 +33,7 @@
               {% else %}
                 <span class="user-status-cur-value">{% trans "Inactive" %}</span>
               {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-status-edit-icon cspt vh" />
+                <span title="{% trans "Edit"%}" class="user-status-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="permission" class="user-status-select hide">
                 <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
@@ -49,7 +49,7 @@
                 {% else %}
                     <span class="user-role-cur-value">{% trans "Default" %}</span>
                 {% endif %}
-                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="user-role-edit-icon cspt vh" />
+                <span title="{% trans "Edit"%}" class="user-role-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="role" class="user-role-select hide">
                 <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>

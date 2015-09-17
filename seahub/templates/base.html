@@ -22,7 +22,7 @@
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
             <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
-            <img src="{{ MEDIA_URL }}img/del.png" class="close" data="{{ request.cur_note.id }}" />
+            <span class="close sf2-icon-x1 op-icon" data="{{ request.cur_note.id }}" title="{% trans "Close" %}"></span>
         </div>
         {% endif %}
         {% endblock info_bar_message %}
@@ -48,7 +48,7 @@
 
                 <div data-url="{% url 'unseen_notices_count' %}" id="msg-count" class="fleft">
                     <div id="notice-icon" class="cspt" title="{% trans "Notifications" %}">
-                        <img src="{{ MEDIA_URL }}img/bell.png" alt="" />
+                        <span class="sf2-icon-bell"></span>
                         <span class="num hide">0</span>
                     </div>
                     <div id="notice-popup" class="hide" data-url="{% url 'get_popup_notices' %}">
@@ -59,7 +59,7 @@
                             <ul class="hide" id="notice-list" data-url="{% url 'set_notice_seen_by_id' %}"></ul>
                             <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
                         </div>
-                        <img src="{{ MEDIA_URL }}img/del.png" class="close" data-url="{% url 'set_notices_seen' %}" />
+                        <span class="close sf2-icon-x1 op-icon" data-url="{% url 'set_notices_seen' %}" title="{% trans "Close" %}"></span>
                     </div>
                 </div>
 
@@ -187,17 +187,17 @@ $(function() {
     var popup = $('#top-nav-grp-info');
     var popup_con = '<div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div><ul id="top-nav-grp-list">';
     {% for grp in grps %}
-    popup_con += '<li class="item" data-url="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="name ellipsis vam">{{ grp.group_name }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="a vh fright"><img src="{{MEDIA_URL}}img/msgs.png" alt="" /></a> </li>';
+    popup_con += '<li class="item" data-url="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"> {% grp_avatar grp.id 36 %} <span class="name ellipsis vam">{{ grp.group_name }}</span> <a href="{% url 'group_discuss' grp.id %}" title="{% trans "Discussion" %}" class="op-icon sf2-icon-msgs vh"></a></li>';
     {% endfor %}
     popup_con += '</ul>';
     popup_con += '<a href="{% url 'group_list' %}" class="item all-grp">{% trans "All Groups" %}</a>';
     popup.html(popup_con);
     $('.item', popup).hover(
         function() {
-            $(this).addClass('hl').children('.a').removeClass('vh');
+            $(this).addClass('hl').children('a').removeClass('vh');
         },
         function() {
-            $(this).removeClass('hl').children('.a').addClass('vh');
+            $(this).removeClass('hl').children('a').addClass('vh');
         }
     )
     .click(function() {
@@ -205,7 +205,6 @@ $(function() {
     });
 
     popup.css({'right': (grp_nav.outerWidth() - popup.outerWidth())/6 * 5});
-
     grp_nav.parent('.nav-item').hover(
         function() {
             popup.removeClass('hide');

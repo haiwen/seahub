@@ -17,8 +17,8 @@
         <li class="tab"><a href="#settings" class="a" id="settings-tab">{% trans "Settings" %}</a></li>
     </ul>
     <div class="fright">
-        <button id="group-member-add" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Members"%}</span></button>
-        <button id="group-admin-add" class="hide"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Add Admins"%}</span></button>
+        <button id="group-member-add" class="hide"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Members"%}</span></button>
+        <button id="group-admin-add" class="hide"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Admins"%}</span></button>
     </div>
     </div>
     <div id="members">
@@ -36,7 +36,7 @@
                 <td>{{ member.user_name }}</td>
                 <td>
                     {% if member.user_name != request.user.username %}
-                    <img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" class="rm-member op-icon vh" title="{% trans "Delete" %}" />
+                    <span class="sf2-icon-delete rm-member op-icon vh" data-url="{{ SITE_ROOT }}group/{{ group.id }}/member/{{ member.user_name|urlencode }}/?op=delete" data-target="{{ member.user_name }}" title="{% trans "Delete" %}"></span> 
                     {% endif %}
                 </td>
             </tr>
@@ -60,7 +60,7 @@
                 <td>{{ member.user_name }}</td>
                 <td>
                     {% if member.user_name != request.user.username %}
-                    <img src="{{MEDIA_URL}}img/rm.png" alt="" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" class="rm-member op-icon vh" title="{% trans "Delete"%}" />
+                    <span class="sf2-icon-delete rm-member op-icon vh" data-url="{% url 'group_remove_admin' group.id %}?u={{ member.user_name|urlencode }}" data-target="{{ member.user_name }}" title="{% trans "Delete"%}"></span> 
                     {% endif %}
                 </td>
             </tr>

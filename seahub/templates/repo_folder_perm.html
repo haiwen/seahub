@@ -76,7 +76,7 @@
                           {% else %}
                             <span class="perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
-                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                            <span title="{% trans "Edit"%}" class="perm-edit-icon op-icon sf2-icon-edit vh"></span>
                         </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
@@ -84,7 +84,7 @@
                         </select>
                     </td>
                     <td>
-                        <img src="{{MEDIA_URL}}img/rm.png" class="perm-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+                        <span class="perm-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
                     </td>
                 </tr>
                 {% endfor %}
@@ -131,7 +131,7 @@
                               {% else %}
                                 <span class="perm-cur-value">{% trans "Read-Only" %}</span>
                               {% endif %}
-                                <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                                <span title="{% trans "Edit"%}" class="perm-edit-icon op-icon sf2-icon-edit vh"></span>
                             </div>
                             <select class="perm-toggle-select hide">
                                 <option value="rw" {%if perm.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
@@ -139,7 +139,7 @@
                             </select>
                         </td>
                         <td>
-                            <img src="{{MEDIA_URL}}img/rm.png" class="perm-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+                            <span class="perm-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
                         </td>
                     </tr>
                 {% endfor %}

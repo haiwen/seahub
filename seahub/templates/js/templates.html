@@ -36,8 +36,8 @@
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
     <td>
       <div class="op-container">
-        <img src="{{ MEDIA_URL }}img/share-orange.png" alt="" class="repo-share-btn op-icon vh" title="{% trans "Share" %}" />
-        <img src="{{ MEDIA_URL }}img/delete-orange.png" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}" />
+        <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+        <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -58,7 +58,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (is_staff || share_from_me) { %>
-    <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <span class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -80,7 +80,7 @@
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
     <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" class="cancel-share op-icon vh" title="{% trans "Unshare" %}" />
+    <span class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
     <% } %>
     </td>
     <td><%- size_formatted %></td>
@@ -97,9 +97,7 @@
             <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
                 <%= groups[i].avatar %>
                 <span class="name ellipsis vam"><%= groups[i].name %></span>
-                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="a fright vh">
-                    <img src="{{MEDIA_URL}}img/msgs.png" alt="" />
-                </a>
+                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="op-icon sf2-icon-msgs vh"></a>
             </li>
             <% } %>
         </ul>
@@ -136,13 +134,15 @@
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
     <% if (path == '/') { %>
-    <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
-    <% if (user_perm == 'rw') { %>
-    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
-    <% } %>
-    <% if (is_repo_owner && !is_virtual) { %>
-    <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
-    <% } %>
+        <div class="fright">
+            <% if (is_repo_owner && !is_virtual) { %>
+            <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
+            <% } %>
+            <% if (user_perm == 'rw') { %>
+            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
+            <% } %>
+            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
+        </div>
     <% } %>
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
@@ -204,16 +204,16 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <a class="op-icon download sf2-icon-download sf2-x" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+                <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                <span class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></span>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More operations" %}" alt="{% trans "More operations" %}" class="more-op-icon cspt" />
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -280,16 +280,16 @@
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op download" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"><img src="{{ MEDIA_URL }}img/download-orange.png" alt="" /></a>
+                <a class="op-icon download sf2-icon-download sf2-x" href="{{ SITE_ROOT }}repo/<%= repo_id %>/<%= dirent.obj_id %>/download/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a class="op share" href="#" title="{% trans "Share" %}"><img src="{{ MEDIA_URL }}img/share-orange.png" alt="" /></a>
+                <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a class="op delete" href="#" title="{% trans "Delete" %}"><img src="{{ MEDIA_URL }}img/delete-orange.png" alt="" /></a>
+                    <span class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></span>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <img src="{{ MEDIA_URL }}img/more_op.png" title="{% trans "More Operations"%}" alt="{% trans "More Operations"%}" class="more-op-icon cspt" />
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
             <ul class="hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -516,7 +516,7 @@
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-        <img src="{{MEDIA_URL}}img/delete-orange.png" class="unshare-btn op-icon vh" title="{% trans "Leave Share" %}" />
+        <span class="sf2-icon-delete sf2-x unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -543,33 +543,32 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Personal" %}</h3>
         <% if (can_add_repo) { %>
-        <img id="myhome-enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" />
+        <span id="myhome-enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/" class="star">{% trans "Starred" %}</a></li>
-
+        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
         <% if (events_enabled) { %>
-        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/" class="activity">{% trans "Activities" %}</a></li>
+        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}home/wiki/" class="wiki">{% trans "Personal Wiki" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}home/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
             <% } %>
         <% } %>
 
-        <li class="tab"><a href="{{ SITE_ROOT }}devices/" class="clients">{% trans "Devices" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <% if (can_add_repo) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/" class="lib">{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/" class="folders">{% trans "Folders" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
         <% } %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/links/" class="links">{% trans "Links" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}share/links/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
     </ul>
 </script>
 <script type="text/template" id="myhome-mods-enable-form-tmpl">
@@ -600,29 +599,29 @@
             <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
         </h3>
         <% if (is_staff) { %>
-            <img id="enable-mods" class="fright" title="{% trans "Enable Modules" %}" src="{{MEDIA_URL}}img/setting.png" alt="" style="margin:8px 0 0 5px;" />
+            <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
         <% } %>
         <% if (is_pub) { %>
             <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="#group/<%= id %>/" class="lib">{% trans "Libraries" %}</a></li>
+        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
 
         <% if (!is_pub) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/" class="msgs">{% trans "Discussion" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-msgs"></span>{% trans "Discussion" %}</a></li>
         <% } %>
 
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'group wiki') { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/" class="wiki">{% trans "Wiki" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Wiki" %}</a></li>
             <% } %>
         <% } %>
 
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/" class="members">{% trans "Members" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
 
         <% if (is_staff) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/" class="admin">{% trans "Admin" %}</a></li>
+        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-wrench"></span>{% trans "Admin" %}</a></li>
         <% } %>
     </ul>
 </script>
@@ -667,7 +666,7 @@
                 {% trans "Read-Only" %}
             <% } %>
             </span>
-            <img src="{{ MEDIA_URL }}img/edit_12.png" alt="{% trans "Edit" %}" title="{% trans "Edit" %}" class="perm-edit-icon op-icon vh" />
+            <span title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
         </div>
         <select class="perm-toggle-select hide w100">
             <% if (perm == 'rw') { %>
@@ -680,7 +679,7 @@
         </select>
     </td>
     <td>
-        <img src="{{ MEDIA_URL }}img/rm.png" class="delete-icon op-icon vh" alt="" title="{% trans "Delete" %}" />
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -750,7 +749,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <img src="{{MEDIA_URL}}img/rm.png" alt="" class="unstar op-icon vh" title="{% trans "Unstar" %}" />
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">

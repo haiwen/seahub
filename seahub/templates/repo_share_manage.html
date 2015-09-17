@@ -61,7 +61,7 @@
                           {% else %}
                             <span class="share-perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
-                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
                         </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
@@ -69,7 +69,7 @@
                         </select>
                     </td>
                     <td>
-                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&to={{ share.user|urlencode }}&permission={{ share.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&to={{ share.user|urlencode }}&permission={{ share.permission }}" class="cancel-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -94,7 +94,7 @@
                           {% else %}
                             <span class="perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
-                            <img src="{{MEDIA_URL}}img/edit_12.png" alt="{% trans "Edit"%}" title="{% trans "Edit"%}" class="perm-edit-icon cspt vh" />
+                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
                         </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
@@ -102,7 +102,7 @@
                         </select>
                     </td>
                     <td>
-                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ share.group_id }}&permission={{ share.permission }}" class="cancel-share op-icon vh" title="{% trans "Unshare"%}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a>
+                        <a href="{% url 'repo_remove_share' %}?repo_id={{ share.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ share.group_id }}&permission={{ share.permission }}" class="cancel-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -21,9 +21,6 @@
     min-width: 100px;
     white-space:nowrap;
 }
-.displayed-op .op {
-    margin-left:5px;
-}
 .hidden-op a {
     color:#444;
 }
