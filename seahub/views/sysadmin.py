@@ -1300,6 +1300,35 @@ def sys_org_rename(request, org_id):
 
     return HttpResponseRedirect(next)
 
+@login_required
+@require_POST
+@sys_staff_required
+def sys_org_remove(request, org_id):
+    """Remove an org and all members/repos/groups.
+
+    Arguments:
+    - `request`:
+    - `org_id`:
+    """
+    org_id = int(org_id)
+    org = ccnet_threaded_rpc.get_org_by_id(org_id)
+    users = ccnet_threaded_rpc.get_org_emailusers(org.url_prefix, -1, -1)
+    for u in users:
+        ccnet_threaded_rpc.remove_org_user(org_id, u.email)
+
+    groups = ccnet_threaded_rpc.get_org_groups(org.org_id, -1, -1)
+    for g in groups:
+        ccnet_threaded_rpc.remove_org_group(org_id, g.gid)
+
+    # remove org repos
+    seafserv_threaded_rpc.remove_org_repo_by_org_id(org_id)
+
+    # remove org
+    ccnet_threaded_rpc.remove_org(org_id)
+
+    messages.success(request, _(u'Successfully deleted.'))
+    return HttpResponseRedirect(reverse('sys_org_admin'))
+
 @login_required_ajax
 @sys_staff_required
 def sys_org_set_member_quota(request, org_id):

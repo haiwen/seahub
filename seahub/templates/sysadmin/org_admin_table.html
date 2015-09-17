@@ -22,7 +22,7 @@
         <td>{{ org.ctime|tsstr_sec }} <br/>
             <span class="{% if org.is_expired %}error{% endif %}">{% if org.expiration %}{{ org.expiration|date:'Y-m-d H:i:s' }}{% else %}--{% endif %}</span>
         </td>
-        <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td>
+        <td><a href="#" data-url="{% url "sys_org_remove" org.org_id %}" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td>
     </tr>
     {% endfor %}
 </table>
