@@ -4,16 +4,9 @@
 {% load url from future %}
 
 {% block main_panel %}
+    <h2 style="margin-bottom:8px">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Trash{% endblocktrans %}</h2>
     <div class="hd">
-        <h3 class="fleft">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Trash{% endblocktrans %}</h3>
-        {% if enable_clean %}
-        <button id="online-gc" class="fright">{% trans "Clean" %}</button>
-        {% endif %}
-    </div>
-
-    <div class="repo-file-list-container">
-        <div class="ovhd">
-            <span class="fleft">
+        <p class="fleft path">
             {% trans "Current path: " %}
             <a href="?days={{days}}">{% blocktrans with repo_name=repo.props.name %}{{repo_name}} Trash{% endblocktrans %}</a>
             {% if not show_recycle_root %}
@@ -25,28 +18,32 @@
             {% endif %}
             {% endfor %}
             {% endif %}
-            </span>
-
-            {% if show_recycle_root %}
-            <span class="fright">
-                {% if days != 7 %}
-                <a href="?days=7">{% trans "a week" %}</a> /
-                {% else %}
-                {% trans "a week" %} /
-                {% endif %}
-                {% if days != 30 %}
-                <a href="?days=30">{% trans "a month" %}</a> /
-                {% else %}
-                {% trans "a month" %} /
-                {% endif %}
-                {% if days != 0 %}
-                <a href="?days=0">{% trans "all" %}</a>
-                {% else %}
-                {% trans "all" %}
-                {% endif %}
-            </span>
+        </p>
+        {% if enable_clean %}
+        <button id="online-gc" class="fright">{% trans "Clean" %}</button>
+        {% endif %}
+        {% if show_recycle_root %}
+        <span class="fright" style="padding-right:12px">
+            {% if days != 7 %}
+            <a href="?days=7">{% trans "a week" %}</a> /
+            {% else %}
+            {% trans "a week" %} /
             {% endif %}
-        </div>
+            {% if days != 30 %}
+            <a href="?days=30">{% trans "a month" %}</a> /
+            {% else %}
+            {% trans "a month" %} /
+            {% endif %}
+            {% if days != 0 %}
+            <a href="?days=0">{% trans "all" %}</a>
+            {% else %}
+            {% trans "all" %}
+            {% endif %}
+        </span>
+        {% endif %}
+    </div>
+
+    <div class="repo-file-list-container">
         <table class="repo-file-list">
             <tr>
                 <th width="5%"></th>
