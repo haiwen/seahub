@@ -67,13 +67,13 @@ define([
         },
 
         highlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
                 this.$el.addClass('hl').find('.repo-file-op').removeClass('vh');
             }
         },
 
         rmHighlight: function() {
-            if (app.globalState.noFileOpPopup) {
+            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
                 this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
             }
         },
@@ -147,7 +147,6 @@ define([
                 popup = this.$('.hidden-op');
 
             if (popup.hasClass('hide')) { // the popup is not shown
-
                 popup.css({'left': icon.position().left});
                 if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
                     // below the icon
@@ -155,14 +154,9 @@ define([
                 } else {
                     popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
                 }
-
                 popup.removeClass('hide');
-                app.globalState.noFileOpPopup = false;
-                app.globalState.popup_tr = icon.parents('tr');
             } else {
                 popup.addClass('hide');
-                app.globalState.noFileOpPopup = true;
-                app.globalState.popup_tr = '';
             }
         },
 
@@ -199,7 +193,6 @@ define([
                 dataType: 'json',
                 success: function(data) {
                     dir.remove(model);
-                    app.globalState.noFileOpPopup = true; // make other items can work normally when hover
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
@@ -213,18 +206,34 @@ define([
 
         rename: function() {
             var is_dir = this.model.get('is_dir');
-            var title = is_dir ? gettext("Rename Directory") : gettext("Rename File");
             var dirent_name = this.model.get('obj_name');
 
             var form = $(this.renameTemplate({
-                form_title: title,
                 dirent_name: dirent_name
             }));
-            form.modal({focus:false}); // For 'newname' input: if use the default 'focus:true', text in it will be selected.
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            var op_detail = $('.detail', form);
-            op_detail.html(op_detail.html().replace('%(name)s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(dirent_name) + '">' + Common.HTMLescape(dirent_name) + '</span>'));
+            var $name = this.$('.dirent-name'),
+                $op = this.$('.dirent-op'),
+                $td = $name.closest('td');
+            $td.attr('colspan', 2).css({
+                'width': $name.width() + $op.outerWidth(),
+                'height': $name.height()
+            }).append(form);
+            $op.hide();
+            $name.hide();
+
+            this.$('.hidden-op').addClass('hide');
+
+            var cancelRename = function() {
+                form.remove();
+                $op.show();
+                $name.show();
+                $td.attr('colspan', 1).css({
+                    'width': $name.width()
+                });
+                return false; // stop bubbling (to 'doc click to hide .hidden-op')
+            };
+            $('.cancel', form).click(cancelRename);
 
             var form_id = form.attr('id');
             var _this = this;
@@ -232,11 +241,10 @@ define([
             form.submit(function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 if (!new_name) {
-                    Common.showFormError(form_id, gettext("It is required."));
                     return false;
                 }
                 if (new_name == dirent_name) {
-                    Common.showFormError(form_id, gettext("You have not renamed it."));
+                    cancelRename();
                     return false;
                 }
                 var post_data = {
@@ -251,17 +259,9 @@ define([
                     var renamed_dirent_data = {
                         'obj_name': data['newname'],
                         'last_modified': new Date().getTime()/1000,
-                        'last_update': gettext("Just now"),
-                        'sharelink': '',
-                        'sharetoken': ''
+                        'last_update': gettext("Just now")
                     };
-                    if (is_dir) {
-                        /*
-                        $.extend(renamed_dirent_data, {
-                            'p_dpath': data['p_dpath']
-                        });
-                        */
-                    } else {
+                    if (!is_dir) {
                         $.extend(renamed_dirent_data, {
                             'starred': false
                         });
@@ -269,12 +269,27 @@ define([
                     $.modal.close();
                     _this.model.set(renamed_dirent_data); // it will trigger 'change' event
                 };
-                Common.ajaxPost({
-                    'form': form,
-                    'post_url': post_url,
-                    'post_data': post_data,
-                    'after_op_success': after_op_success,
-                    'form_id': form_id
+                var after_op_error = function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.");
+                    }
+                    Common.feedback(err_msg, 'error');
+                    Common.enableButton(submit_btn);
+                };
+
+                var submit_btn = $('[type="submit"]', form);
+                Common.disableButton(submit_btn);
+                $.ajax({
+                    url: post_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: post_data,
+                    success: after_op_success,
+                    error: after_op_error
                 });
                 return false;
             });
@@ -494,7 +509,6 @@ define([
                         'locked_by_me': true,
                         'lock_owner_name': app.pageOptions.name
                     });
-                    app.globalState.noFileOpPopup = true;
                     _this.$el.removeClass('hl');
                 }
             });
@@ -509,7 +523,6 @@ define([
                     _this.model.set({
                         'is_locked': false
                     });
-                    app.globalState.noFileOpPopup = true;
                     _this.$el.removeClass('hl');
                 }
             });
