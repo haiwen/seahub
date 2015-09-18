@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Jorgen vd Meulen <j.van.der.meulen@unacle.nl>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 15:39+0800\n"
-"PO-Revision-Date: 2015-09-14 07:04+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-09-14 08:14+0000\n"
+"Last-Translator: Jorgen vd Meulen <j.van.der.meulen@unacle.nl>\n"
 "Language-Team: Dutch (Netherlands) (http://www.transifex.com/haiwen/seahub/language/nl_NL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,35 +36,35 @@ msgstr ""
 #: static/scripts/app/views/share.js:615 static/scripts/app/views/share.js:673
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Mislukt. Controleer de netwerkverbinding."
 
 #: static/scripts/common.js:513
 msgid "Search users or enter emails"
-msgstr ""
+msgstr "Zoek gebruikers of voer emails in"
 
 #: static/scripts/common.js:523
 msgid "Please enter 1 or more character"
-msgstr ""
+msgstr "Voer 1 of meer tekens in."
 
 #: static/scripts/common.js:524
 msgid "No matches"
-msgstr ""
+msgstr "Niet gevonden"
 
 #: static/scripts/common.js:525
 msgid "Searching..."
-msgstr ""
+msgstr "Aan het zoeken..."
 
 #: static/scripts/common.js:526
 msgid "Loading failed"
-msgstr ""
+msgstr "Ophalen mislukt"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
-msgstr ""
+msgstr "Naam is verplicht"
 
 #: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:203
 msgid "Please enter password"
-msgstr ""
+msgstr "Voer het wachtwoord in"
 
 #: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:211
 msgid "Please enter the password again"
@@ -71,7 +72,7 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:207
 msgid "Password is too short"
-msgstr ""
+msgstr "Wachtwoord is te kort"
 
 #: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:215
 msgid "Passwords don't match"
@@ -79,11 +80,11 @@ msgstr ""
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Nieuwe bestanden"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Verwijderde bestanden"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
@@ -99,12 +100,12 @@ msgstr ""
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Verwijderde mappen"
 
 #: static/scripts/app/views/dir.js:45
 #: static/scripts/app/views/starred-file.js:29
 msgid "Close (Esc)"
-msgstr ""
+msgstr "Sluiten (Esc)"
 
 #: static/scripts/app/views/dir.js:46
 #: static/scripts/app/views/starred-file.js:30
@@ -114,22 +115,22 @@ msgstr ""
 #: static/scripts/app/views/dir.js:49
 #: static/scripts/app/views/starred-file.js:33
 msgid "Previous (Left arrow key)"
-msgstr ""
+msgstr "Vorige (linker pijltjestoets)"
 
 #: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:34
 msgid "Next (Right arrow key)"
-msgstr ""
+msgstr "Volgende (rechter pijltjestoets)"
 
 #: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:35
 msgid "%curr% of %total%"
-msgstr ""
+msgstr "%curr% van %total%"
 
 #: static/scripts/app/views/dir.js:57
 #: static/scripts/app/views/starred-file.js:41
 msgid "Open in New Tab"
-msgstr ""
+msgstr "Open in nieuw tabblad"
 
 #: static/scripts/app/views/dir.js:60
 #: static/scripts/app/views/starred-file.js:44
@@ -288,11 +289,11 @@ msgstr ""
 
 #: static/scripts/app/views/dirent.js:216
 msgid "Rename Directory"
-msgstr ""
+msgstr "Hernoem map"
 
 #: static/scripts/app/views/dirent.js:216
 msgid "Rename File"
-msgstr ""
+msgstr "Hernoem Bestand"
 
 #: static/scripts/app/views/dirent.js:239
 msgid "You have not renamed it."
@@ -340,7 +341,7 @@ msgstr ""
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Geüploadde bytes overtreft bestandsgrootte"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
@@ -499,7 +500,7 @@ msgstr ""
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"
-msgstr ""
+msgstr "Gelukt"
 
 #: static/scripts/app/views/starred-file-item.js:45
 msgid "Successfully unstared {placeholder}"
