@@ -179,7 +179,30 @@ class FilesApiTest(ApiTestBase):
             res = self.get(update_blks_url)
             self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/[^/]+"')
 
-    def test_list_dir(self):
+    def test_only_list_dir(self):
+        with self.get_tmp_repo() as repo:
+            self.create_file(repo)
+            self.create_dir(repo)
+            dirents = self.get(repo.dir_url + '?t=d').json()
+            self.assertHasLen(dirents, 1)
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertIsNotNone(dirent['name'])
+                self.assertEqual(dirent['type'], 'dir')
+
+    def test_only_list_file(self):
+        with self.get_tmp_repo() as repo:
+            self.create_file(repo)
+            self.create_dir(repo)
+            dirents = self.get(repo.dir_url + '?t=f').json()
+            self.assertHasLen(dirents, 1)
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertIsNotNone(dirent['name'])
+                self.assertIsNotNone(dirent['size'])
+                self.assertEqual(dirent['type'], 'file')
+
+    def test_list_dir_and_file(self):
         with self.get_tmp_repo() as repo:
             self.create_file(repo)
             self.create_dir(repo)

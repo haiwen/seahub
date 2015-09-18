@@ -1312,7 +1312,13 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_entrys_by_id(request, repo, path, dir_id):
+def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
+    """ Get dirents in a dir
+
+    if request_type is 'f', only return file list,
+    if request_type is 'd', only return dir list,
+    else, return both.
+    """
     username = request.user.username
     try:
         dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
@@ -1357,7 +1363,13 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    dentrys = dir_list + file_list
+
+    if request_type == 'f':
+        dentrys = file_list
+    elif request_type == 'd':
+        dentrys = dir_list
+    else:
+        dentrys = dir_list + file_list
 
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
@@ -2230,7 +2242,12 @@ class DirView(APIView):
             response["oid"] = dir_id
             return response
         else:
-            return get_dir_entrys_by_id(request, repo, path, dir_id)
+            request_type = request.GET.get('t', None)
+            if request_type and request_type not in ('f', 'd'):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        "'t'(type) should be 'f' or 'd'.")
+
+            return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
         # new dir
