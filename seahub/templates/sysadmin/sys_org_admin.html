@@ -1,11 +1,21 @@
 {% extends "sysadmin/base.html" %}
 {% load seahub_tags i18n %}
-
 {% block cur_org %}tab-cur{% endblock %}
 
+{% block left_panel %}{{block.super}}
+<form action="{% url 'sys_org_search' %}" method="get" class="side-search-form">
+    <input type="text" name="name" class="input" value="" placeholder="{% trans "Search orgs by name..." %}" />
+</form>
+{% endblock %}
+
 {% block right_panel %}
-<div class="hd ovhd">
-    <h3 class="fleft">{% trans "All Organizations" %}</h3>
+<div class="tabnav">
+    <ul class="tabnav-tabs">
+        <li class="tabnav-tab {% if all_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}">{% trans "All" %}</a></li>
+        {% if enable_org_plan %}
+        <li class="tabnav-tab {% if paid_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}?filter=paid">{% trans "Paid" %}</a></li>
+        {% endif %}
+    </ul>
     <button id="add-btn" class="fright">{% trans "Add organization" %}</button>
 </div>
 
@@ -29,38 +39,16 @@
 </form>
 
 {% if orgs %}
-<table>
-    <tr>
-        <th width="20%">{% trans "Name" %}</th>
-        <th width="18%">{% trans "Url Prefix" %}</th>
-        <th width="25%">{% trans "Creator" %}</th>
-        <th width="17%">{% trans "Space Used" %}</th>
-        <th width="20%">{% trans "Created At" %}</th>
-    </tr>
-    {% for org in orgs %}
-    <tr>
-        <td>
-            <a href="{% url 'sys_org_info_user' org.org_id %}">{{ org.org_name }}</a>
-            {% if org.trial_info %}
-            <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ org.org_name }}" data-url="{% url 'remove_trial' org.org_id %}">X</a>)</p>
-            {% endif %}
-        </td>
-        <td>{{ org.url_prefix }}</td>
-        <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
-        <td>
-            {{ org.quota_usage|filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|filesizeformat }} {% endif %}
-        </td>
-        <td>{{ org.ctime|tsstr_sec }}</td>
-        <!-- <td><a href="#" data-url="{{ SITE_ROOT}}org/remove/{{ org.org_id }}/" data-target="{{ org.org_name }}" class="remove-btn op vh">{% trans "Delete" %}</a></td> -->
-    </tr>
-    {% endfor %}
-</table>
 
-{% include "snippets/admin_paginator.html" %}
+{% include "sysadmin/org_admin_table.html" %}
 
+  {% if not hide_paginator %}
+  {% include "snippets/admin_paginator.html" %}
+  {% endif %}
 {% else %}
 <p>{% trans "None." %}</p>
 {% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
@@ -68,6 +56,12 @@
 $('#add-btn').click(function() {
         $('#add-org-form').modal();
         $('#simplemodal-container').css({'width':'auto'});
+});
+
+addConfirmTo($('.remove-btn'), {
+    'title':"{% trans "Delete org" %}",
+    'con':"{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true // post request
 });
 
 $('#add-org-form').submit(function() {
