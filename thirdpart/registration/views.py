@@ -7,10 +7,13 @@ Views which allow users to create and activate accounts.
 from django.shortcuts import redirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.http import Http404
 
 from registration.backends import get_backend
-from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
-    USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
+
+from constance import config
+
+from seahub import settings
 
 def activate(request, backend,
              template_name='registration/activate.html',
@@ -176,6 +179,12 @@ def register(request, backend, success_url=None, form_class=None,
     argument.
 
     """
+    if not config.ENABLE_SIGNUP:
+        raise Http404
+
+    if config.ACTIVATE_AFTER_REGISTRATION:
+        success_url = settings.SITE_ROOT
+
     backend = get_backend(backend)
     if not backend.registration_allowed(request):
         return redirect(disallowed_url)
@@ -207,7 +216,7 @@ def register(request, backend, success_url=None, form_class=None,
 
     return render_to_response(template_name, {
         'form': form,
-        'min_len': USER_PASSWORD_MIN_LENGTH,
-        'strong_pwd_required': USER_STRONG_PASSWORD_REQUIRED,
-        'level': USER_PASSWORD_STRENGTH_LEVEL,
+        'min_len': config.USER_PASSWORD_MIN_LENGTH,
+        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
+        'level': config.USER_PASSWORD_STRENGTH_LEVEL,
     }, context_instance=context)

@@ -6,16 +6,181 @@
 {% block right_panel %}
 <h3 class="hd">{% trans "Settings" %}</h3>
 
-<form method="post" action=".">{% csrf_token %}
-    {% for k,v in config_dict.items %}
-    <label>{{ k }}</label>
-    <input type="text" name="{{ k }}" value="{{v.0}}" class="input" />
-    <span>*{{v.1}}</span>
-    <br>
-    {% endfor %}
+<div class="seahub-web-settings">
 
-    <input type="submit" value="{% trans "Submit" %}" />
-</form>
+    <h4>Url</h4>
 
+    <div>
+    {% with type="input" setting_display_name="SERVICE_URL" help_tip="The URL of the server, like https://seafile.example.com or http://192.168.1.2:8000" setting_name="SERVICE_URL" setting_val=config_dict.SERVICE_URL %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <div>
+    {% with type="input" setting_display_name="FILE_SERVER_ROOT" help_tip="The internal URL for downloading/uploading files. Users will not be able to download/upload files if this is not set correctly. If you config Seafile behind Nginx/Apache, it should be {{SERVICE_URL}}/seafhttp, like https://seafile.example.com/seafhttp . If you config Seafile without Nginx/Apache, leave it blank." setting_name="FILE_SERVER_ROOT" setting_val=config_dict.FILE_SERVER_ROOT %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <h4>User</h4>
+
+    <div>
+    {% with type="checkbox" setting_display_name="allow new registrations" help_tip="Allow new user registrations. Uncheck this to prevent anyone from creating a new account." setting_name="ENABLE_SIGNUP" setting_val=config_dict.ENABLE_SIGNUP %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="checkbox" setting_display_name="activate after registration" help_tip="Activate user immediately after registration. If unchecked, an user need to be activated by administrator or via activation email" setting_name="ACTIVATE_AFTER_REGISTRATION" setting_val=config_dict.ACTIVATE_AFTER_REGISTRATION %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="checkbox" setting_display_name="send activation email" help_tip="Send activation Email after user registration." setting_name="REGISTRATION_SEND_MAIL" setting_val=config_dict.REGISTRATION_SEND_MAIL %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="input" setting_display_name="keep sign in" help_tip="Number of days that keep user sign in." setting_name="LOGIN_REMEMBER_DAYS" setting_val=config_dict.LOGIN_REMEMBER_DAYS %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <h4>Password</h4>
+
+    <div>
+    {% with type="checkbox" setting_display_name="strong password" help_tip="Force user use a strong password when singup up or change password." setting_name="USER_STRONG_PASSWORD_REQUIRED" setting_val=config_dict.USER_STRONG_PASSWORD_REQUIRED %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="input" setting_display_name="password minimum length" help_tip="The least number of characters when user make up an account password." setting_name="USER_PASSWORD_MIN_LENGTH" setting_val=config_dict.USER_PASSWORD_MIN_LENGTH %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="input" setting_display_name="password strength level" help_tip="The level of password strength when user make up an account passowrd." setting_name="USER_PASSWORD_STRENGTH_LEVEL" setting_val=config_dict.USER_PASSWORD_STRENGTH_LEVEL %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <h4>Library</h4>
+
+    <div>
+    {% with type="checkbox" setting_display_name="library history" help_tip="If allow user keep library history" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="input" setting_display_name="library password minimum length" help_tip="The least number of characters that can make up an encrypt library password." setting_name="REPO_PASSWORD_MIN_LENGTH" setting_val=config_dict.REPO_PASSWORD_MIN_LENGTH %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <h4>Sync</h4>
+
+    <div>
+    {% with type="checkbox" setting_display_name="DISABLE_SYNC_WITH_ANY_FOLDER" help_tip="If turn on, the desktop clients will not be able to sync a folder outside the default Seafile folder." setting_name="DISABLE_SYNC_WITH_ANY_FOLDER" setting_val=config_dict.DISABLE_SYNC_WITH_ANY_FOLDER %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+</div>
 {% endblock %}
 
+{% block extra_script %}
+<script type="text/javascript">
+var original_value;
+var temp_container;
+$('.input').focus(function() {
+    if ($(this).siblings('.error').html()) {
+        return false;
+    }
+    if (temp_container) {
+        $('.cancel-setting', temp_container).click();
+    }    
+    $(this).siblings('.submit, .cancel-setting').show();
+    original_value = $(this).val();
+    temp_container = $(this).parent();
+});
+
+$('.cancel-setting').click(function() {
+    temp_container = '';
+    if ($(this).siblings('.error').html()) {
+        $(this).siblings('.error').html('').hide();
+    }
+    $(this).siblings('.input').val(original_value).siblings('.submit, .cancel-setting').hide();
+});
+
+$(document).click(function(e) {
+    var target =  e.target || event.srcElement;
+    if (!$('.input').is(target) &&
+        !$('.submit').is(target) &&
+        !$('.cancel-setting').is(target) &&
+        temp_container) {
+        $('.cancel-setting', temp_container).click();
+    }
+});
+
+$('.web-checkbox-setting').change(function() {
+    var checkbox = $(this),
+        value,
+        key = checkbox.attr('name');
+
+    if (checkbox.is(':checked')) {
+        value = 1;
+    } else {
+        value = 0;
+    }
+
+    $.ajax({
+        url: "{% url 'sys_settings' %}",
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: { 'key': key, 'value': value },
+        success: function() {
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+});
+
+$('.web-input-setting-form').submit(function() {
+    var $form = $(this),
+        $error = $form.find('.error'),
+        $input = $form.find('.input'),
+        $sb_btn = $('.submit', $form);
+        $cancel_btn = $('.cancel-setting', $form),
+        key = $.trim($input.attr('name')),
+        value = $.trim($input.val());
+
+    disable($sb_btn);
+
+    if (!value) {
+        $error.html("{% trans "Can not be empty" %}").show();
+        enable($sb_btn);
+        return false;
+    }
+
+    $.ajax({
+        url: "{% url 'sys_settings' %}",
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: { 'key': key, 'value': value },
+        success: function() {
+            $error.html('').hide();
+            enable($sb_btn);
+            $input.val(value);
+            $sb_btn.hide();
+            $cancel_btn.hide();
+            temp_container = '';
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                $error.html($.parseJSON(jqXHR.responseText).error).show();
+                enable($sb_btn);
+            } else {
+                $error.html("{% trans "Failed. Please check the network." %}").show();
+            }
+        }
+    });
+    return false;
+});
+</script>
+{% endblock %}

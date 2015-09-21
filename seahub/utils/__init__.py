@@ -37,8 +37,8 @@ from seaserv import seafile_api, send_message, seafserv_rpc, \
     list_personal_repos_by_owner, get_group_repos, \
     list_inner_pub_repos, CCNET_CONF_PATH
 import seahub.settings
-from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH, \
-    USER_PASSWORD_STRENGTH_LEVEL, USER_PASSWORD_MIN_LENGTH
+from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
+
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -91,7 +91,6 @@ except ImportError:
 
 from seahub.utils.file_types import *
 from seahub.utils.htmldiff import HtmlDiff # used in views/files.py
-
 
 EMPTY_SHA1 = '0000000000000000000000000000000000000000'
 MAX_INT = 2147483647
@@ -1159,7 +1158,7 @@ def is_user_password_strong(password):
        num, upper letter, lower letter, other symbols
     """
 
-    if len(password) < USER_PASSWORD_MIN_LENGTH:
+    if len(password) < config.USER_PASSWORD_MIN_LENGTH:
         return False
     else:
         num = 0
@@ -1168,7 +1167,7 @@ def is_user_password_strong(password):
             # bitwise OR
             num |= get_char_mode(ord(letter))
 
-        if calculate_bitwise(num) < USER_PASSWORD_STRENGTH_LEVEL:
+        if calculate_bitwise(num) < config.USER_PASSWORD_STRENGTH_LEVEL:
             return False
         else:
             return True

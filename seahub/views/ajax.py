@@ -50,6 +50,7 @@ import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
     ENABLE_FOLDER_PERM, SHOW_TRAFFIC
+from constance import config
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
@@ -2160,7 +2161,7 @@ def ajax_repo_change_basic_info(request, repo_id):
                                 status=500, content_type=content_type)
 
     # set library history
-    if days is not None and ENABLE_REPO_HISTORY_SETTING:
+    if days is not None and config.ENABLE_REPO_HISTORY_SETTING:
         res = set_repo_history_limit(repo_id, days)
         if res != 0:
             return HttpResponse(json.dumps({

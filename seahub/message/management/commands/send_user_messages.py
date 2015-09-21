@@ -24,8 +24,6 @@ You've got ${count} new messages on ${site_name}.
 Go check out at ${url}
 ''')
 
-                  
-
 site_name = settings.SITE_NAME
 subjects = (u'New message on %s' % site_name, u'New messages on %s' % site_name)
 url = settings.SITE_BASE.rstrip('/') + reverse('message_list')
@@ -46,7 +44,7 @@ class Command(BaseCommand):
             unread_msgs = UserMessage.objects.filter(ifread=0)
 
             logger.debug('Create new last check time: %s' % now)
-            UserMsgLastCheck(check_time=now).save()            
+            UserMsgLastCheck(check_time=now).save()
         else:
             last_check = UserMsgLastCheck.objects.all()[0]
             last_check_time = last_check.check_time
@@ -65,7 +63,7 @@ class Command(BaseCommand):
                 email_ctx[msg.to_email] += 1
             else:
                 email_ctx[msg.to_email] = 1
-        
+
         for to_email, count in email_ctx.items():
             subject = subjects[1] if count > 1 else subjects[0]
             template = string.Template(email_templates[1]) if count > 1 else \
@@ -79,7 +77,3 @@ class Command(BaseCommand):
                 logger.info('Successfully sended email to %s' % to_email)
             except Exception, e:
                 logger.error('Failed to send email to %s, error detail: %s' % (to_email, e))
-
-
-        
-    

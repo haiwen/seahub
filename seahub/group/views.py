@@ -57,6 +57,8 @@ from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI, \
 
 from seahub.forms import SharedRepoCreateForm
 
+from constance import config
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -602,7 +604,7 @@ def group_info(request, group):
             "is_staff": group.is_staff,
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
-            'repo_password_min_length': settings.REPO_PASSWORD_MIN_LENGTH,
+            'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
             }, context_instance=RequestContext(request))
 
 @group_check

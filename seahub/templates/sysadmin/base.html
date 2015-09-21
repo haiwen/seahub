@@ -9,7 +9,7 @@
             <a href="{{ SITE_ROOT }}sys/info/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
         </li>
         <li class="tab {% block cur_settings %}{% endblock %}">
-            <a href="{% url "sys_settings" %}" class="admin">{% trans "Settings" %}</a>
+            <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
         </li>
         <li class="tab {% block cur_repo %}{% endblock %}">
             <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>

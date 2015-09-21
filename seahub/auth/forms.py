@@ -11,8 +11,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
 
 from captcha.fields import CaptchaField
 
-from seahub.settings import USER_STRONG_PASSWORD_REQUIRED, \
-    USER_PASSWORD_STRENGTH_LEVEL, USER_PASSWORD_MIN_LENGTH
+from constance import config
 
 class AuthenticationForm(forms.Form):
     """
@@ -131,7 +130,7 @@ class SetPasswordForm(forms.Form):
         if 'new_password1' in self.cleaned_data:
             pwd = self.cleaned_data['new_password1']
 
-            if USER_STRONG_PASSWORD_REQUIRED is True:
+            if config.USER_STRONG_PASSWORD_REQUIRED is True:
                 if is_user_password_strong(pwd) is True:
                     return pwd
                 else:
@@ -139,8 +138,8 @@ class SetPasswordForm(forms.Form):
                         _(("%(pwd_len)s characters or more, include "
                            "%(num_types)s types or more of these: "
                            "letters(case sensitive), numbers, and symbols")) %
-                        {'pwd_len': USER_PASSWORD_MIN_LENGTH,
-                         'num_types': USER_PASSWORD_STRENGTH_LEVEL})
+                        {'pwd_len': config.USER_PASSWORD_MIN_LENGTH,
+                         'num_types': config.USER_PASSWORD_STRENGTH_LEVEL})
             else:
                 return pwd
 

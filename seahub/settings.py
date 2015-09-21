@@ -365,7 +365,7 @@ BRANDING_CSS = ''
 # server.
 SERVE_STATIC = True
 
-# Enalbe or disalbe registration on web.
+# Enable or disable registration on web.
 ENABLE_SIGNUP = False
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
@@ -609,10 +609,19 @@ LOGIN_URL = SITE_ROOT + 'accounts/login'
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 CONSTANCE_CONFIG = {
-    'SERVICE_URL': (SERVICE_URL, gettext_noop(
-        "This is outside URL for Seahub(Seafile Web).The domain part (i.e., "
-        "www.example.com) will be used in generating share links and "
-        "download/upload file via web. Note: Outside URL means if you use "
-        "Nginx, it should be the Nginx's address")),
-    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT, gettext_noop('URL for seafile fileserver')),
+    'SERVICE_URL': (SERVICE_URL,''),
+    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),
+    'DISABLE_SYNC_WITH_ANY_FOLDER': (False,''),
+
+    'ENABLE_SIGNUP': (ENABLE_SIGNUP,''),
+    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
+    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
+    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
+
+    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
+    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING,''),
+
+    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED,''),
+    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH,''),
+    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL,''),
 }

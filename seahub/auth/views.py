@@ -26,8 +26,8 @@ from seahub.base.accounts import User
 from seahub.utils import is_ldap_user
 from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
-from seahub.settings import USER_PASSWORD_MIN_LENGTH, \
-    USER_STRONG_PASSWORD_REQUIRED, USER_PASSWORD_STRENGTH_LEVEL
+
+from constance import config
 
 from seahub.password_session import update_session_auth_hash
 
@@ -173,9 +173,9 @@ def login(request, template_name='registration/login.html',
     else:
         current_site = RequestSite(request)
 
-    enable_signup = getattr(settings, 'ENABLE_SIGNUP', False)
     multi_tenancy = getattr(settings, 'MULTI_TENANCY', False)
-    if enable_signup:
+
+    if config.ENABLE_SIGNUP:
         if multi_tenancy:
             org_account_only = getattr(settings, 'FORCE_ORG_REGISTER', False)
             if org_account_only:
@@ -194,7 +194,7 @@ def login(request, template_name='registration/login.html',
         redirect_field_name: redirect_to,
         'site': current_site,
         'site_name': current_site.name,
-        'remember_days': settings.LOGIN_REMEMBER_DAYS,
+        'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
         'enable_shib_login': enable_shib_login,
     }, context_instance=RequestContext(request))
@@ -361,9 +361,9 @@ def password_change(request, template_name='registration/password_change_form.ht
 
     return render_to_response(template_name, {
         'form': form,
-        'min_len': USER_PASSWORD_MIN_LENGTH,
-        'strong_pwd_required': USER_STRONG_PASSWORD_REQUIRED,
-        'level': USER_PASSWORD_STRENGTH_LEVEL,
+        'min_len': config.USER_PASSWORD_MIN_LENGTH,
+        'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
+        'level': config.USER_PASSWORD_STRENGTH_LEVEL,
     }, context_instance=RequestContext(request))
 
 def password_change_done(request, template_name='registration/password_change_done.html'):

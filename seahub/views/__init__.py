@@ -64,8 +64,9 @@ import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
-    REPO_PASSWORD_MIN_LENGTH, ENABLE_FOLDER_PERM
+    ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
+
+from constance import config
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -600,7 +601,7 @@ def repo_basic_info(request, repo_id):
 
     full_history_enabled = no_history_enabled = partial_history_enabled = True
     days_enabled = True
-    if not ENABLE_REPO_HISTORY_SETTING:
+    if not config.ENABLE_REPO_HISTORY_SETTING:
         full_history_enabled = no_history_enabled = partial_history_enabled = False
         days_enabled = False
 
@@ -657,7 +658,7 @@ def repo_change_password(request, repo_id):
 
     return render_to_response('repo_change_password.html', {
             'repo': repo,
-            'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
+            'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
             'ENABLE_FOLDER_PERM': ENABLE_FOLDER_PERM,
             }, context_instance=RequestContext(request))
 

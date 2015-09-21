@@ -3639,3 +3639,69 @@ img.thumbnail {
     max-width: 24px;
     max-height: 24px;
 }
+
+/* seahub web setting */
+.seahub-web-settings {
+    margin-top:15px;
+}
+.seahub-web-settings h4 {
+    background:#f7f7f7;
+    margin:15px 0;
+    padding:4px 0 4px 14px;
+}
+.web-setting-name {
+    width:190px;
+    margin-left:14px;
+}
+.web-setting-name label {
+    width:175px;
+    margin:3px 0;
+}
+.web-setting-description {
+    width:480px;
+    margin-bottom:20px;
+}
+.web-setting-name,
+.web-setting-description {
+    display:inline-block;
+    vertical-align:top;
+}
+.web-setting-description .web-setting-help-tip {
+    font-size:12px;
+}
+.web-input-setting-form .web-setting-help-tip {
+    width:380px;
+    color:#888;
+    line-height:1.4;
+    margin:2px 0 0 0;
+}
+.web-input-setting-form .error {
+    margin:2px 0 0 0;
+}
+.web-input-setting-form .input ,
+.web-input-setting-form .submit {
+    margin:3px 0 0 0;
+}
+.web-input-setting-form .input {
+    width:370px;
+    padding:0 0 0 5px;
+    height:23px;
+}
+.web-input-setting-form .submit {
+    padding:2px 8px;
+    margin-left:20px;
+}
+.web-input-setting-form  .cancel-setting {
+    opacity:0.6;
+    padding:3px 6px 5px;
+}
+.web-input-setting-form  .cancel-setting:hover {
+    opacity:1;
+}
+.web-checkbox-setting-form {
+    width:370px;
+}
+.web-checkbox-setting-form .web-setting-help-tip {
+    top:-7px;
+    left:1px;
+}

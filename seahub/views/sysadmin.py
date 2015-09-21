@@ -7,6 +7,7 @@ import json
 import re
 import datetime
 import csv, chardet, StringIO
+from constance import config
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -26,20 +27,21 @@ from seahub.base.sudo_mode import update_sudo_mode_ts
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
+
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
-    is_pro_version
+    is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
+    clear_token
+from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
+from seahub.utils.sysinfo import get_platform_name
+
 from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, \
+from seahub.settings import INIT_PASSWD, SITE_NAME, CONSTANCE_CONFIG, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
-from seahub.utils import send_html_email, get_user_traffic_list, \
-    get_server_id, clear_token
-from seahub.utils.rpc import mute_seafile_api
-from seahub.utils.sysinfo import get_platform_name
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -52,7 +54,6 @@ except ImportError:
     MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
-
 
 @login_required
 @sys_staff_required
@@ -1661,30 +1662,51 @@ def sys_sudo_mode(request):
 @sys_staff_required
 def sys_settings(request):
     """List and change seahub settings in admin panel.
-
-    Arguments:
-    - `request`:
     """
-    from constance import config
-    from seahub.settings import CONSTANCE_CONFIG
 
-    if request.method == "POST":
-        for k in request.POST.keys():
-            if k == 'csrfmiddlewaretoken':
-                continue
-            try:
-                setattr(config, k, request.POST.get(k))
-            except AttributeError:
-                continue
+    DIGIT_WEB_SETTINGS = ('DISABLE_SYNC_WITH_ANY_FOLDER', 'ENABLE_SIGNUP',
+        'ACTIVATE_AFTER_REGISTRATION', 'REGISTRATION_SEND_MAIL',
+        'LOGIN_REMEMBER_DAYS', 'REPO_PASSWORD_MIN_LENGTH',
+        'ENABLE_REPO_HISTORY_SETTING', 'USER_STRONG_PASSWORD_REQUIRED',
+        'USER_PASSWORD_MIN_LENGTH', 'USER_PASSWORD_STRENGTH_LEVEL',)
 
-        messages.success(request, _('Success'))
-        return HttpResponseRedirect(reverse('sys_settings'))
+    STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
+
+    if request.is_ajax() and request.method == "POST":
+        content_type = 'application/json; charset=utf-8'
+        result = {}
+
+        key = request.POST.get('key', None)
+        value = request.POST.get('value', None)
+
+        if key not in dir(config) or value is None:
+            result['error'] = _(u'Invalid setting')
+            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        if value.isdigit():
+            if key in DIGIT_WEB_SETTINGS:
+                value = int(value)
+            else:
+                result['error'] = _(u'Invalid value')
+                return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+        else:
+            if key not in STRING_WEB_SETTINGS:
+                result['error'] = _(u'Invalid value')
+                return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+        try:
+            setattr(config, key, value)
+            result['success'] = True
+            return HttpResponse(json.dumps(result), content_type=content_type)
+        except AttributeError as e:
+            logger.error(e)
+            result['error'] = _(u'Internal server error')
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
     config_dict = {}
-    for k in dir(config):
-        val = getattr(config, k)
-        help_text = _(CONSTANCE_CONFIG[k][1])
-        config_dict[k] = (val, help_text)
+    for key in dir(config):
+        value = getattr(config, key)
+        config_dict[key] = value
 
     return render_to_response('sysadmin/settings.html', {
         'config_dict': config_dict,

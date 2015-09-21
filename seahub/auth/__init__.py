@@ -7,6 +7,8 @@ from django.utils.importlib import import_module
 from seahub.auth.signals import user_logged_in
 from seahub.utils import is_org_context
 
+from constance import config
+
 SESSION_KEY = '_auth_user_name'
 BACKEND_SESSION_KEY = '_auth_user_backend_2'
 REDIRECT_FIELD_NAME = 'next'
@@ -82,8 +84,9 @@ def login(request, user):
 
     request.session[SESSION_KEY] = user.username
     request.session[BACKEND_SESSION_KEY] = user.backend
+
     if request.session.get('remember_me', False):
-        request.session.set_expiry(settings.LOGIN_REMEMBER_DAYS * 24 * 60 * 60)
+        request.session.set_expiry(config.LOGIN_REMEMBER_DAYS * 24 * 60 * 60)
     if hasattr(request, 'user'):
         request.user = user
     user_logged_in.send(sender=user.__class__, request=request, user=user)
