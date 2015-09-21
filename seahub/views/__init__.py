@@ -1842,10 +1842,15 @@ def i18n(request):
         # language code is not supported, use default.
         lang = settings.LANGUAGE_CODE
 
-    # set language code to user profile
-    p = Profile.objects.get_profile_by_user(request.user.username)
-    if p is not None:
-        p.set_lang_code(lang)
+    # set language code to user profile if user is logged in
+    if not request.user.is_anonymous():
+        p = Profile.objects.get_profile_by_user(request.user.username)
+        if p is not None:
+            # update exist record
+            p.set_lang_code(lang)
+        else:
+            # add new record
+            Profile.objects.add_or_update(request.user.username, '', '', lang)
 
     # set language code to client
     res = HttpResponseRedirect(next)
