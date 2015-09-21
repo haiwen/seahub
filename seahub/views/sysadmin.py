@@ -373,7 +373,11 @@ def sys_user_admin(request):
         users = []
         ups = UserPlan.objects.all()
         for up in ups:
-            u = User.objects.get(up.username)
+            try:
+                u = User.objects.get(up.username)
+            except User.DoesNotExist:
+                continue
+
             _populate_user_quota_usage(u)
             users.append(u)
 
@@ -1187,6 +1191,9 @@ def sys_org_admin(request):
         ops = OrgPlan.objects.all()
         for e in ops:
             o = ccnet_threaded_rpc.get_org_by_id(e.org_id)
+            if not o:
+                continue
+
             o.quota_usage = seafserv_threaded_rpc.get_org_quota_usage(o.org_id)
             o.total_quota = seafserv_threaded_rpc.get_org_quota(o.org_id)
             o.expiration = e.expire_date
@@ -1327,7 +1334,10 @@ def sys_org_remove(request, org_id):
     ccnet_threaded_rpc.remove_org(org_id)
 
     messages.success(request, _(u'Successfully deleted.'))
-    return HttpResponseRedirect(reverse('sys_org_admin'))
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = reverse('sys_org_admin') if referer is None else referer
+    return HttpResponseRedirect(next)
 
 @login_required_ajax
 @sys_staff_required
