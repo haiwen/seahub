@@ -378,6 +378,12 @@ def _file_view(request, repo_id, path):
     if not file_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
+    # Pass permission check, start download or render file.
+    if request.GET.get('dl', '0') == '1':
+        # send stats message
+        send_file_download_msg(request, repo, path, 'web')
+        return HttpResponseRedirect(raw_path)
+
     # check if use wopi host page according to filetype
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
         try:
@@ -1213,7 +1219,7 @@ def send_file_download_msg(request, repo, path, dl_type):
 
 @login_required
 def download_file(request, repo_id, obj_id):
-    """Download file for file/history file  preview.
+    """Download file in repo/file history page.
 
     Arguments:
     - `request`:

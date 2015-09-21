@@ -69,7 +69,7 @@
                 {% endblock %}
             {% endif %}
 
-            <a class="btn-link" href="{% url 'download_file' repo.id obj_id%}?p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
+            <a class="btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
         </div>
 
         <div id="file-view">
