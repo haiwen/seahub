@@ -2165,7 +2165,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:3px;
 }
 .commit-list {
-    margin:0 0 20px;
+    margin-bottom:20px;
 }
 .commit-list .time {
     padding-left:10px;
