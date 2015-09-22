@@ -3,6 +3,7 @@
 Test file/dir operations.
 """
 
+import posixpath
 import random
 import re
 import pytest
@@ -214,6 +215,25 @@ class FilesApiTest(ApiTestBase):
                 self.assertIn(dirent['type'], ('file', 'dir'))
                 if dirent['type'] == 'file':
                     self.assertIsNotNone(dirent['size'])
+
+    def test_list_recursive_dir(self):
+        with self.get_tmp_repo() as repo:
+
+            # create test dir
+            data = {'operation': 'mkdir'}
+            dir_list = ['/1/', '/1/2/', '/1/2/3/', '/4/', '/4/5/', '/6/']
+            for dpath in dir_list:
+                durl = repo.get_dirpath_url(dpath)
+                self.post(durl, data=data, expected=201)
+
+            # get recursive dir
+            dirents = self.get(repo.dir_url + '?t=d&recursive=1').json()
+            self.assertHasLen(dirents, len(dir_list))
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertEqual(dirent['type'], 'dir')
+                full_path = posixpath.join(dirent['parent_dir'], dirent['name']) + '/'
+                self.assertIn(full_path, dir_list)
 
     def test_remove_dir(self):
         with self.get_tmp_repo() as repo:
