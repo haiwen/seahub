@@ -22,7 +22,7 @@
     </ul>
 
     {% if person_msgs.has_other_pages %}
-    <div id="loading-icon" data-next="{{ person_msgs.next_page_number }}"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+    <div id="loading-icon" data-next="{{ person_msgs.next_page_number }}"><div class="loading-tip"></div></div>
     <p id="loading-error" class="error hide"></p>
     {% endif %}
 </div>

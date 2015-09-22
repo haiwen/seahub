@@ -1,6 +1,6 @@
 {% load i18n %}
 function listCommitDetails(url, t) {
-    $.modal('<div id="ls-ch"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-top:30px;" /></div>', {autoResize:true});
+    $.modal('<div id="ls-ch"><div class="loading-tip" style="margin-top:30px;"></div></div>', {autoResize:true});
     $('#ls-ch').css('text-align', 'center');
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $.ajax({
