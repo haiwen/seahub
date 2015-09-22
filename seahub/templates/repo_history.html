@@ -8,7 +8,7 @@
 <h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
 
 {% if user_perm == 'rw' %}
-<p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after this modification."%}</p>
+<p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after the modification."%}</p>
 {% endif %}
 
         <table class="commit-list">
