@@ -352,8 +352,12 @@ def repo_history_view(request, repo_id):
                                                         current_commit, path)
     zipped = get_nav_path(path, repo.name)
 
+    repo_owner = seafile_api.get_repo_owner(repo.id)
+    is_repo_owner = True if username == repo_owner else False
+
     return render_to_response('repo_history_view.html', {
             'repo': repo,
+            "is_repo_owner": is_repo_owner,
             'user_perm': user_perm,
             'current_commit': current_commit,
             'dir_list': dir_list,

@@ -70,7 +70,7 @@ urlpatterns = patterns(
     url(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/$', repo, name='repo'),
     url(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
-    (r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_revert),
+    url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_revert, name='repo_history_revert'),
     url(r'^repo/history/view/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_view, name='repo_history_view'),
     url(r'^repo/recycle/(?P<repo_id>[-0-9a-f]{36})/$', repo_recycle_view, name='repo_recycle_view'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/online_gc/$', repo_online_gc, name='repo_online_gc'),

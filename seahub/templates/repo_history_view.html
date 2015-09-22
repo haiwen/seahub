@@ -3,38 +3,27 @@
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
+{% block extra_style %}
+<style type="text/css">
+#main { position: relative; }
+.go-back { top:-3px; }
+</style>
+{% endblock %}
+
 {% block main_panel %}
-    <div class="w100 ovhd">
-        <h2 class="fleft"><span class="op-target">{{repo.props.name}}</span> {% trans "snapshot"%}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
-        <button data="{% url 'repo_view_snapshot' repo.id %}" class="fright" id="back">{% trans "Back to snapshots"%}</button>
-    </div>
+<h2 class="repo-snapshot-hd">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Snapshot{% endblocktrans %}<span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
 
-    {% if path == '/' %}
-    <div id="repo-latest-commit">
-        <p class="commit-msg">{{ current_commit.props.desc|translate_commit_desc }}</p>
-        <p class="meta-info">
-        <span class="author">
-            {% if current_commit.props.creator_name %}
-            {% avatar current_commit.props.creator_name 20 %}
-            <a class="name" href="{% url 'user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|short_email }}</a>
-            {% else %}
-            {% trans "Unknown"%}
-            {% endif %}
-        </span>
-        <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
-        </p>
-    </div>
-    {% endif %}
+<a href="{% url 'repo_history' repo.props.id %}" class="go-back" title="{% trans "Back to modification history"%}">
+    <span class="icon-chevron-left"></span>
+</a>
 
-    <div class="repo-file-list-outer-container">
-        <div class="repo-file-list-inner-container">
             {% if not user_perm %}
             <div class="repo-file-list-not-show">
                 <p class="access-notice">{% trans "Can't view this library"%}</p>
             </div>
             {% else %}
-            <div class="repo-file-list-topbar">
-                <p class="path">
+            <div class="repo-file-list-topbar ovhd">
+                <p class="path fleft">
                 {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
@@ -44,14 +33,36 @@
                 {% endif %}
                 {% endfor %}
                 </p>
+
+                {% if path == '/' %}
+
+                {% if is_repo_owner %}
+                    <button data-url="{% url 'repo_history_revert' repo.id %}?commit_id={{ current_commit.id }}" id="repo-revert" class="op-btn fright">{% trans "Restore"%}</button>
+                {% endif %}
+
+                <div id="repo-latest-commit" class="clear">
+                    <span class="commit-msg">{{ current_commit.props.desc|translate_commit_desc }}</span>
+                    <span class="meta-info split">
+                        <span class="author">
+                            {% if current_commit.props.creator_name %}
+                            {% avatar current_commit.props.creator_name 20 %}
+                            <a class="name" href="{% url 'user_profile' current_commit.props.creator_name %}">{{ current_commit.props.creator_name|short_email }}</a>
+                            {% else %}
+                            {% trans "Unknown"%}
+                            {% endif %}
+                        </span>
+                        <span class="time">{{ current_commit.props.ctime|translate_seahub_time }}</span>
+                    </span>
+                </div>
+                {% endif %}
             </div>
             <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
                     <th width="45%">{% trans "Name"%}</th>
-                    <th width="30%">{% trans "Size"%}</th>
-                    <th width="20%">{% trans "Operations"%}</th>
+                    <th width="23%">{% trans "Size"%}</th>
+                    <th width="27%">{% trans "Operations"%}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -77,14 +88,13 @@
             </table>
             <!-- /.repo-file-list -->
             {% endif %}
-        </div>
-    </div>
     {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
-$('#back').click(function() {
-    location.href = $(this).attr('data');
+addConfirmTo($('#repo-revert'), {
+    'title':"{% trans "Restore Library" %}",
+    'con':"{% trans "Are you sure you want to restore this library?" %}"
 });
 </script>
 {% endblock %}

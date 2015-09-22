@@ -5,25 +5,30 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block main_panel %}
-<h2><span class="op-target">{{repo.props.name}}</span> {% trans "modification history" %}</h2>
+<h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
 
 {% if user_perm == 'rw' %}
-<p class="tip">{% trans "Tip: A snapshot will be generated after modification, which records the library state before this modification."%}<a href="{% url 'repo_view_snapshot' repo.props.id %}">{% trans "View Snapshot"%}</a></p>
+<p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after this modification."%}</p>
 {% endif %}
 
-<div class="commit-list-outer-container">
-    <div class="commit-list-inner-container">
         <table class="commit-list">
             <tr>
-                <th width="20%" class="time">{% trans "Time" %}</th>
-                <th width="20%">{% trans "Modifier"%}</th>
-                <th width="60%">{% trans "Description"%}</th>
+                <th width="40%">{% trans "Description"%}</th>
+                <th width="19%">{% trans "Time" %}</th>
+                <th width="22%">{% trans "Modifier"%}</th>
+                <th width="19%">{% trans "Operations" %}</th>
             </tr>
 
             {% for commit in commits %}
             {% if commit.show %}
             <tr>
-                <td class="time">{{ commit.ctime|translate_seahub_time }}</td>
+                <td>
+                    {{ commit.props.desc|translate_commit_desc }}
+                    {% if page_next or not forloop.last %}
+                    <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
+                    {% endif %}
+                </td>
+                <td>{{ commit.ctime|translate_seahub_time }}</td>
                 <td>
                 {% if commit.creator_name %}
                     {% if not commit.second_parent_id %}
@@ -37,9 +42,12 @@
                 {% endif %}
                 </td>
                 <td>
-                    {{ commit.props.desc|translate_commit_desc }}
-                    {% if page_next or not forloop.last %}
-                    <a class="lsch" href="#" data-url="{% url 'repo_history_changes' repo.id %}?commit_id={{ commit.id }}" data-time="{{ commit.props.ctime|tsstr_sec }}">{% trans "Details"%}</a>
+                    {% if user_perm == 'rw' %}
+                        {% if forloop.first and current_page == 1 %}
+                        <span class="op vh">{% trans "Current Version" %}</span>
+                        {% else %}
+                        <a href="{% url 'repo_history_view' repo.id %}?commit_id={{ commit.id }}" class="op vh">{% trans "View Snapshot" %}</a>
+                        {% endif %}
                     {% endif %}
                 </td>
             </tr>
@@ -73,15 +81,10 @@
             <a href="?per_page=100" class="per-page">100</a>
             {% endif %}
         </div>
-    </div>
-</div>
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
-    $('#back').click(function() {
-        location.href = $(this).attr('data');
-    });
 </script>
 {% endblock %}

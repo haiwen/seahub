@@ -2173,6 +2173,9 @@ textarea:-moz-placeholder {/* for FF */
 .commit-list .avatar {
     border-radius:2px;
 }
+.repo-snapshot-hd {
+    margin-bottom:10px;
+}
 /*repo-share-form*/
 #email_or_group,
 #share-link,
