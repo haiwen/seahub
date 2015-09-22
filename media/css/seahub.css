@@ -2173,8 +2173,12 @@ textarea:-moz-placeholder {/* for FF */
 .commit-list .avatar {
     border-radius:2px;
 }
+.repo-trash-hd,
 .repo-snapshot-hd {
     margin-bottom:10px;
+}
+#online-gc {
+    margin-left:5px;
 }
 /*repo-share-form*/
 #email_or_group,
