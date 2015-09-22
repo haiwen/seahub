@@ -1392,10 +1392,12 @@ def get_shared_link(request, repo_id, path):
                                            settings.SITE_ROOT, token)
     return Response(file_shared_link)
 
-def get_repo_file(request, repo_id, file_id, file_name, op):
+def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
     if op == 'download':
         token = seafile_api.get_fileserver_access_token(repo_id, file_id, op,
-                                                        request.user.username)
+                                                        request.user.username,
+                                                        use_onetime)
+
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
                                 content_type=json_content_type)
@@ -1727,7 +1729,15 @@ class FileView(APIView):
 
         file_name = os.path.basename(path)
         op = request.GET.get('op', 'download')
-        return get_repo_file(request, repo_id, file_id, file_name, op)
+
+        reuse = request.GET.get('reuse', '0')
+        if reuse not in ('1', '0'):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                    "If you want to reuse file server access token for download file, you should set 'reuse' argument as '1'.")
+
+        use_onetime = False if reuse == '1' else True
+        return get_repo_file(request, repo_id, file_id,
+                file_name, op, use_onetime)
 
     def post(self, request, repo_id, format=None):
         # rename, move or create file

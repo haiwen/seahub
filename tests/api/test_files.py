@@ -6,6 +6,7 @@ Test file/dir operations.
 import random
 import re
 import pytest
+import urllib
 from urllib import urlencode, quote, quote
 
 from tests.common.utils import randstring, urljoin
@@ -76,6 +77,38 @@ class FilesApiTest(ApiTestBase):
             fname, furl = self.create_file(repo)
             res = self.get(furl)
             self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+    def test_download_file_without_reuse_token(self):
+        with self.get_tmp_repo() as repo:
+            fname, furl = self.create_file(repo)
+            res = self.get(furl)
+            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+            # download for the first time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
+
+            # download for the second time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 400)
+
+    def test_download_file_with_reuse_token(self):
+        with self.get_tmp_repo() as repo:
+            fname, furl = self.create_file(repo)
+            res = self.get(furl + '&reuse=1')
+            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+            # download for the first time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
+
+            # download for the second time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
 
     def test_download_file_from_history(self):
         with self.get_tmp_repo() as repo:
