@@ -1312,7 +1312,34 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_entrys_by_id(request, repo, path, dir_id):
+def get_dir_recursively(username, repo_id, path, all_dirs):
+    path_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path,
+            path_id, username, -1, -1)
+
+    for dirent in dirs:
+        if stat.S_ISDIR(dirent.mode):
+            entry = {}
+            entry["type"] = 'dir'
+            entry["parent_dir"] = path
+            entry["id"] = dirent.obj_id
+            entry["name"] = dirent.obj_name
+            entry["mtime"] = dirent.mtime
+            entry["permission"] = dirent.permission
+            all_dirs.append(entry)
+
+            sub_path = posixpath.join(path, dirent.obj_name)
+            get_dir_recursively(username, repo_id, sub_path, all_dirs)
+
+    return all_dirs
+
+def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
+    """ Get dirents in a dir
+
+    if request_type is 'f', only return file list,
+    if request_type is 'd', only return dir list,
+    else, return both.
+    """
     username = request.user.username
     try:
         dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
@@ -1357,7 +1384,13 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    dentrys = dir_list + file_list
+
+    if request_type == 'f':
+        dentrys = file_list
+    elif request_type == 'd':
+        dentrys = dir_list
+    else:
+        dentrys = dir_list + file_list
 
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
@@ -2240,7 +2273,28 @@ class DirView(APIView):
             response["oid"] = dir_id
             return response
         else:
-            return get_dir_entrys_by_id(request, repo, path, dir_id)
+            request_type = request.GET.get('t', None)
+            if request_type and request_type not in ('f', 'd'):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        "'t'(type) should be 'f' or 'd'.")
+
+            if request_type == 'd':
+                recursive = request.GET.get('recursive', '0')
+                if recursive not in ('1', '0'):
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                            "If you want to get recursive dir entries, you should set 'recursive' argument as '1'.")
+
+                if recursive == '1':
+                    username = request.user.username
+                    dir_list = get_dir_recursively(username, repo_id, path, [])
+                    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+                    response = HttpResponse(json.dumps(dir_list), status=200,
+                                            content_type=json_content_type)
+                    response["oid"] = dir_id
+                    response["dir_perm"] = seafile_api.check_permission_by_path(repo_id, path, username)
+                    return response
+
+            return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
         # new dir
