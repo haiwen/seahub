@@ -1140,10 +1140,12 @@ textarea:-moz-placeholder {/* for FF */
     float:right;
     width:710px;
 }
+#main-panel h3:first-child,
 #right-panel h3:first-child,
 #left-panel h3:first-child {
     margin-top: 0px;
 }
+#main-panel .hd,
 #right-panel .hd,
 .tabnav,
 .repo-file-list-topbar,
@@ -1159,6 +1161,7 @@ textarea:-moz-placeholder {/* for FF */
     height:30px;
     position: relative; /* for '#upload-menu' */
 }
+#main-panel .hd,
 #right-panel .hd,
 .tabnav,
 .wiki-top {
@@ -1176,6 +1179,7 @@ textarea:-moz-placeholder {/* for FF */
     background:none;
     padding:0;
 }
+#main-panel .hd,
 #right-panel .hd h3,
 #right-panel h3.hd {
     line-height:30px;
@@ -1208,6 +1212,7 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:none;
     border-bottom-color: #eb8205;
 }
+#main-panel .hd button,
 #right-panel .hd button,
 .tabnav button,
 .repo-file-list-topbar .op-btn,
@@ -1806,6 +1811,10 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-inner-container .repo-file-list-topbar {
     padding:8px 10px;
 }
+#main-panel .hd .path {
+    font-size:14px;
+    margin:0;
+}
 .commit-list-topbar .path,
 .repo-file-list-topbar .path {
     font-size:14px;
@@ -1817,6 +1826,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:1.5;
     margin:0 0 5px;
 }
+#main-panel .hd button,
 #dir-view .repo-op .op-btn {
     padding:5px 14px;
 }
@@ -2164,14 +2174,22 @@ textarea:-moz-placeholder {/* for FF */
 #back {
     margin-top:3px;
 }
+.commit-list-container {
+    margin-top:8px;
+}
 .commit-list {
     margin:0 0 20px;
 }
-.commit-list .time {
+.commit-list .description {
+    height:24px;
     padding-left:10px;
 }
 .commit-list .avatar {
     border-radius:2px;
+}
+/*repo-file-list*/
+.repo-file-list-container {
+    margin-top:-6px;
 }
 /*repo-share-form*/
 #email_or_group,
