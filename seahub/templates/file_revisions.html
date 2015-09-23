@@ -5,10 +5,8 @@
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
 {% block main_panel %}
-<h2>{{ u_filename }}{% trans "'s Version History" %}</h2>
-<p class="tip">{% trans "Tip:a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
-<div class="commit-list-outer-container">
-    <div class="commit-list-inner-container">
+<h2>{% blocktrans %}<span class="op-target">{{ u_filename }}</span> Version History{% endblocktrans %}</h2>
+<p class="tip">{% trans "Tip: a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
         <div class="commit-list-topbar ovhd">
             <p class="path fleft">
                 {% trans 'Current Path:' %}
@@ -41,8 +39,8 @@
         </div>
         <table class="commit-list">
             <tr>
-                <th width="30%" class="time">{% trans 'Time' %}</th>
-                <th width="20%">{% trans 'Modifier' %}</th>
+                <th width="25%" class="time">{% trans 'Time' %}</th>
+                <th width="25%">{% trans 'Modifier' %}</th>
                 <th width="20%">{% trans 'Size' %}</th>
                 <th width="30%">{% trans 'Operations' %}</th>
             </tr>
@@ -84,6 +82,4 @@
             </tr>
             {% endfor %}
         </table>
-    </div>
-</div>
 {% endblock %}

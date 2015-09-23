@@ -4,32 +4,29 @@
 {% load url from future %}
 
 {% block main_panel %}
-    <div class="w100 ovhd">
-        <h2 class="fleft">{% blocktrans with repo_name=repo.props.name %}{{repo_name}} Trash{% endblocktrans %}</h2>
-        {% if enable_clean %}
-        <button id="online-gc" class="fright">{% trans "Clean" %}</button>
-        {% endif %}
-    </div>
+<h2 class="repo-trash-hd">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Trash{% endblocktrans %}</h2>
 
-    <div class="repo-file-list-outer-container">
-        <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar ovhd">
                 <p class="path fleft">
                 {% trans "Current path: " %}
-                <a href="?days={{days}}">{% blocktrans with repo_name=repo.props.name %}{{repo_name}} Trash{% endblocktrans %}</a>
                 {% if not show_recycle_root %}
+                <a href="?days={{days}}">{{repo.name}}</a>
                 {% for name, link in zipped %}
-                {% if not forloop.last %}
-                / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}">{{ name }}</a>
-                {% else %}
-                / {{ name }}
-                {% endif %}
+                    {% if not forloop.last %}
+                    / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}">{{ name }}</a>
+                    {% else %}
+                    / {{ name }}
+                    {% endif %}
                 {% endfor %}
+
+                {% else %}
+                {{repo.name}}
                 {% endif %}
                 </p>
 
                 {% if show_recycle_root %}
-                <span class="fright">
+                <div class="fright">
+                <span>
                     {% if days != 7 %}
                     <a href="?days=7">{% trans "a week" %}</a> /
                     {% else %}
@@ -46,16 +43,20 @@
                     {% trans "all" %}
                     {% endif %}
                 </span>
+                {% if enable_clean %}
+                <button id="online-gc" class="op-btn">{% trans "Clean" %}</button>
+                {% endif %}
+                </div>
                 {% endif %}
             </div>
             <!-- /.repo-file-list-topbar -->
             <table class="repo-file-list">
                 <tr>
                     <th width="5%"></th>
-                    <th width="60%">{% trans "Name" %}</th>
-                    <th width="15%">{% trans "Delete Time" %}</th>
-                    <th width="10%">{% trans "Size" %}</th>
-                    <th width="10%">{% trans "Operations" %}</th>
+                    <th width="45%">{% trans "Name" %}</th>
+                    <th width="20%">{% trans "Delete Time" %}</th>
+                    <th width="15%">{% trans "Size" %}</th>
+                    <th width="15%">{% trans "Operations" %}</th>
                 </tr>
 
                 {% for dirent in dir_list %}
@@ -92,10 +93,8 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
-    </div>
 
-    {% if enable_clean %}
+    {% if enable_clean and show_recycle_root %}
     <form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
         <h3>{% trans "Clean" %}</h3>
         <p>{% trans "Clear files in trash and history：" %}</p>
@@ -115,7 +114,7 @@
 <script type="text/javascript">
 $('#main-panel').removeClass('ovhd');
 
-{% if enable_clean %}
+{% if enable_clean and show_recycle_root %}
 $('#online-gc').click(function() {
     $('#gc-form').modal({focus:false});
     $("#simplemodal-container").css({'height':'auto'});
