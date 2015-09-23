@@ -38,7 +38,7 @@
 <script type="text/javascript">
 $(function() {
     var dld_url = $('#download').attr('href');
-    $('#file-view-tip').append('<a href="' + dld_url + '" class="big-obv-btn">' + "{% trans "Download" %}" + '</a>');
+    $('#file-view-tip').append('<a href="' + dld_url + '" class="btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
 
 {% if filetype == 'PDF' and use_pdfjs %}

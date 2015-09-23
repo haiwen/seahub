@@ -70,7 +70,7 @@
 <script type="text/javascript">
 $(function() {
     var dld_btn = $('.obv-btn').clone();
-    dld_btn.html("{% trans "Download" %}").attr('class', 'big-obv-btn');
+    dld_btn.html("{% trans "Download" %}").attr('class', 'btn-link big-btn-link');
     $('#file-view-tip').append(dld_btn);
 
     {% if traffic_over_limit %}

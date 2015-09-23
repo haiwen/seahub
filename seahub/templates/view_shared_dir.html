@@ -11,8 +11,6 @@
     <h2>{{ dir_name }}</h2>
     <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
 
-    <div class="repo-file-list-outer-container">
-        <div class="repo-file-list-inner-container">
             <div class="repo-file-list-topbar ovhd">
                 <p class="path fleft">
                 {% trans "Current path: "%}
@@ -85,8 +83,6 @@
                 </tr>
                 {% endfor %}
             </table>
-        </div>
-    </div>
 {% endblock %}
 
 {% block extra_script %}
