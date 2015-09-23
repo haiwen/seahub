@@ -1785,15 +1785,13 @@ textarea:-moz-placeholder {/* for FF */
     border: 1px solid #bbb;
     margin: 2px 0 5px;
 }
-.repo-file-list-outer-container,
-.commit-list-outer-container {
+.repo-file-list-outer-container {
     padding:3px;
     background:#eee;
     border-radius:3px;
     margin:10px 0 25px;
 }
-.repo-file-list-inner-container,
-.commit-list-inner-container {
+.repo-file-list-inner-container {
     min-height:250px;
     background:#fff;
     border:1px solid #ddd;
@@ -1802,7 +1800,6 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-not-show {
     padding-left:10px;
 }
-.commit-list-inner-container .commit-list-topbar,
 .repo-file-list-inner-container .repo-file-list-topbar {
     padding:8px 10px;
 }
@@ -2176,6 +2173,9 @@ textarea:-moz-placeholder {/* for FF */
 .repo-trash-hd,
 .repo-snapshot-hd {
     margin-bottom:10px;
+}
+.repo-snapshot-commit {
+    margin-bottom:6px;
 }
 #online-gc {
     margin-left:5px;
