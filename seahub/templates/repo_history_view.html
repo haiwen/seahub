@@ -17,12 +17,6 @@
     <span class="icon-chevron-left"></span>
 </a>
 
-            {% if not user_perm %}
-            <div class="repo-file-list-not-show">
-                <p class="access-notice">{% trans "Can't view this library"%}</p>
-            </div>
-            {% else %}
-
             {% if path == '/' %}
             <div id="repo-latest-commit" class="repo-snapshot-commit">
                 <span class="commit-msg">{{ current_commit.props.desc|translate_commit_desc }}</span>
@@ -87,7 +81,6 @@
                 {% endfor %}
             </table>
             <!-- /.repo-file-list -->
-            {% endif %}
     {% endblock %}
 
 {% block extra_script %}

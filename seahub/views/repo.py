@@ -33,7 +33,7 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
     get_max_upload_file_size, new_merge_with_no_conflict, \
     get_commit_before_new_merge, user_traffic_over_limit, render_error, \
-    get_file_type_and_ext
+    get_file_type_and_ext, render_permission_error
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
 from seahub.utils import gen_file_get_url
@@ -172,9 +172,7 @@ def render_repo(request, repo):
     path = get_path_from_request(request)
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
-        return render_to_response('repo_access_deny.html', {
-                'repo': repo,
-                }, context_instance=RequestContext(request))
+        return render_permission_error(request, _(u'Permission denied'))
 
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
 
@@ -322,9 +320,7 @@ def repo_history_view(request, repo_id):
     path = get_path_from_request(request)
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
-        return render_to_response('repo_access_deny.html', {
-                'repo': repo,
-                }, context_instance=RequestContext(request))
+        return render_permission_error(request, _(u'Permission denied'))
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
