@@ -172,9 +172,7 @@ def render_repo(request, repo):
     path = get_path_from_request(request)
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
-        return render_to_response('repo_access_deny.html', {
-                'repo': repo,
-                }, context_instance=RequestContext(request))
+        return render_error(request, _(u'Permission denied'))
 
     sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
 
@@ -322,9 +320,7 @@ def repo_history_view(request, repo_id):
     path = get_path_from_request(request)
     user_perm = check_repo_access_permission(repo.id, request.user)
     if user_perm is None:
-        return render_to_response('repo_access_deny.html', {
-                'repo': repo,
-                }, context_instance=RequestContext(request))
+        return render_error(request, _(u'Permission denied'))
 
     try:
         server_crypto = UserOptions.objects.is_server_crypto(username)
