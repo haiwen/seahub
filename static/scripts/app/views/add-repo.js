@@ -30,7 +30,8 @@ define([
 
         templateData: function() {
             return {
-                showSharePerm: false
+                showSharePerm: false,
+                enable_encrypt_library: app.pageOptions.enable_encrypt_library
             };
         },
 

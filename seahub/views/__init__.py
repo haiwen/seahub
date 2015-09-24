@@ -1224,6 +1224,7 @@ def libraries(request):
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
+            'enable_encrypt_library': config.ENABLE_ENCRYPT_LIBRARY,
             'max_upload_file_size': max_upload_file_size,
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,

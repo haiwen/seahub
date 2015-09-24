@@ -65,6 +65,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="checkbox" setting_display_name="encrypt library" help_tip="If allow user create encrypted library" setting_name="ENABLE_ENCRYPT_LIBRARY" setting_val=config_dict.ENABLE_ENCRYPT_LIBRARY %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
     {% with type="input" setting_display_name="library password minimum length" help_tip="The least number of characters that can make up an encrypt library password." setting_name="REPO_PASSWORD_MIN_LENGTH" setting_val=config_dict.REPO_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}

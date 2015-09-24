@@ -11,7 +11,8 @@ define([
     var CreatePubRepoView = AddRepoView.extend({
         templateData: function() {
             return {
-                showSharePerm: true
+                showSharePerm: true,
+                enable_encrypt_library: app.pageOptions.enable_encrypt_library
             };
         },
 
