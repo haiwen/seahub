@@ -39,7 +39,7 @@
             </td>
             <td data-id="{{ repo.id }}" data-name="{{ repo.name }}">
                 <div>
-                <a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
+                <a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
                 </div>
             </td>
         </tr>
@@ -51,7 +51,6 @@
 </div>
 {% endif %}
 
-{% include 'snippets/repo_del_popup.html' %}
 {% include 'sysadmin/repo_transfer_form.html' %}
 
 {% endblock %}
@@ -59,7 +58,6 @@
 {% block extra_script %}
 <script type="text/javascript">
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
-{% include 'snippets/repo_del_js.html' %}
 {% include 'sysadmin/repoadmin_js.html' %}
 </script>
 {% endblock %}

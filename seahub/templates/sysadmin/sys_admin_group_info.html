@@ -56,7 +56,7 @@
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td><a href="{% url 'user_info' repo.user %}">{{ repo.user }}</a></td>
                 <td data-id="{{ repo.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
+                    <div><a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op-icon vh" title="{% trans "Delete" %}"><img src="{{MEDIA_URL}}img/rm.png" alt="" /></a></div>
                 </td>
             </tr>
             {% endfor %}
@@ -83,12 +83,15 @@
     </div>
 </div>
 
-{% include 'snippets/repo_del_popup.html' %}
 {% endblock %}
 
 
 {% block extra_script %}
 <script type="text/javascript">
-{% include 'snippets/repo_del_js.html' %}
+addConfirmTo($('.repo-delete-btn'), {
+    'title': "{% trans "Delete Library" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true,
+});
 </script>
 {% endblock %}

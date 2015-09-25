@@ -42,7 +42,8 @@
 <script type="text/javascript">
 addConfirmTo($('.rm-grp'), {
     'title': "{% trans "Delete Group" %}",
-    'con': "{% trans "Are you sure you want to delete %s ?" %}"
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true,
 });
 </script>
 {% endblock %}
