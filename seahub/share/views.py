@@ -534,14 +534,14 @@ def list_shared_links(request):
 
     # download links
     fileshares = FileShare.objects.filter(username=username)
-    p_fileshares = []           # personal file share
+    fs_files, fs_dirs = [], []
     for fs in fileshares:
         r = seafile_api.get_repo(fs.repo_id)
         if not r:
             fs.delete()
             continue
 
-        if fs.s_type == 'f':
+        if fs.is_file_share_link():
             if seafile_api.get_file_id_by_path(r.id, fs.path) is None:
                 fs.delete()
                 continue
@@ -561,7 +561,9 @@ def list_shared_links(request):
         if fs.expire_date is not None and timezone.now() > fs.expire_date:
             fs.is_expired = True
 
-        p_fileshares.append(fs)
+        fs_files.append(fs) if fs.is_file_share_link() else fs_dirs.append(fs)
+    fs_files.sort(lambda x, y: cmp(x.filename, y.filename))
+    fs_dirs.sort(lambda x, y: cmp(x.filename, y.filename))
 
     # upload links
     uploadlinks = UploadLinkShare.objects.filter(username=username)
@@ -581,9 +583,10 @@ def list_shared_links(request):
         link.shared_link = gen_shared_upload_link(link.token)
         link.repo = r
         p_uploadlinks.append(link)
+    p_uploadlinks.sort(lambda x, y: cmp(x.dir_name, y.dir_name))
 
     return render_to_response('share/links.html', {
-            "fileshares": p_fileshares,
+            "fileshares": fs_dirs + fs_files,
             "uploadlinks": p_uploadlinks,
             }, context_instance=RequestContext(request))
 
