@@ -4,7 +4,7 @@ from .views import *
 from .views_misc import ServerInfoView
 from .views_auth import LogoutDeviceView, ClientLoginTokenView
 from .endpoints.dir_shared_items import DirSharedItemsEndpoint
-
+from .endpoints.account import Account
 
 urlpatterns = patterns('',
     url(r'^ping/$', Ping.as_view()),
