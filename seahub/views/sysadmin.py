@@ -1616,11 +1616,12 @@ def sys_repo_delete(request, repo_id):
     repo = seafile_api.get_repo(repo_id)
     repo_name = repo.name
 
-    org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
-    if org_id > 0:
+    if MULTI_TENANCY:
+        org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
         usernames = get_related_users_by_org_repo(org_id, repo_id)
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
     else:
+        org_id = -1
         usernames = get_related_users_by_repo(repo_id)
         repo_owner = seafile_api.get_repo_owner(repo_id)
 
