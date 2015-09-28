@@ -213,6 +213,7 @@ urlpatterns = patterns(
     url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/restore/$', sys_repo_trash_restore, name="sys_repo_trash_restore"),
     url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
+    url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
     url(r'^sys/useradmin/ldap/$', sys_user_admin_ldap, name='sys_useradmin_ldap'),
     url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),

@@ -1524,19 +1524,15 @@ def repo_remove(request, repo_id):
     ct = 'application/json; charset=utf-8'
     result = {}
 
-    if get_system_default_repo_id() == repo_id:
-        result['error'] = _(u'System library can not be deleted.')
-        return HttpResponse(json.dumps(result), status=403, content_type=ct)
-
     repo = get_repo(repo_id)
     username = request.user.username
     if is_org_context(request):
-        # Remove repo in org context, only (sys admin/repo owner/org staff) can
-        # perform this operation.
+        # Remove repo in org context, only (repo owner/org staff) can perform
+        # this operation.
         org_id = request.user.org.org_id
         is_org_staff = request.user.org.is_staff
         org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        if request.user.is_staff or is_org_staff or org_repo_owner == username:
+        if is_org_staff or org_repo_owner == username:
             # Must get related useres before remove the repo
             usernames = get_related_users_by_org_repo(org_id, repo_id)
             seafile_api.remove_repo(repo_id)
@@ -1553,9 +1549,9 @@ def repo_remove(request, repo_id):
             result['error'] = _(u'Permission denied.')
             return HttpResponse(json.dumps(result), status=403, content_type=ct)
     else:
-        # Remove repo in personal context, only (repo owner/sys admin) can
-        # perform this operation.
-        if validate_owner(request, repo_id) or request.user.is_staff:
+        # Remove repo in personal context, only (repo owner) can perform this
+        # operation.
+        if validate_owner(request, repo_id):
             usernames = get_related_users_by_repo(repo_id)
             seafile_api.remove_repo(repo_id)
             if repo:            # send delete signal only repo is valid

@@ -38,4 +38,9 @@ $('#repo-transfer-form').submit(function() {
 });
 
 $('#main-panel').removeClass('ovhd');
-{% include 'snippets/repo_del_js.html' %}
+
+addConfirmTo($('.repo-delete-btn'), {
+    'title': "{% trans "Delete Library" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true
+});

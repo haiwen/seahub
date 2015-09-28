@@ -31,8 +31,11 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version
 from seahub.utils.licenseparse import parse_license
 from seahub.views import get_system_default_repo_id
+from seahub.views.ajax import (get_related_users_by_org_repo,
+                               get_related_users_by_repo)
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, \
@@ -1592,7 +1595,42 @@ def sys_repo_transfer(request):
         pass
 
     seafile_api.set_repo_owner(repo_id, new_owner)
+
     messages.success(request, _(u'Successfully transfered.'))
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_repo_delete(request, repo_id):
+    """Delete a repo.
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse(sys_repo_admin)
+
+    if get_system_default_repo_id() == repo_id:
+        messages.error(request, _('System library can not be deleted.'))
+        return HttpResponseRedirect(next)
+
+    repo = seafile_api.get_repo(repo_id)
+    repo_name = repo.name
+
+    if MULTI_TENANCY:
+        org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
+        usernames = get_related_users_by_org_repo(org_id, repo_id)
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+    else:
+        org_id = -1
+        usernames = get_related_users_by_repo(repo_id)
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    seafile_api.remove_repo(repo_id)
+    repo_deleted.send(sender=None, org_id=org_id, usernames=usernames,
+                      repo_owner=repo_owner, repo_id=repo_id,
+                      repo_name=repo_name)
+
+    messages.success(request, _(u'Successfully deleted.'))
     return HttpResponseRedirect(next)
 
 @login_required
