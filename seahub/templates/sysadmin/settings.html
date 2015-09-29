@@ -8,7 +8,7 @@
 
 <div class="seahub-web-settings">
 
-    <h4>Url</h4>
+    <h4>URL</h4>
 
     <div>
     {% with type="input" setting_display_name="SERVICE_URL" help_tip="The URL of the server, like https://seafile.example.com or http://192.168.1.2:8000" setting_name="SERVICE_URL" setting_val=config_dict.SERVICE_URL %}
@@ -45,15 +45,15 @@
     <h4>Password</h4>
 
     <div>
-    {% with type="checkbox" setting_display_name="strong password" help_tip="Force user use a strong password when singup up or change password." setting_name="USER_STRONG_PASSWORD_REQUIRED" setting_val=config_dict.USER_STRONG_PASSWORD_REQUIRED %}
+    {% with type="checkbox" setting_display_name="strong password" help_tip="Force user to use a strong password when sign up or change password." setting_name="USER_STRONG_PASSWORD_REQUIRED" setting_val=config_dict.USER_STRONG_PASSWORD_REQUIRED %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_display_name="password minimum length" help_tip="The least number of characters when user make up an account password." setting_name="USER_PASSWORD_MIN_LENGTH" setting_val=config_dict.USER_PASSWORD_MIN_LENGTH %}
+    {% with type="input" setting_display_name="password minimum length" help_tip="The least number of characters an account password should include." setting_name="USER_PASSWORD_MIN_LENGTH" setting_val=config_dict.USER_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_display_name="password strength level" help_tip="The level of password strength when user make up an account passowrd." setting_name="USER_PASSWORD_STRENGTH_LEVEL" setting_val=config_dict.USER_PASSWORD_STRENGTH_LEVEL %}
+    {% with type="input" setting_display_name="password strength level" help_tip="The level of an account password's strength." setting_name="USER_PASSWORD_STRENGTH_LEVEL" setting_val=config_dict.USER_PASSWORD_STRENGTH_LEVEL %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>
@@ -61,15 +61,15 @@
     <h4>Library</h4>
 
     <div>
-    {% with type="checkbox" setting_display_name="library history" help_tip="If allow user keep library history" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
+    {% with type="checkbox" setting_display_name="library history" help_tip="Allow user to keep library history" setting_name="ENABLE_REPO_HISTORY_SETTING" setting_val=config_dict.ENABLE_REPO_HISTORY_SETTING %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="checkbox" setting_display_name="encrypt library" help_tip="If allow user create encrypted library" setting_name="ENABLE_ENCRYPT_LIBRARY" setting_val=config_dict.ENABLE_ENCRYPT_LIBRARY %}
+    {% with type="checkbox" setting_display_name="encrypted library" help_tip="Allow user to create encrypted library" setting_name="ENABLE_ENCRYPT_LIBRARY" setting_val=config_dict.ENABLE_ENCRYPT_LIBRARY %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_display_name="library password minimum length" help_tip="The least number of characters that can make up an encrypt library password." setting_name="REPO_PASSWORD_MIN_LENGTH" setting_val=config_dict.REPO_PASSWORD_MIN_LENGTH %}
+    {% with type="input" setting_display_name="library password minimum length" help_tip="The least number of characters an encrypted library password should include." setting_name="REPO_PASSWORD_MIN_LENGTH" setting_val=config_dict.REPO_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>
@@ -86,44 +86,37 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-var original_value;
-var temp_container;
-$('.input').focus(function() {
-    if ($(this).siblings('.error').html()) {
-        return false;
+$('.web-setting-form .input').focus(function() {
+    var $otherFormSubmit = $('.web-setting-form .submit:visible');
+    if ($otherFormSubmit.length > 0) {
+        $otherFormSubmit.siblings('.cancel').click();
     }
-    if (temp_container) {
-        $('.cancel-setting', temp_container).click();
-    }    
-    $(this).siblings('.submit, .cancel-setting').show();
-    original_value = $(this).val();
-    temp_container = $(this).parent();
+
+    var $form = $(this).closest('form'); 
+    $('.submit, .cancel', $form).show();
 });
 
-$('.cancel-setting').click(function() {
-    temp_container = '';
-    if ($(this).siblings('.error').html()) {
-        $(this).siblings('.error').html('').hide();
-    }
-    $(this).siblings('.input').val(original_value).siblings('.submit, .cancel-setting').hide();
+$('.web-setting-form .cancel').click(function() {
+    var $form = $(this).closest('form'); 
+    $('.error, .submit, .cancel', $form).hide();
+    var $input = $('.input', $form);
+    $input.val($input.attr('data-cur'));
 });
 
 $(document).click(function(e) {
     var target =  e.target || event.srcElement;
-    if (!$('.input').is(target) &&
-        !$('.submit').is(target) &&
-        !$('.cancel-setting').is(target) &&
-        temp_container) {
-        $('.cancel-setting', temp_container).click();
+    var $op = $('.web-setting-form .submit:visible');
+    if ($op.length && !$('.input, .submit, .cancel', $op.closest('form')).is(target)) {
+        $('.cancel', $op.closest('form')).click();
     }
 });
 
-$('.web-checkbox-setting').change(function() {
+$('.web-setting-checkbox').change(function() {
     var checkbox = $(this),
         value,
         key = checkbox.attr('name');
 
-    if (checkbox.is(':checked')) {
+    if (checkbox.prop('checked')) {
         value = 1;
     } else {
         value = 0;
@@ -147,19 +140,22 @@ $('.web-input-setting-form').submit(function() {
     var $form = $(this),
         $error = $form.find('.error'),
         $input = $form.find('.input'),
-        $sb_btn = $('.submit', $form);
-        $cancel_btn = $('.cancel-setting', $form),
-        key = $.trim($input.attr('name')),
+        $sb_btn = $('.submit', $form),
+        $cancel_btn = $('.cancel', $form),
+        key = $input.attr('name'),
         value = $.trim($input.val());
 
-    disable($sb_btn);
-
     if (!value) {
-        $error.html("{% trans "Can not be empty" %}").show();
-        enable($sb_btn);
+        $error.html("{% trans "It is required." %}").show();
         return false;
     }
 
+    if (value == $input.attr('data-cur')) { // no change
+        $cancel_btn.click();
+        return false;
+    }
+
+    disable($sb_btn);
     $.ajax({
         url: "{% url 'sys_settings' %}",
         type: 'POST',
@@ -167,21 +163,20 @@ $('.web-input-setting-form').submit(function() {
         beforeSend: prepareCSRFToken,
         data: { 'key': key, 'value': value },
         success: function() {
+            $input.val(value).attr('data-cur', value);
             $error.html('').hide();
             enable($sb_btn);
-            $input.val(value);
             $sb_btn.hide();
             $cancel_btn.hide();
-            temp_container = '';
             feedback("{% trans "Success" %}", 'success');
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
                 $error.html($.parseJSON(jqXHR.responseText).error).show();
-                enable($sb_btn);
             } else {
                 $error.html("{% trans "Failed. Please check the network." %}").show();
             }
+            enable($sb_btn);
         }
     });
     return false;

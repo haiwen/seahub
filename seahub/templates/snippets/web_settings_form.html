@@ -1,28 +1,28 @@
 {% load i18n %}
 
 {% if type == 'input' %}
-<div class="web-setting-name">
-    <label>{{ setting_display_name }}</label>
-</div>
-<div class="web-setting-description">
-    <form class="web-input-setting-form">{% csrf_token %}
-        <input class="input" type="text" name="{{ setting_name }}" value="{{ setting_val }}" />
-        <input class="submit hide" type="submit" value="{% trans "Save" %}" />
-        <i class="icon-remove fa-1x cancel-setting cspt hide" title="{% trans "Cancel" %}"></i><br />
+<form class="web-setting-form web-input-setting-form">
+    <h5 class="web-setting-name">{{ setting_display_name }}</h5>
+    <div class="web-setting-input">
+        <input class="input" type="text" name="{{ setting_name }}" value="{{ setting_val }}" data-cur="{{ setting_val }}" />
         <p class="error hide"></p>
-        <p class="web-setting-help-tip">{{ help_tip }}</p>
-    </form>
-</div>
+        <p class="tip">{{ help_tip }}</p>
+    </div>
+    <div class="web-setting-ops">
+        <button type="submit" class="submit sf2-icon-tick vam hide" title="{% trans "Submit" %}"></button>
+        <button type="button" class="cancel sf2-icon-x2 vam hide" title="{% trans "Cancel" %}"></button>
+    </div>
+</form>
 {% endif %}
 
 {% if type == 'checkbox' %}
-<div class="web-setting-name">
-    <label>{{ setting_display_name }}</label>
-</div>
-
-<div class="web-setting-description">
-    <form class="web-checkbox-setting-form">{% csrf_token %}
-        <input class="web-checkbox-setting" type="checkbox" name="{{ setting_name }}" {% if setting_val %}checked="checked"{% endif %} /><span class="web-setting-help-tip pos-rel">{{ help_tip }}</span>
-    </form>
-</div>
+<form class="web-setting-form web-checkbox-setting-form">{% csrf_token %}
+    <h5 class="web-setting-name">{{ setting_display_name }}</h5>
+    <div class="web-setting-input">
+        <label class="checkbox-label">
+            <span class="checkbox{% if setting_val %} checkbox-checked{% endif %}"><input class="checkbox-orig web-setting-checkbox" type="checkbox" name="{{ setting_name }}"{% if setting_val %} checked="checked"{% endif %} /></span>
+            <span class="checkbox-option">{{ help_tip }}</span>
+        </label>
+    </div>
+</form>
 {% endif %}

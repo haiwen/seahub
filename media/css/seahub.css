@@ -1939,9 +1939,11 @@ textarea:-moz-placeholder {/* for FF */
 #rename-form .input {
     font-size:14px;
 }
+.web-setting-form .submit,
 #rename-form .submit {
     color:green;
 }
+.web-setting-form .cancel,
 #rename-form .cancel {
     color:#666;
 }
@@ -1949,6 +1951,8 @@ textarea:-moz-placeholder {/* for FF */
 #rename-form .submit {
     margin:0;
 }
+.web-setting-form .submit,
+.web-setting-form .cancel,
 #rename-form .submit,
 #rename-form .cancel {
     font-size:16px;
@@ -3640,68 +3644,43 @@ img.thumbnail {
     max-height: 24px;
 }
 
-/* seahub web setting */
-.seahub-web-settings {
-    margin-top:15px;
-}
+/* seahub web settings */
 .seahub-web-settings h4 {
+    padding:3px 10px;
     background:#f7f7f7;
+    border-radius:2px;
     margin:15px 0;
-    padding:4px 0 4px 14px;
 }
-.web-setting-name {
-    width:190px;
-    margin-left:14px;
-}
-.web-setting-name label {
-    width:175px;
-    margin:3px 0;
-}
-.web-setting-description {
-    width:480px;
+.web-setting-form {
     margin-bottom:20px;
 }
 .web-setting-name,
-.web-setting-description {
+.web-setting-input,
+.web-setting-ops {
     display:inline-block;
+}
+.web-setting-name {
+    width:180px;
+    padding:0 10px;
+    vertical-align:top;
+    font-weight:normal;
+    line-height:28px;
+}
+.web-setting-input {
+    width:400px;
+}
+.web-setting-name,
+.web-setting-input .input {
+    margin:0;
+}
+.web-setting-ops {
+    width:100px;
     vertical-align:top;
 }
-.web-setting-description .web-setting-help-tip {
-    font-size:12px;
+.web-setting-form .submit,
+.web-setting-input {
+    margin-top:0;
 }
-.web-input-setting-form .web-setting-help-tip {
-    width:380px;
-    color:#888;
-    line-height:1.4;
-    margin:2px 0 0 0;
-}
-.web-input-setting-form .error {
-    margin:2px 0 0 0;
-}
-.web-input-setting-form .input ,
-.web-input-setting-form .submit {
-    margin:3px 0 0 0;
-}
-.web-input-setting-form .input {
-    width:370px;
-    padding:0 0 0 5px;
-    height:23px;
-}
-.web-input-setting-form .submit {
-    padding:2px 8px;
-    margin-left:20px;
-}
-.web-input-setting-form  .cancel-setting {
-    opacity:0.6;
-    padding:3px 6px 5px;
-}
-.web-input-setting-form  .cancel-setting:hover {
-    opacity:1;
-}
-.web-checkbox-setting-form {
-    width:370px;
-}
-.web-checkbox-setting-form .web-setting-help-tip {
-    top:-7px;
-    left:1px;
+.web-setting-form .submit {
+    margin-right:5px;
 }
