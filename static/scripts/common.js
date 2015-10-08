@@ -36,7 +36,7 @@ require.config({
 
         'jquery.magnific-popup': 'lib/jquery.magnific-popup',
 
-        simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
+        simplemodal: 'lib/jquery.simplemodal',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
 
