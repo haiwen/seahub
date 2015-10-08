@@ -75,6 +75,7 @@ define([
             $loadingTip.show();
             var _this = this;
             this.repos.fetch({
+                cache: false, // for IE
                 reset: true,
                 success: function (collection, response, opts) {
                 },

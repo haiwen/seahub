@@ -106,6 +106,7 @@ define([
             $loadingTip.show();
             var _this = this;
             this.repos.fetch({
+                cache: false,
                 reset: true,
                 success: function (collection, response, opts) {
                 },

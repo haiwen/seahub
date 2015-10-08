@@ -99,6 +99,7 @@ define([
                 dir.setPath(category, repo_id, path);
                 var _this = this;
                 dir.fetch({
+                    cache: false,
                     reset: true,
                     data: {'p': path},
                     success: function (collection, response, opts) {
@@ -893,6 +894,7 @@ define([
                         _this = this;
                     dir.last_start = start;
                     dir.fetch({
+                        cache: false,
                         remove: false,
                         data: {
                             'p': dir.path,
