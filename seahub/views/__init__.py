@@ -421,7 +421,7 @@ def get_unencry_rw_repos_by_user(request):
 
     return accessible_repos
 
-def render_recycle_root(request, repo_id):
+def render_recycle_root(request, repo_id, path='/'):
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -429,7 +429,7 @@ def render_recycle_root(request, repo_id):
     days = show_delete_days(request)
 
     try:
-        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days)
+        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days, path)
     except:
         deleted_entries = []
 
@@ -458,9 +458,16 @@ def render_recycle_root(request, repo_id):
     if is_repo_owner:
         enable_clean = True
 
+    if path == '/':
+        cur_dir_name = repo.name
+    else:
+        cur_dir_name = os.path.basename(path.rstrip('/'))
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
+            'cur_dir_name': cur_dir_name,
+            'cur_dir_path': path,
             'dir_list': dir_list,
             'file_list': file_list,
             'days': days,
@@ -470,7 +477,9 @@ def render_recycle_root(request, repo_id):
 def render_recycle_dir(request, repo_id, commit_id):
     basedir = request.GET.get('base', '')
     path = request.GET.get('p', '')
-    if not basedir or not path:
+    cur_dir_name = request.GET.get('cur_dir_name', '')
+    cur_dir_path = request.GET.get('cur_dir_path', '')
+    if not basedir or not path or not cur_dir_name or not cur_dir_path:
         return render_recycle_root(request, repo_id)
 
     if basedir[0] != '/':
@@ -506,6 +515,8 @@ def render_recycle_dir(request, repo_id, commit_id):
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
+            'cur_dir_name': cur_dir_name,
+            'cur_dir_path': cur_dir_path,
             'zipped': zipped,
             'dir_list': dir_list,
             'file_list': file_list,
@@ -518,12 +529,13 @@ def render_recycle_dir(request, repo_id, commit_id):
 
 @login_required
 def repo_recycle_view(request, repo_id):
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
+    cur_dir_path = request.GET.get('cur_dir_path', '/')
+    if check_folder_permission(request, repo_id, cur_dir_path) != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
-        return render_recycle_root(request, repo_id)
+        return render_recycle_root(request, repo_id, cur_dir_path)
     else:
         return render_recycle_dir(request, repo_id, commit_id)
 
