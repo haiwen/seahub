@@ -814,7 +814,7 @@ class Repos(APIView):
 
         response = HttpResponse(json.dumps(repos_json), status=200,
                                 content_type=json_content_type)
-        response["enable_encrypt_library"] = config.ENABLE_ENCRYPT_LIBRARY
+        response["enable_encrypted_library"] = config.ENABLE_ENCRYPTED_LIBRARY
         return response
 
     def post(self, request, format=None):
@@ -871,7 +871,7 @@ class Repos(APIView):
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
         passwd = request.DATA.get("passwd", None)
-        if (passwd is not None) and (not config.ENABLE_ENCRYPT_LIBRARY):
+        if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
