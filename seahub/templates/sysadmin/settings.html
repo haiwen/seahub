@@ -53,7 +53,7 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="input" setting_display_name="password strength level" help_tip="The level of an account password's strength." setting_name="USER_PASSWORD_STRENGTH_LEVEL" setting_val=config_dict.USER_PASSWORD_STRENGTH_LEVEL %}
+    {% with type="input" setting_display_name="password strength level" help_tip="The level(1-4) of an account password's strength. For example, '3' means password must have at least 3 of the following: num, upper letter, lower letter and other symbols" setting_name="USER_PASSWORD_STRENGTH_LEVEL" setting_val=config_dict.USER_PASSWORD_STRENGTH_LEVEL %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>

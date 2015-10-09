@@ -1690,6 +1690,11 @@ def sys_settings(request):
             else:
                 result['error'] = _(u'Invalid value')
                 return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+            if key == 'USER_PASSWORD_STRENGTH_LEVEL' and value not in (1,2,3,4):
+                result['error'] = _(u'Invalid value')
+                return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
         else:
             if key not in STRING_WEB_SETTINGS:
                 result['error'] = _(u'Invalid value')
