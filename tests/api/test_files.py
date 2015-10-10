@@ -4,15 +4,13 @@ Test file/dir operations.
 """
 
 import posixpath
-import random
-import re
 import pytest
 import urllib
-from urllib import urlencode, quote, quote
+from urllib import urlencode, quote
+import urlparse
 
 from tests.common.utils import randstring, urljoin
-from tests.api.urls import DEFAULT_REPO_URL, REPOS_URL
-from tests.api.apitestbase import ApiTestBase, USERNAME
+from tests.api.apitestbase import ApiTestBase
 
 class FilesApiTest(ApiTestBase):
     def test_rename_file(self):
@@ -45,33 +43,34 @@ class FilesApiTest(ApiTestBase):
 
     def test_copy_file(self):
         with self.get_tmp_repo() as repo:
-            fname, _ = self.create_file(repo)
             # TODO: create another repo here, and use it as dst_repo
+
+            # create sub folder(dpath)
             dpath, _ = self.create_dir(repo)
-            fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=/'
-            data = {
-                'file_names': fname,
-                'dst_repo': repo.repo_id,
-                'dst_dir': dpath,
-            }
-            res = self.post(fopurl, data=data)
-            self.assertEqual(res.text, '"success"')
 
             # create tmp file in sub folder(dpath)
             tmp_file = 'tmp_file.txt'
-            furl = repo.get_filepath_url(dpath + '/' + tmp_file)
+            file_path = dpath + '/' + tmp_file
+            furl = repo.get_filepath_url(file_path)
             data = {'operation': 'create'}
             res = self.post(furl, data=data, expected=201)
 
-            # copy tmp file(in dpath) to dst dir
-            fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=' + quote(dpath)
+            # copy tmp file from sub folder(dpath) to dst dir('/')
             data = {
-                'file_names': tmp_file,
                 'dst_repo': repo.repo_id,
-                'dst_dir': dpath,
+                'dst_dir': '/',
+                'operation': 'copy',
             }
-            res = self.post(fopurl, data=data)
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             self.assertEqual(res.text, '"success"')
+
+            # get info of copied file in dst dir('/')
+            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            detail = self.get(fdurl).json()
+            self.assertIsNotNone(detail)
+            self.assertIsNotNone(detail['id'])
 
     def test_download_file(self):
         with self.get_tmp_repo() as repo:
