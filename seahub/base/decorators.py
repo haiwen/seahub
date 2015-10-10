@@ -80,6 +80,6 @@ def repo_passwd_set_required(func):
 def require_POST(func):
     def decorated(request, *args, **kwargs):
         if request.method != 'POST':
-            return HttpResponseNotAllowed('Only POST here')
+            return HttpResponseNotAllowed(['POST'])
         return func(request, *args, **kwargs)
     return decorated

@@ -24,6 +24,7 @@ from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
+from seahub.base.decorators import require_POST
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
     RepoCreateForm, SharedRepoCreateForm, RepoSettingForm
@@ -1520,6 +1521,7 @@ def set_notice_seen_by_id(request):
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def repo_remove(request, repo_id):
     ct = 'application/json; charset=utf-8'
     result = {}
