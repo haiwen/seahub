@@ -351,8 +351,7 @@ INIT_PASSWD = genpassword
 # browser tab title
 SITE_TITLE = 'Private Seafile'
 
-# Base url and name used in email sending
-SITE_BASE = 'http://seafile.com'
+# Base name used in email sending
 SITE_NAME = 'Seafile'
 
 # Path to the Logo Imagefile (relative to the media path)

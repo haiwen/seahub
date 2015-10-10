@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 
 from seahub.message.models import UserMessage, UserMsgLastCheck
 import seahub.settings as settings
+from seahub.utils import get_service_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -26,7 +27,7 @@ Go check out at ${url}
 
 site_name = settings.SITE_NAME
 subjects = (u'New message on %s' % site_name, u'New messages on %s' % site_name)
-url = settings.SITE_BASE.rstrip('/') + reverse('message_list')
+url = get_service_url().rstrip('/') + reverse('message_list')
 
 class Command(BaseCommand):
     help = 'Send Email notifications to user if he/she has a unread user message.'
