@@ -297,6 +297,8 @@ from django.utils.http import urlquote
 from registration.signals import user_registered
 from seahub.utils import get_site_scheme_and_netloc
 
+from constance import config
+
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
@@ -308,8 +310,9 @@ def email_admin_on_registration(sender, **kwargs):
     This email will be sent when both ``ACTIVATE_AFTER_REGISTRATION`` and
     ``REGISTRATION_SEND_MAIL`` are set to False.
     """
-    if settings.ACTIVATE_AFTER_REGISTRATION is False and \
-            settings.REGISTRATION_SEND_MAIL is False:
+
+    if config.ACTIVATE_AFTER_REGISTRATION is False and \
+            config.REGISTRATION_SEND_MAIL is False:
         reg_email = kwargs['user'].email
 
         ctx_dict = {

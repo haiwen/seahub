@@ -5,11 +5,14 @@
 
 {% block main_panel %}
 <div class="text-panel">
-{% if send_mail %}
-<p>{% trans "An activation email has been sent. Please check your email and click on the link to activate your account." %}</p>
+{% if enable_signup %}
+    {% if send_mail %}
+    <p>{% trans "An activation email has been sent. Please check your email and click on the link to activate your account." %}</p>
+    {% else %}
+    <p>{% trans "Registration complete, please wait for administrator to activate your account." %}</p>
+    {% endif %}
 {% else %}
-<p>{% trans "Registration complete, please wait for administrator to activate your account." %}</p>
+    <p>{% trans "Signup function is not enabled." %}</p>
 {% endif %}
 </div>
 {% endblock %}
- 

@@ -117,6 +117,8 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
     create_org
 
+from constance import config
+
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
@@ -810,7 +812,10 @@ class Repos(APIView):
                     repo["random_key"] = r.random_key
                 repos_json.append(repo)
 
-        return Response(repos_json)
+        response = HttpResponse(json.dumps(repos_json), status=200,
+                                content_type=json_content_type)
+        response["enable_encrypted_library"] = config.ENABLE_ENCRYPTED_LIBRARY
+        return response
 
     def post(self, request, format=None):
 
@@ -865,7 +870,11 @@ class Repos(APIView):
             return resp
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
-        passwd = request.DATA.get("passwd", None) or None
+        passwd = request.DATA.get("passwd", None)
+        if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'NOT allow to create encrypted library.')
+
         if org_id > 0:
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
                                                   username, passwd, org_id)

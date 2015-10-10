@@ -1,5 +1,4 @@
 from django.conf.urls.defaults import *
-# from django.views.generic.simple import direct_to_template
 from django.views.generic import TemplateView
 from django.conf import settings
 
@@ -11,12 +10,10 @@ from seahub.base.generic import DirectTemplateView
 
 form_class = DetailedRegistrationForm if settings.REQUIRE_DETAIL_ON_REGISTRATION \
     else RegistrationForm
+
 reg_dict = { 'backend': 'seahub.base.accounts.RegistrationBackend',
              'form_class': form_class,
              }
-
-if settings.ACTIVATE_AFTER_REGISTRATION == True:
-    reg_dict['success_url'] = settings.SITE_ROOT
 
 urlpatterns = patterns('',
                        url(r'^activate/complete/$',
@@ -37,17 +34,13 @@ try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
     CLOUD_MODE = False
-from seahub.settings import ENABLE_SIGNUP
 
-if ENABLE_SIGNUP:
-    urlpatterns += patterns('',
-        url(r'^register/$',
-            register,
-            reg_dict,
-            name='registration_register'),
-        url(r'^register/complete/$',
-            DirectTemplateView.as_view(
-                template_name='registration/registration_complete.html',
-                extra_context={ 'send_mail': settings.REGISTRATION_SEND_MAIL } ),
-            name='registration_complete'),
+urlpatterns += patterns('',
+    url(r'^register/$',
+        register,
+        reg_dict,
+        name='registration_register'),
+    url(r'^register/complete/$',
+        DirectTemplateView.as_view(template_name='registration/registration_complete.html'),
+        name='registration_complete'),
 )

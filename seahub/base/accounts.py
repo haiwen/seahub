@@ -25,8 +25,7 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 
-from seahub.settings import USER_STRONG_PASSWORD_REQUIRED, \
-    USER_PASSWORD_MIN_LENGTH, USER_PASSWORD_STRENGTH_LEVEL
+from constance import config
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -379,7 +378,7 @@ class RegistrationBackend(object):
             site = RequestSite(request)
 
         from registration.models import RegistrationProfile
-        if settings.ACTIVATE_AFTER_REGISTRATION is True:
+        if config.ACTIVATE_AFTER_REGISTRATION is True:
             # since user will be activated after registration,
             # so we will not use email sending, just create acitvated user
             new_user = RegistrationProfile.objects.create_active_user(username, email,
@@ -393,7 +392,7 @@ class RegistrationBackend(object):
             # create inactive user, user can be activated by admin, or through activated email
             new_user = RegistrationProfile.objects.create_inactive_user(username, email,
                                                                         password, site,
-                                                                        send_email=settings.REGISTRATION_SEND_MAIL)
+                                                                        send_email=config.REGISTRATION_SEND_MAIL)
 
         # userid = kwargs['userid']
         # if userid:
@@ -520,7 +519,7 @@ class RegistrationForm(forms.Form):
         if 'password1' in self.cleaned_data:
             pwd = self.cleaned_data['password1']
 
-            if USER_STRONG_PASSWORD_REQUIRED is True:
+            if config.USER_STRONG_PASSWORD_REQUIRED is True:
                 if is_user_password_strong(pwd) is True:
                     return pwd
                 else:
@@ -528,8 +527,8 @@ class RegistrationForm(forms.Form):
                         _(("%(pwd_len)s characters or more, include "
                            "%(num_types)s types or more of these: "
                            "letters(case sensitive), numbers, and symbols")) %
-                        {'pwd_len': USER_PASSWORD_MIN_LENGTH,
-                         'num_types': USER_PASSWORD_STRENGTH_LEVEL})
+                        {'pwd_len': config.USER_PASSWORD_MIN_LENGTH,
+                         'num_types': config.USER_PASSWORD_STRENGTH_LEVEL})
             else:
                 return pwd
 

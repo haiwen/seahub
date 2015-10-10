@@ -8,9 +8,12 @@ RequestContext.
 """
 
 import re
+
+from constance import config
+
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
-    ENABLE_SIGNUP, MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
-    SHOW_REPO_DOWNLOAD_BUTTON, REPO_PASSWORD_MIN_LENGTH, SHARE_LINK_PASSWORD_MIN_LENGTH
+    MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
+    SHOW_REPO_DOWNLOAD_BUTTON, SHARE_LINK_PASSWORD_MIN_LENGTH
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -70,13 +73,13 @@ def base(request):
         'org': org,
         'base_template': base_template,
         'site_name': SITE_NAME,
-        'enable_signup': ENABLE_SIGNUP,
+        'enable_signup': config.ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
         'has_file_search': HAS_FILE_SEARCH,
         'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
-        'repo_password_min_length': REPO_PASSWORD_MIN_LENGTH,
         'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
+        'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,

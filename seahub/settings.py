@@ -7,7 +7,7 @@ import re
 import random
 import string
 
-from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT
+from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
 
 PROJECT_ROOT = os.path.join(os.path.dirname(__file__), os.pardir)
 
@@ -192,6 +192,8 @@ INSTALLED_APPS = (
     'captcha',
     'compressor',
     'statici18n',
+    'constance',
+    'constance.backends.database',
 
     'seahub.api2',
     'seahub.avatar',
@@ -209,6 +211,8 @@ INSTALLED_APPS = (
     'seahub.password_session',
 )
 
+CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
+CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
@@ -232,6 +236,9 @@ ENABLE_UPLOAD_FOLDER = False
 
 # enable resumable fileupload or not
 ENABLE_RESUMABLE_FILEUPLOAD = False
+
+# enable encrypt library
+ENABLE_ENCRYPTED_LIBRARY = True
 
 # mininum length for password of encrypted library
 REPO_PASSWORD_MIN_LENGTH = 8
@@ -361,7 +368,7 @@ BRANDING_CSS = ''
 # server.
 SERVE_STATIC = True
 
-# Enalbe or disalbe registration on web.
+# Enable or disable registration on web.
 ENABLE_SIGNUP = False
 
 # For security consideration, please set to match the host/domain of your site, e.g., ALLOWED_HOSTS = ['.example.com'].
@@ -603,3 +610,22 @@ if 'win32' in sys.platform:
 LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
+
+CONSTANCE_CONFIG = {
+    'SERVICE_URL': (SERVICE_URL,''),
+    'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),
+    'DISABLE_SYNC_WITH_ANY_FOLDER': (False,''),
+
+    'ENABLE_SIGNUP': (ENABLE_SIGNUP,''),
+    'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
+    'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
+    'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
+
+    'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
+    'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
+    'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING,''),
+
+    'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED,''),
+    'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH,''),
+    'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL,''),
+}

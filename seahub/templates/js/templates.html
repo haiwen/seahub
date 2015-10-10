@@ -11,6 +11,7 @@
           <option value="r">{% trans "Read-Only"%}</option>
         </select>
         <% } %>
+        <% if (enable_encrypted_library) { %>
         <div class="repo-create-encryption">
             <label class="checkbox-label">
                 <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
@@ -21,6 +22,7 @@
             <label>{% trans "Password again"%}</label><br />
             <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
         </div>
+        <% } %>
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>

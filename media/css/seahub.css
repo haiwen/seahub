@@ -1906,9 +1906,11 @@ textarea:-moz-placeholder {/* for FF */
 #rename-form .input {
     font-size:14px;
 }
+.web-setting-form .submit,
 #rename-form .submit {
     color:green;
 }
+.web-setting-form .cancel,
 #rename-form .cancel {
     color:#666;
 }
@@ -1916,6 +1918,8 @@ textarea:-moz-placeholder {/* for FF */
 #rename-form .submit {
     margin:0;
 }
+.web-setting-form .submit,
+.web-setting-form .cancel,
 #rename-form .submit,
 #rename-form .cancel {
     font-size:16px;
@@ -3615,4 +3619,45 @@ textarea:-moz-placeholder {/* for FF */
 img.thumbnail {
     max-width: 24px;
     max-height: 24px;
+}
+
+/* seahub web settings */
+.seahub-web-settings h4 {
+    padding:3px 10px;
+    background:#f7f7f7;
+    border-radius:2px;
+    margin:15px 0;
+}
+.web-setting-form {
+    margin-bottom:20px;
+}
+.web-setting-name,
+.web-setting-input,
+.web-setting-ops {
+    display:inline-block;
+}
+.web-setting-name {
+    width:180px;
+    padding:0 10px;
+    vertical-align:top;
+    font-weight:normal;
+    line-height:28px;
+}
+.web-setting-input {
+    width:400px;
+}
+.web-setting-name,
+.web-setting-input .input {
+    margin:0;
+}
+.web-setting-ops {
+    width:100px;
+    vertical-align:top;
+}
+.web-setting-form .submit,
+.web-setting-input {
+    margin-top:0;
+}
+.web-setting-form .submit {
+    margin-right:5px;
 }
