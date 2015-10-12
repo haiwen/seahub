@@ -24,7 +24,7 @@ consult a specific backend's documentation for details.
 """
 
 from django.conf import settings
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 from seahub.auth import views as auth_views
 

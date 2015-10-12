@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('seahub.profile.views',
 #    url(r'^list_user/$', 'list_userids', name="list_userids"),

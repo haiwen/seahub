@@ -121,7 +121,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
-ROOT_URLCONF = 'djblets.util.rooturl'
+ROOT_URLCONF = 'seahub.utils.rooturl'
 SITE_ROOT = '/'
 
 # Python dotted path to the WSGI application used by Django's runserver.
@@ -176,7 +176,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.i18n',
     'django.core.context_processors.media',
     'django.core.context_processors.static',
-    'djblets.util.context_processors.siteRoot',
+    # 'djblets.util.context_processors.siteRoot',
     'django.core.context_processors.request',
     'django.contrib.messages.context_processors.messages',
     'seahub.base.context_processors.base',

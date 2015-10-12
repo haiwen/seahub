@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 
 urlpatterns = patterns('seahub.notifications.views',
 #    url(r'^$', 'notification_list', name='notification_list'),

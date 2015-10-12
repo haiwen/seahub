@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 from django.views.generic.base import RedirectView
 
 from views import message_list, message_send ,user_msg_list ,msg_count

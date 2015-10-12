@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import patterns, url
 
 from views import group_info, group_members, group_member_operations, group_add_admin, \
     group_manage, msg_reply, msg_reply_new, group_recommend, \

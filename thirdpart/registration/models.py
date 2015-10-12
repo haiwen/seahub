@@ -6,7 +6,7 @@ import re
 from django.conf import settings
 
 from django.db import models
-from django.db import transaction
+# from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -91,14 +91,14 @@ class RegistrationManager(models.Manager):
         
         return self.create_email_user(username, email, password, site,
                                       send_email, is_active=False)
-    create_inactive_user = transaction.commit_on_success(create_inactive_user)
+    # create_inactive_user = transaction.commit_on_success(create_inactive_user)
 
     def create_active_user(self, username, email, password,
                            site, send_email=True):
         
         return self.create_email_user(username, email, password, site,
                                       send_email, is_active=True)
-    create_inactive_user = transaction.commit_on_success(create_inactive_user)
+    # create_inactive_user = transaction.commit_on_success(create_inactive_user)
 
     def create_profile(self, user):
         """

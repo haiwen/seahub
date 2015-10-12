@@ -70,6 +70,7 @@ class Contact(models.Model):
 class ContactAddForm(ModelForm):
     class Meta:
         model = Contact
+        fields = "__all__"
 
     def clean(self):
         if not 'contact_email' in self.cleaned_data:
@@ -80,7 +81,8 @@ class ContactAddForm(ModelForm):
 class ContactEditForm(ModelForm):
     class Meta:
         model = Contact
-    
+        fields = "__all__"
+
     def __init__(self, *args, **kwargs):
         super(ContactEditForm, self).__init__(*args, **kwargs)
         self.fields['contact_email'].widget.attrs['readonly'] = True

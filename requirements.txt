@@ -2,8 +2,8 @@ python-dateutil
 chardet
 six
 Pillow>=2.6.1,<3.0.0
-Django>=1.5.8,<1.6
-Djblets==0.6.14
+Django==1.8.5
+Djblets==0.8.22
 django-compressor==1.4
 django-statici18n==1.1.2
 git+git://github.com/haiwen/django-constance.git@bde7f7cdfd0ed1631a6817fd4cd76f37bf54fe35#egg=django-constance[database]

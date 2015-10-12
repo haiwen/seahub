@@ -50,8 +50,8 @@ class AnonymousUser(object):
     is_staff = False
     is_active = False
     is_superuser = False
-    _groups = EmptyManager()
-    _user_permissions = EmptyManager()
+    _groups = EmptyManager(object)
+    _user_permissions = EmptyManager(object)
 
     def __init__(self):
         pass

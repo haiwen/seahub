@@ -13,7 +13,7 @@ from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
-    SHOW_REPO_DOWNLOAD_BUTTON
+    SHOW_REPO_DOWNLOAD_BUTTON, SITE_ROOT
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -86,4 +86,5 @@ def base(request):
         'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
         'search_repo_id': search_repo_id,
+        'SITE_ROOT': SITE_ROOT,
         }
