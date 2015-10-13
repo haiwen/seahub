@@ -6,7 +6,7 @@
 
 {% block main_panel %}
 <div id="initial-loading-view">
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
 </div>
 {% endblock %}
 
@@ -88,7 +88,7 @@
         </div>
     </div>
 
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"</p>
 </div>
 
@@ -106,7 +106,7 @@
         </thead>
         <tbody></tbody>
     </table>
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
         <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
@@ -115,7 +115,7 @@
 
 <div id="activities" class="hide">
     <div id="activities-body" class="hide"></div>
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
     <button id="activities-more" class="hide">{% trans 'More' %}</button>
 </div>
 
@@ -137,7 +137,7 @@
 <form id="sublib-create-form" class="file-choose-form hide">
     <h3>{% trans "Choose a directory:" %}</h3>
     <div class="dir-tree-cont">
-        <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+        <span class="loading-icon loading-tip"></span>
     </div>
     <input type="hidden" name="dst_repo" value="" />
     <input type="hidden" name="dst_path" value="" />
@@ -168,7 +168,7 @@
         </div>
     </div>
 
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
 </div>
 
@@ -190,7 +190,7 @@
         <h2 class="alc">{% trans "No public library" %}</h2>
         <p>{% blocktrans %}You can create a public library by clicking "New Library" button, others can view and download this library.{% endblocktrans %}</p>
     </div>
-    <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+    <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
 </div>
 
