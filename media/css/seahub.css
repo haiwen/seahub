@@ -324,9 +324,50 @@ p { margin:0.5em 0; }
     margin-bottom:5px;
 }
 .textarea { height:70px; }
-.loading-tip { /*for img*/
-    display:block;
+.loading-tip {
+    width:20px;
+    height:20px;
     margin:1em auto;
+    border-top:0.2em solid #eee;
+    border-right:0.2em solid #eee;
+    border-bottom:0.2em solid #eee;
+    border-left:0.2em solid #aaa;
+    border-radius:50%;
+    animation:loading 0.9s infinite linear;
+    -webkit-animation:loading 0.9s infinite linear;
+    -moz-animation:loading 0.9s infinite linear;
+}
+@keyframes loading {
+    0% {
+        transform:rotate(0deg);
+    }
+    100% {
+        transform:rotate(360deg);
+    }
+}
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform:rotate(0deg);
+    }
+    100% {
+        -webkit-transform:rotate(360deg);
+    }
+}
+@-moz-keyframes loading {
+    0% {
+        -moz-transform:rotate(0deg);
+    }
+    100% {
+        -moz-transform:rotate(360deg);
+    }
+}
+#initial-loading-view .loading-tip {
+    width:26px;
+    height:26px;
+    border-top:0.3em solid #eee;
+    border-right:0.3em solid #eee;
+    border-bottom:0.3em solid #eee;
+    border-left:0.3em solid #aaa;
 }
 .icon-plus, .icon-minus, .icon-pencil,
 .repo-file-list .icon-star-empty,
@@ -2040,6 +2081,10 @@ textarea:-moz-placeholder {/* for FF */
     height:164px;
     overflow-y:auto;
 }
+.fixed-upload-file-dialog .saving-tip p,
+.fileupload-buttonbar .saving-tip p {
+    display:inline-block;
+}
 .fixed-upload-file-dialog .ops {
     position:absolute;
     top:10px;
@@ -2486,6 +2531,9 @@ textarea:-moz-placeholder {/* for FF */
     background-image:none;
 }
 .replies-loading-icon {
+    width:13px;
+    height:13px;
+    margin:0;
     position:absolute;
     top:0;
 }

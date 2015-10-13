@@ -10,7 +10,7 @@
     <div id="events-body">
         {% include 'snippets/events_body.html' %}
     </div>
-<div id="events-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+<div id="events-loading" class="hide"><div class="loading-tip"></div></div>
 {% if events_more %}
 <button id="events-more" data-start="{{new_start}}">{% trans 'More' %}</button>
 {% endif %}

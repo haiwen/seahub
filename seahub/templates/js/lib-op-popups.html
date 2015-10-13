@@ -44,12 +44,12 @@
         <h3><%= form_title %></h3>
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
-            <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" />
+            <div class="loading-tip"></div>
             <div id="current-repo-dirs"></div>
             <% if (show_other_repos) { %>
             <div id="other-repos">
                 <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-                <img class="loading-tip" width="32" src="{{MEDIA_URL}}img/loading-new.gif" alt="{% trans 'Loading...' %}" style="display:none;" />
+                <div class="loading-tip" style="display:none"></div>
                 <div id="other-repos-dirs" class="hide"></div>
             </div>
             <% } %>
@@ -87,7 +87,7 @@
             <div class="row fileupload-buttonbar">
                 <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
             </div>
-            <p class="saving-tip alc clear hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+            <div class="saving-tip alc clear hide"><p style="margin:0 5px 0 0" class="loading-tip vam"></p><p>{% trans "Saving..." %}</p></div>
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </div>
     </div>

@@ -45,7 +45,10 @@
                 </div>
                 <div class="progress-extended"></div>
             </div>
-            <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+            <div class="saving-tip alc hide">
+                <p style="margin:0 5px 0 0" class="loading-tip vam"></p>
+                <p>{% trans "Saving..." %}</p>
+            </div>
         </div>
         <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
     </form>

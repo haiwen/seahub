@@ -10,7 +10,7 @@
         {% include "api2/events_body.html" %}
     </div>
     {% if events_more %}
-    <div id="loading-icon"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
+    <div id="loading-icon"><div class="loading-tip"></div></div>
     <p id="events-error" class="error hide"></p>
     {% endif %}
 </div>

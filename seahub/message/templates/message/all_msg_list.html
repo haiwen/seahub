@@ -38,7 +38,7 @@
 </table>
 
 <div id="send-msg-popup" class="hide">
-    <img src="{{MEDIA_URL}}img/loading-icon.gif" class="loading-tip" />
+    <div class="loading-tip"></div>
     <form id="send-msg-form" action="{% url 'message_send' %}?from=all" method="post" name="send-msg-form" class="msg-form hide">{% csrf_token %}
         <textarea id="mass-msg" name="mass_msg" placeholder="{% trans "message..." %}"></textarea><br/>
         <select id="mass-email" name="mass_email" multiple="multiple"></select><br/>
@@ -54,7 +54,7 @@
 <div id="add-file-popup" class="file-choose-form hide">
     <h3>{% trans "Choose a file or files:" %}</h3>
     <div class="file-tree-cont" id="file-tree">
-        <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+        <div class="loading-tip"></div>
     </div>
     <button class="submit">{% trans "Submit" %}</button>
     <button class="simplemodal-close">{% trans "Cancel"%}</button>
