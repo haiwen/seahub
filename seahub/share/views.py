@@ -1022,6 +1022,10 @@ def save_shared_link(request):
         messages.error(request, _(u'Please choose a directory.'))
         return HttpResponseRedirect(next)
 
+    if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
+        messages.error(request, _('Permission denied'))
+        return HttpResponseRedirect(next)
+
     try:
         fs = FileShare.objects.get(token=token)
     except FileShare.DoesNotExist:
@@ -1038,7 +1042,6 @@ def save_shared_link(request):
                           need_progress=0)
 
     messages.success(request, _(u'Successfully saved.'))
-
     return HttpResponseRedirect(next)
 
 ########## private share
@@ -1114,6 +1117,10 @@ def save_private_file_share(request, token):
     Save private share file to someone's library.
     """
     username = request.user.username
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
     try:
         pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
     except PrivateFileDirShare.DoesNotExist:
@@ -1130,18 +1137,18 @@ def save_private_file_share(request, token):
         dst_repo_id = request.POST.get('dst_repo')
         dst_path    = request.POST.get('dst_path')
 
+        if check_folder_permission(request, dst_repo_id, dst_path) != 'rw':
+            messages.error(request, _('Permission denied'))
+            return HttpResponseRedirect(next)
+
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         seafile_api.copy_file(repo_id, src_path, obj_name,
                               dst_repo_id, dst_path, new_obj_name, username,
                               need_progress=0)
         messages.success(request, _(u'Successfully saved.'))
-
     else:
         messages.error(request, _("You don't have permission to save %s.") % obj_name)
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
     return HttpResponseRedirect(next)
 
 # @login_required
