@@ -868,65 +868,36 @@ def get_shared_link(request):
     data = json.dumps({'token': token, 'shared_link': shared_link})
     return HttpResponse(data, status=200, content_type=content_type)
 
-@login_required
-def remove_shared_link(request):
-    """
-    Handle request to remove file shared link.
-    """
-    token = request.GET.get('t')
-
-    FileShare.objects.filter(token=token).delete()
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('share_admin')
-
-    messages.success(request, _(u'Removed successfully'))
-
-    return HttpResponseRedirect(next)
-
-
 @login_required_ajax
 def ajax_remove_shared_link(request):
-
+    username = request.user.username
     content_type = 'application/json; charset=utf-8'
     result = {}
 
     token = request.GET.get('t')
-
     if not token:
         result = {'error': _(u"Argument missing")}
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     try:
         link = FileShare.objects.get(token=token)
-        link.delete()
-        result = {'success': True}
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    except:
+    except FileShare.DoesNotExist:
         result = {'error': _(u"The link doesn't exist")}
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
+    if not link.is_owner(username):
+        result = {'error': _("Permission denied")}
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
-@login_required
-def remove_shared_upload_link(request):
-    """
-    Handle request to remove shared upload link.
-    """
-    token = request.GET.get('t')
-
-    UploadLinkShare.objects.filter(token=token).delete()
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('share_admin')
-
-    messages.success(request, _(u'Removed successfully'))
-
-    return HttpResponseRedirect(next)
+    link.delete()
+    result = {'success': True}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 
 @login_required_ajax
 def ajax_remove_shared_upload_link(request):
-
+    username = request.user.username
     content_type = 'application/json; charset=utf-8'
     result = {}
 
@@ -937,12 +908,17 @@ def ajax_remove_shared_upload_link(request):
 
     try:
         upload_link = UploadLinkShare.objects.get(token=token)
-        upload_link.delete()
-        result = {'success': True}
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    except:
+    except UploadLinkShare.DoesNotExist:
         result = {'error': _(u"The link doesn't exist")}
         return HttpResponse(json.dumps(result), status=400, content_type=content_type)
+
+    if not upload_link.is_owner(username):
+        result = {'error': _("Permission denied")}
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+    upload_link.delete()
+    result = {'success': True}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 
 @login_required_ajax
@@ -1075,6 +1051,14 @@ def gen_private_file_share(request, repo_id):
     file_or_dir = os.path.basename(path.rstrip('/'))
     username = request.user.username
 
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    if not check_folder_permission(request, repo_id, file_or_dir):
+        messages.error(request, _('Permission denied'))
+        return HttpResponseRedirect(next)
+
     for email in [e.strip() for e in emails if e.strip()]:
         if not is_valid_username(email):
             continue
@@ -1096,9 +1080,6 @@ def gen_private_file_share(request, repo_id):
         share_file_to_user_successful.send(sender=None, priv_share_obj=pfds)
         messages.success(request, _('Successfully shared %s.') % file_or_dir)
 
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = SITE_ROOT
     return HttpResponseRedirect(next)
 
 @login_required

@@ -1513,6 +1513,36 @@ def sys_publink_admin(request):
 
 @login_required
 @sys_staff_required
+def sys_publink_remove(request):
+    """Remove share links.
+    """
+    token = request.GET.get('t')
+
+    FileShare.objects.filter(token=token).delete()
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('share_admin')
+
+    messages.success(request, _(u'Removed successfully'))
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def sys_upload_link_remove(request):
+    """Remove shared upload links.
+    """
+    token = request.GET.get('t')
+
+    UploadLinkShare.objects.filter(token=token).delete()
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('share_admin')
+
+    messages.success(request, _(u'Removed successfully'))
+    return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
 def user_search(request):
     """Search a user.
     """
