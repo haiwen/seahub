@@ -1081,6 +1081,11 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
+    if check_folder_permission(request, src_repo_id, src_path) is None:
+        error_msg = _(u'You do not have permission to copy files/dirs in this directory')
+        result['error'] = error_msg
+        return HttpResponse(json.dumps(result), status=403, content_type=content_type)
+
     for obj_name in obj_dir_names:
         src_dir = posixpath.join(src_path, obj_name)
         if dst_path.startswith(src_dir):
