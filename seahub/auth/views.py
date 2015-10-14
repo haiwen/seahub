@@ -228,10 +228,19 @@ def login_simple_check(request):
         raise Http404
 
 
-def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
+def logout(request, next_page=None,
+           template_name='registration/logged_out.html',
+           redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
     from seahub.auth import logout
     logout(request)
+
+    if redirect_field_name in request.REQUEST:
+        next_page = request.REQUEST[redirect_field_name]
+        # Security check -- don't allow redirection to a different host.
+        if not is_safe_url(url=next_page, host=request.get_host()):
+            next_page = request.path
+
     if next_page is None:
         redirect_to = request.REQUEST.get(redirect_field_name, '')
         if redirect_to:
