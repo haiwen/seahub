@@ -791,9 +791,9 @@ def copy_move_common():
                                     content_type=content_type)
 
             # Leave src folder/file permission checking to corresponding
-            # views, only need to check folder permission when perform 'move'
-            # operation, 1), if move file, check parent dir perm, 2), if move
-            # folder, check that folder perm.
+            # views.
+            # For 'move', check has read-write perm to src folder;
+            # For 'cp', check has read perm to src folder.
 
             return view_method(request, repo_id, path, dst_repo_id, dst_path,
                                obj_name)
@@ -845,12 +845,18 @@ def cp_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
+    # check parent dir perm
+    if not check_folder_permission(request, src_repo_id, src_path):
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
     try:
         res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
                                     dst_repo_id, dst_path, new_obj_name,
                                     username, need_progress=1)
-    except SearpcError, e:
+    except SearpcError as e:
         res = None
 
     if not res:
@@ -915,6 +921,12 @@ def cp_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
+
+    # check src dir perm
+    if not check_folder_permission(request, src_repo_id, src_path):
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
     src_dir = posixpath.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
