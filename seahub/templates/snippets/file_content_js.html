@@ -86,7 +86,7 @@ window.onload = function () {
 {% if filetype == 'PDF' and use_pdfjs %}
 if (!($.browser.msie && parseInt($.browser.version) < 10)) {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
-    $('#file-view').html('<div id="pdf"><img src="{{ MEDIA_URL }}img/loading-icon.gif" alt="{% trans "Loading..." %}" class="loading-tip" /></div>');
+    $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
     PDFJS.getDocument("{{ raw_path|escapejs }}").then(function(pdf) {
         var $loadingTip = $('#pdf .loading-tip');
 

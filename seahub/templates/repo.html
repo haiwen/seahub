@@ -79,7 +79,10 @@
                 <div class="row fileupload-buttonbar">
                     <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
                 </div>
-                <p class="saving-tip alc clear hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+                <p class="saving-tip alc clear hide">
+                    <span class="loading-icon vam"></span>
+                    <span class="vam">{% trans "Saving..." %}</span>
+                </p>
                 <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
             </div>
            {% endif %} 
@@ -114,7 +117,10 @@
                     </div>
                     <div class="progress-extended"></div>
                 </div>
-                <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
+                <p class="saving-tip alc hide">
+                    <span class="loading-icon vam"></span>
+                    <span class="vam">{% trans "Saving..." %}</span>
+                </p>
             </div>
             <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
             {% endif %}
@@ -158,11 +164,11 @@
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <div id="mv-dir-list" class="dir-tree-cont">
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />     
+            <span class="loading-icon loading-tip"></span>
             <div id="current-repo-dirs"></div>
             {% if not repo.encrypted %}
             <h5 class="hd cspt"><span class="icon-caret-right"></span>{% trans "Other Libraries"%}</h5>
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" style="display:none;" />     
+            <span class="loading-icon loading-tip" style="display:none;"></span>
             <div id="other-repos-dirs" class="hide"></div>
             {% endif %}
         </div>
@@ -1390,7 +1396,7 @@ function sortDirent() {
     other.removeClass('hide');
 }
 
-var loading_icon = '<img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="vam" />';
+var loading_icon = '<span class="loading-icon vam"></span>';
 // cur_path: will be updated after reqDirdata
 var cur_path = "{{ path|escapejs}}";
 

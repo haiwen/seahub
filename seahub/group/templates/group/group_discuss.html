@@ -24,7 +24,7 @@
     <div id="add-file-popup" class="file-choose-form hide">
         <h3>{% trans "Choose a file or files:" %}</h3>
         <div class="file-tree-cont" id="file-tree">
-            <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
+            <span class="loading-icon loading-tip"></span>
         </div>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
         <button class="simplemodal-close">{% trans "Cancel"%}</button>
@@ -84,7 +84,7 @@
                 <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
                     <span class="unfold-replies">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
                     <span class="fold-replies hide">{% trans "Hide replies" %}</span>
-                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                    <span class="replies-loading-icon loading-icon"></span>
                 </div>
                 {% if msg.reply_cnt == 0 %}
                 <ul class="reply-list hide"></ul>
@@ -159,7 +159,7 @@
                 <div class="replies-op hide" data-rstatus="hide">
                     <span class="unfold-replies" data-url="">{% blocktrans with amount=0 %}{{ amount }} replies{% endblocktrans %}</span>
                     <span class="fold-replies hide">{% trans "Hide replies" %}</span>
-                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                    <span class="replies-loading-icon loading-icon"></span>
                 </div>
                 <ul class="reply-list hide"></ul>
                 <form action="" method="post" class="reply-form">

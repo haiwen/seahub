@@ -324,7 +324,53 @@ p { margin:0.5em 0; }
     margin-bottom:5px;
 }
 .textarea { height:70px; }
-.loading-tip { /*for img*/
+/* loading implemented with css  */
+@-moz-keyframes loading {
+    0% {
+        -moz-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes loading {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@keyframes loading {
+    0% {
+        -moz-transform: rotate(0deg);
+        -ms-transform: rotate(0deg);
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -moz-transform: rotate(360deg);
+        -ms-transform: rotate(360deg);
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+.loading-icon {
+    display:inline-block;
+    width:22px;
+    height:22px;
+    border:2px solid #eee;
+    border-left-color:#aaa;
+    border-radius:50%;
+    -moz-animation:loading 0.9s infinite linear;
+    -webkit-animation:loading 0.9s infinite linear;
+    animation:loading 0.9s infinite linear;
+}
+.loading-tip {
     display:block;
     margin:1em auto;
 }
@@ -2488,6 +2534,9 @@ textarea:-moz-placeholder {/* for FF */
 .replies-loading-icon {
     position:absolute;
     top:0;
+    width:12px;
+    height:12px;
+    display:none;
 }
 .msg .at {
     color:#808;

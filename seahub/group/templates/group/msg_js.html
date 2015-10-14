@@ -20,10 +20,10 @@ $('.msg .op').hover(
 
 $('.replies-op').hover(
     function() {
-        $(this).children().css({'text-decoration':'underline'});
+        $('.unfold-replies, .fold-replies', $(this)).css({'text-decoration':'underline'});
     },
     function() {
-        $(this).children().css({'text-decoration':'none'});
+        $('.unfold-replies, .fold-replies', $(this)).css({'text-decoration':'none'});
     }
 ).click(function() {
     var op = $(this), 
@@ -35,13 +35,13 @@ $('.replies-op').hover(
 
     if (op.attr('data-rstatus') == 'hide') {
         uf_r.addClass('unfold-replies-nobg');
-        loading.removeClass('hide');
+        loading.show();
         $.ajax({
             url: '{{SITE_ROOT}}group/reply/' + op.parents('.msg').attr('data-id') + '/',
             dataType: 'json',
             cache: true,
             success: function(data) {
-                loading.addClass('hide');
+                loading.hide();
                 uf_r.removeClass('unfold-replies-nobg');
                 r_list.html(data['html']);
                 uf_r.addClass('hide');
