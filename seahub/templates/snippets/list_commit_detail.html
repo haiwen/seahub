@@ -1,7 +1,6 @@
 {% load i18n %}
 function listCommitDetails(url, t) {
-    $.modal('<div id="ls-ch"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-top:30px;" /></div>', {autoResize:true});
-    $('#ls-ch').css('text-align', 'center');
+    $.modal('<div id="ls-ch"><span class="loading-icon loading-tip"></span></div>', {autoResize:true});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $.ajax({
         url: url,
@@ -32,7 +31,7 @@ function listCommitDetails(url, t) {
                     con = '<p>' + HTMLescape(data['cmt_desc']) + '</p>';
                 }
             }
-            $('#ls-ch').css('text-align','left').html(heading + time + con);
+            $('#ls-ch').html(heading + time + con);
             $(window).resize();
         },
         error: function() {

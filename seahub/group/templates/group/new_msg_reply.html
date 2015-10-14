@@ -46,7 +46,7 @@
                 <div class="replies-op{% if msg.reply_cnt < 4 %} hide{% endif %}" data-rstatus="hide">
                     <span class="unfold-replies">{% blocktrans with amount=msg.reply_cnt %}{{ amount }} replies{% endblocktrans %}</span>
                     <span class="fold-replies hide">{% trans "Hide replies" %}</span>
-                    <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" width="16" class="replies-loading-icon hide" />
+                    <span class="replies-loading-icon loading-icon"></span>
                 </div>
                 <ul class="reply-list">
                     {% for r in msg.replies %}

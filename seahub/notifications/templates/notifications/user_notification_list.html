@@ -25,12 +25,13 @@
     </tr>
     {% include "notifications/user_notification_tr.html" %}
 </table>
+{% if notices_more %}
 <div id="notices-more">
-  <div id="notices-loading" class="hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="{% trans 'Loading...' %}" /></div>
-  <button id="notices-more-btn" class="{% if not notices_more %}hide{% endif %}">{% trans 'More' %}</button>
-  <p id="notices-error" class="error hide"></p>
-</div>    
-
+    <div id="notices-loading" class="hide"><span class="loading-icon"></span></div>
+    <button id="notices-more-btn">{% trans 'More' %}</button>
+    <p id="notices-error" class="error hide"></p>
+</div>
+{% endif %}
 {% endif %}
 {% endblock %}
 

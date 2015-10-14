@@ -2534,6 +2534,9 @@ textarea:-moz-placeholder {/* for FF */
 .replies-loading-icon {
     position:absolute;
     top:0;
+    width:12px;
+    height:12px;
+    display:none;
 }
 .msg .at {
     color:#808;
