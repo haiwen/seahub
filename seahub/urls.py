@@ -82,7 +82,6 @@ urlpatterns = patterns(
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit, name='file_edit'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/privshare/$', gen_private_file_share, name='gen_private_file_share'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/$', repo_access_file, name='repo_access_file'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_basic_info, name='repo_basic_info'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/transfer-owner/$', repo_transfer_owner, name='repo_transfer_owner'),

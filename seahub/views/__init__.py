@@ -1356,63 +1356,6 @@ def repo_set_access_property(request, repo_id):
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
 
 @login_required
-def repo_del_file(request, repo_id):
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
-        return render_permission_error(request, _('Failed to delete file.'))
-
-    parent_dir = request.GET.get("p", "/")
-    file_name = request.GET.get("file_name")
-    user = request.user.username
-    try:
-        seafserv_threaded_rpc.del_file(repo_id, parent_dir, file_name, user)
-        messages.success(request, _(u'%s successfully deleted.') % file_name)
-    except:
-        messages.error(request, _(u'Internal error. Failed to delete %s.') % file_name)
-
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponseRedirect(url)
-
-def repo_access_file(request, repo_id, obj_id):
-    """Delete or download file.
-    TODO: need to be rewrite.
-
-    **NOTE**: download file is moved to file.py::download_file
-    """
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return render_error(request, e.msg)
-
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-    op = request.GET.get('op', 'view')
-    file_name = request.GET.get('file_name', '')
-
-    if op == 'del':
-        return repo_del_file(request, repo_id)
-
-    username = request.user.username
-    path = request.GET.get('p', '')
-    if check_repo_access_permission(repo_id, request.user) or \
-            get_file_access_permission(repo_id, path, username):
-        # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, op, username)
-    else:
-        return render_permission_error(request, _(u'Unable to access file'))
-
-    redirect_url = gen_file_get_url(token, file_name)
-    return HttpResponseRedirect(redirect_url)
-
-@login_required
 def file_upload_progress_page(request):
     '''
     As iframe in repo_upload_file.html, for solving problem in chrome.
@@ -1629,9 +1572,8 @@ def repo_revert_dir(request, repo_id):
 
 @login_required
 def file_revisions(request, repo_id):
-    if request.method != 'GET':
-        return render_error(request)
-
+    """List file revisions in file version history page.
+    """
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -1640,43 +1582,7 @@ def file_revisions(request, repo_id):
     if check_repo_access_permission(repo.id, request.user) is None:
         raise Http404
 
-    op = request.GET.get('op')
-    if not op:
-        return render_file_revisions(request, repo_id)
-    elif op != 'download':
-        return render_error(request)
-
-    commit_id  = request.GET.get('commit')
-    path = request.GET.get('p')
-
-    if not (commit_id and path):
-        return render_error(request)
-
-    if op == 'download':
-        def handle_download():
-            parent_dir = os.path.dirname(path)
-            file_name  = os.path.basename(path)
-            seafdir = seafile_api.list_dir_by_commit_and_path (repo_id,
-                                                               commit_id,
-                                                               parent_dir)
-            if not seafdir:
-                return render_error(request)
-
-            # for ...  else ...
-            for dirent in seafdir:
-                if dirent.obj_name == file_name:
-                    break
-            else:
-                return render_error(request)
-
-            url = reverse('repo_access_file', args=[repo_id, dirent.obj_id])
-            url += '?file_name=%s&op=download' % urllib2.quote(file_name.encode('utf-8'))
-            return HttpResponseRedirect(url)
-
-        try:
-            return handle_download()
-        except Exception, e:
-            return render_error(request, str(e))
+    return render_file_revisions(request, repo_id)
 
 def demo(request):
     """
