@@ -2362,6 +2362,10 @@ def set_user_folder_perm(request, repo_id):
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
 
+    if check_folder_permission(request, repo_id, path) != 'rw':
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
+
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
     else:
@@ -2503,6 +2507,10 @@ def set_group_folder_perm(request, repo_id):
     if not seafile_api.get_repo(repo_id):
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
+
+    if check_folder_permission(request, repo_id, path) != 'rw':
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
 
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
