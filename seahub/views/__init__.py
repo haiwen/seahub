@@ -622,7 +622,7 @@ def repo_basic_info(request, repo_id):
 
 @login_required
 def repo_transfer_owner(request, repo_id):
-    """Transfer repo owner.
+    """Show transfer repo owner page.
     """
     username = request.user.username
     can_access, repo = can_access_repo_setting(request, repo_id, username)
@@ -647,7 +647,7 @@ def repo_transfer_success(request, repo_id):
 
 @login_required
 def repo_change_password(request, repo_id):
-    """Change library password.
+    """Show change library password page.
     """
     username = request.user.username
     can_access, repo = can_access_repo_setting(request, repo_id, username)
