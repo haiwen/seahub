@@ -195,13 +195,13 @@ def gen_token(max_length=5):
 
     return uuid.uuid4().hex[:max_length]
 
-def normalize_cache_key(value, prefix=None, token=None):
+def normalize_cache_key(value, prefix=None, token=None, max_length=200):
     """Returns a cache key consisten of ``value`` and ``prefix`` and ``token``. Cache key
     must not include control characters or whitespace.
     """
     key = value if prefix is None else prefix + value
     key = key if token is None else key + '_' + token
-    return urlquote(key)
+    return urlquote(key)[:max_length]
 
 def get_repo_last_modify(repo):
     """ Get last modification time for a repo.
