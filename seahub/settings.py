@@ -293,6 +293,7 @@ AUTO_GENERATE_GROUP_AVATAR_SIZES = (20, 24, 32, 36, 48, 56)
 LOG_DIR = os.environ.get('SEAHUB_LOG_DIR', '/tmp')
 CACHE_DIR = "/tmp"
 install_topdir = os.path.expanduser(os.path.join(os.path.dirname(__file__), '..', '..', '..'))
+central_conf_dir = os.environ.get('SEAFILE_CENTRAL_CONF_DIR', '')
 
 if 'win32' in sys.platform:
     try:
@@ -581,7 +582,8 @@ else:
 
 # Load seahub_settings.py in server release
 try:
-    sys.path.insert(0, install_topdir)
+    if os.path.exists(central_conf_dir):
+        sys.path.insert(0, central_conf_dir)
     import seahub_settings
 except ImportError:
     pass
