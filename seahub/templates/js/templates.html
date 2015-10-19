@@ -137,12 +137,12 @@
     <% } %>
     <% if (path == '/') { %>
     <a class="repo-history-icon fright" href="<%= site_root %>repo/history/<%- repo_id %>/" target="_blank" title="{% trans 'History' %}"></a>
+    <% } %>
     <% if (user_perm == 'rw') { %>
-    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/" target="_blank" title="{% trans 'Trash' %}"></a>
+    <a class="repo-trash-icon fright" href="<%= site_root %>repo/recycle/<%- repo_id %>/?cur_dir_path=<% print(encodeURIComponent(path)); %>" target="_blank" title="{% trans 'Trash' %}"></a>
     <% } %>
-    <% if (is_repo_owner && !is_virtual) { %>
+    <% if (path == '/' && is_repo_owner && !is_virtual) { %>
     <a class="repo-setting-icon fright" href="<%= site_root %>repo/<%- repo_id %>/settings/" target="_blank" title="{% trans 'Settings' %}"></a>
-    <% } %>
     <% } %>
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
