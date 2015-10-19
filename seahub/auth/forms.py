@@ -6,6 +6,7 @@ from django.utils.http import int_to_base36
 from seahub.base.accounts import User
 from seahub.auth import authenticate
 from seahub.auth.tokens import default_token_generator
+from seahub.profile.models import Profile
 from seahub.utils import IS_EMAIL_CONFIGURED, send_html_email, \
     is_valid_username, is_ldap_user, is_user_password_strong, clear_token
 
@@ -32,6 +33,17 @@ class AuthenticationForm(forms.Form):
         self.user_cache = None
         super(AuthenticationForm, self).__init__(*args, **kwargs)
 
+    def get_username_by_login(self, login):
+        """Convert login id to username(login email). Return login id if there
+        is no login_id <-> username record in user profile; Otherwise, return
+        username.
+        """
+        username = Profile.objects.get_username_by_login_id(login)
+        if username is None:
+            return login
+        else:
+            return username
+
     def clean_login(self):
         return self.cleaned_data['login'].strip()
 
@@ -39,8 +51,11 @@ class AuthenticationForm(forms.Form):
         login = self.cleaned_data.get('login')
         password = self.cleaned_data.get('password')
 
-        if login and password:
-            self.user_cache = authenticate(login=login,
+        # convert login id to username
+        username = self.get_username_by_login(login)
+
+        if username and password:
+            self.user_cache = authenticate(username=username,
                                            password=password)
             if self.user_cache is None:
                 raise forms.ValidationError(_("Please enter a correct email/username and password. Note that both fields are case-sensitive."))
