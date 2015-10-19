@@ -97,7 +97,7 @@
 <script type="text/javascript">
 $('.rm-link').click(function() {
     var op = $(this),
-        link_token = op.data('token'),
+        link_token = op.attr('data-token'),
         link_type = op.data('type'),
         ajax_url;
     if (link_type == 'upload') {
@@ -106,9 +106,12 @@ $('.rm-link').click(function() {
         ajax_url = '{% url 'ajax_remove_shared_link' %}';
     }
     $.ajax({
-        url: ajax_url + '?t=' + e(link_token),
+        url: ajax_url,
+        type: 'POST',
+        data: {'t': link_token},
         cache: false,
         dataType: 'json',
+        beforeSend: prepareCSRFToken,
         success: function(data) {
             op.parents('tr').remove();
             feedback("{% trans "Removed successfully." %}", 'success');

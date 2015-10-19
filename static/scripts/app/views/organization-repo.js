@@ -36,20 +36,23 @@ define([
         removeShare: function() {
             var el = this.$el;
             var lib_name = this.model.get('name');
-            Common.ajaxGet({
-                get_url: Common.getUrl({
+            $.ajax({
+                url: Common.getUrl({
                     name: 'ajax_unset_inner_pub_repo',
                     repo_id: this.model.get('id')
                 }),
+                type: 'POST',
                 data: {
                     'permission': this.model.get('permission')
                 },
-                after_op_success: function () {
+                beforeSend: Common.prepareCSRFToken,
+                dataType: 'json',
+                success: function () {
                     el.remove();
                     var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(lib_name) + '</span>');
                     Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
-                after_op_error: function(xhr) {
+                error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
                 }
             });

@@ -111,9 +111,11 @@ $('.rm-link, .rm-upload-link').click(function() {
     var _this = $(this);
     $.ajax({
         url: $(this).hasClass('rm-link') ? '{% url 'ajax_remove_shared_link' %}' : '{% url 'ajax_remove_shared_upload_link' %}',
+        type: 'POST',
         data: {'t': $(this).attr('data-token')},
         cache: false,
         dataType: 'json',
+        beforeSend: prepareCSRFToken,
         success: function() {
             _this.closest('tr').remove();
         },

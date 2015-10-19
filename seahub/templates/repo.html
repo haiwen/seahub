@@ -1297,11 +1297,15 @@ $('#add-new-file').click(function () {
 
 // share current dir
 $('#share-cur-dir').click(function() {
-   var op = $(this), name, aj_urls, type;
-   name = $('#cur-dir-name').attr('data-name');
-   aj_urls = { 'link': op.data('url'), 'upload-link': op.data('upload-url') };
-   type = 'd';
-   showSharePopup(op, name, aj_urls, type, cur_path);
+    var op = $(this),
+        name = $('#cur-dir-name').attr('data-name'),
+        aj_data = {
+            'repo_id': '{{repo.id|escapejs}}',
+            'p': cur_path,
+            'type': 'd'
+        },
+        type = 'd';
+   showSharePopup(op, name, aj_data, type, cur_path);
 });
 
 //select all or not
@@ -1641,7 +1645,9 @@ $('.dir-del, .file-del', context).click(function() {
 
     $.ajax({
         url: url_main + '?parent_dir=' + e(cur_path) + '&name=' + e(dirent_name),
+        type: 'POST',
         dataType: 'json',
+        beforeSend: prepareCSRFToken,
         success: function(data) {
             if (data['success']) {
                 dirent.remove();
@@ -1884,20 +1890,20 @@ $('.file-star', context).click(function() {
 
 //share
 $('.file-share, .dir-share', context).click(function() {
-    var op = $(this), name, aj_urls, type;
+    var op = $(this), name, aj_data, type;
     name = op.parents('tr').attr('data-name');
-    aj_urls = {
-        'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name),
-        'upload-link': '{% url 'get_shared_upload_link' %}?repo_id={{ repo.id }}&p=' + e(cur_path) + e(name)
+    aj_data = {
+        'repo_id': "{{repo.id|escapejs}}",
+        'p': cur_path + name
     };
     if (op.hasClass('dir-share')) {
-        aj_urls['link'] += '&type=d';
+        $.extend(aj_data, {'type': 'd'});
         type = 'd';
     } else {
         type = 'f';
     }
 
-    showSharePopup(op, name, aj_urls, type, cur_path);
+    showSharePopup(op, name, aj_data, type, cur_path);
     return false;
 });
 

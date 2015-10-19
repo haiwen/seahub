@@ -196,7 +196,9 @@ define([
             $.ajax({
                 url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path)
                 + '&name=' + encodeURIComponent(dirent_name),
+                type: 'POST',
                 dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
                 success: function(data) {
                     dir.remove(model);
                     app.globalState.noFileOpPopup = true; // make other items can work normally when hover

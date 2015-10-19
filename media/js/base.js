@@ -73,7 +73,9 @@ $(function() {
                         var link_href = $(this).attr('href');
                         $.ajax({
                             url: notice_list.data('url') + '?notice_id=' + e(notice_id),
-                            dataType:'json',
+                            type: 'POST',
+                            dataType: 'json',
+                            beforeSend: prepareCSRFToken,
                             success: function(data) {
                                 location.href = link_href;
                             },
@@ -116,7 +118,9 @@ $(function() {
             var url = $(this).data('url');
             $.ajax({
                 url: url,
+                type: 'POST',
                 dataType: 'json',
+                beforeSend: prepareCSRFToken,
                 success: function() {
                     $('.num', msg_ct).html(0).addClass('hide');
                     document.title = orig_doc_title;

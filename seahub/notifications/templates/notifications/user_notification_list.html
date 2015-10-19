@@ -45,7 +45,9 @@ $('#mark-all-read').click(function() {
     if (unread_items.length > 0) {
         $.ajax({
             url: '{% url 'set_notices_seen' %}',
+            type: 'POST',
             dataType: 'json',
+            beforeSend: prepareCSRFToken,
             success: function() {
                 var msg_ct = $("#msg-count");
                 $('.num', msg_ct).html(0).addClass('hide');
