@@ -11,6 +11,8 @@ from seahub.base.accounts import User
 
 
 class Fixtures(Exam):
+    user_password = 'secret'
+    admin_password = 'secret'
 
     @fixture
     def user(self):
@@ -94,6 +96,6 @@ class Fixtures(Exam):
 class BaseTestCase(TestCase, Fixtures):
     def login_as(self, user):
         self.client.post(
-            reverse('auth_login'), {'username': user.username,
+            reverse('auth_login'), {'login': user.username,
                                     'password': 'secret'}
         )

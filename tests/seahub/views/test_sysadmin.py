@@ -3,7 +3,7 @@ from django.http.cookie import parse_cookie
 from django.test import TestCase
 
 from seahub.base.accounts import User
-from seahub.test_utils import Fixtures
+from seahub.test_utils import Fixtures, BaseTestCase
 
 from seaserv import ccnet_threaded_rpc
 
@@ -119,3 +119,28 @@ class UserRemoveTest(TestCase, Fixtures):
         self.assertEqual(302, resp.status_code)
         assert 'Successfully deleted %s' % username in parse_cookie(resp.cookies)['messages']
         assert len(ccnet_threaded_rpc.search_emailusers('DB', username, -1, -1))  == 0
+
+
+class SudoModeTest(BaseTestCase):
+    def test_normal_user_raise_404(self):
+        self.login_as(self.user)
+
+        resp = self.client.get(reverse('sys_sudo_mode'))
+        self.assertEqual(404, resp.status_code)
+
+    def test_admin_get(self):
+        self.login_as(self.admin)
+
+        resp = self.client.get(reverse('sys_sudo_mode'))
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed('sysadmin/sudo_mode.html')
+
+    def test_admin_post(self):
+        self.login_as(self.admin)
+
+        resp = self.client.post(reverse('sys_sudo_mode'), {
+            'username': self.admin.username,
+            'password': self.admin_password,
+        })
+        self.assertEqual(302, resp.status_code)
+        self.assertRedirects(resp, reverse('sys_useradmin'))

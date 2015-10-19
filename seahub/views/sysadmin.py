@@ -1637,7 +1637,7 @@ def sys_sudo_mode(request):
 
     # here we can't use @sys_staff_required
     if not request.user.is_staff:
-        return Http404
+        raise Http404
 
     password_error = False
     if request.method == 'POST':
