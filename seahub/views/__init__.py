@@ -35,7 +35,7 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import user_mods_check
+from seahub.base.decorators import user_mods_check, require_POST
 from seahub.base.models import UserStarredFiles, ClientLoginToken
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
@@ -1257,6 +1257,7 @@ def devices(request):
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
+@require_POST
 def unlink_device(request):
     content_type = 'application/json; charset=utf-8'
 

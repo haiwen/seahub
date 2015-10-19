@@ -657,6 +657,7 @@ def rename_dirent(request, repo_id):
                         content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def delete_dirent(request, repo_id):
     """
     Delete a file/dir with ajax.
@@ -706,6 +707,7 @@ def delete_dirent(request, repo_id):
                 status=500, content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def delete_dirents(request, repo_id):
     """
     Delete multi files/dirs with ajax.
@@ -1497,6 +1499,7 @@ def get_popup_notices(request):
                 }), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def set_notices_seen(request):
     """Set user's notices seen:
 
@@ -1521,6 +1524,7 @@ def set_notices_seen(request):
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def set_notice_seen_by_id(request):
     """
 
@@ -2695,6 +2699,7 @@ def toggle_personal_modules(request):
             content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def ajax_unset_inner_pub_repo(request, repo_id):
     """
     Unshare repos in organization.
@@ -2709,7 +2714,7 @@ def ajax_unset_inner_pub_repo(request, repo_id):
         return HttpResponse(json.dumps(result),
                             status=400, content_type=content_type)
 
-    perm = request.GET.get('permission', None)
+    perm = request.POST.get('permission', None)
     if perm is None:
         result["error"] = _(u'Argument missing')
         return HttpResponse(json.dumps(result),

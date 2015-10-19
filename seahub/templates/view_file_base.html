@@ -115,10 +115,14 @@ $('#share').click(function() {
     var op = $(this),
         name = "{{filename|escapejs}}",
         path = "{{path|escapejs}}";
-        aj_urls = { 'link': '{% url 'get_shared_link' %}?repo_id={{ repo.id }}&p=' + e(path) },
+        aj_data = {
+            'repo_id': "{{ repo.id }}",
+            'p': path,
+            'type': 'f'
+        },
         type = 'f',
         cur_path = path.substr(0, path.length - name.length);
-    showSharePopup(op, name, aj_urls, type, cur_path);
+    showSharePopup(op, name, aj_data, type, cur_path);
     return false;
 });
 
