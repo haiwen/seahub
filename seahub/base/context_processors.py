@@ -13,7 +13,7 @@ from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
     MAX_FILE_NAME, BRANDING_CSS, LOGO_PATH, LOGO_WIDTH, LOGO_HEIGHT,\
-    SHOW_REPO_DOWNLOAD_BUTTON, SHARE_LINK_PASSWORD_MIN_LENGTH
+    SHOW_REPO_DOWNLOAD_BUTTON
 
 try:
     from seahub.settings import SEACLOUD_MODE
@@ -78,7 +78,7 @@ def base(request):
         'has_file_search': HAS_FILE_SEARCH,
         'enable_pubfile': ENABLE_PUBFILE,
         'show_repo_download_button': SHOW_REPO_DOWNLOAD_BUTTON,
-        'share_link_password_min_length': SHARE_LINK_PASSWORD_MIN_LENGTH,
+        'share_link_password_min_length': config.SHARE_LINK_PASSWORD_MIN_LENGTH,
         'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
