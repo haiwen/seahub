@@ -74,6 +74,11 @@
     {% endwith %}
     </div>
 
+    <div>
+    {% with type="input" setting_display_name="download/upload link password minimum length" help_tip="The least number of characters a download/upload link password should include." setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %} {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
     <h4>Sync</h4>
 
     <div>

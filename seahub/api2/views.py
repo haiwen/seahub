@@ -2117,6 +2117,9 @@ class FileSharedLinkView(APIView):
         password = request.DATA.get('password', None)
         share_type = request.DATA.get('share_type', 'download')
 
+        if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Password is too short')
+
         if share_type.lower() == 'download':
 
             if check_file_permission(request, repo_id, path) is None:
@@ -2151,7 +2154,6 @@ class FileSharedLinkView(APIView):
 
             if is_dir:
                 # generate dir download link
-
                 fs = FileShare.objects.get_dir_link_by_path(username, repo_id, path)
                 if fs is None:
                     fs = FileShare.objects.create_dir_link(username, repo_id, path,
@@ -2162,7 +2164,6 @@ class FileSharedLinkView(APIView):
 
             else:
                 # generate file download link
-
                 fs = FileShare.objects.get_file_link_by_path(username, repo_id, path)
                 if fs is None:
                     fs = FileShare.objects.create_file_link(username, repo_id, path,

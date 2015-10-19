@@ -3,6 +3,7 @@ import os
 import logging
 import json
 from dateutil.relativedelta import relativedelta
+from constance import config
 
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
@@ -1364,6 +1365,11 @@ def ajax_get_upload_link(request):
             data = json.dumps({'error': err})
             return HttpResponse(data, status=400, content_type=content_type)
 
+        if passwd and len(passwd) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+            err = _('Password is too short')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=400, content_type=content_type)
+
         if path[-1] != '/': # append '/' at end of path
             path += '/'
 
@@ -1433,6 +1439,16 @@ def ajax_get_download_link(request):
         use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
         passwd = request.POST.get('passwd') if use_passwd else None
 
+        if not (repo_id and path):
+            err = _('Invalid arguments')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if passwd and len(passwd) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+            err = _('Password is too short')
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=400, content_type=content_type)
+
         try:
             expire_days = int(request.POST.get('expire_days', 0))
         except ValueError:
@@ -1441,11 +1457,6 @@ def ajax_get_download_link(request):
             expire_date = None
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
-
-        if not (repo_id and path):
-            err = _('Invalid arguments')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=400, content_type=content_type)
 
         username = request.user.username
         if share_type == 'f':
