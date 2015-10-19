@@ -1300,7 +1300,7 @@ $('#share-cur-dir').click(function() {
     var op = $(this),
         name = $('#cur-dir-name').attr('data-name'),
         aj_data = {
-            'repo_id': '{{repo.id|escapejs}}',
+            'repo_id': '{{repo.id}}',
             'p': cur_path,
             'type': 'd'
         },
@@ -1893,7 +1893,7 @@ $('.file-share, .dir-share', context).click(function() {
     var op = $(this), name, aj_data, type;
     name = op.parents('tr').attr('data-name');
     aj_data = {
-        'repo_id': "{{repo.id|escapejs}}",
+        'repo_id': "{{repo.id}}",
         'p': cur_path + name
     };
     if (op.hasClass('dir-share')) {

@@ -116,7 +116,7 @@ $('#share').click(function() {
         name = "{{filename|escapejs}}",
         path = "{{path|escapejs}}";
         aj_data = {
-            'repo_id': "{{ repo.id|escapejs }}",
+            'repo_id': "{{ repo.id }}",
             'p': path,
             'type': 'f'
         },
