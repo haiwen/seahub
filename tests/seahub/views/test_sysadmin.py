@@ -1,19 +1,16 @@
 from django.core.urlresolvers import reverse
 from django.http.cookie import parse_cookie
-from django.test import TestCase
 
 from seahub.base.accounts import User
-from seahub.test_utils import Fixtures, BaseTestCase
+from seahub.test_utils import BaseTestCase
 
 from seaserv import ccnet_threaded_rpc
 
-class UserToggleStatusTest(TestCase, Fixtures):
-    def test_can_activate(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.admin.username,
-                                    'password': 'secret'}
-        )
+class UserToggleStatusTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
 
+    def test_can_activate(self):
         old_passwd = self.user.enc_password
         resp = self.client.get(
             reverse('user_toggle_status', args=[self.user.username]) + '?s=1',
@@ -27,11 +24,6 @@ class UserToggleStatusTest(TestCase, Fixtures):
         assert u.enc_password == old_passwd
 
     def test_can_deactivate(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.admin.username,
-                                    'password': 'secret'}
-        )
-
         old_passwd = self.user.enc_password
         resp = self.client.get(
             reverse('user_toggle_status', args=[self.user.username]) + '?s=0',
@@ -45,13 +37,11 @@ class UserToggleStatusTest(TestCase, Fixtures):
         assert u.enc_password == old_passwd
 
 
-class UserResetTest(TestCase, Fixtures):
-    def test_can_reset(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.admin.username,
-                                    'password': 'secret'}
-        )
+class UserResetTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
 
+    def test_can_reset(self):
         old_passwd = self.user.enc_password
         resp = self.client.post(
             reverse('user_reset', args=[self.user.email])
@@ -62,13 +52,11 @@ class UserResetTest(TestCase, Fixtures):
         assert u.enc_password != old_passwd
 
 
-class BatchUserMakeAdminTest(TestCase, Fixtures):
-    def test_can_make_admins(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.admin.username,
-                                    'password': 'secret'}
-        )
+class BatchUserMakeAdminTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
 
+    def test_can_make_admins(self):
         resp = self.client.post(
             reverse('batch_user_make_admin'), {
                 'set_admin_emails': self.user.username
@@ -102,13 +90,11 @@ class BatchUserMakeAdminTest(TestCase, Fixtures):
 #         assert u.enc_password == old_passwd
 
 
-class UserRemoveTest(TestCase, Fixtures):
-    def test_can_remove(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.admin.username,
-                                    'password': 'secret'}
-        )
+class UserRemoveTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
 
+    def test_can_remove(self):
         # create one user
         username = self.user.username
 

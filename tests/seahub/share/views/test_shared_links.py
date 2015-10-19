@@ -6,9 +6,9 @@ from django.core.urlresolvers import reverse
 import requests
 
 from seahub.share.models import FileShare
-from seahub.test_utils import Fixtures
+from seahub.test_utils import Fixtures, BaseTestCase
 
-class ListSharedLinksTest(TestCase, Fixtures):
+class ListSharedLinksTest(BaseTestCase):
     def setUp(self):
         share_file_info = {
             'username': 'test@test.com',
@@ -22,14 +22,8 @@ class ListSharedLinksTest(TestCase, Fixtures):
     def tearDown(self):
         self.remove_repo()
 
-    def login(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.user.username,
-                                    'password': 'secret'}
-        )
-
     def test_can_render(self):
-        self.login()
+        self.login_as(self.user)
 
         resp = self.client.get(reverse('list_shared_links'))
         self.assertEqual(200, resp.status_code)
@@ -53,7 +47,7 @@ class ListSharedLinksTest(TestCase, Fixtures):
         }
         fs = FileShare.objects.create_file_link(**share_file_info)
 
-        self.login()
+        self.login_as(self.user)
 
         resp = self.client.get(reverse('list_shared_links'))
         self.assertEqual(200, resp.status_code)

@@ -16,10 +16,10 @@ class LoginTest(TestCase):
         self.client.get(LOGIN_URL)
 
         resp = self.client.post(LOGIN_URL, {
-            'username': USERNAME,
+            'login': USERNAME,
             'password': 'fakepasswd',
         })
         assert resp.status_code == 200
         assert resp.context['form'].errors['__all__'] == [
-            u'Please enter a correct username and password. Note that both fields are case-sensitive.'
+            u'Please enter a correct email/username and password. Note that both fields are case-sensitive.'
         ]

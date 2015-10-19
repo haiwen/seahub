@@ -1,18 +1,13 @@
 from django.core.urlresolvers import reverse
-from django.test import TestCase
 
-from seahub.base.accounts import User
-from seahub.test_utils import Fixtures
+from seahub.test_utils import BaseTestCase
 
 from seaserv import ccnet_threaded_rpc
 
 
-class DeleteUserAccountTest(TestCase, Fixtures):
+class DeleteUserAccountTest(BaseTestCase):
     def test_can_delete(self):
-        self.client.post(
-            reverse('auth_login'), {'username': self.user.username,
-                                    'password': 'secret'}
-        )
+        self.login_as(self.user)
 
         username = self.user.username
 
