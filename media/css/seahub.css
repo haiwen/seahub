@@ -3494,6 +3494,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /* user & group folder perm */
+#share-popup {
+    height:380px;
+}
 #share-popup .tabs-panel,
 #folder-perm-tabs .tabs-panel {
     width:550px;
@@ -3501,6 +3504,11 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {
     height:30px;
+}
+#dir-user-share,
+#dir-group-share {
+    height:330px;
+    overflow:auto;
 }
 #dir-user-share .submit,
 #dir-group-share .submit,
