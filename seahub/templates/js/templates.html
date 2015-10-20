@@ -135,17 +135,21 @@
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
-    <% if (path == '/') { %>
-        <div class="fright">
-            <% if (is_repo_owner && !is_virtual) { %>
-            <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" title="{% trans 'Settings' %}"></a>
-            <% } %>
-            <% if (user_perm == 'rw') { %>
-            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
-            <% } %>
-            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}"></a>
-        </div>
-    <% } %>
+    <div class="fright">
+        <% if (path == '/' && is_repo_owner && !is_virtual) { %>
+        <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" title="{% trans 'Settings' %}"></a>
+        <% } %>
+        <% if (user_perm == 'rw') { %>
+        <% if (path == '/') { %>
+        <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
+        <% } else { %>
+        <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/?trash_src_path=<% print(encodeURIComponent(path)); %>" title="{% trans 'Trash' %}"></a>
+        <% } %>
+        <% } %>
+        <% if (path == '/') { %>
+        <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}"></a>
+        <% } %>
+    </div>
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
