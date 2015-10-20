@@ -11,10 +11,17 @@
     <tr>
         {% if repo.encrypted %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "directory icon" %}" /></td>
+        <td>{{ repo.props.name }}</td>
         {% else %}
         <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+            {% if repo.is_default_repo %}
+            <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
+            {% elif enable_sys_admin_view_repo %}
+            <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.props.name }}</a></td>
+            {% else %}
+            <td>{{ repo.props.name }}</td>
+            {% endif %}
         {% endif %}
-        <td>{{ repo.props.name }}</td>
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td>
             {% if repo.owner %}

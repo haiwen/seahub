@@ -207,6 +207,8 @@ urlpatterns = patterns(
     url(r'^sys/info/$', sys_info, name='sys_info'),
     url(r'^sys/settings/$', sys_settings, name='sys_settings'),
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
+    url(r'^sys/seafadmin/repo/(?P<repo_id>[-0-9a-f]{36})/$', sys_admin_repo, name='sys_admin_repo'),
+    url(r'^sys/seafadmin/repo/(?P<repo_id>[-0-9a-f]{36})/download-file/$', sys_admin_repo_download_file, name='sys_admin_repo_download_file'),
     url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
     url(r'^sys/seafadmin/repo-trash/$', sys_repo_trash, name='sys_repo_trash'),
     url(r'^sys/seafadmin/repo-trash/clear/$', sys_repo_trash_clear, name="sys_repo_trash_clear"),
@@ -255,7 +257,6 @@ urlpatterns = patterns(
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
 
     url(r'^client-login/$', client_token_login, name='client_token_login'),
-
 )
 
 from seahub.utils import EVENTS_ENABLED

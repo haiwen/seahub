@@ -222,6 +222,9 @@ LOGIN_REDIRECT_URL = '/profile/'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
+# allow seafile amdin view user's repo
+ENABLE_SYS_ADMIN_VIEW_REPO = False
+
 # show traffic on the UI
 SHOW_TRAFFIC = True
 

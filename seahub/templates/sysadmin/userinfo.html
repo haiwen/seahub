@@ -89,7 +89,13 @@
                 {% else %}
                 <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
-                <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.name }}</a></td>
+                {% if repo.encrypted %}
+                <td>{{ repo.name }}</td>
+                {% elif enable_sys_admin_view_repo %}
+                <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                {% else %}
+                <td>{{ repo.name }}</td>
+                {% endif %}
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
@@ -123,7 +129,11 @@
                 {% else %}
                 <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
-                <td><a href="{% url 'view_common_lib_dir' repo.id '' %}">{{ repo.props.repo_name }}</a></td>
+                {% if enable_sys_admin_view_repo %}
+                <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                {% else %}
+                <td>{{ repo.name }}</td>
+                {% endif %}
                 <td>{{ repo.props.user }}</td>
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
