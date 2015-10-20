@@ -4,115 +4,118 @@
 {% load url from future %}
 
 {% block main_panel %}
+
 {% if trash_src_path == '/' %}
 <h2 class="repo-trash-hd">{% blocktrans %}Deleted items in library <span class="op-target">{{ trash_name }}</span> and sub-folders{% endblocktrans %}</h2>
 {% else %}
 <h2 class="repo-trash-hd">{% blocktrans %}Deleted items in folder <span class="op-target">{{ trash_name }}</span>{% endblocktrans %}</h2>
 {% endif %}
 
-            <div class="repo-file-list-topbar ovhd">
-                <p class="path fleft">
-                {% trans "Current path: " %}
-                {% if not show_recycle_root %}
-                <a href="?days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{trash_name}}</a>
-                {% for name, link in zipped %}
-                    {% if not forloop.last %}
-                    / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ name }}</a>
-                    {% else %}
-                    / {{ name }}
-                    {% endif %}
-                {% endfor %}
+<div class="repo-file-list-topbar ovhd">
+    <p class="path fleft">
+    {% trans "Current path: " %}
+    {% if not show_recycle_root %}
+    <a href="?days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{trash_name}}</a>
+    {% for name, link in zipped %}
+        {% if not forloop.last %}
+        / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ name }}</a>
+        {% else %}
+        / {{ name }}
+        {% endif %}
+    {% endfor %}
 
-                {% else %}
-                {{trash_name}}
-                {% endif %}
-                </p>
-
-                {% if show_recycle_root %}
-                <div class="fright">
-                <span>
-                    {% if days != 7 %}
-                    <a href="?days=7&trash_src_path={{trash_src_path|urlencode}}">{% trans "a week" %}</a> /
-                    {% else %}
-                    {% trans "a week" %} /
-                    {% endif %}
-                    {% if days != 30 %}
-                    <a href="?days=30&trash_src_path={{trash_src_path|urlencode}}">{% trans "a month" %}</a> /
-                    {% else %}
-                    {% trans "a month" %} /
-                    {% endif %}
-                    {% if days != 0 %}
-                    <a href="?days=0&trash_src_path={{trash_src_path|urlencode}}">{% trans "all" %}</a>
-                    {% else %}
-                    {% trans "all" %}
-                    {% endif %}
-                </span>
-                {% if enable_clean %}
-                <button id="online-gc" class="op-btn">{% trans "Clean" %}</button>
-                {% endif %}
-                </div>
-                {% endif %}
-            </div>
-            <!-- /.repo-file-list-topbar -->
-            <table class="repo-file-list">
-                <tr>
-                    <th width="5%"></th>
-                    <th width="45%">{% trans "Name" %}</th>
-                    <th width="20%">{% trans "Delete Time" %}</th>
-                    <th width="15%">{% trans "Size" %}</th>
-                    <th width="15%">{% trans "Operations" %}</th>
-                </tr>
-
-                {% for dirent in dir_list %}
-                <tr>
-                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
-                    {% if show_recycle_root %}
-                    <td><a href="?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ dirent.obj_name }}</a></td>
-                    <td>{{ dirent.delete_time|translate_seahub_time }}</td>
-                    <td></td>
-                    <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
-                    {% else %}
-                    <td><a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ dirent.obj_name }}</a></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-
-                {% for dirent in file_list %}
-                <tr>
-                    <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
-                    {% if show_recycle_root %}
-                    <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}" target="_blank">{{ dirent.obj_name }}</a></td>
-                    <td>{{ dirent.delete_time|translate_seahub_time }}</td>
-                    <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td><a class="op vh" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
-                    {% else %}
-                    <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}" target="_blank">{{ dirent.props.obj_name }}</a></td>
-                    <td></td>
-                    <td>{{ dirent.file_size|filesizeformat }}</td>
-                    <td></td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </table>
-
-    {% if enable_clean and show_recycle_root %}
-    <form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
-        <h3>{% trans "Clean" %}</h3>
-        <p>{% trans "Clear files in trash and history：" %}</p>
-        <select name="day" class="w100" style="margin-bottom:5px;">
-            <option value="3">{% trans "3 days ago" %}</option>
-            <option value="7">{% trans "1 week ago" %}</option>
-            <option value="30">{% trans "1 month ago" %}</option>
-            <option value="0">{% trans "all" %}</option>
-        </select>
-        <button type="submit" class="submit">{% trans "Submit" %}</button>
-        <button type="button" class="simplemodal-close">{% trans "Cancel" %}</button>
-    </form>
+    {% else %}
+    {{trash_name}}
     {% endif %}
-    {% endblock %}
+    </p>
+
+    {% if show_recycle_root %}
+    <div class="fright">
+    <span>
+        {% if days != 7 %}
+        <a href="?days=7&trash_src_path={{trash_src_path|urlencode}}">{% trans "a week" %}</a> /
+        {% else %}
+        {% trans "a week" %} /
+        {% endif %}
+        {% if days != 30 %}
+        <a href="?days=30&trash_src_path={{trash_src_path|urlencode}}">{% trans "a month" %}</a> /
+        {% else %}
+        {% trans "a month" %} /
+        {% endif %}
+        {% if days != 0 %}
+        <a href="?days=0&trash_src_path={{trash_src_path|urlencode}}">{% trans "all" %}</a>
+        {% else %}
+        {% trans "all" %}
+        {% endif %}
+    </span>
+    {% if enable_clean %}
+    <button id="online-gc" class="op-btn">{% trans "Clean" %}</button>
+    {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<!-- /.repo-file-list-topbar -->
+<table class="repo-file-list">
+    <tr>
+        <th width="5%"></th>
+        <th width="45%">{% trans "Name" %}</th>
+        <th width="20%">{% trans "Delete Time" %}</th>
+        <th width="15%">{% trans "Size" %}</th>
+        <th width="15%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for dirent in dir_list %}
+    <tr>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
+        {% if show_recycle_root %}
+        <td><a href="?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ dirent.obj_name }}</a></td>
+        <td>{{ dirent.delete_time|translate_seahub_time }}</td>
+        <td></td>
+        <td><a class="op vh" href="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
+        {% else %}
+        <td><a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}&trash_src_path={{trash_src_path|urlencode}}">{{ dirent.obj_name }}</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+
+    {% for dirent in file_list %}
+    <tr>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
+        {% if show_recycle_root %}
+        <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&days={{days}}" target="_blank">{{ dirent.obj_name }}</a></td>
+        <td>{{ dirent.delete_time|translate_seahub_time }}</td>
+        <td>{{ dirent.file_size|filesizeformat }}</td>
+        <td><a class="op vh" href="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
+        {% else %}
+        <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&days={{days}}" target="_blank">{{ dirent.props.obj_name }}</a></td>
+        <td></td>
+        <td>{{ dirent.file_size|filesizeformat }}</td>
+        <td></td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
+{% if enable_clean and show_recycle_root %}
+<form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
+    <h3>{% trans "Clean" %}</h3>
+    <p>{% trans "Clear files in trash and history：" %}</p>
+    <select name="day" class="w100" style="margin-bottom:5px;">
+        <option value="3">{% trans "3 days ago" %}</option>
+        <option value="7">{% trans "1 week ago" %}</option>
+        <option value="30">{% trans "1 month ago" %}</option>
+        <option value="0">{% trans "all" %}</option>
+    </select>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+    <button type="button" class="simplemodal-close">{% trans "Cancel" %}</button>
+</form>
+{% endif %}
+
+{% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
