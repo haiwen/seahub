@@ -532,8 +532,16 @@ def view_shared_upload_link(request, token):
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
     path = uploadlink.path
-    dir_name = os.path.basename(path[:-1])
+    if path == '/':
+        # use repo name as dir name if share whole library
+        dir_name = repo.name
+    else:
+        dir_name = os.path.basename(path[:-1])
 
     repo = get_repo(repo_id)
     if not repo:
