@@ -261,6 +261,17 @@ function addConfirmTo(op_ele, popup) {
     });
 }
 
+function addFormPost(op_ele) {
+    op_ele.click(function() {
+        $('<form>', {
+            "method": 'POST',
+            "action": $(this).data('url'),
+            "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+        }).appendTo(document.body).submit();
+        return false;
+    });
+}
+
 /*
  * func: add autocomplete to some input ele
  * @param ele_id: autocomplete is added to this ele(ment), e.g-'#xxx'

@@ -61,7 +61,7 @@ urlpatterns = patterns(
     # revert file/dir/repo
     url(r'^repo/revert_file/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_file, name='repo_revert_file'),
     url(r'^repo/revert_dir/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_dir, name='repo_revert_dir'),
-    url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_history_revert, name='repo_revert_history'),
+    url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),
 
     (r'^repo/upload_check/$', validate_filename),
     url(r'^repo/unsetinnerpub/(?P<repo_id>[-0-9a-f]{36})/$', unsetinnerpub, name='unsetinnerpub'),
