@@ -18,7 +18,7 @@ $(function () {
     });
 });
 
-function showSharePopup(op, name, aj_urls, type, cur_path) {
+function showSharePopup(op, name, aj_data, type, cur_path) {
     var path;
     if (op.attr('id') == 'share-cur-dir') {
         path = cur_path.substr(0, cur_path.length - 1); // rm the last '/' as seafile_api treats '/xx' and '/xx/' as different
@@ -87,7 +87,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
         $('#gen-link-btn, #link-options').removeClass('hide');
         $('#share-link-body').addClass('hide');
     }
-    $('#gen-link-btn').data('url', aj_urls['link']).data('obj', op);
+    $('#gen-link-btn').data('aj_data', aj_data).data('obj', op);
     $('#rm-shared-link').data('obj', op);
     $('input[name="file_shared_name"]').val(name);
     $('input[name="file_shared_type"]').val(type);
@@ -107,7 +107,7 @@ function showSharePopup(op, name, aj_urls, type, cur_path) {
             $('#gen-upload-link-btn, #upload-link-options').removeClass('hide');
             $('#share-upload-link-body').addClass('hide');
         }
-        $('#gen-upload-link-btn').data('url', aj_urls['upload-link']).data('obj', op);
+        $('#gen-upload-link-btn').data('aj_data', aj_data).data('obj', op);
         $('#rm-shared-upload-link').data('obj', op);
     });
     {% endif %}
@@ -282,13 +282,13 @@ $('#gen-link-btn').click(function() {
     }
 
     $.ajax({
-            url: gen_link_btn.data('url'),
+            url: '{% url 'ajax_get_download_link' %}',
             type: 'POST',
             dataType: 'json',
             beforeSend: prepareCSRFToken,
-            data: post_data,
+            data: $.extend(post_data, $(this).data('aj_data')),
             success: function(data) {
-                var link = data['shared_link'];
+                var link = data['download_link'];
                 // hide gen-link button, and show link
                 gen_link_btn.addClass('hide');
 
@@ -314,9 +314,12 @@ $('#rm-shared-link').click(function() {
         token = obj.attr('data-token');
 
     $.ajax({
-        url: '{% url 'ajax_remove_shared_link' %}?t=' + token,
+        url: '{% url 'ajax_remove_shared_link' %}',
+        type: 'POST',
+        data: {'t': token},
         dataType: 'json',
         cache: false,
+        beforeSend: prepareCSRFToken,
         success: function(data) {
             $('#share-link-body').addClass('hide');
             $('#link-options, #gen-link-btn').removeClass('hide');
@@ -441,13 +444,16 @@ $('#gen-upload-link-btn').click(function() {
     }
 
     $.ajax({
-        url: gen_upload_link_btn.data('url'),
+        url: '{% url 'ajax_get_upload_link' %}',
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: post_data,
+        data: $.extend(post_data, {
+            'repo_id': $(this).data('aj_data').repo_id, 
+            'p': $(this).data('aj_data').p
+        }),
         success: function(data) {
-            var upload_link = data['shared_upload_link'];
+            var upload_link = data['upload_link'];
             gen_upload_link_btn.addClass('hide');
 
             $('#upload-link-options, #upload-link-options .error').addClass('hide');
@@ -474,9 +480,12 @@ $('#rm-shared-upload-link').click(function() {
         token = obj.attr('data-upload-token');
 
     $.ajax({
-        url: '{% url 'ajax_remove_shared_upload_link' %}?t=' + token,
+        url: '{% url 'ajax_remove_shared_upload_link' %}',
+        type: 'POST',
+        data: {'t': token},
         dataType: 'json',
         cache: false,
+        beforeSend: prepareCSRFToken,
         success: function(data) {
             $('#share-upload-link-body').addClass('hide');
             $('#upload-link-options, #gen-upload-link-btn').removeClass('hide');

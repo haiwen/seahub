@@ -227,176 +227,6 @@ class Accounts(APIView):
 
         return Response(accounts_json)
 
-class Account(APIView):
-    """Query/Add/Delete a specific account.
-    Administator permission is required.
-    """
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAdminUser, )
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, email, format=None):
-        if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-
-        # query account info
-        try:
-            user = User.objects.get(email=email)
-        except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-
-        info = {}
-        info['email'] = user.email
-        info['id'] = user.id
-        info['is_staff'] = user.is_staff
-        info['is_active'] = user.is_active
-        info['create_time'] = user.ctime
-        info['total'] = seafile_api.get_user_quota(email)
-        info['usage'] = seafile_api.get_user_self_usage(email)
-
-        return Response(info)
-
-    def _update_account_profile(self, request, email):
-        name = request.DATA.get("name", None)
-        note = request.DATA.get("note", None)
-
-        if name is None and note is None:
-            return
-
-        profile = Profile.objects.get_profile_by_user(email)
-        if profile is None:
-            profile = Profile(user=email)
-
-        if name is not None:
-            # if '/' in name:
-            #     return api_error(status.HTTP_400_BAD_REQUEST, "Nickname should not include '/'")
-            profile.nickname = name
-
-        if note is not None:
-            profile.intro = note
-
-        profile.save()
-
-    def _update_account_quota(self, request, email):
-        storage = request.DATA.get("storage", None)
-        sharing = request.DATA.get("sharing", None)
-
-        if storage is None and sharing is None:
-            return
-
-        if storage is not None:
-            seafile_api.set_user_quota(email, int(storage))
-
-        if sharing is not None:
-            seafile_api.set_user_share_quota(email, int(sharing))
-
-    def _create_account(self, request, email):
-        copy = request.DATA.copy()
-        copy['email'] = email
-        serializer = AccountSerializer(data=copy)
-        if serializer.is_valid():
-            try:
-                user = User.objects.create_user(serializer.object['email'],
-                                                serializer.object['password'],
-                                                serializer.object['is_staff'],
-                                                serializer.object['is_active'])
-            except User.DoesNotExist as e:
-                logger.error(e)
-                return api_error(status.HTTP_403_FORBIDDEN,
-                                 'Fail to add user.')
-
-            self._update_account_profile(request, user.username)
-
-            resp = Response('success', status=status.HTTP_201_CREATED)
-            resp['Location'] = reverse('api2-account', args=[email])
-            return resp
-        else:
-            return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
-
-    def _update_account(self, request, user):
-        password = request.DATA.get("password", None)
-        is_staff = request.DATA.get("is_staff", None)
-        if is_staff is not None:
-            try:
-                is_staff = to_python_boolean(is_staff)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 '%s is not a valid value' % is_staff)
-
-        is_active = request.DATA.get("is_active", None)
-        if is_active is not None:
-            try:
-                is_active = to_python_boolean(is_active)
-            except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST,
-                                 '%s is not a valid value' % is_active)
-
-        if password is not None:
-            user.set_password(password)
-
-        if is_staff is not None:
-            user.is_staff = is_staff
-
-        if is_active is not None:
-            user.is_active = is_active
-
-        result_code = user.save()
-        if result_code == -1:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Fail to update user.')
-
-        self._update_account_profile(request, user.username)
-
-        try:
-            self._update_account_quota(request, user.username)
-        except SearpcError as e:
-            logger.error(e)
-            return api_error(HTTP_520_OPERATION_FAILED, 'Failed to set account quota')
-
-        is_trial = request.DATA.get("is_trial", None)
-        if is_trial is not None:
-            try:
-                from seahub_extra.trialaccount.models import TrialAccount
-            except ImportError:
-                pass
-            else:
-                try:
-                    is_trial = to_python_boolean(is_trial)
-                except ValueError:
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     '%s is not a valid value' % is_trial)
-
-                if is_trial is True:
-                    expire_date = timezone.now() + relativedelta(days=7)
-                    TrialAccount.object.create_or_update(user.username,
-                                                         expire_date)
-                else:
-                    TrialAccount.objects.filter(user_or_org=user.username).delete()
-
-        return Response('success')
-
-    def put(self, request, email, format=None):
-        if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-
-        try:
-            user = User.objects.get(email=email)
-            return self._update_account(request, user)
-        except User.DoesNotExist:
-            return self._create_account(request, email)
-
-    def delete(self, request, email, format=None):
-        if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
-
-        # delete account
-        try:
-            user = User.objects.get(email=email)
-            user.delete()
-            return Response("success")
-        except User.DoesNotExist:
-            resp = Response("success", status=status.HTTP_202_ACCEPTED)
-            return resp
 
 class AccountInfo(APIView):
     """ Show account info.
@@ -1321,7 +1151,34 @@ class UpdateBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
-def get_dir_entrys_by_id(request, repo, path, dir_id):
+def get_dir_recursively(username, repo_id, path, all_dirs):
+    path_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path,
+            path_id, username, -1, -1)
+
+    for dirent in dirs:
+        if stat.S_ISDIR(dirent.mode):
+            entry = {}
+            entry["type"] = 'dir'
+            entry["parent_dir"] = path
+            entry["id"] = dirent.obj_id
+            entry["name"] = dirent.obj_name
+            entry["mtime"] = dirent.mtime
+            entry["permission"] = dirent.permission
+            all_dirs.append(entry)
+
+            sub_path = posixpath.join(path, dirent.obj_name)
+            get_dir_recursively(username, repo_id, sub_path, all_dirs)
+
+    return all_dirs
+
+def get_dir_entrys_by_id(request, repo, path, dir_id, request_type=None):
+    """ Get dirents in a dir
+
+    if request_type is 'f', only return file list,
+    if request_type is 'd', only return dir list,
+    else, return both.
+    """
     username = request.user.username
     try:
         dirs = seafserv_threaded_rpc.list_dir_with_perm(repo.id, path, dir_id,
@@ -1366,7 +1223,13 @@ def get_dir_entrys_by_id(request, repo, path, dir_id):
 
     dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
     file_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    dentrys = dir_list + file_list
+
+    if request_type == 'f':
+        dentrys = file_list
+    elif request_type == 'd':
+        dentrys = dir_list
+    else:
+        dentrys = dir_list + file_list
 
     response = HttpResponse(json.dumps(dentrys), status=200,
                             content_type=json_content_type)
@@ -1401,10 +1264,12 @@ def get_shared_link(request, repo_id, path):
                                            settings.SITE_ROOT, token)
     return Response(file_shared_link)
 
-def get_repo_file(request, repo_id, file_id, file_name, op):
+def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
     if op == 'download':
         token = seafile_api.get_fileserver_access_token(repo_id, file_id, op,
-                                                        request.user.username)
+                                                        request.user.username,
+                                                        use_onetime)
+
         redirect_url = gen_file_get_url(token, file_name)
         response = HttpResponse(json.dumps(redirect_url), status=200,
                                 content_type=json_content_type)
@@ -1736,10 +1601,18 @@ class FileView(APIView):
 
         file_name = os.path.basename(path)
         op = request.GET.get('op', 'download')
-        return get_repo_file(request, repo_id, file_id, file_name, op)
+
+        reuse = request.GET.get('reuse', '0')
+        if reuse not in ('1', '0'):
+            return api_error(status.HTTP_400_BAD_REQUEST,
+                    "If you want to reuse file server access token for download file, you should set 'reuse' argument as '1'.")
+
+        use_onetime = False if reuse == '1' else True
+        return get_repo_file(request, repo_id, file_id,
+                file_name, op, use_onetime)
 
     def post(self, request, repo_id, format=None):
-        # rename, move or create file
+        # rename, move, copy or create file
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
@@ -1848,6 +1721,57 @@ class FileView(APIView):
                 uri = reverse('FileView', args=[dst_repo_id], request=request)
                 resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
                 return resp
+
+        elif operation.lower() == 'copy':
+            src_repo_id = repo_id
+            src_dir = os.path.dirname(path)
+            src_dir_utf8 = src_dir.encode('utf-8')
+            dst_repo_id = request.POST.get('dst_repo', '')
+            dst_dir = request.POST.get('dst_dir', '')
+            dst_dir_utf8 = dst_dir.encode('utf-8')
+
+            if dst_dir[-1] != '/': # Append '/' to the end of directory if necessary
+                dst_dir += '/'
+
+            if not (dst_repo_id and dst_dir):
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Missing arguments.')
+
+            if src_repo_id == dst_repo_id and src_dir == dst_dir:
+                return Response('success', status=status.HTTP_200_OK)
+
+            # check src folder permission
+            if check_folder_permission(request, repo_id, path) is None:
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to copy file.')
+
+            # check dst folder permission
+            if check_folder_permission(request, dst_repo_id, dst_dir) != 'rw':
+                return api_error(status.HTTP_403_FORBIDDEN,
+                                 'You do not have permission to copy file.')
+
+            filename = os.path.basename(path)
+            filename_utf8 = filename.encode('utf-8')
+            new_filename_utf8 = check_filename_with_rename_utf8(dst_repo_id,
+                                                                dst_dir,
+                                                                filename)
+            try:
+                seafile_api.copy_file(src_repo_id, src_dir_utf8,
+                                      filename_utf8, dst_repo_id,
+                                      dst_dir_utf8, new_filename_utf8,
+                                      username, 0, synchronous=1)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                                 "SearpcError:" + e.msg)
+
+            if request.GET.get('reloaddir', '').lower() == 'true':
+                return reloaddir(request, dst_repo, dst_dir)
+            else:
+                resp = Response('success', status=status.HTTP_200_OK)
+                uri = reverse('FileView', args=[dst_repo_id], request=request)
+                resp['Location'] = uri + '?p=' + quote(dst_dir_utf8) + quote(new_filename_utf8)
+                return resp
+
         elif operation.lower() == 'create':
             if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
@@ -2240,7 +2164,28 @@ class DirView(APIView):
             response["oid"] = dir_id
             return response
         else:
-            return get_dir_entrys_by_id(request, repo, path, dir_id)
+            request_type = request.GET.get('t', None)
+            if request_type and request_type not in ('f', 'd'):
+                return api_error(status.HTTP_400_BAD_REQUEST,
+                        "'t'(type) should be 'f' or 'd'.")
+
+            if request_type == 'd':
+                recursive = request.GET.get('recursive', '0')
+                if recursive not in ('1', '0'):
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                            "If you want to get recursive dir entries, you should set 'recursive' argument as '1'.")
+
+                if recursive == '1':
+                    username = request.user.username
+                    dir_list = get_dir_recursively(username, repo_id, path, [])
+                    dir_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
+                    response = HttpResponse(json.dumps(dir_list), status=200,
+                                            content_type=json_content_type)
+                    response["oid"] = dir_id
+                    response["dir_perm"] = seafile_api.check_permission_by_path(repo_id, path, username)
+                    return response
+
+            return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
         # new dir

@@ -34,6 +34,9 @@ def allow_generate_thumbnail(request, repo_id, path):
 
     # get file size
     file_id = get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return False
+
     repo = get_repo(repo_id)
     file_size = get_file_size(repo.store_id, repo.version, file_id)
 
@@ -81,6 +84,9 @@ def generate_thumbnail(request, repo_id, size, path):
         os.makedirs(thumbnail_dir)
 
     file_id = get_file_id_by_path(repo_id, path)
+    if not file_id:
+        return False
+
     thumbnail_file = os.path.join(thumbnail_dir, file_id)
 
     if os.path.exists(thumbnail_file):

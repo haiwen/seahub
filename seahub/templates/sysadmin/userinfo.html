@@ -93,7 +93,7 @@
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
-                    <div><span class="repo-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span></div>
+                    <div><a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></a></div>
                 </td>
             </tr>
             {% endfor %}
@@ -161,7 +161,7 @@
                     <td>{% trans "Download" %}</td>
                     <td>{{ link.view_cnt }}</td>
                     <td>
-                        <a class="op vh" href="{% url 'remove_shared_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                        <a class="op vh" href="{% url 'sys_publink_remove' %}?t={{ link.token }}">{% trans "Remove"%}</a>
                     </td>
                 {% else %}
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
@@ -170,7 +170,7 @@
                     <td>{% trans "Upload" %}</td>
                     <td>{{ link.view_cnt }}</td>
                     <td>
-                        <a class="op vh" href="{% url 'remove_shared_upload_link' %}?t={{ link.token }}">{% trans "Remove"%}</a>
+                        <a class="op vh" href="{% url 'sys_upload_link_remove' %}?t={{ link.token }}">{% trans "Remove"%}</a>
                     </td>
                 {% endif %}
             </tr>
@@ -239,6 +239,11 @@ $('#set-quota-form .submit').click(function() {
     return false;
 });
 
-{% include 'snippets/repo_del_js.html' %}
+addConfirmTo($('.repo-delete-btn'), {
+    'title': "{% trans "Delete Library" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true
+});
+
 </script>
 {% endblock %}

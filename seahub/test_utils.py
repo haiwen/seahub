@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 from exam.decorators import fixture
 from exam.cases import Exam
+import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc
 
 from seahub.base.accounts import User
@@ -24,7 +25,9 @@ class Fixtures(Exam):
 
     @fixture
     def repo(self):
-        r = seafile_api.get_repo(self.create_repo())
+        r = seafile_api.get_repo(self.create_repo(name='test-repo', desc='',
+                                                  username=self.user.username,
+                                                  passwd=None))
         return r
 
     @fixture
@@ -56,14 +59,18 @@ class Fixtures(Exam):
 
         return User.objects.create_user(password='secret', **kwargs)
 
-    def remove_user(self, email=None, source="DB"):
+    def remove_user(self, email=None):
         if not email:
             email = self.user.username
-        ccnet_threaded_rpc.remove_emailuser(email, source)
+        try:
+            User.objects.get(email).delete()
+        except User.DoesNotExist:
+            pass
+        for g in seaserv.get_personal_groups_by_user(email):
+            ccnet_threaded_rpc.remove_group(g.id, email)
 
     def create_repo(self, **kwargs):
-        repo_id = seafile_api.create_repo('test-repo', '',
-                                          self.user.username, None)
+        repo_id = seafile_api.create_repo(**kwargs)
         return repo_id
 
     def remove_repo(self, repo_id=None):

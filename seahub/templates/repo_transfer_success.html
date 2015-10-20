@@ -12,7 +12,7 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-    $('.text-panel p').html("{% trans "Library {placeholder} has been transfered." %}".replace('{placeholder}', '<span class="op-target">' + "{{repo.name}}" + '</span>'));
+    $('.text-panel p').html("{% trans "Library {placeholder} has been transfered." %}".replace('{placeholder}', '<span class="op-target">' + "{{repo.name|escapejs}}" + '</span>'));
 </script>
 {% endblock %}
 

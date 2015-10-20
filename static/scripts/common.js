@@ -36,7 +36,7 @@ require.config({
 
         'jquery.magnific-popup': 'lib/jquery.magnific-popup',
 
-        simplemodal: 'lib/jquery.simplemodal.1.4.4.min',
+        simplemodal: 'lib/jquery.simplemodal',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
 
@@ -363,13 +363,14 @@ define([
                 }
             });
 
-            _this = this;
+            var _this = this;
             $(document).click(function(e) {
                 _this.closePopup(e, $('#user-info-popup'), $('#my-info'));
             });
         },
 
         initNoticePopup: function() {
+            var _this = this;
             var msg_ct = $("#msg-count");
 
             // for login page, and pages without 'header' such as 'file view' page.
@@ -427,7 +428,9 @@ define([
                                 var link_href = $(this).attr('href');
                                 $.ajax({
                                     url: _this.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
-                                    dataType:'json',
+                                    type: 'POST',
+                                    dataType: 'json',
+                                    beforeSend: _this.prepareCSRFToken,
                                     success: function(data) {
                                         location.href = link_href;
                                     },
@@ -468,7 +471,9 @@ define([
                     // set all unread notice to be read
                     $.ajax({
                         url: _this.getUrl({name: 'set_notices_seen'}),
+                        type: 'POST',
                         dataType: 'json',
+                        beforeSend: _this.prepareCSRFToken,
                         success: function() {
                             $('.num', msg_ct).html(0).addClass('hide');
                             document.title = orig_doc_title;

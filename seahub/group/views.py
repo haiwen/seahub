@@ -32,7 +32,7 @@ from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm
 from signals import grpmsg_added, grpmsg_reply_added, group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
-from seahub.base.decorators import sys_staff_required
+from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
@@ -230,6 +230,7 @@ def group_list(request):
 
 @login_required
 @sys_staff_required
+@require_POST
 def group_remove(request, group_id):
     """
     Remove group from groupadmin page. Only system admin can perform this

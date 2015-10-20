@@ -32,14 +32,17 @@ define([
                     };
                 };
 
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'ajax_repo_remove_share'}),
-                'data': {
-                         'repo_id': this.model.get('id'),
-                         'from': this.model.get('owner'),
-                         'share_type': this.model.get('share_type')
-                        },
-                'after_op_success': success_callback
+            $.ajax({
+                url: Common.getUrl({name: 'ajax_repo_remove_share'}),
+                type: 'POST',
+                beforeSend: Common.prepareCSRFToken,
+                data: {
+                    'repo_id': this.model.get('id'),
+                    'from': this.model.get('owner'),
+                    'share_type': this.model.get('share_type')
+                },
+                dataType: 'json',
+                success: success_callback
             });
         },
 

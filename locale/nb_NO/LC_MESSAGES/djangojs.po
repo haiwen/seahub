@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Bjørn Tore Hoem <bthoem@cloudwalker.no>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 15:39+0800\n"
-"PO-Revision-Date: 2015-09-14 07:04+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-09-22 18:59+0000\n"
+"Last-Translator: Bjørn Tore Hoem <bthoem@cloudwalker.no>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/haiwen/seahub/language/nb_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -35,106 +36,106 @@ msgstr ""
 #: static/scripts/app/views/share.js:615 static/scripts/app/views/share.js:673
 #: static/scripts/app/views/sub-lib.js:79
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Feilet. Vennligst sjekk nettverkstilkoblingen."
 
 #: static/scripts/common.js:513
 msgid "Search users or enter emails"
-msgstr ""
+msgstr "Søk i brukere eller skriv inn epostadresser"
 
 #: static/scripts/common.js:523
 msgid "Please enter 1 or more character"
-msgstr ""
+msgstr "Vennligst skriv inn 1 eller flere bokstaver"
 
 #: static/scripts/common.js:524
 msgid "No matches"
-msgstr ""
+msgstr "Ingen treff"
 
 #: static/scripts/common.js:525
 msgid "Searching..."
-msgstr ""
+msgstr "Søker..."
 
 #: static/scripts/common.js:526
 msgid "Loading failed"
-msgstr ""
+msgstr "Innlasting feilet"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
-msgstr ""
+msgstr "Navn er påkrevd"
 
 #: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:203
 msgid "Please enter password"
-msgstr ""
+msgstr "Vennligst oppgi passord"
 
 #: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:211
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Vennligst skriv inn passordet på nytt."
 
 #: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:207
 msgid "Password is too short"
-msgstr ""
+msgstr "Passordet er for kort"
 
 #: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:215
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Passordene stemmer ikke overens"
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Nye filer"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Slettede filer"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Omdøpte eller flyttede filer"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "Modifiserte filer"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "Nye mapper"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Slettede kataloger"
 
 #: static/scripts/app/views/dir.js:45
 #: static/scripts/app/views/starred-file.js:29
 msgid "Close (Esc)"
-msgstr ""
+msgstr "Lukk (Esc)"
 
 #: static/scripts/app/views/dir.js:46
 #: static/scripts/app/views/starred-file.js:30
 msgid "Loading..."
-msgstr ""
+msgstr "Laster..."
 
 #: static/scripts/app/views/dir.js:49
 #: static/scripts/app/views/starred-file.js:33
 msgid "Previous (Left arrow key)"
-msgstr ""
+msgstr "Forrige (Venstre piltast)"
 
 #: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:34
 msgid "Next (Right arrow key)"
-msgstr ""
+msgstr "Neste (Høyre piltast)"
 
 #: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:35
 msgid "%curr% of %total%"
-msgstr ""
+msgstr "%curr% av %total%"
 
 #: static/scripts/app/views/dir.js:57
 #: static/scripts/app/views/starred-file.js:41
 msgid "Open in New Tab"
-msgstr ""
+msgstr "Åpne i ny fane"
 
 #: static/scripts/app/views/dir.js:60
 #: static/scripts/app/views/starred-file.js:44
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
-msgstr ""
+msgstr "<a href=\"%url%\" target=\"_blank\">Bildet</a> kunne ikke lastes inn."
 
 #: static/scripts/app/views/dir.js:124
 #: static/scripts/app/views/group-side-nav.js:39
@@ -144,16 +145,16 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:78
 #: static/scripts/app/views/organization.js:123
 msgid "Please check the network."
-msgstr ""
+msgstr "Vennligst sjekk nettverkstilkoblingen."
 
 #: static/scripts/app/views/dir.js:150
 msgid "Password is required."
-msgstr ""
+msgstr "Passord er påkrevd."
 
 #: static/scripts/app/views/dir.js:317 static/scripts/app/views/dir.js.c:374
 #: static/scripts/app/views/dirent.js:235
 msgid "It is required."
-msgstr ""
+msgstr "Påkrevd"
 
 #: static/scripts/app/views/dir.js:332 static/scripts/app/views/dir.js.c:399
 #: static/scripts/app/views/dirent.js:254
@@ -163,188 +164,188 @@ msgstr ""
 #: static/scripts/app/views/fileupload.js:382
 #: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
-msgstr ""
+msgstr "Nettopp"
 
 #: static/scripts/app/views/dir.js:380
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "Dette er bare en endelse - vennligst tast inn et navn."
 
 #: static/scripts/app/views/dir.js:538 static/scripts/app/views/dir.js.c:667
 msgid "Processing..."
-msgstr ""
+msgstr "Behandler..."
 
 #: static/scripts/app/views/dir.js:574
 msgid "Successfully deleted %(name)s."
-msgstr ""
+msgstr "Vellykket sletting av %(name)s."
 
 #: static/scripts/app/views/dir.js:576
 msgid "Successfully deleted %(name)s and 1 other item."
-msgstr ""
+msgstr "Vellykket sletting av %(name)s og 1 annet element."
 
 #: static/scripts/app/views/dir.js:578
 msgid "Successfully deleted %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Vellykket sletting av  %(name)s og %(amount)s andre elementer."
 
 #: static/scripts/app/views/dir.js:585
 msgid "Failed to delete %(name)s."
-msgstr ""
+msgstr "Kunne ikke slette %(name)s."
 
 #: static/scripts/app/views/dir.js:587
 msgid "Failed to delete %(name)s and 1 other item."
-msgstr ""
+msgstr "Mislykket sletting av %(name)s og 1 annet element."
 
 #: static/scripts/app/views/dir.js:589
 msgid "Failed to delete %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Mislykket sletting av %(name)s og %(amount)s øvrige elementer."
 
 #: static/scripts/app/views/dir.js:602
 msgid "Delete Items"
-msgstr ""
+msgstr "Slett elementer"
 
 #: static/scripts/app/views/dir.js:603
 msgid "Are you sure you want to delete these selected items?"
-msgstr ""
+msgstr "Er du sikker på at du ønsker å slette de valgte elementene?"
 
 #: static/scripts/app/views/dir.js:617
 msgid "Move selected item(s) to:"
-msgstr ""
+msgstr "Flytt valgte element(er) til:"
 
 #: static/scripts/app/views/dir.js:617
 msgid "Copy selected item(s) to:"
-msgstr ""
+msgstr "Kopiere valgte element(er) til:"
 
 #: static/scripts/app/views/dir.js:662 static/scripts/app/views/dirent.js:331
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Ugyldig destinasjonsbane"
 
 #: static/scripts/app/views/dir.js:710
 msgid "Successfully moved %(name)s."
-msgstr ""
+msgstr "Vellykket flytting av %(name)s."
 
 #: static/scripts/app/views/dir.js:712
 msgid "Successfully moved %(name)s and 1 other item."
-msgstr ""
+msgstr "Vellykket sletting av %(name)s samt 1 annet element."
 
 #: static/scripts/app/views/dir.js:714
 msgid "Successfully moved %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Vellykket flytting av %(name)s og %(amount)s øvrige elementer."
 
 #: static/scripts/app/views/dir.js:718
 msgid "Successfully copied %(name)s."
-msgstr ""
+msgstr "Vellykket kopiering av %(name)s."
 
 #: static/scripts/app/views/dir.js:720
 msgid "Successfully copied %(name)s and 1 other item."
-msgstr ""
+msgstr "Vellykket kopiering av %(name)s og 1 øvrig element."
 
 #: static/scripts/app/views/dir.js:722
 msgid "Successfully copied %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Vellykket kopiering av %(name)s og %(amount)s øvrige elementer."
 
 #: static/scripts/app/views/dir.js:734
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "Intern feil. Mislykket flytting av %(name)s og %(amount)s øvrige elementer."
 
 #: static/scripts/app/views/dir.js:736
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "Intern feil. Mislykket forsøk på flytting av %(name)s."
 
 #: static/scripts/app/views/dir.js:740
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s og %(amount)s øvrige elementer."
 
 #: static/scripts/app/views/dir.js:742
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s."
 
 #: static/scripts/app/views/dir.js:782
 msgid "Moving file %(index)s of %(total)s"
-msgstr ""
+msgstr "Flytter fil %(index)s av %(total)s"
 
 #: static/scripts/app/views/dir.js:782
 msgid "Copying file %(index)s of %(total)s"
-msgstr ""
+msgstr "Kopierer fil %(index)s av %(total)s"
 
 #: static/scripts/app/views/dir.js:804
 msgid "Failed to move %(name)s"
-msgstr ""
+msgstr "Kunne ikke flytte %(name)s"
 
 #: static/scripts/app/views/dir.js:804
 msgid "Failed to copy %(name)s"
-msgstr ""
+msgstr "Kunne ikke kopiere %(name)s"
 
 #: static/scripts/app/views/dir.js:864 static/scripts/app/views/dirent.js:395
 #: static/scripts/app/views/dirent.js:423
 msgid "Canceled."
-msgstr ""
+msgstr "Avbrutt."
 
 #: static/scripts/app/views/dirent.js:47
 msgid "locked by {placeholder}"
-msgstr ""
+msgstr "låst av {placeholder}"
 
 #: static/scripts/app/views/dirent.js:203
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "Vellykket sletting av %(name)s"
 
 #: static/scripts/app/views/dirent.js:216
 msgid "Rename Directory"
-msgstr ""
+msgstr "Omdøpe mappe"
 
 #: static/scripts/app/views/dirent.js:216
 msgid "Rename File"
-msgstr ""
+msgstr "Omdøpe fil"
 
 #: static/scripts/app/views/dirent.js:239
 msgid "You have not renamed it."
-msgstr ""
+msgstr "Du har ikke omdøpt den."
 
 #: static/scripts/app/views/dirent.js:291
 msgid "Move {placeholder} to:"
-msgstr ""
+msgstr "Flytt {placeholder} til:"
 
 #: static/scripts/app/views/dirent.js:291
 msgid "Copy {placeholder} to:"
-msgstr ""
+msgstr "Kopiere {placeholder} til:"
 
 #: static/scripts/app/views/dirent.js:365
 msgid "Moving %(name)s"
-msgstr ""
+msgstr "Flytter %(name)s"
 
 #: static/scripts/app/views/dirent.js:365
 msgid "Copying %(name)s"
-msgstr ""
+msgstr "Kopierer %(name)s"
 
 #: static/scripts/app/views/dirent.js:381
 msgid "Saving..."
-msgstr ""
+msgstr "Lagrer..."
 
 #: static/scripts/app/views/dirent.js:395
 msgid "Failed."
-msgstr ""
+msgstr "Mislyktes."
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr ""
+msgstr "Filen er for stor"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr ""
+msgstr "Filen er for liten"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "Filtypen tillates ikke"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Max number of files exceeded"
-msgstr ""
+msgstr "Maksimalt antall filer er overskredet"
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Opplastet antall byte overskrider filstørrelsen"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr ""
+msgstr "Resultatet er en tom filopplasting"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/group.js:108
@@ -353,81 +354,81 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:75
 #: static/scripts/app/views/organization.js:120
 msgid "Error"
-msgstr ""
+msgstr "Feil"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
-msgstr ""
+msgstr "opplastet"
 
 #: static/scripts/app/views/fileupload.js:19
 msgid "canceled"
-msgstr ""
+msgstr "avbrutt"
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: static/scripts/app/views/fileupload.js:22
 msgid "Delete"
-msgstr ""
+msgstr "Slett"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
-msgstr ""
+msgstr "Filen lastes opp..."
 
 #: static/scripts/app/views/fileupload.js:47
 msgid "File Upload complete"
-msgstr ""
+msgstr "Filopplastingen er utført"
 
 #: static/scripts/app/views/fileupload.js:48
 msgid "File Upload canceled"
-msgstr ""
+msgstr "Filoppastingen ble avbrutt"
 
 #: static/scripts/app/views/fileupload.js:49
 msgid "File Upload failed"
-msgstr ""
+msgstr "Mislykket filopplasting"
 
 #: static/scripts/app/views/fileupload.js:187
 msgid "Failed to get upload url"
-msgstr ""
+msgstr "Lykkes ikke med å få en opplastingslenke"
 
 #: static/scripts/app/views/fileupload.js:220
 msgid "Failed to get update url"
-msgstr ""
+msgstr "Lykkes ikke med å få en oppdateringslenke"
 
 #: static/scripts/app/views/fileupload.js:231
 msgid "Replace file {filename}?"
-msgstr ""
+msgstr "Erstatt fil {filename}?"
 
 #: static/scripts/app/views/fileupload.js:257
 msgid "File is locked"
-msgstr ""
+msgstr "Filen er låst"
 
 #: static/scripts/app/views/folder-perm.js:49
 msgid "Set {placeholder}'s permission"
-msgstr ""
+msgstr "Sett {placeholder}'s tillatelse"
 
 #: static/scripts/app/views/folder-perm.js:101
 #: static/scripts/app/views/share.js:521
 msgid "Select groups"
-msgstr ""
+msgstr "Velg frupper"
 
 #: static/scripts/app/views/folder-share-item.js:77
 msgid "Edit failed"
-msgstr ""
+msgstr "Redigering feilet"
 
 #: static/scripts/app/views/folder-share-item.js:113
 msgid "Delete failed"
-msgstr ""
+msgstr "Sletting feilet"
 
 #: static/scripts/app/views/group-repo.js:50
 #: static/scripts/app/views/organization-repo.js:49
 msgid "Successfully unshared {placeholder}"
-msgstr ""
+msgstr "Vellykket oppheving av deling for {placeholder}"
 
 #: static/scripts/app/views/group.js:106
 #: static/scripts/app/views/myhome-repos.js:87
@@ -435,72 +436,72 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:73
 #: static/scripts/app/views/organization.js:118
 msgid "Permission error"
-msgstr ""
+msgstr "Tilgangsfeil"
 
 #: static/scripts/app/views/myhome-sub-repos.js:115
 msgid "You don't have any library at present."
-msgstr ""
+msgstr "Du har ingen biblioteker for øyeblikket."
 
 #: static/scripts/app/views/myhome-sub-repos.js:134
 msgid "Please choose a directory"
-msgstr ""
+msgstr "Vennligst velg en mappe"
 
 #: static/scripts/app/views/repo.js:48 static/scripts/app/views/sub-lib.js:46
 msgid "Really want to delete {lib_name}?"
-msgstr ""
+msgstr "Ønsker du virkelig å slette {lib_name}?"
 
 #: static/scripts/app/views/repo.js:71 static/scripts/app/views/sub-lib.js:69
 msgid "Delete succeeded."
-msgstr ""
+msgstr "Vellykket sletting."
 
 #: static/scripts/app/views/share.js:63
 msgid "Share {placeholder}"
-msgstr ""
+msgstr "Dele {placeholder}"
 
 #: static/scripts/app/views/share.js:132
 msgid "Expired"
-msgstr ""
+msgstr "Utgått"
 
 #: static/scripts/app/views/share.js:160 static/scripts/app/views/share.js:176
 msgid "Hide"
-msgstr ""
+msgstr "Skjul"
 
 #: static/scripts/app/views/share.js:173
 msgid "Show"
-msgstr ""
+msgstr "Vis"
 
 #: static/scripts/app/views/share.js:228
 msgid "Please enter days."
-msgstr ""
+msgstr "Tast inn antall dager."
 
 #: static/scripts/app/views/share.js:232
 msgid "Please enter valid days"
-msgstr ""
+msgstr "Vennligst tast inn gyldige dager"
 
 #: static/scripts/app/views/share.js:319
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Vennligst legg inn minst en e-postadresse"
 
 #: static/scripts/app/views/share.js:336
 msgid "Successfully sent to {placeholder}"
-msgstr ""
+msgstr "Vellykket sending til {placeholder}"
 
 #: static/scripts/app/views/share.js:340
 msgid "Failed to send to {placeholder}"
-msgstr ""
+msgstr "Mislykket sending til {placeholder}"
 
 #: static/scripts/app/views/share.js:605
 msgid "Failed to share to {placeholder}"
-msgstr ""
+msgstr "Mislykket deling til {placeholder}"
 
 #: static/scripts/app/views/share.js:613 static/scripts/app/views/share.js:671
 msgid "Share failed"
-msgstr ""
+msgstr "Mislykket deling"
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"
-msgstr ""
+msgstr "Vellykket"
 
 #: static/scripts/app/views/starred-file-item.js:45
 msgid "Successfully unstared {placeholder}"
-msgstr ""
+msgstr "Vellykket fjerning av stjernemarkering av {placeholder}"

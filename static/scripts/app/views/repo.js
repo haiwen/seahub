@@ -65,7 +65,9 @@ define([
             $('.yes', confirm_popup).click(function() {
                 $.ajax({
                     url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}),
+                    type: 'POST',
                     dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
                     success: function(data) {
                         _this.remove();
                         Common.feedback(gettext("Delete succeeded."), 'success');

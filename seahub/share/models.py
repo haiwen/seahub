@@ -151,6 +151,9 @@ class FileShare(models.Model):
         else:
             return False
 
+    def is_owner(self, owner):
+        return owner == self.username
+
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):
         """Set a share link as org share link.
@@ -232,6 +235,9 @@ class UploadLinkShare(models.Model):
 
     def is_encrypted(self):
         return True if self.password is not None else False
+
+    def is_owner(self, owner):
+        return owner == self.username
 
 class PrivateFileDirShareManager(models.Manager):
     def add_private_file_share(self, from_user, to_user, repo_id, path, perm):

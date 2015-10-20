@@ -24,6 +24,7 @@ from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
+from seahub.base.decorators import require_POST
 from seahub.contacts.models import Contact
 from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
     RepoCreateForm, SharedRepoCreateForm, RepoSettingForm
@@ -657,6 +658,7 @@ def rename_dirent(request, repo_id):
                         content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def delete_dirent(request, repo_id):
     """
     Delete a file/dir with ajax.
@@ -706,6 +708,7 @@ def delete_dirent(request, repo_id):
                 status=500, content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def delete_dirents(request, repo_id):
     """
     Delete multi files/dirs with ajax.
@@ -791,9 +794,9 @@ def copy_move_common():
                                     content_type=content_type)
 
             # Leave src folder/file permission checking to corresponding
-            # views, only need to check folder permission when perform 'move'
-            # operation, 1), if move file, check parent dir perm, 2), if move
-            # folder, check that folder perm.
+            # views.
+            # For 'move', check has read-write perm to src folder;
+            # For 'cp', check has read perm to src folder.
 
             return view_method(request, repo_id, path, dst_repo_id, dst_path,
                                obj_name)
@@ -845,12 +848,18 @@ def cp_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
 
+    # check parent dir perm
+    if not check_folder_permission(request, src_repo_id, src_path):
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
     new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
     try:
         res = seafile_api.copy_file(src_repo_id, src_path, obj_name,
                                     dst_repo_id, dst_path, new_obj_name,
                                     username, need_progress=1)
-    except SearpcError, e:
+    except SearpcError as e:
         res = None
 
     if not res:
@@ -915,6 +924,12 @@ def cp_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     result = {}
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
+
+    # check src dir perm
+    if not check_folder_permission(request, src_repo_id, src_path):
+        result['error'] = _('Permission denied')
+        return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
 
     src_dir = posixpath.join(src_path, obj_name)
     if dst_path.startswith(src_dir):
@@ -1068,6 +1083,11 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     result = {}
     content_type = 'application/json; charset=utf-8'
     username = request.user.username
+
+    if check_folder_permission(request, src_repo_id, src_path) is None:
+        error_msg = _(u'You do not have permission to copy files/dirs in this directory')
+        result['error'] = error_msg
+        return HttpResponse(json.dumps(result), status=403, content_type=content_type)
 
     for obj_name in obj_dir_names:
         src_dir = posixpath.join(src_path, obj_name)
@@ -1480,6 +1500,7 @@ def get_popup_notices(request):
                 }), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def set_notices_seen(request):
     """Set user's notices seen:
 
@@ -1504,6 +1525,7 @@ def set_notices_seen(request):
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def set_notice_seen_by_id(request):
     """
 
@@ -1521,23 +1543,20 @@ def set_notice_seen_by_id(request):
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def repo_remove(request, repo_id):
     ct = 'application/json; charset=utf-8'
     result = {}
 
-    if get_system_default_repo_id() == repo_id:
-        result['error'] = _(u'System library can not be deleted.')
-        return HttpResponse(json.dumps(result), status=403, content_type=ct)
-
     repo = get_repo(repo_id)
     username = request.user.username
     if is_org_context(request):
-        # Remove repo in org context, only (sys admin/repo owner/org staff) can
-        # perform this operation.
+        # Remove repo in org context, only (repo owner/org staff) can perform
+        # this operation.
         org_id = request.user.org.org_id
         is_org_staff = request.user.org.is_staff
         org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        if request.user.is_staff or is_org_staff or org_repo_owner == username:
+        if is_org_staff or org_repo_owner == username:
             # Must get related useres before remove the repo
             usernames = get_related_users_by_org_repo(org_id, repo_id)
             seafile_api.remove_repo(repo_id)
@@ -1554,9 +1573,9 @@ def repo_remove(request, repo_id):
             result['error'] = _(u'Permission denied.')
             return HttpResponse(json.dumps(result), status=403, content_type=ct)
     else:
-        # Remove repo in personal context, only (repo owner/sys admin) can
-        # perform this operation.
-        if validate_owner(request, repo_id) or request.user.is_staff:
+        # Remove repo in personal context, only (repo owner) can perform this
+        # operation.
+        if validate_owner(request, repo_id):
             usernames = get_related_users_by_repo(repo_id)
             seafile_api.remove_repo(repo_id)
             if repo:            # send delete signal only repo is valid
@@ -2681,6 +2700,7 @@ def toggle_personal_modules(request):
             content_type=content_type)
 
 @login_required_ajax
+@require_POST
 def ajax_unset_inner_pub_repo(request, repo_id):
     """
     Unshare repos in organization.
@@ -2695,7 +2715,7 @@ def ajax_unset_inner_pub_repo(request, repo_id):
         return HttpResponse(json.dumps(result),
                             status=400, content_type=content_type)
 
-    perm = request.GET.get('permission', None)
+    perm = request.POST.get('permission', None)
     if perm is None:
         result["error"] = _(u'Argument missing')
         return HttpResponse(json.dumps(result),

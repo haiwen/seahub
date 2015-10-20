@@ -25,7 +25,7 @@
         </td>
         <td data-id="{{ repo.props.id }}" data-name="{{ repo.props.name }}">
             <div>
-            <a href="#" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
+            <a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
             <a href="#" class="repo-transfer-btn op vh">{% trans "Transfer" %}</a>
             </div>
         </td>

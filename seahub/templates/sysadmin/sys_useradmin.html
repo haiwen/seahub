@@ -17,6 +17,9 @@
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_ldap_imported' %}">{% trans "LDAP(imported)" %}</a></li>
         {% endif %}
         <li class="tabnav-tab"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
+        {% if enable_user_plan %}
+        <li class="tabnav-tab"><a href="{% url 'sys_useradmin' %}?filter=paid">{% trans "Paid" %}</a></li>
+        {% endif %}
     </ul>
     <div class="fright">
         <button id="import-users-btn"><span class="icon-upload-alt add vam"></span><span class="vam">{% trans "Import users" %}</span></button>

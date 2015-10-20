@@ -82,20 +82,20 @@ def _incr_login_faied_attempts(username=None, ip=None):
     Returns new value of failed attempts.
     """
     timeout = settings.LOGIN_ATTEMPT_TIMEOUT
-    username_attempts = 0
-    ip_attempts = 0
+    username_attempts = 1
+    ip_attempts = 1
 
     if username:
         try:
             username_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + username)
         except ValueError:
-            cache.set(LOGIN_ATTEMPT_PREFIX + username, 0, timeout)
+            cache.set(LOGIN_ATTEMPT_PREFIX + username, 1, timeout)
 
     if ip:
         try:
             ip_attempts = cache.incr(LOGIN_ATTEMPT_PREFIX + ip)
         except ValueError:
-            cache.set(LOGIN_ATTEMPT_PREFIX + ip, 0, timeout)
+            cache.set(LOGIN_ATTEMPT_PREFIX + ip, 1, timeout)
 
     return max(username_attempts, ip_attempts)
 
@@ -123,26 +123,27 @@ def login(request, template_name='registration/login.html',
 
     redirect_to = request.REQUEST.get(redirect_field_name, '')
     ip = get_remote_ip(request)
+    failed_attempt = _get_login_failed_attempts(ip=ip)
 
     if request.method == "POST":
-        if request.REQUEST.get('captcha_0', '') != '':
+        username = urlquote(request.REQUEST.get('username', '').strip())
+        remember_me = True if request.REQUEST.get('remember_me',
+                                                  '') == 'on' else False
+
+        if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
             # have captcha
             form = CaptchaAuthenticationForm(data=request.POST)
             if form.is_valid():
                 # captcha & passwod is valid, log user in
-                remember_me = True if request.REQUEST.get(
-                    'remember_me', '') == 'on' else False
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
                 # show page with captcha and increase failed login attempts
-                _incr_login_faied_attempts(ip=ip)
+                _incr_login_faied_attempts(username=username, ip=ip)
         else:
             form = authentication_form(data=request.POST)
             if form.is_valid():
                 # password is valid, log user in
-                remember_me = True if request.REQUEST.get(
-                    'remember_me', '') == 'on' else False
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
             else:
@@ -158,7 +159,6 @@ def login(request, template_name='registration/login.html',
                     form = authentication_form(data=request.POST)
     else:
         ### GET
-        failed_attempt = _get_login_failed_attempts(ip=ip)
         if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
             logger.warn('Login attempt limit reached, ip: %s, attempts: %d' %
                         (ip, failed_attempt))
@@ -229,10 +229,19 @@ def login_simple_check(request):
         raise Http404
 
 
-def logout(request, next_page=None, template_name='registration/logged_out.html', redirect_field_name=REDIRECT_FIELD_NAME):
+def logout(request, next_page=None,
+           template_name='registration/logged_out.html',
+           redirect_field_name=REDIRECT_FIELD_NAME):
     "Logs out the user and displays 'You are logged out' message."
     from seahub.auth import logout
     logout(request)
+
+    if redirect_field_name in request.REQUEST:
+        next_page = request.REQUEST[redirect_field_name]
+        # Security check -- don't allow redirection to a different host.
+        if not is_safe_url(url=next_page, host=request.get_host()):
+            next_page = request.path
+
     if next_page is None:
         redirect_to = request.REQUEST.get(redirect_field_name, '')
         if redirect_to:

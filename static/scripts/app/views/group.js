@@ -93,6 +93,7 @@ define([
             var _this = this;
             this.repos.setGroupID(group_id);
             this.repos.fetch({
+                cache: false,
                 reset: true,
                 data: {from: 'web'},
                 success: function (collection, response, opts) {

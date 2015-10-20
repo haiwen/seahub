@@ -35,7 +35,7 @@ from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
-from seahub.base.decorators import user_mods_check
+from seahub.base.decorators import user_mods_check, require_POST
 from seahub.base.models import UserStarredFiles, ClientLoginToken
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
@@ -623,7 +623,7 @@ def repo_basic_info(request, repo_id):
 
 @login_required
 def repo_transfer_owner(request, repo_id):
-    """Transfer repo owner.
+    """Show transfer repo owner page.
     """
     username = request.user.username
     can_access, repo = can_access_repo_setting(request, repo_id, username)
@@ -648,7 +648,7 @@ def repo_transfer_success(request, repo_id):
 
 @login_required
 def repo_change_password(request, repo_id):
-    """Change library password.
+    """Show change library password page.
     """
     username = request.user.username
     can_access, repo = can_access_repo_setting(request, repo_id, username)
@@ -1196,6 +1196,7 @@ def devices(request):
             }, context_instance=RequestContext(request))
 
 @login_required_ajax
+@require_POST
 def unlink_device(request):
     content_type = 'application/json; charset=utf-8'
 
@@ -1293,63 +1294,6 @@ def repo_set_access_property(request, repo_id):
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
 
     return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-@login_required
-def repo_del_file(request, repo_id):
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
-        return render_permission_error(request, _('Failed to delete file.'))
-
-    parent_dir = request.GET.get("p", "/")
-    file_name = request.GET.get("file_name")
-    user = request.user.username
-    try:
-        seafserv_threaded_rpc.del_file(repo_id, parent_dir, file_name, user)
-        messages.success(request, _(u'%s successfully deleted.') % file_name)
-    except:
-        messages.error(request, _(u'Internal error. Failed to delete %s.') % file_name)
-
-    url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
-    return HttpResponseRedirect(url)
-
-def repo_access_file(request, repo_id, obj_id):
-    """Delete or download file.
-    TODO: need to be rewrite.
-
-    **NOTE**: download file is moved to file.py::download_file
-    """
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    password_set = False
-    if repo.props.encrypted:
-        try:
-            ret = seafserv_rpc.is_passwd_set(repo_id, request.user.username)
-            if ret == 1:
-                password_set = True
-        except SearpcError, e:
-            return render_error(request, e.msg)
-
-    if repo.props.encrypted and not password_set:
-        return HttpResponseRedirect(reverse('repo', args=[repo_id]))
-
-    op = request.GET.get('op', 'view')
-    file_name = request.GET.get('file_name', '')
-
-    if op == 'del':
-        return repo_del_file(request, repo_id)
-
-    username = request.user.username
-    path = request.GET.get('p', '')
-    if check_repo_access_permission(repo_id, request.user) or \
-            get_file_access_permission(repo_id, path, username):
-        # Get a token to access file
-        token = seafile_api.get_fileserver_access_token(repo_id, obj_id, op, username)
-    else:
-        return render_permission_error(request, _(u'Unable to access file'))
-
-    redirect_url = gen_file_get_url(token, file_name)
-    return HttpResponseRedirect(redirect_url)
 
 @login_required
 def file_upload_progress_page(request):
@@ -1568,9 +1512,8 @@ def repo_revert_dir(request, repo_id):
 
 @login_required
 def file_revisions(request, repo_id):
-    if request.method != 'GET':
-        return render_error(request)
-
+    """List file revisions in file version history page.
+    """
     repo = get_repo(repo_id)
     if not repo:
         raise Http404
@@ -1579,43 +1522,7 @@ def file_revisions(request, repo_id):
     if check_repo_access_permission(repo.id, request.user) is None:
         raise Http404
 
-    op = request.GET.get('op')
-    if not op:
-        return render_file_revisions(request, repo_id)
-    elif op != 'download':
-        return render_error(request)
-
-    commit_id  = request.GET.get('commit')
-    path = request.GET.get('p')
-
-    if not (commit_id and path):
-        return render_error(request)
-
-    if op == 'download':
-        def handle_download():
-            parent_dir = os.path.dirname(path)
-            file_name  = os.path.basename(path)
-            seafdir = seafile_api.list_dir_by_commit_and_path (repo_id,
-                                                               commit_id,
-                                                               parent_dir)
-            if not seafdir:
-                return render_error(request)
-
-            # for ...  else ...
-            for dirent in seafdir:
-                if dirent.obj_name == file_name:
-                    break
-            else:
-                return render_error(request)
-
-            url = reverse('repo_access_file', args=[repo_id, dirent.obj_id])
-            url += '?file_name=%s&op=download' % urllib2.quote(file_name.encode('utf-8'))
-            return HttpResponseRedirect(url)
-
-        try:
-            return handle_download()
-        except Exception, e:
-            return render_error(request, str(e))
+    return render_file_revisions(request, repo_id)
 
 def demo(request):
     """
@@ -1781,10 +1688,15 @@ def i18n(request):
         # language code is not supported, use default.
         lang = settings.LANGUAGE_CODE
 
-    # set language code to user profile
-    p = Profile.objects.get_profile_by_user(request.user.username)
-    if p is not None:
-        p.set_lang_code(lang)
+    # set language code to user profile if user is logged in
+    if not request.user.is_anonymous():
+        p = Profile.objects.get_profile_by_user(request.user.username)
+        if p is not None:
+            # update exist record
+            p.set_lang_code(lang)
+        else:
+            # add new record
+            Profile.objects.add_or_update(request.user.username, '', '', lang)
 
     # set language code to client
     res = HttpResponseRedirect(next)

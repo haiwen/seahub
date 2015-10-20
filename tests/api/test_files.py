@@ -3,14 +3,14 @@
 Test file/dir operations.
 """
 
-import random
-import re
+import posixpath
 import pytest
-from urllib import urlencode, quote, quote
+import urllib
+from urllib import urlencode, quote
+import urlparse
 
 from tests.common.utils import randstring, urljoin
-from tests.api.urls import DEFAULT_REPO_URL, REPOS_URL
-from tests.api.apitestbase import ApiTestBase, USERNAME
+from tests.api.apitestbase import ApiTestBase
 
 class FilesApiTest(ApiTestBase):
     def test_rename_file(self):
@@ -43,39 +43,72 @@ class FilesApiTest(ApiTestBase):
 
     def test_copy_file(self):
         with self.get_tmp_repo() as repo:
-            fname, _ = self.create_file(repo)
             # TODO: create another repo here, and use it as dst_repo
+
+            # create sub folder(dpath)
             dpath, _ = self.create_dir(repo)
-            fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=/'
-            data = {
-                'file_names': fname,
-                'dst_repo': repo.repo_id,
-                'dst_dir': dpath,
-            }
-            res = self.post(fopurl, data=data)
-            self.assertEqual(res.text, '"success"')
 
             # create tmp file in sub folder(dpath)
             tmp_file = 'tmp_file.txt'
-            furl = repo.get_filepath_url(dpath + '/' + tmp_file)
+            file_path = dpath + '/' + tmp_file
+            furl = repo.get_filepath_url(file_path)
             data = {'operation': 'create'}
             res = self.post(furl, data=data, expected=201)
 
-            # copy tmp file(in dpath) to dst dir
-            fopurl = urljoin(repo.repo_url, 'fileops/copy/') + '?p=' + quote(dpath)
+            # copy tmp file from sub folder(dpath) to dst dir('/')
             data = {
-                'file_names': tmp_file,
                 'dst_repo': repo.repo_id,
-                'dst_dir': dpath,
+                'dst_dir': '/',
+                'operation': 'copy',
             }
-            res = self.post(fopurl, data=data)
+            u = urlparse.urlparse(furl)
+            parsed_furl = urlparse.urlunparse((u.scheme, u.netloc, u.path, '', '', ''))
+            res = self.post(parsed_furl+ '?p=' + quote(file_path), data=data)
             self.assertEqual(res.text, '"success"')
+
+            # get info of copied file in dst dir('/')
+            fdurl = repo.file_url + u'detail/?p=/%s' % quote(tmp_file)
+            detail = self.get(fdurl).json()
+            self.assertIsNotNone(detail)
+            self.assertIsNotNone(detail['id'])
 
     def test_download_file(self):
         with self.get_tmp_repo() as repo:
             fname, furl = self.create_file(repo)
             res = self.get(furl)
             self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+    def test_download_file_without_reuse_token(self):
+        with self.get_tmp_repo() as repo:
+            fname, furl = self.create_file(repo)
+            res = self.get(furl)
+            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+            # download for the first time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
+
+            # download for the second time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 400)
+
+    def test_download_file_with_reuse_token(self):
+        with self.get_tmp_repo() as repo:
+            fname, furl = self.create_file(repo)
+            res = self.get(furl + '&reuse=1')
+            self.assertRegexpMatches(res.text, '"http(.*)/%s"' % quote(fname))
+
+            # download for the first time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
+
+            # download for the second time
+            url = urllib.urlopen(res.text.strip('"'))
+            code = url.getcode()
+            self.assertEqual(code, 200)
 
     def test_download_file_from_history(self):
         with self.get_tmp_repo() as repo:
@@ -179,7 +212,30 @@ class FilesApiTest(ApiTestBase):
             res = self.get(update_blks_url)
             self.assertRegexpMatches(res.text, r'"http(.*)/update-blks-api/[^/]+"')
 
-    def test_list_dir(self):
+    def test_only_list_dir(self):
+        with self.get_tmp_repo() as repo:
+            self.create_file(repo)
+            self.create_dir(repo)
+            dirents = self.get(repo.dir_url + '?t=d').json()
+            self.assertHasLen(dirents, 1)
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertIsNotNone(dirent['name'])
+                self.assertEqual(dirent['type'], 'dir')
+
+    def test_only_list_file(self):
+        with self.get_tmp_repo() as repo:
+            self.create_file(repo)
+            self.create_dir(repo)
+            dirents = self.get(repo.dir_url + '?t=f').json()
+            self.assertHasLen(dirents, 1)
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertIsNotNone(dirent['name'])
+                self.assertIsNotNone(dirent['size'])
+                self.assertEqual(dirent['type'], 'file')
+
+    def test_list_dir_and_file(self):
         with self.get_tmp_repo() as repo:
             self.create_file(repo)
             self.create_dir(repo)
@@ -191,6 +247,25 @@ class FilesApiTest(ApiTestBase):
                 self.assertIn(dirent['type'], ('file', 'dir'))
                 if dirent['type'] == 'file':
                     self.assertIsNotNone(dirent['size'])
+
+    def test_list_recursive_dir(self):
+        with self.get_tmp_repo() as repo:
+
+            # create test dir
+            data = {'operation': 'mkdir'}
+            dir_list = ['/1/', '/1/2/', '/1/2/3/', '/4/', '/4/5/', '/6/']
+            for dpath in dir_list:
+                durl = repo.get_dirpath_url(dpath)
+                self.post(durl, data=data, expected=201)
+
+            # get recursive dir
+            dirents = self.get(repo.dir_url + '?t=d&recursive=1').json()
+            self.assertHasLen(dirents, len(dir_list))
+            for dirent in dirents:
+                self.assertIsNotNone(dirent['id'])
+                self.assertEqual(dirent['type'], 'dir')
+                full_path = posixpath.join(dirent['parent_dir'], dirent['name']) + '/'
+                self.assertIn(full_path, dir_list)
 
     def test_remove_dir(self):
         with self.get_tmp_repo() as repo:

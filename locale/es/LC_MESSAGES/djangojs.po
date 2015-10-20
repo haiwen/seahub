@@ -11,8 +11,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-09-14 15:39+0800\n"
-"PO-Revision-Date: 2015-09-14 07:04+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-09-15 17:54+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (http://www.transifex.com/haiwen/seahub/language/es/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -82,27 +82,27 @@ msgstr "Las contraseñas no coinciden"
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Archivos nuevos"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Archivos eliminados"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Archivos movidos o renombrados"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "Archivos modificados"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "Carpetas nuevas"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Carpetas eliminadas"
 
 #: static/scripts/app/views/dir.js:45
 #: static/scripts/app/views/starred-file.js:29

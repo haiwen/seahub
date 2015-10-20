@@ -43,8 +43,8 @@ define([
         // Generate the attributes for a new GroupRepo item.
         newAttributes: function() {
             return {
-                name: $('input[name=repo_name]', this.$el).val().trim(),
-                encrypted: $('#encrypt-switch', this.$el).parent().hasClass('checkbox-checked'),
+                name: $.trim($('input[name=repo_name]', this.$el).val()),
+                encrypted: $('#encrypt-switch').prop('checked'),
                 passwd1: $('input[name=passwd]', this.$el).val(),
                 passwd2: $('input[name=passwd_again]', this.$el).val(),
                 passwd: $('input[name=passwd]', this.$el).val()
@@ -59,6 +59,7 @@ define([
         addRepo: function(e) {
             e.preventDefault();
 
+            Common.disableButton(this.$('[type="submit"]'));
             var repos = this.repos;
             repos.create(this.newAttributes(), {
                 wait: true,
@@ -80,11 +81,11 @@ define([
         },
 
         togglePasswdInput: function(e) {
-            var $parent = $(e.target).parent();
-            $parent.toggleClass('checkbox-checked');
+            var $checkbox = $('#encrypt-switch');
+            var pwd_input = this.$('input[type="password"]');
 
-            var pwd_input = $('input[type="password"]', $('.repo-create-encryption'));
-            if ($parent.hasClass('checkbox-checked')) {
+            $checkbox.parent().toggleClass('checkbox-checked');
+            if ($checkbox.prop('checked')) {
                 pwd_input.attr('disabled', false).removeClass('input-disabled');
             } else {
                 pwd_input.attr('disabled', true).addClass('input-disabled');
