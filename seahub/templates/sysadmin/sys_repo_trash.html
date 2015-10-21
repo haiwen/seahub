@@ -59,21 +59,25 @@
 {% if search_owner %}
 addConfirmTo($('#repo-trash-clear'), {
         'title':"{% trans 'Delete Library By Owner' %}",
-        'con':"{% trans "Are you sure you want to delete all %s's libraries?" %}"
+        'con':"{% trans "Are you sure you want to delete all %s's libraries?" %}",
+        'post': true // post request
 });
 {% else %}
 addConfirmTo($('#repo-trash-clear'), {
         'title':"{% trans 'Clear Trash' %}",
-        'con':"{% trans "Are you sure you want to clear trash?" %}"
+        'con':"{% trans "Are you sure you want to clear trash?" %}",
+        'post': true // post request
 });
 {% endif %}
 addConfirmTo($('.repo-restore-btn'), {
         'title':"{% trans 'Restore Library' %}",
-        'con':"{% trans "Are you sure you want to restore %s?" %}"
+        'con':"{% trans "Are you sure you want to restore %s?" %}",
+        'post': true // post request
 });
 addConfirmTo($('.repo-delete-btn'), {
         'title':"{% trans 'Delete Library' %}",
-        'con':"{% trans "Are you sure you want to delete %s completely?" %}"
+        'con':"{% trans "Are you sure you want to delete %s completely?" %}",
+        'post': true // post request
 });
 </script>
 {% endblock %}

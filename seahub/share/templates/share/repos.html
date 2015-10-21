@@ -20,9 +20,9 @@
     {% for repo in out_repos %}
     <tr data-repo_name="{{repo.props.repo_name}}" data-type="{{repo.props.share_type}}" data-repoid="{{ repo.props.repo_id }}" data-user="{{repo.props.user_info}}">
         {% if repo.encrypted %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         {% else %}
-        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>        
+        <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
         {% endif %}
         <td><a href="{% url 'view_common_lib_dir' repo.props.repo_id '' %}">{{ repo.props.repo_name }}</a></td>
         <td title="{{ repo.props.user }}">{{ repo.props.user | email2nickname }}</td>
@@ -37,7 +37,7 @@
                 <option value="r">{% trans "Read-Only"%}</option>
                 {% else %}
                 <option value="rw">{% trans "Read-Write"%}</option>
-                {% endif %} 
+                {% endif %}
             </select>
         </td>
         <td>
@@ -48,7 +48,7 @@
             <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="cancel-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
+            <a href="#" data-url="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-public-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
             {% endif %}
         </td>
     </tr>
@@ -64,6 +64,7 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
+addFormPost($('.cancel-public-share'));
 {% if out_repos %}
 $('.share-permission-edit-icon').click(function() {
     var cur_perm = $(this).parent(),
@@ -104,7 +105,7 @@ $('.share-permission-select').change(function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             cur_perm.removeClass('hide');
-        }   
+        }
     });
 });
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
