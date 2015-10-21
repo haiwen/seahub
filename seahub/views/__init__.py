@@ -428,9 +428,12 @@ def render_recycle_root(request, repo_id):
         raise Http404
 
     days = show_delete_days(request)
+    trash_src_path = request.GET.get('trash_src_path', '/')
 
     try:
-        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days)
+        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id,
+                                                            days,
+                                                            trash_src_path)
     except:
         deleted_entries = []
 
@@ -459,6 +462,11 @@ def render_recycle_root(request, repo_id):
     if is_repo_owner:
         enable_clean = True
 
+    if trash_src_path == '/':
+        trash_name = repo.repo_name
+    else:
+        trash_name = os.path.basename(trash_src_path.rstrip('/'))
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
@@ -466,6 +474,8 @@ def render_recycle_root(request, repo_id):
             'file_list': file_list,
             'days': days,
             'enable_clean': enable_clean,
+            'trash_name': trash_name,
+            'trash_src_path': trash_src_path,
             }, context_instance=RequestContext(request))
 
 def render_recycle_dir(request, repo_id, commit_id):
@@ -504,6 +514,12 @@ def render_recycle_dir(request, repo_id, commit_id):
     if is_repo_owner:
         enable_clean = True
 
+    trash_src_path = request.GET.get('trash_src_path', '/')
+    if trash_src_path == '/':
+        trash_name = repo.repo_name
+    else:
+        trash_name = os.path.basename(trash_src_path.rstrip('/'))
+
     return render_to_response('repo_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
@@ -515,11 +531,14 @@ def render_recycle_dir(request, repo_id, commit_id):
             'path': path,
             'days': days,
             'enable_clean': enable_clean,
+            'trash_name': trash_name,
+            'trash_src_path': trash_src_path,
             }, context_instance=RequestContext(request))
 
 @login_required
 def repo_recycle_view(request, repo_id):
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
+    trash_src_path = request.GET.get('trash_src_path', '/')
+    if check_folder_permission(request, repo_id, trash_src_path) != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
