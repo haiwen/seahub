@@ -973,7 +973,8 @@ def repo_history(request, repo_id):
             }, context_instance=RequestContext(request))
 
 @login_required
-def repo_history_revert(request, repo_id):
+@require_POST
+def repo_revert_history(request, repo_id):
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
@@ -1216,6 +1217,7 @@ def unlink_device(request):
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
+@require_POST
 def unsetinnerpub(request, repo_id):
     """Unshare repos in organization or in share admin page.
 
@@ -1259,7 +1261,7 @@ def unsetinnerpub(request, repo_id):
                 perm_repo_id = repo.id
                 perm_path =  '/'
 
-            send_perm_audit_msg('delete-repo-perm', username, 'all', \
+            send_perm_audit_msg('delete-repo-perm', username, 'all',
                                 perm_repo_id, perm_path, perm)
 
         messages.success(request, _('Unshare "%s" successfully.') % repo.name)
@@ -1402,6 +1404,7 @@ def render_file_revisions (request, repo_id):
         }, context_instance=RequestContext(request))
 
 @login_required
+@require_POST
 def repo_revert_file(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
@@ -1460,6 +1463,7 @@ def repo_revert_file(request, repo_id):
         return HttpResponseRedirect(url)
 
 @login_required
+@require_POST
 def repo_revert_dir(request, repo_id):
     repo = get_repo(repo_id)
     if not repo:
