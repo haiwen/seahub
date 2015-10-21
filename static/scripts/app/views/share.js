@@ -385,14 +385,16 @@ define([
 
         deleteDownloadLink: function() {
             var _this = this;
-            var after_op_success = function(data) {
-                _this.$('#generate-download-link-form').removeClass('hide'),
-                _this.$('#download-link-operations').addClass('hide');
-            };
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'delete_shared_download_link'}),
-                'data': { 't': _this.download_link_token },
-                'after_op_success': after_op_success
+            $.ajax({
+                url: Common.getUrl({name: 'delete_shared_download_link'}),
+                type: 'POST',
+                data: { 't': this.download_link_token },
+                beforeSend: Common.prepareCSRFToken,
+                dataType: 'json',
+                success: function(data) {
+                    _this.$('#generate-download-link-form').removeClass('hide');
+                    _this.$('#download-link-operations').addClass('hide');
+                }
             });
         },
 
@@ -457,14 +459,16 @@ define([
 
         deleteUploadLink: function() {
             var _this = this;
-            var after_op_success = function(data) {
-                _this.$('#generate-upload-link-form').removeClass('hide'),
-                _this.$('#upload-link-operations').addClass('hide');
-            };
-            Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'delete_shared_upload_link'}),
-                'data': { 't': _this.upload_link_token },
-                'after_op_success': after_op_success
+            $.ajax({
+                url: Common.getUrl({name: 'delete_shared_upload_link'}),
+                type: 'POST',
+                data: { 't': this.upload_link_token },
+                beforeSend: Common.prepareCSRFToken,
+                dataType: 'json',
+                success: function(data) {
+                    _this.$('#generate-upload-link-form').removeClass('hide');
+                    _this.$('#upload-link-operations').addClass('hide');
+                }
             });
         },
 
