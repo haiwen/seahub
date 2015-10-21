@@ -1,0 +1,94 @@
+{% extends "myhome_base.html" %}
+
+{% load seahub_tags avatar_tags i18n upload_tags %}
+
+{% block sub_title %}{{repo.name}} - {% endblock %}
+{% block extra_style %}
+<style type="text/css">
+#footer { display:none; }
+</style>
+{% endblock %}
+
+{% block main_panel %}
+    <div id="repo-top">
+        <h2 class="hd">{{repo.props.name}}</h2>
+    </div>
+
+    <div id="repo-file-list">
+        <div class="repo-file-list-topbar">
+            <p class="path fleft">
+            {% for name, link in zipped %}
+            {% if forloop.first or not forloop.last %}
+            <a href="{% url 'sys_admin_repo' repo.id %}?p={{link|urlencode}}" class="dir-link normal">{{ name }}</a> /
+            {% else %}
+            <span id="cur-dir-name">{{ name }}</span> /
+            {% endif %}
+            {% endfor %}
+            </p>
+            <div id="repo-latest-commit" class="clear">
+            </div>
+        </div>
+
+        <table class="repo-file-list">
+            <tr>
+                <th class="dirent-icon"></th>
+                <th><span class="dirent-name">{% trans "Name"%}</span></th>
+                <th class="dirent-size">{% trans "Size"%}</th>
+                <th class="dirent-update">{% trans "Last Update" %}</th>
+                <th class="dirent-op">{% trans "Operations"%}</th>
+            </tr>
+            {% for dirent in dir_list %}
+            <tr class="dir-item">
+                <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td>
+                    <span class="dirent-name"><a href="?p={{path|urlencode}}{{ dirent.obj_name|urlencode }}" class="dir-link">{{ dirent.obj_name }}</a></span>
+                </td>
+
+                <td class="dirent-size"></td>
+                <td class="dirent-update">
+                    {{ dirent.last_modified|translate_seahub_time }}
+                </td>
+                <td class="dirent-op">
+                </td>
+            </tr>
+            {% endfor %}
+            {% for dirent in file_list %}
+            <tr class="file-item">
+                <td class="dirent-icon">
+                    <img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" />
+                </td>
+                <td>
+                    <span class="dirent-name">{{ dirent.obj_name }}</span>
+                </td>
+                <td class="dirent-size">{{ dirent.file_size|filesizeformat }}</td>
+                <td class="dirent-update">
+                    {{ dirent.last_modified|translate_seahub_time }}
+                </td>
+                <td class="dirent-op">
+                    <div class="repo-file-op vh">
+                        <div class="displayed-op">
+                            <a class="op file-download" href="{% url 'sys_admin_repo_download_file' repo.id %}?p={{path|urlencode}}{{ dirent.obj_name|urlencode }}" title="{% trans "Download"%}">
+                                <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.dir-item, .file-item').unbind().hover( // remove previously binded hover handler at first
+    function() {
+        $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
+    },
+    function() {
+        $(this).removeClass('hl').find('.repo-file-op').addClass('vh');
+    }
+);
+</script>
+{% endblock %}

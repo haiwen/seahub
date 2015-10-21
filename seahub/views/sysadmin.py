@@ -6,6 +6,7 @@ import logging
 import json
 import re
 import datetime
+import stat
 import csv, chardet, StringIO
 from constance import config
 
@@ -18,7 +19,8 @@ from django.utils import timezone
 from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_emailusers, \
-    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members
+    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members, get_repo, \
+    get_file_size
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -31,21 +33,22 @@ from seahub.constants import GUEST_USER, DEFAULT_USER
 
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    clear_token
+    clear_token, gen_file_get_url, is_org_context
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
 
-from seahub.views import get_system_default_repo_id
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
+from seahub.views import get_system_default_repo_id, gen_path_link
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, CONSTANCE_CONFIG, \
-    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD
+from seahub.settings import INIT_PASSWD, SITE_NAME, \
+    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
+    ENABLE_SYS_ADMIN_VIEW_REPO
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -155,7 +158,9 @@ def sys_repo_admin(request):
     else:
         page_next = False
 
+    default_repo_id = get_system_default_repo_id()
     for repo in repos:
+        repo.is_default_repo = True if repo.id == default_repo_id else False
         try:
             repo.owner = seafile_api.get_repo_owner(repo.id)
         except:
@@ -163,6 +168,7 @@ def sys_repo_admin(request):
 
     return render_to_response(
         'sysadmin/sys_repo_admin.html', {
+            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'repos': repos,
             'current_page': current_page,
             'prev_page': current_page-1,
@@ -171,6 +177,102 @@ def sys_repo_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_admin_repo_download_file(request, repo_id):
+    """
+    """
+    repo = get_repo(repo_id)
+    path = request.GET.get('p', '')
+    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_admin_repo')
+
+    if not repo or repo.encrypted or not is_pro_version() \
+        or not ENABLE_SYS_ADMIN_VIEW_REPO or not obj_id:
+        messages.error(request, _(u'Unable to download file'))
+        return HttpResponseRedirect(next)
+
+    try:
+        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
+                                      'download', request.user.username)
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _(u'Unable to view library'))
+        return HttpResponseRedirect(next)
+
+    file_name = os.path.basename(path.rstrip('/'))
+    redirect_url = gen_file_get_url(token, file_name)
+    return HttpResponseRedirect(redirect_url)
+
+@login_required
+@sys_staff_required
+def sys_admin_repo(request, repo_id):
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_repo_admin')
+
+    if not is_pro_version() or not ENABLE_SYS_ADMIN_VIEW_REPO:
+        messages.error(request, _(u'Unable to view library, this feature is not enabled.'))
+        return HttpResponseRedirect(next)
+
+    repo = get_repo(repo_id)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponseRedirect(next)
+
+    if repo.encrypted:
+        messages.error(request, _(u'Library is encrypted'))
+        return HttpResponseRedirect(next)
+
+    path = request.GET.get('p', '/')
+    if path[-1] != '/':
+        path = path + '/'
+
+    dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+    if not dir_id:
+        messages.error(request, _(u'Unable to view library, wrong folder path.'))
+        return HttpResponseRedirect(next)
+
+    if is_org_context(request):
+        repo_owner = seafile_api.get_org_repo_owner(repo_id)
+    else:
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    try:
+        dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path,
+                                                        dir_id, repo_owner,
+                                                        -1, -1)
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _(u'Unable to view library'))
+        return HttpResponseRedirect(next)
+
+    file_list, dir_list = [], []
+    for dirent in dirs:
+        dirent.last_modified = dirent.mtime
+        if stat.S_ISDIR(dirent.props.mode):
+            dir_list.append(dirent)
+        else:
+            if repo.version == 0:
+                dirent.file_size = get_file_size(repo.store_id, repo.version, dirent.obj_id)
+            else:
+                dirent.file_size = dirent.size
+            file_list.append(dirent)
+
+    zipped = gen_path_link(path, repo.name)
+
+    return render_to_response('sysadmin/admin_repo_view.html', {
+            'repo': repo,
+            'repo_owner': repo_owner,
+            'dir_list': dir_list,
+            'file_list': file_list,
+            'path': path,
+            'zipped': zipped,
+            }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required
@@ -332,6 +434,7 @@ def sys_repo_search(request):
             'repos': repos,
             'name': repo_name,
             'owner': owner,
+            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             }, context_instance=RequestContext(request))
 
 def _populate_user_quota_usage(user):
@@ -723,6 +826,7 @@ def user_info(request, email):
             'd_profile': d_profile,
             'org_name': org_name,
             'user_shared_links': user_shared_links,
+            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -1171,6 +1275,7 @@ def sys_admin_group_info(request, group_id):
             'group': group,
             'repos': repos,
             'members': members,
+            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             }, context_instance=RequestContext(request))
 
 @login_required
