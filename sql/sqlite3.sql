@@ -10,44 +10,45 @@ INSERT INTO "django_content_type" VALUES(1,'content type','contenttypes','conten
 INSERT INTO "django_content_type" VALUES(2,'session','sessions','session');
 INSERT INTO "django_content_type" VALUES(3,'registration profile','registration','registrationprofile');
 INSERT INTO "django_content_type" VALUES(4,'captcha store','captcha','captchastore');
-INSERT INTO "django_content_type" VALUES(5,'token','api2','token');
-INSERT INTO "django_content_type" VALUES(6,'token v2','api2','tokenv2');
-INSERT INTO "django_content_type" VALUES(7,'avatar','avatar','avatar');
-INSERT INTO "django_content_type" VALUES(8,'group avatar','avatar','groupavatar');
-INSERT INTO "django_content_type" VALUES(9,'group enabled module','base','groupenabledmodule');
-INSERT INTO "django_content_type" VALUES(10,'uuid objid map','base','uuidobjidmap');
-INSERT INTO "django_content_type" VALUES(11,'inner pub msg reply','base','innerpubmsgreply');
-INSERT INTO "django_content_type" VALUES(12,'commands last check','base','commandslastcheck');
+INSERT INTO "django_content_type" VALUES(5,'constance','database','constance');
+INSERT INTO "django_content_type" VALUES(6,'token','api2','token');
+INSERT INTO "django_content_type" VALUES(7,'token v2','api2','tokenv2');
+INSERT INTO "django_content_type" VALUES(8,'avatar','avatar','avatar');
+INSERT INTO "django_content_type" VALUES(9,'group avatar','avatar','groupavatar');
+INSERT INTO "django_content_type" VALUES(10,'group enabled module','base','groupenabledmodule');
+INSERT INTO "django_content_type" VALUES(11,'client login token','base','clientlogintoken');
+INSERT INTO "django_content_type" VALUES(12,'uuid objid map','base','uuidobjidmap');
 INSERT INTO "django_content_type" VALUES(13,'user enabled module','base','userenabledmodule');
+INSERT INTO "django_content_type" VALUES(14,'file discuss','base','filediscuss');
 INSERT INTO "django_content_type" VALUES(15,'device token','base','devicetoken');
-INSERT INTO "django_content_type" VALUES(17,'file discuss','base','filediscuss');
-INSERT INTO "django_content_type" VALUES(18,'inner pub msg','base','innerpubmsg');
-INSERT INTO "django_content_type" VALUES(20,'user last login','base','userlastlogin');
-INSERT INTO "django_content_type" VALUES(21,'user starred files','base','userstarredfiles');
-INSERT INTO "django_content_type" VALUES(22,'contact','contacts','contact');
-INSERT INTO "django_content_type" VALUES(23,'personal wiki','wiki','personalwiki');
-INSERT INTO "django_content_type" VALUES(24,'group wiki','wiki','groupwiki');
-INSERT INTO "django_content_type" VALUES(25,'public group','group','publicgroup');
-INSERT INTO "django_content_type" VALUES(26,'group message','group','groupmessage');
-INSERT INTO "django_content_type" VALUES(27,'message attachment','group','messageattachment');
-INSERT INTO "django_content_type" VALUES(28,'message reply','group','messagereply');
-INSERT INTO "django_content_type" VALUES(29,'user msg attachment','message','usermsgattachment');
-INSERT INTO "django_content_type" VALUES(30,'user msg last check','message','usermsglastcheck');
-INSERT INTO "django_content_type" VALUES(31,'user message','message','usermessage');
-INSERT INTO "django_content_type" VALUES(32,'notification','notifications','notification');
-INSERT INTO "django_content_type" VALUES(33,'user notification','notifications','usernotification');
-INSERT INTO "django_content_type" VALUES(34,'user options','options','useroptions');
-INSERT INTO "django_content_type" VALUES(35,'profile','profile','profile');
-INSERT INTO "django_content_type" VALUES(36,'detailed profile','profile','detailedprofile');
-INSERT INTO "django_content_type" VALUES(37,'private file dir share','share','privatefiledirshare');
-INSERT INTO "django_content_type" VALUES(38,'upload link share','share','uploadlinkshare');
-INSERT INTO "django_content_type" VALUES(39,'file share','share','fileshare');
-INSERT INTO "django_content_type" VALUES(40,'anonymous share','share','anonymousshare');
-INSERT INTO "django_content_type" VALUES(41,'org file share','share','orgfileshare');
-INSERT INTO "django_content_type" VALUES(42,'group public file','pubfile','grouppublicfile');
-INSERT INTO "django_content_type" VALUES(43,'user login log','sysadmin_extra','userloginlog');
-INSERT INTO "django_content_type" VALUES(44,'client login token','base','clientlogintoken');
-INSERT INTO "django_content_type" VALUES(45,'org member quota','organizations','orgmemberquota');
+INSERT INTO "django_content_type" VALUES(16,'commands last check','base','commandslastcheck');
+INSERT INTO "django_content_type" VALUES(17,'inner pub msg','base','innerpubmsg');
+INSERT INTO "django_content_type" VALUES(18,'inner pub msg reply','base','innerpubmsgreply');
+INSERT INTO "django_content_type" VALUES(19,'user last login','base','userlastlogin');
+INSERT INTO "django_content_type" VALUES(20,'user starred files','base','userstarredfiles');
+INSERT INTO "django_content_type" VALUES(21,'contact','contacts','contact');
+INSERT INTO "django_content_type" VALUES(22,'personal wiki','wiki','personalwiki');
+INSERT INTO "django_content_type" VALUES(23,'group wiki','wiki','groupwiki');
+INSERT INTO "django_content_type" VALUES(24,'public group','group','publicgroup');
+INSERT INTO "django_content_type" VALUES(25,'group message','group','groupmessage');
+INSERT INTO "django_content_type" VALUES(26,'message attachment','group','messageattachment');
+INSERT INTO "django_content_type" VALUES(27,'message reply','group','messagereply');
+INSERT INTO "django_content_type" VALUES(28,'user msg attachment','message','usermsgattachment');
+INSERT INTO "django_content_type" VALUES(29,'user msg last check','message','usermsglastcheck');
+INSERT INTO "django_content_type" VALUES(30,'user message','message','usermessage');
+INSERT INTO "django_content_type" VALUES(31,'notification','notifications','notification');
+INSERT INTO "django_content_type" VALUES(32,'user notification','notifications','usernotification');
+INSERT INTO "django_content_type" VALUES(33,'user options','options','useroptions');
+INSERT INTO "django_content_type" VALUES(34,'profile','profile','profile');
+INSERT INTO "django_content_type" VALUES(35,'detailed profile','profile','detailedprofile');
+INSERT INTO "django_content_type" VALUES(36,'private file dir share','share','privatefiledirshare');
+INSERT INTO "django_content_type" VALUES(37,'upload link share','share','uploadlinkshare');
+INSERT INTO "django_content_type" VALUES(38,'file share','share','fileshare');
+INSERT INTO "django_content_type" VALUES(39,'anonymous share','share','anonymousshare');
+INSERT INTO "django_content_type" VALUES(40,'org file share','share','orgfileshare');
+INSERT INTO "django_content_type" VALUES(41,'group public file','pubfile','grouppublicfile');
+INSERT INTO "django_content_type" VALUES(42,'user login log','sysadmin_extra','userloginlog');
+INSERT INTO "django_content_type" VALUES(43,'org member quota','organizations','orgmemberquota');
 CREATE TABLE "django_session" (
     "session_key" varchar(40) NOT NULL PRIMARY KEY,
     "session_data" text NOT NULL,
@@ -64,6 +65,11 @@ CREATE TABLE "captcha_captchastore" (
     "response" varchar(32) NOT NULL,
     "hashkey" varchar(40) NOT NULL UNIQUE,
     "expiration" datetime NOT NULL
+);
+CREATE TABLE "constance_config" (
+    "id" integer NOT NULL PRIMARY KEY,
+    "key" varchar(255) NOT NULL UNIQUE,
+    "value" text NOT NULL
 );
 CREATE TABLE "api2_token" (
     "key" varchar(40) NOT NULL PRIMARY KEY,
@@ -107,16 +113,6 @@ CREATE TABLE "base_filediscuss" (
     "path" text NOT NULL,
     "path_hash" varchar(12) NOT NULL
 );
-CREATE TABLE "base_filecontributors" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "repo_id" varchar(36) NOT NULL,
-    "file_id" varchar(40) NOT NULL,
-    "file_path" text NOT NULL,
-    "file_path_hash" varchar(12) NOT NULL,
-    "last_modified" bigint NOT NULL,
-    "last_commit_id" varchar(40) NOT NULL,
-    "emails" text NOT NULL
-);
 CREATE TABLE "base_userstarredfiles" (
     "id" integer NOT NULL PRIMARY KEY,
     "email" varchar(75) NOT NULL,
@@ -124,25 +120,6 @@ CREATE TABLE "base_userstarredfiles" (
     "repo_id" varchar(36) NOT NULL,
     "path" text NOT NULL,
     "is_dir" bool NOT NULL
-);
-CREATE TABLE "base_dirfileslastmodifiedinfo" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "repo_id" varchar(36) NOT NULL,
-    "parent_dir" text NOT NULL,
-    "parent_dir_hash" varchar(12) NOT NULL,
-    "dir_id" varchar(40) NOT NULL,
-    "last_modified_info" text NOT NULL,
-    UNIQUE ("repo_id", "parent_dir_hash")
-);
-CREATE TABLE "base_filelastmodifiedinfo" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "repo_id" varchar(36) NOT NULL,
-    "file_id" varchar(40) NOT NULL,
-    "file_path" text NOT NULL,
-    "file_path_hash" varchar(12) NOT NULL,
-    "last_modified" bigint NOT NULL,
-    "email" varchar(75) NOT NULL,
-    UNIQUE ("repo_id", "file_path_hash")
 );
 CREATE TABLE "base_userenabledmodule" (
     "id" integer NOT NULL PRIMARY KEY,
@@ -185,6 +162,11 @@ CREATE TABLE "base_devicetoken" (
     "version" varchar(16) NOT NULL,
     "pversion" varchar(16) NOT NULL,
     UNIQUE ("token", "user")
+);
+CREATE TABLE "base_clientlogintoken" (
+    "token" varchar(32) NOT NULL PRIMARY KEY,
+    "username" varchar(255) NOT NULL,
+    "timestamp" datetime NOT NULL
 );
 CREATE TABLE "contacts_contact" (
     "id" integer NOT NULL PRIMARY KEY,
@@ -272,7 +254,10 @@ CREATE TABLE "profile_profile" (
     "user" varchar(75) NOT NULL UNIQUE,
     "nickname" varchar(64) NOT NULL,
     "intro" text NOT NULL,
-    "lang_code" text
+    "lang_code" text,
+    "login_id" varchar(225) UNIQUE,
+    "contact_email" varchar(225),
+    "institution" varchar(225)
 );
 CREATE TABLE "profile_detailedprofile" (
     "id" integer NOT NULL PRIMARY KEY,
@@ -341,11 +326,6 @@ CREATE TABLE "sysadmin_extra_userloginlog" (
     "login_date" datetime NOT NULL,
     "login_ip" varchar(20) NOT NULL
 );
-CREATE TABLE "base_clientlogintoken" (
-    "token" varchar(32) NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
 CREATE TABLE "organizations_orgmemberquota" (
     "id" integer NOT NULL PRIMARY KEY,
     "org_id" integer NOT NULL,
@@ -354,14 +334,13 @@ CREATE TABLE "organizations_orgmemberquota" (
 CREATE INDEX "django_session_b7b81f0c" ON "django_session" ("expire_date");
 CREATE INDEX "base_filediscuss_12d5396a" ON "base_filediscuss" ("group_message_id");
 CREATE INDEX "base_filediscuss_656b4f4a" ON "base_filediscuss" ("path_hash");
-CREATE INDEX "base_filecontributors_2059abe4" ON "base_filecontributors" ("repo_id");
+CREATE INDEX "base_userstarredfiles_830a6ccb" ON "base_userstarredfiles" ("email");
 CREATE INDEX "base_userstarredfiles_2059abe4" ON "base_userstarredfiles" ("repo_id");
-CREATE INDEX "base_filelastmodifiedinfo_2059abe4" ON "base_filelastmodifiedinfo" ("repo_id");
-CREATE INDEX "base_filelastmodifiedinfo_880f7193" ON "base_filelastmodifiedinfo" ("file_path_hash");
 CREATE INDEX "base_userenabledmodule_ee0cafa2" ON "base_userenabledmodule" ("username");
 CREATE INDEX "base_groupenabledmodule_dc00373b" ON "base_groupenabledmodule" ("group_id");
 CREATE INDEX "base_userlastlogin_ee0cafa2" ON "base_userlastlogin" ("username");
 CREATE INDEX "base_innerpubmsgreply_3fde75e6" ON "base_innerpubmsgreply" ("reply_to_id");
+CREATE INDEX "base_clientlogintoken_ee0cafa2" ON "base_clientlogintoken" ("username");
 CREATE INDEX "contacts_contact_d3d8b136" ON "contacts_contact" ("user_email");
 CREATE INDEX "group_groupmessage_dc00373b" ON "group_groupmessage" ("group_id");
 CREATE INDEX "group_messagereply_3fde75e6" ON "group_messagereply" ("reply_to_id");
@@ -374,6 +353,8 @@ CREATE INDEX "message_usermsgattachment_cee41a9a" ON "message_usermsgattachment"
 CREATE INDEX "notifications_usernotification_bc172800" ON "notifications_usernotification" ("to_user");
 CREATE INDEX "notifications_usernotification_265e5521" ON "notifications_usernotification" ("msg_type");
 CREATE INDEX "options_useroptions_830a6ccb" ON "options_useroptions" ("email");
+CREATE INDEX "profile_profile_3b46cb17" ON "profile_profile" ("contact_email");
+CREATE INDEX "profile_profile_71bbc151" ON "profile_profile" ("institution");
 CREATE INDEX "profile_detailedprofile_6340c63c" ON "profile_detailedprofile" ("user");
 CREATE INDEX "share_fileshare_ee0cafa2" ON "share_fileshare" ("username");
 CREATE INDEX "share_fileshare_2059abe4" ON "share_fileshare" ("repo_id");
@@ -387,5 +368,4 @@ CREATE INDEX "share_privatefiledirshare_2059abe4" ON "share_privatefiledirshare"
 CREATE INDEX "pubfile_grouppublicfile_dc00373b" ON "pubfile_grouppublicfile" ("group_id");
 CREATE INDEX "sysadmin_extra_userloginlog_ee0cafa2" ON "sysadmin_extra_userloginlog" ("username");
 CREATE INDEX "sysadmin_extra_userloginlog_c8db99ec" ON "sysadmin_extra_userloginlog" ("login_date");
-CREATE INDEX "base_clientlogintoken_ee0cafa2" ON "base_clientlogintoken" ("username");
 CREATE INDEX "organizations_orgmemberquota_944dadb6" ON "organizations_orgmemberquota" ("org_id");
