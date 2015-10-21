@@ -2047,7 +2047,8 @@ textarea:-moz-placeholder {/* for FF */
     overflow:hidden;
 }
 #upload-menu,
-#add-pub-lib-menu {
+#add-pub-lib-menu,
+#add-menu {
     position:absolute;
     z-index:12; /* make it on top of a checkbox */
     border:1px solid #c5c5c5;
@@ -2056,7 +2057,8 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
 }
 #upload-menu .item,
-#add-pub-lib-menu .item {
+#add-pub-lib-menu .item,
+#add-menu .item {
     padding:0 10px;
     height:27px;
     line-height:27px;
@@ -2175,6 +2177,18 @@ textarea:-moz-placeholder {/* for FF */
     padding-left:1.5em;
     *padding-left:1.9em;
     margin-top:5px;
+}
+/* add new folder/file */
+#add-new {
+    outline:none;
+    color:#9c9c9c;
+}
+#add-new span {
+    padding-right:6px;
+    color:#333;
+}
+#add-menu .item:hover {
+    background:#f3f3f3;
 }
 
 /* repo-history */

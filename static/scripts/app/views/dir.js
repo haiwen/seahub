@@ -90,6 +90,18 @@ define([
                     }
                 });
 
+                // hide 'add-menu'
+                $(document).click(function(e) {
+                    var target = e.target || event.srcElement;
+                    var $add_btn = $('#add-new');
+                    var $add_menu = $('#add-menu');
+                    if (!$add_menu.hasClass('hide') &&
+                        !$add_btn.is(target) &&
+                        !$add_menu.is(target)) {
+                        $add_menu.addClass('hide');
+                    }
+                });
+
                 // hide 'rename form'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
@@ -309,6 +321,7 @@ define([
             events: {
                 'click .path-link': 'visitDir',
                 'click #upload-file': 'uploadFile',
+                'click #add-new': 'addNew',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newFile',
                 'click #share-cur-dir': 'share',
@@ -318,6 +331,14 @@ define([
                 'click #del-dirents': 'del',
                 'click .by-name': 'sortByName',
                 'click .by-time': 'sortByTime'
+            },
+
+            addNew: function() {
+                this.$('#add-menu').css({
+                    'left': this.$('#add-new').position().left,
+                    'top': parseInt(this.$('.repo-op').css('padding-top')) + this.$('#add-new').outerHeight(true)
+                }).toggleClass('hide');
+                return false;
             },
 
             newDir: function() {
