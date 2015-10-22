@@ -81,8 +81,35 @@ $(function(){
             if (data['need_update']) {
                 var tip = "{% trans "A new server version %(v)s is available." %}";
                 tip = tip.replace('%(v)s', data['new_version']);
-                $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
+                $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;"><span>' + tip + '</span></p>').removeClass('hide');
             }
+        }
+    });
+
+    // check if seafile licence expired
+    $.ajax({
+        url: "{% url 'sys_check_licence' %}",
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            var tip, $title_panel = $('#title-panel');
+
+            if (data['already_expired']) {
+                tip = "{% trans 'Your license has already expired in %(v)s.' %}",
+                tip = tip.replace('%(v)s', data['already_expired']);
+            } else if (data['to_be_expired']) {
+                tip = "{% trans 'Your license will be expired in %(v)s.' %}",
+                tip = tip.replace('%(v)s', data['to_be_expired']);
+            }
+
+            if (typeof(tip) != 'undefined') {
+                if ($title_panel.find('p').length) {
+                    $title_panel.find('p').append('<br /><span>' + tip + '</span>');
+                } else {
+                    $title_panel.html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;"><span>' + tip + '</span></p>').removeClass('hide');
+                }
+            }
+
         }
     });
 });
