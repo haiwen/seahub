@@ -35,8 +35,12 @@
     border-radius: 2px;
     background-image: none; /* rm the shadow */
 }
+.select2-container-multi .select2-choices .select2-search-field {
+    position:relative;
+}
 .select2-container-multi .select2-choices .select2-search-field input {
     padding:2px 2px 2px 5px;
+    position:absolute;
 }
 .select2-container-multi .select2-choices .select2-search-choice {
     border:none;
