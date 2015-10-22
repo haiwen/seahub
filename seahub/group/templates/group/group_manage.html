@@ -155,12 +155,14 @@ $('#settings-tab').click(function() {
     admin_add_btn.addClass('hide');
 });
 addConfirmTo($("#group-dismiss"), {
-        'title':"{% trans "Dismiss Group" %}",
-        'con':"{% trans "Really want to dismiss this group?" %}"
+    'title':"{% trans "Dismiss Group" %}",
+    'con':"{% trans "Really want to dismiss this group?" %}",
+    'post':true
 });
 addConfirmTo($(".rm-member"), {
-        'title':"{% trans "Delete Member" %}",
-        'con':"{% trans "Really want to delete %s ?" %}"
+    'title':"{% trans "Delete Member" %}",
+    'con':"{% trans "Really want to delete %s ?" %}",
+    'post':true
 });
 
 $("#group-member-add, #group-admin-add").click(function() {

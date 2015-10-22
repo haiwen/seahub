@@ -250,6 +250,7 @@ def group_remove(request, group_id):
 
 @login_required
 @group_staff_required
+@require_POST
 def group_dismiss(request, group_id):
     """
     Dismiss a group, only group staff can perform this operation.
@@ -415,6 +416,7 @@ def group_revoke_public(request, group_id):
 
 
 @login_required
+@require_POST
 def group_quit(request, group_id):
     try:
         group_id_int = int(group_id)
@@ -862,6 +864,7 @@ def group_add_admin(request, group_id):
 
 @login_required
 @group_staff_required
+@require_POST
 def group_remove_admin(request, group_id):
     """
     Remove group admin, and becomes normal group member.
