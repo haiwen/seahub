@@ -33,7 +33,8 @@ from seahub.constants import GUEST_USER, DEFAULT_USER
 
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    clear_token, gen_file_get_url, is_org_context
+    clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
+    get_virus_record_by_id, get_virus_record
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
@@ -332,6 +333,7 @@ def sys_repo_trash(request):
 
 @login_required
 @sys_staff_required
+@require_POST
 def sys_repo_trash_restore(request, repo_id):
     """Restore deleted repo by id"""
 
@@ -349,6 +351,7 @@ def sys_repo_trash_restore(request, repo_id):
 
 @login_required
 @sys_staff_required
+@require_POST
 def sys_repo_trash_remove(request, repo_id):
     """Remove deleted repo by id"""
 
@@ -366,11 +369,12 @@ def sys_repo_trash_remove(request, repo_id):
 
 @login_required
 @sys_staff_required
+@require_POST
 def sys_repo_trash_clear(request):
     """Clear repo trash (by owner)"""
 
     next = reverse('sys_repo_trash')
-    owner = request.GET.get('owner', '')
+    owner = request.POST.get('owner', '')
     try:
         if owner:
             if is_valid_username(owner):
@@ -927,6 +931,7 @@ def user_remove(request, email):
 
 @login_required
 @sys_staff_required
+@require_POST
 def remove_trial(request, user_or_org):
     """Remove trial account.
 
@@ -1024,6 +1029,7 @@ def email_user_on_activation(user):
 
 @login_required_ajax
 @sys_staff_required
+@require_POST
 def user_toggle_status(request, email):
     content_type = 'application/json; charset=utf-8'
 
@@ -1032,7 +1038,7 @@ def user_toggle_status(request, email):
                             content_type=content_type)
 
     try:
-        user_status = int(request.GET.get('s', 0))
+        user_status = int(request.POST.get('s', 0))
     except ValueError:
         user_status = 0
 
@@ -1065,6 +1071,7 @@ def user_toggle_status(request, email):
 
 @login_required_ajax
 @sys_staff_required
+@require_POST
 def user_toggle_role(request, email):
     content_type = 'application/json; charset=utf-8'
 
@@ -1077,7 +1084,7 @@ def user_toggle_role(request, email):
                             content_type=content_type)
 
     try:
-        user_role = request.GET.get('r', DEFAULT_USER)
+        user_role = request.POST.get('r', DEFAULT_USER)
     except ValueError:
         user_role = DEFAULT_USER
 
@@ -1617,35 +1624,41 @@ def sys_publink_admin(request):
         },
         context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 @sys_staff_required
+@require_POST
 def sys_publink_remove(request):
     """Remove share links.
     """
-    token = request.GET.get('t')
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    token = request.POST.get('t')
+    if not token:
+        result = {'error': _(u"Argument missing")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     FileShare.objects.filter(token=token).delete()
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('share_admin')
+    result = {'success': True}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
-    messages.success(request, _(u'Removed successfully'))
-    return HttpResponseRedirect(next)
-
-@login_required
+@login_required_ajax
 @sys_staff_required
+@require_POST
 def sys_upload_link_remove(request):
     """Remove shared upload links.
     """
-    token = request.GET.get('t')
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    token = request.POST.get('t')
+    if not token:
+        result = {'error': _(u"Argument missing")}
+        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     UploadLinkShare.objects.filter(token=token).delete()
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('share_admin')
-
-    messages.success(request, _(u'Removed successfully'))
-    return HttpResponseRedirect(next)
+    result = {'success': True}
+    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required
 @sys_staff_required
@@ -1818,7 +1831,6 @@ def sys_virus_scan_records(request):
         current_page = 1
         per_page = 100
 
-    from seahub.utils import get_virus_record
     records_all = get_virus_record(start=per_page * (current_page - 1),
                                    limit=per_page + 1)
     if len(records_all) == per_page + 1:
@@ -1846,10 +1858,13 @@ def sys_virus_scan_records(request):
             'page_next': page_next,
         }, context_instance=RequestContext(request))
 
-@login_required
+@login_required_ajax
 @sys_staff_required
+@require_POST
 def sys_delete_virus_scan_records(request, vid):
-    from seahub.utils import handle_virus_record, get_virus_record_by_id
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
 
     r = get_virus_record_by_id(vid)
     parent_dir = os.path.dirname(r.file_path)
@@ -1859,12 +1874,12 @@ def sys_delete_virus_scan_records(request, vid):
         seafile_api.del_file(r.repo_id, parent_dir, dirent_name,
                              request.user.username)
         handle_virus_record(vid)
-        messages.success(request, _('Successfully deleted.'))
+        result = {'success': True}
+        return HttpResponse(json.dumps(result), content_type=content_type)
     except SearpcError as e:
         logger.error(e)
-        messages.error(request, _('Failed to delete, please try again later.'))
-
-    return HttpResponseRedirect(reverse('sys_virus_scan_records'))
+        result = {'error': _(u"Failed to delete, please try again later.")}
+        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
 
 @login_required_ajax
 @sys_staff_required

@@ -33,7 +33,7 @@
                 <option value="r">{% trans "Read-Only"%}</option>
                 {% else %}
                 <option value="rw">{% trans "Read-Write"%}</option>
-                {% endif %} 
+                {% endif %}
             </select>
         </td>
         <td>
@@ -45,7 +45,7 @@
             {% endif %}
             {% if repo.props.share_type == 'public' %}
             {% if not org %}
-            <a href="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
+            <a href="#" data-url="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-public-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
             {% else %}
             <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="op-icon sf2-icon-delete vh" title="{% trans "Unshare" %}"></a>
             {% endif %}
@@ -64,6 +64,7 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
+addFormPost($('.cancel-public-share'));
 {% if shared_folders %}
 $('.share-permission-edit-icon').click(function() {
     $(this).parent().addClass('hide');
@@ -97,7 +98,7 @@ $('.share-permission-select').change(function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
             select.prev().removeClass('hide');
-        }   
+        }
     });
 });
 // select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select

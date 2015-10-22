@@ -20,7 +20,7 @@
         <td>{{ r.file_path }}</td>
         <td>
             {% if not r.has_handle %}
-            <a href="{% url "sys_delete_virus_scan_records" r.vid %}">{% trans "Delete" %}</a>
+            <a class="op vh rm-record" href="#" data-url="{% url "sys_delete_virus_scan_records" r.vid %}">{% trans "Delete" %}</a>
             {% else %}
             <span style="color: green;">{% trans "Handled" %}</span>
             {% endif %}
@@ -35,6 +35,22 @@
 
 {% block extra_script %}
 <script>
+$('.rm-record').click(function() {
+    var _this = $(this),
+        url = _this.attr('data-url');
 
+    $.ajax({
+        url: url,
+        type: 'POST',
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            _this.closest('tr').remove();
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
 </script>
 {% endblock %}

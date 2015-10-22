@@ -12,8 +12,9 @@ class UserToggleStatusTest(BaseTestCase):
 
     def test_can_activate(self):
         old_passwd = self.user.enc_password
-        resp = self.client.get(
-            reverse('user_toggle_status', args=[self.user.username]) + '?s=1',
+        resp = self.client.post(
+            reverse('user_toggle_status', args=[self.user.username]),
+            {'s': 1},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         self.assertEqual(200, resp.status_code)
@@ -25,8 +26,9 @@ class UserToggleStatusTest(BaseTestCase):
 
     def test_can_deactivate(self):
         old_passwd = self.user.enc_password
-        resp = self.client.get(
-            reverse('user_toggle_status', args=[self.user.username]) + '?s=0',
+        resp = self.client.post(
+            reverse('user_toggle_status', args=[self.user.username]),
+            {'s': 0},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest'
         )
         self.assertEqual(200, resp.status_code)

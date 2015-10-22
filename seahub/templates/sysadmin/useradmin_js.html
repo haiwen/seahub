@@ -15,8 +15,9 @@ addConfirmTo($('.revoke-admin-btn'), {
     'post': true // post request
 });
 addConfirmTo($('.unset-trial'), {
-        'title':"{% trans "Remove Trial" %}",
-        'con':"{% trans "Are you sure you want to remove trial for %s ?" %}"
+    'title':"{% trans "Remove Trial" %}",
+    'con':"{% trans "Are you sure you want to remove trial for %s ?" %}",
+    'post': true // post request
 });
 
 $('tr:gt(0)').hover(
@@ -35,26 +36,28 @@ $('.user-status-select, .user-role-select').change(function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
-        url;
+        url, data;
 
     if (select.hasClass('user-status-select')) {
-        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/?s=" + select_val;
+        url = "{{ SITE_ROOT }}useradmin/toggle_status/" + uid + "/";
+        data = {'s': select_val};
     } else {
-        url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/?r=" + select_val;
+        url = "{{ SITE_ROOT }}useradmin/toggle_role/" + uid + "/";
+        data = {'r': select_val};
     }
 
+    if (select_val == 1) {
+        // show activating popup
+        $('#activate-msg').modal();
+        $('#simplemodal-container').css({'height':'auto'});
+    }
     $.ajax({
         url: url,
-        type: 'GET',
+        type: 'POST',
         dataType: 'json',
+        data: data,
         cache: false,
-        beforeSend: function() {
-            if (select_val == 1) {
-                // show activating popup
-                $('#activate-msg').modal();
-                $('#simplemodal-container').css({'height':'auto'});
-            }
-        },
+        beforeSend: prepareCSRFToken,
         success: function(data) {
             if (data['email_sent']) {
                 feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');

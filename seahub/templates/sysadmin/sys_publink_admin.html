@@ -22,7 +22,7 @@
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
-            <a class="op vh" href="{% url 'sys_publink_remove' %}?t={{ publink.token }}">{% trans "Remove" %}</a>
+            <a class="op vh rm-link" href="#" data-token="{{ publink.token }}">{% trans "Remove" %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -36,7 +36,21 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-
+$('.rm-link').click(function() {
+    var _this = $(this);
+    $.ajax({
+        url: '{% url 'sys_publink_remove' %}',
+        type: 'POST',
+        data: {'t': _this.attr('data-token')},
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            _this.closest('tr').remove();
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
 </script>
 {% endblock %}
- 
