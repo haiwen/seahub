@@ -700,7 +700,7 @@ class Repos(APIView):
             return resp
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
-        passwd = request.DATA.get("passwd", None)
+        passwd = request.DATA.get("passwd", None) or None
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
