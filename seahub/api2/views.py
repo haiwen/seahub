@@ -701,6 +701,12 @@ class Repos(APIView):
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
         passwd = request.DATA.get("passwd", None)
+
+        # to avoid 'Bad magic' error when create repo, passwd should be 'None'
+        # not an empty string when create unencrypted repo
+        if not passwd:
+            passwd = None
+
         if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
@@ -786,8 +792,16 @@ class PubRepos(APIView):
                              'Library name is required.')
         repo_desc = request.DATA.get("desc", '')
         passwd = request.DATA.get("passwd", None)
+
+        # to avoid 'Bad magic' error when create repo, passwd should be 'None'
+        # not an empty string when create unencrypted repo
         if not passwd:
             passwd = None
+
+        if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'NOT allow to create encrypted library.')
+
         permission = request.DATA.get("permission", 'r')
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
@@ -3533,8 +3547,16 @@ class GroupRepos(APIView):
         repo_name = request.DATA.get("name", None)
         repo_desc = request.DATA.get("desc", '')
         passwd = request.DATA.get("passwd", None)
+
+        # to avoid 'Bad magic' error when create repo, passwd should be 'None'
+        # not an empty string when create unencrypted repo
         if not passwd:
             passwd = None
+
+        if (passwd is not None) and (not config.ENABLE_ENCRYPTED_LIBRARY):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'NOT allow to create encrypted library.')
+
         permission = request.DATA.get("permission", 'r')
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
