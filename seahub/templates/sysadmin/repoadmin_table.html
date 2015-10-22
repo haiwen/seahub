@@ -2,9 +2,10 @@
 <table class="repo-list">
     <tr>
         <th width="4%"><!--icon--></th>
-        <th width="31%">{% trans "Name" %}</th>
-        <th width="25%">ID</th>
-        <th width="25%">{% trans "Owner" %}</th>
+        <th width="22%">{% trans "Name" %}</th>
+        <th width="17%">{% trans "Files / Size" %}</th>
+        <th width="21%">ID</th>
+        <th width="21%">{% trans "Owner" %}</th>
         <th width="15%">{% trans "Operations" %}</th>
     </tr>
     {% for repo in repos %}
@@ -22,6 +23,7 @@
             <td>{{ repo.props.name }}</td>
             {% endif %}
         {% endif %}
+        <td>{{ repo.file_count }} / {{ repo.size|filesizeformat }}</td>
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td>
             {% if repo.owner %}
