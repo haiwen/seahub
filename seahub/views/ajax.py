@@ -1760,50 +1760,6 @@ def get_group_repos(request, groups):
                 group_repos.append(r)
     return group_repos
 
-@login_required_ajax
-def my_shared_and_group_repos(request):
-    """Return html snippet of repos that shared to user and group repos.
-
-    Arguments:
-    - `request`:
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    # shared
-    shared_repos = get_share_in_repo_list(request, -1, -1)
-    shared_repos.sort(lambda x, y: cmp(y.last_modified, x.last_modified))
-
-    # group repos
-    joined_groups = get_groups_by_user(request)
-    group_repos = get_group_repos(request, joined_groups)
-    group_repos.sort(key=lambda x: x.group.group_name)
-    for i, repo in enumerate(group_repos):
-        if i == 0:
-            repo.show_group_name = True
-        else:
-            if repo.group.group_name != group_repos[i-1].group.group_name:
-                repo.show_group_name = True
-
-    ctx_shared = {"shared_repos": shared_repos}
-    ctx_group = {"group_repos": group_repos}
-    shared_repos_html = render_to_string(
-        'snippets/my_shared_repos.html', ctx_shared,
-        context_instance=RequestContext(request))
-    group_repos_html = render_to_string(
-        'snippets/my_group_repos.html', ctx_group,
-        context_instance=RequestContext(request))
-
-    return_shared_repos = True if shared_repos else False
-
-    ret = {
-        "shared": {
-            "html": shared_repos_html,
-            "return_shared_repos": return_shared_repos
-        },
-        "group": group_repos_html
-    }
-    return HttpResponse(json.dumps(ret), content_type=content_type)
-
 def get_file_uploaded_bytes(request, repo_id):
     """
     For resumable fileupload
