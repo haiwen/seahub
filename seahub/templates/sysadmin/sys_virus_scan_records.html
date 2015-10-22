@@ -35,22 +35,6 @@
 
 {% block extra_script %}
 <script>
-$('.rm-record').click(function() {
-    var _this = $(this),
-        url = _this.attr('data-url');
-
-    $.ajax({
-        url: url,
-        type: 'POST',
-        cache: false,
-        dataType: 'json',
-        beforeSend: prepareCSRFToken,
-        success: function() {
-            _this.closest('tr').remove();
-        },
-        error: ajaxErrorHandler
-    });
-    return false;
-});
+addFormPost($('.rm-record'));
 </script>
 {% endblock %}
