@@ -3497,6 +3497,8 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .tabs-panel,
 #folder-perm-tabs .tabs-panel {
     width:550px;
+    max-height:250px;
+    overflow:auto;
 }
 #share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {
@@ -3510,7 +3512,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #share-popup table,
 #folder-perm-tabs table {
-    margin-top:0;
+    margin:0;
 }
 .select2-result-label .text {
     display:inline-block;
