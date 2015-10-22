@@ -1858,14 +1858,10 @@ def sys_virus_scan_records(request):
             'page_next': page_next,
         }, context_instance=RequestContext(request))
 
-@login_required_ajax
+@login_required
 @sys_staff_required
 @require_POST
 def sys_delete_virus_scan_records(request, vid):
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
     r = get_virus_record_by_id(vid)
     parent_dir = os.path.dirname(r.file_path)
     dirent_name = os.path.basename(r.file_path)
@@ -1874,12 +1870,12 @@ def sys_delete_virus_scan_records(request, vid):
         seafile_api.del_file(r.repo_id, parent_dir, dirent_name,
                              request.user.username)
         handle_virus_record(vid)
-        result = {'success': True}
-        return HttpResponse(json.dumps(result), content_type=content_type)
+        messages.success(request, _('Successfully deleted.'))
     except SearpcError as e:
         logger.error(e)
-        result = {'error': _(u"Failed to delete, please try again later.")}
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+        messages.error(request, _('Failed to delete, please try again later.'))
+
+    return HttpResponseRedirect(reverse('sys_virus_scan_records'))
 
 @login_required_ajax
 @sys_staff_required
