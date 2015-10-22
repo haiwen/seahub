@@ -20,7 +20,7 @@
         <td>{{ r.file_path }}</td>
         <td>
             {% if not r.has_handle %}
-            <a class="op vh rm-record cspt" href="#" data-url="{% url "sys_delete_virus_scan_records" r.vid %}">{% trans "Delete" %}</a>
+            <a class="op vh rm-record" href="#" data-url="{% url "sys_delete_virus_scan_records" r.vid %}">{% trans "Delete" %}</a>
             {% else %}
             <span style="color: green;">{% trans "Handled" %}</span>
             {% endif %}
@@ -50,6 +50,7 @@ $('.rm-record').click(function() {
         },
         error: ajaxErrorHandler
     });
+    return false;
 });
 </script>
 {% endblock %}

@@ -22,7 +22,7 @@
         <td>{{ publink.ctime|translate_seahub_time }} </td>
         <td>{{ publink.view_cnt }}</td>
         <td>
-            <a class="op vh rm-link cspt" href="#" data-token="{{ publink.token }}" >{% trans "Remove" %}</a>
+            <a class="op vh rm-link" href="#" data-token="{{ publink.token }}">{% trans "Remove" %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -50,6 +50,7 @@ $('.rm-link').click(function() {
         },
         error: ajaxErrorHandler
     });
+    return false;
 });
 </script>
 {% endblock %}
