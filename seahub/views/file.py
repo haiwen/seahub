@@ -394,6 +394,7 @@ def _file_view(request, repo_id, path):
             wopi_dict = get_wopi_dict(username, repo_id, path)
 
         if wopi_dict:
+            send_file_download_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
                       context_instance=RequestContext(request))
 
@@ -412,6 +413,7 @@ def _file_view(request, repo_id, path):
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(u_filename, fsize)
     if can_preview:
+        send_file_download_msg(request, repo, path, 'web')
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -794,6 +796,11 @@ def view_shared_file(request, token):
     if exceeds_limit:
         ret_dict['err'] = err_msg
     else:
+        fsize = get_file_size(repo.store_id, repo.version, obj_id)
+        can_preview, err_msg = can_preview_file(filename, fsize)
+        if can_preview:
+            send_file_download_msg(request, repo, path, 'share-link')
+
         """Choose different approach when dealing with different type of file."""
         inner_path = gen_inner_file_get_url(access_token, filename)
         if is_textual_file(file_type=filetype):
@@ -930,6 +937,11 @@ def view_file_via_shared_dir(request, token):
         ret_dict['err'] = err_msg
     else:
         """Choose different approach when dealing with different type of file."""
+
+        fsize = get_file_size(repo.store_id, repo.version, obj_id)
+        can_preview, err_msg = can_preview_file(filename, fsize)
+        if can_preview:
+            send_file_download_msg(request, repo, real_path, 'share-link')
 
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
