@@ -38,17 +38,13 @@
         </td>
         <td>
             {% if repo.props.share_type == 'group' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}&permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
+            <a href="#" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&gid={{ repo.props.group_id }}&permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh unshare" title="{% trans "Unshare"%}"></a>
             {% endif %}
             {% if repo.props.share_type == 'personal' %}
-            <a href="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
+            <a href="#" data-url="{% url 'repo_remove_share' %}?repo_id={{ repo.props.repo_id }}&from={{ request.user.username|urlencode }}&to={{ repo.props.user|urlencode }}&permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh unshare" title="{% trans "Unshare"%}"></a>
             {% endif %}
             {% if repo.props.share_type == 'public' %}
-            {% if not org %}
-            <a href="#" data-url="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="cancel-public-share op-icon sf2-icon-delete vh" title="{% trans "Unshare"%}"></a>
-            {% else %}
-            <a href="{{ SITE_ROOT }}organizations/{{ org.url_prefix }}/innerpubrepo/unset/{{ repo.props.repo_id }}" class="op-icon sf2-icon-delete vh" title="{% trans "Unshare" %}"></a>
-            {% endif %}
+            <a href="#" data-url="{% url 'unsetinnerpub' repo.repo_id %}?permission={{ repo.props.permission }}" class="op-icon sf2-icon-delete vh unshare" title="{% trans "Unshare"%}"></a>
             {% endif %}
         </td>
     </tr>
@@ -64,7 +60,8 @@
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
-addFormPost($('.cancel-public-share'));
+addFormPost($('.unshare'));
+
 {% if shared_folders %}
 $('.share-permission-edit-icon').click(function() {
     $(this).parent().addClass('hide');
@@ -110,6 +107,8 @@ $(document).click(function(e) {
         $('.share-permission-select').addClass('hide');
     }
 });
+
+
 {% endif %}                     // shared_repos
 
 </script>

@@ -272,7 +272,7 @@ def share_repo(request):
     return HttpResponseRedirect(next)
 
 @login_required_ajax
-@require_POST 
+@require_POST
 def ajax_repo_remove_share(request):
     """
     Remove repo shared to user/group/public
@@ -359,6 +359,7 @@ def ajax_repo_remove_share(request):
                             content_type=content_type)
 
 @login_required
+@require_POST
 def repo_remove_share(request):
     """
     If repo is shared from one person to another person, only these two person
@@ -1099,45 +1100,6 @@ def save_private_file_share(request, token):
         messages.error(request, _("You don't have permission to save %s.") % obj_name)
 
     return HttpResponseRedirect(next)
-
-# @login_required
-# def user_share_list(request, id_or_email):
-#     """List sharing repos with ``to_email``.
-#     """
-#     try:
-#         uid = int(id_or_email)
-#         try:
-#             user = User.objects.get(id=uid)
-#         except User.DoesNotExist:
-#             user = None
-#         if not user:
-#             return render_to_response("user_404.html", {},
-#                                       context_instance=RequestContext(request))
-#         to_email = user.email
-#     except ValueError:
-#         to_email = id_or_email
-
-#     share_list = []
-#     username = request.user.username
-#     share_in = seafile_api.get_share_in_repo_list(username, -1, -1)
-#     for e in share_in:
-#         if e.share_type == 'personal' and e.user == to_email:
-#             e.share_in = True
-#             share_list.append(e)
-#     share_out = seafile_api.get_share_out_repo_list(username, -1, -1)
-#     for e in share_out:
-#         if e.share_type == 'personal' and e.user == to_email:
-#             e.share_out = True
-#             share_list.append(e)
-
-#     c = Contact.objects.get_contact_by_user(username, to_email)
-#     add_to_contacts = True if c is None else False
-
-#     return render_to_response('share/user_share_list.html', {
-#             'to_email': to_email,
-#             'share_list': share_list,
-#             'add_to_contacts': add_to_contacts,
-#             }, context_instance=RequestContext(request))
 
 @login_required_ajax
 def send_shared_upload_link(request):
