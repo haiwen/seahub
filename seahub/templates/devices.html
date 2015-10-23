@@ -28,7 +28,7 @@
             {% if device.synced_repos %}
             <ul class="lib-list hide">
                 {% for repo in device.synced_repos %}
-                <li><a href="{% url 'repo' repo.repo_id %}">{{ repo.repo_name }}</a></li>
+                <li><a href="{% url 'view_common_lib_dir' repo.repo_id '' %}">{{ repo.repo_name }}</a></li>
                 {% endfor %}
             </ul>
             {% endif %}
