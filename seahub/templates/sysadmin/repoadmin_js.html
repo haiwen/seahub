@@ -12,7 +12,7 @@ $('.repo-transfer-btn').click(function(){
     var detail = $('.detail', form);
     detail.html(detail.html().replace('%(lib_name)s', '<span class="op-target">' + HTMLescape(repo_name) + '</span>'));
 
-    $('[name="email"]', $('#repo-transfer-form')).select2($.extend({
+    $('[name="email"]', form).select2($.extend({
         width: '268px',
         maximumSelectionSize: 1,
         placeholder: "{% trans "Search user or enter email" %}",

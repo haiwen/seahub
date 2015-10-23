@@ -37,7 +37,7 @@
                 --
                 {% endif %}
             </td>
-            <td data-id="{{ repo.id }}" data-name="{{ repo.name }}">
+            <td>
                 <div>
                 <a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
                 </div>
@@ -51,13 +51,15 @@
 </div>
 {% endif %}
 
-{% include 'sysadmin/repo_transfer_form.html' %}
-
 {% endblock %}
 
 {% block extra_script %}
 <script type="text/javascript">
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
-{% include 'sysadmin/repoadmin_js.html' %}
+addConfirmTo($('.repo-delete-btn'), {
+    'title': "{% trans "Delete Library" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true
+});
 </script>
 {% endblock %}
