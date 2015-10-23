@@ -4,11 +4,11 @@
 {% load url from future %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 <style type="text/css">
 #left-panel { position:relative; }
 </style>
-<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 {% endblock %}
 
 {% block left_panel %}
@@ -194,7 +194,9 @@
 
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
+{% include "sysadmin/repoadmin_js.html" %}
 
 $('#set-quota').click(function() {
     $("#set-quota-form").modal({appendTo: "#main"});
@@ -245,16 +247,5 @@ $('#set-quota-form .submit').click(function() {
     });
     return false;
 });
-
-addConfirmTo($('.repo-delete-btn'), {
-    'title': "{% trans "Delete Library" %}",
-    'con': "{% trans "Are you sure you want to delete %s ?" %}",
-    'post': true
-});
-
-</script>
-<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
-<script type="text/javascript">
-{% include "sysadmin/repoadmin_js.html" %}
 </script>
 {% endblock %}
