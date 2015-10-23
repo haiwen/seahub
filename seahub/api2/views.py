@@ -58,9 +58,9 @@ from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.contacts.models import Contact
 from seahub.profile.models import Profile
-from seahub.views.modules import get_wiki_enabled_group_list
 from seahub.shortcuts import get_first_object_or_none
-from seahub.signals import repo_created, share_file_to_user_successful
+from seahub.signals import (repo_created, repo_deleted,
+                            share_file_to_user_successful)
 from seahub.share.models import PrivateFileDirShare, FileShare, OrgFileShare, \
     UploadLinkShare
 from seahub.share.signals import share_repo_to_user_successful
@@ -959,10 +959,19 @@ class Repo(APIView):
             repo_owner = seafile_api.get_repo_owner(repo.id)
         is_owner = True if username == repo_owner else False
         if not is_owner:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                    'You do not have permission to delete this library.')
+            return api_error(
+                status.HTTP_403_FORBIDDEN,
+                'You do not have permission to delete this library.'
+            )
 
+        usernames = seaserv.get_related_users_by_repo(repo_id)
         seafile_api.remove_repo(repo_id)
+        repo_deleted.send(sender=None,
+                          org_id=-1,
+                          usernames=usernames,
+                          repo_owner=repo_owner,
+                          repo_id=repo_id,
+                          repo_name=repo.name)
         return Response('success', status=status.HTTP_200_OK)
 
 class RepoHistory(APIView):

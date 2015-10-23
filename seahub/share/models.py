@@ -323,3 +323,14 @@ class PrivateFileDirShare(models.Model):
     permission = models.CharField(max_length=5)           # `r` or `rw`
     s_type = models.CharField(max_length=5, default='f') # `f` or `d`
     objects = PrivateFileDirShareManager()
+
+###### signal handlers
+from django.dispatch import receiver
+from seahub.signals import repo_deleted
+
+@receiver(repo_deleted)
+def remove_share_links(sender, **kwargs):
+    repo_id = kwargs['repo_id']
+
+    FileShare.objects.filter(repo_id=repo_id).delete()
+    UploadLinkShare.objects.filter(repo_id=repo_id).delete()
