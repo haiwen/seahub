@@ -36,6 +36,7 @@ $('.user-status-select, .user-role-select').change(function() {
     var select = $(this),
         select_val = select.val(),
         uid = select.parents('tr').attr('data-userid'),
+        $select_prev = $(this).prev('.user-status, .user-role'), // .user-status, .user-role
         url, data;
 
     if (select.hasClass('user-status-select')) {
@@ -66,15 +67,15 @@ $('.user-status-select, .user-role-select').change(function() {
             } else {
                 feedback("{% trans "Edit succeeded" %}", 'success');
             }
-            select.prev().children('span').html(select.children('option[value="' +select.val() + '"]').text());
+            $('.user-status-cur-value, .user-role-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
             select.addClass('hide');
-            select.prev().removeClass('hide');
+            $select_prev.removeClass('hide');
             $.modal.close();
         },
         error: function() {
             feedback("{% trans "Edit failed." %}", 'error');
             select.addClass('hide');
-            select.prev().removeClass('hide');
+            $select_prev.removeClass('hide');
             $.modal.close();
         }
     });
