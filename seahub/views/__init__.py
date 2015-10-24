@@ -1684,7 +1684,7 @@ def pubuser(request):
     per_page = 20           # show 20 users per-page
 
     # Show LDAP users or Database users.
-    have_ldap_user = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
+    have_ldap_user = True if len(seaserv.get_emailusers('LDAPImport', 0, 1)) > 0 else False
 
     try:
         ldap = True if int(request.GET.get('ldap', 0)) == 1 else False
@@ -1692,7 +1692,8 @@ def pubuser(request):
         ldap = False
 
     if ldap and have_ldap_user:
-        users_plus_one = seaserv.get_emailusers('LDAP',
+        # return all ldap imported users(active & inactive)
+        users_plus_one = seaserv.get_emailusers('LDAPImport',
                                                 per_page * (current_page - 1),
                                                 per_page + 1)
     else:
@@ -1703,6 +1704,7 @@ def pubuser(request):
     has_next = True if len(users_plus_one) == per_page + 1 else False
 
     if ldap and have_ldap_user:
+        # return the number of ldap imported users(only active)
         emailusers_count = seaserv.ccnet_threaded_rpc.count_emailusers('LDAP')
     else:
         emailusers_count = count_pub_users(request)
@@ -1712,6 +1714,7 @@ def pubuser(request):
     show_paginator = True if len(page_range) > 1 else False
 
     users = users_plus_one[:per_page]
+    # only show acitve users at pub user page
     users = filter(lambda u: u.is_active, users)
 
     return render_to_response('pubuser.html', {
