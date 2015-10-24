@@ -1654,7 +1654,8 @@ def get_pub_users(request, start, limit):
         raise Http404           # no pubuser in cloud mode
 
     else:
-        users_plus_one = seaserv.get_emailusers('DB', start, limit)
+        users_plus_one = seaserv.get_emailusers('DB', start,
+                                                limit, is_active=True)
     return users_plus_one
 
 def count_pub_users(request):
@@ -1684,7 +1685,9 @@ def pubuser(request):
     per_page = 20           # show 20 users per-page
 
     # Show LDAP users or Database users.
-    have_ldap_user = True if len(seaserv.get_emailusers('LDAPImport', 0, 1)) > 0 else False
+    have_ldap_user = False
+    if len(seaserv.get_emailusers('LDAPImport', 0, 1, is_active=True)) > 0:
+        have_ldap_user = True
 
     try:
         ldap = True if int(request.GET.get('ldap', 0)) == 1 else False
@@ -1692,10 +1695,11 @@ def pubuser(request):
         ldap = False
 
     if ldap and have_ldap_user:
-        # return all ldap imported users(active & inactive)
+        # return ldap imported active users
         users_plus_one = seaserv.get_emailusers('LDAPImport',
                                                 per_page * (current_page - 1),
-                                                per_page + 1)
+                                                per_page + 1,
+                                                is_active=True)
     else:
         users_plus_one = get_pub_users(request, per_page * (current_page - 1),
                                        per_page + 1)
@@ -1704,7 +1708,7 @@ def pubuser(request):
     has_next = True if len(users_plus_one) == per_page + 1 else False
 
     if ldap and have_ldap_user:
-        # return the number of ldap imported users(only active)
+        # return the number of ldap imported active users
         emailusers_count = seaserv.ccnet_threaded_rpc.count_emailusers('LDAP')
     else:
         emailusers_count = count_pub_users(request)
@@ -1714,8 +1718,6 @@ def pubuser(request):
     show_paginator = True if len(page_range) > 1 else False
 
     users = users_plus_one[:per_page]
-    # only show acitve users at pub user page
-    users = filter(lambda u: u.is_active, users)
 
     return render_to_response('pubuser.html', {
                 'users': users,
