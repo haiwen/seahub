@@ -81,10 +81,33 @@ $(function(){
             if (data['need_update']) {
                 var tip = "{% trans "A new server version %(v)s is available." %}";
                 tip = tip.replace('%(v)s', data['new_version']);
-                $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
+                $('#title-panel').append('<p>' + tip + '</p>').addClass('top-tip').removeClass('hide');
             }
         }
     });
+
+    {% if is_pro %}
+    // check if seafile license expired
+    $.ajax({
+        url: "{% url 'sys_check_license' %}",
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            var tip;
+
+            if (data['already_expired']) {
+                tip = "Your license expired on %(date)s.";
+            } else if (data['to_be_expired']) {
+                tip = "Your license will expire on %(date)s.";
+            }
+
+            if (data['already_expired'] || data['to_be_expired']) {
+                tip = tip.replace('%(date)s', data['expiration_date']);
+                $('#title-panel').append('<p>' + tip + '</p>').addClass('top-tip').removeClass('hide');
+            }
+        }
+    });
+    {% endif %}
 });
 
 $('#add-user-btn').click(function() {
