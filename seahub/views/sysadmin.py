@@ -8,6 +8,7 @@ import re
 import datetime
 import stat
 import csv, chardet, StringIO
+import time
 from constance import config
 
 from django.core.urlresolvers import reverse
@@ -2030,3 +2031,38 @@ def sys_settings(request):
     return render_to_response('sysadmin/settings.html', {
         'config_dict': config_dict,
     }, context_instance=RequestContext(request))
+
+@login_required_ajax
+@sys_staff_required
+def sys_check_license(request):
+    """Check seafile license expiration.
+    """
+    if not is_pro_version():
+        raise Http404
+
+    content_type = 'application/json; charset=utf-8'
+    result = {}
+
+    license_file = os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
+    license_dict = parse_license(license_file)
+    if license_dict:
+        try:
+            expiration = license_dict['Expiration']
+        except KeyError as e:
+            logger.error(e)
+            result['error'] = str(e)
+            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
+
+        struct_time = datetime.datetime.strptime(expiration, "%Y-%m-%d")
+        expiration_timestamp = time.mktime(struct_time.timetuple())
+
+        if time.time() > expiration_timestamp:
+            # already expired
+            result['already_expired'] = True
+        elif time.time() + 30 * 24 * 60 * 60 > expiration_timestamp:
+            # will be expired in 30 days
+            result['to_be_expired'] = True
+
+        result['expiration'] = expiration
+
+    return HttpResponse(json.dumps(result), content_type=content_type)
