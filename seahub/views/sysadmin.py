@@ -2063,6 +2063,6 @@ def sys_check_license(request):
             # will be expired in 30 days
             result['to_be_expired'] = True
 
-        result['expiration'] = expiration
+        result['expiration_date'] = expiration
 
     return HttpResponse(json.dumps(result), content_type=content_type)

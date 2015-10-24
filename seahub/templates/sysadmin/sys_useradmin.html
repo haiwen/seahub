@@ -81,7 +81,7 @@ $(function(){
             if (data['need_update']) {
                 var tip = "{% trans "A new server version %(v)s is available." %}";
                 tip = tip.replace('%(v)s', data['new_version']);
-                $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;"><span>' + tip + '</span></p>').removeClass('hide');
+                $('#title-panel').append('<p>' + tip + '</p>').addClass('top-tip').removeClass('hide');
             }
         }
     });
@@ -93,22 +93,17 @@ $(function(){
         dataType: 'json',
         cache: false,
         success: function(data) {
-            var tip, $title_panel = $('#title-panel');
+            var tip;
 
             if (data['already_expired']) {
-                tip = "Your license is already expired in %(v)s.",
-                tip = tip.replace('%(v)s', data['expiration']);
+                tip = "Your license expired on %(date)s.";
             } else if (data['to_be_expired']) {
-                tip = "Your license will be expired in %(v)s.",
-                tip = tip.replace('%(v)s', data['expiration']);
+                tip = "Your license will expire on %(date)s.";
             }
 
-            if (typeof(tip) != 'undefined') {
-                if ($title_panel.find('p').length) {
-                    $title_panel.find('p').append('<br /><span>' + tip + '</span>');
-                } else {
-                    $title_panel.html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;"><span>' + tip + '</span></p>').removeClass('hide');
-                }
+            if (data['already_expired'] || data['to_be_expired']) {
+                tip = tip.replace('%(date)s', data['expiration_date']);
+                $('#title-panel').append('<p>' + tip + '</p>').addClass('top-tip').removeClass('hide');
             }
         }
     });

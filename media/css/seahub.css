@@ -316,6 +316,12 @@ p { margin:0.5em 0; }
 .alc { text-align: center;}
 .cspt { cursor:pointer; }
 .pos-rel { position:relative; }
+.top-tip {
+    background:#fddaa4;
+    color:#1f0600;
+    text-align:center;
+    margin:0 0 15px;
+}
 /** for input, textarea in form **/ /* e.g repo-create */
 .input, .textarea {
     width:260px;
