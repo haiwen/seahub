@@ -367,22 +367,27 @@ def _file_view(request, repo_id, path):
 
     # Check whether user has permission to view file and get file raw path,
     # render error page if permission deny.
-    if filetype == VIDEO or filetype == AUDIO:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path, use_onetime=False)
-    else:
-        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
-            request, repo_id, obj_id, path)
-
     file_perm = seafile_api.check_permission_by_path(repo_id, path, username)
     if not file_perm:
         return render_permission_error(request, _(u'Unable to view file'))
 
     # Pass permission check, start download or render file.
     if request.GET.get('dl', '0') == '1':
+        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
+                                                        'download', username,
+                                                        use_onetime=True)
+        dl_url = gen_file_get_url(token, u_filename)
         # send stats message
         send_file_download_msg(request, repo, path, 'web')
-        return HttpResponseRedirect(raw_path)
+        return HttpResponseRedirect(dl_url)
+
+    # Get file view raw path, ``user_perm`` is not used anymore.
+    if filetype == VIDEO or filetype == AUDIO:
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
+            request, repo_id, obj_id, path, use_onetime=False)
+    else:
+        raw_path, inner_path, user_perm = get_file_view_path_and_perm(
+            request, repo_id, obj_id, path)
 
     # check if use wopi host page according to filetype
     if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
