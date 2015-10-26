@@ -10,6 +10,7 @@ from seahub.auth.models import get_hexdigest
 from seahub.auth import login
 from registration import signals
 #from registration.forms import RegistrationForm
+import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
     seafile_api
 
@@ -279,20 +280,38 @@ class User(object):
             unset_repo_passwd(r.id, self.email)
 
 class AuthBackend(object):
+    def get_user_with_import(self, username):
+        emailuser = seaserv.get_emailuser_with_import(username)
+        if not emailuser:
+            raise User.DoesNotExist, 'User matching query does not exits.'
+
+        user = User(emailuser.email)
+        user.id = emailuser.id
+        user.enc_password = emailuser.password
+        user.is_staff = emailuser.is_staff
+        user.is_active = emailuser.is_active
+        user.ctime = emailuser.ctime
+        user.org = emailuser.org
+        user.source = emailuser.source
+        user.role = emailuser.role
+        user.source = emailuser.source
+
+        return user
+
     def get_user(self, username):
         try:
-            user = User.objects.get(email=username)
+            user = self.get_user_with_import(username)
         except User.DoesNotExist:
             user = None
         return user
 
     def authenticate(self, username=None, password=None):
-        try:
-            user = User.objects.get(email=username)
-            if user.check_password(password):
-                return user
-        except User.DoesNotExist:
+        user = self.get_user(username)
+        if not user:
             return None
+
+        if user.check_password(password):
+            return user
 
 ########## Register related
 class RegistrationBackend(object):
