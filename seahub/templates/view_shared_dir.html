@@ -16,7 +16,7 @@
                 {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{% url "view_shared_dir" token %}?p={{ link|urlencode }}">{{ name }}</a> /
+                <a class="previous-path" href="{% url "view_shared_dir" token %}?p={{ link|urlencode }}">{{ name }}</a> /
                 {% else %}
                 {{ name }}
                 {% endif %}
@@ -25,11 +25,16 @@
                 {% if not traffic_over_limit %}
                 <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn fright">{% trans "ZIP"%}</a>
                 {% endif %}
+                <div class="view-mode fright">
+                    <a class="view-mode-switcher cspt fright" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&view=grid";><img src="{{ MEDIA_URL }}img/grid-view.png" title="{% trans "Grid"%}" class="grid-view-btn {% if view_mode == 'grid' %}active{% endif %}" /></a>
+                    <a class="view-mode-switcher cspt fright" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&view=list";><img src="{{ MEDIA_URL }}img/list-view.png" title="{% trans "List"%}" class="list-view-btn {% if view_mode == 'list' %}active{% endif %}" /></a>
+                </div>
             </div>
+            {% if view_mode ==  'list' %}
             <table class="repo-file-list" style="table-layout:fixed;">
                 <tr>
                     <th width="5%"></th>
-                    <th width="55%">{% trans "Name"%}</th>
+                    <th class="name" width="55%">{% trans "Name"%}</th>
                     <th width="20%">{% trans "Size"%}</th>
                     <th width="20%">{% trans "Operations"%}</th>
                 </tr>
@@ -37,8 +42,8 @@
                 {% for dirent in dir_list %}
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
-                    <td>
-                        <a href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                    <td class="name">
+                        <a href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&view=list">{{ dirent.obj_name }}</a>
                     </td>
 
                     <td></td>
@@ -64,7 +69,7 @@
                         <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                     {% endif %}
 
-                    <td>
+                    <td class="name">
                         {% if dirent.is_img %}
                         <a class="normal img-name-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
                         {% else %}
@@ -83,6 +88,52 @@
                 </tr>
                 {% endfor %}
             </table>
+            {% else %}
+            <ul class="repo-file-grid">
+            {% for dirent in dir_list %}
+                <li class="grid-item fleft pos-rel">
+                    <div class="grid-img-container"><img class="vam" src="{{ MEDIA_URL }}img/folder-beige-128.png" alt="{% trans "Directory icon"%}" /></div>
+                    <div class="grid-link-container">
+                        <a title="{{ dirent.obj_name }}" class="grid-link" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&view=grid">{{ dirent.obj_name }}</a>
+                    </div>
+                    <a class="vh grid-dld-btn cspt" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}">
+                        <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                    </a>
+                </li>
+            {% endfor %}
+            {% for dirent in file_list %}
+                <li class="grid-item fleft pos-rel">
+                    {% if dirent.allow_generate_thumbnail %}
+                        {% if dirent.encoded_thumbnail_src %}
+                            <div class="grid-img-container"><img class="grid-picture vam" src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" alt="{% trans "File"%}" /></div>
+                            <a class="vh grid-dld-btn cspt" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}">
+                                <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                            </a>
+                        {% else %}
+                            <div class="grid-img-container"><img class="not-thumbnail vam" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:128}}" alt="{% trans "File"%}" /></div>
+                            <a class="vh grid-dld-btn cspt" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}">
+                                <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                            </a>
+                        {% endif %}
+                    {% else %}
+                        <div class="grid-img-container"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:128}}" alt="{% trans "File"%}" /></div>
+                        <a class="vh grid-dld-btn cspt" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}">
+                            <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                        </a>
+                    {% endif %}
+                    {% if dirent.is_img %}
+                    <div class="grid-link-container">
+                        <a title="{{ dirent.obj_name }}" class="ovhd normal img-name-link grid-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                    </div>
+                    {% else %}
+                    <div class="grid-link-container">
+                        <a title="{{ dirent.obj_name }}" class="normal ovhd grid-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                    </div>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -95,7 +146,53 @@ $(function() {
     {% endif %}
 });
 
-$('.repo-file-list').magnificPopup({
+var getUrlParams = function(url) {
+    var result = {};
+    var params = (url.split('?')[1] || '').split('&');  
+    for(var param in params) {  
+        if (params.hasOwnProperty(param)) {  
+            paramParts = params[param].split('=');  
+            result[paramParts[0]] = decodeURIComponent(paramParts[1] || "");  
+        }  
+    }  
+    return result;  
+}
+
+$('.view-mode .view-mode-switcher').click(function() {
+    var currentViewMode = getUrlParams(window.location.href)['view'];
+    var switchToViewMode = getUrlParams($(this).attr('href'))['view'];
+    if (currentViewMode == switchToViewMode) {
+        return false;
+    }
+});
+
+{% if view_mode == 'grid' %}
+var grid = $('.repo-file-grid');
+$('.repo-file-list-topbar .previous-path').each(function() {
+    $(this).attr('href', ($(this).attr('href') + '&view=grid'));
+});
+$('.grid-link-container', grid).each(function() {
+    var $grid_link = $(".grid-link", $(this));
+    while ($grid_link.outerHeight() > $(this).outerHeight()) {
+        $grid_link.text($grid_link.text().replace(/(\s)*(.)(\.\.\.)?$/, "..."));
+    };
+}).css('opacity', 1);
+$('.grid-item', grid).hover(function() {
+    $(this).children('.grid-dld-btn').removeClass('vh');
+    $(this).children('.grid-img-container').css('background', '#f8f8f8');
+    $(this).find('.grid-link').css('color', '#eb8205');
+}, function() {
+    $(this).children('.grid-dld-btn').addClass('vh');
+    $(this).children('.grid-img-container').css('background', '#fff');
+    $(this).find('.grid-link').css('color', '#333');
+});
+{% else %}
+$('.repo-file-list-topbar .previous-path').each(function() {
+    $(this).attr('href', ($(this).attr('href') + '&view=list'));
+});
+{% endif %}
+
+$('.repo-file-list, .repo-file-grid').magnificPopup({
     type: 'image',
     delegate: '.img-name-link',
     tClose: "{% trans "Close (Esc)" %}", // Alt text on close button

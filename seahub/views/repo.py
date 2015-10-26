@@ -427,6 +427,10 @@ def view_shared_dir(request, token):
                 return render_to_response('share_access_validation.html', d,
                                           context_instance=RequestContext(request))
 
+    if request.GET.get('view') == 'grid':
+        view_mode = 'grid'
+    else:
+        view_mode = 'list'
     username = fileshare.username
     repo_id = fileshare.repo_id
 
@@ -498,6 +502,7 @@ def view_shared_dir(request, token):
             'repo': repo,
             'token': token,
             'path': req_path,
+            'view_mode': view_mode,
             'username': username,
             'dir_name': dir_name,
             'file_list': file_list,
