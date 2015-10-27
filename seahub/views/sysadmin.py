@@ -19,9 +19,9 @@ from django.template import RequestContext
 from django.utils import timezone
 from django.utils.translation import ugettext as _
 
-from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, get_emailusers, \
-    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members, get_repo, \
-    get_file_size
+import seaserv
+from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
+    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -185,7 +185,7 @@ def sys_repo_admin(request):
 def sys_admin_repo_download_file(request, repo_id):
     """
     """
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     path = request.GET.get('p', '')
     obj_id = seafile_api.get_file_id_by_path(repo_id, path)
 
@@ -221,7 +221,7 @@ def sys_admin_repo(request, repo_id):
         messages.error(request, _(u'Unable to view library, this feature is not enabled.'))
         return HttpResponseRedirect(next)
 
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     if not repo:
         messages.error(request, _(u'Library does not exist'))
         return HttpResponseRedirect(next)
@@ -260,7 +260,9 @@ def sys_admin_repo(request, repo_id):
             dir_list.append(dirent)
         else:
             if repo.version == 0:
-                dirent.file_size = get_file_size(repo.store_id, repo.version, dirent.obj_id)
+                dirent.file_size = seafile_api.get_file_size(repo.store_id,
+                                                             repo.version,
+                                                             dirent.obj_id)
             else:
                 dirent.file_size = dirent.size
             file_list.append(dirent)
@@ -512,7 +514,8 @@ def sys_user_admin(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    users_plus_one = get_emailusers('DB', per_page * (current_page - 1), per_page + 1)
+    users_plus_one = seaserv.get_emailusers('DB', per_page * (current_page - 1),
+                                            per_page + 1)
     if len(users_plus_one) == per_page + 1:
         page_next = True
     else:
@@ -547,7 +550,7 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
-    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
 
     platform = get_platform_name()
     server_id = get_server_id()
@@ -584,7 +587,9 @@ def sys_user_admin_ldap_imported(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    users_plus_one = get_emailusers('LDAPImport', per_page * (current_page - 1), per_page + 1)
+    users_plus_one = seaserv.get_emailusers('LDAPImport',
+                                            per_page * (current_page - 1),
+                                            per_page + 1)
     if len(users_plus_one) == per_page + 1:
         page_next = True
     else:
@@ -628,7 +633,9 @@ def sys_user_admin_ldap(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    users_plus_one = get_emailusers('LDAP', per_page * (current_page - 1), per_page + 1)
+    users_plus_one = seaserv.get_emailusers('LDAP',
+                                            per_page * (current_page - 1),
+                                            per_page + 1)
     if len(users_plus_one) == per_page + 1:
         page_next = True
     else:
@@ -666,8 +673,8 @@ def sys_user_admin_ldap(request):
 def sys_user_admin_admins(request):
     """List all admins from database and ldap imported
     """
-    db_users = get_emailusers('DB', -1, -1)
-    ldpa_imported_users = get_emailusers('LDAPImport', -1, -1)
+    db_users = seaserv.get_emailusers('DB', -1, -1)
+    ldpa_imported_users = seaserv.get_emailusers('LDAPImport', -1, -1)
 
     admin_users = []
     not_admin_users = []
@@ -699,7 +706,7 @@ def sys_user_admin_admins(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    have_ldap = True if len(get_emailusers('LDAP', 0, 1)) > 0 else False
+    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
 
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {

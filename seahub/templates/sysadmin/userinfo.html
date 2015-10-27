@@ -1,8 +1,11 @@
 {% extends "admin_base.html" %}
 {% load i18n avatar_tags seahub_tags %}
+{% load i18n staticfiles %}
 {% load url from future %}
 
 {% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
 <style type="text/css">
 #left-panel { position:relative; }
 </style>
@@ -99,7 +102,10 @@
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
-                    <div><a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></a></div>
+                    <div>
+                        <a href="#" data-url="{% url "sys_repo_delete" repo.id %}" data-target="{{ repo.name }}" class="repo-delete-btn op vh">{% trans "Delete" %}</a>
+                        <a href="#" class="repo-transfer-btn op vh">{% trans "Transfer" %}</a>
+                    </div>
                 </td>
             </tr>
             {% endfor %}
@@ -192,12 +198,14 @@
     </div>
 </div>
 
-{% include 'snippets/repo_del_popup.html' %}
+{% include "sysadmin/repo_transfer_form.html" %}
 {% endblock %}
 
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 <script type="text/javascript">
+{% include "sysadmin/repoadmin_js.html" %}
 
 $('.rm-link').click(function() {
     var _this = $(this);
@@ -265,12 +273,5 @@ $('#set-quota-form .submit').click(function() {
     });
     return false;
 });
-
-addConfirmTo($('.repo-delete-btn'), {
-    'title': "{% trans "Delete Library" %}",
-    'con': "{% trans "Are you sure you want to delete %s ?" %}",
-    'post': true
-});
-
 </script>
 {% endblock %}
