@@ -17,6 +17,8 @@ import json
 
 import ccnet
 from constance import config
+import seaserv
+from seaserv import seafile_api
 
 from django.core.urlresolvers import reverse
 from django.core.mail import EmailMessage
@@ -29,16 +31,8 @@ from django.utils.html import escape
 from django.views.static import serve as django_static_serve
 
 from seahub.api2.models import Token, TokenV2
-import seaserv
-from seaserv import seafile_api, send_message, seafserv_rpc, \
-    seafserv_threaded_rpc, get_repo, get_commits,\
-    CCNET_SERVER_ADDR, CCNET_SERVER_PORT, get_org_by_id, is_org_staff, \
-    get_org_id_by_group, get_personal_groups_by_user, \
-    list_personal_repos_by_owner, get_group_repos, \
-    list_inner_pub_repos, CCNET_CONF_PATH, SEAFILE_CENTRAL_CONF_DIR
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
-
 try:
     from seahub.settings import EVENTS_CONFIG_FILE
 except ImportError:
@@ -56,12 +50,11 @@ try:
     from seahub.settings import ENABLE_INNER_FILESERVER
 except ImportError:
     ENABLE_INNER_FILESERVER = True
-
 try:
     from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
-    
+
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
     conf = os.path.join(os.environ['SEAFILE_CONF_DIR'], 'seafile.conf')
@@ -204,11 +197,11 @@ def get_repo_last_modify(repo):
     consuming.
     """
     if repo.head_cmmt_id is not None:
-        last_cmmt = seafserv_threaded_rpc.get_commit(repo.id, repo.version, repo.head_cmmt_id)
+        last_cmmt = seaserv.get_commit(repo.id, repo.version, repo.head_cmmt_id)
     else:
         logger = logging.getLogger(__name__)
         logger.info('[repo %s] head_cmmt_id is missing.' % repo.id)
-        last_cmmt = get_commits(repo.id, 0, 1)[0]
+        last_cmmt = seafile_api.get_commit_list(repo.id, 0, 1)[0]
     return last_cmmt.ctime if last_cmmt else 0
 
 def calculate_repos_last_modify(repo_list):
@@ -254,7 +247,7 @@ def is_ldap_user(user):
     return user.source == 'LDAP' or user.source == 'LDAPImport'
 
 def check_filename_with_rename(repo_id, parent_dir, filename):
-    cmmts = get_commits(repo_id, 0, 1)
+    cmmts = seafile_api.get_commit_list(repo_id, 0, 1)
     latest_commit = cmmts[0] if cmmts else None
     if not latest_commit:
         return ''
@@ -294,16 +287,16 @@ def get_user_repos(username, org_id=None):
     If ``org_id`` is not None, get org repos that user can access.
     """
     if org_id is None:
-        owned_repos = list_personal_repos_by_owner(username)
+        owned_repos = seaserv.list_personal_repos_by_owner(username)
         shared_repos = seafile_api.get_share_in_repo_list(username, -1, -1)
         groups_repos = []
-        for group in get_personal_groups_by_user(username):
+        for group in seaserv.get_personal_groups_by_user(username):
             # TODO: use seafile_api.get_group_repos
-            groups_repos += get_group_repos(group.id, username)
+            groups_repos += seaserv.get_group_repos(group.id, username)
         if CLOUD_MODE:
             public_repos = []
         else:
-            public_repos = list_inner_pub_repos(username)
+            public_repos = seaserv.list_inner_pub_repos(username)
 
         for r in shared_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned or group
@@ -319,7 +312,7 @@ def get_user_repos(username, org_id=None):
         groups_repos = []
         for group in seaserv.get_org_groups_by_user(org_id, username):
             groups_repos += seafile_api.get_org_group_repos(org_id, group.id)
-        public_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
+        public_repos = seaserv.list_org_inner_pub_repos(org_id)
 
         for r in shared_repos + groups_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned
@@ -348,14 +341,14 @@ def get_file_revision_id_size(repo_id, commit_id, path):
     and size of the file blob
 
     """
-    repo = get_repo(repo_id)
+    repo = seafile_api.get_repo(repo_id)
     dirname  = os.path.dirname(path)
     filename = os.path.basename(path)
     seafdir = seafile_api.list_dir_by_commit_and_path(repo_id, commit_id, dirname)
     for dirent in seafdir:
         if dirent.obj_name == filename:
-            file_size = seafserv_threaded_rpc.get_file_size(repo.store_id, repo.version,
-                                                            dirent.obj_id)
+            file_size = seafile_api.get_file_size(repo.store_id, repo.version,
+                                                  dirent.obj_id)
             return dirent.obj_id, file_size
 
     return None, None
@@ -383,8 +376,8 @@ def get_commit_before_new_merge(commit):
     assert new_merge_with_no_conflict(commit) is True
 
     while(new_merge_with_no_conflict(commit)):
-        p1 = seafserv_threaded_rpc.get_commit(commit.repo_id, commit.version, commit.parent_id)
-        p2 = seafserv_threaded_rpc.get_commit(commit.repo_id, commit.version, commit.second_parent_id)
+        p1 = seaserv.get_commit(commit.repo_id, commit.version, commit.parent_id)
+        p2 = seaserv.get_commit(commit.repo_id, commit.version, commit.second_parent_id)
         commit = p1 if p1.ctime > p2.ctime else p2
 
     assert new_merge_with_no_conflict(commit) is False
@@ -439,7 +432,7 @@ def gen_file_upload_url(token, op):
 
 def get_ccnet_server_addr_port():
     """get ccnet server host and port"""
-    return CCNET_SERVER_ADDR, CCNET_SERVER_PORT
+    return seaserv.CCNET_SERVER_ADDR, seaserv.CCNET_SERVER_PORT
 
 def string2list(string):
     """
@@ -498,11 +491,11 @@ def check_and_get_org_by_group(group_id, user):
     Check whether repo is org repo, get org info if it is, and set
     base template.
     """
-    org_id = get_org_id_by_group(group_id)
+    org_id = seaserv.get_org_id_by_group(group_id)
     if org_id > 0:
         # this repo is org repo, get org info
-        org = get_org_by_id(org_id)
-        org._dict['is_staff'] = is_org_staff(org_id, user)
+        org = seaserv.get_org_by_id(org_id)
+        org._dict['is_staff'] = seaserv.is_org_staff(org_id, user)
         org._dict['email'] = user
         base_template = 'org_base.html'
     else:
@@ -600,15 +593,16 @@ if EVENTS_CONFIG_FILE:
 
             for ev in events:
                 if ev.etype == 'repo-update':
-                    repo = get_repo(ev.repo_id)
+                    repo = seafile_api.get_repo(ev.repo_id)
                     if not repo:
                         # delete the update event for repo which has been deleted
                         seafevents.delete_event(ev_session, ev.uuid)
                         continue
                     if repo.encrypted:
-                        repo.password_set = seafserv_rpc.is_passwd_set(repo.id, username)
+                        repo.password_set = seafile_api.is_passwd_set(
+                            repo.id, username)
                     ev.repo = repo
-                    ev.commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, ev.commit_id)
+                    ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
 
                 valid_events.append(ev)
                 if len(valid_events) == limit:
@@ -890,7 +884,7 @@ def api_convert_desc_link(e):
             e.dtime = api_tsstr_sec(commit.props.ctime)
             return (tmp_str + ' %s') % (op, file_or_dir, remaining)
         else:
-            diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)
+            diff_result = seafile_api.diff_commits(repo_id, '', cmmt_id)
             if diff_result:
                 for d in diff_result:
                     if file_or_dir not in d.name:
@@ -953,12 +947,15 @@ if HAS_OFFICE_CONVERTER:
     FILEEXT_TYPE_MAP = gen_fileext_type_map()
 
     from seafevents.office_converter import OfficeConverterRpcClient
-
     office_converter_rpc = None
+
     def _get_office_converter_rpc():
         global office_converter_rpc
         if office_converter_rpc is None:
-            pool = ccnet.ClientPool(CCNET_CONF_PATH, central_config_dir=SEAFILE_CENTRAL_CONF_DIR)
+            pool = ccnet.ClientPool(
+                seaserv.CCNET_CONF_PATH,
+                central_config_dir=seaserv.SEAFILE_CENTRAL_CONF_DIR
+            )
             office_converter_rpc = OfficeConverterRpcClient(pool)
 
         return office_converter_rpc
@@ -1242,7 +1239,7 @@ def send_perm_audit_msg(etype, from_user, to, repo_id, path, perm):
     msg_utf8 = msg.encode('utf-8')
 
     try:
-        send_message('seahub.stats', msg_utf8)
+        seaserv.send_message('seahub.stats', msg_utf8)
     except Exception as e:
         logger.error("Error when sending perm-audit-%s message: %s" %
                      (etype, str(e)))
