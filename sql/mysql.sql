@@ -9,6 +9,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api2_token` (
@@ -20,8 +22,11 @@ CREATE TABLE `api2_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `api2_token` DISABLE KEYS */;
 /*!40000 ALTER TABLE `api2_token` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api2_tokenv2` (
@@ -39,8 +44,11 @@ CREATE TABLE `api2_tokenv2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `api2_tokenv2` DISABLE KEYS */;
 /*!40000 ALTER TABLE `api2_tokenv2` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avatar_avatar` (
@@ -53,8 +61,11 @@ CREATE TABLE `avatar_avatar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `avatar_avatar` DISABLE KEYS */;
 /*!40000 ALTER TABLE `avatar_avatar` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avatar_groupavatar` (
@@ -66,8 +77,11 @@ CREATE TABLE `avatar_groupavatar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `avatar_groupavatar` DISABLE KEYS */;
 /*!40000 ALTER TABLE `avatar_groupavatar` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_clientlogintoken` (
@@ -79,8 +93,11 @@ CREATE TABLE `base_clientlogintoken` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_clientlogintoken` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_clientlogintoken` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_commandslastcheck` (
@@ -91,8 +108,11 @@ CREATE TABLE `base_commandslastcheck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_commandslastcheck` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_commandslastcheck` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_devicetoken` (
@@ -107,42 +127,11 @@ CREATE TABLE `base_devicetoken` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_devicetoken` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_devicetoken` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_dirfileslastmodifiedinfo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `parent_dir` longtext NOT NULL,
-  `parent_dir_hash` varchar(12) NOT NULL,
-  `dir_id` varchar(40) NOT NULL,
-  `last_modified_info` longtext NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `repo_id` (`repo_id`,`parent_dir_hash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE `base_dirfileslastmodifiedinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_dirfileslastmodifiedinfo` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_filecontributors` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `file_id` varchar(40) NOT NULL,
-  `file_path` longtext NOT NULL,
-  `file_path_hash` varchar(12) NOT NULL,
-  `last_modified` bigint(20) NOT NULL,
-  `last_commit_id` varchar(40) NOT NULL,
-  `emails` longtext NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `base_filecontributors_2059abe4` (`repo_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE `base_filecontributors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_filecontributors` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_filediscuss` (
@@ -158,27 +147,11 @@ CREATE TABLE `base_filediscuss` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_filediscuss` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_filediscuss` ENABLE KEYS */;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `base_filelastmodifiedinfo` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `repo_id` varchar(36) NOT NULL,
-  `file_id` varchar(40) NOT NULL,
-  `file_path` longtext NOT NULL,
-  `file_path_hash` varchar(12) NOT NULL,
-  `last_modified` bigint(20) NOT NULL,
-  `email` varchar(75) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `repo_id` (`repo_id`,`file_path_hash`),
-  KEY `base_filelastmodifiedinfo_2059abe4` (`repo_id`),
-  KEY `base_filelastmodifiedinfo_880f7193` (`file_path_hash`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
 
-/*!40000 ALTER TABLE `base_filelastmodifiedinfo` DISABLE KEYS */;
-/*!40000 ALTER TABLE `base_filelastmodifiedinfo` ENABLE KEYS */;
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_groupenabledmodule` (
@@ -190,8 +163,11 @@ CREATE TABLE `base_groupenabledmodule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_groupenabledmodule` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_groupenabledmodule` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_innerpubmsg` (
@@ -203,8 +179,11 @@ CREATE TABLE `base_innerpubmsg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_innerpubmsg` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_innerpubmsg` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_innerpubmsgreply` (
@@ -219,8 +198,11 @@ CREATE TABLE `base_innerpubmsgreply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_innerpubmsgreply` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_innerpubmsgreply` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userenabledmodule` (
@@ -232,8 +214,11 @@ CREATE TABLE `base_userenabledmodule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_userenabledmodule` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userenabledmodule` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userlastlogin` (
@@ -245,8 +230,11 @@ CREATE TABLE `base_userlastlogin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_userlastlogin` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userlastlogin` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userstarredfiles` (
@@ -257,12 +245,16 @@ CREATE TABLE `base_userstarredfiles` (
   `path` longtext NOT NULL,
   `is_dir` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `base_userstarredfiles_830a6ccb` (`email`),
   KEY `base_userstarredfiles_2059abe4` (`repo_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_userstarredfiles` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userstarredfiles` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_uuidobjidmap` (
@@ -274,8 +266,11 @@ CREATE TABLE `base_uuidobjidmap` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `base_uuidobjidmap` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_uuidobjidmap` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `captcha_captchastore` (
@@ -289,8 +284,27 @@ CREATE TABLE `captcha_captchastore` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `captcha_captchastore` DISABLE KEYS */;
 /*!40000 ALTER TABLE `captcha_captchastore` ENABLE KEYS */;
+
+
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `constance_config` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `key` varchar(255) NOT NULL,
+  `value` longtext NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key` (`key`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+/*!40000 ALTER TABLE `constance_config` DISABLE KEYS */;
+/*!40000 ALTER TABLE `constance_config` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contacts_contact` (
@@ -304,8 +318,11 @@ CREATE TABLE `contacts_contact` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `contacts_contact` DISABLE KEYS */;
 /*!40000 ALTER TABLE `contacts_contact` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_content_type` (
@@ -315,12 +332,15 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `app_label` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (1,'content type','contenttypes','contenttype'),(2,'session','sessions','session'),(3,'registration profile','registration','registrationprofile'),(4,'captcha store','captcha','captchastore'),(5,'token','api2','token'),(6,'token v2','api2','tokenv2'),(7,'avatar','avatar','avatar'),(8,'group avatar','avatar','groupavatar'),(9,'group enabled module','base','groupenabledmodule'),(10,'uuid objid map','base','uuidobjidmap'),(11,'inner pub msg reply','base','innerpubmsgreply'),(12,'commands last check','base','commandslastcheck'),(13,'user enabled module','base','userenabledmodule'),(15,'device token','base','devicetoken'),(17,'file discuss','base','filediscuss'),(18,'inner pub msg','base','innerpubmsg'),(20,'user last login','base','userlastlogin'),(21,'user starred files','base','userstarredfiles'),(22,'contact','contacts','contact'),(23,'personal wiki','wiki','personalwiki'),(24,'group wiki','wiki','groupwiki'),(25,'public group','group','publicgroup'),(26,'group message','group','groupmessage'),(27,'message attachment','group','messageattachment'),(28,'message reply','group','messagereply'),(29,'user msg attachment','message','usermsgattachment'),(30,'user msg last check','message','usermsglastcheck'),(31,'user message','message','usermessage'),(32,'notification','notifications','notification'),(33,'user notification','notifications','usernotification'),(34,'user options','options','useroptions'),(35,'profile','profile','profile'),(36,'detailed profile','profile','detailedprofile'),(37,'private file dir share','share','privatefiledirshare'),(38,'upload link share','share','uploadlinkshare'),(39,'file share','share','fileshare'),(40,'anonymous share','share','anonymousshare'),(41,'org file share','share','orgfileshare'),(42,'group public file','pubfile','grouppublicfile'),(43,'user login log','sysadmin_extra','userloginlog'),(44,'client login token','base','clientlogintoken'),(45,'org member quota','organizations','orgmemberquota');
+INSERT INTO `django_content_type` VALUES (1,'content type','contenttypes','contenttype'),(2,'session','sessions','session'),(3,'registration profile','registration','registrationprofile'),(4,'captcha store','captcha','captchastore'),(5,'constance','database','constance'),(6,'token','api2','token'),(7,'token v2','api2','tokenv2'),(8,'avatar','avatar','avatar'),(9,'group avatar','avatar','groupavatar'),(10,'group enabled module','base','groupenabledmodule'),(11,'client login token','base','clientlogintoken'),(12,'uuid objid map','base','uuidobjidmap'),(13,'user enabled module','base','userenabledmodule'),(14,'file discuss','base','filediscuss'),(15,'device token','base','devicetoken'),(16,'commands last check','base','commandslastcheck'),(17,'inner pub msg','base','innerpubmsg'),(18,'inner pub msg reply','base','innerpubmsgreply'),(19,'user last login','base','userlastlogin'),(20,'user starred files','base','userstarredfiles'),(21,'contact','contacts','contact'),(22,'personal wiki','wiki','personalwiki'),(23,'group wiki','wiki','groupwiki'),(24,'public group','group','publicgroup'),(25,'group message','group','groupmessage'),(26,'message attachment','group','messageattachment'),(27,'message reply','group','messagereply'),(28,'user msg attachment','message','usermsgattachment'),(29,'user msg last check','message','usermsglastcheck'),(30,'user message','message','usermessage'),(31,'notification','notifications','notification'),(32,'user notification','notifications','usernotification'),(33,'user options','options','useroptions'),(34,'profile','profile','profile'),(35,'detailed profile','profile','detailedprofile'),(36,'private file dir share','share','privatefiledirshare'),(37,'upload link share','share','uploadlinkshare'),(38,'file share','share','fileshare'),(39,'anonymous share','share','anonymousshare'),(40,'org file share','share','orgfileshare'),(41,'group public file','pubfile','grouppublicfile'),(42,'user login log','sysadmin_extra','userloginlog'),(43,'org member quota','organizations','orgmemberquota');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_session` (
@@ -332,8 +352,11 @@ CREATE TABLE `django_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_groupmessage` (
@@ -347,8 +370,11 @@ CREATE TABLE `group_groupmessage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `group_groupmessage` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_groupmessage` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_messageattachment` (
@@ -364,8 +390,11 @@ CREATE TABLE `group_messageattachment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `group_messageattachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_messageattachment` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_messagereply` (
@@ -380,8 +409,11 @@ CREATE TABLE `group_messagereply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `group_messagereply` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_messagereply` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_publicgroup` (
@@ -392,8 +424,11 @@ CREATE TABLE `group_publicgroup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `group_publicgroup` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_publicgroup` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermessage` (
@@ -411,8 +446,11 @@ CREATE TABLE `message_usermessage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `message_usermessage` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermessage` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermsgattachment` (
@@ -427,8 +465,11 @@ CREATE TABLE `message_usermsgattachment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `message_usermsgattachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermsgattachment` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermsglastcheck` (
@@ -438,8 +479,11 @@ CREATE TABLE `message_usermsglastcheck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `message_usermsglastcheck` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermsglastcheck` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications_notification` (
@@ -450,8 +494,11 @@ CREATE TABLE `notifications_notification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `notifications_notification` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notifications_notification` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications_usernotification` (
@@ -467,8 +514,11 @@ CREATE TABLE `notifications_usernotification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `notifications_usernotification` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notifications_usernotification` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `options_useroptions` (
@@ -481,8 +531,11 @@ CREATE TABLE `options_useroptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `options_useroptions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `options_useroptions` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `organizations_orgmemberquota` (
@@ -494,8 +547,11 @@ CREATE TABLE `organizations_orgmemberquota` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `organizations_orgmemberquota` DISABLE KEYS */;
 /*!40000 ALTER TABLE `organizations_orgmemberquota` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profile_detailedprofile` (
@@ -508,8 +564,11 @@ CREATE TABLE `profile_detailedprofile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `profile_detailedprofile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `profile_detailedprofile` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profile_profile` (
@@ -518,13 +577,22 @@ CREATE TABLE `profile_profile` (
   `nickname` varchar(64) NOT NULL,
   `intro` longtext NOT NULL,
   `lang_code` longtext,
+  `login_id` varchar(225) DEFAULT NULL,
+  `contact_email` varchar(225) DEFAULT NULL,
+  `institution` varchar(225) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user` (`user`)
+  UNIQUE KEY `user` (`user`),
+  UNIQUE KEY `login_id` (`login_id`),
+  KEY `profile_profile_3b46cb17` (`contact_email`),
+  KEY `profile_profile_71bbc151` (`institution`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `profile_profile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `profile_profile` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `pubfile_grouppublicfile` (
@@ -541,8 +609,11 @@ CREATE TABLE `pubfile_grouppublicfile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `pubfile_grouppublicfile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pubfile_grouppublicfile` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registration_registrationprofile` (
@@ -553,8 +624,11 @@ CREATE TABLE `registration_registrationprofile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `registration_registrationprofile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `registration_registrationprofile` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_anonymousshare` (
@@ -568,8 +642,11 @@ CREATE TABLE `share_anonymousshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `share_anonymousshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_anonymousshare` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_fileshare` (
@@ -591,8 +668,11 @@ CREATE TABLE `share_fileshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `share_fileshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_fileshare` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_orgfileshare` (
@@ -606,8 +686,11 @@ CREATE TABLE `share_orgfileshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `share_orgfileshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_orgfileshare` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_privatefiledirshare` (
@@ -627,8 +710,11 @@ CREATE TABLE `share_privatefiledirshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `share_privatefiledirshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_privatefiledirshare` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_uploadlinkshare` (
@@ -648,8 +734,11 @@ CREATE TABLE `share_uploadlinkshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `share_uploadlinkshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_uploadlinkshare` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sysadmin_extra_userloginlog` (
@@ -663,8 +752,11 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_groupwiki` (
@@ -676,8 +768,11 @@ CREATE TABLE `wiki_groupwiki` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 /*!40000 ALTER TABLE `wiki_groupwiki` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wiki_groupwiki` ENABLE KEYS */;
+
+
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_personalwiki` (
@@ -688,6 +783,7 @@ CREATE TABLE `wiki_personalwiki` (
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
 
 /*!40000 ALTER TABLE `wiki_personalwiki` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wiki_personalwiki` ENABLE KEYS */;

@@ -35,7 +35,7 @@ from seaserv import seafile_api, send_message, seafserv_rpc, \
     CCNET_SERVER_ADDR, CCNET_SERVER_PORT, get_org_by_id, is_org_staff, \
     get_org_id_by_group, get_personal_groups_by_user, \
     list_personal_repos_by_owner, get_group_repos, \
-    list_inner_pub_repos, CCNET_CONF_PATH
+    list_inner_pub_repos, CCNET_CONF_PATH, SEAFILE_CENTRAL_CONF_DIR
 import seahub.settings
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
 
@@ -958,7 +958,7 @@ if HAS_OFFICE_CONVERTER:
     def _get_office_converter_rpc():
         global office_converter_rpc
         if office_converter_rpc is None:
-            pool = ccnet.ClientPool(CCNET_CONF_PATH)
+            pool = ccnet.ClientPool(CCNET_CONF_PATH, central_config_dir=SEAFILE_CENTRAL_CONF_DIR)
             office_converter_rpc = OfficeConverterRpcClient(pool)
 
         return office_converter_rpc
