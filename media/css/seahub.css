@@ -1873,6 +1873,9 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list th {
     padding-top:20px;
 }
+.repo-file-list .name {
+    padding-right:30px;
+}
 #repo-file-list .fixed-hd {
     position:fixed;
     width:950px;
@@ -3717,4 +3720,60 @@ img.thumbnail {
 }
 .web-setting-form .submit {
     margin-right:5px;
+}
+
+/* view mode */
+.view-mode {
+    margin-right:12px;
+}
+.view-mode .active {
+    background:#ccc;
+}
+.list-view-btn,
+.grid-view-btn {
+    padding:4px 6px;
+    height:20px;
+    border:1px solid #ccc;
+    background:#fff;
+    float:left;
+}
+.grid-view-btn {
+    border-left:none;
+}
+.grid-item {
+    height:148px;
+    width:148px;
+}
+.grid-img-container {
+    width:100px;
+    height:100px;
+    line-height:98px;
+    margin:12px auto 8px;
+    border-radius:5px;
+    text-align:center;
+}
+.grid-img-container img {
+    max-height:96px;
+    max-width:96px;
+}
+.grid-link-container {
+    padding:0 22px;
+    text-align:center;
+    height:2.2em;
+    width:104px;
+    opacity:0;
+}
+.grid-link {
+    color:#333;
+    display:block;
+    line-height:1.1em;
+}
+.grid-dld-btn {
+    position:absolute;
+    right:24px;
+    top:12px;
+    border:1px solid #eee;
+    border-radius:5px;
+    background:#fff;
+    padding:2px 7px;
 }
