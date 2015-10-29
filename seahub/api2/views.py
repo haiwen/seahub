@@ -82,7 +82,7 @@ from seahub.views import validate_owner, is_registered_user, check_file_lock, \
     check_folder_permission, check_file_permission
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
     get_group_repos
-from seahub.views.file import get_file_view_path_and_perm, send_file_download_msg
+from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
 if HAS_FILE_SEARCH:
     from seahub_extra.search.views import search_keyword
 from seahub.utils import HAS_OFFICE_CONVERTER
@@ -1588,7 +1588,7 @@ class FileView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, "File not found")
 
         # send stats message
-        send_file_download_msg(request, repo, path, 'api')
+        send_file_access_msg(request, repo, path, 'api')
 
         file_name = os.path.basename(path)
         op = request.GET.get('op', 'download')

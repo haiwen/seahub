@@ -321,6 +321,22 @@ def can_preview_file(file_name, file_size):
         # that string in templates
         return (False, "invalid extension")
 
+def send_file_access_msg_when_preview(request, repo, path, access_from):
+    """ send file access msg when user preview file from web
+    """
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+
+    if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO):
+        send_file_access_msg(request, repo, path, access_from)
+
+    if filetype in (DOCUMENT, SPREADSHEET, OPENDOCUMENT, PDF) and \
+        HAS_OFFICE_CONVERTER:
+        send_file_access_msg(request, repo, path, access_from)
+
+    if filetype == PDF and USE_PDFJS:
+        send_file_access_msg(request, repo, path, access_from)
+
 @login_required
 @repo_passwd_set_required
 def view_repo_file(request, repo_id):
@@ -388,7 +404,7 @@ def _file_view(request, repo_id, path):
             wopi_dict = get_wopi_dict(username, repo_id, path)
 
         if wopi_dict:
-            send_file_download_msg(request, repo, path, 'web')
+            send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
                       context_instance=RequestContext(request))
 
@@ -407,7 +423,8 @@ def _file_view(request, repo_id, path):
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
     can_preview, err_msg = can_preview_file(u_filename, fsize)
     if can_preview:
-        send_file_download_msg(request, repo, path, 'web')
+        send_file_access_msg_when_preview(request, repo, path, 'web')
+
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -700,7 +717,7 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _(u'Unable to download file, share link traffic is used up.'))
         return HttpResponseRedirect(next)
 
-    send_file_download_msg(request, repo, real_path, 'share-link')
+    send_file_access_msg(request, repo, real_path, 'share-link')
     try:
         file_size = seafile_api.get_file_size(repo.store_id, repo.version,
                                               obj_id)
@@ -793,7 +810,7 @@ def view_shared_file(request, token):
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
         can_preview, err_msg = can_preview_file(filename, fsize)
         if can_preview:
-            send_file_download_msg(request, repo, path, 'share-link')
+            send_file_access_msg_when_preview(request, repo, path, 'share-link')
 
         """Choose different approach when dealing with different type of file."""
         inner_path = gen_inner_file_get_url(access_token, filename)
@@ -935,7 +952,7 @@ def view_file_via_shared_dir(request, token):
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
         can_preview, err_msg = can_preview_file(filename, fsize)
         if can_preview:
-            send_file_download_msg(request, repo, real_path, 'share-link')
+            send_file_access_msg_when_preview(request, repo, real_path, 'share-link')
 
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -1200,28 +1217,28 @@ def view_raw_file(request, repo_id, file_path):
 
     return HttpResponseRedirect(raw_path)
 
-def send_file_download_msg(request, repo, path, dl_type):
+def send_file_access_msg(request, repo, path, access_from):
     """Send file downlaod msg.
 
     Arguments:
     - `request`:
     - `repo`:
     - `obj_id`:
-    - `dl_type`: web or api
+    - `access_from`: web or api
     """
     username = request.user.username
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
 
     msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
-        (dl_type, username, ip, user_agent, repo.id, path)
+        (access_from, username, ip, user_agent, repo.id, path)
     msg_utf8 = msg.encode('utf-8')
 
     try:
         send_message('seahub.stats', msg_utf8)
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
-                     (dl_type, str(e)))
+                     (access_from, str(e)))
 
 @login_required
 def download_file(request, repo_id, obj_id):
@@ -1253,7 +1270,7 @@ def download_file(request, repo_id, obj_id):
         return HttpResponseRedirect(next)
 
     # send stats message
-    send_file_download_msg(request, repo, path, 'web')
+    send_file_access_msg(request, repo, path, 'web')
 
     file_name = os.path.basename(path.rstrip('/'))
     redirect_url = gen_file_get_url(token, file_name)
