@@ -517,9 +517,86 @@ def render_recycle_dir(request, repo_id, commit_id):
             'enable_clean': enable_clean,
             }, context_instance=RequestContext(request))
 
+def render_dir_recycle_root(request, repo_id, dir_path):
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    days = show_delete_days(request)
+
+    try:
+        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id,
+                                                            days,
+                                                            dir_path)
+    except:
+        deleted_entries = []
+
+    dir_list = []
+    file_list = []
+    for dirent in deleted_entries:
+        if stat.S_ISDIR(dirent.mode):
+            dir_list.append(dirent)
+        else:
+            file_list.append(dirent)
+
+    # Entries sort by deletion time in descending order.
+    dir_list.sort(lambda x, y : cmp(y.delete_time,
+                                    x.delete_time))
+    file_list.sort(lambda x, y : cmp(y.delete_time,
+                                     x.delete_time))
+
+    return render_to_response('dir_recycle_view.html', {
+            'show_recycle_root': True,
+            'repo': repo,
+            'dir_list': dir_list,
+            'file_list': file_list,
+            'days': days,
+            'dir_name': os.path.basename(dir_path.rstrip('/')),
+            'dir_path': dir_path,
+            }, context_instance=RequestContext(request))
+
+def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
+    basedir = request.GET.get('base', '')
+    path = request.GET.get('p', '')
+    if not basedir or not path:
+        return render_dir_recycle_root(request, repo_id, dir_path)
+
+    if basedir[0] != '/':
+        basedir = '/' + basedir
+    if path[-1] != '/':
+        path += '/'
+
+    repo = get_repo(repo_id)
+    if not repo:
+        raise Http404
+
+    commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
+    if not commit:
+        raise Http404
+
+    zipped = gen_path_link(path, '')
+    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, commit,
+                                                        basedir + path)
+
+    days = show_delete_days(request)
+
+    return render_to_response('dir_recycle_view.html', {
+            'show_recycle_root': False,
+            'repo': repo,
+            'zipped': zipped,
+            'dir_list': dir_list,
+            'file_list': file_list,
+            'commit_id': commit_id,
+            'basedir': basedir,
+            'path': path,
+            'days': days,
+            'dir_name': os.path.basename(dir_path.rstrip('/')),
+            'dir_path': dir_path,
+            }, context_instance=RequestContext(request))
+
 @login_required
 def repo_recycle_view(request, repo_id):
-    if check_repo_access_permission(repo_id, request.user) != 'rw':
+    if check_folder_permission(request, repo_id, '/') != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
@@ -527,6 +604,18 @@ def repo_recycle_view(request, repo_id):
         return render_recycle_root(request, repo_id)
     else:
         return render_recycle_dir(request, repo_id, commit_id)
+
+@login_required
+def dir_recycle_view(request, repo_id):
+    dir_path = request.GET.get('dir_path', '')
+    if check_folder_permission(request, repo_id, dir_path) != 'rw':
+        return render_permission_error(request, _(u'Unable to view recycle page'))
+
+    commit_id = request.GET.get('commit_id', '')
+    if not commit_id:
+        return render_dir_recycle_root(request, repo_id, dir_path)
+    else:
+        return render_dir_recycle_dir(request, repo_id, commit_id, dir_path)
 
 @login_required
 def repo_online_gc(request, repo_id):
@@ -1446,8 +1535,12 @@ def repo_revert_file(request, repo_id):
             # When revert file from repo history, we redirect to repo history
             url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
         elif from_page == 'recycle':
-            # When revert from recycle page, redirect to recycle page.
+            # When revert from repo recycle page, redirect to recycle page.
             url = reverse('repo_recycle_view', args=[repo_id])
+        elif from_page == 'dir_recycle':
+            # When revert from dir recycle page, redirect to recycle page.
+            dir_path = request.GET.get('dir_path', '')
+            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
         else:
             # When revert file from file history, we reload page
             url = next
@@ -1476,11 +1569,11 @@ def repo_revert_dir(request, repo_id):
     if not (commit_id and path and from_page):
         return render_error(request, _(u"Invalid arguments"))
 
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
     # perm check
     if check_folder_permission(request, repo.id, path) != 'rw':
-        next = request.META.get('HTTP_REFERER', None)
-        if not next:
-            next = settings.SITE_ROOT
         messages.error(request, _("Permission denied"))
         return HttpResponseRedirect(next)
 
@@ -1489,16 +1582,18 @@ def repo_revert_dir(request, repo_id):
     except Exception as e:
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
-        referer = request.META.get('HTTP_REFERER', None)
-        next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
     else:
         if from_page == 'repo_history':
             # When revert file from repo history, we redirect to repo history
             url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
         elif from_page == 'recycle':
-            # When revert from recycle page, redirect to recycle page.
+            # When revert from repo recycle page, redirect to recycle page.
             url = reverse('repo_recycle_view', args=[repo_id])
+        elif from_page == 'dir_recycle':
+            # When revert from dir recycle page, redirect to dir recycle page.
+            dir_path = request.GET.get('dir_path', '')
+            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
         else:
             # When revert file from file history, we redirect to parent dir of this file
             parent_dir = os.path.dirname(path)

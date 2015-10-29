@@ -146,6 +146,10 @@
             <% } %>
             <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}"></a>
         </div>
+    <% } else { %>
+        <% if (user_perm == 'rw') { %>
+        <a class="op-link sf2-icon-trash fright" href="<%= site_root %>dir/recycle/<%- repo_id %>/?dir_path=<% print(encodeURIComponent(path)); %>" title="{% trans 'Trash' %}"></a>
+        <% } %>
     <% } %>
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
