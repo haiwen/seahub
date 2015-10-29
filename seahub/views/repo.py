@@ -370,7 +370,7 @@ def _download_dir_from_share_link(request, fileshare, repo, real_path):
             request, _(u'Unable to access file: share link traffic is used up.'))
 
     shared_by = fileshare.username
-    if fileshare.path == '/':
+    if real_path == '/':
         dirname = repo.name
     else:
         dirname = os.path.basename(real_path.rstrip('/'))
