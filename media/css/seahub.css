@@ -3718,3 +3718,69 @@ img.thumbnail {
 .web-setting-form .submit {
     margin-right:5px;
 }
+/* view shared dir */
+.mode-link {
+    display:inline-block;
+    padding:4px 6px;
+    background:#fff;
+    border:1px solid #ccc;
+    font-size:0;
+    line-height:0;
+}
+.list-mode-link {
+    border-right:0;
+}
+.cur-mode-link {
+    background:#eee;
+}
+.shared-dir-zip {
+    margin-left:5px;
+}
+.grid {
+    display:inline-block;
+    width:100px;
+    padding:10px 24px;
+    position:relative;
+}
+.grid .img-link,
+.grid .text-link {
+    display:block;
+    text-align:center;
+}
+.grid .img-link {
+    height:100px;
+    font-size:0;
+    line-height:0;
+    border-radius:3px;
+    margin-bottom:6px;
+}
+.grid .img-link:before {
+    content:' ';
+    display:inline-block;
+    vertical-align:middle;
+    height:100%;
+}
+.grid .thumbnail {
+    max-width:96px;
+    max-height:96px;
+    padding:1px;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
+.grid .text-link {
+    color:#333;
+    font-size:14px;
+    line-height:17px;
+    height:34px;
+    white-space:normal;
+}
+.grid .op-icon {
+    position:absolute;
+    top:10px;
+    right:24px;
+    padding:2px 6px;
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:3px;
+    margin:0;
+}

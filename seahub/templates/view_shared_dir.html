@@ -16,16 +16,25 @@
                 {% trans "Current path: "%}
                 {% for name, link in zipped %}
                 {% if not forloop.last %}
-                <a href="{% url "view_shared_dir" token %}?p={{ link|urlencode }}">{{ name }}</a> /
+                <a href="{% url "view_shared_dir" token %}?p={{ link|urlencode }}&mode={{mode}}">{{ name }}</a> /
                 {% else %}
                 {{ name }}
                 {% endif %}
                 {% endfor %}
                 </p>
-                {% if not traffic_over_limit %}
-                <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn fright">{% trans "ZIP"%}</a>
-                {% endif %}
+
+                <div class="fright">
+                    <a href="?p={{ path|urlencode }}&mode=list" title="{% trans "List" %}" class="mode-link vam{% if mode == 'list' %} cur-mode-link{% endif %} list-mode-link">
+                        <img src="{{ MEDIA_URL }}img/list.png" alt="" width="20" />
+                    </a><a href="?p={{ path|urlencode }}&mode=grid" title="{% trans "Grid" %}" class="mode-link vam{% if mode == 'grid' %} cur-mode-link{% endif %}">
+                        <img src="{{ MEDIA_URL }}img/grid.png" alt="" width="20" />
+                    </a>
+                    {% if not traffic_over_limit %}
+                    <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn vam shared-dir-zip">{% trans "ZIP"%}</a>
+                    {% endif %}
+                </div>
             </div>
+    {% if mode == 'list' %}
             <table class="repo-file-list" style="table-layout:fixed;">
                 <tr>
                     <th width="5%"></th>
@@ -38,9 +47,8 @@
                 <tr>
                     <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>
-                        <a href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                        <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}">{{ dirent.obj_name }}</a>
                     </td>
-
                     <td></td>
                     <td>
                       {% if not traffic_over_limit %}
@@ -83,6 +91,51 @@
                 </tr>
                 {% endfor %}
             </table>
+    {% else %}
+        <ul class="repo-file-list">
+            {% for dirent in dir_list %}
+            <li class="grid" title="{{ dirent.obj_name }}">
+                <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}" class="img-link">
+                    <img src="{{ MEDIA_URL }}img/folder-beige-128.png" alt="" width="96" class="vam" />
+                </a>
+                <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}" class="text-link ellipsis">{{ dirent.obj_name }}</a>
+                {% if not traffic_over_limit %}
+                <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}">
+                    <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                </a>
+                  {% endif %}
+            </li>
+            {% endfor %}
+
+            {% for dirent in file_list %}
+            <li class="file-item grid" data-name="{{dirent.obj_name}}" title="{{dirent.obj_name}}">
+                <a class="img-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">
+                {% if dirent.allow_generate_thumbnail %}
+                    {% if dirent.encoded_thumbnail_src %}
+                        <img class="thumbnail vam" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="" />
+                    {% else %}
+                        <img class="not-thumbnail vam" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:128 }}" alt="" width="96" />
+                    {% endif %}
+                {% else %}
+                    <img class="vam" src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter:128 }}" alt="" width="96" />
+                {% endif %}
+                </a>
+
+                {% if dirent.is_img %}
+                <a class="normal img-name-link text-link ellipsis" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" data-mfp-src="{% url "view_raw_shared_file" token dirent.obj_id dirent.obj_name %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                {% else %}
+                <a class="normal text-link ellipsis" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">{{ dirent.obj_name }}</a>
+                {% endif %}
+
+                {% if not traffic_over_limit %}
+                <a class="op-icon vh" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}">
+                    <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                </a>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}
 
 {% block extra_script %}
@@ -129,7 +182,7 @@ $(function() {
         var img_icon = $(img_icons[i]),
             file_name = img_icon.closest('.file-item').attr('data-name');
         $.ajax({
-            url: '{% url "share_link_thumbnail_create" token %}?path=' + e(cur_path + file_name),
+            url: '{% url "share_link_thumbnail_create" token %}?path=' + e(cur_path + file_name) + '&size={{thumbnail_size}}',
             cache: false,
             dataType: 'json',
             success: function(data) {
@@ -150,5 +203,18 @@ $(function() {
     get_thumbnail(0);
 });
 {% endif %}
+
+$('.grid').hover(
+    function () {
+        $('.img-link', $(this)).css({'background': '#f8f8f8'});
+        $('.text-link', $(this)).css({'color': '#f93'});
+        $('.op-icon', $(this)).removeClass('vh');
+    },
+    function () {
+        $('.img-link', $(this)).css({'background': '#fff'});
+        $('.text-link', $(this)).css({'color': '#333'});
+        $('.op-icon', $(this)).addClass('vh');
+    }
+);
 </script>
 {% endblock %}

@@ -35,7 +35,8 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_commit_before_new_merge, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
-    ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+    ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
+    THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src, \
@@ -480,6 +481,13 @@ def view_shared_dir(request, token):
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
+    # mode to view dir/file items 
+    mode = request.GET.get('mode', 'list')
+    if mode != 'list':
+        mode = 'grid'
+
+    thumbnail_size = THUMBNAIL_DEFAULT_SIZE if mode == 'list' else THUMBNAIL_SIZE_FOR_GRID
+
     for f in file_list:
 
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
@@ -489,9 +497,9 @@ def view_shared_dir(request, token):
         real_image_path = posixpath.join(real_path, f.obj_name)
         if allow_generate_thumbnail(request, repo_id, real_image_path):
              f.allow_generate_thumbnail = True
-             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
+             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
                 req_image_path = posixpath.join(req_path, f.obj_name)
-                src = get_share_link_thumbnail_src(token, THUMBNAIL_DEFAULT_SIZE, req_image_path)
+                src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
                 f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('view_shared_dir.html', {
@@ -505,6 +513,8 @@ def view_shared_dir(request, token):
             'zipped': zipped,
             'traffic_over_limit': traffic_over_limit,
             'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
+            'mode': mode,
+            'thumbnail_size': thumbnail_size,
             }, context_instance=RequestContext(request))
 
 def view_shared_upload_link(request, token):
