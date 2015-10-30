@@ -1098,6 +1098,25 @@ class RepoOwner(APIView):
                             content_type=json_content_type)
 
 ########## File related
+class FileBlockDownloadLinkView(APIView):
+    authentication_classes = (TokenAuthentication, )
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, file_id, block_id, format=None):
+        parent_dir = request.GET.get('p', '/')
+        if check_folder_permission(request, repo_id, parent_dir) is None:
+            return api_error(status.HTTP_403_FORBIDDEN,
+                    'You do not have permission to access this repo.')
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+
+        token = seafile_api.get_fileserver_access_token(
+                repo_id, file_id, 'downloadblks', request.user.username)
+        url = gen_block_get_url(token, block_id)
+        return Response(url)
+
 class UploadLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
@@ -1151,7 +1170,7 @@ class UploadBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks', request.user.username, use_onetime = False)
+            repo_id, 'dummy', 'upload-blks-api', request.user.username, use_onetime = False)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1170,7 +1189,7 @@ class UpdateBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks', request.user.username)
+            repo_id, 'dummy', 'update-blks-api', request.user.username)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
@@ -1315,13 +1334,11 @@ def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
             repo = get_repo(repo_id)
             encrypted = repo.encrypted
             enc_version = repo.enc_version
-        token = seafile_api.get_fileserver_access_token(
-            repo_id, file_id, op, request.user.username)
-        url = gen_block_get_url(token, None)
+
         res = {
-            'blklist':blklist,
-            'url':url,
-            'encrypted':encrypted,
+            'file_id': file_id,
+            'blklist': blklist,
+            'encrypted': encrypted,
             'enc_version': enc_version,
             }
         response = HttpResponse(json.dumps(res), status=200,
