@@ -431,8 +431,12 @@ def render_recycle_root(request, repo_id):
 
     try:
         deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days)
-    except:
-        deleted_entries = []
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _('Internal server error'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
 
     dir_list = []
     file_list = []
@@ -483,7 +487,15 @@ def render_recycle_dir(request, repo_id, commit_id):
     if not repo:
         raise Http404
 
-    commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
+    try:
+        commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _('Internal server error'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
+
     if not commit:
         raise Http404
 
@@ -528,8 +540,12 @@ def render_dir_recycle_root(request, repo_id, dir_path):
         deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id,
                                                             days,
                                                             dir_path)
-    except:
-        deleted_entries = []
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _('Internal server error'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
 
     dir_list = []
     file_list = []
@@ -570,7 +586,15 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
     if not repo:
         raise Http404
 
-    commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
+    try :
+        commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
+    except SearpcError as e:
+        logger.error(e)
+        messages.error(request, _('Internal server error'))
+        referer = request.META.get('HTTP_REFERER', None)
+        next = settings.SITE_ROOT if referer is None else referer
+        return HttpResponseRedirect(next)
+
     if not commit:
         raise Http404
 
