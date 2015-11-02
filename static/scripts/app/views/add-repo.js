@@ -36,7 +36,13 @@ define([
 
         events: {
             "submit": "addRepo",
-            "click #encrypt-switch": "togglePasswdInput"
+            "click #encrypt-switch": "togglePasswdInput",
+            "keyup [type='password']": "hideErrAndEnbaleBtn"
+        },
+
+        hideErrAndEnbaleBtn: function() {
+            this.$('.error').html('').hide();
+            Common.enableButton(this.$('[type="submit"]'));
         },
 
         // Generate the attributes for a new GroupRepo item.
