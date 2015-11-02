@@ -62,7 +62,7 @@ try:
     from seahub.settings import CHECK_SHARE_LINK_TRAFFIC
 except ImportError:
     CHECK_SHARE_LINK_TRAFFIC = False
-    
+
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
     conf = os.path.join(os.environ['SEAFILE_CONF_DIR'], 'seafile.conf')

@@ -10,8 +10,6 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.base.sudo_mode import sudo_mode_check
 from seahub.utils import render_error
 from django.utils.translation import ugettext as _
-from seahub.views.modules import get_enabled_mods_by_user, \
-    get_available_mods_by_user
 from seahub.settings import FORCE_SERVER_CRYPTO, ENABLE_SUDO_MODE
 
 def sys_staff_required(func):
@@ -83,3 +81,6 @@ def require_POST(func):
             return HttpResponseNotAllowed(['POST'])
         return func(request, *args, **kwargs)
     return decorated
+
+from seahub.views.modules import get_enabled_mods_by_user, \
+    get_available_mods_by_user  # Move here to avoid circular import
