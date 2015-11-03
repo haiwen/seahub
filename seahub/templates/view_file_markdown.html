@@ -1,7 +1,10 @@
 {% extends 'view_file_base.html' %}
 {% load i18n %}
 {% load url from future %}
-
+{% block extra_style %}{{block.super}}
+    <link rel="stylesheet" href="{{MEDIA_URL}}css/editormd.preview.min.css" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}css/editormd.min.css" />
+{% endblock %}
 {% block update_detail %}
 {% if last_commit_id %}
   <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
@@ -27,22 +30,26 @@
     {% endif %}
 
     {% ifnotequal file_content None %}
-    <div id="md-view" class="article"></div>
+    <div id="md-view">
+        <textarea style="display:none">{{file_content|escape}}</textarea>
+    </div>
     {% endifnotequal %}
     
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/jq.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/underscore.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/editormd.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/marked.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/prettify.min.js"></script>
 <script type="text/javascript">
     {% ifnotequal file_content None %}
-    var converter = new Markdown.Converter();
-    {% include 'snippets/md_xss.html' %}
-    Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
-    $('#md-view').html(converter.makeHtml('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');
+        var testEditormdView2;
+        testEditormdView2 = editormd.markdownToHTML("md-view", {
+            path : "{{MEDIA_URL}}js/"
+        });
     {% endifnotequal %}
-
     $('#file-enc').change(function() {
         var file_enc = $(this).val();
         var s = location.search;

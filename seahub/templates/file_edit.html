@@ -5,15 +5,16 @@
 
 {% block extra_style %}
 {% if filetype == 'Text' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/codemirror.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}editormd/codemirror/codemirror.css" />
 <style type="text/css">
 .CodeMirror-focused pre.CodeMirror-cursor { visibility: visible; }
 .CodeMirror-scroll { height:auto; min-height:700px; }
 </style>
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}codemirror/monokai.css" />
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}editormd/codemirror/monokai.css" />
 {% endif %}
 {% if filetype == 'Markdown' %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/pagedown.css" />
+<link rel="stylesheet" href="{{MEDIA_URL}}css/editormd.preview.min.css" />
+<link rel="stylesheet" href="{{MEDIA_URL}}css/editormd.min.css" />
 <style type="text/css">
 #main { min-height:0; }
 .withpd { padding:40px 96px; }
@@ -83,10 +84,6 @@
          </p>
          <div id="op-after-edit" class="fright vh">
              <span id="saved-tip" class="tip hide">{% trans "Draft saved." %}</span>
-             {% if filetype == 'Markdown' %}
-             <button id="source-code-btn" class="hide">{% trans "Continue editing" %}</button>
-             <button id="preview-btn">{% trans "Preview" %}</button>
-             {% endif %}
              <button id="file-edit-submit">{% trans "Submit" %}</button>
              <a href="{{cancel_url}}" id="file-edit-cancel">{% trans "Cancel" %}</a>
          </div>
@@ -104,55 +101,8 @@
                 {% endif %}
 
                 {% if filetype == 'Markdown' %}
-                <div id="md-edit">
-                    <div id="wmd-button-bar"></div>
-                    <textarea class="wmd-input hide" id="wmd-input">{{ file_content|escape }}</textarea>
-                    <div id="wmd-preview" class="article hide"></div>
-                </div>
-
-                <div id="md-edit-help" class="hide">
-                  <h3>{% trans "Standard Syntax"%}</h3>
-                  <table>
-                    <tbody>
-                        <tr>
-                            <th>{% trans "Enter this" %}</th>
-                            <th>{% trans "To see this" %}</th>
-                        </tr>
-                        <tr>
-                            <td><pre>**{% trans "bold" %}** {% trans "text" %}</pre></td>
-                            <td><strong class="bold">{% trans "bold" %}</strong> {% trans "text" %}</td>
-                        </tr>
-                        <tr>
-                            <td><pre>*{% trans "italics" %}* {% trans "text" %}</pre></td>
-                            <td><span class="italic">{% trans "italics" %}</span> {% trans "text" %}</td>
-                        </tr>
-                        <tr>
-                            <td><pre>{% trans "Header" %}
-====== </pre></td>
-                            <td>
-                                <h3>{% trans "Header" %}</h3>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><pre>{% trans "Smaller header" %}
---------- </pre></td>
-                            <td><h4>{% trans "Smaller header" %}</h4></td>
-                        </tr>
-                        <tr>
-                            <td><pre>[{% trans "Link something" %}](https://cloud.seafile.com/)</pre></td>
-                            <td><a href="https://cloud.seafile.com/">{% trans "Link something" %}</a></td>
-                        </tr>
-                        <tr>
-                            <td><pre>![{% trans "alt text" %}](https://cloud.seafile.com/media/img/seafile_logo.png)</pre></td>
-                            <td><img src="https://cloud.seafile.com/media/img/seafile_logo.png" alt="" /></td>
-                        </tr>
-                  </tbody></table>
-                  <h3>{% trans "Extended Syntax for Wiki"%}</h3>
-                  <ul>
-                    <li><p>[[page name]] {% trans "or" %} [[display name|page name]] : {% trans "internal link to another wiki page." %}</p></li>
-                    <li><p>[[images/pic.jpg]]: {% trans "internal link to a picture at this-library/images/pic.jpg." %}</p></li>
-                    <li><p>[[folder/file.doc]]: {% trans "internal link to a file at this-library/folder/file.doc." %}</p></li>
-                  </ul>
+                <div id='md-input'>
+                    <textarea style="display:none">{{file_content|escape}}</textarea>
                 </div>
                 {% endif %}
 
@@ -175,7 +125,7 @@
     <div id="load-draft" class="hide">
         <h3>{% trans "Draft Available" %}</h3>
         <p>{% trans "There's a saved draft for this file, would you like to load it?" %}</p>
-        <button id="load-draft-btn">{% trans "Load" %}</button>
+        <button class="simplemodal-close" id="load-draft-btn">{% trans "Load" %}</button>
         <button class="simplemodal-close" id="discard-draft-btn">{% trans "Discard" %}</button>
     </div>
 {% endblock %}
@@ -210,13 +160,13 @@ if ('localStorage' in window && window['localStorage'] !== null) {
 </script>
 
 {% if filetype == 'Text' %}
-<script type="text/javascript" src="{{MEDIA_URL}}codemirror/codemirror-2.36.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/codemirror/codemirror-2.36.js"></script>
 {% endif %}
 
 {% if filetype == 'Markdown' %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Editor.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/jq.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/underscore.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}editormd/editormd.min.js"></script>
 {% endif %}
 
 {% endif %}
@@ -240,19 +190,21 @@ if ('localStorage' in window && window['localStorage'] !== null) {
 
     var saved_tip = $('#saved-tip');
     function saveDraft() {
-        var draft;
-        {% if filetype == 'Text' %}
-        draft = editor.getValue();
-        {% endif %}
-        {% if filetype == 'Markdown' %}
-        draft = $('#wmd-input').val();
-        {% endif %}
-        browserStorage.set(key, draft);
-        saved_tip.removeClass('hide');
+        setTimeout(function() {
+            var draft;
+            {% if filetype == 'Text' %}
+            draft = editor.getValue();
+            {% endif %}
+            {% if filetype == 'Markdown' %}
+            draft = $('.editormd-markdown-textarea').val();
+            {% endif %}
+            browserStorage.set(key, draft);
+            saved_tip.removeClass('hide');
+        }, 300);
     }
 
     {% if filetype == 'Markdown' %}
-    $('#wmd-input').on('keyup', saveDraft);
+    $('#md-input').on('keyup', saveDraft);
     {% endif %}
 
     $('#load-draft-btn').click(function() {
@@ -261,7 +213,68 @@ if ('localStorage' in window && window['localStorage'] !== null) {
         editor.setValue(saved_draft);
         {% endif %}
         {% if filetype == 'Markdown' %}
-        $('#wmd-input').val(saved_draft);
+        $('#md-input').remove();
+        $('#file-edit').append('<div id="md-input"><textarea style="display:none">'+saved_draft+'</textarea></div>');
+        var testEditormdView2;
+        testEditormdView2 = editormd("md-input", {
+            width: '80%',
+            toolbarIcons: function() {
+            return ["undo", "redo", "|", "bold", "del", "italic", "quote", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "image", "table", "datetime", "|", "watch", "preview" ,"fullscreen", "search"]
+            },
+            path: "{{MEDIA_URL}}editormd/",
+            lang: {
+                toolbar: {
+                    undo: "{% trans 'Undo(Ctrl+Z)' %}",
+                    redo: "{% trans 'Redo(Ctrl+Y)' %}",
+                    bold: "{% trans 'Bold' %}",
+                    del: "{% trans 'Strikethrough' %}",
+                    italic: "{% trans 'Italic' %}",
+                    quote: "{% trans 'Block quote' %}",
+                    h1: "{% trans 'Heading 1' %}",
+                    h2: "{% trans 'Heading 2' %}",
+                    h3: "{% trans 'Heading 3' %}",
+                    h4: "{% trans 'Heading 4' %}",
+                    h5: "{% trans 'Heading 5' %}",
+                    h6: "{% trans 'Heading 6' %}",
+                    "list-ul": "{% trans 'Unordered list' %}",
+                    "list-ol": "{% trans 'Ordered list' %}",
+                    hr: "{% trans 'Horizontal rule' %}",
+                    link: "{% trans 'Link' %}",
+                    image: "{% trans 'Image' %}",
+                    table: "{% trans 'Tables' %}",
+                    datetime: "{% trans 'Datetime' %}",
+                    watch: "{% trans 'Unwatch' %}",
+                    unwatch:  "{% trans 'Watch' %}",
+                    preview: "{% trans 'HTML Preview (Press Shift + ESC exit)' %}",
+                    fullscreen: "{% trans 'Fullscreen (Press ESC exit)' %}",
+                    search: "{% trans 'Search' %}",
+                },
+                buttons: {
+                    enter: "{% trans 'Confirm' %}",
+                    cancel: "{% trans 'Cancel' %}",
+                    close: "{% trans 'Close' %}"
+                },
+                dialog: {
+                    link: {
+                        title: "{% trans 'Link' %}",
+                        url: "{% trans 'Address' %}",
+                        urlTitle: "{% trans 'Title' %}",
+                        urlEmpty: "{% trans 'Error: Please fill in the link address.' %}"
+                    },
+                    image: {
+                        title: "Image",
+                        url: "Address",
+                        link: "Link",
+                        alt: "Title",
+                        uploadButton: "Upload",
+                        imageURLEmpty: "Error: picture url address can't be empty.",
+                        uploadFileEmpty: "Error: upload pictures cannot be empty!",
+                        formatNotAllowed: "Error: only allows to upload pictures file, upload allowed image file format:"
+                    }
+                }
+            }
+        });
+        $('#md-input').on('keyup', saveDraft);
         {% endif %}
         feedback("{% trans "Draft successfully loaded" %}", 'success', 1000);
     });
@@ -300,70 +313,68 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
 {% endif %}
 
 {% if filetype == 'Markdown' %}
-var converter = new Markdown.Converter();
-converter.hooks.chain("preBlockGamut", function (text, rbg) {
-    return text.replace(/^ {0,3}""" *\n((?:.*?\n)+?) {0,3}""" *$/gm, function (whole, inner) {
-        return "<blockquote>" + rbg(inner) + "</blockquote>\n";
-    });
+var testEditormdView2;
+    testEditormdView2 = editormd("md-input", {
+        width: '80%',
+        toolbarIcons : function() {
+            return ["undo", "redo", "|", "bold", "del", "italic", "quote", "|", "h1", "h2", "h3", "h4", "h5", "h6", "|", "list-ul", "list-ol", "hr", "|", "link", "image", "table", "datetime", "|", "watch", "preview" ,"fullscreen", "search"]
+        },
+        path: "{{MEDIA_URL}}editormd/",
+        lang: {
+            toolbar: {
+                undo: "{% trans 'Undo(Ctrl+Z)' %}",
+                redo: "{% trans 'Redo(Ctrl+Y)' %}",
+                bold: "{% trans 'Bold' %}",
+                del: "{% trans 'Strikethrough' %}",
+                italic: "{% trans 'Italic' %}",
+                quote: "{% trans 'Block quote' %}",
+                h1: "{% trans 'Heading 1' %}",
+                h2: "{% trans 'Heading 2' %}",
+                h3: "{% trans 'Heading 3' %}",
+                h4: "{% trans 'Heading 4' %}",
+                h5: "{% trans 'Heading 5' %}",
+                h6: "{% trans 'Heading 6' %}",
+                "list-ul": "{% trans 'Unordered list' %}",
+                "list-ol": "{% trans 'Ordered list' %}",
+                hr: "{% trans 'Horizontal rule' %}",
+                link: "{% trans 'Link' %}",
+                image: "{% trans 'Image' %}",
+                table: "{% trans 'Tables' %}",
+                datetime: "{% trans 'Datetime' %}",
+                watch: "{% trans 'Unwatch' %}",
+                unwatch: "{% trans 'Watch' %}",
+                preview: "{% trans 'HTML Preview (Press Shift + ESC exit)' %}",
+                fullscreen: "{% trans 'Fullscreen (Press ESC exit)' %}",
+                search: "{% trans 'Search' %}",
+            },
+            buttons: {
+                enter: "{% trans 'Confirm' %}",
+                cancel: "{% trans 'Cancel' %}",
+                close: "{% trans 'Close' %}"
+            },
+            dialog: {
+                link: {
+                    title: "{% trans 'Link' %}",
+                    url: "{% trans 'Address' %}",
+                    urlTitle: "{% trans 'Title' %}",
+                    urlEmpty: "{% trans 'Error: Please fill in the link address.' %}"
+                },
+                image: {
+                    title: "Image",
+                    url: "Address",
+                    link: "Link",
+                    alt: "Title",
+                    uploadButton: "Upload",
+                    imageURLEmpty: "Error: picture url address can't be empty.",
+                    uploadFileEmpty: "Error: upload pictures cannot be empty!",
+                    formatNotAllowed: "Error: only allows to upload pictures file, upload allowed image file format:"
+                }
+            }
+        }
 });
-{% include 'snippets/md_xss.html' %}
-
-Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
-
-var local_toolbar_strs = {
-    bold: "{% trans "Strong <strong> Ctrl+B" %}",
-    boldexample: "{% trans "strong text" %}",
-
-    italic: "{% trans "Emphasis <em> Ctrl+I" %}",
-    italicexample: "{% trans "emphasized text" %}",
-
-    link: "{% trans "Hyperlink <a> Ctrl+L" %}",
-    linkdescription: "{% trans "enter link description here" %}",
-    linkdialog: "<h3>{% trans "Insert Hyperlink" %}</h3><p>http://example.com/ \"{% trans "optional title" %}\"</p>",
-
-    quote: "{% trans "Blockquote <blockquote> Ctrl+Q" %}",
-    quoteexample: "{% trans "Blockquote" %}",
-
-    code: "{% trans "Code Sample <pre><code> Ctrl+K" %}",
-    codeexample: "{% trans "enter code here" %}",
-
-    image: "{% trans "Image <img> Ctrl+G" %}",
-    imagedescription: "{% trans "enter image description here" %}",
-    imagedialog: "<h3>{% trans "Insert Image" %}</h3><p>http://example.com/images/diagram.jpg \"{% trans "optional title" %}\"</p>",
-
-    olist: "{% trans "Numbered List <ol> Ctrl+O" %}",
-    ulist: "{% trans "Bulleted List <ul> Ctrl+U" %}",
-    litem: "{% trans "List item" %}",
-
-    heading: "{% trans "Heading <h1>/<h2> Ctrl+H" %}",
-    headingexample: "{% trans "Heading" %}",
-
-    hr: "{% trans "Horizontal Rule <hr> Ctrl+R" %}",
-    undo: "{% trans "Undo - Ctrl+Z" %}",
-    redo: "{% trans "Redo - Ctrl+Y" %}",
-    redomac: "{% trans "Redo - Ctrl+Shift+Z" %}",
-
-    help: "{% trans "Editing Help" %}"
-};
-
-var editor = new Markdown.Editor(converter, null, { helpButton: { handler: mdEditHelp }, strings: local_toolbar_strs });
-editor.run();
-
 var file_edit = $('#file-edit'); 
 var file_edit_styles = {'min-height':0, 'padding-bottom':50, 'height':$(window).height() - $('#path-op').outerHeight() - parseInt(file_edit.css('padding-top')) - 51};
 file_edit.css(file_edit_styles).removeClass('hide');
-$('#wmd-input').css({'height':file_edit.height() - $('#file-enc-conf').outerHeight(true) - $('#wmd-button-bar').outerHeight() - parseInt($('#wmd-input').css('padding-top'))*2}).removeClass('hide');
-
-$('#preview-btn, #source-code-btn').click(function() {
-    $('#wmd-button-bar, #wmd-input, #wmd-preview, #source-code-btn, #preview-btn').toggleClass('hide');
-    $('#md-edit').toggleClass('withpd');
-    if (!$('#wmd-input').hasClass('hide')) {
-        file_edit.css(file_edit_styles);
-    } else {
-        file_edit.removeAttr('style');
-    }
-});
-$('#wmd-preview').children(':first').css('margin-top', '0');
 
 function mdEditHelp() {
     $('#md-edit-help').modal();
@@ -381,7 +392,7 @@ function editSubmit() {
     var content = editor.getValue();
     {% endif %}
     {% if filetype == 'Markdown' %}
-    var content = $('#wmd-input').val();
+    var content = $('.editormd-markdown-textarea').val();
     {% endif %}
 
     $.ajax({

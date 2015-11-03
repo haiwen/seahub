@@ -1,4 +1,4 @@
-/****** icon-xx ********/
+***** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
 @font-face {
     font-family: 'FontAwesome';
@@ -3711,4 +3711,14 @@ img.thumbnail {
 }
 .web-setting-form .submit {
     margin-right:5px;
+}
+
+/* editor.md */
+#md-view a ,
+.editormd-preview .editormd-preview-container a {
+    color:#eb8205;
+}
+.editormd-form input[type=number] {
+    height:36px;
+    border-radius:4px;
 }
