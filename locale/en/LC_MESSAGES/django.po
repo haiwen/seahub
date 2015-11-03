@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-30 11:27+0800\n"
+"POT-Creation-Date: 2015-11-03 11:10+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -6088,16 +6088,6 @@ msgstr ""
 msgid "System"
 msgstr ""
 
-#: seahub/templates/sysadmin/sys_org_admin.html:7
-msgid "Search orgs by name..."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_admin.html:16
-#: seahub/templates/sysadmin/sys_useradmin.html:21
-#: seahub/templates/sysadmin/sys_useradmin_paid.html:21
-msgid "Paid"
-msgstr ""
-
 #: seahub/templates/sysadmin/sys_org_admin.html:19
 #: seahub/templates/sysadmin/sys_org_admin.html:23
 msgid "Add organization"
@@ -6113,11 +6103,6 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:49
 msgid "None."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_admin.html:62
-#: seahub/templates/sysadmin/sys_org_search.html:27
-msgid "Delete org"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:78
@@ -6278,10 +6263,6 @@ msgstr ""
 msgid ""
 "Edit succeeded, but failed to send email, please check your email "
 "configuration."
-msgstr ""
-
-#: seahub/templates/sysadmin/sys_org_search.html:6
-msgid "Search Org"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_search.html:9
@@ -6803,7 +6784,7 @@ msgid "Destination path is too long for %s."
 msgstr ""
 
 #: seahub/views/ajax.py:1088
-msgid "You do not have permission to copy files/dirs in this directory"
+msgid "You do not have permission to copy files/folders in this directory"
 msgstr ""
 
 #: seahub/views/ajax.py:1172
