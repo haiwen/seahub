@@ -626,25 +626,6 @@ def list_priv_shared_folders(request):
             'shared_folders': shared_folders,
             }, context_instance=RequestContext(request))
 
-@login_required
-def view_priv_shared_folder(request, repo_id):
-    """
-
-    Arguments:
-    - `request`:
-    - `repo_id`:
-    """
-    repo = seafile_api.get_repo(repo_id)
-    if repo is None:
-        raise Http404
-
-    if not repo.is_virtual:
-        raise Http404
-
-    url = reverse('view_common_lib_dir',
-            args=[repo.origin_repo_id, repo.origin_path.strip('/')])
-    return HttpResponseRedirect(url)
-
 @login_required_ajax
 def share_permission_admin(request):
     """Change repo share permission in ShareAdmin.
