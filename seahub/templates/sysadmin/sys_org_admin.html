@@ -4,7 +4,7 @@
 
 {% block left_panel %}{{block.super}}
 <form action="{% url 'sys_org_search' %}" method="get" class="side-search-form">
-    <input type="text" name="name" class="input" value="" placeholder="{% trans "Search orgs by name..." %}" />
+    <input type="text" name="name" class="input" value="" placeholder="Search orgs by name..." />
 </form>
 {% endblock %}
 
@@ -13,7 +13,7 @@
     <ul class="tabnav-tabs">
         <li class="tabnav-tab {% if all_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}">{% trans "All" %}</a></li>
         {% if enable_org_plan %}
-        <li class="tabnav-tab {% if paid_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}?filter=paid">{% trans "Paid" %}</a></li>
+        <li class="tabnav-tab {% if paid_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}?filter=paid">Paid</a></li>
         {% endif %}
     </ul>
     <button id="add-btn" class="fright">{% trans "Add organization" %}</button>
@@ -59,7 +59,7 @@ $('#add-btn').click(function() {
 });
 
 addConfirmTo($('.remove-btn'), {
-    'title':"{% trans "Delete org" %}",
+    'title':"Delete org",
     'con':"{% trans "Are you sure you want to delete %s ?" %}",
     'post': true // post request
 });

@@ -1085,7 +1085,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     username = request.user.username
 
     if check_folder_permission(request, src_repo_id, src_path) is None:
-        error_msg = _(u'You do not have permission to copy files/dirs in this directory')
+        error_msg = _(u'You do not have permission to copy files/folders in this directory')
         result['error'] = error_msg
         return HttpResponse(json.dumps(result), status=403, content_type=content_type)
 
