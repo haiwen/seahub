@@ -8,9 +8,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-09-14 15:39+0800\n"
-"PO-Revision-Date: 2015-09-22 18:59+0000\n"
-"Last-Translator: Bjørn Tore Hoem <bthoem@cloudwalker.no>\n"
+"POT-Creation-Date: 2015-11-03 11:11+0800\n"
+"PO-Revision-Date: 2015-10-30 03:30+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Norwegian Bokmål (Norway) (http://www.transifex.com/haiwen/seahub/language/nb_NO/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -19,10 +19,11 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: static/scripts/common.js:160 static/scripts/common.js.c:250
-#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:816
-#: static/scripts/app/views/dir.js.c:873
-#: static/scripts/app/views/dirent.js:406
-#: static/scripts/app/views/dirent.js:432
+#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:835
+#: static/scripts/app/views/dir.js.c:892
+#: static/scripts/app/views/dirent.js:279
+#: static/scripts/app/views/dirent.js:423
+#: static/scripts/app/views/dirent.js:449
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
@@ -32,29 +33,29 @@ msgstr ""
 #: static/scripts/app/views/group-repo.js:58
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
-#: static/scripts/app/views/repo.js:81 static/scripts/app/views/share.js:352
-#: static/scripts/app/views/share.js:615 static/scripts/app/views/share.js:673
-#: static/scripts/app/views/sub-lib.js:79
+#: static/scripts/app/views/repo.js:83 static/scripts/app/views/share.js:352
+#: static/scripts/app/views/share.js:620 static/scripts/app/views/share.js:679
+#: static/scripts/app/views/sub-lib.js:81
 msgid "Failed. Please check the network."
 msgstr "Feilet. Vennligst sjekk nettverkstilkoblingen."
 
-#: static/scripts/common.js:513
+#: static/scripts/common.js:518
 msgid "Search users or enter emails"
 msgstr "Søk i brukere eller skriv inn epostadresser"
 
-#: static/scripts/common.js:523
+#: static/scripts/common.js:528
 msgid "Please enter 1 or more character"
 msgstr "Vennligst skriv inn 1 eller flere bokstaver"
 
-#: static/scripts/common.js:524
+#: static/scripts/common.js:529
 msgid "No matches"
 msgstr "Ingen treff"
 
-#: static/scripts/common.js:525
+#: static/scripts/common.js:530
 msgid "Searching..."
 msgstr "Søker..."
 
-#: static/scripts/common.js:526
+#: static/scripts/common.js:531
 msgid "Loading failed"
 msgstr "Innlasting feilet"
 
@@ -137,27 +138,26 @@ msgstr "Åpne i ny fane"
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr "<a href=\"%url%\" target=\"_blank\">Bildet</a> kunne ikke lastes inn."
 
-#: static/scripts/app/views/dir.js:124
+#: static/scripts/app/views/dir.js:143
 #: static/scripts/app/views/group-side-nav.js:39
-#: static/scripts/app/views/group.js:111
-#: static/scripts/app/views/myhome-repos.js:92
+#: static/scripts/app/views/group.js:112
+#: static/scripts/app/views/myhome-repos.js:93
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78
-#: static/scripts/app/views/organization.js:123
+#: static/scripts/app/views/organization.js:124
 msgid "Please check the network."
 msgstr "Vennligst sjekk nettverkstilkoblingen."
 
-#: static/scripts/app/views/dir.js:150
+#: static/scripts/app/views/dir.js:169
 msgid "Password is required."
 msgstr "Passord er påkrevd."
 
-#: static/scripts/app/views/dir.js:317 static/scripts/app/views/dir.js.c:374
-#: static/scripts/app/views/dirent.js:235
+#: static/scripts/app/views/dir.js:336 static/scripts/app/views/dir.js.c:393
 msgid "It is required."
 msgstr "Påkrevd"
 
-#: static/scripts/app/views/dir.js:332 static/scripts/app/views/dir.js.c:399
-#: static/scripts/app/views/dirent.js:254
+#: static/scripts/app/views/dir.js:351 static/scripts/app/views/dir.js.c:418
+#: static/scripts/app/views/dirent.js:264
 #: static/scripts/app/views/fileupload.js:344
 #: static/scripts/app/views/fileupload.js:358
 #: static/scripts/app/views/fileupload.js:370
@@ -166,116 +166,116 @@ msgstr "Påkrevd"
 msgid "Just now"
 msgstr "Nettopp"
 
-#: static/scripts/app/views/dir.js:380
+#: static/scripts/app/views/dir.js:399
 msgid "Only an extension there, please input a name."
 msgstr "Dette er bare en endelse - vennligst tast inn et navn."
 
-#: static/scripts/app/views/dir.js:538 static/scripts/app/views/dir.js.c:667
+#: static/scripts/app/views/dir.js:557 static/scripts/app/views/dir.js.c:686
 msgid "Processing..."
 msgstr "Behandler..."
 
-#: static/scripts/app/views/dir.js:574
+#: static/scripts/app/views/dir.js:593
 msgid "Successfully deleted %(name)s."
 msgstr "Vellykket sletting av %(name)s."
 
-#: static/scripts/app/views/dir.js:576
+#: static/scripts/app/views/dir.js:595
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr "Vellykket sletting av %(name)s og 1 annet element."
 
-#: static/scripts/app/views/dir.js:578
+#: static/scripts/app/views/dir.js:597
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr "Vellykket sletting av  %(name)s og %(amount)s andre elementer."
 
-#: static/scripts/app/views/dir.js:585
+#: static/scripts/app/views/dir.js:604
 msgid "Failed to delete %(name)s."
 msgstr "Kunne ikke slette %(name)s."
 
-#: static/scripts/app/views/dir.js:587
+#: static/scripts/app/views/dir.js:606
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr "Mislykket sletting av %(name)s og 1 annet element."
 
-#: static/scripts/app/views/dir.js:589
+#: static/scripts/app/views/dir.js:608
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr "Mislykket sletting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:602
+#: static/scripts/app/views/dir.js:621
 msgid "Delete Items"
 msgstr "Slett elementer"
 
-#: static/scripts/app/views/dir.js:603
+#: static/scripts/app/views/dir.js:622
 msgid "Are you sure you want to delete these selected items?"
 msgstr "Er du sikker på at du ønsker å slette de valgte elementene?"
 
-#: static/scripts/app/views/dir.js:617
+#: static/scripts/app/views/dir.js:636
 msgid "Move selected item(s) to:"
 msgstr "Flytt valgte element(er) til:"
 
-#: static/scripts/app/views/dir.js:617
+#: static/scripts/app/views/dir.js:636
 msgid "Copy selected item(s) to:"
 msgstr "Kopiere valgte element(er) til:"
 
-#: static/scripts/app/views/dir.js:662 static/scripts/app/views/dirent.js:331
+#: static/scripts/app/views/dir.js:681 static/scripts/app/views/dirent.js:348
 msgid "Invalid destination path"
 msgstr "Ugyldig destinasjonsbane"
 
-#: static/scripts/app/views/dir.js:710
+#: static/scripts/app/views/dir.js:729
 msgid "Successfully moved %(name)s."
 msgstr "Vellykket flytting av %(name)s."
 
-#: static/scripts/app/views/dir.js:712
+#: static/scripts/app/views/dir.js:731
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Vellykket sletting av %(name)s samt 1 annet element."
 
-#: static/scripts/app/views/dir.js:714
+#: static/scripts/app/views/dir.js:733
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Vellykket flytting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:718
+#: static/scripts/app/views/dir.js:737
 msgid "Successfully copied %(name)s."
 msgstr "Vellykket kopiering av %(name)s."
 
-#: static/scripts/app/views/dir.js:720
+#: static/scripts/app/views/dir.js:739
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Vellykket kopiering av %(name)s og 1 øvrig element."
 
-#: static/scripts/app/views/dir.js:722
+#: static/scripts/app/views/dir.js:741
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Vellykket kopiering av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:734
+#: static/scripts/app/views/dir.js:753
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr "Intern feil. Mislykket flytting av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:736
+#: static/scripts/app/views/dir.js:755
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Intern feil. Mislykket forsøk på flytting av %(name)s."
 
-#: static/scripts/app/views/dir.js:740
+#: static/scripts/app/views/dir.js:759
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s og %(amount)s øvrige elementer."
 
-#: static/scripts/app/views/dir.js:742
+#: static/scripts/app/views/dir.js:761
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Intern feil. Mislykket forsøk på kopiering av %(name)s."
 
-#: static/scripts/app/views/dir.js:782
+#: static/scripts/app/views/dir.js:801
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Flytter fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:782
+#: static/scripts/app/views/dir.js:801
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopierer fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:804
+#: static/scripts/app/views/dir.js:823
 msgid "Failed to move %(name)s"
 msgstr "Kunne ikke flytte %(name)s"
 
-#: static/scripts/app/views/dir.js:804
+#: static/scripts/app/views/dir.js:823
 msgid "Failed to copy %(name)s"
 msgstr "Kunne ikke kopiere %(name)s"
 
-#: static/scripts/app/views/dir.js:864 static/scripts/app/views/dirent.js:395
-#: static/scripts/app/views/dirent.js:423
+#: static/scripts/app/views/dir.js:883 static/scripts/app/views/dirent.js:412
+#: static/scripts/app/views/dirent.js:440
 msgid "Canceled."
 msgstr "Avbrutt."
 
@@ -283,43 +283,31 @@ msgstr "Avbrutt."
 msgid "locked by {placeholder}"
 msgstr "låst av {placeholder}"
 
-#: static/scripts/app/views/dirent.js:203
+#: static/scripts/app/views/dirent.js:198
 msgid "Successfully deleted %(name)s"
 msgstr "Vellykket sletting av %(name)s"
 
-#: static/scripts/app/views/dirent.js:216
-msgid "Rename Directory"
-msgstr "Omdøpe mappe"
-
-#: static/scripts/app/views/dirent.js:216
-msgid "Rename File"
-msgstr "Omdøpe fil"
-
-#: static/scripts/app/views/dirent.js:239
-msgid "You have not renamed it."
-msgstr "Du har ikke omdøpt den."
-
-#: static/scripts/app/views/dirent.js:291
+#: static/scripts/app/views/dirent.js:308
 msgid "Move {placeholder} to:"
 msgstr "Flytt {placeholder} til:"
 
-#: static/scripts/app/views/dirent.js:291
+#: static/scripts/app/views/dirent.js:308
 msgid "Copy {placeholder} to:"
 msgstr "Kopiere {placeholder} til:"
 
-#: static/scripts/app/views/dirent.js:365
+#: static/scripts/app/views/dirent.js:382
 msgid "Moving %(name)s"
 msgstr "Flytter %(name)s"
 
-#: static/scripts/app/views/dirent.js:365
+#: static/scripts/app/views/dirent.js:382
 msgid "Copying %(name)s"
 msgstr "Kopierer %(name)s"
 
-#: static/scripts/app/views/dirent.js:381
+#: static/scripts/app/views/dirent.js:398
 msgid "Saving..."
 msgstr "Lagrer..."
 
-#: static/scripts/app/views/dirent.js:395
+#: static/scripts/app/views/dirent.js:412
 msgid "Failed."
 msgstr "Mislyktes."
 
@@ -348,11 +336,11 @@ msgid "Empty file upload result"
 msgstr "Resultatet er en tom filopplasting"
 
 #: static/scripts/app/views/fileupload.js:17
-#: static/scripts/app/views/group.js:108
-#: static/scripts/app/views/myhome-repos.js:89
+#: static/scripts/app/views/group.js:109
+#: static/scripts/app/views/myhome-repos.js:90
 #: static/scripts/app/views/myhome-shared-repos.js:76
 #: static/scripts/app/views/myhome-sub-repos.js:75
-#: static/scripts/app/views/organization.js:120
+#: static/scripts/app/views/organization.js:121
 msgid "Error"
 msgstr "Feil"
 
@@ -413,7 +401,7 @@ msgid "Set {placeholder}'s permission"
 msgstr "Sett {placeholder}'s tillatelse"
 
 #: static/scripts/app/views/folder-perm.js:101
-#: static/scripts/app/views/share.js:521
+#: static/scripts/app/views/share.js:525
 msgid "Select groups"
 msgstr "Velg frupper"
 
@@ -426,15 +414,15 @@ msgid "Delete failed"
 msgstr "Sletting feilet"
 
 #: static/scripts/app/views/group-repo.js:50
-#: static/scripts/app/views/organization-repo.js:49
+#: static/scripts/app/views/organization-repo.js:52
 msgid "Successfully unshared {placeholder}"
 msgstr "Vellykket oppheving av deling for {placeholder}"
 
-#: static/scripts/app/views/group.js:106
-#: static/scripts/app/views/myhome-repos.js:87
+#: static/scripts/app/views/group.js:107
+#: static/scripts/app/views/myhome-repos.js:88
 #: static/scripts/app/views/myhome-shared-repos.js:74
 #: static/scripts/app/views/myhome-sub-repos.js:73
-#: static/scripts/app/views/organization.js:118
+#: static/scripts/app/views/organization.js:119
 msgid "Permission error"
 msgstr "Tilgangsfeil"
 
@@ -450,7 +438,7 @@ msgstr "Vennligst velg en mappe"
 msgid "Really want to delete {lib_name}?"
 msgstr "Ønsker du virkelig å slette {lib_name}?"
 
-#: static/scripts/app/views/repo.js:71 static/scripts/app/views/sub-lib.js:69
+#: static/scripts/app/views/repo.js:73 static/scripts/app/views/sub-lib.js:71
 msgid "Delete succeeded."
 msgstr "Vellykket sletting."
 
@@ -490,13 +478,9 @@ msgstr "Vellykket sending til {placeholder}"
 msgid "Failed to send to {placeholder}"
 msgstr "Mislykket sending til {placeholder}"
 
-#: static/scripts/app/views/share.js:605
+#: static/scripts/app/views/share.js:609
 msgid "Failed to share to {placeholder}"
 msgstr "Mislykket deling til {placeholder}"
-
-#: static/scripts/app/views/share.js:613 static/scripts/app/views/share.js:671
-msgid "Share failed"
-msgstr "Mislykket deling"
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"
