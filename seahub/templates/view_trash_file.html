@@ -12,5 +12,3 @@
     {% if not forloop.last %} <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}">{{ name }}</a> / {% else %} {{ name }} {% endif %}
   {% endfor %}
 {% endblock %}
-
-
