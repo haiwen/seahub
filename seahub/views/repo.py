@@ -35,7 +35,8 @@ from seahub.utils import gen_file_upload_url, is_org_context, \
     get_commit_before_new_merge, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
-    ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE
+    ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
+    THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_thumbnail_src, \
