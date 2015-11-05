@@ -80,7 +80,6 @@ define([
 
         select: function () {
             var checkbox = this.$('.checkbox');
-            var checkbox_index = checkbox.closest('tr').index();
             checkbox.toggleClass('checkbox-checked');
             if (checkbox.hasClass('checkbox-checked')) {
                 this.model.set({'selected':true}, {silent:true}); // do not trigger the 'change' event.
@@ -89,7 +88,6 @@ define([
             }
 
             var dirView = this.dirView;
-            dirView.$('.grid-item').eq(checkbox_index).children('.grid-img-container').toggleClass('hl');
             var $dirents_op = dirView.$('#multi-dirents-op');
             var toggle_all_checkbox = dirView.$('th .checkbox');
             var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;

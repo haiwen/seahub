@@ -37,6 +37,7 @@ define([
                 this.$multi_choose = false;
                 this.$view_mode = 'list';
                 this.$if_switched = false;
+                this.$selected_models = [];
 
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
@@ -120,11 +121,11 @@ define([
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
                     var $grid_view_btn = $('.grid-view-btn');
-                    var $checkedbox = $('td.select .checkbox-checked');
                     if ( _this.$multi_choose == false &&
-                    e.which == 1 && !$grid_view_btn.is(target) &&
-                    $('.grid-view:visible').length > 0) {
-                        $checkedbox.click();
+                    e.which == 1 && !$grid_view_btn.is(target)) {
+                        var $dirents_op = _this.$('#multi-dirents-op');
+                        $('.grid-img-container').removeClass('hl');
+                        $dirents_op.hide();
                     }   
                 });
 
@@ -201,14 +202,13 @@ define([
                 } else {
                     thumbnail_size = 192;
                 }
-                var _mode = this.$view_mode;
                 var dir = this.dir;
                 dir.setPath(category, repo_id, path);
                 var _this = this;
                 dir.fetch({
                     cache: false,
                     reset: true,
-                    data: {'p': path, 'mode': _mode, 'thumbnail_size': thumbnail_size},
+                    data: {'p': path, 'thumbnail_size': thumbnail_size},
                     success: function (collection, response, opts) {
                         dir.last_start = 0; // for 'more'
                         if (response.dirent_list.length == 0 ||  // the dir is empty
@@ -285,13 +285,13 @@ define([
             },
 
             addOne: function(dirent) {
-                // if (this.$view_mode == 'list') {                 
+                if (this.$view_mode == 'list') {                 
                     var view = new DirentView({model: dirent, dirView: this});
                     this.$dirent_list.append(view.render().el);
-                // } else {
+                } else {
                     var gview = new DirentGridView({model: dirent, dirView: this});
                     this.$dirent_grid.append(gview.render().el);
-                // }
+                }
             },
 
             reset: function() {
@@ -616,13 +616,13 @@ define([
                 if (this.$view_mode == 'grid') {
                     return false;
                 } else {
+                    var repo_id = this.dir.repo_id;
+                    var path = this.dir.path;
+                    var category = this.dir.category;
                     this.$if_switched = true;
-                    this.$('.list-view-btn').removeClass('active').siblings('.grid-view-btn').addClass('active');
                     this.$('.repo-file-list').addClass('hide').siblings('.grid-view').removeClass('hide');
                     this.$view_mode = 'grid';
-                    //这里有很多问题
-                    //这里有很多问题
-                    //这里有很多问题
+                    this.showDir(category, repo_id, path);
                 }
             },
 
@@ -630,13 +630,13 @@ define([
                 if (this.$view_mode == 'list') {
                     return false;
                 } else {
+                    var repo_id = this.dir.repo_id;
+                    var path = this.dir.path;
+                    var category = this.dir.category;
                     this.$if_switched = true;
-                    this.$('.list-view-btn').addClass('active').siblings('.grid-view-btn').removeClass('active');
                     this.$('.grid-view').addClass('hide').siblings('.repo-file-list').removeClass('hide');
                     this.$view_mode = 'list';
-                    //这里有很多问题
-                    //这里有很多问题
-                    //这里有很多问题
+                    this.showDir(category, repo_id, path);
                 }
             },
 

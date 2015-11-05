@@ -92,10 +92,24 @@ define([
             var index = this.$el.index();
             var dirView = this.dirView;
             if (e.which == 1 && dirView.$multi_choose == true) {
-                dirView.$('td.select').eq(index).click();
+                var grid = this.$('.grid-img-container');
+                var inner_grid = this.$('.grid-img-inner-container');
+                inner_grid.removeClass('hl');
+                grid.toggleClass('hl');
+                if (grid.hasClass('hl')) {
+                    this.model.set({'selected':true}, {silent:true}); // do not trigger the 'change' event.
+                } else {
+                    this.model.set({'selected':false}, {silent:true});
+                }
+                var dirView = this.dirView;
+                var $dirents_op = dirView.$('#multi-dirents-op');
+                var hl_num = dirView.$('.grid-img-container.hl').length;
+                if (hl_num > 0) {
+                    $dirents_op.css({'display':'inline'});
+                } else {
+                    $dirents_op.hide();
+                }
             } else if (e.which == 1 && dirView.$multi_choose == false) {
-                dirView.$('td.select .checkbox-checked').click();
-                dirView.$('td.select').eq(index).click();
                 return false;
             }
         },
