@@ -21,6 +21,7 @@ define([
             path_bar_template: _.template($('#dir-path-bar-tmpl').html()),
             dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
             dirents_hd_template: _.template($('#dirents-hd-tmpl').html()),
+            top_search_form_template: _.template($('#top-search-form-tmpl').html()),
 
             newDirTemplate: _.template($("#add-new-dir-form-template").html()),
             newFileTemplate: _.template($("#add-new-file-form-template").html()),
@@ -110,6 +111,10 @@ define([
             },
 
             showDir: function(category, repo_id, path) {
+                $('#top-search-form').html(this.top_search_form_template({
+                    search_repo_id: repo_id
+                }));
+
                 this.$el.show();
                 this.$dirent_list.empty();
                 var loading_tip = this.$('.loading-tip').show();
@@ -192,6 +197,10 @@ define([
             },
 
             hide: function() {
+                $('#top-search-form').html(this.top_search_form_template({
+                    search_repo_id: ''
+                }));
+
                 this.$el.hide();
             },
 
