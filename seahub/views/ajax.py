@@ -435,9 +435,6 @@ def list_lib_dir(request, repo_id):
                             status=500, content_type=content_type)
 
     offset = int(request.GET.get('start', 0))
-    mode = request.GET.get('mode', 'list')
-    if mode != 'list':
-        mode = 'grid'
     file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo, head_commit, path, offset, limit=100)
     more_start = None
     if dirent_more:
@@ -483,7 +480,6 @@ def list_lib_dir(request, repo_id):
         f_['file_size'] = filesizeformat(f.file_size)
         f_['obj_id'] = f.obj_id
         f_['perm'] = f.permission # perm for file in current dir
-        f_["mode"] = mode
 
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
         if file_type == IMAGE:

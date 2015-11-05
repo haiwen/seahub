@@ -274,7 +274,7 @@
     <td class="dirent-icon">
         <div class="pos-rel">
         <% if (dirent.is_img) { %>
-            <% if (dirent.mode == 'list') { %>
+            <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
             <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
@@ -372,7 +372,7 @@
     <% } %>
 <% } else { %>
     <% if (dirent.is_img) { %>
-        <% if (dirent.mode == 'grid') { %>
+        <% if (dirent.encoded_thumbnail_src) { %>
         <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>"><div class="grid-img-inner-container"><img class="thumbnail vam" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" /></div><%- dirent.mode %></div>
         <% } else { %>
         <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>">
