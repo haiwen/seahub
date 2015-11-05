@@ -78,41 +78,41 @@ FILEEXT_ICON_MAP = {
     # normal file and unknown file
     'default' : 'file.png',
 
-    # for 128 pixel icon
+    # for 192 pixel icon
     # pdf file
-    'pdf-128' : 'pdf-128.png',
+    'pdf-192' : 'pdf-192.png',
     # document file
-    'doc-128' : 'word-128.png',
-    'docx-128' : 'word-128.png',
-    'ppt-128' : 'ppt-128.png',
-    'pptx-128' : 'ppt-128.png',
-    'xls-128' : 'excel-128.png',
-    'xlsx-128' : 'excel-128.png',
-    'txt-128' : 'txt-128.png',
-    'odt-128' : 'word-128.png',
-    'fodt-128' : 'word-128.png',
-    'ods-128' : 'excel-128.png',
-    'fods-128' : 'excel-128.png',
-    'odp-128' : 'ppt-128.png',
-    'fodp-128' : 'ppt-128.png',
+    'doc-192' : 'word-192.png',
+    'docx-192' : 'word-192.png',
+    'ppt-192' : 'ppt-192.png',
+    'pptx-192' : 'ppt-192.png',
+    'xls-192' : 'excel-192.png',
+    'xlsx-192' : 'excel-192.png',
+    'txt-192' : 'txt-192.png',
+    'odt-192' : 'word-192.png',
+    'fodt-192' : 'word-192.png',
+    'ods-192' : 'excel-192.png',
+    'fods-192' : 'excel-192.png',
+    'odp-192' : 'ppt-192.png',
+    'fodp-192' : 'ppt-192.png',
     # music file
-    'mp3-128' : 'music-128.png',
-    'oga-128' : 'music-128.png',
-    'ogg-128' : 'music-128.png',
-    'flac-128' : 'music-128.png',
-    'aac-128' : 'music-128.png',
-    'ac3-128' : 'music-128.png',
-    'wma-128' : 'music-128.png',
+    'mp3-192' : 'music-192.png',
+    'oga-192' : 'music-192.png',
+    'ogg-192' : 'music-192.png',
+    'flac-192' : 'music-192.png',
+    'aac-192' : 'music-192.png',
+    'ac3-192' : 'music-192.png',
+    'wma-192' : 'music-192.png',
     # picture file
-    'jpg-128' : 'pic-128.png',
-    'jpeg-128' : 'pic-128.png',
-    'png-128' : 'pic-128.png',
-    'svg-128' : 'pic-128.png',
-    'gif-128' : 'pic-128.png',
-    'bmp-128' : 'pic-128.png',
-    'ico-128' : 'pic-128.png',
+    'jpg-192' : 'pic-192.png',
+    'jpeg-192' : 'pic-192.png',
+    'png-192' : 'pic-192.png',
+    'svg-192' : 'pic-192.png',
+    'gif-192' : 'pic-192.png',
+    'bmp-192' : 'pic-192.png',
+    'ico-192' : 'pic-192.png',
     # normal file and unknown file
-    'default-128' : 'file-128.png',
+    'default-192' : 'file-192.png',
 }
 @register.filter(name='file_icon_filter')
 def file_icon_filter(value, size=None):
@@ -123,13 +123,13 @@ def file_icon_filter(value, size=None):
         file_ext = None
 
     if file_ext and FILEEXT_ICON_MAP.has_key(file_ext):
-        if size == 128:
-            return FILEEXT_ICON_MAP.get(file_ext + '-128')
+        if size == 192:
+            return FILEEXT_ICON_MAP.get(file_ext + '-192')
         else:
             return FILEEXT_ICON_MAP.get(file_ext)
     else:
-        if size == 128:
-            return FILEEXT_ICON_MAP.get('default-128')
+        if size == 192:
+            return FILEEXT_ICON_MAP.get('default-192')
         else:
             return FILEEXT_ICON_MAP.get('default')
 
