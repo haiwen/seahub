@@ -54,6 +54,7 @@ define([
         // TODO: move to common
         displayValidationErrors: function(model, error, options) {
             this.$('.error').html(error).show();
+            Common.enableButton(this.$('[type="submit"]'));
         },
 
         addRepo: function(e) {

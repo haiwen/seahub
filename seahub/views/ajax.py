@@ -1535,7 +1535,14 @@ def set_notice_seen_by_id(request):
     content_type = 'application/json; charset=utf-8'
     notice_id = request.GET.get('notice_id')
 
-    notice = UserNotification.objects.get(id=notice_id)
+    try:
+        notice = UserNotification.objects.get(id=notice_id)
+    except UserNotification.DoesNotExist as e:
+        logger.error(e)
+        return HttpResponse(json.dumps({
+                    'error': _(u'Failed')
+                    }), status=400, content_type=content_type)
+
     if not notice.seen:
         notice.seen = True
         notice.save()

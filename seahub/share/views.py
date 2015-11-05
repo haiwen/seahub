@@ -157,13 +157,16 @@ def share_to_user(request, repo, to_user, permission):
 
 def check_user_share_quota(username, repo, users=[], groups=[]):
     """Check whether user has enough share quota when share repo to
-    users/groups. Only used for cloud service.
+    users/groups. Only used for personal account on cloud service.
     """
     if not users and not groups:
         return True
 
     if not seaserv.CALC_SHARE_USAGE:
         return True
+
+    if ccnet_threaded_rpc.get_orgs_by_user(username):
+        return True             # no share quota check for org user
 
     check_pass = False
     share_quota = seafile_api.get_user_share_quota(username)

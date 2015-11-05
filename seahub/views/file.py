@@ -303,12 +303,18 @@ def file_size_exceeds_preview_limit(file_size, file_type):
         else:
             return False, ''
 
-def can_preview_file(file_name, file_size):
+def can_preview_file(file_name, file_size, repo=None):
     """Check whether a file can be viewed online.
     Returns (True, None) if file can be viewed online, otherwise
     (False, erro_msg).
     """
+
     file_type, file_ext = get_file_type_and_ext(file_name)
+
+    if repo and repo.encrypted and (file_type in (DOCUMENT, SPREADSHEET,
+        OPENDOCUMENT, PDF)):
+        return (False, _(u'The library is encrypted, can not open file online.'))
+
     if file_ext in FILEEXT_TYPE_MAP:  # check file extension
         exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size,
                                                                  file_type)
@@ -320,6 +326,22 @@ def can_preview_file(file_name, file_size):
         # TODO: may need a better way instead of return string, and compare
         # that string in templates
         return (False, "invalid extension")
+
+def send_file_access_msg_when_preview(request, repo, path, access_from):
+    """ send file access msg when user preview file from web
+    """
+    filename = os.path.basename(path)
+    filetype, fileext = get_file_type_and_ext(filename)
+
+    if filetype in (TEXT, IMAGE, MARKDOWN, VIDEO, AUDIO):
+        send_file_access_msg(request, repo, path, access_from)
+
+    if filetype in (DOCUMENT, SPREADSHEET, OPENDOCUMENT, PDF) and \
+        HAS_OFFICE_CONVERTER:
+        send_file_access_msg(request, repo, path, access_from)
+
+    if filetype == PDF and USE_PDFJS:
+        send_file_access_msg(request, repo, path, access_from)
 
 @login_required
 @repo_passwd_set_required
@@ -390,7 +412,8 @@ def _file_view(request, repo_id, path):
             request, repo_id, obj_id, path)
 
     # check if use wopi host page according to filetype
-    if ENABLE_OFFICE_WEB_APP and fileext in OFFICE_WEB_APP_FILE_EXTENSION:
+    if not repo.encrypted and ENABLE_OFFICE_WEB_APP and \
+        fileext in OFFICE_WEB_APP_FILE_EXTENSION:
         try:
             from seahub_extra.wopi.utils import get_wopi_dict
         except ImportError:
@@ -399,7 +422,7 @@ def _file_view(request, repo_id, path):
             wopi_dict = get_wopi_dict(username, repo_id, path)
 
         if wopi_dict:
-            send_file_download_msg(request, repo, path, 'web')
+            send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
                       context_instance=RequestContext(request))
 
@@ -416,9 +439,10 @@ def _file_view(request, repo_id, path):
                 'file_encoding_list': [], 'filetype': filetype}
 
     fsize = get_file_size(repo.store_id, repo.version, obj_id)
-    can_preview, err_msg = can_preview_file(u_filename, fsize)
+    can_preview, err_msg = can_preview_file(u_filename, fsize, repo)
     if can_preview:
-        send_file_download_msg(request, repo, path, 'web')
+        send_file_access_msg_when_preview(request, repo, path, 'web')
+
         """Choose different approach when dealing with different type of file."""
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -585,18 +609,11 @@ def view_history_file_common(request, repo_id, ret_dict):
 
     request.user_perm = user_perm
     if user_perm:
-        # Check file size
+        # Check if can preview file
         fsize = get_file_size(repo.store_id, repo.version, obj_id)
-        if fsize > FILE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(FILE_PREVIEW_MAX_SIZE)
-            ret_dict['err'] = err
-
-        elif filetype in (DOCUMENT, PDF) and HAS_OFFICE_CONVERTER and fsize > OFFICE_PREVIEW_MAX_SIZE:
-            err = _(u'File size surpasses %s, can not be opened online.') % \
-                filesizeformat(OFFICE_PREVIEW_MAX_SIZE)
-            ret_dict['err'] = err
-        else:
+        can_preview, err_msg = can_preview_file(u_filename, fsize, repo)
+        if can_preview:
+            send_file_access_msg_when_preview(request, repo, path, 'web')
             """Choose different approach when dealing with different type of file."""
             if is_textual_file(file_type=filetype):
                 handle_textual_file(request, filetype, inner_path, ret_dict)
@@ -611,6 +628,9 @@ def view_history_file_common(request, repo_id, ret_dict):
                 handle_pdf(inner_path, obj_id, fileext, ret_dict)
             else:
                 pass
+        else:
+            ret_dict['err'] = err_msg
+
     # populate return value dict
     ret_dict['repo'] = repo
     ret_dict['obj_id'] = obj_id
@@ -711,7 +731,7 @@ def _download_file_from_share_link(request, fileshare):
         messages.error(request, _(u'Unable to download file, share link traffic is used up.'))
         return HttpResponseRedirect(next)
 
-    send_file_download_msg(request, repo, real_path, 'share-link')
+    send_file_access_msg(request, repo, real_path, 'share-link')
     try:
         file_size = seafile_api.get_file_size(repo.store_id, repo.version,
                                               obj_id)
@@ -797,14 +817,10 @@ def view_shared_file(request, token):
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        fsize = get_file_size(repo.store_id, repo.version, obj_id)
-        can_preview, err_msg = can_preview_file(filename, fsize)
-        if can_preview:
-            send_file_download_msg(request, repo, path, 'share-link')
+    fsize = get_file_size(repo.store_id, repo.version, obj_id)
+    can_preview, err_msg = can_preview_file(filename, fsize, repo)
+    if can_preview:
+        send_file_access_msg_when_preview(request, repo, path, 'share-link')
 
         """Choose different approach when dealing with different type of file."""
         inner_path = gen_inner_file_get_url(access_token, filename)
@@ -819,6 +835,8 @@ def view_shared_file(request, token):
                 ret_dict['err'] = _(u'Invalid file format.')
         elif filetype == PDF:
             handle_pdf(inner_path, obj_id, fileext, ret_dict)
+    else:
+        ret_dict['err'] = err_msg
 
     accessible_repos = get_unencry_rw_repos_by_user(request)
     save_to_link = reverse('save_shared_link') + '?t=' + token
@@ -937,17 +955,12 @@ def view_file_via_shared_dir(request, token):
     # get file content
     ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
                 'file_encoding_list': [], 'filetype': filetype}
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(file_size, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
+    fsize = get_file_size(repo.store_id, repo.version, obj_id)
+    can_preview, err_msg = can_preview_file(filename, fsize, repo)
+    if can_preview:
+        send_file_access_msg_when_preview(request, repo, real_path, 'share-link')
+
         """Choose different approach when dealing with different type of file."""
-
-        fsize = get_file_size(repo.store_id, repo.version, obj_id)
-        can_preview, err_msg = can_preview_file(filename, fsize)
-        if can_preview:
-            send_file_download_msg(request, repo, real_path, 'share-link')
-
         if is_textual_file(file_type=filetype):
             handle_textual_file(request, filetype, inner_path, ret_dict)
         elif filetype == DOCUMENT:
@@ -987,6 +1000,8 @@ def view_file_via_shared_dir(request, token):
                              (repo.id, shared_by, obj_id, file_size))
             except SearpcError, e:
                 logger.error('Error when sending file-view message: %s' % str(e))
+    else:
+        ret_dict['err'] = err_msg
 
     traffic_over_limit = user_traffic_over_limit(shared_by)
 
@@ -1211,28 +1226,28 @@ def view_raw_file(request, repo_id, file_path):
 
     return HttpResponseRedirect(raw_path)
 
-def send_file_download_msg(request, repo, path, dl_type):
+def send_file_access_msg(request, repo, path, access_from):
     """Send file downlaod msg.
 
     Arguments:
     - `request`:
     - `repo`:
     - `obj_id`:
-    - `dl_type`: web or api
+    - `access_from`: web or api
     """
     username = request.user.username
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
 
     msg = 'file-download-%s\t%s\t%s\t%s\t%s\t%s' % \
-        (dl_type, username, ip, user_agent, repo.id, path)
+        (access_from, username, ip, user_agent, repo.id, path)
     msg_utf8 = msg.encode('utf-8')
 
     try:
         send_message('seahub.stats', msg_utf8)
     except Exception as e:
         logger.error("Error when sending file-download-%s message: %s" %
-                     (dl_type, str(e)))
+                     (access_from, str(e)))
 
 @login_required
 def download_file(request, repo_id, obj_id):
@@ -1264,7 +1279,7 @@ def download_file(request, repo_id, obj_id):
         return HttpResponseRedirect(next)
 
     # send stats message
-    send_file_download_msg(request, repo, path, 'web')
+    send_file_access_msg(request, repo, path, 'web')
 
     file_name = os.path.basename(path.rstrip('/'))
     redirect_url = gen_file_get_url(token, file_name)
