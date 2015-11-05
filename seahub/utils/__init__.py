@@ -599,7 +599,7 @@ if EVENTS_CONFIG_FILE:
                         seafevents.delete_event(ev_session, ev.uuid)
                         continue
                     if repo.encrypted:
-                        repo.password_set = seafile_api.is_passwd_set(
+                        repo.password_set = seafile_api.is_password_set(
                             repo.id, username)
                     ev.repo = repo
                     ev.commit = seaserv.get_commit(repo.id, repo.version, ev.commit_id)
