@@ -197,9 +197,9 @@
     </td>
     <td class="star"></td>
     <% if (dirent.perm == 'r') { %>
-        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-read-only-24.png" alt="{% trans "Directory icon" %}" /></td>
+        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-read-only-48.png" alt="{% trans "Directory icon" %}" width="24" /></td>
     <% } else { %>
-        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon" %}" /></td>
+        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-48.png" alt="{% trans "Directory icon" %}" width="24" /></td>
     <% } %>
     <td>
         <% if (category) { %>
@@ -264,10 +264,10 @@
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
-            <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+            <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" width="24" />
             <% } %>
         <% } else { %>
-        <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+        <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" width="24" />
         <% } %>
 
         <% if (is_pro && dirent.is_locked) { %>
@@ -745,7 +745,7 @@
     </div>
 </script>
 <script type="text/template" id="starred-file-item-tmpl">
-    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" /></td>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/<%= icon_path %>" alt="{% trans "icon" %}" width="24" /></td>
     <td>
         <% if (is_img) { %>
             <a class="img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- file_name %></a>
