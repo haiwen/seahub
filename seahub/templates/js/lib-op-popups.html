@@ -39,6 +39,14 @@
     </form>
     </script>
 
+    <script type="text/template" id="grid-rename-form-template">
+    <form id="grid-rename-form" action="" method="post">
+        <input type="text" name="grid_newname" value="<%- grid_dirent_name %>" class="input vam" maxlength="{{max_file_name}}" />
+        <button type="submit" class="submit sf2-icon-tick vam" title="{% trans "Submit" %}"></button>
+        <button type="button" class="cancel sf2-icon-x2 vam" title="{% trans "Cancel" %}"></button>
+    </form>
+    </script>
+
     <script type="text/template" id="mvcp-form-template">
     <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3><%= form_title %></h3>

@@ -454,6 +454,7 @@ def list_lib_dir(request, repo_id):
     result["dirent_more"] = dirent_more
     result["more_start"] = more_start
 
+
     dirent_list = []
     for d in dir_list:
         d_ = {}
@@ -466,7 +467,8 @@ def list_lib_dir(request, repo_id):
         d_['perm'] = d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
-    size = THUMBNAIL_DEFAULT_SIZE
+    size = request.GET.get('thumbnail_size', THUMBNAIL_DEFAULT_SIZE)
+    
     for f in file_list:
         f_ = {}
         f_['is_file'] = True

@@ -130,12 +130,25 @@
       </li>
     </ul>
     <% } %>
-    <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
-    <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
+    <button id="add-new" class="op-btn upload-file-btn icon-caret-down">
+        <span class="fleft">{% trans "New" %}</span>
+    </button>
+    <ul id="add-menu" class="hide">
+        <li id="add-new-dir" class="item">
+            {% trans "New Folder" %}
+        </li>
+        <li id="add-new-file" class="item">
+            {% trans "New File" %}
+        </li>
+    </ul>
     <% } %>
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
+    <div class="switch-mode vam">
+        <img src="{{ MEDIA_URL }}img/grid-view.png" title="{% trans "Grid View"%}" id="grid-view-btn" class="grid-view-btn cspt fright" />
+        <img src="{{ MEDIA_URL }}img/list-view.png" title="{% trans "List View"%}" id="list-view-btn" class="list-view-btn cspt fright" />
+    </div>
     <% if (path == '/') { %>
         <div class="fright">
             <% if (is_repo_owner && !is_virtual) { %>
@@ -326,6 +339,105 @@
     </td>
     <% } %>
 </script>
+<script type="text/template" id="grid-view">
+<% if (dirent.is_dir) { %>
+    <% if (dirent.perm == 'r') { %>
+        <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>"><div class="grid-img-inner-container"><img src="{{ MEDIA_URL }}img/folder-read-only-24.png" alt="{% trans "Directory icon" %}" /></div></div>
+    <% } else { %>
+        <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>"><div class="grid-img-inner-container"><img src="{{ MEDIA_URL }}img/folder-beige-128.png" alt="{% trans "Directory icon" %}" /></div></div>
+    <% } %>
+    <ul class="grid-hidden-op hide">
+        <li><a class="op" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Download" %}</a></li>
+        <% if (!repo_encrypted && can_generate_shared_link) { %>
+        <li><a class="op share" href="#" class="op-icon share">{% trans "Share" %}</a></li>
+        <% } %>
+        <% if (dirent.perm == 'rw') { %>
+        <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
+        <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+        <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+        <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+        <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
+        <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
+        <% } %>
+        <% if (is_pro) { %>
+        <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
+        <% } %>
+        <% } %>
+    </ul>
+
+    <% if (category) { %>
+    <div class="grid-link-container"><a href="#<%= category %>/lib/<%= repo_id %><%- encoded_path %>" class="dir-link grid-link normal ellipsis"><%- dirent.obj_name %></a></div>
+    <% } else { %>
+    <div class="grid-link-container"><a href="#lib/<%= repo_id %><%- encoded_path %>" class="ellipsis grid-link dir-link normal"><%- dirent.obj_name %></a></div>
+    <% } %>
+<% } else { %>
+    <% if (dirent.is_img) { %>
+        <% if (dirent.encoded_thumbnail_src) { %>
+        <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>"><div class="grid-img-inner-container"><img class="thumbnail vam" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" /></div><%- dirent.mode %></div>
+        <% } else { %>
+        <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>">
+            <div class="grid-img-inner-container"><img src="{{ MEDIA_URL }}img/file/pic-128.png" alt="" /></div>
+        </div>
+        <% } %>
+    <% } else { %>
+        <div class="grid-img-container ovhd <% if (dirent.selected) { %>hl<% } %>">
+            <div class="grid-img-inner-container">
+            <% if (dirent.file_icon == 'txt.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/txt-128.png" alt="" />
+                <% } else if (dirent.file_icon == 'file.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/file-128.png" alt="" />    
+                <% } else if (dirent.file_icon == 'music.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/music-128.png" alt="" />
+                <% } else if (dirent.file_icon == 'pdf.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/pdf-128.png" alt="" />
+                <% } else if (dirent.file_icon == 'pic.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/pic-128.png" alt="" />
+                <% } else if (dirent.file_icon == 'ppt.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/ppt-128.png" alt="" />
+                <% } else if (dirent.file_icon == 'excel.png') { %>
+                <img src="{{ MEDIA_URL }}img/file/excel-128.png" alt="" />
+                <% } else { %>
+                <img src="{{ MEDIA_URL }}img/file/word-128.png" alt="" />
+                <% } %>
+            <% } %>
+            </div>
+        </div>
+    <ul class="grid-hidden-op hide">
+        <li><a class="op download" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>?dl=1">{% trans "Download" %}</a></li>
+            <% if (!repo_encrypted && can_generate_shared_link) { %>
+        <li><a class="op share" href="#">{% trans "Share" %}</a></li>
+        <% } %>
+        <% if (dirent.perm == 'rw') { %>
+        <li><a class="op delete" href="#">{% trans "Delete" %}</a></li>
+        <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
+        <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
+        <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+        <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
+        <% if (is_pro) { %>
+            <% if (dirent.is_locked) { %>
+                <% if (dirent.locked_by_me) { %>
+                <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>
+                <% } %>
+            <% } else { %>
+                <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
+            <% } %>
+        <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
+        <% } %>
+    <% } %>
+    </ul>
+
+    <% if (is_pro && dirent.is_locked) { %>
+    <div class="grid-img-container ovhd"><img class="file-locked-icon" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" /></div>
+    <% } %>
+    <% if (dirent.is_img) { %>
+    <div class="grid-link-container"><a class="normal img-name-link grid-link ovhd ellipsis" title="<%- dirent.obj_name %>" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- dirent.obj_name %></a>
+    </div>
+    <% } else { %>
+    <div class="grid-link-container"><a class="normal ellipsis sd ovhd grid-link" title="<%- dirent.obj_name %>" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- dirent.obj_name %></a>
+    </div>
+    <% } %>
+ <% } %>
+</script> 
 <script type="text/template" id="group-change-item-tmpl">
     <td>
     <span class="icon-plus"></span>

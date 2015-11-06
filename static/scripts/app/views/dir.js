@@ -9,10 +9,11 @@ define([
     'file-tree',
     'app/collections/dirents',
     'app/views/dirent',
+    'app/views/dirent-grid',
     'app/views/fileupload',
     'app/views/share'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
-        FileTree, DirentCollection, DirentView, FileUploadView, ShareView) {
+        FileTree, DirentCollection, DirentView, DirentGridView, FileUploadView, ShareView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -30,9 +31,14 @@ define([
 
             initialize: function(options) {
                 this.$dirent_list = this.$('.repo-file-list tbody');
+                this.$dirent_grid = this.$('.grid-view');
                 this.$path_bar = this.$('.path');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
+                this.$multi_choose = false;
+                this.$view_mode = 'list';
+                this.$if_switched = false;
+                this.$selected_models = [];
 
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
@@ -70,6 +76,15 @@ define([
                     }
                 });
 
+                //stop default event when clicking the right mouse button
+                $('.grid-view').bind("contextmenu", function(e) {
+                    if ( e && e.preventDefault ){ 
+                        e.preventDefault(); 
+                    }else{
+                        window.event.returnValue = false; 
+                    }
+                });
+
                 // hide 'hidden-op' popup
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
@@ -91,6 +106,63 @@ define([
                     }
                 });
 
+                // hide 'grid-hidden-op' popup
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var $popup = $('.grid-hidden-op:visible');
+                    if ($popup.length > 0 &&  // There is a visible popup
+                        !$popup.is(target) &&
+                        !$popup.find('*').is(target)) {
+                        $popup.siblings('.grid-img-container').removeClass('hl');
+                        $popup.addClass('hide');
+                    }
+                });
+
+                //remove hl of other grids
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var $grid_view_btn = $('.grid-view-btn');
+                    if ( _this.$multi_choose == false &&
+                    e.which == 1 && !$grid_view_btn.is(target)) {
+                        var $dirents_op = _this.$('#multi-dirents-op');
+                        $('.grid-img-container').removeClass('hl');
+                        $dirents_op.hide();
+                    }   
+                });
+
+                //enable multi-choose when pushing ctrl
+                $(window).keydown(function(e) {
+                    if(e.which == 17) {
+                        _this.$multi_choose = true;
+                    } else {
+                        _this.$multi_choose = false;
+                    }
+                }).keyup(function() {
+                    _this.$multi_choose = false;
+                });
+
+                //enable submit rename request when pushing 'enter'
+                $(window).keydown(function(e) {
+                    if (e.which == 13) {
+                        var form = $('#grid-rename-form');
+                        if (form.length) {
+                            form.find('.submit').click();
+                        }
+                    }
+                })
+
+                // hide 'add-menu'
+                $(document).click(function(e) {
+                    var target = e.target || event.srcElement;
+                    var $add_btn = $('#add-new');
+                    var $add_menu = $('#add-menu');
+                    if (!$add_menu.hasClass('hide') &&
+                        !$add_btn.is(target) &&
+                        !$add_menu.is(target)) {
+                        $add_menu.addClass('hide');
+                    }
+                });
+
                 // hide 'rename form'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
@@ -108,6 +180,16 @@ define([
                         }
                     }
                 });
+
+                // hide 'grid rename form'
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var $form = $('#grid-rename-form');
+                    if ($form.length && !$form.find('*').is(target)) {
+                        var $li = $form.closest('li'); // get $tr before $form removed in `.cancel click()`
+                        $('.cancel', $form).click();
+                    }
+                });
             },
 
             showDir: function(category, repo_id, path) {
@@ -117,14 +199,21 @@ define([
 
                 this.$el.show();
                 this.$dirent_list.empty();
+                this.$dirent_grid.empty();
                 var loading_tip = this.$('.loading-tip').show();
+                var thumbnail_size;
+                if (this.$view_mode == 'list') {
+                    thumbnail_size = 48;
+                } else {
+                    thumbnail_size = 192;
+                }
                 var dir = this.dir;
                 dir.setPath(category, repo_id, path);
                 var _this = this;
                 dir.fetch({
                     cache: false,
                     reset: true,
-                    data: {'p': path},
+                    data: {'p': path, 'thumbnail_size': thumbnail_size},
                     success: function (collection, response, opts) {
                         dir.last_start = 0; // for 'more'
                         if (response.dirent_list.length == 0 ||  // the dir is empty
@@ -205,8 +294,13 @@ define([
             },
 
             addOne: function(dirent) {
-                var view = new DirentView({model: dirent, dirView: this});
-                this.$dirent_list.append(view.render().el);
+                if (this.$view_mode == 'list') {                 
+                    var view = new DirentView({model: dirent, dirView: this});
+                    this.$dirent_list.append(view.render().el);
+                } else {
+                    var gview = new DirentGridView({model: dirent, dirView: this});
+                    this.$dirent_grid.append(gview.render().el);
+                }
             },
 
             reset: function() {
@@ -235,12 +329,18 @@ define([
                     repo_id = this.dir.repo_id,
                     cur_path = this.dir.path,
                     _this = this;
+                var thumbnail_size;
+                if (this.$view_mode == 'list') {
+                    thumbnail_size = 48;
+                } else {
+                    thumbnail_size = 192;
+                }
                 var get_thumbnail = function(i) {
                     var cur_img = images_with_no_thumbnail[i];
                     var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
                     $.ajax({
                         url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
-                        data: {'path': cur_img_path},
+                        data: {'path': cur_img_path, 'size': thumbnail_size},
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
@@ -317,9 +417,12 @@ define([
             // Directory Operations
             events: {
                 'click .path-link': 'visitDir',
+                'click #add-new': 'addNew',
                 'click #upload-file': 'uploadFile',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newFile',
+                'click #grid-view-btn': 'switchToGridView',
+                'click #list-view-btn': 'switchToListView',
                 'click #share-cur-dir': 'share',
                 'click th.select': 'select',
                 'click #mv-dirents': 'mv',
@@ -327,6 +430,14 @@ define([
                 'click #del-dirents': 'del',
                 'click .by-name': 'sortByName',
                 'click .by-time': 'sortByTime'
+            },
+
+            addNew: function() {
+                this.$('#add-menu').css({
+                    'left': this.$('#add-new').position().left,
+                    'top': parseInt(this.$('.repo-op').css('padding-top')) + this.$('#add-new').outerHeight(true)
+                }).toggleClass('hide');
+                return false;
             },
 
             newDir: function() {
@@ -351,7 +462,6 @@ define([
                                    + '?parent_dir=' + encodeURIComponent(dir.path);
                     var after_op_success = function(data) {
                         $.modal.close();
-
                         var new_dirent = dir.add({
                             'is_dir': true,
                             'obj_name': data['name'],
@@ -445,17 +555,60 @@ define([
                 var dirView = this,
                     dir = this.dir;
                 var view = new DirentView({model: new_dirent, dirView: dirView});
+                var gview = new DirentGridView({model: new_dirent, dirView: dirView});
                 var new_file = view.render().el;
+                var grid_new_file = gview.render().el;
                 // put the new file as the first file
-                if ($('tr', dirView.$dirent_list).length == 0) {
-                    dirView.$dirent_list.append(new_file);
-                } else {
-                    var dirs = dir.where({'is_dir':true});
-                    if (dirs.length == 0) {
-                        dirView.$dirent_list.prepend(new_file);
+                if (this.$view_mode == 'list') {
+                    if ($('tr', dirView.$dirent_list).length == 0) {
+                        dirView.$dirent_list.append(new_file);
                     } else {
-                        // put the new file after the last dir
-                        $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
+                        var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_list.prepend(new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
+                        }
+                    } 
+                    if (!this.$if_switched) {
+                        return;
+                    } else if ($('.grid-item', dirView.$dirent_grid).length != 0) {
+                         var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_grid.prepend(grid_new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('.grid-item', dirView.$dirent_grid)[dirs.length - 1]).after(grid_new_file);
+                        }
+                    } else {
+                        dirView.$dirent_list.append(grid_new_file);
+                    }
+                }
+                if (this.$view_mode == 'grid') {
+                    if ($('.grid-item', dirView.$dirent_grid).length == 0) {
+                        dirView.$dirent_grid.append(grid_new_file);
+                    } else {
+                        var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_grid.prepend(grid_new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('.grid-item', dirView.$dirent_grid)[dirs.length - 1]).after(grid_new_file);
+                        }
+                    } 
+                    if (!this.$if_switched) {
+                        return;
+                    } else if ($('tr', dirView.$dirent_list).length != 0) {
+                         var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_list.prepend(new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
+                        }
+                    } else {
+                        dirView.$dirent_list.append(new_file);
                     }
                 }
             },
@@ -463,7 +616,37 @@ define([
             addNewDir: function(new_dirent) {
                 var dirView = this;
                 var view = new DirentView({model: new_dirent, dirView: dirView});
+                var gview = new DirentGridView({model: new_dirent, dirView: dirView});
                 dirView.$dirent_list.prepend(view.render().el); // put the new dir as the first one
+                dirView.$dirent_grid.prepend(gview.render().el); // put the new dir as the first one
+            },
+
+            switchToGridView: function() {
+                if (this.$view_mode == 'grid') {
+                    return false;
+                } else {
+                    var repo_id = this.dir.repo_id;
+                    var path = this.dir.path;
+                    var category = this.dir.category;
+                    this.$if_switched = true;
+                    this.$('.repo-file-list').addClass('hide').siblings('.grid-view').removeClass('hide');
+                    this.$view_mode = 'grid';
+                    this.showDir(category, repo_id, path);
+                }
+            },
+
+            switchToListView: function() {
+                if (this.$view_mode == 'list') {
+                    return false;
+                } else {
+                    var repo_id = this.dir.repo_id;
+                    var path = this.dir.path;
+                    var category = this.dir.category;
+                    this.$if_switched = true;
+                    this.$('.grid-view').addClass('hide').siblings('.repo-file-list').removeClass('hide');
+                    this.$view_mode = 'list';
+                    this.showDir(category, repo_id, path);
+                }
             },
 
             share: function () {
@@ -480,7 +663,7 @@ define([
                 };
                 new ShareView(options);
             },
-
+            
             sortByName: function() {
                 this.$('.by-time .sort-icon').hide();
 
@@ -541,16 +724,19 @@ define([
 
                 var dir = this.dir;
                 var all_dirent_checkbox = this.$('.checkbox');
+                var all_dirent_grid = this.$('.grid-item .grid-img-container');
                 var $dirents_op = this.$('#multi-dirents-op');
 
                 if (el.hasClass('checkbox-checked')) {
                     all_dirent_checkbox.addClass('checkbox-checked');
+                    all_dirent_grid.addClass('hl');
                     dir.each(function(model) {
                         model.set({'selected': true}, {silent: true});
                     });
                     $dirents_op.css({'display':'inline'});
                 } else {
                     all_dirent_checkbox.removeClass('checkbox-checked');
+                    all_dirent_grid.removeClass('hl');
                     dir.each(function(model) {
                         model.set({'selected': false}, {silent: true});
                     });
