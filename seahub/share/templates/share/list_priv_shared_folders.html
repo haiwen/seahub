@@ -19,7 +19,7 @@
     </tr>
     {% for repo in shared_folders %}
     <tr data="{{repo.props.share_type}}">
-        <td><img src="{{MEDIA_URL}}img/folder-icon-24.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+        <td><img src="{{MEDIA_URL}}img/folder-48.png" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" width="24" /></td>
         <td data="{{ repo.props.repo_id }}"><a href="{% url 'view_priv_shared_folder' repo.repo_id %}">{{ repo.props.repo_name }}</a></td>
         <td data="{{repo.props.user_info}}" title="{{ repo.props.user }}">{{ repo.props.user | email2nickname }}</td>
         <td>
