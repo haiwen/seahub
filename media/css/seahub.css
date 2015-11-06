@@ -1909,7 +1909,8 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:none;
 }
 .audit-item .audit-select-hidden,
-.repo-file-list .hidden-op {
+.repo-file-list .hidden-op,
+.grid-item .grid-hidden-op {
     position:absolute;
     background:#fff;
     padding:6px 1px;
@@ -1917,8 +1918,17 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
+.grid-hidden-op a {
+    color:#444;
+}
+.grid-hidden-op a:hover {
+    color:#fff;
+    text-decoration:none;
+    background:#feaa7c;
+}
 .audit-select-hidden li a,
-.hidden-op a {
+.hidden-op a,
+.grid-hidden-op a {
     display:block;
     padding:0 12px;
 }
@@ -1958,8 +1968,16 @@ textarea:-moz-placeholder {/* for FF */
 #rename-form .input {
     font-size:14px;
 }
+#grid-rename-form .input {
+    height:18px;
+    line-height:18px;
+    width:60%;
+    padding:0 0 0 5px;
+    margin:0;
+}
 .web-setting-form .submit,
-#rename-form .submit {
+#rename-form .submit,
+#grid-rename-form .submit {
     color:green;
 }
 .web-setting-form .cancel,
@@ -1973,9 +1991,16 @@ textarea:-moz-placeholder {/* for FF */
 .web-setting-form .submit,
 .web-setting-form .cancel,
 #rename-form .submit,
-#rename-form .cancel {
+#rename-form .cancel,
+#grid-rename-form .submit,
+#grid-rename-form .cancel {
     font-size:16px;
     line-height:1;
+}
+#grid-rename-form .submit,
+#grid-rename-form .cancel {
+    margin:0;
+    padding:1px;
 }
 .repo-top-op-btn {
     font-size:14px;
@@ -2053,7 +2078,8 @@ textarea:-moz-placeholder {/* for FF */
     overflow:hidden;
 }
 #upload-menu,
-#add-pub-lib-menu {
+#add-pub-lib-menu,
+#add-menu {
     position:absolute;
     z-index:12; /* make it on top of a checkbox */
     border:1px solid #c5c5c5;
@@ -2062,11 +2088,24 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
 }
 #upload-menu .item,
-#add-pub-lib-menu .item {
+#add-pub-lib-menu .item,
+#add-menu .item {
     padding:0 10px;
     height:27px;
     line-height:27px;
     cursor:pointer;
+}
+/* add new folder/file */
+#add-new {
+    outline:none;
+    color:#9c9c9c;
+}
+#add-new span {
+    padding-right:6px;
+    color:#333;
+}
+#add-menu .item:hover {
+    background:#f3f3f3;
 }
 #upload-menu .item {
     position:relative;
@@ -3783,4 +3822,57 @@ img.thumbnail {
     border:1px solid #eee;
     border-radius:3px;
     margin:0;
+}
+/* view mode */
+.switch-mode {
+    display:inline-block;
+    margin-left:12px;
+}
+.switch-mode .active {
+    background:#ccc;
+}
+.list-view-btn,
+.grid-view-btn {
+    outline:none;
+    padding:3px 6px 4px;
+    height:20px;
+    border:1px solid #ccc;
+    background:#fff;
+    display:inline-block;
+}
+.grid-view-btn {
+    border-left:none;
+}
+.grid-item {
+    height:142px;
+    width:142px;
+}
+.grid-img-container {
+    text-align:center;
+    width:100px;
+    height:100px;
+    line-height:98px;
+    margin:12px auto 8px;
+    border-radius:6px;
+}
+.grid-img-inner-container {
+    width:100px;
+    height:100px;
+}
+.grid-img-container img {
+    max-height:96px;
+    max-width:96px;
+}
+.grid-link-container {
+    margin:0 auto;
+    text-align:center;
+    height:2.2em;
+    width:104px;
+}
+.grid-link {
+    color:#333;
+    font-size:14px;
+    line-height:17px;
+    height:34px;
+    white-space:normal;
 }
