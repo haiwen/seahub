@@ -2025,7 +2025,7 @@ def image_view(request, filename):
 
     # Prepare response
     content_type, content_encoding = mimetypes.guess_type(filename)
-    response = HttpResponse(content=file_content, mimetype=content_type)
+    response = HttpResponse(content=file_content, content_type=content_type)
     response['Content-Disposition'] = 'inline; filename=%s' % filename
     if content_encoding:
         response['Content-Encoding'] = content_encoding

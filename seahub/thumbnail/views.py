@@ -111,7 +111,8 @@ def thumbnail_get(request, repo_id, size, path):
         try:
             with open(thumbnail_file, 'rb') as f:
                 thumbnail = f.read()
-            return HttpResponse(content=thumbnail, mimetype='image/'+THUMBNAIL_EXTENSION)
+            return HttpResponse(content=thumbnail,
+                                content_type='image/' + THUMBNAIL_EXTENSION)
         except IOError as e:
             logger.error(e)
             return HttpResponse()
@@ -234,7 +235,8 @@ def share_link_thumbnail_get(request, token, size, path):
         try:
             with open(thumbnail_file, 'rb') as f:
                 thumbnail = f.read()
-            return HttpResponse(content=thumbnail, mimetype='image/'+THUMBNAIL_EXTENSION)
+            return HttpResponse(content=thumbnail,
+                                content_type='image/' + THUMBNAIL_EXTENSION)
         except IOError as e:
             logger.error(e)
             return HttpResponse()
