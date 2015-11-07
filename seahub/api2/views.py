@@ -16,7 +16,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
-from rest_framework.throttling import AnonRateThrottle, UserRateThrottle
 from rest_framework.views import APIView
 
 from django.contrib.auth.hashers import check_password
@@ -30,9 +29,9 @@ from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 from django.utils import timezone
 
-from .throttling import ScopedRateThrottle
+from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
-from .serializers import AuthTokenSerializer, AccountSerializer
+from .serializers import AuthTokenSerializer
 from .utils import is_repo_writable, is_repo_accessible, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
@@ -182,7 +181,7 @@ class ObtainAuthToken(APIView):
         context = { 'request': request }
         serializer = AuthTokenSerializer(data=request.DATA, context=context)
         if serializer.is_valid():
-            key = serializer.object
+            key = serializer.validated_data
             return Response({'token': key})
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

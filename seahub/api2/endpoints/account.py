@@ -7,7 +7,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc
@@ -15,6 +14,7 @@ from pysearpc import SearpcError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.serializers import AccountSerializer
+from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.accounts import User
@@ -96,10 +96,10 @@ class Account(APIView):
         serializer = AccountSerializer(data=copy)
         if serializer.is_valid():
             try:
-                user = User.objects.create_user(serializer.object['email'],
-                                                serializer.object['password'],
-                                                serializer.object['is_staff'],
-                                                serializer.object['is_active'])
+                user = User.objects.create_user(serializer.data['email'],
+                                                serializer.data['password'],
+                                                serializer.data['is_staff'],
+                                                serializer.data['is_active'])
             except User.DoesNotExist as e:
                 logger.error(e)
                 return api_error(status.HTTP_403_FORBIDDEN,

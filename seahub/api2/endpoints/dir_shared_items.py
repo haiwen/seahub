@@ -7,13 +7,13 @@ from pysearpc import SearpcError
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 import seaserv
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
+from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.share.signals import share_repo_to_user_successful
