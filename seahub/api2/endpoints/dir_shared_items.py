@@ -156,7 +156,7 @@ class DirSharedItemsEndpoint(APIView):
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
-        permission = request.DATA.get('permission', 'r')
+        permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
 
@@ -236,18 +236,18 @@ class DirSharedItemsEndpoint(APIView):
         else:
             sub_repo = None
 
-        share_type = request.DATA.get('share_type')
+        share_type = request.data.get('share_type')
         if share_type != 'user' and share_type != 'group':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Bad share type')
 
-        permission = request.DATA.get('permission', 'r')
+        permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
 
         shared_repo = repo if path == '/' else sub_repo
         success, failed = [], []
         if share_type == 'user':
-            share_to_users = request.DATA.getlist('username')
+            share_to_users = request.data.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
                     return api_error(status.HTTP_400_BAD_REQUEST,
@@ -289,7 +289,7 @@ class DirSharedItemsEndpoint(APIView):
                     continue
 
         if share_type == 'group':
-            group_ids = request.DATA.getlist('group_id')
+            group_ids = request.data.getlist('group_id')
             for gid in group_ids:
                 try:
                     gid = int(gid)

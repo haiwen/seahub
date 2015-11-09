@@ -56,8 +56,8 @@ class Account(APIView):
         return Response(info)
 
     def _update_account_profile(self, request, email):
-        name = request.DATA.get("name", None)
-        note = request.DATA.get("note", None)
+        name = request.data.get("name", None)
+        note = request.data.get("note", None)
 
         if name is None and note is None:
             return
@@ -78,8 +78,8 @@ class Account(APIView):
         refresh_profile_cache(email)
 
     def _update_account_quota(self, request, email):
-        storage = request.DATA.get("storage", None)
-        sharing = request.DATA.get("sharing", None)
+        storage = request.data.get("storage", None)
+        sharing = request.data.get("sharing", None)
 
         if storage is None and sharing is None:
             return
@@ -91,7 +91,7 @@ class Account(APIView):
             seafile_api.set_user_share_quota(email, int(sharing))
 
     def _create_account(self, request, email):
-        copy = request.DATA.copy()
+        copy = request.data.copy()
         copy['email'] = email
         serializer = AccountSerializer(data=copy)
         if serializer.is_valid():
@@ -114,8 +114,8 @@ class Account(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, serializer.errors)
 
     def _update_account(self, request, user):
-        password = request.DATA.get("password", None)
-        is_staff = request.DATA.get("is_staff", None)
+        password = request.data.get("password", None)
+        is_staff = request.data.get("is_staff", None)
         if is_staff is not None:
             try:
                 is_staff = to_python_boolean(is_staff)
@@ -123,7 +123,7 @@ class Account(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  '%s is not a valid value' % is_staff)
 
-        is_active = request.DATA.get("is_active", None)
+        is_active = request.data.get("is_active", None)
         if is_active is not None:
             try:
                 is_active = to_python_boolean(is_active)
@@ -153,7 +153,7 @@ class Account(APIView):
             logger.error(e)
             return api_error(HTTP_520_OPERATION_FAILED, 'Failed to set account quota')
 
-        is_trial = request.DATA.get("is_trial", None)
+        is_trial = request.data.get("is_trial", None)
         if is_trial is not None:
             try:
                 from seahub_extra.trialaccount.models import TrialAccount
@@ -180,10 +180,10 @@ class Account(APIView):
         if not is_valid_username(email):
             return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
 
-        op = request.DATA.get('op', '').lower()
+        op = request.data.get('op', '').lower()
         if op == 'migrate':
             from_user = email
-            to_user = request.DATA.get('to_user', '')
+            to_user = request.data.get('to_user', '')
             if not is_valid_username(to_user):
                 return api_error(status.HTTP_400_BAD_REQUEST, '%s is not valid email.' % to_user)
 

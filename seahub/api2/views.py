@@ -179,7 +179,7 @@ class ObtainAuthToken(APIView):
 
     def post(self, request):
         context = { 'request': request }
-        serializer = AuthTokenSerializer(data=request.DATA, context=context)
+        serializer = AuthTokenSerializer(data=request.data, context=context)
         if serializer.is_valid():
             key = serializer.validated_data
             return Response({'token': key})
@@ -681,16 +681,16 @@ class Repos(APIView):
             gen_sync_token = True
 
         username = request.user.username
-        repo_name = request.DATA.get("name", None)
+        repo_name = request.data.get("name", None)
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
-        repo_desc = request.DATA.get("desc", '')
+        repo_desc = request.data.get("desc", '')
         org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
 
-        repo_id = request.DATA.get('repo_id', '')
+        repo_id = request.data.get('repo_id', '')
         try:
             if repo_id:
                 # client generates magic and random key
@@ -721,7 +721,7 @@ class Repos(APIView):
             return resp
 
     def _create_repo(self, request, repo_name, repo_desc, username, org_id):
-        passwd = request.DATA.get("passwd", None)
+        passwd = request.data.get("passwd", None)
 
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
@@ -743,10 +743,10 @@ class Repos(APIView):
     def _create_enc_repo(self, request, repo_id, repo_name, repo_desc, username, org_id):
         if not _REPO_ID_PATTERN.match(repo_id):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo id must be a valid uuid')
-        magic = request.DATA.get('magic', '')
-        random_key = request.DATA.get('random_key', '')
+        magic = request.data.get('magic', '')
+        random_key = request.data.get('random_key', '')
         try:
-            enc_version = int(request.DATA.get('enc_version', 0))
+            enc_version = int(request.data.get('enc_version', 0))
         except ValueError:
             return None, api_error(status.HTTP_400_BAD_REQUEST,
                              'Invalid enc_version param.')
@@ -807,12 +807,12 @@ class PubRepos(APIView):
                              'You do not have permission to create library.')
 
         username = request.user.username
-        repo_name = request.DATA.get("name", None)
+        repo_name = request.data.get("name", None)
         if not repo_name:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Library name is required.')
-        repo_desc = request.DATA.get("desc", '')
-        passwd = request.DATA.get("passwd", None)
+        repo_desc = request.data.get("desc", '')
+        passwd = request.data.get("passwd", None)
 
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
@@ -823,7 +823,7 @@ class PubRepos(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
-        permission = request.DATA.get("permission", 'r')
+        permission = request.data.get("permission", 'r')
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
@@ -1868,7 +1868,7 @@ class FileView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        path = request.DATA.get('p', '')
+        path = request.data.get('p', '')
         file_id = seafile_api.get_file_id_by_path(repo_id, path)
         if not path or not file_id:
             return api_error(status.HTTP_400_BAD_REQUEST,
@@ -1879,7 +1879,7 @@ class FileView(APIView):
         if check_folder_permission(request, repo_id, path) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        operation = request.DATA.get('operation', '')
+        operation = request.data.get('operation', '')
         if operation.lower() == 'lock':
 
             is_locked, locked_by_me = check_file_lock(repo_id, path, username)
@@ -1887,7 +1887,7 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, 'File is already locked')
 
             # lock file
-            expire = request.DATA.get('expire', FILE_LOCK_EXPIRATION_DAYS)
+            expire = request.data.get('expire', FILE_LOCK_EXPIRATION_DAYS)
             try:
                 seafile_api.lock_file(repo_id, path.lstrip('/'), username, expire)
                 return Response('success', status=status.HTTP_200_OK)
@@ -2009,7 +2009,7 @@ class FileRevert(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
-        path = request.DATA.get('p', '')
+        path = request.data.get('p', '')
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
@@ -2027,7 +2027,7 @@ class FileRevert(APIView):
                    'You do not have permission to access this folder.')
 
         path = unquote(path.encode('utf-8'))
-        commit_id = unquote(request.DATA.get('commit_id', '').encode('utf-8'))
+        commit_id = unquote(request.data.get('commit_id', '').encode('utf-8'))
         try:
             ret = seafserv_threaded_rpc.revert_file(repo_id, commit_id,
                                                     path, username)
@@ -2094,13 +2094,13 @@ class FileSharedLinkView(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, "Library does not exist")
 
-        path = request.DATA.get('p', None)
+        path = request.data.get('p', None)
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing')
 
         username = request.user.username
-        password = request.DATA.get('password', None)
-        share_type = request.DATA.get('share_type', 'download')
+        password = request.data.get('password', None)
+        share_type = request.data.get('share_type', 'download')
 
         if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Password is too short')
@@ -2110,7 +2110,7 @@ class FileSharedLinkView(APIView):
             if check_file_permission(request, repo_id, path) is None:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
 
-            expire = request.DATA.get('expire', None)
+            expire = request.data.get('expire', None)
             if expire:
                 try:
                     expire_days = int(expire)
@@ -3377,7 +3377,7 @@ class Groups(APIView):
                 return HttpResponse(json.dumps(result), status=500,
                                     content_type=content_type)
 
-        group_name = request.DATA.get('group_name', None)
+        group_name = request.data.get('group_name', None)
         group_name = group_name.strip()
         if not validate_group_name(group_name):
             result['error'] = 'Failed to rename group, group name can only contain letters, numbers, blank, hyphen or underscore.'
@@ -3488,7 +3488,7 @@ class GroupMembers(APIView):
         if not is_group_staff(group, request.user):
             return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can add group members')
 
-        user_name = request.DATA.get('user_name', None)
+        user_name = request.data.get('user_name', None)
         if not is_registered_user(user_name):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Not a valid user')
 
@@ -3515,7 +3515,7 @@ class GroupMembers(APIView):
         if not is_group_staff(group, request.user):
             return api_error(status.HTTP_403_FORBIDDEN, 'Only administrators can remove group members')
 
-        user_name = request.DATA.get('user_name', None)
+        user_name = request.data.get('user_name', None)
 
         try:
             ccnet_threaded_rpc.group_remove_member(group.id, request.user.username, user_name)
@@ -3596,9 +3596,9 @@ class GroupRepos(APIView):
     def post(self, request, group, format=None):
         # add group repo
         username = request.user.username
-        repo_name = request.DATA.get("name", None)
-        repo_desc = request.DATA.get("desc", '')
-        passwd = request.DATA.get("passwd", None)
+        repo_name = request.data.get("name", None)
+        repo_desc = request.data.get("desc", '')
+        passwd = request.data.get("passwd", None)
 
         # to avoid 'Bad magic' error when create repo, passwd should be 'None'
         # not an empty string when create unencrypted repo
@@ -3609,7 +3609,7 @@ class GroupRepos(APIView):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'NOT allow to create encrypted library.')
 
-        permission = request.DATA.get("permission", 'r')
+        permission = request.data.get("permission", 'r')
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
