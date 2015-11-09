@@ -1,4 +1,5 @@
 import logging
+from dateutil.relativedelta import relativedelta
 
 from django.utils import timezone
 from rest_framework import status
@@ -10,10 +11,12 @@ from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc
+from pysearpc import SearpcError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.serializers import AccountSerializer
 from seahub.api2.utils import api_error, to_python_boolean
+from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
 from seahub.utils import is_valid_username
