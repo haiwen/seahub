@@ -437,9 +437,6 @@ SESSION_COOKIE_AGE = 24 * 60 * 60
 # Days of remembered login info (deafult: 7 days)
 LOGIN_REMEMBER_DAYS = 7
 
-#Share Access
-SHARE_ACCESS_PASSWD_TIMEOUT = 60 * 60
-
 SEAFILE_VERSION = '5.0.0'
 
 # Compress static files(css, js)

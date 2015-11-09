@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 import requests
 
-from seahub.share.models import FileShare, PrivateFileDirShare
+from seahub.share.models import FileShare
 from seahub.test_utils import Fixtures
 
 
@@ -13,13 +13,20 @@ class SharedFileTest(TestCase, Fixtures):
 
     def setUp(self):
         share_file_info = {
-            'username': 'test@test.com',
+            'username': self.user,
             'repo_id': self.repo.id,
             'path': self.file,
             'password': None,
             'expire_date': None,
         }
         self.fs = FileShare.objects.create_file_link(**share_file_info)
+
+        share_file_info.update({'password': '12345678'})
+        self.enc_fs = FileShare.objects.create_file_link(**share_file_info)
+        share_file_info.update({'password': '12345678'})
+        self.enc_fs2 = FileShare.objects.create_file_link(**share_file_info)
+
+        assert self.enc_fs.token != self.enc_fs2.token
 
     def tearDown(self):
         self.remove_repo()
@@ -98,6 +105,47 @@ class SharedFileTest(TestCase, Fixtures):
         self.remove_folder()
         resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
         self.assertEqual(200, resp.status_code)
+
+    def _assert_redirect_to_password_page(self, fs):
+        resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+
+    def _assert_render_file_page_when_input_passwd(self, fs):
+        resp = self.client.post(reverse('view_shared_file', args=[fs.token]), {
+            'password': '12345678',
+        })
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertContains(resp, os.path.basename(self.file))
+        dl_url_tag = '<a href="?dl=1" class="obv-btn">'
+        self.assertContains(resp, dl_url_tag)
+
+    def _assert_render_file_page_without_passwd(self, fs):
+        resp = self.client.get(reverse('view_shared_file', args=[fs.token]))
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'shared_file_view.html')
+
+    def test_can_view_enc(self):
+        self._assert_redirect_to_password_page(self.enc_fs)
+        self._assert_render_file_page_when_input_passwd(self.enc_fs)
+
+    def test_can_view_enc_link_without_passwd(self):
+        self._assert_redirect_to_password_page(self.enc_fs)
+        self._assert_render_file_page_when_input_passwd(self.enc_fs)
+        self._assert_render_file_page_without_passwd(self.enc_fs)
+
+    def test_can_view_multiple_enc_links_without_passwd(self):
+        # first shared link
+        self._assert_redirect_to_password_page(self.enc_fs)
+        self._assert_render_file_page_when_input_passwd(self.enc_fs)
+
+        # second shared link
+        self._assert_redirect_to_password_page(self.enc_fs2)
+        self._assert_render_file_page_when_input_passwd(self.enc_fs2)
+
+        self._assert_render_file_page_without_passwd(self.enc_fs)
+        self._assert_render_file_page_without_passwd(self.enc_fs2)
 
 
 class FileViaSharedDirTest(TestCase, Fixtures):

@@ -3,7 +3,7 @@
 
 {% block main_panel %}
 <div class="wide-panel">
-    <p class="access-notice">{% trans "Please input the password if you want to browse the shared file/directory. And the password will be kept on the server for only 1 hour." %}</p>
+    <p class="access-notice">{% trans "Please input the password if you want to browse the shared file/directory." %}</p>
     <form action="{% url view_name token %}" method="post" id="share-passwd-form">{% csrf_token %}
         <label>{% trans "Password: " %}</label>
         <input type="password" name="password" autofocus />
