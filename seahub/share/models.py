@@ -1,14 +1,16 @@
 import datetime
-from django.core.cache import cache
+import logging
+
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.hashers import make_password
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.utils import normalize_file_path, normalize_dir_path, gen_token, \
-    normalize_cache_key
-from seahub.utils.ip import get_remote_ip
-from seahub.settings import SHARE_ACCESS_PASSWD_TIMEOUT
+from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
+
 
 class AnonymousShare(models.Model):
     """
@@ -19,37 +21,31 @@ class AnonymousShare(models.Model):
     anonymous_email = LowerCaseCharField(max_length=255)
     token = models.CharField(max_length=25, unique=True)
 
-def _get_cache_key(request, prefix, token):
-    """Return cache key of certain ``prefix``. If user is logged in, use
-    username and token, otherwise use combination of request ip and user agent
-    and token.
+def _get_link_key(token, is_upload_link=False):
+    return 'visited_ufs_' + token if is_upload_link else \
+        'visited_fs_' + token
 
-    Arguments:
-    - `prefix`:
-    """
-    if request.user.is_authenticated():
-        key = normalize_cache_key(request.user.username, 'SharedLink_', token)
-    else:
-        ip = get_remote_ip(request)
-        # Memcached key length limit is 250 chars, and user agent sometimes may
-        # be long which will cause error.
-        agent = request.META.get('HTTP_USER_AGENT', '')[:150]
-        key = normalize_cache_key(ip + agent, 'SharedLink_', token)
-
-    return key
-
-def set_share_link_access(request, token):
-    """Remember which share download/upload links user can access without
+def set_share_link_access(request, token, is_upload_link=False):
+    """Remember which shared download/upload link user can access without
     providing password.
     """
-    key = _get_cache_key(request, 'SharedLink_', token)
-    cache.set(key, True, SHARE_ACCESS_PASSWD_TIMEOUT)
+    if request.session:
+        link_key = _get_link_key(token, is_upload_link)
+        request.session[link_key] = True
+    else:
+        # should never reach here in normal case
+        logger.warn('Failed to remember shared link password, request.session'
+                    ' is None when set shared link access.')
 
-def check_share_link_access(request, token):
-    """Check whether user can access share link without providing password.
+def check_share_link_access(request, token, is_upload_link=False):
+    """Check whether user can access shared download/upload link without
+    providing password.
     """
-    key = _get_cache_key(request, 'SharedLink_', token)
-    return cache.get(key, False)
+    link_key = _get_link_key(token, is_upload_link)
+    if request.session.get(link_key, False):
+        return True
+    else:
+        return False
 
 class FileShareManager(models.Manager):
     def _add_file_share(self, username, repo_id, path, s_type,
