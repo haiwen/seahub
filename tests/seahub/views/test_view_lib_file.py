@@ -6,7 +6,7 @@ from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 
-class ViewFileTest(BaseTestCase):
+class ViewLibFileTest(BaseTestCase):
     def setUp(self):
         # self.login_as(self.user)
         pass
@@ -219,3 +219,11 @@ class ViewFileTest(BaseTestCase):
         for _ in range(3):      # token for video is not one time only
             r = requests.get(raw_path)
             self.assertEqual(200, r.status_code)
+
+    def test_can_download(self):
+        self.login_as(self.user)
+
+        url = reverse('view_lib_file', args=[self.repo.id, self.file]) + '?dl=1'
+        resp = self.client.get(url)
+        self.assertEqual(302, resp.status_code)
+        assert '8082/files/' in resp.get('location')

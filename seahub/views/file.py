@@ -400,7 +400,7 @@ def _file_view(request, repo_id, path):
                                                         use_onetime=True)
         dl_url = gen_file_get_url(token, u_filename)
         # send stats message
-        send_file_download_msg(request, repo, path, 'web')
+        send_file_access_msg(request, repo, path, 'web')
         return HttpResponseRedirect(dl_url)
 
     # Get file view raw path, ``user_perm`` is not used anymore.
