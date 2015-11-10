@@ -1,11 +1,9 @@
-import re
-
 from rest_framework import serializers
 
 from seahub.auth import authenticate
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
-from seahub.utils import is_valid_username
+from seahub.profile.models import Profile
 
 def all_none(values):
     for value in values:
@@ -35,7 +33,7 @@ class AuthTokenSerializer(serializers.Serializer):
     platform_version = serializers.CharField(required=False)
 
     def validate(self, attrs):
-        username = attrs.get('username')
+        login_id = attrs.get('username')
         password = attrs.get('password')
 
         platform = attrs.get('platform', None)
@@ -54,10 +52,9 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('invalid params')
 
-        # first check username and password
-        if username:
-            if not is_valid_username(username):
-                raise serializers.ValidationError('username is not valid.')
+        username = Profile.objects.get_username_by_login_id(login_id)
+        if username is None:
+            username = login_id
 
         if username and password:
             user = authenticate(username=username, password=password)
