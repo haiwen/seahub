@@ -47,6 +47,9 @@ class ProfileManager(models.Manager):
     def get_username_by_login_id(self, login_id):
         """Convert a user's login id to username(login email).
         """
+        if not login_id:
+            return None
+
         try:
             return super(ProfileManager, self).get(login_id=login_id).user
         except Profile.DoesNotExist:
@@ -55,7 +58,7 @@ class ProfileManager(models.Manager):
     def get_user_language(self, username):
         """Get user's language from profile. Return default language code if
         user has no preferred language.
-        
+
         Arguments:
         - `self`:
         - `username`:
