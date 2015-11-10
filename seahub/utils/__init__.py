@@ -312,7 +312,7 @@ def get_user_repos(username, org_id=None):
         groups_repos = []
         for group in seaserv.get_org_groups_by_user(org_id, username):
             groups_repos += seafile_api.get_org_group_repos(org_id, group.id)
-        public_repos = seaserv.list_org_inner_pub_repos(org_id)
+        public_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
 
         for r in shared_repos + groups_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned
