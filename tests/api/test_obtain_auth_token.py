@@ -51,4 +51,4 @@ class ObtainAuthTokenTest(BaseTestCase):
 
         self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['non_field_errors'] == ['Must include "username" and "password"']
+        assert json_resp['username'] == [u'This field may not be blank.']

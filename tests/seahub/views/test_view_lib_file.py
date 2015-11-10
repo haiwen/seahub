@@ -67,7 +67,8 @@ class ViewLibFileTest(BaseTestCase):
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_file_base.html')
-        assert resp.context['err'] == 'File size surpasses -1 bytes, can not be opened online.'
+        assert 'File size surpasses -1' in resp.context['err'] and \
+            'can not be opened online.' in resp.context['err']
 
     def test_text_file(self):
         self.login_as(self.user)

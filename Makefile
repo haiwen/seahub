@@ -38,4 +38,9 @@ clean:
 	rm -rf static/scripts/dist 2> /dev/null
 	@echo ""
 
+cleanpyc:
+	@echo '--> Cleaning .pyc files'
+	find . -name \*.pyc -exec rm -f {} \;
+	@echo ""
+
 .PHONY: develop setup-git dist locale uglify statici18n collectstatic compressstatic clean
