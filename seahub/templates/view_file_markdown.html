@@ -43,6 +43,8 @@
     };
     marked.setOptions({
         renderer: renderer,
+        breaks: true, // keep linebreak
+        smartLists: true,
         sanitize: true // Ignore any HTML that has been input
     });
     $('#md-view').html(marked('{{ file_content|escapejs }}')).children(':first').css('margin-top', '0');

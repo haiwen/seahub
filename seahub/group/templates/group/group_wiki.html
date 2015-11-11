@@ -108,6 +108,8 @@ renderer.heading = function (text, level) {
 };
 marked.setOptions({
     renderer: renderer,
+    breaks: true, // keep linebreak
+    smartLists: true,
     sanitize: true // Ignore any HTML that has been input
 });
 $('#wiki-content')
