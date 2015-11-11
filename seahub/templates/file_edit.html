@@ -15,6 +15,12 @@
 {% if filetype == 'Markdown' %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/editormd.min.css" />
 <style type="text/css">
+#main {
+    min-height:0;
+}
+.editormd {
+    margin:0 auto;
+}
 /* for 'link', 'image', 'table' popups */
 .editormd-form input[type=text],
 .editormd-form input[type=number] {
@@ -248,8 +254,25 @@ var editor = CodeMirror.fromTextArea($('#docu-view')[0], {
 {% endif %}
 
 {% if filetype == 'Markdown' %}
+var $fileEdit = $('#file-edit');
+var pathOpHeight = $('#path-op').outerHeight(true),
+    fileEncContHeight = $('#file-enc-cont').outerHeight(true);
+$fileEdit.css({'min-height':0, 'padding':'30px 0'}).outerHeight($(window).height() - pathOpHeight);
 var mdEditor = editormd('md-editor', {
     width: 950,
+    height: $fileEdit.height() - fileEncContHeight - 2,
+    onresize: function () { // window resize
+        var $mdEditor = this.editor;
+        if (this.state.fullscreen) {
+            $mdEditor.height('100%');
+        } else {
+            $fileEdit.outerHeight($(window).height() - pathOpHeight);
+            $mdEditor.height($fileEdit.height() - fileEncContHeight - 2);
+        }
+    },
+    onfullscreenExit: function () {
+        this.resize();
+    },
     path: '{{MEDIA_URL}}js/editormd/lib/', // 'lib' path
 
     placeholder: '', // for empty file
@@ -259,7 +282,6 @@ var mdEditor = editormd('md-editor', {
     pageBreak: false, // disable parse page break [========]
     atLink: false, // for @link
     previewCodeHighlight: false, 
-    autoHeight: true,
     
     toolbarIcons: function () {
         // custom toolbar
