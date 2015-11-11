@@ -57,7 +57,11 @@ except ImportError:
 
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
-    conf = os.path.join(os.environ['SEAFILE_CONF_DIR'], 'seafile.conf')
+    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
+        confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    else:
+        confdir = os.environ['SEAFILE_CONF_DIR']
+    conf = os.path.join(confdir, 'seafile.conf')
     cfg.read(conf)
     if cfg.has_option('cluster', 'enabled'):
         enabled = cfg.getboolean('cluster', 'enabled')
