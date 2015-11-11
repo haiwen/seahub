@@ -44,7 +44,7 @@ urlpatterns = patterns(
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
-    url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
+    url(r'^home/wiki/(?P<page_name>[^/]+)$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
     url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
     url(r'^home/wiki_use_lib/$', personal_wiki_use_lib, name='personal_wiki_use_lib'),

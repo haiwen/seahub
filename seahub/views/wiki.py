@@ -35,7 +35,7 @@ from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
-from seahub.wiki.utils import clean_page_name
+from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.utils import render_error
 
 # Get an instance of a logger
@@ -58,7 +58,7 @@ def personal_wiki(request, page_name="home"):
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
-        filename = clean_page_name(page_name) + '.md'
+        filename = page_name_to_file_name(clean_page_name(page_name))
         if not seaserv.post_empty_file(repo.id, "/", filename, username):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('personal_wiki', args=[page_name]))

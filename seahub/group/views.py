@@ -42,7 +42,7 @@ from seahub.notifications.models import UserNotification
 from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
-from seahub.wiki.utils import clean_page_name
+from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
@@ -1350,7 +1350,7 @@ def group_wiki(request, group, page_name="home"):
         repo = get_group_wiki_repo(group, username)
         # No need to check whether repo is none, since repo is already created
 
-        filename = clean_page_name(page_name) + '.md'
+        filename = page_name_to_file_name(clean_page_name(page_name))
         if not post_empty_file(repo.id, "/", filename, username):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
