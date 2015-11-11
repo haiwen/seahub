@@ -90,16 +90,20 @@
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Converter.js"></script>
-<script type="text/javascript" src="{{MEDIA_URL}}js/Markdown.Extra.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
 <script type="text/javascript">
 {% if wiki_exists %}
-var converter = new Markdown.Converter();
-{% include 'snippets/md_xss.html' %}
-
-Markdown.Extra.init(converter, {extensions: ["fenced_code_gfm", "tables", "def_list"]});
+var renderer = new marked.Renderer();
+// remove 'id' attribute for headings
+renderer.heading = function (text, level) {
+    return '<h' + level + '>' + text + '</h' + level + '>';
+};
+marked.setOptions({
+    renderer: renderer,
+    sanitize: true // Ignore any HTML that has been input
+});
 $('#wiki-content')
-.html(addAnchorsToHeaders(converter.makeHtml('{{ content|escapejs }}')))
+.html(addAnchorsToHeaders(marked('{{ content|escapejs }}')))
 .find('h1, h2').hover(
     function() {
         $('.anchor', $(this)).removeClass('vh');
@@ -212,7 +216,7 @@ $('#wiki-use-lib-form').submit(function() {
 
 {% if wiki_exists %}
 {% if wiki_index_exists %}
-$('#wiki-index-con').html(converter.makeHtml('{{ index_content|escapejs }}'));
+$('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
 {% with page_name='index' %}
 $('#edit-index').click(function() {
     location.href = "{% url 'personal_wiki_page_edit' page_name %}";
