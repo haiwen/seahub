@@ -1356,7 +1356,6 @@ def group_wiki(request, group, page_name="home"):
         return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
     else:
         url_prefix = reverse('group_wiki', args=[group.id])
-        content = convert_wiki_link(content, url_prefix, repo.id, username)
 
         # fetch file modified time and modifier
         path = '/' + dirent.obj_name
@@ -1379,8 +1378,6 @@ def group_wiki(request, group, page_name="home"):
             index_content, index_repo, index_dirent = get_group_wiki_page(username, group, index_pagename)
         except (WikiDoesNotExist, WikiPageMissing) as e:
             wiki_index_exists = False
-        else:
-            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
 
         return render_to_response("group/group_wiki.html", {
             "group" : group,
