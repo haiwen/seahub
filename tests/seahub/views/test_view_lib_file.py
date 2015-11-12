@@ -227,3 +227,21 @@ class ViewLibFileTest(BaseTestCase):
         resp = self.client.get(url)
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
+
+        resp = requests.request('GET', resp.get('location'))
+        cont_disp = resp.headers['content-disposition']
+        assert 'inline' not in cont_disp
+        assert 'attachment' in cont_disp
+
+    def test_can_view_raw(self):
+        self.login_as(self.user)
+
+        url = reverse('view_lib_file', args=[self.repo.id, self.file]) + '?raw=1'
+        resp = self.client.get(url)
+        self.assertEqual(302, resp.status_code)
+        assert '8082/files/' in resp.get('location')
+
+        resp = requests.request('GET', resp.get('location'))
+        cont_disp = resp.headers['content-disposition']
+        assert 'inline' in cont_disp
+        assert 'attachment' not in cont_disp
