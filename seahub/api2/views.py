@@ -3442,9 +3442,54 @@ class Groups(APIView):
                              "Operation can only be rename.")
 
 class GroupMembers(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        """
+        Get group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid group ID')
+
+        try:
+            group = seaserv.get_group(group_id_int)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to get group.')
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Group not found')
+
+        try:
+            is_group_user = seaserv.is_group_user(group_id_int,
+                                                  request.user.username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to check if is group user.')
+        if not is_group_user:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            members = seaserv.get_group_members(group.id)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to get group members.')
+        members_json = []
+        for m in members:
+            members_json.append({
+                'username': m.user_name,
+                "fullname": email2nickname(m.user_name),
+                "avatar": avatar(m.user_name, 32)
+            })
+
+        return HttpResponse(json.dumps(members_json),
+                            content_type=json_content_type)
 
     def put(self, request, group_id, format=None):
         """
