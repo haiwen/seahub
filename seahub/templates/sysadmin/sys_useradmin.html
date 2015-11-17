@@ -24,6 +24,7 @@
     <div class="fright">
         <button id="import-users-btn"><span class="icon-upload-alt add vam"></span><span class="vam">{% trans "Import users" %}</span></button>
         <button id="add-user-btn"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add user" %}</span></button>
+        <button id="export-excel">{% trans "Export Excel" %}</button>
     </div>
 </div>
 
@@ -207,6 +208,9 @@ $('#upload-csv-form').submit(function() {
         $('.error', form).removeClass('hide');
         return false;
     }
+});
+$("#export-excel").click(function() {
+    location.href = "{% url 'sys_useradmin_export_excel' %}";
 });
 {% include "sysadmin/useradmin_js.html" %}
 </script>

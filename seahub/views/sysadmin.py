@@ -17,6 +17,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
+from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
 
 import seaserv
@@ -28,6 +29,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
+from seahub.base.templatetags.seahub_tags import tsstr_sec, translate_seahub_time_str
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
@@ -39,7 +41,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
-
+from seahub.utils.ms_excel import write_xls
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.views import get_system_default_repo_id, gen_path_link
@@ -48,7 +50,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, \
+from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO
 try:
@@ -574,6 +576,114 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
         }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_useradmin_export_excel(request):
+    """ Export all users from database to excel
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    try:
+        users = seaserv.get_emailusers('DB', -1, -1) + \
+                seaserv.get_emailusers('LDAPImport', -1, -1)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _(u'Failed to export excel'))
+        return HttpResponseRedirect(next)
+
+    if is_pro_version():
+        is_pro = True
+    else:
+        is_pro = False
+
+    if is_pro:
+        if CALC_SHARE_USAGE:
+            head = [_("Email"), _("Status"), _("Role"), _("Space Used"),
+                    _("Space Quota"), _("Share Used"), _("Share Quota"),
+                    _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+        else:
+            head = [_("Email"), _("Status"), _("Role"), _("Space Used"),
+                    _("Space Quota"), _("Create At"), _("Last Login"),
+                    _("Admin"), _("LDAP(imported)"),]
+    else:
+        if CALC_SHARE_USAGE:
+            head = [_("Email"), _("Status"), _("Space Used"),
+                    _("Space Quota"), _("Share Used"), _("Share Quota"),
+                    _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+        else:
+            head = [_("Email"), _("Status"), _("Space Used"),
+                    _("Space Quota"), _("Create At"), _("Last Login"),
+                    _("Admin"), _("LDAP(imported)"),]
+
+    data_list = []
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+        if user.is_active:
+            status = _('Active')
+        else:
+            status = _('Inactive')
+
+        _populate_user_quota_usage(user)
+        space_usage = filesizeformat(user.space_usage)
+        space_quota = filesizeformat(user.space_quota) if \
+            user.space_quota > 0 else ''
+
+        if CALC_SHARE_USAGE:
+            share_usage = filesizeformat(user.share_usage)
+            share_quota = filesizeformat(user.share_quota) if \
+                user.share_quota > 0 else ''
+
+        create_at = tsstr_sec(user.ctime) if user.ctime else '--'
+        last_login = translate_seahub_time_str(user.last_login) if \
+            user.last_login else ''
+
+        is_admin = _('Yes') if user.is_staff else ''
+        ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
+
+        if is_pro:
+            if user.role == GUEST_USER:
+                role = _('Guest')
+            else:
+                role = _('Default')
+
+            if CALC_SHARE_USAGE:
+                row = [user.email, status, role, space_usage, space_quota,
+                       share_usage, share_quota, create_at, last_login,
+                       is_admin, ldap_import]
+            else:
+                row = [user.email, status, role, space_usage, space_quota,
+                       create_at, last_login, is_admin, ldap_import]
+
+        else:
+            if CALC_SHARE_USAGE:
+                row = [user.email, status, space_usage, space_quota,
+                       share_usage, share_quota, create_at, last_login,
+                       is_admin, ldap_import]
+            else:
+                row = [user.email, status, space_usage, space_quota,
+                       create_at, last_login, is_admin, ldap_import]
+
+        data_list.append(row)
+
+    wb = write_xls(_('users'), head, data_list)
+    if not wb:
+        messages.error(request, _(u'Failed to export excel'))
+        return HttpResponseRedirect(next)
+
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=users.xls'
+    wb.save(response)
+    return response
 
 @login_required
 @sys_staff_required
@@ -1272,6 +1382,38 @@ def sys_group_admin(request):
             'per_page': per_page,
             'page_next': page_next,
             }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_group_admin_export_excel(request):
+    """ Export all groups to excel
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    try:
+        groups = ccnet_threaded_rpc.get_all_groups(-1, -1)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _(u'Failed to export excel'))
+        return HttpResponseRedirect(next)
+
+    head = [_("Name"), _("Creator"), _("Create At")]
+    data_list = []
+    for grp in groups:
+        row = [grp.group_name, grp.creator_name, tsstr_sec(grp.timestamp)]
+        data_list.append(row)
+
+    wb = write_xls(_('groups'), head, data_list)
+    if not wb:
+        messages.error(request, _(u'Failed to export excel'))
+        return HttpResponseRedirect(next)
+
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=groups.xls'
+    wb.save(response)
+    return response
 
 @login_required
 @sys_staff_required
