@@ -311,6 +311,11 @@ if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
         url(r'^shib-login/', shib_login, name="shib_login"),
     )
 
+if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
+    urlpatterns += patterns(
+        '', url(r'^krb5-login/', shib_login, name="krb5_login"),
+    )
+
 # serve office converter static files
 from seahub.utils import HAS_OFFICE_CONVERTER, CLUSTER_MODE, OFFICE_CONVERTOR_NODE
 if HAS_OFFICE_CONVERTER:
