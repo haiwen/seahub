@@ -6,9 +6,9 @@ define([
     'app/collections/group-repos',
     'app/views/group-repo',
     'app/views/add-group-repo',
-    'app/views/group-side-nav'
+    'app/views/myhome'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, GroupSideNavView) {
+    AddGroupRepoView, MyHomeView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -23,14 +23,13 @@ define([
         },
 
         initialize: function(options) {
-            this.$tabs = this.$el;
             this.$table = this.$('table');
             this.$tableHead = this.$('thead');
             this.$tableBody = this.$('tbody');
+            this.$path_bar = this.$('.hd-path');
+            this.$group_links = this.$('.group-links');
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-
-            this.sideNavView = new GroupSideNavView();
 
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
@@ -56,9 +55,41 @@ define([
             this.$tableHead.html(this.reposHdTemplate());
         },
 
+        renderGroupLinks: function() {
+            var group_links = '';
+            for (var i = 0; i < app.pageOptions.groups.length; i++) {
+                if (app.pageOptions.groups[i].id == this.group_id) {
+                  var the_group = app.pageOptions.groups[i];
+                }
+            }
+            if (app.pageOptions.is_staff) {
+                group_links += '<a class="op-link sf2-icon-cog1"' + 'href="" title=' + '"' + gettext("Admin") + '"</a>';
+            }
+            if (the_group.view_perm != 'pub') {
+                group_links += '<a class="op-link sf2-icon-user2"' + 'href="" title=' + '"' + gettext("Members") + '"</a>';
+            }
+            if (!the_group.is_pub) {
+                group_links += '<a class="op-link sf2-icon-msgs2"' + 'href="" title=' + '"' + gettext("Discussion") + '"</a>';
+            }
+            this.$group_links.html(group_links);
+        },
+
+        renderPath: function() {
+            var group_name = '';
+            for (var i = 0; i < app.pageOptions.groups.length; i++) {
+                if (app.pageOptions.groups[i].id == this.group_id) {
+                    group_name = app.pageOptions.groups[i].name;
+                }
+            }
+            var path_link = '<a class="normal" href="/groups/">' + gettext("Groups") + '</a> / ' + group_name + ' /';
+            this.$path_bar.html(path_link);
+        },
+
         reset: function() {
             this.$('.error').hide();
             this.$loadingTip.hide();
+            this.renderPath();
+            this.renderGroupLinks();
             if (this.repos.length) {
                 this.$emptyTip.hide();
                 this.renderReposHd();
@@ -71,22 +102,11 @@ define([
             }
         },
 
-        showSideNav: function () {
-            var sideNavView = this.sideNavView;
-            if (sideNavView.group_id && sideNavView.group_id == this.group_id) {
-                sideNavView.show();
-                return;
-            }
-            sideNavView.render(this.group_id);
-            sideNavView.show();
-        },
-
         showRepoList: function(group_id) {
             this.group_id = group_id;
-            this.showSideNav();
             this.dirView.hide();
             this.$emptyTip.hide();
-            this.$tabs.show();
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -117,12 +137,11 @@ define([
         },
 
         hideRepoList: function() {
-            this.$tabs.hide();
+            this.$el.hide();
         },
 
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
-            this.showSideNav();
             this.hideRepoList();
             this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
@@ -169,7 +188,6 @@ define([
         },
 
         hide: function() {
-            this.sideNavView.hide();
             this.hideRepoList();
             this.dirView.hide();
             this.$emptyTip.hide();

@@ -5,11 +5,11 @@ define([
     'common',
     'app/views/myhome',
     'app/views/group',
+    'app/views/groups',
     'app/views/organization',
-    'app/views/dir',
-    'app/views/top-group-nav'
-], function($, Backbone, Common, MyHomeView, GroupView, OrgView,
-    DirView, GroupNavView) {
+    'app/views/dir'
+], function($, Backbone, Common, MyHomeView, GroupView, GroupsView, OrgView,
+    DirView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -21,6 +21,7 @@ define([
             'my-sub-libs/lib/:repo_id(/*path)': 'showMySubRepoDir',
             'shared-libs/': 'showSharedRepos',
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
+            'group/': 'showGroups',
             'group/:group_id/': 'showGroupRepos',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
             'org/': 'showOrgRepos',
@@ -41,13 +42,10 @@ define([
 
             this.myHomeView = new MyHomeView({dirView: this.dirView});
             this.groupView = new GroupView({dirView: this.dirView});
+            this.groupsView = new GroupsView({dirView: this.dirView});
             this.orgView = new OrgView({dirView: this.dirView});
 
             this.currentView = this.myHomeView;
-
-            if (app.pageOptions.top_nav_groups.length > 0) {
-                this.topGroupNavView = new GroupNavView();
-            }
 
             $('#info-bar .close').click(Common.closeTopNoticeBar);
             $('#top-browser-tip .close').click(function () {
@@ -134,11 +132,19 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('shared-libs', repo_id, path);
+            this.myHomeView.sideNavView.show({'cur_tab': 'shared'});
+        },
+
+        showGroups: function() {
+            this.switchCurrentView(this.groupsView);
+            this.myHomeView.sideNavView.show({'cur_tab': 'allgroup'});
         },
 
         showGroupRepos: function(group_id) {
             this.switchCurrentView(this.groupView);
             this.groupView.showRepoList(group_id);
+            var group_scrollTop = this.myHomeView.sideNavView.$el.children('.side-tabnav-tabs-groups').scrollTop();
+            this.myHomeView.sideNavView.show({'cur_tab': 'group', 'cur_group_tab': group_id, 'group_scrollTop': group_scrollTop});
         },
 
         showGroupRepoDir: function(group_id, repo_id, path) {
@@ -154,6 +160,7 @@ define([
         showOrgRepos: function() {
             this.switchCurrentView(this.orgView);
             this.orgView.showRepoList();
+            this.myHomeView.sideNavView.show({'cur_tab': 'org'});
         },
 
         showOrgRepoDir: function(repo_id, path) {

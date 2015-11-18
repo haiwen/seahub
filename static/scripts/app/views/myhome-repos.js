@@ -10,23 +10,23 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        el: $('#repo-tabs'),
+        el: $('#my-own-repos'),
 
         reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
 
         events: {
             'click .repo-create': 'createRepo',
-            'click #my-own-repos .by-name': 'sortByName',
-            'click #my-own-repos .by-time': 'sortByTime'
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
-            this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#my-own-repos table');
+            this.$table = $('table', this.$el);
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('#my-own-repos .empty-tips');
+            this.$path_bar = $('.hd-path', this.$el);
+            this.$loadingTip = $('.loading-tip', this.$el);
+            this.$emptyTip = $('.empty-tips', this.$el);
             this.$repoCreateBtn = this.$('.repo-create');
 
             this.repos = new RepoCollection();
@@ -47,9 +47,15 @@ define([
             this.$tableHead.html(this.reposHdTemplate());
         },
 
+        renderPath: function() {
+            var path_link = '<a href="#my-libs/"' + 'class="normal">' + gettext('Mine') + '</a> /';
+            this.$path_bar.html(path_link);
+        },
+
         reset: function() {
             this.$('.error').hide();
             this.$loadingTip.hide();
+            this.renderPath();
             if (this.repos.length) {
                 this.$emptyTip.hide();
                 this.renderReposHd();
@@ -68,8 +74,7 @@ define([
         },
 
         showMyRepos: function() {
-            this.$tabs.show();
-            $('#mylib-tab').parent().addClass('ui-state-active');
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -107,7 +112,6 @@ define([
             this.$el.hide();
             this.$table.hide();
             this.$emptyTip.hide();
-            $('#mylib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
         createRepo: function() {

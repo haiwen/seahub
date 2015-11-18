@@ -9,16 +9,16 @@ define([
     'use strict';
 
     var SharedReposView = Backbone.View.extend({
-        el: $('#repo-tabs'),
+        el: $('#repos-shared-to-me'),
 
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
-            this.$tabs = $('#repo-tabs');
             this.$table = $('#repos-shared-to-me table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
+            this.$path_bar = $('.hd-path', this.$el);
+            this.$loadingTip = $('.loading-tip', this.$el);
             this.$emptyTip = $('#repos-shared-to-me .empty-tips');
 
             this.repos = new RepoCollection({type: 'shared'});
@@ -39,9 +39,15 @@ define([
             this.$tableHead.html(this.reposHdTemplate());
         },
 
+        renderPath: function() {
+            var path_link = '<a href="#shared-libs/"' + 'class="normal">' + gettext('Shared') + '</a> /';
+            this.$path_bar.html(path_link);
+        },
+
         reset: function() {
             this.$('.error').hide();
             this.$loadingTip.hide();
+            this.renderPath();
             if (this.repos.length) {
                 this.$emptyTip.hide();
                 this.renderReposHd();
@@ -55,8 +61,7 @@ define([
         },
 
         showSharedRepos: function() {
-            this.$tabs.show();
-            $('#shared-lib-tab').parent().addClass('ui-state-active');
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -91,12 +96,11 @@ define([
             this.$el.hide();
             this.$table.hide();
             this.$emptyTip.hide();
-            $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
         events: {
-            'click #repos-shared-to-me .by-name': 'sortByName',
-            'click #repos-shared-to-me .by-time': 'sortByTime'
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         sortByName: function() {

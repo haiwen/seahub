@@ -32,7 +32,7 @@ define([
         },
 
         showMyRepos: function() {
-            this.sideNavView.show();
+            this.sideNavView.show({'cur_tab': 'mine'});
             this.currentView.hide();
             this.reposView.show();
             this.currentView = this.reposView;
@@ -46,7 +46,7 @@ define([
         },
 
         showSharedRepos: function() {
-            this.sideNavView.show();
+            this.sideNavView.show({'cur_tab': 'shared'});
             this.currentView.hide();
             this.sharedReposView.show();
             this.currentView = this.sharedReposView;
