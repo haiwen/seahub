@@ -90,23 +90,6 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
-<script type="text/template" id="top-group-nav-tmpl">
-    <div id="top-nav-grp-info" class="top-info-popup hide">
-        <div class="outer-caret up-outer-caret">
-            <div class="inner-caret"></div>
-        </div>
-        <ul id="top-nav-grp-list">
-            <% for (var i = 0, len = groups.length; i < len; i++) { %>
-            <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
-                <%= groups[i].avatar %>
-                <span class="name ellipsis vam"><%= groups[i].name %></span>
-                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="op-icon sf2-icon-msgs vh"></a>
-            </li>
-            <% } %>
-        </ul>
-        <a href="{{SITE_ROOT}}groups/" class="item all-grp">All Groups</a>
-    </div>
-</script>
 <script type="text/template" id="dir-op-bar-tmpl">
     <% if (user_perm == 'rw') { %>
     <div id="multi-dirents-op" class="hide">
@@ -154,14 +137,14 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="/groups/" class="normal">{% trans "Groups" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a> /
     <% } else if (context == 'org') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#org/" class="normal">{% trans "Organization" %}</a> /
     <% } else if (context == 'common') { %>
-        <a href="#my-libs/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#my-libs/" class="normal">{% trans "Mine" %}</a> /
     <% } else { %>
-        <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
-        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
+        <a href="#<%= category %>/" class="normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
     <% } %>
     <% if (path == '/') { %>
     <%- repo_name %> /
@@ -548,27 +531,38 @@
 </script>
 <script type="text/template" id="myhome-side-nav-tmpl">
     <div class="hd w100 ovhd">
-        <h3 class="fleft">{% trans "Personal" %}</h3>
+        <h3 class="fleft">{% trans "Files" %}</h3>
         <% if (can_add_repo) { %>
         <span id="myhome-enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
         <% } %>
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+        <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+        <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+        <% if (can_view_org) { %>
+        <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
+        <% } %>
+        <li class="group hide-groups tab<% if (cur_tab == 'group' || cur_tab == 'allgroup') { %> tab-cur<% } %>"><a href="javascript:;"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span  class="show-icon<% if (cur_tab != 'group' && cur_tab != 'allgroup') { %> icon-caret-left<% } %>  fright<% if (cur_tab == 'group' || cur_tab == 'allgroup') { %> icon-caret-down<% } %>"></span></a></li>
+    </ul>
+    <ul class="side-tabnav-tabs side-tabnav-tabs-groups<% if (cur_tab != 'group' && cur_tab != 'allgroup') { %> hide<% } %>">
+        <li class="tab<% if (cur_tab == 'allgroup') { %> bold<% } %>"><a href="{{ SITE_ROOT }}#group/" class="group-tab"><span class="gray-prefix"># </span>{% trans "All Groups" %}</a></li>
+        <% for (var i = 0, len = groups.length; i < len; i++) { %>
+        <li class="tab<% if (cur_group_tab == groups[i].id) { %> bold<% } %>"><a class="group-tab ellipsis" href="{{ SITE_ROOT }}#group/<%= groups[i].id %>/"><span class="gray-prefix"># </span><%= groups[i].name %></a></li>
+        <% } %>
+    </ul>
+    <h3 class="hd">{% trans "Tools" %}</h3>
+    <ul class="side-tabnav-tabs">
         <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
         <% if (events_enabled) { %>
         <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
         <% } %>
-
+        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
         <li class="tab"><a href="{{ SITE_ROOT }}home/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
             <% } %>
         <% } %>
-
-        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
-
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <% if (can_add_repo) { %>

@@ -37,7 +37,6 @@
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
-                {% block nav %}{% endblock %}
 
                 {% block header_right %}
                 {% if request.user.is_authenticated %}
@@ -45,6 +44,10 @@
                 {% if has_file_search %}
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
+
+                <div id="help-link" class="fleft">
+                    <a href="{{SITE_ROOT}}help/" target="_blank" class="sf2-icon-help" title="{% trans "Help" %}"></a>
+                </div>
 
                 <div data-url="{% url 'unseen_notices_count' %}" id="msg-count" class="fleft">
                     <div id="notice-icon" class="cspt" title="{% trans "Notifications" %}">

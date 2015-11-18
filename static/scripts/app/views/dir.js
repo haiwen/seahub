@@ -30,10 +30,9 @@ define([
 
             initialize: function(options) {
                 this.$dirent_list = this.$('.repo-file-list tbody');
-                this.$path_bar = this.$('.path');
+                this.$path_bar = this.$('.hd-path');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
-
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
                 this.listenTo(this.dir, 'reset', this.reset);
@@ -265,20 +264,27 @@ define([
                 var dir = this.dir;
                 var path = dir.path;
                 var context = 'my';
-
+                var group_name = '';
                 var category_start = dir.category.split('/')[0];
                 if (category_start == 'org') {
                     context = 'org';
                 } else if (category_start == 'group') {
                     context = 'group';
+                    for (var i = 0; i < app.pageOptions.groups.length; i++) {
+                        if (app.pageOptions.groups[i].id == dir.category.split('/')[1]) {
+                            group_name = app.pageOptions.groups[i].name;
+                        }
+                    }
                 } else if (category_start == 'common') {
                     context = 'common';
                 }
+
                 var obj = {
                         path: path,
                         repo_name: dir.repo_name,
                         category: dir.category,
-                        context: context
+                        context: context,
+                        group_name: group_name
                     };
 
                 var path_list = path.substr(1).split('/');

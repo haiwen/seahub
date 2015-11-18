@@ -6,32 +6,32 @@ define([
     'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/create-pub-repo',
-    'app/views/add-pub-repo'
+    'app/views/add-pub-repo',
+    'app/views/myhome'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    CreatePubRepoView, AddPubRepoView) {
+    CreatePubRepoView, AddPubRepoView, MyHomeView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        el: '#main',
+        el: '#organization-repos',
 
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
 
-            this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
+            this.$path_bar = $('.hd-path', this.$el);
             this.$loadingTip = $('#organization-repos .loading-tip');
             this.$emptyTip = $('#organization-repos .empty-tips');
-
+            
             this.repos = new PubRepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = options.dirView;
-
             // show/hide 'add lib' menu
             var $add_lib = $('#add-pub-lib'),
                 $add_lib_menu = $('#add-pub-lib-menu');
@@ -39,7 +39,7 @@ define([
                 $add_lib_menu.toggleClass('hide');
                 $add_lib_menu.css({
                     'top': $add_lib.position().top + $add_lib.outerHeight(),
-                    'right': 10 // align right with $add_lib
+                    'left': 10 // align right with $add_lib
                 });
             });
             $('.item', $add_lib_menu).hover(
@@ -56,10 +56,10 @@ define([
         },
 
         events: {
-            'click #organization-repos .share-existing': 'addRepo',
-            'click #organization-repos .create-new': 'createRepo',
-            'click #organization-repos .by-name': 'sortByName',
-            'click #organization-repos .by-time': 'sortByTime'
+            'click .share-existing': 'addRepo',
+            'click .create-new': 'createRepo',
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         createRepo: function() {
@@ -83,9 +83,15 @@ define([
             this.$tableHead.html(this.reposHdTemplate());
         },
 
+        renderPath: function() {
+            var path_link = '<a href="#org/"' + 'class="normal">' + gettext('Organization') + '</a> /';
+            this.$path_bar.html(path_link);
+        },
+
         reset: function() {
             this.$('.error').hide();
             this.$loadingTip.hide();
+            this.renderPath();
             if (this.repos.length) {
                 this.$emptyTip.hide();
                 this.renderReposHd();
@@ -99,7 +105,6 @@ define([
         },
 
         showRepoList: function() {
-            this.$sideNav.show();
             this.dirView.hide();
             this.$reposDiv.show();
             var $loadingTip = this.$loadingTip;
@@ -133,7 +138,6 @@ define([
         },
 
         showDir: function(repo_id, path) {
-            this.$sideNav.show();
             var path = path || '/';
             this.hideRepoList();
             this.dirView.showDir('org', repo_id, path);
@@ -177,7 +181,6 @@ define([
         },
 
         hide: function() {
-            this.$sideNav.hide();
             this.hideRepoList();
             this.$emptyTip.hide();
             this.dirView.hide();
