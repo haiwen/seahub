@@ -56,7 +56,7 @@
 
                 {% for dirent in file_list %}
                 <tr class="file-item" data-name="{{dirent.obj_name}}" >
-                    {% if dirent.allow_generate_thumbnail %}
+                    {% if dirent.is_img %}
                         {% if dirent.encoded_thumbnail_src %}
                             <td class="dirent-icon"><img class="thumbnail" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="{% trans "File"%}" /></td>
                         {% else %}

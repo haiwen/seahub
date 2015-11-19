@@ -52,7 +52,7 @@ from seahub.group.views import group_check, remove_group_common, \
     rename_group_with_new_name
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
     validate_group_name
-from seahub.thumbnail.utils import allow_generate_thumbnail, generate_thumbnail
+from seahub.thumbnail.utils import generate_thumbnail
 from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
@@ -90,7 +90,7 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS
+        ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, ENABLE_THUMBNAIL
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -4361,7 +4361,6 @@ class ThumbnailView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         size = request.GET.get('size', None)
-        path = request.GET.get('p', None)
         if size is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Size is missing.')
 
@@ -4371,27 +4370,32 @@ class ThumbnailView(APIView):
             logger.error(e)
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid size.')
 
+        path = request.GET.get('p', None)
         obj_id = get_file_id_by_path(repo_id, path)
         if path is None or obj_id is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong path.')
 
-        if check_folder_permission(request, repo_id, path) is None:
+        if repo.encrypted or not ENABLE_THUMBNAIL or \
+            check_folder_permission(request, repo_id, path) is None:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        if not allow_generate_thumbnail(request, repo_id, path):
-            return api_error(status.HTTP_403_FORBIDDEN, 'Not allowed to generate thumbnail.')
+        success, status_code = generate_thumbnail(request, repo_id, size, path)
+        if success:
+            thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
+            thumbnail_file = os.path.join(thumbnail_dir, obj_id)
+            try:
+                with open(thumbnail_file, 'rb') as f:
+                    thumbnail = f.read()
+                return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
+            except IOError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get thumbnail.')
         else:
-            if generate_thumbnail(request, repo_id, size, path):
-                thumbnail_dir = os.path.join(THUMBNAIL_ROOT, str(size))
-                thumbnail_file = os.path.join(thumbnail_dir, obj_id)
-                try:
-                    with open(thumbnail_file, 'rb') as f:
-                        thumbnail = f.read()
-                    return HttpResponse(thumbnail, 'image/' + THUMBNAIL_EXTENSION)
-                except IOError as e:
-                    logger.error(e)
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get thumbnail.')
-            else:
+            if status_code == 400:
+                return api_error(status.HTTP_400_BAD_REQUEST, "Invalid argument")
+            if status_code == 403:
+                return api_error(status.HTTP_403_FORBIDDEN, 'Forbidden')
+            if status_code == 500:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to generate thumbnail.')
 
 _REPO_ID_PATTERN = re.compile(r'[-0-9a-f]{36}')
