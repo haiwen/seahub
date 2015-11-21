@@ -394,6 +394,7 @@ def _file_view(request, repo_id, path):
         return render_permission_error(request, _(u'Unable to view file'))
 
     # Pass permission check, start download or render file.
+
     if request.GET.get('dl', '0') == '1':
         token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
                                                         'download', username,
@@ -402,6 +403,15 @@ def _file_view(request, repo_id, path):
         # send stats message
         send_file_access_msg(request, repo, path, 'web')
         return HttpResponseRedirect(dl_url)
+
+    if request.GET.get('raw', '0') == '1':
+        token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
+                                                        'view', username,
+                                                        use_onetime=True)
+        raw_url = gen_file_get_url(token, u_filename)
+        # send stats message
+        send_file_access_msg(request, repo, path, 'web')
+        return HttpResponseRedirect(raw_url)
 
     # Get file view raw path, ``user_perm`` is not used anymore.
     if filetype == VIDEO or filetype == AUDIO:

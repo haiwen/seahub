@@ -57,7 +57,11 @@ except ImportError:
 
 def is_cluster_mode():
     cfg = ConfigParser.ConfigParser()
-    conf = os.path.join(os.environ['SEAFILE_CONF_DIR'], 'seafile.conf')
+    if 'SEAFILE_CENTRAL_CONF_DIR' in os.environ:
+        confdir = os.environ['SEAFILE_CENTRAL_CONF_DIR']
+    else:
+        confdir = os.environ['SEAFILE_CONF_DIR']
+    conf = os.path.join(confdir, 'seafile.conf')
     cfg.read(conf)
     if cfg.has_option('cluster', 'enabled'):
         enabled = cfg.getboolean('cluster', 'enabled')
@@ -312,7 +316,7 @@ def get_user_repos(username, org_id=None):
         groups_repos = []
         for group in seaserv.get_org_groups_by_user(org_id, username):
             groups_repos += seafile_api.get_org_group_repos(org_id, group.id)
-        public_repos = seaserv.list_org_inner_pub_repos(org_id)
+        public_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos(org_id)
 
         for r in shared_repos + groups_repos + public_repos:
             # collumn names in shared_repo struct are not same as owned
@@ -628,6 +632,14 @@ if EVENTS_CONFIG_FILE:
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
+    def get_log_events_by_time(log_type, tstart, tend):
+        """Return log events list by start/end timestamp. (If no logs, return 'None')
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_event_log_by_time(session, log_type, tstart, tend)
+
+        return events if events else None
+
     def get_file_audit_events(email, org_id, repo_id, start, limit):
         """Return file audit events list. (If no file audit, return 'None')
 
@@ -685,6 +697,8 @@ if EVENTS_CONFIG_FILE:
 else:
     EVENTS_ENABLED = False
     def get_user_events():
+        pass
+    def get_log_events_by_time():
         pass
     def get_org_user_events():
         pass

@@ -44,7 +44,7 @@ urlpatterns = patterns(
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
-    url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
+    url(r'^home/wiki/(?P<page_name>[^/]+)$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
     url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
     url(r'^home/wiki_use_lib/$', personal_wiki_use_lib, name='personal_wiki_use_lib'),
@@ -217,10 +217,12 @@ urlpatterns = patterns(
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
+    url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
     url(r'^sys/useradmin/ldap/$', sys_user_admin_ldap, name='sys_useradmin_ldap'),
     url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),
     url(r'^sys/useradmin/admins/$', sys_user_admin_admins, name='sys_useradmin_admins'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+    url(r'^sys/groupadmin/export-excel/$', sys_group_admin_export_excel, name='sys_group_admin_export_excel'),
     url(r'^sys/groupadmin/(?P<group_id>\d+)/$', sys_admin_group_info, name='sys_admin_group_info'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/orgadmin/search/$', sys_org_search, name='sys_org_search'),
@@ -294,12 +296,18 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
-        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
+        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
+        sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
+        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += patterns('',
-        url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
-        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
-        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
-        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
+        url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
+        url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
+        url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
+        url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
+        url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
+        url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
+        url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
     )
 
 if getattr(settings, 'MULTI_TENANCY', False):

@@ -6,6 +6,7 @@ view_trash_file, view_snapshot_file
 
 import os
 import hashlib
+import logging
 import json
 import stat
 import tempfile
@@ -34,8 +35,11 @@ from seahub.wiki.models import PersonalWiki, WikiDoesNotExist, WikiPageMissing
 from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
     convert_wiki_link, get_wiki_pages
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
-from seahub.wiki.utils import clean_page_name
+from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.utils import render_error
+
+# Get an instance of a logger
+logger = logging.getLogger(__name__)
 
 @login_required
 @user_mods_check
@@ -54,14 +58,13 @@ def personal_wiki(request, page_name="home"):
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
-        filename = clean_page_name(page_name) + '.md'
+        filename = page_name_to_file_name(clean_page_name(page_name))
         if not seaserv.post_empty_file(repo.id, "/", filename, username):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('personal_wiki', args=[page_name]))
     else:
         url_prefix = reverse('personal_wiki', args=[])
-        content = convert_wiki_link(content, url_prefix, repo.id, username)
-        
+
         # fetch file modified time and modifier
         path = '/' + dirent.obj_name
         try:
@@ -81,8 +84,6 @@ def personal_wiki(request, page_name="home"):
             index_content, index_repo, index_dirent = get_personal_wiki_page(username, index_pagename)
         except (WikiDoesNotExist, WikiPageMissing) as e:
             wiki_index_exists = False
-        else:
-            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
 
         return render_to_response("wiki/personal_wiki.html", { 
             "wiki_exists": wiki_exists,

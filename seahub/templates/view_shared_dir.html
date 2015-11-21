@@ -188,7 +188,8 @@ $(function() {
             success: function(data) {
                 if (data) {
                     img_icon.attr("src", '{{ SITE_ROOT }}' + data.encoded_thumbnail_src).load(function() {
-                        $(this).removeClass("not-thumbnail").addClass("thumbnail");
+                        $(this).removeClass("not-thumbnail").addClass("thumbnail")
+                        .removeAttr('width'); // for grid view
                     });
                 }
             },

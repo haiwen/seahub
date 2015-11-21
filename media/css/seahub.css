@@ -1398,6 +1398,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:5px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
     white-space:nowrap;
+    z-index:10; /* for shared dir grid view */
 }
 #lang-context-selector a,
 #to-group a {
