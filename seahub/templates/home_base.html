@@ -98,6 +98,14 @@ $('#group-nav a:first').click(function() {
     $('#group-nav .grp-list').slideToggle();
     return false;
 });
+$('#group-nav .grp-list').hover(
+    function () {
+        $(this).css({'overflow': 'auto'});
+    },
+    function () {
+        $(this).css({'overflow': 'hidden'});
+    }
+);
 {% endif %}
 </script>
 {% endblock %}

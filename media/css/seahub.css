@@ -731,7 +731,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #group-nav .grp-list {
     max-height:105px;
-    overflow:auto;
+    overflow:hidden;
 }
 #group-nav .sharp {
     display:inline-block;
