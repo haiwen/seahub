@@ -11,17 +11,6 @@
 {% endblock %}
 
 {% block left_panel %}
-<div class="side-tabnav hide" id="myhome-side-nav">
-</div>
-<div class="side-tabnav hide" id="group-side-nav">
-</div>
-<div class="side-tabnav hide" id="org-side-nav">
-    <h3 class="hd">{% trans "Organization" %}</h3>
-    <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{% url 'pubuser' %}"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
-    </ul>
-</div>
 <div class="info-item hide" id="groups-side-tips">
     <h3 class="info-item-top">{% trans "Tips" %}</h3>
     <div class="info-item-bottom">
@@ -32,6 +21,7 @@
         {% endif %}
     </div>
 </div>
+<div class="side-tabnav hide" id="side-nav"></div>
 {% endblock %}
 
 {% block right_panel %}
@@ -252,17 +242,6 @@ app["pageOptions"] = {
         var groups = [];
         {% for group in request.user.joined_groups %}
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
-        {% endfor %}
-        return groups;
-    })(),
-    top_nav_groups: (function () {
-        var groups = [];
-        {% for group in grps %}
-        groups.push({
-            'name': '{{group.group_name}}',
-            'id': '{{group.id}}',
-            'avatar': '{% grp_avatar group.id 36 %}'
-        });
         {% endfor %}
         return groups;
     })(),

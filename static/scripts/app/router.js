@@ -3,14 +3,14 @@ define([
     'jquery',
     'backbone',
     'common',
+    'app/views/side-nav',
     'app/views/myhome',
     'app/views/groups',
     'app/views/group',
     'app/views/organization',
-    'app/views/dir',
-    'app/views/top-group-nav'
-], function($, Backbone, Common, MyHomeView, GroupsView, GroupView, OrgView,
-    DirView, GroupNavView) {
+    'app/views/dir'
+], function($, Backbone, Common, SideNavView, MyHomeView, GroupsView, GroupView,
+    OrgView, DirView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -39,6 +39,8 @@ define([
             Common.initAccountPopup();
             Common.initNoticePopup();
 
+            this.sideNavView = new SideNavView();
+
             this.dirView = new DirView();
 
             this.myHomeView = new MyHomeView({dirView: this.dirView});
@@ -48,10 +50,6 @@ define([
             this.groupsView = new GroupsView();
 
             this.currentView = this.myHomeView;
-
-            if (app.pageOptions.top_nav_groups.length > 0) {
-                this.topGroupNavView = new GroupNavView();
-            }
 
             $('#info-bar .close').click(Common.closeTopNoticeBar);
             $('#top-browser-tip .close').click(function () {
@@ -72,12 +70,14 @@ define([
                 this.myHomeView.showMyRepos();
             } else {
                 this.myHomeView.showSharedRepos();
+                this.sideNavView.setCurTab('shared');
             }
         },
 
         showMyRepos: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showMyRepos();
+            this.sideNavView.setCurTab('mine');
         },
 
         showMySubRepos: function() {
@@ -88,16 +88,19 @@ define([
         showSharedRepos: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showSharedRepos();
+            this.sideNavView.setCurTab('shared');
         },
 
         showStarredFile: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showStarredFile();
+            this.sideNavView.setCurTab('starred');
         },
 
         showActivities: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showActivities();
+            this.sideNavView.setCurTab('activities');
         },
 
         showMyRepoDir: function(repo_id, path) {
@@ -108,6 +111,7 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('my-libs', repo_id, path);
+            this.sideNavView.setCurTab('mine');
         },
 
         showCommonDir: function(repo_id, path) {
@@ -128,6 +132,7 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('my-sub-libs', repo_id, path);
+            this.sideNavView.setCurTab('sub-libs');
         },
 
         showSharedRepoDir: function(repo_id, path) {
@@ -138,6 +143,7 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('shared-libs', repo_id, path);
+            this.sideNavView.setCurTab('shared');
         },
 
         showGroups: function () {
@@ -148,6 +154,7 @@ define([
         showGroupRepos: function(group_id) {
             this.switchCurrentView(this.groupView);
             this.groupView.showRepoList(group_id);
+            this.sideNavView.setCurTab('group', {'cur_group_id': group_id});
         },
 
         showGroupRepoDir: function(group_id, repo_id, path) {
@@ -158,11 +165,13 @@ define([
             }
             this.switchCurrentView(this.groupView);
             this.groupView.showDir(group_id, repo_id, path);
+            this.sideNavView.setCurTab('group', {'cur_group_id': group_id});
         },
 
         showOrgRepos: function() {
             this.switchCurrentView(this.orgView);
             this.orgView.showRepoList();
+            this.sideNavView.setCurTab('org');
         },
 
         showOrgRepoDir: function(repo_id, path) {
@@ -173,6 +182,7 @@ define([
             }
             this.switchCurrentView(this.orgView);
             this.orgView.showDir(repo_id, path);
+            this.sideNavView.setCurTab('org');
         }
 
     });

@@ -5,10 +5,9 @@ define([
     'common',
     'app/collections/group-repos',
     'app/views/group-repo',
-    'app/views/add-group-repo',
-    'app/views/group-side-nav'
+    'app/views/add-group-repo'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, GroupSideNavView) {
+    AddGroupRepoView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -29,8 +28,6 @@ define([
             this.$tableBody = this.$('tbody');
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-
-            this.sideNavView = new GroupSideNavView();
 
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
@@ -71,19 +68,8 @@ define([
             }
         },
 
-        showSideNav: function () {
-            var sideNavView = this.sideNavView;
-            if (sideNavView.group_id && sideNavView.group_id == this.group_id) {
-                sideNavView.show();
-                return;
-            }
-            sideNavView.render(this.group_id);
-            sideNavView.show();
-        },
-
         showRepoList: function(group_id) {
             this.group_id = group_id;
-            this.showSideNav();
             this.dirView.hide();
             this.$emptyTip.hide();
             this.$tabs.show();
@@ -122,7 +108,6 @@ define([
 
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
-            this.showSideNav();
             this.hideRepoList();
             this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
@@ -169,7 +154,6 @@ define([
         },
 
         hide: function() {
-            this.sideNavView.hide();
             this.hideRepoList();
             this.dirView.hide();
             this.$emptyTip.hide();
