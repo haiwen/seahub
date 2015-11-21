@@ -90,23 +90,6 @@
     <td><%= mtime_relative %></td>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
-<script type="text/template" id="top-group-nav-tmpl">
-    <div id="top-nav-grp-info" class="top-info-popup hide">
-        <div class="outer-caret up-outer-caret">
-            <div class="inner-caret"></div>
-        </div>
-        <ul id="top-nav-grp-list">
-            <% for (var i = 0, len = groups.length; i < len; i++) { %>
-            <li class="item" data-url="#group/<%= groups[i].id %>/" title="<%= groups[i].name %>">
-                <%= groups[i].avatar %>
-                <span class="name ellipsis vam"><%= groups[i].name %></span>
-                <a href="{{SITE_ROOT}}group/<%= groups[i].id %>/discuss/" title="{% trans "Discussion" %}" class="op-icon sf2-icon-msgs vh"></a>
-            </li>
-            <% } %>
-        </ul>
-        <a href="{{SITE_ROOT}}groups/" class="item all-grp">All Groups</a>
-    </div>
-</script>
 <script type="text/template" id="dir-op-bar-tmpl">
     <% if (user_perm == 'rw') { %>
     <div id="multi-dirents-op" class="hide">
@@ -546,27 +529,70 @@
     <td><a href="#my-libs/lib/<%= origin_repo_id %><%- origin_path %>"><%- abbrev_origin_path %></a></td>
     <td><%= mtime_relative %></td>
 </script>
-<script type="text/template" id="myhome-side-nav-tmpl">
-    <div class="hd w100 ovhd">
-        <h3 class="fleft">{% trans "Personal" %}</h3>
-        <% if (can_add_repo) { %>
-        <span id="myhome-enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
+<script type="text/template" id="side-nav-tmpl">
+    <h3 class="hd">{% trans "Files" %}</h3>
+    <ul class="side-tabnav-tabs">
+        {% if user.permissions.can_add_repo %}
+        <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+        {% comment %}
+        {% if sub_lib_enabled %}
+        <li class="tab<% if (cur_tab == 'sub-libs') { %> tab-cur<% } %>"><a href="#my-sub-libs/">{% trans "Sub-libraries" %}</a></li>
+        {% endif %}
+        {% endcomment %}
+        {% endif %}
+
+        <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+
+        {% if user.permissions.can_view_org %}
+        <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
+        {% endif %}
+
+        <% if (cur_tab == 'group') { %>
+        <li class="tab tab-cur" id="group-nav">
+            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
+            <ul class="grp-list">
+                <li><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
+                {% for grp in grps %}
+                <li<% if (cur_group_id == '{{ grp.id }}') { %> class="cur"<% }%>>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <% } else { %>
+        <li class="tab" id="group-nav">
+            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+            <ul class="grp-list hide">
+                <li>
+                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                </li>
+                {% for grp in grps %}
+                <li>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
         <% } %>
+    </ul>
+
+    <div class="hd w100 ovhd">
+        <h3 class="fleft">{% trans "Tools" %}</h3>
+        {% if user.permissions.can_add_repo %}
+        <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
+        {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'libs') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
         <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
-        <% if (events_enabled) { %>
+        {% if events_enabled %}
         <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
-        <% } %>
-
-        <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
-            <% if (mods_enabled[i] == 'personal wiki') { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}home/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
-            <% } %>
-        <% } %>
-
-        <li class="tab"><a href="{{ SITE_ROOT }}devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+        {% endif %}
+        {% for mod in request.user.mods_enabled %}
+        {% if mod == 'personal wiki' %}
+        <li class="tab"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
+        {% endif %}
+        {% endfor %}
+        <li class="tab"><a href="{% url 'devices' %}"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
@@ -578,6 +604,7 @@
         <li class="tab"><a href="{{ SITE_ROOT }}share/links/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
     </ul>
 </script>
+
 <script type="text/template" id="myhome-mods-enable-form-tmpl">
 <form id="myhome-mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>
@@ -599,38 +626,6 @@
     </ul>
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
-</script>
-<script type="text/template" id="group-side-nav-tmpl">
-    <div class="hd w100 ovhd">
-        <h3 class="fleft">
-            <%= avatar %> <span title="<%- name %>" class="grp-name ellipsis vam"><%- name %></span>
-        </h3>
-        <% if (is_staff) { %>
-            <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
-        <% } %>
-        <% if (is_pub) { %>
-            <img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />
-        <% } %>
-    </div>
-    <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="#group/<%= id %>/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-
-        <% if (!is_pub) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/discuss/"><span class="sf2-icon-msgs"></span>{% trans "Discussion" %}</a></li>
-        <% } %>
-
-        <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
-            <% if (mods_enabled[i] == 'group wiki') { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/wiki/"><span class="sf2-icon-wiki"></span>{% trans "Wiki" %}</a></li>
-            <% } %>
-        <% } %>
-
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/members/"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
-
-        <% if (is_staff) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}group/<%= id %>/manage/"><span class="sf2-icon-wrench"></span>{% trans "Admin" %}</a></li>
-        <% } %>
-    </ul>
 </script>
 <script type="text/template" id="group-mods-enable-form-tmpl">
 <form id="mods-enable-form" method="post" action="" class="hide">{% csrf_token%}

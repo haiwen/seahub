@@ -18,19 +18,19 @@
         {% if user.permissions.can_view_org %}
         <li class="tab"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
         {% endif %}
-        <li class="tab">
-            {% if grps %}
-            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
-            <ul class="group-list">
+
+        <li class="tab" id="group-nav">
+            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+            <ul class="grp-list hide">
+                <li>
+                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                </li>
                 {% for grp in grps %}
-                <li class="item">
-                    <a class="name ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}">{{ grp.group_name }}</a>
+                <li>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
                 </li>
                 {% endfor %}
             </ul>
-            {% else %}
-            <a href="{% url 'group_list' %}"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
-            {% endif %}
         </li>
     </ul>
 
@@ -91,6 +91,11 @@
 $('#enable-mods').click(function() {
     $('#mods-enable-form').modal({appendTo: "#main"});
     $('#simplemodal-container').css('height', 'auto');
+    return false;
+});
+$('#group-nav a:first').click(function() {
+    $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
+    $('#group-nav .grp-list').slideToggle();
     return false;
 });
 {% endif %}

@@ -18,7 +18,6 @@ define([
 
         initialize: function(options) {
 
-            this.$sideNav = $('#org-side-nav');
             this.$reposDiv = $('#organization-repos');
             this.$table = $('#organization-repos table');
             this.$tableHead = $('thead', this.$table);
@@ -99,7 +98,6 @@ define([
         },
 
         showRepoList: function() {
-            this.$sideNav.show();
             this.dirView.hide();
             this.$reposDiv.show();
             var $loadingTip = this.$loadingTip;
@@ -133,7 +131,6 @@ define([
         },
 
         showDir: function(repo_id, path) {
-            this.$sideNav.show();
             var path = path || '/';
             this.hideRepoList();
             this.dirView.showDir('org', repo_id, path);
@@ -177,7 +174,6 @@ define([
         },
 
         hide: function() {
-            this.$sideNav.hide();
             this.hideRepoList();
             this.$emptyTip.hide();
             this.dirView.hide();

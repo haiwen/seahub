@@ -690,6 +690,10 @@ textarea:-moz-placeholder {/* for FF */
     color:#333;
     font-weight:normal;
 }
+.side-tabnav-tabs .tab .grp-list a {
+    font-size:14px;
+    padding:0;
+}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;
@@ -712,8 +716,29 @@ textarea:-moz-placeholder {/* for FF */
 .side-tabnav-tabs .tab-cur a {
     color:#fff;
 }
-.side-tabnav-tabs .tab-cur a {
+.side-tabnav-tabs .tab-cur a,
+.side-tabnav-tabs .tab-cur .grp-list .cur a {
     font-weight:bold;
+}
+.side-tabnav-tabs .tab-cur .grp-list a {
+    background:transparent;
+    font-weight:normal;
+    color:#333;
+}
+.side-tabnav-tabs .tab .grp-list a:hover,
+.side-tabnav-tabs .tab-cur .grp-list a:hover {
+    background-color:#feefb8;
+}
+#group-nav .grp-list {
+    max-height:105px;
+    overflow:auto;
+}
+#group-nav .sharp {
+    display:inline-block;
+    width:42px;
+    margin-right:5px;
+    text-align:right;
+    color:#aaa;
 }
 .side-textnav .hd {
     margin:2em 0 .5em;
