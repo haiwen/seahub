@@ -104,7 +104,7 @@ class Fixtures(Exam):
 
 class BaseTestCase(TestCase, Fixtures):
     def login_as(self, user):
-        self.client.post(
+        return self.client.post(
             reverse('auth_login'), {'login': user.username,
-                                    'password': 'secret'}
+                                    'password': self.user_password}
         )

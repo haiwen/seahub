@@ -46,6 +46,7 @@ from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.views import get_system_default_repo_id, gen_path_link
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
+from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
@@ -1236,7 +1237,9 @@ def user_reset(request, email):
             new_password = INIT_PASSWD
         user.set_password(new_password)
         user.save()
+
         clear_token(user.username)
+        UserOptions.objects.set_force_passwd_change(user.username)
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
@@ -1309,6 +1312,7 @@ def user_add(request):
 
         if user:
             User.objects.update_role(email, role)
+            UserOptions.objects.set_force_passwd_change(email)
 
         if request.user.org:
             org_id = request.user.org.org_id
