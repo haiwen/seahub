@@ -9,17 +9,16 @@ define([
     'use strict';
 
     var SharedReposView = Backbone.View.extend({
-        el: $('#repo-tabs'),
+        el: $('#repos-shared-to-me'),
 
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
-            this.$tabs = $('#repo-tabs');
-            this.$table = $('#repos-shared-to-me table');
+            this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('#repos-shared-to-me .empty-tips');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
 
             this.repos = new RepoCollection({type: 'shared'});
             this.listenTo(this.repos, 'add', this.addOne);
@@ -55,8 +54,7 @@ define([
         },
 
         showSharedRepos: function() {
-            this.$tabs.show();
-            $('#shared-lib-tab').parent().addClass('ui-state-active');
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -89,14 +87,11 @@ define([
 
         hide: function() {
             this.$el.hide();
-            this.$table.hide();
-            this.$emptyTip.hide();
-            $('#shared-lib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
         events: {
-            'click #repos-shared-to-me .by-name': 'sortByName',
-            'click #repos-shared-to-me .by-time': 'sortByTime'
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         sortByName: function() {

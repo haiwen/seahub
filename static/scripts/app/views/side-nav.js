@@ -16,6 +16,7 @@ define([
             this.default_cur_tab = 'mine';
             this.data = {
                 'cur_tab': this.default_cur_tab,
+                'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
