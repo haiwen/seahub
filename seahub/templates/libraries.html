@@ -131,12 +131,7 @@
 {% endif %}
 
 <div id="group-repo-tabs" class="hide">
-    <div class="hd ovhd">
-        <h3 class="fleft">{% trans "Group" %}</h3>
-        {% if user.permissions.can_add_repo %}
-        <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-        {% endif %}
-    </div>
+    <div id="group-top"></div>
 
     <div id="grp-repos">
         <table class="hide">
