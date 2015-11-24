@@ -10,23 +10,22 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        el: $('#repo-tabs'),
+        el: $('#my-own-repos'),
 
         reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
 
         events: {
             'click .repo-create': 'createRepo',
-            'click #my-own-repos .by-name': 'sortByName',
-            'click #my-own-repos .by-time': 'sortByTime'
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         initialize: function(options) {
-            this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#my-own-repos table');
+            this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('#my-own-repos .empty-tips');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
             this.$repoCreateBtn = this.$('.repo-create');
 
             this.repos = new RepoCollection();
@@ -68,8 +67,7 @@ define([
         },
 
         showMyRepos: function() {
-            this.$tabs.show();
-            $('#mylib-tab').parent().addClass('ui-state-active');
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -98,16 +96,11 @@ define([
         },
 
         show: function() {
-            this.$repoCreateBtn.show();
             this.showMyRepos();
         },
 
         hide: function() {
-            this.$repoCreateBtn.hide();
             this.$el.hide();
-            this.$table.hide();
-            this.$emptyTip.hide();
-            $('#mylib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
         createRepo: function() {

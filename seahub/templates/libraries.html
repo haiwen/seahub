@@ -11,44 +11,16 @@
 {% endblock %}
 
 {% block left_panel %}
-<div class="side-tabnav hide" id="myhome-side-nav">
-</div>
-<div class="side-tabnav hide" id="group-side-nav">
-</div>
-<div class="side-tabnav hide" id="org-side-nav">
-    <h3 class="hd">{% trans "Organization" %}</h3>
-    <ul class="side-tabnav-tabs">
-        <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{% url 'pubuser' %}"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
-    </ul>
-</div>
+<div class="side-tabnav hide" id="side-nav"></div>
 {% endblock %}
 
 {% block right_panel %}
-
-
-<div id="repo-tabs" class="tab-tabs hide">
-    <div class="hd">
-        <ul class="tab-tabs-nav fleft">
-            {% if user.permissions.can_add_repo %}
-            <li class="tab"><a href="#my-libs/" class="a" id="mylib-tab">{% trans "Mine" %}</a></li>
-            {% if sub_lib_enabled %}
-            <li class="tab"><a href="#my-sub-libs/" class="a" id="sublib-tab">{% trans "Sub-libraries" %}</a></li>
-            {% endif %}
-            {% endif %}
-            <li class="tab"><a href="#shared-libs/" class="a" id="shared-lib-tab">{% trans "Shared" %}</a></li>
-        </ul>
-        <div class="fright">
-            {% if user.permissions.can_add_repo %}
-            <button class="repo-create"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-            {% endif %}
-            {% if sub_lib_enabled %}
-            <button id="sub-lib-create" class="hide" title="{% trans "New Sub-library" %}"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "New Sub-library" %}</span></button>
-            {% endif %}
+    {% if user.permissions.can_add_repo %}
+    <div id="my-own-repos" class="hide">
+        <div class="hd ovhd">
+            <h3 class="fleft">{% trans "Mine" %}</h3>
+            <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
         </div>
-    </div>
-
-    <div id="my-own-repos">
         <table class="hide">
             <thead></thead>
             <tbody></tbody>
@@ -57,9 +29,17 @@
             <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
             <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
         </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
     </div>
+    {% endif %}
 
-    <div id="my-sub-repos">
+    {% if user.permissions.can_add_repo and sub_lib_enabled %}
+    <div id="my-sub-repos" class="hide">
+        <div class="hd ovhd">
+            <h3 class="fleft">{% trans "Sub-libraries" %}</h3>
+            <button id="sub-lib-create" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Sub-library" %}</span></button>
+        </div>
         <table class="hide">
             <thead>
             <tr>
@@ -76,9 +56,13 @@
             <h2 class="center-contents">{% trans "You have not created any sub-libraries" %}</h2>
             <p>{% trans "You can create a sub-library from a directory inside a library. A sub-library can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
         </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
     </div>
+    {% endif %}
 
-    <div id="repos-shared-to-me">
+    <div id="repos-shared-to-me" class="hide">
+        <h3 class="hd">{% trans "Shared" %}</h3>
         <table class="hide">
             <thead></thead>
             <tbody></tbody>
@@ -86,11 +70,10 @@
         <div class="empty-tips hide">
             <h2 class="alc">{% trans "No library is shared to you" %}</h2>
         </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
     </div>
 
-    <span class="loading-icon loading-tip"></span>
-    <p class="error error-tip hide"></p>
-</div>
 
 <div id="starred-file" class="hide">
     <h3 class="hd">{% trans "Starred" %}</h3>
@@ -147,16 +130,16 @@
 </form>
 {% endif %}
 
-<div id="group-repo-tabs" class="tab-tabs hide">
+<div id="group-repo-tabs" class="hide">
     <div class="hd ovhd">
-        <h3 class="fleft">{% trans "Libraries" %}</h3>
+        <h3 class="fleft">{% trans "Group" %}</h3>
         {% if user.permissions.can_add_repo %}
         <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
         {% endif %}
     </div>
 
     <div id="grp-repos">
-        <table style="display:none">
+        <table class="hide">
             <thead></thead>
             <tbody></tbody>
         </table>
@@ -172,9 +155,9 @@
     <p class="error error-tip hide"></p>
 </div>
 
-<div id="organization-repos" class="tab-tabs hide">
+<div id="organization-repos" class="hide">
     <div class="hd">
-        <h3 class="fleft">{% trans "Libraries" %}</h3>
+        <h3 class="fleft">{% trans "Organization" %}</h3>
         <button id="add-pub-lib" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
         <ul id="add-pub-lib-menu" class="hide">
             <li class="item share-existing">{% trans "Share existing libraries" %}</li>
@@ -211,17 +194,6 @@ app["pageOptions"] = {
         var groups = [];
         {% for group in request.user.joined_groups %}
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
-        {% endfor %}
-        return groups;
-    })(),
-    top_nav_groups: (function () {
-        var groups = [];
-        {% for group in grps %}
-        groups.push({
-            'name': '{{group.group_name}}',
-            'id': '{{group.id}}',
-            'avatar': '{% grp_avatar group.id 36 %}'
-        });
         {% endfor %}
         return groups;
     })(),

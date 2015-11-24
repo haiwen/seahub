@@ -4,14 +4,43 @@
 
 {% block left_panel %}
 <div class="side-tabnav">
+    <h3 class="hd">{% trans "Files" %}</h3>
+    <ul class="side-tabnav-tabs">
+        {% if user.permissions.can_add_repo %}
+        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+        {% comment %}
+        {% if sub_lib_enabled %}
+        <li class="tab"><a href="#my-sub-libs/">{% trans "Sub-libraries" %}</a></li>
+        {% endif %}
+        {% endcomment %}
+        {% endif %}
+        <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+        {% if user.permissions.can_view_org %}
+        <li class="tab"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
+        {% endif %}
+
+        <li class="tab" id="group-nav">
+            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+            <ul class="grp-list hide">
+                <li>
+                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                </li>
+                {% for grp in grps %}
+                <li>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                </li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
     <div class="hd w100 ovhd">
-        <h3 class="fleft">{% trans "Personal" %}</h3>
+        <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
         <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
         <li class="tab {% block cur_stars %}{% endblock %}"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
         {% if events_enabled %}
         <li class="tab {% block cur_activities %}{% endblock %}"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
@@ -64,6 +93,19 @@ $('#enable-mods').click(function() {
     $('#simplemodal-container').css('height', 'auto');
     return false;
 });
+$('#group-nav a:first').click(function() {
+    $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
+    $('#group-nav .grp-list').slideToggle();
+    return false;
+});
+$('#group-nav .grp-list').hover(
+    function () {
+        $(this).css({'overflow': 'auto'});
+    },
+    function () {
+        $(this).css({'overflow': 'hidden'});
+    }
+);
 {% endif %}
 </script>
 {% endblock %}
