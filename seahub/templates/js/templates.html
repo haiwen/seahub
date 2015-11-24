@@ -627,6 +627,24 @@
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
 </script>
+<script type="text/template" id="group-top-tmpl">
+<p class="path"><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a> / <%- name %></p>
+<div class="hd ovhd">
+    {% if user.permissions.can_add_repo %}
+    <button class="repo-create fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+    {% endif %}
+
+    <div class="fright">
+    <% if (!is_pub) { %>
+    <span class="sf2-icon-msgs op-icon" title="{% trans "Discussion" %}"></span>
+    <% } %>
+    <span class="sf2-icon-user op-icon" title="{% trans "Members" %}"></span>
+    <% if (is_staff) { %>
+    <span class="sf2-icon-wrench op-icon" title="{% trans "Admin" %}"></span>
+    <% } %>
+    </div>
+</div>
+</script>
 <script type="text/template" id="group-mods-enable-form-tmpl">
 <form id="mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
     <h3>{% trans "Enable Modules"%}</h3>

@@ -13,6 +13,7 @@ define([
     var GroupView = Backbone.View.extend({
         el: '#group-repo-tabs',
 
+        groupTopTemplate: _.template($('#group-top-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         events: {
@@ -34,6 +35,7 @@ define([
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = options.dirView;
+
         },
 
         addOne: function(repo, collection, options) {
@@ -68,10 +70,36 @@ define([
             }
         },
 
+        renderGroupTop: function(group_id) {
+            var _this = this;
+            var $groupTop = $('#group-top');
+            $.ajax({
+                url: Common.getUrl({
+                    'name': 'group_basic_info',
+                    'group_id': group_id
+                }),
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    $groupTop.html(_this.groupTopTemplate(data));
+                },
+                error: function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err_msg = gettext("Please check the network.");
+                    }
+                    $groupTop.html('<p class="error">' + err_msg + '</p>');
+                }
+            });
+        },
+
         showRepoList: function(group_id) {
             this.group_id = group_id;
             this.dirView.hide();
             this.$emptyTip.hide();
+            this.renderGroupTop(group_id);
             this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;

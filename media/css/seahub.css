@@ -1234,6 +1234,11 @@ textarea:-moz-placeholder {/* for FF */
 #organization-repos .hd {
     position:relative;
 }
+#group-top .op-icon {
+    display:inline-block;
+    font-size:22px;
+    margin:4px 0 0 5px;
+}
 .commit-list-topbar,
 .file-audit-list-topbar,
 .repo-file-list-topbar {
@@ -1799,6 +1804,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:25px;
     margin:0;
 }
+#group-top .path,
 #dir-view .path {
     font-size:16px;
     line-height:1.5;
