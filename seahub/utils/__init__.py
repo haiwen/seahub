@@ -632,6 +632,14 @@ if EVENTS_CONFIG_FILE:
     def get_org_user_events(org_id, username, start, count):
         return _get_events(username, start, count, org_id=org_id)
 
+    def get_log_events_by_time(log_type, tstart, tend):
+        """Return log events list by start/end timestamp. (If no logs, return 'None')
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_event_log_by_time(session, log_type, tstart, tend)
+
+        return events if events else None
+
     def get_file_audit_events(email, org_id, repo_id, start, limit):
         """Return file audit events list. (If no file audit, return 'None')
 
@@ -689,6 +697,8 @@ if EVENTS_CONFIG_FILE:
 else:
     EVENTS_ENABLED = False
     def get_user_events():
+        pass
+    def get_log_events_by_time():
         pass
     def get_org_user_events():
         pass
