@@ -5,11 +5,12 @@ define([
     'common',
     'app/views/myhome',
     'app/views/group',
+    'app/views/all-groups',
     'app/views/organization',
     'app/views/dir',
     'app/views/top-group-nav'
-], function($, Backbone, Common, MyHomeView, GroupView, OrgView,
-    DirView, GroupNavView) {
+], function($, Backbone, Common, MyHomeView, GroupView, AllGroupsView,
+    OrgView, DirView, GroupNavView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -23,6 +24,7 @@ define([
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
             'group/:group_id/': 'showGroupRepos',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
+            'groups/': 'showAllGroups',
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
             'common/lib/:repo_id(/*path)': 'showCommonDir',
@@ -41,6 +43,7 @@ define([
 
             this.myHomeView = new MyHomeView({dirView: this.dirView});
             this.groupView = new GroupView({dirView: this.dirView});
+            this.allGroupsView = new AllGroupsView({dirView: this.dirView});
             this.orgView = new OrgView({dirView: this.dirView});
 
             this.currentView = this.myHomeView;
@@ -149,6 +152,11 @@ define([
             }
             this.switchCurrentView(this.groupView);
             this.groupView.showDir(group_id, repo_id, path);
+        },
+
+        showAllGroups: function() {
+            this.switchCurrentView(this.allGroupsView);
+            this.allGroupsView.showAllGroups();
         },
 
         showOrgRepos: function() {

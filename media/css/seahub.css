@@ -3784,3 +3784,23 @@ img.thumbnail {
     border-radius:3px;
     margin:0;
 }
+
+/* all groups */
+#all-groups-tables {
+    margin-top:10px;
+}
+#all-groups-tables table {
+    margin:0 0 20px;
+}
+#all-groups-tables table .no-repos {
+    text-align:center;
+    color:#9c9c9c;
+}
+.group-hd .group-name {
+    color:#333;
+    font-size:16px;
+    padding-left:6px;
+}
+.group-hd .group-name:hover {
+    color:#eb8205;
+}

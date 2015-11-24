@@ -3680,6 +3680,54 @@ class GroupRepo(APIView):
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 
+class AllGroupsRepos(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request):
+        """
+        Get all groups repos.
+        """
+
+        groups_repos_json = []
+        groups = get_groups_by_user(request)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        username = request.user.username
+        for group in groups:
+            groups_repos = {}
+            groups_repos['group_id'] = group.id
+            groups_repos['group_name'] = group.group_name
+            groups_repos['repos'] = []
+
+            if org_id:
+                repos = seafile_api.get_org_group_repos(org_id, group.id)
+            else:
+                repos = seafile_api.get_repos_by_group(group.id)
+
+            for repo in repos:
+                repo_dict = {}
+                repo_dict['repo_id'] = repo.id
+                repo_dict['repo_name'] = repo.name
+                repo_dict['mtime'] = repo.last_modify
+                repo_dict['mtime_relative'] = translate_seahub_time(repo.last_modify)
+                repo_dict['size'] = repo.size
+                repo_dict['size_formatted'] = filesizeformat(repo.size)
+                repo_dict['encrypted'] = repo.encrypted
+                repo_dict['permission'] = check_permission(repo.id, username)
+                repo_dict['shared_by'] = repo.user
+                repo_dict['shared_by_fullname'] = email2nickname(repo.user)
+                repo_dict['share_from_me'] = True if username == repo.user else False
+                groups_repos['repos'].append(repo_dict)
+
+            groups_repos_json.append(groups_repos)
+
+        return HttpResponse(json.dumps(groups_repos_json), content_type=json_content_type)
+
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False

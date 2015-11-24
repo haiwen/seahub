@@ -193,7 +193,7 @@ urlpatterns = patterns(
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groups/', group_list, name='group_list'),
+    url(r'^#groups/', group_list, name='group_list'),
     (r'^message/', include('seahub.message.urls')),
     (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),

@@ -104,7 +104,7 @@
             </li>
             <% } %>
         </ul>
-        <a href="{{SITE_ROOT}}groups/" class="item all-grp">All Groups</a>
+        <a href="{{SITE_ROOT}}#groups/" class="item all-grp">All Groups</a>
     </div>
 </script>
 <script type="text/template" id="dir-op-bar-tmpl">
@@ -155,6 +155,8 @@
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+    <% } else if (context == 'groups') { %>
+        <a href="#groups/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else if (context == 'org') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
     <% } else if (context == 'common') { %>
@@ -866,4 +868,56 @@
     <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
 <% } %>
 <!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
+</script>
+<script type="text/template" id="create-group-tmpl">
+    <form id="create-group-form" action="" method="post">{% csrf_token %}
+        <h3>{% trans "New Group" %}</h3>
+        <label>{% trans "Group Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" /><br />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
+</script>
+<script type="text/template" id="all-groups-tmpl">
+    <div>
+        <div class="group-hd">
+            <a href='{{SITE_ROOT}}#group/<%= group_id %>/' class="vam group-name normal"><%= group_name %></a>
+        </div>
+        <table class="group-repos">
+            <thead>
+                <tr>
+                    <th width="5%"><!--icon--></th>
+                    <th width="40%">{% trans "Name" %}</span></th>
+                    <th width="7%"><!--op--></th>
+                    <th width="14%">{% trans "Size" %}</th>
+                    <th width="18%">{% trans "Last Update" %}</th>
+                    <th width="16%">{% trans "Shared By" %}</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</script>
+<script type="text/template" id="all-groups-repo-tr-tmpl">
+    <td>
+        <% if (encrypted) { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <% } else { %>
+            <% if (permission == 'rw') { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+            <% } else { %>
+        <img src="{{ MEDIA_URL }}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+            <% } %>
+        <% } %>
+    </td>
+    <td><a href="{{SITE_ROOT}}#group/<%= group_id %>/lib/<%= repo_id %>"><%- repo_name %></a></td>
+    <td class="alc">
+        <% if (is_staff || share_from_me) { %>
+        <span class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
+        <% } %>
+    </td>
+    <td><%= size_formatted %></td>
+    <td><%= mtime_relative %></td>
+    <td><span title="<%- shared_by %>"><%- shared_by_fullname %></span></td>
 </script>
