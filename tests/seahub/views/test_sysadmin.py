@@ -1,7 +1,9 @@
+from mock import patch
 from django.core.urlresolvers import reverse
 from django.http.cookie import parse_cookie
 
 from seahub.base.accounts import User
+from seahub.utils.ms_excel import write_xls as real_write_xls
 from seahub.test_utils import BaseTestCase
 
 from seaserv import ccnet_threaded_rpc
@@ -149,6 +151,21 @@ class SysUserAdminExportExcelTest(BaseTestCase):
         self.login_as(self.admin)
 
     def test_can_export_excel(self):
+        resp = self.client.get(reverse('sys_useradmin_export_excel'))
+        self.assertEqual(200, resp.status_code)
+        assert 'application/ms-excel' in resp._headers['content-type']
+
+    def write_xls(self, sheet_name, head, data_list):
+        assert 'Role' in head
+        return real_write_xls(sheet_name, head, data_list)
+
+    @patch('seahub.views.sysadmin.write_xls')
+    @patch('seahub.views.sysadmin.is_pro_version')
+    def test_can_export_excel_in_pro(self, mock_is_pro_version, mock_write_xls):
+        mock_is_pro_version.return_value = True
+        mock_write_xls.side_effect = self.write_xls
+
+        mock_write_xls.assert_called_once()
         resp = self.client.get(reverse('sys_useradmin_export_excel'))
         self.assertEqual(200, resp.status_code)
         assert 'application/ms-excel' in resp._headers['content-type']
