@@ -400,6 +400,9 @@ def list_repos_by_name_and_owner(repo_name, owner):
     repos = []
     owned_repos = seafile_api.get_owned_repo_list(owner)
     for repo in owned_repos:
+        if not repo.name:
+            continue
+
         if repo_name in repo.name:
             repo.owner = owner
             repos.append(repo)
@@ -409,6 +412,9 @@ def list_repos_by_name(repo_name):
     repos = []
     repos_all = seafile_api.get_repo_list(-1, -1)
     for repo in repos_all:
+        if not repo.name:
+            continue
+
         if repo_name in repo.name:
             try:
                 repo.owner = seafile_api.get_repo_owner(repo.id)
