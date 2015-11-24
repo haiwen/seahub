@@ -71,6 +71,7 @@
             <li class="tab"><a href="#owned" class="a">{% trans "Owned Libs" %}</a></li>
             <li class="tab"><a href="#shared" class="a">{% trans "Shared Libs" %}</a></li>
             <li class="tab"><a href="#shared-links" class="a">{% trans "Shared Links" %}</a></li>
+            <li class="tab"><a href="#groups" class="a">{% trans "Groups" %}</a></li>
         </ul>
     </div>
 
@@ -111,7 +112,9 @@
             {% endfor %}
         </table>
         {% else %}
-        <p>{% trans "None" %}</p>
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has not created any libraries" %}</h2>
+        </div>
         {% endif %}
     </div>
 
@@ -147,7 +150,9 @@
             {% endfor %}
         </table>
         {% else %}
-        <p>{% trans "None" %}</p>
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has no shared libraries" %}</h2>
+        </div>
         {% endif %}
     </div>
 
@@ -193,7 +198,34 @@
             {% endfor %}
         </table>
         {% else %}
-        <p>{% trans "None" %}</p>
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has not created any shared links" %}</h2>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="groups">
+        {% if personal_groups %}
+        <table>
+            <tr>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Role" %}</th>
+                <th width="25%">{% trans "Create At" %}</th>
+                <th width="15%">{% trans "Operations" %}</th>
+            </tr>
+            {% for group in personal_groups %}
+                <tr>
+                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td>{{ group.role }}</td>
+                    <td>{{ group.timestamp|tsstr_sec }}</td>
+                    <td><a href="#" data-url="{% url 'group_remove' group.id %}" data-target="{{ group.group_name }}" class="rm-grp op vh">{% trans "Delete" %}</a></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has not created or joined any groups" %}</h2>
+        </div>
         {% endif %}
     </div>
 </div>
@@ -272,6 +304,11 @@ $('#set-quota-form .submit').click(function() {
         }
     });
     return false;
+});
+addConfirmTo($('.rm-grp'), {
+    'title': "{% trans "Delete Group" %}",
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true
 });
 </script>
 {% endblock %}

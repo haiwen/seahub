@@ -907,6 +907,26 @@ def user_info(request, email):
     p_uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
     user_shared_links += p_uploadlinks
 
+    try:
+        personal_groups = seaserv.get_personal_groups_by_user(email)
+    except SearpcError as e:
+        logger.error(e)
+        personal_groups = []
+
+    for g in personal_groups:
+        try:
+            is_group_staff = seaserv.check_group_staff(g.id, email)
+        except SearpcError as e:
+            logger.error(e)
+            is_group_staff = False
+
+        if email == g.creator_name:
+            g.role = _('Owner')
+        elif is_group_staff:
+            g.role = _('Admin')
+        else:
+            g.role = _('Member')
+
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -922,6 +942,7 @@ def user_info(request, email):
             'org_name': org_name,
             'user_shared_links': user_shared_links,
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
+            'personal_groups': personal_groups,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax
