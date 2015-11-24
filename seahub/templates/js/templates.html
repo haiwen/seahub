@@ -137,13 +137,12 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Group" %}</a> /
     <% } else if (context == 'org') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
     <% } else if (context == 'common') { %>
-        <a href="#my-libs/" class="path-link normal">{% trans "Libraries" %}</a> /
+        <a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a> /
     <% } else { %>
-        <a href="#" class="path-link normal">{% trans "Libraries" %}</a> /
         <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
     <% } %>
     <% if (path == '/') { %>
@@ -587,11 +586,11 @@
         {% if events_enabled %}
         <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
         {% endif %}
-        {% for mod in request.user.mods_enabled %}
-        {% if mod == 'personal wiki' %}
-        <li class="tab"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
-        {% endif %}
-        {% endfor %}
+        <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
+            <% if (mods_enabled[i] == 'personal wiki') { %>
+                <li class="tab"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
+            <% } %>
+        <% } %>
         <li class="tab"><a href="{% url 'devices' %}"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
 

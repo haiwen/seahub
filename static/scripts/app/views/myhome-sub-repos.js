@@ -11,19 +11,18 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        el: $('#repo-tabs'),
+        el: $('#my-sub-repos'),
 
         events: {
             'click #sub-lib-create': 'createRepo'
         },
 
         initialize: function(options) {
-            this.$tabs = $('#repo-tabs');
-            this.$table = this.$('#my-sub-repos table');
+            this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('.loading-tip', this.$tabs);
-            this.$emptyTip = $('#my-sub-repos .empty-tips');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
 
             this.repos = new RepoCollection({type: 'sub'});
             this.listenTo(this.repos, 'add', this.addOne);
@@ -54,8 +53,7 @@ define([
         },
 
         showSubRepos: function() {
-            this.$tabs.show();
-            $('#sublib-tab').parent().addClass('ui-state-active');
+            this.$el.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -83,16 +81,11 @@ define([
         },
 
         show: function() {
-            $('#sub-lib-create').show();
             this.showSubRepos();
         },
 
         hide: function() {
-            $('#sub-lib-create').hide();
             this.$el.hide();
-            this.$table.hide();
-            this.$emptyTip.hide();
-            $('#sublib-tab', this.$tabs).parent().removeClass('ui-state-active');
         },
 
         createRepo: function() {
