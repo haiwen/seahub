@@ -600,23 +600,11 @@ def sys_useradmin_export_excel(request):
         is_pro = False
 
     if is_pro:
-        if CALC_SHARE_USAGE:
-            head = [_("Email"), _("Status"), _("Role"), _("Space Used"),
-                    _("Space Quota"), _("Share Used"), _("Share Quota"),
-                    _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
-        else:
-            head = [_("Email"), _("Status"), _("Role"), _("Space Used"),
-                    _("Space Quota"), _("Create At"), _("Last Login"),
-                    _("Admin"), _("LDAP(imported)"),]
+        head = [_("Email"), _("Status"), _("Role"), _("Create At"),
+                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
     else:
-        if CALC_SHARE_USAGE:
-            head = [_("Email"), _("Status"), _("Space Used"),
-                    _("Space Quota"), _("Share Used"), _("Share Quota"),
-                    _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
-        else:
-            head = [_("Email"), _("Status"), _("Space Used"),
-                    _("Space Quota"), _("Create At"), _("Last Login"),
-                    _("Admin"), _("LDAP(imported)"),]
+        head = [_("Email"), _("Status"), _("Create At"),
+                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
 
     data_list = []
 
@@ -633,18 +621,8 @@ def sys_useradmin_export_excel(request):
         else:
             status = _('Inactive')
 
-        _populate_user_quota_usage(user)
-        space_usage = filesizeformat(user.space_usage)
-        space_quota = filesizeformat(user.space_quota) if \
-            user.space_quota > 0 else ''
-
-        if CALC_SHARE_USAGE:
-            share_usage = filesizeformat(user.share_usage)
-            share_quota = filesizeformat(user.share_quota) if \
-                user.share_quota > 0 else ''
-
-        create_at = tsstr_sec(user.ctime) if user.ctime else '--'
-        last_login = translate_seahub_time_str(user.last_login) if \
+        create_at = tsstr_sec(user.ctime) if user.ctime else ''
+        last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
             user.last_login else ''
 
         is_admin = _('Yes') if user.is_staff else ''
@@ -656,22 +634,11 @@ def sys_useradmin_export_excel(request):
             else:
                 role = _('Default')
 
-            if CALC_SHARE_USAGE:
-                row = [user.email, status, role, space_usage, space_quota,
-                       share_usage, share_quota, create_at, last_login,
-                       is_admin, ldap_import]
-            else:
-                row = [user.email, status, role, space_usage, space_quota,
-                       create_at, last_login, is_admin, ldap_import]
-
+            row = [user.email, status, role, create_at,
+                   last_login, is_admin, ldap_import]
         else:
-            if CALC_SHARE_USAGE:
-                row = [user.email, status, space_usage, space_quota,
-                       share_usage, share_quota, create_at, last_login,
-                       is_admin, ldap_import]
-            else:
-                row = [user.email, status, space_usage, space_quota,
-                       create_at, last_login, is_admin, ldap_import]
+            row = [user.email, status, create_at, last_login,
+                   is_admin, ldap_import]
 
         data_list.append(row)
 
@@ -681,7 +648,7 @@ def sys_useradmin_export_excel(request):
         return HttpResponseRedirect(next)
 
     response = HttpResponse(mimetype='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=users.xls'
+    response['Content-Disposition'] = 'attachment; filename=users.xlsx'
     wb.save(response)
     return response
 
@@ -1402,7 +1369,8 @@ def sys_group_admin_export_excel(request):
     head = [_("Name"), _("Creator"), _("Create At")]
     data_list = []
     for grp in groups:
-        row = [grp.group_name, grp.creator_name, tsstr_sec(grp.timestamp)]
+        create_at = tsstr_sec(grp.timestamp) if grp.timestamp else ''
+        row = [grp.group_name, grp.creator_name, create_at]
         data_list.append(row)
 
     wb = write_xls(_('groups'), head, data_list)
@@ -1411,7 +1379,7 @@ def sys_group_admin_export_excel(request):
         return HttpResponseRedirect(next)
 
     response = HttpResponse(mimetype='application/ms-excel')
-    response['Content-Disposition'] = 'attachment; filename=groups.xls'
+    response['Content-Disposition'] = 'attachment; filename=groups.xlsx'
     wb.save(response)
     return response
 

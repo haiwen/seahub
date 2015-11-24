@@ -132,3 +132,23 @@ class SudoModeTest(BaseTestCase):
         })
         self.assertEqual(302, resp.status_code)
         self.assertRedirects(resp, reverse('sys_useradmin'))
+
+
+class SysGroupAdminExportExcelTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
+
+    def test_can_export_excel(self):
+        resp = self.client.get(reverse('sys_group_admin_export_excel'))
+        self.assertEqual(200, resp.status_code)
+        assert 'application/ms-excel' in resp._headers['content-type']
+
+
+class SysUserAdminExportExcelTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
+
+    def test_can_export_excel(self):
+        resp = self.client.get(reverse('sys_useradmin_export_excel'))
+        self.assertEqual(200, resp.status_code)
+        assert 'application/ms-excel' in resp._headers['content-type']
