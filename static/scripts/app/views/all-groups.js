@@ -148,12 +148,6 @@ define([
             });
         },
 
-        showDir: function(group_id, repo_id, path) {
-            this.showSideTips();
-            this.$el.hide();
-            this.dirView.showDir('groups/' + group_id, repo_id, path);
-        },
-
         hide: function() {
             this.$sideTips.hide();
             this.$el.hide();

@@ -271,8 +271,6 @@ define([
                     context = 'org';
                 } else if (category_start == 'group') {
                     context = 'group';
-                } else if (category_start == 'groups') {
-                    context = 'groups';
                 } else if (category_start == 'common') {
                     context = 'common';
                 }
