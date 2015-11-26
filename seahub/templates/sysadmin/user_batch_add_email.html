@@ -1,0 +1,25 @@
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}{{ user }} invited you to join {{ site_name }}.{% endblocktrans%}
+</p>
+
+<p style="font-size:14px;color:#434144;">
+{% trans "Here is your account information:" %}<br />
+{% blocktrans %}Email: {{ email }}{% endblocktrans %}<br />
+{% blocktrans %}Password: {{ password }}{% endblocktrans %}
+</p>
+
+<a href="{{ url_base }}{% url 'auth_login' %}" target="_blank">{% trans "Log In" %}</a> 
+
+{% endautoescape %}
+
+{% endblock %}

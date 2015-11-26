@@ -2,6 +2,7 @@ import os
 from mock import patch
 from django.core.urlresolvers import reverse
 from django.http.cookie import parse_cookie
+from post_office.models import Email
 
 from tests.common.utils import randstring
 
@@ -297,3 +298,52 @@ class UserInfoTest(BaseTestCase):
 
         self.assertContains(resp, 'Member')
         self.assertContains(resp, self.admin_group_2_name)
+
+
+class BatchAddUserTest(BaseTestCase):
+    def setUp(self):
+        self.login_as(self.admin)
+
+        self.new_users = []
+        self.csv_file = os.path.join(os.getcwd(), 'tests/seahub/views/batch_add_user.csv')
+        with open(self.csv_file) as f:
+            for line in f.readlines():
+                self.new_users.append(line.split(',')[0].strip())
+
+    def tearDown(self):
+        for u in self.new_users:
+            self.remove_user(u)
+
+    def test_can_batch_add(self):
+        for e in self.new_users:
+            try:
+                r = User.objects.get(e)
+            except User.DoesNotExist:
+                r = None
+            assert r is None
+
+        with open(self.csv_file) as f:
+            resp = self.client.post(reverse('batch_add_user'), {
+                'file': f
+            })
+
+        self.assertEqual(302, resp.status_code)
+        assert 'Import succeeded' in parse_cookie(resp.cookies)['messages']
+        for e in self.new_users:
+            assert User.objects.get(e) is not None
+
+    def test_can_send_email(self):
+        self.assertEqual(0, len(Email.objects.all()))
+
+        with open(self.csv_file) as f:
+            resp = self.client.post(reverse('batch_add_user'), {
+                'file': f
+            })
+
+        self.assertEqual(302, resp.status_code)
+        self.assertNotEqual(0, len(Email.objects.all()))
+
+        email = Email.objects.all()[0]
+        assert self.new_users[0] == email.to[0]
+        assert "Email: %s" % self.new_users[0] in email.html_message
+        assert email.status == 2

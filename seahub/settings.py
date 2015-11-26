@@ -194,6 +194,7 @@ INSTALLED_APPS = (
     'statici18n',
     'constance',
     'constance.backends.database',
+    'post_office',
 
     'seahub.api2',
     'seahub.avatar',
