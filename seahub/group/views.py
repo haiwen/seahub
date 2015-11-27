@@ -210,25 +210,6 @@ def group_add(request):
                                       content_type=content_type)
 
 @login_required
-def group_list(request):
-    """List user groups"""
-    joined_groups = request.user.joined_groups
-
-    enabled_groups = get_wiki_enabled_group_list(
-        in_group_ids=[x.id for x in joined_groups])
-    enabled_group_ids = [ int(x.group_id) for x in enabled_groups ]
-
-    for group in joined_groups:
-        if group.id in enabled_group_ids:
-            group.wiki_enabled = True
-        else:
-            group.wiki_enabled = False
-
-    return render_to_response('group/groups.html', {
-            'joined_groups': joined_groups,
-            }, context_instance=RequestContext(request))
-
-@login_required
 @sys_staff_required
 @require_POST
 def group_remove(request, group_id):
@@ -274,9 +255,12 @@ def group_dismiss(request, group_id):
         remove_group_common(group.id, username, org_id=org_id)
     except SearpcError, e:
         logger.error(e)
-        messages.error(request, _('Failed to dismiss group, pleaes retry later.'))
-    else:
-        messages.success(request, _('Successfully dismissed group.'))
+        next = request.META.get('HTTP_REFERER', None)
+        if next:
+            messages.error(request, _('Failed to dismiss group, pleaes retry later.'))
+            return HttpResponseRedirect(next)
+        else:
+            return HttpResponseRedirect(SITE_ROOT)
 
     return HttpResponseRedirect(reverse('group_list'))
 
