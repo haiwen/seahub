@@ -3691,7 +3691,11 @@ class AllGroupsRepos(APIView):
         """
 
         groups_repos_json = []
-        groups = get_groups_by_user(request)
+        try:
+            groups = get_groups_by_user(request)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
 
         org_id = None
         if is_org_context(request):
@@ -3704,10 +3708,14 @@ class AllGroupsRepos(APIView):
             groups_repos['group_name'] = group.group_name
             groups_repos['repos'] = []
 
-            if org_id:
-                repos = seafile_api.get_org_group_repos(org_id, group.id)
-            else:
-                repos = seafile_api.get_repos_by_group(group.id)
+            try:
+                if org_id:
+                    repos = seafile_api.get_org_group_repos(org_id, group.id)
+                else:
+                    repos = seafile_api.get_repos_by_group(group.id)
+            except SearpcError as e:
+                logger.error(e)
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal server error')
 
             for repo in repos:
                 repo_dict = {}
