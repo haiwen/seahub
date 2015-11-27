@@ -56,8 +56,10 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     render_permission_error, is_pro_version, \
     is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
-    user_traffic_over_limit, do_md5
+    user_traffic_over_limit, do_md5, get_file_audit_events_by_path, \
+    generate_file_audit_event_type
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
                                      MARKDOWN, TEXT, OPENDOCUMENT, VIDEO)
 from seahub.utils.star import is_file_starred
@@ -1568,3 +1570,81 @@ def view_priv_shared_file(request, token):
             'accessible_repos': accessible_repos,
             'save_to_link': save_to_link,
             }, context_instance=RequestContext(request))
+
+@login_required
+def file_access(request, repo_id):
+    """List file access log.
+    """
+
+    if not is_pro_version():
+        raise Http404
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    repo = get_repo(repo_id)
+    if not repo:
+        messages.error(request, _("Library does not exist"))
+        return HttpResponseRedirect(next)
+
+    path = request.GET.get('p', None)
+    if not path:
+        messages.error(request, _("Argument missing"))
+        return HttpResponseRedirect(next)
+
+    if not seafile_api.get_file_id_by_path(repo_id, path):
+        messages.error(request, _("File does not exist"))
+        return HttpResponseRedirect(next)
+
+    # perm check
+    if check_folder_permission(request, repo_id, path) != 'rw':
+        messages.error(request, _("Permission denied"))
+        return HttpResponseRedirect(next)
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    start = per_page * (current_page - 1)
+    limit = per_page + 1
+
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+        events = get_file_audit_events_by_path(None, org_id, repo_id, path, start, limit)
+    else:
+        events = get_file_audit_events_by_path(None, 0, repo_id, path, start, limit)
+
+    events = events if events else []
+    if len(events) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    events = events[:per_page]
+
+    for ev in events:
+        ev.repo = get_repo(ev.repo_id)
+        ev.filename = os.path.basename(ev.file_path)
+        ev.time = utc_to_local(ev.timestamp)
+        ev.event_type, ev.show_device = generate_file_audit_event_type(ev)
+
+    filename = os.path.basename(path)
+    zipped = gen_path_link(path, repo.name)
+    extra_href = "&p=%s" % urlquote(path)
+    return render_to_response('file_access.html', {
+        'repo': repo,
+        'path': path,
+        'filename': filename,
+        'zipped': zipped,
+        'events': events,
+        'extra_href': extra_href,
+        'current_page': current_page,
+        'prev_page': current_page-1,
+        'next_page': current_page+1,
+        'per_page': per_page,
+        'page_next': page_next,
+        }, context_instance=RequestContext(request))
