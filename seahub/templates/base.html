@@ -46,6 +46,8 @@
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
 
+                <a href="{{SITE_ROOT}}help/" target="_blank" class="sf2-icon-help fleft help" title="{% trans "Help" %}"></a>
+
                 <div data-url="{% url 'unseen_notices_count' %}" id="msg-count" class="fleft">
                     <div id="notice-icon" class="cspt" title="{% trans "Notifications" %}">
                         <span class="sf2-icon-bell"></span>
