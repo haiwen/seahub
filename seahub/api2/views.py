@@ -3680,6 +3680,109 @@ class GroupRepo(APIView):
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 
+class GroupList(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+        result = {}
+        content_type = 'application/json; charset=utf-8'
+        username = request.user.username
+
+        if not request.user.permissions.can_add_group():
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'You do not have permission to create group.')
+
+        # check plan
+        num_of_groups = getattr(request.user, 'num_of_groups', -1)
+        if num_of_groups > 0:
+            current_groups = len(get_personal_groups_by_user(username))
+            if current_groups > num_of_groups:
+                result['error'] = 'You can only create %d groups.' % num_of_groups
+                return HttpResponse(json.dumps(result), status=500,
+                                    content_type=content_type)
+
+        group_name = request.DATA.get('group_name', None)
+        group_name = group_name.strip()
+        if not validate_group_name(group_name):
+            result['error'] = 'Failed to rename group, group name can only contain letters, numbers, blank, hyphen or underscore.'
+            return HttpResponse(json.dumps(result), status=403,
+                                content_type=content_type)
+
+        # Check whether group name is duplicated.
+        if request.cloud_mode:
+            checked_groups = get_personal_groups_by_user(username)
+        else:
+            checked_groups = get_personal_groups(-1, -1)
+        for g in checked_groups:
+            if g.group_name == group_name:
+                result['error'] = 'There is already a group with that name.'
+                return HttpResponse(json.dumps(result), status=400,
+                                    content_type=content_type)
+
+        # Group name is valid, create that group.
+        try:
+            group_id = ccnet_threaded_rpc.create_group(group_name.encode('utf-8'),
+                                                       username)
+            new_group = {
+                "id": group_id,
+                "name": group_name,
+                "is_staff": True,
+                "repos": [],
+            }
+            return HttpResponse(json.dumps(new_group), content_type=content_type)
+        except SearpcError, e:
+            result['error'] = e.msg
+            return HttpResponse(json.dumps(result), status=500,
+                                content_type=content_type)
+
+    def get(self, request):
+        """
+        List all groups.
+        """
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        username = request.user.username
+        groups = get_groups_by_user(request)
+        group_list = []
+
+        for g in groups:
+            group = {
+                "id": g.id,
+                "name": g.group_name,
+                "is_staff": check_group_staff(g.id, username),
+                "repos": [],
+            }
+
+            if org_id:
+                repos = seafile_api.get_org_group_repos(org_id, g.id)
+            else:
+                repos = seafile_api.get_repos_by_group(g.id)
+
+            for r in repos:
+                repo = {
+                    "id": r.id,
+                    "name": r.name,
+                    "desc": r.desc,
+                    "size": r.size,
+                    "size_formatted": filesizeformat(r.size),
+                    "mtime": r.last_modified,
+                    "mtime_relative": translate_seahub_time(r.last_modified),
+                    "encrypted": r.encrypted,
+                    "permission": r.permission,
+                    "owner": r.user,
+                    "owner_nickname": email2nickname(r.user),
+                    "share_from_me": True if username == r.user else False,
+                }
+                group['repos'].append(repo)
+
+            group_list.append(group)
+        return HttpResponse(json.dumps(group_list), content_type=json_content_type)
+
+
 def is_group_staff(group, user):
     if user.is_anonymous():
         return False
