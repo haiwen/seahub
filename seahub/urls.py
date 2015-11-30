@@ -11,7 +11,6 @@ from seahub.views.file import view_repo_file, view_history_file, view_trash_file
 from seahub.views.repo import repo, repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
-from group.views import group_list
 from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
 from share.views import gen_private_file_share, rm_private_file_share, \
     save_private_file_share
@@ -97,6 +96,7 @@ urlpatterns = patterns(
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='view_group'),
+    url(r'^#groups/', fake_view, name='group_list'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
@@ -193,7 +193,6 @@ urlpatterns = patterns(
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groups/', group_list, name='group_list'),
     (r'^message/', include('seahub.message.urls')),
     (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),

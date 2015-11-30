@@ -22,6 +22,16 @@
         <li class="tab"><a href="{% url 'pubuser' %}"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
     </ul>
 </div>
+<div class="info-item hide" id="groups-side-tips">
+    <h3 class="info-item-top">{% trans "Tips" %}</h3>
+    <div class="info-item-bottom">
+        {% if user.permissions.can_add_group %}
+        <p class="not-last">{% trans "After creating a group, you can add members and share libraries into it." %}</p>
+        {% else %}
+        <p class="not-last">{% trans "Since you are a guest user now, you can not create groups." %}</p>
+        {% endif %}
+    </div>
+</div>
 {% endblock %}
 
 {% block right_panel %}
@@ -192,6 +202,37 @@
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
+</div>
+
+<div id="groups" class="hide">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "My Groups" %}</h3>
+        {% if user.permissions.can_add_group %}
+        <button id="add-group" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
+        {% endif %}
+    </div>
+
+    <div id="group-list" class="hide"></div>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You are not in any group" %}</h2>
+        {% if user.permissions.can_add_group %}
+        <p>{% blocktrans %}Group is a place for you and your friends leaving messages and collaborating on libraries. You can create a group by clicking "New Group" button.{% endblocktrans %}</p>
+        {% else %}
+        <p>{% trans "Group is a place for you and your friends leaving messages and collaborating on libraries. Groups you join will be listed here." %}</p>
+        {% endif %}
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <p class="error error-tip hide"></p>
+
+    {% if user.permissions.can_add_group %}
+    <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3>{% trans "New Group" %}</h3>
+        <label>{% trans "Group Name" %}</label><br />
+        <input name="group_name" value="" class="input" /><br />
+        <p class="error hide"></p>
+        <input type="submit" class="submit" value="{% trans "Submit" %}" />
+    </form>
+    {% endif %}
 </div>
 
 {% include "js/dir-view.html" %}

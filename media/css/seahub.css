@@ -2267,59 +2267,20 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
 }
 /* group, org */
-.group-hl {
-    background:#fbfbfb;
-}
-.group-list,
 .user-list {
     margin-top:30px;
 }
-.group-list .group,
 .user-list .user {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
     width:330px;
     margin:0 17px 30px 0;
 }
-.group-list .group {
-    width:310px;
-    padding:10px;
-	margin-bottom:20px;
-}
-.group-list .group,
 .user-list .user {
     *display:inline; /* for ie 6,7 */
 }
-.group .txt {
-    width:240px;
-}
 .user-list .txt {
     width:265px;
-}
-.group h4 {
-    margin:0 0 4px;
-}
-.group p {
-    margin:0;
-}
-.group .item-name {
-    display:inline-block;
-    width:5em;
-    color:#666;
-}
-.group .fast .a {
-    margin:8px 12px 0 0;
-    display:inline-block;
-    font-size:24px;
-    color:#999;
-}
-.group .fast .a:hover {
-    text-decoration:none;
-}
-.ru .group .item-name,
-.de .group .item-name,
-.it .group .item-name {
-    width:6em;
 }
 .member {
     _height:21px;
@@ -3784,4 +3745,14 @@ img.thumbnail {
     border:1px solid #eee;
     border-radius:3px;
     margin:0;
+}
+#groups .group-name {
+    font-size:16px;
+    margin:15px 0 10px;
+}
+#groups .group-name .a {
+    color:#322;
+}
+#groups .empty-tips {
+    margin:10px 0 40px;
 }
