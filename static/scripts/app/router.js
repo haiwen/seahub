@@ -4,11 +4,12 @@ define([
     'backbone',
     'common',
     'app/views/myhome',
+    'app/views/groups',
     'app/views/group',
     'app/views/organization',
     'app/views/dir',
     'app/views/top-group-nav'
-], function($, Backbone, Common, MyHomeView, GroupView, OrgView,
+], function($, Backbone, Common, MyHomeView, GroupsView, GroupView, OrgView,
     DirView, GroupNavView) {
     "use strict";
 
@@ -21,6 +22,7 @@ define([
             'my-sub-libs/lib/:repo_id(/*path)': 'showMySubRepoDir',
             'shared-libs/': 'showSharedRepos',
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
+            'groups/': 'showGroups',
             'group/:group_id/': 'showGroupRepos',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
             'org/': 'showOrgRepos',
@@ -42,6 +44,8 @@ define([
             this.myHomeView = new MyHomeView({dirView: this.dirView});
             this.groupView = new GroupView({dirView: this.dirView});
             this.orgView = new OrgView({dirView: this.dirView});
+
+            this.groupsView = new GroupsView();
 
             this.currentView = this.myHomeView;
 
@@ -134,6 +138,11 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('shared-libs', repo_id, path);
+        },
+
+        showGroups: function () {
+            this.switchCurrentView(this.groupsView);
+            this.groupsView.show();
         },
 
         showGroupRepos: function(group_id) {
