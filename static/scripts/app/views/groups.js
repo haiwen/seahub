@@ -60,6 +60,7 @@ define([
             var _this = this;
             this.groups.fetch({
                 cache: false,
+                data: {'with_repos': 1}, // list repos of every group
                 reset: true,
                 success: function (collection, response, opts) {
                 },  
@@ -104,7 +105,7 @@ define([
                     return false;
                 }
                 Common.disableButton($('[type="submit"]', $form)); 
-                groups.create({'group_name': group_name}, {
+                groups.create({'group_name': group_name, 'repos':[]}, {
                     wait: true,
                     validate: true,
                     prepend: true,  // show newly created group at the top 

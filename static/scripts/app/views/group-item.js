@@ -31,7 +31,7 @@ define([
                 return Common.compareTwoWord(a.name, b.name);
             });
             var group_id = this.model.get('id'),
-                is_staff = this.model.get('is_staff'),
+                is_staff = $.inArray(app.pageOptions.username, this.model.get('admins')) != -1 ? true : false,
                 $listContainer = this.$('tbody');
             var groupRepos = new GroupRepos();
             groupRepos.setGroupID(group_id);
