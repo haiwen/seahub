@@ -39,6 +39,7 @@ class NotificationForm(ModelForm):
 ########## user notification
 MSG_TYPE_GROUP_MSG = 'group_msg'
 MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
+MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_GRPMSG_REPLY = 'grpmsg_reply'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
@@ -72,7 +73,12 @@ def user_msg_to_json(message, msg_from):
 def group_join_request_to_json(username, group_id, join_request_msg):
     return json.dumps({'username': username, 'group_id': group_id,
                        'join_request_msg': join_request_msg})
-    
+
+def add_user_to_group_to_json(group_staff, group_id):
+    return json.dumps({'group_staff': group_staff,
+                       'group_id': group_id})
+
+
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
         """Add generic user notification.
@@ -251,7 +257,19 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user,
                                            MSG_TYPE_GROUP_JOIN_REQUEST, detail)
-        
+
+    def set_add_user_to_group_notice(self, to_user, detail):
+        """
+
+        Arguments:
+        - `self`:
+        - `to_user`:
+        - `detail`:
+        """
+        return self._add_user_notification(to_user,
+                                           MSG_TYPE_ADD_USER_TO_GROUP,
+                                           detail)
+
     def add_file_uploaded_msg(self, to_user, detail):
         """
         
@@ -384,6 +402,14 @@ class UserNotification(models.Model):
         - `self`:
         """
         return self.msg_type == MSG_TYPE_GROUP_JOIN_REQUEST
+
+    def is_add_user_to_group(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        return self.msg_type == MSG_TYPE_ADD_USER_TO_GROUP
 
     def group_message_detail_to_dict(self):
         """Parse group message detail, returns dict contains ``group_id`` and
@@ -737,6 +763,34 @@ class UserNotification(models.Model):
             }
         return msg
 
+    def format_add_user_to_group(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        group_staff = d['group_staff']
+        group_id = d['group_id']
+
+        group = seaserv.get_group(group_id)
+        if group is None:
+            self.delete()
+            return None
+
+        msg = _(u"User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group <a href='%(href)s'>%(group_name)s</a>") % {
+            'user_profile': reverse('user_profile', args=[group_staff]),
+            'group_staff': group_staff,
+            'href': reverse('view_group', args=[group_id]),
+            'group_name': group.group_name,
+            }
+        return msg
+
 ########## handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
@@ -744,10 +798,27 @@ from django.dispatch import receiver
 from seahub.signals import share_file_to_user_successful, upload_file_successful
 from seahub.group.models import GroupMessage, MessageReply
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added, \
-    group_join_request
+    group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.message.models import UserMessage
 from seahub.message.signals import user_message_sent
+
+@receiver(upload_file_successful)
+def add_upload_file_msg_cb(sender, **kwargs):
+    """Notify repo owner when others upload files to his/her folder from shared link.
+    """
+    repo_id = kwargs.get('repo_id', None)
+    file_path = kwargs.get('file_path', None)
+    owner = kwargs.get('owner', None)
+
+    assert repo_id and file_path and owner is not None, 'Arguments error'
+
+    filename = os.path.basename(file_path)
+    folder_path = os.path.dirname(file_path)
+    folder_name = os.path.basename(folder_path)
+
+    detail = file_uploaded_msg_to_json(filename, repo_id, folder_path)
+    UserNotification.objects.add_file_uploaded_msg(owner, detail)
 
 @receiver(upload_file_successful)
 def add_upload_file_msg_cb(sender, **kwargs):
@@ -857,3 +928,15 @@ def group_join_request_cb(sender, **kwargs):
     for staff in staffs:
         UserNotification.objects.add_group_join_request_notice(to_user=staff,
                                                                detail=detail)
+
+@receiver(add_user_to_group)
+def add_user_to_group_cb(sender, **kwargs):
+    group_staff = kwargs['group_staff']
+    group_id = kwargs['group_id']
+    added_user = kwargs['added_user']
+
+    detail = add_user_to_group_to_json(group_staff,
+                                       group_id)
+
+    UserNotification.objects.set_add_user_to_group_notice(to_user=added_user,
+                                                          detail=detail)

@@ -178,6 +178,14 @@ def add_notice_from_info(notices):
                 logger.error(e)
                 notice.default_avatar_url = default_avatar_url
 
+        elif notice.is_add_user_to_group():
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['group_staff']
+            except Exception as e:
+                logger.error(e)
+                notice.default_avatar_url = default_avatar_url
+
         else:
             pass
 

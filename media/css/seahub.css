@@ -3577,6 +3577,7 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align: middle;
 }
 /* sysadmin */
+#import-members-btn .icon-upload-alt,
 #import-users-btn .icon-upload-alt {
     color:#777;
     margin-right:3px;
