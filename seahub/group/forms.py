@@ -69,4 +69,10 @@ class WikiCreateForm(forms.Form):
             raise forms.ValidationError(error_msg)
         else:
             return repo_name
-    
+
+
+class BatchAddMembersForm(forms.Form):
+    """
+    Form for importing group members from CSV file.
+    """
+    file = forms.FileField()
