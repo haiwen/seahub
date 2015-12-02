@@ -303,6 +303,7 @@
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 <li><a class="op file-history" href="{{ SITE_ROOT }}repo/file_revisions/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>">{% trans "History" %}</a></li>
                 <% if (is_pro) { %>
+                    <li><a class="op" href="{{ SITE_ROOT }}repo/file-access/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" target="_blank">{% trans "Access Log" %}</a></li>
                     <% if (dirent.is_locked) { %>
                         <% if (dirent.locked_by_me) { %>
                         <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>

@@ -39,8 +39,7 @@ from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src, \
-    allow_generate_thumbnail, get_share_link_thumbnail_src
+from seahub.thumbnail.utils import get_thumbnail_src, get_share_link_thumbnail_src
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -243,9 +242,10 @@ def render_repo(request, repo):
     dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
 
     for f in file_list:
-        file_path = posixpath.join(path, f.obj_name)
-        if allow_generate_thumbnail(request, repo.id, file_path):
-            f.allow_generate_thumbnail = True
+        file_type, file_ext = get_file_type_and_ext(f.obj_name)
+        if file_type == IMAGE:
+            f.is_img = True
+            file_path = posixpath.join(path, f.obj_name)
             if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
                src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
                f.encoded_thumbnail_src = urlquote(src)
@@ -481,26 +481,21 @@ def view_shared_dir(request, token):
 
     traffic_over_limit = user_traffic_over_limit(fileshare.username)
 
-    # mode to view dir/file items 
+    # mode to view dir/file items
     mode = request.GET.get('mode', 'list')
     if mode != 'list':
         mode = 'grid'
-
     thumbnail_size = THUMBNAIL_DEFAULT_SIZE if mode == 'list' else THUMBNAIL_SIZE_FOR_GRID
 
-    for f in file_list:
-
-        file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
-            f.is_img = True
-
-        real_image_path = posixpath.join(real_path, f.obj_name)
-        if allow_generate_thumbnail(request, repo_id, real_image_path):
-            f.allow_generate_thumbnail = True
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
-                req_image_path = posixpath.join(req_path, f.obj_name)
-                src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
-                f.encoded_thumbnail_src = urlquote(src)
+    if not repo.encrypted and ENABLE_THUMBNAIL:
+        for f in file_list:
+            file_type, file_ext = get_file_type_and_ext(f.obj_name)
+            if file_type == IMAGE:
+                f.is_img = True
+                if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(thumbnail_size), f.obj_id)):
+                    req_image_path = posixpath.join(req_path, f.obj_name)
+                    src = get_share_link_thumbnail_src(token, thumbnail_size, req_image_path)
+                    f.encoded_thumbnail_src = urlquote(src)
 
     return render_to_response('view_shared_dir.html', {
             'repo': repo,

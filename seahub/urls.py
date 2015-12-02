@@ -7,7 +7,7 @@ from seahub.views import *
 from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_priv_shared_file, view_raw_file, view_raw_shared_file, \
-    download_file, view_lib_file
+    download_file, view_lib_file, file_access
 from seahub.views.repo import repo, repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
@@ -69,6 +69,7 @@ urlpatterns = patterns(
     (r'^repo/upload_error/(?P<repo_id>[-0-9a-f]{36})/$', upload_file_error),
     (r'^repo/update_error/(?P<repo_id>[-0-9a-f]{36})/$', update_file_error),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
+    url(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
     url(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/$', repo, name='repo'),
     url(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
@@ -317,6 +318,11 @@ if getattr(settings, 'MULTI_TENANCY', False):
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += patterns('',
         url(r'^shib-login/', shib_login, name="shib_login"),
+    )
+
+if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
+    urlpatterns += patterns(
+        '', url(r'^krb5-login/', shib_login, name="krb5_login"),
     )
 
 # serve office converter static files

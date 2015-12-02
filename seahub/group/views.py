@@ -3,6 +3,9 @@ import logging
 import os
 import json
 import urllib2
+import csv
+import chardet
+import StringIO
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, InvalidPage
@@ -29,13 +32,14 @@ from pysearpc import SearpcError
 from decorators import group_staff_required
 from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm, GroupJoinMsgForm, WikiCreateForm
+    GroupAddForm, GroupJoinMsgForm, WikiCreateForm, BatchAddMembersForm
 from signals import grpmsg_added, grpmsg_reply_added, group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
+from seahub.group.signals import add_user_to_group
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError
 from seahub.notifications.models import UserNotification
@@ -737,6 +741,136 @@ def ajax_add_group_member(request, group_id):
         messages.success(request, _(u'Successfully added.'))
     return HttpResponse(json.dumps('success'), status=200,
                         content_type=content_type)
+
+@login_required
+@group_staff_required
+def batch_add_members(request, group_id):
+    """Batch add users to group.
+    """
+
+    group = get_group(group_id)
+    referer = request.META.get('HTTP_REFERER', None)
+    if not group:
+        next = SITE_ROOT if referer is None else referer
+        messages.error(request, _(u'The group does not exist.'))
+        return HttpResponseRedirect(next)
+
+    next = reverse('group_manage', args=[group_id]) \
+            if referer is None else referer
+
+    reader = []
+    form = BatchAddMembersForm(request.POST, request.FILES)
+    if form.is_valid():
+        uploaded_file = request.FILES['file']
+        if uploaded_file.size > 10 * 1024 * 1024:
+            messages.error(request, _(u'Failed, file is too large'))
+            return HttpResponseRedirect(next)
+
+        try:
+            content = uploaded_file.read()
+            encoding = chardet.detect(content)['encoding']
+            if encoding != 'utf-8':
+                content = content.decode(encoding, 'replace').encode('utf-8')
+
+            filestream = StringIO.StringIO(content)
+            reader = csv.reader(filestream)
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, _(u'Failed'))
+            return HttpResponseRedirect(next)
+
+    failed = []
+    success = []
+    member_list = []
+    for row in reader:
+        if not row:
+            continue
+
+        email = row[0].strip().lower()
+        if not is_valid_username(email):
+            failed.append(email)
+            continue
+
+        if is_group_user(group.id, email):
+            continue
+
+        member_list.append(email)
+
+    username = request.user.username
+    if is_org_context(request):
+
+        # Can only invite organization users to group
+        org_id = request.user.org.org_id
+        for email in member_list:
+            if not org_user_exists(org_id, email):
+                failed.append(email)
+                continue
+
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError, e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    elif request.cloud_mode:
+
+        # check plan
+        group_members = getattr(request.user, 'group_members', -1)
+        if group_members > 0:
+            current_group_members = len(get_group_members(group.id))
+            if current_group_members > group_members:
+                messages.error(request, _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members)
+                return HttpResponseRedirect(next)
+
+        # Can invite unregistered user to group.
+        for email in member_list:
+
+            # Add user to group, unregistered user will see the group
+            # when he logs in.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError as e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    else:
+
+        # Can only invite registered user to group if not in cloud mode.
+        for email in member_list:
+            if not is_registered_user(email):
+                failed.append(email)
+                continue
+
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError, e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    for email in success:
+        add_user_to_group.send(sender = None,
+                               group_staff = username,
+                               group_id = group_id,
+                               added_user = email)
+
+    for email in failed:
+        messages.error(request, _(u'Failed to add %s to group.') % email)
+
+    return HttpResponseRedirect(next)
 
 @login_required
 @group_staff_required

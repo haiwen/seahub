@@ -45,6 +45,10 @@
 
     {% elif notice.is_group_join_request %}
         <p class="brief">{{ notice.format_group_join_request|safe }}</p>
+
+    {% elif notice.is_add_user_to_group %}
+        <p class="brief">{{ notice.format_add_user_to_group|safe }}</p>
+
     {% endif %}
 
         <p class="time">{{ notice.timestamp|translate_seahub_time }}</p>

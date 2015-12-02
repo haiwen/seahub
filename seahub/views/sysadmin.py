@@ -1986,10 +1986,15 @@ def sys_virus_scan_records(request):
     records = []
     for r in records_all[:per_page]:
         try:
-            r.repo = seafile_api.get_repo(r.repo_id)
-        except SearpcError:
+            repo = seafile_api.get_repo(r.repo_id)
+        except SearpcError as e:
+            logger.error(e)
             continue
 
+        if not repo:
+            continue
+
+        r.repo = repo
         r.repo.owner = seafile_api.get_repo_owner(r.repo.repo_id)
         records.append(r)
 

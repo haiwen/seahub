@@ -61,7 +61,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.base.accounts import User
-from seahub.thumbnail.utils import get_thumbnail_src, allow_generate_thumbnail
+from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         file_icon_filter, email2nickname, tsstr_sec
@@ -482,7 +482,6 @@ def list_lib_dir(request, repo_id):
         file_type, file_ext = get_file_type_and_ext(f.obj_name)
         if file_type == IMAGE:
             f_['is_img'] = True
-
             if not repo.encrypted and ENABLE_THUMBNAIL and \
                 os.path.exists(os.path.join(THUMBNAIL_ROOT, str(size), f.obj_id)):
                 file_path = posixpath.join(path, f.obj_name)

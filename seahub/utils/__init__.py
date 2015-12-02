@@ -640,6 +640,30 @@ if EVENTS_CONFIG_FILE:
 
         return events if events else None
 
+    def generate_file_audit_event_type(e):
+        return {
+            'file-download-web': (_('web'), ''),
+            'file-download-share-link': (_('share-link'),''),
+            'file-download-api': (_('API'), e.device),
+            'repo-download-sync': (_('download-sync'), e.device),
+            'repo-upload-sync': (_('upload-sync'), e.device),
+        }[e.etype]
+
+    def get_file_audit_events_by_path(email, org_id, repo_id, file_path, start, limit):
+        """Return file audit events list by file path. (If no file audit, return 'None')
+
+        For example:
+        ``get_file_audit_events_by_path(email, org_id, repo_id, file_path, 0, 10)`` returns the first 10
+        events.
+        ``get_file_audit_events_by_path(email, org_id, repo_id, file_path, 5, 10)`` returns the 6th through
+        15th events.
+        """
+        with _get_seafevents_session() as session:
+            events = seafevents.get_file_audit_events_by_path(session,
+                email, org_id, repo_id, file_path, start, limit)
+
+        return events if events else None
+
     def get_file_audit_events(email, org_id, repo_id, start, limit):
         """Return file audit events list. (If no file audit, return 'None')
 
@@ -701,6 +725,10 @@ else:
     def get_log_events_by_time():
         pass
     def get_org_user_events():
+        pass
+    def generate_file_audit_event_type():
+        pass
+    def get_file_audit_events_by_path():
         pass
     def get_file_audit_events():
         pass

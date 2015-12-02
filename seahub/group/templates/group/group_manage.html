@@ -17,6 +17,7 @@
         <li class="tab"><a href="#settings" class="a" id="settings-tab">{% trans "Settings" %}</a></li>
     </ul>
     <div class="fright">
+        <button id="import-members-btn" class="hide"><span class="icon-upload-alt"></span>{% trans "Import Members" %}</button>
         <button id="group-member-add" class="hide"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Members"%}</span></button>
         <button id="group-admin-add" class="hide"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Admins"%}</span></button>
     </div>
@@ -99,6 +100,14 @@
 
 </div>
 
+<form id="upload-csv-form" class="hide" enctype="multipart/form-data" method="post" action="{% url 'batch_add_members' group.id %}">{% csrf_token %}
+    <h3>{% trans "Import group members from a CSV file" %}</h3>
+    <input type="file" name="file" />
+    <p class="tip">{% trans "File format: user@mail.com"%}</p>
+    <p class="error hide">{% trans "Please choose a CSV file" %}</p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+
 <form id="group-transfer-form" method="post" action="{% url 'group_transfer' group.id %}" class="hide">{% csrf_token %}
     <h3>{% trans "Transfer Group To"%}</h3>
     <input type="hidden" name="email" /><br />
@@ -132,26 +141,33 @@
 <script type="text/javascript" src="{% static "scripts/lib/select2-3.5.2.js" %}"></script>
 {% include "snippets/avatar_upload_js.html" %}
 <script type="text/javascript">
-var cur_tab = $('.ui-tabs-selected .a');    
+var cur_tab = $('.ui-tabs-selected .a');
 var member_add_btn = $('#group-member-add'),
+    import_members_btn = $('#import-members-btn'),
     admin_add_btn = $('#group-admin-add');
+
 if (cur_tab.attr('id') == 'members-tab') {
     member_add_btn.removeClass('hide');
+    import_members_btn.removeClass('hide');
 }
 if (cur_tab.attr('id') == 'admin-tab') {
     admin_add_btn.removeClass('hide');
 }
+
 $('#members-tab').click(function() {
     member_add_btn.removeClass('hide');
+    import_members_btn.removeClass('hide');
     admin_add_btn.addClass('hide');
 });
 $('#admin-tab').click(function() {
     member_add_btn.addClass('hide');
+    import_members_btn.addClass('hide');
     admin_add_btn.removeClass('hide');
 });
 $('#settings-tab').click(function() {
     changeAvatar($('#grp-avatar-chg-btn'), $('#grp-avatar-input'), $('#grp-avatar-form'));
     member_add_btn.addClass('hide');
+    import_members_btn.addClass('hide');
     admin_add_btn.addClass('hide');
 });
 addConfirmTo($("#group-dismiss"), {
@@ -246,6 +262,18 @@ $('#group-rename').click(function() {
 });
 $('#group-rename-form').submit(function() {
     if (!$.trim($('[name="new_name"]', $(this)).val())) {
+        return false;
+    }
+});
+
+$('#import-members-btn').click(function () {
+    $('#upload-csv-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+$('#upload-csv-form').submit(function() {
+    var form = $(this);
+    if (!$('[name=file]', form).val()) {
+        $('.error', form).removeClass('hide');
         return false;
     }
 });

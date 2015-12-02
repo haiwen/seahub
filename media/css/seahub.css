@@ -1188,6 +1188,7 @@ textarea:-moz-placeholder {/* for FF */
 .tabnav,
 .repo-file-list-topbar,
 .commit-list-topbar,
+.file-audit-list-topbar,
 #dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
@@ -1209,6 +1210,7 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
 }
 .commit-list-topbar,
+.file-audit-list-topbar,
 .repo-file-list-topbar {
     margin-bottom:0;
 }
@@ -1826,6 +1828,22 @@ textarea:-moz-placeholder {/* for FF */
     border: 1px solid #bbb;
     margin: 2px 0 5px;
 }
+.file-audit-list-outer-container {
+    padding:3px;
+    background:#eee;
+    border-radius:3px;
+    margin:10px 0 25px;
+}
+.file-audit-list-inner-container {
+    min-height:250px;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
+.file-audit-list-inner-container .file-audit-list-topbar {
+    padding:8px 10px;
+}
+.file-audit-list-topbar .path,
 .commit-list-topbar .path,
 .repo-file-list-topbar .path {
     font-size:14px;
@@ -2188,12 +2206,15 @@ textarea:-moz-placeholder {/* for FF */
 #back {
     margin-top:3px;
 }
+.file-audit-list,
 .commit-list {
     margin-bottom:20px;
 }
+.file-audit-list .user,
 .commit-list .time {
     padding-left:10px;
 }
+.file-audit-list .avatar,
 .commit-list .avatar {
     border-radius:2px;
 }
@@ -3538,6 +3559,10 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align: middle;
 }
 /* sysadmin */
+#import-members-btn .icon-upload-alt {
+    color:#777;
+    margin-right:3px;
+}
 #traffic-month-form {
     margin-top:10px;
 }

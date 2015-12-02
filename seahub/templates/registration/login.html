@@ -41,6 +41,10 @@
     {% if enable_shib_login %}
     <button id="shib-login" class="submit fright">{% trans "Shibboleth" %}</button>
     {% endif %}
+
+    {% if enable_krb5_login %}
+    <button id="krb5-login" class="submit fright">{% trans "Kerberos" %}</button>
+    {% endif %}
 </form>
 </div>
 {% endblock %}
@@ -90,6 +94,15 @@ $(function() {
 $(function() {
     $('#shib-login').click(function() {
         window.location = "{% url 'shib_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
+        return false;
+    });
+});
+{% endif %}
+
+{% if enable_krb5_login %}
+$(function() {
+    $('#krb5-login').click(function() {
+        window.location = "{% url 'krb5_login' %}{% if next %}?next={{ next|escape }}{% endif %}";
         return false;
     });
 });
