@@ -1390,7 +1390,7 @@ def sys_group_admin_export_excel(request):
         groups = ccnet_threaded_rpc.get_all_groups(-1, -1)
     except Exception as e:
         logger.error(e)
-        messages.error(request, _(u'Failed to export excel'))
+        messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
     head = [_("Name"), _("Creator"), _("Create At")]
@@ -1402,7 +1402,7 @@ def sys_group_admin_export_excel(request):
 
     wb = write_xls('groups', head, data_list)
     if not wb:
-        messages.error(request, _(u'Failed to export excel'))
+        messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
     response = HttpResponse(mimetype='application/ms-excel')
