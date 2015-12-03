@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 16:52+0800\n"
+"POT-Creation-Date: 2015-12-03 17:59+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,7 @@ msgstr ""
 #: static/scripts/app/views/dir.js:148
 #: static/scripts/app/views/group-side-nav.js:39
 #: static/scripts/app/views/group.js:112 static/scripts/app/views/groups.js:77
+#: static/scripts/app/views/groups.js:122
 #: static/scripts/app/views/myhome-repos.js:93
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78

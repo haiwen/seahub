@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 16:52+0800\n"
+"POT-Creation-Date: 2015-12-03 17:58+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3533,11 +3533,11 @@ msgstr ""
 msgid "Platform"
 msgstr ""
 
-#: seahub/templates/devices.html:14
+#: seahub/templates/devices.html:14 seahub/templates/file_access.html:27
 msgid "Device Name"
 msgstr ""
 
-#: seahub/templates/devices.html:15
+#: seahub/templates/devices.html:15 seahub/templates/file_access.html:27
 msgid "IP"
 msgstr ""
 
@@ -3684,10 +3684,6 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
-#: seahub/templates/file_access.html:27
-msgid "IP / Device"
-msgstr ""
-
 #: seahub/templates/file_access.html:28
 msgid "Date"
 msgstr ""
@@ -3704,7 +3700,7 @@ msgid "Per page: "
 msgstr ""
 
 #: seahub/templates/file_access.html:83
-msgid "No file access infomation"
+msgid "This file has (apparently) not been accessed yet"
 msgstr ""
 
 #: seahub/templates/file_edit.html:96
@@ -6633,26 +6629,6 @@ msgstr ""
 msgid "permission error"
 msgstr ""
 
-#: seahub/utils/__init__.py:645
-msgid "web"
-msgstr ""
-
-#: seahub/utils/__init__.py:646
-msgid "share-link"
-msgstr ""
-
-#: seahub/utils/__init__.py:647
-msgid "API"
-msgstr ""
-
-#: seahub/utils/__init__.py:648
-msgid "download-sync"
-msgstr ""
-
-#: seahub/utils/__init__.py:649
-msgid "upload-sync"
-msgstr ""
-
 #: seahub/views/__init__.py:624 seahub/views/__init__.py:636
 msgid "Unable to view recycle page"
 msgstr ""
@@ -7066,12 +7042,7 @@ msgid "Invalid username"
 msgstr ""
 
 #: seahub/views/sysadmin.py:600 seahub/views/sysadmin.py:653
-#: seahub/views/sysadmin.py:1393 seahub/views/sysadmin.py:1405
-msgid "Failed to export excel"
-msgstr ""
-
-#: seahub/views/sysadmin.py:651
-msgid "users"
+msgid "Failed to export Excel"
 msgstr ""
 
 #: seahub/views/sysadmin.py:928
@@ -7189,8 +7160,8 @@ msgid ""
 "Email service is not properly configured."
 msgstr ""
 
-#: seahub/views/sysadmin.py:1403
-msgid "groups"
+#: seahub/views/sysadmin.py:1393 seahub/views/sysadmin.py:1405
+msgid "Failed to export excel"
 msgstr ""
 
 #: seahub/views/sysadmin.py:1567
