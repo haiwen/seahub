@@ -19,6 +19,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
+from seahub.api2.endpoints.groups import Groups
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -190,6 +191,7 @@ urlpatterns = patterns(
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
+    url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),

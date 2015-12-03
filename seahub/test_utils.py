@@ -96,8 +96,10 @@ class Fixtures(Exam):
         group_id = ccnet_threaded_rpc.create_group(group_name, username)
         return ccnet_threaded_rpc.get_group(group_id)
 
-    def remove_group(self):
-        return ccnet_threaded_rpc.remove_group(self.group.id, self.user.username)
+    def remove_group(self, group_id=None):
+        if not group_id:
+            group_id = self.group.id
+        return ccnet_threaded_rpc.remove_group(group_id, self.user.username)
 
 
 class BaseTestCase(TestCase, Fixtures):
