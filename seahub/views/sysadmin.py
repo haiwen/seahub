@@ -597,7 +597,7 @@ def sys_useradmin_export_excel(request):
                 seaserv.get_emailusers('LDAPImport', -1, -1)
     except Exception as e:
         logger.error(e)
-        messages.error(request, _(u'Failed to export excel'))
+        messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
     if is_pro_version():
@@ -648,9 +648,9 @@ def sys_useradmin_export_excel(request):
 
         data_list.append(row)
 
-    wb = write_xls(_('users'), head, data_list)
+    wb = write_xls('users', head, data_list)
     if not wb:
-        messages.error(request, _(u'Failed to export excel'))
+        messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
     response = HttpResponse(mimetype='application/ms-excel')
@@ -1400,7 +1400,7 @@ def sys_group_admin_export_excel(request):
         row = [grp.group_name, grp.creator_name, create_at]
         data_list.append(row)
 
-    wb = write_xls(_('groups'), head, data_list)
+    wb = write_xls('groups', head, data_list)
     if not wb:
         messages.error(request, _(u'Failed to export excel'))
         return HttpResponseRedirect(next)
