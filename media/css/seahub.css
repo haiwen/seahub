@@ -692,7 +692,15 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav-tabs .tab .grp-list a {
     font-size:14px;
+    line-height:24px;
     padding:0;
+}
+#group-nav .sharp {
+    display:inline-block;
+    width:42px;
+    margin-right:5px;
+    text-align:right;
+    color:#aaa;
 }
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
@@ -708,37 +716,20 @@ textarea:-moz-placeholder {/* for FF */
     line-height:1;
     color:#999;
 }
+#group-nav .toggle-icon {
+    color:#999;
+}
 .side-tabnav-tabs .tab-cur a,
 .side-tabnav-tabs .tab-cur a:hover {
     background-color:#feac74;
 }
 .side-tabnav-tabs .tab-cur [class^="sf2-icon-"],
-.side-tabnav-tabs .tab-cur a {
+.side-tabnav-tabs .tab-cur a,
+#group-nav .tab-cur .sharp {
     color:#fff;
 }
-.side-tabnav-tabs .tab-cur a,
-.side-tabnav-tabs .tab-cur .grp-list .cur a {
+.side-tabnav-tabs .tab-cur a {
     font-weight:bold;
-}
-.side-tabnav-tabs .tab-cur .grp-list a {
-    background:transparent;
-    font-weight:normal;
-    color:#333;
-}
-.side-tabnav-tabs .tab .grp-list a:hover,
-.side-tabnav-tabs .tab-cur .grp-list a:hover {
-    background-color:#feefb8;
-}
-#group-nav .grp-list {
-    max-height:105px;
-    overflow:hidden;
-}
-#group-nav .sharp {
-    display:inline-block;
-    width:42px;
-    margin-right:5px;
-    text-align:right;
-    color:#aaa;
 }
 .side-textnav .hd {
     margin:2em 0 .5em;
