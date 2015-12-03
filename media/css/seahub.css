@@ -1180,7 +1180,7 @@ textarea:-moz-placeholder {/* for FF */
     margin:0 auto;
 }
 #header {
-    background:#fafbfd;
+    background:#f8f8f9 url('../img/nav.png') center top repeat-x;
     width:100%;
     font-size:14px;
     margin-bottom:30px;
