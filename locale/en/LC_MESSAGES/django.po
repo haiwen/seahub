@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 17:58+0800\n"
+"POT-Creation-Date: 2015-12-03 18:25+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -7042,6 +7042,7 @@ msgid "Invalid username"
 msgstr ""
 
 #: seahub/views/sysadmin.py:600 seahub/views/sysadmin.py:653
+#: seahub/views/sysadmin.py:1393 seahub/views/sysadmin.py:1405
 msgid "Failed to export Excel"
 msgstr ""
 
@@ -7158,10 +7159,6 @@ msgstr ""
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
-msgstr ""
-
-#: seahub/views/sysadmin.py:1393 seahub/views/sysadmin.py:1405
-msgid "Failed to export excel"
 msgstr ""
 
 #: seahub/views/sysadmin.py:1567
