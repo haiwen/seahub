@@ -39,6 +39,8 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response, to_python_boolean, is_seafile_pro
+
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -3456,6 +3458,12 @@ class GroupMembers(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid group ID')
 
         try:
+            avatar_size = int(request.GET.get('avatar_size',
+                    AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        try:
             group = seaserv.get_group(group_id_int)
         except SearpcError as e:
             logger.error(e)
@@ -3482,10 +3490,13 @@ class GroupMembers(APIView):
                              'Failed to get group members.')
         members_json = []
         for m in members:
+            avatar_url, is_default, date_uploaded = api_avatar_url(m.user_name,
+                    avatar_size)
+
             members_json.append({
                 'username': m.user_name,
                 "fullname": email2nickname(m.user_name),
-                "avatar": avatar(m.user_name, 32)
+                "avatar_url": request.build_absolute_uri(avatar_url),
             })
 
         return HttpResponse(json.dumps(members_json),
