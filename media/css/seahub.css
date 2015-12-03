@@ -1828,21 +1828,6 @@ textarea:-moz-placeholder {/* for FF */
     border: 1px solid #bbb;
     margin: 2px 0 5px;
 }
-.file-audit-list-outer-container {
-    padding:3px;
-    background:#eee;
-    border-radius:3px;
-    margin:10px 0 25px;
-}
-.file-audit-list-inner-container {
-    min-height:250px;
-    background:#fff;
-    border:1px solid #ddd;
-    border-radius:3px;
-}
-.file-audit-list-inner-container .file-audit-list-topbar {
-    padding:8px 10px;
-}
 .file-audit-list-topbar .path,
 .commit-list-topbar .path,
 .repo-file-list-topbar .path {
@@ -2218,6 +2203,7 @@ textarea:-moz-placeholder {/* for FF */
 .commit-list .avatar {
     border-radius:2px;
 }
+.file-access-hd,
 .repo-trash-hd,
 .repo-snapshot-hd {
     margin-bottom:10px;
