@@ -642,11 +642,11 @@ if EVENTS_CONFIG_FILE:
 
     def generate_file_audit_event_type(e):
         return {
-            'file-download-web': (_('web'), ''),
-            'file-download-share-link': (_('share-link'),''),
-            'file-download-api': (_('API'), e.device),
-            'repo-download-sync': (_('download-sync'), e.device),
-            'repo-upload-sync': (_('upload-sync'), e.device),
+            'file-download-web': ('web', ''),
+            'file-download-share-link': ('share-link',''),
+            'file-download-api': ('API', e.device),
+            'repo-download-sync': ('download-sync', e.device),
+            'repo-upload-sync': ('upload-sync', e.device),
         }[e.etype]
 
     def get_file_audit_events_by_path(email, org_id, repo_id, file_path, start, limit):

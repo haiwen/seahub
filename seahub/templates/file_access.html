@@ -24,7 +24,7 @@
             <tr>
                 <th width="25%" class="user">{% trans "User" %}</th>
                 <th width="20%">{% trans "Type" %}</th>
-                <th width="30%">{% trans "IP / Device" %}</th>
+                <th width="30%">{% trans "IP" %} / {% trans "Device Name" %}</th>
                 <th width="25%">{% trans "Date" %}</th>
             </tr>
 
@@ -80,7 +80,7 @@
         </div>
         {% else %}
         <div class="empty-tips">
-            <h2 class="alc">{% trans "No file access infomation" %}</h2>
+            <h2 class="alc">{% trans "This file has (apparently) not been accessed yet" %}</h2>
         </div>
         {% endif %}
 
