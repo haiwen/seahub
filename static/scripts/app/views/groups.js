@@ -114,8 +114,14 @@ define([
                             _this.reset();
                         }
                     },  
-                    error: function() {
-                        Common.feedback('Error', 'error', Common.ERROR_TIMEOUT);
+                    error: function(collection, response, options) {
+                        var err_msg;
+                        if (response.responseText) {
+                            err_msg = response.responseJSON.error_msg;
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        Common.feedback(err_msg, 'error', Common.ERROR_TIMEOUT);
                     },  
                     complete: function() {
                         Common.closeModal();
