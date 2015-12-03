@@ -366,18 +366,18 @@ class SearchUser(APIView):
         except ValueError:
             size = 32
 
-        formated_result = format_user_result(search_result, size)[:10]
+        formated_result = format_user_result(request, search_result, size)[:10]
         return HttpResponse(json.dumps({"users": formated_result}), status=200,
                             content_type=json_content_type)
 
-def format_user_result(users, size):
+def format_user_result(request, users, size):
     results = []
     for email in users:
         url, is_default, date_uploaded = api_avatar_url(email, size)
         results.append({
             "email": email,
             "avatar": avatar(email, size),
-            "avatar_url": url,
+            "avatar_url": request.build_absolute_uri(url),
             "name": email2nickname(email),
         })
     return results
