@@ -68,6 +68,17 @@ class DirSharedItemsTest(BaseTestCase):
         assert len(json_resp['success']) == 2
         assert json_resp['success'][0]['permission'] == 'r'
 
+    def test_share_folder_to_invalid_email(self):
+        self.login_as(self.user)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
+                                                       self.folder),
+            "share_type=user&username=abc",
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(400, resp.status_code)
+
     def test_can_share_root_to_groups(self):
         self.login_as(self.user)
 

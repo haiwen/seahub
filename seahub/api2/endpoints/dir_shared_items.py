@@ -249,6 +249,10 @@ class DirSharedItemsEndpoint(APIView):
         if share_type == 'user':
             share_to_users = request.DATA.getlist('username')
             for to_user in share_to_users:
+                if not is_valid_username(to_user):
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     'Username must be a valid email address.')
+
                 if not check_user_share_quota(username, shared_repo, users=[to_user]):
                     return api_error(status.HTTP_403_FORBIDDEN,
                                      'Failed to share: No enough quota.')
