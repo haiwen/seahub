@@ -173,6 +173,7 @@ def sys_repo_admin(request):
     return render_to_response(
         'sysadmin/sys_repo_admin.html', {
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
+            'is_pro_version': is_pro_version(),
             'repos': repos,
             'current_page': current_page,
             'prev_page': current_page-1,
