@@ -640,14 +640,37 @@
     {% endif %}
 
     <div class="fright">
-    <% if (!is_pub) { %>
-    <span class="sf2-icon-msgs op-icon" title="{% trans "Discussion" %}"></span>
-    <% } %>
-    <span class="sf2-icon-user op-icon" title="{% trans "Members" %}"></span>
     <% if (is_staff) { %>
-    <span class="sf2-icon-wrench op-icon" title="{% trans "Admin" %}"></span>
+    <span class="sf2-icon-cog1 op-icon" title="{% trans "Admin" %}"></span>
+    <% } %>
+    <span class="sf2-icon-user2 op-icon toggle-members" title="{% trans "Members" %}"></span>
+    <% if (!is_pub) { %>
+    <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     <% } %>
     </div>
+</div>
+</script>
+<script type="text/template" id="group-member-tmpl">
+<a href="{{ SITE_ROOT }}profile/<%- group_member_email %>/" class="user-profile-item">
+    <img class="user-profile-avatar" width="32" src="<%= group_member_avatar_url %>" />
+    <div class="user-profile-txt">
+        <span class="user-profile-name" title="<%- group_member_fullname %>"><%- group_member_fullname %></span>
+        <span class="user-profile-email" title="<%- group_member_email %>"><%- group_member_email %></span>
+    </div>
+</a>
+</script>
+<script type="text/template" id="group-members-list-tmpl">
+<div class="popover">
+    <div class="outer-caret up-outer-caret">
+        <div class="inner-caret"></div>
+    </div>
+    <h3 class="popover-header">{% trans "Members" %}</h3>
+    <div class="popover-content">
+        <span class="loading-icon loading-tip"></span>
+        <ul class="group-members-list hide"></ul>
+        <p class="popover-error-msg hide"></p>
+    </div>
+    <span class="popover-close sf2-icon-x1 op-icon close-members" title="{% trans "Close" %}"></span>
 </div>
 </script>
 <script type="text/template" id="group-mods-enable-form-tmpl">
