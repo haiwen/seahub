@@ -555,7 +555,8 @@ if EVENTS_CONFIG_FILE:
                         if _same_events(e1, e2): duplicate = True; break
 
                     new_merge = False
-                    if hasattr(e1, 'commit') and new_merge_with_no_conflict(e1.commit):
+                    if hasattr(e1, 'commit') and e1.commit and \
+                       new_merge_with_no_conflict(e1.commit):
                         new_merge = True
 
                     if not duplicate and not new_merge:
