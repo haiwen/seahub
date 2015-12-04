@@ -551,7 +551,7 @@
         <li class="tab" id="group-nav">
             <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
-                <li><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
+                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
                 {% for grp in grps %}
                 <li<% if (cur_group_id == '{{ grp.id }}') { %> class="tab-cur"<% }%>>
                     <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>

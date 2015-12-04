@@ -149,12 +149,19 @@ define([
         showGroups: function () {
             this.switchCurrentView(this.groupsView);
             this.groupsView.show();
+            this.sideNavView.setCurTab('group', {
+                'cur_group_tab': 'groups',
+                'cur_group_id': ''
+            });
         },
 
         showGroupRepos: function(group_id) {
             this.switchCurrentView(this.groupView);
             this.groupView.showRepoList(group_id);
-            this.sideNavView.setCurTab('group', {'cur_group_id': group_id});
+            this.sideNavView.setCurTab('group', {
+                'cur_group_tab': '',
+                'cur_group_id': group_id
+            });
         },
 
         showGroupRepoDir: function(group_id, repo_id, path) {
