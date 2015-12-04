@@ -584,30 +584,6 @@ textarea:-moz-placeholder {/* for FF */
     top:-11px;
     left:-10px;
 }
-/**** info-item *****/
-.info-item {
-    border: 1px solid #eee;
-    border-radius: 2px;
-    margin-bottom: 12px;
-}
-.info-item h3,
-.info-item p {
-    margin:0;
-}
-.info-item h3 {
-    font-size:1.15em;
-}
-.info-item-top {
-    padding: 4px 10px;
-    background: #f8f8f8;
-    border-bottom: 1px solid #eee;
-}
-.info-item-bottom {
-    padding: 8px 10px;
-}
-.info-item p.not-last {
-    margin-bottom:0.4em;
-}
 /**** tabnav *****/
 .tabnav-tabs,
 .tabnav-tab {
