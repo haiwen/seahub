@@ -18,7 +18,8 @@ from pysearpc import SearpcError
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
-from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url
+from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
+        get_default_group_avatar_url
 from seahub.utils import is_org_context
 from seahub.utils.timeutils import dt, utc_to_local
 from seahub.group.utils import validate_group_name, check_group_name_conflict
@@ -69,8 +70,13 @@ class Groups(APIView):
 
         groups = []
         for g in user_groups:
+            try:
+                avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
+            except Exception as e:
+                logger.error(e)
+                avatar_url = get_default_group_avatar_url()
+
             val = utc_to_local(dt(g.timestamp))
-            avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
             group = {
                 "id": g.id,
                 "name": g.group_name,
@@ -145,9 +151,13 @@ class Groups(APIView):
             size = GROUP_AVATAR_DEFAULT_SIZE
 
         g = seaserv.get_group(group_id)
-        val = utc_to_local(dt(g.timestamp))
-        avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
+        try:
+            avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
+        except Exception as e:
+            logger.error(e)
+            avatar_url = get_default_group_avatar_url()
 
+        val = utc_to_local(dt(g.timestamp))
         new_group = {
             "id": g.id,
             "name": g.group_name,
