@@ -29,12 +29,6 @@ def get_default_group_avatar_url():
     return '%s%s' % (base_url, GROUP_AVATAR_DEFAULT_URL)
 
 def api_grp_avatar_url(group_id, size=GROUP_AVATAR_DEFAULT_SIZE):
-    key = get_grp_cache_key(group_id, size)
-    val = cache.get(key)
-    if val:
-        return val.avatar_url(size), False, val.date_uploaded
-
-    # Get from DB, and refresh cache
     grp_avatars = GroupAvatar.objects.filter(group_id=group_id)
     if grp_avatars:
         avatar = grp_avatars.order_by('-date_uploaded')[0]

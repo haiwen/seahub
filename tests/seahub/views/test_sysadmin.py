@@ -231,7 +231,7 @@ class UserInfoTest(BaseTestCase):
         self.assertContains(resp, 'id="owned"')
         self.assertContains(resp, 'id="shared"')
         self.assertContains(resp, 'id="shared-links"')
-        self.assertContains(resp, 'id="groups"')
+        self.assertContains(resp, 'id="user-admin-groups"')
 
     def test_can_list_owned_repos(self):
 
