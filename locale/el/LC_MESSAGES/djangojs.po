@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-11-03 11:11+0800\n"
-"PO-Revision-Date: 2015-10-30 03:30+0000\n"
+"POT-Creation-Date: 2015-12-03 18:25+0800\n"
+"PO-Revision-Date: 2015-12-02 15:50+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Greek (http://www.transifex.com/haiwen/seahub/language/el/)\n"
 "MIME-Version: 1.0\n"
@@ -17,9 +17,9 @@ msgstr ""
 "Language: el\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/scripts/common.js:160 static/scripts/common.js.c:250
-#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:835
-#: static/scripts/app/views/dir.js.c:892
+#: static/scripts/common.js:161 static/scripts/common.js.c:251
+#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:844
+#: static/scripts/app/views/dir.js.c:901
 #: static/scripts/app/views/dirent.js:279
 #: static/scripts/app/views/dirent.js:423
 #: static/scripts/app/views/dirent.js:449
@@ -38,25 +38,25 @@ msgstr ""
 msgid "Failed. Please check the network."
 msgstr ""
 
-#: static/scripts/common.js:518
+#: static/scripts/common.js:519
 msgid "Search users or enter emails"
 msgstr ""
 
-#: static/scripts/common.js:528
-msgid "Please enter 1 or more character"
-msgstr ""
-
 #: static/scripts/common.js:529
-msgid "No matches"
-msgstr ""
+msgid "Please enter 1 or more character"
+msgstr "Παρακαλώ εισάγετε έναν ή περισσότερους χαρακτήρες"
 
 #: static/scripts/common.js:530
-msgid "Searching..."
-msgstr ""
+msgid "No matches"
+msgstr "Δεν υπάρχουν αποτελέσματα"
 
 #: static/scripts/common.js:531
+msgid "Searching..."
+msgstr "Αναζήτηση..."
+
+#: static/scripts/common.js:532
 msgid "Loading failed"
-msgstr ""
+msgstr "Αποτυχία φόρτωσης"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
@@ -72,7 +72,7 @@ msgstr ""
 
 #: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:207
 msgid "Password is too short"
-msgstr ""
+msgstr "Ο κωδικός είναι πολυ μικρός"
 
 #: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:215
 msgid "Passwords don't match"
@@ -102,44 +102,45 @@ msgstr ""
 msgid "Deleted directories"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:45
+#: static/scripts/app/views/dir.js:46
 #: static/scripts/app/views/starred-file.js:29
 msgid "Close (Esc)"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:46
+#: static/scripts/app/views/dir.js:47
 #: static/scripts/app/views/starred-file.js:30
 msgid "Loading..."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:49
+#: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:33
 msgid "Previous (Left arrow key)"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:50
+#: static/scripts/app/views/dir.js:51
 #: static/scripts/app/views/starred-file.js:34
 msgid "Next (Right arrow key)"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:51
+#: static/scripts/app/views/dir.js:52
 #: static/scripts/app/views/starred-file.js:35
 msgid "%curr% of %total%"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:57
+#: static/scripts/app/views/dir.js:58
 #: static/scripts/app/views/starred-file.js:41
 msgid "Open in New Tab"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:60
+#: static/scripts/app/views/dir.js:61
 #: static/scripts/app/views/starred-file.js:44
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:143
+#: static/scripts/app/views/dir.js:148
 #: static/scripts/app/views/group-side-nav.js:39
-#: static/scripts/app/views/group.js:112
+#: static/scripts/app/views/group.js:112 static/scripts/app/views/groups.js:77
+#: static/scripts/app/views/groups.js:122
 #: static/scripts/app/views/myhome-repos.js:93
 #: static/scripts/app/views/myhome-shared-repos.js:79
 #: static/scripts/app/views/myhome-sub-repos.js:78
@@ -147,15 +148,15 @@ msgstr ""
 msgid "Please check the network."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:169
+#: static/scripts/app/views/dir.js:174
 msgid "Password is required."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:336 static/scripts/app/views/dir.js.c:393
+#: static/scripts/app/views/dir.js:345 static/scripts/app/views/dir.js.c:402
 msgid "It is required."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:351 static/scripts/app/views/dir.js.c:418
+#: static/scripts/app/views/dir.js:360 static/scripts/app/views/dir.js.c:427
 #: static/scripts/app/views/dirent.js:264
 #: static/scripts/app/views/fileupload.js:344
 #: static/scripts/app/views/fileupload.js:358
@@ -165,118 +166,118 @@ msgstr ""
 msgid "Just now"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:399
+#: static/scripts/app/views/dir.js:408
 msgid "Only an extension there, please input a name."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:557 static/scripts/app/views/dir.js.c:686
+#: static/scripts/app/views/dir.js:566 static/scripts/app/views/dir.js.c:695
 msgid "Processing..."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:593
+#: static/scripts/app/views/dir.js:602
 msgid "Successfully deleted %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:595
+#: static/scripts/app/views/dir.js:604
 msgid "Successfully deleted %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:597
+#: static/scripts/app/views/dir.js:606
 msgid "Successfully deleted %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:604
+#: static/scripts/app/views/dir.js:613
 msgid "Failed to delete %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:606
+#: static/scripts/app/views/dir.js:615
 msgid "Failed to delete %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:608
+#: static/scripts/app/views/dir.js:617
 msgid "Failed to delete %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:621
+#: static/scripts/app/views/dir.js:630
 msgid "Delete Items"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:622
+#: static/scripts/app/views/dir.js:631
 msgid "Are you sure you want to delete these selected items?"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:636
+#: static/scripts/app/views/dir.js:645
 msgid "Move selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:636
+#: static/scripts/app/views/dir.js:645
 msgid "Copy selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:681 static/scripts/app/views/dirent.js:348
+#: static/scripts/app/views/dir.js:690 static/scripts/app/views/dirent.js:348
 msgid "Invalid destination path"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:729
+#: static/scripts/app/views/dir.js:738
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:731
+#: static/scripts/app/views/dir.js:740
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:733
+#: static/scripts/app/views/dir.js:742
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:737
+#: static/scripts/app/views/dir.js:746
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:739
+#: static/scripts/app/views/dir.js:748
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:741
+#: static/scripts/app/views/dir.js:750
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:753
+#: static/scripts/app/views/dir.js:762
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:755
+#: static/scripts/app/views/dir.js:764
 msgid "Internal error. Failed to move %(name)s."
-msgstr ""
+msgstr "Εσωτερικό σφάλμα. Αποτυχία μετακίνησης του %(name)s."
 
-#: static/scripts/app/views/dir.js:759
+#: static/scripts/app/views/dir.js:768
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:761
+#: static/scripts/app/views/dir.js:770
 msgid "Internal error. Failed to copy %(name)s."
-msgstr ""
+msgstr "Εσωτερικό σφάλμα. Αποτυχία αντιγραφής του %(name)s."
 
-#: static/scripts/app/views/dir.js:801
+#: static/scripts/app/views/dir.js:810
 msgid "Moving file %(index)s of %(total)s"
-msgstr ""
+msgstr "Μετακίνηση αρχείου %(index)s από %(total)s"
 
-#: static/scripts/app/views/dir.js:801
+#: static/scripts/app/views/dir.js:810
 msgid "Copying file %(index)s of %(total)s"
-msgstr ""
+msgstr "Αντιγραφή αρχείου %(index)s από %(total)s"
 
-#: static/scripts/app/views/dir.js:823
+#: static/scripts/app/views/dir.js:832
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:823
+#: static/scripts/app/views/dir.js:832
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:883 static/scripts/app/views/dirent.js:412
+#: static/scripts/app/views/dir.js:892 static/scripts/app/views/dirent.js:412
 #: static/scripts/app/views/dirent.js:440
 msgid "Canceled."
-msgstr ""
+msgstr "Ακυρώθηκε."
 
 #: static/scripts/app/views/dirent.js:47
 msgid "locked by {placeholder}"
@@ -284,7 +285,7 @@ msgstr ""
 
 #: static/scripts/app/views/dirent.js:198
 msgid "Successfully deleted %(name)s"
-msgstr ""
+msgstr "Επιτυχής διαγραφή του %(name)s"
 
 #: static/scripts/app/views/dirent.js:308
 msgid "Move {placeholder} to:"
@@ -335,7 +336,7 @@ msgid "Empty file upload result"
 msgstr ""
 
 #: static/scripts/app/views/fileupload.js:17
-#: static/scripts/app/views/group.js:109
+#: static/scripts/app/views/group.js:109 static/scripts/app/views/groups.js:74
 #: static/scripts/app/views/myhome-repos.js:90
 #: static/scripts/app/views/myhome-shared-repos.js:76
 #: static/scripts/app/views/myhome-sub-repos.js:75
@@ -417,7 +418,7 @@ msgstr ""
 msgid "Successfully unshared {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/group.js:107
+#: static/scripts/app/views/group.js:107 static/scripts/app/views/groups.js:72
 #: static/scripts/app/views/myhome-repos.js:88
 #: static/scripts/app/views/myhome-shared-repos.js:74
 #: static/scripts/app/views/myhome-sub-repos.js:73
