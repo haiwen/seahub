@@ -16,6 +16,7 @@ define([
             this.default_cur_tab = 'mine';
             this.data = {
                 'cur_tab': this.default_cur_tab,
+                'show_group_list': false, // when cur_tab is not 'group'
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
@@ -30,8 +31,6 @@ define([
 
         events: {
             'click #group-nav a:first': 'toggleGroupList',
-            'mouseenter #group-nav .grp-list': 'mouseEnterGroupList', 
-            'mouseleave #group-nav .grp-list': 'mouseLeaveGroupList', 
             'click #enable-mods': 'enableMods'
         },
 
@@ -39,14 +38,6 @@ define([
             $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
             $('#group-nav .grp-list').slideToggle();
             return false;
-        },
-
-        mouseEnterGroupList: function () {
-            $('#group-nav .grp-list').css({'overflow': 'auto'});
-        },
-
-        mouseLeaveGroupList: function () {
-            $('#group-nav .grp-list').css({'overflow': 'hidden'});
         },
 
         enableMods: function () {
@@ -99,6 +90,7 @@ define([
             if (options) {
                 $.extend(this.data, options);
             }
+            this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
             this.render();
         }
 

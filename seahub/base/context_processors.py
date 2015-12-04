@@ -50,9 +50,9 @@ def base(request):
     except AttributeError:
         base_template = 'myhome_base.html'
 
-    # get 8 user groups
     try:
-        grps = request.user.joined_groups[:8]
+        grps = request.user.joined_groups
+        grps.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
     except AttributeError:      # anonymous user
         grps = None
 
