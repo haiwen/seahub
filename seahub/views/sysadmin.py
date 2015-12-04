@@ -1908,7 +1908,10 @@ def sys_repo_delete(request, repo_id):
         return HttpResponseRedirect(next)
 
     repo = seafile_api.get_repo(repo_id)
-    repo_name = repo.name
+    if repo:                    # Handle the case that repo is `None`.
+        repo_name = repo.name
+    else:
+        repo_name = ''
 
     if MULTI_TENANCY:
         org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
