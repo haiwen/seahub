@@ -3,6 +3,9 @@ import logging
 import os
 import json
 import urllib2
+import csv
+import chardet
+import StringIO
 
 from django.conf import settings
 from django.core.paginator import EmptyPage, InvalidPage
@@ -29,20 +32,21 @@ from pysearpc import SearpcError
 from decorators import group_staff_required
 from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm, GroupJoinMsgForm, WikiCreateForm
+    GroupAddForm, GroupJoinMsgForm, WikiCreateForm, BatchAddMembersForm
 from signals import grpmsg_added, grpmsg_reply_added, group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.models import FileDiscuss
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
+from seahub.group.signals import add_user_to_group
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError
 from seahub.notifications.models import UserNotification
 from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
-from seahub.wiki.utils import clean_page_name
+from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.settings import SITE_ROOT, SITE_NAME
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import render_error, render_permission_error, string2list, \
@@ -210,25 +214,6 @@ def group_add(request):
                                       content_type=content_type)
 
 @login_required
-def group_list(request):
-    """List user groups"""
-    joined_groups = request.user.joined_groups
-
-    enabled_groups = get_wiki_enabled_group_list(
-        in_group_ids=[x.id for x in joined_groups])
-    enabled_group_ids = [ int(x.group_id) for x in enabled_groups ]
-
-    for group in joined_groups:
-        if group.id in enabled_group_ids:
-            group.wiki_enabled = True
-        else:
-            group.wiki_enabled = False
-
-    return render_to_response('group/groups.html', {
-            'joined_groups': joined_groups,
-            }, context_instance=RequestContext(request))
-
-@login_required
 @sys_staff_required
 @require_POST
 def group_remove(request, group_id):
@@ -274,9 +259,6 @@ def group_dismiss(request, group_id):
         remove_group_common(group.id, username, org_id=org_id)
     except SearpcError, e:
         logger.error(e)
-        messages.error(request, _('Failed to dismiss group, pleaes retry later.'))
-    else:
-        messages.success(request, _('Successfully dismissed group.'))
 
     return HttpResponseRedirect(reverse('group_list'))
 
@@ -759,6 +741,136 @@ def ajax_add_group_member(request, group_id):
         messages.success(request, _(u'Successfully added.'))
     return HttpResponse(json.dumps('success'), status=200,
                         content_type=content_type)
+
+@login_required
+@group_staff_required
+def batch_add_members(request, group_id):
+    """Batch add users to group.
+    """
+
+    group = get_group(group_id)
+    referer = request.META.get('HTTP_REFERER', None)
+    if not group:
+        next = SITE_ROOT if referer is None else referer
+        messages.error(request, _(u'The group does not exist.'))
+        return HttpResponseRedirect(next)
+
+    next = reverse('group_manage', args=[group_id]) \
+            if referer is None else referer
+
+    reader = []
+    form = BatchAddMembersForm(request.POST, request.FILES)
+    if form.is_valid():
+        uploaded_file = request.FILES['file']
+        if uploaded_file.size > 10 * 1024 * 1024:
+            messages.error(request, _(u'Failed, file is too large'))
+            return HttpResponseRedirect(next)
+
+        try:
+            content = uploaded_file.read()
+            encoding = chardet.detect(content)['encoding']
+            if encoding != 'utf-8':
+                content = content.decode(encoding, 'replace').encode('utf-8')
+
+            filestream = StringIO.StringIO(content)
+            reader = csv.reader(filestream)
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, _(u'Failed'))
+            return HttpResponseRedirect(next)
+
+    failed = []
+    success = []
+    member_list = []
+    for row in reader:
+        if not row:
+            continue
+
+        email = row[0].strip().lower()
+        if not is_valid_username(email):
+            failed.append(email)
+            continue
+
+        if is_group_user(group.id, email):
+            continue
+
+        member_list.append(email)
+
+    username = request.user.username
+    if is_org_context(request):
+
+        # Can only invite organization users to group
+        org_id = request.user.org.org_id
+        for email in member_list:
+            if not org_user_exists(org_id, email):
+                failed.append(email)
+                continue
+
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError, e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    elif request.cloud_mode:
+
+        # check plan
+        group_members = getattr(request.user, 'group_members', -1)
+        if group_members > 0:
+            current_group_members = len(get_group_members(group.id))
+            if current_group_members > group_members:
+                messages.error(request, _(u'You can only invite %d members.<a href="http://seafile.com/">Upgrade account.</a>') % group_members)
+                return HttpResponseRedirect(next)
+
+        # Can invite unregistered user to group.
+        for email in member_list:
+
+            # Add user to group, unregistered user will see the group
+            # when he logs in.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError as e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    else:
+
+        # Can only invite registered user to group if not in cloud mode.
+        for email in member_list:
+            if not is_registered_user(email):
+                failed.append(email)
+                continue
+
+            # Add user to group.
+            try:
+                ccnet_threaded_rpc.group_add_member(group.id,
+                                                    username,
+                                                    email)
+                success.append(email)
+            except SearpcError, e:
+                failed.append(email)
+                logger.error(e)
+                continue
+
+    for email in success:
+        add_user_to_group.send(sender = None,
+                               group_staff = username,
+                               group_id = group_id,
+                               added_user = email)
+
+    for email in failed:
+        messages.error(request, _(u'Failed to add %s to group.') % email)
+
+    return HttpResponseRedirect(next)
 
 @login_required
 @group_staff_required
@@ -1350,13 +1462,12 @@ def group_wiki(request, group, page_name="home"):
         repo = get_group_wiki_repo(group, username)
         # No need to check whether repo is none, since repo is already created
 
-        filename = clean_page_name(page_name) + '.md'
+        filename = page_name_to_file_name(clean_page_name(page_name))
         if not post_empty_file(repo.id, "/", filename, username):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('group_wiki', args=[group.id, page_name]))
     else:
         url_prefix = reverse('group_wiki', args=[group.id])
-        content = convert_wiki_link(content, url_prefix, repo.id, username)
 
         # fetch file modified time and modifier
         path = '/' + dirent.obj_name
@@ -1379,8 +1490,6 @@ def group_wiki(request, group, page_name="home"):
             index_content, index_repo, index_dirent = get_group_wiki_page(username, group, index_pagename)
         except (WikiDoesNotExist, WikiPageMissing) as e:
             wiki_index_exists = False
-        else:
-            index_content = convert_wiki_link(index_content, url_prefix, index_repo.id, username)
 
         return render_to_response("group/group_wiki.html", {
             "group" : group,

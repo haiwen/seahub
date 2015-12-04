@@ -18,7 +18,7 @@
         {% endif %}
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_useradmin_admins' %}">{% trans "Admins" %}</a></li>
     </ul>
-    <button id="add-admin-btn" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add admin" %}</span></button>
+    <button id="add-admin-btn" class="fright">{% trans "Add admin" %}</button>
 </div>
 
 <form id="add-admin-form"  method="post" name="add-admin-form" class="tab-popup hide">{% csrf_token %}

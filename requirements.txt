@@ -7,3 +7,4 @@ Djblets==0.6.14
 django-compressor==1.4
 django-statici18n==1.1.2
 git+git://github.com/haiwen/django-constance.git@bde7f7cdfd0ed1631a6817fd4cd76f37bf54fe35#egg=django-constance[database]
+openpyxl==2.3.0

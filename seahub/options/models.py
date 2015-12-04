@@ -105,18 +105,23 @@ class UserOptionsManager(models.Manager):
 
     def is_user_guide_enabled(self, username):
         """Return ``True`` if user need guide, otherwise ``False``.
-        
+
         Arguments:
         - `self`:
         - `username`:
         """
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_USER_GUIDE)
-            return bool(int(user_option.option_val))
-        except UserOptions.DoesNotExist:
+        rst = super(UserOptionsManager, self).filter(
+            email=username, option_key=KEY_USER_GUIDE)
+        rst_len = len(rst)
+        if rst_len <= 0:
             # Assume ``user_guide`` is enabled if this optoin is not set.
-            return True        
+            return True
+        elif rst_len == 1:
+            return bool(int(rst[0].option_val))
+        else:
+            for i in range(rst_len - 1):
+                rst[i].delete()
+            return bool(int(rst[rst_len - 1].option_val))
 
     def enable_sub_lib(self, username):
         """

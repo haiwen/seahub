@@ -167,6 +167,23 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_avatar_src(username)
         return notice
 
+    def format_add_user_to_group(self, notice):
+        d = json.loads(notice.detail)
+        group_staff = d['group_staff']
+        group_id = d['group_id']
+
+        group = seaserv.get_group(group_id)
+        if group is None:
+            notice.delete()
+
+        notice.notice_from = group_staff
+        notice.avatar_src = self.get_avatar_src(group_staff)
+        notice.group_staff_profile_url = reverse('user_profile',
+                                                  args=[group_staff])
+        notice.group_url = reverse('view_group', args=[group_id])
+        notice.group_name = group.group_name
+        return notice
+
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
@@ -235,6 +252,9 @@ class Command(BaseCommand):
 
                 elif notice.is_group_join_request():
                     notice = self.format_group_join_request(notice)
+
+                elif notice.is_add_user_to_group():
+                    notice = self.format_add_user_to_group(notice)
 
                 notices.append(notice)
 

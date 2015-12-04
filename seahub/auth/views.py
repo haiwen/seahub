@@ -188,6 +188,7 @@ def login(request, template_name='registration/login.html',
         signup_url = ''
 
     enable_shib_login = getattr(settings, 'ENABLE_SHIB_LOGIN', False)
+    enable_krb5_login = getattr(settings, 'ENABLE_KRB5_LOGIN', False)
 
     return render_to_response(template_name, {
         'form': form,
@@ -197,6 +198,7 @@ def login(request, template_name='registration/login.html',
         'remember_days': config.LOGIN_REMEMBER_DAYS,
         'signup_url': signup_url,
         'enable_shib_login': enable_shib_login,
+        'enable_krb5_login': enable_krb5_login,
     }, context_instance=RequestContext(request))
 
 def login_simple_check(request):

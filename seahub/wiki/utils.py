@@ -18,7 +18,7 @@ from seahub.utils.file_types import IMAGE
 from models import WikiPageMissing, WikiDoesNotExist, GroupWiki, PersonalWiki
 
 
-__all__ = ["get_wiki_dirent", "clean_page_name"]
+__all__ = ["get_wiki_dirent", "clean_page_name", "page_name_to_file_name"]
 
 
 
@@ -31,8 +31,15 @@ def clean_page_name(page_name):
     # Remove special characters. Do not lower page name and spaces are allowed.
     return slugify(page_name, ok=SLUG_OK, lower=False, spaces=True)
 
+def page_name_to_file_name(page_name):
+    """Append ".md" if page name does not end with .md or .markdown.
+    """
+    if page_name.endswith('.md') or page_name.endswith('.markdown'):
+        return page_name
+    return page_name + '.md'
+
 def get_wiki_dirent(repo_id, page_name):
-    file_name = page_name + ".md"
+    file_name = page_name_to_file_name(page_name)
     repo = seaserv.get_repo(repo_id)
     if not repo:
         raise WikiDoesNotExist

@@ -19,8 +19,8 @@ from seahub.api2.utils import api_error, to_python_boolean
 from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.accounts import User
 from seahub.profile.models import Profile
+from seahub.profile.utils import refresh_cache as refresh_profile_cache
 from seahub.utils import is_valid_username
-from seahub.views import get_owned_repo_list
 
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
@@ -75,6 +75,7 @@ class Account(APIView):
             profile.intro = note
 
         profile.save()
+        refresh_profile_cache(email)
 
     def _update_account_quota(self, request, email):
         storage = request.DATA.get("storage", None)

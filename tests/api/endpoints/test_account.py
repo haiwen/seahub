@@ -5,6 +5,7 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.base.accounts import User
+from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from tests.common.utils import randstring
@@ -104,6 +105,16 @@ class AccountTest(BaseTestCase):
             self.user1.username).intro, 'this_is_user1')
         self.assertEqual(seafile_api.get_user_quota(
             self.user1.username), 102400)
+
+    def test_refresh_profile_cache_after_update(self):
+        self.login_as(self.admin)
+        self.assertEqual(email2nickname(self.user1.username),
+                         self.user1.username.split('@')[0])
+
+        resp = self._do_update()
+        self.assertEqual(200, resp.status_code)
+
+        self.assertEqual(email2nickname(self.user1.username), 'user1')
 
     def test_migrate(self):
         self.login_as(self.admin)

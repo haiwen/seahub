@@ -7,13 +7,14 @@ from views import group_info, group_members, group_member_operations, group_add_
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
     group_wiki_page_delete, group_wiki_use_lib, group_remove, group_dismiss, group_quit, \
     group_make_public, group_revoke_public, group_transfer, group_toggle_modules, \
-    group_add_discussion, group_rename, group_add, ajax_add_group_member
+    group_add_discussion, group_rename, group_add, ajax_add_group_member, \
+    batch_add_members
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
     url(r'^(?P<group_id>\d+)/discuss/$', group_discuss, name='group_discuss'),
     url(r'^(?P<group_id>\d+)/wiki/$', group_wiki, name='group_wiki'),
-    url(r'^(?P<group_id>\d+)/wiki/(?P<page_name>[^/]+)/$', group_wiki, name='group_wiki'),
+    url(r'^(?P<group_id>\d+)/wiki/(?P<page_name>[^/]+)$', group_wiki, name='group_wiki'),
     url(r'^(?P<group_id>\d+)/wiki_pages/$', group_wiki_pages, name='group_wiki_pages'),
     url(r'^(?P<group_id>\d+)/wiki_create/$', group_wiki_create, name='group_wiki_create'),
     url(r'^(?P<group_id>\d+)/wiki_use_lib/$', group_wiki_use_lib, name='group_wiki_use_lib'),
@@ -42,6 +43,7 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/discussion/add/$', group_add_discussion, name='group_add_discussion'),
     url(r'^add/$', group_add, name='group_add'),
 
+    url(r'^(?P<group_id>\d+)/batch-add-members/$', batch_add_members, name='batch_add_members'),
     url(r'^ajax/(?P<group_id>\d+)/member/add/$', ajax_add_group_member, name='group_add_member'),
 )
 

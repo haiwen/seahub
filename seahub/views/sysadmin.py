@@ -17,6 +17,7 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
+from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
 
 import seaserv
@@ -28,6 +29,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
+from seahub.base.templatetags.seahub_tags import tsstr_sec, translate_seahub_time_str
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
@@ -39,7 +41,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
-
+from seahub.utils.ms_excel import write_xls
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.views import get_system_default_repo_id, gen_path_link
@@ -48,7 +50,7 @@ from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
 from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
-from seahub.settings import INIT_PASSWD, SITE_NAME, \
+from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
     ENABLE_SYS_ADMIN_VIEW_REPO
 try:
@@ -398,6 +400,9 @@ def list_repos_by_name_and_owner(repo_name, owner):
     repos = []
     owned_repos = seafile_api.get_owned_repo_list(owner)
     for repo in owned_repos:
+        if not repo.name:
+            continue
+
         if repo_name in repo.name:
             repo.owner = owner
             repos.append(repo)
@@ -407,6 +412,9 @@ def list_repos_by_name(repo_name):
     repos = []
     repos_all = seafile_api.get_repo_list(-1, -1)
     for repo in repos_all:
+        if not repo.name:
+            continue
+
         if repo_name in repo.name:
             try:
                 repo.owner = seafile_api.get_repo_owner(repo.id)
@@ -574,6 +582,81 @@ def sys_user_admin(request):
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
         }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_useradmin_export_excel(request):
+    """ Export all users from database to excel
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    try:
+        users = seaserv.get_emailusers('DB', -1, -1) + \
+                seaserv.get_emailusers('LDAPImport', -1, -1)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
+
+    if is_pro_version():
+        is_pro = True
+    else:
+        is_pro = False
+
+    if is_pro:
+        head = [_("Email"), _("Status"), _("Role"), _("Create At"),
+                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+    else:
+        head = [_("Email"), _("Status"), _("Create At"),
+                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+
+    data_list = []
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for user in users:
+        # populate user last login time
+        user.last_login = None
+        for last_login in last_logins:
+            if last_login.username == user.email:
+                user.last_login = last_login.last_login
+
+        if user.is_active:
+            status = _('Active')
+        else:
+            status = _('Inactive')
+
+        create_at = tsstr_sec(user.ctime) if user.ctime else ''
+        last_login = user.last_login.strftime("%Y-%m-%d %H:%M:%S") if \
+            user.last_login else ''
+
+        is_admin = _('Yes') if user.is_staff else ''
+        ldap_import = _('Yes') if user.source == 'LDAPImport' else ''
+
+        if is_pro:
+            if user.role == GUEST_USER:
+                role = _('Guest')
+            else:
+                role = _('Default')
+
+            row = [user.email, status, role, create_at,
+                   last_login, is_admin, ldap_import]
+        else:
+            row = [user.email, status, create_at, last_login,
+                   is_admin, ldap_import]
+
+        data_list.append(row)
+
+    wb = write_xls('users', head, data_list)
+    if not wb:
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
+
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=users.xlsx'
+    wb.save(response)
+    return response
 
 @login_required
 @sys_staff_required
@@ -824,6 +907,26 @@ def user_info(request, email):
     p_uploadlinks.sort(key=lambda x: x.view_cnt, reverse=True)
     user_shared_links += p_uploadlinks
 
+    try:
+        personal_groups = seaserv.get_personal_groups_by_user(email)
+    except SearpcError as e:
+        logger.error(e)
+        personal_groups = []
+
+    for g in personal_groups:
+        try:
+            is_group_staff = seaserv.check_group_staff(g.id, email)
+        except SearpcError as e:
+            logger.error(e)
+            is_group_staff = False
+
+        if email == g.creator_name:
+            g.role = _('Owner')
+        elif is_group_staff:
+            g.role = _('Admin')
+        else:
+            g.role = _('Member')
+
     return render_to_response(
         'sysadmin/userinfo.html', {
             'owned_repos': owned_repos,
@@ -839,6 +942,7 @@ def user_info(request, email):
             'org_name': org_name,
             'user_shared_links': user_shared_links,
             'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
+            'personal_groups': personal_groups,
         }, context_instance=RequestContext(request))
 
 @login_required_ajax
@@ -1272,6 +1376,39 @@ def sys_group_admin(request):
             'per_page': per_page,
             'page_next': page_next,
             }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_group_admin_export_excel(request):
+    """ Export all groups to excel
+    """
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = SITE_ROOT
+
+    try:
+        groups = ccnet_threaded_rpc.get_all_groups(-1, -1)
+    except Exception as e:
+        logger.error(e)
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
+
+    head = [_("Name"), _("Creator"), _("Create At")]
+    data_list = []
+    for grp in groups:
+        create_at = tsstr_sec(grp.timestamp) if grp.timestamp else ''
+        row = [grp.group_name, grp.creator_name, create_at]
+        data_list.append(row)
+
+    wb = write_xls('groups', head, data_list)
+    if not wb:
+        messages.error(request, _(u'Failed to export Excel'))
+        return HttpResponseRedirect(next)
+
+    response = HttpResponse(mimetype='application/ms-excel')
+    response['Content-Disposition'] = 'attachment; filename=groups.xlsx'
+    wb.save(response)
+    return response
 
 @login_required
 @sys_staff_required
@@ -1771,7 +1908,10 @@ def sys_repo_delete(request, repo_id):
         return HttpResponseRedirect(next)
 
     repo = seafile_api.get_repo(repo_id)
-    repo_name = repo.name
+    if repo:                    # Handle the case that repo is `None`.
+        repo_name = repo.name
+    else:
+        repo_name = ''
 
     if MULTI_TENANCY:
         org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
@@ -1849,10 +1989,15 @@ def sys_virus_scan_records(request):
     records = []
     for r in records_all[:per_page]:
         try:
-            r.repo = seafile_api.get_repo(r.repo_id)
-        except SearpcError:
+            repo = seafile_api.get_repo(r.repo_id)
+        except SearpcError as e:
+            logger.error(e)
             continue
 
+        if not repo:
+            continue
+
+        r.repo = repo
         r.repo.owner = seafile_api.get_repo_owner(r.repo.repo_id)
         records.append(r)
 

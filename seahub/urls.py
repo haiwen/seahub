@@ -7,11 +7,10 @@ from seahub.views import *
 from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
     text_diff, view_priv_shared_file, view_raw_file, view_raw_shared_file, \
-    download_file, view_lib_file
+    download_file, view_lib_file, file_access
 from seahub.views.repo import repo, repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
-from group.views import group_list
 from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
 from share.views import gen_private_file_share, rm_private_file_share, \
     save_private_file_share
@@ -20,6 +19,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_page_delete, personal_wiki_use_lib
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
+from seahub.api2.endpoints.groups import Groups
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -44,7 +44,7 @@ urlpatterns = patterns(
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
     url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
-    url(r'^home/wiki/(?P<page_name>[^/]+)/$', personal_wiki, name='personal_wiki'),
+    url(r'^home/wiki/(?P<page_name>[^/]+)$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
     url(r'^home/wiki_create/$', personal_wiki_create, name='personal_wiki_create'),
     url(r'^home/wiki_use_lib/$', personal_wiki_use_lib, name='personal_wiki_use_lib'),
@@ -70,6 +70,7 @@ urlpatterns = patterns(
     (r'^repo/upload_error/(?P<repo_id>[-0-9a-f]{36})/$', upload_file_error),
     (r'^repo/update_error/(?P<repo_id>[-0-9a-f]{36})/$', update_file_error),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
+    url(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
     url(r'^repo/text_diff/(?P<repo_id>[-0-9a-f]{36})/$', text_diff, name='text_diff'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/$', repo, name='repo'),
     url(r'^repo/history/(?P<repo_id>[-0-9a-f]{36})/$', repo_history, name='repo_history'),
@@ -97,6 +98,7 @@ urlpatterns = patterns(
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='view_group'),
+    url(r'^#groups/', fake_view, name='group_list'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
@@ -189,11 +191,11 @@ urlpatterns = patterns(
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
+    url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
-    url(r'^groups/', group_list, name='group_list'),
     (r'^message/', include('seahub.message.urls')),
     (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),
@@ -217,10 +219,12 @@ urlpatterns = patterns(
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),
+    url(r'^sys/useradmin/export-excel/$', sys_useradmin_export_excel, name='sys_useradmin_export_excel'),
     url(r'^sys/useradmin/ldap/$', sys_user_admin_ldap, name='sys_useradmin_ldap'),
     url(r'^sys/useradmin/ldap/imported$', sys_user_admin_ldap_imported, name='sys_useradmin_ldap_imported'),
     url(r'^sys/useradmin/admins/$', sys_user_admin_admins, name='sys_useradmin_admins'),
     url(r'^sys/groupadmin/$', sys_group_admin, name='sys_group_admin'),
+    url(r'^sys/groupadmin/export-excel/$', sys_group_admin_export_excel, name='sys_group_admin_export_excel'),
     url(r'^sys/groupadmin/(?P<group_id>\d+)/$', sys_admin_group_info, name='sys_admin_group_info'),
     url(r'^sys/orgadmin/$', sys_org_admin, name='sys_org_admin'),
     url(r'^sys/orgadmin/search/$', sys_org_search, name='sys_org_search'),
@@ -294,12 +298,18 @@ if getattr(settings, 'ENABLE_PAYMENT', False):
 
 if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
-        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit
+        sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
+        sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
+        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
     urlpatterns += patterns('',
-        url(r'^sys/loginadmin/', sys_login_admin, name='sys_login_admin'),
-        url(r'^sys/log/fileaudit/', sys_log_file_audit, name='sys_log_file_audit'),
-        url(r'^sys/log/fileupdate/', sys_log_file_update, name='sys_log_file_update'),
-        url(r'^sys/log/permaudit/', sys_log_perm_audit, name='sys_log_perm_audit'),
+        url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
+        url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
+        url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
+        url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
+        url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
+        url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
+        url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
     )
 
 if getattr(settings, 'MULTI_TENANCY', False):
@@ -310,6 +320,11 @@ if getattr(settings, 'MULTI_TENANCY', False):
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += patterns('',
         url(r'^shib-login/', shib_login, name="shib_login"),
+    )
+
+if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
+    urlpatterns += patterns(
+        '', url(r'^krb5-login/', shib_login, name="krb5_login"),
     )
 
 # serve office converter static files

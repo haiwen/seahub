@@ -1188,6 +1188,7 @@ textarea:-moz-placeholder {/* for FF */
 .tabnav,
 .repo-file-list-topbar,
 .commit-list-topbar,
+.file-audit-list-topbar,
 #dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
@@ -1209,6 +1210,7 @@ textarea:-moz-placeholder {/* for FF */
     position:relative;
 }
 .commit-list-topbar,
+.file-audit-list-topbar,
 .repo-file-list-topbar {
     margin-bottom:0;
 }
@@ -1398,6 +1400,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:5px 0;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
     white-space:nowrap;
+    z-index:10; /* for shared dir grid view */
 }
 #lang-context-selector a,
 #to-group a {
@@ -1825,6 +1828,7 @@ textarea:-moz-placeholder {/* for FF */
     border: 1px solid #bbb;
     margin: 2px 0 5px;
 }
+.file-audit-list-topbar .path,
 .commit-list-topbar .path,
 .repo-file-list-topbar .path {
     font-size:14px;
@@ -2187,15 +2191,19 @@ textarea:-moz-placeholder {/* for FF */
 #back {
     margin-top:3px;
 }
+.file-audit-list,
 .commit-list {
     margin-bottom:20px;
 }
+.file-audit-list .user,
 .commit-list .time {
     padding-left:10px;
 }
+.file-audit-list .avatar,
 .commit-list .avatar {
     border-radius:2px;
 }
+.file-access-hd,
 .repo-trash-hd,
 .repo-snapshot-hd {
     margin-bottom:10px;
@@ -2266,59 +2274,20 @@ textarea:-moz-placeholder {/* for FF */
     height:80px;
 }
 /* group, org */
-.group-hl {
-    background:#fbfbfb;
-}
-.group-list,
 .user-list {
     margin-top:30px;
 }
-.group-list .group,
 .user-list .user {
     display:inline-block; /*to handle different height of items*/
     vertical-align:top;
     width:330px;
     margin:0 17px 30px 0;
 }
-.group-list .group {
-    width:310px;
-    padding:10px;
-	margin-bottom:20px;
-}
-.group-list .group,
 .user-list .user {
     *display:inline; /* for ie 6,7 */
 }
-.group .txt {
-    width:240px;
-}
 .user-list .txt {
     width:265px;
-}
-.group h4 {
-    margin:0 0 4px;
-}
-.group p {
-    margin:0;
-}
-.group .item-name {
-    display:inline-block;
-    width:5em;
-    color:#666;
-}
-.group .fast .a {
-    margin:8px 12px 0 0;
-    display:inline-block;
-    font-size:24px;
-    color:#999;
-}
-.group .fast .a:hover {
-    text-decoration:none;
-}
-.ru .group .item-name,
-.de .group .item-name,
-.it .group .item-name {
-    width:6em;
 }
 .member {
     _height:21px;
@@ -3576,6 +3545,10 @@ textarea:-moz-placeholder {/* for FF */
     vertical-align: middle;
 }
 /* sysadmin */
+#import-members-btn .icon-upload-alt {
+    color:#777;
+    margin-right:3px;
+}
 #traffic-month-form {
     margin-top:10px;
 }
@@ -3783,4 +3756,14 @@ img.thumbnail {
     border:1px solid #eee;
     border-radius:3px;
     margin:0;
+}
+#groups .group-name {
+    font-size:16px;
+    margin:15px 0 10px;
+}
+#groups .group-name .a {
+    color:#322;
+}
+#groups .empty-tips {
+    margin:10px 0 40px;
 }
