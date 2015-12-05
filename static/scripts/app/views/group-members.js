@@ -52,7 +52,7 @@ define([
         reset: function() {
             this.$loadingTip.hide();
             this.members.each(this.addOne, this);
-            if (this.$groupMembersList.children('li').length > 1) {
+            if (this.$groupMembersList.children('li').length > 2) {
                 this.$groupMembersList.children('li:last-child').css('border-bottom', 'none');
             }
             this.$groupMembersList.show();

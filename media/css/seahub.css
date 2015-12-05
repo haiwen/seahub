@@ -995,16 +995,17 @@ textarea:-moz-placeholder {/* for FF */
 }
 .popover-header {
     text-align:center;
-    padding:5px 0 3px;
+    padding:8px 0;
     border-bottom:1px solid #dfdfe1;
     margin:0 10px;
 }
 .popover-content {
     overflow:auto;
+    padding:0 10px;
 }
 .popover-close {
     position:absolute;
-    top:.5em;
+    top:.6em;
     right:10px;
     cursor:pointer;
     font-size:16px;
@@ -3754,12 +3755,15 @@ img.thumbnail {
 .group-members-popover li {
     border-bottom:1px solid #dfdfe1;
 }
-.group-members-popover li.hl {
-    background:#fafafa;
-}
 .group-members-popover .user-profile-item {
     display:block;
     font-weight:normal;
     color:#333;
+    text-decoration:none;
+    margin:0 -10px;
+}
+.group-members-popover .user-profile-item:hover {
+    color:#333;
+    background:#fafafa;
     text-decoration:none;
 }

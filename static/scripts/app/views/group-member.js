@@ -25,19 +25,6 @@ define([
             }
             this.$el.html(this.template(obj));
             return this;
-        },
-
-        events: {
-            'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight'
-        },
-
-        highlight: function() {
-            this.$el.addClass('hl');
-        },
-
-        rmHighlight: function() {
-            this.$el.removeClass('hl');
         }
 
     });
