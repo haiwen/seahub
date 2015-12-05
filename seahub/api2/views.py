@@ -1192,7 +1192,8 @@ class UploadBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks-api', request.user.username, use_onetime = False)
+            repo_id, 'dummy', 'upload-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1211,7 +1212,8 @@ class UpdateBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks-api', request.user.username)
+            repo_id, 'dummy', 'update-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
