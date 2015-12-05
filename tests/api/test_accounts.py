@@ -18,6 +18,10 @@ class AccountsApiTest(ApiTestBase):
         self.assertEqual(info['email'], self.username)
         self.assertIsNotNone(info['total'])
         self.assertIsNotNone(info['usage'])
+        self.assertIsNotNone(info['login_id'])
+        self.assertIsNotNone(info['department'])
+        self.assertIsNotNone(info['contact_email'])
+        self.assertIsNotNone(info['institution'])
 
     def test_list_accounts(self):
         # Normal user can not list accounts

@@ -57,7 +57,7 @@ from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.contacts.models import Contact
-from seahub.profile.models import Profile
+from seahub.profile.models import Profile, DetailedProfile
 from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import (repo_created, repo_deleted,
                             share_file_to_user_successful)
@@ -238,10 +238,17 @@ class AccountInfo(APIView):
     def get(self, request, format=None):
         info = {}
         email = request.user.username
+        p = Profile.objects.get_profile_by_user(email)
+        d_p = DetailedProfile.objects.get_detailed_profile_by_user(email)
+
         info['email'] = email
-        info['nickname'] = email2nickname(email)
+        info['name'] = email2nickname(email)
         info['total'] = seafile_api.get_user_quota(email)
         info['usage'] = seafile_api.get_user_self_usage(email)
+        info['login_id'] = p.login_id if p else ""
+        info['department'] = d_p.department if d_p else ""
+        info['contact_email'] = p.contact_email if p else ""
+        info['institution'] = p.institution if p else ""
 
         return Response(info)
 
@@ -372,6 +379,13 @@ class SearchUser(APIView):
 
 def format_user_result(request, users, size):
     results = []
+
+    # Get contact_emails from users' profiles
+    profiles = Profile.objects.filter(user__in=users)
+    contact_email_dict = {}
+    for e in profiles:
+        contact_email_dict[e.user] = e.contact_email
+
     for email in users:
         url, is_default, date_uploaded = api_avatar_url(email, size)
         results.append({
@@ -379,6 +393,7 @@ def format_user_result(request, users, size):
             "avatar": avatar(email, size),
             "avatar_url": request.build_absolute_uri(url),
             "name": email2nickname(email),
+            "contact_email": contact_email_dict.get(email, ""),
         })
     return results
 
