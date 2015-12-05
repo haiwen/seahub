@@ -1357,6 +1357,48 @@ class UploadBlksLinkView(APIView):
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
+
+    def get_blklist_missing(self, repo_id, blks):
+        if not blks:
+            return []
+
+        blklist = blks.split(',')
+        try:
+            return json.loads(seafile_api.check_repo_blocks_missing(
+                repo_id, json.dumps(blklist)))
+        except Exception as e:
+            pass
+
+        return blklist
+
+
+    def post(self, request, repo_id, format=None):
+        parent_dir = request.GET.get('p', '/')
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+            return api_error(status.HTTP_403_FORBIDDEN,
+                    'You do not have permission to access this folder.')
+
+        if check_quota(repo_id) < 0:
+            return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
+
+        token = seafile_api.get_fileserver_access_token(
+            repo_id, 'dummy', 'upload', request.user.username,
+            use_onetime = False)
+        blksurl = gen_file_upload_url(token, 'upload-raw-blks-api')
+        commiturl = '%s?commitonly=true&ret-json=true' %  gen_file_upload_url(
+            token, 'upload-blks-api')
+        blks = request.POST.get('blklist', None)
+        blklist = self.get_blklist_missing(repo_id, blks)
+        res = {
+            'rawblksurl': blksurl,
+            'commiturl': commiturl,
+            'blklist': blklist
+        }
+
+        return HttpResponse(json.dumps(res), status=200,
+                            content_type=json_content_type)
+
+
 class UpdateBlksLinkView(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated, )
