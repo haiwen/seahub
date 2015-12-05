@@ -93,7 +93,6 @@ class UserManager(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
-        user.source = emailuser.source
 
         return user
 
@@ -293,7 +292,6 @@ class AuthBackend(object):
         user.org = emailuser.org
         user.source = emailuser.source
         user.role = emailuser.role
-        user.source = emailuser.source
 
         return user
 

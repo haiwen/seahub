@@ -2261,6 +2261,11 @@ class DirView(APIView):
 
             create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
             if not create_parents:
+                # check whether parent dir exists
+                if not seafile_api.get_dir_id_by_path(repo_id, parent_dir):
+                    return api_error(status.HTTP_400_BAD_REQUEST,
+                                     'Parent dir does not exist')
+
                 new_dir_name = os.path.basename(path)
                 new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
                                                                     parent_dir,
