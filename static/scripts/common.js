@@ -104,6 +104,7 @@ define([
               case 'repo_set_password': return siteRoot + 'repo/set_password/';
               case 'groups': return siteRoot + 'api/v2.1/groups/';
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
+              case 'group_members': return siteRoot+ 'api2/groups/' + options.group_id + '/members/';
               case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
               case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
               case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
@@ -409,7 +410,7 @@ define([
                 popup.toggleClass('hide');
 
                 if (!popup.hasClass('hide')) {
-                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.hd', popup).outerHeight() - 3});
+                    $('.popover-content', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.popover-header', popup).outerHeight() - 3});
                     var loading_tip = $('.loading-tip', popup),
                         notice_list = $('#notice-list');
                     notice_list.addClass('hide');
@@ -462,11 +463,11 @@ define([
             $(window).resize(function() {
                 var popup = $('#notice-popup');
                 if (!popup.hasClass('hide')) {
-                    $('.con', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.hd', popup).outerHeight() - 3});
+                    $('.popover-content', popup).css({'max-height':$(window).height() - $('#header').outerHeight() - $('.popover-header', popup).outerHeight() - 3});
                 }
             });
 
-            $('#notice-popup .close').click(function() {
+            $('#notice-popup .popover-close').click(function() {
                 $('#notice-popup').addClass('hide');
                 if ($('#notice-list .unread').length > 0) {
                     // set all unread notice to be read

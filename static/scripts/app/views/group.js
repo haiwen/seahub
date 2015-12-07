@@ -5,8 +5,9 @@ define([
     'common',
     'app/collections/group-repos',
     'app/views/group-repo',
+    'app/views/group-members',
     'app/views/add-group-repo'
-], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
+], function($, _, Backbone, Common, GroupRepos, GroupRepoView, GroupMembersView,
     AddGroupRepoView) {
     'use strict';
 
@@ -19,7 +20,8 @@ define([
         events: {
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
-            'click .by-time': 'sortByTime'
+            'click .by-time': 'sortByTime',
+            'click .toggle-members': 'toggleGroupMembersPopover'
         },
 
         initialize: function(options) {
@@ -36,6 +38,17 @@ define([
 
             this.dirView = options.dirView;
 
+            var _this = this;
+            $(document).click(function(e) {
+                var target = e.target || event.srcElement;
+                var popover = _this.$('.group-members-popover');
+                if (popover.length &&
+                    !_this.$('.toggle-members').is(target) &&
+                    !popover.is(target) &&
+                    !popover.find('*').is(target)) {
+                    popover.remove();
+                }
+            });
         },
 
         addOne: function(repo, collection, options) {
@@ -179,6 +192,17 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
+        },
+
+        toggleGroupMembersPopover: function() {
+            if (!this.$('.group-members-popover').length) {
+                var $groupMembersPopover = new GroupMembersView({groupView: this});
+                this.$el.append($groupMembersPopover.$el);
+                $groupMembersPopover.show();
+            } else {
+                this.$('.group-members-popover').remove();
+                return false;
+            }
         },
 
         hide: function() {

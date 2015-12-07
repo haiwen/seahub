@@ -51,15 +51,15 @@
                         <span class="sf2-icon-bell"></span>
                         <span class="num hide">0</span>
                     </div>
-                    <div id="notice-popup" class="hide" data-url="{% url 'get_popup_notices' %}">
+                    <div id="notice-popup" class="popover hide" data-url="{% url 'get_popup_notices' %}">
                         <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <h3 class="hd">{% trans "Notifications" %}</h3>
-                        <div class="con">
+                        <h3 class="popover-header">{% trans "Notifications" %}</h3>
+                        <div class="popover-content">
                             <span class="loading-icon loading-tip"></span>
                             <ul class="hide" id="notice-list" data-url="{% url 'set_notice_seen_by_id' %}"></ul>
                             <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
                         </div>
-                        <span class="close sf2-icon-x1 op-icon" data-url="{% url 'set_notices_seen' %}" title="{% trans "Close" %}"></span>
+                        <span class="popover-close sf2-icon-x1 op-icon" data-url="{% url 'set_notices_seen' %}" title="{% trans "Close" %}"></span>
                     </div>
                 </div>
 
