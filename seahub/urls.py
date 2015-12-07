@@ -192,6 +192,7 @@ urlpatterns = patterns(
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Groups.as_view(), name='api-v2.1-group'),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
