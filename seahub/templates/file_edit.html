@@ -18,6 +18,10 @@
 #main {
     min-height:0;
 }
+.editormd,
+.editormd .CodeMirror {
+    font-family: inherit;
+}
 .editormd {
     margin:0 auto;
 }
@@ -282,6 +286,8 @@ var mdEditor = editormd('md-editor', {
     pageBreak: false, // disable parse page break [========]
     atLink: false, // for @link
     previewCodeHighlight: false, 
+    showTrailingSpace: false,
+    matchWordHighlight: false,
     
     toolbarIcons: function () {
         // custom toolbar
