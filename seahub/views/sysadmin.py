@@ -654,7 +654,7 @@ def sys_useradmin_export_excel(request):
         messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=users.xlsx'
     wb.save(response)
     return response
@@ -1406,7 +1406,7 @@ def sys_group_admin_export_excel(request):
         messages.error(request, _(u'Failed to export Excel'))
         return HttpResponseRedirect(next)
 
-    response = HttpResponse(mimetype='application/ms-excel')
+    response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachment; filename=groups.xlsx'
     wb.save(response)
     return response
