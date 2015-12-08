@@ -16,6 +16,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.share.views import check_user_share_quota
 from seahub.utils import (is_org_context, is_valid_username,
@@ -182,6 +183,11 @@ class DirSharedItemsEndpoint(APIView):
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Bad username.')
 
+            try:
+                User.objects.get(email=shared_to)
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
+
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_set_share_permission(
@@ -250,8 +256,14 @@ class DirSharedItemsEndpoint(APIView):
             share_to_users = request.DATA.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Username must be a valid email address.')
+                    failed.append(to_user)
+                    continue
+
+                try:
+                    User.objects.get(email=to_user)
+                except User.DoesNotExist:
+                    failed.append(to_user)
+                    continue
 
                 if not check_user_share_quota(username, shared_repo, users=[to_user]):
                     return api_error(status.HTTP_403_FORBIDDEN,
@@ -363,6 +375,11 @@ class DirSharedItemsEndpoint(APIView):
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Bad argument.')
+
+            try:
+                User.objects.get(email=shared_to)
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
 
             if is_org_context(request):
                 org_id = request.user.org.org_id

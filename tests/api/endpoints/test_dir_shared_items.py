@@ -2,6 +2,8 @@ import json
 
 from seaserv import seafile_api
 
+from tests.common.utils import randstring
+
 from seahub.test_utils import BaseTestCase
 
 class DirSharedItemsTest(BaseTestCase):
@@ -60,24 +62,43 @@ class DirSharedItemsTest(BaseTestCase):
         resp = self.client.put(
             '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
                                                        self.folder),
-            "share_type=user&username=a@a.com&username=b@b.com",
+            "share_type=user&username=%s" % self.admin.email,
             'application/x-www-form-urlencoded',
         )
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp['success']) == 2
+        assert len(json_resp['success']) == 1
         assert json_resp['success'][0]['permission'] == 'r'
 
     def test_share_folder_to_invalid_email(self):
         self.login_as(self.user)
+        invalid_email = '%s' % randstring(6)
 
         resp = self.client.put(
             '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
                                                        self.folder),
-            "share_type=user&username=abc",
+            "share_type=user&username=%s" % invalid_email,
             'application/x-www-form-urlencoded',
         )
-        self.assertEqual(400, resp.status_code)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 1
+        assert invalid_email in json_resp['failed']
+
+    def test_share_folder_to_unregistered_user(self):
+        self.login_as(self.user)
+        unregistered_user = '%s@%s.com' % (randstring(6), randstring(6))
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=%s' % (self.repo.id,
+                                                       self.folder),
+            "share_type=user&username=%s" % unregistered_user,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+        assert len(json_resp['failed']) == 1
+        assert unregistered_user in json_resp['failed']
 
     def test_can_share_root_to_groups(self):
         self.login_as(self.user)
@@ -134,6 +155,21 @@ class DirSharedItemsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp[0]['permission'] == 'r'
 
+    def test_modify_shared_repo_with_unregistered_user(self):
+        self._add_shared_items()
+        self.login_as(self.user)
+
+        unregistered_user = '%s@%s.com' % (randstring(6), randstring(6))
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user&username=%s' % (
+            self.repo.id,
+            self.folder,
+            unregistered_user), {
+                'permission': 'r'
+            }
+        )
+        self.assertEqual(400, resp.status_code)
+
     def test_can_modify_group_shared_repo(self):
         self._add_shared_items()
         self.login_as(self.user)
@@ -173,6 +209,19 @@ class DirSharedItemsTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
         assert len(json_resp) == 0
+
+    def test_unshare_repo_with_unregistered_user(self):
+        self._add_shared_items()
+        self.login_as(self.user)
+
+        unregistered_user = '%s@%s.com' % (randstring(6), randstring(6))
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=%s&share_type=user&username=%s' % (
+            self.repo.id,
+            self.folder,
+            unregistered_user
+        ))
+        self.assertEqual(400, resp.status_code)
 
     def test_can_unshare_repo_to_group(self):
         self._add_shared_items()
