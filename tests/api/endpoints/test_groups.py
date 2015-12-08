@@ -126,6 +126,14 @@ class GroupsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['creator'] == new_creator
 
+    def test_can_not_transfer_group_to_myself(self):
+        new_creator = self.user.email
+        url = reverse('api-v2.1-group', args=[self.group_id])
+        data = 'operation=transfer&email=%s' % new_creator
+
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(400, resp.status_code)
+
     def test_can_delete_group(self):
         url = reverse('api-v2.1-group', args=[self.group_id])
         resp = self.client.delete(url)
