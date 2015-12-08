@@ -126,7 +126,7 @@ class GroupsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['creator'] == new_creator
 
-    def test_can_not_transfer_group_to_myself(self):
+    def test_can_not_transfer_group_to_group_owner(self):
         new_creator = self.user.email
         url = reverse('api-v2.1-group', args=[self.group_id])
         data = 'operation=transfer&email=%s' % new_creator
