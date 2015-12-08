@@ -128,6 +128,8 @@
 .sf2-icon-x1:before { content:"\e01d"; }
 .sf2-icon-tick:before { content:"\e01e"; }
 .sf2-icon-x2:before { content:"\e01f"; }
+.sf2-icon-user2:before { content:"\e020"; }
+.sf2-icon-msgs2:before { content:"\e021"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -1204,7 +1206,7 @@ textarea:-moz-placeholder {/* for FF */
 #group-top .op-icon {
     display:inline-block;
     font-size:22px;
-    margin:4px 0 0 5px;
+    margin:4px 15px 0 0;
 }
 .commit-list-topbar,
 .file-audit-list-topbar,
