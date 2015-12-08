@@ -236,6 +236,9 @@ class Groups(APIView):
                     logger.error(e)
                     error_msg = _(u'Internal Server Error')
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                error_msg = _('You can not transfer a group to yourself')
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
         else:
             error_msg = _(u'Operation can only be rename or transfer.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
