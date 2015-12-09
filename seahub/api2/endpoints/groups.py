@@ -225,20 +225,23 @@ class Groups(APIView):
                 error_msg = _('Email %s is not valid.') % email
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if email != username:
-                try:
-                    if not seaserv.is_group_user(group_id, email):
-                        seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
-
-                    seaserv.ccnet_threaded_rpc.set_group_creator(group_id, email)
-                    seaserv.ccnet_threaded_rpc.group_set_admin(group_id, email)
-                except SearpcError as e:
-                    logger.error(e)
-                    error_msg = _(u'Internal Server Error')
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-            else:
-                error_msg = _('You can not transfer a group to yourself')
+            if email == group.creator_name:
+                error_msg = _('%s is already group owner') % email
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            try:
+                if not seaserv.is_group_user(group_id, email):
+                    seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
+
+                if not seaserv.check_group_staff(group_id, email):
+                    seaserv.ccnet_threaded_rpc.group_set_admin(group_id, email)
+
+                seaserv.ccnet_threaded_rpc.set_group_creator(group_id, email)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = _(u'Internal Server Error')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         else:
             error_msg = _(u'Operation can only be rename or transfer.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
