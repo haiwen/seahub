@@ -361,12 +361,14 @@ class SearchUser(APIView):
         # remove duplicate emails
         search_result = {}.fromkeys(search_result).keys()
 
-        # reomve myself
-        if username in search_result:
-            search_result.remove(username)
+        try:
+            include_self = int(request.GET.get('include_self', 1))
+        except ValueError:
+            include_self = 1
 
-        if is_valid_username(q) and q not in search_result:
-            search_result.insert(0, q)
+        if include_self == 0 and username in search_result:
+            # reomve myself
+            search_result.remove(username)
 
         try:
             size = int(request.GET.get('avatar_size', 32))
