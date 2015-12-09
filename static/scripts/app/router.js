@@ -172,7 +172,10 @@ define([
             }
             this.switchCurrentView(this.groupView);
             this.groupView.showDir(group_id, repo_id, path);
-            this.sideNavView.setCurTab('group', {'cur_group_id': group_id});
+            this.sideNavView.setCurTab('group', {
+                'cur_group_tab': '',
+                'cur_group_id': group_id
+            });
         },
 
         showOrgRepos: function() {
