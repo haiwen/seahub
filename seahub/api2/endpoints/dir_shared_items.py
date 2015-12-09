@@ -155,15 +155,18 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
 
+        path = request.GET.get('p', '/')
+        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+
+        if username != seafile_api.get_repo_owner(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         permission = request.DATA.get('permission', 'r')
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
-
-        path = request.GET.get('p', '/')
-        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
 
         if path == '/':
             shared_repo = repo
@@ -232,6 +235,9 @@ class DirSharedItemsEndpoint(APIView):
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+
+        if username != seafile_api.get_repo_owner(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if path != '/':
             try:
@@ -352,11 +358,14 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
 
-        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
-
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+
+        if username != seafile_api.get_repo_owner(repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         if path == '/':
             shared_repo = repo
