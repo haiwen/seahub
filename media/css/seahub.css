@@ -2218,7 +2218,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #folder-perm-popup .hd,
 #file-share .hd,
-#share-popup .hd {
+#share-popup .hd,
+#group-members-admin .hd {
     margin:0 0 8px 4px;
 }
 #file-share .tip,
@@ -3774,9 +3775,11 @@ img.thumbnail {
 }
 #add-group-member {
     width:550px;
+    margin-bottom:8px;
 }
 #add-group-member .submit {
     height:30px;
     vertical-align:top;
     margin-top:0;
+    padding:0 12px;
 }
