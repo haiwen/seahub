@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'app/views/group-list'
+], function($, _, Backbone, Common, GroupListView) {
     'use strict';
 
     var sideNavView = Backbone.View.extend({
@@ -14,6 +15,7 @@ define([
 
         initialize: function() {
             this.default_cur_tab = 'mine';
+            this.groupListView = new GroupListView({sideNavView: this});
             this.data = {
                 'cur_tab': this.default_cur_tab,
                 'show_group_list': false, // when cur_tab is not 'group'
@@ -26,6 +28,8 @@ define([
 
         render: function() {
             this.$el.html(this.template(this.data));
+            this.groupListView.render();
+            this.$el.find('.grp-list-items').html(this.groupListView.$el);
             return this;
         },
 

@@ -552,11 +552,7 @@
             <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
                 <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
-                {% for grp in grps %}
-                <li<% if (cur_group_id == '{{ grp.id }}') { %> class="tab-cur"<% }%>>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
-                </li>
-                {% endfor %}
+                <li class="grp-list-items"></li>
             </ul>
         </li>
         <% } else { %>
@@ -571,11 +567,7 @@
                 <li>
                     <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
                 </li>
-                {% for grp in grps %}
-                <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
-                </li>
-                {% endfor %}
+                <li class="grp-list-items"></li>
             </ul>
         </li>
         <% } %>
@@ -632,6 +624,11 @@
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
 </script>
+<script type="text/template" id="group-list-item-tmpl">
+<a class="ellipsis" href="{{SITE_ROOT}}#group/<%= group_id %>/" title="<%- group_name %>">
+    <span class="sharp">#</span><%- group_name %>
+</a>
+</script>
 <script type="text/template" id="group-top-tmpl">
 <p class="path"><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a> / <%- name %></p>
 <div class="hd ovhd">
@@ -641,13 +638,37 @@
 
     <div class="fright">
     <% if (is_staff) { %>
-    <span class="sf2-icon-cog1 op-icon" title="{% trans "Admin" %}"></span>
+    <span class="sf2-icon-cog1 op-icon toggle-admin" title="{% trans "Admin" %}"></span>
     <% } %>
     <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}"></span>
     <% if (!is_pub) { %>
     <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     <% } %>
     </div>
+</div>
+</script>
+<script type="text/template" id="group-members-admin-tmpl">
+<h3 class="hd">
+    <span class="op-target ellipsis ellipsis-op-target" title="<%- group_name %>"><%- group_name %></span> {% trans "Members" %}
+</h3>
+<div id="add-group-member">
+    <input type="hidden" name="email" />
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</div>
+<div class="tabs-panel">
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="8%"></th>
+                <th width="38%">{% trans "Name" %}</th>
+                <th width="44%">{% trans "Email" %}</th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <span class="loading-tip loading-icon"></span>
+    <p class="error hide"></p>
 </div>
 </script>
 <script type="text/template" id="group-mods-enable-form-tmpl">
@@ -671,6 +692,60 @@
     </ul>
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
+</script>
+<script type="text/template" id="group-admin-tmpl">
+<div class="popover">
+    <div class="outer-caret up-outer-caret">
+        <div class="inner-caret"></div>
+    </div>
+    <h4 class="popover-header">{% trans "Group Settings" %}</h4>
+    <div class="popover-content">
+        <ul>
+            <li><a href="#" class="group-admin-item rename-group">{% trans "Rename" %}</a></li>
+            <li><a href="#" class="group-admin-item transfer-group">{% trans "Transfer" %}</a></li>
+        </ul>
+        <hr class="popover-hr" />
+        <ul>
+            <li><a href="#" class="group-admin-item change-members">{% trans "Change Members" %}</a></li>
+            <li><a href="#" class="group-admin-item change-admins">{% trans "Change Admins" %}</a></li>
+        </ul>
+        <hr class="popover-hr" />
+        <ul>
+            <li><a href="#" class="group-admin-item dismiss-group">{% trans "Dismiss" %}</a></li>
+        </ul>
+    </div>
+    <span class="popover-close sf2-icon-x1 op-icon close-admin" title="{% trans "Close" %}"></span>
+</div>
+</script>
+<script type="text/template" id="group-rename-tmpl">
+<form id="group-rename-form" method="put" action="">{% csrf_token%}
+    <h3>{% trans "Rename group to"%}</h3>
+    <input type="text" name="new_name" value="" class="input" /><br />
+    <input type="submit" value="{% trans "Submit"%}" />
+    <p class="error hide"></p>
+</form>
+</script>
+<script type="text/template" id="group-transfer-tmpl">
+<form id="group-transfer-form" method="put" action="">{% csrf_token %}
+    <h3>{% trans "Transfer group to"%}</h3>
+    <input type="hidden" name="email" /><br />
+    <input type="submit" value="{% trans "Submit"%}" />
+    <p class="error hide"></p>
+</form>
+</script>
+<script type="text/template" id="group-members-admin-item-tmpl">
+<td>
+    <img src=<%= avatar_url %> class="avatar"/ >
+</td>
+<td>
+    <a href="{{ SITE_ROOT }}profile/<%- email %>/" target="_blank" title="<%- name %>"><%- name %></a>
+</td>
+<td>
+    <span><%- email %></span>
+</td>
+<td>
+    <span class="sf2-icon-delete delete-member op-icon vh" title="{% trans "Delete" %}"></span> 
+</td>
 </script>
 <script type="text/template" id="folder-perm-item-tmpl">
     <% if (for_user) { %>

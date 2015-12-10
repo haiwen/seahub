@@ -105,6 +105,8 @@ define([
               case 'groups': return siteRoot + 'api/v2.1/groups/';
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
               case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
+              case 'group_admin': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
+              case 'group_members': return siteRoot+ 'api2/groups/' + options.group_id + '/members/';
               case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
               case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
               case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
