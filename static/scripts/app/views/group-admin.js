@@ -19,6 +19,7 @@ define([
         initialize: function(options) {
             this.groupView = options.groupView;
             this.group_id = this.groupView.group_id;
+            this.group_name = this.groupView.group_name;
             this.sideNavView = options.sideNavView;
 
             this.render();
@@ -39,6 +40,7 @@ define([
 
         renameGroup: function() {
             var form = $(this.renameTemplate({}));
+            $('[name="new_name"]', form).attr('placeholder', Common.HTMLescape(this.group_name));
             form.modal({appendTo:'#main', focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 

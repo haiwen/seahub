@@ -3751,6 +3751,9 @@ img.thumbnail {
 .group-admin-popover .outer-caret {
     left:114px
 }
+.group-admin-popover .group-settings-list {
+    margin-top:5px;
+}
 .group-admin-popover .group-admin-item {
     display:block;
     color:#333;
@@ -3761,7 +3764,7 @@ img.thumbnail {
 }
 .group-admin-popover .group-admin-item:hover {
     color:#333;
-    background:#fafafa;
+    background:#f6f6f6;
     text-decoration:none;
 }
 /* group admin modal */
