@@ -983,6 +983,41 @@ textarea:-moz-placeholder {/* for FF */
 .op-confirm button {
     margin-right:8px;
 }
+/**** popover ****/ /* e.g notifications-list */
+.popover {
+    position:absolute;
+    width:240px;
+    background:#fff;
+    border:1px solid #c9c9c9;
+    border-radius:3px;
+    box-shadow:0 0 1px #f3f3f3;
+    z-index:20;
+}
+.popover-header {
+    text-align:center;
+    padding:8px 0;
+    border-bottom:1px solid #dfdfe1;
+    margin:0 10px;
+}
+.popover-content {
+    overflow:auto;
+    padding:0 10px;
+}
+.popover-close {
+    position:absolute;
+    top:.6em;
+    right:10px;
+    cursor:pointer;
+    font-size:16px;
+    color:#b9b9b9;
+    margin:0;
+}
+.popover-hr {
+    height:1px;
+    background:#dfdfe1;
+    border:none;
+    margin:5px 0;
+}
 /**** simplemodal ****/
 #basic-modal-content {display:none;}
 #simplemodal-overlay { background-color:#000; }
@@ -2183,7 +2218,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 #folder-perm-popup .hd,
 #file-share .hd,
-#share-popup .hd {
+#share-popup .hd,
+#group-members-admin .hd {
     margin:0 0 8px 4px;
 }
 #file-share .tip,
@@ -3409,7 +3445,8 @@ textarea:-moz-placeholder {/* for FF */
 
 /* user & group folder perm */
 #share-popup .tabs-panel,
-#folder-perm-tabs .tabs-panel {
+#folder-perm-tabs .tabs-panel,
+#group-members-admin .tabs-panel {
     width:550px;
     max-height:250px;
     overflow:auto;
@@ -3425,7 +3462,8 @@ textarea:-moz-placeholder {/* for FF */
     height:30px;
 }
 #share-popup table,
-#folder-perm-tabs table {
+#folder-perm-tabs table,
+#group-members-admin table {
     margin:0;
 }
 .select2-result-label .text {
@@ -3705,4 +3743,43 @@ img.thumbnail {
 }
 #groups .empty-tips {
     margin:10px 0 40px;
+}
+/* group admin */
+.group-admin-popover .popover {
+    top:76px;
+    right:0;
+}
+.group-admin-popover .outer-caret {
+    left:114px
+}
+.group-admin-popover .group-settings-list {
+    margin-top:5px;
+}
+.group-admin-popover .group-admin-item {
+    display:block;
+    color:#333;
+    font-weight:normal;
+    text-decoration:none;
+    padding:6px 10px;
+    margin:0 -10px;
+}
+.group-admin-popover .group-admin-item:hover {
+    color:#333;
+    background:#f6f6f6;
+    text-decoration:none;
+}
+/* group admin modal */
+#group-members-admin .avatar {
+    height:24px;
+    border-radius:1000px;
+}
+#add-group-member {
+    width:550px;
+    margin-bottom:8px;
+}
+#add-group-member .submit {
+    height:30px;
+    vertical-align:top;
+    margin-top:0;
+    padding:0 12px;
 }
