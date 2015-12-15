@@ -18,7 +18,7 @@ define([
 
             this.$sideTips = $('#groups-side-tips');
             this.$loadingTip = this.$('.loading-tip');
-            this.$groupList = $('#group-list');   
+            this.$groupList = $('.group-list');
             this.$emptyTip = this.$('.empty-tips');
             this.$error = this.$('.error');
         },
@@ -43,7 +43,7 @@ define([
             this.$loadingTip.hide();
             if (this.groups.length) {
                 this.$emptyTip.hide();
-                this.$groupList.empty();
+                this.$groupList.children('tbody').remove();
                 this.groups.each(this.addOne, this);
                 this.$groupList.show();
             } else {
