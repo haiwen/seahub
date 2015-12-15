@@ -198,6 +198,8 @@ class UserInfoTest(BaseTestCase):
         self.admin_repo_id = r.id
 
         # set common user as staff in admin user's group
+        ccnet_threaded_rpc.group_add_member(self.admin_group_1_id,
+                self.admin.email, self.user.email)
         ccnet_threaded_rpc.group_set_admin(self.admin_group_1_id, self.user.email)
 
         # add common user to admin user's another group

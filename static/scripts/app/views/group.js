@@ -6,17 +6,19 @@ define([
     'app/collections/group-repos',
     'app/views/group-repo',
     'app/views/add-group-repo',
-    'app/views/group-side-nav'
+    'app/views/group-members'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, GroupSideNavView) {
+    AddGroupRepoView, GroupMembersView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        el: '#group-repo-tabs',
+        el: '#group',
 
+        groupTopTemplate: _.template($('#group-top-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         events: {
+            'click #group-members-icon': 'toggleMembersPanel',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
             'click .by-time': 'sortByTime'
@@ -27,16 +29,16 @@ define([
             this.$table = this.$('table');
             this.$tableHead = this.$('thead');
             this.$tableBody = this.$('tbody');
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-
-            this.sideNavView = new GroupSideNavView();
+            this.$loadingTip = this.$('#group-repos .loading-tip');
+            this.$emptyTip = this.$('#group-repos .empty-tips');
 
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
             this.dirView = options.dirView;
+
+            this.membersView = new GroupMembersView();
         },
 
         addOne: function(repo, collection, options) {
@@ -71,21 +73,36 @@ define([
             }
         },
 
-        showSideNav: function () {
-            var sideNavView = this.sideNavView;
-            if (sideNavView.group_id && sideNavView.group_id == this.group_id) {
-                sideNavView.show();
-                return;
-            }
-            sideNavView.render(this.group_id);
-            sideNavView.show();
+        renderGroupTop: function(group_id) {
+            var _this = this;
+            var $groupTop = $('#group-top');
+            $.ajax({
+                url: Common.getUrl({
+                    'name': 'group_basic_info',
+                    'group_id': group_id
+                }),
+                cache: false,
+                dataType: 'json',
+                success: function (data) {
+                    $groupTop.html(_this.groupTopTemplate(data));
+                },
+                error: function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err_msg = gettext("Please check the network.");
+                    }
+                    $groupTop.html('<p class="error">' + err_msg + '</p>');
+                }
+            });
         },
 
         showRepoList: function(group_id) {
             this.group_id = group_id;
-            this.showSideNav();
             this.dirView.hide();
             this.$emptyTip.hide();
+            this.renderGroupTop(group_id);
             this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
@@ -122,7 +139,6 @@ define([
 
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
-            this.showSideNav();
             this.hideRepoList();
             this.dirView.showDir('group/' + this.group_id, repo_id, path);
         },
@@ -169,10 +185,22 @@ define([
         },
 
         hide: function() {
-            this.sideNavView.hide();
             this.hideRepoList();
             this.dirView.hide();
             this.$emptyTip.hide();
+        },
+
+        showMembers: function() {
+            this.membersView.show({'group_id': this.group_id});
+        },
+
+        toggleMembersPanel: function() {
+            var panel_id = this.membersView.el.id;
+            if ($('#' + panel_id + ':visible').length) { // the panel is shown
+                this.membersView.hide();
+            } else {
+                this.showMembers();
+            }
         }
 
     });

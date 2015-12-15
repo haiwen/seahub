@@ -38,6 +38,8 @@ from .utils import is_repo_writable, is_repo_accessible, \
     get_person_msgs, api_group_check, get_email, get_timestamp, \
     get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
     json_response, to_python_boolean, is_seafile_pro
+
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -3468,9 +3470,63 @@ class Groups(APIView):
                              "Operation can only be rename.")
 
 class GroupMembers(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, group_id, format=None):
+        """
+        Get group members.
+        """
+        try:
+            group_id_int = int(group_id)
+        except ValueError:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid group ID')
+
+        try:
+            avatar_size = int(request.GET.get('avatar_size',
+                    AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        try:
+            group = seaserv.get_group(group_id_int)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to get group.')
+        if not group:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Group not found')
+
+        try:
+            is_group_user = seaserv.is_group_user(group_id_int,
+                                                  request.user.username)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to check if is group user.')
+        if not is_group_user:
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        try:
+            members = seaserv.get_group_members(group.id)
+        except SearpcError as e:
+            logger.error(e)
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
+                             'Failed to get group members.')
+        members_json = []
+        for m in members:
+            avatar_url, is_default, date_uploaded = api_avatar_url(m.user_name,
+                    avatar_size)
+
+            members_json.append({
+                'username': m.user_name,
+                "fullname": email2nickname(m.user_name),
+                "avatar_url": request.build_absolute_uri(avatar_url),
+            })
+
+        return HttpResponse(json.dumps(members_json),
+                            content_type=json_content_type)
 
     def put(self, request, group_id, format=None):
         """

@@ -6,21 +6,22 @@ define([
 ], function($, _, Backbone, Common) {
     'use strict';
 
-    var MyhomeSideNavView = Backbone.View.extend({
-        el: '#myhome-side-nav',
+    var sideNavView = Backbone.View.extend({
+        el: '#side-nav',
 
-        template: _.template($("#myhome-side-nav-tmpl").html()),
+        template: _.template($("#side-nav-tmpl").html()),
         enableModTemplate: _.template($("#myhome-mods-enable-form-tmpl").html()),
 
         initialize: function() {
-            this.default_cur_tab = 'libs';
+            this.default_cur_tab = 'mine';
             this.data = {
                 'cur_tab': this.default_cur_tab,
+                'show_group_list': false, // when cur_tab is not 'group'
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
-                'events_enabled': app.pageOptions.events_enabled
             };
             this.render();
+            this.$el.show();
         },
 
         render: function() {
@@ -29,7 +30,14 @@ define([
         },
 
         events: {
-            'click #myhome-enable-mods': 'enableMods'
+            'click #group-nav a:first': 'toggleGroupList',
+            'click #enable-mods': 'enableMods'
+        },
+
+        toggleGroupList: function () {
+            $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
+            $('#group-nav .grp-list').slideToggle();
+            return false;
         },
 
         enableMods: function () {
@@ -77,24 +85,16 @@ define([
             });
         },
 
-        show: function(options) {
-            if (options && options.cur_tab) {
-                this.data.cur_tab = options.cur_tab;
-                this.render();
-            } else {
-                if (this.data.cur_tab != this.default_cur_tab) {
-                    this.data.cur_tab = this.default_cur_tab;
-                    this.render();
-                }
+        setCurTab: function (cur_tab, options) {
+            this.data.cur_tab = cur_tab || this.default_cur_tab;
+            if (options) {
+                $.extend(this.data, options);
             }
-            this.$el.show();
-        },
-
-        hide: function() {
-            this.$el.hide();
+            this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
+            this.render();
         }
 
     });
 
-    return MyhomeSideNavView;
+    return sideNavView;
 });

@@ -98,6 +98,7 @@ urlpatterns = patterns(
     url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/file(?P<path>.*)$', view_lib_file, name='view_lib_file'),
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='view_group'),
+    url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
     url(r'^#groups/', fake_view, name='group_list'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
@@ -192,6 +193,7 @@ urlpatterns = patterns(
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Groups.as_view(), name='api-v2.1-group'),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),

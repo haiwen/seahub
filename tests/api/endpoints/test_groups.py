@@ -7,6 +7,7 @@ from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
 from seahub.api2.endpoints.groups import Groups
+from tests.common.utils import randstring
 
 class GroupsTest(BaseTestCase):
 
@@ -61,7 +62,7 @@ class GroupsTest(BaseTestCase):
         assert self.group_id in group_ids
 
     def test_create_group(self):
-        new_group_name = 'new-group-1'
+        new_group_name = 'new-group-' + randstring(6)
 
         resp = self.client.post(self.url, {'group_name': new_group_name})
         self.assertEqual(201, resp.status_code)
@@ -74,7 +75,7 @@ class GroupsTest(BaseTestCase):
         self.remove_group(json_resp['id'])
 
     def test_create_group_with_cn_name(self):
-        new_group_name = u'中文'
+        new_group_name = u'中文' + randstring(6)
         resp = self.client.post(self.url, {'group_name': new_group_name})
         self.assertEqual(201, resp.status_code)
 
@@ -90,15 +91,53 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_create_group_with_invalid_name(self):
-        group_name = 'new%group-2'
+        new_group_name = 'new%group-' + randstring(6)
 
-        resp = self.client.post(self.url, {'group_name': group_name})
+        resp = self.client.post(self.url, {'group_name': new_group_name})
         self.assertEqual(400, resp.status_code)
 
     @patch.object(Groups, '_can_add_group')
     def test_can_not_create_group_with_invalid_permission(self, mock_can_add_group):
         mock_can_add_group.return_value = False
-        group_name = 'new-group-3'
+        new_group_name = 'new-group-' + randstring(6)
 
-        resp = self.client.post(self.url, {'group_name': group_name})
+        resp = self.client.post(self.url, {'group_name': new_group_name})
         self.assertEqual(403, resp.status_code)
+
+    def test_can_rename_group(self):
+        new_group_name = 'new-group-' + randstring(6)
+        url = reverse('api-v2.1-group', args=[self.group_id])
+        data = 'operation=rename&new_group_name=%s' % new_group_name
+
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['name'] == new_group_name
+
+    def test_can_transfer_group(self):
+        new_creator = self.admin.email
+        url = reverse('api-v2.1-group', args=[self.group_id])
+        data = 'operation=transfer&email=%s' % new_creator
+
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['creator'] == new_creator
+
+    def test_can_not_transfer_group_to_group_owner(self):
+        new_creator = self.user.email
+        url = reverse('api-v2.1-group', args=[self.group_id])
+        data = 'operation=transfer&email=%s' % new_creator
+
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(400, resp.status_code)
+
+    def test_can_delete_group(self):
+        url = reverse('api-v2.1-group', args=[self.group_id])
+        resp = self.client.delete(url)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['success'] is True

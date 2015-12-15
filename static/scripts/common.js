@@ -104,6 +104,7 @@ define([
               case 'repo_set_password': return siteRoot + 'repo/set_password/';
               case 'groups': return siteRoot + 'api/v2.1/groups/';
               case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
+              case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';
               case 'group_basic_info': return siteRoot + 'ajax/group/' + options.group_id + '/basic-info/';
               case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
               case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
@@ -117,6 +118,7 @@ define([
               case 'search_user': return siteRoot + 'api2/search-user/';
               case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
               case 'events': return siteRoot + 'api2/events/';
+              case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
             }
         },
 

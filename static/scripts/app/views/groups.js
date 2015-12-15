@@ -16,7 +16,6 @@ define([
             this.listenTo(this.groups, 'add', this.addOne);
             this.listenTo(this.groups, 'reset', this.reset);
 
-            this.$sideTips = $('#groups-side-tips');
             this.$loadingTip = this.$('.loading-tip');
             this.$groupList = $('#group-list');   
             this.$emptyTip = this.$('.empty-tips');
@@ -82,13 +81,11 @@ define([
         },
 
         show: function() {
-            this.$sideTips.show();
             this.$el.show();
             this.render();
         },
 
         hide: function() {
-            this.$sideTips.hide();
             this.$el.hide();
         },
 

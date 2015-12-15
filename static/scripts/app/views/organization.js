@@ -12,19 +12,16 @@ define([
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        el: '#main',
+        el: '#organization-repos',
 
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
-
-            this.$sideNav = $('#org-side-nav');
-            this.$reposDiv = $('#organization-repos');
-            this.$table = $('#organization-repos table');
+            this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = $('#organization-repos .loading-tip');
-            this.$emptyTip = $('#organization-repos .empty-tips');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
 
             this.repos = new PubRepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
@@ -56,10 +53,10 @@ define([
         },
 
         events: {
-            'click #organization-repos .share-existing': 'addRepo',
-            'click #organization-repos .create-new': 'createRepo',
-            'click #organization-repos .by-name': 'sortByName',
-            'click #organization-repos .by-time': 'sortByTime'
+            'click .share-existing': 'addRepo',
+            'click .create-new': 'createRepo',
+            'click .by-name': 'sortByName',
+            'click .by-time': 'sortByTime'
         },
 
         createRepo: function() {
@@ -99,9 +96,8 @@ define([
         },
 
         showRepoList: function() {
-            this.$sideNav.show();
             this.dirView.hide();
-            this.$reposDiv.show();
+            this.$el.show();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
             var _this = this;
@@ -129,11 +125,10 @@ define([
         },
 
         hideRepoList: function() {
-            this.$reposDiv.hide();
+            this.$el.hide();
         },
 
         showDir: function(repo_id, path) {
-            this.$sideNav.show();
             var path = path || '/';
             this.hideRepoList();
             this.dirView.showDir('org', repo_id, path);
@@ -177,7 +172,6 @@ define([
         },
 
         hide: function() {
-            this.$sideNav.hide();
             this.hideRepoList();
             this.$emptyTip.hide();
             this.dirView.hide();
