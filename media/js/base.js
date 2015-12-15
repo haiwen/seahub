@@ -841,8 +841,6 @@ function userInputOPtionsForSelect2(user_search_url) {
     return {
         tags: [],
 
-        tokenSeparators: [",", " "],
-
         minimumInputLength: 1, // input at least 1 character
 
         ajax: {
@@ -886,6 +884,13 @@ function userInputOPtionsForSelect2(user_search_url) {
         formatSelection: function(item) {
             return HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
         },
+
+        createSearchChoice: function(term) {
+            return {
+                'id': $.trim(term)
+            };
+        },
+
         escapeMarkup: function(m) { return m; }
     };
 }
