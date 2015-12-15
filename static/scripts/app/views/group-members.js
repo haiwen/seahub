@@ -66,7 +66,7 @@ define([
             this.collection.fetch({
                 cache: false,
                 reset: true,
-                data: {'avatar_size': 32},
+                data: {'avatar_size': 64},
                 success: function (collection, response, opts) {
                 },  
                 error: function (collection, response, opts) {
