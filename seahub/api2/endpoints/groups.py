@@ -19,7 +19,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
-        get_default_group_avatar_url
+    get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username
 from seahub.utils.timeutils import dt, utc_to_local
 from seahub.group.utils import validate_group_name, check_group_name_conflict
@@ -27,8 +27,39 @@ from seahub.group.views import remove_group_common
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time
 
+from .utils import api_check_group_staff
 
 logger = logging.getLogger(__name__)
+
+def get_group_admins(group_id):
+    members = seaserv.get_group_members(group_id)
+    admin_members = filter(lambda m: m.is_staff, members)
+
+    admins = []
+    for u in admin_members:
+        admins.append(u.user_name)
+
+    return admins
+
+def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
+    group = seaserv.get_group(group_id)
+    try:
+        avatar_url, is_default, date_uploaded = api_grp_avatar_url(group.id, avatar_size)
+    except Exception as e:
+        logger.error(e)
+        avatar_url = get_default_group_avatar_url()
+
+    val = utc_to_local(dt(group.timestamp))
+    group_info = {
+        "id": group.id,
+        "name": group.group_name,
+        "creator": group.creator_name,
+        "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
+        "avatar_url": request.build_absolute_uri(avatar_url),
+        "admins": get_group_admins(group.id),
+    }
+
+    return group_info
 
 
 class Groups(APIView):
@@ -36,15 +67,6 @@ class Groups(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
-
-    def _get_group_admins(self, group_id):
-        members = seaserv.get_group_members(group_id)
-        admin_members = filter(lambda m: m.is_staff, members)
-
-        admins = []
-        for u in admin_members:
-            admins.append(u.user_name)
-        return admins
 
     def _can_add_group(self, request):
         return request.user.permissions.can_add_group()
@@ -66,26 +88,18 @@ class Groups(APIView):
         except ValueError:
             size = GROUP_AVATAR_DEFAULT_SIZE
 
-        with_repos = request.GET.get('with_repos')
-        with_repos = True if with_repos == '1' else False
+        try:
+            with_repos = int(request.GET.get('with_repos', 0))
+        except ValueError:
+            with_repos = 0
+
+        if with_repos not in (0, 1):
+            error_msg = _(u'Argument can only be 0 or 1')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         groups = []
         for g in user_groups:
-            try:
-                avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
-            except Exception as e:
-                logger.error(e)
-                avatar_url = get_default_group_avatar_url()
-
-            val = utc_to_local(dt(g.timestamp))
-            group = {
-                "id": g.id,
-                "name": g.group_name,
-                "creator": g.creator_name,
-                "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
-                "avatar_url": request.build_absolute_uri(avatar_url),
-                "admins": self._get_group_admins(g.id),
-            }
+            group_info = get_group_info(request, g.id , size)
 
             if with_repos:
                 if org_id:
@@ -111,9 +125,9 @@ class Groups(APIView):
                     }
                     repos.append(repo)
 
-                group['repos'] = repos
+                group_info['repos'] = repos
 
-            groups.append(group)
+            groups.append(group_info)
 
         return Response(groups)
 
@@ -125,7 +139,7 @@ class Groups(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        group_name = request.data.get('group_name', '')
+        group_name = request.data.get('name', '')
         group_name = group_name.strip()
 
         # Check whether group name is validate.
@@ -138,7 +152,7 @@ class Groups(APIView):
             error_msg = _(u'There is already a group with that name.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        # Group name is valid, create that group.
+        # create group.
         try:
             group_id = seaserv.ccnet_threaded_rpc.create_group(group_name, username)
         except SearpcError as e:
@@ -146,58 +160,29 @@ class Groups(APIView):
             error_msg = _(u'Failed')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        try:
-            size = int(request.data.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
-        except ValueError:
-            size = GROUP_AVATAR_DEFAULT_SIZE
+        # get info of new group
+        group_info = get_group_info(request, group_id, GROUP_AVATAR_DEFAULT_SIZE)
 
-        g = seaserv.get_group(group_id)
-        try:
-            avatar_url, is_default, date_uploaded = api_grp_avatar_url(g.id, size)
-        except Exception as e:
-            logger.error(e)
-            avatar_url = get_default_group_avatar_url()
+        return Response(group_info, status=status.HTTP_201_CREATED)
 
-        val = utc_to_local(dt(g.timestamp))
-        new_group = {
-            "id": g.id,
-            "name": g.group_name,
-            "creator": g.creator_name,
-            "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
-            "avatar_url": request.build_absolute_uri(avatar_url),
-            "admins": self._get_group_admins(g.id),
-        }
-        return Response(new_group, status=status.HTTP_201_CREATED)
 
+class Group(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    @api_check_group_staff
     def put(self, request, group_id):
-        """ Rename, transfer a group
+        """ Rename, transfer a specific group
         """
 
-        group_id = int(group_id)
-        try:
-            group = seaserv.get_group(group_id)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = _(u'Internal Server Error')
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        if not group:
-            error_msg = _(u'Group does not exist.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # only group staff can rename or transfer a group
+        group = seaserv.get_group(group_id)
         username = request.user.username
-        if not seaserv.check_group_staff(group_id, username):
-            error_msg = _(u'Permission denied')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        operation = request.DATA.get('operation', '')
-        if operation.lower() == 'rename':
-            new_group_name = request.DATA.get('new_group_name', None)
-            if not new_group_name:
-                error_msg = _(u'Argument missing')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+        new_group_name = request.data.get('name', None)
+        if new_group_name:
+            # rename a group
             # Check whether group name is validate.
             if not validate_group_name(new_group_name):
                 error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
@@ -215,73 +200,41 @@ class Groups(APIView):
                 error_msg = _(u'Internal Server Error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        elif operation.lower() == 'transfer':
-            email = request.DATA.get('email')
-            if not email:
-                error_msg = _(u'Argument missing')
+        new_creator= request.data.get('creator', None)
+        if new_creator:
+            # transfer a group
+            if not is_valid_username(new_creator):
+                error_msg = _('Creator %s is not valid.') % new_creator
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            if not is_valid_username(email):
-                error_msg = _('Email %s is not valid.') % email
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if email == group.creator_name:
-                error_msg = _('%s is already group owner') % email
+            if new_creator == group.creator_name:
+                error_msg = _('%s is already group owner') % new_creator
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             try:
-                if not seaserv.is_group_user(group_id, email):
-                    seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
+                if not seaserv.is_group_user(group_id, new_creator):
+                    seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, new_creator)
 
-                if not seaserv.check_group_staff(group_id, email):
-                    seaserv.ccnet_threaded_rpc.group_set_admin(group_id, email)
+                if not seaserv.check_group_staff(group_id, new_creator):
+                    seaserv.ccnet_threaded_rpc.group_set_admin(group_id, new_creator)
 
-                seaserv.ccnet_threaded_rpc.set_group_creator(group_id, email)
+                seaserv.ccnet_threaded_rpc.set_group_creator(group_id, new_creator)
             except SearpcError as e:
                 logger.error(e)
                 error_msg = _(u'Internal Server Error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        else:
-            error_msg = _(u'Operation can only be rename or transfer.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # get new info of this group
+        group_info = get_group_info(request, group_id, GROUP_AVATAR_DEFAULT_SIZE)
 
-        g = seaserv.get_group(group_id)
-        val = utc_to_local(dt(g.timestamp))
-        avatar_url, is_default, date_uploaded = api_grp_avatar_url(group_id,
-                GROUP_AVATAR_DEFAULT_SIZE)
+        return Response(group_info)
 
-        group_info = {
-            "id": g.id,
-            "name": g.group_name,
-            "creator": g.creator_name,
-            "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
-            "avatar_url": request.build_absolute_uri(avatar_url),
-            "admins": self._get_group_admins(g.id),
-        }
-        return Response(group_info, status=status.HTTP_200_OK)
-
+    @api_check_group_staff
     def delete(self, request, group_id):
-        """ Delete a group
+        """ Delete a specific group
         """
 
-        group_id = int(group_id)
-        try:
-            group = seaserv.get_group(group_id)
-        except SearpcError as e:
-            logger.error(e)
-            error_msg = _(u'Internal Server Error')
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        if not group:
-            error_msg = _(u'Group does not exist.')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        # only group staff can delete a group
         username = request.user.username
-        if not seaserv.check_group_staff(group_id, username):
-            error_msg = _(u'Permission denied')
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         org_id = None
         if is_org_context(request):
@@ -294,5 +247,4 @@ class Groups(APIView):
             error_msg = _(u'Internal Server Error')
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return Response({'success': True}, status=status.HTTP_200_OK)
-
+        return Response({'success': True})
