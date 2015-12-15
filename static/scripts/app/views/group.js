@@ -5,18 +5,20 @@ define([
     'common',
     'app/collections/group-repos',
     'app/views/group-repo',
-    'app/views/add-group-repo'
+    'app/views/add-group-repo',
+    'app/views/group-members'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView) {
+    AddGroupRepoView, GroupMembersView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        el: '#group-repo-tabs',
+        el: '#group',
 
         groupTopTemplate: _.template($('#group-top-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         events: {
+            'click #group-members-icon': 'toggleMembersPanel',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
             'click .by-time': 'sortByTime'
@@ -27,8 +29,8 @@ define([
             this.$table = this.$('table');
             this.$tableHead = this.$('thead');
             this.$tableBody = this.$('tbody');
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
+            this.$loadingTip = this.$('#group-repos .loading-tip');
+            this.$emptyTip = this.$('#group-repos .empty-tips');
 
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
@@ -36,6 +38,7 @@ define([
 
             this.dirView = options.dirView;
 
+            this.membersView = new GroupMembersView();
         },
 
         addOne: function(repo, collection, options) {
@@ -185,6 +188,19 @@ define([
             this.hideRepoList();
             this.dirView.hide();
             this.$emptyTip.hide();
+        },
+
+        showMembers: function() {
+            this.membersView.show({'group_id': this.group_id});
+        },
+
+        toggleMembersPanel: function() {
+            var panel_id = this.membersView.el.id;
+            if ($('#' + panel_id + ':visible').length) { // the panel is shown
+                this.membersView.hide();
+            } else {
+                this.showMembers();
+            }
         }
 
     });

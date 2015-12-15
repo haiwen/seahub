@@ -643,7 +643,7 @@
     <% if (is_staff) { %>
     <span class="sf2-icon-cog1 op-icon" title="{% trans "Admin" %}"></span>
     <% } %>
-    <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}"></span>
+    <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
     <% if (!is_pub) { %>
     <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     <% } %>
@@ -904,4 +904,11 @@
     <% } else { %>
     <p class="empty-tips alc">{% trans "No library is shared to this group" %}</p>
     <% } %>
+</script>
+<script type="text/template" id="group-member-tmpl">
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar fleft" />
+    <div class="txt">
+        <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
+        <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
+    </div>
 </script>

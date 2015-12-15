@@ -130,25 +130,37 @@
 </form>
 {% endif %}
 
-<div id="group-repo-tabs" class="hide">
+<div id="group" class="hide">
     <div id="group-top"></div>
 
-    <div id="grp-repos">
+    <div id="group-repos">
         <table class="hide">
             <thead></thead>
             <tbody></tbody>
         </table>
-
         <div class="empty-tips" style="margin-bottom:150px; display:none;">
             <h2 class="alc">{% trans "No library is shared to this group" %}</h2>
             <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
             <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
         </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
     </div>
 
-    <span class="loading-icon loading-tip"></span>
-    <p class="error error-tip hide"></p>
+    <div id="group-members" class="popover hide">
+        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+        <div class="popover-hd ovhd">
+            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+            <h3 class="popover-title">{% trans "Members" %}</h3>
+        </div>
+        <div class="popover-con">
+            <span class="loading-icon loading-tip"></span>
+            <ul id="group-member-list" class="hide"></ul>
+            <p class="error hide"></p>
+        </div>
+    </div>
 </div>
+
 
 <div id="organization-repos" class="hide">
     <div class="hd">

@@ -1140,6 +1140,45 @@ textarea:-moz-placeholder {/* for FF */
     color:#fff;
     text-decoration:none;
 }
+/**** popover ****/ /* e.g. top notice popup, group members popup */
+.popover {
+    width:240px;
+    background:#fff;
+    border:1px solid #c9c9c9;
+    border-radius:3px;
+    box-shadow:0 0 1px #f3f3f3;
+}
+.popover-hd {
+    padding:5px 0 3px;
+    border-bottom:1px solid #dfdfe1;
+    margin:0 10px;
+}
+.popover-title {
+    text-align:center;
+    margin:0;
+}
+.popover-close {
+    font-size:16px;
+    color:#b9b9b9;
+    margin:4px 0 0;
+}
+.popover-con {
+    padding:0 10px;
+    overflow:auto;
+}
+/**** user-item ****/ /* e.g. group member in 'group members' panel */
+.user-item {
+    margin:5px 0;
+}
+.user-item .avatar {
+    border-radius:1000px;
+}
+.user-item .txt {
+    margin-left:40px;
+}
+.user-item .txt-item {
+    margin:0;
+}
 /********** container ***********/
 #main, #footer {
     width:950px;
@@ -3696,6 +3735,7 @@ img.thumbnail {
     border-radius:3px;
     margin:0;
 }
+/**** #groups ****/ /* groups page */
 #groups .group-name {
     font-size:16px;
     margin:15px 0 10px;
@@ -3705,4 +3745,16 @@ img.thumbnail {
 }
 #groups .empty-tips {
     margin:10px 0 40px;
+}
+/**** #group ****/ /* group page */
+#group {
+    position:relative;
+}
+#group-members {
+    position:absolute;
+    top:77px;
+    right:0;
+}
+#group-members .outer-caret {
+    right:66px;
 }
