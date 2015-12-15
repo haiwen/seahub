@@ -21,7 +21,7 @@ define([
             this.$error = this.$('.error');
 
             var _this = this;
-            $(window).resize(function () {
+            $(window).resize(function() {
                 _this.setConMaxHeight();
             });
             $(document).click(function(e) {
@@ -67,9 +67,9 @@ define([
                 cache: false,
                 reset: true,
                 data: {'avatar_size': 64},
-                success: function (collection, response, opts) {
+                success: function(collection, response, opts) {
                 },  
-                error: function (collection, response, opts) {
+                error: function(collection, response, opts) {
                     _this.$loadingTip.hide();
                     var err_msg;
                     if (response.responseText) {

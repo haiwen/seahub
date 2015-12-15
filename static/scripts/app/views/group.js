@@ -190,11 +190,11 @@ define([
             this.$emptyTip.hide();
         },
 
-        showMembers: function () {
+        showMembers: function() {
             this.membersView.show({'group_id': this.group_id});
         },
 
-        toggleMembersPanel: function () {
+        toggleMembersPanel: function() {
             var panel_id = this.membersView.el.id;
             if ($('#' + panel_id + ':visible').length) { // the panel is shown
                 this.membersView.hide();
