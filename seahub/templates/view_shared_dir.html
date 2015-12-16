@@ -113,7 +113,7 @@
             {% for dirent in file_list %}
             <li class="file-item grid" data-name="{{dirent.obj_name}}" title="{{dirent.obj_name}}">
                 <a class="img-link" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}">
-                {% if dirent.allow_generate_thumbnail %}
+                {% if dirent.is_img %}
                     {% if dirent.encoded_thumbnail_src %}
                         <img class="thumbnail vam" src="{{ SITE_ROOT }}{{ dirent.encoded_thumbnail_src }}" alt="" />
                     {% else %}
