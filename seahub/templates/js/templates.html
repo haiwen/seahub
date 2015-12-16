@@ -66,7 +66,6 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
 </script>
 <script type="text/template" id="organization-repo-tmpl">
     <td>
@@ -868,23 +867,15 @@
 <% } %>
 <!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
 </script>
-<script type="text/template" id="group-item-tmpl">
-    <h4 class="group-name ellipsis"><a href="#group/<%= id %>/" title="<%- name %>" class="a normal"><%- name %></a></h4>
-    <% if (repos.length) { %>
-    <table>
-        <thead>
-        <tr>
-            <th width="4%"><!--icon--></th>
-            <th width="40%">{% trans "Name" %}</th>
-            <th width="8%"><!--op--></th>
-            <th width="14%">{% trans "Size" %}</th>
-            <th width="18%">{% trans "Last Update" %}</th>
-            <th width="16%">{% trans "Shared By" %}</th>
-        </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
-    <% } else { %>
-    <p class="empty-tips alc">{% trans "No library is shared to this group" %}</p>
-    <% } %>
+<script type="text/template" id="all-groups-header-tmpl">
+    <tr>
+        <td colspan=5 class="group-hd">
+            <a href="#group/<%= id %>/" title="<%- name %>" class="a normal group-name ellipsis"><%- name %></a>
+        </td>
+    </tr>
+</script>
+<script type="text/template" id="all-groups-no-repos-tmpl">
+    <tr>
+        <td class="no-group-repos" colspan=5>{% trans "No library is shared to this group" %}</td>
+    </tr>
 </script>

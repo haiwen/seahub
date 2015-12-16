@@ -3757,13 +3757,29 @@ img.thumbnail {
     border-radius:3px;
     margin:0;
 }
-#groups .group-name {
-    font-size:16px;
-    margin:15px 0 10px;
+/* all groups */
+.group-list,
+.group-list .group-hd {
+    border-bottom:1px solid #f0f0f0;
 }
-#groups .group-name .a {
+.group-list .group-hd {
+    background:#fafafa;
+    padding:0;
+    border-top:1px solid #f0f0f0;
+}
+.group-list .group-name {
     color:#322;
+    font-size:12px;
+    padding-left:4px;
 }
-#groups .empty-tips {
-    margin:10px 0 40px;
+.group-list .no-group-repos {
+    text-align:center;
+    color:#aaa;
+}
+.group-list td {
+    border-bottom:1px solid #f9f9f9;
+}
+.group-list th,
+.group-list tbody tr:last-child td {
+    border-bottom:none;
 }
