@@ -1,3 +1,4 @@
+import os
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -49,6 +50,8 @@ class EncryptSharedDirTest(TestCase, Fixtures):
         self.fs = FileShare.objects.create_dir_link(**share_file_info)
 
         self.sub_dir = self.folder
+        self.sub_file = self.file
+        self.filename= os.path.basename(self.file)
 
     def tearDown(self):
         self.remove_repo()
@@ -100,3 +103,41 @@ class EncryptSharedDirTest(TestCase, Fixtures):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateNotUsed(resp, 'share_access_validation.html')
         self.assertTemplateUsed(resp, 'view_shared_dir.html')
+
+    def test_view_file_via_shared_dir(self):
+        resp = self.client.post(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file, {
+                'password': '12345678'
+            }
+        )
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateNotUsed(resp, 'share_access_validation.html')
+        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertContains(resp, '%s</h2>' % self.filename)
+
+        resp = self.client.get(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateNotUsed(resp, 'share_access_validation.html')
+        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertContains(resp, '%s</h2>' % self.filename)
+
+    def test_view_file_via_shared_dir_without_password(self):
+        resp = self.client.get(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+
+    def test_view_file_via_shared_dir_with_wrong_password(self):
+        resp = self.client.post(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]), {
+                'password': '1234567'
+            }
+        )
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+        self.assertContains(resp, 'Please enter a correct password')
