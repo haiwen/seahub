@@ -133,7 +133,7 @@ class EncryptSharedDirTest(TestCase, Fixtures):
 
     def test_view_file_via_shared_dir_with_wrong_password(self):
         resp = self.client.post(
-            reverse('view_file_via_shared_dir', args=[self.fs.token]), {
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file, {
                 'password': '1234567'
             }
         )
