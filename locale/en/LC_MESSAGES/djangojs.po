@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 18:25+0800\n"
+"POT-Creation-Date: 2015-12-17 16:07+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -29,7 +29,7 @@ msgstr ""
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/folder-share-item.js:79
 #: static/scripts/app/views/folder-share-item.js:115
-#: static/scripts/app/views/group-repo.js:58
+#: static/scripts/app/views/group-repo.js:64
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:83 static/scripts/app/views/share.js:352
@@ -413,7 +413,7 @@ msgstr ""
 msgid "Delete failed"
 msgstr ""
 
-#: static/scripts/app/views/group-repo.js:50
+#: static/scripts/app/views/group-repo.js:56
 #: static/scripts/app/views/organization-repo.js:52
 msgid "Successfully unshared {placeholder}"
 msgstr ""
