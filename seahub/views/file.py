@@ -889,6 +889,27 @@ def view_raw_shared_file(request, token, obj_id, file_name):
     if fileshare is None:
         raise Http404
 
+    if fileshare.is_encrypted():
+        if not check_share_link_access(request, token):
+            if fileshare.is_file_share_link():
+                d = {'token': token, 'view_name': 'view_shared_file', }
+            else:
+                d = {'token': token, 'view_name': 'view_shared_dir', }
+
+            if request.method == 'POST':
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
+                d['form'] = form
+                if form.is_valid():
+                    set_share_link_access(request, token)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
     if not repo:
@@ -925,6 +946,31 @@ def view_file_via_shared_dir(request, token):
     if fileshare is None:
         raise Http404
 
+
+    req_path = request.GET.get('p', '').rstrip('/')
+    if not req_path:
+        return HttpResponseRedirect(reverse('view_shared_dir', args=[token]))
+
+    if fileshare.is_encrypted():
+        if not check_share_link_access(request, token):
+            d = {'token': token,
+                 'view_name': 'view_file_via_shared_dir',
+                 'path': req_path,
+             }
+            if request.method == 'POST':
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
+                d['form'] = form
+                if form.is_valid():
+                    set_share_link_access(request, token)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
+
     if request.GET.get('dl', '') == '1':
         # download shared file
         return _download_file_from_share_link(request, fileshare)
@@ -937,10 +983,6 @@ def view_file_via_shared_dir(request, token):
 
     # Get file path from frontend, and construct request file path
     # with fileshare.path to real path, used to fetch file content by RPC.
-    req_path = request.GET.get('p', '').rstrip('/')
-    if not req_path:
-        raise Http404
-
     real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
 
     # generate dir navigator
