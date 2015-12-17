@@ -21,6 +21,11 @@ define([
             this.group_id = options.group_id;
             this.is_staff = options.is_staff;
 
+            this.show_shared_by = true; // default
+            if (options.show_shared_by !== undefined) { // e.g. views/group-item.js
+                this.show_shared_by = options.show_shared_by;
+            }
+
             this.listenTo(this.model, 'destroy', this.remove);
         },
 
@@ -28,7 +33,8 @@ define([
             var obj = this.model.toJSON();
             $.extend(obj, {
                 group_id: this.group_id,
-                is_staff: this.is_staff
+                is_staff: this.is_staff,
+                show_shared_by: this.show_shared_by
             });
             this.$el.html(this.template(obj));
             return this;
