@@ -644,21 +644,29 @@ define([
 
                 var title = op == 'mv' ? gettext("Move selected item(s) to:") : gettext("Copy selected item(s) to:");
 
+                var show_cur_repo = true;
+                if (dir.user_perm == 'r') {
+                    show_cur_repo = false;
+                }
+
                 var form = $(this.mvcpTemplate({
                     form_title: title,
                     op_type: op,
                     obj_type: '',
                     obj_name: '',
+                    show_cur_repo: show_cur_repo,
                     show_other_repos: !dir.encrypted
                 }));
                 form.modal({appendTo:'#main', autoResize:true, focus:false});
                 $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-                FileTree.renderTreeForPath({
-                    repo_name: dir.repo_name,
-                    repo_id: dir.repo_id,
-                    path: dir.path
-                });
+                if (show_cur_repo) {
+                    FileTree.renderTreeForPath({
+                        repo_name: dir.repo_name,
+                        repo_id: dir.repo_id,
+                        path: dir.path
+                    });
+                }
                 if (!dir.encrypted) {
                     FileTree.prepareOtherReposTree({cur_repo_id: dir.repo_id});
                 }
