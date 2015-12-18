@@ -234,6 +234,11 @@
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
             </ul>
+            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op hide">
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
+            </ul>
             <% } %>
         </div>
     </td>
@@ -315,6 +320,11 @@
                     <% } %>
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
+            </ul>
+            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op hide">
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
             <% } %>
         </div>
