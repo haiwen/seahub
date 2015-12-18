@@ -135,6 +135,13 @@
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
+
+    <% if (!encrypted && user_perm == 'r') { %>
+    <div id="multi-dirents-op" class="hide">
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
+    </div>
+    <% } %>
+
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
@@ -189,6 +196,7 @@
     </tr>
 </script>
 <script type="text/template" id="dirent-tmpl">
+
     <% if (dirent.is_dir) { %>
     <td class="select">
         <% if (dirent.selected) { %>
