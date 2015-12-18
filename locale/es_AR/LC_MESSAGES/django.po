@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-12-17 16:07+0800\n"
-"PO-Revision-Date: 2015-12-17 08:20+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2015-12-17 16:26+0000\n"
+"Last-Translator: Rodolfo Cossalter <rcoss@dm.uba.ar>\n"
 "Language-Team: Spanish (Argentina) (http://www.transifex.com/haiwen/seahub/language/es_AR/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -4901,7 +4901,7 @@ msgstr "La biblioteca  {placeholder} ha sido transferida."
 #: seahub/templates/share_access_validation.html:6
 msgid ""
 "Please input the password if you want to browse the shared file/directory."
-msgstr ""
+msgstr "Ingresa la contraseña si deseas visitar el archivo/carpeta compartido."
 
 #: seahub/templates/shared_file_view.html:30
 #: seahub/templates/view_shared_dir.html:12
