@@ -102,7 +102,7 @@ define([
                     return false;
                 }
                 Common.disableButton($('[type="submit"]', $form)); 
-                groups.create({'group_name': group_name, 'repos':[]}, {
+                groups.create({'name': group_name, 'repos':[]}, {
                     wait: true,
                     validate: true,
                     prepend: true,  // show newly created group at the top 
