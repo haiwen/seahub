@@ -265,12 +265,17 @@ define([
                 var dir = this.dir;
                 var path = dir.path;
                 var context = 'my';
+                var group_id = '';
+                var group_name = '';
 
                 var category_start = dir.category.split('/')[0];
                 if (category_start == 'org') {
                     context = 'org';
                 } else if (category_start == 'group') {
+                    // for group, the dir.category is like 'group/2'.
                     context = 'group';
+                    group_id = dir.category.split('/')[1];
+                    group_name = Common.groupId2Name(group_id);
                 } else if (category_start == 'common') {
                     context = 'common';
                 }
@@ -278,6 +283,8 @@ define([
                         path: path,
                         repo_name: dir.repo_name,
                         category: dir.category,
+                        group_id: group_id,
+                        group_name: group_name,
                         context: context
                     };
 
