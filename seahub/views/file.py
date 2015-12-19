@@ -1256,6 +1256,7 @@ def file_edit(request, repo_id):
 @login_required
 def view_raw_file(request, repo_id, file_path):
     """Returns raw content of a file.
+    Used when use viewer.js to preview opendocument file.
 
     Arguments:
     - `request`:
