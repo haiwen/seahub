@@ -18,6 +18,9 @@ KEY_SUB_LIB = "sub_lib"
 VAL_SUB_LIB_ENABLED = "1"
 VAL_SUB_LIB_DISABLED = "0"
 
+KEY_FORCE_PASSWD_CHANGE = "force_passwd_change"
+VAL_FORCE_PASSWD_CHANGE = "1"
+
 KEY_DEFAULT_REPO = "default_repo"
 
 class CryptoOptionNotSetError(Exception):
@@ -42,6 +45,11 @@ class UserOptionsManager(models.Manager):
         user_option.save(using=self._db)
 
         return user_option
+
+    def unset_user_option(self, username, k):
+        """Remove user's option.
+        """
+        super(UserOptionsManager, self).filter(email=username, option_key=k).delete()
 
     def enable_server_crypto(self, username):
         """
@@ -185,7 +193,24 @@ class UserOptionsManager(models.Manager):
             return user_option.option_val
         except UserOptions.DoesNotExist:
             return None
-        
+
+    def passwd_change_required(self, username):
+        """Check whether user need to change password.
+        """
+        try:
+            r = super(UserOptionsManager, self).get(
+                email=username, option_key=KEY_FORCE_PASSWD_CHANGE)
+            return r.option_val == VAL_FORCE_PASSWD_CHANGE
+        except UserOptions.DoesNotExist:
+            return False
+
+    def set_force_passwd_change(self, username):
+        return self.set_user_option(username, KEY_FORCE_PASSWD_CHANGE,
+                                    VAL_FORCE_PASSWD_CHANGE)
+
+    def unset_force_passwd_change(self, username):
+        return self.unset_user_option(username, KEY_FORCE_PASSWD_CHANGE)
+
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)

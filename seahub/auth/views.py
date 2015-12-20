@@ -23,6 +23,7 @@ from seahub.auth.forms import AuthenticationForm, CaptchaAuthenticationForm
 from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChangeForm
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
+from seahub.options.models import UserOptions
 from seahub.utils import is_ldap_user
 from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
@@ -134,6 +135,11 @@ def login(request, template_name='registration/login.html',
             # have captcha
             form = CaptchaAuthenticationForm(data=request.POST)
             if form.is_valid():
+                if UserOptions.objects.passwd_change_required(
+                        form.get_user().username):
+                    redirect_to = reverse('auth_password_change')
+                    request.session['force_passwd_change'] = True
+
                 # captcha & passwod is valid, log user in
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
@@ -143,6 +149,11 @@ def login(request, template_name='registration/login.html',
         else:
             form = authentication_form(data=request.POST)
             if form.is_valid():
+                if UserOptions.objects.passwd_change_required(
+                        form.get_user().username):
+                    redirect_to = reverse('auth_password_change')
+                    request.session['force_passwd_change'] = True
+
                 # password is valid, log user in
                 request.session['remember_me'] = remember_me
                 return log_user_in(request, form.get_user(), redirect_to)
@@ -365,6 +376,12 @@ def password_change(request, template_name='registration/password_change_form.ht
         form = password_change_form(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
+
+            if request.session.get('force_passwd_change', False):
+                del request.session['force_passwd_change']
+                UserOptions.objects.unset_force_passwd_change(
+                    request.user.username)
+
             update_session_auth_hash(request, request.user)
             return HttpResponseRedirect(post_change_redirect)
     else:
@@ -375,6 +392,7 @@ def password_change(request, template_name='registration/password_change_form.ht
         'min_len': config.USER_PASSWORD_MIN_LENGTH,
         'strong_pwd_required': config.USER_STRONG_PASSWORD_REQUIRED,
         'level': config.USER_PASSWORD_STRENGTH_LEVEL,
+        'force_passwd_change': request.session.get('force_passwd_change', False),
     }, context_instance=RequestContext(request))
 
 def password_change_done(request, template_name='registration/password_change_done.html'):

@@ -1,5 +1,7 @@
 """Copied from latest django/utils/http.py::is_safe_url
 """
+from __future__ import unicode_literals
+
 import unicodedata
 import urlparse
 import json

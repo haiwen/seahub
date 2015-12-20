@@ -1,4 +1,8 @@
+import re
+
 from django.core.cache import cache
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 import seaserv
 
@@ -12,6 +16,7 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
+from seahub.settings import SITE_ROOT
 
 class BaseMiddleware(object):
     """
@@ -70,3 +75,21 @@ class InfobarMiddleware(object):
 
     def process_response(self, request, response):
         return response
+
+
+class ForcePasswdChangeMiddleware(object):
+    def _request_in_black_list(self, request):
+        path = request.path
+        black_list = (r'^%s$' % SITE_ROOT, r'home/.+', r'repo/.+',
+                      r'[f|d]/[a-f][0-9]{10}', r'group/\d+', r'groups/',
+                      r'share/', r'profile/', r'notification/list/')
+
+        for patt in black_list:
+            if re.search(patt, path) is not None:
+                return True
+        return False
+
+    def process_request(self, request):
+        if request.session.get('force_passwd_change', False):
+            if self._request_in_black_list(request):
+                return HttpResponseRedirect(reverse('auth_password_change'))
