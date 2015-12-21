@@ -8,6 +8,8 @@ from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.views.decorators.http import condition
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from seaserv import get_repo, get_file_id_by_path
 
@@ -17,7 +19,10 @@ from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT, ENABLE_THUMBNAIL
 from seahub.thumbnail.utils import generate_thumbnail, \
     get_thumbnail_src, get_share_link_thumbnail_src
-from seahub.share.models import FileShare
+
+from seahub.share.forms import SharedLinkPasswordForm
+from seahub.share.models import FileShare, \
+    check_share_link_access, set_share_link_access
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -172,6 +177,9 @@ def share_link_latest_entry(request, token, size, path):
     if not fileshare:
         return None
 
+    if fileshare.is_encrypted() and not check_share_link_access(request, token):
+        return None
+
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
     if not repo:
@@ -207,6 +215,23 @@ def share_link_thumbnail_get(request, token, size, path):
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if not fileshare:
         return HttpResponse()
+
+    if fileshare.is_encrypted():
+        if not check_share_link_access(request, token):
+            d = {'token': token, 'view_name': 'view_shared_dir', }
+            if request.method == 'POST':
+                post_values = request.POST.copy()
+                post_values['enc_password'] = fileshare.password
+                form = SharedLinkPasswordForm(post_values)
+                d['form'] = form
+                if form.is_valid():
+                    set_share_link_access(request, token)
+                else:
+                    return render_to_response('share_access_validation.html', d,
+                                              context_instance=RequestContext(request))
+            else:
+                return render_to_response('share_access_validation.html', d,
+                                          context_instance=RequestContext(request))
 
     if fileshare.path == '/':
         image_path = path
