@@ -177,7 +177,12 @@ def share_link_latest_entry(request, token, size, path):
     if not repo:
         return None
 
-    obj_id = get_file_id_by_path(repo_id, path)
+    if fileshare.path == '/':
+        image_path = path
+    else:
+        image_path = posixpath.join(fileshare.path, path.lstrip('/'))
+
+    obj_id = get_file_id_by_path(repo_id, image_path)
     if obj_id:
         try:
             thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
