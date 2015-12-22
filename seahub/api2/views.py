@@ -314,12 +314,12 @@ class SearchUser(APIView):
 
                 searched_users = filter(lambda u: q in u.email, users)
                 # 'user__in' for only get profile of user in org
-                # 'nickname__contains' for search by nickname
+                # 'nickname__icontains' for search by nickname
                 searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                           Q(nickname__contains=q)).values('user')
+                                                           Q(nickname__icontains=q)).values('user')
             elif ENABLE_GLOBAL_ADDRESSBOOK:
                 searched_users = get_searched_users(q)
-                searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+                searched_profiles = Profile.objects.filter(nickname__icontains=q).values('user')
             else:
                 users = []
                 contacts = Contact.objects.get_contacts_by_user(username)
@@ -335,12 +335,12 @@ class SearchUser(APIView):
 
                 searched_users = filter(lambda u: q in u.email, users)
                 # 'user__in' for only get profile of contacts
-                # 'nickname__contains' for search by nickname
+                # 'nickname__icontains' for search by nickname
                 searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                           Q(nickname__contains=q)).values('user')
+                                                           Q(nickname__icontains=q)).values('user')
         else:
             searched_users = get_searched_users(q)
-            searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+            searched_profiles = Profile.objects.filter(nickname__icontains=q).values('user')
 
 
         # remove inactive users and add to result
@@ -1193,7 +1193,8 @@ class UploadBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks-api', request.user.username, use_onetime = False)
+            repo_id, 'dummy', 'upload-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1212,7 +1213,8 @@ class UpdateBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks-api', request.user.username)
+            repo_id, 'dummy', 'update-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 

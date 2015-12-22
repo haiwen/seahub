@@ -3738,13 +3738,29 @@ img.thumbnail {
 /**** #groups ****/ /* groups page */
 #groups .group-name {
     font-size:16px;
-    margin:15px 0 10px;
+    padding-left:3px;
+    border-bottom:1px solid #e6e6e6;
+    margin:15px 0 0;
 }
 #groups .group-name .a {
     color:#322;
 }
-#groups .empty-tips {
-    margin:10px 0 40px;
+#groups table {
+    margin:0 0 32px;
+}
+#groups th {
+    font-size:0;
+    padding:0;
+}
+#groups th,
+#groups td {
+    border-bottom:0;
+}
+#groups .empty-tip {
+    color:#a4a4a4;
+    padding:4px 0;
+    border-bottom:1px solid #e5e5e5;
+    margin:0 0 32px;
 }
 /**** #group ****/ /* group page */
 #group {

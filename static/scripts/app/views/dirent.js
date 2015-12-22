@@ -308,21 +308,28 @@ define([
             var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
             title = title.replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(obj_name) + '">' + Common.HTMLescape(obj_name) + '</span>');
 
+            var show_cur_repo = true;
+            if (this.model.get('perm') == 'r') {
+                show_cur_repo = false;
+            }
             var form = $(this.mvcpTemplate({
                 form_title: title,
                 op_type: op_type,
                 obj_type: obj_type,
                 obj_name: obj_name,
-                show_other_repos: !dir.encrypted,
+                show_cur_repo: show_cur_repo,
+                show_other_repos: !dir.encrypted
             }));
             form.modal({appendTo:'#main', autoResize:true, focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            FileTree.renderTreeForPath({
-                repo_name: dir.repo_name,
-                repo_id: dir.repo_id,
-                path: dir.path
-            });
+            if (show_cur_repo) {
+                FileTree.renderTreeForPath({
+                    repo_name: dir.repo_name,
+                    repo_id: dir.repo_id,
+                    path: dir.path
+                });
+            }
             if (!dir.encrypted) {
                 FileTree.prepareOtherReposTree({cur_repo_id: dir.repo_id});
             }

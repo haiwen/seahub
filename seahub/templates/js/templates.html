@@ -66,7 +66,9 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
+    <% if (show_shared_by) { %>
     <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <% } %>
 </script>
 <script type="text/template" id="organization-repo-tmpl">
     <td>
@@ -116,6 +118,13 @@
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
+
+    <% if (!encrypted && user_perm == 'r') { %>
+    <div id="multi-dirents-op" class="hide">
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
+    </div>
+    <% } %>
+
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
@@ -169,6 +178,7 @@
     </tr>
 </script>
 <script type="text/template" id="dirent-tmpl">
+
     <% if (dirent.is_dir) { %>
     <td class="select">
         <% if (dirent.selected) { %>
@@ -213,6 +223,11 @@
                 <% if (is_pro) { %>
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
+            </ul>
+            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op hide">
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
             <% } %>
         </div>
@@ -295,6 +310,11 @@
                     <% } %>
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
+            </ul>
+            <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
+            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op hide">
+                <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
             <% } %>
         </div>
@@ -889,20 +909,19 @@
     <h4 class="group-name ellipsis"><a href="#group/<%= id %>/" title="<%- name %>" class="a normal"><%- name %></a></h4>
     <% if (repos.length) { %>
     <table>
-        <thead>
+        <thead class="vh"><!--use .vh for <td> width-->
         <tr>
             <th width="4%"><!--icon--></th>
-            <th width="40%">{% trans "Name" %}</th>
-            <th width="8%"><!--op--></th>
-            <th width="14%">{% trans "Size" %}</th>
-            <th width="18%">{% trans "Last Update" %}</th>
-            <th width="16%">{% trans "Shared By" %}</th>
+            <th width="46%">{% trans "Name" %}</th>
+            <th width="10%"><!--op--></th>
+            <th width="20%">{% trans "Size" %}</th>
+            <th width="20%">{% trans "Last Update" %}</th>
         </tr>
         </thead>
         <tbody></tbody>
     </table>
     <% } else { %>
-    <p class="empty-tips alc">{% trans "No library is shared to this group" %}</p>
+    <p class="empty-tip alc">{% trans "No library is shared to this group" %}</p>
     <% } %>
 </script>
 <script type="text/template" id="group-member-tmpl">
