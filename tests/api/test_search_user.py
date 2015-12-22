@@ -28,11 +28,11 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
     def test_can_search_by_nickname(self):
-        p = Profile.objects.add_or_update(self.user.email, nickname="Test")
+        p = Profile.objects.add_or_update(self.user.email, nickname="Carl Smith")
         p.contact_email = 'new_mail@test.com'
         p.save()
 
-        resp = self.client.get(self.endpoint + '?q=' + "Test")
+        resp = self.client.get(self.endpoint + '?q=' + "Carl")
         json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
@@ -40,15 +40,15 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['email'] == self.user.email
         assert json_resp['users'][0]['avatar'] is not None
         assert json_resp['users'][0]['avatar_url'] is not None
-        assert json_resp['users'][0]['name'] == 'Test'
+        assert json_resp['users'][0]['name'] == 'Carl Smith'
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
     def test_can_search_by_nickname_insensitive(self):
-        p = Profile.objects.add_or_update(self.user.email, nickname="Test")
+        p = Profile.objects.add_or_update(self.user.email, nickname="Carl Smith")
         p.contact_email = 'new_mail@test.com'
         p.save()
 
-        resp = self.client.get(self.endpoint + '?q=' + "test")
+        resp = self.client.get(self.endpoint + '?q=' + "carl")
         json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
@@ -56,5 +56,5 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['email'] == self.user.email
         assert json_resp['users'][0]['avatar'] is not None
         assert json_resp['users'][0]['avatar_url'] is not None
-        assert json_resp['users'][0]['name'] == 'Test'
+        assert json_resp['users'][0]['name'] == 'Carl Smith'
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
