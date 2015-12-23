@@ -83,7 +83,8 @@
     src:url('sf_font2/seafile-font2.eot');
     src:url('sf_font2/seafile-font2.eot?#iefix') format('embedded-opentype'),
         url('sf_font2/seafile-font2.woff') format('woff'),
-        url('sf_font2/seafile-font2.ttf') format('truetype');
+        url('sf_font2/seafile-font2.ttf') format('truetype'),
+        url('sf_font2/seafile-font2.svg#seafile-font2') format('svg');
     font-weight: normal;
     font-style: normal;
 }
