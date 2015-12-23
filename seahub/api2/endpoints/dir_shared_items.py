@@ -124,6 +124,12 @@ class DirSharedItemsEndpoint(APIView):
 
         return sub_repo
 
+    def get_repo_owner(self, request, repo_id):
+        if is_org_context(request):
+            return seafile_api.get_org_repo_owner(repo_id)
+        else:
+            return seafile_api.get_repo_owner(repo_id)
+
     def get(self, request, repo_id, format=None):
         """List shared items(shared to users/groups) for a folder/library.
         """
@@ -159,7 +165,7 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
 
-        if username != seafile_api.get_repo_owner(repo_id):
+        if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
@@ -236,7 +242,7 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
 
-        if username != seafile_api.get_repo_owner(repo_id):
+        if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if path != '/':
@@ -362,7 +368,7 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
 
-        if username != seafile_api.get_repo_owner(repo_id):
+        if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
