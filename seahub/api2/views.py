@@ -2585,7 +2585,7 @@ class BeShared(APIView):
                 cmmts = get_commits(r_id, 0, 1)
                 last_commit = cmmts[0] if cmmts else None
                 r.last_modified = last_commit.ctime if last_commit else 0
-                r.share_type = 'group'
+                r._dict['share_type'] = 'group'
                 r.user = seafile_api.get_repo_owner(r_id)
                 r.user_perm = check_permission(r_id, username)
                 shared_repos.append(r)
