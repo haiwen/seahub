@@ -36,7 +36,11 @@
       <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
       <% } %>
     </td>
+    <% if (name) { %>
     <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
+    <% } else { %>
+    <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
+    <% } %>
     <td>
       <div class="op-container">
         <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>

@@ -526,7 +526,14 @@ class Repos(APIView):
 
         repos_json = []
         if filter_by['mine']:
-            owned_repos = get_owned_repo_list(request)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                        email, ret_corrupted=True)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(email,
+                        ret_corrupted=True)
+
             owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in owned_repos:
                 # do not return virtual repos
