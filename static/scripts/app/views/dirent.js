@@ -144,7 +144,7 @@ define([
             return false;
         },
 
-        togglePopup: function () {
+        togglePopup: function() {
             var icon = this.$('.more-op-icon'),
                 popup = this.$('.hidden-op');
 

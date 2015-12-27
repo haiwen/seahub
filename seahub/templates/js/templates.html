@@ -37,14 +37,24 @@
       <% } %>
     </td>
     <% if (name) { %>
-    <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
+    <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
     <% } else { %>
     <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
     <% } %>
-    <td>
+    <td class="repo-op-td">
       <div class="op-container">
         <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
         <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+        <span class="sf2-icon-caret-down more-op-icon op-icon vh js-toggle-popup" title="{% trans "More operations" %}"></span>
+        <ul class="hidden-op repo-hidden-op hide dropdown-menu">
+          <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+          <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+          <li><a class="op js-popup-permission-settings" href="#">{% trans "Permissions" %}</a></li>
+          <% if (enable_repo_history_setting) { %>
+          <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
+          <% } %>
+          <li><a class="op js-view-links" href="#">{% trans "Sharing Links" %}</a></li>
+        </ul>
       </div>
     </td>
     <td><%= size_formatted %></td>
@@ -218,7 +228,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -299,7 +309,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -732,7 +742,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -802,14 +812,14 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
        <th width="4%"><!--icon--></th>
-       <th width="46%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
-       <th width="10%"><!--op--></th>
+       <th width="42%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
+       <th width="14%"><!--op--></th>
        <th width="20%">{% trans "Size" %}</th>
        <th width="20%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
    </tr>
@@ -939,6 +949,7 @@
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>
+
 <script type="text/template" id="group-settings-tmpl">
 <% if (is_owner) { %>
     <ul class="group-setting-list">
@@ -966,21 +977,23 @@
     </ul>
 <% } %>
 </script>
+
 <script type="text/template" id="group-rename-form-tmpl">
 <form method="post" action="">
     <h3>{% trans "Rename Group To" %}</h3>
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
+
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
     <h3>{% trans "Transfer Group To" %}</h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">
@@ -991,6 +1004,7 @@
     <p class="error hide"></p>
 </form>
 </script>
+
 <script type="text/template" id="group-manage-members-tmpl">
 <h3><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
@@ -1023,6 +1037,7 @@
     <p class="error hide"></p>
 </div>
 </script>
+
 <script type="text/template" id="group-manage-member-tmpl">
 <td>
     <img src="<%= avatar_url %>" alt="" width="20" class="avatar" />
@@ -1069,4 +1084,25 @@
         <% } %>
     <% } %>
 <% } %>
+</script>
+
+<script type="text/template" id="history-settings-dialog-tmpl">
+    <h3><%= title %></h3>
+    <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
+        <input type="radio" name="history" value="full_history"
+            <% if (full_history_checked) { %> checked="checked"{ <% } %>
+            class="vam" />
+            <span class="vam">{% trans "Keep full history" %}</span><br />
+        <input type="radio" name="history" value="no_history"
+            <% if (no_history_checked) { %>checked="checked"<% } %>
+            class="vam" />
+            <span class="vam">{% trans "Don't keep history" %}</span><br />
+        <input type="radio" name="history" value="partial_history"
+            <% if (partial_history_checked) { %>checked="checked"<% } %>
+            class="vam" />
+            <span calss="vam">{% trans "Only keep a period of history:" %}
+        <input type="text" name="days" size="4" disabled="disabled"
+            class="input-disabled" value="<%- history_limit %>" /> {% trans "days" %}</span><br />
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
 </script>

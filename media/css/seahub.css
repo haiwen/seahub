@@ -1183,6 +1183,24 @@ textarea:-moz-placeholder {/* for FF */
 .user-item .txt-item {
     margin:0;
 }
+/**** dropdown menu ******/
+.dropdown-menu {
+    position:absolute;
+    background:#fff;
+    padding:6px 1px;
+    border:1px solid #eee;
+    border-radius:5px;
+    z-index:10;
+}
+.dropdown-menu li a,
+.dropdown-menu a {
+    display:block;
+    padding:4px 12px;
+    width:180px;
+}
+.dropdown-menu a:hover {
+    background:#eee;
+}
 /********** container ***********/
 #main, #footer {
     width:950px;
@@ -1945,25 +1963,25 @@ textarea:-moz-placeholder {/* for FF */
 #mv-dir-list .icon-caret-right {
     margin-right:15px;
 }
-#rename-form .input {
+.inline-rename-form .input {
     font-size:14px;
 }
 .web-setting-form .submit,
-#rename-form .submit {
+.inline-rename-form .submit {
     color:green;
 }
 .web-setting-form .cancel,
-#rename-form .cancel {
+.inline-rename-form .cancel {
     color:#666;
 }
-#rename-form .input,
-#rename-form .submit {
+.inline-rename-form .input,
+.inline-rename-form .submit {
     margin:0;
 }
 .web-setting-form .submit,
 .web-setting-form .cancel,
-#rename-form .submit,
-#rename-form .cancel {
+.inline-rename-form .submit,
+.inline-rename-form .cancel {
     font-size:16px;
     line-height:1;
 }
@@ -2090,7 +2108,7 @@ textarea:-moz-placeholder {/* for FF */
 .fixed-upload-file-dialog .op-icon {
     font-size:18px;
     color: #b8b8b8;
-    margin:0; 
+    margin:0;
 }
 .fixed-upload-file-dialog .close,
 .fileupload-buttonbar .cancel {

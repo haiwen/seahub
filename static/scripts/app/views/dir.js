@@ -73,7 +73,7 @@ define([
                 // hide 'hidden-op' popup
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
-                    var $popup = $('.hidden-op:visible');
+                    var $popup = $('.dirent-hidden-op:visible');
                     if ($popup.length > 0 &&  // There is a visible popup
                         !$('.more-op-icon', $popup.closest('tr')).is(target) &&
                         !$popup.is(target) &&

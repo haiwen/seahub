@@ -31,6 +31,31 @@ define([
             this.repos = new RepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
+
+            // hide 'hidden-op' popup
+            $(document).click(function(e) {
+                var target = e.target || event.srcElement;
+                var $popup = $('.repo-hidden-op:visible');
+                if ($popup.length > 0 &&  // There is a visible repo op popup
+                    !$('.more-op-icon', $popup.closest('tr')).is(target) &&
+                    !$popup.is(target) &&
+                    !$popup.find('*').is(target)) {
+                    // when the popup and op-icon is not target
+                    // hide the popup and remove the highlight if the current repo
+                    // is not the target
+                    $popup.addClass('hide');
+                    var $tr = $popup.closest('tr');
+                    if (!$tr.find('*').is(target)) {
+                        $tr.removeClass('hl').find('.op-icon').addClass('vh');
+                        $('.my-own-repos-table tr:gt(0)').each(function() {
+                            if ($(this).find('*').is(target)) {
+                                $(this).addClass('hl').find('.op-icon').removeClass('vh');
+                            }
+                        });
+                    }
+                }
+            });
+
         },
 
         addOne: function(repo, collection, options) {
