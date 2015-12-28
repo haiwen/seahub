@@ -252,7 +252,6 @@ function addFile(file_data) {
         var path = cur_path;
         var new_name = file_data.name;
         var new_file = file_tpl.clone(true);
-        var new_file_path = e(path+new_name);
 
         new_file.attr({
                 'data-name': new_name,
@@ -264,7 +263,7 @@ function addFile(file_data) {
                 'data-status': 'unstarred'
                 });
         $('.dirent-icon img', new_file).attr('src', '{{MEDIA_URL}}img/file/file.png');
-        $('.dirent-name a', new_file).html(new_name).attr('href', '{% url 'view_lib_file' repo.id new_file_path %}');
+        $('.dirent-name a', new_file).html(new_name).attr('href', '{% url 'repo_view_file' repo.id %}?p=' + e(path+new_name));
         $('.dirent-size', new_file).html(filesizeformat(file_data.size, 1));
         $('.dirent-update', new_file).html("{% trans "Just now" %}");
         $('.file-download', new_file).attr('href', '{{SITE_ROOT}}repo/{{repo.id}}/' + file_data.id + '/download/?p=' + e(path+new_name));
@@ -1938,8 +1937,7 @@ $('#add-new-file-form, #add-new-dir-form, #rename-form, #mv-form').submit(functi
             }
             post_url = '{% url 'new_file' repo.id %}?parent_dir=' + e(path);
             after_op_success = function(data) {
-                var new_file_path = e(path) + e(data['name']);
-                location.href = '{% url 'view_lib_file' repo.id new_file_path %}';
+                location.href = '{% url 'repo_view_file' repo.id %}?p=' + e(path) + e(data['name']);
             };
         } else {
             post_url = '{% url 'new_dir' repo.id %}?parent_dir=' + e(path);
