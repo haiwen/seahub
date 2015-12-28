@@ -53,7 +53,7 @@
           <% if (enable_repo_history_setting) { %>
           <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
           <% } %>
-          <li><a class="op js-view-links" href="#">{% trans "Sharing Links" %}</a></li>
+          <li><a class="op js-popup-share-link-admin" href="#">{% trans "Sharing Links" %}</a></li>
         </ul>
       </div>
     </td>
@@ -1105,4 +1105,12 @@
             class="input-disabled" value="<%- history_limit %>" /> {% trans "days" %}</span><br />
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
+</script>
+
+<script type="text/template" id="repo-permissions-dialog-tmpl">
+    <h3><%= title %></h3>
+</script>
+
+<script type="text/template" id="repo-share-link-admin-dialog-tmpl">
+    <h3><%= title %></h3>
 </script>
