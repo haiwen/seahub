@@ -265,6 +265,7 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
 
         view_dir_base = reverse('repo', args=[repo.id])
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
+        view_file_base = reverse('repo_view_file', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
             dirent.last_modified = dirent.mtime
@@ -297,7 +298,7 @@ def get_repo_dirents_with_perm(request, repo, commit, path, offset=-1, limit=-1)
                 dirent.starred = False
                 fpath = posixpath.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
-                dirent.view_link = reverse('view_lib_file', args=[repo.id, urlquote(p_fpath)])
+                dirent.view_link = view_file_base + '?p=' + urlquote(p_fpath)
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
                 dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
