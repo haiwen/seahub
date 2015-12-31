@@ -15,6 +15,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.share.views import check_user_share_quota
@@ -128,13 +129,13 @@ class DirSharedItemsEndpoint(APIView):
         """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         ret = []
         if shared_to_user:
@@ -152,17 +153,17 @@ class DirSharedItemsEndpoint(APIView):
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Permission invalid.')
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         if path == '/':
             shared_repo = repo
@@ -172,15 +173,16 @@ class DirSharedItemsEndpoint(APIView):
                 if sub_repo:
                     shared_repo = sub_repo
                 else:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'No sub repo found')
+                    # unlikely to happen
+                    return api_error(status.HTTP_404_NOT_FOUND, 'Failed to get sub repo')
             except SearpcError as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub repo')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Bad username.')
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
@@ -198,10 +200,10 @@ class DirSharedItemsEndpoint(APIView):
             try:
                 gid = int(gid)
             except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Bad group id: %s' % gid)
+                return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid.' % gid)
             group = seaserv.get_group(gid)
             if not group:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Group not found: %s' % gid)
+                return api_error(status.HTTP_404_NOT_FOUND, 'Group %s not found.' % gid)
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
@@ -221,28 +223,28 @@ class DirSharedItemsEndpoint(APIView):
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         if path != '/':
             try:
                 sub_repo = self.get_or_create_sub_repo_by_path(request, repo, path)
             except SearpcError as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub repo')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub repo.')
         else:
             sub_repo = None
 
         share_type = request.data.get('share_type')
         if share_type != 'user' and share_type != 'group':
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Bad share type')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'share_type invalid.')
 
         permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         shared_repo = repo if path == '/' else sub_repo
         success, failed = [], []
@@ -251,11 +253,11 @@ class DirSharedItemsEndpoint(APIView):
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
                     return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Username must be a valid email address.')
+                                     'Email %s not valid.' % to_user)
 
                 if not check_user_share_quota(username, shared_repo, users=[to_user]):
                     return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share: No enough quota.')
+                                     'Not enough quota.')
 
                 try:
                     if is_org_context(request):
@@ -294,14 +296,14 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     gid = int(gid)
                 except ValueError:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Bad group id: %s' % gid)
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid.' % gid)
                 group = seaserv.get_group(gid)
                 if not group:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'Group not found: %s' % gid)
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Group %s not found' % gid)
 
                 if not check_user_share_quota(username, shared_repo, groups=[group]):
                     return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share: No enough quota.')
+                                     'Not enough quota.')
 
                 try:
                     if is_org_context(request):
@@ -338,13 +340,13 @@ class DirSharedItemsEndpoint(APIView):
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Repo not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Library %s not found.' % repo_id)
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Folder %s not found.' % path)
 
         if path == '/':
             shared_repo = repo
@@ -354,15 +356,15 @@ class DirSharedItemsEndpoint(APIView):
                 if sub_repo:
                     shared_repo = sub_repo
                 else:
-                    return api_error(status.HTTP_400_BAD_REQUEST, 'No sub repo found')
+                    return api_error(status.HTTP_400_BAD_REQUEST, 'Sub-library not found.')
             except SearpcError as e:
                 logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub repo')
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub-library.')
 
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Bad argument.')
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % share_to)
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
@@ -381,7 +383,7 @@ class DirSharedItemsEndpoint(APIView):
             try:
                 group_id = int(group_id)
             except ValueError:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Bad group id')
+                return api_error(status.HTTP_400_BAD_REQUEST, 'group_id %s invalid' % group_id)
 
             # hacky way to get group repo permission
             permission = ''
