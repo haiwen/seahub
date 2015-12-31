@@ -20,7 +20,7 @@ from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
 from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.api2.endpoints.groups import Groups, Group
-from seahub.api2.endpoints.group_members import GroupMembers
+from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -196,6 +196,8 @@ urlpatterns = patterns(
     url(r'^api/v2.1/groups/$', Groups.as_view(), name='api-v2.1-groups'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/$', Group.as_view(), name='api-v2.1-group'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
+    url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
