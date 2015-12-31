@@ -806,13 +806,6 @@ def view_shared_file(request, token):
 
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
-    if filetype != 'Unknown':
-        try:
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, file_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
-
     if request.GET.get('dl', '') == '1':
         # download shared file
         return _download_file_from_share_link(request, fileshare)
@@ -1047,13 +1040,6 @@ def view_file_via_shared_dir(request, token):
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
-        # send statistic messages
-        if ret_dict['filetype'] != 'Unknown':
-            try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, file_size))
-            except SearpcError, e:
-                logger.error('Error when sending file-view message: %s' % str(e))
     else:
         ret_dict['err'] = err_msg
 
