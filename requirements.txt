@@ -3,7 +3,8 @@ chardet
 six
 Pillow>=2.6.1,<3.0.0
 Django>=1.5.8,<1.6
-Djblets==0.6.14
+http://effbot.org/media/downloads/PIL-1.1.7.tar.gz
+https://github.com/djblets/djblets/archive/release-0.6.14.zip#egg=Djblets
 django-compressor==1.4
 django-statici18n==1.1.2
 git+git://github.com/haiwen/django-constance.git@bde7f7cdfd0ed1631a6817fd4cd76f37bf54fe35#egg=django-constance[database]
