@@ -27,8 +27,8 @@ from seahub.group.views import remove_group_common
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time
 
-from .utils import api_check_group_staff, api_check_group_member, \
-    api_check_group_owner
+from .utils import api_check_group, is_group_member, is_group_admin, \
+    is_group_owner, is_group_admin_or_owner
 
 logger = logging.getLogger(__name__)
 
@@ -171,10 +171,20 @@ class Group(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    @api_check_group_member
+    @api_check_group
     def get(self, request, group_id):
         """ Get info of a group.
         """
+
+        try:
+            # only group member can get info of a group
+            if not is_group_member(group_id, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         try:
             avatar_size = int(request.GET.get('avatar_size', GROUP_AVATAR_DEFAULT_SIZE))
@@ -182,84 +192,95 @@ class Group(APIView):
             avatar_size = GROUP_AVATAR_DEFAULT_SIZE
 
         group_info = get_group_info(request, group_id, avatar_size)
+
         return Response(group_info)
 
-    @api_check_group_staff
+    @api_check_group
     def put(self, request, group_id):
         """ Rename, transfer a specific group
         """
 
-        group = seaserv.get_group(group_id)
         username = request.user.username
-
         new_group_name = request.data.get('name', None)
+        # rename a group
         if new_group_name:
-            # rename a group
-            # Check whether group name is validate.
-            if not validate_group_name(new_group_name):
-                error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            # Check whether group name is duplicated.
-            if check_group_name_conflict(request, new_group_name):
-                error_msg = _(u'There is already a group with that name.')
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             try:
+                # only group owner/admin can rename a group
+                if not is_group_admin_or_owner(group_id, username):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                # Check whether group name is validate.
+                if not validate_group_name(new_group_name):
+                    error_msg = _(u'Group name can only contain letters, numbers, blank, hyphen or underscore')
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                # Check whether group name is duplicated.
+                if check_group_name_conflict(request, new_group_name):
+                    error_msg = _(u'There is already a group with that name.')
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
                 seaserv.ccnet_threaded_rpc.set_group_name(group_id, new_group_name)
+
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         new_owner = request.data.get('owner', None)
+        # transfer a group
         if new_owner:
-            # transfer a group
-
-            # only group owner can transfer a group
-            if not (username == group.creator_name):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            if not is_valid_username(new_owner):
-                error_msg = 'Email %s invalid.' % new_owner
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if new_owner == group.creator_name:
-                error_msg = _(u'User %s is already group owner.') % new_owner
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
             try:
-                if not seaserv.is_group_user(group_id, new_owner):
+                # only group owner can transfer a group
+                if not is_group_owner(group_id, username):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                # augument check
+                if not is_valid_username(new_owner):
+                    error_msg = 'Email %s invalid.' % new_owner
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                if is_group_owner(group_id, new_owner):
+                    error_msg = _(u'User %s is already group owner.') % new_owner
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                # transfer a group
+                if not is_group_member(group_id, new_owner):
                     seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, new_owner)
 
-                if not seaserv.check_group_staff(group_id, new_owner):
+                if not is_group_admin(group_id, new_owner):
                     seaserv.ccnet_threaded_rpc.group_set_admin(group_id, new_owner)
 
                 seaserv.ccnet_threaded_rpc.set_group_creator(group_id, new_owner)
+
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # get new info of this group
         group_info = get_group_info(request, group_id)
 
         return Response(group_info)
 
-    @api_check_group_owner
+    @api_check_group
     def delete(self, request, group_id):
-        """ Delete a specific group
+        """ Dismiss a specific group
         """
-
-        username = request.user.username
 
         org_id = None
         if is_org_context(request):
             org_id = request.user.org.org_id
 
+        username = request.user.username
         try:
+            # only group owner can dismiss a group
+            if not is_group_owner(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             remove_group_common(group_id, username, org_id=org_id)
+
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

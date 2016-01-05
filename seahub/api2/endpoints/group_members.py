@@ -19,11 +19,12 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
     get_default_avatar_url
-from seahub.utils import is_valid_username, string2list, is_org_context
+from seahub.utils import string2list, is_org_context
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 
-from .utils import api_check_group_member, api_check_group_staff
+from .utils import api_check_group, is_group_member, is_group_admin, \
+    is_group_owner, is_group_admin_or_owner
 
 logger = logging.getLogger(__name__)
 
@@ -58,7 +59,7 @@ class GroupMembers(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    @api_check_group_member
+    @api_check_group
     def get(self, request, group_id, format=None):
         """
         Get all group members.
@@ -71,18 +72,20 @@ class GroupMembers(APIView):
             avatar_size = AVATAR_DEFAULT_SIZE
 
         try:
+            # only group member can get info of all group members
+            if not is_group_member(group_id, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
             members = seaserv.get_group_members(group_id)
+
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        is_admin = request.GET.get('is_admin', 'false')
-        if is_admin.lower() not in ('true', 'false'):
-            error_msg = 'is_admin invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         group_members = []
+        is_admin = request.GET.get('is_admin', 'false')
         for m in members:
             # only return group admins
             if is_admin == 'true' and not m.is_staff:
@@ -93,22 +96,32 @@ class GroupMembers(APIView):
 
         return Response(group_members)
 
-    @api_check_group_staff
+    @api_check_group
     def post(self, request, group_id):
         """
         Add a group member.
         """
-        username = request.user.username
-        email = request.data.get('email', None)
 
+        email = request.data.get('email', None)
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
             error_msg = 'Email %s invalid.' % email
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        username = request.user.username
         try:
+            # only group owner/admin can add a group member
+            if not is_group_admin_or_owner(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if is_group_member(group_id, email):
+                error_msg = _(u'User %s is already group member.') % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
+
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -124,11 +137,26 @@ class GroupMember(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    @api_check_group_member
+    @api_check_group
     def get(self, request, group_id, email):
         """
         Get info of a specific group member.
         """
+        try:
+            # only group member can get info of a specific group member
+            if not is_group_member(group_id, request.user.username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not is_group_member(group_id, email):
+                error_msg = 'Email %s invalid.' % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         try:
             avatar_size = int(request.GET.get('avatar_size',
                 AVATAR_DEFAULT_SIZE))
@@ -139,72 +167,96 @@ class GroupMember(APIView):
 
         return Response(member_info)
 
-    @api_check_group_staff
+    @api_check_group
     def put(self, request, group_id, email):
         """
         Set/unset a specific group member as admin.
         """
 
+        username = request.user.username
         is_admin = request.data.get('is_admin', '')
-        if is_admin.lower() == 'true':
-            try:
+        try:
+            # only group owner can set/unset a specific group member as admin
+            if not is_group_owner(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if not is_group_member(group_id, email):
+                error_msg = 'Email %s invalid.' % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            # set/unset a specific group member as admin
+            if is_admin.lower() == 'true':
                 seaserv.ccnet_threaded_rpc.group_set_admin(group_id, email)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-        elif is_admin.lower() == 'false':
-            try:
+            elif is_admin.lower() == 'false':
                 seaserv.ccnet_threaded_rpc.group_unset_admin(group_id, email)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                error_msg = 'is_admin invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        else:
-            error_msg = 'is_admin invalid.'
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         member_info = get_group_member_info(request, group_id, email)
 
         return Response(member_info)
 
-    @api_check_group_member
+    @api_check_group
     def delete(self, request, group_id, email):
         """
-        Delete a group member.
+        User leave group or group owner/admin delete a group member.
         """
+
+        try:
+            if not is_group_member(group_id, email):
+                error_msg = 'Email %s invalid.' % email
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
         username = request.user.username
-
-        if not is_valid_username(email):
-            error_msg = 'Email %s invalid.' % email
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
+        # user leave group
         if username == email:
-            # user leave group
             try:
                 seaserv.ccnet_threaded_rpc.quit_group(group_id, username)
+                # remove repo-group share info of all 'email' owned repos
                 seafile_api.remove_group_repos_by_owner(group_id, email)
+                return Response({'success': True})
             except SearpcError as e:
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        else:
-            # admin delete group memeber
-            try:
-                if not seaserv.check_group_staff(group_id, username):
+
+        # group owner/admin delete a group member
+        try:
+            if is_group_owner(group_id, username):
+                # group owner can delete all group member
+                seaserv.ccnet_threaded_rpc.group_remove_member(group_id, username, email)
+                seafile_api.remove_group_repos_by_owner(group_id, email)
+                return Response({'success': True})
+
+            elif is_group_admin(group_id, username):
+                # group admin can NOT delete group owner/admin
+                if not is_group_admin_or_owner(group_id, email):
+                    seaserv.ccnet_threaded_rpc.group_remove_member(group_id, username, email)
+                    seafile_api.remove_group_repos_by_owner(group_id, email)
+                    return Response({'success': True})
+                else:
                     error_msg = 'Permission denied.'
                     return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-                seaserv.ccnet_threaded_rpc.group_remove_member(group_id, username, email)
-                seafile_api.remove_group_repos_by_owner(group_id, email)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            else:
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        return Response({'success': True})
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
 
 class GroupMembersBulk(APIView):
@@ -212,12 +264,20 @@ class GroupMembersBulk(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    @api_check_group_staff
+    @api_check_group
     def post(self, request, group_id):
         """
         Bulk add group members.
         """
         username = request.user.username
+        try:
+            if not is_group_admin_or_owner(group_id, username):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         emails_str = request.data.get('emails', '')
         emails_list = string2list(emails_str)
