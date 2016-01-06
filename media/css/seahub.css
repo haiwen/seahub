@@ -3758,3 +3758,22 @@ img.thumbnail {
 #group-members .outer-caret {
     right:66px;
 }
+#group-settings {
+    position:absolute;
+    top:77px;
+    right:0;
+}
+#group-settings .outer-caret {
+    right:106px;
+}
+.group-setting-list {
+    border-bottom:1px solid #e3e3e5;
+}
+.group-setting-item {
+    line-height:31px;
+    cursor:pointer;
+    margin:5px 0;
+}
+#add-group-members-form .submit {
+    margin:0 0 0 5px;
+}

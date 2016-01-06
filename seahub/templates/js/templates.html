@@ -66,7 +66,7 @@
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
-    <td><span title="<%- owner %>"><%- owner_nickname %></span></td>
+    <td><span title="<%- owner %>"><%- owner_name %></span></td>
 </script>
 <script type="text/template" id="organization-repo-tmpl">
     <td>
@@ -640,9 +640,7 @@
     {% endif %}
 
     <div class="fright">
-    <% if (is_staff) { %>
-    <span class="sf2-icon-cog1 op-icon" title="{% trans "Admin" %}"></span>
-    <% } %>
+    <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
     <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
     <% if (!is_pub) { %>
     <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
@@ -911,4 +909,136 @@
         <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
+</script>
+<script type="text/template" id="group-settings-tmpl">
+<% if (is_owner) { %>
+    <ul class="group-setting-list">
+        <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
+        <li class="group-setting-item" data-op="transfer">{% trans "Transfer" %}</li>
+    </ul>
+    <ul class="group-setting-list">
+        <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
+        <li class="group-setting-item" data-op="manage-members">{% trans "Manage Members" %}</li>
+    </ul>
+    <ul class="last-group-setting-list">
+        <li class="group-setting-item" data-op="dismiss">{% trans "Dismiss" %}</li>
+    </ul>
+<% } else if (is_admin) { %>
+    <ul class="group-setting-list">
+        <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
+    </ul>
+    <ul class="last-group-setting-list">
+        <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
+        <li class="group-setting-item" data-op="manage-members">{% trans "Manage Members" %}</li>
+    </ul>
+<% } else { %>
+    <ul class="last-group-setting-list">
+        <li class="group-setting-item" data-op="leave">{% trans "Leave group" %}</li>
+    </ul>
+<% } %>
+</script>
+<script type="text/template" id="group-rename-form-tmpl">
+<form method="post" action="">
+    <h3>{% trans "Rename Group To" %}</h3>
+    <input type="text" name="new_name" value="" class="input" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" />
+</form> 
+</script>
+<script type="text/template" id="group-transfer-form-tmpl">
+<form method="post" action="">
+    <h3>{% trans "Transfer Group To" %}</h3>
+    <input type="hidden" name="email" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" />
+</form> 
+</script>
+<script type="text/template" id="group-import-members-form-tmpl">
+<form enctype="multipart/form-data" method="post" action="">
+    <h3>{% trans "Import group members from a CSV file" %}</h3>
+    <input type="file" name="file" />
+    <p class="tip">{% trans "File format: user@mail.com" %}</p>
+    <p class="error hide">{% trans "Please choose a CSV file" %}</p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+</script>
+<script type="text/template" id="group-manage-members-tmpl">
+<h3><%= title %></h3>
+<form method="post" action="" id="add-group-members-form">
+    <input type="hidden" name="user_name" />
+    <input type="submit" value="{% trans "Add" %}" class="submit" />
+    <p class="error hide"></p>
+</form>
+<div class="members">
+    <table>
+        <thead>
+            <% if (is_owner) { %>
+            <tr>
+                <th width="5%"></th>
+                <th width="25%">{% trans "Name" %}</th>
+                <th width="25%">{% trans "Email" %}</th>
+                <th width="25%">{% trans "Role" %}</th>
+                <th width="20%">{% trans "Operations" %}</th>
+            </tr>
+            <% } else { %>
+            <tr>
+                <th width="5%"></th>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="40%">{% trans "Email" %}</th>
+                <th width="20%">{% trans "Operations" %}</th>
+            </tr>
+            <% } %>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <p class="error hide"></p>
+</div>
+</script>
+<script type="text/template" id="group-member2-tmpl"> {# TODO: any better id? #}
+<td>
+    <img src="<%= avatar_url %>" alt="" width="20" class="avatar" />
+</td>
+<td>
+    <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(email)); %>/"><%- name %></a>
+</td>
+<td><%- contact_email %></td>
+
+<% if (is_owner) { %>
+    <% if (username == email) { %>
+        <td></td>
+    <% } else { %>
+    <td>
+    <% if (is_admin) { %>
+        <span class="cur-role">{% trans "Admin" %}</span>
+        <span title="{% trans "Edit" %}" class="role-edit-icon sf2-icon-edit op-icon vh"></span>
+        <select name="role" class="role-edit hide">
+            <option value="0">{% trans "Member" %}</option>
+            <option value="1" selected="selected">{% trans "Admin" %}</option>
+        </select>
+    <% } else { %>
+        <span class="cur-role">{% trans "Member" %}</span>
+        <span title="{% trans "Edit" %}" class="role-edit-icon sf2-icon-edit op-icon vh"></span>
+        <select name="role" class="role-edit hide">
+            <option value="0" selected="selected">{% trans "Member" %}</option>
+            <option value="1">{% trans "Admin" %}</option>
+        </select>
+    <% } %>
+    </td>
+    <% } %>
+<% } %>
+
+<% if (username == email) { %>
+    <td></td>
+<% } else { %>
+    <% if (is_owner) { %>
+        <td><span class="sf2-icon-delete op-icon vh rm" title="{% trans "Delete" %}"></span></td>
+    <% } else { %>
+        <% if (is_admin) { %>
+            <td></td>
+        <% } else { %>
+            <td><span class="sf2-icon-delete op-icon vh rm" title="{% trans "Delete" %}"></span></td>
+        <% } %>
+    <% } %>
+<% } %>
 </script>
