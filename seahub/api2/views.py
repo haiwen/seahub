@@ -3470,7 +3470,7 @@ class Groups(APIView):
                              "Operation can only be rename.")
 
 class GroupMembers(APIView):
-    authentication_classes = (TokenAuthentication)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle,)
 
