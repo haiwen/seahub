@@ -22,6 +22,7 @@ from seahub.profile.models import Profile
 from seahub.profile.utils import refresh_cache as refresh_profile_cache
 from seahub.utils import is_valid_username
 
+
 logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
@@ -36,13 +37,13 @@ class Account(APIView):
 
     def get(self, request, email, format=None):
         if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % email)
 
         # query account info
         try:
             user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'User %s not found.' % email)
 
         info = {}
         info['email'] = user.email
@@ -102,8 +103,8 @@ class Account(APIView):
                                                 serializer.data['is_active'])
             except User.DoesNotExist as e:
                 logger.error(e)
-                return api_error(status.HTTP_403_FORBIDDEN,
-                                 'Fail to add user.')
+                return api_error(status.HTTP_520_OPERATION_FAILED,
+                                 'Failed to add user.')
 
             self._update_account_profile(request, user.username)
 
@@ -121,7 +122,7 @@ class Account(APIView):
                 is_staff = to_python_boolean(is_staff)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 '%s is not a valid value' % is_staff)
+                                 'is_staff invalid.')
 
         is_active = request.data.get("is_active", None)
         if is_active is not None:
@@ -129,7 +130,7 @@ class Account(APIView):
                 is_active = to_python_boolean(is_active)
             except ValueError:
                 return api_error(status.HTTP_400_BAD_REQUEST,
-                                 '%s is not a valid value' % is_active)
+                                 'is_active invalid.')
 
         if password is not None:
             user.set_password(password)
@@ -142,8 +143,8 @@ class Account(APIView):
 
         result_code = user.save()
         if result_code == -1:
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Fail to update user.')
+            return api_error(status.HTTP_520_OPERATION_FAILED,
+                             'Failed to update user.')
 
         self._update_account_profile(request, user.username)
 
@@ -151,7 +152,7 @@ class Account(APIView):
             self._update_account_quota(request, user.username)
         except SearpcError as e:
             logger.error(e)
-            return api_error(HTTP_520_OPERATION_FAILED, 'Failed to set account quota')
+            return api_error(HTTP_520_OPERATION_FAILED, 'Failed to set user quota.')
 
         is_trial = request.data.get("is_trial", None)
         if is_trial is not None:
@@ -164,7 +165,7 @@ class Account(APIView):
                     is_trial = to_python_boolean(is_trial)
                 except ValueError:
                     return api_error(status.HTTP_400_BAD_REQUEST,
-                                     '%s is not a valid value' % is_trial)
+                                     'is_trial invalid')
 
                 if is_trial is True:
                     expire_date = timezone.now() + relativedelta(days=7)
@@ -178,19 +179,19 @@ class Account(APIView):
     def post(self, request, email, format=None):
         # migrate an account's repos and groups to an exist account
         if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % email)
 
         op = request.data.get('op', '').lower()
         if op == 'migrate':
             from_user = email
             to_user = request.data.get('to_user', '')
             if not is_valid_username(to_user):
-                return api_error(status.HTTP_400_BAD_REQUEST, '%s is not valid email.' % to_user)
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % to_user)
 
             try:
                 user2 = User.objects.get(email=to_user)
             except User.DoesNotExist:
-                return api_error(status.HTTP_400_BAD_REQUEST, '%s does not exist.' % to_user)
+                return api_error(status.HTTP_404_NOT_FOUND, 'User %s not found.' % to_user)
 
             # transfer owned repos to new user
             for r in seafile_api.get_owned_repo_list(from_user):
@@ -208,11 +209,11 @@ class Account(APIView):
 
             return Response("success")
         else:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Op can only be migrate')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'op can only be migrate.')
 
     def put(self, request, email, format=None):
         if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % email)
 
         try:
             user = User.objects.get(email=email)
@@ -222,7 +223,7 @@ class Account(APIView):
 
     def delete(self, request, email, format=None):
         if not is_valid_username(email):
-            return api_error(status.HTTP_404_NOT_FOUND, 'User not found.')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % email)
 
         # delete account
         try:
