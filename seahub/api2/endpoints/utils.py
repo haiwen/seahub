@@ -24,7 +24,7 @@ def api_check_group(func):
 
         if not group:
             error_msg = 'Group %d not found.' % group_id
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return func(view, request, group_id, *args, **kwargs)
 
