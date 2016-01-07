@@ -56,7 +56,20 @@ class SearchUserTest(BaseTestCase):
 
         refresh_cache(admin_email)
 
-        resp = self.client.get(self.endpoint + '?q=' + "Carl")
+        # test lower case
+        resp = self.client.get(self.endpoint + '?q=' + "carl")
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['users'] is not None
+        assert json_resp['users'][0]['email'] == admin_email
+        assert json_resp['users'][0]['avatar'] is not None
+        assert json_resp['users'][0]['avatar_url'] is not None
+        assert json_resp['users'][0]['name'] == 'Carl Smith'
+        assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
+
+        # test upper case
+        resp = self.client.get(self.endpoint + '?q=' + "CARL")
         json_resp = json.loads(resp.content)
 
         self.assertEqual(200, resp.status_code)
