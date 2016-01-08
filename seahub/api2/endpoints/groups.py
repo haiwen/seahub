@@ -22,13 +22,13 @@ from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username
 from seahub.utils.timeutils import dt, utc_to_local
-from seahub.group.utils import validate_group_name, check_group_name_conflict
+from seahub.group.utils import validate_group_name, check_group_name_conflict, \
+    is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
 from seahub.group.views import remove_group_common
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time
 
-from .utils import api_check_group, is_group_member, is_group_admin, \
-    is_group_owner, is_group_admin_or_owner
+from .utils import api_check_group
 
 logger = logging.getLogger(__name__)
 
