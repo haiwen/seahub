@@ -3,7 +3,8 @@ import logging
 
 from django.db import models
 from django.utils import timezone
-from django.contrib.auth.hashers import make_password
+from django.utils.translation import ugettext_lazy as _
+from django.contrib.auth.hashers import make_password, check_password
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
@@ -46,6 +47,34 @@ def check_share_link_access(request, token, is_upload_link=False):
         return True
     else:
         return False
+
+def check_share_link_common(request, sharelink, is_upload_link=False):
+    """Check if user can view a share link
+    """
+
+    msg = ''
+    if not sharelink.is_encrypted():
+        return (True, msg)
+
+    # if CAN access shared download/upload link without providing password
+    # return True
+    if check_share_link_access(request, sharelink.token, is_upload_link):
+        return (True, msg)
+
+    if request.method != 'POST':
+        return (False, msg)
+
+    password = request.POST.get('password', None)
+    if not password:
+        msg = _("Password can\'t be empty")
+        return (False, msg)
+
+    if check_password(password, sharelink.password):
+        set_share_link_access(request, sharelink.token, is_upload_link)
+        return (True, msg)
+    else:
+        msg = _("Please enter a correct password.")
+        return (False, msg)
 
 class FileShareManager(models.Manager):
     def _add_file_share(self, username, repo_id, path, s_type,

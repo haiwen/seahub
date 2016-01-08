@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.hashers import check_password
 from django.utils.translation import ugettext_lazy as _
 
 class RepoShareForm(forms.Form):
@@ -35,18 +34,3 @@ class UploadLinkShareForm(forms.Form):
             })
     shared_upload_link = forms.CharField()
     extra_msg = forms.CharField(required=False)
-
-class SharedLinkPasswordForm(forms.Form):
-    """
-    Form for user to access shared files/directory.
-    """
-    password = forms.CharField(error_messages={'required': _('Password can\'t be empty')})
-    enc_password = forms.CharField()
-
-    def clean(self):
-        password = self.cleaned_data['password']
-        enc_password = self.cleaned_data['enc_password']
-        if not check_password(password, enc_password):
-            raise forms.ValidationError(_("Please enter a correct password."))
-
-        return self.cleaned_data

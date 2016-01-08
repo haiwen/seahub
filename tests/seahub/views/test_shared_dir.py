@@ -131,6 +131,12 @@ class EncryptSharedDirTest(TestCase, Fixtures):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'share_access_validation.html')
 
+        resp = self.client.post(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+
     def test_view_file_via_shared_dir_with_wrong_password(self):
         resp = self.client.post(
             reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file, {

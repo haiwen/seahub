@@ -12,10 +12,9 @@
         <label>{% trans "Password: " %}</label>
         <input type="password" name="password" autofocus />
         <input type="submit" value="{% trans "Submit" %}" />
-        <p class="error hide"></p>
-        {% for error in form.errors.values %}
-        {{ error|escape }}
-        {% endfor %}
+        {% if err_msg %}
+        <p class="error">{{ err_msg }}</p>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
