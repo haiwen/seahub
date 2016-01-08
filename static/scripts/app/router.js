@@ -26,6 +26,7 @@ define([
             'group/:group_id/': 'showGroupRepos',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
             'group/:group_id/members/': 'showGroupMembers',
+            'group/:group_id/settings/': 'showGroupSettings',
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
             'common/lib/:repo_id(/*path)': 'showCommonDir',
@@ -182,6 +183,11 @@ define([
         showGroupMembers: function(group_id) {
             this.showGroupRepos(group_id);
             this.groupView.showMembers();
+        },
+
+        showGroupSettings: function(group_id) {
+            this.showGroupRepos(group_id);
+            this.groupView.showSettings();
         },
 
         showOrgRepos: function() {

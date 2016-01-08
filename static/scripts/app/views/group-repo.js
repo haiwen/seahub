@@ -28,7 +28,11 @@ define([
             var obj = this.model.toJSON();
             $.extend(obj, {
                 group_id: this.group_id,
-                is_staff: this.is_staff
+                is_staff: this.is_staff,
+                // for '#groups' (no 'share_from_me')
+                share_from_me: app.pageOptions.username == this.model.get('owner') ? true : false,
+                // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
+                owner_name: this.model.get('owner_nickname') || this.model.get('owner_name')
             });
             this.$el.html(this.template(obj));
             return this;

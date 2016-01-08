@@ -6,9 +6,10 @@ define([
     'app/collections/group-repos',
     'app/views/group-repo',
     'app/views/add-group-repo',
-    'app/views/group-members'
+    'app/views/group-members',
+    'app/views/group-settings'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, GroupMembersView) {
+    AddGroupRepoView, GroupMembersView, GroupSettingsView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -18,6 +19,7 @@ define([
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         events: {
+            'click #group-settings-icon': 'toggleSettingsPanel',
             'click #group-members-icon': 'toggleMembersPanel',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
@@ -39,6 +41,7 @@ define([
             this.dirView = options.dirView;
 
             this.membersView = new GroupMembersView();
+            this.settingsView = new GroupSettingsView();
         },
 
         addOne: function(repo, collection, options) {
@@ -188,6 +191,21 @@ define([
             this.hideRepoList();
             this.dirView.hide();
             this.$emptyTip.hide();
+        },
+
+        showSettings: function() {
+            this.settingsView.show({
+                'group_id': this.group_id
+            });
+        },
+
+        toggleSettingsPanel: function() {
+            var panel_id = this.settingsView.el.id;
+            if ($('#' + panel_id + ':visible').length) { // the panel is shown
+                this.settingsView.hide();
+            } else {
+                this.showSettings();
+            }
         },
 
         showMembers: function() {
