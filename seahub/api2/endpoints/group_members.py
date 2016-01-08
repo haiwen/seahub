@@ -12,47 +12,18 @@ import seaserv
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
-from seahub.profile.models import Profile
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
-from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
-    get_default_avatar_url
 from seahub.utils import string2list, is_org_context
-from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
+from seahub.group.utils import is_group_member, is_group_admin, \
+    is_group_owner, is_group_admin_or_owner, get_group_member_info
 
-from .utils import api_check_group, is_group_member, is_group_admin, \
-    is_group_owner, is_group_admin_or_owner
+from .utils import api_check_group
 
 logger = logging.getLogger(__name__)
-
-def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_SIZE):
-    p = Profile.objects.get_profile_by_user(email)
-    if p:
-        login_id = p.login_id if p.login_id else ''
-    else:
-        login_id = ''
-
-    try:
-        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
-    except Exception as e:
-        logger.error(e)
-        avatar_url = get_default_avatar_url()
-
-    is_admin = seaserv.check_group_staff(group_id, email)
-    member_info = {
-        "name": email2nickname(email),
-        'email': email,
-        "contact_email": Profile.objects.get_contact_email_by_user(email),
-        "login_id": login_id,
-        "avatar_url": request.build_absolute_uri(avatar_url),
-        "is_admin": is_admin,
-    }
-
-    return member_info
-
 
 class GroupMembers(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

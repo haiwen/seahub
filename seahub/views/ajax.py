@@ -4,6 +4,9 @@ import stat
 import logging
 import json
 import posixpath
+import csv
+import chardet
+import StringIO
 
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, Http404, HttpResponseBadRequest
@@ -47,6 +50,8 @@ from seahub.views.modules import get_enabled_mods_by_group, \
     disable_mod_for_group, MOD_GROUP_WIKI, MOD_PERSONAL_WIKI, \
     enable_mod_for_user, disable_mod_for_user
 from seahub.group.views import is_group_staff
+from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
+    get_group_member_info
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
@@ -2724,3 +2729,117 @@ def ajax_unset_inner_pub_repo(request, repo_id):
     except SearpcError:
         return HttpResponse(json.dumps({"error": _('Internal server error')}),
                 status=500, content_type=content_type)
+
+@login_required_ajax
+def ajax_group_members_import(request, group_id):
+    """Import users to group.
+    """
+
+    result = {}
+    username = request.user.username
+    content_type = 'application/json; charset=utf-8'
+
+    group_id = int(group_id)
+    try:
+        group = seaserv.get_group(group_id)
+
+        if not group:
+            result['error'] = 'Group %s not found.' % group_id
+            return HttpResponse(json.dumps(result), status=404,
+                            content_type=content_type)
+        # check permission
+        if not is_group_admin_or_owner(group_id, username):
+            result['error'] = 'Permission denied.'
+            return HttpResponse(json.dumps(result), status=403,
+                            content_type=content_type)
+
+    except SearpcError as e:
+        logger.error(e)
+        result['error'] = 'Internal Server Error'
+        return HttpResponse(json.dumps(result), status=500,
+                        content_type=content_type)
+
+
+    # get and convert uploaded file
+    uploaded_file = request.FILES['file']
+    if uploaded_file.size > 10 * 1024 * 1024:
+        result['error'] = _(u'Failed, file is too large')
+        return HttpResponse(json.dumps(result), status=403,
+                        content_type=content_type)
+
+    try:
+        content = uploaded_file.read()
+        encoding = chardet.detect(content)['encoding']
+        if encoding != 'utf-8':
+            content = content.decode(encoding, 'replace').encode('utf-8')
+
+        filestream = StringIO.StringIO(content)
+        reader = csv.reader(filestream)
+    except Exception as e:
+        logger.error(e)
+        result['error'] = 'Internal Server Error'
+        return HttpResponse(json.dumps(result), status=500,
+                        content_type=content_type)
+
+    # prepare email list from uploaded file
+    emails_list = []
+    for row in reader:
+        if not row:
+            continue
+
+        email = row[0].strip().lower()
+        emails_list.append(email)
+
+    org_id = None
+    if is_org_context(request):
+        org_id = request.user.org.org_id
+
+    result = {}
+    result['failed'] = []
+    result['success'] = []
+    emails_need_add = []
+
+    # check email validation
+    for email in emails_list:
+        try:
+            User.objects.get(email=email)
+        except User.DoesNotExist:
+            result['failed'].append({
+                'email': email,
+                'error_msg': 'User %s not found.' % email
+                })
+            continue
+
+        if is_group_member(group_id, email):
+            result['failed'].append({
+                'email': email,
+                'error_msg': _(u'User %s is already a group member.') % email
+                })
+            continue
+
+        # Can only invite organization users to group
+        if org_id and not \
+            seaserv.ccnet_threaded_rpc.org_user_exists(org_id, email):
+            result['failed'].append({
+                'email': email,
+                'error_msg': _(u'User %s not found in organization.') % email
+                })
+            continue
+
+        emails_need_add.append(email)
+
+    # Add email to group.
+    for email in emails_need_add:
+        try:
+            seaserv.ccnet_threaded_rpc.group_add_member(group_id,
+                username, email)
+            member_info = get_group_member_info(request, group_id, email)
+            result['success'].append(member_info)
+        except SearpcError as e:
+            logger.error(e)
+            result['failed'].append({
+                'email': email,
+                'error_msg': 'Internal Server Error'
+                })
+
+    return HttpResponse(json.dumps(result), content_type=content_type)

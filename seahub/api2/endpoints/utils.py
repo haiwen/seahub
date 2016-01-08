@@ -29,23 +29,3 @@ def api_check_group(func):
         return func(view, request, group_id, *args, **kwargs)
 
     return _decorated
-
-def is_group_member(group_id, email):
-    return seaserv.is_group_user(group_id, email)
-
-def is_group_admin(group_id, email):
-    return seaserv.check_group_staff(group_id, email)
-
-def is_group_owner(group_id, email):
-    group = seaserv.get_group(group_id)
-    if email == group.creator_name:
-        return True
-    else:
-        return False
-
-def is_group_admin_or_owner(group_id, email):
-    if is_group_admin(group_id, email) or \
-        is_group_owner(group_id, email):
-        return True
-    else:
-        return False

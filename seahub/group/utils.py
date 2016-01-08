@@ -1,9 +1,17 @@
 # -*- coding: utf-8 -*-
 import re
+import logging
 
 import seaserv
 
 from seahub.utils import is_org_context
+from seahub.profile.models import Profile
+from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
+    get_default_avatar_url
+
+logger = logging.getLogger(__name__)
 
 class BadGroupNameError(Exception):
     pass
@@ -42,3 +50,48 @@ def check_group_name_conflict(request, new_group_name):
             return True
 
     return False
+
+def is_group_member(group_id, email):
+    return seaserv.is_group_user(group_id, email)
+
+def is_group_admin(group_id, email):
+    return seaserv.check_group_staff(group_id, email)
+
+def is_group_owner(group_id, email):
+    group = seaserv.get_group(group_id)
+    if email == group.creator_name:
+        return True
+    else:
+        return False
+
+def is_group_admin_or_owner(group_id, email):
+    if is_group_admin(group_id, email) or \
+        is_group_owner(group_id, email):
+        return True
+    else:
+        return False
+
+def get_group_member_info(request, group_id, email, avatar_size=AVATAR_DEFAULT_SIZE):
+    p = Profile.objects.get_profile_by_user(email)
+    if p:
+        login_id = p.login_id if p.login_id else ''
+    else:
+        login_id = ''
+
+    try:
+        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+    except Exception as e:
+        logger.error(e)
+        avatar_url = get_default_avatar_url()
+
+    is_admin = seaserv.check_group_staff(group_id, email)
+    member_info = {
+        "name": email2nickname(email),
+        'email': email,
+        "contact_email": Profile.objects.get_contact_email_by_user(email),
+        "login_id": login_id,
+        "avatar_url": request.build_absolute_uri(avatar_url),
+        "is_admin": is_admin,
+    }
+
+    return member_info
