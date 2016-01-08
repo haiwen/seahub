@@ -967,7 +967,6 @@
 <form method="post" action="" id="add-group-members-form">
     <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
-    <p class="error hide"></p>
 </form>
 <div class="members">
     <table>
@@ -976,16 +975,16 @@
             <tr>
                 <th width="5%"></th>
                 <th width="25%">{% trans "Name" %}</th>
-                <th width="25%">{% trans "Email" %}</th>
+                <th width="35%">{% trans "Email" %}</th>
                 <th width="25%">{% trans "Role" %}</th>
-                <th width="20%">{% trans "Operations" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
             <% } else { %>
             <tr>
                 <th width="5%"></th>
                 <th width="30%">{% trans "Name" %}</th>
-                <th width="40%">{% trans "Email" %}</th>
-                <th width="20%">{% trans "Operations" %}</th>
+                <th width="55%">{% trans "Email" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
             <% } %>
         </thead>
@@ -995,7 +994,7 @@
     <p class="error hide"></p>
 </div>
 </script>
-<script type="text/template" id="group-member2-tmpl"> {# TODO: any better id? #}
+<script type="text/template" id="group-manage-member-tmpl">
 <td>
     <img src="<%= avatar_url %>" alt="" width="20" class="avatar" />
 </td>
@@ -1032,12 +1031,12 @@
     <td></td>
 <% } else { %>
     <% if (is_owner) { %>
-        <td><span class="sf2-icon-delete op-icon vh rm" title="{% trans "Delete" %}"></span></td>
+        <td><span class="sf2-icon-x2 op-icon vh rm" title="{% trans "Delete" %}"></span></td>
     <% } else { %>
         <% if (is_admin) { %>
             <td></td>
         <% } else { %>
-            <td><span class="sf2-icon-delete op-icon vh rm" title="{% trans "Delete" %}"></span></td>
+            <td><span class="sf2-icon-x2 op-icon vh rm" title="{% trans "Delete" %}"></span></td>
         <% } %>
     <% } %>
 <% } %>

@@ -9,7 +9,7 @@ define([
     var View = Backbone.View.extend({
         tagName: 'tr',
 
-        template: _.template($('#group-member2-tmpl').html()),
+        template: _.template($('#group-manage-member-tmpl').html()),
 
         events: {
             'mouseenter': 'highlight',
@@ -22,6 +22,7 @@ define([
         initialize: function(options) {
             this.group_id = options.group_id;
             this.is_owner = options.is_owner;
+            this.$errorContainer = options.errorContainer;
 
             this.listenTo(this.model, 'change', this.render);
         },
@@ -77,8 +78,7 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
-                    // improve it? 
-                    Common.feedback(error_msg, 'error');
+                    _this.$errorContainer.html(err_msg).show();
                 }
             });
         },
@@ -104,8 +104,7 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
-                    // improve it? 
-                    Common.feedback(error_msg, 'error');
+                    _this.$errorContainer.html(err_msg).show();
                 }
             });
         }

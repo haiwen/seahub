@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/collections/group-members',
-    'app/views/group-member2'
+    'app/views/group-manage-member'
 ], function($, _, Backbone, Common, GroupMembers, ItemView) {
     'use strict';
 
@@ -24,6 +24,10 @@ define([
                 focus: false,
                 containerCss: {
                     'width': 560
+                },
+                onClose: function() {
+                    $(document).off('click', hideRoleEdit);
+                    $.modal.close();
                 }
             });
             this.$modalContainer = $('#simplemodal-container').css({'height':'auto'});
@@ -39,14 +43,14 @@ define([
 
             this.$loadingTip = this.$('.loading-tip');
             this.$listContainer = this.$('tbody');   
-            this.$listError = this.$('.members .error');
+            this.$error = this.$('.error');
 
             var _this = this;
             $(window).resize(function() {
                 _this.setConMaxHeight();
             });
             // click other place to hide '.role-edit'
-            $(document).click(function(e) {
+            var hideRoleEdit = function(e) {
                 var target = e.target || event.srcElement;
                 var $el = _this.$('.role-edit:visible');
                 var $td = $el.parent();
@@ -57,7 +61,8 @@ define([
                     $el.hide();
                     $td.find('.cur-role, .role-edit-icon').show();
                 }
-            });
+            };
+            $(document).click(hideRoleEdit);
         },
 
         render: function() {
@@ -78,7 +83,8 @@ define([
             var view = new ItemView({
                 model: item,
                 group_id: this.group_id,
-                is_owner: this.is_owner
+                is_owner: this.is_owner,
+                errorContainer: this.$error
             });
             if (options.prepend) {
                 this.$listContainer.prepend(view.render().el);
@@ -108,7 +114,7 @@ define([
                     } else {
                         err_msg = gettext('Please check the network.');
                     }
-                    _this.$listError.html(err_msg).show();
+                    _this.$error.html(err_msg).show();
                 }
             });
         },
@@ -121,7 +127,7 @@ define([
                 return false;
             }
             var input_val_list = input_val.split(',');
-            if (input_val_list.length == 1) {
+            if (input_val_list.length == 1) { // 1 email
                 this.collection.create({'email': input_val}, {
                     wait: true,
                     validate: true,
@@ -130,17 +136,50 @@ define([
                         $input.select2('val', '');
                     },  
                     error: function(collection, response, options) {
+                        $input.select2('val', '');
                         var err_msg;
                         if (response.responseText) {
                             err_msg = response.responseJSON.error_msg;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }   
-                        _this.$listError.html(err_msg).show();
+                        _this.$error.html(err_msg).show();
                     }  
                 });
             } else {
-                // TODO: input_val_list.length > 1
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'group_member_bulk',
+                        'group_id': _this.group_id
+                    }),
+                    type: 'post',
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {'emails': input_val},
+                    success: function(data) { // data: {success, failed}
+                        $input.select2('val', '');
+
+                        if (data.success.length > 0) {
+                            _this.collection.add(data.success, {prepend: true});
+                        }
+                        var err_str = '';
+                        if (data.failed.length > 0) {
+                            $(data.failed).each(function(index, item) {
+                                err_str += item.email + ': ' + item.error_msg + '<br />';
+                            });
+                            _this.$error.html(err_str).show();
+                        }
+                    },
+                    error: function(xhr) {
+                        var err_msg;
+                        if (xhr.responseText) {
+                            err_msg = gettext('Error');
+                        } else {
+                            err_msg = gettext("Failed. Please check the network.");
+                        }
+                        _this.$error.html(err_msg).show();
+                    }
+                });
             }
 
             return false;
@@ -154,7 +193,8 @@ define([
                     - parseInt($modalContainer.css('padding-top'))
                     - parseInt($modalContainer.css('padding-bottom'))
                     - this.$('h3').outerHeight(true)
-                    - this.$('form').outerHeight(true),
+                    - this.$('form').outerHeight(true)
+                    - 20, // add some gap between the bottom borders of the popup & the window
                 'overflow': 'auto'
             });
         }
