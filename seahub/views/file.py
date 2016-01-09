@@ -57,7 +57,7 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit, do_md5, get_file_audit_events_by_path, \
-    generate_file_audit_event_type
+    generate_file_audit_event_type, FILE_AUDIT_ENABLED
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -1640,7 +1640,7 @@ def file_access(request, repo_id):
     """List file access log.
     """
 
-    if not is_pro_version():
+    if not is_pro_version() or not FILE_AUDIT_ENABLED:
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)
