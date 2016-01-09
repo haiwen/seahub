@@ -41,7 +41,10 @@ define([
             this.dirView = options.dirView;
 
             this.membersView = new GroupMembersView();
-            this.settingsView = new GroupSettingsView();
+            this.settingsView = new GroupSettingsView({
+                sideNavView: options.sideNavView,
+                groupView: this
+            });
         },
 
         addOne: function(repo, collection, options) {
@@ -76,13 +79,13 @@ define([
             }
         },
 
-        renderGroupTop: function(group_id) {
+        renderGroupTop: function() {
             var _this = this;
             var $groupTop = $('#group-top');
             $.ajax({
                 url: Common.getUrl({
-                    'name': 'group_basic_info',
-                    'group_id': group_id
+                    'name': 'group',
+                    'group_id': this.group_id
                 }),
                 cache: false,
                 dataType: 'json',
@@ -92,7 +95,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = $.parseJSON(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Please check the network.");
                     }
@@ -105,7 +108,7 @@ define([
             this.group_id = group_id;
             this.dirView.hide();
             this.$emptyTip.hide();
-            this.renderGroupTop(group_id);
+            this.renderGroupTop();
             this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;

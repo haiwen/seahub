@@ -552,11 +552,15 @@
             <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
                 <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
-                {% for grp in grps %}
-                <li<% if (cur_group_id == '{{ grp.id }}') { %> class="tab-cur"<% }%>>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                <% for (var i = 0, len = groups.length; i < len; i++) { %>
+                    <% if (cur_group_id == groups[i].id) { %>
+                    <li class="tab-cur">
+                    <% } else { %>
+                    <li>
+                    <% } %>
+                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
                 </li>
-                {% endfor %}
+                <% } %>
             </ul>
         </li>
         <% } else { %>
@@ -571,11 +575,11 @@
                 <li>
                     <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
                 </li>
-                {% for grp in grps %}
+                <% for (var i = 0, len = groups.length; i < len; i++) { %>
                 <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
                 </li>
-                {% endfor %}
+                <% } %>
             </ul>
         </li>
         <% } %>
@@ -640,11 +644,9 @@
     {% endif %}
 
     <div class="fright">
-    <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
-    <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
-    <% if (!is_pub) { %>
-    <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
-    <% } %>
+        <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
+        <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
+        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     </div>
 </div>
 </script>

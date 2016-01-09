@@ -110,6 +110,7 @@ define([
                         if (groups.length == 1) {
                             _this.reset();
                         }
+                        app.ui.sideNavView.updateGroups();
                     },  
                     error: function(collection, response, options) {
                         var err_msg;

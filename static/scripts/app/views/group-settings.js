@@ -16,6 +16,8 @@ define([
         importMembersTemplate: _.template($('#group-import-members-form-tmpl').html()),
 
         initialize: function(options) {
+            this.groupView = options.groupView;
+
             // group basic info
             this.group = {};
 
@@ -65,7 +67,7 @@ define([
                 }), 
                 cache: false,
                 dataType: 'json',
-                success: function (data) {
+                success: function(data) {
                     _this.group = data; // {id, name, owner, created_at, avatar_url, admins}
 
                     var username = app.pageOptions.username;
@@ -170,9 +172,8 @@ define([
                     },
                     success: function() {
                         $.modal.close();
-                        // TODO: improve 
-                        //app.router.navigate('group/' + _this.group_id + '/', {trigger: true, replace: true});
-                        location.reload(true);
+                        app.ui.sideNavView.updateGroups();
+                        _this.groupView.renderGroupTop();
                     },
                     error: function(xhr) {
                         var error_msg;
@@ -307,9 +308,8 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken, 
                     success: function() {
+                        app.ui.sideNavView.updateGroups();
                         app.router.navigate('groups/', {trigger: true});
-                        // TO update side nav - 'group list'
-                        location.reload(true); // improve it ??
                     },
                     error: function(xhr) {
                         var error_msg;
@@ -343,9 +343,8 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function() {
+                        app.ui.sideNavView.updateGroups();
                         app.router.navigate('groups/', {trigger: true});
-                        // TO update side nav - 'group list'
-                        location.reload(true); // improve it ??
                     },
                     error: function(xhr) {
                         var err_msg;

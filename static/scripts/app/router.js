@@ -42,11 +42,16 @@ define([
             Common.initNoticePopup();
 
             this.sideNavView = new SideNavView();
+            app.ui = {
+                sideNavView: this.sideNavView
+            };
 
             this.dirView = new DirView();
 
             this.myHomeView = new MyHomeView({dirView: this.dirView});
-            this.groupView = new GroupView({dirView: this.dirView});
+            this.groupView = new GroupView({
+                dirView: this.dirView
+            });
             this.orgView = new OrgView({dirView: this.dirView});
 
             this.groupsView = new GroupsView();
