@@ -122,6 +122,7 @@ class FileAccessLogTest(BaseTestCase):
 
     @patch('seahub.views.file.is_pro_version')
     def test_can_not_render_if_not_pro(self, mock_is_pro_version):
+
         mock_is_pro_version.return_value = False
 
         url = reverse('file_access', args=[self.repo_id]) + '?p=' + self.file_path
@@ -131,12 +132,14 @@ class FileAccessLogTest(BaseTestCase):
     @patch('seahub.views.file.generate_file_audit_event_type')
     @patch('seahub.views.file.get_file_audit_events_by_path')
     @patch('seahub.views.file.is_pro_version')
-    def test_can_show_web_type(self, mock_is_pro_version,
+    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
+    def test_can_show_web_type(self, mock_file_audit_enabled, mock_is_pro_version,
             mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
 
         etype = 'file-download-web'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
 
+        mock_file_audit_enabled.return_value = True
         mock_is_pro_version.return_value = True
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
@@ -150,12 +153,14 @@ class FileAccessLogTest(BaseTestCase):
     @patch('seahub.views.file.generate_file_audit_event_type')
     @patch('seahub.views.file.get_file_audit_events_by_path')
     @patch('seahub.views.file.is_pro_version')
-    def test_can_show_share_link_type(self, mock_is_pro_version,
+    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
+    def test_can_show_share_link_type(self, mock_file_audit_enabled, mock_is_pro_version,
             mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
 
         etype = 'file-download-share-link'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
 
+        mock_file_audit_enabled.return_value = True
         mock_is_pro_version.return_value = True
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
@@ -169,12 +174,14 @@ class FileAccessLogTest(BaseTestCase):
     @patch('seahub.views.file.generate_file_audit_event_type')
     @patch('seahub.views.file.get_file_audit_events_by_path')
     @patch('seahub.views.file.is_pro_version')
-    def test_can_show_api_type(self, mock_is_pro_version,
+    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
+    def test_can_show_api_type(self, mock_file_audit_enabled, mock_is_pro_version,
             mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
 
         etype = 'file-download-api'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
 
+        mock_file_audit_enabled.return_value = True
         mock_is_pro_version.return_value = True
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
@@ -188,12 +195,14 @@ class FileAccessLogTest(BaseTestCase):
     @patch('seahub.views.file.generate_file_audit_event_type')
     @patch('seahub.views.file.get_file_audit_events_by_path')
     @patch('seahub.views.file.is_pro_version')
-    def test_can_show_download_sync_type(self, mock_is_pro_version,
+    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
+    def test_can_show_download_sync_type(self, mock_file_audit_enabled, mock_is_pro_version,
             mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
 
         etype = 'repo-download-sync'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
 
+        mock_file_audit_enabled.return_value = True
         mock_is_pro_version.return_value = True
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type
@@ -207,12 +216,14 @@ class FileAccessLogTest(BaseTestCase):
     @patch('seahub.views.file.generate_file_audit_event_type')
     @patch('seahub.views.file.get_file_audit_events_by_path')
     @patch('seahub.views.file.is_pro_version')
-    def test_can_show_upload_sync_type(self, mock_is_pro_version,
+    @patch('seahub.views.file.FILE_AUDIT_ENABLED')
+    def test_can_show_upload_sync_type(self, mock_file_audit_enabled, mock_is_pro_version,
             mock_get_file_audit_events_by_path, mock_generate_file_audit_event_type):
 
         etype = 'repo-upload-sync'
         event = Event(self.user.email, self.repo_id, self.file_path, etype)
 
+        mock_file_audit_enabled.return_value = True
         mock_is_pro_version.return_value = True
         mock_get_file_audit_events_by_path.return_value = [event]
         mock_generate_file_audit_event_type.side_effect = self.generate_file_audit_event_type

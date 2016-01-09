@@ -32,6 +32,7 @@ define([
             var dir = this.dir;
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             var is_pro = app.pageOptions.is_pro;
+            var file_audit_enabled = app.pageOptions.file_audit_enabled;
 
             this.$el.html(this.template({
                 dirent: this.model.attributes,
@@ -42,6 +43,7 @@ define([
                 is_repo_owner: dir.is_repo_owner,
                 can_generate_shared_link: app.pageOptions.can_generate_shared_link,
                 is_pro: is_pro,
+                file_audit_enabled: file_audit_enabled,
                 repo_encrypted: dir.encrypted
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
