@@ -47,8 +47,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, PrivateFileDirShare, \
-    check_share_link_access, set_share_link_access
-from seahub.share.forms import SharedLinkPasswordForm
+    check_share_link_common
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, is_org_context, \
@@ -769,22 +768,11 @@ def view_shared_file(request, token):
     if fileshare is None:
         raise Http404
 
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token, 'view_name': 'view_shared_file', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_shared_file', 'err_msg': err_msg}
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
@@ -889,26 +877,16 @@ def view_raw_shared_file(request, token, obj_id, file_name):
     if fileshare is None:
         raise Http404
 
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
-            if fileshare.is_file_share_link():
-                d = {'token': token, 'view_name': 'view_shared_file', }
-            else:
-                d = {'token': token, 'view_name': 'view_shared_dir', }
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'err_msg': err_msg}
+        if fileshare.is_file_share_link():
+            d['view_name'] = 'view_shared_file'
+        else:
+            d['view_name'] = 'view_shared_dir'
 
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
@@ -951,25 +929,15 @@ def view_file_via_shared_dir(request, token):
     if not req_path:
         return HttpResponseRedirect(reverse('view_shared_dir', args=[token]))
 
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token,
-                 'view_name': 'view_file_via_shared_dir',
-                 'path': req_path,
-             }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token,
+             'view_name': 'view_file_via_shared_dir',
+             'path': req_path,
+             'err_msg': err_msg,
+         }
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     if request.GET.get('dl', '') == '1':
         # download shared file
