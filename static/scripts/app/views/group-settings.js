@@ -246,7 +246,6 @@ define([
             });
         },
 
-        // TODO: finish it after the backend py is done.
         importMembers: function() {
             var _this = this;
             var $form = $(this.importMembersTemplate());
@@ -255,8 +254,9 @@ define([
 
             $form.submit(function() {
                 var $fileInput = $('[name=file]', $form)[0];
+                var $error = $('.error', $form);
                 if (!$fileInput.files.length) {
-                    $('.error', $form).removeClass('hide');
+                    $error.html(gettext("Please choose a CSV file")).removeClass('hide');
                     return false;
                 }
 
@@ -278,8 +278,27 @@ define([
                     contentType: false, // tell jQuery not to set contentType
                     beforeSend: Common.prepareCSRFToken,
                     success: function(data) {
+                        if (data.failed.length > 0) {
+                            var err_msg = '';
+                            $(data.failed).each(function(index, item) {
+                                err_msg += item.email + ': ' + item.error_msg + '<br />';
+                            });
+                            $error.html(err_msg).removeClass('hide');
+                            Common.enableButton($submitBtn);
+                        } else {
+                            $.modal.close();
+                            Common.feedback(gettext("Successfully imported."), 'success');
+                        }
                     },
-                    error: function () {
+                    error: function(xhr) {
+                        var error_msg;
+                        if (xhr.responseText) {
+                            error_msg = $.parseJSON(xhr.responseText).error;
+                        } else {
+                            error_msg = gettext("Failed. Please check the network.");
+                        }
+                        $error.html(error_msg).removeClass('hide');
+                        Common.enableButton($submitBtn);
                     }
                 });
                 return false;
