@@ -77,8 +77,8 @@ class GroupMembers(APIView):
         try:
             User.objects.get(email=email)
         except User.DoesNotExist:
-            error_msg = 'Email %s invalid.' % email
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            error_msg = 'User %s not found.' % email
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         username = request.user.username
         try:
@@ -269,7 +269,7 @@ class GroupMembersBulk(APIView):
             except User.DoesNotExist:
                 result['failed'].append({
                     'email': email,
-                    'error_msg': 'Email %s invalid.' % email
+                    'error_msg': 'User %s not found.' % email
                     })
                 continue
 
@@ -285,7 +285,7 @@ class GroupMembersBulk(APIView):
                 seaserv.ccnet_threaded_rpc.org_user_exists(org_id, email):
                 result['failed'].append({
                     'email': email,
-                    'error_msg': _(u'User %s not found in organizaiont.') % email
+                    'error_msg': _(u'User %s not found in organization.') % email
                     })
                 continue
 
