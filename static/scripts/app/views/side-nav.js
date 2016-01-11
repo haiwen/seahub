@@ -17,6 +17,7 @@ define([
             this.data = {
                 'cur_tab': this.default_cur_tab,
                 'show_group_list': false, // when cur_tab is not 'group'
+                'groups': app.pageOptions.groups,
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
@@ -85,13 +86,32 @@ define([
             });
         },
 
-        setCurTab: function (cur_tab, options) {
+        setCurTab: function(cur_tab, options) {
             this.data.cur_tab = cur_tab || this.default_cur_tab;
             if (options) {
                 $.extend(this.data, options);
             }
             this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
             this.render();
+        },
+
+        updateGroups: function() {
+            var _this = this;
+            $.ajax({
+                url: Common.getUrl({name: 'groups'}),
+                type: 'GET',
+                dataType: 'json',
+                cache: false,
+                success: function(data) {
+                    data.sort(function(a, b) {
+                        return Common.compareTwoWord(a.name, b.name);
+                    });
+                    _this.data.groups = data;
+                    _this.render();
+                },
+                error: function() {
+                }
+            });
         }
 
     });

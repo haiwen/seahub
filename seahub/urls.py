@@ -101,6 +101,7 @@ urlpatterns = patterns(
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='view_group'),
     url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
     url(r'^#groups/', fake_view, name='group_list'),
+    url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
     # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
