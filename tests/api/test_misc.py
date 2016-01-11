@@ -1,5 +1,4 @@
 import json
-import unittest
 import pytest
 import requests
 
@@ -7,7 +6,7 @@ from django.test import TestCase
 
 from seahub import settings
 from tests.api.apitestbase import ApiTestBase
-from tests.api.urls import LIST_GROUP_AND_CONTACTS_URL, SERVER_INFO_URL
+from tests.api.urls import SERVER_INFO_URL
 
 class MiscApiTest(ApiTestBase, TestCase):
 
