@@ -180,7 +180,7 @@ class Command(BaseCommand):
         notice.avatar_src = self.get_avatar_src(group_staff)
         notice.group_staff_profile_url = reverse('user_profile',
                                                   args=[group_staff])
-        notice.group_url = reverse('view_group', args=[group_id])
+        notice.group_url = reverse('group_info', args=[group_id])
         notice.group_name = group.group_name
         return notice
 

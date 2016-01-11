@@ -1,7 +1,6 @@
 from django.conf.urls import patterns, url
 
-from views import group_info, \
-    msg_reply, msg_reply_new, group_recommend, \
+from views import msg_reply, msg_reply_new, group_recommend, \
     create_group_repo, attention, group_message_remove, \
     group_discuss, group_wiki, group_wiki_create, \
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
@@ -10,7 +9,6 @@ from views import group_info, \
     group_add_discussion, group_add
 
 urlpatterns = patterns('',
-    url(r'^(?P<group_id>\d+)/$', group_info, name='group_info'),
     url(r'^(?P<group_id>\d+)/discuss/$', group_discuss, name='group_discuss'),
     url(r'^(?P<group_id>\d+)/wiki/$', group_wiki, name='group_wiki'),
     url(r'^(?P<group_id>\d+)/wiki/(?P<page_name>[^/]+)$', group_wiki, name='group_wiki'),

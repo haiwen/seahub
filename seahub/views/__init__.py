@@ -2049,9 +2049,9 @@ def underscore_template(request, template):
 
 def fake_view(request, **kwargs):
     """
-    Used for 'view_common_lib_dir' and 'view_group' url
+    Used for 'view_common_lib_dir' and some other urls 
 
-    As the two urls aboved starts with '#',
+    As the urls start with '#',
     http request will not access this function
     """
     pass
