@@ -98,6 +98,7 @@ define([
               case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
               case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
               case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
+              case 'rename_repo': return siteRoot + 'api2/repos/' + options.repo_id + '/?op=rename';
 
               // Permission
               case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';

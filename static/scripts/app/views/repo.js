@@ -31,6 +31,7 @@ define([
         },
 
         initialize: function() {
+            this.listenTo(this.model, "change", this.render);
         },
 
         render: function() {
@@ -145,7 +146,6 @@ define([
                 repo_name: repo_name
             }));
 
-
             var $name_span = this.$('.repo-name-span'),
                 $op_td = this.$('.repo-op-td'),
                 $name_td = $name_span.closest('td');
@@ -168,6 +168,52 @@ define([
                 return false; // stop bubbling (to 'doc click to hide .hidden-op')
             };
             $('.cancel', form).click(cancelRename);
+
+            var form_id = form.attr('id');
+            var _this = this;
+            form.submit(function() {
+                var new_name = $.trim($('[name="newname"]', form).val());
+                if (!new_name) {
+                    return false;
+                }
+                if (new_name == repo_name) {
+                    cancelRename();
+                    return false;
+                }
+                var post_data = {
+                    'repo_name': new_name
+                };
+                var post_url = Common.getUrl({
+                    name: 'rename_repo',
+                    repo_id: _this.model.get('id')
+                });
+                var after_op_success = function(data) {
+                    _this.model.set({ 'name': new_name }); // it will trigger 'change' event
+                };
+                var after_op_error = function(xhr) {
+                    var err_msg;
+                    if (xhr.responseText) {
+                        err_msg = $.parseJSON(xhr.responseText).error;
+                    } else {
+                        err_msg = gettext("Failed. Please check the network.");
+                    }
+                    Common.feedback(err_msg, 'error');
+                    Common.enableButton(submit_btn);
+                };
+
+                var submit_btn = $('[type="submit"]', form);
+                Common.disableButton(submit_btn);
+                $.ajax({
+                    url: post_url,
+                    type: 'POST',
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: post_data,
+                    success: after_op_success,
+                    error: after_op_error
+                });
+                return false;
+            });
 
             return false;
         },
