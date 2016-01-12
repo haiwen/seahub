@@ -2778,6 +2778,7 @@ def ajax_repo_dir_recycle_more(request, repo_id):
             'show_recycle_root': True,
             'repo': repo,
             'dir_entries': deleted_entries,
+            'dir_path': path,
             'MEDIA_URL': MEDIA_URL
         }
 
