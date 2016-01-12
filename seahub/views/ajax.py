@@ -50,7 +50,7 @@ from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
     THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
-    ENABLE_FOLDER_PERM, SHOW_TRAFFIC
+    ENABLE_FOLDER_PERM, SHOW_TRAFFIC, MEDIA_URL
 from constance import config
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
@@ -2724,3 +2724,69 @@ def ajax_unset_inner_pub_repo(request, repo_id):
     except SearpcError:
         return HttpResponse(json.dumps({"error": _('Internal server error')}),
                 status=500, content_type=content_type)
+
+@login_required_ajax
+def ajax_repo_dir_recycle_more(request, repo_id):
+    """
+    List 'more' repo/dir trash.
+    """
+    result = {}
+    content_type = 'application/json; charset=utf-8'
+
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        err_msg = 'Library %s not found.' % repo_id
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=404, content_type=content_type)
+
+    path = request.GET.get('path', '/')
+    path = '/' if path == '' else path
+    if check_folder_permission(request, repo_id, path) != 'rw':
+        err_msg = 'Permission denied.'
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=403, content_type=content_type)
+
+    scan_stat = request.GET.get('scan_stat', None)
+    try:
+        deleted_entries = seafile_api.get_deleted(repo_id, 0, path, scan_stat)
+    except SearpcError as e:
+        logger.error(e)
+        result['error'] = 'Internal server error'
+        return HttpResponse(json.dumps(result), status=500,
+                        content_type=content_type)
+
+    new_scan_stat = deleted_entries[-1].scan_stat
+    trash_more = True if new_scan_stat is not None else False
+
+    more_entries_html = ''
+    # since there will always have one 'deleted_entry' to tell scan_stat,
+    # so if len of deleted_entries = 1, means have not get any trash dir/file
+    # if len of deleted_entries > 1,
+    # means have get trash dir/file from current scanned commits
+    if len(deleted_entries) > 1:
+        deleted_entries = deleted_entries[0:-1]
+        for dirent in deleted_entries:
+            if stat.S_ISDIR(dirent.mode):
+                dirent.is_dir = True
+            else:
+                dirent.is_dir = False
+
+        # Entries sort by deletion time in descending order.
+        deleted_entries.sort(lambda x, y : cmp(y.delete_time,
+                                               x.delete_time))
+        ctx = {
+            'show_recycle_root': True,
+            'repo': repo,
+            'dir_entries': deleted_entries,
+            'MEDIA_URL': MEDIA_URL
+        }
+
+        more_entries_html = render_to_string("snippets/repo_dir_trash_tr.html", ctx)
+
+    result = {
+        'html': more_entries_html,
+        'trash_more': trash_more,
+        'new_scan_stat': new_scan_stat,
+    }
+
+    return HttpResponse(json.dumps(result), content_type=content_type)

@@ -1,0 +1,202 @@
+{% extends base_template %}
+
+{% load seahub_tags avatar_tags i18n %}
+{% load url from future %}
+
+{% block main_panel %}
+<h2 class="repo-trash-hd">{% blocktrans %}<span class="op-target">{{repo_dir_name}}</span> Trash{% endblocktrans %}</h2>
+<div class="repo-file-list-topbar ovhd">
+    <p class="path fleft">
+    {% trans "Current path: " %}
+    {% if not show_recycle_root %}
+    <a href="?dir_path={{dir_path|urlencode}}">{{repo_dir_name}}</a>
+    {% for name, link in zipped %}
+        {% if not forloop.last %}
+        / <a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&dir_path={{dir_path|urlencode}}">{{ name }}</a>
+        {% else %}
+        / {{ name }}
+        {% endif %}
+    {% endfor %}
+    {% else %}
+    {{repo_dir_name}}
+    {% endif %}
+    </p>
+
+    {% if enable_clean %}
+    <div class="fright">
+    <button id="online-gc" class="op-btn">{% trans "Clean" %}</button>
+    </div>
+    {% endif %}
+</div>
+<!-- /.repo-file-list-topbar -->
+<table class="repo-file-list">
+    <tr>
+        <th width="5%"></th>
+        <th width="45%">{% trans "Name" %}</th>
+        <th width="20%">{% trans "Delete Time" %}</th>
+        <th width="15%">{% trans "Size" %}</th>
+        <th width="15%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for dirent in dir_entries %}
+    {% if dirent.is_dir %}
+    <tr>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory" %}" /></td>
+        {% if show_recycle_root %}
+        <td><a href="?commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}&dir_path={{dir_path|urlencode}}">{{ dirent.obj_name }}</a></td>
+        <td>{{ dirent.delete_time|translate_seahub_time }}</td>
+        <td></td>
+
+        {% if dir_path %}
+        <td><a class="op restore-dir hide" href="#" data-url="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=dir_recycle">{% trans "Restore" %}</a></td>
+        {% else %}
+        <td><a class="op restore-dir hide" href="#" data-url="{% url 'repo_revert_dir' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
+        {% endif %}
+
+        {% else %}
+        <td><a href="?commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dir_path={{dir_path|urlencode}}">{{ dirent.obj_name }}</a></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        {% endif %}
+    </tr>
+    {% else %}
+    <tr>
+        <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ dirent.obj_name|file_icon_filter }}" alt="{% trans "File" %}" /></td>
+        {% if show_recycle_root %}
+        <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ dirent.commit_id }}&base={{ dirent.basedir|urlencode }}&p=/{{ dirent.obj_name|urlencode }}" target="_blank">{{ dirent.obj_name }}</a></td>
+        <td>{{ dirent.delete_time|translate_seahub_time }}</td>
+        <td>{{ dirent.file_size|filesizeformat }}</td>
+
+        {% if dir_path %}
+        <td><a class="op restore-file hide" href="#" data-url="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=dir_recycle">{% trans "Restore" %}</a></td>
+        {% else %}
+        <td><a class="op restore-file hide" href="#" data-url="{% url 'repo_revert_file' repo.id %}?commit={{ dirent.commit_id }}&p={{ dirent.basedir|urlencode }}{{dirent.obj_name|urlencode}}&from=recycle">{% trans "Restore" %}</a></td>
+        {% endif %}
+
+        {% else %}
+        <td><a class="normal" href="{% url 'view_trash_file' repo.id %}?obj_id={{ dirent.obj_id }}&commit_id={{ commit_id }}&base={{ basedir|urlencode }}&p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}" target="_blank">{{ dirent.props.obj_name }}</a></td>
+        <td></td>
+        <td>{{ dirent.file_size|filesizeformat }}</td>
+        <td></td>
+        {% endif %}
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% if trash_more %}
+<div id="trash-more">
+    <div id="trash-more-loading" class="hide"><span class="loading-icon"></span></div>
+    <button id="trash-more-btn">{% trans 'More' %}</button>
+</div>
+{% endif %}
+
+{% if enable_clean %}
+<form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
+    <h3>{% trans "Clean" %}</h3>
+    <p>{% trans "Clear files in trash and history：" %}</p>
+    <select name="day" class="w100" style="margin-bottom:5px;">
+        <option value="3">{% trans "3 days ago" %}</option>
+        <option value="7">{% trans "1 week ago" %}</option>
+        <option value="30">{% trans "1 month ago" %}</option>
+        <option value="0">{% trans "all" %}</option>
+    </select>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+    <button type="button" class="simplemodal-close">{% trans "Cancel" %}</button>
+</form>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#main-panel').removeClass('ovhd');
+
+{% if enable_clean %}
+$('#online-gc').click(function() {
+    $('#gc-form').modal({focus:false});
+    $("#simplemodal-container").css({'height':'auto'});
+});
+{% endif %}
+
+var dir_path = '{{dir_path}}',
+    scan_stat = '{{scan_stat}}',
+    $trash_more_btn = $('#trash-more-btn'),
+    $trash_more_loading = $('#trash-more-loading');
+
+var get_more_trash = function(current_scan_stat) {
+    if (current_scan_stat != 'None') {
+        $trash_more_btn.addClass('hide');
+        $trash_more_loading.removeClass('hide');
+
+        $.ajax({
+            url:'{% url "ajax_repo_dir_recycle_more" repo.id %}' + '?scan_stat=' + current_scan_stat + '&path=' + dir_path,
+            dataType: 'json',
+            cache: false,
+            success: function(data) {
+                var new_scan_stat = data['new_scan_stat'];
+
+                if (data['html']) {
+                    // have trash dir or file
+                    $('.repo-file-list').append(data['html']);
+                    $trash_more_loading.addClass('hide');
+
+                    // have not scan all commit
+                    if (data['trash_more']) {
+                        $trash_more_btn.removeClass('hide');
+                    }
+                    scan_stat = new_scan_stat;
+                } else if (new_scan_stat) {
+                    // no trash dir or file
+                    // have not scan all commit
+                    get_more_trash(new_scan_stat);
+                } else {
+                    // no trash dir or file
+                    // scan all commit
+                    $trash_more_loading.addClass('hide');
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                $('#trash-more-loading').addClass('hide');
+                var error;
+                if (xhr.responseText) {
+                    error = $.parseJSON(xhr.responseText).error;
+                } else {
+                    error = "{% trans "Failed. Please check the network." %}";
+                }
+                feedback(error, 'error');
+            }
+        });
+    }
+}
+
+$('table').on("click", ".restore-file, .restore-dir", function() {
+    $('<form>', {
+        "method": 'POST',
+        "action": $(this).data('url'),
+        "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
+    }).appendTo(document.body).submit();
+    return false;
+});
+
+$('table').on("mouseenter", "tr", function() {
+    $(this).find('.restore-dir').removeClass('hide');
+    $(this).find('.restore-file').removeClass('hide');
+});
+$('table').on("mouseleave", "tr", function() {
+    $(this).find('.restore-dir').addClass('hide');
+    $(this).find('.restore-file').addClass('hide');
+});
+
+{% if scan_stat and not dir_entries %}
+get_more_trash(scan_stat);
+{% endif %}
+
+{% if trash_more %}
+$('#trash-more-btn').click(function() {
+    get_more_trash(scan_stat);
+});
+{% endif %}
+
+</script>
+{% endblock %}

@@ -9,6 +9,6 @@
 {% block file_path %}
   {% trans "Current Path: "%}
   {% for name, link in zipped %}
-    {% if not forloop.last %} <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}&days={{days}}">{{ name }}</a> / {% else %} {{ name }} {% endif %}
+    {% if not forloop.last %} <a href="{% url 'repo_recycle_view' repo.id %}?commit_id={{ current_commit.id }}&base={{ basedir|urlencode }}&p={{ link|urlencode }}">{{ name }}</a> / {% else %} {{ name }} {% endif %}
   {% endfor %}
 {% endblock %}

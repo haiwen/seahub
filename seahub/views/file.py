@@ -680,9 +680,7 @@ def view_trash_file(request, repo_id):
     basedir = request.GET.get('base', '')
     if not basedir:
         raise Http404
-    days = show_delete_days(request)
     ret_dict['basedir'] = basedir
-    ret_dict['days'] = days
 
     # generate file path navigator
     path = ret_dict['path']

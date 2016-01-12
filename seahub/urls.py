@@ -177,6 +177,8 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-user-folder-perm/$', set_user_folder_perm, name='set_user_folder_perm'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-group-folder-perm/$', set_group_folder_perm, name='set_group_folder_perm'),
 
+    url(r'^ajax/(?P<repo_id>[-0-9a-f]{36})/repo-dir/recycle/more/$', ajax_repo_dir_recycle_more, name='ajax_repo_dir_recycle_more'),
+
     url(r'^_templates/(?P<template>.*)$', underscore_template, name="underscore_template"),
 
     ## ajax lib

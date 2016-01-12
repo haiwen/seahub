@@ -427,30 +427,28 @@ def render_recycle_root(request, repo_id):
     if not repo:
         raise Http404
 
-    days = show_delete_days(request)
-
+    scan_stat = request.GET.get('scan_stat', None)
     try:
-        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id, days)
+        deleted_entries = seafile_api.get_deleted(repo_id, 0, '/', scan_stat)
     except SearpcError as e:
         logger.error(e)
-        messages.error(request, _('Internal server error'))
         referer = request.META.get('HTTP_REFERER', None)
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
 
-    dir_list = []
-    file_list = []
+    new_scan_stat = deleted_entries[-1].scan_stat
+    trash_more = True if new_scan_stat is not None else False
+
+    deleted_entries = deleted_entries[0:-1]
     for dirent in deleted_entries:
         if stat.S_ISDIR(dirent.mode):
-            dir_list.append(dirent)
+            dirent.is_dir = True
         else:
-            file_list.append(dirent)
+            dirent.is_dir = False
 
     # Entries sort by deletion time in descending order.
-    dir_list.sort(lambda x, y : cmp(y.delete_time,
-                                    x.delete_time))
-    file_list.sort(lambda x, y : cmp(y.delete_time,
-                                     x.delete_time))
+    deleted_entries.sort(lambda x, y : cmp(y.delete_time,
+                                           x.delete_time))
 
     username = request.user.username
     if is_org_context(request):
@@ -463,12 +461,13 @@ def render_recycle_root(request, repo_id):
     if is_repo_owner:
         enable_clean = True
 
-    return render_to_response('repo_recycle_view.html', {
+    return render_to_response('repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
-            'dir_list': dir_list,
-            'file_list': file_list,
-            'days': days,
+            'repo_dir_name': repo.name,
+            'dir_entries': deleted_entries,
+            'scan_stat': new_scan_stat,
+            'trash_more': trash_more,
             'enable_clean': enable_clean,
             }, context_instance=RequestContext(request))
 
@@ -491,7 +490,6 @@ def render_recycle_dir(request, repo_id, commit_id):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        messages.error(request, _('Internal server error'))
         referer = request.META.get('HTTP_REFERER', None)
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
@@ -500,33 +498,25 @@ def render_recycle_dir(request, repo_id, commit_id):
         raise Http404
 
     zipped = gen_path_link(path, '')
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, commit,
-                                                        basedir + path)
 
-    days = show_delete_days(request)
+    dir_entries = seafile_api.list_dir_by_commit_and_path(commit.repo_id,
+                                                   commit.id, basedir+path,
+                                                   -1, -1)
+    for dirent in dir_entries:
+        if stat.S_ISDIR(dirent.mode):
+            dirent.is_dir = True
+        else:
+            dirent.is_dir = False
 
-    username = request.user.username
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_repo_owner = True if repo_owner == username else False
-
-    enable_clean = False
-    if is_repo_owner:
-        enable_clean = True
-
-    return render_to_response('repo_recycle_view.html', {
+    return render_to_response('repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
+            'repo_dir_name': repo.name,
             'zipped': zipped,
-            'dir_list': dir_list,
-            'file_list': file_list,
+            'dir_entries': dir_entries,
             'commit_id': commit_id,
             'basedir': basedir,
             'path': path,
-            'days': days,
-            'enable_clean': enable_clean,
             }, context_instance=RequestContext(request))
 
 def render_dir_recycle_root(request, repo_id, dir_path):
@@ -534,40 +524,36 @@ def render_dir_recycle_root(request, repo_id, dir_path):
     if not repo:
         raise Http404
 
-    days = show_delete_days(request)
-
+    scan_stat = request.GET.get('scan_stat', None)
     try:
-        deleted_entries = seafserv_threaded_rpc.get_deleted(repo_id,
-                                                            days,
-                                                            dir_path)
+        deleted_entries = seafile_api.get_deleted(repo_id, 0, dir_path, scan_stat)
     except SearpcError as e:
         logger.error(e)
-        messages.error(request, _('Internal server error'))
         referer = request.META.get('HTTP_REFERER', None)
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
 
-    dir_list = []
-    file_list = []
+    new_scan_stat = deleted_entries[-1].scan_stat
+    trash_more = True if new_scan_stat is not None else False
+
+    deleted_entries = deleted_entries[0:-1]
     for dirent in deleted_entries:
         if stat.S_ISDIR(dirent.mode):
-            dir_list.append(dirent)
+            dirent.is_dir = True
         else:
-            file_list.append(dirent)
+            dirent.is_dir = False
 
     # Entries sort by deletion time in descending order.
-    dir_list.sort(lambda x, y : cmp(y.delete_time,
-                                    x.delete_time))
-    file_list.sort(lambda x, y : cmp(y.delete_time,
-                                     x.delete_time))
+    deleted_entries.sort(lambda x, y : cmp(y.delete_time,
+                                           x.delete_time))
 
-    return render_to_response('dir_recycle_view.html', {
+    return render_to_response('repo_dir_recycle_view.html', {
             'show_recycle_root': True,
             'repo': repo,
-            'dir_list': dir_list,
-            'file_list': file_list,
-            'days': days,
-            'dir_name': os.path.basename(dir_path.rstrip('/')),
+            'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
+            'dir_entries': deleted_entries,
+            'scan_stat': new_scan_stat,
+            'trash_more': trash_more,
             'dir_path': dir_path,
             }, context_instance=RequestContext(request))
 
@@ -590,7 +576,6 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
         commit = seafserv_threaded_rpc.get_commit(repo.id, repo.version, commit_id)
     except SearpcError as e:
         logger.error(e)
-        messages.error(request, _('Internal server error'))
         referer = request.META.get('HTTP_REFERER', None)
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
@@ -599,22 +584,24 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
         raise Http404
 
     zipped = gen_path_link(path, '')
-    file_list, dir_list, dirent_more = get_repo_dirents(request, repo, commit,
-                                                        basedir + path)
+    dir_entries = seafile_api.list_dir_by_commit_and_path(commit.repo_id,
+                                                   commit.id, basedir+path,
+                                                   -1, -1)
+    for dirent in dir_entries:
+        if stat.S_ISDIR(dirent.mode):
+            dirent.is_dir = True
+        else:
+            dirent.is_dir = False
 
-    days = show_delete_days(request)
-
-    return render_to_response('dir_recycle_view.html', {
+    return render_to_response('repo_dir_recycle_view.html', {
             'show_recycle_root': False,
             'repo': repo,
+            'repo_dir_name': os.path.basename(dir_path.rstrip('/')),
             'zipped': zipped,
-            'dir_list': dir_list,
-            'file_list': file_list,
+            'dir_entries': dir_entries,
             'commit_id': commit_id,
             'basedir': basedir,
             'path': path,
-            'days': days,
-            'dir_name': os.path.basename(dir_path.rstrip('/')),
             'dir_path': dir_path,
             }, context_instance=RequestContext(request))
 
@@ -1624,11 +1611,11 @@ def repo_revert_dir(request, repo_id):
             url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
 
         if ret == 1:
-            root_url = reverse('repo', args=[repo_id]) + u'?p=/'
+            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
             msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
             messages.success(request, msg, extra_tags='safe')
         else:
-            dir_view_url = reverse('repo', args=[repo_id]) + u'?p=' + urllib2.quote(path.encode('utf-8'))
+            dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
             msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
             messages.success(request, msg, extra_tags='safe')
         return HttpResponseRedirect(url)
