@@ -1718,9 +1718,6 @@ textarea:-moz-placeholder {/* for FF */
     color:#000;
     background:#dfdfdf;
 }
-#trash-more {
-    margin-top: 20px;
-}
 #notices-more {
     margin-top: -20px;
 }
