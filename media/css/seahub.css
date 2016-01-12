@@ -1694,14 +1694,17 @@ textarea:-moz-placeholder {/* for FF */
 }
 #events-loading,
 #notices-loading,
+#trash-more-loading,
 #activities-more,
 #events-more,
+#trash-more-btn,
 #notices-more-btn {
     text-align:center;
     width:100%;
 }
 #activities-more,
 #events-more,
+#trash-more-btn,
 #notices-more-btn {
     color:#777;
     padding:.5em 0;
@@ -1710,6 +1713,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 #activities-more:hover,
 #events-more:hover,
+#trash-more-btn:hover,
 #notices-more-btn:hover {
     color:#000;
     background:#dfdfdf;
