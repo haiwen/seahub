@@ -125,49 +125,47 @@ var dir_path = '{{dir_path}}',
     $trash_more_loading = $('#trash-more-loading');
 
 var get_more_trash = function(current_scan_stat) {
-    if (current_scan_stat != 'None') {
-        $trash_more_btn.addClass('hide');
-        $trash_more_loading.removeClass('hide');
+    $trash_more_btn.addClass('hide');
+    $trash_more_loading.removeClass('hide');
 
-        $.ajax({
-            url:'{% url "ajax_repo_dir_recycle_more" repo.id %}' + '?scan_stat=' + current_scan_stat + '&path=' + dir_path,
-            dataType: 'json',
-            cache: false,
-            success: function(data) {
-                var new_scan_stat = data['new_scan_stat'];
+    $.ajax({
+        url:'{% url "ajax_repo_dir_recycle_more" repo.id %}' + '?scan_stat=' + current_scan_stat + '&path=' + e(dir_path),
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            var new_scan_stat = data['new_scan_stat'];
 
-                if (data['html']) {
-                    // have trash dir or file
-                    $('.repo-file-list').append(data['html']);
-                    $trash_more_loading.addClass('hide');
+            if (data['html']) {
+                // have trash dir or file
+                $('.repo-file-list').append(data['html']);
+                $trash_more_loading.addClass('hide');
 
-                    // have not scan all commit
-                    if (data['trash_more']) {
-                        $trash_more_btn.removeClass('hide');
-                    }
-                    scan_stat = new_scan_stat;
-                } else if (new_scan_stat) {
-                    // no trash dir or file
-                    // have not scan all commit
-                    get_more_trash(new_scan_stat);
-                } else {
-                    // no trash dir or file
-                    // scan all commit
-                    $trash_more_loading.addClass('hide');
+                // have not scan all commit
+                if (data['trash_more']) {
+                    $trash_more_btn.removeClass('hide');
                 }
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                $('#trash-more-loading').addClass('hide');
-                var error;
-                if (xhr.responseText) {
-                    error = $.parseJSON(xhr.responseText).error;
-                } else {
-                    error = "{% trans "Failed. Please check the network." %}";
-                }
-                feedback(error, 'error');
+                scan_stat = new_scan_stat;
+            } else if (new_scan_stat) {
+                // no trash dir or file
+                // have not scan all commit
+                get_more_trash(new_scan_stat);
+            } else {
+                // no trash dir or file
+                // scan all commit
+                $trash_more_loading.addClass('hide');
             }
-        });
-    }
+        },
+        error: function (xhr, textStatus, errorThrown) {
+            $('#trash-more-loading').addClass('hide');
+            var error;
+            if (xhr.responseText) {
+                error = $.parseJSON(xhr.responseText).error;
+            } else {
+                error = "{% trans "Failed. Please check the network." %}";
+            }
+            feedback(error, 'error');
+        }
+    });
 }
 
 $('table').on("click", ".restore-file, .restore-dir", function() {
@@ -188,6 +186,9 @@ $('table').on("mouseleave", "tr", function() {
     $(this).find('.restore-file').addClass('hide');
 });
 
+// has 'scan_stat' means have not scanned all commit
+// 'not dir_entries' means no trash returned
+// so continue scan by send ajax
 {% if scan_stat and not dir_entries %}
 get_more_trash(scan_stat);
 {% endif %}

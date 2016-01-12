@@ -436,7 +436,11 @@ def render_recycle_root(request, repo_id):
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
 
-    new_scan_stat = deleted_entries[-1].scan_stat
+    if not deleted_entries:
+        new_scan_stat = None
+    else:
+        new_scan_stat = deleted_entries[-1].scan_stat
+
     trash_more = True if new_scan_stat is not None else False
 
     deleted_entries = deleted_entries[0:-1]
@@ -533,7 +537,11 @@ def render_dir_recycle_root(request, repo_id, dir_path):
         next = settings.SITE_ROOT if referer is None else referer
         return HttpResponseRedirect(next)
 
-    new_scan_stat = deleted_entries[-1].scan_stat
+    if not deleted_entries:
+        new_scan_stat = None
+    else:
+        new_scan_stat = deleted_entries[-1].scan_stat
+
     trash_more = True if new_scan_stat is not None else False
 
     deleted_entries = deleted_entries[0:-1]
@@ -607,7 +615,8 @@ def render_dir_recycle_dir(request, repo_id, commit_id, dir_path):
 
 @login_required
 def repo_recycle_view(request, repo_id):
-    if check_folder_permission(request, repo_id, '/') != 'rw':
+    if not seafile_api.get_dir_id_by_path(repo_id, '/') or \
+        check_folder_permission(request, repo_id, '/') != 'rw':
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
@@ -619,7 +628,10 @@ def repo_recycle_view(request, repo_id):
 @login_required
 def dir_recycle_view(request, repo_id):
     dir_path = request.GET.get('dir_path', '')
-    if check_folder_permission(request, repo_id, dir_path) != 'rw':
+
+    if not seafile_api.get_dir_id_by_path(repo_id, dir_path) or \
+        check_folder_permission(request, repo_id, dir_path) != 'rw':
+
         return render_permission_error(request, _(u'Unable to view recycle page'))
 
     commit_id = request.GET.get('commit_id', '')
