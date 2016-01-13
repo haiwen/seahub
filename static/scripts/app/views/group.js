@@ -146,7 +146,22 @@ define([
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
             this.hideRepoList();
-            this.dirView.showDir('group/' + this.group_id, repo_id, path);
+
+            var group_name;
+            var groups = app.pageOptions.groups;
+            for (var i = 0, len = groups.length; i < len; i++) {
+                if (group_id == groups[i].id) {
+                    group_name = groups[i].name;
+                    break;
+                }
+            }
+            if (group_name) {
+                this.dirView.showDir('group/' + this.group_id, repo_id, path, {'group_name': group_name});
+            } else {
+                // the group does not exist
+                Common.feedback(gettext("Group not found"), 'error');
+                app.router.navigate('my-libs/', {trigger: true});
+            }
         },
 
         createRepo: function() {
