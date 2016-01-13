@@ -17,6 +17,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.share.views import check_user_share_quota
 from seahub.utils import (is_org_context, is_valid_username,
@@ -124,6 +125,12 @@ class DirSharedItemsEndpoint(APIView):
 
         return sub_repo
 
+    def get_repo_owner(self, request, repo_id):
+        if is_org_context(request):
+            return seafile_api.get_org_repo_owner(repo_id)
+        else:
+            return seafile_api.get_repo_owner(repo_id)
+
     def get(self, request, repo_id, format=None):
         """List shared items(shared to users/groups) for a folder/library.
         """
@@ -155,6 +162,13 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
+        path = request.GET.get('p', '/')
+        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+
+        if username != self.get_repo_owner(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         permission = request.data.get('permission', 'r')
@@ -183,6 +197,11 @@ class DirSharedItemsEndpoint(APIView):
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
+
+            try:
+                User.objects.get(email=shared_to)
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
@@ -229,6 +248,9 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
+        if username != self.get_repo_owner(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
         if path != '/':
             try:
                 sub_repo = self.get_or_create_sub_repo_by_path(request, repo, path)
@@ -252,8 +274,14 @@ class DirSharedItemsEndpoint(APIView):
             share_to_users = request.data.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
-                    return api_error(status.HTTP_400_BAD_REQUEST,
-                                     'Email %s not valid.' % to_user)
+                    failed.append(to_user)
+                    continue
+
+                try:
+                    User.objects.get(email=to_user)
+                except User.DoesNotExist:
+                    failed.append(to_user)
+                    continue
 
                 if not check_user_share_quota(username, shared_repo, users=[to_user]):
                     return api_error(status.HTTP_403_FORBIDDEN,
@@ -342,11 +370,14 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
-        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
-
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
+
+        if username != self.get_repo_owner(request, repo_id):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
+        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
         if path == '/':
             shared_repo = repo
@@ -365,6 +396,11 @@ class DirSharedItemsEndpoint(APIView):
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % share_to)
+
+            try:
+                User.objects.get(email=shared_to)
+            except User.DoesNotExist:
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
 
             if is_org_context(request):
                 org_id = request.user.org.org_id

@@ -47,8 +47,7 @@ from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, PrivateFileDirShare, \
-    check_share_link_access, set_share_link_access
-from seahub.share.forms import SharedLinkPasswordForm
+    check_share_link_common
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, is_org_context, \
@@ -57,7 +56,7 @@ from seahub.utils import show_delete_days, render_error, is_org_context, \
     is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
     check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
     user_traffic_over_limit, do_md5, get_file_audit_events_by_path, \
-    generate_file_audit_event_type
+    generate_file_audit_event_type, FILE_AUDIT_ENABLED
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
 from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
@@ -680,9 +679,7 @@ def view_trash_file(request, repo_id):
     basedir = request.GET.get('base', '')
     if not basedir:
         raise Http404
-    days = show_delete_days(request)
     ret_dict['basedir'] = basedir
-    ret_dict['days'] = days
 
     # generate file path navigator
     path = ret_dict['path']
@@ -769,22 +766,11 @@ def view_shared_file(request, token):
     if fileshare is None:
         raise Http404
 
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token, 'view_name': 'view_shared_file', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_shared_file', 'err_msg': err_msg}
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     shared_by = fileshare.username
     repo_id = fileshare.repo_id
@@ -806,13 +792,6 @@ def view_shared_file(request, token):
 
     # send statistic messages
     file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
-    if filetype != 'Unknown':
-        try:
-            send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                         (repo.id, shared_by, obj_id, file_size))
-        except SearpcError, e:
-            logger.error('Error when sending file-view message: %s' % str(e))
-
     if request.GET.get('dl', '') == '1':
         # download shared file
         return _download_file_from_share_link(request, fileshare)
@@ -889,6 +868,17 @@ def view_raw_shared_file(request, token, obj_id, file_name):
     if fileshare is None:
         raise Http404
 
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'err_msg': err_msg}
+        if fileshare.is_file_share_link():
+            d['view_name'] = 'view_shared_file'
+        else:
+            d['view_name'] = 'view_shared_dir'
+
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
+
     repo_id = fileshare.repo_id
     repo = get_repo(repo_id)
     if not repo:
@@ -925,6 +915,21 @@ def view_file_via_shared_dir(request, token):
     if fileshare is None:
         raise Http404
 
+
+    req_path = request.GET.get('p', '').rstrip('/')
+    if not req_path:
+        return HttpResponseRedirect(reverse('view_shared_dir', args=[token]))
+
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token,
+             'view_name': 'view_file_via_shared_dir',
+             'path': req_path,
+             'err_msg': err_msg,
+         }
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
+
     if request.GET.get('dl', '') == '1':
         # download shared file
         return _download_file_from_share_link(request, fileshare)
@@ -937,10 +942,6 @@ def view_file_via_shared_dir(request, token):
 
     # Get file path from frontend, and construct request file path
     # with fileshare.path to real path, used to fetch file content by RPC.
-    req_path = request.GET.get('p', '').rstrip('/')
-    if not req_path:
-        raise Http404
-
     real_path = posixpath.join(fileshare.path, req_path.lstrip('/'))
 
     # generate dir navigator
@@ -1005,13 +1006,6 @@ def view_file_via_shared_dir(request, token):
                 if cur_img_index != len(img_list) - 1:
                     img_next = posixpath.join(parent_dir, img_list[cur_img_index + 1])
 
-        # send statistic messages
-        if ret_dict['filetype'] != 'Unknown':
-            try:
-                send_message('seahub.stats', 'file-view\t%s\t%s\t%s\t%s' % \
-                             (repo.id, shared_by, obj_id, file_size))
-            except SearpcError, e:
-                logger.error('Error when sending file-view message: %s' % str(e))
     else:
         ret_dict['err'] = err_msg
 
@@ -1214,6 +1208,7 @@ def file_edit(request, repo_id):
 @login_required
 def view_raw_file(request, repo_id, file_path):
     """Returns raw content of a file.
+    Used when use viewer.js to preview opendocument file.
 
     Arguments:
     - `request`:
@@ -1597,7 +1592,7 @@ def file_access(request, repo_id):
     """List file access log.
     """
 
-    if not is_pro_version():
+    if not is_pro_version() or not FILE_AUDIT_ENABLED:
         raise Http404
 
     referer = request.META.get('HTTP_REFERER', None)

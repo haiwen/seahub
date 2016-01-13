@@ -5,6 +5,8 @@ from .views_misc import ServerInfoView
 from .views_auth import LogoutDeviceView, ClientLoginTokenView
 from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.account import Account
+from .endpoints.shared_upload_links import SharedUploadLinksView
+from .endpoints.be_shared_repo import BeSharedReposView
 
 urlpatterns = patterns('',
     url(r'^ping/$', Ping.as_view()),
@@ -49,8 +51,10 @@ urlpatterns = patterns('',
     url(r'^shared-repos/$', SharedRepos.as_view(), name='sharedrepos'),
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
     url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
+    url(r'^beshared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', BeSharedReposView.as_view(), name='beshared-repos'),
     url(r'^default-repo/$', DefaultRepoView.as_view(), name='api2-defaultrepo'),
     url(r'^shared-links/$', SharedLinksView.as_view()),
+    url(r'^shared-upload-links/$', SharedUploadLinksView.as_view()),
     url(r'^shared-files/$', SharedFilesView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
     url(r'^repo-tokens/$', RepoTokensView.as_view()),

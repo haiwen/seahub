@@ -32,6 +32,7 @@ define([
             var dir = this.dir;
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             var is_pro = app.pageOptions.is_pro;
+            var file_audit_enabled = app.pageOptions.file_audit_enabled;
 
             this.$el.html(this.template({
                 dirent: this.model.attributes,
@@ -42,6 +43,7 @@ define([
                 is_repo_owner: dir.is_repo_owner,
                 can_generate_shared_link: app.pageOptions.can_generate_shared_link,
                 is_pro: is_pro,
+                file_audit_enabled: file_audit_enabled,
                 repo_encrypted: dir.encrypted
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
@@ -308,21 +310,28 @@ define([
             var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
             title = title.replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(obj_name) + '">' + Common.HTMLescape(obj_name) + '</span>');
 
+            var show_cur_repo = true;
+            if (this.model.get('perm') == 'r') {
+                show_cur_repo = false;
+            }
             var form = $(this.mvcpTemplate({
                 form_title: title,
                 op_type: op_type,
                 obj_type: obj_type,
                 obj_name: obj_name,
-                show_other_repos: !dir.encrypted,
+                show_cur_repo: show_cur_repo,
+                show_other_repos: !dir.encrypted
             }));
             form.modal({appendTo:'#main', autoResize:true, focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-            FileTree.renderTreeForPath({
-                repo_name: dir.repo_name,
-                repo_id: dir.repo_id,
-                path: dir.path
-            });
+            if (show_cur_repo) {
+                FileTree.renderTreeForPath({
+                    repo_name: dir.repo_name,
+                    repo_id: dir.repo_id,
+                    path: dir.path
+                });
+            }
             if (!dir.encrypted) {
                 FileTree.prepareOtherReposTree({cur_repo_id: dir.repo_id});
             }

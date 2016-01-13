@@ -49,3 +49,21 @@ class SharedUploadLinkTest(BaseTestCase):
         )
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'view_shared_upload_link.html')
+
+    def test_can_not_render_enc_without_password(self):
+        resp = self.client.get(
+            reverse('view_shared_upload_link', args=[self.enc_fs.token])
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+
+    def test_can_not_render_enc_with_wrong_password(self):
+
+        resp = self.client.post(reverse('view_shared_upload_link',
+                                        args=[self.enc_fs.token]), {
+                                            'password': '1234567',
+                                        }
+        )
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'share_access_validation.html')
+        self.assertContains(resp, 'Please enter a correct password')

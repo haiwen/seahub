@@ -21,6 +21,11 @@ define([
             this.group_id = options.group_id;
             this.is_staff = options.is_staff;
 
+            this.show_shared_by = true; // default
+            if (options.show_shared_by !== undefined) { // e.g. views/group-item.js
+                this.show_shared_by = options.show_shared_by;
+            }
+
             this.listenTo(this.model, 'destroy', this.remove);
         },
 
@@ -32,7 +37,8 @@ define([
                 // for '#groups' (no 'share_from_me')
                 share_from_me: app.pageOptions.username == this.model.get('owner') ? true : false,
                 // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
-                owner_name: this.model.get('owner_nickname') || this.model.get('owner_name')
+                owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
+                show_shared_by: this.show_shared_by
             });
             this.$el.html(this.template(obj));
             return this;

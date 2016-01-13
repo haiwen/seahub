@@ -39,7 +39,8 @@ define([
                 var view = new GroupRepoView({
                     model: new Backbone.Model(item, {collection: groupRepos}), 
                     group_id: group_id,
-                    is_staff: is_staff
+                    is_staff: is_staff,
+                    show_shared_by: false // don't show 'Shared By'
                 }); 
                 $listContainer.append(view.render().el);
             });

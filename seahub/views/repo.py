@@ -23,8 +23,7 @@ from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, UploadLinkShare, \
-    check_share_link_access, set_share_link_access
-from seahub.share.forms import SharedLinkPasswordForm
+    check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_repo_access_permission, get_repo_dirents_with_perm, \
     get_system_default_repo_id
@@ -411,22 +410,11 @@ def view_shared_dir(request, token):
     if fileshare is None:
         raise Http404
 
-    if fileshare.is_encrypted():
-        if not check_share_link_access(request, token):
-            d = {'token': token, 'view_name': 'view_shared_dir', }
-            if request.method == 'POST':
-                post_values = request.POST.copy()
-                post_values['enc_password'] = fileshare.password
-                form = SharedLinkPasswordForm(post_values)
-                d['form'] = form
-                if form.is_valid():
-                    set_share_link_access(request, token)
-                else:
-                    return render_to_response('share_access_validation.html', d,
-                                              context_instance=RequestContext(request))
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     username = fileshare.username
     repo_id = fileshare.repo_id
@@ -519,22 +507,13 @@ def view_shared_upload_link(request, token):
     if uploadlink is None:
         raise Http404
 
-    if uploadlink.is_encrypted() and not check_share_link_access(
-            request, token, is_upload_link=True):
-        d = {'token': token, 'view_name': 'view_shared_upload_link', }
-        if request.method == 'POST':
-            post_values = request.POST.copy()
-            post_values['enc_password'] = uploadlink.password
-            form = SharedLinkPasswordForm(post_values)
-            d['form'] = form
-            if form.is_valid():
-                set_share_link_access(request, token, is_upload_link=True)
-            else:
-                return render_to_response('share_access_validation.html', d,
-                                          context_instance=RequestContext(request))
-        else:
-            return render_to_response('share_access_validation.html', d,
-                                      context_instance=RequestContext(request))
+    password_check_passed, err_msg = check_share_link_common(request,
+                                                             uploadlink,
+                                                             is_upload_link=True)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_shared_upload_link', 'err_msg': err_msg}
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     username = uploadlink.username
     repo_id = uploadlink.repo_id

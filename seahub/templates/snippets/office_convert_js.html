@@ -191,5 +191,5 @@ OfficePreviewer.prototype.load_page = function(index) {
 
 $(function() {
     var commit_id = '{{ current_commit.id }}' || '{{ repo.head_cmmt_id }}';
-    new OfficePreviewer('{{ repo.id }}', '{{ path }}', '{{ shared_token }}', commit_id).start();
+    new OfficePreviewer('{{ repo.id }}', '{{ path|escapejs }}', '{{ shared_token }}', commit_id).start();
 });

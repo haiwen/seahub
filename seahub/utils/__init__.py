@@ -510,6 +510,9 @@ def check_and_get_org_by_group(group_id, user):
 
 # events related
 if EVENTS_CONFIG_FILE:
+    parsed_events_conf = ConfigParser.ConfigParser()
+    parsed_events_conf.read(EVENTS_CONFIG_FILE)
+
     import seafevents
 
     EVENTS_ENABLED = True
@@ -952,13 +955,25 @@ def more_files_in_commit(commit):
     """
     return True if re.search(MORE_PATT, commit.desc) else False
 
+# file audit related
+FILE_AUDIT_ENABLED = False
+if EVENTS_CONFIG_FILE:
+    def check_file_audit_enabled():
+        enabled = seafevents.is_audit_enabled(parsed_events_conf)
+
+        if enabled:
+            logging.debug('file audit: enabled')
+        else:
+            logging.debug('file audit: not enabled')
+        return enabled
+
+    FILE_AUDIT_ENABLED = check_file_audit_enabled()
+
 # office convert related
 HAS_OFFICE_CONVERTER = False
 if EVENTS_CONFIG_FILE:
     def check_office_converter_enabled():
-        config = ConfigParser.ConfigParser()
-        config.read(EVENTS_CONFIG_FILE)
-        enabled = seafevents.is_office_converter_enabled(config)
+        enabled = seafevents.is_office_converter_enabled(parsed_events_conf)
 
         if enabled:
             logging.debug('office converter: enabled')
@@ -967,14 +982,10 @@ if EVENTS_CONFIG_FILE:
         return enabled
 
     def get_office_converter_html_dir():
-        config = ConfigParser.ConfigParser()
-        config.read(EVENTS_CONFIG_FILE)
-        return seafevents.get_office_converter_html_dir(config)
+        return seafevents.get_office_converter_html_dir(parsed_events_conf)
 
     def get_office_converter_limit():
-        config = ConfigParser.ConfigParser()
-        config.read(EVENTS_CONFIG_FILE)
-        return seafevents.get_office_converter_limit(config)
+        return seafevents.get_office_converter_limit(parsed_events_conf)
 
     HAS_OFFICE_CONVERTER = check_office_converter_enabled()
 
@@ -1129,9 +1140,7 @@ if EVENTS_CONFIG_FILE:
     def check_search_enabled():
         enabled = False
         if hasattr(seafevents, 'is_search_enabled'):
-            config = ConfigParser.ConfigParser()
-            config.read(EVENTS_CONFIG_FILE)
-            enabled = seafevents.is_search_enabled(config)
+            enabled = seafevents.is_search_enabled(parsed_events_conf)
 
             if enabled:
                 logging.debug('search: enabled')

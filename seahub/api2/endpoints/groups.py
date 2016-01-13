@@ -153,7 +153,14 @@ class Groups(APIView):
 
         # create group.
         try:
-            group_id = seaserv.ccnet_threaded_rpc.create_group(group_name, username)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                group_id = seaserv.ccnet_threaded_rpc.create_org_group(org_id,
+                                                                       group_name,
+                                                                       username)
+            else:
+                group_id = seaserv.ccnet_threaded_rpc.create_group(group_name,
+                                                                   username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'

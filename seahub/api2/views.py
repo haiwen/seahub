@@ -314,12 +314,12 @@ class SearchUser(APIView):
 
                 searched_users = filter(lambda u: q in u.email, users)
                 # 'user__in' for only get profile of user in org
-                # 'nickname__contains' for search by nickname
+                # 'nickname__icontains' for search by nickname
                 searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                           Q(nickname__contains=q)).values('user')
+                                                           Q(nickname__icontains=q)).values('user')
             elif ENABLE_GLOBAL_ADDRESSBOOK:
                 searched_users = get_searched_users(q)
-                searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+                searched_profiles = Profile.objects.filter(nickname__icontains=q).values('user')
             else:
                 users = []
                 contacts = Contact.objects.get_contacts_by_user(username)
@@ -335,12 +335,12 @@ class SearchUser(APIView):
 
                 searched_users = filter(lambda u: q in u.email, users)
                 # 'user__in' for only get profile of contacts
-                # 'nickname__contains' for search by nickname
+                # 'nickname__icontains' for search by nickname
                 searched_profiles = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                           Q(nickname__contains=q)).values('user')
+                                                           Q(nickname__icontains=q)).values('user')
         else:
             searched_users = get_searched_users(q)
-            searched_profiles = Profile.objects.filter(nickname__contains=q).values('user')
+            searched_profiles = Profile.objects.filter(nickname__icontains=q).values('user')
 
 
         # remove inactive users and add to result
@@ -527,7 +527,14 @@ class Repos(APIView):
 
         repos_json = []
         if filter_by['mine']:
-            owned_repos = get_owned_repo_list(request)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                owned_repos = seafile_api.get_org_owned_repo_list(org_id,
+                        email, ret_corrupted=True)
+            else:
+                owned_repos = seafile_api.get_owned_repo_list(email,
+                        ret_corrupted=True)
+
             owned_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
             for r in owned_repos:
                 # do not return virtual repos
@@ -1193,7 +1200,8 @@ class UploadBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'upload-blks-api', request.user.username, use_onetime = False)
+            repo_id, 'dummy', 'upload-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'upload-blks-api')
         return Response(url)
 
@@ -1212,7 +1220,8 @@ class UpdateBlksLinkView(APIView):
             return api_error(HTTP_520_OPERATION_FAILED, 'Above quota')
 
         token = seafile_api.get_fileserver_access_token(
-            repo_id, 'dummy', 'update-blks-api', request.user.username)
+            repo_id, 'dummy', 'update-blks-api', request.user.username,
+            use_onetime = False)
         url = gen_file_upload_url(token, 'update-blks-api')
         return Response(url)
 
@@ -2557,7 +2566,7 @@ class BeShared(APIView):
     """
     List repos that others/groups share to user.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -2584,7 +2593,7 @@ class BeShared(APIView):
                 cmmts = get_commits(r_id, 0, 1)
                 last_commit = cmmts[0] if cmmts else None
                 r.last_modified = last_commit.ctime if last_commit else 0
-                r.share_type = 'group'
+                r._dict['share_type'] = 'group'
                 r.user = seafile_api.get_repo_owner(r_id)
                 r.user_perm = check_permission(r_id, username)
                 shared_repos.append(r)

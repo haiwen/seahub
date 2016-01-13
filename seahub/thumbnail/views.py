@@ -8,6 +8,8 @@ from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 from django.http import HttpResponse
 from django.views.decorators.http import condition
+from django.shortcuts import render_to_response
+from django.template import RequestContext
 
 from seaserv import get_repo, get_file_id_by_path
 
@@ -17,7 +19,7 @@ from seahub.settings import THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_EXTENSION, \
     THUMBNAIL_ROOT, ENABLE_THUMBNAIL
 from seahub.thumbnail.utils import generate_thumbnail, \
     get_thumbnail_src, get_share_link_thumbnail_src
-from seahub.share.models import FileShare
+from seahub.share.models import FileShare, check_share_link_common
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -178,7 +180,12 @@ def share_link_latest_entry(request, token, size, path):
     if not repo:
         return None
 
-    obj_id = get_file_id_by_path(repo_id, path)
+    if fileshare.path == '/':
+        image_path = path
+    else:
+        image_path = posixpath.join(fileshare.path, path.lstrip('/'))
+
+    obj_id = get_file_id_by_path(repo_id, image_path)
     if obj_id:
         try:
             thumbnail_file = os.path.join(THUMBNAIL_ROOT, str(size), obj_id)
@@ -208,6 +215,12 @@ def share_link_thumbnail_get(request, token, size, path):
     fileshare = FileShare.objects.get_valid_file_link_by_token(token)
     if not fileshare:
         return HttpResponse()
+
+    password_check_passed, err_msg = check_share_link_common(request, fileshare)
+    if not password_check_passed:
+        d = {'token': token, 'view_name': 'view_shared_dir', 'err_msg': err_msg}
+        return render_to_response('share_access_validation.html', d,
+                                  context_instance=RequestContext(request))
 
     if fileshare.path == '/':
         image_path = path
