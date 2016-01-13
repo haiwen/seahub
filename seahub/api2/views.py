@@ -28,6 +28,7 @@ from django.template.loader import render_to_string
 from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 from django.utils import timezone
+from django.utils.translation import ugettext as _
 
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
@@ -1110,22 +1111,79 @@ class RepoPublic(APIView):
 
 
 class RepoOwner(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAdminUser, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
         repo = get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        org_id = None
         if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if request.user.username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        return HttpResponse(json.dumps({"owner": repo_owner}), status=200,
+                            content_type=json_content_type)
+
+    def put(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
             repo_owner = seafile_api.get_org_repo_owner(repo.id)
         else:
             repo_owner = seafile_api.get_repo_owner(repo.id)
 
-        return HttpResponse(json.dumps({"owner": repo_owner}), status=200,
-                            content_type=json_content_type)
+        if request.user.username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check new owner validation
+        new_owner = request.data.get('owner', '').lower()
+        try:
+            User.objects.get(email=new_owner)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % new_owner
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if org_id:
+            if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, new_owner):
+                error_msg = _(u'User %s not found in organization.') % new_owner
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # transfer repo
+        if org_id:
+            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
+        else:
+            if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
+                # can not transfer library to organization user %s.
+                error_msg = 'Email %s invalid.' % new_owner
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                seafile_api.set_repo_owner(repo_id, new_owner)
+
+        return HttpResponse(json.dumps({'success': True}),
+                content_type=json_content_type)
 
 ########## File related
 class FileBlockDownloadLinkView(APIView):
