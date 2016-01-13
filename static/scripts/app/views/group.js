@@ -147,19 +147,12 @@ define([
             this.group_id = group_id;
             this.hideRepoList();
 
-            var group_name;
-            var groups = app.pageOptions.groups;
-            for (var i = 0, len = groups.length; i < len; i++) {
-                if (group_id == groups[i].id) {
-                    group_name = groups[i].name;
-                    break;
-                }
-            }
+            var group_name = Common.groupId2Name(group_id);
             if (group_name) {
                 this.dirView.showDir('group/' + this.group_id, repo_id, path, {'group_name': group_name});
             } else {
                 // the group does not exist
-                Common.feedback(gettext("Group not found"), 'error');
+                Common.feedback('Group {group_id} not found'.replace('{group_id}', group_id), 'error');
                 app.router.navigate('my-libs/', {trigger: true});
             }
         },
