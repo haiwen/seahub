@@ -5,12 +5,12 @@ from django.http import HttpResponse
 from django.utils.dateformat import DateFormat
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 
 from seaserv import seafile_api
 
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.throttling import UserRateThrottle
 from seahub.share.models import UploadLinkShare
 from seahub.utils import gen_shared_upload_link
 
