@@ -150,7 +150,8 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Group" %}</a> /
+        <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a> /
+        <a href="#<%- category %>/" class="path-link normal"><%- group_name %></a> /
     <% } else if (context == 'org') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
     <% } else if (context == 'common') { %>
@@ -731,7 +732,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -801,7 +802,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">

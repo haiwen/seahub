@@ -664,6 +664,15 @@ define([
             } else {
                 return bytes + ' B';
             }
+        },
+
+        groupId2Name: function(group_id) {
+            for (var i = 0; i < app.pageOptions.groups.length; i++) {
+                var group = app.pageOptions.groups[i];
+                if (group.id == group_id)
+                    return group.name;
+            }
+            return '';
         }
 
     }
