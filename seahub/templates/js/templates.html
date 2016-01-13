@@ -150,7 +150,8 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Group" %}</a> /
+        <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a> /
     <% } else if (context == 'org') { %>
         <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
     <% } else if (context == 'common') { %>

@@ -103,10 +103,21 @@ define([
                 dataType: 'json',
                 cache: false,
                 success: function(data) {
-                    data.sort(function(a, b) {
+                    var groups = [];
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        groups.push({
+                            'id': data[i].id,
+                            'name': data[i].name
+                        });
+                    }
+                    groups.sort(function(a, b) {
                         return Common.compareTwoWord(a.name, b.name);
                     });
-                    _this.data.groups = data;
+
+                    // update app.pageOptions.groups
+                    app.pageOptions.groups = groups;
+
+                    _this.data.groups = groups;
                     _this.render();
                 },
                 error: function() {

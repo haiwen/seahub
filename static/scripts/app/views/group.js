@@ -146,7 +146,15 @@ define([
         showDir: function(group_id, repo_id, path) {
             this.group_id = group_id;
             this.hideRepoList();
-            this.dirView.showDir('group/' + this.group_id, repo_id, path);
+
+            var group_name = Common.groupId2Name(group_id);
+            if (group_name) {
+                this.dirView.showDir('group/' + this.group_id, repo_id, path, {'group_name': group_name});
+            } else {
+                // the group does not exist
+                Common.feedback('Group {group_id} not found'.replace('{group_id}', group_id), 'error');
+                app.router.navigate('my-libs/', {trigger: true});
+            }
         },
 
         createRepo: function() {

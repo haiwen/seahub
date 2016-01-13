@@ -110,7 +110,9 @@ define([
                 });
             },
 
-            showDir: function(category, repo_id, path) {
+            // 'category' is sth. like url prefix
+            // options is for 'group dir view', at present (Wed Jan 13 12:44:17 CST 2016)
+            showDir: function(category, repo_id, path, options) {
                 $('#top-search-form').html(this.top_search_form_template({
                     search_repo_id: repo_id
                 }));
@@ -118,6 +120,9 @@ define([
                 this.$el.show();
                 this.$dirent_list.empty();
                 var loading_tip = this.$('.loading-tip').show();
+
+                this.contextOptions = options;
+
                 var dir = this.dir;
                 dir.setPath(category, repo_id, path);
                 var _this = this;
@@ -280,6 +285,9 @@ define([
                         category: dir.category,
                         context: context
                     };
+                if (this.contextOptions) {
+                    $.extend(obj, this.contextOptions);
+                }
 
                 var path_list = path.substr(1).split('/');
                 var path_list_encoded = Common.encodePath(path.substr(1)).split('/');
