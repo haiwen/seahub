@@ -57,13 +57,6 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(rinfo['type'])
             # elf.assertIsNotNone(rinfo['password_need']) # allow null here
 
-    def test_get_repo_owner(self):
-        with self.get_tmp_repo() as repo:
-            repo_owner_url = urljoin(repo.repo_url, '/owner/')
-            # XXX: why only admin can get the owner of a repo?
-            info = self.admin_get(repo_owner_url).json()
-            self.assertEqual(info['owner'], self.username)
-
     def test_get_repo_history(self):
         with self.get_tmp_repo() as repo:
             self.create_file(repo)
