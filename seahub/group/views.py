@@ -412,38 +412,6 @@ def msg_reply_new(request):
             'group_msgs': group_msgs,
             }, context_instance=RequestContext(request))
 
-
-def group_info_for_pub(request, group):
-    # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
-
-    return render_to_response("group/group_info_for_pub.html", {
-            "repos": [],
-            "group": group,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
-            }, context_instance=RequestContext(request))
-
-
-@group_check
-def group_info(request, group):
-
-    if group.view_perm == "pub":
-        return group_info_for_pub(request, group)
-
-    # get available modules(wiki, etc)
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
-
-    return render_to_response("group/group_info.html", {
-            "group" : group,
-            "is_staff": group.is_staff,
-            "mods_enabled": mods_enabled,
-            "mods_available": mods_available,
-            'repo_password_min_length': config.REPO_PASSWORD_MIN_LENGTH,
-            }, context_instance=RequestContext(request))
-
 def send_group_member_add_mail(request, group, from_user, to_user):
     c = {
         'email': from_user,
