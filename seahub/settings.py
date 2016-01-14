@@ -227,6 +227,9 @@ ACCOUNT_ACTIVATION_DAYS = 7
 # allow seafile amdin view user's repo
 ENABLE_SYS_ADMIN_VIEW_REPO = False
 
+#allow search from LDAP directly during auto-completion (not only search imported users)
+ENABLE_SEARCH_FROM_LDAP_DIRECTLY = False
+
 # show traffic on the UI
 SHOW_TRAFFIC = True
 

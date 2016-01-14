@@ -841,8 +841,6 @@ function userInputOPtionsForSelect2(user_search_url) {
     return {
         tags: [],
 
-        tokenSeparators: [",", " "],
-
         minimumInputLength: 1, // input at least 1 character
 
         ajax: {
@@ -863,7 +861,7 @@ function userInputOPtionsForSelect2(user_search_url) {
                         // for search. both name & email can be searched.
                         // use ' '(space) to separate name & email
                         "text": users[i].name + ' ' + users[i].email,
-                        "avatar": users[i].avatar,
+                        "avatar_url": users[i].avatar_url,
                         "name": users[i].name
                     });
                 }
@@ -875,8 +873,8 @@ function userInputOPtionsForSelect2(user_search_url) {
 
         // format items shown in the drop-down menu
         formatResult: function(item) {
-            if (item.avatar) {
-                return item.avatar + '<span class="text ellipsis">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
+            if (item.avatar_url) {
+                return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar">' + '<span class="text ellipsis">' + HTMLescape(item.name) + '<br />' + HTMLescape(item.id) + '</span>';
             } else {
                 return; // if no match, show nothing
             }
@@ -886,6 +884,13 @@ function userInputOPtionsForSelect2(user_search_url) {
         formatSelection: function(item) {
             return HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
         },
+
+        createSearchChoice: function(term) {
+            return {
+                'id': $.trim(term)
+            };
+        },
+
         escapeMarkup: function(m) { return m; }
     };
 }
