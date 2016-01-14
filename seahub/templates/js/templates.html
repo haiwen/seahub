@@ -1114,3 +1114,12 @@
 <script type="text/template" id="repo-share-link-admin-dialog-tmpl">
     <h3><%= title %></h3>
 </script>
+
+<script type="text/template" id="repo-transfer-form-tmpl">
+<form method="post" action="">
+    <h3>{% trans "Transfer Library To" %}</h3>
+    <input type="hidden" name="email" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" />
+</form>
+</script>

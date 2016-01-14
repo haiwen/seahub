@@ -17,6 +17,7 @@ define([
         template: _.template($('#repo-tmpl').html()),
         repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
         renameTemplate: _.template($("#repo-rename-form-template").html()),
+        transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
         events: {
             'mouseenter': 'highlight',
@@ -25,6 +26,7 @@ define([
             'click .repo-share-btn': 'share',
             'click .js-toggle-popup': 'togglePopup',
             'click .js-repo-rename': 'rename',
+            'click .js-repo-transfer': 'transfer',
             'click .js-popup-history-settings': 'popupHistorySettings',
             'click .js-popup-permission-settings': 'popupPermissionSettings',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin'
@@ -216,6 +218,65 @@ define([
             });
 
             return false;
+        },
+
+        transfer: function() {
+            var _this = this;
+            this.togglePopup(); // Close the popup
+
+            var $form = $(this.transferTemplate());
+            $form.modal({focus:false});
+            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            $('[name="email"]', $form).select2($.extend(
+                Common.contactInputOptionsForSelect2(), {
+                width: '300px',
+                maximumSelectionSize: 1,
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
+                formatSelectionTooBig: gettext("You cannot select any more choices")
+            }));
+
+            $form.submit(function() {
+                var email = $.trim($('[name="email"]', $(this)).val());
+                if (!email) {
+                    return false;
+                }
+                if (email == _this.model.get('owner')) {
+                    return false;
+                }
+
+                var $submitBtn = $('[type="submit"]', $(this));
+                Common.disableButton($submitBtn);
+                $.ajax({
+                    url: Common.getUrl({
+                        'name': 'transfer_repo',
+                        'repo_id': _this.model.get('id')
+                    }),
+                    type: 'put',
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {
+                        'owner': email
+                    },
+                    success: function() {
+                        // after the transfer, the former owner becomes a common admin of the group.
+                        $.modal.close();
+                        _this.remove();
+                        Common.feedback(gettext("Transfer library succeeded."), 'success');
+                    },
+                    error: function(xhr) {
+                        var error_msg;
+                        if (xhr.responseText) {
+                            error_msg = $.parseJSON(xhr.responseText).error_msg;
+                        } else {
+                            error_msg = gettext("Failed. Please check the network.");
+                        }
+                        $('.error', $form).html(error_msg).show();
+                        Common.enableButton($submitBtn);
+                    }
+                });
+                return false;
+            });
         },
 
         popupHistorySettings: function() {
