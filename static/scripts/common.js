@@ -564,7 +564,7 @@ define([
                                 // for search. both name & email can be searched.
                                 // use ' '(space) to separate name & email
                                 "text": users[i].name + ' ' + users[i].email,
-                                "avatar": users[i].avatar,
+                                "avatar_url": users[i].avatar_url,
                                 "name": users[i].name
                             });
                         }
@@ -577,8 +577,8 @@ define([
 
                 // format items shown in the drop-down menu
                 formatResult: function(item) {
-                    if (item.avatar) {
-                        return item.avatar + '<span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
+                    if (item.avatar_url) {
+                        return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar"><span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }

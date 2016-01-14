@@ -415,6 +415,7 @@ def get_searched_users(q):
 
     return searched_users
 
+
 class Search(APIView):
     """ Search all the repos
     """

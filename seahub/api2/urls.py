@@ -7,6 +7,7 @@ from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.account import Account
 from .endpoints.shared_upload_links import SharedUploadLinksView
 from .endpoints.be_shared_repo import BeSharedReposView
+from .endpoints.search_user import SearchUser
 
 urlpatterns = patterns('',
     url(r'^ping/$', Ping.as_view()),
