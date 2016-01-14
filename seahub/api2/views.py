@@ -92,7 +92,8 @@ if HAS_OFFICE_CONVERTER:
     from seahub.utils import query_office_convert_status, prepare_converted_html
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
-        ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, ENABLE_THUMBNAIL
+    ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, \
+    ENABLE_THUMBNAIL, ENABLE_SUB_LIBRARY
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -1054,6 +1055,93 @@ class RepoHistory(APIView):
                                         "page_next": page_next},
                                        cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
+
+class RepoHistoryLimit(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        username = request.user.username
+        # no settings for virtual repo
+        if repo.is_virtual or \
+            not config.ENABLE_REPO_HISTORY_SETTING or \
+            username != repo_owner:
+
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            keep_days = seaserv.get_repo_history_limit(repo_id)
+            return Response({'keep_days': keep_days})
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+    def put(self, request, repo_id, format=None):
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        username = request.user.username
+        # no settings for virtual repo
+        if repo.is_virtual or \
+            not config.ENABLE_REPO_HISTORY_SETTING or \
+            username != repo_owner:
+
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check arg validation
+        keep_days = request.data.get('keep_days', None)
+        if not keep_days:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            keep_days = int(keep_days)
+        except ValueError:
+            error_msg = 'keep_days invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            # days <= -1, keep full history
+            # days = 0, not keep history
+            # days > 0, keep a period of days
+            res = seaserv.set_repo_history_limit(repo_id, keep_days)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if res == 0:
+            new_limit = seaserv.get_repo_history_limit(repo_id)
+            return Response({'keep_days': new_limit})
+        else:
+            error_msg = 'Failed to set library history limit.'
+            return api_error(status.HTTP_520_OPERATION_FAILED, error_msg)
+
 
 class DownloadRepo(APIView):
     authentication_classes = (TokenAuthentication, )
