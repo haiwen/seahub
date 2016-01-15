@@ -16,7 +16,7 @@
 <div class="side-tabnav hide" id="group-side-nav">
 </div>
 <div class="side-tabnav hide" id="org-side-nav">
-    <h3 class="hd">{% trans "Organization" %}</h3>
+    <h3 class="hd">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab tab-cur"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
         <li class="tab"><a href="{% url 'pubuser' %}"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>

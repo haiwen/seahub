@@ -65,7 +65,7 @@
 
                     {% if user.permissions.can_view_org %}
                     <li class="nav-item">
-                    <a href="{{ SITE_ROOT }}#org/" class="a">{% trans "Organization" %}</a>
+                    <a href="{{ SITE_ROOT }}#org/" class="a">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a>
                     </li>
                     {% endif %}
 
