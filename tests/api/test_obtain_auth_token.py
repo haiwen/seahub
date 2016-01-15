@@ -1,5 +1,6 @@
 import json
 
+from seahub.api2.models import TokenV2
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from .urls import TOKEN_URL
@@ -52,3 +53,22 @@ class ObtainAuthTokenTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
         assert json_resp['username'] == [u'This field may not be blank.']
+
+    def test_can_obtain_token_v2(self):
+        resp = self.client.post(TOKEN_URL, {
+            'username': self.p.login_id,
+            'password': self.user_password,
+            'platform': 'windows',
+            'device_id': 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+            'device_name': 'fake-device-name',
+            'client_version': '4.1.0',
+            'platform_version': '',
+        })
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['token'] is not None
+        assert len(json_resp['token']) == 40
+
+        t = TokenV2.objects.get(key=json_resp['token'])
+        assert t.client_version == '4.1.0'
+        assert t.platform_version == ''

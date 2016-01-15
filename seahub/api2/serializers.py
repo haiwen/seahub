@@ -29,8 +29,8 @@ class AuthTokenSerializer(serializers.Serializer):
     device_name = serializers.CharField(required=False)
 
     # These fields may be needed in the future
-    client_version = serializers.CharField(required=False)
-    platform_version = serializers.CharField(required=False)
+    client_version = serializers.CharField(required=False, default='')
+    platform_version = serializers.CharField(required=False, default='')
 
     def validate(self, attrs):
         login_id = attrs.get('username')
