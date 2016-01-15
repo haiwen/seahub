@@ -42,7 +42,7 @@ class AuthTokenSerializer(serializers.Serializer):
         client_version = attrs.get('client_version', None)
         platform_version = attrs.get('platform_version', None)
 
-        v2_fields = (platform, device_id, device_name, client_version, platform_version)
+        v2_fields = (platform, device_id, device_name)
 
         # Decide the version of token we need
         if all_none(v2_fields):
