@@ -16,13 +16,85 @@
   
 
   
-  /* gettext identity library */
+  /* gettext library */
 
-  django.gettext = function (msgid) { return msgid; };
-  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.catalog = {
+    "Canceled.": "Avbruten.", 
+    "Close (Esc)": "St\u00e4ng (Esc)", 
+    "Copying %(name)s": "Kopierar %(name)s", 
+    "Copying file %(index)s of %(total)s": "Kopierar fil %(index)s av %(total)s", 
+    "Failed to get upload url": "Misslyckades att h\u00e4mta uppladdningsurl", 
+    "Failed to send to {placeholder}": "Misslyckades att skicka till {placeholder}", 
+    "File Upload canceled": "Filuppladdning avbruten", 
+    "File Upload complete": "Filuppladdning klar", 
+    "File Upload failed": "Filuppladdning misslyckades", 
+    "File Uploading...": "Filen laddas upp...", 
+    "Hide": "D\u00f6lj", 
+    "Internal error. Failed to copy %(name)s.": "Internt fel. Misslyckades att kopiera %(name)s.", 
+    "Internal error. Failed to move %(name)s.": "Internt fel. Misslyckades att flytta %(name)s.", 
+    "Loading failed": "Laddning misslyckades", 
+    "Moving %(name)s": "Flyttar %(name)s", 
+    "Moving file %(index)s of %(total)s": "Flyttar fil %(index)s av %(total)s", 
+    "Next (Right arrow key)": "N\u00e4sta (H\u00f6ger piltangent)", 
+    "No matches": "Inga matchningar", 
+    "Open in New Tab": "\u00d6ppna i ny tabb", 
+    "Please enter 1 or more character": "V\u00e4nligen ange 1 eller fler tecken", 
+    "Please enter valid days": "V\u00e4nligen ange giltiga dagar", 
+    "Previous (Left arrow key)": "F\u00f6reg\u00e5ende (V\u00e4nster piltangent)", 
+    "Search users or enter emails": "S\u00f6k anv\u00e4ndare eller ange mejladresser", 
+    "Searching...": "S\u00f6ker...", 
+    "Select groups": "V\u00e4lj grupper", 
+    "Show": "Visa", 
+    "Success": "Lyckades", 
+    "Successfully copied %(name)s and %(amount)s other items.": "Lyckades kopiera %(name)s och %(amount)s andra filer.", 
+    "Successfully copied %(name)s and 1 other item.": "Lyckades kopiera %(name)s och 1 annan fil.", 
+    "Successfully copied %(name)s.": "Lyckades kopiera %(name)s.", 
+    "Successfully deleted %(name)s": "Lyckades ta bort %(name)s", 
+    "Successfully deleted %(name)s and %(amount)s other items.": "Lyckades ta bort %(name)s och %(amount)s andra filer.", 
+    "Successfully deleted %(name)s.": "Lyckades ta bort %(name)s.", 
+    "Successfully moved %(name)s and %(amount)s other items.": "Lyckades flytta %(name)s och %(amount)s andra filer.", 
+    "Successfully moved %(name)s and 1 other item.": "Lyckades flytta %(name)s och 1 annan fil.", 
+    "Successfully moved %(name)s.": "Lyckades flytta %(name)s.", 
+    "Successfully sent to {placeholder}": "Lyckades skicka till {placeholder}", 
+    "canceled": "avbruten", 
+    "uploaded": "uppladdad"
+  };
+
+  django.gettext = function (msgid) {
+    var value = django.catalog[msgid];
+    if (typeof(value) == 'undefined') {
+      return msgid;
+    } else {
+      return (typeof(value) == 'string') ? value : value[0];
+    }
+  };
+
+  django.ngettext = function (singular, plural, count) {
+    var value = django.catalog[singular];
+    if (typeof(value) == 'undefined') {
+      return (count == 1) ? singular : plural;
+    } else {
+      return value[django.pluralidx(count)];
+    }
+  };
+
   django.gettext_noop = function (msgid) { return msgid; };
-  django.pgettext = function (context, msgid) { return msgid; };
-  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+
+  django.pgettext = function (context, msgid) {
+    var value = django.gettext(context + '\x04' + msgid);
+    if (value.indexOf('\x04') != -1) {
+      value = msgid;
+    }
+    return value;
+  };
+
+  django.npgettext = function (context, singular, plural, count) {
+    var value = django.ngettext(context + '\x04' + singular, context + '\x04' + plural, count);
+    if (value.indexOf('\x04') != -1) {
+      value = django.ngettext(singular, plural, count);
+    }
+    return value;
+  };
   
 
   django.interpolate = function (fmt, obj, named) {
