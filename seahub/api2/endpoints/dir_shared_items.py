@@ -15,7 +15,6 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-from seahub.api2.status import HTTP_520_OPERATION_FAILED
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful
@@ -395,7 +394,7 @@ class DirSharedItemsEndpoint(APIView):
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % share_to)
+                return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
             try:
                 User.objects.get(email=shared_to)
