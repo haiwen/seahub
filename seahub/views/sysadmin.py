@@ -815,7 +815,8 @@ def user_info(request, email):
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
     if not org:
-        owned_repos = mute_seafile_api.get_owned_repo_list(email)
+        owned_repos = mute_seafile_api.get_owned_repo_list(email,
+                                                           ret_corrupted=True)
         in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
         space_usage = mute_seafile_api.get_user_self_usage(email)
         space_quota = mute_seafile_api.get_user_quota(email)
@@ -828,7 +829,8 @@ def user_info(request, email):
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id,
                                                                      email)
         space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, email)
-        owned_repos = seafile_api.get_org_owned_repo_list(org_id, email)
+        owned_repos = seafile_api.get_org_owned_repo_list(org_id, email,
+                                                          ret_corrupted=True)
         in_repos = seafile_api.get_org_share_in_repo_list(org_id, email, -1, -1)
 
     # get user profile
