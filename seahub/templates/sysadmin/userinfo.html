@@ -93,13 +93,19 @@
                 {% else %}
                 <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
                 {% endif %}
-                {% if repo.encrypted %}
-                <td>{{ repo.name }}</td>
-                {% elif enable_sys_admin_view_repo %}
-                <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+
+                {% if not repo.name %}
+                    <td>Broken ({{repo.id}})</td>
                 {% else %}
-                <td>{{ repo.name }}</td>
+                    {% if repo.encrypted %}
+                        <td>{{ repo.name }}</td>
+                    {% elif enable_sys_admin_view_repo %}
+                        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                    {% else %}
+                        <td>{{ repo.name }}</td>
+                    {% endif %}
                 {% endif %}
+
                 <td>{{ repo.size|filesizeformat }}</td>
                 <td>{{ repo.last_modify|translate_seahub_time }}</td>
                 <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
