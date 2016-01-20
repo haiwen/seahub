@@ -317,6 +317,7 @@ p { margin:0.5em 0; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
+.outstanding-tip { color:red; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}

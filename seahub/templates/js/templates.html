@@ -5,10 +5,10 @@
         <label>{% trans "Name"%}</label><br/>
         <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <% if (showSharePerm) { %>
-        <label>{% trans "Share Permission"%}</label><br />
+        <label>{% trans "Share Permission" %}</label><br />
         <select name="permission" class="perm">
-          <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-          <option value="r">{% trans "Read-Only"%}</option>
+          <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+          <option value="r">{% trans "Read-Only" %}</option>
         </select>
         <br />
         <% } %>
@@ -16,11 +16,11 @@
         <div class="repo-create-encryption">
             <label class="checkbox-label">
                 <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
-                <span class="checkbox-option">{% trans "Encrypt"%}</span>
+                <span class="checkbox-option">{% trans "Encrypt" %}</span>
             </label>
-            <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+            <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
             <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-            <label>{% trans "Password again"%}</label><br />
+            <label>{% trans "Password again" %}</label><br />
             <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
         </div>
         <% } %>
@@ -50,9 +50,7 @@
           <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
           <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
           <li><a class="op js-popup-permission-settings" href="#">{% trans "Permissions" %}</a></li>
-          <% if (enable_repo_history_setting) { %>
           <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
-          <% } %>
           <li><a class="op js-popup-share-link-admin" href="#">{% trans "Sharing Links" %}</a></li>
         </ul>
       </div>
@@ -1088,23 +1086,26 @@
 
 <script type="text/template" id="history-settings-dialog-tmpl">
     <h3><%= title %></h3>
-    <form id="repo-basic-info-form" action="" method="post" class="form">{% csrf_token %}
-        <input type="radio" name="history" value="full_history"
-            <% if (full_history_checked) { %> checked="checked"{ <% } %>
-            class="vam" />
-            <span class="vam">{% trans "Keep full history" %}</span><br />
-        <input type="radio" name="history" value="no_history"
-            <% if (no_history_checked) { %>checked="checked"<% } %>
-            class="vam" />
-            <span class="vam">{% trans "Don't keep history" %}</span><br />
-        <input type="radio" name="history" value="partial_history"
-            <% if (partial_history_checked) { %>checked="checked"<% } %>
-            class="vam" />
-            <span calss="vam">{% trans "Only keep a period of history:" %}
-        <input type="text" name="days" size="4" disabled="disabled"
-            class="input-disabled" value="<%- history_limit %>" /> {% trans "days" %}</span><br />
+
+    <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
+
+    <form id="repo-history-settings-form" action="" method="post" class="form">{% csrf_token %}
+        <input type="radio" name="history" value="full_history" class="vam" />
+        <span class="vam">{% trans "Keep full history" %}</span><br />
+
+        <input type="radio" name="history" value="no_history" class="vam" />
+        <span class="vam">{% trans "Don't keep history" %}</span><br />
+
+        <input type="radio" name="history" value="partial_history" class="vam" />
+        <span calss="vam">{% trans "Only keep a period of history:" %}
+            <input type="text" name="days" size="4" disabled="disabled"
+            class="input-disabled" value="<%- default_history_limit %>" /> {% trans "days" %}
+        </span><br />
+
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
+    <span class="loading-icon loading-tip"></span>
+    <p class="error hide"></p>
 </script>
 
 <script type="text/template" id="repo-permissions-dialog-tmpl">

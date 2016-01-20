@@ -15,8 +15,8 @@ define([
         initialize: function(options) {
 
             this.group_id = options.group_id;
-            this.group_name = options.group_name; 
-            this.is_owner = options.is_owner; 
+            this.group_name = options.group_name;
+            this.is_owner = options.is_owner;
 
             this.render();
             this.$el.modal({
@@ -42,7 +42,7 @@ define([
             this.setConMaxHeight();
 
             this.$loadingTip = this.$('.loading-tip');
-            this.$listContainer = this.$('tbody');   
+            this.$listContainer = this.$('tbody');
             this.$error = this.$('.error');
 
             var _this = this;
@@ -101,7 +101,7 @@ define([
                 data: {'avatar_size': 40},
                 success: function(collection, response, opts) {
                     _this.$loadingTip.hide();
-                },  
+                },
                 error: function(collection, response, opts) {
                     _this.$loadingTip.hide();
                     var err_msg;
@@ -134,7 +134,7 @@ define([
                     prepend: true,
                     success: function() {
                         $input.select2('val', '');
-                    },  
+                    },
                     error: function(collection, response, options) {
                         $input.select2('val', '');
                         var err_msg;
@@ -142,9 +142,9 @@ define([
                             err_msg = response.responseJSON.error_msg;
                         } else {
                             err_msg = gettext('Please check the network.');
-                        }   
+                        }
                         _this.$error.html(err_msg).show();
-                    }  
+                    }
                 });
             } else {
                 $.ajax({

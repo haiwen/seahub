@@ -37,11 +37,7 @@ define([
         },
 
         render: function() {
-            var obj = this.model.toJSON();
-            $.extend(obj, {
-                enable_repo_history_setting: app.pageOptions.enable_repo_history_setting
-            });
-            this.$el.html(this.template(obj));
+            this.$el.html(this.template(this.model.toJSON()));
             return this;
         },
 

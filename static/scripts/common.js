@@ -100,6 +100,7 @@ define([
               case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
               case 'rename_repo': return siteRoot + 'api2/repos/' + options.repo_id + '/?op=rename';
               case 'transfer_repo': return siteRoot + 'api2/repos/' + options.repo_id + '/owner/';
+              case 'repo_history_limit': return siteRoot + 'api2/repos/' + options.repo_id + '/history-limit/';
 
               // Permission
               case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
@@ -180,7 +181,6 @@ define([
             }
         },
 
-        // TODO: Change to jquery function like $.disableButtion(btn)
         enableButton: function(btn) {
             btn.removeAttr('disabled').removeClass('btn-disabled');
         },
