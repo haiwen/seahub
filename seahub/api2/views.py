@@ -1077,10 +1077,7 @@ class RepoHistoryLimit(APIView):
 
         username = request.user.username
         # no settings for virtual repo
-        if repo.is_virtual or \
-            not config.ENABLE_REPO_HISTORY_SETTING or \
-            username != repo_owner:
-
+        if repo.is_virtual or username != repo_owner:
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 

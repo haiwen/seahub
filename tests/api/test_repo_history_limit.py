@@ -4,6 +4,8 @@ import json
 
 from django.core.urlresolvers import reverse
 
+from constance import config
+
 from seahub.test_utils import BaseTestCase
 
 class RepoTest(BaseTestCase):
@@ -16,6 +18,15 @@ class RepoTest(BaseTestCase):
 
     def test_can_get_history_limit(self):
         self.login_as(self.user)
+        resp = self.client.get(reverse("api2-repo-history-limit", args=[self.user_repo_id]))
+        json_resp = json.loads(resp.content)
+        assert json_resp['keep_days'] == -1
+
+    def test_can_get_history_limit_if_setting_not_enabled(self):
+        self.login_as(self.user)
+
+        config.ENABLE_REPO_HISTORY_SETTING = False
+
         resp = self.client.get(reverse("api2-repo-history-limit", args=[self.user_repo_id]))
         json_resp = json.loads(resp.content)
         assert json_resp['keep_days'] == -1
@@ -74,3 +85,13 @@ class RepoTest(BaseTestCase):
         data = 'keep_days=%s' % 'invalid-arg'
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
+
+    def test_can_not_set_if_setting_not_enabled(self):
+        self.login_as(self.user)
+
+        config.ENABLE_REPO_HISTORY_SETTING = False
+
+        url = reverse("api2-repo-history-limit", args=[self.user_repo_id])
+        data = 'keep_days=%s' % 6
+        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
+        self.assertEqual(403, resp.status_code)
