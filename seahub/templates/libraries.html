@@ -185,7 +185,7 @@
 <div id="organization-repos" class="tab-tabs hide">
     <div class="hd">
         <h3 class="fleft">{% trans "Libraries" %}</h3>
-        <button id="add-pub-lib" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+        <button id="add-pub-lib" class="fright {% if not can_add_pub_repo %}hide{% endif %}"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
         <ul id="add-pub-lib-menu" class="hide">
             <li class="item share-existing">{% trans "Share existing libraries" %}</li>
             <li class="item create-new">{% trans "Create a new library" %}</li>

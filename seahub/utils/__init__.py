@@ -1311,3 +1311,11 @@ def within_time_range(d1, d2, maxdiff_seconds):
     # delta.total_seconds() is only available in python 2.7+
     diff = (delta.microseconds + (delta.seconds + delta.days*24*3600) * 1e6) / 1e6
     return diff < maxdiff_seconds
+
+def enable_org_repo_creation(request):
+    """Whether or not enable organization library.
+    """
+    if request.user.is_staff:
+        return True
+    else:
+        return config.ENABLE_ORGANIZATION_LIBRARY
