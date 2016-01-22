@@ -527,8 +527,6 @@ get_events_conf_file()
 # Settings for Extra App #
 ##########################
 
-ENABLE_PUBFILE = False
-
 ENABLE_SUB_LIBRARY = True
 
 ############################
