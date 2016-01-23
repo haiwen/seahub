@@ -29,6 +29,7 @@ from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from django.utils.dateformat import DateFormat
 
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
@@ -4196,3 +4197,180 @@ class OrganizationView(APIView):
         except Exception as e:
             logger.error(e)
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
+
+class RepoDownloadSharedLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if request.user.username != repo_owner or repo.is_virtual:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        shared_links = []
+        fileshares = FileShare.objects.filter(repo_id=repo_id)
+        for fs in fileshares:
+            size = None
+            shared_link = {}
+            if fs.is_file_share_link():
+                path = fs.path.rstrip('/') # Normalize file path
+                if seafile_api.get_file_id_by_path(repo.id, fs.path) is None:
+                    continue
+
+                obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+                size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
+            else:
+                path = fs.path
+                if path[-1] != '/': # Normalize dir path
+                    path += '/'
+
+                if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
+                    continue
+
+            shared_link['create_by'] = fs.username
+            shared_link['creator_name'] = email2nickname(fs.username)
+            # return time with time zone: 2016-01-18T15:03:10+0800
+            shared_link['create_time'] = fs.ctime.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(fs.ctime).format('O')
+            shared_link['token'] = fs.token
+            shared_link['path'] = path
+            shared_link['name'] = os.path.basename(path.rstrip('/')) if path != '/' else '/'
+            shared_link['view_count'] = fs.view_cnt
+            shared_link['share_type'] = fs.s_type
+            shared_link['size'] = size if size else ''
+            shared_links.append(shared_link)
+
+        return Response(shared_links)
+
+class RepoDownloadSharedLink(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, repo_id, token, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if request.user.username != repo_owner or repo.is_virtual:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        link.delete()
+        result = {'success': True}
+        return Response(result)
+
+class RepoUploadSharedLinks(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, repo_id, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if request.user.username != repo_owner or repo.is_virtual:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        shared_links = []
+        fileshares = UploadLinkShare.objects.filter(repo_id=repo_id)
+        for fs in fileshares:
+            shared_link = {}
+            path = fs.path
+            if path[-1] != '/': # Normalize dir path
+                path += '/'
+
+            if seafile_api.get_dir_id_by_path(repo.id, fs.path) is None:
+                continue
+
+            shared_link['create_by'] = fs.username
+            shared_link['creator_name'] = email2nickname(fs.username)
+            # return time with time zone: 2016-01-18T15:03:10+0800
+            shared_link['create_time'] = fs.ctime.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(fs.ctime).format('O')
+            shared_link['token'] = fs.token
+            shared_link['path'] = path
+            shared_link['name'] = os.path.basename(path.rstrip('/')) if path != '/' else '/'
+            shared_link['view_count'] = fs.view_cnt
+            shared_links.append(shared_link)
+
+        return Response(shared_links)
+
+class RepoUploadSharedLink(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
+    throttle_classes = (UserRateThrottle, )
+
+    def delete(self, request, repo_id, token, format=None):
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        org_id = None
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+
+        # check permission
+        if org_id:
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if request.user.username != repo_owner or repo.is_virtual:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            link = UploadLinkShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'Link %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        link.delete()
+        result = {'success': True}
+        return Response(result)
