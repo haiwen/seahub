@@ -67,4 +67,4 @@ class RepoPublicTest(BaseTestCase):
         resp = self.client.post(self.user_repo_url)
         self.assertEqual(403, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['error_msg'] == 'Failed to share library to public: permission denied.'
+        assert json_resp['error_msg'] == 'Permission denied.'

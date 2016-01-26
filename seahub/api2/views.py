@@ -71,7 +71,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link, enable_org_repo_creation
+    gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -1076,11 +1076,11 @@ class RepoPublic(APIView):
         """
         repo = get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
-        if not enable_org_repo_creation(request):
+        if not is_org_repo_creation_allowed(request):
             return api_error(status.HTTP_403_FORBIDDEN,
-                             'Failed to share library to public: permission denied.')
+                             'Permission denied.')
 
         if check_permission(repo_id, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
@@ -3214,7 +3214,7 @@ class SharedRepo(APIView):
 
         elif share_type == 'public':
             if not CLOUD_MODE:
-                if not enable_org_repo_creation(request):
+                if not is_org_repo_creation_allowed(request):
                     return api_error(status.HTTP_403_FORBIDDEN,
                                      'Failed to share library to public: permission denied.')
 
