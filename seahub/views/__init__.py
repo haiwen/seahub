@@ -53,7 +53,8 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
     user_traffic_over_limit, send_perm_audit_msg, get_origin_repo_info, \
-    get_max_upload_file_size, is_pro_version, FILE_AUDIT_ENABLED
+    get_max_upload_file_size, is_pro_version, FILE_AUDIT_ENABLED, \
+    is_org_repo_creation_allowed
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
@@ -1267,6 +1268,8 @@ def libraries(request):
         UserOptions.objects.disable_user_guide(username)
 
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
+    can_add_pub_repo = True if is_org_repo_creation_allowed(request) else False
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -1279,6 +1282,7 @@ def libraries(request):
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
+            'can_add_pub_repo': can_add_pub_repo,
             }, context_instance=RequestContext(request))
 
 @login_required
