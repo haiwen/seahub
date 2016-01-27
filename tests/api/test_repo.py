@@ -51,3 +51,9 @@ class RepoTest(BaseTestCase):
 
         assert len(FileShare.objects.all()) == 0
         assert len(UploadLinkShare.objects.all()) == 0
+
+    def test_invalid_magic_argu(self):
+        self.login_as(self.user)
+
+        resp = self.client.post(reverse('api2-repo', args=[self.repo.id])+'?op=checkpassword&magic=123')
+        self.assertEqual(500, resp.status_code)

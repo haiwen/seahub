@@ -966,7 +966,8 @@ class Repo(APIView):
 
             try:
                 seafile_api.check_passwd(repo.id, magic)
-            except SearpcError, e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
             return Response("success")
@@ -2530,7 +2531,7 @@ class DirView(APIView):
         return reloaddir_if_necessary(request, repo, parent_dir_utf8)
 
 class DirDownloadView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
