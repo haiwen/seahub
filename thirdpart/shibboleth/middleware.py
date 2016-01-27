@@ -5,6 +5,7 @@ from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB
 
 from seahub import auth
 from seahub.base.sudo_mode import update_sudo_mode_ts
+from seahub.profile.models import Profile
 
 class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
     """
@@ -41,6 +42,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
             # request.user set to AnonymousUser by the
             # AuthenticationMiddleware).
             return
+
         # If the user is already authenticated and that user is the user we are
         # getting passed in the headers, then the correct user is already
         # persisted in the session and we don't need to continue.
@@ -107,11 +109,26 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
 
     def make_profile(self, user, shib_meta):
         """
-        This is here as a stub to allow subclassing of ShibbolethRemoteUserMiddleware
-        to include a make_profile method that will create a Django user profile
-        from the Shib provided attributes.  By default it does nothing.
+        Extrat nickname(givenname surname), contact_email, institution from
+        Shib attributs, and add those to user profile.
         """
-        return
+        givenname = shib_meta.get('givenname', '')
+        surname = shib_meta.get('surname', '')
+        nickname = "%s %s" % (givenname, surname)
+        institution = shib_meta.get('institution', None)
+        contact_email = shib_meta.get('contact_email', None)
+
+        p = Profile.objects.get_profile_by_user(user.username)
+        if not p:
+            p = Profile(user=user.username)
+
+        p.nickname = nickname
+        if institution:
+            p.institution = institution
+        if contact_email:
+            p.contact_email = contact_email
+
+        p.save()
 
     def setup_session(self, request):
         """
