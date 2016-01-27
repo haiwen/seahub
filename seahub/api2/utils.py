@@ -14,6 +14,7 @@ from django.core.paginator import EmptyPage, InvalidPage
 from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status, serializers
+import seaserv
 from seaserv import seafile_api, get_commits, server_repo_size, \
     get_personal_groups_by_user, is_group_user, get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
@@ -28,7 +29,7 @@ from seahub.group.views import is_group_staff
 from seahub.message.models import UserMessage, UserMsgAttachment
 from seahub.notifications.models import UserNotification
 from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
-    gen_file_get_url
+    gen_file_get_url, is_org_context
 from seahub.utils.paginator import Paginator
 from seahub.utils.file_types import IMAGE
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
@@ -558,3 +559,123 @@ def to_python_boolean(string):
 
 def is_seafile_pro():
     return any(['seahub_extra' in app for app in settings.INSTALLED_APPS])
+
+def api_repo_setting_permission_check(func):
+    """Decorator for initial repo setting permission check
+    """
+    def _decorated(view, request, repo_id, *args, **kwargs):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        username = request.user.username
+        if repo.is_virtual or username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        return func(view, request, repo_id, *args, **kwargs)
+
+    return _decorated
+
+def api_repo_user_folder_perm_check(func):
+    """Check repo setting permission and args used by user-folder-perm
+    """
+    def _decorated(view, request, repo_id, *args, **kwargs):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        username = request.user.username
+        if repo.is_virtual or username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check arguments
+        user = request.data.get('user', None)
+        path = request.data.get('path', None)
+        perm = request.data.get('perm', None)
+
+        try:
+            User.objects.get(email=user)
+        except User.DoesNotExist:
+            error_msg = 'User %s not found.' % user
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if path:
+            path = path.rstrip('/') if path != '/' else path
+
+        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if request.method in ('POST', 'PUT') and perm not in ('r', 'rw'):
+            error_msg = 'perm invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        return func(view, request, repo_id, *args, **kwargs)
+
+    return _decorated
+
+def api_repo_group_folder_perm_check(func):
+    """Check repo setting permission and args used by group-folder-perm
+    """
+    def _decorated(view, request, repo_id, *args, **kwargs):
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check permission
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        username = request.user.username
+        if repo.is_virtual or username != repo_owner:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check arguments
+        group_id = request.data.get('group_id', None)
+        path = request.data.get('path', None)
+        perm = request.data.get('perm', None)
+
+        try:
+            group_id = int(group_id)
+        except ValueError:
+            error_msg = 'group_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not seaserv.get_group(group_id):
+            error_msg = 'Group %s not found.' % group_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if path:
+            path = path.rstrip('/') if path != '/' else path
+
+        if seafile_api.get_dir_id_by_path(repo_id, path) is None:
+            error_msg = 'Folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if request.method in ('POST', 'PUT') and perm not in ('r', 'rw'):
+            error_msg = 'perm invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        return func(view, request, repo_id, *args, **kwargs)
+
+    return _decorated
