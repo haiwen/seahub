@@ -56,7 +56,7 @@ class DirSharedItemsEndpoint(APIView):
     def list_group_shared_items(self, request, repo_id, path):
         username = request.user.username
         if path == '/':
-            share_items = seafile_api.list_repo_shared_group(username, repo_id)
+            share_items = seafile_api.list_repo_shared_group_by_user(username, repo_id)
         else:
             share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
                                                                    path, username)
@@ -422,7 +422,7 @@ class DirSharedItemsEndpoint(APIView):
 
             # hacky way to get group repo permission
             permission = ''
-            for e in seafile_api.list_repo_shared_group(username, shared_repo.id):
+            for e in seafile_api.list_repo_shared_group_by_user(username, shared_repo.id):
                 if e.group_id == group_id:
                     permission = e.perm
                     break

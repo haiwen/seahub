@@ -9,7 +9,6 @@ from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.utils.translation import ugettext as _
 from django.utils.http import urlquote
 
@@ -17,16 +16,13 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
-from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
-from seahub.contacts.models import Contact
 from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
-    check_repo_access_permission, get_repo_dirents_with_perm, \
-    get_system_default_repo_id
+    check_folder_permission, get_repo_dirents_with_perm
 
 from seahub.utils import gen_file_upload_url, is_org_context, \
     get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
@@ -84,46 +80,17 @@ def get_next_url_from_request(request):
 def get_nav_path(path, repo_name):
     return gen_path_link(path, repo_name)
 
-def get_shared_groups_by_repo_and_user(repo_id, username):
-    """Get all groups which this repo is shared.
-    """
-    repo_shared_groups = seaserv.get_shared_groups_by_repo(repo_id)
-
-    # Filter out groups that user is joined.
-    groups = [x for x in repo_shared_groups if seaserv.is_group_user(x.id, username)]
-    return groups
-
 def is_no_quota(repo_id):
     return True if seaserv.check_quota(repo_id) < 0 else False
 
 def get_upload_url(request, repo_id):
     username = request.user.username
-    if check_repo_access_permission(repo_id, request.user) == 'rw':
+    if check_folder_permission(request, repo_id, '/') == 'rw':
         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
                                                         'upload', username)
         return gen_file_upload_url(token, 'upload')
     else:
         return ''
-
-# def get_api_upload_url(request, repo_id):
-#     """Get file upload url for web api.
-#     """
-#     username = request.user.username
-#     if check_repo_access_permission(repo_id, request.user) == 'rw':
-#         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-#                                                         'upload', username)
-#         return gen_file_upload_url(token, 'upload-api')
-#     else:
-#         return ''
-
-# def get_api_update_url(request, repo_id):
-#     username = request.user.username
-#     if check_repo_access_permission(repo_id, request.user) == 'rw':
-#         token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-#                                                         'update', username)
-#         return gen_file_upload_url(token, 'update-api')
-#     else:
-#         return ''
 
 def get_fileshare(repo_id, username, path):
     if path == '/':    # no shared link for root dir
@@ -169,7 +136,7 @@ def render_repo(request, repo):
     """
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
         return render_error(request, _(u'Permission denied'))
 
@@ -228,13 +195,6 @@ def render_repo(request, repo):
     if dirent_more:
         more_start = 100
     zipped = get_nav_path(path, repo.name)
-    repo_groups = get_shared_groups_by_repo_and_user(repo.id, username)
-    if len(repo_groups) > 1:
-        repo_group_str = render_to_string("snippets/repo_group_list.html",
-                                          {'groups': repo_groups})
-    else:
-        repo_group_str = ''
-
     fileshare = get_fileshare(repo.id, username, path)
     dir_shared_link = get_dir_share_link(fileshare)
     uploadlink = get_uploadlink(repo.id, username, path)
@@ -265,8 +225,6 @@ def render_repo(request, repo):
             'more_start': more_start,
             'path': path,
             'zipped': zipped,
-            'groups': repo_groups,
-            'repo_group_str': repo_group_str,
             'no_quota': no_quota,
             'max_upload_file_size': max_upload_file_size,
             'fileserver_root': fileserver_root,
@@ -318,7 +276,7 @@ def repo_history_view(request, repo_id):
 
     username = request.user.username
     path = get_path_from_request(request)
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    user_perm = check_folder_permission(request, repo.id, '/')
     if user_perm is None:
         return render_error(request, _(u'Permission denied'))
 

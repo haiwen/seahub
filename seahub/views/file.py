@@ -36,7 +36,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
 from seaserv import get_repo, send_message, \
-    get_commits, check_permission, get_shared_groups_by_repo,\
+    get_commits, check_permission,\
     is_group_user, get_file_id_by_path, get_commit, get_file_size, \
     get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
 from pysearpc import SearpcError
@@ -86,8 +86,7 @@ try:
 except ImportError:
     OFFICE_WEB_APP_FILE_EXTENSION = ()
 
-from seahub.views import is_registered_user, check_repo_access_permission, \
-    get_unencry_rw_repos_by_user, get_file_access_permission
+from seahub.views import get_unencry_rw_repos_by_user
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -186,9 +185,7 @@ def get_file_view_path_and_perm(request, repo_id, obj_id, path, use_onetime=True
     username = request.user.username
     filename = os.path.basename(path)
 
-    # user_perm = get_file_access_permission(repo_id, path, username) or \
-    #     get_repo_access_permission(repo_id, username)
-    user_perm = check_repo_access_permission(repo_id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         return ('', '', user_perm)
     else:
@@ -1275,8 +1272,7 @@ def download_file(request, repo_id, obj_id):
 
     # Permission check and generate download link
     path = request.GET.get('p', '')
-    if check_repo_access_permission(repo_id, request.user) or \
-            get_file_access_permission(repo_id, path, username):
+    if check_folder_permission(request, repo_id, path):
         # Get a token to access file
         token = seafile_api.get_fileserver_access_token(repo_id, obj_id,
                                                         'download', username)
@@ -1303,7 +1299,7 @@ def get_file_content_by_commit_and_path(request, repo_id, commit_id, path, file_
     if not obj_id or obj_id == EMPTY_SHA1:
         return '', None
     else:
-        permission = check_repo_access_permission(repo_id, request.user)
+        permission = check_folder_permission(request, repo_id, '/')
         if permission:
             # Get a token to visit file
             token = seafile_api.get_fileserver_access_token(repo_id, obj_id,

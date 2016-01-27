@@ -103,7 +103,7 @@ def get_system_default_repo_id():
     return _default_repo_id
 
 def check_folder_permission(request, repo_id, path):
-    """Check repo/folder access permission of a user, always return 'rw'
+    """Check repo/folder/file access permission of a user, always return 'rw'
     when repo is system repo and user is admin.
 
     Arguments:
@@ -113,21 +113,6 @@ def check_folder_permission(request, repo_id, path):
     """
     username = request.user.username
     if request.user.is_staff and get_system_default_repo_id() == repo_id:
-        return 'rw'
-
-    return seafile_api.check_permission_by_path(repo_id, path, username)
-
-def check_file_permission(request, repo_id, path):
-    """Check file access permission of a user, always return 'rw'
-    when repo is system repo and user is admin.
-
-    Arguments:
-    - `request`:
-    - `repo_id`:
-    - `path`:
-    """
-    username = request.user.username
-    if get_system_default_repo_id() == repo_id and request.user.is_staff:
         return 'rw'
 
     return seafile_api.check_permission_by_path(repo_id, path, username)
@@ -158,36 +143,6 @@ def check_file_lock(repo_id, file_path, username):
         return (True, True)
     else:
         return (None, None)
-
-def check_repo_access_permission(repo_id, user):
-    """Check repo access permission of a user, always return 'rw' when repo is
-    system repo and user is admin.
-
-    Arguments:
-    - `repo_id`:
-    - `user`:
-    """
-    if user.is_staff and get_system_default_repo_id() == repo_id:
-        return 'rw'
-    else:
-        return seafile_api.check_repo_access_permission(repo_id, user.username)
-
-def get_file_access_permission(repo_id, path, username):
-    """Check user has permission to view the file.
-    1. check whether this file is private shared.
-    2. if failed, check whether the parent of this directory is private shared.
-    """
-
-    pfs = PrivateFileDirShare.objects.get_private_share_in_file(username,
-                                                               repo_id, path)
-    if pfs is None:
-        dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
-        for e in dirs:
-            if path.startswith(e.path):
-                return e.permission
-        return None
-    else:
-        return pfs.permission
 
 def gen_path_link(path, repo_name):
     """
@@ -417,7 +372,7 @@ def get_unencry_rw_repos_by_user(request):
 
     for r in shared_repos + groups_repos + public_repos:
         if not has_repo(accessible_repos, r) and not r.encrypted:
-            if seafile_api.check_repo_access_permission(r.id, username) == 'rw':
+            if check_folder_permission(request, r.id, '/') == 'rw':
                 accessible_repos.append(r)
 
     return accessible_repos
@@ -702,7 +657,7 @@ def repo_basic_info(request, repo_id):
     if not can_access:
         raise Http404
 
-    history_limit = seaserv.get_repo_history_limit(repo.id)
+    history_limit = seafile_api.get_repo_history_limit(repo.id)
     full_history_checked = no_history_checked = partial_history_checked = False
     if history_limit > 0:
         partial_history_checked = True
@@ -813,10 +768,11 @@ def repo_shared_link(request, repo_id):
             if path[-1] != '/':         # Normalize dir path
                 path += '/'
             #get dir size
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(
-                repo.id, repo.head_cmmt_id, path)
-            fs.filesize = seafserv_threaded_rpc.get_dir_size(repo.store_id,
-                                                         repo.version, dir_id)
+            dir_id = seafile_api.get_dir_id_by_commit_and_path(repo.id,
+                repo.head_cmmt_id, path)
+            fs.filesize = seafile_api.get_dir_size(repo.store_id,
+                repo.version, dir_id)
+
         p_fileshares.append(fs)
 
     # upload links
@@ -1027,7 +983,7 @@ def repo_history(request, repo_id):
     """
     List library modification histories.
     """
-    user_perm = check_repo_access_permission(repo_id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if not user_perm:
         return render_permission_error(request, _(u'Unable to view library modification'))
 
@@ -1098,7 +1054,7 @@ def repo_revert_history(request, repo_id):
         return HttpResponseRedirect(next)
 
     # perm check
-    perm = check_repo_access_permission(repo.id, request.user)
+    perm = check_folder_permission(request, repo_id, '/')
     username = request.user.username
     repo_owner = seafile_api.get_repo_owner(repo.id)
 
@@ -1642,7 +1598,7 @@ def file_revisions(request, repo_id):
         raise Http404
 
     # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
+    if check_folder_permission(request, repo_id, '/') is None:
         raise Http404
 
     return render_file_revisions(request, repo_id)
@@ -1849,16 +1805,15 @@ def repo_download_dir(request, repo_id):
     else:
         dirname = repo.name
 
-    allow_download = True if check_repo_access_permission(
-        repo_id, request.user) else False
-    if allow_download:
-        dir_id = seafserv_threaded_rpc.get_dirid_by_path (repo.id,
-                                                          repo.head_cmmt_id,
-                                                          path.encode('utf-8'))
+    allow_download = True if check_folder_permission(request, repo_id, '/') else False
 
+    if allow_download:
+
+        dir_id = seafile_api.get_dir_id_by_commit_and_path(repo.id,
+            repo.head_cmmt_id, path)
         try:
-            total_size = seafserv_threaded_rpc.get_dir_size(repo.store_id, repo.version,
-                                                            dir_id)
+            total_size = seafile_api.get_dir_size(repo.store_id,
+                repo.version, dir_id)
         except Exception, e:
             logger.error(str(e))
             return render_error(request, _(u'Internal Error'))
@@ -1942,7 +1897,7 @@ def convert_cmmt_desc_link(request):
         raise Http404
 
     # perm check
-    if check_repo_access_permission(repo_id, request.user) is None:
+    if check_folder_permission(request, repo_id, '/') is None:
         raise Http404
 
     diff_result = seafserv_threaded_rpc.get_diff(repo_id, '', cmmt_id)

@@ -236,9 +236,7 @@ class RepoUserFolderPermTest(BaseTestCase):
     def test_invalid_perm(self):
         self.login_as(self.user)
 
-        invalid_perm = randstring(1)
-        while invalid_perm == 'r':
-            invalid_perm = randstring(1)
+        invalid_perm = 'a'
 
         # test add
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
@@ -249,10 +247,6 @@ class RepoUserFolderPermTest(BaseTestCase):
         }
         resp = self.client.post(url, data)
         self.assertEqual(400, resp.status_code)
-
-        invalid_perm = randstring(2)
-        while invalid_perm == 'rw':
-            invalid_perm = randstring(2)
 
         # test modify
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
