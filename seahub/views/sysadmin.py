@@ -872,12 +872,8 @@ def user_info(request, email):
                 if path[-1] != '/':         # Normalize dir path
                     path += '/'
                 # get dir size
-                dir_id = seafserv_threaded_rpc.get_dirid_by_path(r.id,
-                                                                 r.head_cmmt_id,
-                                                                 path)
-                fs.dir_size = seafserv_threaded_rpc.get_dir_size(r.store_id,
-                                                                 r.version,
-                                                                 dir_id)
+                dir_id = seafile_api.get_dir_id_by_commit_and_path(r.id, r.head_cmmt_id, path)
+                fs.dir_size = seafile_api.get_dir_size(r.store_id, r.version, dir_id)
 
             fs.is_download = True
             p_fileshares.append(fs)

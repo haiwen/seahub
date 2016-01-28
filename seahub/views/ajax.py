@@ -22,8 +22,7 @@ import seaserv
 from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage, edit_repo, \
-    set_repo_history_limit
+    get_user_quota_usage, get_user_share_usage, edit_repo
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
@@ -39,10 +38,9 @@ from seahub.share.models import UploadLinkShare
 from seahub.group.models import PublicGroup
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import get_repo_dirents_with_perm, validate_owner, \
-    check_repo_access_permission, get_unencry_rw_repos_by_user, \
+    get_unencry_rw_repos_by_user, is_registered_user, \
     get_system_default_repo_id, get_diff, group_events_data, \
-    get_owned_repo_list, check_folder_permission, is_registered_user, \
-    check_file_lock
+    get_owned_repo_list, check_folder_permission
 from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
     get_uploadlink, get_dir_shared_upload_link
 from seahub.views.modules import get_enabled_mods_by_group, \
@@ -97,7 +95,7 @@ def get_dirents(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
     # permission checking
-    user_perm = check_repo_access_permission(repo_id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u"You don't have permission to access the library.")
         return HttpResponse(json.dumps({"err_msg": err_msg}), status=403,
@@ -201,7 +199,7 @@ def get_unenc_group_repos(request, group_id):
             if not repo.encrypted:
                 repo_list.append({"name": repo.repo_name, "id": repo.repo_id})
     else:
-        repos = seafile_api.get_group_repo_list(group_id_int)
+        repos = seafile_api.get_repos_by_group(group_id_int)
         for repo in repos:
             if not repo.encrypted:
                 repo_list.append({"name": repo.name, "id": repo.id})
@@ -256,7 +254,7 @@ def list_dir(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -343,7 +341,7 @@ def list_dir_more(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -1181,7 +1179,7 @@ def cancel_cp(request):
 def repo_star_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
-    user_perm = check_repo_access_permission(repo_id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -1201,7 +1199,7 @@ def repo_star_file(request, repo_id):
 def repo_unstar_file(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 
-    user_perm = check_repo_access_permission(repo_id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -1250,7 +1248,7 @@ def get_current_commit(request, repo_id):
                             status=400, content_type=content_type)
 
     username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
+    user_perm = check_folder_permission(request, repo_id, '/')
     if user_perm is None:
         err_msg = _(u'Permission denied.')
         return HttpResponse(json.dumps({'error': err_msg}),
@@ -1380,8 +1378,9 @@ def download_enc_file(request, repo_id, file_id):
         return HttpResponse(json.dumps(result), content_type=content_type)
 
     try:
-        blks = seafile_api.list_file_by_file_id(repo_id, file_id)
-    except SearpcError, e:
+        blks = seafile_api.list_blocks_by_file_id(repo_id, file_id)
+    except SearpcError as e:
+        logger.error(e)
         result['error'] = _(u'Failed to get file block list')
         return HttpResponse(json.dumps(result), content_type=content_type)
 
@@ -1701,8 +1700,7 @@ def get_share_in_repo_list(request, start, limit):
         repo_list = seafile_api.get_share_in_repo_list(username, -1, -1)
 
     for repo in repo_list:
-        repo.user_perm = seafile_api.check_repo_access_permission(repo.repo_id,
-                                                                  username)
+        repo.user_perm = check_folder_permission(request, repo.repo_id, '/')
     return repo_list
 
 def get_groups_by_user(request):
@@ -1741,8 +1739,7 @@ def get_group_repos(request, groups):
                 r.last_modified = get_repo_last_modify(r)
                 r.share_type = 'group'
                 r.user = repo_owner
-                r.user_perm = seafile_api.check_repo_access_permission(
-                    r_id, username)
+                r.user_perm = check_folder_permission(request, r_id, '/')
                 r.group = grp
                 group_repos.append(r)
     else:
@@ -1765,8 +1762,7 @@ def get_group_repos(request, groups):
                 r.last_modified = get_repo_last_modify(r)
                 r.share_type = 'group'
                 r.user = repo_owner
-                r.user_perm = seafile_api.check_repo_access_permission(
-                    r_id, username)
+                r.user_perm = check_folder_permission(request, r_id, '/')
                 r.group = grp
                 group_repos.append(r)
     return group_repos
@@ -1881,7 +1877,7 @@ def repo_history_changes(request, repo_id):
                 status=400, content_type=content_type)
 
     # perm check
-    if check_repo_access_permission(repo.id, request.user) is None:
+    if check_folder_permission(request, repo_id, '/') is None:
         if request.user.is_staff is True:
             pass # Allow system staff to check repo changes
         else:
@@ -2148,7 +2144,7 @@ def ajax_repo_change_basic_info(request, repo_id):
 
     # set library history
     if days is not None and config.ENABLE_REPO_HISTORY_SETTING:
-        res = set_repo_history_limit(repo_id, days)
+        res = seafile_api.set_repo_history_limit(repo_id, days)
         if res != 0:
             return HttpResponse(json.dumps({
                         'error': _(u'Failed to save settings on server')

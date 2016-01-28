@@ -6,7 +6,6 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.utils import EMPTY_SHA1
-from seahub.views import check_repo_access_permission
 from seahub.base.accounts import User
 
 logger = logging.getLogger(__name__)

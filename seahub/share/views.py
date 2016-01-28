@@ -36,8 +36,7 @@ from seahub.base.decorators import user_mods_check, require_POST
 from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
-from seahub.views import is_registered_user, check_repo_access_permission, \
-        check_folder_permission
+from seahub.views import is_registered_user, check_folder_permission
 from seahub.utils import render_permission_error, string2list, render_error, \
     gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
@@ -1206,8 +1205,12 @@ def ajax_get_upload_link(request):
             path += '/'
 
         repo = seaserv.get_repo(repo_id)
-        user_perm = check_repo_access_permission(repo.id, request.user)
+        if not repo:
+            err = 'Library %s not found.' % repo_id
+            data = json.dumps({'error': err})
+            return HttpResponse(data, status=404, content_type=content_type)
 
+        user_perm = check_folder_permission(request, repo_id, '/')
         if user_perm == 'rw':
             l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
                 username=request.user.username).filter(path=path)

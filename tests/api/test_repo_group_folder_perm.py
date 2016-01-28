@@ -1,7 +1,6 @@
 """seahub/api2/views.py::Repo api tests.
 """
 import json
-from random import randint
 from tests.common.utils import randstring
 from django.core.urlresolvers import reverse
 from seaserv import seafile_api
@@ -211,9 +210,7 @@ class RepoGroupFolderPermTest(BaseTestCase):
     def test_invalid_group(self):
         self.login_as(self.user)
 
-        invalid_group_id = randint(0, 9)
-        while invalid_group_id == self.group_id:
-            invalid_group_id = randint(0, 9)
+        invalid_group_id = -1
 
         # test delete
         url = reverse("api2-repo-group-folder-perm", args=[self.user_repo_id])

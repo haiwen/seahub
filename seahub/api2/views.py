@@ -34,12 +34,10 @@ from django.utils.dateformat import DateFormat
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
-from .utils import is_repo_writable, is_repo_accessible, \
+from .utils import get_diff_details, \
     api_error, get_file_size, prepare_starred_files, \
     get_groups, get_group_and_contacts, prepare_events, \
-    get_person_msgs, api_group_check, get_email, get_timestamp, \
-    get_group_message_json, get_group_msgs, get_group_msgs_json, get_diff_details, \
-    json_response, to_python_boolean, is_seafile_pro, \
+    api_group_check, get_timestamp, json_response, is_seafile_pro, \
     api_repo_user_folder_perm_check, api_repo_setting_permission_check, \
     api_repo_group_folder_perm_check
 
@@ -84,7 +82,7 @@ from seahub.utils.timeutils import utc_to_local
 from seahub.views import validate_owner, is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
     list_inner_pub_repos, get_virtual_repos_by_owner, \
-    check_folder_permission, check_file_permission
+    check_folder_permission
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
     get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
@@ -121,7 +119,7 @@ from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
     remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
-    create_org
+    create_org, ccnet_api
 
 from constance import config
 
@@ -901,11 +899,6 @@ def check_set_repo_password(request, repo):
 
         return set_repo_password(request, repo, password)
 
-def check_repo_access_permission(request, repo):
-    if not seafile_api.check_repo_access_permission(repo.id,
-                                                    request.user.username):
-        return api_error(status.HTTP_403_FORBIDDEN,
-                'You do not have permission to access this library.')
 
 class Repo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -918,7 +911,7 @@ class Repo(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         username = request.user.username
-        if not is_repo_accessible(repo.id, username):
+        if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this library.')
 
@@ -967,12 +960,14 @@ class Repo(APIView):
             if not magic:
                 return api_error(HTTP_441_REPO_PASSWD_MAGIC_REQUIRED,
                                  'Library password magic is needed.')
-            resp = check_repo_access_permission(request, repo)
-            if resp:
-                return resp
+
+            if not check_folder_permission(request, repo_id, '/'):
+                return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
+
             try:
                 seafile_api.check_passwd(repo.id, magic)
-            except SearpcError, e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
             return Response("success")
@@ -1085,7 +1080,7 @@ class RepoHistoryLimit(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
-            keep_days = seaserv.get_repo_history_limit(repo_id)
+            keep_days = seafile_api.get_repo_history_limit(repo_id)
             return Response({'keep_days': keep_days})
         except SearpcError as e:
             logger.error(e)
@@ -1130,14 +1125,14 @@ class RepoHistoryLimit(APIView):
             # days <= -1, keep full history
             # days = 0, not keep history
             # days > 0, keep a period of days
-            res = seaserv.set_repo_history_limit(repo_id, keep_days)
+            res = seafile_api.set_repo_history_limit(repo_id, keep_days)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         if res == 0:
-            new_limit = seaserv.get_repo_history_limit(repo_id)
+            new_limit = seafile_api.get_repo_history_limit(repo_id)
             return Response({'keep_days': new_limit})
         else:
             error_msg = 'Failed to set library history limit.'
@@ -1150,8 +1145,7 @@ class DownloadRepo(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
-        username = request.user.username
-        if not is_repo_accessible(repo_id, username):
+        if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this library.')
 
@@ -1256,7 +1250,7 @@ class RepoOwner(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if org_id:
-            if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, new_owner):
+            if not ccnet_api.org_user_exists(org_id, new_owner):
                 error_msg = _(u'User %s not found in organization.') % new_owner
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
@@ -1264,7 +1258,7 @@ class RepoOwner(APIView):
         if org_id:
             seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
         else:
-            if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
+            if ccnet_api.get_orgs_by_user(new_owner):
                 # can not transfer library to organization user %s.
                 error_msg = 'Email %s invalid.' % new_owner
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -1503,9 +1497,10 @@ def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
         enc_version = 0
         if file_id != EMPTY_SHA1:
             try:
-                blks = seafile_api.list_file_by_file_id(repo_id, file_id)
+                blks = seafile_api.list_blocks_by_file_id(repo_id, file_id)
                 blklist = blks.split('\n')
-            except SearpcError, e:
+            except SearpcError as e:
+                logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to get file block list')
         blklist = [i for i in blklist if len(i) == 40]
@@ -1570,13 +1565,12 @@ class OpDeleteView(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
         username = request.user.username
-        if not is_repo_writable(repo.id, username):
+        if check_folder_permission(request, repo_id, '/') != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to delete this file.')
 
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         parent_dir = request.GET.get('p')
         file_names = request.POST.get("file_names")
@@ -2265,7 +2259,7 @@ class FileSharedLinkView(APIView):
 
         if share_type.lower() == 'download':
 
-            if check_file_permission(request, repo_id, path) is None:
+            if check_folder_permission(request, repo_id, path) is None:
                 return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied')
 
             expire = request.data.get('expire', None)
@@ -2537,7 +2531,7 @@ class DirView(APIView):
         return reloaddir_if_necessary(request, repo, parent_dir_utf8)
 
 class DirDownloadView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
@@ -2563,9 +2557,8 @@ class DirDownloadView(APIView):
                              'Failed to get current commit of repo %s.' % repo_id)
 
         try:
-            dir_id = seafserv_threaded_rpc.get_dirid_by_path(current_commit.repo_id,
-                                                             current_commit.id,
-                                                             path.encode('utf-8'))
+            dir_id = seafile_api.get_dir_id_by_commit_and_path(current_commit.repo_id,
+                current_commit.id, path)
         except SearpcError, e:
             return api_error(HTTP_520_OPERATION_FAILED,
                              "Failed to get dir id by path")
@@ -3885,9 +3878,8 @@ def html_repo_history_changes(request, repo_id):
     if not repo:
         return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
 
-    resp = check_repo_access_permission(request, repo)
-    if resp:
-        return resp
+    if not check_folder_permission(request, repo_id, '/'):
+        return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
     if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
         return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
@@ -3944,9 +3936,8 @@ class RepoHistoryChange(APIView):
                                 status=400,
                                 content_type=json_content_type)
 
-        resp = check_repo_access_permission(request, repo)
-        if resp:
-            return resp
+        if not check_folder_permission(request, repo_id, '/'):
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
             return HttpResponse(json.dumps({"err": 'Library is encrypted'}),
@@ -4129,7 +4120,7 @@ class RepoTokensView(APIView):
 
         tokens = {}
         for repo in repos:
-            if not seafile_api.check_repo_access_permission(repo, request.user.username):
+            if not check_folder_permission(request, repo.id, '/'):
                 continue
             tokens[repo] = seafile_api.generate_repo_token(repo, request.user.username)
 

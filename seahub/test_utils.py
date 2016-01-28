@@ -2,6 +2,7 @@ import os
 from uuid import uuid4
 
 from django.core.urlresolvers import reverse
+from django.test import RequestFactory
 from django.test import TestCase
 from exam.decorators import fixture
 from exam.cases import Exam
@@ -9,11 +10,24 @@ import seaserv
 from seaserv import seafile_api, ccnet_threaded_rpc
 
 from seahub.base.accounts import User
+from seahub.utils import mkstemp
 
 
 class Fixtures(Exam):
     user_password = 'secret'
     admin_password = 'secret'
+
+    @fixture
+    def fake_request(self):
+        # Every test needs access to the request factory.
+        factory = RequestFactory()
+
+        # Create an instance of a GET request.
+        fake_request = factory.get('/foo/')
+        fake_request.user = self.user
+        fake_request.cloud_mode = False
+
+        return fake_request
 
     @fixture
     def user(self):
@@ -82,6 +96,26 @@ class Fixtures(Exam):
         seafile_api.post_empty_file(**kwargs)
         return kwargs['parent_dir'] + kwargs['filename']
 
+    def create_file_with_content(self, file_name, parent_dir='/', content='abc',
+                                 username=''):
+        seafile_api.post_empty_file(self.repo.id, parent_dir, file_name, username)
+
+        # first dump the file content to a tmp file, then update the file
+        fd, tmp_file = mkstemp()
+
+        try:
+            bytesWritten = os.write(fd, 'junk content')
+        except:
+            bytesWritten = -1
+        finally:
+            os.close(fd)
+
+        assert bytesWritten > 0
+
+        seafile_api.put_file(self.repo.id, tmp_file, parent_dir, file_name,
+                             '', None)
+        return parent_dir + file_name
+
     def create_folder(self, **kwargs):
         seafile_api.post_dir(**kwargs)
         return kwargs['parent_dir'] + kwargs['dirname']
@@ -108,3 +142,9 @@ class BaseTestCase(TestCase, Fixtures):
             reverse('auth_login'), {'login': user.username,
                                     'password': self.user_password}
         )
+
+    def setUp(self):
+        pass
+
+    def tearDown(self):
+        self.remove_repo(self.repo.id)
