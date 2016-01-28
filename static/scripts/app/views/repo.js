@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/views/share',
-    'app/views/dialogs/history-settings',
+    'app/views/dialogs/repo-history-settings',
     'app/views/dialogs/repo-permissions',
     'app/views/dialogs/repo-share-link-admin'
 ], function($, _, Backbone, Common, ShareView, HistorySettingsDialog,
@@ -27,8 +27,8 @@ define([
             'click .js-toggle-popup': 'togglePopup',
             'click .js-repo-rename': 'rename',
             'click .js-repo-transfer': 'transfer',
-            'click .js-popup-history-settings': 'popupHistorySettings',
             'click .js-popup-permission-settings': 'popupPermissionSettings',
+            'click .js-popup-history-settings': 'popupHistorySettings',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin'
         },
 
@@ -120,20 +120,20 @@ define([
         },
 
         togglePopup: function() {
-            var icon = this.$('.js-toggle-popup'),
-            popup = this.$('.hidden-op');
+            var $icon = this.$('.js-toggle-popup'),
+                $popup = this.$('.hidden-op');
 
-            if (popup.hasClass('hide')) { // the popup is not shown
-                popup.css({'left': icon.position().left});
-                if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
+            if ($popup.hasClass('hide')) { // the popup is not shown
+                $popup.css({'left': $icon.position().left});
+                if ($icon.offset().top + $popup.height() <= $('#main').offset().top + $('#main').height()) {
                     // below the icon
-                    popup.css('top', icon.position().top + icon.height() + 3);
+                    $popup.css('top', $icon.position().top + $icon.outerHeight(true) + 3);
                 } else {
-                    popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
+                    $popup.css('bottom', $icon.parent().outerHeight() - $icon.position().top + 3);
                 }
-                popup.removeClass('hide');
+                $popup.removeClass('hide');
             } else {
-                popup.addClass('hide');
+                $popup.addClass('hide');
             }
         },
 
@@ -182,9 +182,9 @@ define([
                     'repo_name': new_name
                 };
                 var post_url = Common.getUrl({
-                    name: 'rename_repo',
+                    name: 'repo',
                     repo_id: _this.model.get('id')
-                });
+                }) + '?op=rename';
                 var after_op_success = function(data) {
                     _this.model.set({ 'name': new_name }); // it will trigger 'change' event
                 };
@@ -220,7 +220,11 @@ define([
             var _this = this;
             this.togglePopup(); // Close the popup
 
-            var $form = $(this.transferTemplate());
+            var repo_name = this.model.get('name');
+            var $form = $(this.transferTemplate({
+                title: gettext("Transfer Library {library_name} To").replace('{library_name}',
+                           '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(repo_name) + '">' + Common.HTMLescape(repo_name) + '</span>')
+            }));
             $form.modal({focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
@@ -245,7 +249,7 @@ define([
                 Common.disableButton($submitBtn);
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'transfer_repo',
+                        'name': 'repo_owner',
                         'repo_id': _this.model.get('id')
                     }),
                     type: 'put',
@@ -255,10 +259,9 @@ define([
                         'owner': email
                     },
                     success: function() {
-                        // after the transfer, the former owner becomes a common admin of the group.
                         $.modal.close();
                         _this.remove();
-                        Common.feedback(gettext("Transfer library succeeded."), 'success');
+                        Common.feedback(gettext("Successfully transferred the library."), 'success');
                     },
                     error: function(xhr) {
                         var error_msg;

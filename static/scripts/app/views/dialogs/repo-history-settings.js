@@ -7,8 +7,7 @@ define([
     'use strict';
 
     var HistorySettingsDialog = Backbone.View.extend({
-        tagName: 'div',
-        id: 'history-settings-dialog',
+
         template: _.template($('#history-settings-dialog-tmpl').html()),
 
         initialize: function(options) {
@@ -16,47 +15,32 @@ define([
             this.repo_id = options.repo_id;
 
             this.render();
+            this.$('.op-target').css({'max-width':280}); // for long repo name
             this.$el.modal();
             $("#simplemodal-container").css({'height':'auto'});
 
             this.$loadingTip = this.$('.loading-tip');
             this.$error = this.$('.error');
-            this.$form = this.$('#repo-history-settings-form');
+            this.$form = this.$('form');
             this.$radios = this.$('input:radio[name=history]');
             this.$days_input = this.$('input:text[name=days]');
-            this.$submit = this.$('input[type=submit]');
+            this.$submit = this.$('[type=submit]');
 
             this.renderHistorySettings();
-
-            // only enable setting keep_days when partial history radio is chosen
-            var _this = this;
-            this.$radios.change(function() {
-                var value = $(this).attr('value');
-
-                if (value == 'full_history' || value == 'no_history') {
-                    _this.$days_input.prop('disabled', true).addClass('input-disabled');
-                } else {
-                    _this.$days_input.prop('disabled', false).removeClass('input-disabled');
-                }
-            });
         },
 
         render: function() {
+            var repo_name = this.repo_name;
             this.$el.html(this.template({
                 title: gettext("{placeholder} History Settings")
                     .replace('{placeholder}',
                     '<span class="op-target ellipsis ellipsis-op-target" title="'
-                    + Common.HTMLescape(this.repo_name) + '">'
-                    + Common.HTMLescape(this.repo_name) + '</span>'),
-                repo_id: this.repo_id,
+                    + Common.HTMLescape(repo_name) + '">'
+                    + Common.HTMLescape(repo_name) + '</span>'),
                 default_history_limit: 30
             }));
 
             return this;
-        },
-
-        events: {
-            'submit form': 'formSubmit'
         },
 
         renderHistorySettings: function() {
@@ -65,12 +49,11 @@ define([
             $.ajax({
                 url: Common.getUrl({
                     'name': 'repo_history_limit',
-                    'repo_id': _this.repo_id
+                    'repo_id': this.repo_id
                 }),
                 type: 'get',
                 dataType: 'json',
-                beforeSend: Common.prepareCSRFToken,
-                success: function(data) { // data: { keep_days: -1 }
+                success: function(data) {
                     _this.$loadingTip.hide();
 
                     if (data.keep_days <= -1) {
@@ -102,6 +85,23 @@ define([
             });
         },
 
+        events: {
+            'change [name="history"]': 'changeHistorySetting',
+            'submit form': 'formSubmit'
+        },
+
+        // only enable setting keep_days when partial history radio is chosen
+        changeHistorySetting: function(e) {
+            var value = $(e.currentTarget).val();
+            var $days_input = this.$days_input;
+            
+            if (value == 'full_history' || value == 'no_history') {
+                $days_input.prop('disabled', true).addClass('input-disabled');
+            } else {
+                $days_input.prop('disabled', false).removeClass('input-disabled');
+            }
+        },
+
         formSubmit: function() {
             var days;
             var value = this.$radios.filter(':checked').val();
@@ -120,7 +120,7 @@ define([
             $.ajax({
                 url: Common.getUrl({
                     'name': 'repo_history_limit',
-                    'repo_id': _this.repo_id
+                    'repo_id': this.repo_id
                 }),
                 type: 'put',
                 dataType: 'json',
@@ -128,9 +128,9 @@ define([
                 data: {
                     'keep_days': days
                 },
-                success: function(data) {
+                success: function() {
                     $.modal.close();
-                    Common.feedback(gettext("Set library history succeeded."), 'success');
+                    Common.feedback(gettext("Successfully set library history."), 'success');
                 },
                 error: function(xhr) {
                     var err_msg;

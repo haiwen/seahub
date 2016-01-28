@@ -152,7 +152,7 @@ define([
                 popup.css({'left': icon.position().left});
                 if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
                     // below the icon
-                    popup.css('top', icon.position().top + icon.height() + 3);
+                    popup.css('top', icon.position().top + icon.outerHeight(true) + 3);
                 } else {
                     popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
                 }
@@ -259,7 +259,7 @@ define([
                     name: is_dir ? 'rename_dir' : 'rename_file',
                     repo_id: dir.repo_id
                 }) + '?parent_dir=' + encodeURIComponent(dir.path);
-                var after_op_success = function (data) {
+                var after_op_success = function(data) {
                     var renamed_dirent_data = {
                         'obj_name': data['newname'],
                         'last_modified': new Date().getTime()/1000,
@@ -270,7 +270,6 @@ define([
                             'starred': false
                         });
                     }
-                    $.modal.close();
                     _this.model.set(renamed_dirent_data); // it will trigger 'change' event
                 };
                 var after_op_error = function(xhr) {

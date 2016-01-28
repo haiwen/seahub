@@ -7,8 +7,8 @@
         <% if (showSharePerm) { %>
         <label>{% trans "Share Permission" %}</label><br />
         <select name="permission" class="perm">
-          <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
-          <option value="r">{% trans "Read-Only" %}</option>
+            <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+            <option value="r">{% trans "Read-Only" %}</option>
         </select>
         <br />
         <% } %>
@@ -30,11 +30,11 @@
 </script>
 <script type="text/template" id="repo-tmpl">
     <td>
-      <% if (encrypted) { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
-      <% } else { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
-      <% } %>
+        <% if (encrypted) { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } %>
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
@@ -42,18 +42,18 @@
     <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
     <% } %>
     <td class="repo-op-td">
-      <div class="op-container">
-        <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-        <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
-        <span class="sf2-icon-caret-down more-op-icon op-icon vh js-toggle-popup" title="{% trans "More operations" %}"></span>
-        <ul class="hidden-op repo-hidden-op hide dropdown-menu">
-          <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
-          <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
-          <li><a class="op js-popup-permission-settings" href="#">{% trans "Permissions" %}</a></li>
-          <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
-          <li><a class="op js-popup-share-link-admin" href="#">{% trans "Sharing Links" %}</a></li>
-        </ul>
-      </div>
+        <div class="op-container">
+            <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            <span class="sf2-icon-caret-down more-op-icon op-icon vh js-toggle-popup" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op repo-hidden-op hide dropdown-menu">
+                <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+                <li><a class="op js-popup-permission-settings" href="#">{% trans "Permissions" %}</a></li>
+                <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
+                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Sharing Links" %}</a></li>
+            </ul>
+        </div>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -1089,7 +1089,7 @@
 
     <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
 
-    <form id="repo-history-settings-form" action="" method="post" class="form">{% csrf_token %}
+    <form action="" method="post">
         <input type="radio" name="history" value="full_history" class="vam" />
         <span class="vam">{% trans "Keep full history" %}</span><br />
 
@@ -1098,12 +1098,12 @@
 
         <input type="radio" name="history" value="partial_history" class="vam" />
         <span calss="vam">{% trans "Only keep a period of history:" %}
-            <input type="text" name="days" size="4" disabled="disabled"
-            class="input-disabled" value="<%- default_history_limit %>" /> {% trans "days" %}
+            <input type="text" name="days" size="4" disabled="disabled" class="input-disabled" value="<%= default_history_limit %>" /> {% trans "days" %}
         </span><br />
 
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
+
     <span class="loading-icon loading-tip"></span>
     <p class="error hide"></p>
 </script>
@@ -1117,8 +1117,8 @@
 </script>
 
 <script type="text/template" id="repo-transfer-form-tmpl">
-<form method="post" action="">
-    <h3>{% trans "Transfer Library To" %}</h3>
+<form method="post" action="" id="repo-transfer-form">
+    <h3><%= title %></h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />

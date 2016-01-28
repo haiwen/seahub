@@ -19,6 +19,8 @@ define([
             this.is_owner = options.is_owner;
 
             this.render();
+            // for long group name
+            this.$('.op-target').css({'max-width': 270});
             this.$el.modal({
                 appendTo: '#main',
                 focus: false,

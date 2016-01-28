@@ -16,6 +16,7 @@ define([
             this.repo_id = options.repo_id;
 
             this.render();
+            this.$('.op-target').css({'max-width':280}); // for long repo name
             this.$el.modal();
             $("#simplemodal-container").css({'height':'auto'});
         },
@@ -26,9 +27,7 @@ define([
                     .replace('{placeholder}',
                     '<span class="op-target ellipsis ellipsis-op-target" title="'
                     + Common.HTMLescape(this.repo_name) + '">'
-                    + Common.HTMLescape(this.repo_name) + '</span>'),
-                repo_id: this.repo_id
-                // TODO: get settings from server
+                    + Common.HTMLescape(this.repo_name) + '</span>')
             }));
 
             return this;

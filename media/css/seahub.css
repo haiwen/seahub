@@ -430,6 +430,8 @@ p { margin:0.5em 0; }
     text-decoration:none;
 }
 .more-op-icon {
+    display:inline-block;
+    margin-top:4px;
     font-size:12px;
 }
 .big-more-btn {
@@ -1197,7 +1199,8 @@ textarea:-moz-placeholder {/* for FF */
 .dropdown-menu a {
     display:block;
     padding:4px 12px;
-    width:180px;
+    min-width:110px;
+    white-space:nowrap;
 }
 .dropdown-menu a:hover {
     background:#eee;
@@ -2263,14 +2266,14 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .op-target {
     max-width:400px;
 }
-#rename-form .op-target {
-    max-width:280px;
-}
 #mv-form .op-target {
     max-width:410px;
 }
 #folder-perm-popup .op-target {
     max-width:540px;
+}
+#repo-transfer-form .op-target {
+    max-width:200px;
 }
 /* group-join-form */
 /* group-join-form */
