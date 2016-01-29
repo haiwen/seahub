@@ -679,12 +679,10 @@ def view_trash_file(request, repo_id):
     basedir = request.GET.get('base', '')
     if not basedir:
         raise Http404
-    ret_dict['basedir'] = basedir
 
-    # generate file path navigator
-    path = ret_dict['path']
-    repo = ret_dict['repo']
-    ret_dict['zipped'] = gen_path_link(path, repo.name)
+    if basedir != '/':
+        tmp_path = posixpath.join(basedir.rstrip('/'), ret_dict['path'].lstrip('/'))
+        ret_dict['path'] = tmp_path
 
     return render_to_response('view_trash_file.html', ret_dict,
                               context_instance=RequestContext(request), )
