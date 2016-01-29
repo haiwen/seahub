@@ -16,13 +16,101 @@
   
 
   
-  /* gettext identity library */
+  /* gettext library */
 
-  django.gettext = function (msgid) { return msgid; };
-  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.catalog = {
+    "%curr% of %total%": "%curr% van %total%", 
+    "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded.": "<a href=\"%url%\" target=\"_blank\">De afbeelding</a> kon niet worden geladen.", 
+    "Cancel": "Annuleren", 
+    "Canceled.": "Geannuleerd.", 
+    "Close (Esc)": "Sluiten (Esc)", 
+    "Delete": "Verwijderen", 
+    "Delete failed": "Verwijderen mislukt", 
+    "Deleted directories": "Verwijderde mappen", 
+    "Deleted files": "Verwijderde bestanden", 
+    "Edit failed": "Bewerken mislukt", 
+    "Error": "Fout", 
+    "Expired": "Verlopen", 
+    "Failed.": "Mislukt.", 
+    "Failed. Please check the network.": "Mislukt. Controleer de netwerkverbinding.", 
+    "File Upload canceled": "Bestandsupload geannuleerd", 
+    "File Upload complete": "Bestandsupload voltooid", 
+    "File Upload failed": "Bestandsupload mislukt", 
+    "File Uploading...": "Bestand uploaden...", 
+    "File is locked": "Bestand is vergrendeld", 
+    "File is too big": "Bestand is te groot", 
+    "File is too small": "Bestand is te klein", 
+    "Filetype not allowed": "Bestandstype niet toegestaan", 
+    "Hide": "Verbergen", 
+    "It is required.": "Het is verplicht.", 
+    "Just now": "Zojuist", 
+    "Loading failed": "Ophalen mislukt", 
+    "Loading...": "Laden...", 
+    "Max number of files exceeded": "Maximaal aantal bestanden overschreden", 
+    "Modified files": "Aangepaste bestanden", 
+    "Name is required": "Naam is verplicht", 
+    "New directories": "Nieuwe mappen", 
+    "New files": "Nieuwe bestanden", 
+    "Next (Right arrow key)": "Volgende (rechter pijltjestoets)", 
+    "No matches": "Niet gevonden", 
+    "Only an extension there, please input a name.": "Alleen een extensie, voer een naam in.", 
+    "Open in New Tab": "Open in nieuw tabblad", 
+    "Password is required.": "Wachtwoord is verplicht.", 
+    "Password is too short": "Wachtwoord is te kort", 
+    "Passwords don't match": "De wachtwoorden komen niet overeen", 
+    "Please check the network.": "Controleer de netwerkverbinding.", 
+    "Please enter 1 or more character": "Voer 1 of meer tekens in.", 
+    "Please enter password": "Voer het wachtwoord in", 
+    "Please enter the password again": "Gelieve het wachtwoord opnieuw in te voeren", 
+    "Previous (Left arrow key)": "Vorige (linker pijltjestoets)", 
+    "Processing...": "In behandeling...", 
+    "Renamed or Moved files": "Hernoemde of Verplaatste bestanden", 
+    "Saving...": "Opslaan...", 
+    "Search users or enter emails": "Zoek gebruikers of voer emails in", 
+    "Searching...": "Aan het zoeken...", 
+    "Show": "Toon", 
+    "Start": "Start", 
+    "Success": "Gelukt", 
+    "Uploaded bytes exceed file size": "Ge\u00fcploadde bytes overtreft bestandsgrootte", 
+    "canceled": "geannuleerd", 
+    "uploaded": "ge\u00fcpload"
+  };
+
+  django.gettext = function (msgid) {
+    var value = django.catalog[msgid];
+    if (typeof(value) == 'undefined') {
+      return msgid;
+    } else {
+      return (typeof(value) == 'string') ? value : value[0];
+    }
+  };
+
+  django.ngettext = function (singular, plural, count) {
+    var value = django.catalog[singular];
+    if (typeof(value) == 'undefined') {
+      return (count == 1) ? singular : plural;
+    } else {
+      return value[django.pluralidx(count)];
+    }
+  };
+
   django.gettext_noop = function (msgid) { return msgid; };
-  django.pgettext = function (context, msgid) { return msgid; };
-  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+
+  django.pgettext = function (context, msgid) {
+    var value = django.gettext(context + '\x04' + msgid);
+    if (value.indexOf('\x04') != -1) {
+      value = msgid;
+    }
+    return value;
+  };
+
+  django.npgettext = function (context, singular, plural, count) {
+    var value = django.ngettext(context + '\x04' + singular, context + '\x04' + plural, count);
+    if (value.indexOf('\x04') != -1) {
+      value = django.ngettext(singular, plural, count);
+    }
+    return value;
+  };
   
 
   django.interpolate = function (fmt, obj, named) {
