@@ -131,6 +131,9 @@
 .sf2-icon-x2:before { content:"\e01f"; }
 .sf2-icon-user2:before { content:"\e020"; }
 .sf2-icon-msgs2:before { content:"\e021"; }
+.sf2-icon-group-settings:before { content:"\e022"; }
+.sf2-icon-comment:before { content:"\e023"; }
+.sf2-icon-wiki2:before { content:"\e024"; }
 
 /******* tags **********/
 html { background:#fff; }
