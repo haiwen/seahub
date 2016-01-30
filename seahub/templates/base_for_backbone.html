@@ -47,7 +47,6 @@
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
-                {% block nav %}{% endblock %}
 
                 {% block header_right %}
                 {% if request.user.is_authenticated %}
@@ -91,16 +90,6 @@
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
-                    {% if request.user.is_staff %}
-                    <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
                 </div>
                 </div>
                 {% endif %}

@@ -4,7 +4,23 @@
 
 {% block left_panel %}
 <div class="side-tabnav">
-    <h3 class="hd">{% trans "Files" %}</h3>
+    {% if request.user.is_staff %}
+    <h3 class="hd">{% trans "Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab">
+            <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}"><span class="sf2-icon-wrench"></span>{% trans "System Admin" %}</a>
+        </li>
+    </ul>
+    {% endif %}
+    {% if request.user.org and request.user.org.is_staff %}
+    <h3 class="hd">{% trans "Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab">
+            <a href="{% url 'org_user_admin'%}" title="{% trans "Organization Admin" %}"><span class="sf2-icon-wrench"></span>{% trans "Organization Admin" %}</a>
+        </li>
+    </ul>
+    {% endif %}
+    <h3 class="hd">{% trans "Libraries" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>

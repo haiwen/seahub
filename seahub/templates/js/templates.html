@@ -558,7 +558,24 @@
     <td><%= mtime_relative %></td>
 </script>
 <script type="text/template" id="side-nav-tmpl">
-    <h3 class="hd">{% trans "Files" %}</h3>
+    {% if request.user.is_staff %}
+    <h3 class="hd">{% trans "Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab">
+            <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}"><span class="sf2-icon-wrench"></span>{% trans "System Admin" %}</a>
+        </li>
+    </ul>
+    {% endif %}
+    {% if request.user.org and request.user.org.is_staff %}
+    <h3 class="hd">{% trans "Admin" %}</h3>
+    <ul class="side-tabnav-tabs">
+        <li class="tab">
+            <a href="{% url 'org_user_admin'%}" title="{% trans "Organization Admin" %}"><span class="sf2-icon-wrench"></span>{% trans "Organization Admin" %}</a>
+        </li>
+    </ul>
+    {% endif %}
+
+    <h3 class="hd">{% trans "Libraries" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
@@ -732,7 +749,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -802,7 +819,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
@@ -972,7 +989,7 @@
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
@@ -980,7 +997,7 @@
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">
