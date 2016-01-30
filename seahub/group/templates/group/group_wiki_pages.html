@@ -11,7 +11,7 @@
         <li class="item"><a href="{% url 'group_wiki' group.id %}" class="link">{% trans "Home" %}</a></li>
         <li class="item cur-item"><a href="{% url 'group_wiki_pages' group.id %}" class="link">{% trans "Pages" %}</a></li>
         {% if group.view_perm != "pub" %}
-        <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
+        <li class="item"><a href="{% url 'repo_history' repo_id %}" class="link">{% trans "Wiki History" %}</a></li>
         {% endif %}
     </ul>
     {% if repo_perm == 'rw' %}

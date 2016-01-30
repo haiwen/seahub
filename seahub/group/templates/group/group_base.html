@@ -12,64 +12,10 @@
         <h3 class="fleft">
         {% grp_avatar group.props.id 32 %} <span title="{{ group.group_name }}" class="grp-name ellipsis vam">{{ group.group_name }}</span>
         </h3>
-        {% if is_staff %}
-        <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" style="margin:6px 0 0 5px;"></span>
-        {% endif %}
-        {% if group.is_pub %}<img src="{{MEDIA_URL}}img/grp_public.png" alt="" title="{% trans "This group is public." %}" class="fright" style="margin:8px 0 0 5px;" />{% endif %}
     </div>
-    <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_library %}{% endblock%}"><a href="{{ SITE_ROOT }}#group/{{ group.id }}/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-
-        {% if not group.is_pub %}
-        <li class="tab {% block cur_discuss %}{% endblock%}"><a href="{% url 'group_discuss' group.id %}"><span class="sf2-icon-msgs"></span>{% trans "Discussion" %}</a></li>
-        {% endif %}
-
-        {% for mod in mods_enabled %}
-        {% if mod == 'group wiki' %}
-        <li class="tab {% block cur_wiki %}{%endblock%}"><a href="{% url 'group_wiki' group.id %}"><span class="sf2-icon-wiki"></span>{% trans "Wiki" %}</a></li>
-        {% endif %}
-        {% endfor %}
-
-        {% if enable_pubfile and group.is_pub %}
-        <li class="tab {% block cur_pubfile %}{%endblock%}"><a href="{% url 'group_pubfiles' group.id %}"><span class="sf2-icon-file"></span>{% trans "Files" %}</a></li>
-        {% endif %}
-
-        {% if group.view_perm != 'pub' %}
-        <li class="tab {% block cur_members %}{%endblock%}"><a href="{% url 'group_members' group.id %}"><span class="sf2-icon-user"></span>{% trans "Members" %}</a></li>
-        {% endif %}
-
-        {% if is_staff %}
-        <li class="tab {% block cur_admin %}{%endblock%}"><a href="{% url 'group_manage' group.id %}"><span class="sf2-icon-wrench"></span>{% trans "Admin" %}</a></li>
-        {% endif %}
-    </ul>
 </div>
 {% endblock %}
 
 {% block main_panel %}
-<form id="mods-enable-form" method="post" action="{% url 'group_toggle_modules' group.id %}" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
-    <ul>
-    {% for mod in mods_available %}
-      {% if mod == 'group wiki' %}
-      <li>
-      <label class="checkbox-label">
-          <span class="checkbox {% if mod in mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="group_wiki" class="checkbox-orig" {%if mod in mods_enabled%}checked{% endif%} /></span>
-          <span class="checkbox-option">{% trans "Wiki" %}</span>
-      </label>
-      </li>
-      {% endif %}
-    {% endfor %}
-    </ul>
-    <input type="submit" value="{% trans "Submit"%}" class="submit" />
-</form>
-{% endblock %}
 
-{% block extra_script %}
-<script type="text/javascript">
-$('#enable-mods').click(function() {
-    $('#mods-enable-form').modal({appendTo: "#main"});
-    $('#simplemodal-container').css('height', 'auto');
-    return false;
-});
-</script>
 {% endblock %}
