@@ -21,9 +21,7 @@ define([
             // group basic info
             this.group = {};
 
-            this.$loadingTip = this.$('.loading-tip');
-            this.$listContainer = $('#group-setting-con');   
-            this.$error = this.$('.error');
+            this.$listContainer = $('#group-setting-con');
 
             var _this = this;
             $(window).resize(function() {
@@ -39,7 +37,7 @@ define([
                     !$popup.find('*').is(target) &&
                     !$popup_switch.is(target)) {
                     _this.hide();
-                }   
+                }
             });
         },
 
@@ -51,49 +49,22 @@ define([
         },
 
         render: function() {
-            this.$error.hide();
             this.$listContainer.hide();
-            this.$loadingTip.show();
 
             // the user's role in this group
             this.is_owner = false,
             this.is_admin = false;
 
-            var _this = this;
-            $.ajax({
-                url: Common.getUrl({
-                    'name': 'group',
-                    'group_id': this.group.id
-                }), 
-                cache: false,
-                dataType: 'json',
-                success: function(data) {
-                    _this.group = data; // {id, name, owner, created_at, avatar_url, admins}
-
-                    var username = app.pageOptions.username;
-                    if (username == _this.group.owner) {
-                        _this.is_owner = true;
-                    } else if ($.inArray(username, _this.group.admins) != -1) {
-                        _this.is_admin = true;
-                    }
-                    _this.$listContainer.html(_this.template({
-                        'is_owner': _this.is_owner,
-                        'is_admin': _this.is_admin
-                    })).show();
-                },
-                error: function(xhr) {
-                    var err_msg;
-                    if (xhr.responseText) {
-                        err_msg = gettext('Error');
-                    } else {
-                        err_msg = gettext("Please check the network.");
-                    }   
-                    _this.$error.html(err_msg).show();
-                },
-                complete: function() {
-                    _this.$loadingTip.hide();
-                }
-            }); 
+            if (app.pageOptions.username == this.group.owner) {
+                this.is_owner = true;
+            } else if ($.inArray(app.pageOptions.username, this.group.admins) != -1) {
+                this.is_admin = true;
+            }
+            this.$listContainer.html(this.template({
+                'is_owner': this.is_owner,
+                'is_admin': this.is_admin,
+                'wiki_enabled': this.group.wiki_enabled
+            })).show();
         },
 
         // set max-height for '.popover-con'
@@ -102,10 +73,10 @@ define([
         },
 
         show: function(options) {
-            this.group.id = options.group_id;
+            this.group = options.group;
             this.$el.show();
-            this.setConMaxHeight();
             this.render();
+            this.setConMaxHeight();
             app.router.navigate('group/' + this.group.id + '/settings/');
         },
 
@@ -130,6 +101,12 @@ define([
                 case 'transfer':
                     this.transfer();
                     break;
+                case 'add-wiki':
+                    this.toggleWiki('on');
+                    break;
+                case 'remove-wiki':
+                    this.toggleWiki('off');
+                    break;
                 case 'import-members':
                     this.importMembers();
                     break;
@@ -153,7 +130,7 @@ define([
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $form.submit(function() {
-                var new_name = $.trim($('[name="new_name"]', $(this)).val());    
+                var new_name = $.trim($('[name="new_name"]', $(this)).val());
                 if (!new_name || new_name == _this.group.name) {
                     return false;
                 }
@@ -161,12 +138,12 @@ define([
                 Common.disableButton($submitBtn);
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'group', 
+                        'name': 'group',
                         'group_id': _this.group.id
                     }),
                     type: 'put',
                     dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken, 
+                    beforeSend: Common.prepareCSRFToken,
                     data: {
                         'name': new_name
                     },
@@ -218,12 +195,12 @@ define([
                 Common.disableButton($submitBtn);
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'group', 
+                        'name': 'group',
                         'group_id': _this.group.id
                     }),
                     type: 'put',
                     dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken, 
+                    beforeSend: Common.prepareCSRFToken,
                     data: {
                         'owner': email
                     },
@@ -246,6 +223,44 @@ define([
             });
         },
 
+        toggleWiki: function(status) {
+            var _this = this;
+            var wiki_enabled;
+
+            if (status == 'on') {
+                wiki_enabled = 'true';
+            } else {
+                wiki_enabled = 'false';
+            }
+
+            $.ajax({
+                url: Common.getUrl({
+                    'name': 'group',
+                    'group_id': _this.group.id
+                }),
+                type: 'put',
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                data: {
+                    'wiki_enabled': wiki_enabled
+                },
+                success: function() {
+                    _this.hide();
+                    _this.groupView.renderGroupTop();
+                },
+                error: function(xhr) {
+                    var error_msg;
+                    if (xhr.responseText) {
+                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                    } else {
+                        error_msg = gettext("Failed. Please check the network.");
+                    }
+                    Common.feedback(error_msg, 'error');
+                    _this.hide();
+                }
+            });
+        },
+
         importMembers: function() {
             var _this = this;
             var $form = $(this.importMembersTemplate());
@@ -264,12 +279,12 @@ define([
                 Common.disableButton($submitBtn);
 
                 var file = $fileInput.files[0];
-                var formData = new FormData(); 
+                var formData = new FormData();
                 formData.append('file', file);
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group_import_members',
-                        'group_id': _this.group.id 
+                        'group_id': _this.group.id
                     }),
                     type: 'post',
                     dataType: 'json',
@@ -320,12 +335,12 @@ define([
             var yesCallback = function () {
                 $.ajax({
                     url: Common.getUrl({
-                        'name': 'group', 
+                        'name': 'group',
                         'group_id': _this.group.id
                     }),
                     type: 'delete',
                     dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken, 
+                    beforeSend: Common.prepareCSRFToken,
                     success: function() {
                         app.ui.sideNavView.updateGroups();
                         app.router.navigate('groups/', {trigger: true});

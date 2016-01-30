@@ -2090,7 +2090,7 @@ textarea:-moz-placeholder {/* for FF */
 .fixed-upload-file-dialog .op-icon {
     font-size:18px;
     color: #b8b8b8;
-    margin:0; 
+    margin:0;
 }
 .fixed-upload-file-dialog .close,
 .fileupload-buttonbar .cancel {
