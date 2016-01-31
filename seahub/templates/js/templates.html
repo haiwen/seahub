@@ -147,6 +147,12 @@
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
+
+    <div class="switch-mode vam">
+        <img src="{{ MEDIA_URL }}img/grid.png" title="{% trans "Grid View" %}" id="js-switch-grid-view" alt='' class="grid-view-btn cspt fright <% if (mode == 'grid') { %>active<% } %>" />
+        <img src="{{ MEDIA_URL }}img/list.png" title="{% trans "List View" %}" id="js-switch-list-view" alt='' class="list-view-btn cspt fright <% if (mode == 'list') { %>active<% } %>" />
+    </div>
+
     <% if (path == '/') { %>
         <div class="fright">
             <% if (user_perm == 'rw') { %>
@@ -349,6 +355,35 @@
     </td>
     <% } %>
 </script>
+
+<script type="text/template" id="grid-view-file-item-tmpl">
+    <a href="<%= url %>" class="img-link" target="_blank">
+        <img src="{{ MEDIA_URL }}img/file/txt-192.png" alt="" width="96" class="vam" />
+    </a>
+
+    <a href="<%= url %>" class="ellipsis text-link normal" target="_blank">
+        <%- dirent.obj_name %>
+    </a>
+</script>
+
+<script type="text/template" id="grid-view-img-item-tmpl">
+
+</script>
+
+<script type="text/template" id="grid-view-dir-item-tmpl">
+    <a href="<%= url %>" class="img-link">
+        <% if (dirent.perm == 'r') { %>
+        <img src="{{ MEDIA_URL }}img/folder-read-only-192.png" alt="" width="96" class="vam" />
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/folder-beige-192.png" alt="" width="96" class="vam" />
+        <% } %>
+    </a>
+
+    <a href="<%= url %>" class="ellipsis normal text-link">
+        <%- dirent.obj_name %>
+    </a>
+</script>
+
 <script type="text/template" id="group-change-item-tmpl">
     <td>
     <span class="icon-plus"></span>

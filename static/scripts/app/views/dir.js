@@ -9,10 +9,11 @@ define([
     'file-tree',
     'app/collections/dirents',
     'app/views/dirent',
+    'app/views/dirent-grid',
     'app/views/fileupload',
     'app/views/share'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
-        FileTree, DirentCollection, DirentView, FileUploadView, ShareView) {
+        FileTree, DirentCollection, DirentView, DirentGridView, FileUploadView, ShareView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -29,10 +30,15 @@ define([
             mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
             initialize: function(options) {
-                this.$dirent_list = this.$('.repo-file-list tbody');
+                this.$dirent_list_body = this.$('.repo-file-list tbody');
+                this.$dirent_list = this.$('.repo-file-list');
+                this.$dirent_grid = this.$('.grid-view');
                 this.$path_bar = this.$('.path');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
+
+                this.view_mode = 'list';
+                this.contextOptions = {};
 
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
@@ -108,99 +114,26 @@ define([
                         }
                     }
                 });
+
             },
 
+            // public function
+            // show a folder
             // 'category' is sth. like url prefix
-            // options is for 'group dir view', at present (Wed Jan 13 12:44:17 CST 2016)
+            // options: for rendering from group view, currently is { group_name: group_name }
             showDir: function(category, repo_id, path, options) {
                 $('#top-search-form').html(this.top_search_form_template({
                     search_repo_id: repo_id
                 }));
 
-                this.$el.show();
-                this.$dirent_list.empty();
-                var loading_tip = this.$('.loading-tip').show();
-
                 this.contextOptions = options;
-
-                var dir = this.dir;
-                dir.setPath(category, repo_id, path);
-                var _this = this;
-                dir.fetch({
-                    cache: false,
-                    reset: true,
-                    data: {'p': path},
-                    success: function (collection, response, opts) {
-                        dir.last_start = 0; // for 'more'
-                        if (response.dirent_list.length == 0 ||  // the dir is empty
-                            !response.dirent_more ) { // no 'more'
-                            loading_tip.hide();
-                        }
-                    },
-                    error: function (collection, response, opts) {
-                        loading_tip.hide();
-                        var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
-                        var $error = _this.$('.error');
-                        var err_msg;
-                        var lib_need_decrypt = false;
-                        if (response.responseText) {
-                            if (response.responseJSON.lib_need_decrypt) {
-                                lib_need_decrypt = true;
-                            } else {
-                                err_msg = response.responseJSON.error;
-                            }
-                        } else {
-                            err_msg = gettext('Please check the network.');
-                        }
-                        if (err_msg) {
-                            $error.html(err_msg).show();
-                        }
-
-                        if (lib_need_decrypt) {
-                            var form = $($('#repo-decrypt-form-template').html());
-                            var decrypt_success = false;
-                            form.modal({
-                                containerCss: {'padding': '1px'},
-                                onClose: function () {
-                                    $.modal.close();
-                                    $el_con.show();
-                                    if (!decrypt_success) {
-                                        app.router.navigate(
-                                            category + '/', // need to append '/' at end
-                                            {trigger: true}
-                                        );
-                                    }
-                                }
-                            });
-                            $('#simplemodal-container').css({'height':'auto'});
-                            form.submit(function() {
-                                var passwd = $.trim($('[name="password"]', form).val());
-                                if (!passwd) {
-                                    $('.error', form).html(gettext("Password is required.")).removeClass('hide');
-                                    return false;
-                                }
-                                Common.ajaxPost({
-                                    form: form,
-                                    form_id: form.attr('id'),
-                                    post_url: Common.getUrl({'name':'repo_set_password'}),
-                                    post_data: {
-                                        repo_id: repo_id,
-                                        password: passwd,
-                                        username: app.pageOptions.username
-                                    },
-                                    after_op_success: function() {
-                                        decrypt_success = true;
-                                        $.modal.close();
-                                        _this.showDir(category, repo_id, path);
-                                    }
-                                });
-                                return false;
-                            });
-                        }
-                    }
-                });
+                this.$el.show();
+                this.dir.setPath(category, repo_id, path);
+                this.renderDir();
             },
 
+            // public function
+            // hide the folder view
             hide: function() {
                 $('#top-search-form').html(this.top_search_form_template({
                     search_repo_id: ''
@@ -209,16 +142,25 @@ define([
                 this.$el.hide();
             },
 
+            /***** private functions *****/
+
             addOne: function(dirent) {
-                var view = new DirentView({model: dirent, dirView: this});
-                this.$dirent_list.append(view.render().el);
+                var view;
+                if (this.view_mode == 'list') {
+                    view = new DirentView({model: dirent, dirView: this});
+                    this.$dirent_list_body.append(view.render().el);
+                } else {
+                    view = new DirentGridView({model: dirent, dirView: this});
+                    this.$dirent_grid.append(view.render().el);
+                }
             },
 
             reset: function() {
-                this.dir.each(this.addOne, this);
                 this.renderPath();
                 this.renderDirOpBar();
-                this.renderDirentsHd();
+                if (this.view_mode == 'list')
+                    this.renderDirentsHd();
+                this.dir.each(this.addOne, this);
                 this.fileUploadView.setFileInput();
                 this.getImageThumbnail();
             },
@@ -266,6 +208,96 @@ define([
                 get_thumbnail(0);
             },
 
+            _showEncryptDialog: function() {
+                var _this = this;
+                var form = $($('#repo-decrypt-form-template').html());
+                var decrypt_success = false;
+                form.modal({
+                    containerCss: {'padding': '1px'},
+                    onClose: function () {
+                        $.modal.close();
+                        _this.$el_con.show();
+                        if (!decrypt_success) {
+                            app.router.navigate(
+                                category + '/', // need to append '/' at end
+                                {trigger: true}
+                            );
+                        }
+                    }
+                });
+                $('#simplemodal-container').css({'height':'auto'});
+                form.submit(function() {
+                    var passwd = $.trim($('[name="password"]', form).val());
+                    if (!passwd) {
+                        $('.error', form).html(gettext("Password is required.")).removeClass('hide');
+                        return false;
+                    }
+                    Common.ajaxPost({
+                        form: form,
+                        form_id: form.attr('id'),
+                        post_url: Common.getUrl({'name':'repo_set_password'}),
+                        post_data: {
+                            repo_id: _this.dir.repo_id,
+                            password: passwd,
+                            username: app.pageOptions.username
+                        },
+                        after_op_success: function() {
+                            decrypt_success = true;
+                            $.modal.close();
+                            _this.showDir(_this.dir.category, _this.dir.repo_id, _this.dir.path);
+                        }
+                    });
+                    return false;
+                });
+            },
+
+            renderDir: function() {
+                this.$dirent_grid.empty();
+                this.$dirent_list_body.empty();
+
+                if (this.view_mode == 'list') {
+                    this.$dirent_list.show();
+                    this.$dirent_grid.hide();
+                } else {
+                    this.$dirent_list.hide();
+                    this.$dirent_grid.show();
+                }
+
+                var loading_tip = this.$('.loading-tip').show();
+
+                var _this = this;
+                var dir = this.dir;
+                dir.fetch({
+                    cache: false,
+                    reset: true,
+                    data: { 'p': dir.path },
+                    success: function(collection, response, opts) {
+                        dir.last_start = 0; // for 'more'
+                        if (response.dirent_list.length == 0 ||  // the dir is empty
+                            !response.dirent_more ) { // no 'more'
+                            loading_tip.hide();
+                        }
+                    },
+                    error: function(collection, response, opts) {
+                        loading_tip.hide();
+                        var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
+                        var $error = _this.$('.error');
+                        var err_msg;
+                        if (response.responseText) {
+                            if (response.responseJSON.lib_need_decrypt) {
+                                _this._showEncryptDialog();
+                                return;
+                            } else {
+                                err_msg = response.responseJSON.error;
+                            }
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        $error.html(err_msg).show();
+                    }
+                });
+            },
+
             renderPath: function() {
                 var dir = this.dir;
                 var path = dir.path;
@@ -285,9 +317,8 @@ define([
                         category: dir.category,
                         context: context
                     };
-                if (this.contextOptions) {
-                    $.extend(obj, this.contextOptions);
-                }
+                // add possible group_name
+                $.extend(obj, this.contextOptions);
 
                 var path_list = path.substr(1).split('/');
                 var path_list_encoded = Common.encodePath(path.substr(1)).split('/');
@@ -308,6 +339,7 @@ define([
                 this.$dir_op_bar.html($.trim(this.dir_op_bar_template({
                     user_perm: dir.user_perm,
                     encrypted: dir.encrypted,
+                    mode: this.view_mode,
                     path: dir.path,
                     repo_id: dir.repo_id,
                     site_root: app.pageOptions.site_root,
@@ -326,6 +358,8 @@ define([
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newFile',
                 'click #share-cur-dir': 'share',
+                'click #js-switch-grid-view': 'switchToGridView',
+                'click #js-switch-list-view': 'switchToListView',
                 'click th.select': 'select',
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
@@ -452,15 +486,15 @@ define([
                 var view = new DirentView({model: new_dirent, dirView: dirView});
                 var new_file = view.render().el;
                 // put the new file as the first file
-                if ($('tr', dirView.$dirent_list).length == 0) {
-                    dirView.$dirent_list.append(new_file);
+                if ($('tr', dirView.$dirent_list_body).length == 0) {
+                    dirView.$dirent_list_body.append(new_file);
                 } else {
                     var dirs = dir.where({'is_dir':true});
                     if (dirs.length == 0) {
-                        dirView.$dirent_list.prepend(new_file);
+                        dirView.$dirent_list_body.prepend(new_file);
                     } else {
                         // put the new file after the last dir
-                        $($('tr', dirView.$dirent_list)[dirs.length - 1]).after(new_file);
+                        $($('tr', dirView.$dirent_list_body)[dirs.length - 1]).after(new_file);
                     }
                 }
             },
@@ -468,7 +502,7 @@ define([
             addNewDir: function(new_dirent) {
                 var dirView = this;
                 var view = new DirentView({model: new_dirent, dirView: dirView});
-                dirView.$dirent_list.prepend(view.render().el); // put the new dir as the first one
+                dirView.$dirent_list_body.prepend(view.render().el); // put the new dir as the first one
             },
 
             share: function () {
@@ -484,6 +518,26 @@ define([
                     'obj_name': path == '/' ? dir.repo_name : path.substr(path.lastIndexOf('/') + 1)
                 };
                 new ShareView(options);
+            },
+
+            switchToGridView: function() {
+                if (this.view_mode == 'grid') {
+                    return false;
+                } else {
+                    this.view_mode = 'grid';
+                    this.renderDir();
+                    return false;
+                }
+            },
+
+            switchToListView: function() {
+                if (this.view_mode == 'list') {
+                    return false;
+                } else {
+                    this.view_mode = 'list';
+                    this.renderDir();
+                    return false;
+                }
             },
 
             sortByName: function() {
@@ -508,7 +562,7 @@ define([
                     }
                 };
                 dirents.sort();
-                this.$dirent_list.empty();
+                this.$dirent_list_body.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
@@ -534,7 +588,7 @@ define([
                 };
                 dirents.sort();
 
-                this.$dirent_list.empty();
+                this.$dirent_list_body.empty();
                 dirents.each(this.addOne, this);
                 el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;

@@ -3727,54 +3727,6 @@ img.thumbnail {
 .shared-dir-zip {
     margin-left:5px;
 }
-.grid {
-    display:inline-block;
-    width:100px;
-    padding:10px 24px;
-    position:relative;
-}
-.grid .img-link,
-.grid .text-link {
-    display:block;
-    text-align:center;
-}
-.grid .img-link {
-    height:100px;
-    font-size:0;
-    line-height:0;
-    border-radius:3px;
-    margin-bottom:6px;
-}
-.grid .img-link:before {
-    content:' ';
-    display:inline-block;
-    vertical-align:middle;
-    height:100%;
-}
-.grid .thumbnail {
-    max-width:96px;
-    max-height:96px;
-    padding:1px;
-    border:1px solid #ddd;
-    border-radius:3px;
-}
-.grid .text-link {
-    color:#333;
-    font-size:14px;
-    line-height:17px;
-    height:34px;
-    white-space:normal;
-}
-.grid .op-icon {
-    position:absolute;
-    top:10px;
-    right:24px;
-    padding:2px 6px;
-    background:#fff;
-    border:1px solid #eee;
-    border-radius:3px;
-    margin:0;
-}
 /**** #groups ****/ /* groups page */
 #groups .group-name {
     font-size:16px;
@@ -3832,4 +3784,83 @@ img.thumbnail {
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
+}
+/****** grid view *****/
+/* view mode */
+.switch-mode {
+    display:inline-block;
+    margin-left:12px;
+}
+.switch-mode .active {
+    background:#ccc;
+}
+.list-view-btn,
+.grid-view-btn {
+    outline:none;
+    padding:3px 6px 4px;
+    height:20px;
+    border:1px solid #ccc;
+    background:#fff;
+    display:inline-block;
+}
+.grid-view-btn {
+    border-left:none;
+}
+/* grid view */
+.grid-item {
+    display:inline-block;
+    width:100px;
+    padding:10px 24px;
+    position:relative;
+}
+.grid-item .img-link {
+    display:block;
+    text-align:center;
+    height:100px;
+    font-size:0;
+    line-height:0;
+    border-radius:3px;
+    margin-bottom:6px;
+}
+.grid-item .img-link:before {
+    content:' ';
+    display:inline-block;
+    vertical-align:middle;
+    height:100%;
+}
+.grid-item .img-link.hl {
+    background:#f8f8f8;
+}
+.grid-item .thumbnail {
+    max-width:96px;
+    max-height:96px;
+    padding:1px;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
+.grid-item .text-link {
+    display:block;
+    text-align:center;
+    color:#333;
+    font-size:14px;
+    line-height:17px;
+    height:34px;
+    white-space:normal;
+}
+.grid-item .text-link.hl {
+    color:#f93;
+    background:#fff;
+}
+.grid-item .op-icon {
+    position:absolute;
+    top:10px;
+    right:24px;
+    padding:2px 6px;
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:3px;
+    margin:0;
+}
+#dir-view .grid-item {
+    padding:10px 20px; /* use less padding */
 }
