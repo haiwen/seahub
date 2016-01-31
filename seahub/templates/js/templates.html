@@ -558,7 +558,7 @@
     <td><%= mtime_relative %></td>
 </script>
 <script type="text/template" id="side-nav-tmpl">
-    <h3 class="hd">{% trans "Files" %}</h3>
+    <h3 class="hd">{% trans "Libraries" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
@@ -732,7 +732,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -802,7 +802,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
@@ -972,7 +972,7 @@
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
@@ -980,7 +980,7 @@
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">

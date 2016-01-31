@@ -81,16 +81,6 @@
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
-                    {% if request.user.is_staff %}
-                    <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
                 </div>
                 </div>
                 {% else %} {# for non-logged-in user #}
@@ -153,7 +143,7 @@ function ajaxErrorHandler(xhr, textStatus, errorThrown) {
         feedback($.parseJSON(xhr.responseText).error, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
-    }    
+    }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
