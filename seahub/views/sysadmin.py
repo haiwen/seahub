@@ -162,6 +162,7 @@ def sys_repo_admin(request):
     else:
         page_next = False
 
+    repos = filter(lambda r: not r.is_virtual, repos)
     default_repo_id = get_system_default_repo_id()
     for repo in repos:
         repo.is_default_repo = True if repo.id == default_repo_id else False
