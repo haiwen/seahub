@@ -3,10 +3,8 @@ define([
     'underscore',
     'backbone',
     'common',
-    'jquery.ui.tabs',
-    'select2',
     'app/views/folder-share-item'
-], function($, _, Backbone, Common, Tabs, Select2, FolderShareItemView) {
+], function($, _, Backbone, Common, FolderShareItemView) {
     'use strict';
 
     var SharePopupView = Backbone.View.extend({

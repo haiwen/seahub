@@ -5,10 +5,9 @@ define([
     'common',
     'app/views/share',
     'app/views/dialogs/repo-history-settings',
-    'app/views/dialogs/repo-permissions',
     'app/views/dialogs/repo-share-link-admin'
 ], function($, _, Backbone, Common, ShareView, HistorySettingsDialog,
-    RepoPermissionsDialog, RepoShareLinkAdminDialog) {
+    RepoShareLinkAdminDialog) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
@@ -27,7 +26,6 @@ define([
             'click .js-toggle-popup': 'togglePopup',
             'click .js-repo-rename': 'rename',
             'click .js-repo-transfer': 'transfer',
-            'click .js-popup-permission-settings': 'popupPermissionSettings',
             'click .js-popup-history-settings': 'popupHistorySettings',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin'
         },
@@ -285,16 +283,6 @@ define([
             };
             this.togglePopup(); // close the popup
             new HistorySettingsDialog(options);
-            return false;
-        },
-
-        popupPermissionSettings: function() {
-            var options = {
-                'repo_name': this.model.get('name'),
-                'repo_id': this.model.get('id')
-            };
-            this.togglePopup(); // close the popup
-            new RepoPermissionsDialog(options);
             return false;
         },
 
