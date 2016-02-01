@@ -3020,7 +3020,7 @@ class DefaultRepoView(APIView):
     """
     Get user's default library.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -3037,9 +3037,12 @@ class DefaultRepoView(APIView):
 
     def default_repo_info(self, repo_id):
         repo_json = {
-            'exists': True,
-            'repo_id': repo_id
+            'exists': False,
         }
+
+        if repo_id is not None:
+            repo_json['exists'] = True
+            repo_json['repo_id'] = repo_id
 
         return Response(repo_json)
 
