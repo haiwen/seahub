@@ -231,6 +231,7 @@ def unenc_rw_repos(request):
     acc_repos = get_unencry_rw_repos_by_user(request)
 
     repo_list = []
+    acc_repos = filter(lambda r: not r.is_virtual, acc_repos)
     for repo in acc_repos:
         repo_list.append({"name": repo.name, "id": repo.id})
 
