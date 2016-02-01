@@ -1186,6 +1186,14 @@ def create_default_library(request):
     - `username`:
     """
     username = request.user.username
+
+    # Disable user guide no matter user permission error or creation error,
+    # so that the guide popup only show once.
+    UserOptions.objects.disable_user_guide(username)
+
+    if not request.user.permissions.can_add_repo():
+        return
+
     if is_org_context(request):
         org_id = request.user.org.org_id
         default_repo = seafile_api.create_org_repo(name=_("My Library"),
@@ -1213,7 +1221,6 @@ def create_default_library(request):
         return
 
     UserOptions.objects.set_default_repo(username, default_repo)
-
     return default_repo
 
 def get_owned_repo_list(request):
@@ -1262,10 +1269,7 @@ def libraries(request):
     max_upload_file_size = get_max_upload_file_size()
     guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     if guide_enabled:
-        if request.user.permissions.can_add_repo():
-            create_default_library(request)
-        # only show guide once
-        UserOptions.objects.disable_user_guide(username)
+        create_default_library(request)
 
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
     can_add_pub_repo = True if is_org_repo_creation_allowed(request) else False
