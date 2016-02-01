@@ -101,6 +101,10 @@ define([
                 case 'repo': return siteRoot + 'api2/repos/' + options.repo_id + '/';
                 case 'repo_owner': return siteRoot + 'api2/repos/' + options.repo_id + '/owner/';
                 case 'repo_history_limit': return siteRoot + 'api2/repos/' + options.repo_id + '/history-limit/';
+                case 'repo_shared_download_links': return siteRoot + 'api2/repos/' + options.repo_id + '/download-shared-links/';
+                case 'repo_shared_download_link': return siteRoot + 'api2/repos/' + options.repo_id + '/download-shared-links/' + options.token + '/';
+                case 'repo_shared_upload_links': return siteRoot + 'api2/repos/' + options.repo_id + '/upload-shared-links/';
+                case 'repo_shared_upload_link': return siteRoot + 'api2/repos/' + options.repo_id + '/upload-shared-links/' + options.token + '/';
 
                 // Permission
                 case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';

@@ -51,7 +51,7 @@
                 <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                 <li><a class="op js-popup-permission-settings" href="#">{% trans "Permissions" %}</a></li>
                 <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
-                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Sharing Links" %}</a></li>
+                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Shared Links" %}</a></li>
             </ul>
         </div>
     </td>
@@ -362,7 +362,7 @@
 <script type="text/template" id="share-popup-tmpl">
     <h3 class="hd"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft"> {# TODO: better var name? #}
+        <ul class="left-right-tabs-nav fleft">
             <% if (!repo_encrypted) { %>
             <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
             <% } %>
@@ -1112,8 +1112,66 @@
     <h3><%= title %></h3>
 </script>
 
-<script type="text/template" id="repo-share-link-admin-dialog-tmpl">
+<script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
     <h3><%= title %></h3>
+    <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
+            <li class="tab"><a href="#js-upload-links" class="a">{% trans "Upload Links" %}</a></li>
+        </ul>
+
+        <div class="fright">
+            <div id="js-download-links" class="tabs-panel">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="6%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="21%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="6%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+            <div id="js-upload-links" class="tabs-panel hide">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="6%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="21%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="6%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="repo-shared-link-tmpl">
+    <% if (share_type == 'd') { %>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+    <td><a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- name %></a></td>
+    <% } else { %>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/file.png" alt="{% trans "File"%}" /></td>
+    <td><a href="{{SITE_ROOT}}lib/<%= repo_id %>/file<%= encoded_path %>"><%- name %></a></td>
+    <% } %>
+    <td><a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(create_by)); %>/"><%- creator_name %></a></td>
+    <td><%= formattedSize %></td>
+    <td><%= view_count %></td>
+    <td>
+        <span class="sf2-icon-delete op-icon vh rm-link" title="{% trans "Remove"%}"></span>
+    </td>
 </script>
 
 <script type="text/template" id="repo-transfer-form-tmpl">
