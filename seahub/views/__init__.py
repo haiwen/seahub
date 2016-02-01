@@ -1529,9 +1529,8 @@ def repo_revert_file(request, repo_id):
 
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
-    from_page = request.GET.get('from')
 
-    if not (commit_id and path and from_page):
+    if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
 
     referer = request.META.get('HTTP_REFERER', None)
@@ -1558,30 +1557,17 @@ def repo_revert_file(request, repo_id):
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
         return HttpResponseRedirect(next)
-    else:
-        if from_page == 'repo_history':
-            # When revert file from repo history, we redirect to repo history
-            url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
-        elif from_page == 'recycle':
-            # When revert from repo recycle page, redirect to recycle page.
-            url = reverse('repo_recycle_view', args=[repo_id])
-        elif from_page == 'dir_recycle':
-            # When revert from dir recycle page, redirect to recycle page.
-            dir_path = request.GET.get('dir_path', '')
-            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
-        else:
-            # When revert file from file history, we reload page
-            url = next
 
-        if ret == 1:
-            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
-            msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
-            messages.success(request, msg, extra_tags='safe')
-        else:
-            file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
-            messages.success(request, msg, extra_tags='safe')
-        return HttpResponseRedirect(url)
+    if ret == 1:
+        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
+        messages.success(request, msg, extra_tags='safe')
+    else:
+        file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
+        msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
+        messages.success(request, msg, extra_tags='safe')
+
+    return HttpResponseRedirect(next)
 
 @login_required
 @require_POST
@@ -1592,9 +1578,8 @@ def repo_revert_dir(request, repo_id):
 
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
-    from_page = request.GET.get('from')
 
-    if not (commit_id and path and from_page):
+    if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
 
     referer = request.META.get('HTTP_REFERER', None)
@@ -1611,31 +1596,17 @@ def repo_revert_dir(request, repo_id):
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
         return HttpResponseRedirect(next)
-    else:
-        if from_page == 'repo_history':
-            # When revert file from repo history, we redirect to repo history
-            url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
-        elif from_page == 'recycle':
-            # When revert from repo recycle page, redirect to recycle page.
-            url = reverse('repo_recycle_view', args=[repo_id])
-        elif from_page == 'dir_recycle':
-            # When revert from dir recycle page, redirect to dir recycle page.
-            dir_path = request.GET.get('dir_path', '')
-            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
-        else:
-            # When revert file from file history, we redirect to parent dir of this file
-            parent_dir = os.path.dirname(path)
-            url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
 
-        if ret == 1:
-            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
-            msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
-            messages.success(request, msg, extra_tags='safe')
-        else:
-            dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
-            messages.success(request, msg, extra_tags='safe')
-        return HttpResponseRedirect(url)
+    if ret == 1:
+        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
+        messages.success(request, msg, extra_tags='safe')
+    else:
+        dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
+        msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
+        messages.success(request, msg, extra_tags='safe')
+
+    return HttpResponseRedirect(next)
 
 @login_required
 def file_revisions(request, repo_id):
