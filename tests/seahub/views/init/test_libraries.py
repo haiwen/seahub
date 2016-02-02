@@ -45,7 +45,7 @@ class LibrariesTest(BaseTestCase):
         assert resp.context['can_add_pub_repo'] is False
 
         # logout
-        self.client.logout()
+        self.logout()
 
         # admin
         self.login_as(self.admin)

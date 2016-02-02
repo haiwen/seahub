@@ -2,8 +2,11 @@ import os
 from uuid import uuid4
 
 from django.core.urlresolvers import reverse
+from django.conf import settings
+from django.http import SimpleCookie
 from django.test import RequestFactory
 from django.test import TestCase
+from django.utils.importlib import import_module
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
@@ -137,14 +140,24 @@ class Fixtures(Exam):
 
 
 class BaseTestCase(TestCase, Fixtures):
+    def tearDown(self):
+        self.remove_repo(self.repo.id)
+
     def login_as(self, user):
         return self.client.post(
             reverse('auth_login'), {'login': user.username,
                                     'password': self.user_password}
         )
 
-    def setUp(self):
-        pass
+    def logout(self):
+        """
+        Removes the authenticated user's cookies and session object.
 
-    def tearDown(self):
-        self.remove_repo(self.repo.id)
+        Causes the authenticated user to be logged out.
+        """
+        session = import_module(settings.SESSION_ENGINE).SessionStore()
+        session_cookie = self.client.cookies.get(settings.SESSION_COOKIE_NAME)
+
+        if session_cookie:
+            session.delete(session_key=session_cookie.value)
+        self.client.cookies = SimpleCookie()
