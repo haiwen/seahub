@@ -30,12 +30,12 @@ class GroupDiscussion(APIView):
         try:
             discussion = GroupMessage.objects.get(pk=discuss_id)
         except GroupMessage.DoesNotExist:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Bad discussion id')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Discussion id %s not found.' % discuss_id)
 
         # perm check
         if not ccnet_api.check_group_staff(group_id, username) and \
            discussion.from_email != username:
-            return api_error(status.HTTP_403_FORBIDDEN, 'Permission error.')
+            return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         discussion.delete()
 

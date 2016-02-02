@@ -72,7 +72,7 @@ class GroupDiscussions(APIView):
         """
         content = request.data.get('content', '')
         if not content:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'content can not be empty')
+            return api_error(status.HTTP_400_BAD_REQUEST, 'Content can not be empty.')
 
         username = request.user.username
         discuss = GroupMessage.objects.create(group_id=group_id,
