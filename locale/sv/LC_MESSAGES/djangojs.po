@@ -3,13 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
+# Johan Olsson <radapompa@gmail.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-03 18:25+0800\n"
-"PO-Revision-Date: 2015-11-26 16:51+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"POT-Creation-Date: 2016-01-21 11:36+0800\n"
+"PO-Revision-Date: 2016-01-21 14:28+0000\n"
+"Last-Translator: Johan Olsson <radapompa@gmail.com>\n"
 "Language-Team: Swedish (http://www.transifex.com/haiwen/seahub/language/sv/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -18,25 +19,25 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: static/scripts/common.js:161 static/scripts/common.js.c:251
-#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:844
-#: static/scripts/app/views/dir.js.c:901
-#: static/scripts/app/views/dirent.js:279
-#: static/scripts/app/views/dirent.js:423
-#: static/scripts/app/views/dirent.js:449
+#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:852
+#: static/scripts/app/views/dir.js.c:909
+#: static/scripts/app/views/dirent.js:281
+#: static/scripts/app/views/dirent.js:432
+#: static/scripts/app/views/dirent.js:458
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
 #: static/scripts/app/views/folder-perm.js:208
 #: static/scripts/app/views/folder-share-item.js:79
 #: static/scripts/app/views/folder-share-item.js:115
-#: static/scripts/app/views/group-repo.js:58
+#: static/scripts/app/views/group-repo.js:64
 #: static/scripts/app/views/myhome-sub-repos.js:123
 #: static/scripts/app/views/myhome-sub-repos.js:165
 #: static/scripts/app/views/repo.js:83 static/scripts/app/views/share.js:352
 #: static/scripts/app/views/share.js:620 static/scripts/app/views/share.js:679
 #: static/scripts/app/views/sub-lib.js:81
 msgid "Failed. Please check the network."
-msgstr ""
+msgstr "Misslyckades. Kontrollera nätverket."
 
 #: static/scripts/common.js:519
 msgid "Search users or enter emails"
@@ -60,47 +61,47 @@ msgstr "Laddning misslyckades"
 
 #: static/scripts/app/models/repo.js:30
 msgid "Name is required"
-msgstr ""
+msgstr "Namn krävs"
 
 #: static/scripts/app/models/repo.js:33 static/scripts/app/views/share.js:203
 msgid "Please enter password"
-msgstr ""
+msgstr "Vänligen ange lösenordet"
 
 #: static/scripts/app/models/repo.js:34 static/scripts/app/views/share.js:211
 msgid "Please enter the password again"
-msgstr ""
+msgstr "Vänligen ange lösenordet igen"
 
 #: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:207
 msgid "Password is too short"
-msgstr ""
+msgstr "Lösenordet är för kort"
 
 #: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:215
 msgid "Passwords don't match"
-msgstr ""
+msgstr "Lösenorden överensstämmer inte"
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
-msgstr ""
+msgstr "Nya filer"
 
 #: static/scripts/app/views/details.js:53
 msgid "Deleted files"
-msgstr ""
+msgstr "Borttagna filer"
 
 #: static/scripts/app/views/details.js:59
 msgid "Renamed or Moved files"
-msgstr ""
+msgstr "Namnändrade eller flyttade filer"
 
 #: static/scripts/app/views/details.js:65
 msgid "Modified files"
-msgstr ""
+msgstr "Ändrade filer"
 
 #: static/scripts/app/views/details.js:71
 msgid "New directories"
-msgstr ""
+msgstr "Nya kataloger"
 
 #: static/scripts/app/views/details.js:77
 msgid "Deleted directories"
-msgstr ""
+msgstr "Borttagna kataloger"
 
 #: static/scripts/app/views/dir.js:46
 #: static/scripts/app/views/starred-file.js:29
@@ -110,7 +111,7 @@ msgstr "Stäng (Esc)"
 #: static/scripts/app/views/dir.js:47
 #: static/scripts/app/views/starred-file.js:30
 msgid "Loading..."
-msgstr ""
+msgstr "Laddar"
 
 #: static/scripts/app/views/dir.js:50
 #: static/scripts/app/views/starred-file.js:33
@@ -125,7 +126,7 @@ msgstr "Nästa (Höger piltangent)"
 #: static/scripts/app/views/dir.js:52
 #: static/scripts/app/views/starred-file.js:35
 msgid "%curr% of %total%"
-msgstr ""
+msgstr "%curr% av %total%"
 
 #: static/scripts/app/views/dir.js:58
 #: static/scripts/app/views/starred-file.js:41
@@ -135,7 +136,7 @@ msgstr "Öppna i ny tabb"
 #: static/scripts/app/views/dir.js:61
 #: static/scripts/app/views/starred-file.js:44
 msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
-msgstr ""
+msgstr "<a href=\"%url%\" target=\"_blank\">Bilden</a> kunde inte laddas."
 
 #: static/scripts/app/views/dir.js:148
 #: static/scripts/app/views/group-side-nav.js:39
@@ -146,33 +147,33 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:78
 #: static/scripts/app/views/organization.js:124
 msgid "Please check the network."
-msgstr ""
+msgstr "Kontrollera nätverksanslutningen"
 
 #: static/scripts/app/views/dir.js:174
 msgid "Password is required."
-msgstr ""
+msgstr "Lösenord krävs."
 
 #: static/scripts/app/views/dir.js:345 static/scripts/app/views/dir.js.c:402
 msgid "It is required."
-msgstr ""
+msgstr "Det krävs."
 
 #: static/scripts/app/views/dir.js:360 static/scripts/app/views/dir.js.c:427
-#: static/scripts/app/views/dirent.js:264
+#: static/scripts/app/views/dirent.js:266
 #: static/scripts/app/views/fileupload.js:344
 #: static/scripts/app/views/fileupload.js:358
 #: static/scripts/app/views/fileupload.js:370
 #: static/scripts/app/views/fileupload.js:382
 #: static/scripts/app/views/myhome-sub-repos.js:152
 msgid "Just now"
-msgstr ""
+msgstr "Precis nyss"
 
 #: static/scripts/app/views/dir.js:408
 msgid "Only an extension there, please input a name."
-msgstr ""
+msgstr "Bara en ändelse, vänligen ange ett namn"
 
-#: static/scripts/app/views/dir.js:566 static/scripts/app/views/dir.js.c:695
+#: static/scripts/app/views/dir.js:566 static/scripts/app/views/dir.js.c:703
 msgid "Processing..."
-msgstr ""
+msgstr "Arbetar..."
 
 #: static/scripts/app/views/dir.js:602
 msgid "Successfully deleted %(name)s."
@@ -180,7 +181,7 @@ msgstr "Lyckades ta bort %(name)s."
 
 #: static/scripts/app/views/dir.js:604
 msgid "Successfully deleted %(name)s and 1 other item."
-msgstr ""
+msgstr "Lyckades tabort %(name)s och 1 annat objekt."
 
 #: static/scripts/app/views/dir.js:606
 msgid "Successfully deleted %(name)s and %(amount)s other items."
@@ -188,152 +189,152 @@ msgstr "Lyckades ta bort %(name)s och %(amount)s andra filer."
 
 #: static/scripts/app/views/dir.js:613
 msgid "Failed to delete %(name)s."
-msgstr ""
+msgstr "Misslyckades att tabort %(name)s."
 
 #: static/scripts/app/views/dir.js:615
 msgid "Failed to delete %(name)s and 1 other item."
-msgstr ""
+msgstr "Misslyckades att tabort %(name)s och 1 annat objekt."
 
 #: static/scripts/app/views/dir.js:617
 msgid "Failed to delete %(name)s and %(amount)s other items."
-msgstr ""
+msgstr "Misslyckades att tabort %(name)s och %(amount)s andra objekt."
 
 #: static/scripts/app/views/dir.js:630
 msgid "Delete Items"
-msgstr ""
+msgstr "Borttagna Objekt"
 
 #: static/scripts/app/views/dir.js:631
 msgid "Are you sure you want to delete these selected items?"
-msgstr ""
+msgstr "Är du säker att du vill ta bort valda objekt?"
 
 #: static/scripts/app/views/dir.js:645
 msgid "Move selected item(s) to:"
-msgstr ""
+msgstr "Flytta valda objekt till:"
 
 #: static/scripts/app/views/dir.js:645
 msgid "Copy selected item(s) to:"
-msgstr ""
+msgstr "Kopiera valda objekt till:"
 
-#: static/scripts/app/views/dir.js:690 static/scripts/app/views/dirent.js:348
+#: static/scripts/app/views/dir.js:698 static/scripts/app/views/dirent.js:357
 msgid "Invalid destination path"
-msgstr ""
+msgstr "Felaktig destinationssökväg"
 
-#: static/scripts/app/views/dir.js:738
+#: static/scripts/app/views/dir.js:746
 msgid "Successfully moved %(name)s."
 msgstr "Lyckades flytta %(name)s."
 
-#: static/scripts/app/views/dir.js:740
+#: static/scripts/app/views/dir.js:748
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr "Lyckades flytta %(name)s och 1 annan fil."
 
-#: static/scripts/app/views/dir.js:742
+#: static/scripts/app/views/dir.js:750
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr "Lyckades flytta %(name)s och %(amount)s andra filer."
 
-#: static/scripts/app/views/dir.js:746
+#: static/scripts/app/views/dir.js:754
 msgid "Successfully copied %(name)s."
 msgstr "Lyckades kopiera %(name)s."
 
-#: static/scripts/app/views/dir.js:748
+#: static/scripts/app/views/dir.js:756
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr "Lyckades kopiera %(name)s och 1 annan fil."
 
-#: static/scripts/app/views/dir.js:750
+#: static/scripts/app/views/dir.js:758
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr "Lyckades kopiera %(name)s och %(amount)s andra filer."
 
-#: static/scripts/app/views/dir.js:762
+#: static/scripts/app/views/dir.js:770
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "Internt fel. Misslyckades att flytta %(name)s och %(amount)s andra objekt."
 
-#: static/scripts/app/views/dir.js:764
+#: static/scripts/app/views/dir.js:772
 msgid "Internal error. Failed to move %(name)s."
 msgstr "Internt fel. Misslyckades att flytta %(name)s."
 
-#: static/scripts/app/views/dir.js:768
+#: static/scripts/app/views/dir.js:776
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
-msgstr ""
+msgstr "Internt fel. Misslyckades att kopiera %(name)s och %(amount)s andra objekt"
 
-#: static/scripts/app/views/dir.js:770
+#: static/scripts/app/views/dir.js:778
 msgid "Internal error. Failed to copy %(name)s."
 msgstr "Internt fel. Misslyckades att kopiera %(name)s."
 
-#: static/scripts/app/views/dir.js:810
+#: static/scripts/app/views/dir.js:818
 msgid "Moving file %(index)s of %(total)s"
 msgstr "Flyttar fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:810
+#: static/scripts/app/views/dir.js:818
 msgid "Copying file %(index)s of %(total)s"
 msgstr "Kopierar fil %(index)s av %(total)s"
 
-#: static/scripts/app/views/dir.js:832
+#: static/scripts/app/views/dir.js:840
 msgid "Failed to move %(name)s"
-msgstr ""
+msgstr "Misslyckades att flytta %(name)s"
 
-#: static/scripts/app/views/dir.js:832
+#: static/scripts/app/views/dir.js:840
 msgid "Failed to copy %(name)s"
-msgstr ""
+msgstr "Misslyckades att kopiera %(name)s"
 
-#: static/scripts/app/views/dir.js:892 static/scripts/app/views/dirent.js:412
-#: static/scripts/app/views/dirent.js:440
+#: static/scripts/app/views/dir.js:900 static/scripts/app/views/dirent.js:421
+#: static/scripts/app/views/dirent.js:449
 msgid "Canceled."
 msgstr "Avbruten."
 
-#: static/scripts/app/views/dirent.js:47
+#: static/scripts/app/views/dirent.js:49
 msgid "locked by {placeholder}"
-msgstr ""
+msgstr "låst av {placeholder}"
 
-#: static/scripts/app/views/dirent.js:198
+#: static/scripts/app/views/dirent.js:200
 msgid "Successfully deleted %(name)s"
 msgstr "Lyckades ta bort %(name)s"
 
-#: static/scripts/app/views/dirent.js:308
+#: static/scripts/app/views/dirent.js:310
 msgid "Move {placeholder} to:"
-msgstr ""
+msgstr "Flytta {placeholder} till:"
 
-#: static/scripts/app/views/dirent.js:308
+#: static/scripts/app/views/dirent.js:310
 msgid "Copy {placeholder} to:"
-msgstr ""
+msgstr "Kopiera {placeholder} till:"
 
-#: static/scripts/app/views/dirent.js:382
+#: static/scripts/app/views/dirent.js:391
 msgid "Moving %(name)s"
 msgstr "Flyttar %(name)s"
 
-#: static/scripts/app/views/dirent.js:382
+#: static/scripts/app/views/dirent.js:391
 msgid "Copying %(name)s"
 msgstr "Kopierar %(name)s"
 
-#: static/scripts/app/views/dirent.js:398
+#: static/scripts/app/views/dirent.js:407
 msgid "Saving..."
-msgstr ""
+msgstr "Sparar..."
 
-#: static/scripts/app/views/dirent.js:412
+#: static/scripts/app/views/dirent.js:421
 msgid "Failed."
-msgstr ""
+msgstr "Misslyckades"
 
 #: static/scripts/app/views/fileupload.js:10
 msgid "File is too big"
-msgstr ""
+msgstr "Filen är för stor"
 
 #: static/scripts/app/views/fileupload.js:11
 msgid "File is too small"
-msgstr ""
+msgstr "Filen är för liten"
 
 #: static/scripts/app/views/fileupload.js:12
 msgid "Filetype not allowed"
-msgstr ""
+msgstr "Filtypen stöds ej"
 
 #: static/scripts/app/views/fileupload.js:13
 msgid "Max number of files exceeded"
-msgstr ""
+msgstr "Maxantal filer överskridet"
 
 #: static/scripts/app/views/fileupload.js:14
 msgid "Uploaded bytes exceed file size"
-msgstr ""
+msgstr "Uppladdade bytes överskrider filstorleken"
 
 #: static/scripts/app/views/fileupload.js:15
 msgid "Empty file upload result"
-msgstr ""
+msgstr "Uppladdning resulterade i en tom fil"
 
 #: static/scripts/app/views/fileupload.js:17
 #: static/scripts/app/views/group.js:109 static/scripts/app/views/groups.js:74
@@ -342,7 +343,7 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:75
 #: static/scripts/app/views/organization.js:121
 msgid "Error"
-msgstr ""
+msgstr "Fel"
 
 #: static/scripts/app/views/fileupload.js:18
 msgid "uploaded"
@@ -354,15 +355,15 @@ msgstr "avbruten"
 
 #: static/scripts/app/views/fileupload.js:20
 msgid "Start"
-msgstr ""
+msgstr "Starta"
 
 #: static/scripts/app/views/fileupload.js:21
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: static/scripts/app/views/fileupload.js:22
 msgid "Delete"
-msgstr ""
+msgstr "Ta bort"
 
 #: static/scripts/app/views/fileupload.js:46
 msgid "File Uploading..."
@@ -386,19 +387,19 @@ msgstr "Misslyckades att hämta uppladdningsurl"
 
 #: static/scripts/app/views/fileupload.js:220
 msgid "Failed to get update url"
-msgstr ""
+msgstr "Misslyckades att hämta uppdateringsurl"
 
 #: static/scripts/app/views/fileupload.js:231
 msgid "Replace file {filename}?"
-msgstr ""
+msgstr "Byt ut fil {filename}?"
 
 #: static/scripts/app/views/fileupload.js:257
 msgid "File is locked"
-msgstr ""
+msgstr "Filen är låst"
 
 #: static/scripts/app/views/folder-perm.js:49
 msgid "Set {placeholder}'s permission"
-msgstr ""
+msgstr "Sätt {placeholder}s rättigheter"
 
 #: static/scripts/app/views/folder-perm.js:101
 #: static/scripts/app/views/share.js:525
@@ -407,16 +408,16 @@ msgstr "Välj grupper"
 
 #: static/scripts/app/views/folder-share-item.js:77
 msgid "Edit failed"
-msgstr ""
+msgstr "Ändring misslyckades"
 
 #: static/scripts/app/views/folder-share-item.js:113
 msgid "Delete failed"
-msgstr ""
+msgstr "Borttagning misslyckades"
 
-#: static/scripts/app/views/group-repo.js:50
+#: static/scripts/app/views/group-repo.js:56
 #: static/scripts/app/views/organization-repo.js:52
 msgid "Successfully unshared {placeholder}"
-msgstr ""
+msgstr "Slutade dela {placeholder}"
 
 #: static/scripts/app/views/group.js:107 static/scripts/app/views/groups.js:72
 #: static/scripts/app/views/myhome-repos.js:88
@@ -424,31 +425,31 @@ msgstr ""
 #: static/scripts/app/views/myhome-sub-repos.js:73
 #: static/scripts/app/views/organization.js:119
 msgid "Permission error"
-msgstr ""
+msgstr "Behörighetsfel"
 
 #: static/scripts/app/views/myhome-sub-repos.js:115
 msgid "You don't have any library at present."
-msgstr ""
+msgstr "Du har inga kataloger för tillfället."
 
 #: static/scripts/app/views/myhome-sub-repos.js:134
 msgid "Please choose a directory"
-msgstr ""
+msgstr "Vänligen välj en katalog"
 
 #: static/scripts/app/views/repo.js:48 static/scripts/app/views/sub-lib.js:46
 msgid "Really want to delete {lib_name}?"
-msgstr ""
+msgstr "Är du säker att du önskar radera %(lib_name)?"
 
 #: static/scripts/app/views/repo.js:73 static/scripts/app/views/sub-lib.js:71
 msgid "Delete succeeded."
-msgstr ""
+msgstr "Borttagen"
 
 #: static/scripts/app/views/share.js:63
 msgid "Share {placeholder}"
-msgstr ""
+msgstr "Dela {placeholder}"
 
 #: static/scripts/app/views/share.js:132
 msgid "Expired"
-msgstr ""
+msgstr "Utgången"
 
 #: static/scripts/app/views/share.js:160 static/scripts/app/views/share.js:176
 msgid "Hide"
@@ -460,7 +461,7 @@ msgstr "Visa"
 
 #: static/scripts/app/views/share.js:228
 msgid "Please enter days."
-msgstr ""
+msgstr "Vänligen ange dagar."
 
 #: static/scripts/app/views/share.js:232
 msgid "Please enter valid days"
@@ -468,7 +469,7 @@ msgstr "Vänligen ange giltiga dagar"
 
 #: static/scripts/app/views/share.js:319
 msgid "Please input at least an email."
-msgstr ""
+msgstr "Ange email."
 
 #: static/scripts/app/views/share.js:336
 msgid "Successfully sent to {placeholder}"
@@ -480,7 +481,7 @@ msgstr "Misslyckades att skicka till {placeholder}"
 
 #: static/scripts/app/views/share.js:609
 msgid "Failed to share to {placeholder}"
-msgstr ""
+msgstr "Misslyckades att dela till {placeholder}"
 
 #: static/scripts/app/views/shared-repo.js:26
 msgid "Success"
@@ -488,4 +489,4 @@ msgstr "Lyckades"
 
 #: static/scripts/app/views/starred-file-item.js:45
 msgid "Successfully unstared {placeholder}"
-msgstr ""
+msgstr "Tog bort {placeholder} från favoriter"

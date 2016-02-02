@@ -219,8 +219,8 @@ CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 AUTHENTICATION_BACKENDS = (
     'seahub.base.accounts.AuthBackend',
 )
-
 LOGIN_REDIRECT_URL = '/profile/'
+LOGIN_URL = SITE_ROOT + 'accounts/login'
 
 ACCOUNT_ACTIVATION_DAYS = 7
 
@@ -611,10 +611,6 @@ if 'win32' in sys.platform:
     fp.write("%d\n" % os.getpid())
     fp.close()
 
-# Put here after loading other settings files if `SITE_ROOT` is modified in
-# other settings files.
-LOGIN_URL = SITE_ROOT + 'accounts/login'
-
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
 CONSTANCE_CONFIG = {
@@ -626,6 +622,7 @@ CONSTANCE_CONFIG = {
     'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
     'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
     'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
+    'ENABLE_ORGANIZATION_LIBRARY': (True, ''),
 
     'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
     'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),

@@ -74,7 +74,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link
+    gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -1152,14 +1152,20 @@ class DownloadRepo(APIView):
         return repo_download_info(request, repo_id)
 
 class RepoPublic(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
     def post(self, request, repo_id, format=None):
+        """Set organization library.
+        """
         repo = get_repo(repo_id)
         if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
+
+        if not is_org_repo_creation_allowed(request):
+            return api_error(status.HTTP_403_FORBIDDEN,
+                             'Permission denied.')
 
         if check_permission(repo_id, request.user.username) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
@@ -1175,19 +1181,24 @@ class RepoPublic(APIView):
                             content_type=json_content_type)
 
     def delete(self, request, repo_id, format=None):
+        """Unset organization library.
+        """
+        username = request.user.username
+
         repo = get_repo(repo_id)
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
 
-        if check_permission(repo_id, request.user.username) != 'rw':
+        if not request.user.is_staff and \
+           not seafile_api.is_repo_owner(username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN,
-                    'You do not have permission to access this library.')
+                             'You do not have permission to unshare library.')
 
         try:
             seafile_api.remove_inner_pub_repo(repo_id)
         except:
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    'Unable to make library private')
+                             'Unable to make library private')
 
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
@@ -3150,7 +3161,7 @@ class DefaultRepoView(APIView):
     """
     Get user's default library.
     """
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
@@ -3167,9 +3178,12 @@ class DefaultRepoView(APIView):
 
     def default_repo_info(self, repo_id):
         repo_json = {
-            'exists': True,
-            'repo_id': repo_id
+            'exists': False,
         }
+
+        if repo_id is not None:
+            repo_json['exists'] = True
+            repo_json['repo_id'] = repo_id
 
         return Response(repo_json)
 
@@ -3198,10 +3212,12 @@ class SharedRepo(APIView):
 
     def delete(self, request, repo_id, format=None):
         """
-        Unshare a library. Only repo owner can perform this operation.
+        Unshare a library.
+        Repo owner and system admin can perform this operation.
         """
         username = request.user.username
-        if not seafile_api.is_repo_owner(username, repo_id):
+        if not request.user.is_staff and not seafile_api.is_repo_owner(
+                username, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to unshare library.')
 
@@ -3342,6 +3358,10 @@ class SharedRepo(APIView):
 
         elif share_type == 'public':
             if not CLOUD_MODE:
+                if not is_org_repo_creation_allowed(request):
+                    return api_error(status.HTTP_403_FORBIDDEN,
+                                     'Failed to share library to public: permission denied.')
+
                 try:
                     seafile_api.add_inner_pub_repo(repo_id, permission)
                 except SearpcError, e:

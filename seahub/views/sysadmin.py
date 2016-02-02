@@ -165,6 +165,7 @@ def sys_repo_admin(request):
     else:
         page_next = False
 
+    repos = filter(lambda r: not r.is_virtual, repos)
     default_repo_id = get_system_default_repo_id()
     for repo in repos:
         repo.is_default_repo = True if repo.id == default_repo_id else False
@@ -2156,12 +2157,15 @@ def sys_settings(request):
     """List and change seahub settings in admin panel.
     """
 
-    DIGIT_WEB_SETTINGS = ('DISABLE_SYNC_WITH_ANY_FOLDER', 'ENABLE_SIGNUP',
+    DIGIT_WEB_SETTINGS = (
+        'DISABLE_SYNC_WITH_ANY_FOLDER', 'ENABLE_SIGNUP',
         'ACTIVATE_AFTER_REGISTRATION', 'REGISTRATION_SEND_MAIL',
         'LOGIN_REMEMBER_DAYS', 'REPO_PASSWORD_MIN_LENGTH',
         'ENABLE_REPO_HISTORY_SETTING', 'USER_STRONG_PASSWORD_REQUIRED',
         'ENABLE_ENCRYPTED_LIBRARY', 'USER_PASSWORD_MIN_LENGTH',
-        'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH')
+        'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
+        'ENABLE_ORGANIZATION_LIBRARY'
+    )
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
 

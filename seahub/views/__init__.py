@@ -53,7 +53,8 @@ from seahub.utils import render_permission_error, render_error, list_to_string, 
     EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
     TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
     user_traffic_over_limit, send_perm_audit_msg, get_origin_repo_info, \
-    get_max_upload_file_size, is_pro_version, FILE_AUDIT_ENABLED
+    get_max_upload_file_size, is_pro_version, FILE_AUDIT_ENABLED, \
+    is_org_repo_creation_allowed
 from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
@@ -1141,6 +1142,14 @@ def create_default_library(request):
     - `username`:
     """
     username = request.user.username
+
+    # Disable user guide no matter user permission error or creation error,
+    # so that the guide popup only show once.
+    UserOptions.objects.disable_user_guide(username)
+
+    if not request.user.permissions.can_add_repo():
+        return
+
     if is_org_context(request):
         org_id = request.user.org.org_id
         default_repo = seafile_api.create_org_repo(name=_("My Library"),
@@ -1168,7 +1177,6 @@ def create_default_library(request):
         return
 
     UserOptions.objects.set_default_repo(username, default_repo)
-
     return default_repo
 
 def get_owned_repo_list(request):
@@ -1217,12 +1225,11 @@ def libraries(request):
     max_upload_file_size = get_max_upload_file_size()
     guide_enabled = UserOptions.objects.is_user_guide_enabled(username)
     if guide_enabled:
-        if request.user.permissions.can_add_repo():
-            create_default_library(request)
-        # only show guide once
-        UserOptions.objects.disable_user_guide(username)
+        create_default_library(request)
 
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
+    can_add_pub_repo = True if is_org_repo_creation_allowed(request) else False
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -1235,6 +1242,7 @@ def libraries(request):
             'folder_perm_enabled': folder_perm_enabled,
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
+            'can_add_pub_repo': can_add_pub_repo,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -1481,9 +1489,8 @@ def repo_revert_file(request, repo_id):
 
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
-    from_page = request.GET.get('from')
 
-    if not (commit_id and path and from_page):
+    if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
 
     referer = request.META.get('HTTP_REFERER', None)
@@ -1510,30 +1517,17 @@ def repo_revert_file(request, repo_id):
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
         return HttpResponseRedirect(next)
-    else:
-        if from_page == 'repo_history':
-            # When revert file from repo history, we redirect to repo history
-            url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
-        elif from_page == 'recycle':
-            # When revert from repo recycle page, redirect to recycle page.
-            url = reverse('repo_recycle_view', args=[repo_id])
-        elif from_page == 'dir_recycle':
-            # When revert from dir recycle page, redirect to recycle page.
-            dir_path = request.GET.get('dir_path', '')
-            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
-        else:
-            # When revert file from file history, we reload page
-            url = next
 
-        if ret == 1:
-            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
-            msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
-            messages.success(request, msg, extra_tags='safe')
-        else:
-            file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
-            messages.success(request, msg, extra_tags='safe')
-        return HttpResponseRedirect(url)
+    if ret == 1:
+        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
+        messages.success(request, msg, extra_tags='safe')
+    else:
+        file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
+        msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
+        messages.success(request, msg, extra_tags='safe')
+
+    return HttpResponseRedirect(next)
 
 @login_required
 @require_POST
@@ -1544,9 +1538,8 @@ def repo_revert_dir(request, repo_id):
 
     commit_id = request.GET.get('commit')
     path      = request.GET.get('p')
-    from_page = request.GET.get('from')
 
-    if not (commit_id and path and from_page):
+    if not (commit_id and path):
         return render_error(request, _(u"Invalid arguments"))
 
     referer = request.META.get('HTTP_REFERER', None)
@@ -1563,31 +1556,17 @@ def repo_revert_dir(request, repo_id):
         logger.error(e)
         messages.error(request, _('Failed to restore, please try again later.'))
         return HttpResponseRedirect(next)
-    else:
-        if from_page == 'repo_history':
-            # When revert file from repo history, we redirect to repo history
-            url = reverse('repo', args=[repo_id]) + u'?commit_id=%s&history=y' % commit_id
-        elif from_page == 'recycle':
-            # When revert from repo recycle page, redirect to recycle page.
-            url = reverse('repo_recycle_view', args=[repo_id])
-        elif from_page == 'dir_recycle':
-            # When revert from dir recycle page, redirect to dir recycle page.
-            dir_path = request.GET.get('dir_path', '')
-            url = next if not dir_path else reverse('dir_recycle_view', args=[repo_id]) + '?dir_path=' + urlquote(dir_path)
-        else:
-            # When revert file from file history, we redirect to parent dir of this file
-            parent_dir = os.path.dirname(path)
-            url = reverse('repo', args=[repo_id]) + ('?p=%s' % urllib2.quote(parent_dir.encode('utf-8')))
 
-        if ret == 1:
-            root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
-            msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
-            messages.success(request, msg, extra_tags='safe')
-        else:
-            dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
-            msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
-            messages.success(request, msg, extra_tags='safe')
-        return HttpResponseRedirect(url)
+    if ret == 1:
+        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
+        messages.success(request, msg, extra_tags='safe')
+    else:
+        dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
+        msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
+        messages.success(request, msg, extra_tags='safe')
+
+    return HttpResponseRedirect(next)
 
 @login_required
 def file_revisions(request, repo_id):

@@ -74,6 +74,7 @@ def edit_profile(request):
         default_repo = None
 
     owned_repos = get_owned_repo_list(request)
+    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
 
     return render_to_response('profile/set_profile.html', {
             'form': form,

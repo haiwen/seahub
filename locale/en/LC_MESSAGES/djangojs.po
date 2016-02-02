@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-17 16:07+0800\n"
+"POT-Creation-Date: 2016-01-21 11:36+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,11 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: static/scripts/common.js:161 static/scripts/common.js.c:251
-#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:844
-#: static/scripts/app/views/dir.js.c:901
-#: static/scripts/app/views/dirent.js:279
-#: static/scripts/app/views/dirent.js:423
-#: static/scripts/app/views/dirent.js:449
+#: static/scripts/app/views/details.js:94 static/scripts/app/views/dir.js:852
+#: static/scripts/app/views/dir.js.c:909
+#: static/scripts/app/views/dirent.js:281
+#: static/scripts/app/views/dirent.js:432
+#: static/scripts/app/views/dirent.js:458
 #: static/scripts/app/views/folder-perm-item.js:82
 #: static/scripts/app/views/folder-perm-item.js:124
 #: static/scripts/app/views/folder-perm.js:156
@@ -157,7 +157,7 @@ msgid "It is required."
 msgstr ""
 
 #: static/scripts/app/views/dir.js:360 static/scripts/app/views/dir.js.c:427
-#: static/scripts/app/views/dirent.js:264
+#: static/scripts/app/views/dirent.js:266
 #: static/scripts/app/views/fileupload.js:344
 #: static/scripts/app/views/fileupload.js:358
 #: static/scripts/app/views/fileupload.js:370
@@ -170,7 +170,7 @@ msgstr ""
 msgid "Only an extension there, please input a name."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:566 static/scripts/app/views/dir.js.c:695
+#: static/scripts/app/views/dir.js:566 static/scripts/app/views/dir.js.c:703
 msgid "Processing..."
 msgstr ""
 
@@ -214,100 +214,100 @@ msgstr ""
 msgid "Copy selected item(s) to:"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:690 static/scripts/app/views/dirent.js:348
+#: static/scripts/app/views/dir.js:698 static/scripts/app/views/dirent.js:357
 msgid "Invalid destination path"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:738
+#: static/scripts/app/views/dir.js:746
 msgid "Successfully moved %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:740
+#: static/scripts/app/views/dir.js:748
 msgid "Successfully moved %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:742
+#: static/scripts/app/views/dir.js:750
 msgid "Successfully moved %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:746
+#: static/scripts/app/views/dir.js:754
 msgid "Successfully copied %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:748
+#: static/scripts/app/views/dir.js:756
 msgid "Successfully copied %(name)s and 1 other item."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:750
+#: static/scripts/app/views/dir.js:758
 msgid "Successfully copied %(name)s and %(amount)s other items."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:762
+#: static/scripts/app/views/dir.js:770
 msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:764
+#: static/scripts/app/views/dir.js:772
 msgid "Internal error. Failed to move %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:768
+#: static/scripts/app/views/dir.js:776
 msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:770
+#: static/scripts/app/views/dir.js:778
 msgid "Internal error. Failed to copy %(name)s."
 msgstr ""
 
-#: static/scripts/app/views/dir.js:810
+#: static/scripts/app/views/dir.js:818
 msgid "Moving file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:810
+#: static/scripts/app/views/dir.js:818
 msgid "Copying file %(index)s of %(total)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:832
+#: static/scripts/app/views/dir.js:840
 msgid "Failed to move %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:832
+#: static/scripts/app/views/dir.js:840
 msgid "Failed to copy %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dir.js:892 static/scripts/app/views/dirent.js:412
-#: static/scripts/app/views/dirent.js:440
+#: static/scripts/app/views/dir.js:900 static/scripts/app/views/dirent.js:421
+#: static/scripts/app/views/dirent.js:449
 msgid "Canceled."
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:47
+#: static/scripts/app/views/dirent.js:49
 msgid "locked by {placeholder}"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:198
+#: static/scripts/app/views/dirent.js:200
 msgid "Successfully deleted %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:308
+#: static/scripts/app/views/dirent.js:310
 msgid "Move {placeholder} to:"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:308
+#: static/scripts/app/views/dirent.js:310
 msgid "Copy {placeholder} to:"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:382
+#: static/scripts/app/views/dirent.js:391
 msgid "Moving %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:382
+#: static/scripts/app/views/dirent.js:391
 msgid "Copying %(name)s"
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:398
+#: static/scripts/app/views/dirent.js:407
 msgid "Saving..."
 msgstr ""
 
-#: static/scripts/app/views/dirent.js:412
+#: static/scripts/app/views/dirent.js:421
 msgid "Failed."
 msgstr ""
 
