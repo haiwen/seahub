@@ -4415,9 +4415,9 @@ class RepoUserFolderPerm(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        user = request.data.get('user')
-        path = request.data.get('path')
-        perm = request.data.get('perm')
+        user = request.data.get('user_email')
+        path = request.data.get('folder_path')
+        perm = request.data.get('permission')
         path = path.rstrip('/') if path != '/' else path
 
         permission = seafile_api.get_folder_user_perm(repo_id, path, user)
@@ -4443,9 +4443,9 @@ class RepoUserFolderPerm(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        user = request.data.get('user')
-        path = request.data.get('path')
-        perm = request.data.get('perm')
+        user = request.data.get('user_email')
+        path = request.data.get('folder_path')
+        perm = request.data.get('permission')
         path = path.rstrip('/') if path != '/' else path
 
         permission = seafile_api.get_folder_user_perm(repo_id, path, user)
@@ -4471,8 +4471,8 @@ class RepoUserFolderPerm(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        user = request.data.get('user')
-        path = request.data.get('path')
+        user = request.data.get('user_email')
+        path = request.data.get('folder_path')
         path = path.rstrip('/') if path != '/' else path
 
         permission = seafile_api.get_folder_user_perm(repo_id, path, user)
@@ -4540,8 +4540,8 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         group_id = request.data.get('group_id')
-        path = request.data.get('path')
-        perm = request.data.get('perm')
+        path = request.data.get('folder_path')
+        perm = request.data.get('permission')
         group_id = int(group_id)
         path = path.rstrip('/') if path != '/' else path
 
@@ -4569,8 +4569,8 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         group_id = request.data.get('group_id')
-        path = request.data.get('path')
-        perm = request.data.get('perm')
+        path = request.data.get('folder_path')
+        perm = request.data.get('permission')
         group_id = int(group_id)
         path = path.rstrip('/') if path != '/' else path
 
@@ -4598,7 +4598,7 @@ class RepoGroupFolderPerm(APIView):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         group_id = request.data.get('group_id')
-        path = request.data.get('path')
+        path = request.data.get('folder_path')
         group_id = int(group_id)
         path = path.rstrip('/') if path != '/' else path
 

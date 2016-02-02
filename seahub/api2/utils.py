@@ -580,9 +580,9 @@ def api_repo_user_folder_perm_check(func):
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # check arguments
-        user = request.data.get('user', None)
-        path = request.data.get('path', None)
-        perm = request.data.get('perm', None)
+        user = request.data.get('user_email', None)
+        path = request.data.get('folder_path', None)
+        perm = request.data.get('permission', None)
 
         try:
             User.objects.get(email=user)
@@ -598,7 +598,7 @@ def api_repo_user_folder_perm_check(func):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if request.method in ('POST', 'PUT') and perm not in ('r', 'rw'):
-            error_msg = 'perm invalid.'
+            error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return func(view, request, repo_id, *args, **kwargs)
@@ -627,8 +627,8 @@ def api_repo_group_folder_perm_check(func):
 
         # check arguments
         group_id = request.data.get('group_id', None)
-        path = request.data.get('path', None)
-        perm = request.data.get('perm', None)
+        path = request.data.get('folder_path', None)
+        perm = request.data.get('permission', None)
 
         try:
             group_id = int(group_id)
@@ -648,7 +648,7 @@ def api_repo_group_folder_perm_check(func):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         if request.method in ('POST', 'PUT') and perm not in ('r', 'rw'):
-            error_msg = 'perm invalid.'
+            error_msg = 'permission invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         return func(view, request, repo_id, *args, **kwargs)

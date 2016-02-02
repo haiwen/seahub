@@ -57,7 +57,7 @@ class RepoUserFolderPermTest(BaseTestCase):
         self.login_as(self.user)
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (self.admin_email,
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email,
             self.user_folder_path, self.perm_rw)
 
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
@@ -71,7 +71,7 @@ class RepoUserFolderPermTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (self.admin_email,
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email,
             self.user_folder_path, self.perm_rw)
 
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
@@ -85,7 +85,7 @@ class RepoUserFolderPermTest(BaseTestCase):
         self.login_as(self.user)
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (self.admin_email,
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email,
             self.user_folder_path, self.perm_rw)
 
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
@@ -100,9 +100,9 @@ class RepoUserFolderPermTest(BaseTestCase):
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": self.admin_email,
-            "path": self.user_folder_path,
-            "perm": self.perm_rw
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_rw
         }
 
         resp = self.client.post(url, data)
@@ -120,9 +120,9 @@ class RepoUserFolderPermTest(BaseTestCase):
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": self.admin_email,
-            "path": self.user_folder_path,
-            "perm": self.perm_rw
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_rw
         }
 
         resp = self.client.post(url, data)
@@ -140,9 +140,9 @@ class RepoUserFolderPermTest(BaseTestCase):
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": self.admin_email,
-            "path": self.user_folder_path,
-            "perm": self.perm_r
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_r
         }
 
         resp = self.client.post(url, data)
@@ -163,7 +163,7 @@ class RepoUserFolderPermTest(BaseTestCase):
         assert len(json_resp) == 1
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s' % (self.admin_email, self.user_folder_path)
+        data = 'user_email=%s&folder_path=%s' % (self.admin_email, self.user_folder_path)
         resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(200, resp.status_code)
 
@@ -175,7 +175,7 @@ class RepoUserFolderPermTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s' % (self.admin_email, self.user_folder_path)
+        data = 'user_email=%s&folder_path=%s' % (self.admin_email, self.user_folder_path)
         resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
 
@@ -187,22 +187,22 @@ class RepoUserFolderPermTest(BaseTestCase):
         # test add
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": self.admin_email,
-            "path": invalid_path,
-            "perm": self.perm_rw
+            "user_email": self.admin_email,
+            "folder_path": invalid_path,
+            "permission": self.perm_rw
         }
         resp = self.client.post(url, data)
         self.assertEqual(404, resp.status_code)
 
         # test modify
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (self.admin_email, invalid_path, self.perm_rw)
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email, invalid_path, self.perm_rw)
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
 
         # test delete
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s' % (self.admin_email, invalid_path)
+        data = 'user_email=%s&folder_path=%s' % (self.admin_email, invalid_path)
         resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
 
@@ -214,22 +214,22 @@ class RepoUserFolderPermTest(BaseTestCase):
         # test add
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": invalid_user,
-            "path": self.user_folder_path,
-            "perm": self.perm_rw
+            "user_email": invalid_user,
+            "folder_path": self.user_folder_path,
+            "permission": self.perm_rw
         }
         resp = self.client.post(url, data)
         self.assertEqual(404, resp.status_code)
 
         # test modify
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (invalid_user, self.user_folder_path, self.perm_rw)
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (invalid_user, self.user_folder_path, self.perm_rw)
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
 
         # test delete
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s' % (invalid_user, self.user_folder_path)
+        data = 'user_email=%s&folder_path=%s' % (invalid_user, self.user_folder_path)
         resp = self.client.delete(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
 
@@ -241,15 +241,15 @@ class RepoUserFolderPermTest(BaseTestCase):
         # test add
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
         data = {
-            "user": self.admin_email,
-            "path": self.user_folder_path,
-            "perm": invalid_perm
+            "user_email": self.admin_email,
+            "folder_path": self.user_folder_path,
+            "permission": invalid_perm
         }
         resp = self.client.post(url, data)
         self.assertEqual(400, resp.status_code)
 
         # test modify
         url = reverse("api2-repo-user-folder-perm", args=[self.user_repo_id])
-        data = 'user=%s&path=%s&perm=%s' % (self.admin_email, self.user_folder_path, invalid_perm)
+        data = 'user_email=%s&folder_path=%s&permission=%s' % (self.admin_email, self.user_folder_path, invalid_perm)
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
