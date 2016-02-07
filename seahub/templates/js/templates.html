@@ -49,8 +49,11 @@
             <ul class="hidden-op repo-hidden-op hide dropdown-menu">
                 <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
-                <li><a class="op js-popup-history-settings" href="#">{% trans "History Settings" %}</a></li>
+                <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
                 <li><a class="op js-popup-share-link-admin" href="#">{% trans "Shared Links" %}</a></li>
+                <% if (app.pageOptions.folder_perm_enabled) { %>
+                <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
+                <% } %>
             </ul>
         </div>
     </td>
@@ -1107,10 +1110,6 @@
     <p class="error hide"></p>
 </script>
 
-<script type="text/template" id="repo-permissions-dialog-tmpl">
-    <h3><%= title %></h3>
-</script>
-
 <script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
     <h3><%= title %></h3>
     <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
@@ -1180,4 +1179,116 @@
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
+</script>
+
+<script type="text/template" id="repo-folder-perm-admin-dialog-tmpl">
+    <h3><%= title %></h3>
+    <div id="repo-folder-perm" class="left-right-tabs js-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
+            <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+        </ul>
+
+        <div class="fright">
+            <div id="js-repo-user-folder-perm" class="tabs-panel">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="30%">{% trans "User" %}</th>
+                        <th width="30%">{% trans "Folder" %}</th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="10%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="user-perm-add-tr">
+                            <td><input name="emails" type="hidden" /></td>
+                            <td>
+                                <input type="text" name="folder_path" />
+                                <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam" />
+                            </td>
+                            <td>
+                                <select name="permission" class="w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                                    <option value="r">{% trans "Read-Only"%}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="perm-add-submit">{% trans "Submit" %}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+            <div id="js-repo-group-folder-perm" class="tabs-panel hide">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="30%">{% trans "Group" %}</th>
+                        <th width="30%">{% trans "Folder" %}</th>
+                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="10%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="group-perm-add-tr">
+                            <td>
+                                <select name="groups" class="w100" multiple="multiple"></select>
+                            </td>
+                            <td>
+                                <input type="text" name="folder_path" />
+                                <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam" />
+                            </td>
+                            <td>
+                                <select name="permission" class="w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                                    <option value="r">{% trans "Read-Only"%}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="perm-add-submit">{% trans "Submit" %}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="repo-folder-perm-item-tmpl">
+    <td>
+        <% if (perm_type == 'user') { %>
+        <a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(user_email)); %>/"><%- user_name %></a>
+        <% } else { %>
+        <a href="#group/<%= group_id %>/"><%- group_name %></a>
+        <% } %>
+    </td>
+    <td>
+        <a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- folder_name %></a>
+    </td>
+    <td>
+        <% if (permission == 'rw') { %>
+            <span class="cur-perm">{% trans "Read-Write" %}</span>
+            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <select class="perm-toggle-select hide">
+                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                <option value="r">{% trans "Read-Only"%}</option>
+            </select>
+        <% } else { %>
+            <span class="cur-perm">{% trans "Read-Only" %}</span>
+            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <select class="perm-toggle-select hide">
+                <option value="rw">{% trans "Read-Write" %}</option>
+                <option value="r" selected="selected">{% trans "Read-Only"%}</option>
+            </select>
+        <% } %>
+    </td>
+    <td>
+        <span class="remove op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
+    </td>
 </script>

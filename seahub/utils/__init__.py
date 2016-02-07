@@ -1261,6 +1261,7 @@ def do_urlopen(url, data=None, headers=None):
     return ret
 
 def is_pro_version():
+    return True
     if EVENTS_CONFIG_FILE:
         return True
     else:

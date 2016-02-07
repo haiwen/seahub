@@ -3479,7 +3479,8 @@ textarea:-moz-placeholder {/* for FF */
 /* user & group folder perm */
 #share-popup .tabs-panel,
 #folder-perm-tabs .tabs-panel,
-#repo-shared-links .tabs-panel {
+#repo-shared-links .tabs-panel,
+#repo-folder-perm .tabs-panel {
     width:550px;
     max-height:250px;
     overflow:auto;

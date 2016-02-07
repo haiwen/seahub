@@ -32,7 +32,7 @@ define([
         render: function() {
             var repo_name = this.repo_name;
             this.$el.html(this.template({
-                title: gettext("{placeholder} History Settings")
+                title: gettext("{placeholder} History Setting")
                     .replace('{placeholder}',
                     '<span class="op-target ellipsis ellipsis-op-target" title="'
                     + Common.HTMLescape(repo_name) + '">'
