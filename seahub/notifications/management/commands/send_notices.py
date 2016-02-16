@@ -210,11 +210,10 @@ class Command(BaseCommand):
 
         email_ctx = {}
         for notice in unseen_notices:
-            to_email = Profile.objects.get_contact_email_by_user(notice.to_user)
             if notice.to_user in email_ctx:
-                email_ctx[to_email] += 1
+                email_ctx[notice.to_user] += 1
             else:
-                email_ctx[to_email] = 1
+                email_ctx[notice.to_user] = 1
 
         for to_user, count in email_ctx.items():
             # save current language
@@ -223,12 +222,14 @@ class Command(BaseCommand):
             # get and active user language
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
-            logger.info('Set language code to %s' % user_language)
+            logger.info('Set language code to %s for user: %s' % (user_language, to_user))
             self.stdout.write('[%s] Set language code to %s' % (
                 str(datetime.datetime.now()), user_language))
 
             notices = []
             for notice in unseen_notices:
+                logger.info('Processing unseen notice: [%s]' % (notice))
+
                 if notice.to_user != to_user:
                     continue
 
@@ -261,6 +262,8 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
+            contact_email = Profile.objects.get_contact_email_by_user(to_user)
+            to_user = contact_email  # use contact email if any
             c = {
                 'to_user': to_user,
                 'notice_count': count,
