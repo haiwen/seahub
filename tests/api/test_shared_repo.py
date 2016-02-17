@@ -12,7 +12,7 @@ class SharedRepoTest(BaseTestCase):
                                         username=self.admin.username,
                                         passwd=None)
         self.shared_repo_url = '/api2/shared-repos/%s/?share_type=public&permission=rw'
-        config.ENABLE_ORGANIZATION_LIBRARY = 1
+        config.ENABLE_USER_CREATE_ORG_REPO = 1
 
     def tearDown(self):
         self.remove_repo(self.repo_id)
@@ -34,9 +34,9 @@ class SharedRepoTest(BaseTestCase):
         assert "success" in resp.content
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is True
-        config.ENABLE_ORGANIZATION_LIBRARY = False
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is False
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
+        config.ENABLE_USER_CREATE_ORG_REPO = False
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.admin)
 
@@ -45,9 +45,9 @@ class SharedRepoTest(BaseTestCase):
         assert "success" in resp.content
 
     def test_user_can_not_set_pub_repo_when_setting_disalbed(self):
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is True
-        config.ENABLE_ORGANIZATION_LIBRARY = False
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is False
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
+        config.ENABLE_USER_CREATE_ORG_REPO = False
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         self.login_as(self.user)
 
