@@ -222,7 +222,7 @@ class Command(BaseCommand):
             # get and active user language
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
-            logger.info('Set language code to %s for user: %s' % (user_language, to_user))
+            logger.debug('Set language code to %s for user: %s' % (user_language, to_user))
             self.stdout.write('[%s] Set language code to %s' % (
                 str(datetime.datetime.now()), user_language))
 
