@@ -1318,4 +1318,4 @@ def is_org_repo_creation_allowed(request):
     if request.user.is_staff:
         return True
     else:
-        return config.ENABLE_ORGANIZATION_LIBRARY
+        return config.ENABLE_USER_CREATE_ORG_REPO

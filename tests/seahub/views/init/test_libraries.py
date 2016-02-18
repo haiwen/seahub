@@ -30,15 +30,15 @@ class LibrariesTest(BaseTestCase):
         # user
         self.login_as(self.user)
 
-        config.ENABLE_ORGANIZATION_LIBRARY = 1
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is True
+        config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_pub_repo'] is True
 
-        config.ENABLE_ORGANIZATION_LIBRARY = 0
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is False
+        config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
@@ -50,15 +50,15 @@ class LibrariesTest(BaseTestCase):
         # admin
         self.login_as(self.admin)
 
-        config.ENABLE_ORGANIZATION_LIBRARY = 1
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is True
+        config.ENABLE_USER_CREATE_ORG_REPO = 1
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_pub_repo'] is True
 
-        config.ENABLE_ORGANIZATION_LIBRARY = 0
-        assert bool(config.ENABLE_ORGANIZATION_LIBRARY) is False
+        config.ENABLE_USER_CREATE_ORG_REPO = 0
+        assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is False
 
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
