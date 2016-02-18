@@ -39,7 +39,7 @@ class ProfileManager(models.Manager):
         """Get a user's contact email, use username(login email) if not found.
         """
         p = self.get_profile_by_user(username)
-        if p and p.contact_email != '':
+        if p and p.contact_email:
             return p.contact_email
         else:
             return username
