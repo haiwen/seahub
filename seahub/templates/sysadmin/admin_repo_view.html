@@ -25,8 +25,16 @@
             {% endif %}
             {% endfor %}
             </p>
-            <div id="repo-latest-commit" class="clear">
+            {% if is_default_repo %}
+            <div class="repo-op fright">
+                <div id="upload-file" class="op-btn upload-file-btn">
+                    <span class="icon-upload-alt"></span><span>{% trans "Upload"%}</span>
+                    <input type="file" name="file" multiple />
+                </div>
+                <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
             </div>
+            {% endif %}
+            <div id="repo-latest-commit" class="clear"></div>
         </div>
 
         <table class="repo-file-list">
@@ -49,6 +57,15 @@
                     {{ dirent.last_modified|translate_seahub_time }}
                 </td>
                 <td class="dirent-op">
+                    {% if is_default_repo %}
+                    <div class="repo-file-op vh">
+                        <div class="displayed-op">
+                            <a href="#" class="op dirent-del" data-url="{% url 'delete_dir' repo.id %}?parent_dir={{path|urlencode}}&name={{ dirent.obj_name|urlencode }}" title="{% trans "Delete" %}">
+                                <img src="{{MEDIA_URL}}img/rm.png" alt="" />
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
@@ -67,6 +84,11 @@
                 <td class="dirent-op">
                     <div class="repo-file-op vh">
                         <div class="displayed-op">
+                            {% if is_default_repo %}
+                            <a href="#" class="op dirent-del" data-url="{% url 'delete_file' repo.id %}?parent_dir={{path|urlencode}}&name={{ dirent.obj_name|urlencode }}" title="{% trans "Delete" %}">
+                                <img src="{{MEDIA_URL}}img/rm.png" alt="" />
+                            </a>
+                            {% endif %}
                             <a class="op file-download" href="{% url 'sys_admin_repo_download_file' repo.id %}?p={{path|urlencode}}{{ dirent.obj_name|urlencode }}" title="{% trans "Download"%}">
                                 <img src="{{MEDIA_URL}}img/download.png" alt="" />
                             </a>
@@ -78,9 +100,41 @@
         </table>
     </div>
 
+    {% if is_default_repo %}
+    <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
+        <h3>{% trans "New Directory" %}</h3>
+        <label>{% trans "Directory Name" %}</label><br /><!-- <br/> for ie 7 -->
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+
+    <div id="upload-file-dialog" class="hide">
+        <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
+        <div class="ops">
+            <img src="{{MEDIA_URL}}img/minus.png" alt="" class="fold-switch cspt" />
+            <img src="{{MEDIA_URL}}img/close.png" alt="close" title="{% trans "close" %}" class="close cspt hide" />
+        </div>
+        <div class="con">
+            <div class="row fileupload-buttonbar">
+                <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
+            </div>
+            <p class="saving-tip alc clear hide">
+                <span class="loading-icon vam"></span>
+                <span class="vam">{% trans "Saving..." %}</span>
+            </p>
+            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        </div>
+    </div>
+    {% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
+{% if is_default_repo %}
+{% upload_js %}
+{% endif %}
 <script type="text/javascript">
 $('.dir-item, .file-item').unbind().hover( // remove previously binded hover handler at first
     function() {
@@ -90,5 +144,217 @@ $('.dir-item, .file-item').unbind().hover( // remove previously binded hover han
         $(this).removeClass('hl').find('.repo-file-op').addClass('vh');
     }
 );
+
+{% if is_default_repo %}
+var cur_path = "{{path|escapejs}}";
+$(function() {
+    $.getScript('{{ MEDIA_URL }}js/jquery.fileupload.min.js', function () {
+        var popup = $('#upload-file-dialog').addClass('fixed-upload-file-dialog');;
+        var popup_height = '200px';
+        popup.css({'height': popup_height}).data('height', popup_height);
+
+        var fu_status = $('.status', popup),
+            total_progress = $('.total-progress', popup),
+            cancel_all_btn = $('.fileupload-buttonbar .cancel', popup),
+            close_icon = $('.close', popup),
+            saving_tip = $('.saving-tip', popup);
+
+        var fu_status_ = {
+            'uploading': "{% trans "File Uploading..." %}",
+            'complete': "{% trans "File Upload complete" %}",
+            'canceled': "{% trans "File Upload canceled" %}",
+            'failed': "{% trans "File Upload failed" %}"
+        };
+
+        popup.fileupload({
+            formData: {'parent_dir': cur_path},
+            fileInput: $('#upload-file input'),
+            paramName: 'file',
+            // customize it for 'done'
+            getFilesFromResponse: function (data) {
+                if (data.result) {
+                    return data.result;
+                }
+            },
+            autoUpload:true,
+            {% if max_upload_file_size %}
+            maxFileSize: {{ max_upload_file_size }}, // in bytes
+            {% endif %}
+            maxNumberOfFiles: 500,
+            sequentialUploads: true
+        })
+        .bind('fileuploadadd', function(e, data) {
+            popup.removeClass('hide');
+            cancel_all_btn.removeClass('hide');
+            close_icon.addClass('hide');
+        })
+        .bind('fileuploadstart', function() {
+            fu_status.html(fu_status_.uploading);
+        })
+        .bind('fileuploadsubmit', function(e, data) {
+            if (data.files.length == 0) {
+                return false;
+            }
+            var file = data.files[0];
+            // get url(token) for every file
+            if (!file.error) {
+                $.ajax({
+                    url: '{% url 'get_file_op_url' repo.id %}',
+                    cache: false,
+                    data: {
+                        'op_type': 'upload',
+                        'path': cur_path
+                    },
+                    dataType: 'json',
+                    success: function(ret) {
+                        data.url = ret['url'];
+                        data.jqXHR = popup.fileupload('send', data);
+                    },
+                    error: function() {
+                        file.error = "{% trans "Failed to get upload url" %}";
+                    }
+                });
+                return false;
+            }
+        })
+        .bind('fileuploadprogressall', function (e, data) {
+            total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' + '<span style="font-size:14px;color:#555;">(' + $(this).data('blueimp-fileupload')._formatBitrate(data.bitrate) + ')</span>').removeClass('hide');
+            if (data.loaded > 0 && data.loaded == data.total) {
+                saving_tip.show();
+            }
+        })
+        .bind('fileuploadstop', function() {
+            location.reload(true);
+        })
+        // after tpl has rendered
+        .bind('fileuploadcompleted', function() { // 'done'
+            if ($('.files .cancel', popup).length == 0) {
+                location.reload(true);
+            }
+        })
+        .bind('fileuploadfailed', function(e, data) { // 'fail'
+            if ($('.files .cancel', popup).length == 0) {
+                cancel_all_btn.addClass('hide');
+                close_icon.removeClass('hide');
+                total_progress.addClass('hide');
+                saving_tip.hide();
+                if (data.errorThrown == 'abort') { // 'cancel'
+                    fu_status.html(fu_status_.canceled);
+                } else { // 'error'
+                    fu_status.html(fu_status_.failed);
+                }
+            }
+        });
+
+        // Enable iframe cross-domain access via redirect option:
+        popup.fileupload(
+            'option',
+            'redirect',
+            window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
+        );
+    });
+});
+
+// fold/unfold the dialog
+$('#upload-file-dialog .fold-switch').click(function() {
+    var popup = $('#upload-file-dialog');
+    var full_ht = parseInt(popup.data('height'));
+    var main_con = $('.fileupload-buttonbar, .table', popup);
+    if (popup.height() == full_ht) {
+        popup.height($('.hd', popup).outerHeight(true));
+        main_con.addClass('hide');
+    } else {
+        popup.height(full_ht);
+        main_con.removeClass('hide');
+    }
+});
+
+$('#upload-file-dialog .close').click(function() {
+    $('#upload-file-dialog').addClass('hide');
+    $('#upload-file-dialog .files').empty();
+});
+
+window.locale = {
+    "fileupload": {
+        "errors": {
+            "maxFileSize": "{% trans "File is too big" %}",
+            "minFileSize": "{% trans "File is too small" %}",
+            "acceptFileTypes": "{% trans "Filetype not allowed" %}",
+            "maxNumberOfFiles": "{% trans "Max number of files exceeded" %}",
+            "uploadedBytes": "{% trans "Uploaded bytes exceed file size" %}",
+            "emptyResult": "{% trans "Empty file upload result" %}"
+        },
+        "error": "{% trans "Error" %}",
+        "uploaded": "{% trans "uploaded" %}",
+        "canceled": "{% trans "canceled" %}",
+        "start": "{% trans "Start" %}",
+        "cancel": "{% trans "Cancel" %}",
+        "destroy": "{% trans "Delete" %}"
+    }
+};
+
+$('#add-new-dir').click(function () {
+    $('#add-new-dir-form').modal({appendTo:'#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+});
+
+$('#add-new-dir-form').submit(function() {
+    var form = $(this),
+        form_id = form.attr('id'),
+        dirent_name = $.trim(form.find('input[name="name"]').val()),
+        submit_btn = form.children('input[type="submit"]'),
+        post_data = {'dirent_name': dirent_name},
+        path = '{{path}}';
+
+    if (!dirent_name) {
+        apply_form_error(form_id, "{% trans "It is required." %}");
+        return false;
+    }
+
+    disable(submit_btn);
+
+    $.ajax({
+        url: '{% url 'new_dir' repo.id %}?parent_dir=' + e(path),
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        data: post_data,
+        success: function(data) {
+            location.reload(true);
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            var err;
+            if (xhr.responseText) {
+                err = $.parseJSON(xhr.responseText).error;
+            } else {
+                err = "{% trans "Failed. Please check the network." %}";
+            }
+            apply_form_error(form_id, err);
+            enable(submit_btn);
+        }
+    });
+    return false;
+});
+
+$('.dirent-del').click(function() {
+    var dirent = $(this).parents('tr'),
+        url = $(this).attr('data-url');
+
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            if (data['success']) {
+                dirent.remove();
+                feedback("{% trans "Delete succeeded." %}", 'success');
+            }
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
+{% endif %}
 </script>
 {% endblock %}
