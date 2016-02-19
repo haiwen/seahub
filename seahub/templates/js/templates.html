@@ -672,7 +672,10 @@
     {% endif %}
 
     <div class="fright">
-        <span class="sf2-icon-group-settings op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
+        <% if (wiki_enabled) { %>
+        <span class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></span>
+        <% } %>
+        <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
         <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
         <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     </div>
@@ -732,7 +735,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span> 
+        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -802,7 +805,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span> 
+        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">
@@ -944,6 +947,11 @@
     <ul class="group-setting-list">
         <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
         <li class="group-setting-item" data-op="transfer">{% trans "Transfer" %}</li>
+        <% if (!wiki_enabled) { %>
+        <li class="group-setting-item" data-op="add-wiki">{% trans "Add Wiki" %}</li>
+        <% } else { %>
+        <li class="group-setting-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</li>
+        <% } %>
     </ul>
     <ul class="group-setting-list">
         <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
@@ -955,6 +963,11 @@
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
         <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
+        <% if (!wiki_enabled) { %>
+        <li class="group-setting-item" data-op="add-wiki">{% trans "Add Wiki" %}</li>
+        <% } else { %>
+        <li class="group-setting-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</li>
+        <% } %>
     </ul>
     <ul class="last-group-setting-list">
         <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
@@ -972,7 +985,7 @@
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
@@ -980,7 +993,7 @@
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
-</form> 
+</form>
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">

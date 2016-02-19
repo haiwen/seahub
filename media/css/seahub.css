@@ -131,7 +131,7 @@
 .sf2-icon-x2:before { content:"\e01f"; }
 .sf2-icon-user2:before { content:"\e020"; }
 .sf2-icon-msgs2:before { content:"\e021"; }
-.sf2-icon-group-settings:before { content:"\e022"; }
+/*.sf2-icon-group-settings:before { content:"\e022"; }*/
 .sf2-icon-comment:before { content:"\e023"; }
 .sf2-icon-wiki2:before { content:"\e024"; }
 
@@ -656,7 +656,8 @@ textarea:-moz-placeholder {/* for FF */
 }
 .side-tabnav .grp-name { /*for 'group'*/
     display:inline-block;
-    width:130px;
+    max-width:130px;
+    font-weight:normal;
 }
 .side-tabnav-tabs {
     margin-bottom:1em;
@@ -2090,7 +2091,7 @@ textarea:-moz-placeholder {/* for FF */
 .fixed-upload-file-dialog .op-icon {
     font-size:18px;
     color: #b8b8b8;
-    margin:0; 
+    margin:0;
 }
 .fixed-upload-file-dialog .close,
 .fileupload-buttonbar .cancel {

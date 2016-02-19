@@ -27,6 +27,8 @@ from seahub.group.utils import validate_group_name, check_group_name_conflict, \
 from seahub.group.views import remove_group_common
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time
+from seahub.views.modules import is_wiki_mod_enabled_for_group, \
+    enable_mod_for_group, disable_mod_for_group, MOD_GROUP_WIKI
 
 from .utils import api_check_group
 
@@ -58,6 +60,7 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
         "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
+        "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)
     }
 
     return group_info
@@ -260,6 +263,31 @@ class Group(APIView):
                     seaserv.ccnet_threaded_rpc.group_set_admin(group_id, new_owner)
 
                 seaserv.ccnet_threaded_rpc.set_group_creator(group_id, new_owner)
+
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        wiki_enabled = request.data.get('wiki_enabled', None)
+        # turn on/off group wiki
+        if wiki_enabled:
+            try:
+                # only group owner/admin can turn on a group wiki
+                if not is_group_admin_or_owner(group_id, username):
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                # augument check
+                if wiki_enabled != 'true' and wiki_enabled != 'false':
+                    error_msg = 'wiki_enabled invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                # turn on/off group wiki
+                if wiki_enabled == 'true':
+                    enable_mod_for_group(group_id, MOD_GROUP_WIKI)
+                else:
+                    disable_mod_for_group(group_id, MOD_GROUP_WIKI)
 
             except SearpcError as e:
                 logger.error(e)

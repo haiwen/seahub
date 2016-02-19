@@ -21,6 +21,7 @@ define([
         events: {
             'click #group-settings-icon': 'toggleSettingsPanel',
             'click #group-members-icon': 'toggleMembersPanel',
+            'click #group-wiki-icon': 'showGroupWiki',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
             'click .by-time': 'sortByTime'
@@ -34,6 +35,8 @@ define([
             this.$loadingTip = this.$('#group-repos .loading-tip');
             this.$emptyTip = this.$('#group-repos .empty-tips');
 
+            this.group = {}; // will be fetched when rendering the top bar
+
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
@@ -42,7 +45,6 @@ define([
 
             this.membersView = new GroupMembersView();
             this.settingsView = new GroupSettingsView({
-                sideNavView: options.sideNavView,
                 groupView: this
             });
         },
@@ -90,6 +92,7 @@ define([
                 cache: false,
                 dataType: 'json',
                 success: function (data) {
+                    _this.group = data;
                     $groupTop.html(_this.groupTopTemplate(data));
                 },
                 error: function(xhr) {
@@ -120,7 +123,7 @@ define([
                 reset: true,
                 data: {from: 'web'},
                 success: function (collection, response, opts) {
-                },  
+                },
                 error: function (collection, response, opts) {
                     $loadingTip.hide();
                     var $error = _this.$('.error');
@@ -206,7 +209,7 @@ define([
 
         showSettings: function() {
             this.settingsView.show({
-                'group_id': this.group_id
+                'group': this.group
             });
         },
 
@@ -217,6 +220,10 @@ define([
             } else {
                 this.showSettings();
             }
+        },
+
+        showGroupWiki: function() {
+            location.href = '/group/' + this.group.id + '/wiki/';
         },
 
         showMembers: function() {
