@@ -675,7 +675,7 @@
         <% if (wiki_enabled) { %>
         <span class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></span>
         <% } %>
-        <span class="sf2-icon-cog1 op-icon" title="{% trans "Group Settings" %}" id="group-settings-icon"></span>
+        <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
         <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
         <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
     </div>
@@ -963,6 +963,11 @@
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
         <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
+        <% if (!wiki_enabled) { %>
+        <li class="group-setting-item" data-op="add-wiki">{% trans "Add Wiki" %}</li>
+        <% } else { %>
+        <li class="group-setting-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</li>
+        <% } %>
     </ul>
     <ul class="last-group-setting-list">
         <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>

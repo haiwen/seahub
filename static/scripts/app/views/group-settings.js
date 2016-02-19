@@ -77,12 +77,10 @@ define([
             this.$el.show();
             this.render();
             this.setConMaxHeight();
-            app.router.navigate('group/' + this.group.id + '/settings/');
         },
 
         hide: function() {
             this.$el.hide();
-            app.router.navigate('group/' + this.group.id + '/');
         },
 
         highlightItem: function(e) {
