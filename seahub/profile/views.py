@@ -50,7 +50,6 @@ def edit_profile(request):
         init_dict = {}
         if profile:
             init_dict['nickname'] = profile.nickname
-            init_dict['intro'] = profile.intro
             init_dict['login_id'] = profile.login_id
             init_dict['contact_email'] = profile.contact_email
         if d_profile:
@@ -100,18 +99,14 @@ def user_profile(request, username):
     nickname = '' if user is None else email2nickname(user.username)
 
     if user is not None:
-        profile = Profile.objects.get_profile_by_user(user.username)
-        intro = profile.intro if profile else ''
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
             user.username)
     else:
-        intro = _(u'Has not accepted invitation yet')
         d_profile = None
 
     return render_to_response('profile/user_profile.html', {
             'user': user,
             'nickname': nickname,
-            'intro': intro,
             'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 
