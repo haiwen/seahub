@@ -3374,7 +3374,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:16px;
 }
 
-/* repo setting */
+/* repo setting TODO*/
 .user-perm-add-tr input,
 .group-perm-add-tr input {
     padding:2px 5px;
@@ -3484,6 +3484,13 @@ textarea:-moz-placeholder {/* for FF */
     width:550px;
     max-height:250px;
     overflow:auto;
+}
+#repo-folder-perm .tabs-panel {
+    width:600px;
+}
+.repo-folder-perm-folder-path {
+    padding:3px 5px;
+    width:155px;
 }
 #share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {

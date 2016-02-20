@@ -66,7 +66,7 @@ define([
 
             if (collection.perm_type == 'user') {
                 $('[name="emails"]', $panel).select2($.extend({
-                    width: '160px'
+                    width: '190px'
                 },Common.contactInputOptionsForSelect2()));
             } else {
                 var groups = app.pageOptions.groups || [];
@@ -76,7 +76,7 @@ define([
                 }
                 $('[name="groups"]', $panel).html(g_opts).select2({
                     placeholder: gettext("Select groups"),
-                    width: '160px',
+                    width: '190px',
                     escapeMarkup: function(m) { return m; }
                 });
             }

@@ -1194,17 +1194,17 @@
                 <table>
                     <thead>
                     <tr>
-                        <th width="30%">{% trans "User" %}</th>
-                        <th width="30%">{% trans "Folder" %}</th>
-                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="32%">{% trans "User" %}</th>
+                        <th width="32%">{% trans "Folder" %}</th>
+                        <th width="26%">{% trans "Permission" %}</th>
                         <th width="10%"><!--op--></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr class="user-perm-add-tr">
+                        <tr>
                             <td><input name="emails" type="hidden" /></td>
                             <td>
-                                <input type="text" name="folder_path" />
+                                <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
                                 <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam" />
                             </td>
                             <td>
@@ -1226,19 +1226,19 @@
                 <table>
                     <thead>
                     <tr>
-                        <th width="30%">{% trans "Group" %}</th>
-                        <th width="30%">{% trans "Folder" %}</th>
-                        <th width="30%">{% trans "Permission" %}</th>
+                        <th width="32%">{% trans "Group" %}</th>
+                        <th width="32%">{% trans "Folder" %}</th>
+                        <th width="26%">{% trans "Permission" %}</th>
                         <th width="10%"><!--op--></th>
                     </tr>
                     </thead>
                     <tbody>
-                        <tr class="group-perm-add-tr">
+                        <tr>
                             <td>
                                 <select name="groups" class="w100" multiple="multiple"></select>
                             </td>
                             <td>
-                                <input type="text" name="folder_path" />
+                                <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
                                 <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam" />
                             </td>
                             <td>
