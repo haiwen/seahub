@@ -58,12 +58,6 @@
         <br/>
         {% endif %}
 
-        <label>{% trans "About me:" %}</label><textarea name="intro" class="textarea">{{ form.data.intro }}</textarea>
-        {% for error in form.intro.errors %}
-        <span class="error">{{ error|escape }}</span>
-        {% endfor %}
-        <br/>
-
         {% if form.department and form.telephone %}
         <label>{% trans "Department:" %}</label><input type="text" name="department" value="{{ form.data.department }}" class="input" />
         {% for error in form.department.errors %}
