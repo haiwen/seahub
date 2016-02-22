@@ -34,7 +34,7 @@
                 <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
             </div>
             {% endif %}
-            <div id="repo-latest-commit" class="clear"></div>
+            <div class="clear"></div>
         </div>
 
         <table class="repo-file-list">
@@ -106,7 +106,7 @@
         <label>{% trans "Directory Name" %}</label><br /><!-- <br/> for ie 7 -->
         <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
         <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
     </form>
 
@@ -224,12 +224,14 @@ $(function() {
             }
         })
         .bind('fileuploadstop', function() {
-            location.reload(true);
+            setTimeout(function() { location.reload(true); }, 1000);
         })
         // after tpl has rendered
         .bind('fileuploadcompleted', function() { // 'done'
             if ($('.files .cancel', popup).length == 0) {
-                location.reload(true);
+                saving_tip.hide();
+                total_progress.addClass('hide');
+                fu_status.html(fu_status_.complete);
             }
         })
         .bind('fileuploadfailed', function(e, data) { // 'fail'
@@ -301,10 +303,8 @@ $('#add-new-dir').click(function () {
 $('#add-new-dir-form').submit(function() {
     var form = $(this),
         form_id = form.attr('id'),
-        dirent_name = $.trim(form.find('input[name="name"]').val()),
-        submit_btn = form.children('input[type="submit"]'),
-        post_data = {'dirent_name': dirent_name},
-        path = '{{path}}';
+        dirent_name = $.trim($('[name="name"]', form).val()),
+        submit_btn = $('[type="submit"]', form);
 
     if (!dirent_name) {
         apply_form_error(form_id, "{% trans "It is required." %}");
@@ -314,11 +314,11 @@ $('#add-new-dir-form').submit(function() {
     disable(submit_btn);
 
     $.ajax({
-        url: '{% url 'new_dir' repo.id %}?parent_dir=' + e(path),
+        url: '{% url 'new_dir' repo.id %}?parent_dir=' + e(cur_path),
         type: 'POST',
         dataType: 'json',
         beforeSend: prepareCSRFToken,
-        data: post_data,
+        data: {'dirent_name': dirent_name},
         success: function(data) {
             location.reload(true);
         },

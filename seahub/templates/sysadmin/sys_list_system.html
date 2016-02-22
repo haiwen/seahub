@@ -2,12 +2,6 @@
 {% load i18n %}
 {% block cur_repo %}tab-cur{% endblock %}
 
-{% block left_panel %}{{block.super}}
-<form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form">
-    <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" />
-</form>
-{% endblock %}
-
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
@@ -36,5 +30,4 @@
 <p>{% trans "None" %}</p>
 {% endif %}
 
-{% include "sysadmin/repo_transfer_form.html" %}
 {% endblock %}
