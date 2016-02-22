@@ -163,6 +163,10 @@ def sys_repo_admin(request):
         page_next = False
 
     repos = filter(lambda r: not r.is_virtual, repos)
+
+    default_repo_id = get_system_default_repo_id()
+    repos = filter(lambda r: not r.repo_id == default_repo_id, repos)
+
     for repo in repos:
         try:
             repo.owner = seafile_api.get_repo_owner(repo.id)
