@@ -7,13 +7,14 @@ define([
     'backbone',
     'common',
     'file-tree',
+    'js.cookie',
     'app/collections/dirents',
     'app/views/dirent',
     'app/views/dirent-grid',
     'app/views/fileupload',
     'app/views/share'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
-        FileTree, DirentCollection, DirentView, DirentGridView, FileUploadView, ShareView) {
+        FileTree, Cookies, DirentCollection, DirentView, DirentGridView, FileUploadView, ShareView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -37,7 +38,11 @@ define([
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
 
-                this.view_mode = 'list';
+                var view_mode = Cookies.get('view_mode');
+                if (view_mode == 'grid') {
+                    this.view_mode = 'grid';
+                } else
+                    this.view_mode = 'list';
                 this.contextOptions = {};
 
                 this.dir = new DirentCollection();
@@ -525,6 +530,7 @@ define([
                     return false;
                 } else {
                     this.view_mode = 'grid';
+                    Cookies.set('view_mode', 'grid');
                     this.renderDir();
                     return false;
                 }
@@ -535,6 +541,7 @@ define([
                     return false;
                 } else {
                     this.view_mode = 'list';
+                    Cookies.set('view_mode', 'list');
                     this.renderDir();
                     return false;
                 }
