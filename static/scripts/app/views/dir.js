@@ -488,26 +488,49 @@ define([
             addNewFile: function(new_dirent) {
                 var dirView = this,
                     dir = this.dir;
-                var view = new DirentView({model: new_dirent, dirView: dirView});
-                var new_file = view.render().el;
-                // put the new file as the first file
-                if ($('tr', dirView.$dirent_list_body).length == 0) {
-                    dirView.$dirent_list_body.append(new_file);
-                } else {
-                    var dirs = dir.where({'is_dir':true});
-                    if (dirs.length == 0) {
-                        dirView.$dirent_list_body.prepend(new_file);
+
+                if (this.view_mode == 'list') {
+                    var view = new DirentView({model: new_dirent, dirView: dirView});
+                    var new_file = view.render().el;
+                    // put the new file as the first file
+                    if ($('tr', dirView.$dirent_list_body).length == 0) {
+                        dirView.$dirent_list_body.append(new_file);
                     } else {
-                        // put the new file after the last dir
-                        $($('tr', dirView.$dirent_list_body)[dirs.length - 1]).after(new_file);
+                        var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_list_body.prepend(new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('tr', dirView.$dirent_list_body)[dirs.length - 1]).after(new_file);
+                        }
+                    }
+                } else {
+                    var gview = new DirentGridView({model: new_dirent, dirView: dirView});
+                    var grid_new_file = gview.render().el;
+                    if ($('.grid-item', dirView.$dirent_grid).length == 0) {
+                        dirView.$dirent_grid.append(grid_new_file);
+                    } else {
+                        var dirs = dir.where({'is_dir':true});
+                        if (dirs.length == 0) {
+                            dirView.$dirent_grid.prepend(grid_new_file);
+                        } else {
+                            // put the new file after the last dir
+                            $($('.grid-item', dirView.$dirent_grid)[dirs.length - 1]).after(grid_new_file);
+                        }
                     }
                 }
             },
 
             addNewDir: function(new_dirent) {
                 var dirView = this;
-                var view = new DirentView({model: new_dirent, dirView: dirView});
-                dirView.$dirent_list_body.prepend(view.render().el); // put the new dir as the first one
+                if (this.view_mode == 'list') {
+                    var view = new DirentView({model: new_dirent, dirView: dirView});
+                    // put the new dir as the first one
+                    dirView.$dirent_list_body.prepend(view.render().el);
+                } else {
+                    var gview = new DirentGridView({model: new_dirent, dirView: dirView});
+                    dirView.$dirent_grid.prepend(gview.render().el);
+                }
             },
 
             share: function () {
