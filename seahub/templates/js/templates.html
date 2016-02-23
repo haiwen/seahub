@@ -149,8 +149,10 @@
     <% } %>
 
     <div class="switch-mode vam">
-        <img src="{{ MEDIA_URL }}img/grid.png" title="{% trans "Grid View" %}" id="js-switch-grid-view" alt='' class="grid-view-btn cspt fright <% if (mode == 'grid') { %>active<% } %>" />
+        <span class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" id="js-switch-list-view"></span><span class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" id="js-switch-grid-view"></span>
+        <!-- <img src="{{ MEDIA_URL }}img/grid.png" title="{% trans "Grid View" %}" id="js-switch-grid-view" alt='' class="grid-view-btn cspt fright <% if (mode == 'grid') { %>active<% } %>" />
         <img src="{{ MEDIA_URL }}img/list.png" title="{% trans "List View" %}" id="js-switch-list-view" alt='' class="list-view-btn cspt fright <% if (mode == 'list') { %>active<% } %>" />
+    -->
     </div>
 
     <% if (path == '/') { %>

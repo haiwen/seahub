@@ -134,6 +134,8 @@
 /*.sf2-icon-group-settings:before { content:"\e022"; }*/
 .sf2-icon-comment:before { content:"\e023"; }
 .sf2-icon-wiki2:before { content:"\e024"; }
+.sf2-icon-grid-view:before { content:"\e025"; }
+.sf2-icon-list-view:before { content:"\e026"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -3805,6 +3807,20 @@ img.thumbnail {
 }
 .grid-view-btn {
     border-left:none;
+}
+.grid-view-icon-btn,
+.list-view-icon-btn {
+    display:inline-block;
+    padding:0 6px;
+    font-size:18px;
+    height:27px;
+    color:#aaa;
+    border:1px solid #ccc;
+    background:#fff;
+}
+.grid-view-icon-btn.active,
+.list-view-icon-btn.active {
+    color:#fff;
 }
 /* grid view */
 .grid-item {
