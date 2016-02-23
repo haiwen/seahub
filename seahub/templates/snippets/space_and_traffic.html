@@ -1,10 +1,10 @@
-{% load i18n %}
+{% load seahub_tags i18n %}
 <div class="item">
-    <p>{% trans "Used:" %} {{ space_usage|filesizeformat }} {% if space_quota > 0 %}/ {{ space_quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Used:" %} {{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %}/ {{ space_quota|seahub_filesizeformat }} {% endif %}</p>
 
     {% if not org %}
     {% if CALC_SHARE_USAGE %}
-    <p>{% trans "Sharing:" %} {{ share_usage|filesizeformat }} {% if share_quota > 0 %}/ {{ share_quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Sharing:" %} {{ share_usage|seahub_filesizeformat }} {% if share_quota > 0 %}/ {{ share_quota|seahub_filesizeformat }} {% endif %}</p>
     {% endif %}
     {% endif %}
 

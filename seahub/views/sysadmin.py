@@ -38,6 +38,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
     get_virus_record_by_id, get_virus_record
+from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
@@ -966,12 +967,12 @@ def user_set_quota(request, email):
     if f.is_valid():
         email = f.cleaned_data['email']
         space_quota_mb = f.cleaned_data['space_quota']
-        space_quota = space_quota_mb * (1 << 20)
+        space_quota = space_quota_mb * get_file_size_unit('MB')
         share_quota_mb = f.cleaned_data['share_quota']
 
         share_quota = None
         if share_quota_mb is not None:
-            share_quota = share_quota_mb * (1 << 20)
+            share_quota = share_quota_mb * get_file_size_unit('MB')
 
         org = ccnet_threaded_rpc.get_orgs_by_user(email)
         try:
@@ -981,7 +982,7 @@ def user_set_quota(request, email):
                     seafile_api.set_user_share_quota(email, share_quota)
             else:
                 org_id = org[0].org_id
-                org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / (1 << 20)
+                org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
                     result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
                                             org_quota_mb)
@@ -1009,7 +1010,7 @@ def sys_org_set_quota(request, org_id):
 
     org_id = int(org_id)
     quota_mb = int(request.POST.get('quota', 0))
-    quota = quota_mb * (1 << 20)
+    quota = quota_mb * get_file_size_unit('MB')
 
     try:
         seafserv_threaded_rpc.set_org_quota(org_id, quota)

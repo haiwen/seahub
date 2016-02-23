@@ -17,7 +17,7 @@
         </td>
         <td><a href="{% url 'user_info' org.creator %}">{{ org.creator }}</a></td>
         <td>
-            {{ org.quota_usage|filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|filesizeformat }} {% endif %}
+            {{ org.quota_usage|seahub_filesizeformat }} {% if org.total_quota > 0 %} / {{ org.total_quota|seahub_filesizeformat }} {% endif %}
         </td>
         <td>{{ org.ctime|tsstr_sec }} <br/>
             <span class="{% if org.is_expired %}error{% endif %}">{% if org.expiration %}{{ org.expiration|date:'Y-m-d H:i:s' }}{% else %}--{% endif %}</span>

@@ -43,10 +43,10 @@
     </dl>
 
     <h3 class="hd">{% trans "Space Used" %}</h3>
-    <p>{% trans "Used" %}: {{ space_usage|filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Used" %}: {{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}</p>
 
     {% if CALC_SHARE_USAGE %}
-    <p>{% trans "Sharing" %}: {{ share_usage|filesizeformat }} {% if share_quota > 0 %} / {{ share_quota|filesizeformat }} {% endif %}</p>
+    <p>{% trans "Sharing" %}: {{ share_usage|seahub_filesizeformat }} {% if share_quota > 0 %} / {{ share_quota|seahub_filesizeformat }} {% endif %}</p>
     {% endif %}
 
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>

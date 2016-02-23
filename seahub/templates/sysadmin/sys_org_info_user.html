@@ -1,6 +1,5 @@
 {% extends "sysadmin/sys_org_info_base.html" %}
 {% load i18n seahub_tags %}
-{% load url from future %}
 
 {% block right_panel %}
 <div class="tabnav">
@@ -40,9 +39,9 @@
         </td>
         <td>
             {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|filesizeformat }} + {{ user.share_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {{ user.self_usage|seahub_filesizeformat }} + {{ user.share_usage|seahub_filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|seahub_filesizeformat }} {% endif %}
             {% else %}
-            {{ user.self_usage|filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|filesizeformat }} {% endif %}
+            {{ user.self_usage|seahub_filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|seahub_filesizeformat }} {% endif %}
             {% endif %}
         </td>
         <td style="font-size:11px;">

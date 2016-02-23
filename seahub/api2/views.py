@@ -75,6 +75,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
+from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import utc_to_local
 from seahub.views import validate_owner, is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
@@ -4585,7 +4586,7 @@ class OrganizationView(APIView):
             OrgMemberQuota.objects.set_quota(new_org.org_id, member_limit)
 
             # set quota
-            quota = quota_mb * (1 << 20)
+            quota = quota_mb * get_file_size_unit('MB')
             seafserv_threaded_rpc.set_org_quota(new_org.org_id, quota)
 
             return Response('success', status=status.HTTP_201_CREATED)
