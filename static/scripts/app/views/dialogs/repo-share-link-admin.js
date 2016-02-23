@@ -47,7 +47,7 @@ define([
 
         render: function() {
             this.$el.html(this.template({
-                title: gettext("{placeholder} Shared Links")
+                title: gettext("{placeholder} Share Links")
                     .replace('{placeholder}',
                     '<span class="op-target ellipsis ellipsis-op-target" title="'
                     + Common.HTMLescape(this.repo_name) + '">'

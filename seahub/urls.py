@@ -86,13 +86,6 @@ urlpatterns = patterns(
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/snapshot/files/$', view_snapshot_file, name="view_snapshot_file"),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/file/edit/$', file_edit, name='file_edit'),
     url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/(?P<obj_id>[0-9a-f]{40})/download/$', download_file, name='download_file'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/$', repo_basic_info, name='repo_basic_info'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/transfer-owner/$', repo_transfer_owner, name='repo_transfer_owner'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/change-password/$', repo_change_password, name='repo_change_password'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/shared-link/$', repo_shared_link, name='repo_shared_link'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/share-manage/$', repo_share_manage, name='repo_share_manage'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/settings/folder-perm/$', repo_folder_perm, name='repo_folder_perm'),
-    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/transfer-success/$', repo_transfer_success, name='repo_transfer_success'),
 
     ### lib (replace the old `repo` urls) ###
     # url(r'^lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', view_lib_dir, name='view_lib_dir'),

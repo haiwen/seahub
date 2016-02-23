@@ -2247,8 +2247,6 @@ def ajax_repo_change_passwd(request, repo_id):
                     'error': e.msg,
                     }), status=400, content_type=content_type)
 
-    messages.success(request, _(u'Successfully updated the password of Library %(repo_name)s.') %
-                     {'repo_name': escape(repo.name)})
     return HttpResponse(json.dumps({'success': True}),
                         content_type=content_type)
 

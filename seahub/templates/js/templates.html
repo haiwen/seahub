@@ -50,7 +50,12 @@
                 <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                 <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Shared Links" %}</a></li>
+                <% if (encrypted && enc_version == 2) { %>
+                <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
+                <% } %>
+                <% if (!encrypted) { %>
+                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
+                <% } %>
                 <% if (app.pageOptions.folder_perm_enabled) { %>
                 <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
                 <% } %>
@@ -144,9 +149,6 @@
     <% } %>
     <% if (path == '/') { %>
         <div class="fright">
-            <% if (is_repo_owner && !is_virtual) { %>
-            <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" title="{% trans 'Settings' %}"></a>
-            <% } %>
             <% if (user_perm == 'rw') { %>
             <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
             <% } %>
@@ -1301,4 +1303,18 @@
     <td>
         <span class="remove op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
     </td>
+</script>
+
+<script type="text/template" id="repo-change-password-form-tmpl">
+    <form id="repo-change-passwd-form" action="" method="post">
+        <h3><%= title %></h3>
+        <label>{% trans "Old Password" %}</label><br />
+        <input type="password" name="old_passwd" class="input" /><br />
+        <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
+        <input type="password" name="new_passwd" class="input" /><br />
+        <label>{% trans "New Password Again" %}</label><br />
+        <input type="password" name="new_passwd_again" class="input" /><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
 </script>

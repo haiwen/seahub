@@ -4,11 +4,12 @@ define([
     'backbone',
     'common',
     'app/views/share',
+    'app/views/dialogs/repo-change-password',
     'app/views/dialogs/repo-history-settings',
     'app/views/dialogs/repo-share-link-admin',
     'app/views/dialogs/repo-folder-perm-admin'
-], function($, _, Backbone, Common, ShareView, HistorySettingsDialog,
-    RepoShareLinkAdminDialog, RepoFolderPermAdminDialog) {
+], function($, _, Backbone, Common, ShareView, RepoChangePasswordDialog,
+    HistorySettingsDialog, RepoShareLinkAdminDialog, RepoFolderPermAdminDialog) {
     'use strict';
 
     var RepoView = Backbone.View.extend({
@@ -27,6 +28,7 @@ define([
             'click .js-toggle-popup': 'togglePopup',
             'click .js-repo-rename': 'rename',
             'click .js-repo-transfer': 'transfer',
+            'click .js-repo-change-password': 'changePassword',
             'click .js-popup-history-setting': 'popupHistorySetting',
             'click .js-popup-share-link-admin': 'popupShareLinkAdmin',
             'click .js-popup-folder-perm-admin': 'popupFolderPermAdmin'
@@ -305,6 +307,16 @@ define([
             };
             this.togglePopup(); // close the popup
             new RepoFolderPermAdminDialog(options);
+            return false;
+        },
+
+        changePassword: function () {
+            var options = {
+                'repo_name': this.model.get('name'),
+                'repo_id': this.model.get('id')
+            };
+            this.togglePopup(); // close the popup
+            new RepoChangePasswordDialog(options);
             return false;
         }
 
