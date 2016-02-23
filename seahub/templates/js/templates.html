@@ -5,10 +5,10 @@
         <label>{% trans "Name"%}</label><br/>
         <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <% if (showSharePerm) { %>
-        <label>{% trans "Share Permission"%}</label><br />
+        <label>{% trans "Share Permission" %}</label><br />
         <select name="permission" class="perm">
-          <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-          <option value="r">{% trans "Read-Only"%}</option>
+            <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+            <option value="r">{% trans "Read-Only" %}</option>
         </select>
         <br />
         <% } %>
@@ -16,11 +16,11 @@
         <div class="repo-create-encryption">
             <label class="checkbox-label">
                 <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
-                <span class="checkbox-option">{% trans "Encrypt"%}</span>
+                <span class="checkbox-option">{% trans "Encrypt" %}</span>
             </label>
-            <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+            <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
             <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-            <label>{% trans "Password again"%}</label><br />
+            <label>{% trans "Password again" %}</label><br />
             <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
         </div>
         <% } %>
@@ -30,22 +30,37 @@
 </script>
 <script type="text/template" id="repo-tmpl">
     <td>
-      <% if (encrypted) { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
-      <% } else { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
-      <% } %>
+        <% if (encrypted) { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <% } else { %>
+        <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <% } %>
     </td>
     <% if (name) { %>
-    <td><a href="#my-libs/lib/<%= id %>"><%- name %></a></td>
+    <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
     <% } else { %>
     <td>{% trans "Broken (please contact your administrator to fix this library)" %}</td>
     <% } %>
-    <td>
-      <div class="op-container">
-        <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-        <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
-      </div>
+    <td class="repo-op-td">
+        <div class="op-container">
+            <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
+            <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            <span class="sf2-icon-caret-down more-op-icon op-icon vh js-toggle-popup" title="{% trans "More operations" %}"></span>
+            <ul class="hidden-op repo-hidden-op hide dropdown-menu">
+                <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+                <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
+                <% if (encrypted && enc_version == 2) { %>
+                <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
+                <% } %>
+                <% if (!encrypted) { %>
+                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
+                <% } %>
+                <% if (app.pageOptions.folder_perm_enabled) { %>
+                <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
+                <% } %>
+            </ul>
+        </div>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -134,9 +149,6 @@
     <% } %>
     <% if (path == '/') { %>
         <div class="fright">
-            <% if (is_repo_owner && !is_virtual) { %>
-            <a class="op-link sf2-icon-cog1" href="<%= site_root %>repo/<%- repo_id %>/settings/" title="{% trans 'Settings' %}"></a>
-            <% } %>
             <% if (user_perm == 'rw') { %>
             <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
             <% } %>
@@ -218,7 +230,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -299,7 +311,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -354,7 +366,7 @@
 <script type="text/template" id="share-popup-tmpl">
     <h3 class="hd"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
-        <ul class="left-right-tabs-nav fleft"> {# TODO: better var name? #}
+        <ul class="left-right-tabs-nav fleft">
             <% if (!repo_encrypted) { %>
             <li class="tab"><a href="#download-link-share" class="a">{% trans "Download Link" %}</a></li>
             <% } %>
@@ -811,8 +823,8 @@
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
        <th width="4%"><!--icon--></th>
-       <th width="46%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
-       <th width="10%"><!--op--></th>
+       <th width="42%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
+       <th width="14%"><!--op--></th>
        <th width="20%">{% trans "Size" %}</th>
        <th width="20%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
    </tr>
@@ -942,6 +954,7 @@
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>
+
 <script type="text/template" id="group-settings-tmpl">
 <% if (is_owner) { %>
     <ul class="group-setting-list">
@@ -979,6 +992,7 @@
     </ul>
 <% } %>
 </script>
+
 <script type="text/template" id="group-rename-form-tmpl">
 <form method="post" action="">
     <h3>{% trans "Rename Group To" %}</h3>
@@ -987,6 +1001,7 @@
     <input type="submit" value="{% trans "Submit" %}" />
 </form>
 </script>
+
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
     <h3>{% trans "Transfer Group To" %}</h3>
@@ -1004,6 +1019,7 @@
     <p class="error hide"></p>
 </form>
 </script>
+
 <script type="text/template" id="group-manage-members-tmpl">
 <h3><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
@@ -1036,6 +1052,7 @@
     <p class="error hide"></p>
 </div>
 </script>
+
 <script type="text/template" id="group-manage-member-tmpl">
 <td>
     <img src="<%= avatar_url %>" alt="" width="20" class="avatar" />
@@ -1082,4 +1099,235 @@
         <% } %>
     <% } %>
 <% } %>
+</script>
+
+<script type="text/template" id="history-settings-dialog-tmpl">
+    <h3><%= title %></h3>
+
+    <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
+
+    <form action="" method="post">
+        <input type="radio" name="history" value="full_history" class="vam" />
+        <span class="vam">{% trans "Keep full history" %}</span><br />
+
+        <input type="radio" name="history" value="no_history" class="vam" />
+        <span class="vam">{% trans "Don't keep history" %}</span><br />
+
+        <input type="radio" name="history" value="partial_history" class="vam" />
+        <span calss="vam">{% trans "Only keep a period of history:" %}
+            <input type="text" name="days" size="4" disabled="disabled" class="input-disabled" value="<%= default_history_limit %>" /> {% trans "days" %}
+        </span><br />
+
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+
+    <span class="loading-icon loading-tip"></span>
+    <p class="error hide"></p>
+</script>
+
+<script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
+    <h3><%= title %></h3>
+    <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
+            <li class="tab"><a href="#js-upload-links" class="a">{% trans "Upload Links" %}</a></li>
+        </ul>
+
+        <div class="fright">
+            <div id="js-download-links" class="tabs-panel">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="6%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="21%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="6%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+            <div id="js-upload-links" class="tabs-panel hide">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="6%"><!--icon--></th>
+                        <th width="40%">{% trans "Name"%}</th>
+                        <th width="21%">{% trans "Created By"%}</th>
+                        <th width="15%">{% trans "Size"%}</th>
+                        <th width="12%">{% trans "Visits"%}</th>
+                        <th width="6%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+        </div>
+    </div>
+</script>
+<script type="text/template" id="repo-shared-link-tmpl">
+    <% if (share_type == 'd') { %>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+    <td><a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- name %></a></td>
+    <% } else { %>
+    <td class="alc"><img src="{{ MEDIA_URL }}img/file/file.png" alt="{% trans "File"%}" /></td>
+    <td><a href="{{SITE_ROOT}}lib/<%= repo_id %>/file<%= encoded_path %>"><%- name %></a></td>
+    <% } %>
+    <td><a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(create_by)); %>/"><%- creator_name %></a></td>
+    <td><%= formattedSize %></td>
+    <td><%= view_count %></td>
+    <td>
+        <span class="sf2-icon-delete op-icon vh rm-link" title="{% trans "Remove"%}"></span>
+    </td>
+</script>
+
+<script type="text/template" id="repo-transfer-form-tmpl">
+<form method="post" action="" id="repo-transfer-form">
+    <h3><%= title %></h3>
+    <input type="hidden" name="email" /><br />
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" />
+</form>
+</script>
+
+<script type="text/template" id="repo-folder-perm-admin-dialog-tmpl">
+    <h3><%= title %></h3>
+    <div id="repo-folder-perm" class="left-right-tabs js-tabs ovhd">
+        <ul class="left-right-tabs-nav fleft">
+            <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
+            <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
+        </ul>
+
+        <div class="fright">
+            <div id="js-repo-user-folder-perm" class="tabs-panel">
+                <div class="js-folder-perm-content">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="32%">{% trans "User" %}</th>
+                        <th width="32%">{% trans "Folder" %}</th>
+                        <th width="26%">{% trans "Permission" %}</th>
+                        <th width="10%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input name="emails" type="hidden" /></td>
+                            <td>
+                                <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
+                                <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam add-folder" />
+                            </td>
+                            <td>
+                                <select name="permission" class="w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                                    <option value="r">{% trans "Read-Only"%}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="perm-add-submit">{% trans "Submit" %}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+                </div>
+                <form class="js-folder-select hide">
+                    <h4>{% trans "Select a folder" %}</h4>
+                    <div class="js-jstree-container"></div>
+                    <span class="loading-icon loading-tip"></span>
+                    <p class="error hide"></p>
+                    <button type="submit" class="submit">{% trans "Submit" %}</button>
+                    <button class="folder-select-cancel">{% trans "Cancel"%}</button>
+                </form>
+            </div>
+            <div id="js-repo-group-folder-perm" class="tabs-panel hide">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="32%">{% trans "Group" %}</th>
+                        <th width="32%">{% trans "Folder" %}</th>
+                        <th width="26%">{% trans "Permission" %}</th>
+                        <th width="10%"><!--op--></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <select name="groups" class="w100" multiple="multiple"></select>
+                            </td>
+                            <td>
+                                <input type="text" name="folder_path" class="repo-folder-perm-folder-path" />
+                                <img src="{{ MEDIA_URL }}img/add.png" alt="" title="{% trans "Select a folder" %}" class="add vam" />
+                            </td>
+                            <td>
+                                <select name="permission" class="w100">
+                                    <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
+                                    <option value="r">{% trans "Read-Only"%}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <button class="perm-add-submit">{% trans "Submit" %}</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <span class="loading-icon loading-tip"></span>
+                <p class="error hide"></p>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="repo-folder-perm-item-tmpl">
+    <td>
+        <% if (perm_type == 'user') { %>
+        <a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(user_email)); %>/"><%- user_name %></a>
+        <% } else { %>
+        <a href="#group/<%= group_id %>/"><%- group_name %></a>
+        <% } %>
+    </td>
+    <td>
+        <a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- folder_name %></a>
+    </td>
+    <td>
+        <% if (permission == 'rw') { %>
+            <span class="cur-perm">{% trans "Read-Write" %}</span>
+            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <select class="perm-toggle-select hide">
+                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                <option value="r">{% trans "Read-Only"%}</option>
+            </select>
+        <% } else { %>
+            <span class="cur-perm">{% trans "Read-Only" %}</span>
+            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <select class="perm-toggle-select hide">
+                <option value="rw">{% trans "Read-Write" %}</option>
+                <option value="r" selected="selected">{% trans "Read-Only"%}</option>
+            </select>
+        <% } %>
+    </td>
+    <td>
+        <span class="remove op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
+    </td>
+</script>
+
+<script type="text/template" id="repo-change-password-form-tmpl">
+    <form id="repo-change-passwd-form" action="" method="post">
+        <h3><%= title %></h3>
+        <label>{% trans "Old Password" %}</label><br />
+        <input type="password" name="old_passwd" class="input" /><br />
+        <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
+        <input type="password" name="new_passwd" class="input" /><br />
+        <label>{% trans "New Password Again" %}</label><br />
+        <input type="password" name="new_passwd_again" class="input" /><br />
+        <p class="error hide"></p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+    </form>
 </script>

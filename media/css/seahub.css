@@ -317,6 +317,7 @@ p { margin:0.5em 0; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
+.outstanding-tip { color:red; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
@@ -429,6 +430,8 @@ p { margin:0.5em 0; }
     text-decoration:none;
 }
 .more-op-icon {
+    display:inline-block;
+    margin-top:4px;
     font-size:12px;
 }
 .big-more-btn {
@@ -1183,6 +1186,25 @@ textarea:-moz-placeholder {/* for FF */
 }
 .user-item .txt-item {
     margin:0;
+}
+/**** dropdown menu ******/
+.dropdown-menu {
+    position:absolute;
+    background:#fff;
+    padding:6px 1px;
+    border:1px solid #eee;
+    border-radius:5px;
+    z-index:10;
+}
+.dropdown-menu li a,
+.dropdown-menu a {
+    display:block;
+    padding:4px 12px;
+    min-width:110px;
+    white-space:nowrap;
+}
+.dropdown-menu a:hover {
+    background:#eee;
 }
 /********** container ***********/
 #main, #footer {
@@ -1946,25 +1968,25 @@ textarea:-moz-placeholder {/* for FF */
 #mv-dir-list .icon-caret-right {
     margin-right:15px;
 }
-#rename-form .input {
+.inline-rename-form .input {
     font-size:14px;
 }
 .web-setting-form .submit,
-#rename-form .submit {
+.inline-rename-form .submit {
     color:green;
 }
 .web-setting-form .cancel,
-#rename-form .cancel {
+.inline-rename-form .cancel {
     color:#666;
 }
-#rename-form .input,
-#rename-form .submit {
+.inline-rename-form .input,
+.inline-rename-form .submit {
     margin:0;
 }
 .web-setting-form .submit,
 .web-setting-form .cancel,
-#rename-form .submit,
-#rename-form .cancel {
+.inline-rename-form .submit,
+.inline-rename-form .cancel {
     font-size:16px;
     line-height:1;
 }
@@ -2245,14 +2267,14 @@ textarea:-moz-placeholder {/* for FF */
 #share-popup .op-target {
     max-width:400px;
 }
-#rename-form .op-target {
-    max-width:280px;
-}
 #mv-form .op-target {
     max-width:410px;
 }
 #folder-perm-popup .op-target {
     max-width:540px;
+}
+#repo-transfer-form .op-target {
+    max-width:200px;
 }
 /* group-join-form */
 /* group-join-form */
@@ -3353,7 +3375,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:16px;
 }
 
-/* repo setting */
+/* repo setting TODO*/
 .user-perm-add-tr input,
 .group-perm-add-tr input {
     padding:2px 5px;
@@ -3457,10 +3479,19 @@ textarea:-moz-placeholder {/* for FF */
 
 /* user & group folder perm */
 #share-popup .tabs-panel,
-#folder-perm-tabs .tabs-panel {
+#folder-perm-tabs .tabs-panel,
+#repo-shared-links .tabs-panel,
+#repo-folder-perm .tabs-panel {
     width:550px;
     max-height:250px;
     overflow:auto;
+}
+#repo-folder-perm .tabs-panel {
+    width:600px;
+}
+.repo-folder-perm-folder-path {
+    padding:3px 5px;
+    width:155px;
 }
 #share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {

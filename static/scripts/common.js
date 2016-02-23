@@ -62,77 +62,87 @@ define([
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
             switch (options.name) {
-              // File Operations
-              case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
-              case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
-              case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
-              case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
-              case 'del_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/delete/';
-              case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
-              case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
-              case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
-              case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
-              case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
-              case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
-              case 'lock_or_unlock_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
-              case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
-              case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
-              case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
-              case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
-              case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
-              case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
-              case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
-              case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
-              case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
-              case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
+                // File Operations
+                case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
+                case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
+                case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
+                case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
+                case 'del_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/delete/';
+                case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
+                case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
+                case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
+                case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
+                case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
+                case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
+                case 'lock_or_unlock_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
+                case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
+                case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
+                case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
+                case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
+                case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
+                case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
+                case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
+                case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
+                case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
-              // Repos
-              case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
-              case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
-              case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
-              case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
-              case 'repo_set_password': return siteRoot + 'repo/set_password/';
-              case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
-              case 'get_history_changes': return siteRoot + 'ajax/repo/' + options.repo_id + '/history/changes/';
-              case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
-              case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
-              case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
-              case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
+                // Repos
+                case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
+                case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
+                case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
+                case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
+                case 'repo_set_password': return siteRoot + 'repo/set_password/';
+                case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
+                case 'get_history_changes': return siteRoot + 'ajax/repo/' + options.repo_id + '/history/changes/';
+                case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
+                case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
+                case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
+                case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
+                case 'repo': return siteRoot + 'api2/repos/' + options.repo_id + '/';
+                case 'repo_owner': return siteRoot + 'api2/repos/' + options.repo_id + '/owner/';
+                case 'repo_history_limit': return siteRoot + 'api2/repos/' + options.repo_id + '/history-limit/';
+                case 'repo_shared_download_links': return siteRoot + 'api2/repos/' + options.repo_id + '/download-shared-links/';
+                case 'repo_shared_download_link': return siteRoot + 'api2/repos/' + options.repo_id + '/download-shared-links/' + options.token + '/';
+                case 'repo_shared_upload_links': return siteRoot + 'api2/repos/' + options.repo_id + '/upload-shared-links/';
+                case 'repo_shared_upload_link': return siteRoot + 'api2/repos/' + options.repo_id + '/upload-shared-links/' + options.token + '/';
+                case 'repo_user_folder_perm': return siteRoot + 'api2/repos/' + options.repo_id + '/user-folder-perm/';
+                case 'repo_group_folder_perm': return siteRoot + 'api2/repos/' + options.repo_id + '/group-folder-perm/';
+                case 'repo_change_password': return siteRoot + 'ajax/repo/' + options.repo_id + '/setting/change-passwd/';
 
-              // Permission
-              case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
-              case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
+                // Permission
+                case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
+                case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
 
-              // Links
-              case 'get_shared_download_link': return siteRoot + 'share/ajax/get-download-link/';
-              case 'delete_shared_download_link': return siteRoot + 'share/ajax/link/remove/';
-              case 'send_shared_download_link': return siteRoot + 'share/link/send/';
-              case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
-              case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
-              case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
+                // Links
+                case 'get_shared_download_link': return siteRoot + 'share/ajax/get-download-link/';
+                case 'delete_shared_download_link': return siteRoot + 'share/ajax/link/remove/';
+                case 'send_shared_download_link': return siteRoot + 'share/link/send/';
+                case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
+                case 'delete_shared_upload_link': return siteRoot + 'share/ajax/upload_link/remove/';
+                case 'get_share_upload_link': return siteRoot + 'share/ajax/get-upload-link/';
 
-              // Group
-              case 'groups': return siteRoot + 'api/v2.1/groups/';
-              case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
-              case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';
-              case 'group_member': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/' + options.email + '/';
-              case 'group_member_bulk': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/bulk/';
-              case 'group_import_members': return siteRoot + 'ajax/group/' + options.group_id + '/members/import/';
-              case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
-              case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
+                // Group
+                case 'groups': return siteRoot + 'api/v2.1/groups/';
+                case 'group': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/';
+                case 'group_members': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/';
+                case 'group_member': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/' + options.email + '/';
+                case 'group_member_bulk': return siteRoot + 'api/v2.1/groups/' + options.group_id + '/members/bulk/';
+                case 'group_import_members': return siteRoot + 'ajax/group/' + options.group_id + '/members/import/';
+                case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
+                case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
 
-              // Misc
-              case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
-              case 'get_user_contacts': return siteRoot + 'ajax/contacts/';
-              case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
-              case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
-              case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
-              case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
-              case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
-              case 'starred_files': return siteRoot + 'api2/starredfiles/';
-              case 'events': return siteRoot + 'api2/events/';
-              case 'search_user': return siteRoot + 'api2/search-user/';
-              case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
+                // Misc
+                case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
+                case 'get_user_contacts': return siteRoot + 'ajax/contacts/';
+                case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
+                case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
+                case 'get_unseen_notices_num': return siteRoot + 'ajax/unseen-notices-count/';
+                case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
+                case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
+                case 'starred_files': return siteRoot + 'api2/starredfiles/';
+                case 'events': return siteRoot + 'api2/events/';
+                case 'search_user': return siteRoot + 'api2/search-user/';
+                case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
             }
         },
 
@@ -178,7 +188,6 @@ define([
             }
         },
 
-        // TODO: Change to jquery function like $.disableButtion(btn)
         enableButton: function(btn) {
             btn.removeAttr('disabled').removeClass('btn-disabled');
         },
