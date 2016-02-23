@@ -356,20 +356,24 @@ def translate_seahub_time_str(val):
 @register.filter(name='email2nickname')
 def email2nickname(value):
     """
-    Return nickname or short email.
+    Return nickname if it exists and it's not an empty string,
+    otherwise return short email.
     """
     if not value:
         return ''
 
     key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
-    nickname = cache.get(key)
-    if not nickname:
-        profile = get_first_object_or_none(Profile.objects.filter(user=value))
-        if profile is not None and profile.nickname:
-            nickname = profile.nickname
-        else:
-            nickname = value.split('@')[0]
-        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
+    cached_nickname = cache.get(key)
+    if cached_nickname and cached_nickname.strip():
+        return cached_nickname.strip()
+
+    profile = get_first_object_or_none(Profile.objects.filter(user=value))
+    if profile is not None and profile.nickname and profile.nickname.strip():
+        nickname = profile.nickname.strip()
+    else:
+        nickname = value.split('@')[0]
+
+    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
 
 @register.filter(name='email2id')
