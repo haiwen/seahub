@@ -163,9 +163,11 @@ def sys_repo_admin(request):
         page_next = False
 
     repos = filter(lambda r: not r.is_virtual, repos)
+
     default_repo_id = get_system_default_repo_id()
+    repos = filter(lambda r: not r.repo_id == default_repo_id, repos)
+
     for repo in repos:
-        repo.is_default_repo = True if repo.id == default_repo_id else False
         try:
             repo.owner = seafile_api.get_repo_owner(repo.id)
         except:
@@ -272,6 +274,8 @@ def sys_admin_repo(request, repo_id):
             file_list.append(dirent)
 
     zipped = gen_path_link(path, repo.name)
+    default_repo_id = get_system_default_repo_id()
+    is_default_repo = True if repo_id == default_repo_id else False
 
     return render_to_response('sysadmin/admin_repo_view.html', {
             'repo': repo,
@@ -280,6 +284,8 @@ def sys_admin_repo(request, repo_id):
             'file_list': file_list,
             'path': path,
             'zipped': zipped,
+            'is_default_repo': is_default_repo,
+            'max_upload_file_size': seaserv.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
 
 @login_required

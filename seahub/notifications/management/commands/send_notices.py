@@ -124,7 +124,7 @@ class Command(BaseCommand):
         if repo is None:
             notice.delete()
 
-        notice.repo_url = reverse('repo', args=[repo.id])
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, '/'])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
@@ -138,7 +138,7 @@ class Command(BaseCommand):
         uploaded_to = d['uploaded_to'].rstrip('/')
         file_path = uploaded_to + '/' + file_name
         file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
-        folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(uploaded_to)
+        folder_link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to).strip('/')])
         folder_name = os.path.basename(uploaded_to)
 
         notice.file_link = file_link

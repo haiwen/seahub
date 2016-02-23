@@ -16,11 +16,10 @@ from django.contrib import messages
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
-from seaserv import seafile_api, seafserv_rpc, is_passwd_set, \
+from seaserv import seafile_api, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
-    get_user_quota_usage, get_user_share_usage, edit_repo, \
-    set_repo_history_limit
+    edit_repo, set_repo_history_limit
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
@@ -35,13 +34,9 @@ from seahub.message.models import UserMessage
 from seahub.share.models import UploadLinkShare
 from seahub.group.models import PublicGroup
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
-from seahub.views import get_repo_dirents_with_perm, validate_owner, \
-    check_repo_access_permission, get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id, get_diff, group_events_data, \
-    get_owned_repo_list, check_folder_permission, is_registered_user, \
-    check_file_lock
-from seahub.views.repo import get_nav_path, get_fileshare, get_dir_share_link, \
-    get_uploadlink, get_dir_shared_upload_link
+from seahub.views import validate_owner, check_repo_access_permission, \
+    get_unencry_rw_repos_by_user, get_system_default_repo_id, get_diff, group_events_data, \
+    get_owned_repo_list, check_folder_permission, is_registered_user
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group, enable_mod_for_group, \
     disable_mod_for_group, MOD_GROUP_WIKI, MOD_PERSONAL_WIKI, \
@@ -49,7 +44,7 @@ from seahub.views.modules import get_enabled_mods_by_group, \
 from seahub.group.views import is_group_staff
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, ENABLE_REPO_HISTORY_SETTING, \
+    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, \
     ENABLE_FOLDER_PERM, SHOW_TRAFFIC, MEDIA_URL
 from constance import config
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
@@ -59,7 +54,7 @@ from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     get_org_user_events, get_user_events, get_file_type_and_ext, \
     is_valid_username, send_perm_audit_msg, get_origin_repo_info, is_pro_version
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
-from seahub.utils.star import star_file, unstar_file
+from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE
@@ -239,165 +234,6 @@ def unenc_rw_repos(request):
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required_ajax
-def list_dir(request, repo_id):
-    """
-    List directory entries in AJAX.
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=400, content_type=content_type)
-
-    username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-
-    try:
-        server_crypto = UserOptions.objects.is_server_crypto(username)
-    except CryptoOptionNotSetError:
-        # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False
-
-    if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-            and not seafile_api.is_password_set(repo.id, username):
-        err_msg = _(u'Library is encrypted.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
-    if not head_commit:
-        err_msg = _(u'Error: no head commit id')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=500, content_type=content_type)
-
-    if new_merge_with_no_conflict(head_commit):
-        info_commit = get_commit_before_new_merge(head_commit)
-    else:
-        info_commit = head_commit
-
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
-
-    more_start = None
-    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo,
-                                                                  head_commit, path,
-                                                                  offset=0, limit=100)
-    if dirent_more:
-        more_start = 100
-    zipped = get_nav_path(path, repo.name)
-    fileshare = get_fileshare(repo.id, username, path)
-    dir_shared_link = get_dir_share_link(fileshare)
-    uploadlink = get_uploadlink(repo.id, username, path)
-    dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
-
-    ctx = {
-        'repo': repo,
-        'zipped': zipped,
-        'user_perm': user_perm,
-        'path': path,
-        'server_crypto': server_crypto,
-        'fileshare': fileshare,
-        'dir_shared_link': dir_shared_link,
-        'uploadlink': uploadlink,
-        'dir_shared_upload_link': dir_shared_upload_link,
-        'dir_list': dir_list,
-        'file_list': file_list,
-        'dirent_more': dirent_more,
-        'more_start': more_start,
-        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
-        'sub_lib_enabled': sub_lib_enabled,
-        'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
-        'current_commit': head_commit,
-        'info_commit': info_commit,
-    }
-    html = render_to_string('snippets/repo_dir_data.html', ctx,
-                            context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({'html': html, 'path': path}),
-                        content_type=content_type)
-
-@login_required_ajax
-def list_dir_more(request, repo_id):
-    """
-    List 'more' entries in a directory with AJAX.
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=400, content_type=content_type)
-
-    username = request.user.username
-    user_perm = check_repo_access_permission(repo.id, request.user)
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-
-    try:
-        server_crypto = UserOptions.objects.is_server_crypto(username)
-    except CryptoOptionNotSetError:
-        # Assume server_crypto is ``False`` if this option is not set.
-        server_crypto = False
-
-    if repo.encrypted and \
-            (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-           and not seafile_api.is_password_set(repo.id, username):
-        err_msg = _(u'Library is encrypted.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
-    if not head_commit:
-        err_msg = _(u'Error: no head commit id')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=500, content_type=content_type)
-
-    path = request.GET.get('p', '/')
-    if path[-1] != '/':
-        path = path + '/'
-
-    offset = int(request.GET.get('start'))
-    if not offset:
-        err_msg = _(u'Argument missing')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=400, content_type=content_type)
-    more_start = None
-    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo,
-                                                                  head_commit, path,
-                                                                  offset, limit=100)
-    if dirent_more:
-        more_start = offset + 100
-
-    ctx = {
-        'repo': repo,
-        'user_perm': user_perm,
-        'path': path,
-        'server_crypto': server_crypto,
-        'dir_list': dir_list,
-        'file_list': file_list,
-        'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
-        'sub_lib_enabled': sub_lib_enabled,
-    }
-    html = render_to_string('snippets/repo_dirents.html', ctx,
-                            context_instance=RequestContext(request))
-    return HttpResponse(json.dumps({'html': html, 'dirent_more': dirent_more, 'more_start': more_start}),
-                        content_type=content_type)
-
-@login_required_ajax
 def list_lib_dir(request, repo_id):
     '''
         New ajax API for list library directory
@@ -436,9 +272,51 @@ def list_lib_dir(request, repo_id):
                             status=500, content_type=content_type)
 
     offset = int(request.GET.get('start', 0))
-    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(request, repo, head_commit, path, offset, limit=100)
+    limit = 100
+    dir_list = []
+    file_list = []
+    dirent_more = False
+
+    try:
+        dir_id = seafile_api.get_dir_id_by_path(repo.id, path)
+    except SearpcError as e:
+        logger.error(e)
+        err_msg = 'Internal Server Error'
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=500, content_type=content_type)
+
+    if not dir_id:
+        err_msg = 'Folder not found.'
+        return HttpResponse(json.dumps({'error': err_msg}),
+                            status=404, content_type=content_type)
+
+    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path, dir_id, username, offset, limit)
+    starred_files = get_dir_starred_files(username, repo_id, path)
+
+    for dirent in dirs:
+        dirent.last_modified = dirent.mtime
+        if stat.S_ISDIR(dirent.mode):
+            dpath = posixpath.join(path, dirent.obj_name)
+            if dpath[-1] != '/':
+                dpath += '/'
+            dir_list.append(dirent)
+        else:
+            if repo.version == 0:
+                file_size = seafile_api.get_file_size(repo.store_id, repo.version, dirent.obj_id)
+            else:
+                file_size = dirent.size
+            dirent.file_size = file_size if file_size else 0
+
+            dirent.starred = False
+            fpath = posixpath.join(path, dirent.obj_name)
+            if fpath in starred_files:
+                dirent.starred = True
+
+            file_list.append(dirent)
+
     more_start = None
-    if dirent_more:
+    if limit == len(dirs):
+        dirent_more = True
         more_start = offset + 100
 
     if is_org_context(request):
@@ -462,8 +340,7 @@ def list_lib_dir(request, repo_id):
         d_['obj_name'] = d.obj_name
         d_['last_modified'] = d.last_modified
         d_['last_update'] = translate_seahub_time(d.last_modified)
-        p_dpath = posixpath.join(path, d.obj_name)
-        d_['p_dpath'] = p_dpath # for 'view_link' & 'dl_link'
+        d_['p_dpath'] = posixpath.join(path, d.obj_name)
         d_['perm'] = d.permission # perm for sub dir in current dir
         dirent_list.append(d_)
 
@@ -1072,7 +949,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+        url = reverse("view_common_lib_dir", args=[dst_repo_id, urlquote(dst_path).strip('/')])
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -1115,7 +992,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse('repo', args=[dst_repo_id]) + '?p=' + urlquote(dst_path)
+        url = reverse("view_common_lib_dir", args=[dst_repo_id, urlquote(dst_path).strip('/')])
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -1955,69 +1832,6 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
         repo_id = None
 
     return repo_id
-
-@login_required_ajax
-def repo_create(request):
-    '''
-    Handle ajax post to create a library.
-
-    '''
-    if request.method != 'POST':
-        return Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    if not request.user.permissions.can_add_repo():
-        result['error'] = _(u"You do not have permission to create library")
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
-    form = RepoCreateForm(request.POST)
-    if not form.is_valid():
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponseBadRequest(json.dumps(result),
-                                      content_type=content_type)
-
-    repo_name = form.cleaned_data['repo_name']
-    repo_desc = form.cleaned_data['repo_desc']
-    encryption = int(form.cleaned_data['encryption'])
-
-    uuid = form.cleaned_data['uuid']
-    magic_str = form.cleaned_data['magic_str']
-    encrypted_file_key = form.cleaned_data['encrypted_file_key']
-
-    repo_id = _create_repo_common(request, repo_name, repo_desc, encryption,
-                                  uuid, magic_str, encrypted_file_key)
-    if repo_id is None:
-        result['error'] = _(u"Internal Server Error")
-        return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
-
-    username = request.user.username
-    try:
-        default_lib = (int(request.GET.get('default_lib', 0)) == 1)
-    except ValueError:
-        default_lib = False
-    if default_lib:
-        UserOptions.objects.set_default_repo(username, repo_id)
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-    else:
-        org_id = -1
-    repo_created.send(sender=None,
-                      org_id=org_id,
-                      creator=username,
-                      repo_id=repo_id,
-                      repo_name=repo_name)
-    result = {
-        'repo_id': repo_id,
-        'repo_name': repo_name,
-        'repo_desc': repo_desc,
-        'repo_enc': encryption,
-    }
-    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
 def public_repo_create(request):
