@@ -266,7 +266,7 @@ if EVENTS_ENABLED:
     urlpatterns += patterns(
         '',
         url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
-        url(r'^sys/virus_scan_records/delete/(?P<vid>[\d+])/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
+        url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
     )
 
 if settings.SERVE_STATIC:
