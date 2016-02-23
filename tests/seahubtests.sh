@@ -11,6 +11,8 @@ export SEAHUB_TEST_PASSWORD
 export SEAHUB_TEST_ADMIN_USERNAME
 export SEAHUB_TEST_ADMIN_PASSWORD
 
+[[ -e /etc/default/seafile-server ]] && . /etc/default/seafile-server
+
 # If you run this script on your local machine, you must set CCNET_CONF_DIR
 # and SEAFILE_CONF_DIR like this:
 #
@@ -23,7 +25,6 @@ if [[ ${TRAVIS} != "" ]]; then
     set -x
 fi
 
-set -x
 SEAHUB_TESTSDIR=$(python -c "import os; print os.path.dirname(os.path.realpath('$0'))")
 SEAHUB_SRCDIR=$(dirname "${SEAHUB_TESTSDIR}")
 local_settings_py=${SEAHUB_SRCDIR}/seahub/local_settings.py
@@ -46,7 +47,7 @@ function init() {
     # enlarge anon api throttling settings in settings.py, this is a workaround
     # to make tests pass, otherwise a few tests will be throttlled.
     # TODO: cache api token.
-    echo "REST_FRAMEWORK = {'DEFAULT_THROTTLE_RATES': {'ping': '600/minute', 'anon': '5000/minute', 'user': '300/minute',},}" >> "${local_settings_py}"
+    echo "REST_FRAMEWORK = {'DEFAULT_THROTTLE_RATES': {'ping': '6000/minute', 'anon': '5000/minute', 'user': '3000/minute',},}" >> "${local_settings_py}"
 }
 
 function start_seahub() {
@@ -67,7 +68,7 @@ function check_phantom_js() {
 function run_tests() {
     check_phantom_js
     set +e
-    py.test $nose_opts tests
+    py.test "$@" tests
     rvalue=$?
     if [[ ${TRAVIS} != "" ]]; then
         # On travis-ci, dump seahub logs when test finished
@@ -80,7 +81,16 @@ function run_tests() {
     exit $rvalue
 }
 
-case $1 in
+function run_ui_tests() {
+    check_phantom_js
+    cd  tests/ui/
+    set -x
+    py.test "$@"
+}
+
+action=$1
+shift
+case $action in
     "init")
         init
         ;;
@@ -88,9 +98,10 @@ case $1 in
         start_seahub
         ;;
     "test")
-        shift
-        nose_opts=$*
-        run_tests
+        run_tests "$@"
+        ;;
+    "testui")
+        run_ui_tests "$@"
         ;;
     *)
         echo "unknow command \"$1\""

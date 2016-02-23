@@ -36,3 +36,5 @@ docs/_build/*
 deps
 ghostdriver.log
 seahub/thumbnail/thumb/*
+.cache
+__cache__/

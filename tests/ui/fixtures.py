@@ -1,53 +1,52 @@
 from contextlib import contextmanager
-from pytest import yield_fixture # pylint: disable=E1101
-from tests.ui.driver import Browser
-from tests.common.common import (
-    BASE_URL, USERNAME, PASSWORD, ADMIN_USERNAME, ADMIN_PASSWORD
-)
+from pytest import yield_fixture  # pylint: disable=E1101
+from tests.ui.sessions import SeafileSession
+from tests.common.common import (BASE_URL, USERNAME, PASSWORD, ADMIN_USERNAME,
+                                 ADMIN_PASSWORD)
 
-@yield_fixture(scope='session')
-def browser():
-    """Get an instance of a browser that already logged in.
-
-    Note this browser instance are shared among all test cases.
-    """
-    with _create_browser(admin=False) as browser:
-        yield browser
-
-@yield_fixture(scope='session')
-def admin_browser():
-    """Get an instance of a browser that already logged in with admin credentials.
-
-    This browser instance are shared among all test cases.
-    """
-    with _create_browser(admin=True) as browser:
-        yield browser
 
 @yield_fixture(scope='function')
-def admin_browser_once():
-    """Get an instance of a browser that already logged in with admin credentials.
-
-    This browser instance are created/destroyed for each test case.
+def session():
+    """Get an instance of a session that already logged in.
     """
-    with _create_browser(admin=True) as browser:
-        yield browser
+    with _create_session(admin=False) as session:
+        yield session
+
+
+@yield_fixture(scope='function')
+def anonymous_sessions():
+    """Get an instance of a session that's not logged in.
+    """
+    session = SeafileSession(BASE_URL)
+    try:
+        yield session
+    except:
+        print 'Unexpected error at url "{}"'.format(session.browser.path)
+        raise
+    finally:
+        session.end()
+
+
+@yield_fixture(scope='function')
+def admin_session():
+    """Get an instance of a session that already logged in with admin credentials.
+
+    This session instance are shared among all test cases.
+    """
+    with _create_session(admin=True) as session:
+        yield session
+
 
 @contextmanager
-def _create_browser(admin=False):
+def _create_session(admin=False):
     username, password = (ADMIN_USERNAME, ADMIN_PASSWORD) \
                          if admin else (USERNAME, PASSWORD)
-    b = Browser(BASE_URL)
-    b.gohome()
-    assert b.path == '/accounts/login/'
-
-    b.fill_form({
-        'username': username,
-        'password': password
-    })
-    b.submit_by_input_name('username')
-    assert b.path != '/accounts/login/'
-
+    session = SeafileSession(BASE_URL)
     try:
-        yield b
+        session.login(username, password)
+        yield session
+    except:
+        print 'Unexpected error at url "{}"'.format(session.browser.path)
+        raise
     finally:
-        b.quit()
+        session.end()
