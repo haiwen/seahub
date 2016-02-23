@@ -13,6 +13,10 @@ define([
 
         template: _.template($('#repo-folder-perm-admin-dialog-tmpl').html()),
 
+        events: {
+            'click .add-folder': 'addFolder'
+        },
+
         initialize: function(options) {
             this.repo_name = options.repo_name;
             this.repo_id = options.repo_id;
@@ -114,6 +118,12 @@ define([
                 $error: $('.error', $panel)
             });
             $('tbody', $panel).append(view.render().el);
+        },
+
+        addFolder: function(e) {
+            var $icon = $(e.currentTarget);
+            var $permContent = $icon.closest('.js-folder-perm-content').slideUp();
+            var $folderSelect = $('.js-folder-select', $permContent.parent()).slideDown();
         }
 
     });
