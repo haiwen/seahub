@@ -45,6 +45,8 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
 
         self.middleware.make_profile(self.user, {
             'display_name': 'display name',
+            'givenname': 'g',
+            'surname': 's',
             'institution': 'i',
             'contact_email': 'foo@foo.com'
         })
