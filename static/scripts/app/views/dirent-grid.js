@@ -35,26 +35,18 @@ define([
 
         render: function() {
             var dir = this.dir;
-            var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            var url;
             var template;
 
             if (this.model.get('is_dir')) {
                 template = this.dirTemplate;
-                if (dir.category) {
-                    url = "#" + dir.category + "/lib/" + dir.repo_id + Common.encodePath(dirent_path);
-                } else {
-                    url = "#lib/" + dir.repo_id + Common.encodePath(dirent_path);
-                }
             } else {
                 template = this.fileTemplate;
-                url = "/lib/" + dir.repo_id + "/file" + Common.encodePath(dirent_path);
             }
 
             this.$el.html(template({
                 dirent: this.model.attributes,
-                dirent_path: dirent_path,
-                url: url,
+                dirent_path: this.model.getPath(),
+                url: this.model.getWebUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
@@ -71,8 +63,10 @@ define([
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'mousedown .img-link': 'showPopupMenu',
-            'mousedown .text-link': 'showPopupMenu'
+            //'mousedown .img-link': 'showPopupMenu',
+            //'mousedown .text-link': 'showPopupMenu'
+            'contextmenu .img-link': 'showPopupMenu',
+            'contextmenu .text-link': 'showPopupMenu'
 
             /*
             'click .dir-link': 'visitDir',
@@ -107,49 +101,39 @@ define([
             */
         },
 
-        showPopupMenu: function(e) {
-            e = e || window.event;
+        showPopupMenu: function(event) {
+            console.log("showPopupMenu");
             var dir = this.dir;
-            var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            var url;
             var template;
 
             if (this.model.get('is_dir')) {
                 template = this.dirOpTemplate;
-                if (dir.category) {
-                    url = "#" + dir.category + "/lib/" + dir.repo_id + Common.encodePath(dirent_path);
-                } else {
-                    url = "#lib/" + dir.repo_id + Common.encodePath(dirent_path);
-                }
             } else {
                 template = this.fileOpTemplate;
-                url = "/lib/" + dir.repo_id + "/file" + Common.encodePath(dirent_path) + "?dl=1";
             }
 
             this.$('.img-link').addClass('hl');
             this.$('.text-link').addClass('hl');
 
-            if (e.which == 3) {
-                var op = template({
-                    dirent: this.model.attributes,
-                    dirent_path: dirent_path,
-                    url: url,
-                    category: dir.category,
-                    repo_id: dir.repo_id,
-                    is_repo_owner: dir.is_repo_owner,
-                    can_generate_shared_link: app.pageOptions.can_generate_shared_link,
-                    is_pro: app.pageOptions.is_pro,
-                    repo_encrypted: dir.encrypted
-                });
-                this.$el.append(op);
-                this.$('.grid-item-op').css({
-                    'left': '100px',
-                    'top': '100px',
-                });
+            var op = template({
+                dirent: this.model.attributes,
+                dirent_path: this.model.getPath(),
+                download_url: this.model.getDownloadUrl(),
+                category: dir.category,
+                repo_id: dir.repo_id,
+                is_repo_owner: dir.is_repo_owner,
+                can_generate_shared_link: app.pageOptions.can_generate_shared_link,
+                is_pro: app.pageOptions.is_pro,
+                repo_encrypted: dir.encrypted
+            });
+            this.$el.append(op);
+            this.$('.grid-item-op').css({
+                'left': '100px',
+                'top': '100px',
+            });
 
-                // TODO: bind operations here
-                return false;
-            }
+            // TODO: bind operations here
+            return false;
         }
 
     });

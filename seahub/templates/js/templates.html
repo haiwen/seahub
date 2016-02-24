@@ -387,8 +387,8 @@
 </script>
 
 <script type="text/template" id="grid-view-file-op-tmpl">
-    <ul class="grid-item-op">
-        <li><a class="op download" href="<%= url %>">{% trans "Download" %}</a></li>
+    <ul class="grid-item-op dropdown-menu">
+        <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
         <% if (!repo_encrypted && can_generate_shared_link) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
         <% } %>
@@ -413,8 +413,8 @@
 </script>
 
 <script type="text/template" id="grid-view-dir-op-tmpl">
-    <ul class="grid-item-op">
-        <li><a class="op download" href="<%= url %>">{% trans "Download" %}</a></li>
+    <ul class="grid-item-op dropdown-menu">
+        <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
         <% if (!repo_encrypted && can_generate_shared_link) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
         <% } %>

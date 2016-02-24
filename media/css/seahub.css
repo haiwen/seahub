@@ -1204,9 +1204,12 @@ textarea:-moz-placeholder {/* for FF */
     padding:4px 12px;
     min-width:110px;
     white-space:nowrap;
+    color:#444;
 }
 .dropdown-menu a:hover {
-    background:#eee;
+    background:#feaa7c;
+    text-decoration:none;
+    color:#fff;
 }
 /********** container ***********/
 #main, #footer {
