@@ -263,18 +263,27 @@ class DirSharedItemsEndpoint(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Bad permission')
 
         shared_repo = repo if path == '/' else sub_repo
-        success, failed = [], []
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
         if share_type == 'user':
             share_to_users = request.DATA.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'username invalid.'
+                        })
                     continue
 
                 try:
                     User.objects.get(email=to_user)
                 except User.DoesNotExist:
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'User %s not found.' % to_user
+                        })
                     continue
 
                 if not check_user_share_quota(username, shared_repo, users=[to_user]):
@@ -296,7 +305,7 @@ class DirSharedItemsEndpoint(APIView):
                                                        from_user=username,
                                                        to_user=to_user,
                                                        repo=shared_repo)
-                    success.append({
+                    result['success'].append({
                         "share_type": "user",
                         "user_info": {
                             "name": to_user,
@@ -309,7 +318,10 @@ class DirSharedItemsEndpoint(APIView):
                                         repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'Internal Server Error'
+                        })
                     continue
 
         if share_type == 'group':
@@ -337,7 +349,7 @@ class DirSharedItemsEndpoint(APIView):
                         seafile_api.set_group_repo(shared_repo.repo_id, gid,
                                                    username, permission)
 
-                    success.append({
+                    result['success'].append({
                         "share_type": "group",
                         "group_info": {
                             "id": gid,
@@ -350,13 +362,14 @@ class DirSharedItemsEndpoint(APIView):
                                         repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
-                    failed.append(group.group_name)
+                    result['failed'].append({
+                        'group_name': group.group_name,
+                        'error_msg': 'Internal Server Error'
+                        })
                     continue
 
-        return HttpResponse(json.dumps({
-            "success": success,
-            "failed": failed
-        }), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps(result),
+            status=200, content_type=json_content_type)
 
     def delete(self, request, repo_id, format=None):
         username = request.user.username

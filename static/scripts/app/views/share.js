@@ -606,8 +606,10 @@ define([
                     });
                     emails_input.select2("val", "");
                     if (data.failed.length > 0) {
-                        var err_msg = gettext("Failed to share to {placeholder}")
-                            .replace('{placeholder}', Common.HTMLescape(data.failed.join(', ')));
+                        var err_msg = '';
+                        $(data.failed).each(function(index, item) {
+                            err_msg += Common.HTMLescape(item.email) + ': ' + item.error_msg + '<br />';
+                        });
                         $('.error', panel).html(err_msg).removeClass('hide');
                     }
                 },
@@ -669,6 +671,13 @@ define([
                         $add_item.after(new_item.el);
                     });
                     groups_input.select2("val", "");
+                    if (data.failed.length > 0) {
+                        var err_msg = '';
+                        $(data.failed).each(function(index, item) {
+                            err_msg += Common.HTMLescape(item.group_name) + ': ' + item.error_msg + '<br />';
+                        });
+                        $('.error', panel).html(err_msg).removeClass('hide');
+                    }
                 },
                 error: function(xhr) {
                     var err_msg;
