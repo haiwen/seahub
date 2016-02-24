@@ -18,7 +18,7 @@ from django.template.defaultfilters import filesizeformat
 import seaserv
 from seaserv import seafile_api, is_passwd_set, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
-    CALC_SHARE_USAGE, seafserv_threaded_rpc, ccnet_threaded_rpc, \
+    seafserv_threaded_rpc, ccnet_threaded_rpc, \
     edit_repo, set_repo_history_limit
 from pysearpc import SearpcError
 
@@ -1485,34 +1485,18 @@ def space_and_traffic(request):
     if not org:
         space_quota = seafile_api.get_user_quota(username)
         space_usage = seafile_api.get_user_self_usage(username)
-        if CALC_SHARE_USAGE:
-            share_quota = seafile_api.get_user_share_quota(username)
-            share_usage = seafile_api.get_user_share_usage(username)
-        else:
-            share_quota = 0
-            share_usage = 0
     else:
         org_id = org[0].org_id
         space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id,
                                                                username)
         space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(
             org_id, username)
-        share_quota = 0         # no share quota/usage for org account
-        share_usage = 0
 
     rates = {}
-    rates['space_quota'] = space_quota
-    rates['share_quota'] = share_quota
-    total_quota = space_quota + share_quota
     if space_quota > 0:
-        rates['space_usage'] = str(float(space_usage) / total_quota * 100) + '%'
+        rates['space_usage'] = str(float(space_usage) / space_quota * 100) + '%'
     else:                       # no space quota set in config
         rates['space_usage'] = '0%'
-
-    if share_quota > 0:
-        rates['share_usage'] = str(float(share_usage) / total_quota * 100) + '%'
-    else:                       # no share quota set in config
-        rates['share_usage'] = '0%'
 
     # traffic calculation
     traffic_stat = 0
@@ -1546,10 +1530,6 @@ def space_and_traffic(request):
         "org": org,
         "space_quota": space_quota,
         "space_usage": space_usage,
-        "share_quota": share_quota,
-        "share_usage": share_usage,
-        "CALC_SHARE_USAGE": CALC_SHARE_USAGE,
-        "show_quota_help": not CALC_SHARE_USAGE,
         "rates": rates,
         "SHOW_TRAFFIC": SHOW_TRAFFIC,
         "TRAFFIC_STATS_ENABLED": TRAFFIC_STATS_ENABLED,

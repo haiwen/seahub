@@ -22,7 +22,7 @@ from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members
+    seafile_api, get_group, get_group_members
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -474,19 +474,13 @@ def _populate_user_quota_usage(user):
             org_id = user.org.org_id
             user.space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
             user.space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
-            user.share_usage = user.share_quota = 0
         else:
             user.space_usage = seafile_api.get_user_self_usage(user.email)
             user.space_quota = seafile_api.get_user_quota(user.email)
-
-            if CALC_SHARE_USAGE:
-                user.share_quota = seafile_api.get_user_share_quota(user.email)
-                user.share_usage = seafile_api.get_user_share_usage(user.email)
-            else:
-                user.share_usage = user.share_quota = 0
     except SearpcError as e:
         logger.error(e)
-        user.space_usage = user.space_quota = user.share_usage = user.share_quota = -1
+        user.space_usage = -1
+        user.space_quota = -1
 
 @login_required
 @sys_staff_required
@@ -581,7 +575,6 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
             'platform': platform,
             'server_id': server_id[:8],
@@ -709,7 +702,6 @@ def sys_user_admin_ldap_imported(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'is_pro': is_pro_version(),
         }, context_instance=RequestContext(request))
 
@@ -756,7 +748,6 @@ def sys_user_admin_ldap(request):
             'per_page': per_page,
             'page_next': page_next,
             'is_pro': is_pro_version(),
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
         },
         context_instance=RequestContext(request))
 
@@ -804,7 +795,6 @@ def sys_user_admin_admins(request):
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
@@ -816,7 +806,6 @@ def sys_user_admin_admins(request):
 def user_info(request, email):
     org_name = None
     space_quota = space_usage = 0
-    share_quota = share_usage = 0
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
     if not org:
@@ -824,9 +813,6 @@ def user_info(request, email):
         in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
         space_usage = mute_seafile_api.get_user_self_usage(email)
         space_quota = mute_seafile_api.get_user_quota(email)
-        if CALC_SHARE_USAGE:
-            share_usage = mute_seafile_api.get_user_share_usage(email)
-            share_quota = mute_seafile_api.get_user_share_quota(email)
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
@@ -941,9 +927,6 @@ def user_info(request, email):
             'owned_repos': owned_repos,
             'space_quota': space_quota,
             'space_usage': space_usage,
-            'share_quota': share_quota,
-            'share_usage': share_usage,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'in_repos': in_repos,
             'email': email,
             'profile': profile,
@@ -968,18 +951,11 @@ def user_set_quota(request, email):
         email = f.cleaned_data['email']
         space_quota_mb = f.cleaned_data['space_quota']
         space_quota = space_quota_mb * get_file_size_unit('MB')
-        share_quota_mb = f.cleaned_data['share_quota']
-
-        share_quota = None
-        if share_quota_mb is not None:
-            share_quota = share_quota_mb * get_file_size_unit('MB')
 
         org = ccnet_threaded_rpc.get_orgs_by_user(email)
         try:
             if not org:
                 seafile_api.set_user_quota(email, space_quota)
-                if share_quota is not None:
-                    seafile_api.set_user_share_quota(email, share_quota)
             else:
                 org_id = org[0].org_id
                 org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / get_file_size_unit('MB')
@@ -1675,13 +1651,11 @@ def sys_org_info_user(request, org_id):
         try:
             user.self_usage =seafserv_threaded_rpc. \
                     get_org_user_quota_usage(org_id, user.email)
-            user.share_usage = 0
             user.quota = seafserv_threaded_rpc. \
                     get_org_user_quota(org_id, user.email)
         except SearpcError as e:
             logger.error(e)
             user.self_usage = -1
-            user.share_usage = -1
             user.quota = -1
 
         # populate user last login time

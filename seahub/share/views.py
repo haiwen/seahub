@@ -155,40 +155,6 @@ def share_to_user(request, repo, to_user, permission):
                                            to_user=to_user, repo=repo)
         return True
 
-def check_user_share_quota(username, repo, users=[], groups=[]):
-    """Check whether user has enough share quota when share repo to
-    users/groups. Only used for personal account on cloud service.
-    """
-    if not users and not groups:
-        return True
-
-    if not seaserv.CALC_SHARE_USAGE:
-        return True
-
-    if ccnet_threaded_rpc.get_orgs_by_user(username):
-        return True             # no share quota check for org user
-
-    check_pass = False
-    share_quota = seafile_api.get_user_share_quota(username)
-    if share_quota == -2:
-        return True             # share quota is unlimited
-
-    current_share_usage = seafile_api.get_user_share_usage(username)
-
-    share_usage = 0
-    if users:
-        share_usage += seafile_api.get_repo_size(repo.id) * (len(users))
-
-    if groups:
-        grp_members = []
-        for group in groups:
-            grp_members += [e.user_name for e in seaserv.get_group_members(group.id)]
-        grp_members = set(grp_members)
-        share_usage += seafile_api.get_repo_size(repo.id) * (len(grp_members) - 1)
-    if share_usage + current_share_usage < share_quota:
-        check_pass = True
-
-    return check_pass
 
 ########## views
 @login_required
@@ -251,14 +217,6 @@ def share_repo(request):
         share_to_public(request, repo, permission)
         send_perm_audit_msg('add-repo-perm', username, 'all', \
                             perm_repo_id, perm_path, permission)
-
-    if not check_user_share_quota(username, repo, users=share_to_users,
-                                  groups=share_to_groups):
-        messages.error(request, _(
-            'Failed to share "%s", no enough quota. '
-            '<a href="http://seafile.com/">Upgrade account.</a>'
-        ) % escape(repo.name), extra_tags='safe')
-        return HttpResponseRedirect(next)
 
     for group in share_to_groups:
         if share_to_group(request, repo, group, permission):
@@ -1312,11 +1270,6 @@ def ajax_private_share_dir(request):
 
     for group_id in groups:
         share_to_groups.append(seaserv.get_group(group_id))
-
-    if not check_user_share_quota(username, shared_repo, users=share_to_users,
-                                  groups=share_to_groups):
-        result['error'] = _(('Failed to share "%s", no enough quota. <a href="http://seafile.com/">Upgrade account.</a>') % escape(shared_repo.name))
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
 
     for email in share_to_users:
         # Add email to contacts.

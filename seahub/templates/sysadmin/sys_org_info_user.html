@@ -38,11 +38,7 @@
             </select>
         </td>
         <td>
-            {% if CALC_SHARE_USAGE %}
-            {{ user.self_usage|seahub_filesizeformat }} + {{ user.share_usage|seahub_filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|seahub_filesizeformat }} {% endif %}
-            {% else %}
             {{ user.self_usage|seahub_filesizeformat }} {% if user.quota > 0 %} / {{ user.quota|seahub_filesizeformat }} {% endif %}
-            {% endif %}
         </td>
         <td style="font-size:11px;">
         {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}

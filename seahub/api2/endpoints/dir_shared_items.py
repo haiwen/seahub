@@ -18,7 +18,6 @@ from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful
-from seahub.share.views import check_user_share_quota
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 
@@ -286,10 +285,6 @@ class DirSharedItemsEndpoint(APIView):
                         })
                     continue
 
-                if not check_user_share_quota(username, shared_repo, users=[to_user]):
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share: No enough quota.')
-
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
@@ -334,10 +329,6 @@ class DirSharedItemsEndpoint(APIView):
                 group = seaserv.get_group(gid)
                 if not group:
                     return api_error(status.HTTP_400_BAD_REQUEST, 'Group not found: %s' % gid)
-
-                if not check_user_share_quota(username, shared_repo, groups=[group]):
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Failed to share: No enough quota.')
 
                 try:
                     if is_org_context(request):

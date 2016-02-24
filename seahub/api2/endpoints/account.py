@@ -87,8 +87,8 @@ class Account(APIView):
         if storage is not None:
             seafile_api.set_user_quota(email, int(storage))
 
-        if sharing is not None:
-            seafile_api.set_user_share_quota(email, int(sharing))
+        # if sharing is not None:
+        #     seafile_api.set_user_share_quota(email, int(sharing))
 
     def _create_account(self, request, email):
         copy = request.DATA.copy()
