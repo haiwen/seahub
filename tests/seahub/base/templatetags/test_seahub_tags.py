@@ -1,6 +1,7 @@
 from seahub.test_utils import BaseTestCase
 
-from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.base.templatetags.seahub_tags import email2nickname, \
+    seahub_filesizeformat
 from seahub.profile.models import Profile
 
 
@@ -30,3 +31,11 @@ class Email2nicknameTest(BaseTestCase):
         assert Profile.objects.all()[0].nickname == ' foo bar '
 
         assert email2nickname(self.user.username) == 'foo bar'
+
+
+class SeahubFilesizeformatTest(BaseTestCase):
+    def test_seahub_filesizeformat(self):
+        assert seahub_filesizeformat(1) == u'1\xa0byte'
+        assert seahub_filesizeformat(1000) == u'1.0\xa0KB'
+        assert seahub_filesizeformat(1000000) == u'1.0\xa0MB'
+        assert seahub_filesizeformat(1000000000) == u'1.0\xa0GB'
