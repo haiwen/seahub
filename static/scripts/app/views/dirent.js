@@ -183,20 +183,8 @@ define([
 
         del: function() {
             var dirent_name = this.model.get('obj_name');
-            var dir = this.dir;
-            var options = {
-                repo_id: dir.repo_id,
-                name: this.model.get('is_dir') ? 'del_dir' : 'del_file'
-            };
-            var model = this.model;
-            $.ajax({
-                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path)
-                + '&name=' + encodeURIComponent(dirent_name),
-                type: 'POST',
-                dataType: 'json',
-                beforeSend: Common.prepareCSRFToken,
+            this.model.deleteFromServer({
                 success: function(data) {
-                    dir.remove(model);
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');

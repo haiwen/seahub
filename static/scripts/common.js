@@ -68,8 +68,8 @@ define([
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
                 case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
-                case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
-                case 'del_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/delete/';
+                case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'del_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
                 case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
                 case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';

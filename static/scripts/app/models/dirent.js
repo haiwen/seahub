@@ -1,8 +1,9 @@
 define([
+    'jquery',
     'underscore',
     'backbone',
     'common'
-], function(_, Backbone, Common) {
+], function($, _, Backbone, Common) {
     'use strict';
 
     var Dirent = Backbone.Model.extend({
@@ -41,6 +42,37 @@ define([
                 return app.config.siteRoot + "lib/" + dir.repo_id
                     + "/file" + Common.encodePath(dirent_path) + "?dl=1";
             }
+        },
+
+        // We can't use Backbone.sync() here because the URL for a dirent
+        // is not a standard RESTful one
+        deleteFromServer: function(options) {
+            var dir = this.collection;
+            var path = this.getPath();
+            var model = this;
+
+            var opts = {
+                repo_id: dir.repo_id,
+                name: this.get('is_dir') ? 'del_dir' : 'del_file'
+            };
+            $.ajax({
+                url: Common.getUrl(opts) + '?p=' + encodeURIComponent(path),
+                type: 'DELETE',
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                success: function(data) {
+                    // We don't understand how the event actually work in Backbone
+                    // It is safer to call dir.remove() directly.
+                    dir.remove(model);
+                    // this.trigger('destroy');
+                    if (options.success)
+                        options.success(data);
+                },
+                error: function(xhr) {
+                    if (options.error)
+                        options.error(xhr);
+                }
+            });
         }
 
     });

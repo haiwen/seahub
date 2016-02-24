@@ -133,8 +133,27 @@ define([
             });
 
             // TODO: bind operations here
+
+            this.$('.grid-item-op .delete').on('click', { view: this }, this.del);
+
             return false;
-        }
+        },
+
+        del: function(event) {
+            var _this = event.data.view;
+            var dirent_name = _this.model.get('obj_name');
+            _this.model.deleteFromServer({
+                success: function(data) {
+                    var msg = gettext("Successfully deleted %(name)s")
+                        .replace('%(name)s', Common.HTMLescape(dirent_name));
+                    Common.feedback(msg, 'success');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+            return false;
+        },
 
     });
 
