@@ -290,7 +290,6 @@ define([
             // Directory Operations
             events: {
                 'click .path-link': 'visitDir',
-                'click #upload-file': 'uploadFile',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newFile',
                 'click #share-cur-dir': 'share',
