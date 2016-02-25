@@ -102,7 +102,6 @@ define([
         },
 
         showPopupMenu: function(event) {
-            console.log("showPopupMenu");
             var dir = this.dir;
             var template;
 
@@ -132,17 +131,21 @@ define([
                 'top': '100px',
             });
 
-            // TODO: bind operations here
-
-            this.$('.grid-item-op .delete').on('click', { view: this }, this.del);
+            // Using _.bind(function, object) to make that whenever the function is
+            // called, the value of this will be the object.
+            this.$el.on('click', '.delete', _.bind(this.del, this));
+            this.$el.on('click', '.share', _.bind(this.share, this));
 
             return false;
         },
 
+        _closeMenu: function() {
+            this.$('.grid-item-op').remove();
+        },
+
         del: function(event) {
-            var _this = event.data.view;
-            var dirent_name = _this.model.get('obj_name');
-            _this.model.deleteFromServer({
+            var dirent_name = this.model.get('obj_name');
+            this.model.deleteFromServer({
                 success: function(data) {
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
@@ -154,6 +157,26 @@ define([
             });
             return false;
         },
+
+        share: function() {
+            var dir = this.dir,
+                obj_name = this.model.get('obj_name'),
+                dirent_path = this.model.getPath();
+
+            var options = {
+                'is_repo_owner': dir.is_repo_owner,
+                'is_virtual': dir.is_virtual,
+                'user_perm': this.model.get('perm'),
+                'repo_id': dir.repo_id,
+                'repo_encrypted': false,
+                'is_dir': this.model.get('is_dir') ? true : false,
+                'dirent_path': dirent_path,
+                'obj_name': obj_name
+            };
+            new ShareView(options);
+            this._closeMenu();
+            return false;
+        }
 
     });
 

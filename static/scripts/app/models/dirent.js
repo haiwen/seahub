@@ -50,6 +50,7 @@ define([
             var dir = this.collection;
             var path = this.getPath();
             var model = this;
+            options = options || {};
 
             var opts = {
                 repo_id: dir.repo_id,
