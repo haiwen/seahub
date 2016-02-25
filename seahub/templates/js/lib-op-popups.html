@@ -40,7 +40,7 @@
     </script>
 
     <script type="text/template" id="mvcp-form-template">
-    <form id="mv-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
+    <form id="mv-form" action="" method="post" class="file-choose-form">{% csrf_token %}
         <h3><%= form_title %></h3>
         <div id="mv-dir-list" class="dir-tree-cont">
             <% if (show_cur_repo) { %>
@@ -68,7 +68,7 @@
     </script>
 
     <script type="text/template" id="mv-progress-popup-template">
-    <div id="mv-progress-popup" class="alc hide">
+    <div id="mv-progress-popup" class="alc">
         <p id="mv-details" class="ellipsis"></p>
         <div id="mv-progress"></div>
         <p id="mv-other-info" class="hide"></p>

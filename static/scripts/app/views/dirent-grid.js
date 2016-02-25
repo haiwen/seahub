@@ -5,8 +5,10 @@ define([
     'common',
     'file-tree',
     'app/views/share',
-    'app/views/folder-perm'
-], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView) {
+    'app/views/folder-perm',
+    'app/views/dialogs/dirent-mvcp'
+], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView,
+    DirentMvcpDialog) {
     'use strict';
 
     app = app || {};
@@ -135,6 +137,8 @@ define([
             // called, the value of this will be the object.
             this.$el.on('click', '.delete', _.bind(this.del, this));
             this.$el.on('click', '.share', _.bind(this.share, this));
+            this.$el.on('click', '.mv', _.bind(this.mvcp, this));
+            this.$el.on('click', '.cp', _.bind(this.mvcp, this));
 
             return false;
         },
@@ -174,6 +178,19 @@ define([
                 'obj_name': obj_name
             };
             new ShareView(options);
+            this._closeMenu();
+            return false;
+        },
+
+        mvcp: function(event) {
+            var op_type = $(event.target).hasClass('mv') ? 'mv' : 'cp';
+            var options = {
+                'dir': this.dir,
+                'dirent': this.model,
+                'op_type': op_type
+            };
+
+            new DirentMvcpDialog(options);
             this._closeMenu();
             return false;
         }
