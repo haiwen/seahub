@@ -70,8 +70,8 @@ define([
                 case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
                 case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
-                case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
-                case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
+                case 'rename_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'rename_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
                 case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
                 case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';

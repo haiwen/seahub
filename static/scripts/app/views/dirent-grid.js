@@ -6,9 +6,10 @@ define([
     'file-tree',
     'app/views/share',
     'app/views/folder-perm',
-    'app/views/dialogs/dirent-mvcp'
+    'app/views/dialogs/dirent-mvcp',
+    'app/views/dialogs/dirent-rename'
 ], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView,
-    DirentMvcpDialog) {
+    DirentMvcpDialog, DirentRenameDialog) {
     'use strict';
 
     app = app || {};
@@ -22,6 +23,7 @@ define([
         dirOpTemplate: _.template($('#grid-view-dir-op-tmpl').html()),
         fileTemplate:  _.template($('#grid-view-file-item-tmpl').html()),
         fileOpTemplate: _.template($('#grid-view-file-op-tmpl').html()),
+        renameTemplate: _.template($("#dirent-rename-dialog-template").html()),
 
         // renameTemplate: _.template($("#grid-rename-form-template").html()),
         // mvcpTemplate: _.template($("#mvcp-form-template").html()),
@@ -86,21 +88,11 @@ define([
         highlight: function() {
             this.$('.img-link').addClass('hl');
             this.$('.text-link').addClass('hl');
-            /*
-            if (!$('.grid-hidden-op:visible').length && !$('#grid-rename-form').length) {
-                this.$('.grid-img-inner-container').addClass('hl');
-            }
-            */
         },
 
         rmHighlight: function() {
             this.$('.img-link').removeClass('hl');
             this.$('.text-link').removeClass('hl');
-            /*
-            if (!$('.grid-hidden-op:visible').length && !$('#grid-rename-form').length) {
-                this.$('.grid-img-inner-container').removeClass('hl');
-            }
-            */
         },
 
         showPopupMenu: function(event) {
@@ -139,6 +131,7 @@ define([
             this.$el.on('click', '.share', _.bind(this.share, this));
             this.$el.on('click', '.mv', _.bind(this.mvcp, this));
             this.$el.on('click', '.cp', _.bind(this.mvcp, this));
+            this.$el.on('click', '.rename', _.bind(this.rename, this));
 
             return false;
         },
@@ -192,6 +185,16 @@ define([
 
             new DirentMvcpDialog(options);
             this._closeMenu();
+            return false;
+        },
+
+        rename: function() {
+            this._closeMenu();
+            var options = {
+                'dir': this.dir,
+                'dirent': this.model
+            };
+            new DirentRenameDialog(options);
             return false;
         }
 

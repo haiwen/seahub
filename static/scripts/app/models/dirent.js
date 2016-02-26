@@ -74,6 +74,49 @@ define([
                         options.error(xhr);
                 }
             });
+        },
+
+        rename: function(options) {
+            var dir = this.collection;
+            var _this = this;
+            options = options || {};
+
+            var opts = {
+                repo_id: dir.repo_id,
+                name: this.get('is_dir') ? 'rename_dir' : 'rename_file'
+            };
+
+            var post_data = {
+                'operation': 'rename',
+                'newname': options.newname
+            };
+
+            $.ajax({
+                url: Common.getUrl(opts) + '?p=' + encodeURIComponent(this.getPath()),
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                data: post_data,
+                success: function(data) {
+                    var renamed_dirent_data = {
+                        'obj_name': options.newname,
+                        'last_modified': new Date().getTime()/1000,
+                        'last_update': gettext("Just now")
+                    };
+                    if (!_this.get('is_dir')) {
+                        $.extend(renamed_dirent_data, {
+                            'starred': false
+                        });
+                    }
+                    _this.set(renamed_dirent_data)
+                    if (options.success)
+                        options.success(data);
+                },
+                error: function(xhr) {
+                    if (options.error)
+                        options.error(xhr);
+                }
+            });
         }
 
     });

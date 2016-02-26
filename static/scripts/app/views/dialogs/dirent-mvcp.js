@@ -162,8 +162,7 @@ define([
 
         formSubmit: function() {
             var _this = this;
-            var form_id = this.$form.attr('id'),
-                path = this.dir.path,
+            var path = this.dir.path,
                 repo_id = this.dir.repo_id,
                 obj_name = this.dirent.get('obj_name'),
                 obj_type = this.dirent.get('is_dir') ? 'dir' : 'file';
@@ -216,7 +215,7 @@ define([
                 'post_url': post_url,
                 'post_data': post_data,
                 'after_op_success': after_op_success,
-                'form_id': form_id
+                'form_id': this.$form.attr('id')
             });
             return false;
         }

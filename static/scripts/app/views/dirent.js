@@ -227,9 +227,7 @@ define([
             };
             $('.cancel', form).click(cancelRename);
 
-            var form_id = form.attr('id');
             var _this = this;
-            var dir = this.dirView.dir;
             form.submit(function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 if (!new_name) {
@@ -239,27 +237,10 @@ define([
                     cancelRename();
                     return false;
                 }
-                var post_data = {
-                    'oldname': dirent_name,
-                    'newname': new_name
-                };
-                var post_url = Common.getUrl({
-                    name: is_dir ? 'rename_dir' : 'rename_file',
-                    repo_id: dir.repo_id
-                }) + '?parent_dir=' + encodeURIComponent(dir.path);
-                var after_op_success = function(data) {
-                    var renamed_dirent_data = {
-                        'obj_name': data['newname'],
-                        'last_modified': new Date().getTime()/1000,
-                        'last_update': gettext("Just now")
-                    };
-                    if (!is_dir) {
-                        $.extend(renamed_dirent_data, {
-                            'starred': false
-                        });
-                    }
-                    _this.model.set(renamed_dirent_data); // it will trigger 'change' event
-                };
+
+                var submit_btn = $('[type="submit"]', form);
+                Common.disableButton(submit_btn);
+
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
@@ -270,16 +251,8 @@ define([
                     Common.feedback(err_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
-
-                var submit_btn = $('[type="submit"]', form);
-                Common.disableButton(submit_btn);
-                $.ajax({
-                    url: post_url,
-                    type: 'POST',
-                    dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken,
-                    data: post_data,
-                    success: after_op_success,
+                _this.model.rename({
+                    newname: new_name,
                     error: after_op_error
                 });
                 return false;
