@@ -4497,14 +4497,14 @@ class RepoUserFolderPerm(APIView):
 
         permission = seafile_api.get_folder_user_perm(repo_id, path, user)
         if not permission:
-            return Response('success')
+            return Response({'success': True})
 
         username = request.user.username
         try:
             seafile_api.rm_folder_user_perm(repo_id, path, user)
             send_perm_audit_msg('delete-repo-perm', username,
                 user, repo_id, path, permission)
-            return Response('success')
+            return Response({'success': True})
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -4624,14 +4624,14 @@ class RepoGroupFolderPerm(APIView):
 
         permission = seafile_api.get_folder_group_perm(repo_id, path, group_id)
         if not permission:
-            return Response('success')
+            return Response({'success': True})
 
         username = request.user.username
         try:
             seafile_api.rm_folder_group_perm(repo_id, path, group_id)
             send_perm_audit_msg('delete-repo-perm', username, group_id,
                 repo_id, path, permission)
-            return Response('success')
+            return Response({'success': True})
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
