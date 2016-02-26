@@ -16,13 +16,67 @@
   
 
   
-  /* gettext identity library */
+  /* gettext library */
 
-  django.gettext = function (msgid) { return msgid; };
-  django.ngettext = function (singular, plural, count) { return (count == 1) ? singular : plural; };
+  django.catalog = {
+    "%curr% of %total%": "%curr% van %total%", 
+    "Close (Esc)": "Sluiten (Esc)", 
+    "Deleted directories": "Verwijderde mappen", 
+    "Deleted files": "Verwijderde bestanden", 
+    "Failed. Please check the network.": "Mislukt. Controleer de netwerkverbinding.", 
+    "Loading failed": "Ophalen mislukt", 
+    "Name is required": "Naam is verplicht", 
+    "New files": "Nieuwe bestanden", 
+    "Next (Right arrow key)": "Volgende (rechter pijltjestoets)", 
+    "No matches": "Niet gevonden", 
+    "Open in New Tab": "Open in nieuw tabblad", 
+    "Password is too short": "Wachtwoord is te kort", 
+    "Please enter 1 or more character": "Voer 1 of meer tekens in.", 
+    "Please enter password": "Voer het wachtwoord in", 
+    "Previous (Left arrow key)": "Vorige (linker pijltjestoets)", 
+    "Rename Directory": "Hernoem map", 
+    "Rename File": "Hernoem Bestand", 
+    "Search users or enter emails": "Zoek gebruikers of voer emails in", 
+    "Searching...": "Aan het zoeken...", 
+    "Success": "Gelukt", 
+    "Uploaded bytes exceed file size": "Ge\u00fcploadde bytes overtreft bestandsgrootte"
+  };
+
+  django.gettext = function (msgid) {
+    var value = django.catalog[msgid];
+    if (typeof(value) == 'undefined') {
+      return msgid;
+    } else {
+      return (typeof(value) == 'string') ? value : value[0];
+    }
+  };
+
+  django.ngettext = function (singular, plural, count) {
+    var value = django.catalog[singular];
+    if (typeof(value) == 'undefined') {
+      return (count == 1) ? singular : plural;
+    } else {
+      return value[django.pluralidx(count)];
+    }
+  };
+
   django.gettext_noop = function (msgid) { return msgid; };
-  django.pgettext = function (context, msgid) { return msgid; };
-  django.npgettext = function (context, singular, plural, count) { return (count == 1) ? singular : plural; };
+
+  django.pgettext = function (context, msgid) {
+    var value = django.gettext(context + '\x04' + msgid);
+    if (value.indexOf('\x04') != -1) {
+      value = msgid;
+    }
+    return value;
+  };
+
+  django.npgettext = function (context, singular, plural, count) {
+    var value = django.ngettext(context + '\x04' + singular, context + '\x04' + plural, count);
+    if (value.indexOf('\x04') != -1) {
+      value = django.ngettext(singular, plural, count);
+    }
+    return value;
+  };
   
 
   django.interpolate = function (fmt, obj, named) {
