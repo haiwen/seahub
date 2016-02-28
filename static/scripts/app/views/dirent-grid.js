@@ -121,8 +121,8 @@ define([
             });
             this.$el.append(op);
             this.$('.grid-item-op').css({
-                'left': '100px',
-                'top': '100px',
+                'left': event.pageX,
+                'top': event.pageY,
             });
 
             // Using _.bind(function, object) to make that whenever the function is

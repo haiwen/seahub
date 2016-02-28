@@ -3881,7 +3881,7 @@ img.thumbnail {
     margin:0;
 }
 .grid-item-op {
-    position:relative;
+    position:fixed;
 }
 #dir-view .grid-item {
     padding:10px 20px; /* use less padding */

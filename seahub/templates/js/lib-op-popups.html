@@ -42,7 +42,7 @@
     <script type="text/template" id="dirent-rename-dialog-template">
     <form id="rename-form" class="dirent-rename-dialog" action="" method="post">
         <h3><%= form_title %></h3>
-        <input type="text" name="newname" value="<%- dirent_name %>" class="input vam" maxlength="{{max_file_name}}" />
+        <input type="text" name="newname" value="<%- dirent_name %>" class="input vam" maxlength="{{max_file_name}}" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
