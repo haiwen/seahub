@@ -274,7 +274,7 @@ define([
             .bind('fileuploadprogressall', function (e, data) {
                 $total_progress.html(parseInt(data.loaded / data.total * 100, 10) + '% ' +
                     '<span style="font-size:14px;color:#555;">(' +
-                    $(this).data('blueimp-fileupload')._formatBitrate(data.bitrate) + 
+                    $(this).data('blueimp-fileupload')._formatBitrate(data.bitrate) +
                     ')</span>').removeClass('hide');
                 if (data.loaded > 0 && data.loaded == data.total) {
                     saving_tip.show();

@@ -50,6 +50,7 @@ define([
             this.$el.html(template({
                 dirent: this.model.attributes,
                 dirent_path: this.model.getPath(),
+                icon_url: this.model.getIconUrl(192),
                 url: this.model.getWebUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
@@ -132,6 +133,7 @@ define([
             this.$el.on('click', '.mv', _.bind(this.mvcp, this));
             this.$el.on('click', '.cp', _.bind(this.mvcp, this));
             this.$el.on('click', '.rename', _.bind(this.rename, this));
+            this.$el.on('click', '.open-via-client', _.bind(this.open_via_client, this));
 
             return false;
         },
@@ -196,6 +198,11 @@ define([
             };
             new DirentRenameDialog(options);
             return false;
+        },
+
+        open_via_client: function() {
+            this._closeMenu();
+            return true;
         }
 
     });

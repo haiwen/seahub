@@ -210,22 +210,14 @@
         <% } %>
     </td>
     <td class="star"></td>
-    <% if (dirent.perm == 'r') { %>
-        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-read-only-24.png" alt="{% trans "Directory icon" %}" /></td>
-    <% } else { %>
-        <td class="dirent-icon"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon" %}" /></td>
-    <% } %>
+    <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="{% trans "Directory icon" %}" /></td>
     <td>
-        <% if (category) { %>
-        <span class="dirent-name"><a href="#<%= category %>/lib/<%= repo_id %><%- encoded_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
-        <% } else { %>
-        <span class="dirent-name"><a href="#lib/<%= repo_id %><%- encoded_path %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
-        <% } %>
+        <span class="dirent-name"><a href="<%= url %>" class="dir-link normal"><%- dirent.obj_name %></a></span>
     </td>
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x" href="{{ SITE_ROOT }}repo/download_dir/<%= repo_id %>/?p=<% print(encodeURIComponent(dirent_path)); %>" title="{% trans "Download" %}"></a>
+                <a class="op-icon download sf2-icon-download sf2-x" href="<%= download_url %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
                 <% } %>
@@ -242,9 +234,7 @@
                 <% if (app.pageOptions.folder_perm_enabled && is_repo_owner) { %>
                 <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                 <% } %>
-                <% if (is_pro) { %>
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
-                <% } %>
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
@@ -283,10 +273,10 @@
             <% if (dirent.encoded_thumbnail_src) { %>
             <img class="thumbnail" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
             <% } else { %>
-            <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+            <img src="<%= icon_url %>" width="24" alt="" />
             <% } %>
         <% } else { %>
-        <img src="{{ MEDIA_URL }}img/file/<%= dirent.file_icon %>" alt="" />
+        <img src="<%= icon_url %>" width="24" alt="" />
         <% } %>
 
         <% if (is_pro && dirent.is_locked) { %>
@@ -297,16 +287,16 @@
     <td>
         <span class="dirent-name">
             <% if (dirent.is_img) { %>
-            <a class="normal img-name-link" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- dirent.obj_name %></a>
+            <a class="normal img-name-link" href="<%= url %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- dirent.obj_name %></a>
             <% } else { %>
-            <a class="normal" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>" target="_blank"><%- dirent.obj_name %></a>
+            <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
         </span>
     </td>
     <td class="dirent-op">
         <div class="repo-file-op vh">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x" href="{{ SITE_ROOT }}lib/<%= repo_id %>/file<%- encoded_path %>?dl=1" title="{% trans "Download" %}"></a>
+                <a class="op-icon download sf2-icon-download sf2-x" href="<%= download_url %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
                 <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
                 <% } %>
@@ -333,8 +323,8 @@
                     <% } else { %>
                     <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                     <% } %>
-                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
                 <% } %>
+                <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
@@ -357,7 +347,7 @@
 
 <script type="text/template" id="grid-view-file-item-tmpl">
     <a href="<%= url %>" class="img-link" target="_blank">
-        <img src="{{ MEDIA_URL }}img/file/txt-192.png" alt="" width="96" class="vam" />
+        <img src="<%= icon_url %>" alt="" width="96" class="vam" />
     </a>
 
     <a href="<%= url %>" class="ellipsis text-link normal" target="_blank">
@@ -371,11 +361,7 @@
 
 <script type="text/template" id="grid-view-dir-item-tmpl">
     <a href="<%= url %>" class="img-link">
-        <% if (dirent.perm == 'r') { %>
-        <img src="{{ MEDIA_URL }}img/folder-read-only-192.png" alt="" width="96" class="vam" />
-        <% } else { %>
-        <img src="{{ MEDIA_URL }}img/folder-beige-192.png" alt="" width="96" class="vam" />
-        <% } %>
+        <img src="<%= icon_url %>" alt="" width="96" class="vam" />
     </a>
 
     <a href="<%= url %>" class="ellipsis normal text-link">
@@ -399,12 +385,12 @@
                 <% if (dirent.is_locked) { %>
                     <% if (dirent.locked_by_me) { %>
         <li><a class="op unlock-file" href="#">{% trans "Unlock" %}</a></li>
-                    <% } else { %>
-        <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                     <% } %>
+                <% } else { %>
+        <li><a class="op lock-file" href="#">{% trans "Lock" %}</a></li>
                 <% } %>
-        <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
             <% } %>
+        <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
         <% } %>
     </ul>
 </script>
@@ -420,9 +406,7 @@
         <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
         <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
         <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-            <% if (is_pro) { %>
         <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%= repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
-            <% } %>
         <% } %>
     </ul>
 </script>

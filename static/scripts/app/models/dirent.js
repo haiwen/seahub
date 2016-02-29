@@ -13,6 +13,15 @@ define([
             return Common.pathJoin([this.collection.path, this.get('obj_name')]);
         },
 
+        getIconUrl: function(size) {
+            if (this.get('is_dir')) {
+                var is_readonly = this.get('perm') == 'r';
+                return Common.getDirIconUrl(is_readonly, size);
+            } else {
+                return Common.getFileIconUrl(this.get('obj_name'), size);
+            }
+        },
+
         // return the URL to visit the folder or file
         getWebUrl: function() {
             var dir = this.collection;

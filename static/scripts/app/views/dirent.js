@@ -38,6 +38,9 @@ define([
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
                 encoded_path: Common.encodePath(dirent_path),
+                icon_url: this.model.getIconUrl(48),
+                url: this.model.getWebUrl(),
+                download_url: this.model.getDownloadUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
@@ -65,7 +68,14 @@ define([
             'click .cp': 'mvcp',
             'click .set-folder-permission': 'setFolderPerm',
             'click .lock-file': 'lockFile',
-            'click .unlock-file': 'unlockFile'
+            'click .unlock-file': 'unlockFile',
+            'click .open-via-client': 'open_via_client'
+        },
+
+        _hideMenu: function() {
+            //this.$('.hidden-op').addClass('hide');
+            this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
+            this.$('.hidden-op').addClass('hide');
         },
 
         highlight: function() {
@@ -498,7 +508,13 @@ define([
                 }
             });
             return false;
+        },
+
+        open_via_client: function() {
+            this._hideMenu();
+            return true;
         }
+
     });
 
     return DirentView;
