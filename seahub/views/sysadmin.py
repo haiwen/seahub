@@ -187,22 +187,40 @@ def sys_repo_admin(request):
         },
         context_instance=RequestContext(request))
 
+def can_view_sys_admin_repo(repo):
+    default_repo_id = get_system_default_repo_id()
+    is_default_repo = True if repo.id == default_repo_id else False
+
+    if is_default_repo:
+        return True
+    elif repo.encrypted:
+        return False
+    elif is_pro_version() and ENABLE_SYS_ADMIN_VIEW_REPO:
+        return True
+    else:
+        return False
+
 @login_required
 @sys_staff_required
 def sys_admin_repo_download_file(request, repo_id):
-    """
-    """
-    repo = seafile_api.get_repo(repo_id)
-    path = request.GET.get('p', '')
-    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_admin_repo')
 
-    if not repo or repo.encrypted or not is_pro_version() \
-        or not ENABLE_SYS_ADMIN_VIEW_REPO or not obj_id:
-        messages.error(request, _(u'Unable to download file'))
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponseRedirect(next)
+
+    path = request.GET.get('p', '')
+    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        messages.error(request, _(u'Unable to download file, invalid file path'))
+        return HttpResponseRedirect(next)
+
+    if not can_view_sys_admin_repo(repo):
+        messages.error(request, _(u'Unable to view library'))
         return HttpResponseRedirect(next)
 
     try:
@@ -220,21 +238,18 @@ def sys_admin_repo_download_file(request, repo_id):
 @login_required
 @sys_staff_required
 def sys_admin_repo(request, repo_id):
+
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_repo_admin')
-
-    if not is_pro_version() or not ENABLE_SYS_ADMIN_VIEW_REPO:
-        messages.error(request, _(u'Unable to view library, this feature is not enabled.'))
-        return HttpResponseRedirect(next)
 
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         messages.error(request, _(u'Library does not exist'))
         return HttpResponseRedirect(next)
 
-    if repo.encrypted:
-        messages.error(request, _(u'Library is encrypted'))
+    if not can_view_sys_admin_repo(repo):
+        messages.error(request, _(u'Unable to view library'))
         return HttpResponseRedirect(next)
 
     path = request.GET.get('p', '/')
