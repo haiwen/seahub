@@ -7,7 +7,7 @@ define([
     'app/views/share',
     'app/views/folder-perm',
     'app/views/dialogs/dirent-mvcp',
-    'app/views/dialogs/dirent-rename'
+    'app/views/dialogs/dirent-rename',
 ], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView,
     DirentMvcpDialog, DirentRenameDialog) {
     'use strict';
@@ -136,6 +136,7 @@ define([
             this.$('.open-via-client').on('click', _.bind(this.open_via_client, this));
             this.$('.lock-file').on('click', _.bind(this.lockFile, this));
             this.$('.unlock-file').on('click', _.bind(this.unlockFile, this));
+            this.$('.set-folder-permission').on('click', _.bind(this.setFolderPerm, this));
 
             return false;
         },
@@ -200,6 +201,16 @@ define([
                 'dirent': this.model
             };
             new DirentRenameDialog(options);
+            return false;
+        },
+
+        setFolderPerm: function() {
+            var options = {
+                'obj_name': this.model.get('obj_name'),
+                'dir_path': this.dir.path,
+                'repo_id': this.dir.repo_id
+            };
+            new FolderPermView(options);
             return false;
         },
 
