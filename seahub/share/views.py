@@ -28,8 +28,6 @@ from seahub.share.forms import RepoShareForm, FileLinkShareForm, \
 from seahub.share.models import FileShare, PrivateFileDirShare, \
     UploadLinkShare, OrgFileShare
 from seahub.share.signals import share_repo_to_user_successful
-# from settings import ANONYMOUS_SHARE_COOKIE_TIMEOUT
-# from tokens import anon_share_token_generator
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check, require_POST
