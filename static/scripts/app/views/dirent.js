@@ -456,41 +456,14 @@ define([
             return false;
         },
 
-        lockOrUnlockFile: function(params) {
-            var dir = this.dir,
-                filepath = Common.pathJoin([dir.path, this.model.get('obj_name')]),
-                callback = params.after_success;
-
-            $.ajax({
-                url: Common.getUrl({name: 'lock_or_unlock_file', repo_id: dir.repo_id}),
-                type: 'PUT',
-                dataType: 'json',
-                data: {
-                    'operation': params.op,
-                    'p': filepath
-                },
-                cache: false,
-                beforeSend: Common.prepareCSRFToken,
-                success: function() {
-                    callback();
-                },
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
-                }
-            });
-        },
-
         lockFile: function() {
             var _this = this;
-            this.lockOrUnlockFile({
-                'op': 'lock',
-                'after_success': function() {
-                    _this.model.set({
-                        'is_locked': true,
-                        'locked_by_me': true,
-                        'lock_owner_name': app.pageOptions.name
-                    });
+            this.model.lockFile({
+                success: function() {
                     _this.$el.removeClass('hl');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
             return false;
@@ -498,13 +471,12 @@ define([
 
         unlockFile: function() {
             var _this = this;
-            this.lockOrUnlockFile({
-                'op': 'unlock',
-                'after_success': function() {
-                    _this.model.set({
-                        'is_locked': false
-                    });
+            this.model.unlockFile({
+                success: function() {
                     _this.$el.removeClass('hl');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
             return false;

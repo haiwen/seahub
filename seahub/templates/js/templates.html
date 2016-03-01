@@ -348,6 +348,9 @@
 <script type="text/template" id="grid-view-file-item-tmpl">
     <a href="<%= url %>" class="img-link" target="_blank">
         <img src="<%= icon_url %>" alt="" width="96" class="vam" />
+        <% if (is_pro && dirent.is_locked) { %>
+        <img class="grid-file-locked-icon" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" />
+        <% } %>
     </a>
 
     <a href="<%= url %>" class="ellipsis text-link normal" target="_blank">

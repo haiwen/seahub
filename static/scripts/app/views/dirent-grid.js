@@ -128,21 +128,24 @@ define([
 
             // Using _.bind(function, object) to make that whenever the function is
             // called, the value of this will be the object.
-            this.$el.on('click', '.delete', _.bind(this.del, this));
-            this.$el.on('click', '.share', _.bind(this.share, this));
-            this.$el.on('click', '.mv', _.bind(this.mvcp, this));
-            this.$el.on('click', '.cp', _.bind(this.mvcp, this));
-            this.$el.on('click', '.rename', _.bind(this.rename, this));
-            this.$el.on('click', '.open-via-client', _.bind(this.open_via_client, this));
+            this.$('.delete').on('click', _.bind(this.del, this));
+            this.$('.share').on('click', _.bind(this.share, this));
+            this.$('.mv').on('click', _.bind(this.mvcp, this));
+            this.$('.cp').on('click', _.bind(this.mvcp, this));
+            this.$('.rename').on('click', _.bind(this.rename, this));
+            this.$('.open-via-client').on('click', _.bind(this.open_via_client, this));
+            this.$('.lock-file').on('click', _.bind(this.lockFile, this));
+            this.$('.unlock-file').on('click', _.bind(this.unlockFile, this));
 
             return false;
         },
 
-        _closeMenu: function() {
+        closeMenu: function() {
             this.$('.grid-item-op').remove();
         },
 
         del: function(event) {
+            this.closeMenu();
             var dirent_name = this.model.get('obj_name');
             this.model.deleteFromServer({
                 success: function(data) {
@@ -173,7 +176,7 @@ define([
                 'obj_name': obj_name
             };
             new ShareView(options);
-            this._closeMenu();
+            this.closeMenu();
             return false;
         },
 
@@ -186,12 +189,12 @@ define([
             };
 
             new DirentMvcpDialog(options);
-            this._closeMenu();
+            this.closeMenu();
             return false;
         },
 
         rename: function() {
-            this._closeMenu();
+            this.closeMenu();
             var options = {
                 'dir': this.dir,
                 'dirent': this.model
@@ -200,8 +203,32 @@ define([
             return false;
         },
 
+        lockFile: function() {
+            this.closeMenu();
+            this.model.lockFile({
+                success: function() {
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+            return false;
+        },
+
+        unlockFile: function() {
+            this.closeMenu();
+            this.model.unlockFile({
+                success: function() {
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+            return false;
+        },
+
         open_via_client: function() {
-            this._closeMenu();
+            this.closeMenu();
             return true;
         }
 

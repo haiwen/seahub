@@ -126,7 +126,74 @@ define([
                         options.error(xhr);
                 }
             });
-        }
+        },
+
+        lockOrUnlockFile: function(options) {
+            var dir = this.collection,
+                filepath = this.getPath();
+
+            $.ajax({
+                url: Common.getUrl({name: 'lock_or_unlock_file', repo_id: dir.repo_id}),
+                type: 'PUT',
+                dataType: 'json',
+                data: {
+                    'operation': options.op,
+                    'p': filepath
+                },
+                cache: false,
+                beforeSend: Common.prepareCSRFToken,
+                success: function() {
+                    options.success();
+                },
+                error: function(xhr) {
+                    options.error(xhr);
+                }
+            });
+        },
+
+        lockFile: function(options) {
+            var _this = this;
+            this.lockOrUnlockFile({
+                op: 'lock',
+                success: function() {
+                    _this.set({
+                        'is_locked': true,
+                        'locked_by_me': true,
+                        'lock_owner_name': app.pageOptions.name
+                    });
+                    if (options.success) {
+                        options.success();
+                    }
+                },
+                error: function(xhr) {
+                    if (options.error) {
+                        options.error(xhr)
+                    }
+                }
+            });
+            return false;
+        },
+
+        unlockFile: function(options) {
+            var _this = this;
+            this.lockOrUnlockFile({
+                op: 'unlock',
+                success: function() {
+                    _this.set({
+                        'is_locked': false
+                    });
+                    if (options.success) {
+                        options.success();
+                    }
+                },
+                error: function(xhr) {
+                    if (options.error) {
+                        options.error(xhr)
+                    }
+                }
+            });
+            return false;
+        },
 
     });
 
