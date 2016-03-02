@@ -21,6 +21,8 @@ from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
+from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
+from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -195,6 +197,11 @@ urlpatterns = patterns(
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
+    url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
+    url(r'^api/v2.1/share-link/(?P<token>[a-f0-9]{10})/$', ShareLink.as_view(), name='api-v2.1-share-link'),
+    url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
+    url(r'^api/v2.1/upload-link/(?P<token>[a-f0-9]{10})/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
+
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
