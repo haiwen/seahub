@@ -4496,7 +4496,7 @@ class RepoUserFolderPerm(APIView):
             result['user_email'] = perm.user
             result['user_name'] = email2nickname(perm.user)
             result['folder_path'] = perm.path
-            result['folder_name'] = os.path.basename(perm.path.rstrip('/'))
+            result['folder_name'] = perm.path if perm.path == '/' else os.path.basename(perm.path.rstrip('/'))
             result['permission'] = perm.permission
 
             results.append(result)
@@ -4594,7 +4594,7 @@ def get_repo_group_folder_perm_result(repo_id, path, group_id):
         result['group_id'] = group_id
         result['group_name'] = group.group_name
         result['folder_path'] = path
-        result['folder_name'] = os.path.basename(path.rstrip('/'))
+        result['folder_name'] = path if path == '/' else os.path.basename(path.rstrip('/'))
         result['permission'] = permission
 
     return result
@@ -4620,7 +4620,7 @@ class RepoGroupFolderPerm(APIView):
             result['group_id'] = perm.group_id
             result['group_name'] = group.group_name
             result['folder_path'] = perm.path
-            result['folder_name'] = os.path.basename(perm.path.rstrip('/'))
+            result['folder_name'] = perm.path if perm.path == '/' else os.path.basename(perm.path.rstrip('/'))
             result['permission'] = perm.permission
 
             results.append(result)

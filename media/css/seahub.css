@@ -3486,12 +3486,16 @@ textarea:-moz-placeholder {/* for FF */
     max-height:250px;
     overflow:auto;
 }
-#repo-folder-perm .tabs-panel {
-    width:600px;
+#repo-folder-perm .tabs-panel {/* for the case that the scrollbar appears */
+    width:630px;
+    padding-right:0;
 }
 .repo-folder-perm-folder-path {
     padding:3px 5px;
     width:155px;
+}
+.repo-folder-perm-content {
+    width:610px; /* for the table in it. */
 }
 #share-popup .share-permission-select,
 #folder-perm-tabs .perm-select {

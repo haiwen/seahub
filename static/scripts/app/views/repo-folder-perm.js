@@ -16,7 +16,7 @@ define([
             'mouseleave': 'rmHighlight',
             'click .edit-icon': 'showEdit',
             'change .perm-toggle-select': 'edit',
-            'click .remove': 'remove'
+            'click .rm': 'rm'
         },
 
         initialize: function(options) {
@@ -96,7 +96,7 @@ define([
             });
         },
 
-        remove: function() {
+        rm: function() {
             var url = Common.getUrl({
                 name: this.data.perm_type == 'user' ? 'repo_user_folder_perm' : 'repo_group_folder_perm',
                 repo_id: this.data.repo_id
