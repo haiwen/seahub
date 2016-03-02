@@ -1705,7 +1705,7 @@ class OwaFileView(APIView):
         filename = os.path.basename(path)
         filetype, fileext = get_file_type_and_ext(filename)
         if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
-            error_msg = 'file extension invalid.'
+            error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # get wopi dict
