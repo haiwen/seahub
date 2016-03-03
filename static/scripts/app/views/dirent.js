@@ -5,8 +5,10 @@ define([
     'common',
     'file-tree',
     'app/views/share',
+    'app/views/dialogs/dirent-mvcp',
     'app/views/folder-perm'
-], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView) {
+], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog,
+    FolderPermView) {
     'use strict';
 
     app = app || {};
@@ -38,6 +40,9 @@ define([
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
                 encoded_path: Common.encodePath(dirent_path),
+                icon_url: this.model.getIconUrl(48),
+                url: this.model.getWebUrl(),
+                download_url: this.model.getDownloadUrl(),
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
@@ -65,7 +70,13 @@ define([
             'click .cp': 'mvcp',
             'click .set-folder-permission': 'setFolderPerm',
             'click .lock-file': 'lockFile',
-            'click .unlock-file': 'unlockFile'
+            'click .unlock-file': 'unlockFile',
+            'click .open-via-client': 'open_via_client'
+        },
+
+        _hideMenu: function() {
+            this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
+            this.$('.hidden-op').addClass('hide');
         },
 
         highlight: function() {
@@ -183,20 +194,8 @@ define([
 
         del: function() {
             var dirent_name = this.model.get('obj_name');
-            var dir = this.dir;
-            var options = {
-                repo_id: dir.repo_id,
-                name: this.model.get('is_dir') ? 'del_dir' : 'del_file'
-            };
-            var model = this.model;
-            $.ajax({
-                url: Common.getUrl(options) + '?parent_dir=' + encodeURIComponent(dir.path)
-                + '&name=' + encodeURIComponent(dirent_name),
-                type: 'POST',
-                dataType: 'json',
-                beforeSend: Common.prepareCSRFToken,
+            this.model.deleteFromServer({
                 success: function(data) {
-                    dir.remove(model);
                     var msg = gettext("Successfully deleted %(name)s")
                         .replace('%(name)s', Common.HTMLescape(dirent_name));
                     Common.feedback(msg, 'success');
@@ -239,9 +238,7 @@ define([
             };
             $('.cancel', form).click(cancelRename);
 
-            var form_id = form.attr('id');
             var _this = this;
-            var dir = this.dirView.dir;
             form.submit(function() {
                 var new_name = $.trim($('[name="newname"]', form).val());
                 if (!new_name) {
@@ -251,27 +248,10 @@ define([
                     cancelRename();
                     return false;
                 }
-                var post_data = {
-                    'oldname': dirent_name,
-                    'newname': new_name
-                };
-                var post_url = Common.getUrl({
-                    name: is_dir ? 'rename_dir' : 'rename_file',
-                    repo_id: dir.repo_id
-                }) + '?parent_dir=' + encodeURIComponent(dir.path);
-                var after_op_success = function(data) {
-                    var renamed_dirent_data = {
-                        'obj_name': data['newname'],
-                        'last_modified': new Date().getTime()/1000,
-                        'last_update': gettext("Just now")
-                    };
-                    if (!is_dir) {
-                        $.extend(renamed_dirent_data, {
-                            'starred': false
-                        });
-                    }
-                    _this.model.set(renamed_dirent_data); // it will trigger 'change' event
-                };
+
+                var submit_btn = $('[type="submit"]', form);
+                Common.disableButton(submit_btn);
+
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
@@ -282,16 +262,8 @@ define([
                     Common.feedback(err_msg, 'error');
                     Common.enableButton(submit_btn);
                 };
-
-                var submit_btn = $('[type="submit"]', form);
-                Common.disableButton(submit_btn);
-                $.ajax({
-                    url: post_url,
-                    type: 'POST',
-                    dataType: 'json',
-                    beforeSend: Common.prepareCSRFToken,
-                    data: post_data,
-                    success: after_op_success,
+                _this.model.rename({
+                    newname: new_name,
                     error: after_op_error
                 });
                 return false;
@@ -299,179 +271,15 @@ define([
             return false;
         },
 
-        mvcp: function(event) {
-            var dir = this.dir;
-            var el = event.target || event.srcElement,
-                op_type = $(el).hasClass('mv') ? 'mv' : 'cp',
-                obj_name = this.model.get('obj_name'),
-                obj_type = this.model.get('is_dir') ? 'dir' : 'file';
+        mvcp: function(e) {
+            var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
+            var options = {
+                'dir': this.dir,
+                'dirent': this.model,
+                'op_type': op_type
+            };
 
-            var title = op_type == 'mv' ? gettext("Move {placeholder} to:") : gettext("Copy {placeholder} to:");
-            title = title.replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(obj_name) + '">' + Common.HTMLescape(obj_name) + '</span>');
-
-            var show_cur_repo = true;
-            if (this.model.get('perm') == 'r') {
-                show_cur_repo = false;
-            }
-            var form = $(this.mvcpTemplate({
-                form_title: title,
-                op_type: op_type,
-                obj_type: obj_type,
-                obj_name: obj_name,
-                show_cur_repo: show_cur_repo,
-                show_other_repos: !dir.encrypted
-            }));
-            form.modal({appendTo:'#main', autoResize:true, focus:false});
-            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-
-            if (show_cur_repo) {
-                FileTree.renderTreeForPath({
-                    repo_name: dir.repo_name,
-                    repo_id: dir.repo_id,
-                    path: dir.path
-                });
-            }
-            if (!dir.encrypted) {
-                FileTree.prepareOtherReposTree({cur_repo_id: dir.repo_id});
-            }
-
-            var dirent = this.$el;
-            var _this = this;
-            form.submit(function() {
-                var form = $(this),
-                    form_id = form.attr('id'),
-                    path = dir.path,
-                    repo_id = dir.repo_id;
-                var dst_repo = $('[name="dst_repo"]', form).val(),
-                    dst_path = $('[name="dst_path"]', form).val(),
-                    op = $('[name="op"]', form).val(),
-                    obj_name = $('[name="obj_name"]', form).val(),
-                    obj_type = $('[name="obj_type"]', form).val();
-
-                if (!$.trim(dst_repo) || !$.trim(dst_path)) {
-                    $('.error', form).removeClass('hide');
-                    return false;
-                }
-                if (dst_repo == repo_id && (dst_path == path || (obj_type == 'dir' && dst_path == path + obj_name + '/'))) {
-                    $('.error', form).html(gettext("Invalid destination path")).removeClass('hide');
-                    return false;
-                }
-                var options = { repo_id: repo_id };
-                if (obj_type == 'dir') {
-                    options.name = op == 'mv' ? 'mv_dir' : 'cp_dir';
-                } else {
-                    options.name = op == 'mv' ? 'mv_file' : 'cp_file';
-                }
-                var post_url = Common.getUrl(options) + '?path=' + encodeURIComponent(path) + '&obj_name=' + encodeURIComponent(obj_name);
-                var post_data = {
-                    'dst_repo': dst_repo,
-                    'dst_path': dst_path
-                };
-                var after_op_success = function(data) {
-                    $.modal.close();
-                    var msg = data['msg'];
-                    if (!data['task_id']) { // no progress
-                        if (op == 'mv') {
-                            dirent.remove();
-                        }
-                        Common.feedback(msg, 'success');
-                    } else {
-                        var mv_progress_popup = $(_this.mvProgressTemplate());
-                        var details = $('#mv-details', mv_progress_popup),
-                            cancel_btn = $('#cancel-mv', mv_progress_popup),
-                            other_info = $('#mv-other-info', mv_progress_popup);
-                        cancel_btn.removeClass('hide');
-                        setTimeout(function () {
-                            mv_progress_popup.modal({containerCss: {
-                                width: 300,
-                                height: 150,
-                                paddingTop: 50
-                            }, focus:false});
-                            var det_text = op == 'mv' ? gettext("Moving %(name)s") : gettext("Copying %(name)s");
-                            details.html(det_text.replace('%(name)s', Common.HTMLescape(obj_name))).removeClass('vh');
-                            $('#mv-progress').progressbar();
-                            req_progress();
-                        }, 100);
-                        var req_progress = function () {
-                            $.ajax({
-                                url: Common.getUrl({name: 'get_cp_progress'}) + '?task_id=' + encodeURIComponent(data['task_id']),
-                                dataType: 'json',
-                                success: function(data) {
-                                    var bar = $('.ui-progressbar-value', $('#mv-progress'));
-                                    if (!data['failed'] && !data['canceled'] && !data['successful']) {
-                                        if (data['done'] == data['total']) {
-                                            bar.css('width', '100%'); // 'done' and 'total' can be both 0
-                                            details.addClass('vh');
-                                            cancel_btn.addClass('hide');
-                                            other_info.html(gettext("Saving...")).removeClass('hide');
-                                        } else {
-                                            bar.css('width', parseInt(data['done']/data['total']*100, 10) + '%');
-                                        }
-                                        bar.show();
-                                        setTimeout(req_progress, 1000);
-                                    } else if (data['successful']) {
-                                        $.modal.close();
-                                        if (op == 'mv') {
-                                            dirent.remove();
-                                        }
-                                        Common.feedback(msg, 'success');
-                                    } else { // failed or canceled
-                                        details.addClass('vh');
-                                        var other_msg = data['failed'] ? gettext("Failed.") : gettext("Canceled.");
-                                        other_info.html(other_msg).removeClass('hide');
-                                        cancel_btn.addClass('hide');
-                                        setTimeout(function () { $.modal.close(); }, 1000);
-                                    }
-                                },
-                                error: function(xhr, textStatus, errorThrown) {
-                                    var error;
-                                    if (xhr.responseText) {
-                                        error = $.parseJSON(xhr.responseText).error;
-                                    } else {
-                                        error = gettext("Failed. Please check the network.");
-                                    }
-                                    details.addClass('vh')
-                                    other_info.html(error).removeClass('hide');
-                                    cancel_btn.addClass('hide');
-                                    setTimeout(function () { $.modal.close(); }, 1000);
-                                }
-                            });
-                        };
-
-                        cancel_btn.click(function() {
-                            Common.disableButton(cancel_btn);
-                            $.ajax({
-                                url: Common.getUrl({name: 'cancel_cp'}) + '?task_id=' + encodeURIComponent(data['task_id']),
-                                dataType: 'json',
-                                success: function(data) {
-                                    details.addClass('vh')
-                                    other_info.html(gettext("Canceled.")).removeClass('hide');
-                                    cancel_btn.addClass('hide');
-                                    setTimeout(function () {$.modal.close();}, 1000);
-                                },
-                                error: function(xhr, textStatus, errorThrown) {
-                                    var error;
-                                    if (xhr.responseText) {
-                                        error = $.parseJSON(xhr.responseText).error;
-                                    } else {
-                                        error = gettext("Failed. Please check the network.");
-                                    }
-                                    other_info.html(error).removeClass('hide');
-                                    Common.enableButton(cancel_btn);
-                                }
-                            });
-                        });
-                    }
-                }
-                Common.ajaxPost({
-                    'form': form,
-                    'post_url': post_url,
-                    'post_data': post_data,
-                    'after_op_success': after_op_success,
-                    'form_id': form_id
-                });
-                return false;
-            });
+            new DirentMvcpDialog(options);
             return false;
         },
 
@@ -485,41 +293,14 @@ define([
             return false;
         },
 
-        lockOrUnlockFile: function(params) {
-            var dir = this.dir,
-                filepath = Common.pathJoin([dir.path, this.model.get('obj_name')]),
-                callback = params.after_success;
-
-            $.ajax({
-                url: Common.getUrl({name: 'lock_or_unlock_file', repo_id: dir.repo_id}),
-                type: 'PUT',
-                dataType: 'json',
-                data: {
-                    'operation': params.op,
-                    'p': filepath
-                },
-                cache: false,
-                beforeSend: Common.prepareCSRFToken,
-                success: function() {
-                    callback();
-                },
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
-                }
-            });
-        },
-
         lockFile: function() {
             var _this = this;
-            this.lockOrUnlockFile({
-                'op': 'lock',
-                'after_success': function() {
-                    _this.model.set({
-                        'is_locked': true,
-                        'locked_by_me': true,
-                        'lock_owner_name': app.pageOptions.name
-                    });
+            this.model.lockFile({
+                success: function() {
                     _this.$el.removeClass('hl');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
             return false;
@@ -527,17 +308,22 @@ define([
 
         unlockFile: function() {
             var _this = this;
-            this.lockOrUnlockFile({
-                'op': 'unlock',
-                'after_success': function() {
-                    _this.model.set({
-                        'is_locked': false
-                    });
+            this.model.unlockFile({
+                success: function() {
                     _this.$el.removeClass('hl');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
             return false;
+        },
+
+        open_via_client: function() {
+            this._hideMenu();
+            return true;
         }
+
     });
 
     return DirentView;

@@ -134,6 +134,8 @@
 /*.sf2-icon-group-settings:before { content:"\e022"; }*/
 .sf2-icon-comment:before { content:"\e023"; }
 .sf2-icon-wiki2:before { content:"\e024"; }
+.sf2-icon-grid-view:before { content:"\e025"; }
+.sf2-icon-list-view:before { content:"\e026"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -1202,9 +1204,12 @@ textarea:-moz-placeholder {/* for FF */
     padding:4px 12px;
     min-width:110px;
     white-space:nowrap;
+    color:#444;
 }
 .dropdown-menu a:hover {
-    background:#eee;
+    background:#feaa7c;
+    text-decoration:none;
+    color:#fff;
 }
 /********** container ***********/
 #main, #footer {
@@ -3731,54 +3736,6 @@ img.thumbnail {
 .shared-dir-zip {
     margin-left:5px;
 }
-.grid {
-    display:inline-block;
-    width:100px;
-    padding:10px 24px;
-    position:relative;
-}
-.grid .img-link,
-.grid .text-link {
-    display:block;
-    text-align:center;
-}
-.grid .img-link {
-    height:100px;
-    font-size:0;
-    line-height:0;
-    border-radius:3px;
-    margin-bottom:6px;
-}
-.grid .img-link:before {
-    content:' ';
-    display:inline-block;
-    vertical-align:middle;
-    height:100%;
-}
-.grid .thumbnail {
-    max-width:96px;
-    max-height:96px;
-    padding:1px;
-    border:1px solid #ddd;
-    border-radius:3px;
-}
-.grid .text-link {
-    color:#333;
-    font-size:14px;
-    line-height:17px;
-    height:34px;
-    white-space:normal;
-}
-.grid .op-icon {
-    position:absolute;
-    top:10px;
-    right:24px;
-    padding:2px 6px;
-    background:#fff;
-    border:1px solid #eee;
-    border-radius:3px;
-    margin:0;
-}
 /**** #groups ****/ /* groups page */
 #groups .group-name {
     font-size:16px;
@@ -3836,4 +3793,91 @@ img.thumbnail {
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
+}
+/****** grid view *****/
+/* view mode */
+.switch-mode {
+    display:inline-block;
+    margin-left:12px;
+}
+.grid-view-icon-btn,
+.list-view-icon-btn {
+    display:inline-block;
+    padding:0 6px;
+    height:27px;
+    background:#fff;
+    border:1px solid #ccc;
+    font-size:18px;
+    color:#aaa;
+    cursor:pointer;
+}
+.grid-view-icon-btn.active,
+.list-view-icon-btn.active {
+    color:#fff;
+    background:#ccc;
+    cursor:default;
+}
+/* grid view */
+.grid-item {
+    display:inline-block;
+    width:100px;
+    padding:10px 24px;
+    position:relative;
+}
+.grid-item .img-link {
+    position:relative; /* for locked icon */
+    display:block;
+    text-align:center;
+    height:100px;
+    font-size:0;
+    line-height:0;
+    border-radius:3px;
+    margin-bottom:6px;
+}
+.grid-item .img-link:before {
+    content:' ';
+    display:inline-block;
+    vertical-align:middle;
+    height:100%;
+}
+.grid-item .img-link.hl {
+    background:#f8f8f8;
+}
+.grid-item .thumbnail {
+    max-width:96px;
+    max-height:96px;
+    padding:1px;
+    border:1px solid #ddd;
+    border-radius:3px;
+}
+.grid-item .text-link {
+    display:block;
+    text-align:center;
+    color:#333;
+    font-size:14px;
+    line-height:17px;
+    height:34px;
+    white-space:normal;
+}
+.grid-item .text-link.hl {
+    color:#f93;
+    background:#fff;
+}
+.grid-item .op-icon {
+    position:absolute;
+    top:10px;
+    right:24px;
+    padding:2px 6px;
+    background:#fff;
+    border:1px solid #eee;
+    border-radius:3px;
+    margin:0;
+}
+.grid-file-locked-icon {
+    position:absolute;
+    bottom:0px;
+    right:10px;
+}
+#dir-view .grid-item {
+    padding:10px 20px; /* use less padding */
 }

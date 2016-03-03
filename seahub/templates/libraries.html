@@ -238,7 +238,6 @@
 <script type="text/javascript">
 app["pageOptions"] = {
     site_root: "{{ SITE_ROOT }}",
-    base_url: "{{ SITE_ROOT }}" + "home/my/",
     csrfToken: "{{ csrf_token }}",
     reposUrl: "{% url 'api2-repos' %}",
     pubReposUrl: "{% url 'api2-pub-repos' %}",
@@ -275,6 +274,8 @@ app["pageOptions"] = {
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     enable_resumable_fileupload: {% if enable_resumable_fileupload %} true {% else %} false {% endif %},
     enable_thumbnail: {% if enable_thumbnail %} true {% else %} false {% endif %},
+    thumbnail_default_size: {{ thumbnail_default_size }},
+    thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},
     enable_encrypted_library: {% if enable_encrypted_library %} true {% else %} false {% endif %},
     enable_repo_history_setting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},

@@ -36,6 +36,8 @@ require.config({
 
         'jquery.magnific-popup': 'lib/jquery.magnific-popup',
 
+        'js.cookie': 'lib/js.cookie',
+
         simplemodal: 'lib/jquery.simplemodal',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
@@ -66,10 +68,10 @@ define([
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
                 case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
-                case 'del_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/delete/';
-                case 'del_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/delete/';
-                case 'rename_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/rename/';
-                case 'rename_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/rename/';
+                case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'del_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'rename_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'rename_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
                 case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
                 case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
@@ -143,6 +145,77 @@ define([
                 case 'events': return siteRoot + 'api2/events/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
+            }
+        },
+
+        FILEEXT_ICON_MAP: {
+            // text file
+            'md': 'txt.png',
+            'txt': 'txt.png',
+
+            // pdf file
+            'pdf' : 'pdf.png',
+            // document file
+            'doc' : 'word.png',
+            'docx' : 'word.png',
+            'ppt' : 'ppt.png',
+            'pptx' : 'ppt.png',
+            'xls' : 'excel.png',
+            'xlsx' : 'excel.png',
+            'txt' : 'txt.png',
+            'odt' : 'word.png',
+            'fodt' : 'word.png',
+            'ods' : 'excel.png',
+            'fods' : 'excel.png',
+            'odp' : 'ppt.png',
+            'fodp' : 'ppt.png',
+            // music file
+            'mp3' : 'music.png',
+            'oga' : 'music.png',
+            'ogg' : 'music.png',
+            'flac' : 'music.png',
+            'aac' : 'music.png',
+            'ac3' : 'music.png',
+            'wma' : 'music.png',
+            // image file
+            'jpg' : 'pic.png',
+            'jpeg' : 'pic.png',
+            'png' : 'pic.png',
+            'svg' : 'pic.png',
+            'gif' : 'pic.png',
+            'bmp' : 'pic.png',
+            'ico' : 'pic.png',
+            // default
+            'default' : 'file.png'
+        },
+
+        getFileIconUrl: function(filename, size) {
+            if (size > 24) {
+                size = 192;
+            } else {
+                size = 24;
+            }
+
+            var file_ext;
+            if (filename.lastIndexOf('.') == -1) {
+                return app.config.mediaUrl + "img/file/" + size + "/"
+                    + this.FILEEXT_ICON_MAP['default'];
+            } else {
+                file_ext = filename.substr(filename.lastIndexOf('.') + 1).toLowerCase();
+            }
+
+            if (_.has(this.FILEEXT_ICON_MAP, file_ext)) {
+                return app.config.mediaUrl + "img/file/" + size + "/" + this.FILEEXT_ICON_MAP[file_ext];
+            } else {
+                return app.config.mediaUrl + "img/file/" + size + "/" + this.FILEEXT_ICON_MAP['default'];
+            }
+        },
+
+        getDirIconUrl: function(is_readonly, size) {
+            if (is_readonly) {
+                return app.config.mediaUrl + "img/folder-read-only-192.png";
+            } else {
+                return app.config.mediaUrl + "img/folder-beige-192.png";
             }
         },
 
