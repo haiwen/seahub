@@ -347,7 +347,16 @@
 
 <script type="text/template" id="grid-view-file-item-tmpl">
     <a href="<%= url %>" class="img-link" target="_blank">
-        <img src="<%= icon_url %>" alt="" width="96" class="vam" />
+        <% if (dirent.is_img) { %>
+            <% if (dirent.encoded_thumbnail_src) { %>
+            <img class="thumbnail vam" src="{{ SITE_ROOT }}<%- dirent.encoded_thumbnail_src %>" alt="" />
+            <% } else { %>
+            <img src="<%= icon_url %>" width="96" alt="" class="vam" />
+            <% } %>
+        <% } else { %>
+        <img src="<%= icon_url %>" width="96" alt="" class="vam" />
+        <% } %>
+
         <% if (is_pro && dirent.is_locked) { %>
         <img class="grid-file-locked-icon" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" />
         <% } %>
@@ -356,10 +365,6 @@
     <a href="<%= url %>" class="ellipsis text-link normal" target="_blank">
         <%- dirent.obj_name %>
     </a>
-</script>
-
-<script type="text/template" id="grid-view-img-item-tmpl">
-
 </script>
 
 <script type="text/template" id="grid-view-dir-item-tmpl">

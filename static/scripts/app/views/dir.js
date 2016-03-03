@@ -210,12 +210,19 @@ define([
                     repo_id = this.dir.repo_id,
                     cur_path = this.dir.path,
                     _this = this;
+                var thumbnail_size = app.pageOptions.thumbnail_default_size;
+                if (this.view_mode == 'grid') {
+                    thumbnail_size = app.pageOptions.thumbnail_size_for_grid;
+                }
                 var get_thumbnail = function(i) {
                     var cur_img = images_with_no_thumbnail[i];
                     var cur_img_path = Common.pathJoin([cur_path, cur_img.get('obj_name')]);
                     $.ajax({
                         url: Common.getUrl({name: 'thumbnail_create', repo_id: repo_id}),
-                        data: {'path': cur_img_path},
+                        data: {
+                            'path': cur_img_path,
+                            'size': thumbnail_size
+                        },
                         cache: false,
                         dataType: 'json',
                         success: function(data) {
@@ -294,11 +301,18 @@ define([
                 var loading_tip = this.$('.loading-tip').show();
 
                 var _this = this;
+                var thumbnail_size = app.pageOptions.thumbnail_default_size;
+                if (this.view_mode == 'grid') {
+                    thumbnail_size = app.pageOptions.thumbnail_size_for_grid;
+                }
                 var dir = this.dir;
                 dir.fetch({
                     cache: false,
                     reset: true,
-                    data: { 'p': dir.path },
+                    data: {
+                        'p': dir.path,
+                        'thumbnail_size': thumbnail_size
+                    },
                     success: function(collection, response, opts) {
                         dir.last_start = 0; // for 'more'
                         if (response.dirent_list.length == 0 ||  // the dir is empty
@@ -1039,11 +1053,16 @@ define([
                     var loading_tip = this.$('.loading-tip'),
                         _this = this;
                     dir.last_start = start;
+                    var thumbnail_size = app.pageOptions.thumbnail_default_size;
+                    if (this.view_mode == 'grid') {
+                        thumbnail_size = app.pageOptions.thumbnail_size_for_grid;
+                    }
                     dir.fetch({
                         cache: false,
                         remove: false,
                         data: {
                             'p': dir.path,
+                            'thumbnail_size': thumbnail_size,
                             'start': dir.more_start
                         },
                         success: function (collection, response, opts) {

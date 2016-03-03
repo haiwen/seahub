@@ -966,6 +966,8 @@ def libraries(request):
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
+            'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
+            'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
             'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
             'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
             'max_upload_file_size': max_upload_file_size,
