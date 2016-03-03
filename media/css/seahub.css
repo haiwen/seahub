@@ -3796,34 +3796,22 @@ img.thumbnail {
     display:inline-block;
     margin-left:12px;
 }
-.switch-mode .active {
-    background:#ccc;
-}
-.list-view-btn,
-.grid-view-btn {
-    outline:none;
-    padding:3px 6px 4px;
-    height:20px;
-    border:1px solid #ccc;
-    background:#fff;
-    display:inline-block;
-}
-.grid-view-btn {
-    border-left:none;
-}
 .grid-view-icon-btn,
 .list-view-icon-btn {
     display:inline-block;
     padding:0 6px;
-    font-size:18px;
     height:27px;
-    color:#aaa;
-    border:1px solid #ccc;
     background:#fff;
+    border:1px solid #ccc;
+    font-size:18px;
+    color:#aaa;
+    cursor:pointer;
 }
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {
     color:#fff;
+    background:#ccc;
+    cursor:default;
 }
 /* grid view */
 .grid-item {
@@ -3885,9 +3873,6 @@ img.thumbnail {
     position:absolute;
     bottom:0px;
     right:10px;
-}
-.grid-item-op {
-    position:fixed;
 }
 #dir-view .grid-item {
     padding:10px 20px; /* use less padding */

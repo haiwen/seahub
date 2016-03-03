@@ -121,9 +121,12 @@ define([
                 repo_encrypted: dir.encrypted
             });
             this.$el.append(op);
+
+            var el_pos = this.$el.offset();
             this.$('.grid-item-op').css({
-                'left': event.pageX,
-                'top': event.pageY,
+                'position': 'absolute',
+                'left': event.pageX - el_pos.left,
+                'top': event.pageY - el_pos.top
             });
 
             // Using _.bind(function, object) to make that whenever the function is

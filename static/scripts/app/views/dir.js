@@ -41,8 +41,10 @@ define([
                 var view_mode = Cookies.get('view_mode');
                 if (view_mode == 'grid') {
                     this.view_mode = 'grid';
-                } else
+                } else {
                     this.view_mode = 'list';
+                }
+
                 this.contextOptions = {};
 
                 this.dir = new DirentCollection();
@@ -183,8 +185,9 @@ define([
             reset: function() {
                 this.renderPath();
                 this.renderDirOpBar();
-                if (this.view_mode == 'list')
+                if (this.view_mode == 'list') {
                     this.renderDirentsHd();
+                }
                 this.dir.each(this.addOne, this);
                 this.fileUploadView.setFileInput();
                 this.getImageThumbnail();
@@ -233,7 +236,7 @@ define([
                 get_thumbnail(0);
             },
 
-            _showEncryptDialog: function() {
+            _showLibDecryptDialog: function() {
                 var _this = this;
                 var form = $($('#repo-decrypt-form-template').html());
                 var decrypt_success = false;
@@ -244,7 +247,7 @@ define([
                         _this.$el_con.show();
                         if (!decrypt_success) {
                             app.router.navigate(
-                                category + '/', // need to append '/' at end
+                                _this.dir.category + '/', // need to append '/' at end
                                 {trigger: true}
                             );
                         }
@@ -269,7 +272,7 @@ define([
                         after_op_success: function() {
                             decrypt_success = true;
                             $.modal.close();
-                            _this.showDir(_this.dir.category, _this.dir.repo_id, _this.dir.path);
+                            _this.renderDir();
                         }
                     });
                     return false;
@@ -305,12 +308,12 @@ define([
                     },
                     error: function(collection, response, opts) {
                         loading_tip.hide();
-                        var $el_con = _this.$('.repo-file-list-topbar, .repo-file-list').hide();
+                        _this.$el_con = _this.$('.repo-file-list-topbar, .js-dir-content').hide();
                         var $error = _this.$('.error');
                         var err_msg;
                         if (response.responseText) {
                             if (response.responseJSON.lib_need_decrypt) {
-                                _this._showEncryptDialog();
+                                _this._showLibDecryptDialog();
                                 return;
                             } else {
                                 err_msg = response.responseJSON.error;
@@ -337,12 +340,11 @@ define([
                     context = 'common';
                 }
                 var obj = {
-                        path: path,
-                        repo_name: dir.repo_name,
-                        category: dir.category,
-                        context: context
-                    };
-                // add possible group_name
+                    path: path,
+                    repo_name: dir.repo_name,
+                    category: dir.category,
+                    context: context
+                };
                 $.extend(obj, this.contextOptions);
 
                 var path_list = path.substr(1).split('/');
