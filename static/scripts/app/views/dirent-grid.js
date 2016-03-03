@@ -7,7 +7,7 @@ define([
     'app/views/share',
     'app/views/folder-perm',
     'app/views/dialogs/dirent-mvcp',
-    'app/views/dialogs/dirent-rename',
+    'app/views/dialogs/dirent-rename'
 ], function($, _, Backbone, Common, FileTree, ShareView, FolderPermView,
     DirentMvcpDialog, DirentRenameDialog) {
     'use strict';
@@ -24,10 +24,6 @@ define([
         fileTemplate:  _.template($('#grid-view-file-item-tmpl').html()),
         fileOpTemplate: _.template($('#grid-view-file-op-tmpl').html()),
         renameTemplate: _.template($("#dirent-rename-dialog-template").html()),
-
-        // renameTemplate: _.template($("#grid-rename-form-template").html()),
-        // mvcpTemplate: _.template($("#mvcp-form-template").html()),
-        // mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
         initialize: function(options) {
             this.dirView = options.dirView;
@@ -68,22 +64,8 @@ define([
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            //'mousedown .img-link': 'showPopupMenu',
-            //'mousedown .text-link': 'showPopupMenu'
             'contextmenu .img-link': 'showPopupMenu',
             'contextmenu .text-link': 'showPopupMenu'
-
-            /*
-            'click .dir-link': 'visitDir',
-            'click .share': 'share',
-            'click .delete': 'del', // 'delete' is a preserve word
-            'click .rename': 'rename',
-            'click .mv': 'mvcp',
-            'click .cp': 'mvcp',
-            'click .set-folder-permission': 'setFolderPerm',
-            'click .lock-file': 'lockFile',
-            'click .unlock-file': 'unlockFile'
-            */
         },
 
         highlight: function() {
@@ -184,8 +166,8 @@ define([
             return false;
         },
 
-        mvcp: function(event) {
-            var op_type = $(event.target).hasClass('mv') ? 'mv' : 'cp';
+        mvcp: function(e) {
+            var op_type = $(e.currentTarget).hasClass('mv') ? 'mv' : 'cp';
             var options = {
                 'dir': this.dir,
                 'dirent': this.model,
