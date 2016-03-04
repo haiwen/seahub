@@ -35,12 +35,13 @@ define([
             var dirent_path = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             var is_pro = app.pageOptions.is_pro;
             var file_audit_enabled = app.pageOptions.file_audit_enabled;
+            var file_icon_size = Common.isHiDPI() ? 48 : 24;
 
             this.$el.html(this.template({
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
                 encoded_path: Common.encodePath(dirent_path),
-                icon_url: this.model.getIconUrl(48),
+                icon_url: this.model.getIconUrl(file_icon_size),
                 url: this.model.getWebUrl(),
                 download_url: this.model.getDownloadUrl(),
                 category: dir.category,

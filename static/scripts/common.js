@@ -212,10 +212,27 @@ define([
         },
 
         getDirIconUrl: function(is_readonly, size) {
-            if (is_readonly) {
-                return app.config.mediaUrl + "img/folder-read-only-192.png";
+            if (size > 24) {
+                if (is_readonly) {
+                    return app.config.mediaUrl + "img/folder-read-only-192.png";
+                } else {
+                    return app.config.mediaUrl + "img/folder-192.png";
+                }
             } else {
-                return app.config.mediaUrl + "img/folder-beige-192.png";
+                if (is_readonly) {
+                    return app.config.mediaUrl + "img/folder-read-only-24.png";
+                } else {
+                    return app.config.mediaUrl + "img/folder-24.png";
+                }
+            }
+        },
+
+        isHiDPI: function() {
+            var pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
+            if (pixelRatio > 1) {
+                return true;
+            } else {
+                return false;
             }
         },
 
