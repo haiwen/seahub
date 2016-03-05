@@ -51,6 +51,8 @@
 
 {% block extra_script %}
 <script type="text/javascript">
+$('[name="login"]').focus();
+
 function setCaptchaInputWidth() {
     $('#id_captcha_1').css({'width': $('.input').outerWidth() - $('.captcha').width() - 10});
 }
