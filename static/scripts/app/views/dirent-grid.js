@@ -35,8 +35,9 @@ define([
 
         render: function() {
             var dir = this.dir;
-            var template;
+            var dirent_path = this.model.getPath();
 
+            var template;
             if (this.model.get('is_dir')) {
                 template = this.dirTemplate;
             } else {
@@ -45,7 +46,7 @@ define([
 
             this.$el.html(template({
                 dirent: this.model.attributes,
-                dirent_path: this.model.getPath(),
+                dirent_path: dirent_path,
                 icon_url: this.model.getIconUrl(192),
                 url: this.model.getWebUrl(),
                 category: dir.category,
@@ -57,6 +58,18 @@ define([
             }));
 
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
+
+            this.$el.attr('title', this.model.get('obj_name'));
+
+            // for magnificPopup
+            if (this.model.get('is_img')) {
+                this.$el.addClass('image-grid-item');
+                this.$el.attr({
+                    'data-mfp-src': app.pageOptions.site_root + 'repo/' + dir.repo_id + '/raw' + Common.encodePath(dirent_path),
+                    'data-url': this.model.getWebUrl(),
+                    'data-name': this.model.get('obj_name')
+                });
+            }
 
             return this;
         },

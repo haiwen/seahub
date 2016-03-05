@@ -59,7 +59,6 @@ define([
             var dir = this.collection;
             var path = this.getPath();
             var model = this;
-            options = options || {};
 
             var opts = {
                 repo_id: dir.repo_id,
@@ -75,12 +74,14 @@ define([
                     // It is safer to call dir.remove() directly.
                     dir.remove(model);
                     // this.trigger('destroy');
-                    if (options.success)
+                    if (options.success) {
                         options.success(data);
+                    }
                 },
                 error: function(xhr) {
-                    if (options.error)
+                    if (options.error) {
                         options.error(xhr);
+                    }
                 }
             });
         },
@@ -88,7 +89,6 @@ define([
         rename: function(options) {
             var dir = this.collection;
             var _this = this;
-            options = options || {};
 
             var opts = {
                 repo_id: dir.repo_id,
@@ -118,12 +118,14 @@ define([
                         });
                     }
                     _this.set(renamed_dirent_data)
-                    if (options.success)
+                    if (options.success) {
                         options.success(data);
+                    }
                 },
                 error: function(xhr) {
-                    if (options.error)
+                    if (options.error) {
                         options.error(xhr);
+                    }
                 }
             });
         },
@@ -133,7 +135,10 @@ define([
                 filepath = this.getPath();
 
             $.ajax({
-                url: Common.getUrl({name: 'lock_or_unlock_file', repo_id: dir.repo_id}),
+                url: Common.getUrl({
+                    name: 'lock_or_unlock_file',
+                    repo_id: dir.repo_id
+                }),
                 type: 'PUT',
                 dataType: 'json',
                 data: {
