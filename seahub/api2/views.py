@@ -74,7 +74,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
+    gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed, \
+    IS_EMAIL_CONFIGURED, string2list, send_html_email
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
@@ -94,7 +95,8 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, \
-    ENABLE_THUMBNAIL, ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
+    ENABLE_THUMBNAIL, ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM, \
+    REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER, SITE_NAME
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -3152,6 +3154,182 @@ class SharedLinksView(APIView):
         share.delete()
 
         return HttpResponse(json.dumps({}), status=200, content_type=json_content_type)
+
+class SendShareLinkView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+
+        if not IS_EMAIL_CONFIGURED:
+            error_msg = _(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check args
+        email = request.data.get('email', None)
+        if not email:
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        token = request.data.get('token', None)
+        if not token:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        extra_msg = request.data.get('extra_msg', '')
+
+        # check if token exists
+        try:
+            link = FileShare.objects.get(token=token)
+        except FileShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check if is share link owner
+        username = request.user.username
+        if not link.is_owner(username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        to_email_list = string2list(email)
+        for to_email in to_email_list:
+
+            failed_info = {}
+
+            if not is_valid_username(to_email):
+                failed_info['email'] = to_email
+                failed_info['error_msg'] = 'email invalid.'
+                result['failed'].append(failed_info)
+                continue
+
+            # prepare basic info
+            c = {
+                'email': username,
+                'to_email': to_email,
+                'extra_msg': extra_msg,
+            }
+
+            if REPLACE_FROM_EMAIL:
+                from_email = username
+            else:
+                from_email = None  # use default from email
+
+            if ADD_REPLY_TO_HEADER:
+                reply_to = username
+            else:
+                reply_to = None
+
+            c['file_shared_link'] = gen_shared_link(token, link.s_type)
+            c['file_shared_name'] = os.path.basename(link.path.rstrip('/'))
+            template = 'shared_link_email.html'
+
+            if link.s_type == 'f':
+                c['file_shared_type'] = _(u"file")
+                title = _(u'A file is shared to you on %s') % SITE_NAME
+            else:
+                c['file_shared_type'] = _(u"directory")
+                title = _(u'A directory is shared to you on %s') % SITE_NAME
+
+            # send email
+            try:
+                send_html_email(title, template, c, from_email, [to_email], reply_to=reply_to)
+                result['success'].append(to_email)
+            except Exception as e:
+                logger.error(e)
+                failed_info['email'] = to_email
+                failed_info['error_msg'] = 'Internal Server Error'
+                result['failed'].append(failed_info)
+
+        return Response(result)
+
+class SendUploadLinkView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def post(self, request):
+
+        if not IS_EMAIL_CONFIGURED:
+            error_msg = _(u'Sending shared link failed. Email service is not properly configured, please contact administrator.')
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # check args
+        email = request.data.get('email', None)
+        if not email:
+            error_msg = 'email invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        token = request.data.get('token', None)
+        if not token:
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        extra_msg = request.data.get('extra_msg', '')
+
+        # check if token exists
+        try:
+            link = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # check if is upload link owner
+        username = request.user.username
+        if not link.is_owner(username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+        to_email_list = string2list(email)
+        for to_email in to_email_list:
+
+            failed_info = {}
+            if not is_valid_username(to_email):
+                failed_info['email'] = to_email
+                failed_info['error_msg'] = 'email invalid.'
+                result['failed'].append(failed_info)
+                continue
+
+            # prepare basic info
+            c = {
+                'email': username,
+                'to_email': to_email,
+                'extra_msg': extra_msg,
+            }
+
+            if REPLACE_FROM_EMAIL:
+                from_email = username
+            else:
+                from_email = None  # use default from email
+
+            if ADD_REPLY_TO_HEADER:
+                reply_to = username
+            else:
+                reply_to = None
+
+            c['shared_upload_link'] = gen_shared_upload_link(token)
+            title = _(u'An upload link is shared to you on %s') % SITE_NAME
+            template = 'shared_upload_link_email.html'
+
+            # send email
+            try:
+                send_html_email(title, template, c, from_email, [to_email], reply_to=reply_to)
+                result['success'].append(to_email)
+            except Exception as e:
+                logger.error(e)
+                failed_info['email'] = to_email
+                failed_info['error_msg'] = 'Internal Server Error'
+                result['failed'].append(failed_info)
+
+        return Response(result)
 
 class SharedDirView(APIView):
     throttle_classes = (UserRateThrottle, )
