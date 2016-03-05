@@ -77,8 +77,8 @@ define([
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'contextmenu .img-link': 'showPopupMenu',
-            'contextmenu .text-link': 'showPopupMenu'
+            'click': 'closeMenu',
+            'contextmenu': 'showPopupMenu'
         },
 
         highlight: function() {
@@ -91,7 +91,10 @@ define([
             this.$('.text-link').removeClass('hl');
         },
 
-        showPopupMenu: function(event) {
+        showPopupMenu: function(e) {
+            // make sure there is only 1 menu popup
+            $('.grid-item-op', this.dirView.$dirent_grid).remove();
+
             var dir = this.dir;
             var template;
 
@@ -120,8 +123,8 @@ define([
             var el_pos = this.$el.offset();
             this.$('.grid-item-op').css({
                 'position': 'absolute',
-                'left': event.pageX - el_pos.left,
-                'top': event.pageY - el_pos.top
+                'left': e.pageX - el_pos.left,
+                'top': e.pageY - el_pos.top
             });
 
             // Using _.bind(function, object) to make that whenever the function is

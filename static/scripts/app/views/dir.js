@@ -141,22 +141,15 @@ define([
                     }
                 });
 
-                // stop default event when clicking the right mouse button in grid view
-                $('.grid-view').bind("contextmenu", function(e) {
-                    if (e && e.preventDefault) {
-                        e.preventDefault();
-                    } else {
-                        window.event.returnValue = false;
-                    }
-                });
-
-                // remove 'grid-item-op' popup
+                // for 'grid view': click to hide the contextmenu of '.grid-item'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
                     var $popup = $('.grid-item-op');
                     if ($popup.length > 0 &&
                         !$popup.is(target) &&
-                        !$popup.find('*').is(target)) {
+                        !$popup.find('*').is(target) &&
+                        !$popup.closest('.grid-item').is(target) &&
+                        !$popup.closest('.grid-item').find('*').is(target)) {
                         $popup.remove();
                     }
                 });
