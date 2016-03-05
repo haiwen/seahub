@@ -163,7 +163,7 @@ ol { padding-left:2em; }
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; }
 dd { margin-bottom:.8em; color:#222; }
-a { color:#eb8205; text-decoration:none; font-weight:bold; }
+a { color:#eb8205; text-decoration:none; font-weight:bold; outline:none; }
 a.normal {font-weight: normal;}
 a:hover { color: #ff9933; text-decoration: underline; }
 img { border:none; }
@@ -3422,7 +3422,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:15px;
     color:#8a8a8a;
     font-size:22px;
-    outline:none; /* removing the dotted outline for FireFox */
 }
 .repo-op .op-link:hover {
     color:#eb8205;
@@ -3877,6 +3876,9 @@ img.thumbnail {
     position:absolute;
     bottom:0px;
     right:10px;
+}
+.grid-item-op { /* the context menu */
+    box-shadow: 0 2px 2px #aaa;
 }
 #dir-view .grid-item {
     padding:10px 20px; /* use less padding */

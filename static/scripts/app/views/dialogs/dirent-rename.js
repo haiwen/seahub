@@ -15,7 +15,7 @@ define([
             this.dir = options.dir;
 
             this.render();
-            this.$el.modal({appendTo:'#main', autoResize:true, focus:false});
+            this.$el.modal({appendTo:'#main'});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$error = this.$('.error');
@@ -66,7 +66,6 @@ define([
                         err = gettext("Failed. Please check the network.");
                     }
                     _this.$error.html(err).removeClass('hide');
-                    $("#simplemodal-container").css({'height':'auto'});
                     Common.enableButton($submit_btn);
                 }
             });

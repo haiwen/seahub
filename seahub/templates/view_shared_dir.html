@@ -170,7 +170,7 @@ var magnificOptions = {
     image: {
         titleSrc: function(item) {
             var $el = item.el;
-            var img_name = $el.closest('.file-item').attr('data-name');
+            var img_name = HTMLescape($el.closest('.file-item').attr('data-name'));
             var img_link = '<a href="' + $el.attr('href') + '" target="_blank">' + "{% trans "Open in New Tab" %}" + '</a>';
             return img_name + '<br />' + img_link;
         },

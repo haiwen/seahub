@@ -35,8 +35,9 @@ define([
 
         render: function() {
             var dir = this.dir;
-            var template;
+            var dirent_path = this.model.getPath();
 
+            var template;
             if (this.model.get('is_dir')) {
                 template = this.dirTemplate;
             } else {
@@ -45,7 +46,7 @@ define([
 
             this.$el.html(template({
                 dirent: this.model.attributes,
-                dirent_path: this.model.getPath(),
+                dirent_path: dirent_path,
                 icon_url: this.model.getIconUrl(192),
                 url: this.model.getWebUrl(),
                 category: dir.category,
@@ -58,14 +59,26 @@ define([
 
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
 
+            this.$el.attr('title', this.model.get('obj_name'));
+
+            // for magnificPopup
+            if (this.model.get('is_img')) {
+                this.$el.addClass('image-grid-item');
+                this.$el.attr({
+                    'data-mfp-src': app.pageOptions.site_root + 'repo/' + dir.repo_id + '/raw' + Common.encodePath(dirent_path),
+                    'data-url': this.model.getWebUrl(),
+                    'data-name': this.model.get('obj_name')
+                });
+            }
+
             return this;
         },
 
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'contextmenu .img-link': 'showPopupMenu',
-            'contextmenu .text-link': 'showPopupMenu'
+            'click': 'closeMenu',
+            'contextmenu': 'showPopupMenu'
         },
 
         highlight: function() {
@@ -78,7 +91,10 @@ define([
             this.$('.text-link').removeClass('hl');
         },
 
-        showPopupMenu: function(event) {
+        showPopupMenu: function(e) {
+            // make sure there is only 1 menu popup
+            $('.grid-item-op', this.dirView.$dirent_grid).remove();
+
             var dir = this.dir;
             var template;
 
@@ -107,8 +123,8 @@ define([
             var el_pos = this.$el.offset();
             this.$('.grid-item-op').css({
                 'position': 'absolute',
-                'left': event.pageX - el_pos.left,
-                'top': event.pageY - el_pos.top
+                'left': e.pageX - el_pos.left,
+                'top': e.pageY - el_pos.top
             });
 
             // Using _.bind(function, object) to make that whenever the function is

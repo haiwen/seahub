@@ -31,9 +31,10 @@ define([
             mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
             initialize: function(options) {
-                this.$dirent_list_body = this.$('.repo-file-list tbody');
                 this.$dirent_list = this.$('.repo-file-list');
                 this.$dirent_grid = this.$('.grid-view');
+                this.$dirent_list_body = this.$('.repo-file-list tbody');
+
                 this.$path_bar = this.$('.path');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
@@ -53,9 +54,9 @@ define([
 
                 this.fileUploadView = new FileUploadView({dirView: this});
 
-                this.$el.magnificPopup({
+                // magnificPopup for image files
+                var magnificPopupOptions = {
                     type: 'image',
-                    delegate: '.img-name-link',
                     tClose: gettext("Close (Esc)"), // Alt text on close button
                     tLoading: gettext("Loading..."), // Text that is displayed during loading. Can contain %curr% and %total% keys
                     gallery: {
@@ -65,15 +66,33 @@ define([
                         tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
                     },
                     image: {
+                        tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
+                    }
+                };
+                // magnificPopup: for 'list view'
+                this.$dirent_list.magnificPopup($.extend({}, magnificPopupOptions, {
+                    delegate: '.img-name-link',
+                    image: {
                         titleSrc: function(item) {
                             var el = item.el;
                             var img_name = el[0].innerHTML;
                             var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
                             return img_name + '<br />' + img_link;
-                        },
-                        tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
+                        }
                     }
-                });
+                }));
+                // magnificPopup: for 'grid view'
+                this.$dirent_grid.magnificPopup($.extend({}, magnificPopupOptions, {
+                    delegate: '.image-grid-item',
+                    image: {
+                        titleSrc: function(item) {
+                            var $el = $(item.el);
+                            var img_name = Common.HTMLescape($el.attr('data-name'));
+                            var img_link = '<a href="' + $el.attr('data-url') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
+                            return img_name + '<br />' + img_link;
+                        }
+                    }
+                }));
 
                 // scroll window: get 'more', fix 'op bar'
                 var _this = this;
@@ -122,22 +141,15 @@ define([
                     }
                 });
 
-                // stop default event when clicking the right mouse button in grid view
-                $('.grid-view').bind("contextmenu", function(e) {
-                    if (e && e.preventDefault) {
-                        e.preventDefault();
-                    } else {
-                        window.event.returnValue = false;
-                    }
-                });
-
-                // remove 'grid-item-op' popup
+                // for 'grid view': click to hide the contextmenu of '.grid-item'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
                     var $popup = $('.grid-item-op');
                     if ($popup.length > 0 &&
                         !$popup.is(target) &&
-                        !$popup.find('*').is(target)) {
+                        !$popup.find('*').is(target) &&
+                        !$popup.closest('.grid-item').is(target) &&
+                        !$popup.closest('.grid-item').find('*').is(target)) {
                         $popup.remove();
                     }
                 });
