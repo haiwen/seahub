@@ -1,6 +1,5 @@
 {% extends "admin_base.html" %}
 {% load i18n seahub_tags %}
-{% load url from future %}
 
 {% block nav_orgadmin_class %}class="cur"{% endblock %}
 
@@ -25,7 +24,7 @@
     </dl>
 
     <h3 class="hd">{% trans "Space Used" %}</h3>
-    <p>{{ quota_usage|filesizeformat }} {% if total_quota > 0 %}/ {{ total_quota|filesizeformat }} {% endif %}</p>
+    <p>{{ quota_usage|seahub_filesizeformat }} {% if total_quota > 0 %}/ {{ total_quota|seahub_filesizeformat }} {% endif %}</p>
     <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
 </div>
 <form id="set-quota-form" method="post" class="hide">{% csrf_token %}

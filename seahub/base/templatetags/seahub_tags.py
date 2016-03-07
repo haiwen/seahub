@@ -7,10 +7,10 @@ import time
 from django import template
 from django.core.cache import cache
 from django.utils.safestring import mark_safe
-from django.utils import translation
+from django.utils import translation, formats
 from django.utils.dateformat import DateFormat
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext
+from django.utils.translation import ugettext, ungettext
 from django.utils.translation import pgettext
 from django.utils.html import escape
 
@@ -22,6 +22,8 @@ from seahub.cconvert import CConvert
 from seahub.po import TRANSLATION_MAP
 from seahub.shortcuts import get_first_object_or_none
 from seahub.utils import normalize_cache_key, CMMT_DESC_PATT
+from seahub.utils.html import avoid_wrapping
+from seahub.utils.file_size import get_file_size_unit
 
 register = template.Library()
 
@@ -356,20 +358,24 @@ def translate_seahub_time_str(val):
 @register.filter(name='email2nickname')
 def email2nickname(value):
     """
-    Return nickname or short email.
+    Return nickname if it exists and it's not an empty string,
+    otherwise return short email.
     """
     if not value:
         return ''
 
     key = normalize_cache_key(value, NICKNAME_CACHE_PREFIX)
-    nickname = cache.get(key)
-    if not nickname:
-        profile = get_first_object_or_none(Profile.objects.filter(user=value))
-        if profile is not None and profile.nickname:
-            nickname = profile.nickname
-        else:
-            nickname = value.split('@')[0]
-        cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
+    cached_nickname = cache.get(key)
+    if cached_nickname and cached_nickname.strip():
+        return cached_nickname.strip()
+
+    profile = get_first_object_or_none(Profile.objects.filter(user=value))
+    if profile is not None and profile.nickname and profile.nickname.strip():
+        nickname = profile.nickname.strip()
+    else:
+        nickname = value.split('@')[0]
+
+    cache.set(key, nickname, NICKNAME_CACHE_TIMEOUT)
     return nickname
 
 @register.filter(name='email2id')
@@ -464,3 +470,38 @@ def trim(value, length):
 @register.filter(name='strip_slash')
 def strip_slash(value):
     return value.strip('/')
+
+@register.filter(is_safe=True)
+def seahub_filesizeformat(bytes):
+    """
+    Formats the value like a 'human-readable' file size (i.e. 13 KB, 4.1 MB,
+    102 bytes, etc).
+    """
+    try:
+        bytes = float(bytes)
+    except (TypeError, ValueError, UnicodeDecodeError):
+        value = ungettext("%(size)d byte", "%(size)d bytes", 0) % {'size': 0}
+        return avoid_wrapping(value)
+
+    filesize_number_format = lambda value: formats.number_format(round(value, 1), 1)
+
+    KB = get_file_size_unit('KB')
+    MB = get_file_size_unit('MB')
+    GB = get_file_size_unit('GB')
+    TB = get_file_size_unit('TB')
+    PB = get_file_size_unit('PB')
+
+    if bytes < KB:
+        value = ungettext("%(size)d byte", "%(size)d bytes", bytes) % {'size': bytes}
+    elif bytes < MB:
+        value = ugettext("%s KB") % filesize_number_format(bytes / KB)
+    elif bytes < GB:
+        value = ugettext("%s MB") % filesize_number_format(bytes / MB)
+    elif bytes < TB:
+        value = ugettext("%s GB") % filesize_number_format(bytes / GB)
+    elif bytes < PB:
+        value = ugettext("%s TB") % filesize_number_format(bytes / TB)
+    else:
+        value = ugettext("%s PB") % filesize_number_format(bytes / PB)
+
+    return avoid_wrapping(value)

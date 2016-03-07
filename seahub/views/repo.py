@@ -4,7 +4,6 @@ import posixpath
 import logging
 
 from django.core.urlresolvers import reverse
-from django.contrib.sites.models import RequestSite
 from django.db.models import F
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render_to_response
@@ -16,25 +15,21 @@ import seaserv
 from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
-from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
-from seahub.forms import RepoPassowrdForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
-    check_folder_permission, get_repo_dirents_with_perm
+    check_folder_permission
 
-from seahub.utils import gen_file_upload_url, is_org_context, \
-    get_fileserver_root, gen_dir_share_link, gen_shared_upload_link, \
-    get_max_upload_file_size, new_merge_with_no_conflict, \
-    get_commit_before_new_merge, user_traffic_over_limit, render_error, \
+from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
+    gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
-from seahub.settings import ENABLE_SUB_LIBRARY, FORCE_SERVER_CRYPTO, \
+from seahub.settings import FORCE_SERVER_CRYPTO, \
     ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
-from seahub.thumbnail.utils import get_thumbnail_src, get_share_link_thumbnail_src
+from seahub.thumbnail.utils import get_share_link_thumbnail_src
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -124,148 +119,6 @@ def get_dir_shared_upload_link(uploadlink):
         dir_shared_upload_link = ''
     return dir_shared_upload_link
 
-def render_repo(request, repo):
-    """Steps to show repo page:
-    If user has permission to view repo
-      If repo is encrypt and password is not set on server
-        return decrypt repo page
-      If repo is not encrypt or password is set on server
-        Show repo direntries based on requested path
-    If user does not have permission to view repo
-      return permission deny page
-    """
-    username = request.user.username
-    path = get_path_from_request(request)
-    user_perm = check_folder_permission(request, repo.id, '/')
-    if user_perm is None:
-        return render_error(request, _(u'Permission denied'))
-
-    sub_lib_enabled = UserOptions.objects.is_sub_lib_enabled(username)
-
-    server_crypto = False
-    if repo.encrypted:
-        try:
-            server_crypto = UserOptions.objects.is_server_crypto(username)
-        except CryptoOptionNotSetError:
-            return render_to_response('options/set_user_options.html', {
-                    }, context_instance=RequestContext(request))
-
-        if (repo.enc_version == 1 or (repo.enc_version == 2 and server_crypto)) \
-                and not is_password_set(repo.id, username):
-            return render_to_response('decrypt_repo_form.html', {
-                    'repo': repo,
-                    'next': get_next_url_from_request(request) or reverse('repo', args=[repo.id]),
-                    'force_server_crypto': FORCE_SERVER_CRYPTO,
-                    }, context_instance=RequestContext(request))
-
-    # query context args
-    fileserver_root = get_fileserver_root()
-    max_upload_file_size = get_max_upload_file_size()
-
-    protocol = request.is_secure() and 'https' or 'http'
-    domain = RequestSite(request).domain
-
-    for g in request.user.joined_groups:
-        g.avatar = grp_avatar(g.id, 20)
-
-    head_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)
-    if not head_commit:
-        raise Http404
-
-    if new_merge_with_no_conflict(head_commit):
-        info_commit = get_commit_before_new_merge(head_commit)
-    else:
-        info_commit = head_commit
-
-    repo_size = get_repo_size(repo.id)
-    no_quota = is_no_quota(repo.id)
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_repo_owner = True if repo_owner == username else False
-    if is_repo_owner and not repo.is_virtual:
-        show_repo_settings = True
-    else:
-        show_repo_settings = False
-
-    file_list, dir_list, dirent_more = get_repo_dirents_with_perm(
-        request, repo, head_commit, path, offset=0, limit=100)
-    more_start = None
-    if dirent_more:
-        more_start = 100
-    zipped = get_nav_path(path, repo.name)
-    fileshare = get_fileshare(repo.id, username, path)
-    dir_shared_link = get_dir_share_link(fileshare)
-    uploadlink = get_uploadlink(repo.id, username, path)
-    dir_shared_upload_link = get_dir_shared_upload_link(uploadlink)
-
-    for f in file_list:
-        file_type, file_ext = get_file_type_and_ext(f.obj_name)
-        if file_type == IMAGE:
-            f.is_img = True
-            file_path = posixpath.join(path, f.obj_name)
-            if os.path.exists(os.path.join(THUMBNAIL_ROOT, str(THUMBNAIL_DEFAULT_SIZE), f.obj_id)):
-               src = get_thumbnail_src(repo.id, THUMBNAIL_DEFAULT_SIZE, file_path)
-               f.encoded_thumbnail_src = urlquote(src)
-
-    return render_to_response('repo.html', {
-            'repo': repo,
-            'user_perm': user_perm,
-            'repo_owner': repo_owner,
-            'is_repo_owner': is_repo_owner,
-            'show_repo_settings': show_repo_settings,
-            'current_commit': head_commit,
-            'info_commit': info_commit,
-            'password_set': True,
-            'repo_size': repo_size,
-            'dir_list': dir_list,
-            'file_list': file_list,
-            'dirent_more': dirent_more,
-            'more_start': more_start,
-            'path': path,
-            'zipped': zipped,
-            'no_quota': no_quota,
-            'max_upload_file_size': max_upload_file_size,
-            'fileserver_root': fileserver_root,
-            'protocol': protocol,
-            'domain': domain,
-            'fileshare': fileshare,
-            'dir_shared_link': dir_shared_link,
-            'uploadlink': uploadlink,
-            'dir_shared_upload_link': dir_shared_upload_link,
-            'ENABLE_SUB_LIBRARY': ENABLE_SUB_LIBRARY,
-            'server_crypto': server_crypto,
-            'sub_lib_enabled': sub_lib_enabled,
-            'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
-            'ENABLE_THUMBNAIL': ENABLE_THUMBNAIL,
-            }, context_instance=RequestContext(request))
-
-@login_required
-def repo(request, repo_id):
-    """Show repo page and handle POST request to decrypt repo.
-    """
-    repo = get_repo(repo_id)
-
-    if not repo:
-        raise Http404
-
-    if request.method == 'GET':
-        return render_repo(request, repo)
-    elif request.method == 'POST':
-        form = RepoPassowrdForm(request.POST)
-        next = get_next_url_from_request(request) or reverse('repo',
-                                                             args=[repo_id])
-        if form.is_valid():
-            return HttpResponseRedirect(next)
-        else:
-            return render_to_response('decrypt_repo_form.html', {
-                    'repo': repo,
-                    'form': form,
-                    'next': next,
-                    'force_server_crypto': FORCE_SERVER_CRYPTO,
-                    }, context_instance=RequestContext(request))
-
 @login_required
 def repo_history_view(request, repo_id):
     """View repo in history.
@@ -291,13 +144,13 @@ def repo_history_view(request, repo_id):
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
-                'next': get_next_url_from_request(request) or reverse('repo', args=[repo.id]),
+                'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '/']),
                 'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
 
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
-        return HttpResponseRedirect(reverse('repo', args=[repo.id]))
+        return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '/']))
     current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)

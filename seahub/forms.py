@@ -146,9 +146,6 @@ class RepoPassowrdForm(forms.Form):
             except SearpcError, e:
                 if e.msg == 'Bad arguments':
                     raise forms.ValidationError(_(u'Bad url format'))
-                # elif e.msg == 'Repo is not encrypted':
-                #     return HttpResponseRedirect(reverse('repo',
-                #                                         args=[self.repo_id]))
                 elif e.msg == 'Incorrect password':
                     raise forms.ValidationError(_(u'Wrong password'))
                 elif e.msg == 'Internal server error':
@@ -164,8 +161,6 @@ class SetUserQuotaForm(forms.Form):
     space_quota = forms.IntegerField(min_value=0,
                                error_messages={'required': _('Space quota can\'t be empty'),
                                                'min_value': _('Space quota is too low (minimum value is 0)')})
-    share_quota = forms.IntegerField(min_value=0, required = False,
-                               error_messages={'min_value': _('Share quota is too low (minimum value is 0)')})
 
 class RepoSettingForm(forms.Form):
     """

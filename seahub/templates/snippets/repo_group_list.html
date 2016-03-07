@@ -1,9 +1,0 @@
-{% load url from future %}
-{% autoescape off %}
-<ul>
-  {% for group in groups %}
-  <li><a href="{% url 'group_info' group.id %}">{{ group.group_name }}</a></li>
-  {% endfor %}
-</ul>
-{% endautoescape %}
-

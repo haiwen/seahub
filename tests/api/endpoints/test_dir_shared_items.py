@@ -83,7 +83,7 @@ class DirSharedItemsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert len(json_resp['failed']) == 1
-        assert invalid_email in json_resp['failed']
+        assert invalid_email in json_resp['failed'][0]['email']
 
     def test_share_folder_to_unregistered_user(self):
         self.login_as(self.user)
@@ -98,7 +98,7 @@ class DirSharedItemsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
         assert len(json_resp['failed']) == 1
-        assert unregistered_user in json_resp['failed']
+        assert unregistered_user in json_resp['failed'][0]['email']
 
     def test_can_share_root_to_groups(self):
         self.login_as(self.user)

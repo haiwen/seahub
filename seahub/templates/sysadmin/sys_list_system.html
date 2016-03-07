@@ -2,12 +2,6 @@
 {% load i18n %}
 {% block cur_repo %}tab-cur{% endblock %}
 
-{% block left_panel %}{{block.super}}
-<form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form">
-    <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" />
-</form>
-{% endblock %}
-
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
@@ -26,7 +20,7 @@
     </tr>
     {% for repo in repos %}
     <tr>
-        <td><a href="{% url 'repo' repo.id %}">{{ repo.props.name }}</a></td>
+        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.props.name }}</a></td>
         <td style="font-size:11px;">{{ repo.id }}</td>
         <td>{{ repo.props.desc }}</td>
     </tr>
@@ -36,5 +30,4 @@
 <p>{% trans "None" %}</p>
 {% endif %}
 
-{% include "sysadmin/repo_transfer_form.html" %}
 {% endblock %}

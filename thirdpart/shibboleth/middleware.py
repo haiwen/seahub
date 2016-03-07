@@ -112,9 +112,14 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         Extrat nickname(givenname surname), contact_email, institution from
         Shib attributs, and add those to user profile.
         """
-        givenname = shib_meta.get('givenname', '')
-        surname = shib_meta.get('surname', '')
-        nickname = "%s %s" % (givenname, surname)
+        # use `display_name` as nickname in shib_meta first
+        nickname = shib_meta.get('display_name', None)
+        if nickname is None:
+            # otherwise, fallback to givenname plus surname in shib_meta
+            givenname = shib_meta.get('givenname', '')
+            surname = shib_meta.get('surname', '')
+            nickname = "%s %s" % (givenname, surname)
+
         institution = shib_meta.get('institution', None)
         contact_email = shib_meta.get('contact_email', None)
 
@@ -122,7 +127,9 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         if not p:
             p = Profile(user=user.username)
 
-        p.nickname = nickname
+        if nickname.strip():  # set nickname when it's not empty
+            p.nickname = nickname
+
         if institution:
             p.institution = institution
         if contact_email:

@@ -69,10 +69,6 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
-    {% with type="checkbox" setting_display_name="organization library" help_tip="Allow user to add organization library. If unchecked, only system admin can add library." setting_name="ENABLE_ORGANIZATION_LIBRARY" setting_val=config_dict.ENABLE_ORGANIZATION_LIBRARY %}
-        {% include "snippets/web_settings_form.html" %}
-    {% endwith %}
-        
     {% with type="input" setting_display_name="library password minimum length" help_tip="The least number of characters an encrypted library password should include." setting_name="REPO_PASSWORD_MIN_LENGTH" setting_val=config_dict.REPO_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
@@ -80,6 +76,12 @@
 
     <div>
     {% with type="input" setting_display_name="download/upload link password minimum length" help_tip="The least number of characters a download/upload link password should include." setting_name="SHARE_LINK_PASSWORD_MIN_LENGTH" setting_val=config_dict.SHARE_LINK_PASSWORD_MIN_LENGTH %} {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    </div>
+
+    <div>
+    {% with type="checkbox" setting_display_name="ENABLE_USER_CREATE_ORG_REPO" help_tip="Allow user to add organization library. If unchecked, only system admin can add library." setting_name="ENABLE_USER_CREATE_ORG_REPO" setting_val=config_dict.ENABLE_USER_CREATE_ORG_REPO %}
+        {% include "snippets/web_settings_form.html" %}
     {% endwith %}
     </div>
 

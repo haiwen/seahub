@@ -62,12 +62,7 @@
         {% endif %}
 
         <td style="font-size:11px;">
-            <p> {{ user.space_usage|filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|filesizeformat }} {% endif %} </p>
-            {% if not user.org %}
-            {% if CALC_SHARE_USAGE %}
-            <p> {{ user.share_usage|filesizeformat }} {% if user.share_quota > 0 %} / {{ user.share_quota|filesizeformat }} {% endif %} </p>
-            {% endif %}
-            {% endif %}
+            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
         </td>
         <td>
             {% if user.source == "DB" %}

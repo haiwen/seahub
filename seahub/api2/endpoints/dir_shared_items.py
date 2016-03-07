@@ -18,7 +18,6 @@ from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
 from seahub.share.signals import share_repo_to_user_successful
-from seahub.share.views import check_user_share_quota
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 
@@ -268,23 +267,28 @@ class DirSharedItemsEndpoint(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
         shared_repo = repo if path == '/' else sub_repo
-        success, failed = [], []
+        result = {}
+        result['failed'] = []
+        result['success'] = []
+
         if share_type == 'user':
             share_to_users = request.data.getlist('username')
             for to_user in share_to_users:
                 if not is_valid_username(to_user):
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'username invalid.'
+                        })
                     continue
 
                 try:
                     User.objects.get(email=to_user)
                 except User.DoesNotExist:
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'User %s not found.' % to_user
+                        })
                     continue
-
-                if not check_user_share_quota(username, shared_repo, users=[to_user]):
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Not enough quota.')
 
                 try:
                     if is_org_context(request):
@@ -301,7 +305,7 @@ class DirSharedItemsEndpoint(APIView):
                                                        from_user=username,
                                                        to_user=to_user,
                                                        repo=shared_repo)
-                    success.append({
+                    result['success'].append({
                         "share_type": "user",
                         "user_info": {
                             "name": to_user,
@@ -314,7 +318,10 @@ class DirSharedItemsEndpoint(APIView):
                                         repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
-                    failed.append(to_user)
+                    result['failed'].append({
+                        'email': to_user,
+                        'error_msg': 'Internal Server Error'
+                        })
                     continue
 
         if share_type == 'group':
@@ -328,10 +335,6 @@ class DirSharedItemsEndpoint(APIView):
                 if not group:
                     return api_error(status.HTTP_404_NOT_FOUND, 'Group %s not found' % gid)
 
-                if not check_user_share_quota(username, shared_repo, groups=[group]):
-                    return api_error(status.HTTP_403_FORBIDDEN,
-                                     'Not enough quota.')
-
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
@@ -342,7 +345,7 @@ class DirSharedItemsEndpoint(APIView):
                         seafile_api.set_group_repo(shared_repo.repo_id, gid,
                                                    username, permission)
 
-                    success.append({
+                    result['success'].append({
                         "share_type": "group",
                         "group_info": {
                             "id": gid,
@@ -355,13 +358,14 @@ class DirSharedItemsEndpoint(APIView):
                                         repo_id, path, permission)
                 except SearpcError as e:
                     logger.error(e)
-                    failed.append(group.group_name)
+                    result['failed'].append({
+                        'group_name': group.group_name,
+                        'error_msg': 'Internal Server Error'
+                        })
                     continue
 
-        return HttpResponse(json.dumps({
-            "success": success,
-            "failed": failed
-        }), status=200, content_type=json_content_type)
+        return HttpResponse(json.dumps(result),
+            status=200, content_type=json_content_type)
 
     def delete(self, request, repo_id, format=None):
         username = request.user.username

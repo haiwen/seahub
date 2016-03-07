@@ -124,7 +124,7 @@ class Command(BaseCommand):
         if repo is None:
             notice.delete()
 
-        notice.repo_url = reverse('repo', args=[repo.id])
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, '/'])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
@@ -138,7 +138,7 @@ class Command(BaseCommand):
         uploaded_to = d['uploaded_to'].rstrip('/')
         file_path = uploaded_to + '/' + file_name
         file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
-        folder_link = reverse('repo', args=[repo_id]) + '?p=' + urlquote(uploaded_to)
+        folder_link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to).strip('/')])
         folder_name = os.path.basename(uploaded_to)
 
         notice.file_link = file_link
@@ -210,11 +210,10 @@ class Command(BaseCommand):
 
         email_ctx = {}
         for notice in unseen_notices:
-            to_email = Profile.objects.get_contact_email_by_user(notice.to_user)
             if notice.to_user in email_ctx:
-                email_ctx[to_email] += 1
+                email_ctx[notice.to_user] += 1
             else:
-                email_ctx[to_email] = 1
+                email_ctx[notice.to_user] = 1
 
         for to_user, count in email_ctx.items():
             # save current language
@@ -223,12 +222,14 @@ class Command(BaseCommand):
             # get and active user language
             user_language = self.get_user_language(to_user)
             translation.activate(user_language)
-            logger.info('Set language code to %s' % user_language)
+            logger.debug('Set language code to %s for user: %s' % (user_language, to_user))
             self.stdout.write('[%s] Set language code to %s' % (
                 str(datetime.datetime.now()), user_language))
 
             notices = []
             for notice in unseen_notices:
+                logger.info('Processing unseen notice: [%s]' % (notice))
+
                 if notice.to_user != to_user:
                     continue
 
@@ -261,6 +262,8 @@ class Command(BaseCommand):
             if not notices:
                 continue
 
+            contact_email = Profile.objects.get_contact_email_by_user(to_user)
+            to_user = contact_email  # use contact email if any
             c = {
                 'to_user': to_user,
                 'notice_count': count,

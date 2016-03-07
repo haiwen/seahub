@@ -22,7 +22,7 @@ from django.utils.translation import ugettext as _
 
 import seaserv
 from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    CALC_SHARE_USAGE, seafile_api, get_group, get_group_members
+    seafile_api, get_group, get_group_members
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
@@ -39,6 +39,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
     get_virus_record_by_id, get_virus_record
+from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
@@ -166,9 +167,11 @@ def sys_repo_admin(request):
         page_next = False
 
     repos = filter(lambda r: not r.is_virtual, repos)
+
     default_repo_id = get_system_default_repo_id()
+    repos = filter(lambda r: not r.repo_id == default_repo_id, repos)
+
     for repo in repos:
-        repo.is_default_repo = True if repo.id == default_repo_id else False
         try:
             repo.owner = seafile_api.get_repo_owner(repo.id)
         except:
@@ -187,22 +190,40 @@ def sys_repo_admin(request):
         },
         context_instance=RequestContext(request))
 
+def can_view_sys_admin_repo(repo):
+    default_repo_id = get_system_default_repo_id()
+    is_default_repo = True if repo.id == default_repo_id else False
+
+    if is_default_repo:
+        return True
+    elif repo.encrypted:
+        return False
+    elif is_pro_version() and ENABLE_SYS_ADMIN_VIEW_REPO:
+        return True
+    else:
+        return False
+
 @login_required
 @sys_staff_required
 def sys_admin_repo_download_file(request, repo_id):
-    """
-    """
-    repo = seafile_api.get_repo(repo_id)
-    path = request.GET.get('p', '')
-    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_admin_repo')
 
-    if not repo or repo.encrypted or not is_pro_version() \
-        or not ENABLE_SYS_ADMIN_VIEW_REPO or not obj_id:
-        messages.error(request, _(u'Unable to download file'))
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
+        messages.error(request, _(u'Library does not exist'))
+        return HttpResponseRedirect(next)
+
+    path = request.GET.get('p', '')
+    obj_id = seafile_api.get_file_id_by_path(repo_id, path)
+    if not obj_id:
+        messages.error(request, _(u'Unable to download file, invalid file path'))
+        return HttpResponseRedirect(next)
+
+    if not can_view_sys_admin_repo(repo):
+        messages.error(request, _(u'Unable to view library'))
         return HttpResponseRedirect(next)
 
     try:
@@ -220,21 +241,18 @@ def sys_admin_repo_download_file(request, repo_id):
 @login_required
 @sys_staff_required
 def sys_admin_repo(request, repo_id):
+
     next = request.META.get('HTTP_REFERER', None)
     if not next:
         next = reverse('sys_repo_admin')
-
-    if not is_pro_version() or not ENABLE_SYS_ADMIN_VIEW_REPO:
-        messages.error(request, _(u'Unable to view library, this feature is not enabled.'))
-        return HttpResponseRedirect(next)
 
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         messages.error(request, _(u'Library does not exist'))
         return HttpResponseRedirect(next)
 
-    if repo.encrypted:
-        messages.error(request, _(u'Library is encrypted'))
+    if not can_view_sys_admin_repo(repo):
+        messages.error(request, _(u'Unable to view library'))
         return HttpResponseRedirect(next)
 
     path = request.GET.get('p', '/')
@@ -275,6 +293,8 @@ def sys_admin_repo(request, repo_id):
             file_list.append(dirent)
 
     zipped = gen_path_link(path, repo.name)
+    default_repo_id = get_system_default_repo_id()
+    is_default_repo = True if repo_id == default_repo_id else False
 
     return render_to_response('sysadmin/admin_repo_view.html', {
             'repo': repo,
@@ -283,6 +303,8 @@ def sys_admin_repo(request, repo_id):
             'file_list': file_list,
             'path': path,
             'zipped': zipped,
+            'is_default_repo': is_default_repo,
+            'max_upload_file_size': seaserv.MAX_UPLOAD_FILE_SIZE,
             }, context_instance=RequestContext(request))
 
 @login_required
@@ -470,19 +492,13 @@ def _populate_user_quota_usage(user):
             org_id = user.org.org_id
             user.space_usage = seafserv_threaded_rpc.get_org_user_quota_usage(org_id, user.email)
             user.space_quota = seafserv_threaded_rpc.get_org_user_quota(org_id, user.email)
-            user.share_usage = user.share_quota = 0
         else:
             user.space_usage = seafile_api.get_user_self_usage(user.email)
             user.space_quota = seafile_api.get_user_quota(user.email)
-
-            if CALC_SHARE_USAGE:
-                user.share_quota = seafile_api.get_user_share_quota(user.email)
-                user.share_usage = seafile_api.get_user_share_usage(user.email)
-            else:
-                user.share_usage = user.share_quota = 0
     except SearpcError as e:
         logger.error(e)
-        user.space_usage = user.space_quota = user.share_usage = user.share_quota = -1
+        user.space_usage = -1
+        user.space_quota = -1
 
 @login_required
 @sys_staff_required
@@ -577,7 +593,6 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
             'platform': platform,
             'server_id': server_id[:8],
@@ -705,7 +720,6 @@ def sys_user_admin_ldap_imported(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'is_pro': is_pro_version(),
         }, context_instance=RequestContext(request))
 
@@ -752,7 +766,6 @@ def sys_user_admin_ldap(request):
             'per_page': per_page,
             'page_next': page_next,
             'is_pro': is_pro_version(),
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
         },
         context_instance=RequestContext(request))
 
@@ -800,7 +813,6 @@ def sys_user_admin_admins(request):
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
@@ -812,7 +824,6 @@ def sys_user_admin_admins(request):
 def user_info(request, email):
     org_name = None
     space_quota = space_usage = 0
-    share_quota = share_usage = 0
 
     org = ccnet_threaded_rpc.get_orgs_by_user(email)
     if not org:
@@ -821,9 +832,6 @@ def user_info(request, email):
         in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
         space_usage = mute_seafile_api.get_user_self_usage(email)
         space_quota = mute_seafile_api.get_user_quota(email)
-        if CALC_SHARE_USAGE:
-            share_usage = mute_seafile_api.get_user_share_usage(email)
-            share_quota = mute_seafile_api.get_user_share_quota(email)
     else:
         org_id = org[0].org_id
         org_name = org[0].org_name
@@ -935,9 +943,6 @@ def user_info(request, email):
             'owned_repos': owned_repos,
             'space_quota': space_quota,
             'space_usage': space_usage,
-            'share_quota': share_quota,
-            'share_usage': share_usage,
-            'CALC_SHARE_USAGE': CALC_SHARE_USAGE,
             'in_repos': in_repos,
             'email': email,
             'profile': profile,
@@ -961,22 +966,15 @@ def user_set_quota(request, email):
     if f.is_valid():
         email = f.cleaned_data['email']
         space_quota_mb = f.cleaned_data['space_quota']
-        space_quota = space_quota_mb * (1 << 20)
-        share_quota_mb = f.cleaned_data['share_quota']
-
-        share_quota = None
-        if share_quota_mb is not None:
-            share_quota = share_quota_mb * (1 << 20)
+        space_quota = space_quota_mb * get_file_size_unit('MB')
 
         org = ccnet_threaded_rpc.get_orgs_by_user(email)
         try:
             if not org:
                 seafile_api.set_user_quota(email, space_quota)
-                if share_quota is not None:
-                    seafile_api.set_user_share_quota(email, share_quota)
             else:
                 org_id = org[0].org_id
-                org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / (1 << 20)
+                org_quota_mb = seafserv_threaded_rpc.get_org_quota(org_id) / get_file_size_unit('MB')
                 if space_quota_mb > org_quota_mb:
                     result['error'] = _(u'Failed to set quota: maximum quota is %d MB' % \
                                             org_quota_mb)
@@ -1004,7 +1002,7 @@ def sys_org_set_quota(request, org_id):
 
     org_id = int(org_id)
     quota_mb = int(request.POST.get('quota', 0))
-    quota = quota_mb * (1 << 20)
+    quota = quota_mb * get_file_size_unit('MB')
 
     try:
         seafserv_threaded_rpc.set_org_quota(org_id, quota)
@@ -1672,13 +1670,11 @@ def sys_org_info_user(request, org_id):
         try:
             user.self_usage =seafserv_threaded_rpc. \
                     get_org_user_quota_usage(org_id, user.email)
-            user.share_usage = 0
             user.quota = seafserv_threaded_rpc. \
                     get_org_user_quota(org_id, user.email)
         except SearpcError as e:
             logger.error(e)
             user.self_usage = -1
-            user.share_usage = -1
             user.quota = -1
 
         # populate user last login time
@@ -2164,7 +2160,7 @@ def sys_settings(request):
         'ENABLE_REPO_HISTORY_SETTING', 'USER_STRONG_PASSWORD_REQUIRED',
         'ENABLE_ENCRYPTED_LIBRARY', 'USER_PASSWORD_MIN_LENGTH',
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
-        'ENABLE_ORGANIZATION_LIBRARY'
+        'ENABLE_USER_CREATE_ORG_REPO'
     )
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)

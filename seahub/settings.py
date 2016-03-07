@@ -4,8 +4,6 @@
 import sys
 import os
 import re
-import random
-import string
 
 from seaserv import FILE_SERVER_ROOT, FILE_SERVER_PORT, SERVICE_URL
 
@@ -272,6 +270,11 @@ FORCE_SERVER_CRYPTO = True
 # Enable or disable repo history setting
 ENABLE_REPO_HISTORY_SETTING = True
 
+# Enable or disable org repo creation by user
+ENABLE_USER_CREATE_ORG_REPO = True
+
+DISABLE_SYNC_WITH_ANY_FOLDER = False
+
 # File preview
 FILE_PREVIEW_MAX_SIZE = 30 * 1024 * 1024
 OFFICE_PREVIEW_MAX_SIZE = 2 * 1024 * 1024
@@ -353,8 +356,8 @@ REQUIRE_DETAIL_ON_REGISTRATION = False
 # Account initial password, for password resetting.
 # INIT_PASSWD can either be a string, or a function (function has to be set without the brackets)
 def genpassword():
-    return ''.join([random.choice(string.digits + string.letters) for i in range(0, 10)])
-
+    from django.utils.crypto import get_random_string
+    return get_random_string(10)
 INIT_PASSWD = genpassword
 
 # browser tab title
@@ -616,13 +619,13 @@ INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 CONSTANCE_CONFIG = {
     'SERVICE_URL': (SERVICE_URL,''),
     'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),
-    'DISABLE_SYNC_WITH_ANY_FOLDER': (False,''),
+    'DISABLE_SYNC_WITH_ANY_FOLDER': (DISABLE_SYNC_WITH_ANY_FOLDER,''),
 
     'ENABLE_SIGNUP': (ENABLE_SIGNUP,''),
     'ACTIVATE_AFTER_REGISTRATION': (ACTIVATE_AFTER_REGISTRATION,''),
     'REGISTRATION_SEND_MAIL': (REGISTRATION_SEND_MAIL ,''),
     'LOGIN_REMEMBER_DAYS': (LOGIN_REMEMBER_DAYS,''),
-    'ENABLE_ORGANIZATION_LIBRARY': (True, ''),
+    'ENABLE_USER_CREATE_ORG_REPO': (ENABLE_USER_CREATE_ORG_REPO, ''),
 
     'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
     'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
