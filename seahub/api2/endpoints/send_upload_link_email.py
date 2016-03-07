@@ -3,18 +3,16 @@ import logging
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.throttling import UserRateThrottle
 from rest_framework.views import APIView
 from rest_framework import status
 from django.utils.translation import ugettext as _
 
 from seahub.api2.authentication import TokenAuthentication
+from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
-
 from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username, \
     string2list, gen_shared_upload_link, send_html_email
 from seahub.share.models import UploadLinkShare
-
 from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER, SITE_NAME
 
 logger = logging.getLogger(__name__)
