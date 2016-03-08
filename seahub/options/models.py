@@ -179,12 +179,18 @@ class UserOptionsManager(models.Manager):
         - `self`:
         - `username`:
         """
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_DEFAULT_REPO)
-            return user_option.option_val
-        except UserOptions.DoesNotExist:
+        user_options = super(UserOptionsManager, self).filter(
+            email=username, option_key=KEY_DEFAULT_REPO)
+
+        if len(user_options) == 0:
             return None
+        elif len(user_options) == 1:
+            return user_options[0].option_val
+        else:
+            for o in user_options[1: len(user_options)]:
+                o.delete()
+
+            return user_options[0].option_val
         
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
