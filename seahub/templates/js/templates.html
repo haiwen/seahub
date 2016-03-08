@@ -714,7 +714,7 @@
         <% } %>
         <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
         <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
-        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
+        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></span>
     </div>
 </div>
 </script>
@@ -974,10 +974,21 @@
     <% } %>
 </script>
 <script type="text/template" id="group-member-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="avatar fleft" />
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="txt">
         <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
+    </div>
+</script>
+
+<script type="text/template" id="group-discussion-tmpl">
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+    <div class="txt">
+        <div>
+            <span class="txt-item ellipsis" title="<%- user_name %>"><%- user_name %></span>
+            <span class="txt-item ellipsis" title="<%- created_at %>"><%- created_at %></span>
+        </div>
+        <div class="txt-item" title=""><%= content_marked %></div>
     </div>
 </script>
 

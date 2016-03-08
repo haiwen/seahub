@@ -5,7 +5,6 @@ import logging
 import seaserv
 
 from seahub.utils import is_org_context
-from seahub.profile.models import Profile
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \

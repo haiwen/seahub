@@ -12,10 +12,11 @@ from rest_framework.views import APIView
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsGroupMember
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, get_user_common_info
 from seahub.group.models import GroupMessage
 from seahub.utils.paginator import Paginator
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from .utils import api_check_group
 
 json_content_type = 'application/json; charset=utf-8'
@@ -53,15 +54,25 @@ class GroupDiscussions(APIView):
         except (EmptyPage, InvalidPage):
             group_msgs = paginator.page(paginator.num_pages)
 
+        try:
+            avatar_size = int(request.GET.get('avatar_size',
+                    AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
         msgs = []
-        for e in group_msgs:
-            isoformat_timestr = datetime_to_isoformat_timestr(e.timestamp)
+        for msg in group_msgs:
+            info = get_user_common_info(msg.from_email, avatar_size)
+            isoformat_timestr = datetime_to_isoformat_timestr(msg.timestamp)
             msgs.append({
                 "group_id": group_id,
-                "discussion_id": e.pk,
-                "user": e.from_email,
-                "content": e.message,
-                "created_at": isoformat_timestr,
+                "discussion_id": msg.pk,
+                "user_name": info["name"],
+                "user_email": info["email"],
+                "user_login_id": info["login_id"],
+                "avatar_url": request.build_absolute_uri(info["avatar_url"]),
+                "content": msg.message,
+                "created_at": isoformat_timestr
             })
 
         return HttpResponse(json.dumps(msgs), status=200,
@@ -75,16 +86,26 @@ class GroupDiscussions(APIView):
         if not content:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Content can not be empty.')
 
+        try:
+            avatar_size = int(request.data.get('avatar_size',
+                            AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
         username = request.user.username
         discuss = GroupMessage.objects.create(group_id=group_id,
                                               from_email=username,
                                               message=content)
+        info = get_user_common_info(username, avatar_size)
 
         isoformat_timestr = datetime_to_isoformat_timestr(discuss.timestamp)
         return Response({
             "group_id": group_id,
             "discussion_id": discuss.pk,
-            "user": username,
+            "user_name": info["name"],
+            "user_email": info["email"],
+            "user_login_id": info["login_id"],
+            "avatar_url": request.build_absolute_uri(info["avatar_url"]),
             "content": discuss.message,
-            "created_at": isoformat_timestr,
+            "created_at": isoformat_timestr
         }, status=201)

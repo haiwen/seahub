@@ -1,5 +1,5 @@
 {% extends "base_for_backbone.html" %}
-{% load seahub_tags group_avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n %}
 {% load staticfiles %}
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
@@ -148,6 +148,30 @@
         </div>
         <div class="popover-con">
             <div id="group-setting-con" class="hide"></div>
+        </div>
+    </div>
+
+    <div id="group-discussions" class="popover hide">
+        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+        <div class="popover-hd ovhd">
+            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+            <h3 class="popover-title">{% trans "Discussions" %}</h3>
+        </div>
+        <div class="popover-con">
+            <span class="loading-icon loading-tip"></span>
+            <ul id="group-discussion-list" class="hide"></ul>
+            <div>
+                <form id="group-message-form" action="" method="post" class="">{% csrf_token %}
+                    <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+                    <div class="txt">
+                        <textarea name="message" id="message" placeholder="{% trans "Add a discussion..." %}" class=""></textarea>
+                        <div class="ops">
+                            <button type="submit" class="submit">{% trans "Submit" %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <p class="error hide"></p>
         </div>
     </div>
 

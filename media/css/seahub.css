@@ -502,6 +502,9 @@ textarea:-moz-placeholder {/* for FF */
 .avatar {
     border-radius:3px;
 }
+.avatar-circle {
+    border-radius:1000px;
+}
 .empty-tips {
     padding: 30px 40px;
     background-color: #FAFAFA;
@@ -1190,9 +1193,6 @@ textarea:-moz-placeholder {/* for FF */
 /**** user-item ****/ /* e.g. group member in 'group members' panel */
 .user-item {
     margin:5px 0;
-}
-.user-item .avatar {
-    border-radius:1000px;
 }
 .user-item .txt {
     margin-left:40px;
@@ -3596,6 +3596,15 @@ img.thumbnail {
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
+}
+#group-discussions {
+    width:440px;
+    position:absolute;
+    top:77px;
+    right:0;
+}
+#group-discussions .outer-caret {
+    right:30px;
 }
 /****** grid view *****/
 /* view mode */

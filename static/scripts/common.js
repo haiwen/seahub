@@ -42,6 +42,7 @@ require.config({
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
         moment: 'lib/moment-with-locales',
+        marked: 'lib/marked.min',
 
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
@@ -136,6 +137,8 @@ define([
                 case 'group_import_members': return siteRoot + 'ajax/group/' + options.group_id + '/members/import/';
                 case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
                 case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
+                case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
+                case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
 
                 // Misc
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
