@@ -212,8 +212,6 @@
 app["pageOptions"] = {
     site_root: "{{ SITE_ROOT }}",
     csrfToken: "{{ csrf_token }}",
-    reposUrl: "{% url 'api2-repos' %}",
-    pubReposUrl: "{% url 'api2-pub-repos' %}",
     groups: (function () {
         var groups = [];
         {% for group in request.user.joined_groups %}

@@ -89,6 +89,8 @@ define([
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
                 // Repos
+                case 'repos': return siteRoot + 'api2/repos/';
+                case 'pub_repos': return siteRoot + 'api2/repos/public/';
                 case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
                 case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
                 case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';

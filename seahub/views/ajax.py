@@ -1818,63 +1818,6 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
     return repo_id
 
 @login_required_ajax
-def public_repo_create(request):
-    '''
-    Handle ajax post to create public repo.
-
-    '''
-    if request.method != 'POST':
-        return Http404
-
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    if not request.user.permissions.can_add_repo():
-        result['error'] = _(u"You do not have permission to create library")
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
-    form = SharedRepoCreateForm(request.POST)
-    if not form.is_valid():
-        result['error'] = str(form.errors.values()[0])
-        return HttpResponseBadRequest(json.dumps(result),
-                                      content_type=content_type)
-
-    repo_name = form.cleaned_data['repo_name']
-    repo_desc = form.cleaned_data['repo_desc']
-    permission = form.cleaned_data['permission']
-    encryption = int(form.cleaned_data['encryption'])
-
-    uuid = form.cleaned_data['uuid']
-    magic_str = form.cleaned_data['magic_str']
-    encrypted_file_key = form.cleaned_data['encrypted_file_key']
-
-    repo_id = _create_repo_common(request, repo_name, repo_desc, encryption,
-                                  uuid, magic_str, encrypted_file_key)
-    if repo_id is None:
-        result['error'] = _(u'Internal Server Error')
-        return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
-
-    org_id = -1
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
-            org_id, repo_id, permission)
-    else:
-        seafile_api.add_inner_pub_repo(repo_id, permission)
-
-    username = request.user.username
-    repo_created.send(sender=None,
-                      org_id=org_id,
-                      creator=username,
-                      repo_id=repo_id,
-                      repo_name=repo_name)
-
-    result['success'] = True
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-@login_required_ajax
 def events(request):
     events_count = 15
     username = request.user.username

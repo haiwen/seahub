@@ -178,10 +178,6 @@ urlpatterns = patterns(
 
     url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
 
-    ### Organizaion ###
-    url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
-    url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
-    url(r'^pubinfo/users/$', pubuser, name='pubuser'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
