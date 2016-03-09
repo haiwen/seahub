@@ -18,8 +18,6 @@ define([
             '': 'showRepos',
             'my-libs/': 'showMyRepos',
             'my-libs/lib/:repo_id(/*path)': 'showMyRepoDir',
-            'my-sub-libs/': 'showMySubRepos',
-            'my-sub-libs/lib/:repo_id(/*path)': 'showMySubRepoDir',
             'shared-libs/': 'showSharedRepos',
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
             'groups/': 'showGroups',
@@ -86,11 +84,6 @@ define([
             this.sideNavView.setCurTab('mine');
         },
 
-        showMySubRepos: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showMySubRepos();
-        },
-
         showSharedRepos: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showSharedRepos();
@@ -128,17 +121,6 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('common', repo_id, path);
-        },
-
-        showMySubRepoDir: function(repo_id, path) {
-            if (path) {
-                path = '/' + path;
-            } else {
-                path = '/';
-            }
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showDir('my-sub-libs', repo_id, path);
-            this.sideNavView.setCurTab('sub-libs');
         },
 
         showSharedRepoDir: function(repo_id, path) {

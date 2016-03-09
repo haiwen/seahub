@@ -88,21 +88,6 @@
     </div>
 </div>
 
-
-{% if sub_lib_enabled %}
-<form id="sublib-create-form" class="file-choose-form hide">
-    <h3>{% trans "Choose a directory:" %}</h3>
-    <div class="dir-tree-cont">
-        <span class="loading-icon loading-tip"></span>
-    </div>
-    <input type="hidden" name="dst_repo" value="" />
-    <input type="hidden" name="dst_path" value="" />
-    <p class="error hide"></p>
-    <input type="button" value="{% trans "Submit" %}" class="submit" />
-    <button class="simplemodal-close">{% trans "Cancel"%}</button>
-</form>
-{% endif %}
-
 <div id="group" class="hide">
     <div id="group-top"></div>
 
