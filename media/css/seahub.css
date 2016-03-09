@@ -136,6 +136,16 @@
 .sf2-icon-wiki2:before { content:"\e024"; }
 
 /******* tags **********/
+html {
+    box-sizing:border-box;
+    -webkit-box-sizing:border-box;
+}
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: inherit;
+          box-sizing: inherit;
+}
 html { background:#fff; }
 body,
 h1,h2,h3,h4,h5,h6,
@@ -775,12 +785,6 @@ textarea:-moz-placeholder {/* for FF */
 .checkbox-option {
     vertical-align:middle;
 }
-#simplemodal-container .checkbox-option {
-    font-weight:normal;
-}
-#simplemodal-container .checkbox-label {
-    margin:4px 0;
-}
 .checkbox-label {
     display:block;
 }
@@ -992,15 +996,23 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:8px;
 }
 /**** simplemodal ****/
-#basic-modal-content {display:none;}
-#simplemodal-overlay { background-color:#000; }
+#basic-modal-content {
+    display:none;
+}
+#simplemodal-overlay {
+    background-color:#000;
+}
 #simplemodal-container {
     padding: 20px;
     background-color:#fcfcfc;
     border-radius:4px;
     -moz-border-radius:4px;
+    box-sizing:content-box;
+    -webkit-box-sizing:content-box;
 }
-#simplemodal-container a {font-weight:normal;}
+#simplemodal-container a {
+    font-weight:normal;
+}
 .modalCloseImg {
     position:absolute;
     width:28px;
@@ -1023,6 +1035,12 @@ textarea:-moz-placeholder {/* for FF */
 }
 #simplemodal-container label {
     margin:8px 0 4px;
+}
+#simplemodal-container .checkbox-option {
+    font-weight:normal;
+}
+#simplemodal-container .checkbox-label {
+    margin:4px 0;
 }
 .simplemodal-close {
     margin-left:5px;
@@ -1217,7 +1235,7 @@ textarea:-moz-placeholder {/* for FF */
     overflow-x: hidden;
 }
 #header {
-    flex: 0 1 auto;
+    flex: 0 0 auto;
 }
 #main {
     flex: 1 1 auto;
@@ -1229,60 +1247,48 @@ textarea:-moz-placeholder {/* for FF */
 }
 #left-panel {
     flex: 1 0 25%;
+    padding-top:30px;
+    padding-right:10px;
+    padding-left:16px;
+    border-right:1px solid #ddd;
+    overflow-y:hidden;
+}
+#left-panel:hover {
     overflow-y:auto;
 }
 #right-panel {
     flex: 3 0 75%;
-    overflow-y:auto;
-}
-#main, #footer {
-    /* width:950px; */
 }
 #header {
-    padding-top:16px;
+    padding:10px 10px 8px;
     background:#f8f8f8;
     width:100%;
     font-size: 14px;
     border-bottom:1px solid #ddd;
-    flex: 0 1 50px;
 }
 #header-inner {
-    height:48px;
+    height:40px;
     margin:0 auto;
 }
-
-#main {
-    /*min-height: 400px;
-    _height: 400px;*/
-    flex: 1 1 auto;
+/* right panel header bar */
+#right-panel .hd {
+    padding:9px 18px;
+    background:#f2f2f2;
+    border-bottom:1px solid #ddd;
 }
+#right-panel .hd h3 {
+    line-height:30px;
+    margin-bottom:0;
+}
+#group-top
 #title-panel h2 {
     margin-bottom:0.45em;
-}
-#left-panel {
-    padding-top:30px;
-    border-right:1px solid #ddd;
-
-
-    /*
-    float:left;
-    width:200px;
-    */
-}
-#right-panel {
-    /*
-    float:right;
-    width:710px;
-    */
-    padding:0;
 }
 #right-panel h3:first-child,
 #left-panel h3:first-child {
     margin-top: 0px;
 }
-#right-panel .hd,
 .tabnav,
-.repo-file-list-topbar,
 .commit-list-topbar,
 .file-audit-list-topbar,
 .wiki-top {
@@ -1296,14 +1302,16 @@ textarea:-moz-placeholder {/* for FF */
     position: relative; /* for '#upload-menu' */
     margin-top:10px;
 }
-#right-panel .hd,
 .tabnav,
 .wiki-top {
     padding-bottom:0;
-    height:39px;
+    height:48px;
 }
-#organization-repos .hd {
-    position:relative;
+#right-panel #group-top {
+    padding:9px 18px;
+}
+.group-op-bar {
+    margin-top:10px;
 }
 #group-top .op-icon {
     display:inline-block;
@@ -1315,11 +1323,9 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-topbar {
     margin-bottom:0;
 }
-#dir-view .repo-file-list-topbar {
-    background:#f2f2f2;
-    padding: 0.3rem 0.9375rem;
+#right-panel .repo-file-list-topbar {
+    padding: 9px 18px;
 }
-#right-panel .hd h3,
 #right-panel h3.hd {
     line-height:30px;
     margin-bottom:0;
@@ -1358,6 +1364,37 @@ textarea:-moz-placeholder {/* for FF */
     height:29px;
     background:#fff;
     line-height:17px;
+}
+#right-panel {
+    display: flex;
+    flex-flow: column;
+    overflow-x: hidden;
+}
+#dir-view {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    overflow-x: hidden;
+}
+#dir-view .hd {
+    flex: 0 0 auto;
+}
+#dir-view .dir-view-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+}
+.flex-container {
+    flex: 1 1 auto;
+    display: flex;
+    flex-flow: column;
+    overflow-x: hidden;
+}
+.flex-container-header {
+    flex: 0 0 auto;
+}
+.flex-container-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
 }
 #add-pub-lib {
    outline:none;
