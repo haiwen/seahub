@@ -1499,7 +1499,7 @@ def get_shared_link(request, repo_id, path):
     domain = RequestSite(request).domain
     file_shared_link = '%s://%s%sf/%s/' % (http_or_https, domain,
                                            settings.SITE_ROOT, token)
-    return Response(file_shared_link)
+    return file_shared_link
 
 def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
     if op == 'download':
@@ -1546,7 +1546,9 @@ def get_repo_file(request, repo_id, file_id, file_name, op, use_onetime=True):
         path = request.GET.get('p', None)
         if path is None:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
-        return get_shared_link(request, repo_id, path)
+
+        file_shared_link = get_shared_link(request, repo_id, path)
+        return Response(file_shared_link)
 
 def reloaddir(request, repo, parent_dir):
     try:
@@ -1935,7 +1937,7 @@ class FileView(APIView):
             if not newname:
                 return api_error(status.HTTP_400_BAD_REQUEST,
                                  'New name is missing')
-            newname = unquote(newname.encode('utf-8'))
+            newname = newname.encode('utf-8')
             if len(newname) > settings.MAX_UPLOAD_FILE_NAME_LEN:
                 return api_error(status.HTTP_400_BAD_REQUEST, 'New name is too long')
 
@@ -1986,15 +1988,6 @@ class FileView(APIView):
             if check_folder_permission(request, dst_repo_id, dst_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
-
-            # names = obj_names.split(':')
-            # names = map(lambda x: unquote(x).decode('utf-8'), names)
-
-            # if dst_dir.startswith(src_dir):
-            #     for obj_name in names:
-            #         if dst_dir.startswith('/'.join([src_dir, obj_name])):
-            #             return api_error(status.HTTP_409_CONFLICT,
-            #                              'Can not move a dirctory to its subdir')
 
             filename = os.path.basename(path)
             filename_utf8 = filename.encode('utf-8')
