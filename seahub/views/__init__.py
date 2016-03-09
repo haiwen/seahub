@@ -848,11 +848,6 @@ def get_virtual_repos_by_owner(request):
 
 @login_required
 @user_mods_check
-def myhome(request):
-    return HttpResponseRedirect(reverse('libraries'))
-
-@login_required
-@user_mods_check
 def libraries(request):
     """
     New URL to replace myhome
@@ -890,23 +885,6 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             }, context_instance=RequestContext(request))
-
-@login_required
-@user_mods_check
-def starred(request):
-    """List starred files.
-
-    Arguments:
-    - `request`:
-    """
-    username = request.user.username
-    starred_files = UserStarredFiles.objects.get_starred_files_by_username(
-        username)
-
-    return render_to_response('starred.html', {
-            "starred_files": starred_files,
-            }, context_instance=RequestContext(request))
-
 
 @login_required
 @user_mods_check
@@ -1457,31 +1435,6 @@ def repo_download_dir(request, repo_id):
     url = gen_file_get_url(token, dirname)
     return redirect(url)
 
-@login_required
-@user_mods_check
-def activities(request):
-    if not EVENTS_ENABLED:
-        raise Http404
-
-    events_count = 15
-    username = request.user.username
-    start = int(request.GET.get('start', 0))
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
-
-    events_more = True if len(events) == events_count else False
-
-    event_groups = group_events_data(events)
-
-    return render_to_response('activities.html', {
-        'event_groups': event_groups,
-        'events_more': events_more,
-        'new_start': start,
-            }, context_instance=RequestContext(request))
 
 def group_events_data(events):
     """
@@ -1554,29 +1507,6 @@ def convert_cmmt_desc_link(request):
         logger.warn('diff_result: %s' % (d.__dict__))
     raise Http404
 
-@login_required
-def toggle_modules(request):
-    """Enable or disable modules.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next = settings.SITE_ROOT if referer is None else referer
-
-    username = request.user.username
-    personal_wiki = request.POST.get('personal_wiki', 'off')
-    if personal_wiki == 'on':
-        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        messages.success(request, _('Successfully enable "Personal Wiki".'))
-    else:
-        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
-        if referer.find('wiki') > 0:
-            next = reverse('myhome')
-        messages.success(request, _('Successfully disable "Personal Wiki".'))
-
-    return HttpResponseRedirect(next)
-
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
@@ -1612,7 +1542,7 @@ def image_view(request, filename):
     return response
 
 def shib_login(request):
-    return HttpResponseRedirect(request.GET.get("next",reverse('myhome')))
+    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
 
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.
@@ -1629,7 +1559,7 @@ def underscore_template(request, template):
 
 def fake_view(request, **kwargs):
     """
-    Used for 'view_common_lib_dir' and some other urls 
+    Used for 'view_common_lib_dir' and some other urls
 
     As the urls start with '#',
     http request will not access this function

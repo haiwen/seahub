@@ -423,114 +423,6 @@ def send_group_member_add_mail(request, group, from_user, to_user):
     send_html_email(subject, 'group/add_member_email.html', c, None, [to_user])
 
 @login_required_ajax
-def group_recommend(request):
-    """
-    Get or post file/directory discussions to a group.
-    """
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-    if request.method == 'POST':
-
-        form = GroupRecommendForm(request.POST)
-        if form.is_valid():
-            repo_id = form.cleaned_data['repo_id']
-            attach_type = form.cleaned_data['attach_type']
-            path = form.cleaned_data['path']
-            message = form.cleaned_data['message']
-            # groups is a group_id list, e.g. [u'1', u'7']
-            groups = request.POST.getlist('groups')
-            username = request.user.username
-
-            groups_not_in = []
-            groups_posted_to = []
-            for group_id in groups:
-                # Check group id format
-                try:
-                    group_id = int(group_id)
-                except ValueError:
-                    result['error'] = _(u'Error: wrong group id')
-                    return HttpResponse(json.dumps(result), status=400,
-                                        content_type=content_type)
-
-                group = get_group(group_id)
-                if not group:
-                    result['error'] = _(u'Error: the group does not exist.')
-                    return HttpResponse(json.dumps(result), status=400,
-                                        content_type=content_type)
-
-                # TODO: Check whether repo is in the group and Im in the group
-                if not is_group_user(group_id, username):
-                    groups_not_in.append(group.group_name)
-                    continue
-
-                # save message to group
-                gm = GroupMessage(group_id=group_id, from_email=username,
-                                  message=message)
-                gm.save()
-
-                # send signal
-                grpmsg_added.send(sender=GroupMessage, group_id=group_id,
-                                  from_email=username, message=message)
-
-                # save attachment
-                ma = MessageAttachment(group_message=gm, repo_id=repo_id,
-                                       attach_type=attach_type, path=path,
-                                       src='recommend')
-                ma.save()
-
-                # save discussion
-                fd = FileDiscuss(group_message=gm, repo_id=repo_id, path=path)
-                fd.save()
-
-                group_url = reverse('group_discuss', args=[group_id])
-                groups_posted_to.append(u'<a href="%(url)s" target="_blank">%(name)s</a>' % \
-                {'url':group_url, 'name':group.group_name})
-
-            if len(groups_posted_to) > 0:
-                result['success'] = _(u'Successfully posted to %(groups)s.') % {'groups': ', '.join(groups_posted_to)}
-
-            if len(groups_not_in) > 0:
-                result['error'] = _(u'Error: you are not in group %s.') % (', '.join(groups_not_in))
-
-        else:
-            result['error'] = str(form.errors)
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    # request.method == 'GET'
-    else:
-        repo_id = request.GET.get('repo_id')
-        path = request.GET.get('path', None)
-        repo = get_repo(repo_id)
-        if not repo:
-            result['error'] = _(u'Error: the library does not exist.')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-        if path is None:
-            result['error'] = _(u'Error: no path.')
-            return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-
-    # get discussions & replies
-    path_hash = calc_file_path_hash(path)
-    discussions = FileDiscuss.objects.filter(path_hash=path_hash, repo_id=repo_id)
-    msg_ids = [ e.group_message_id for e in discussions ]
-
-    grp_msgs = GroupMessage.objects.filter(id__in=msg_ids).order_by('-timestamp')
-    msg_replies = MessageReply.objects.filter(reply_to__in=grp_msgs)
-    for msg in grp_msgs:
-        msg.replies = []
-        for reply in msg_replies:
-            if msg.id == reply.reply_to_id:
-                msg.replies.append(reply)
-        msg.reply_cnt = len(msg.replies)
-        msg.replies = msg.replies[-3:]
-
-    ctx = {}
-    ctx['messages'] = grp_msgs
-    html = render_to_string("group/discussion_list.html", ctx)
-    result['html'] = html
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-
-@login_required_ajax
 def create_group_repo(request, group_id):
     """Create a repo and share it to current group"""
 
@@ -608,53 +500,6 @@ def create_group_repo(request, group_id):
         else:
             return HttpResponse(json.dumps({'success': True}),
                                 content_type=content_type)
-
-@login_required_ajax
-def attention(request):
-    """
-    Handle ajax request to query group members used in autocomplete.
-    """
-    user = request.user.username
-    name_str =  request.GET.get('name_startsWith')
-    gids = request.GET.get('gids', '')
-    result = []
-
-    members = []
-    for gid in gids.split('_'):
-        try:
-            gid = int(gid)
-        except ValueError:
-            continue
-
-        if not is_group_user(gid, user):
-            continue
-
-        # Get all group users
-        members += get_group_members(gid)
-
-    member_names = []
-    for m in members:
-        if len(result) == 10:   # Return at most 10 results.
-            break
-
-        if m.user_name == user:
-            continue
-
-        if m.user_name in member_names:
-            # Remove duplicated member names
-            continue
-        else:
-            member_names.append(m.user_name)
-
-        from seahub.base.templatetags.seahub_tags import email2nickname, char2pinyin
-        nickname = email2nickname(m.user_name)
-        pinyin = char2pinyin(nickname)
-        if nickname.startswith(name_str) or pinyin.startswith(name_str):
-            result.append({'contact_name': nickname})
-
-    content_type = 'application/json; charset=utf-8'
-
-    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @group_check
 def group_add_discussion(request, group):
@@ -801,30 +646,6 @@ def group_discuss(request, group):
             "mods_enabled": mods_enabled,
             "mods_available": mods_available,
             }, context_instance=RequestContext(request))
-
-@group_staff_required
-@group_check
-def group_toggle_modules(request, group):
-    """Enable or disable modules.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    referer = request.META.get('HTTP_REFERER', None)
-    next = SITE_ROOT if referer is None else referer
-
-    username = request.user.username
-    group_wiki = request.POST.get('group_wiki', 'off')
-    if group_wiki == 'on':
-        enable_mod_for_group(group.id, MOD_GROUP_WIKI)
-        messages.success(request, _('Successfully enable "Wiki".'))
-    else:
-        disable_mod_for_group(group.id, MOD_GROUP_WIKI)
-        if referer.find('wiki') > 0:
-            next = reverse('group_info', args=[group.id])
-        messages.success(request, _('Successfully disable "Wiki".'))
-
-    return HttpResponseRedirect(next)
 
 
 ########## wiki
