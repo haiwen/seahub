@@ -2229,6 +2229,8 @@ textarea:-moz-placeholder {/* for FF */
     padding:2px;
 }
 /* file/dir share popup */
+#repo-folder-perm-popup,
+#repo-share-link-admin-dialog,
 #folder-perm-popup,
 #file-share,
 #share-popup {

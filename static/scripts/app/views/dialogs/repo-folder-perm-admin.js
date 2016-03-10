@@ -12,6 +12,7 @@ define([
 
     var View = Backbone.View.extend({
 
+        id: 'repo-folder-perm-popup',
         template: _.template($('#repo-folder-perm-admin-dialog-tmpl').html()),
 
         initialize: function(options) {
@@ -22,6 +23,7 @@ define([
             this.$('.op-target').css({'max-width':280}); // for long repo name
             this.$el.modal({
                 focus: false,
+                containerCss: {"padding": 0},
                 onClose: function() {
                     $(document).off('click', hideItemEdit);
                     $.modal.close();
