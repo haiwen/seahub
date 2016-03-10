@@ -56,27 +56,6 @@
 .fa-1x {
     font-size: 1.3em;
 }
-/****** sf-icon-xx ********/
-@font-face {
-    font-family: 'seafile-font';
-    src:url('sf_font/seafile-font.eot');
-    src:url('sf_font/seafile-font.eot?#iefix') format('embedded-opentype'),
-        url('sf_font/seafile-font.woff') format('woff'),
-        url('sf_font/seafile-font.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-[class^="sf-icon-"] {
-    font-family: 'seafile-font';
-    speak: none;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    -webkit-font-smoothing: antialiased;
-}
-.sf-icon-share:before { content:"\e001"; }
-.sf-icon-removeformat:before { content:"\f1e7"; }
-
 /****** sf2-icon-xx ********/
 @font-face {
     font-family: 'seafile-font2';
