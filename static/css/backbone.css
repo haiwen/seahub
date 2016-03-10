@@ -35,8 +35,13 @@
     border-radius: 2px;
     background-image: none; /* rm the shadow */
 }
+.select2-container-multi .select2-choices .select2-search-field {
+    float:none;
+}
 .select2-container-multi .select2-choices .select2-search-field input {
     padding:2px 2px 2px 5px;
+    font-family:inherit; 
+    font-size:13px;
 }
 .select2-container-multi .select2-choices .select2-search-choice {
     border:none;

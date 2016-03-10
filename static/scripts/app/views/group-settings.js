@@ -176,7 +176,7 @@ define([
                 Common.contactInputOptionsForSelect2(), {
                 width: '268px',
                 maximumSelectionSize: 1,
-                placeholder: gettext("Search user or enter email"), // to override 'placeholder' returned by `Common.conta...`
+                placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
                 formatSelectionTooBig: gettext("You cannot select any more choices")
             }));
 

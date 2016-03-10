@@ -202,7 +202,6 @@ define([
                 cur_path += '/';
             }
             var _this = this;
-            // container.data('site_root', '{{SITE_ROOT}}');
             $.ajax({
                 url: Common.getUrl({name: 'get_dirents', repo_id: options.repo_id})
                 + '?path=' + encodeURIComponent(cur_path) + '&dir_only=true&all_dir=true',

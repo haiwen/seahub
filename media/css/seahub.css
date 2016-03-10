@@ -3494,9 +3494,26 @@ textarea:-moz-placeholder {/* for FF */
     width:630px;
     padding-right:0;
 }
+#repo-folder-perm .jstree {
+    margin:10px 0 4px;
+}
 .repo-folder-perm-folder-path {
-    padding:3px 5px;
-    width:155px;
+    width:150px;
+    padding:3px 33px 3px 5px;
+}
+.repo-folder-perm-add-folder {
+    position:absolute;
+    right:0;
+    top:4px;
+    width:29px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    font-size:14px;
+    color:#666;
+    cursor:pointer;
+    border-left: 1px solid #ddd;
+    margin:0;
 }
 .repo-folder-perm-content {
     width:610px; /* for the table in it. */
@@ -3512,6 +3529,7 @@ textarea:-moz-placeholder {/* for FF */
     height:30px;
 }
 #share-popup table,
+#repo-folder-perm table,
 #folder-perm-tabs table {
     margin:0;
 }
@@ -3819,19 +3837,20 @@ img.thumbnail {
 /* grid view */
 .grid-item {
     display:inline-block;
-    width:100px;
-    padding:10px 24px;
+    width:140px;
+    padding:10px 4px;
     position:relative;
 }
 .grid-item .img-link {
     position:relative; /* for locked icon */
     display:block;
     text-align:center;
+    width:100px;
     height:100px;
     font-size:0;
     line-height:0;
     border-radius:3px;
-    margin-bottom:6px;
+    margin:0 auto 6px;
 }
 .grid-item .img-link:before {
     content:' ';
@@ -3855,8 +3874,6 @@ img.thumbnail {
     color:#333;
     font-size:14px;
     line-height:17px;
-    height:34px;
-    white-space:normal;
 }
 .grid-item .text-link.hl {
     color:#f93;
@@ -3881,5 +3898,5 @@ img.thumbnail {
     box-shadow: 0 2px 2px #aaa;
 }
 #dir-view .grid-item {
-    padding:10px 20px; /* use less padding */
+    width:134px;
 }

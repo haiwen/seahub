@@ -474,7 +474,7 @@ define([
             var form = this.$('#dir-user-share');
 
             $('[name="emails"]', form).select2($.extend({
-                width: '297px'
+                //width: '292px' // the container will copy class 'w100' from the original element to get width
             },Common.contactInputOptionsForSelect2()));
 
             // show existing items
@@ -521,7 +521,6 @@ define([
             }
             $('[name="groups"]', form).html(g_opts).select2({
                 placeholder: gettext("Select groups"),
-                width: '297px',
                 escapeMarkup: function(m) { return m; }
             });
 
@@ -560,10 +559,10 @@ define([
         },
 
         dirUserShare: function () {
-            var panel = $('#dir-user-share');
-            var form = this.$('#add-dir-user-share-item');
+            var $panel = $('#dir-user-share');
+            var $form = this.$('#add-dir-user-share-item'); // pseudo form
 
-            var emails_input = $('[name="emails"]', form),
+            var emails_input = $('[name="emails"]', $form),
                 emails = emails_input.val(); // string
             if (!emails) {
                 return false;
@@ -572,8 +571,12 @@ define([
             var $add_item = $('#add-dir-user-share-item');
             var repo_id = this.repo_id, 
                 path = this.dirent_path;
-            var perm = $('[name="permission"]', form).val();
+            var $perm = $('[name="permission"]', $form);
+            var perm = $perm.val();
+            var $error = $('.error', $panel); 
+            var $submitBtn = $('[type="submit"]', $form); 
 
+            Common.disableButton($submitBtn);
             $.ajax({
                 url: Common.getUrl({
                     name: 'dir_shared_items',
@@ -589,26 +592,31 @@ define([
                     'permission': perm
                 },
                 success: function(data) {
-                    $(data.success).each(function(index, item) {
-                        var new_item = new FolderShareItemView({
-                            'repo_id': repo_id,
-                            'path': path,
-                            'item_data': {
-                                "user": item.user_info.name,
-                                "user_name": item.user_info.nickname,
-                                "perm": item.permission,
-                                'for_user': true
-                            }
+                    if (data.success.length > 0) {
+                        $(data.success).each(function(index, item) {
+                            var new_item = new FolderShareItemView({
+                                'repo_id': repo_id,
+                                'path': path,
+                                'item_data': {
+                                    "user": item.user_info.name,
+                                    "user_name": item.user_info.nickname,
+                                    "perm": item.permission,
+                                    'for_user': true
+                                }
+                            });
+                            $add_item.after(new_item.el);
                         });
-                        $add_item.after(new_item.el);
-                    });
-                    emails_input.select2("val", "");
+                        emails_input.select2("val", "");
+                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('[value="r"]', $perm).removeAttr('selected');
+                        $error.addClass('hide');
+                    }
                     if (data.failed.length > 0) {
                         var err_msg = '';
                         $(data.failed).each(function(index, item) {
                             err_msg += Common.HTMLescape(item.email) + ': ' + item.error_msg + '<br />';
                         });
-                        $('.error', panel).html(err_msg).removeClass('hide');
+                        $error.html(err_msg).removeClass('hide');
                     }
                 },
                 error: function(xhr) {
@@ -619,17 +627,20 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.")
                     }
-                    $('.error', panel).html(err_msg).removeClass('hide');
+                    $error.html(err_msg).removeClass('hide');
+                },
+                complete: function() {
+                    Common.enableButton($submitBtn);
                 }
             });
         },
 
         dirGroupShare: function () {
-            var panel = $('#dir-group-share');
-            var form = this.$('#add-dir-group-share-item');
+            var $panel = $('#dir-group-share');
+            var $form = this.$('#add-dir-group-share-item'); // pseudo form
 
-            var groups_input = $('[name="groups"]', form),
-                groups = groups_input.val(); // null or [group.id]
+            var $groups_input = $('[name="groups"]', $form),
+                groups = $groups_input.val(); // null or [group.id]
 
             if (!groups) {
                 return false;
@@ -638,8 +649,12 @@ define([
             var $add_item = $('#add-dir-group-share-item');
             var repo_id = this.repo_id, 
                 path = this.dirent_path;
-            var perm = $('[name="permission"]', form).val();
+            var $perm = $('[name="permission"]', $form),
+                perm = $perm.val();
+            var $error = $('.error', $panel); 
+            var $submitBtn = $('[type="submit"]', $form); 
 
+            Common.disableButton($submitBtn);
             $.ajax({
                 url: Common.getUrl({
                     name: 'dir_shared_items',
@@ -655,26 +670,31 @@ define([
                     'permission': perm
                 },
                 success: function(data) {
-                    $(data.success).each(function(index, item) {
-                        var new_item = new FolderShareItemView({
-                            'repo_id': repo_id,
-                            'path': path,
-                            'item_data': {
-                                "group_id": item.group_info.id,
-                                "group_name": item.group_info.name,
-                                "perm": item.permission,
-                                'for_user': false
-                            }
+                    if (data.success.length > 0) {
+                        $(data.success).each(function(index, item) {
+                            var new_item = new FolderShareItemView({
+                                'repo_id': repo_id,
+                                'path': path,
+                                'item_data': {
+                                    "group_id": item.group_info.id,
+                                    "group_name": item.group_info.name,
+                                    "perm": item.permission,
+                                    'for_user': false
+                                }
+                            });
+                            $add_item.after(new_item.el);
                         });
-                        $add_item.after(new_item.el);
-                    });
-                    groups_input.select2("val", "");
+                        $groups_input.select2("val", "");
+                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('[value="r"]', $perm).removeAttr('selected');
+                        $error.addClass('hide');
+                    }
                     if (data.failed.length > 0) {
                         var err_msg = '';
                         $(data.failed).each(function(index, item) {
                             err_msg += Common.HTMLescape(item.group_name) + ': ' + item.error_msg + '<br />';
                         });
-                        $('.error', panel).html(err_msg).removeClass('hide');
+                        $error.html(err_msg).removeClass('hide');
                     }
                 },
                 error: function(xhr) {
@@ -685,7 +705,10 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.")
                     }
-                    $('.error', panel).html(err_msg).removeClass('hide');
+                    $error.html(err_msg).removeClass('hide');
+                },
+                complete: function() {
+                    Common.enableButton($submitBtn);
                 }
             });
         }

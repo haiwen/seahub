@@ -19,8 +19,6 @@ define([
 
         template: _.template($('#dirent-tmpl').html()),
         renameTemplate: _.template($("#rename-form-template").html()),
-        mvcpTemplate: _.template($("#mvcp-form-template").html()),
-        mvProgressTemplate: _.template($("#mv-progress-popup-template").html()),
 
         initialize: function(options) {
             this.dirView = options.dirView;
