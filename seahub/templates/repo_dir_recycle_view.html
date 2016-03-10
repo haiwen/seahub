@@ -125,12 +125,31 @@ var get_more_trash = function(current_scan_stat) {
     });
 }
 
+
 $('table').on("click", ".restore-file, .restore-dir", function() {
-    $('<form>', {
-        "method": 'POST',
-        "action": $(this).data('url'),
-        "html": '<input name="csrfmiddlewaretoken" value="' + getCookie('csrftoken') + '" type="hidden">'
-    }).appendTo(document.body).submit();
+    var _this = $(this),
+        commit_id = _this.data('commit_id'),
+        path = _this.data('path');
+
+    $.ajax({
+        url: _this.data('url'),
+        type: 'PUT',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {'commit_id': commit_id, 'p': path},
+        success: function(data) {
+            _this.closest('tr').remove();
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: function ajaxErrorHandler(xhr, textStatus, errorThrown) {
+            if (xhr.responseText) {
+                feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+            } else {
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
+            }
+        }
+    });
     return false;
 });
 
