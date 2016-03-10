@@ -25,9 +25,17 @@
 
         <div class="fright">
             <a href="?p={{ path|urlencode }}&mode=list" title="{% trans "List" %}" class="mode-link vam{% if mode == 'list' %} cur-mode-link{% endif %} list-mode-link">
-                <img src="{{ MEDIA_URL }}img/list.png" alt="" width="20" />
+                {% if mode == 'list' %}
+                    <img src="{{ MEDIA_URL }}img/list-white.png" alt="" width="20" />
+                {% else %}
+                    <img src="{{ MEDIA_URL }}img/list.png" alt="" width="20" />
+                {% endif %}
             </a><a href="?p={{ path|urlencode }}&mode=grid" title="{% trans "Grid" %}" class="mode-link vam{% if mode == 'grid' %} cur-mode-link{% endif %}">
-                <img src="{{ MEDIA_URL }}img/grid.png" alt="" width="20" />
+                {% if mode == 'grid' %}
+                    <img src="{{ MEDIA_URL }}img/grid-white.png" alt="" width="20" />
+                {% else %}
+                    <img src="{{ MEDIA_URL }}img/grid.png" alt="" width="20" />
+                {% endif %}
             </a>
             {% if not traffic_over_limit %}
             <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn vam shared-dir-zip">{% trans "ZIP"%}</a>
