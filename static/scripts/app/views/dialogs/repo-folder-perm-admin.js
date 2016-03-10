@@ -160,11 +160,20 @@ define([
 
             var $form = $('.js-folder-select-form', $permContent.parent()).slideDown();
             var $jstreeContainer = $('.js-jtree-container', $form);
+            /*
             var repo_data = FileTree.formatRepoData([{
                 'id': this.repo_id,
                 'name': this.repo_name
             }]);
             FileTree.renderDirTree($jstreeContainer, $form, repo_data);
+            */
+            FileTree.renderTreeForPath({
+                $form: $form,
+                $container: $jstreeContainer,
+                repo_id: this.repo_id,
+                repo_name: this.repo_name,
+                path: '/'
+            });
         },
 
         addFolder: function(e) {
