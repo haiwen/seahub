@@ -62,7 +62,10 @@ function showSharePopup(op, name, aj_data, type, cur_path) {
     );
     {% endif %}
 
-    form.modal({appendTo: "#main",'focus':false, containerCss:{"padding":0}});
+    form.modal({
+        appendTo: "#main",
+        focus: false
+    });
 
     var hd = $('#file-share .hd');
     hd.html(hd.html().replace('%(name)s', '<span class="op-target">' + HTMLescape(trimFilename(name, 30)) + '</span>'));

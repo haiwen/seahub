@@ -24,11 +24,7 @@ define([
 
             this.render();
 
-            this.$el.modal({
-                appendTo: "#main",
-                focus: false,
-                containerCss: {"padding": 0}
-            });
+            this.$el.modal();
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$("#share-tabs").tabs();

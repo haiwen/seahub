@@ -23,7 +23,6 @@ define([
             this.$('.op-target').css({'max-width':280}); // for long repo name
             this.$el.modal({
                 focus: false,
-                containerCss: {"padding": 0},
                 onClose: function() {
                     $(document).off('click', hideItemEdit);
                     $.modal.close();

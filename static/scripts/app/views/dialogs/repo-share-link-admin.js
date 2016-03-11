@@ -20,9 +20,7 @@ define([
 
             this.render();
             this.$('.op-target').css({'max-width':280}); // for long repo name
-            this.$el.modal({
-                containerCss: {"padding": 0}
-            });
+            this.$el.modal();
             $("#simplemodal-container").css({
                 'width':'auto',
                 'height':'auto'

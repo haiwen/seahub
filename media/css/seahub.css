@@ -1,3 +1,20 @@
+/**
+ * CONTENTS
+ * 
+ * Font Icons
+ * icon-xx ...............Font Awesome 3.2.1 by Dave Gandy
+ * sf2-icon-xx ...........seafile-font2
+ *
+ * Reset 
+ * tags ..................reset styles of tags
+ *
+ * Helper
+ * common class .......... common class
+ *
+ * (TODO: complete this TOC)
+ *
+ */
+
 /****** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
 @font-face {
@@ -973,15 +990,24 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:8px;
 }
 /**** simplemodal ****/
-#basic-modal-content {display:none;}
-#simplemodal-overlay { background-color:#000; }
+#basic-modal-content {
+    display:none;
+}
+#simplemodal-overlay {
+    background-color:#000;
+}
 #simplemodal-container {
     padding: 20px;
     background-color:#fcfcfc;
     border-radius:4px;
     -moz-border-radius:4px;
 }
-#simplemodal-container a {font-weight:normal;}
+#simplemodal-container a {
+    font-weight:normal;
+}
+#simplemodal-container table {
+    margin:0;
+}
 .modalCloseImg {
     position:absolute;
     width:28px;
@@ -995,7 +1021,7 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-container h3 {
     font-size:1.5em;
     word-wrap:break-word;
-    margin:0 0 4px;
+    margin:0 0 10px;
 }
 #simplemodal-container h3,
 #simplemodal-container h4,
@@ -2234,13 +2260,7 @@ textarea:-moz-placeholder {/* for FF */
 #folder-perm-popup,
 #file-share,
 #share-popup {
-    padding:15px;
     min-height:200px;
-}
-#folder-perm-popup .hd,
-#file-share .hd,
-#share-popup .hd {
-    margin:0 0 8px 4px;
 }
 #file-share .tip,
 #share-popup .tip {
@@ -3509,11 +3529,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:2px;
     height:30px;
 }
-#share-popup table,
-#repo-folder-perm table,
-#folder-perm-tabs table {
-    margin:0;
-}
 .select2-result-label .text {
     display:inline-block;
     width:calc(100% - 42px);
@@ -3525,13 +3540,13 @@ textarea:-moz-placeholder {/* for FF */
 .select2-result-label .text {
     vertical-align:middle;
 }
+#add-group-members-form {
+    margin-bottom:4px;
+}
 
 /* add repo to public */
 #add-pubrepo-popup {
     width:500px;
-}
-#add-pubrepo-popup table {
-    margin-bottom:8px;
 }
 #add-pubrepo-popup tbody {
     display: block;

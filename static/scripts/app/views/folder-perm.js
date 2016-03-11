@@ -25,8 +25,7 @@ define([
 
             this.$el.modal({
                 appendTo: "#main",
-                focus: false,
-                containerCss: {"padding": 0}
+                focus: false
             });
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
