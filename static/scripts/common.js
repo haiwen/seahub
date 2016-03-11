@@ -631,7 +631,7 @@ define([
         contactInputOptionsForSelect2: function() {
             var _this = this;
             return {
-                placeholder: gettext("Search users or enter emails"),
+                placeholder: gettext("Search users or enter emails and press Enter"),
 
                 // with 'tags', the user can directly enter, not just select
                 // tags need `<input type="hidden" />`, not `<select>`

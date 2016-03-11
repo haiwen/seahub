@@ -799,6 +799,8 @@ define([
 
                 if (show_cur_repo) {
                     FileTree.renderTreeForPath({
+                        $form: form,
+                        $container: $('#current-repo-dirs'),
                         repo_name: dir.repo_name,
                         repo_id: dir.repo_id,
                         path: dir.path

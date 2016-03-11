@@ -35,7 +35,7 @@ define([
             this.$modalContainer = $('#simplemodal-container').css({'height':'auto'});
 
             this.$('[name="user_name"]').select2($.extend({
-                width: '268px',
+                width: '320px',
             }, Common.contactInputOptionsForSelect2()));
 
             this.collection = new GroupMembers();

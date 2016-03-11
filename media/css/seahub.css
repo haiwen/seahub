@@ -1,3 +1,20 @@
+/**
+ * CONTENTS
+ * 
+ * Font Icons
+ * icon-xx ...............Font Awesome 3.2.1 by Dave Gandy
+ * sf2-icon-xx ...........seafile-font2
+ *
+ * Reset 
+ * tags ..................reset styles of tags
+ *
+ * Helper
+ * common class .......... common class
+ *
+ * (TODO: complete this TOC)
+ *
+ */
+
 /****** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
 @font-face {
@@ -56,27 +73,6 @@
 .fa-1x {
     font-size: 1.3em;
 }
-/****** sf-icon-xx ********/
-@font-face {
-    font-family: 'seafile-font';
-    src:url('sf_font/seafile-font.eot');
-    src:url('sf_font/seafile-font.eot?#iefix') format('embedded-opentype'),
-        url('sf_font/seafile-font.woff') format('woff'),
-        url('sf_font/seafile-font.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-[class^="sf-icon-"] {
-    font-family: 'seafile-font';
-    speak: none;
-    font-weight: normal;
-    font-variant: normal;
-    text-transform: none;
-    -webkit-font-smoothing: antialiased;
-}
-.sf-icon-share:before { content:"\e001"; }
-.sf-icon-removeformat:before { content:"\f1e7"; }
-
 /****** sf2-icon-xx ********/
 @font-face {
     font-family: 'seafile-font2';
@@ -136,6 +132,7 @@
 .sf2-icon-wiki2:before { content:"\e024"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-plus:before { content: "\e027"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -994,15 +991,24 @@ textarea:-moz-placeholder {/* for FF */
     margin-right:8px;
 }
 /**** simplemodal ****/
-#basic-modal-content {display:none;}
-#simplemodal-overlay { background-color:#000; }
+#basic-modal-content {
+    display:none;
+}
+#simplemodal-overlay {
+    background-color:#000;
+}
 #simplemodal-container {
     padding: 20px;
     background-color:#fcfcfc;
     border-radius:4px;
     -moz-border-radius:4px;
 }
-#simplemodal-container a {font-weight:normal;}
+#simplemodal-container a {
+    font-weight:normal;
+}
+#simplemodal-container table {
+    margin:0;
+}
 .modalCloseImg {
     position:absolute;
     width:28px;
@@ -1016,7 +1022,7 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-container h3 {
     font-size:1.5em;
     word-wrap:break-word;
-    margin:0 0 4px;
+    margin:0 0 10px;
 }
 #simplemodal-container h3,
 #simplemodal-container h4,
@@ -2250,16 +2256,12 @@ textarea:-moz-placeholder {/* for FF */
     padding:2px;
 }
 /* file/dir share popup */
+#repo-folder-perm-popup,
+#repo-share-link-admin-dialog,
 #folder-perm-popup,
 #file-share,
 #share-popup {
-    padding:15px;
     min-height:200px;
-}
-#folder-perm-popup .hd,
-#file-share .hd,
-#share-popup .hd {
-    margin:0 0 8px 4px;
 }
 #file-share .tip,
 #share-popup .tip {
@@ -3494,9 +3496,26 @@ textarea:-moz-placeholder {/* for FF */
     width:630px;
     padding-right:0;
 }
+#repo-folder-perm .jstree {
+    margin:10px 0 4px;
+}
 .repo-folder-perm-folder-path {
-    padding:3px 5px;
-    width:155px;
+    width:150px;
+    padding:3px 33px 3px 5px;
+}
+.repo-folder-perm-add-folder {
+    position:absolute;
+    right:0;
+    top:4px;
+    width:29px;
+    height:28px;
+    line-height:28px;
+    text-align:center;
+    font-size:14px;
+    color:#666;
+    cursor:pointer;
+    border-left: 1px solid #ddd;
+    margin:0;
 }
 .repo-folder-perm-content {
     width:610px; /* for the table in it. */
@@ -3511,10 +3530,6 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:2px;
     height:30px;
 }
-#share-popup table,
-#folder-perm-tabs table {
-    margin:0;
-}
 .select2-result-label .text {
     display:inline-block;
     width:calc(100% - 42px);
@@ -3526,13 +3541,13 @@ textarea:-moz-placeholder {/* for FF */
 .select2-result-label .text {
     vertical-align:middle;
 }
+#add-group-members-form {
+    margin-bottom:4px;
+}
 
 /* add repo to public */
 #add-pubrepo-popup {
     width:500px;
-}
-#add-pubrepo-popup table {
-    margin-bottom:8px;
 }
 #add-pubrepo-popup tbody {
     display: block;
@@ -3819,19 +3834,20 @@ img.thumbnail {
 /* grid view */
 .grid-item {
     display:inline-block;
-    width:100px;
-    padding:10px 24px;
+    width:140px;
+    padding:10px 4px;
     position:relative;
 }
 .grid-item .img-link {
     position:relative; /* for locked icon */
     display:block;
     text-align:center;
+    width:100px;
     height:100px;
     font-size:0;
     line-height:0;
     border-radius:3px;
-    margin-bottom:6px;
+    margin:0 auto 6px;
 }
 .grid-item .img-link:before {
     content:' ';
@@ -3855,8 +3871,6 @@ img.thumbnail {
     color:#333;
     font-size:14px;
     line-height:17px;
-    height:34px;
-    white-space:normal;
 }
 .grid-item .text-link.hl {
     color:#f93;
@@ -3881,5 +3895,5 @@ img.thumbnail {
     box-shadow: 0 2px 2px #aaa;
 }
 #dir-view .grid-item {
-    padding:10px 20px; /* use less padding */
+    width:134px;
 }

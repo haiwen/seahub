@@ -190,10 +190,8 @@ define([
         },
 
         renderTreeForPath: function(options) {
-            // check templates/snippets/lib_op_popups.html for the template
-            var form = $('#mv-form'),
-                container = $('#current-repo-dirs'),
-                loading_tip = container.prev();
+            var form = options.$form,
+                container = options.$container;
 
             var repo_name = options.repo_name,
                 repo_id = options.repo_id;
@@ -202,7 +200,6 @@ define([
                 cur_path += '/';
             }
             var _this = this;
-            // container.data('site_root', '{{SITE_ROOT}}');
             $.ajax({
                 url: Common.getUrl({name: 'get_dirents', repo_id: options.repo_id})
                 + '?path=' + encodeURIComponent(cur_path) + '&dir_only=true&all_dir=true',
@@ -257,7 +254,6 @@ define([
                     }
                     json_data.push(repo_data);
 
-                    loading_tip.hide();
                     _this.renderDirTree(container, form, json_data);
                     container.removeClass('hide');
                 },
@@ -267,7 +263,6 @@ define([
                         'attr': {'repo_id': repo_id, 'root_node': true},
                         'state': 'closed'
                     }];
-                    loading_tip.hide();
                     _this.renderDirTree(container, form, cur_repo);
                     container.removeClass('hide');
                 }

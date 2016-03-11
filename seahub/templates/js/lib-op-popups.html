@@ -55,8 +55,9 @@
         <div id="mv-dir-list" class="dir-tree-cont">
             <% if (show_cur_repo) { %>
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
-            <span class="loading-icon loading-tip"></span>
-            <div id="current-repo-dirs"></div>
+            <div id="current-repo-dirs">
+                <span class="loading-icon loading-tip"></span>
+            </div>
             <% } %>
             <% if (show_other_repos) { %>
             <div id="other-repos">

@@ -12,6 +12,7 @@ define([
 
     var View = Backbone.View.extend({
 
+        id: 'repo-folder-perm-popup',
         template: _.template($('#repo-folder-perm-admin-dialog-tmpl').html()),
 
         initialize: function(options) {
@@ -88,8 +89,7 @@ define([
             if (collection.perm_type == 'user') {
                 $('[name="emails"]', $panel).select2($.extend(
                     Common.contactInputOptionsForSelect2(), {
-                        width: '190px',
-                        placeholder: gettext("Search user or enter email"), // to override 'placeholder' returned by `Common.conta...`
+                        placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
                         maximumSelectionSize: 1,
                         formatSelectionTooBig: gettext("You can only select 1 item")
                     }));
@@ -101,7 +101,6 @@ define([
                 }
                 $('[name="groups"]', $panel).html(g_opts).select2({
                     placeholder: gettext("Select a group"),
-                    width: '190px',
                     maximumSelectionSize: 1,
                     formatSelectionTooBig: gettext("You can only select 1 item"),
                     escapeMarkup: function(m) { return m; }
@@ -148,7 +147,7 @@ define([
         },
 
         events: {
-            'click .add-folder': 'showFolderSelectForm',
+            'click .js-add-folder': 'showFolderSelectForm',
             'click .js-folder-select-submit': 'addFolder',
             'click .js-folder-select-cancel': 'cancelFolderSelect',
 
@@ -162,11 +161,20 @@ define([
 
             var $form = $('.js-folder-select-form', $permContent.parent()).slideDown();
             var $jstreeContainer = $('.js-jtree-container', $form);
+            /*
             var repo_data = FileTree.formatRepoData([{
                 'id': this.repo_id,
                 'name': this.repo_name
             }]);
             FileTree.renderDirTree($jstreeContainer, $form, repo_data);
+            */
+            FileTree.renderTreeForPath({
+                $form: $form,
+                $container: $jstreeContainer,
+                repo_id: this.repo_id,
+                repo_name: this.repo_name,
+                path: '/'
+            });
         },
 
         addFolder: function(e) {

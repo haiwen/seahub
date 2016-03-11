@@ -26,6 +26,8 @@ define([
 
             if (this.show_cur_repo) {
                 FileTree.renderTreeForPath({
+                    $form: this.$el,
+                    $container: this.$('#current-repo-dirs'),
                     repo_name: this.dir.repo_name,
                     repo_id: this.dir.repo_id,
                     path: this.dir.path
