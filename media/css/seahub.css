@@ -132,6 +132,7 @@
 .sf2-icon-wiki2:before { content:"\e024"; }
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
+.sf2-icon-plus:before { content: "\e027"; }
 
 /******* tags **********/
 html { background:#fff; }
