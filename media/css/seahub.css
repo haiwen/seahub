@@ -1218,38 +1218,74 @@ textarea:-moz-placeholder {/* for FF */
     color:#fff;
 }
 /********** container ***********/
-#main, #footer {
-    width:950px;
+#wrapper, body, html {
+    height:100%;
+}
+#wrapper {
+    display: flex;
+    flex-flow: column;
+    height:100%;
+    overflow-x: hidden;
+}
+#header {
+    flex: 0 1 auto;
 }
 #main {
-    margin:0 auto;
+    flex: 1 1 auto;
+}
+#main {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: flex-start;
+}
+#left-panel {
+    flex: 1 0 25%;
+    overflow-y:auto;
+}
+#right-panel {
+    flex: 3 0 75%;
+    overflow-y:auto;
+}
+#main, #footer {
+    /* width:950px; */
 }
 #header {
     padding-top:16px;
-    background:#f4f4f7 url('../img/nav.png') center top repeat-x;
+    background:#f8f8f8;
     width:100%;
     font-size: 14px;
-    margin-bottom:40px;
+    border-bottom:1px solid #ddd;
+    flex: 0 1 50px;
 }
 #header-inner {
     height:48px;
-    width:950px;
     margin:0 auto;
 }
+
 #main {
-    min-height: 400px;
-    _height: 400px;
+    /*min-height: 400px;
+    _height: 400px;*/
+    flex: 1 1 auto;
 }
 #title-panel h2 {
     margin-bottom:0.45em;
 }
 #left-panel {
+    padding-top:30px;
+    border-right:1px solid #ddd;
+
+
+    /*
     float:left;
     width:200px;
+    */
 }
 #right-panel {
+    /*
     float:right;
     width:710px;
+    */
+    padding:0;
 }
 #right-panel h3:first-child,
 #left-panel h3:first-child {
@@ -1260,7 +1296,6 @@ textarea:-moz-placeholder {/* for FF */
 .repo-file-list-topbar,
 .commit-list-topbar,
 .file-audit-list-topbar,
-#dir-view .repo-op,
 .wiki-top {
     padding:9px 10px;
     background:#f2f2f2;
@@ -1270,6 +1305,7 @@ textarea:-moz-placeholder {/* for FF */
 #dir-view .repo-op {
     height:30px;
     position: relative; /* for '#upload-menu' */
+    margin-top:10px;
 }
 #right-panel .hd,
 .tabnav,
@@ -1291,8 +1327,8 @@ textarea:-moz-placeholder {/* for FF */
     margin-bottom:0;
 }
 #dir-view .repo-file-list-topbar {
-    background:none;
-    padding:0;
+    background:#f2f2f2;
+    padding: 0.3rem 0.9375rem;
 }
 #right-panel .hd h3,
 #right-panel h3.hd {
@@ -1575,26 +1611,7 @@ textarea:-moz-placeholder {/* for FF */
 
 /* footer */
 #footer {
-    color:#636363;
-    font-size:12px;
-    padding:20px 0 10px;
-    margin:80px auto 25px;
-    border-top:1px solid #DDD;
-}
-#footer .items {
-    width:65%;
-}
-#footer .other-info {
-    width:30%;
-}
-#footer .item {
-    float:left;
-    width:32%;
-    padding:0 3% 0 2%;
-}
-#footer a {
-    color:#888;
-    font-weight:normal;
+
 }
 
 /*** for separate pages ***/
@@ -1869,6 +1886,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 .repo-file-list .select {
     width:15px;
+    padding-left:0.9375rem;
 }
 .repo-file-list .star {
     width:25px;

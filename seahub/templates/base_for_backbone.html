@@ -7,6 +7,7 @@
 <title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
@@ -92,16 +93,6 @@
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
-                    {% if request.user.is_staff %}
-                    <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
                 </div>
                 </div>
                 {% endif %}
@@ -130,7 +121,6 @@
             </div>
         </div>
 
-        {% include 'footer.html' %}
         {% include 'js/templates.html' %}
 </div><!-- wrapper -->
 
