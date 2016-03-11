@@ -31,9 +31,9 @@
 <script type="text/template" id="repo-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
         <% } else { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
         <% } %>
     </td>
     <% if (name) { %>
@@ -68,12 +68,12 @@
 <script type="text/template" id="group-repo-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
         <% } else { %>
             <% if (permission == 'rw') { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
             <% } else { %>
-        <img src="{{ MEDIA_URL }}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
             <% } %>
         <% } %>
     </td>
@@ -92,12 +92,12 @@
 <script type="text/template" id="organization-repo-tmpl">
     <td>
         <% if (encrypted) { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
         <% } else { %>
             <% if (permission == 'rw') { %>
-        <img src="{{ MEDIA_URL }}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
             <% } else { %>
-        <img src="{{ MEDIA_URL }}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="" />
+        <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
             <% } %>
         <% } %>
     </td>
@@ -604,12 +604,12 @@
 <script type="text/template" id="shared-repo-tmpl">
     <td>
         <% if (encrypted) { %>
-            <img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
         <% } else { %>
             <% if (permission == 'rw') { %>
-            <img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "directory icon" %}" />
+            <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
             <% } else { %>
-            <img src="{{MEDIA_URL}}img/folder-no-write-20.png?t=1387267140" title="{% trans "Read-Only" %}" alt="{% trans "directory icon" %}" />
+            <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
             <% } %>
         <% } %>
     </td>

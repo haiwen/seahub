@@ -227,6 +227,26 @@ define([
             }
         },
 
+        getLibIconUrl: function(is_encrypted, is_readonly, size) {
+            if (size > 24) {
+                if (is_encrypted) {
+                    return app.config.mediaUrl + "img/lib/96/lib-encrypted.png";
+                } else if (is_readonly) {
+                    return app.config.mediaUrl + "img/lib/96/lib-readonly.png";
+                } else {
+                    return app.config.mediaUrl + "img/lib/96/lib.png";
+                }
+            } else {
+                if (is_encrypted) {
+                    return app.config.mediaUrl + "img/lib/24/lib-encrypted.png";
+                } else if (is_readonly) {
+                    return app.config.mediaUrl + "img/lib/24/lib-readonly.png";
+                } else {
+                    return app.config.mediaUrl + "img/lib/24/lib.png";
+                }
+            }
+        },
+
         isHiDPI: function() {
             var pixelRatio = window.devicePixelRatio ? window.devicePixelRatio : 1;
             if (pixelRatio > 1) {

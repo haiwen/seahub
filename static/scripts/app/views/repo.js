@@ -39,7 +39,11 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.toJSON()));
+            var obj = this.model.toJSON();
+            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var icon_url = this.model.getIconUrl(icon_size);
+            _.extend(obj, { 'icon_url': icon_url });
+            this.$el.html(this.template(obj));
             return this;
         },
 
