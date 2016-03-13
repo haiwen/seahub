@@ -9,6 +9,7 @@ RequestContext.
 
 import re
 
+from django.conf import settings as dj_settings
 from constance import config
 
 from seahub.settings import SEAFILE_VERSION, SITE_TITLE, SITE_NAME, \
@@ -85,6 +86,7 @@ def base(request):
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
         'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
+        'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         'search_repo_id': search_repo_id,
         'SITE_ROOT': SITE_ROOT,
         }

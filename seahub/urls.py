@@ -201,6 +201,7 @@ urlpatterns = patterns(
     (r'^help/', include('seahub.help.urls')),
     url(r'^captcha/', include('captcha.urls')),
     (r'^thumbnail/', include('seahub.thumbnail.urls')),
+    url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
 
     ### system admin ###
     url(r'^sys/info/$', sys_info, name='sys_info'),
@@ -234,6 +235,10 @@ urlpatterns = patterns(
     url(r'^sys/orgadmin/(?P<org_id>\d+)/group/$', sys_org_info_group, name='sys_org_info_group'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/library/$', sys_org_info_library, name='sys_org_info_library'),
     url(r'^sys/orgadmin/(?P<org_id>\d+)/setting/$', sys_org_info_setting, name='sys_org_info_setting'),
+    url(r'^sys/instadmin/$', sys_inst_admin, name='sys_inst_admin'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/remove/$', sys_inst_remove, name='sys_inst_remove'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/user/$', sys_inst_info_user, name='sys_inst_info_user'),
+    url(r'^sys/instadmin/(?P<inst_id>\d+)/toggleadmin/(?P<email>[^/]+)/$', sys_inst_toggle_admin, name='sys_inst_toggle_admin'),
     url(r'^sys/publinkadmin/$', sys_publink_admin, name='sys_publink_admin'),
     url(r'^sys/publink/remove/$', sys_publink_remove, name='sys_publink_remove'),
     url(r'^sys/uploadlink/remove/$', sys_upload_link_remove, name='sys_upload_link_remove'),

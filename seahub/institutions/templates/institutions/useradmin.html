@@ -1,0 +1,66 @@
+{% extends "institutions/base.html" %}
+{% load seahub_tags i18n %}
+{% block cur_users %}tab-cur{% endblock %}
+
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'institutions:useradmin' %}">{% trans "Users" %}</a></li>
+    </ul>
+</div>
+
+<table>
+    <tr>
+        <th width="36%">{% trans "Email" %}</th>
+        <th width="12%">{% trans "Status" %}</th>
+        <th width="16%">{% trans "Space Used" %}</th>
+        <th width="22%">{% trans "Create At / Last Login" %}</th>
+        <th width="14%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr data-userid="{{user.email}}">
+        <td><a href="{% url 'institutions:user_info' user.email %}">{{ user.email }}</a>
+        </td>
+        <td>
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+            </div>
+        </td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+        </td>
+        <td>
+            {% if user.source == "DB" %}
+            {{ user.ctime|tsstr_sec }} /<br />
+            {% else %}
+            -- /
+            {% endif %}
+            {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        </td>
+        <td>
+          {% if not user.is_self %}
+          <a href="#" class="remove-user-btn op vh" data-url="{% url 'institutions:user_remove' user.email %}" data-target="{{ user.email }}">{% trans "Delete" %}</a>
+          {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+ addConfirmTo($('.remove-user-btn'), {
+     'title':"{% trans "Delete User" %}",
+     'con':"{% trans "Are you sure you want to delete %s ?" %}",
+     'post': true // post request
+ });
+
+</script>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "admin_base.html" %}
+{% load i18n seahub_tags %}
+
+{% block nav_orgadmin_class %}class="cur"{% endblock %}
+
+{% block extra_style %}
+<style type="text/css">
+#left-panel { position:relative; }
+#set-quota-form {
+    min-width:255px;
+}
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back" %}" href="{% url 'sys_inst_admin' %}"><span class="icon-chevron-left"></span></a>
+<div class="side-info">
+    <h3 class="hd">{{ inst.name }}</h3>
+    <dl>
+        <dt>{% trans "Number of members" %}</dt>
+        <dd>{{ users_count }}</dd>
+    </dl>
+</div>
+{% endblock %}

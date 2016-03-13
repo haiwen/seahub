@@ -1,0 +1,130 @@
+{% extends "institutions/base.html" %}
+{% load i18n avatar_tags seahub_tags %}
+{% load staticfiles %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
+<style type="text/css">
+#left-panel { position:relative; }
+</style>
+{% endblock %}
+
+{% block left_panel %}
+<a class="go-back" title="{% trans "Back to user list" %}"  href="{% url 'institutions:useradmin' %}"><span class="icon-chevron-left"></span></a>
+<div class="side-info">
+    <h3 class="hd">{% trans "Profile" %}</h3>
+    {% avatar email 48 %}
+    <dl>
+        <dt>{% trans "Email" %}</dt>
+        <dd>{{ email }}</dd>
+
+        {% if profile %}
+        <dt>{% trans "Name" context "true name" %}</dt>
+        <dd>{{ profile.nickname }}</dd>
+        {% endif %}
+
+        {% if d_profile %}
+        <dt>{% trans "Department" %}</dt>
+        <dd>{{ d_profile.department }}</dd>
+
+        <dt>{% trans "Telephone" %}</dt>
+        <dd>{{ d_profile.telephone }}</dd>
+        {% endif %}
+    </dl>
+
+    <h3 class="hd">{% trans "Space Used" %}</h3>
+    <p>{% trans "Used" %}: {{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}</p>
+</div>
+{% endblock %}
+
+{% block right_panel %}
+<div id="tabs" class="tab-tabs">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#owned" class="a">{% trans "Owned Libs" %}</a></li>
+            <li class="tab"><a href="#user-admin-groups" class="a">{% trans "Groups" %}</a></li>
+        </ul>
+    </div>
+
+    <div id="owned">
+        {% if owned_repos %}
+        <table class="repo-list">
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="35%">{% trans "Name" %}</th>
+                <th width="16%">{% trans "Size"%}</th>
+                <th width="25%">{% trans "Last Update"%}</th>
+                <th width="20%">{% trans "Operations" %}</th>
+            </tr>
+
+            {% for repo in owned_repos %}
+            <tr>
+                {% if repo.encrypted %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "library icon" %}" /></td>
+                {% else %}
+                <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write" %}" alt="{% trans "library icon" %}" /></td>
+                {% endif %}
+
+                {% if not repo.name %}
+                    <td>Broken ({{repo.id}})</td>
+                {% else %}
+                    {% if repo.encrypted %}
+                        <td>{{ repo.name }}</td>
+                    {% elif enable_sys_admin_view_repo %}
+                        <td><a href="{% url 'sys_admin_repo' repo.id %}">{{ repo.name }}</a></td>
+                    {% else %}
+                        <td>{{ repo.name }}</td>
+                    {% endif %}
+                {% endif %}
+
+                <td>{{ repo.size|filesizeformat }}</td>
+                <td>{{ repo.last_modify|translate_seahub_time }}</td>
+                <td data-id="{{ repo.props.id }}" data-name="{{repo.name}}">
+                    <div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has not created any libraries" %}</h2>
+        </div>
+        {% endif %}
+    </div>
+
+    <div id="user-admin-groups">
+        {% if personal_groups %}
+        <table>
+            <tr>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Role" %}</th>
+                <th width="25%">{% trans "Create At" %}</th>
+                <th width="15%">{% trans "Operations" %}</th>
+            </tr>
+            {% for group in personal_groups %}
+                <tr>
+                    <td><a href="{% url 'sys_admin_group_info' group.id %}">{{ group.group_name }}</a></td>
+                    <td>{{ group.role }}</td>
+                    <td>{{ group.timestamp|tsstr_sec }}</td>
+                    <td></td>
+                </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="empty-tips">
+            <h2 class="alc">{% trans "This user has not created or joined any groups" %}</h2>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% include "sysadmin/repo_transfer_form.html" %}
+{% endblock %}
+
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}
