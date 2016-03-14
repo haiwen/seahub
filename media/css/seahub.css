@@ -1936,8 +1936,7 @@ textarea:-moz-placeholder {/* for FF */
 .displayed-op .op:hover {
     text-decoration:none;
 }
-.audit-item .audit-select-hidden,
-.repo-file-list .hidden-op {
+.audit-item .audit-select-hidden {
     position:absolute;
     background:#fff;
     padding:6px 1px;
@@ -1945,13 +1944,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
-.audit-select-hidden li a,
-.hidden-op a {
+.audit-select-hidden li a {
     display:block;
     padding:0 12px;
-}
-.hidden-op a:hover {
-    background: #eee;
 }
 .file-choose-form {
     width:500px;
