@@ -87,34 +87,6 @@
 
 {% if user.permissions.can_add_repo %}
 
-{% if not force_server_crypto %}
-<div class="setting-item" id="enc-lib-setting">
-<h3>{% trans "Encrypted Libraries Setting" %}</h3>
-<form method="post" action="{% url 'options_save' %}">{% csrf_token %}
-    <label>{% trans "How to view encrypted libraries online:"%}</label><br />
-    <input type="radio" name="repo-enc" value="server-crypto" {% if server_crypto %}checked="checked"{% endif %} class="vam" />
-    <span class="vam bold">{% trans "Send passwords to the server." %}</span> <span class="vam">{% trans "Files will be decrypted in the server before being sent to you." %}</span><br />
-
-    <input type="radio" name="repo-enc" value="client-crypto" {% if not server_crypto %}checked="checked"{% endif %} class="vam" />
-    <span class="vam bold">{% trans "Save passwords in your browser." %}</span> <span class="vam">{% trans "Files will be decrypted in your browser when you download them." %}</span>
-    <p>{% trans "Tip: the latter way is more secure, but it is not supported well by all browsers. We advise you to use the latest version of Chrome or Firefox." %}</p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-</div>
-{% endif %}
-
-{% if not is_pro %}
-<div class="setting-item" id="sub-lib-setting">
-    <h3>{% trans "Sub-library Setting" %}</h3>
-    <form method="post" action="{% url 'sub_lib_enable_set' %}">{% csrf_token %}
-        <input type="checkbox" name="enable-sub-lib" class="vam" {% if sub_lib_enabled %}checked="checked"{% endif %} /> <span class="vam">{% trans "Enable sub-library" %}</span>
-        <p>{% trans "This feature enables you to selectively sync a folder inside a library. A sub-library can be created from any folder. After being created, it will be listed in your desktop client, and you can download it just like downloading a normal library. It will be automatically kept in sync with its origin library." %}</p>
-        <p>{% trans "Sub-library is also used when sharing a folder to a group or another user. Without this option on, a hidden sub-library will be created automatically in such case. With this option on, those hidden sub-libraries will also be listed, which enables you to manage them." %}</p>
-        <input type="submit" value="{% trans "Submit" %}" class="submit" />
-    </form>
-</div>
-{% endif %}
-
 <div class="setting-item" id="default-lib">
     <h3>{% trans "Default Library Setting" %}</h3>
     {% if default_repo %}
@@ -178,7 +150,7 @@ var all_repos = [];
     all_repos.push({
         'data': '{{ a_repo.props.name }}',
         'attr': {'repo_id': '{{ a_repo.props.id }}', 'root_node': true},
-    });  
+    });
 {% endfor %}
 $('#default-lib').click(function() {
     var form = $('#default-lib-form'),
@@ -205,14 +177,14 @@ $('#default-lib-form').submit(function() {
     lang_context.click(function() {
         lang_selector.toggleClass('hide');
         return false;
-    }).focus(function() { $(this).blur(); }); 
+    }).focus(function() { $(this).blur(); });
 
     $(document).click(function(e) {
         var element = e.target || e.srcElement;
         if (element.id != 'lang-context-selector' && element.id != 'lang-context') {
             lang_selector.addClass('hide');
-        }   
-    }); 
+        }
+    });
 })();
 </script>
 {% endblock %}
