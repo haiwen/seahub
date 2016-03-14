@@ -9,8 +9,7 @@
 #view-hd,
 #shared-file-view-hd,
 #view-path-op,
-#file-op,
-#sf-commit-op {
+#file-op {
     width:950px;
     margin:0 auto;
 }
@@ -44,7 +43,6 @@
     border:1px solid #ededed;
     margin-top:12px;
 }
-#sf,
 #md-view,
 .CodeMirror,
 #file-view-tip {
@@ -52,7 +50,6 @@
     margin:0 auto;
     box-shadow:0 0 6px #ccc;
 }
-#sf,
 #md-view {
     min-height:400px;
 }

@@ -2776,13 +2776,7 @@ textarea:-moz-placeholder {/* for FF */
 #file-edit-cancel {
     vertical-align:middle; /* for ie 7 */
 }
-#sf {
-    width:624px;
-    /*font-size:15px;*/
-    font-size:medium;
-    background:#fff;
-}
-#sf, #md-view {
+#md-view {
     padding:40px 96px;
 }
 #md-edit-help {
