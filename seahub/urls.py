@@ -117,6 +117,7 @@ urlpatterns = patterns(
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
     url(r'^user/(?P<msg_id>\d+)/msgdel/$', user_msg_remove, name='user_msg_remove'),
     url(r'^user/(?P<msg_id>\d+)/remsgdel/$', user_received_msg_remove, name='user_received_msg_remove'),
+    url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
 
@@ -161,7 +162,6 @@ urlpatterns = patterns(
     url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),
     url(r'^ajax/set_notice_seen_by_id/$', set_notice_seen_by_id, name='set_notice_seen_by_id'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
-    url(r'^ajax/events/$', events, name="events"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-basic-info/$', ajax_repo_change_basic_info, name='ajax_repo_change_basic_info'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/transfer-owner/$', ajax_repo_transfer_owner, name='ajax_repo_transfer_owner'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),

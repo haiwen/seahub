@@ -33,12 +33,6 @@ define([
             this.currentView = this.reposView;
         },
 
-        showMySubRepos: function() {
-            this.currentView.hide();
-            this.subReposView.show();
-            this.currentView = this.subReposView;
-        },
-
         showSharedRepos: function() {
             this.currentView.hide();
             this.sharedReposView.show();

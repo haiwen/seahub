@@ -1388,6 +1388,28 @@ def convert_cmmt_desc_link(request):
         logger.warn('diff_result: %s' % (d.__dict__))
     raise Http404
 
+@login_required
+def toggle_modules(request):
+    """Enable or disable modules.
+    """
+    if request.method != 'POST':
+        raise Http404
+
+    referer = request.META.get('HTTP_REFERER', None)
+    next = settings.SITE_ROOT if referer is None else referer
+
+    username = request.user.username
+    personal_wiki = request.POST.get('personal_wiki', 'off')
+    if personal_wiki == 'on':
+        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        messages.success(request, _('Successfully enable "Personal Wiki".'))
+    else:
+        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
+        if referer.find('wiki') > 0:
+            next = settings.SITE_ROOT
+        messages.success(request, _('Successfully disable "Personal Wiki".'))
+
+    return HttpResponseRedirect(next)
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):

@@ -38,7 +38,7 @@ from seahub.group.models import PublicGroup
 from seahub.signals import upload_file_successful, repo_created, repo_deleted
 from seahub.views import validate_owner, \
     get_unencry_rw_repos_by_user, is_registered_user, \
-    get_system_default_repo_id, get_diff, group_events_data, \
+    get_system_default_repo_id, get_diff, \
     get_owned_repo_list, check_folder_permission, is_registered_user
 from seahub.views.modules import get_enabled_mods_by_group, \
     get_available_mods_by_group, enable_mod_for_group, \
@@ -1816,29 +1816,6 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
         repo_id = None
 
     return repo_id
-
-@login_required_ajax
-def events(request):
-    events_count = 15
-    username = request.user.username
-    start = int(request.GET.get('start'))
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
-
-    events_more = True if len(events) == events_count else False
-
-    event_groups = group_events_data(events)
-    ctx = {'event_groups': event_groups}
-    html = render_to_string("snippets/events_body.html", ctx)
-
-    return HttpResponse(json.dumps({'html': html,
-                                    'events_more': events_more,
-                                    'new_start': start}),
-                        content_type='application/json; charset=utf-8')
 
 @login_required_ajax
 def ajax_repo_change_basic_info(request, repo_id):
