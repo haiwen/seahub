@@ -31,6 +31,8 @@ define([
 
         render: function() {
             var obj = this.model.toJSON();
+            var icon_size = Common.isHiDPI() ? 96 : 24;
+            var icon_url = this.model.getIconUrl(icon_size);
             $.extend(obj, {
                 group_id: this.group_id,
                 is_staff: this.is_staff,
@@ -38,7 +40,9 @@ define([
                 share_from_me: app.pageOptions.username == this.model.get('owner') ? true : false,
                 // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
                 owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
-                show_shared_by: this.show_shared_by
+                show_shared_by: this.show_shared_by,
+                icon_url: icon_url,
+                icon_title: this.model.getIconTitle()
             });
             this.$el.html(this.template(obj));
             return this;

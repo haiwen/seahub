@@ -4,8 +4,9 @@ define([
     'backbone',
     'common',
     'app/collections/group-repos',
-    'app/views/group-repo'
-], function($, _, Backbone, Common, GroupRepos, GroupRepoView) {
+    'app/views/group-repo',
+    'app/models/group-repo'
+], function($, _, Backbone, Common, GroupRepos, GroupRepoView, GroupRepo) {
     'use strict';
 
     var GroupItemView = Backbone.View.extend({
@@ -37,11 +38,11 @@ define([
             groupRepos.setGroupID(group_id);
             $(repos).each(function(index, item) {
                 var view = new GroupRepoView({
-                    model: new Backbone.Model(item, {collection: groupRepos}), 
+                    model: new GroupRepo(item, {collection: groupRepos}),
                     group_id: group_id,
                     is_staff: is_staff,
                     show_shared_by: false // don't show 'Shared By'
-                }); 
+                });
                 $listContainer.append(view.render().el);
             });
         }
