@@ -41,7 +41,8 @@ define([
                 // 'owner_name' for '#groups', 'owner_nickname' for '#group/id/'
                 owner_name: this.model.get('owner_nickname') || this.model.get('owner_name'),
                 show_shared_by: this.show_shared_by,
-                icon_url: icon_url
+                icon_url: icon_url,
+                icon_title: this.model.getIconTitle()
             });
             this.$el.html(this.template(obj));
             return this;

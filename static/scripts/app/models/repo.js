@@ -45,6 +45,19 @@ define([
             var is_encrypted = this.get('encrypted');
             var is_readonly = this.get('permission') == "r" ? true : false;
             return Common.getLibIconUrl(is_encrypted, is_readonly, size);
+        },
+
+        getIconTitle: function() {
+            var icon_title = '';
+            if (this.get('encrypted')) {
+                icon_title = gettext("Encrypted");
+            } else if (this.get('permission') == "rw") {
+                icon_title = gettext("Read-Write");
+            } else {
+                icon_title = gettext("Read-Only");
+            }
+
+            return icon_title;
         }
 
     });

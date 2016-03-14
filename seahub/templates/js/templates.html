@@ -30,11 +30,7 @@
 </script>
 <script type="text/template" id="repo-tmpl">
     <td>
-        <% if (encrypted) { %>
-        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
-        <% } else { %>
-        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
-        <% } %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
@@ -67,15 +63,7 @@
 </script>
 <script type="text/template" id="group-repo-tmpl">
     <td>
-        <% if (encrypted) { %>
-        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
-        <% } else { %>
-            <% if (permission == 'rw') { %>
-        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
-            <% } else { %>
-        <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
-            <% } %>
-        <% } %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
@@ -91,15 +79,7 @@
 </script>
 <script type="text/template" id="organization-repo-tmpl">
     <td>
-        <% if (encrypted) { %>
-        <img src="<%- icon_url %>" title="{% trans "Encrypted" %}" alt="" width="24" />
-        <% } else { %>
-            <% if (permission == 'rw') { %>
-        <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
-            <% } else { %>
-        <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
-            <% } %>
-        <% } %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
     </td>
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
@@ -603,15 +583,7 @@
 </script>
 <script type="text/template" id="shared-repo-tmpl">
     <td>
-        <% if (encrypted) { %>
-            <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
-        <% } else { %>
-            <% if (permission == 'rw') { %>
-            <img src="<%- icon_url %>" title="{% trans "Read-Write" %}" alt="" width="24" />
-            <% } else { %>
-            <img src="<%- icon_url %>" title="{% trans "Read-Only" %}" alt="" width="24" />
-            <% } %>
-        <% } %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
