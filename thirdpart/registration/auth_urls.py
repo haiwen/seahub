@@ -65,7 +65,7 @@ else:
                             url(r'^login/$',
                                 auth_views.login,
                                 {'template_name': 'registration/login.html',
-                                 'redirect_if_logged_in': 'myhome'},
+                                 'redirect_if_logged_in': 'libraries'},
                                 name='auth_login'),
                             url(r'^logout/$',
                                 auth_views.logout,

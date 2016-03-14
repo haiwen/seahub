@@ -4,11 +4,10 @@ define([
     'backbone',
     'common',
     'app/views/myhome-repos',
-    'app/views/myhome-sub-repos',
     'app/views/myhome-shared-repos',
     'app/views/starred-file',
     'app/views/activities'
-], function($, _, Backbone, Common, ReposView, SubReposView,
+], function($, _, Backbone, Common, ReposView,
     SharedReposView, StarredFileView, ActivitiesView) {
     'use strict';
 
@@ -17,7 +16,6 @@ define([
 
         initialize: function(options) {
             this.reposView = new ReposView();
-            this.subReposView = new SubReposView();
             this.sharedReposView = new SharedReposView();
             this.starredFileView = new StarredFileView();
             this.activitiesView = new ActivitiesView();
@@ -33,12 +31,6 @@ define([
             this.currentView.hide();
             this.reposView.show();
             this.currentView = this.reposView;
-        },
-
-        showMySubRepos: function() {
-            this.currentView.hide();
-            this.subReposView.show();
-            this.currentView = this.subReposView;
         },
 
         showSharedRepos: function() {

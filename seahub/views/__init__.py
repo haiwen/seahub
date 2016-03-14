@@ -848,11 +848,6 @@ def get_virtual_repos_by_owner(request):
 
 @login_required
 @user_mods_check
-def myhome(request):
-    return HttpResponseRedirect(reverse('libraries'))
-
-@login_required
-@user_mods_check
 def libraries(request):
     """
     New URL to replace myhome
@@ -890,23 +885,6 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             }, context_instance=RequestContext(request))
-
-@login_required
-@user_mods_check
-def starred(request):
-    """List starred files.
-
-    Arguments:
-    - `request`:
-    """
-    username = request.user.username
-    starred_files = UserStarredFiles.objects.get_starred_files_by_username(
-        username)
-
-    return render_to_response('starred.html', {
-            "starred_files": starred_files,
-            }, context_instance=RequestContext(request))
-
 
 @login_required
 @user_mods_check
@@ -1254,125 +1232,6 @@ def list_inner_pub_repos(request):
 
     return []
 
-@login_required
-def pubrepo(request):
-    """
-    Show public libraries.
-    """
-    if not request.user.permissions.can_view_org():
-        raise Http404
-
-    username = request.user.username
-
-    if request.cloud_mode and request.user.org is not None:
-        org_id = request.user.org.org_id
-        public_repos = seaserv.list_org_inner_pub_repos(org_id, username)
-        for r in public_repos:
-            if r.user == username:
-                r.share_from_me = True
-        return render_to_response('organizations/pubrepo.html', {
-                'public_repos': public_repos,
-                'create_shared_repo': True,
-                }, context_instance=RequestContext(request))
-
-    if not request.cloud_mode:
-        public_repos = seaserv.list_inner_pub_repos(username)
-        for r in public_repos:
-            if r.user == username:
-                r.share_from_me = True
-        return render_to_response('pubrepo.html', {
-                'public_repos': public_repos,
-                'create_shared_repo': True,
-                }, context_instance=RequestContext(request))
-
-    raise Http404
-
-def get_pub_users(request, start, limit):
-    if is_org_context(request):
-        url_prefix = request.user.org.url_prefix
-        users_plus_one = seaserv.get_org_users_by_url_prefix(url_prefix,
-                                                             start, limit)
-
-    elif request.cloud_mode:
-        raise Http404           # no pubuser in cloud mode
-
-    else:
-        users_plus_one = seaserv.get_emailusers('DB', start,
-                                                limit, is_active=True)
-    return users_plus_one
-
-def count_pub_users(request):
-    if is_org_context(request):
-        url_prefix = request.user.org.url_prefix
-        # TODO: need a new api to count org users.
-        org_users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
-        return len(org_users)
-    elif request.cloud_mode:
-        return 0
-    else:
-        return seaserv.ccnet_threaded_rpc.count_emailusers('DB')
-
-@login_required
-def pubuser(request):
-    """
-    Show public users in database or ldap depending on request arg ``ldap``.
-    """
-    if not request.user.permissions.can_view_org():
-        raise Http404
-
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-    except ValueError:
-        current_page = 1
-    per_page = 20           # show 20 users per-page
-
-    # Show LDAP users or Database users.
-    have_ldap_user = False
-    if len(seaserv.get_emailusers('LDAPImport', 0, 1, is_active=True)) > 0:
-        have_ldap_user = True
-
-    try:
-        ldap = True if int(request.GET.get('ldap', 0)) == 1 else False
-    except ValueError:
-        ldap = False
-
-    if ldap and have_ldap_user:
-        # return ldap imported active users
-        users_plus_one = seaserv.get_emailusers('LDAPImport',
-                                                per_page * (current_page - 1),
-                                                per_page + 1,
-                                                is_active=True)
-    else:
-        users_plus_one = get_pub_users(request, per_page * (current_page - 1),
-                                       per_page + 1)
-
-    has_prev = False if current_page == 1 else True
-    has_next = True if len(users_plus_one) == per_page + 1 else False
-
-    if ldap and have_ldap_user:
-        # return the number of ldap imported active users
-        emailusers_count = seaserv.ccnet_threaded_rpc.count_emailusers('LDAP')
-    else:
-        emailusers_count = count_pub_users(request)
-
-    num_pages = int(ceil(emailusers_count / float(per_page)))
-    page_range = get_page_range(current_page, num_pages)
-    show_paginator = True if len(page_range) > 1 else False
-
-    users = users_plus_one[:per_page]
-
-    return render_to_response('pubuser.html', {
-                'users': users,
-                'current_page': current_page,
-                'has_prev': has_prev,
-                'has_next': has_next,
-                'page_range': page_range,
-                'show_paginator': show_paginator,
-                'have_ldap_user': have_ldap_user,
-                'ldap': ldap,
-                }, context_instance=RequestContext(request))
-
 @login_required_ajax
 def repo_set_password(request):
     content_type = 'application/json; charset=utf-8'
@@ -1457,31 +1316,6 @@ def repo_download_dir(request, repo_id):
     url = gen_file_get_url(token, dirname)
     return redirect(url)
 
-@login_required
-@user_mods_check
-def activities(request):
-    if not EVENTS_ENABLED:
-        raise Http404
-
-    events_count = 15
-    username = request.user.username
-    start = int(request.GET.get('start', 0))
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        events, start = get_org_user_events(org_id, username, start, events_count)
-    else:
-        events, start = get_user_events(username, start, events_count)
-
-    events_more = True if len(events) == events_count else False
-
-    event_groups = group_events_data(events)
-
-    return render_to_response('activities.html', {
-        'event_groups': event_groups,
-        'events_more': events_more,
-        'new_start': start,
-            }, context_instance=RequestContext(request))
 
 def group_events_data(events):
     """
@@ -1572,11 +1406,10 @@ def toggle_modules(request):
     else:
         disable_mod_for_user(username, MOD_PERSONAL_WIKI)
         if referer.find('wiki') > 0:
-            next = reverse('myhome')
+            next = settings.SITE_ROOT
         messages.success(request, _('Successfully disable "Personal Wiki".'))
 
     return HttpResponseRedirect(next)
-
 
 storage = get_avatar_file_storage()
 def latest_entry(request, filename):
@@ -1612,7 +1445,7 @@ def image_view(request, filename):
     return response
 
 def shib_login(request):
-    return HttpResponseRedirect(request.GET.get("next",reverse('myhome')))
+    return HttpResponseRedirect(request.GET.get("next", reverse('libraries')))
 
 def underscore_template(request, template):
     """Serve underscore template through Django, mainly for I18n.
@@ -1629,7 +1462,7 @@ def underscore_template(request, template):
 
 def fake_view(request, **kwargs):
     """
-    Used for 'view_common_lib_dir' and some other urls 
+    Used for 'view_common_lib_dir' and some other urls
 
     As the urls start with '#',
     http request will not access this function

@@ -1,14 +1,18 @@
 define([
     'underscore',
     'backbone',
+    'common',
     'app/models/repo'
-], function(_, Backbone, Repo) {
+], function(_, Backbone, Common, Repo) {
     'use strict';
 
     var RepoCollection = Backbone.Collection.extend({
         model: Repo,
-        url: app.pageOptions.reposUrl,
         type: 'mine',
+
+        url: function() {
+            return Common.getUrl({name: 'repos'});
+        },
 
         initialize: function(options) {
             //console.log('init RepoCollection');
@@ -20,7 +24,7 @@ define([
         fetch: function(options) {
             // override default fetch url
             options = options ? _.clone(options) : {};
-            options.url = this.url + '?type=' + this.type;
+            options.url = this.url() + '?type=' + this.type;
 
             //call Backbone's fetch
             return Backbone.Collection.prototype.fetch.call(this, options);

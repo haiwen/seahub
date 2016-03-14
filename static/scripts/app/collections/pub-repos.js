@@ -1,15 +1,19 @@
 define([
     'underscore',
     'backbone',
+    'common',
     'app/models/pub-repo'
-], function(_, Backbone, PubRepo) {
+], function(_, Backbone, Common, PubRepo) {
     'use strict';
 
     var PubRepoCollection = Backbone.Collection.extend({
         model: PubRepo,
-        url: app.pageOptions.pubReposUrl,
 
-        comparator: -'mtime'
+        comparator: -'mtime',
+
+        url: function() {
+            return Common.getUrl({name: 'pub_repos'});
+        }
 
     });
 

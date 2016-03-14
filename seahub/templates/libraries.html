@@ -34,33 +34,6 @@
     </div>
     {% endif %}
 
-    {% if user.permissions.can_add_repo and sub_lib_enabled %}
-    <div id="my-sub-repos" class="hide">
-        <div class="hd ovhd">
-            <h3 class="fleft">{% trans "Sub-libraries" %}</h3>
-            <button id="sub-lib-create" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Sub-library" %}</span></button>
-        </div>
-        <table class="hide">
-            <thead>
-            <tr>
-                <th width="4%"><!--icon--></th>
-                <th width="38%">{% trans "Name" %}</th>
-                <th width="6%"><!--op--></th>
-                <th width="30%">{% trans "Origin" %}</th>
-                <th width="22%">{% trans "Last Update" %}</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-        <div class="empty-tips hide">
-            <h2 class="center-contents">{% trans "You have not created any sub-libraries" %}</h2>
-            <p>{% trans "You can create a sub-library from a directory inside a library. A sub-library can be independently synced and shared. Files in the sub-library will be automatically kept in sync with those in the directory of the origin library." %}</p>
-        </div>
-        <span class="loading-icon loading-tip"></span>
-        <p class="error error-tip hide"></p>
-    </div>
-    {% endif %}
-
     <div id="repos-shared-to-me" class="hide">
         <h3 class="hd">{% trans "Shared" %}</h3>
         <table class="hide">
@@ -114,21 +87,6 @@
         <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
     </div>
 </div>
-
-
-{% if sub_lib_enabled %}
-<form id="sublib-create-form" class="file-choose-form hide">
-    <h3>{% trans "Choose a directory:" %}</h3>
-    <div class="dir-tree-cont">
-        <span class="loading-icon loading-tip"></span>
-    </div>
-    <input type="hidden" name="dst_repo" value="" />
-    <input type="hidden" name="dst_path" value="" />
-    <p class="error hide"></p>
-    <input type="button" value="{% trans "Submit" %}" class="submit" />
-    <button class="simplemodal-close">{% trans "Cancel"%}</button>
-</form>
-{% endif %}
 
 <div id="group" class="hide">
     <div id="group-top"></div>
@@ -239,8 +197,6 @@
 app["pageOptions"] = {
     site_root: "{{ SITE_ROOT }}",
     csrfToken: "{{ csrf_token }}",
-    reposUrl: "{% url 'api2-repos' %}",
-    pubReposUrl: "{% url 'api2-pub-repos' %}",
     groups: (function () {
         var groups = [];
         {% for group in request.user.joined_groups %}

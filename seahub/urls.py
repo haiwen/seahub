@@ -47,7 +47,6 @@ urlpatterns = patterns(
     url(r'^$', libraries, name='libraries'),
     #url(r'^home/$', direct_to_template, { 'template': 'home.html' } ),
     url(r'^robots\.txt$', TemplateView.as_view(template_name='robots.txt', content_type='text/plain')),
-    url(r'^home/my/$', myhome, name='myhome'),
     url(r'^home/wiki/$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki/(?P<page_name>[^/]+)$', personal_wiki, name='personal_wiki'),
     url(r'^home/wiki_pages/$', personal_wiki_pages, name='personal_wiki_pages'),
@@ -98,7 +97,6 @@ urlpatterns = patterns(
     url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
     url(r'^#groups/', fake_view, name='group_list'),
     url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
-    # url(r'^home/my/lib/(?P<repo_id>[-0-9a-f]{36})/dir/(?P<path>.*)$', myhome_lib, name='myhome_lib'),
 
     ### share file/dir, upload link ###
 #    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/privshare/$', gen_private_file_share, name='gen_private_file_share'),
@@ -114,8 +112,6 @@ urlpatterns = patterns(
     ### Misc ###
     url(r'^image-view/(?P<filename>.*)$', image_view, name='image_view'),
    (r'^file_upload_progress_page/$', file_upload_progress_page),
-    url(r'^activities/$', activities, name='activities'),
-    url(r'^starred/$', starred, name='starred'),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
     url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
@@ -166,7 +162,6 @@ urlpatterns = patterns(
     url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),
     url(r'^ajax/set_notice_seen_by_id/$', set_notice_seen_by_id, name='set_notice_seen_by_id'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
-    url(r'^ajax/events/$', events, name="events"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-basic-info/$', ajax_repo_change_basic_info, name='ajax_repo_change_basic_info'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/transfer-owner/$', ajax_repo_transfer_owner, name='ajax_repo_transfer_owner'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),
@@ -183,10 +178,6 @@ urlpatterns = patterns(
 
     url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
 
-    ### Organizaion ###
-    url(r'^pubinfo/libraries/$', pubrepo, name='pubrepo'),
-    url(r'^ajax/publicrepo/create/$', public_repo_create, name='public_repo_create'),
-    url(r'^pubinfo/users/$', pubuser, name='pubuser'),
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),

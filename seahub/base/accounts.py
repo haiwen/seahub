@@ -476,7 +476,7 @@ class RegistrationBackend(object):
         account activation.
 
         """
-        return ('myhome', (), {})
+        return ('libraries', (), {})
 
 
 class RegistrationForm(forms.Form):
