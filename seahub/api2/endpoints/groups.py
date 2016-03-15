@@ -1,6 +1,5 @@
 import logging
 
-from django.utils.dateformat import DateFormat
 from django.utils.translation import ugettext as _
 from django.template.defaultfilters import filesizeformat
 
@@ -21,7 +20,7 @@ from seahub.avatar.settings import GROUP_AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
     get_default_group_avatar_url
 from seahub.utils import is_org_context, is_valid_username
-from seahub.utils.timeutils import dt, utc_to_local
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 from seahub.group.utils import validate_group_name, check_group_name_conflict, \
     is_group_member, is_group_admin, is_group_owner, is_group_admin_or_owner
 from seahub.group.views import remove_group_common
@@ -52,12 +51,12 @@ def get_group_info(request, group_id, avatar_size=GROUP_AVATAR_DEFAULT_SIZE):
         logger.error(e)
         avatar_url = get_default_group_avatar_url()
 
-    val = utc_to_local(dt(group.timestamp))
+    isoformat_timestr = timestamp_to_isoformat_timestr(group.timestamp)
     group_info = {
         "id": group.id,
         "name": group.group_name,
         "owner": group.creator_name,
-        "created_at": val.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(val).format('O'),
+        "created_at": isoformat_timestr,
         "avatar_url": request.build_absolute_uri(avatar_url),
         "admins": get_group_admins(group.id),
         "wiki_enabled": is_wiki_mod_enabled_for_group(group_id)

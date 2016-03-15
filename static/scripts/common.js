@@ -41,6 +41,7 @@ require.config({
         simplemodal: 'lib/jquery.simplemodal',
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
+        moment: 'lib/moment-with-locales',
 
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
@@ -52,8 +53,9 @@ define([
     'jquery',
     'underscore',
     'text',                     // Workaround for r.js, otherwise text.js will not be included
-    'pinyin-by-unicode'
-], function($, _, text, PinyinByUnicode) {
+    'pinyin-by-unicode',
+    'moment',
+], function($, _, text, PinyinByUnicode, Moment) {
     return {
         INFO_TIMEOUT: 10000,     // 10 secs for info msg
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
@@ -144,6 +146,7 @@ define([
                 case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
                 case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
                 case 'starred_files': return siteRoot + 'api2/starredfiles/';
+                case 'devices': return siteRoot + 'api2/devices/';
                 case 'events': return siteRoot + 'api2/events/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
@@ -189,6 +192,19 @@ define([
             'ico' : 'pic.png',
             // default
             'default' : 'file.png'
+        },
+
+        getMomentWithLocale: function(time) {
+            var language_code;
+            if (app.pageOptions.language_code == 'en') {
+                language_code = 'en-gb';
+            } else if (app.pageOptions.language_code == 'es-ar' || app.pageOptions.language_code == 'es-mx') {
+                language_code = 'es';
+            } else {
+                language_code = app.pageOptions.language_code;
+            }
+
+            return Moment(time).locale(language_code);
         },
 
         getFileIconUrl: function(filename, size) {

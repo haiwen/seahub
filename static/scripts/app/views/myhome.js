@@ -6,9 +6,10 @@ define([
     'app/views/myhome-repos',
     'app/views/myhome-shared-repos',
     'app/views/starred-file',
+    'app/views/devices',
     'app/views/activities'
 ], function($, _, Backbone, Common, ReposView,
-    SharedReposView, StarredFileView, ActivitiesView) {
+    SharedReposView, StarredFileView, DevicesView, ActivitiesView) {
     'use strict';
 
     var MyHomeView = Backbone.View.extend({
@@ -18,6 +19,7 @@ define([
             this.reposView = new ReposView();
             this.sharedReposView = new SharedReposView();
             this.starredFileView = new StarredFileView();
+            this.devicesView = new DevicesView();
             this.activitiesView = new ActivitiesView();
 
             this.dirView = options.dirView;
@@ -43,6 +45,12 @@ define([
             this.currentView.hide();
             this.starredFileView.show();
             this.currentView = this.starredFileView;
+        },
+
+        showDevices: function() {
+            this.currentView.hide();
+            this.devicesView.show();
+            this.currentView = this.devicesView;
         },
 
         showActivities: function() {

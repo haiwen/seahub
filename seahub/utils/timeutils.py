@@ -1,3 +1,4 @@
+import pytz
 import datetime
 from django.conf import settings
 from django.utils import six
@@ -11,7 +12,6 @@ def dt(value):
     except ValueError:
         # TODO: need a better way to handle 64 bits timestamp.
         return datetime.datetime.utcfromtimestamp(value/1000000)
-    
 
 def value_to_db_datetime(value):
     if value is None:
@@ -33,3 +33,16 @@ def utc_to_local(dt):
     utc = dt.replace(tzinfo=timezone.utc)
     local = timezone.make_naive(utc, tz)
     return local
+
+def timestamp_to_isoformat_timestr(timestamp):
+    dt_obj = dt(timestamp)
+    dt_obj = dt_obj.replace(microsecond=0)
+    pytz_obj = pytz.timezone(settings.TIME_ZONE)
+    isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()
+    return isoformat_timestr
+
+def datetime_to_isoformat_timestr(datetime):
+    datetime = datetime.replace(microsecond=0)
+    pytz_obj = pytz.timezone(settings.TIME_ZONE)
+    isoformat_timestr = pytz_obj.localize(datetime).isoformat()
+    return isoformat_timestr

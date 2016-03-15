@@ -666,7 +666,7 @@
                 <li class="tab"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
             <% } %>
         <% } %>
-        <li class="tab"><a href="{% url 'devices' %}"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+        <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
@@ -843,6 +843,27 @@
     <td><%= mtime_relative %></td>
     <td>
         <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
+    </td>
+</script>
+<script type="text/template" id="device-item-tmpl">
+    <td><%- platform %></td>
+    <td><%- device_name %></td>
+    <td><%- last_login_ip %></td>
+    <td><time title='<%- time %>'><%- time_from_now %></time></td>
+    <td>
+        <span class="lib-num cspt"><%- synced_repos_length %><% if (synced_repos.length > 0) { %> <span class="dir-icon icon-caret-down"></span><% } %></span>
+        <% if (synced_repos.length > 0) { %>
+        <ul class="lib-list hide">
+            <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
+            <li><a href="#my-libs/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
+            <% } %>
+        </ul>
+        <% } %>
+    </td>
+    <td>
+        <div>
+            <span class="unlink-device op-icon sf2-icon-delete vh" title="{% trans "Unlink" %}"></span>
+        </div>
     </td>
 </script>
 <script type="text/template" id="my-repos-hd-tmpl">

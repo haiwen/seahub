@@ -3,6 +3,7 @@ import datetime
 
 from seaserv import seafile_api
 from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +18,6 @@ def _last_sync_time(repos):
 
 def get_user_devices(username):
     devices = TokenV2.objects.get_user_devices(username)
-
     peer_repos_map = get_user_synced_repo_infos(username)
 
     for device in devices:
@@ -29,6 +29,7 @@ def get_user_devices(username):
                 device['last_accessed'] = max(device['last_accessed'],
                                               _last_sync_time(repos))
 
+        device['last_accessed'] = datetime_to_isoformat_timestr(device['last_accessed'])
     return devices
 
 def get_user_synced_repo_infos(username):

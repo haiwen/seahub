@@ -29,6 +29,7 @@ define([
             'common/lib/:repo_id(/*path)': 'showCommonDir',
             'starred/': 'showStarredFile',
             'activities/': 'showActivities',
+            'devices/': 'showDevices',
             // Default
             '*actions': 'showRepos'
         },
@@ -94,6 +95,12 @@ define([
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showStarredFile();
             this.sideNavView.setCurTab('starred');
+        },
+
+        showDevices: function() {
+            this.switchCurrentView(this.myHomeView);
+            this.myHomeView.showDevices();
+            this.sideNavView.setCurTab('devices');
         },
 
         showActivities: function() {
