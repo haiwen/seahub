@@ -182,7 +182,6 @@ define([
             },
 
             /***** private functions *****/
-
             addOne: function(dirent) {
                 var view;
                 if (this.view_mode == 'list') {
@@ -194,13 +193,28 @@ define([
                 }
             },
 
+            render_dirents_slice: function(start, limit) {
+                var dir = this.dir;
+                _.each(dir.slice(start, start + limit), this.addOne, this);
+                if (dir.length > start + limit) {
+                    dir.dirent_more = true;
+                    dir.last_start = start + limit;
+                } else {
+                    dir.dirent_more = false;
+                }
+            },
+
             reset: function() {
                 this.renderPath();
                 this.renderDirOpBar();
                 if (this.view_mode == 'list') {
                     this.renderDirentsHd();
                 }
-                this.dir.each(this.addOne, this);
+
+                this.dir.last_start = 0;
+                this.dir.limit = 100;
+                this.render_dirents_slice(this.dir.last_start, this.dir.limit);
+
                 this.fileUploadView.setFileInput();
                 this.getImageThumbnail();
             },
@@ -325,12 +339,8 @@ define([
                         'p': dir.path,
                         'thumbnail_size': thumbnail_size
                     },
-                    success: function(collection, response, opts) {
-                        dir.last_start = 0; // for 'more'
-                        if (response.dirent_list.length == 0 ||  // the dir is empty
-                            !response.dirent_more ) { // no 'more'
-                            loading_tip.hide();
-                        }
+                    success: function() {
+                        loading_tip.hide();
                     },
                     error: function(collection, response, opts) {
                         loading_tip.hide();
@@ -641,7 +651,7 @@ define([
                 };
                 dirents.sort();
                 this.$dirent_list_body.empty();
-                dirents.each(this.addOne, this);
+                this.render_dirents_slice(0, this.dir.limit);
                 el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
             },
@@ -667,7 +677,7 @@ define([
                 dirents.sort();
 
                 this.$dirent_list_body.empty();
-                dirents.each(this.addOne, this);
+                this.render_dirents_slice(0, this.dir.limit);
                 el.toggleClass('icon-caret-up icon-caret-down').show();
                 dirents.comparator = null;
             },
@@ -1059,37 +1069,11 @@ define([
 
             onWindowScroll: function () {
                 // 'more'
-                var dir = this.dir,
-                    start = dir.more_start;
-                if (dir.dirent_more &&
-                        $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true) &&
-                        start != dir.last_start) {
-                    var loading_tip = this.$('.loading-tip'),
-                        _this = this;
-                    dir.last_start = start;
-                    var thumbnail_size = app.pageOptions.thumbnail_default_size;
-                    if (this.view_mode == 'grid') {
-                        thumbnail_size = app.pageOptions.thumbnail_size_for_grid;
-                    }
-                    dir.fetch({
-                        cache: false,
-                        remove: false,
-                        data: {
-                            'p': dir.path,
-                            'thumbnail_size': thumbnail_size,
-                            'start': dir.more_start
-                        },
-                        success: function (collection, response, opts) {
-                            if (!response.dirent_more ) { // no 'more'
-                                loading_tip.hide();
-                            }
-                            _this.getImageThumbnail();
-                        },
-                        error: function(xhr, textStatus, errorThrown) {
-                            loading_tip.hide();
-                            Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
-                        }
-                    });
+                if (this.dir.dirent_more &&
+                        $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true)) {
+
+                    this.render_dirents_slice(this.dir.last_start, this.dir.limit);
+                    this.getImageThumbnail();
                 }
 
                 // fixed 'dir-op-bar'

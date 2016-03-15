@@ -276,11 +276,8 @@ def list_lib_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=500, content_type=content_type)
 
-    offset = int(request.GET.get('start', 0))
-    limit = 100
     dir_list = []
     file_list = []
-    dirent_more = False
 
     try:
         dir_id = seafile_api.get_dir_id_by_path(repo.id, path)
@@ -295,7 +292,8 @@ def list_lib_dir(request, repo_id):
         return HttpResponse(json.dumps({'error': err_msg}),
                             status=404, content_type=content_type)
 
-    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path, dir_id, username, offset, limit)
+    dirs = seafserv_threaded_rpc.list_dir_with_perm(repo_id, path, dir_id,
+            username, -1, -1)
     starred_files = get_dir_starred_files(username, repo_id, path)
 
     for dirent in dirs:
@@ -319,11 +317,6 @@ def list_lib_dir(request, repo_id):
 
             file_list.append(dirent)
 
-    more_start = None
-    if limit == len(dirs):
-        dirent_more = True
-        more_start = offset + 100
-
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo.id)
     else:
@@ -334,9 +327,6 @@ def list_lib_dir(request, repo_id):
     result["repo_name"] = repo.name
     result["user_perm"] = user_perm
     result["encrypted"] = repo.encrypted
-
-    result["dirent_more"] = dirent_more
-    result["more_start"] = more_start
 
     dirent_list = []
     for d in dir_list:
