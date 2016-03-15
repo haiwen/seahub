@@ -19,6 +19,5 @@ class ListLibDirTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 8
         assert self.folder_name == json_resp['dirent_list'][0]['obj_name']
         assert self.repo.name == json_resp['repo_name']
