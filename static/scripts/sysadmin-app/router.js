@@ -41,6 +41,7 @@ define([
         showDashboard: function() {
             this.switchCurrentView(this.dashboardView);
             this.sideNavView.setCurTab('dashboard');
+            this.dashboardView.show();
         }
 
     });
