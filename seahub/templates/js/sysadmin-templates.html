@@ -46,3 +46,56 @@
         {% endif %}
     </ul>
 </script>
+
+<script type="text/template" id="sysinfo-tmpl">
+    <div class="header-bar">
+        <h3 class="">{% trans "Info" %}</h3>
+    </div>
+    <dl>
+        <dt>{% trans "System Info" %}</dt>
+        <dd><% if (is_pro) { %>
+                {% trans "Professional Edition" %}
+                <% if (with_license) { %>
+                    {% trans "expires on" %} <%- license.Expiration %>
+                <% } %>
+            <% } else { %>
+            {% trans "Community Edition" %}
+            <a href="http://manual.seafile.com/deploy_pro/migrate_from_seafile_community_server.html" target="_blank">{% trans "Upgrade to Pro Edition" %}</a>
+            <% } %>
+        </dd>
+
+        <dt>{% trans "Libraries" %}</dt>
+        <dd><%- repos_count %></dd>
+
+        <% if (is_pro) { %>
+        <dt>{% trans "Active Users" %} / {% trans "Total Users" %} / {% trans "Limits" %}</dt>
+        <dd>
+            <%- active_users_count %>
+            /
+            <%- users_count %>
+            /
+            <% if (with_license) { %>
+                <%- license.MaxUsers %>
+            <% } else { %>
+                --
+            <% } %>
+        </dd>
+        <% } else { %>
+        <dt>{% trans "Active Users" %} / {% trans "Total Users" %}</dt>
+        <dd>
+            <%- active_users_count %>
+            /
+            <%- users_count %>
+        </dd>
+        <% } %>
+
+        <dt>{% trans "Groups" %}</dt>
+        <dd><%- groups_count %></dd>
+
+        <% if (multi_tenancy_enabled) { %>
+        <dt>{% trans "Organizations" %}</dt>
+        <dd><%- org_count %></dd>
+        <% } %>
+
+    </dl>
+</script>
