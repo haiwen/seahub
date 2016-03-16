@@ -204,6 +204,7 @@ urlpatterns = patterns(
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
 
     ### system admin ###
+    url(r'^sysadmin/$', sysadmin, name='sysadmin'),
     url(r'^sys/info/$', sys_info, name='sys_info'),
     url(r'^sys/settings/$', sys_settings, name='sys_settings'),
     url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
