@@ -39,7 +39,7 @@ except ImportError:
 def base(request):
     """
     Add seahub base configure to the context.
-    
+
     """
     try:
         org = request.user.org
