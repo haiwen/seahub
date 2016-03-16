@@ -1,11 +1,11 @@
 /**
  * CONTENTS
- * 
+ *
  * Font Icons
  * icon-xx ...............Font Awesome 3.2.1 by Dave Gandy
  * sf2-icon-xx ...........seafile-font2
  *
- * Reset 
+ * Reset
  * tags ..................reset styles of tags
  *
  * Helper
@@ -1157,12 +1157,16 @@ textarea:-moz-placeholder {/* for FF */
     text-decoration:none;
 }
 /**** popover ****/ /* e.g. top notice popup, group members popup */
+.popover-container {
+    position:relative;
+}
 .popover {
     width:240px;
     background:#fff;
     border:1px solid #c9c9c9;
     border-radius:3px;
     box-shadow:0 0 1px #f3f3f3;
+    position:absolute;
 }
 .popover-hd {
     padding:5px 0 3px;
@@ -3895,4 +3899,19 @@ img.thumbnail {
 }
 #dir-view .grid-item {
     width:134px;
+}
+/* devices */
+.device-libs-popover {
+    left:-80px;
+    z-index:100;
+}
+.device-libs-item {
+    display:block;
+    padding:4px 12px;
+    white-space:nowrap;
+    color:#eb8205;
+}
+.device-libs-item:hover {
+    background:#f8f8f8;
+    text-decoration:none;
 }

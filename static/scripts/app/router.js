@@ -128,6 +128,7 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('common', repo_id, path);
+            this.sideNavView.setCurTab('mine');
         },
 
         showSharedRepoDir: function(repo_id, path) {

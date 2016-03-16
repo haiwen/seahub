@@ -12,13 +12,20 @@ define([
         template: _.template($('#device-item-tmpl').html()),
 
         events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
+            'mouseenter': 'highlight',
+            'mouseleave': 'rmHighlight',
             'click .unlink-device': 'unlinkDevice',
-            'click .lib-num': 'showSyncedRepos'
+            'click .js-toggle-repos': 'toggleSyncedRepos'
         },
 
         initialize: function() {
+            $(document).click(function(e) {
+                var target = e.target || event.srcElement;
+                if (!$('.js-toggle-repos, .device-libs-popover').is(target)) {
+                    $('.device-libs-popover').addClass('hide');
+                    $('.dir-icon').removeClass('icon-caret-up').addClass('icon-caret-down');
+                }
+            });
         },
 
         render: function () {
@@ -50,52 +57,50 @@ define([
             return this;
         },
 
-        showAction: function() {
+        highlight: function() {
             this.$el.addClass('hl');
             this.$el.find('.op-icon').removeClass('vh');
         },
 
-        hideAction: function() {
+        rmHighlight: function() {
             this.$el.removeClass('hl');
             this.$el.find('.op-icon').addClass('vh');
         },
 
-        showSyncedRepos: function(e) {
-            var $lib_num = $(e.currentTarget);
-            var lib_list = $lib_num.next('.lib-list');
-            var dir_icon = $lib_num.children('.dir-icon');
+        toggleSyncedRepos: function(e) {
+            var $current_icon= $(e.currentTarget).children('.dir-icon'),
+                $current_popover = $(e.currentTarget).next('.device-libs-popover');
 
-            if (lib_list.length > 0) {
-                lib_list.toggleClass('hide');
-                if (lib_list.hasClass('hide')) {
-                    dir_icon.removeClass('icon-caret-up').addClass('icon-caret-down');
-                } else {
-                    dir_icon.removeClass('icon-caret-down').addClass('icon-caret-up');
-                }
+            $('.device-libs-popover').not($current_popover).addClass('hide');
+            $('.dir-icon').not($current_icon).removeClass('icon-caret-up').addClass('icon-caret-down');
+
+            $current_popover.toggleClass('hide');
+            if ($current_icon.hasClass('icon-caret-up')) {
+                $current_icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+            } else {
+                $current_icon.removeClass('icon-caret-down').addClass('icon-caret-up');
             }
+
+            return false
         },
 
         unlinkDevice: function() {
             var _this = this,
-                data = {
-                    'platform': this.model.get('platform'),
-                    'device_id': this.model.get('device_id')
-                };
+                device_name = this.model.get('device_name');
 
-            $.ajax({
-                url: Common.getUrl({name: 'devices'}),
-                type: 'DELETE',
-                dataType: 'json',
-                beforeSend: Common.prepareCSRFToken,
-                data: data,
+            this.model.unlink({
                 success: function() {
                     _this.remove();
-                    Common.feedback(gettext("Success"), 'success');
+
+                    var msg = gettext("Successfully unlink %(name)s.")
+                        .replace('%(name)s', Common.HTMLescape(device_name));
+                    Common.feedback(msg, 'success');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
                 }
             });
+            return false;
         }
 
     });
