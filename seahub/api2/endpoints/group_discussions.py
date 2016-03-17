@@ -2,7 +2,6 @@ import json
 
 from django.core.paginator import EmptyPage, InvalidPage
 from django.http import HttpResponse
-from django.utils.dateformat import DateFormat
 
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
@@ -16,6 +15,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.group.models import GroupMessage
 from seahub.utils.paginator import Paginator
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from .utils import api_check_group
 
 json_content_type = 'application/json; charset=utf-8'
@@ -55,12 +55,13 @@ class GroupDiscussions(APIView):
 
         msgs = []
         for e in group_msgs:
+            isoformat_timestr = datetime_to_isoformat_timestr(e.timestamp)
             msgs.append({
                 "group_id": group_id,
                 "discussion_id": e.pk,
                 "user": e.from_email,
                 "content": e.message,
-                "created_at": e.timestamp.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(e.timestamp).format('O'),
+                "created_at": isoformat_timestr,
             })
 
         return HttpResponse(json.dumps(msgs), status=200,
@@ -79,10 +80,11 @@ class GroupDiscussions(APIView):
                                               from_email=username,
                                               message=content)
 
+        isoformat_timestr = datetime_to_isoformat_timestr(discuss.timestamp)
         return Response({
             "group_id": group_id,
             "discussion_id": discuss.pk,
             "user": username,
             "content": discuss.message,
-            "created_at": discuss.timestamp.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(discuss.timestamp).format('O'),
+            "created_at": isoformat_timestr,
         }, status=201)

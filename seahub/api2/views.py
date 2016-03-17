@@ -29,7 +29,6 @@ from django.template.defaultfilters import filesizeformat
 from django.shortcuts import render_to_response
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from django.utils.dateformat import DateFormat
 
 from .throttling import ScopedRateThrottle, AnonRateThrottle, UserRateThrottle
 from .authentication import TokenAuthentication
@@ -75,11 +74,12 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
+from seahub.utils.devices import get_user_devices, do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import IMAGE, DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import utc_to_local
+from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import validate_owner, is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, get_owned_repo_list, \
     list_inner_pub_repos, get_virtual_repos_by_owner, \
@@ -1861,6 +1861,38 @@ class OwaFileView(APIView):
         send_file_access_msg(request, repo, path, 'api')
         return Response(wopi_dict)
 
+class DevicesView(APIView):
+    """List user devices"""
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def get(self, request, format=None):
+        username = request.user.username
+        user_devices = get_user_devices(username)
+        return Response(user_devices)
+
+    def delete(self, request, format=None):
+
+        platform = request.data.get('platform', '')
+        device_id = request.data.get('device_id', '')
+
+        if not platform:
+            error_msg = 'platform invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not device_id:
+            error_msg = 'device_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        try:
+            do_unlink_device(request.user.username, platform, device_id)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 class FileView(APIView):
     """
@@ -4327,8 +4359,7 @@ class RepoDownloadSharedLinks(APIView):
 
             shared_link['create_by'] = fs.username
             shared_link['creator_name'] = email2nickname(fs.username)
-            # return time with time zone: 2016-01-18T15:03:10+0800
-            shared_link['create_time'] = fs.ctime.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(fs.ctime).format('O')
+            shared_link['create_time'] = datetime_to_isoformat_timestr(fs.ctime)
             shared_link['token'] = fs.token
             shared_link['path'] = path
             shared_link['name'] = os.path.basename(path.rstrip('/')) if path != '/' else '/'
@@ -4412,8 +4443,7 @@ class RepoUploadSharedLinks(APIView):
 
             shared_link['create_by'] = fs.username
             shared_link['creator_name'] = email2nickname(fs.username)
-            # return time with time zone: 2016-01-18T15:03:10+0800
-            shared_link['create_time'] = fs.ctime.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(fs.ctime).format('O')
+            shared_link['create_time'] = datetime_to_isoformat_timestr(fs.ctime)
             shared_link['token'] = fs.token
             shared_link['path'] = path
             shared_link['name'] = os.path.basename(path.rstrip('/')) if path != '/' else '/'

@@ -60,7 +60,6 @@ from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
-from seahub.utils.devices import get_user_devices, do_unlink_device
 import seahub.settings as settings
 from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
     FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
@@ -885,37 +884,6 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             }, context_instance=RequestContext(request))
-
-@login_required
-@user_mods_check
-def devices(request):
-    """List user devices"""
-    username = request.user.username
-    user_devices = get_user_devices(username)
-
-    return render_to_response('devices.html', {
-            "devices": user_devices,
-            }, context_instance=RequestContext(request))
-
-@login_required_ajax
-@require_POST
-def unlink_device(request):
-    content_type = 'application/json; charset=utf-8'
-
-    platform = request.POST.get('platform', '')
-    device_id = request.POST.get('device_id', '')
-
-    if not platform or not device_id:
-        return HttpResponseBadRequest(json.dumps({'error': _(u'Argument missing')}),
-                content_type=content_type)
-
-    try:
-        do_unlink_device(request.user.username, platform, device_id)
-    except:
-        return HttpResponse(json.dumps({'error': _(u'Internal server error')}),
-                status=500, content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required
 @require_POST

@@ -75,6 +75,28 @@
     <button id="activities-more" class="hide">{% trans 'More' %}</button>
 </div>
 
+<div id="devices" class="hide">
+    <h3 class="hd">{% trans "Devices" %}</h3>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="13%">{% trans "Platform" %}</th>
+                <th width="25%">{% trans "Device Name" %}</th>
+                <th width="20%">{% trans "IP" %}</th>
+                <th width="17%">{% trans "Last Access" %}</th>
+                <th width="15%">{% trans "# Libraries" %}</th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You do not have connected devices" %}</h2>
+        <p>{% trans "Your clients (Desktop/Android/iOS) will be listed here." %}</p>
+    </div>
+</div>
+
 <div id="guide-for-new" class="hide">
     <span class="icon-lightbulb fleft"></span>
     <div class="txt">
@@ -232,6 +254,7 @@ app["pageOptions"] = {
     enable_thumbnail: {% if enable_thumbnail %} true {% else %} false {% endif %},
     thumbnail_default_size: {{ thumbnail_default_size }},
     thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},
+    language_code: "{{ LANGUAGE_CODE }}",
     enable_encrypted_library: {% if enable_encrypted_library %} true {% else %} false {% endif %},
     enable_repo_history_setting: {% if enable_repo_history_setting %} true {% else %} false {% endif %},
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},

@@ -29,6 +29,7 @@ define([
             'common/lib/:repo_id(/*path)': 'showCommonDir',
             'starred/': 'showStarredFile',
             'activities/': 'showActivities',
+            'devices/': 'showDevices',
             // Default
             '*actions': 'showRepos'
         },
@@ -96,6 +97,12 @@ define([
             this.sideNavView.setCurTab('starred');
         },
 
+        showDevices: function() {
+            this.switchCurrentView(this.myHomeView);
+            this.myHomeView.showDevices();
+            this.sideNavView.setCurTab('devices');
+        },
+
         showActivities: function() {
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showActivities();
@@ -121,6 +128,7 @@ define([
             }
             this.switchCurrentView(this.myHomeView);
             this.myHomeView.showDir('common', repo_id, path);
+            this.sideNavView.setCurTab('mine');
         },
 
         showSharedRepoDir: function(repo_id, path) {

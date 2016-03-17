@@ -10,3 +10,4 @@ django-statici18n==1.1.2
 djangorestframework==3.3.1
 git+git://github.com/haiwen/django-constance.git@bde7f7cdfd0ed1631a6817fd4cd76f37bf54fe35#egg=django-constance[database]
 openpyxl==2.3.0
+pytz==2015.7

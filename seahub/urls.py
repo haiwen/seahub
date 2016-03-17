@@ -56,9 +56,6 @@ urlpatterns = patterns(
     url(r'^home/wiki_page_edit/(?P<page_name>[^/]+)$', personal_wiki_page_edit, name='personal_wiki_page_edit'),
     url(r'^home/wiki_page_delete/(?P<page_name>[^/]+)$', personal_wiki_page_delete, name='personal_wiki_page_delete'),
 
-    url(r'^devices/$', devices, name='devices'),
-    url(r'^home/devices/unlink/$', unlink_device, name='unlink_device'),
-
     # url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
     # url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 

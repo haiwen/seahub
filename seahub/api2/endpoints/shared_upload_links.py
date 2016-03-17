@@ -2,7 +2,6 @@ import json
 import os
 
 from django.http import HttpResponse
-from django.utils.dateformat import DateFormat
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
@@ -13,6 +12,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.share.models import UploadLinkShare
 from seahub.utils import gen_shared_upload_link
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -45,7 +45,7 @@ class SharedUploadLinksView(APIView):
             link.repo = r
 
             if link.expire_date:
-                expire_date = link.expire_date.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(link.expire_date).format('O')
+                expire_date = datetime_to_isoformat_timestr(link.expire_date)
             else:
                 expire_date = ""
 
@@ -54,7 +54,7 @@ class SharedUploadLinksView(APIView):
                 "repo_id": link.repo_id,
                 "path": link.path,
                 "token": link.token,
-                "ctime": link.ctime.strftime("%Y-%m-%dT%H:%M:%S") + DateFormat(link.ctime).format('O'),
+                "ctime": datetime_to_isoformat_timestr(link.ctime),
                 "view_cnt": link.view_cnt,
                 "expire_date": expire_date,
             })
