@@ -3,7 +3,8 @@ define([
     'underscore',
     'backbone',
     'common',
-], function($, _, Backbone, Common) {
+    'moment'
+], function($, _, Backbone, Common, Moment) {
     'use strict';
 
     var DeviceView = Backbone.View.extend({
@@ -43,7 +44,7 @@ define([
 
             // convert to human readable time
             var now = new Date(),
-                last_accessed = Common.getMomentWithLocale(data['last_accessed']);
+                last_accessed = Moment(data['last_accessed']);
 
             data['time'] = last_accessed.format('LLLL');
             if (last_accessed - now > 0) {

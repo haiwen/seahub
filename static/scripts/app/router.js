@@ -36,6 +36,7 @@ define([
 
         initialize: function() {
             Common.prepareApiCsrf();
+            Common.initLocale();
             Common.initAccountPopup();
             Common.initNoticePopup();
 

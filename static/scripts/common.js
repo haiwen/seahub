@@ -194,19 +194,6 @@ define([
             'default' : 'file.png'
         },
 
-        getMomentWithLocale: function(time) {
-            var language_code;
-            if (app.pageOptions.language_code == 'en') {
-                language_code = 'en-gb';
-            } else if (app.pageOptions.language_code == 'es-ar' || app.pageOptions.language_code == 'es-mx') {
-                language_code = 'es';
-            } else {
-                language_code = app.pageOptions.language_code;
-            }
-
-            return Moment(time).locale(language_code);
-        },
-
         getFileIconUrl: function(filename, size) {
             if (size > 24) {
                 size = 192;
@@ -474,6 +461,18 @@ define([
                 path_arr_.push(encodeURIComponent(path_arr[i]));
             }
             return path_arr_.join('/');
+        },
+
+        initLocale: function() {
+            var language_code;
+            if (app.pageOptions.language_code == 'en') {
+                language_code = 'en-gb';
+            } else if (app.pageOptions.language_code == 'es-ar' || app.pageOptions.language_code == 'es-mx') {
+                language_code = 'es';
+            } else {
+                language_code = app.pageOptions.language_code;
+            }
+            Moment.locale(language_code);
         },
 
         closePopup: function(e, popup, popup_switch) {
