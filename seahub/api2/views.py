@@ -1713,6 +1713,10 @@ class OwaFileView(APIView):
         username = request.user.username
         wopi_dict = get_wopi_dict(username, repo_id, path)
 
+        # old version of rest_framework will NOT convert UUID obj to
+        # JSON serializable obj automaticly
+        wopi_dict['access_token'] = str(wopi_dict['access_token'])
+
         # send stats message
         send_file_access_msg(request, repo, path, 'api')
         return Response(wopi_dict)
