@@ -478,6 +478,15 @@ define([
             Moment.locale(language_code);
         },
 
+        getRelativeTimeStr: function(m) {
+            var now = new Date();
+            if (m - now > 0) {
+                return gettext("Just now");
+            } else {
+                return m.fromNow();
+            }
+        },
+
         closePopup: function(e, popup, popup_switch) {
             var target = e.target || event.srcElement;
             if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {

@@ -982,13 +982,13 @@
 </script>
 
 <script type="text/template" id="group-discussion-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
-    <div class="txt">
-        <div>
-            <span class="txt-item ellipsis" title="<%- user_name %>"><%- user_name %></span>
-            <span class="txt-item ellipsis" title="<%- created_at %>"><%- created_at %></span>
+    <img src="<%= avatar_url %>" alt="" width="32" class="msg-avatar avatar-circle" />
+    <div class="msg-body">
+        <div class="msg-header">
+            <a class="msg-username ellipsis" href="<%= user_profile_url %>"><%- user_name %></a>
+            <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
         </div>
-        <div class="txt-item" title=""><%= content_marked %></div>
+        <div class="msg-content" title=""><%= content_marked %></div>
     </div>
 </script>
 

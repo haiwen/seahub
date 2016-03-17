@@ -18,6 +18,7 @@ define([
 
             this.$loadingTip = this.$('.loading-tip');
             this.$listContainer = this.$('#group-discussion-list');
+            this.$emptyTip = this.$('.no-discussion-tip');
             this.$error = this.$('.error');
 
             var _this = this;
@@ -59,9 +60,15 @@ define([
             this.$error.hide();
             this.$loadingTip.hide();
             this.$listContainer.empty();
-            this.collection.each(this.addOne, this);
-            this.$listContainer.removeClass('hide');
-            this.$listContainer.show();
+            if (this.collection.length) {
+                this.$emptyTip.hide();
+                this.collection.each(this.addOne, this);
+                this.$listContainer.removeClass('hide');
+                this.$listContainer.show();
+            } else {
+                this.$emptyTip.show();
+                this.$listContainer.hide();
+            }
         },
 
         render: function() {
@@ -124,6 +131,9 @@ define([
                 prepend: true,
                 success: function() {
                     _this.$('[name="message"]').val('');
+                    if (_this.collection.length == 1) {
+                        _this.collection.reset(_this.collection.models);
+                    }
                 },
                 error: function(collection, response, options) {
                     var err_msg;
