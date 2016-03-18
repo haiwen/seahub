@@ -238,8 +238,8 @@ $('#gen-link-btn').click(function() {
         obj = gen_link_btn.data('obj'),
         form = $('#link-options'),
         form_id = form.attr('id'),
-        use_passwd = $('#link-passwd-switch').attr('checked'),
-        set_expiration = $('#link-expire-switch').attr('checked'),
+        use_passwd = $('#link-passwd-switch').prop('checked'),
+        set_expiration = $('#link-expire-switch').prop('checked'),
         passwd, passwd_again, expire_days, post_data;
 
     if (use_passwd) {
@@ -515,7 +515,7 @@ $('#link-passwd-switch').click(function () {
         pwd_input = $('input[type="password"]', form);
     var link_passwd = $('#link-passwd');
 
-    if ($(this).attr('checked')) {
+    if ($(this).prop('checked')) {
         pwd_input.attr('disabled', false).removeClass('input-disabled');
         link_passwd.slideDown(100);
     } else {
@@ -529,7 +529,7 @@ $('#link-expire-switch').click(function () {
         days_input = $('input[name="expire-days"]', form);
     var link_expire = $('#link-expire'); 
 
-    if ($(this).attr('checked')) {
+    if ($(this).prop('checked')) {
         link_expire.slideDown(100);
         days_input.attr('disabled', false).removeClass('input-disabled');
     } else {
