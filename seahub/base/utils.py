@@ -71,7 +71,7 @@ def urlize(text, trim_url_limit=None, nofollow=False, autoescape=False):
                 if autoescape and not safe_input:
                     lead, trail = escape(lead), escape(trail)
                     url, trimmed = escape(url), escape(trimmed)
-                middle = '<a target="_blank" href="%s"%s>%s</a>' % (url, nofollow_attr, trimmed)
+                middle = '<a href="%s"%s>%s</a>' % (url, nofollow_attr, trimmed)
                 words[i] = mark_safe('%s%s%s' % (lead, middle, trail))
             else:
                 if safe_input:
