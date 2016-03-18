@@ -1,12 +1,8 @@
 import logging
 import os
 
-from django.utils.dateformat import DateFormat
-from django.utils.translation import ugettext as _
-from django.template.defaultfilters import filesizeformat
-
 from rest_framework.authentication import SessionAuthentication
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -14,13 +10,12 @@ from rest_framework import status
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
-from seahub.utils.rpc import mute_seafile_api
 from seahub.utils import is_pro_version
 from seahub.utils.licenseparse import parse_license
 
-from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.utils import api_error
 
 import seahub.settings
 try:
@@ -34,11 +29,16 @@ class SysInfo(APIView):
     """Show system info.
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
+    throttle_classes = (UserRateThrottle, )
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
         # count repos
-        repos_count = mute_seafile_api.count_repos()
+        try:
+            repos_count = seafile_api.count_repos()
+        except SearpcError as e:
+            logger.error(e)
+            repos_count = 0
 
         # count groups
         try:
@@ -49,14 +49,14 @@ class SysInfo(APIView):
 
         # count orgs
         if MULTI_TENANCY:
-            multi_tenacy_enabled = True
+            multi_tenancy_enabled = True
             try:
                 org_count = ccnet_api.count_orgs()
             except Exception as e:
                 logger.error(e)
                 org_count = 0
         else:
-            multi_tenacy_enabled = False
+            multi_tenancy_enabled = False
             org_count = 0
 
         # count users
@@ -108,7 +108,7 @@ class SysInfo(APIView):
             'repos_count': repos_count,
             'groups_count': groups_count,
             'org_count': org_count,
-            'multi_tenancy_enabled': multi_tenacy_enabled,
+            'multi_tenancy_enabled': multi_tenancy_enabled,
             'is_pro': is_pro,
             'with_license': with_license,
             'license': license_dict

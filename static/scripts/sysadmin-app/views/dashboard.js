@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/models/SysInfo'
+    'sysadmin-app/models/sysinfo'
 ], function($, _, Backbone, Common, SysInfo) {
     'use strict';
 
