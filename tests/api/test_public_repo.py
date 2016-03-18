@@ -18,6 +18,8 @@ class RepoPublicTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo(self.repo_id)
+        # clear cache between every test case to avoid config option cache issue
+        self.clear_cache()
 
     def test_admin_can_set_pub_repo(self):
         self.login_as(self.admin)
