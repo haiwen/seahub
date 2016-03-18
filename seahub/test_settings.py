@@ -1,11 +1,11 @@
 from .settings import *
 
 # no cache for testing
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-    }
-}
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+#     }
+# }
 
 # enlarge api throttle
 REST_FRAMEWORK = {

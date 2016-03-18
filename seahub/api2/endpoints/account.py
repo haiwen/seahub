@@ -75,7 +75,6 @@ class Account(APIView):
             profile.intro = note
 
         profile.save()
-        refresh_profile_cache(email)
 
     def _update_account_quota(self, request, email):
         storage = request.DATA.get("storage", None)

@@ -129,11 +129,19 @@ class DetailedProfile(models.Model):
     telephone = models.CharField(max_length=100)
     objects = DetailedProfileManager()
 
-########## signal handler    
+
+########## signal handlers
+from django.db.models.signals import post_save
+from .utils import refresh_cache
+
 @receiver(user_registered)
 def clean_email_id_cache(sender, **kwargs):
     from seahub.utils import normalize_cache_key
-    
+
     user = kwargs['user']
     key = normalize_cache_key(user.email, EMAIL_ID_CACHE_PREFIX)
     cache.set(key, user.id, EMAIL_ID_CACHE_TIMEOUT)
+
+@receiver(post_save, sender=Profile, dispatch_uid="update_nickname_cache")
+def update_nickname_cache(sender, instance, **kwargs):
+    refresh_cache(instance.user)

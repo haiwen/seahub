@@ -1,6 +1,7 @@
 import os
 from uuid import uuid4
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 from exam.decorators import fixture
@@ -108,3 +109,8 @@ class BaseTestCase(TestCase, Fixtures):
             reverse('auth_login'), {'login': user.username,
                                     'password': 'secret'}
         )
+
+    def clear_cache(self):
+        # clear cache between every test case to avoid config option cache
+        # issue which cause test failed
+        cache.clear()
