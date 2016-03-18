@@ -35,8 +35,8 @@
     <div id="tabs" class="tab-tabs">
         <div class="hd ovhd">
             <ul class="tab-tabs-nav fleft">
-                <li class="tab"><a href="#user-tab" class="a" id="user-tab">{% trans "User" %}</a></li>
-                <li class="tab"><a href="#group-tab" class="a" id="group-tab">{% trans "Group" %}</a></li>
+                <li class="tab"><a href="#user-tab" class="a">{% trans "User" %}</a></li>
+                <li class="tab"><a href="#group-tab" class="a">{% trans "Group" %}</a></li>
             </ul>
             <div class="fright">
                 <button class="repo-share-btn"><img src="{{ MEDIA_URL }}img/add.png" alt="" class="add vam" /><span class="vam">{% trans "Share Library" %}</span></button>
@@ -52,17 +52,15 @@
                 </tr>
                 {% if repo_share_user %}
                 {% for share in repo_share_user %}
-                <tr class="perm-item" data-to_user="{{ share.user }}">
+                <tr data-type="user" data-user="{{ share.user }}">
                     <td><a href="{% url 'user_profile' share.user %}">{{ share.user }}</a></td>
                     <td>
-                        <div class="perm-change">
                           {% if share.permission == 'rw' %}
-                            <span class="share-perm-cur-value">{% trans "Read-Write" %}</span>
+                            <span class="perm-cur-value">{% trans "Read-Write" %}</span>
                           {% else %}
-                            <span class="share-perm-cur-value">{% trans "Read-Only" %}</span>
+                            <span class="perm-cur-value">{% trans "Read-Only" %}</span>
                           {% endif %}
                             <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
-                        </div>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
                             <option value="r" {%if not share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
@@ -85,17 +83,15 @@
                 </tr>
                 {% if repo_share_group %}
                 {% for share in repo_share_group %}
-                <tr class="perm-item" data-group_id="{{ share.group_id }}">
+                <tr data-type="group" data-groupid="{{ share.group_id }}">
                     <td><a href="{% url 'group_info' share.group_id%}">{{ share.group_name }}</a></td>
                     <td>
-                        <div class="perm-change">
-                          {% if share.permission == 'rw' %}
-                            <span class="perm-cur-value">{% trans "Read-Write" %}</span>
-                          {% else %}
-                            <span class="perm-cur-value">{% trans "Read-Only" %}</span>
-                          {% endif %}
-                            <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
-                        </div>
+                        {% if share.permission == 'rw' %}
+                        <span class="perm-cur-value">{% trans "Read-Write" %}</span>
+                        {% else %}
+                        <span class="perm-cur-value">{% trans "Read-Only" %}</span>
+                        {% endif %}
+                        <span title="{% trans "Edit"%}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
                         <select class="perm-toggle-select hide">
                             <option value="rw" {%if share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Write" %}</option>
                             <option value="r" {%if not share.permission == 'rw' %}selected="selected"{% endif %}>{% trans "Read-Only"%}</option>
@@ -139,11 +135,11 @@ g_opts += '<option value="' + '{{ group.id}}'+ '" data-index="' + '{{forloop.cou
 {% endfor %}
 
 $(".repo-share-btn").click(function() {
-    var form = $('#dir-private-share');
-    form.modal({appendTo: "#main", focus:false});
+    var $form = $('#dir-private-share');
+    $form.modal({appendTo: "#main", focus:false});
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
-    $('[name="emails"]', $('#dir-private-share')).select2($.extend({
+    $('[name="emails"]', $form).select2($.extend({
         placeholder: "{% trans "Search users or enter emails" %}",
         width: '400px',
         formatInputTooShort: "{% trans "Please enter 1 or more character" %}",
@@ -153,7 +149,7 @@ $(".repo-share-btn").click(function() {
         formatSelectionTooBig: "{% trans "You cannot select any more choices" %}" 
     }, userInputOPtionsForSelect2('{% url 'search-user' %}')));
 
-    $('[name="groups"]', $('#dir-private-share')).html(g_opts).select2({
+    $('[name="groups"]', $form).html(g_opts).select2({
         placeholder: "{% trans "Select groups" %}",
         width: '400px',
         formatNoMatches: "{% trans "No matches" %}",
@@ -187,7 +183,7 @@ $('.submit', $('#dir-private-share')).click(function() {
         url: '{% url 'ajax_private_share_dir' %}',
         type: 'POST',
         dataType: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: post_data,
         success: function(data) {
@@ -199,24 +195,56 @@ $('.submit', $('#dir-private-share')).click(function() {
     return false;
 });
 
-{% include "repo_setting_extra_js.html" %}
+$('.perm-edit-icon').click(function() {
+    // handle other 'edit' at first
+    $('.perm-cur-value, .perm-edit-icon').removeClass('hide');
+    $('.perm-toggle-select').addClass('hide');
+
+    var $td = $(this).parent();
+    $('.perm-cur-value, .perm-edit-icon', $td).addClass('hide');
+    $('.perm-toggle-select', $td).removeClass('hide');
+});
 
 $('.perm-toggle-select').on('change', function() {
-    var select = $(this),
-        perm_item = select.parents('.perm-item'),
-        perm = select.val();
+    var $el = $(this),
+        $tr = $el.closest('tr');
+    var perm_type = $tr.data('type'),
+        share_type = perm_type == 'user' ? 'personal': 'group',
+        url = '{% url 'share_permission_admin' %}?share_type=' + share_type,
+        post_data = {
+            repo_id: '{{repo.id}}',
+            email_or_group: perm_type == 'user' ? $tr.attr('data-user') : $tr.attr('data-groupid'),
+            permission: $el.val() 
+        };
 
-    if (is_user_tab == true) {
-        var to_user = perm_item.attr('data-to_user'),
-            data = { repo_id: '{{repo.id}}', email_or_group: to_user, permission: perm },
-            url = '{% url 'share_permission_admin' %}?share_type=' + 'personal';
-    } else {
-        var group_id = perm_item.attr('data-group_id'),
-            data = { repo_id: '{{repo.id}}', email_or_group: group_id, permission: perm },
-            url = '{% url 'share_permission_admin' %}?share_type=' + 'group';
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: post_data,
+        success: function() {
+            var $td = $el.parent();
+            $el.addClass('hide');
+            $('.perm-edit-icon', $td).removeClass('hide');
+            $('.perm-cur-value', $td)
+            .html($('[value="' + $el.val() + '"]', $el).text())
+            .removeClass('hide');
+
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+});
+
+$(document).on('click', function(e) {
+    var target = e.target || event.srcElement;
+    if ($('.perm-toggle-select:visible').length > 0 &&
+        !$('.perm-edit-icon, .perm-toggle-select').is(target)) {
+        $('.perm-cur-value, .perm-edit-icon').removeClass('hide');
+        $('.perm-toggle-select').addClass('hide');
     }
-
-    perm_toggle(select, data, url)
 });
 
 addFormPost($('.cancel-share'));

@@ -38,7 +38,7 @@ $('#add-file-popup .submit').click(function() {
     $.modal.close();
     var files = '';
     for (var i = 0, len = selected.length; i < len; i++) {
-        files += '<li class="item">' + '<img src="{{MEDIA_URL}}img/del.png" class="rm vam" data-index="' + i + '" /><span class="vam">' + selected[i].substr(selected[i].lastIndexOf('/') + 1) + '</span></li>';
+        files += '<li class="item">' + '<img src="{{MEDIA_URL}}img/del.png" class="rm vam" data-index="' + i + '" /><span class="vam">' + HTMLescape(selected[i].substr(selected[i].lastIndexOf('/') + 1)) + '</span></li>';
     }
     files_ct.data('files', selected).html(files).removeClass('hide');
     $('.rm', files_ct).click(function() {

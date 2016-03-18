@@ -1,4 +1,4 @@
-{% load seahub_tags avatar_tags group_avatar_tags i18n %}
+{% load seahub_tags avatar_tags group_avatar_tags i18n staticfiles %}
 {% load url from future %}
 
 <!DOCTYPE html>
@@ -144,7 +144,10 @@
         {% include 'footer.html' %}
 </div><!-- wrapper -->
 
-<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1398068110"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jquery.ui.tabs.js" %}"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
 <script type="text/javascript">
 $.jstree._themes = '{{ MEDIA_URL }}js/themes/';

@@ -294,6 +294,9 @@ td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
 p { margin:0.5em 0; }
+:focus {/* to overwrite user agent stylesheet */
+    outline:none;
+}
 
 /********** common class ***********/
 .hl { background-color: #f8f8f8; }/*highlight*/
