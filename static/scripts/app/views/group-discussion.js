@@ -10,16 +10,18 @@ define([
 
     var View = Backbone.View.extend({
         tagName: 'li',
-        className: 'msg cspt ovhd',
+        className: 'msg ovhd',
 
         template: _.template($('#group-discussion-tmpl').html()),
 
         events: {
             'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight'
+            'mouseleave': 'rmHighlight',
+            'click .js-del-msg': 'delMessage'
         },
 
         initialize: function() {
+            this.listenTo(this.model, 'destroy', this.remove);
         },
 
         render: function() {
@@ -46,6 +48,23 @@ define([
 
         rmHighlight: function() {
             this.$el.removeClass('hl');
+        },
+
+        delMessage: function() {
+            this.model.destroy({
+                wait: true,
+                success: function() {
+                },
+                error: function(model, response) {
+                    var err;
+                    if (response.responseText) {
+                        err = $.parseJSON(response.responseText).error_msg;
+                    } else {
+                        err = gettext("Failed. Please check the network.");
+                    }
+                    Common.feedback(err, 'error');
+                }
+            });
         }
 
     });

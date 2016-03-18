@@ -985,6 +985,10 @@
     <img src="<%= avatar_url %>" alt="" width="32" class="msg-avatar avatar-circle" />
     <div class="msg-body">
         <div class="msg-header">
+            <div class="msg-ops">
+                <span class="msg-op js-rep-msg">{% trans "Reply" %}</span>
+                <span class="msg-op js-del-msg">{% trans "Delete" %}</span>
+            </div>
             <a class="msg-username ellipsis" href="<%= user_profile_url %>"><%- user_name %></a>
             <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
         </div>

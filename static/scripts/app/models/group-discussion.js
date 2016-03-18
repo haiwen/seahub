@@ -1,7 +1,8 @@
 define([
     'underscore',
-    'backbone'
-], function(_, Backbone) {
+    'backbone',
+    'common'
+], function(_, Backbone, Common) {
     'use strict';
 
     var GroupDiscussion = Backbone.Model.extend({});

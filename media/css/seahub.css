@@ -1237,6 +1237,13 @@ textarea:-moz-placeholder {/* for FF */
 }
 .msg-header {
 }
+.msg-ops {
+    float:right;
+    margin-right:10px;
+}
+.msg-op {
+    cursor:pointer;
+}
 .msg-username {
 }
 .msg-content p:first-child {

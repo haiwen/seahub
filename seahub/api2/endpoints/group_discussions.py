@@ -65,8 +65,8 @@ class GroupDiscussions(APIView):
             info = get_user_common_info(msg.from_email, avatar_size)
             isoformat_timestr = datetime_to_isoformat_timestr(msg.timestamp)
             msgs.append({
+                "id": msg.pk,
                 "group_id": group_id,
-                "discussion_id": msg.pk,
                 "user_name": info["name"],
                 "user_email": info["email"],
                 "user_login_id": info["login_id"],
@@ -100,8 +100,8 @@ class GroupDiscussions(APIView):
 
         isoformat_timestr = datetime_to_isoformat_timestr(discuss.timestamp)
         return Response({
+            "id": discuss.pk,
             "group_id": group_id,
-            "discussion_id": discuss.pk,
             "user_name": info["name"],
             "user_email": info["email"],
             "user_login_id": info["login_id"],
