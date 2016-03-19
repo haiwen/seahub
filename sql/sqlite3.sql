@@ -1,371 +1,159 @@
 PRAGMA foreign_keys=OFF;
-CREATE TABLE "django_content_type" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "name" varchar(100) NOT NULL,
-    "app_label" varchar(100) NOT NULL,
-    "model" varchar(100) NOT NULL,
-    UNIQUE ("app_label", "model")
-);
-INSERT INTO "django_content_type" VALUES(1,'content type','contenttypes','contenttype');
-INSERT INTO "django_content_type" VALUES(2,'session','sessions','session');
-INSERT INTO "django_content_type" VALUES(3,'registration profile','registration','registrationprofile');
-INSERT INTO "django_content_type" VALUES(4,'captcha store','captcha','captchastore');
-INSERT INTO "django_content_type" VALUES(5,'constance','database','constance');
-INSERT INTO "django_content_type" VALUES(6,'token','api2','token');
-INSERT INTO "django_content_type" VALUES(7,'token v2','api2','tokenv2');
-INSERT INTO "django_content_type" VALUES(8,'avatar','avatar','avatar');
-INSERT INTO "django_content_type" VALUES(9,'group avatar','avatar','groupavatar');
-INSERT INTO "django_content_type" VALUES(10,'group enabled module','base','groupenabledmodule');
-INSERT INTO "django_content_type" VALUES(11,'client login token','base','clientlogintoken');
-INSERT INTO "django_content_type" VALUES(12,'uuid objid map','base','uuidobjidmap');
-INSERT INTO "django_content_type" VALUES(13,'user enabled module','base','userenabledmodule');
-INSERT INTO "django_content_type" VALUES(14,'file discuss','base','filediscuss');
-INSERT INTO "django_content_type" VALUES(15,'device token','base','devicetoken');
-INSERT INTO "django_content_type" VALUES(16,'commands last check','base','commandslastcheck');
-INSERT INTO "django_content_type" VALUES(17,'inner pub msg','base','innerpubmsg');
-INSERT INTO "django_content_type" VALUES(18,'inner pub msg reply','base','innerpubmsgreply');
-INSERT INTO "django_content_type" VALUES(19,'user last login','base','userlastlogin');
-INSERT INTO "django_content_type" VALUES(20,'user starred files','base','userstarredfiles');
-INSERT INTO "django_content_type" VALUES(21,'contact','contacts','contact');
-INSERT INTO "django_content_type" VALUES(22,'personal wiki','wiki','personalwiki');
-INSERT INTO "django_content_type" VALUES(23,'group wiki','wiki','groupwiki');
-INSERT INTO "django_content_type" VALUES(24,'public group','group','publicgroup');
-INSERT INTO "django_content_type" VALUES(25,'group message','group','groupmessage');
-INSERT INTO "django_content_type" VALUES(26,'message attachment','group','messageattachment');
-INSERT INTO "django_content_type" VALUES(27,'message reply','group','messagereply');
-INSERT INTO "django_content_type" VALUES(28,'user msg attachment','message','usermsgattachment');
-INSERT INTO "django_content_type" VALUES(29,'user msg last check','message','usermsglastcheck');
-INSERT INTO "django_content_type" VALUES(30,'user message','message','usermessage');
-INSERT INTO "django_content_type" VALUES(31,'notification','notifications','notification');
-INSERT INTO "django_content_type" VALUES(32,'user notification','notifications','usernotification');
-INSERT INTO "django_content_type" VALUES(33,'user options','options','useroptions');
-INSERT INTO "django_content_type" VALUES(34,'profile','profile','profile');
-INSERT INTO "django_content_type" VALUES(35,'detailed profile','profile','detailedprofile');
-INSERT INTO "django_content_type" VALUES(36,'private file dir share','share','privatefiledirshare');
-INSERT INTO "django_content_type" VALUES(37,'upload link share','share','uploadlinkshare');
-INSERT INTO "django_content_type" VALUES(38,'file share','share','fileshare');
-INSERT INTO "django_content_type" VALUES(39,'anonymous share','share','anonymousshare');
-INSERT INTO "django_content_type" VALUES(40,'org file share','share','orgfileshare');
-INSERT INTO "django_content_type" VALUES(41,'group public file','pubfile','grouppublicfile');
-INSERT INTO "django_content_type" VALUES(42,'user login log','sysadmin_extra','userloginlog');
-INSERT INTO "django_content_type" VALUES(43,'org member quota','organizations','orgmemberquota');
-CREATE TABLE "django_session" (
-    "session_key" varchar(40) NOT NULL PRIMARY KEY,
-    "session_data" text NOT NULL,
-    "expire_date" datetime NOT NULL
-);
-CREATE TABLE "registration_registrationprofile" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "emailuser_id" integer NOT NULL,
-    "activation_key" varchar(40) NOT NULL
-);
-CREATE TABLE "captcha_captchastore" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "challenge" varchar(32) NOT NULL,
-    "response" varchar(32) NOT NULL,
-    "hashkey" varchar(40) NOT NULL UNIQUE,
-    "expiration" datetime NOT NULL
-);
-CREATE TABLE "constance_config" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "key" varchar(255) NOT NULL UNIQUE,
-    "value" text NOT NULL
-);
-CREATE TABLE "api2_token" (
-    "key" varchar(40) NOT NULL PRIMARY KEY,
-    "user" varchar(255) NOT NULL UNIQUE,
-    "created" datetime NOT NULL
-);
-CREATE TABLE "api2_tokenv2" (
-    "key" varchar(40) NOT NULL PRIMARY KEY,
-    "user" varchar(255) NOT NULL,
-    "platform" varchar(32) NOT NULL,
-    "device_id" varchar(40) NOT NULL,
-    "device_name" varchar(40) NOT NULL,
-    "platform_version" varchar(16) NOT NULL,
-    "client_version" varchar(16) NOT NULL,
-    "last_accessed" datetime NOT NULL,
-    "last_login_ip" char(39),
-    UNIQUE ("user", "platform", "device_id")
-);
-CREATE TABLE "avatar_avatar" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "emailuser" varchar(255) NOT NULL,
-    "primary" bool NOT NULL,
-    "avatar" varchar(1024) NOT NULL,
-    "date_uploaded" datetime NOT NULL
-);
-CREATE TABLE "avatar_groupavatar" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" varchar(255) NOT NULL,
-    "avatar" varchar(1024) NOT NULL,
-    "date_uploaded" datetime NOT NULL
-);
-CREATE TABLE "base_uuidobjidmap" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "uuid" varchar(40) NOT NULL,
-    "obj_id" varchar(40) NOT NULL UNIQUE
-);
-CREATE TABLE "base_filediscuss" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_message_id" integer NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" text NOT NULL,
-    "path_hash" varchar(12) NOT NULL
-);
-CREATE TABLE "base_userstarredfiles" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "email" varchar(75) NOT NULL,
-    "org_id" integer NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" text NOT NULL,
-    "is_dir" bool NOT NULL
-);
-CREATE TABLE "base_userenabledmodule" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "module_name" varchar(20) NOT NULL
-);
-CREATE TABLE "base_groupenabledmodule" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" varchar(10) NOT NULL,
-    "module_name" varchar(20) NOT NULL
-);
-CREATE TABLE "base_userlastlogin" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "last_login" datetime NOT NULL
-);
-CREATE TABLE "base_commandslastcheck" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "command_type" varchar(100) NOT NULL,
-    "last_check" datetime NOT NULL
-);
-CREATE TABLE "base_innerpubmsg" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "from_email" varchar(75) NOT NULL,
-    "message" varchar(500) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
-CREATE TABLE "base_innerpubmsgreply" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "reply_to_id" integer NOT NULL REFERENCES "base_innerpubmsg" ("id"),
-    "from_email" varchar(75) NOT NULL,
-    "message" varchar(150) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
-CREATE TABLE "base_devicetoken" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "token" varchar(80) NOT NULL,
-    "user" varchar(255) NOT NULL,
-    "platform" varchar(32) NOT NULL,
-    "version" varchar(16) NOT NULL,
-    "pversion" varchar(16) NOT NULL,
-    UNIQUE ("token", "user")
-);
-CREATE TABLE "base_clientlogintoken" (
-    "token" varchar(32) NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
-CREATE TABLE "contacts_contact" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "user_email" varchar(255) NOT NULL,
-    "contact_email" varchar(255) NOT NULL,
-    "contact_name" varchar(255),
-    "note" varchar(255)
-);
-CREATE TABLE "wiki_personalwiki" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL UNIQUE,
-    "repo_id" varchar(36) NOT NULL
-);
-CREATE TABLE "wiki_groupwiki" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" integer NOT NULL UNIQUE,
-    "repo_id" varchar(36) NOT NULL
-);
-CREATE TABLE "group_groupmessage" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" integer NOT NULL,
-    "from_email" varchar(255) NOT NULL,
-    "message" varchar(2048) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
-CREATE TABLE "group_messagereply" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "reply_to_id" integer NOT NULL REFERENCES "group_groupmessage" ("id"),
-    "from_email" varchar(255) NOT NULL,
-    "message" varchar(2048) NOT NULL,
-    "timestamp" datetime NOT NULL
-);
-CREATE TABLE "group_messageattachment" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_message_id" integer NOT NULL REFERENCES "group_groupmessage" ("id"),
-    "repo_id" varchar(40) NOT NULL,
-    "attach_type" varchar(5) NOT NULL,
-    "path" text NOT NULL,
-    "src" varchar(20) NOT NULL
-);
-CREATE TABLE "group_publicgroup" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" integer NOT NULL
-);
-CREATE TABLE "message_usermessage" (
-    "message_id" integer NOT NULL PRIMARY KEY,
-    "message" varchar(512) NOT NULL,
-    "from_email" varchar(255) NOT NULL,
-    "to_email" varchar(255) NOT NULL,
-    "timestamp" datetime NOT NULL,
-    "ifread" bool NOT NULL,
-    "sender_deleted_at" datetime,
-    "recipient_deleted_at" datetime
-);
-CREATE TABLE "message_usermsglastcheck" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "check_time" datetime NOT NULL
-);
-CREATE TABLE "message_usermsgattachment" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "user_msg_id" integer NOT NULL REFERENCES "message_usermessage" ("message_id"),
-    "priv_file_dir_share_id" integer
-);
-CREATE TABLE "notifications_notification" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "message" varchar(512) NOT NULL,
-    "primary" bool NOT NULL
-);
-CREATE TABLE "notifications_usernotification" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "to_user" varchar(255) NOT NULL,
-    "msg_type" varchar(30) NOT NULL,
-    "detail" text NOT NULL,
-    "timestamp" datetime NOT NULL,
-    "seen" bool NOT NULL
-);
-CREATE TABLE "options_useroptions" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "email" varchar(255) NOT NULL,
-    "option_key" varchar(50) NOT NULL,
-    "option_val" varchar(50) NOT NULL
-);
-CREATE TABLE "profile_profile" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "user" varchar(75) NOT NULL UNIQUE,
-    "nickname" varchar(64) NOT NULL,
-    "intro" text NOT NULL,
-    "lang_code" text,
-    "login_id" varchar(225) UNIQUE,
-    "contact_email" varchar(225),
-    "institution" varchar(225)
-);
-CREATE TABLE "profile_detailedprofile" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "user" varchar(255) NOT NULL,
-    "department" varchar(512) NOT NULL,
-    "telephone" varchar(100) NOT NULL
-);
-CREATE TABLE "share_anonymousshare" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "repo_owner" varchar(255) NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "anonymous_email" varchar(255) NOT NULL,
-    "token" varchar(25) NOT NULL UNIQUE
-);
-CREATE TABLE "share_fileshare" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" text NOT NULL,
-    "token" varchar(10) NOT NULL UNIQUE,
-    "ctime" datetime NOT NULL,
-    "view_cnt" integer NOT NULL,
-    "s_type" varchar(2) NOT NULL,
-    "password" varchar(128),
-    "expire_date" datetime
-);
-CREATE TABLE "share_orgfileshare" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "org_id" integer NOT NULL,
-    "file_share_id" integer NOT NULL UNIQUE REFERENCES "share_fileshare" ("id")
-);
-CREATE TABLE "share_uploadlinkshare" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" text NOT NULL,
-    "token" varchar(10) NOT NULL UNIQUE,
-    "ctime" datetime NOT NULL,
-    "view_cnt" integer NOT NULL,
-    "password" varchar(128),
-    "expire_date" datetime
-);
-CREATE TABLE "share_privatefiledirshare" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "from_user" varchar(255) NOT NULL,
-    "to_user" varchar(255) NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" text NOT NULL,
-    "token" varchar(10) NOT NULL UNIQUE,
-    "permission" varchar(5) NOT NULL,
-    "s_type" varchar(5) NOT NULL
-);
-CREATE TABLE "pubfile_grouppublicfile" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "group_id" integer NOT NULL,
-    "repo_id" varchar(36) NOT NULL,
-    "path" varchar(4096) NOT NULL,
-    "is_dir" bool NOT NULL,
-    "added_by" varchar(256) NOT NULL,
-    "description" varchar(1024) NOT NULL,
-    "download_count" integer NOT NULL
-);
-CREATE TABLE "sysadmin_extra_userloginlog" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "username" varchar(255) NOT NULL,
-    "login_date" datetime NOT NULL,
-    "login_ip" varchar(20) NOT NULL
-);
-CREATE TABLE "organizations_orgmemberquota" (
-    "id" integer NOT NULL PRIMARY KEY,
-    "org_id" integer NOT NULL,
-    "quota" integer NOT NULL
-);
-CREATE INDEX "django_session_b7b81f0c" ON "django_session" ("expire_date");
-CREATE INDEX "base_filediscuss_12d5396a" ON "base_filediscuss" ("group_message_id");
-CREATE INDEX "base_filediscuss_656b4f4a" ON "base_filediscuss" ("path_hash");
-CREATE INDEX "base_userstarredfiles_830a6ccb" ON "base_userstarredfiles" ("email");
-CREATE INDEX "base_userstarredfiles_2059abe4" ON "base_userstarredfiles" ("repo_id");
-CREATE INDEX "base_userenabledmodule_ee0cafa2" ON "base_userenabledmodule" ("username");
-CREATE INDEX "base_groupenabledmodule_dc00373b" ON "base_groupenabledmodule" ("group_id");
-CREATE INDEX "base_userlastlogin_ee0cafa2" ON "base_userlastlogin" ("username");
-CREATE INDEX "base_innerpubmsgreply_3fde75e6" ON "base_innerpubmsgreply" ("reply_to_id");
-CREATE INDEX "base_clientlogintoken_ee0cafa2" ON "base_clientlogintoken" ("username");
-CREATE INDEX "contacts_contact_d3d8b136" ON "contacts_contact" ("user_email");
-CREATE INDEX "group_groupmessage_dc00373b" ON "group_groupmessage" ("group_id");
-CREATE INDEX "group_messagereply_3fde75e6" ON "group_messagereply" ("reply_to_id");
-CREATE INDEX "group_messageattachment_12d5396a" ON "group_messageattachment" ("group_message_id");
-CREATE INDEX "group_publicgroup_dc00373b" ON "group_publicgroup" ("group_id");
-CREATE INDEX "message_usermessage_8b1dd4eb" ON "message_usermessage" ("from_email");
-CREATE INDEX "message_usermessage_590d1560" ON "message_usermessage" ("to_email");
-CREATE INDEX "message_usermsgattachment_72f290f5" ON "message_usermsgattachment" ("user_msg_id");
-CREATE INDEX "message_usermsgattachment_cee41a9a" ON "message_usermsgattachment" ("priv_file_dir_share_id");
-CREATE INDEX "notifications_usernotification_bc172800" ON "notifications_usernotification" ("to_user");
-CREATE INDEX "notifications_usernotification_265e5521" ON "notifications_usernotification" ("msg_type");
-CREATE INDEX "options_useroptions_830a6ccb" ON "options_useroptions" ("email");
-CREATE INDEX "profile_profile_3b46cb17" ON "profile_profile" ("contact_email");
-CREATE INDEX "profile_profile_71bbc151" ON "profile_profile" ("institution");
-CREATE INDEX "profile_detailedprofile_6340c63c" ON "profile_detailedprofile" ("user");
-CREATE INDEX "share_fileshare_ee0cafa2" ON "share_fileshare" ("username");
-CREATE INDEX "share_fileshare_2059abe4" ON "share_fileshare" ("repo_id");
-CREATE INDEX "share_fileshare_44096fd5" ON "share_fileshare" ("s_type");
-CREATE INDEX "share_orgfileshare_944dadb6" ON "share_orgfileshare" ("org_id");
-CREATE INDEX "share_uploadlinkshare_ee0cafa2" ON "share_uploadlinkshare" ("username");
-CREATE INDEX "share_uploadlinkshare_2059abe4" ON "share_uploadlinkshare" ("repo_id");
-CREATE INDEX "share_privatefiledirshare_0e7efed3" ON "share_privatefiledirshare" ("from_user");
-CREATE INDEX "share_privatefiledirshare_bc172800" ON "share_privatefiledirshare" ("to_user");
-CREATE INDEX "share_privatefiledirshare_2059abe4" ON "share_privatefiledirshare" ("repo_id");
-CREATE INDEX "pubfile_grouppublicfile_dc00373b" ON "pubfile_grouppublicfile" ("group_id");
-CREATE INDEX "sysadmin_extra_userloginlog_ee0cafa2" ON "sysadmin_extra_userloginlog" ("username");
-CREATE INDEX "sysadmin_extra_userloginlog_c8db99ec" ON "sysadmin_extra_userloginlog" ("login_date");
-CREATE INDEX "organizations_orgmemberquota_944dadb6" ON "organizations_orgmemberquota" ("org_id");
+BEGIN TRANSACTION;
+CREATE TABLE "django_migrations" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app" varchar(255) NOT NULL, "name" varchar(255) NOT NULL, "applied" datetime NOT NULL);
+INSERT INTO "django_migrations" VALUES(1,'captcha','0001_initial','2016-03-19 16:26:56.445576');
+INSERT INTO "django_migrations" VALUES(2,'contenttypes','0001_initial','2016-03-19 16:26:56.535638');
+INSERT INTO "django_migrations" VALUES(3,'contenttypes','0002_remove_content_type_name','2016-03-19 16:26:56.575683');
+INSERT INTO "django_migrations" VALUES(4,'database','0001_initial','2016-03-19 16:26:56.588344');
+INSERT INTO "django_migrations" VALUES(5,'institutions','0001_initial','2016-03-19 16:26:56.616290');
+INSERT INTO "django_migrations" VALUES(6,'post_office','0001_initial','2016-03-19 16:26:56.715212');
+INSERT INTO "django_migrations" VALUES(7,'post_office','0002_add_i18n_and_backend_alias','2016-03-19 16:26:57.123126');
+INSERT INTO "django_migrations" VALUES(8,'sessions','0001_initial','2016-03-19 16:26:57.172678');
+CREATE TABLE "registration_registrationprofile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "emailuser_id" integer NOT NULL, "activation_key" varchar(40) NOT NULL);
+CREATE TABLE "api2_token" ("key" varchar(40) NOT NULL PRIMARY KEY, "user" varchar(255) NOT NULL UNIQUE, "created" datetime NOT NULL);
+CREATE TABLE "api2_tokenv2" ("key" varchar(40) NOT NULL PRIMARY KEY, "user" varchar(255) NOT NULL, "platform" varchar(32) NOT NULL, "device_id" varchar(40) NOT NULL, "device_name" varchar(40) NOT NULL, "platform_version" varchar(16) NOT NULL, "client_version" varchar(16) NOT NULL, "last_accessed" datetime NOT NULL, "last_login_ip" char(39) NULL, UNIQUE ("user", "platform", "device_id"));
+CREATE TABLE "avatar_avatar" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "emailuser" varchar(255) NOT NULL, "primary" bool NOT NULL, "avatar" varchar(1024) NOT NULL, "date_uploaded" datetime NOT NULL);
+CREATE TABLE "avatar_groupavatar" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" varchar(255) NOT NULL, "avatar" varchar(1024) NOT NULL, "date_uploaded" datetime NOT NULL);
+CREATE TABLE "base_filediscuss" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_message_id" integer NOT NULL REFERENCES "group_groupmessage" ("id"), "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "path_hash" varchar(12) NOT NULL);
+CREATE TABLE "base_userstarredfiles" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(254) NOT NULL, "org_id" integer NOT NULL, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "is_dir" bool NOT NULL);
+CREATE TABLE "base_userenabledmodule" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "module_name" varchar(20) NOT NULL);
+CREATE TABLE "base_groupenabledmodule" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" varchar(10) NOT NULL, "module_name" varchar(20) NOT NULL);
+CREATE TABLE "base_userlastlogin" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "last_login" datetime NOT NULL);
+CREATE TABLE "base_commandslastcheck" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "command_type" varchar(100) NOT NULL, "last_check" datetime NOT NULL);
+CREATE TABLE "base_innerpubmsg" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "from_email" varchar(254) NOT NULL, "message" varchar(500) NOT NULL, "timestamp" datetime NOT NULL);
+CREATE TABLE "base_innerpubmsgreply" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "reply_to_id" integer NOT NULL REFERENCES "base_innerpubmsg" ("id"), "from_email" varchar(254) NOT NULL, "message" varchar(150) NOT NULL, "timestamp" datetime NOT NULL);
+CREATE TABLE "base_devicetoken" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "token" varchar(80) NOT NULL, "user" varchar(255) NOT NULL, "platform" varchar(32) NOT NULL, "version" varchar(16) NOT NULL, "pversion" varchar(16) NOT NULL, UNIQUE ("token", "user"));
+CREATE TABLE "base_clientlogintoken" ("token" varchar(32) NOT NULL PRIMARY KEY, "username" varchar(255) NOT NULL, "timestamp" datetime NOT NULL);
+CREATE TABLE "contacts_contact" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_email" varchar(255) NOT NULL, "contact_email" varchar(255) NOT NULL, "contact_name" varchar(255) NULL, "note" varchar(255) NULL);
+CREATE TABLE "wiki_personalwiki" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL UNIQUE, "repo_id" varchar(36) NOT NULL);
+CREATE TABLE "wiki_groupwiki" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL UNIQUE, "repo_id" varchar(36) NOT NULL);
+CREATE TABLE "group_groupmessage" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL, "from_email" varchar(255) NOT NULL, "message" varchar(2048) NOT NULL, "timestamp" datetime NOT NULL);
+CREATE TABLE "group_messagereply" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "reply_to_id" integer NOT NULL REFERENCES "group_groupmessage" ("id"), "from_email" varchar(255) NOT NULL, "message" varchar(2048) NOT NULL, "timestamp" datetime NOT NULL);
+CREATE TABLE "group_messageattachment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_message_id" integer NOT NULL REFERENCES "group_groupmessage" ("id"), "repo_id" varchar(40) NOT NULL, "attach_type" varchar(5) NOT NULL, "path" text NOT NULL, "src" varchar(20) NOT NULL);
+CREATE TABLE "group_publicgroup" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "group_id" integer NOT NULL);
+CREATE TABLE "message_usermessage" ("message_id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "message" varchar(512) NOT NULL, "from_email" varchar(255) NOT NULL, "to_email" varchar(255) NOT NULL, "timestamp" datetime NOT NULL, "ifread" bool NOT NULL, "sender_deleted_at" datetime NULL, "recipient_deleted_at" datetime NULL);
+CREATE TABLE "message_usermsglastcheck" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "check_time" datetime NOT NULL);
+CREATE TABLE "message_usermsgattachment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user_msg_id" integer NOT NULL REFERENCES "message_usermessage" ("message_id"), "priv_file_dir_share_id" integer NULL REFERENCES "share_privatefiledirshare" ("id"));
+CREATE TABLE "notifications_notification" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "message" varchar(512) NOT NULL, "primary" bool NOT NULL);
+CREATE TABLE "notifications_usernotification" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "to_user" varchar(255) NOT NULL, "msg_type" varchar(30) NOT NULL, "detail" text NOT NULL, "timestamp" datetime NOT NULL, "seen" bool NOT NULL);
+CREATE TABLE "options_useroptions" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "email" varchar(255) NOT NULL, "option_key" varchar(50) NOT NULL, "option_val" varchar(50) NOT NULL);
+CREATE TABLE "profile_profile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user" varchar(254) NOT NULL UNIQUE, "nickname" varchar(64) NOT NULL, "intro" text NOT NULL, "lang_code" text NULL, "login_id" varchar(225) NULL UNIQUE, "contact_email" varchar(225) NULL, "institution" varchar(225) NULL);
+CREATE TABLE "profile_detailedprofile" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user" varchar(255) NOT NULL, "department" varchar(512) NOT NULL, "telephone" varchar(100) NOT NULL);
+CREATE TABLE "share_anonymousshare" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "repo_owner" varchar(255) NOT NULL, "repo_id" varchar(36) NOT NULL, "anonymous_email" varchar(255) NOT NULL, "token" varchar(25) NOT NULL UNIQUE);
+CREATE TABLE "share_fileshare" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "token" varchar(10) NOT NULL UNIQUE, "ctime" datetime NOT NULL, "view_cnt" integer NOT NULL, "s_type" varchar(2) NOT NULL, "password" varchar(128) NULL, "expire_date" datetime NULL);
+CREATE TABLE "share_orgfileshare" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL, "file_share_id" integer NOT NULL UNIQUE REFERENCES "share_fileshare" ("id"));
+CREATE TABLE "share_uploadlinkshare" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "token" varchar(10) NOT NULL UNIQUE, "ctime" datetime NOT NULL, "view_cnt" integer NOT NULL, "password" varchar(128) NULL, "expire_date" datetime NULL);
+CREATE TABLE "share_privatefiledirshare" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "from_user" varchar(255) NOT NULL, "to_user" varchar(255) NOT NULL, "repo_id" varchar(36) NOT NULL, "path" text NOT NULL, "token" varchar(10) NOT NULL UNIQUE, "permission" varchar(5) NOT NULL, "s_type" varchar(5) NOT NULL);
+CREATE TABLE "sysadmin_extra_userloginlog" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "username" varchar(255) NOT NULL, "login_date" datetime NOT NULL, "login_ip" varchar(128) NOT NULL);
+CREATE TABLE "organizations_orgmemberquota" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "org_id" integer NOT NULL, "quota" integer NOT NULL);
+CREATE TABLE "captcha_captchastore" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "challenge" varchar(32) NOT NULL, "response" varchar(32) NOT NULL, "hashkey" varchar(40) NOT NULL UNIQUE, "expiration" datetime NOT NULL);
+CREATE TABLE "django_content_type" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "app_label" varchar(100) NOT NULL, "model" varchar(100) NOT NULL, UNIQUE ("app_label", "model"));
+INSERT INTO "django_content_type" VALUES(1,'contenttypes','contenttype');
+INSERT INTO "django_content_type" VALUES(2,'sessions','session');
+INSERT INTO "django_content_type" VALUES(3,'registration','registrationprofile');
+INSERT INTO "django_content_type" VALUES(4,'captcha','captchastore');
+INSERT INTO "django_content_type" VALUES(5,'database','constance');
+INSERT INTO "django_content_type" VALUES(6,'post_office','attachment');
+INSERT INTO "django_content_type" VALUES(7,'post_office','emailtemplate');
+INSERT INTO "django_content_type" VALUES(8,'post_office','email');
+INSERT INTO "django_content_type" VALUES(9,'post_office','log');
+INSERT INTO "django_content_type" VALUES(10,'api2','token');
+INSERT INTO "django_content_type" VALUES(11,'api2','tokenv2');
+INSERT INTO "django_content_type" VALUES(12,'avatar','avatar');
+INSERT INTO "django_content_type" VALUES(13,'avatar','groupavatar');
+INSERT INTO "django_content_type" VALUES(14,'base','groupenabledmodule');
+INSERT INTO "django_content_type" VALUES(15,'base','clientlogintoken');
+INSERT INTO "django_content_type" VALUES(16,'base','userenabledmodule');
+INSERT INTO "django_content_type" VALUES(17,'base','filediscuss');
+INSERT INTO "django_content_type" VALUES(18,'base','devicetoken');
+INSERT INTO "django_content_type" VALUES(19,'base','commandslastcheck');
+INSERT INTO "django_content_type" VALUES(20,'base','innerpubmsg');
+INSERT INTO "django_content_type" VALUES(21,'base','innerpubmsgreply');
+INSERT INTO "django_content_type" VALUES(22,'base','userlastlogin');
+INSERT INTO "django_content_type" VALUES(23,'base','userstarredfiles');
+INSERT INTO "django_content_type" VALUES(24,'contacts','contact');
+INSERT INTO "django_content_type" VALUES(25,'institutions','institutionadmin');
+INSERT INTO "django_content_type" VALUES(26,'institutions','institution');
+INSERT INTO "django_content_type" VALUES(27,'wiki','personalwiki');
+INSERT INTO "django_content_type" VALUES(28,'wiki','groupwiki');
+INSERT INTO "django_content_type" VALUES(29,'group','publicgroup');
+INSERT INTO "django_content_type" VALUES(30,'group','groupmessage');
+INSERT INTO "django_content_type" VALUES(31,'group','messageattachment');
+INSERT INTO "django_content_type" VALUES(32,'group','messagereply');
+INSERT INTO "django_content_type" VALUES(33,'message','usermsgattachment');
+INSERT INTO "django_content_type" VALUES(34,'message','usermsglastcheck');
+INSERT INTO "django_content_type" VALUES(35,'message','usermessage');
+INSERT INTO "django_content_type" VALUES(36,'notifications','notification');
+INSERT INTO "django_content_type" VALUES(37,'notifications','usernotification');
+INSERT INTO "django_content_type" VALUES(38,'options','useroptions');
+INSERT INTO "django_content_type" VALUES(39,'profile','profile');
+INSERT INTO "django_content_type" VALUES(40,'profile','detailedprofile');
+INSERT INTO "django_content_type" VALUES(41,'share','privatefiledirshare');
+INSERT INTO "django_content_type" VALUES(42,'share','uploadlinkshare');
+INSERT INTO "django_content_type" VALUES(43,'share','fileshare');
+INSERT INTO "django_content_type" VALUES(44,'share','anonymousshare');
+INSERT INTO "django_content_type" VALUES(45,'share','orgfileshare');
+INSERT INTO "django_content_type" VALUES(46,'sysadmin_extra','userloginlog');
+INSERT INTO "django_content_type" VALUES(47,'organizations','orgmemberquota');
+CREATE TABLE "constance_config" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "key" varchar(255) NOT NULL UNIQUE, "value" text NOT NULL);
+CREATE TABLE "institutions_institution" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(200) NOT NULL, "create_time" datetime NOT NULL);
+CREATE TABLE "institutions_institutionadmin" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "user" varchar(254) NOT NULL, "institution_id" integer NOT NULL REFERENCES "institutions_institution" ("id"));
+CREATE TABLE "post_office_attachment" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "file" varchar(100) NOT NULL, "name" varchar(255) NOT NULL);
+CREATE TABLE "post_office_log" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "date" datetime NOT NULL, "status" smallint unsigned NOT NULL, "exception_type" varchar(255) NOT NULL, "message" text NOT NULL, "email_id" integer NOT NULL REFERENCES "post_office_email" ("id"));
+CREATE TABLE "post_office_attachment_emails" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "attachment_id" integer NOT NULL REFERENCES "post_office_attachment" ("id"), "email_id" integer NOT NULL REFERENCES "post_office_email" ("id"), UNIQUE ("attachment_id", "email_id"));
+CREATE TABLE "post_office_email" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "from_email" varchar(254) NOT NULL, "cc" text NOT NULL, "bcc" text NOT NULL, "subject" varchar(255) NOT NULL, "message" text NOT NULL, "html_message" text NOT NULL, "status" smallint unsigned NULL, "priority" smallint unsigned NULL, "created" datetime NOT NULL, "last_updated" datetime NOT NULL, "scheduled_time" datetime NULL, "headers" text NULL, "context" text NULL, "template_id" integer NULL REFERENCES "post_office_emailtemplate" ("id"), "backend_alias" varchar(64) NOT NULL, "to" text NOT NULL);
+CREATE TABLE "post_office_emailtemplate" ("id" integer NOT NULL PRIMARY KEY AUTOINCREMENT, "name" varchar(255) NOT NULL, "description" text NOT NULL, "subject" varchar(255) NOT NULL, "content" text NOT NULL, "html_content" text NOT NULL, "created" datetime NOT NULL, "last_updated" datetime NOT NULL, "default_template_id" integer NULL REFERENCES "post_office_emailtemplate" ("id"), "language" varchar(12) NOT NULL, UNIQUE ("language", "default_template_id"));
+CREATE TABLE "django_session" ("session_key" varchar(40) NOT NULL PRIMARY KEY, "session_data" text NOT NULL, "expire_date" datetime NOT NULL);
+DELETE FROM sqlite_sequence;
+INSERT INTO "sqlite_sequence" VALUES('django_migrations',8);
+INSERT INTO "sqlite_sequence" VALUES('django_content_type',47);
+INSERT INTO "sqlite_sequence" VALUES('post_office_email',0);
+INSERT INTO "sqlite_sequence" VALUES('post_office_emailtemplate',0);
+CREATE INDEX "base_filediscuss_06a351d8" ON "base_filediscuss" ("group_message_id");
+CREATE INDEX "base_filediscuss_b57d9b6b" ON "base_filediscuss" ("path_hash");
+CREATE INDEX "base_userstarredfiles_0c83f57c" ON "base_userstarredfiles" ("email");
+CREATE INDEX "base_userstarredfiles_9a8c79bf" ON "base_userstarredfiles" ("repo_id");
+CREATE INDEX "base_userenabledmodule_14c4b06b" ON "base_userenabledmodule" ("username");
+CREATE INDEX "base_groupenabledmodule_0e939a4f" ON "base_groupenabledmodule" ("group_id");
+CREATE INDEX "base_userlastlogin_14c4b06b" ON "base_userlastlogin" ("username");
+CREATE INDEX "base_innerpubmsgreply_6ec85d95" ON "base_innerpubmsgreply" ("reply_to_id");
+CREATE INDEX "base_clientlogintoken_14c4b06b" ON "base_clientlogintoken" ("username");
+CREATE INDEX "contacts_contact_40c27bdc" ON "contacts_contact" ("user_email");
+CREATE INDEX "group_groupmessage_0e939a4f" ON "group_groupmessage" ("group_id");
+CREATE INDEX "group_messagereply_6ec85d95" ON "group_messagereply" ("reply_to_id");
+CREATE INDEX "group_messageattachment_06a351d8" ON "group_messageattachment" ("group_message_id");
+CREATE INDEX "group_publicgroup_0e939a4f" ON "group_publicgroup" ("group_id");
+CREATE INDEX "message_usermessage_f50bd8c4" ON "message_usermessage" ("from_email");
+CREATE INDEX "message_usermessage_acc047cf" ON "message_usermessage" ("to_email");
+CREATE INDEX "message_usermsgattachment_728fbd7e" ON "message_usermsgattachment" ("user_msg_id");
+CREATE INDEX "message_usermsgattachment_4b5c5c38" ON "message_usermsgattachment" ("priv_file_dir_share_id");
+CREATE INDEX "notifications_usernotification_86899d6f" ON "notifications_usernotification" ("to_user");
+CREATE INDEX "notifications_usernotification_486af403" ON "notifications_usernotification" ("msg_type");
+CREATE INDEX "options_useroptions_0c83f57c" ON "options_useroptions" ("email");
+CREATE INDEX "profile_profile_b9973d8c" ON "profile_profile" ("contact_email");
+CREATE INDEX "profile_profile_955bfff7" ON "profile_profile" ("institution");
+CREATE INDEX "profile_detailedprofile_ee11cbb1" ON "profile_detailedprofile" ("user");
+CREATE INDEX "share_fileshare_14c4b06b" ON "share_fileshare" ("username");
+CREATE INDEX "share_fileshare_9a8c79bf" ON "share_fileshare" ("repo_id");
+CREATE INDEX "share_fileshare_1abd88b5" ON "share_fileshare" ("s_type");
+CREATE INDEX "share_orgfileshare_9cf869aa" ON "share_orgfileshare" ("org_id");
+CREATE INDEX "share_uploadlinkshare_14c4b06b" ON "share_uploadlinkshare" ("username");
+CREATE INDEX "share_uploadlinkshare_9a8c79bf" ON "share_uploadlinkshare" ("repo_id");
+CREATE INDEX "share_privatefiledirshare_f4f87abd" ON "share_privatefiledirshare" ("from_user");
+CREATE INDEX "share_privatefiledirshare_86899d6f" ON "share_privatefiledirshare" ("to_user");
+CREATE INDEX "share_privatefiledirshare_9a8c79bf" ON "share_privatefiledirshare" ("repo_id");
+CREATE INDEX "sysadmin_extra_userloginlog_14c4b06b" ON "sysadmin_extra_userloginlog" ("username");
+CREATE INDEX "sysadmin_extra_userloginlog_28ed1ef0" ON "sysadmin_extra_userloginlog" ("login_date");
+CREATE INDEX "organizations_orgmemberquota_9cf869aa" ON "organizations_orgmemberquota" ("org_id");
+CREATE INDEX "institutions_institutionadmin_a964baeb" ON "institutions_institutionadmin" ("institution_id");
+CREATE INDEX "post_office_log_fdfd0ebf" ON "post_office_log" ("email_id");
+CREATE INDEX "post_office_attachment_emails_07ba63f5" ON "post_office_attachment_emails" ("attachment_id");
+CREATE INDEX "post_office_attachment_emails_fdfd0ebf" ON "post_office_attachment_emails" ("email_id");
+CREATE INDEX "post_office_email_9acb4454" ON "post_office_email" ("status");
+CREATE INDEX "post_office_email_e2fa5388" ON "post_office_email" ("created");
+CREATE INDEX "post_office_email_3acc0b7a" ON "post_office_email" ("last_updated");
+CREATE INDEX "post_office_email_ed24d584" ON "post_office_email" ("scheduled_time");
+CREATE INDEX "post_office_email_74f53564" ON "post_office_email" ("template_id");
+CREATE INDEX "post_office_emailtemplate_dea6f63e" ON "post_office_emailtemplate" ("default_template_id");
+CREATE INDEX "django_session_de54fa62" ON "django_session" ("expire_date");
+COMMIT;

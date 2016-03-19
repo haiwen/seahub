@@ -16,12 +16,6 @@ from fields import LowerCaseCharField
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-class UuidObjidMap(models.Model):
-    """
-    Model used for store crocdoc uuid and file object id mapping.
-    """
-    uuid = models.CharField(max_length=40)
-    obj_id = models.CharField(max_length=40, unique=True)
 
 class FileDiscuss(models.Model):
     """
