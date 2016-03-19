@@ -33,7 +33,7 @@ define([
         create: function(model, options) {
             // override default create url
             options = options ? _.clone(options) : {};
-            options.url = this.url + '?from=web';
+            options.url = this.url() + '?from=web';
 
             //call Backbone's create
             return Backbone.Collection.prototype.create.call(this, model, options);
