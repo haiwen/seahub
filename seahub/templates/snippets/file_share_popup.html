@@ -1,15 +1,9 @@
-{% load i18n %} {# for file/dir share #}
+{% load i18n %}
     <div id="file-share" class="hide">
         <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
         <div id="file-share-tabs" class="left-right-tabs ovhd">
             <ul class="left-right-tabs-nav fleft">
                 <li class="tab"><a href="#link-share" class="a">{% trans "Download Link" %}</a></li>
-                {% if user_perm == 'rw' %}
-                <li class="tab" id="upload-link-share-tab"><a href="#upload-link-share" class="a">{% trans "Upload Link" %}</a></li>{# for dir #}
-                {% endif %}
-                {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-                <li class="tab" id="syncable-share-tab"><a href="#syncable-share" class="a">{% trans "Private Share" %}</a></li> {# for dir #}
-                {% endif %}
             </ul>
 
             <div class="fright">
@@ -58,51 +52,6 @@
                 </div>
             </div>
 
-            {% if user_perm == 'rw' %}
-            <div id="upload-link-share" class="tabs-panel">
-                <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
-                <div id="upload-link-options">
-                    <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="use-passwd" id="upload-link-passwd-switch" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
-                    </label>
-                    <div id="upload-link-passwd" class="hide">
-                        <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-                        <label>{% trans "Password again"%}</label><br />
-                        <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
-                    </div>
-                    <p class="error hide"></p>
-                </div>
-                <button id="gen-upload-link-btn" class="hide">{% trans "Generate"%}</button>
-                <div id="share-upload-link-body" class="hide">
-                    <p><span class="vam">{% trans 'Upload Link: ' %}</span><input type="text" readonly="readonly" id="shared-upload-link-text" class="vam" /></p>
-                    <button id="send-upload-link">{% trans 'Send' %}</button>
-                    <button id="rm-shared-upload-link">{% trans 'Delete' %}</button>
-
-                    <form id="upload-link-send-form" action="" method="post" class="hide">{% csrf_token %}
-                        <label>{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" id="upload-link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
-                        <input type="hidden" name="shared_upload_link" value="{{ dir_shared_upload_link }}" />
-                        <label>{% trans "Message (optional):"%}</label><br />
-                        <textarea class="textarea" name="extra_msg" id="upload-extra-msg-text"></textarea><br />
-                        <p class="error hide"></p>
-                        <input type="submit" value="{% trans "Submit"%}" class="submit" />
-                        <input type="button" value="{% trans "Cancel"%}" class="cancel" />
-                        <p id="upload-sending" class="hide">{% trans "Sending..."%}</p>
-                    </form>
-                </div>
-            </div>
-            {% endif %}
-
-            {% if ENABLE_SUB_LIBRARY and not repo.is_virtual and is_repo_owner %}
-            <div id="syncable-share" class="tabs-panel">
-                {% url 'share_repo' as repo_share_url %}
-                {% with post_url=repo_share_url %}
-                {% include "snippets/repo_share_form.html" %} {# for sub-lib share #}
-                {% endwith %} 
-            </div>
-            {% endif %}
         </div>
 
         </div>
