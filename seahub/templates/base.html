@@ -91,6 +91,11 @@
                         {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
                     </div>
                     {% endif %}
+                    {% if request.user.inst_admin %}
+                    <div class="manage">
+                        {% block inst_admin %}<a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
+                    </div>
+                    {% endif %}
                 </div>
                 </div>
                 {% else %} {# for non-logged-in user #}

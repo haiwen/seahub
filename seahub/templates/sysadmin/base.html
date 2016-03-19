@@ -25,6 +25,11 @@
             <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
         </li>
         {% endif %}
+        {% if multi_institution %}
+        <li class="tab {% block cur_inst %}{% endblock %}">
+            <a href="{{ SITE_ROOT }}sys/instadmin/"><span class="sf2-icon-organization"></span>{% trans "Institutions" %}</a>
+        </li>
+        {% endif %}
         <li class="tab {% block cur_notice %}{% endblock %}">
             <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="sf2-icon-msgs"></span>{% trans "Notifications" %}</a>
         </li>

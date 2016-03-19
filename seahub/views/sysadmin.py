@@ -34,7 +34,7 @@ from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
-
+from seahub.institutions.models import Institution, InstitutionAdmin
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
@@ -2244,3 +2244,129 @@ def sys_check_license(request):
         result['expiration_date'] = expiration
 
     return HttpResponse(json.dumps(result), content_type=content_type)
+
+@login_required
+@sys_staff_required
+def sys_inst_admin(request):
+    """List institutions.
+    """
+    if request.method == "POST":
+        inst_name = request.POST.get('name').strip()
+        if not inst_name:
+            messages.error(request, 'Name is required.')
+            return HttpResponseRedirect(reverse('sys_inst_admin'))
+
+        Institution.objects.create(name=inst_name)
+        messages.success(request, _('Success'))
+
+        return HttpResponseRedirect(reverse('sys_inst_admin'))
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    offset = per_page * (current_page - 1)
+    limit = per_page + 1
+    insts = Institution.objects.all()[offset:offset + limit]
+
+    if len(insts) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response(
+        'sysadmin/sys_inst_admin.html', {
+            'insts': insts,
+            'current_page': current_page,
+            'prev_page': current_page - 1,
+            'next_page': current_page + 1,
+            'per_page': per_page,
+            'page_next': page_next,
+        }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_inst_remove(request, inst_id):
+    """Delete an institution.
+    """
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    inst.delete()
+    messages.success(request, _('Success'))
+
+    return HttpResponseRedirect(reverse('sys_inst_admin'))
+
+@login_required
+@sys_staff_required
+def sys_inst_info_user(request, inst_id):
+    """List institution members.
+    """
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    inst_admins = [x.user for x in InstitutionAdmin.objects.filter(institution=inst)]
+    usernames = [x.user for x in Profile.objects.filter(institution=inst.name)]
+    users = [User.objects.get(x) for x in usernames]
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
+    for u in users:
+        _populate_user_quota_usage(u)
+
+        if u.username in inst_admins:
+            u.inst_admin = True
+        else:
+            u.inst_admin = False
+
+        # populate user last login time
+        u.last_login = None
+        for last_login in last_logins:
+            if last_login.username == u.email:
+                u.last_login = last_login.last_login
+
+    users_count = len(users)
+
+    return render_to_response('sysadmin/sys_inst_info_user.html', {
+        'inst': inst,
+        'users': users,
+        'users_count': users_count,
+    }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_inst_toggle_admin(request, inst_id, email):
+    """Set or revoke an institution admin.
+    """
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    try:
+        u = User.objects.get(email=email)
+    except User.DoesNotExist:
+        assert False, 'TODO'
+
+    if u.is_staff:
+        assert False
+
+    res = InstitutionAdmin.objects.filter(institution=inst, user=email)
+    if len(res) == 0:
+        InstitutionAdmin.objects.create(institution=inst, user=email)
+    elif len(res) == 1:
+        res[0].delete()
+        # todo: expire user's session
+    else:
+        assert False
+
+    messages.success(request, _('Success'))
+    return HttpResponseRedirect(reverse('sys_inst_info_user', args=[inst.pk]))

@@ -1,0 +1,27 @@
+{% extends "institutions/base.html" %}
+{% load seahub_tags i18n %}
+
+{% block cur_info %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "Info" %}</h3>
+
+<dl>
+    <dt>{% trans "Name" %}</dt>
+    <dd>{{ inst.name }}</dd>
+
+    <dt>{% trans "Libraries" %}</dt>
+    <dd>{{repos_count}}</dd>
+
+    <dt>{% trans "Active Users" %} / {% trans "Total Users" %}</dt>
+    <dd>
+        {% if active_users_count %}{{ active_users_count }}{% else %}--{% endif %}
+        /
+        {% if users_count %}{{ users_count }}{% else %}--{% endif %}
+    </dd>
+
+    <dt>{% trans "Groups" %}</dt>
+    <dd>{{groups_count}}</dd>
+</dl>
+{% endblock %}
+
