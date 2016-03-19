@@ -49,51 +49,43 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-var user_list = [], user_email;
-{% for user in not_admin_users %}
-user_email = '{{ user.email }}';
-user_list.push({value:user_email, label:user_email});
-{% endfor %}
 $('#add-admin-btn').click(function() {
     var form = $("#add-admin-form");
     form.modal({appendTo: "#main", focus:false});
     $('#simplemodal-container').css({'height':'auto', 'padding':0});
     $('#add-admin-tabs').tabs();
-    addAutocomplete('#added-member-name', '#enter', user_list);
-
 });
 $('#add-admin-form').submit(function() {
-    var form = $(this),
-        cur_tab_id = $('.ui-tabs-selected a', form).attr('href'),
-        post_data = '',
-        input = $('[name="user_email"]', form); 
-        post_data = input.val();
+    var $form = $(this),
+        emails = $.trim($('[name="user_email"]', $form).val());
 
-    if (!post_data) {
-        apply_form_error(form.attr('id'), '{% trans "Please enter emails, or select some." %}');
+    if (!emails) {
         return false;
-    }    
+    }
 
-    var submit_btn = $('[type="submit"]', form);
-    disable(submit_btn);
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
     $.ajax({
-    url: '{% url 'batch_user_make_admin' %}',
+        url: '{% url 'batch_user_make_admin' %}',
         type: 'POST',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
         data: {
-            'set_admin_emails': post_data
+            'set_admin_emails': emails
         },
-        success: function(data) {
-            location.reload('true');
+        success: function() {
+            location.reload(true);
         },
-        error: function(data, textStatus, jqXHR) {
-            var errors = $.parseJSON(data.responseText);
-            $.each(errors, function(index, value) {
-                apply_form_error(form.attr('id'), value);
-            });
-            enable(submit_btn);
+        error: function(xhr) {
+            var error_msg;
+            if (xhr.responseText) {
+                error_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                error_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $('.error', $form).html(error_msg).removeClass('hide');
+            enable($submitBtn);
         }
     });
 
