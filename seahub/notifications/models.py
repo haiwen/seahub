@@ -524,10 +524,10 @@ class UserNotification(models.Model):
             else:
                 uploaded_to = d['uploaded_to'].rstrip('/')
                 file_path = uploaded_to + '/' + filename
-                link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to.lstrip('/'))])
+                link = reverse('view_common_lib_dir', args=[repo_id, uploaded_to.lstrip('/')])
                 name = os.path.basename(uploaded_to)
 
-            file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
+            file_link = reverse('view_lib_file', args=[repo_id, file_path])
 
             msg = _(u"A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a href='%(link)s'>%(name)s</a>") % {
                 'file_link': file_link,

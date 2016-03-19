@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-from django.utils.http import urlquote
 from django.core.urlresolvers import reverse
 
 from seaserv import seafile_api
@@ -16,7 +15,7 @@ class ListPrivSharedFoldersTest(BaseTestCase):
         username = self.user.username
 
         parent_dir = '/'
-        dirname = '<img onerror=alert(1) src=a>_"_Ω_%2F_W_#_12_这'
+        dirname = 'test-folder'
         full_dir_path = os.path.join(parent_dir, dirname)
 
         # create folder
@@ -31,5 +30,5 @@ class ListPrivSharedFoldersTest(BaseTestCase):
         self.login_as(self.user)
         resp = self.client.get(reverse('list_priv_shared_folders'))
         self.assertEqual(200, resp.status_code)
-        href = reverse("view_common_lib_dir", args=[repo_id, urlquote(full_dir_path).strip('/')])
+        href = reverse("view_common_lib_dir", args=[repo_id, full_dir_path.strip('/')])
         self.assertRegexpMatches(resp.content, href)

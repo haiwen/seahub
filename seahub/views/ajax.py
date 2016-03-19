@@ -945,7 +945,7 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, urlquote(dst_path).strip('/')])
+        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
@@ -988,7 +988,7 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
             success.append(obj_name)
 
     if len(success) > 0:
-        url = reverse("view_common_lib_dir", args=[dst_repo_id, urlquote(dst_path).strip('/')])
+        url = reverse("view_common_lib_dir", args=[dst_repo_id, dst_path.strip('/')])
 
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
