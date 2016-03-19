@@ -47,7 +47,8 @@ define([
 
         addOne: function(item, collection, options) {
             var view = new ItemView({
-                model: item
+                model: item,
+                parentView: this
             });
             if (options.prepend == true) {
                 this.$listContainer.append(view.render().el);
@@ -115,6 +116,10 @@ define([
         hide: function() {
             this.$el.hide();
             app.router.navigate('group/' + this.group_id + '/');
+        },
+
+        beginReply: function(to_user) {
+            this.$('[name="message"]').val("@" + to_user + " ");
         },
 
         formSubmit: function() {

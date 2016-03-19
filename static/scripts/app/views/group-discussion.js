@@ -17,11 +17,13 @@ define([
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
-            'click .js-del-msg': 'delMessage'
+            'click .js-del-msg': 'delMessage',
+            'click .js-reply-msg': 'reply'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             this.listenTo(this.model, 'destroy', this.remove);
+            this.parentView = options.parentView;
         },
 
         render: function() {
@@ -48,6 +50,10 @@ define([
 
         rmHighlight: function() {
             this.$el.removeClass('hl');
+        },
+
+        reply: function() {
+            this.parentView.beginReply(this.model.get("user_name"));
         },
 
         delMessage: function() {
