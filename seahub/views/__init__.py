@@ -249,7 +249,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
                 dirent.starred = False
                 fpath = posixpath.join(path, dirent.obj_name)
                 p_fpath = posixpath.join(path, dirent.obj_name)
-                dirent.view_link = reverse('view_lib_file', args=[repo.id, urlquote(p_fpath)])
+                dirent.view_link = reverse('view_lib_file', args=[repo.id, p_fpath])
                 dirent.dl_link = get_file_download_link(repo.id, dirent.obj_id,
                                                         p_fpath)
                 dirent.history_link = file_history_base + '?p=' + urlquote(p_fpath)
@@ -1339,13 +1339,13 @@ def convert_cmmt_desc_link(request):
 
         if d.status == 'add' or d.status == 'mod':  # Add or modify file
             return HttpResponseRedirect(
-                reverse('view_lib_file', args=[repo_id, '/' + urlquote(d.name)]))
+                reverse('view_lib_file', args=[repo_id, '/' + d.name]))
         elif d.status == 'mov':  # Move or Rename file
             return HttpResponseRedirect(
-                reverse('view_lib_file', args=[repo_id, '/' + urlquote(d.new_name)]))
+                reverse('view_lib_file', args=[repo_id, '/' + d.new_name]))
         elif d.status == 'newdir':
             return HttpResponseRedirect(
-                reverse('view_common_lib_dir', args=[repo_id, urlquote(d.name).strip('/')]))
+                reverse('view_common_lib_dir', args=[repo_id, d.name.strip('/')]))
         else:
             continue
 

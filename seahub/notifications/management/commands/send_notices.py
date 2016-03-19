@@ -137,8 +137,8 @@ class Command(BaseCommand):
         repo_id = d['repo_id']
         uploaded_to = d['uploaded_to'].rstrip('/')
         file_path = uploaded_to + '/' + file_name
-        file_link = reverse('view_lib_file', args=[repo_id, urlquote(file_path)])
-        folder_link = reverse('view_common_lib_dir', args=[repo_id, urlquote(uploaded_to).strip('/')])
+        file_link = reverse('view_lib_file', args=[repo_id, file_path])
+        folder_link = reverse('view_common_lib_dir', args=[repo_id, uploaded_to.strip('/')])
         folder_name = os.path.basename(uploaded_to)
 
         notice.file_link = file_link
