@@ -46,10 +46,12 @@ define([
 
         highlight: function() {
             this.$el.addClass('hl');
+            this.$('.msg-ops').show();
         },
 
         rmHighlight: function() {
             this.$el.removeClass('hl');
+            this.$('.msg-ops').hide();
         },
 
         reply: function() {

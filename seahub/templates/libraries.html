@@ -163,18 +163,18 @@
             <div class="no-discussion-tip" style="display:none;">
                 <p>{% blocktrans %}No discussion in this group yet.{% endblocktrans %}</p>
             </div>
-            <div>
-                <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
-                    <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="msg-avatar avatar-circle" />
-                    <div class="msg-body">
-                        <textarea name="message" id="add-discussion" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                        <div class="ops">
-                            <button type="submit" class="submit">{% trans "Submit" %}</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
             <p class="error hide"></p>
+        </div>
+        <div class="popover-footer">
+            <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
+                <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="msg-avatar avatar-circle" />
+                <div class="msg-body">
+                    <textarea name="message" id="add-discussion" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                    <div class="ops">
+                        <button type="submit" class="submit">{% trans "Submit" %}</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 

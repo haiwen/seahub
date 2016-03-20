@@ -18,6 +18,7 @@ define([
 
             this.$loadingTip = this.$('.loading-tip');
             this.$listContainer = this.$('#group-discussion-list');
+            this.$content = this.$('.popover-con');
             this.$emptyTip = this.$('.no-discussion-tip');
             this.$error = this.$('.error');
 
@@ -66,6 +67,7 @@ define([
                 this.collection.each(this.addOne, this);
                 this.$listContainer.removeClass('hide');
                 this.$listContainer.show();
+                this.$content.scrollTop(9999);
             } else {
                 this.$emptyTip.show();
                 this.$listContainer.hide();
@@ -102,7 +104,14 @@ define([
 
         // set max-height for '.popover-con'
         setConMaxHeight: function() {
-            this.$('.popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
+            this.$('.popover-con').css({
+                'max-height': $(window).height() - this.$el.offset().top
+                    - this.$('.popover-hd').outerHeight(true)
+                    - this.$('.popover-footer').outerHeight(true)
+                    - 2
+                    - 10
+            }); // 2: top, bottom border width of $el,
+                // 10: leave some margin at the bottom
         },
 
         show: function(options) {
