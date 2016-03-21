@@ -88,7 +88,7 @@ class GroupMembers(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
             if is_group_member(group_id, email):
-                error_msg = _(u'User %s is already group member.') % email
+                error_msg = _(u'User %s is already a group member.') % email
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
