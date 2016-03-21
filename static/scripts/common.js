@@ -150,6 +150,9 @@ define([
                 case 'events': return siteRoot + 'api2/events/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
+
+                // sysadmin
+                case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
             }
         },
 

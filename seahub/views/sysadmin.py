@@ -38,7 +38,8 @@ from seahub.institutions.models import Institution, InstitutionAdmin
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
-    get_virus_record_by_id, get_virus_record
+    get_virus_record_by_id, get_virus_record, FILE_AUDIT_ENABLED, \
+    get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
@@ -69,6 +70,31 @@ except ImportError:
     MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
+
+@login_required
+@sys_staff_required
+def sysadmin(request):
+    """
+    """
+    username = request.user.username
+
+    max_upload_file_size = get_max_upload_file_size()
+
+    folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
+
+    return render_to_response('sysadmin/sysadmin_backbone.html', {
+            'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
+            'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
+            'enable_thumbnail': settings.ENABLE_THUMBNAIL,
+            'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
+            'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,
+            'enable_encrypted_library': config.ENABLE_ENCRYPTED_LIBRARY,
+            'enable_repo_history_setting': config.ENABLE_REPO_HISTORY_SETTING,
+            'max_upload_file_size': max_upload_file_size,
+            'folder_perm_enabled': folder_perm_enabled,
+            'is_pro': True if is_pro_version() else False,
+            'file_audit_enabled': FILE_AUDIT_ENABLED
+            }, context_instance=RequestContext(request))
 
 @login_required
 @sys_staff_required

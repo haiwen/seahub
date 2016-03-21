@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<title>{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
@@ -16,10 +16,8 @@
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
-<link rel="stylesheet" type="text/css" href="{% static "css/backbone.css" %}"/>
 {% endcompress %}
 
-{% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
 </head>
 
@@ -48,32 +46,6 @@
                     {% endif %}
                 </a>
 
-                {% block nav %}{% endblock %}
-
-                {% block header_right %}
-                {% if request.user.is_authenticated %}
-                <div class="fright">
-                {% if has_file_search %}
-                    {% include 'snippets/search_form.html' %}
-                {% endif %}
-
-                <div id="msg-count" class="fleft">
-                    <div id="notice-icon" class="cspt" title="{% trans "Notifications" %}">
-                        <span class="sf2-icon-bell"></span>
-                        <span class="num hide">0</span>
-                    </div>
-                    <div id="notice-popup" class="hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <h3 class="hd">{% trans "Notifications" %}</h3>
-                        <div class="con">
-                            <span class="loading-icon loading-tip"></span>
-                            <ul class="hide" id="notice-list"></ul>
-                            <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
-                        </div>
-                        <span class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></span>
-                    </div>
-                </div>
-
                 <div id="account" class="fright">
                     <div id="my-info">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
@@ -92,41 +64,22 @@
                         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
                         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
-                    {% if request.user.is_staff %}
                     <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sysadmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
+                        <a href="{{ SITE_ROOT }}" title="{% trans "Exit System Admin" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>
                     </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.inst_admin %}
-                    <div class="manage">
-                        {% block inst_admin %}<a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    
                 </div>
-                </div>
-                {% endif %}
-                {% endblock %}
             </div>
         </div>
 
         <div id="main" class="clear">
             <div id="title-panel" class="w100 ovhd">
-                {% block title_panel %}{% endblock %}
             </div>
             <div id="left-panel">
-                {% block left_panel %}{% endblock %}
+                <div class="side-tabnav hide" id="side-nav"></div>
             </div>
             <div id="right-panel">
-                {% block right_panel %}{% endblock %}
             </div>
             <div id="main-panel" class="clear w100 ovhd">
-                {% block main_panel %} {% endblock %}
             </div>
 
             <div id="confirm-popup" class="hide">
@@ -137,7 +90,7 @@
         </div>
 
         {% include 'footer.html' %}
-        {% include 'js/templates.html' %}
+        {% include 'js/sysadmin-templates.html' %}
 </div><!-- wrapper -->
 
 <script type="text/javascript">
@@ -147,10 +100,31 @@ var app = {
         siteRoot: '{{ SITE_ROOT }}'
     }
 };
+app["pageOptions"] = {
+    csrfToken: "{{ csrf_token }}",
+    email: "{{request.user.username}}",
+    name: "{{request.user.username|email2nickname|escapejs}}",
+    events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
+    repo_password_min_length: {{ repo_password_min_length }},
+    share_link_password_min_length: {{ share_link_password_min_length }},
+    enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
+    enable_resumable_fileupload: {% if enable_resumable_fileupload %} true {% else %} false {% endif %},
+    thumbnail_default_size: {{ thumbnail_default_size }},
+    thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},
+    enable_encrypted_library: {% if enable_encrypted_library %} true {% else %} false {% endif %},
+    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
+    folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
+    is_pro: {% if is_pro %} true {% else %} false {% endif %},
+    file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
+    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
+};
 </script>
 <script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
-
-{% block extra_script %}{% endblock %}
+{% if debug %}
+<script data-main="{% static "scripts/sysadmin-main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% else %}
+<script data-main="{% static "scripts/dist/sysadmin-main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% endif %}
 
 </body>
 </html>

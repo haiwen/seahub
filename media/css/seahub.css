@@ -810,6 +810,16 @@ textarea:-moz-placeholder {/* for FF */
     margin:0;
     color:#000;
 }
+/***** header  *****/
+.header-bar {
+    padding:9px 10px;
+    background:#f2f2f2;
+    margin-bottom:.5em;
+    border-radius:2px;
+    padding-bottom:0;
+    height:39px;
+    overflow:hidden;
+}
 /**** narrow-panel ****/
 .narrow-panel {
     width:320px;
