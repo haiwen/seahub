@@ -10,7 +10,7 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.base.sudo_mode import sudo_mode_check
 from seahub.utils import render_error
 from django.utils.translation import ugettext as _
-from seahub.settings import FORCE_SERVER_CRYPTO, ENABLE_SUDO_MODE
+from seahub.settings import ENABLE_SUDO_MODE
 
 def sys_staff_required(func):
     """
@@ -65,7 +65,6 @@ def repo_passwd_set_required(func):
                 return render_to_response('decrypt_repo_form.html', {
                         'repo': repo,
                         'next': request.get_full_path(),
-                        'force_server_crypto': FORCE_SERVER_CRYPTO,
                         }, context_instance=RequestContext(request))
 
             if repo.enc_version == 2 and not server_crypto:

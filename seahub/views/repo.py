@@ -24,8 +24,8 @@ from seahub.views import gen_path_link, get_repo_dirents, \
 from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
     get_file_type_and_ext
-from seahub.settings import FORCE_SERVER_CRYPTO, \
-    ENABLE_UPLOAD_FOLDER, ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
+from seahub.settings import ENABLE_UPLOAD_FOLDER, \
+    ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
 from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
@@ -145,7 +145,6 @@ def repo_history_view(request, repo_id):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
                 'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '']),
-                'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
 
     commit_id = request.GET.get('commit_id', None)

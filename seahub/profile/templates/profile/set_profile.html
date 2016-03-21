@@ -10,12 +10,6 @@
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
         {% if user.permissions.can_add_repo %}
-        {% if not force_server_crypto %}
-        <li class="tab"><a href="#enc-lib-setting">{% trans "Encrypted Libraries" %}</a></li>
-        {% endif %}
-        {% if not is_pro %}
-        <li class="tab"><a href="#sub-lib-setting">{% trans "Sub-library" %}</a></li>
-        {% endif %}
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
         {% endif %}
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
