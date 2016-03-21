@@ -15,3 +15,7 @@ REST_FRAMEWORK = {
         'user': '300/minute',
     },
 }
+
+# Use static file storage instead of cached, since the cached need to run collect
+# command first.
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
