@@ -27,7 +27,7 @@ $('#repo-decrypt-form').submit(function() {
 
     if (!password) {
         $error.html("{% trans "Please enter the password." %}").removeClass('hide');
-         return false;
+        return false;
     }
 
     var $submitBtn = $('[type="submit"]', $form);

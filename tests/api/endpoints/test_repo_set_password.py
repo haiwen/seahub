@@ -30,6 +30,6 @@ class RepoSetPasswordTest(BaseTestCase):
         data = {"password": 'invalid-password',}
 
         resp = self.client.post(url, data)
-        self.assertEqual(403, resp.status_code)
+        self.assertEqual(400, resp.status_code)
         json_resp = json.loads(resp.content)
         assert json_resp['error_msg'] == 'Wrong password'
