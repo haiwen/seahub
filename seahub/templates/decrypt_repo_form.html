@@ -5,10 +5,8 @@
 <div class="wide-panel">
     <h2>{{repo.name}}</h2>
     <p class="access-notice">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
-    <form action="{% url 'repo' repo.id %}?next={{ next }}" method="post" id="repo-decrypt-form">{% csrf_token %}
+    <form action="" method="post" id="repo-decrypt-form">{% csrf_token %}
         <label>{% trans "Password: " %}</label>
-        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-        <input type="hidden" name="username" value="{{ request.user.username }}" />
         <input type="password" name="password" autofocus />
         <input type="submit" value="{% trans "Submit" %}" />
         <p class="error hide"></p>
@@ -27,12 +25,35 @@
 <script type="text/javascript">
 $('#repo-decrypt-form').submit(function() {
     var form = $(this),
-        pwd = $('[name="password"]', form).val(),
-        err = $('.error',form);
-    if (!$.trim(pwd)) {
+        form_id = $(this).attr('id');
+        password = $('[name="password"]', form).val(),
+        err = $('.error',form),
+        repo_id = "{{ repo.id }}",
+        username = "{{ request.user.username }}",
+        redirect_url = "{{ next }}";
+
+    if (!$.trim(password)) {
         err.html("{% trans "Please enter the password." %}").removeClass('hide');
         return false;
     }
+
+    $.ajax({
+        type: "POST",
+        url: "{% url 'api-v2.1-repo-set-password' repo.id %}",
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {password: password},
+        success: function(data) {
+            location.href = redirect_url;
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            var error_msg = $.parseJSON(jqXHR.responseText).error_msg;
+            apply_form_error(form_id, error_msg);
+        }
+    });
+
+    return false;
 });
 </script>
 {% endblock %}

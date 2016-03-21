@@ -128,31 +128,6 @@ class RepoNewDirentForm(forms.Form):
         except SearpcError, e:
             raise forms.ValidationError(str(e))
 
-class RepoPassowrdForm(forms.Form):
-    """
-    Form for user to decrypt a repo in repo page.
-    """
-    repo_id = forms.CharField(error_messages={'required': _('Repo id is required')})
-    username = forms.CharField(error_messages={'required': _('Username is required')})
-    password = forms.CharField(error_messages={'required': _('Password can\'t be empty')})
-
-    def clean(self):
-        if 'password' in self.cleaned_data:
-            repo_id = self.cleaned_data['repo_id']
-            username = self.cleaned_data['username']
-            password = self.cleaned_data['password']
-            try:
-                seafserv_threaded_rpc.set_passwd(repo_id, username, password)
-            except SearpcError, e:
-                if e.msg == 'Bad arguments':
-                    raise forms.ValidationError(_(u'Bad url format'))
-                elif e.msg == 'Incorrect password':
-                    raise forms.ValidationError(_(u'Wrong password'))
-                elif e.msg == 'Internal server error':
-                    raise forms.ValidationError(_(u'Internal server error'))
-                else:
-                    raise forms.ValidationError(_(u'Decrypt library error'))
-        
 class SetUserQuotaForm(forms.Form):
     """
     Form for setting user quota.

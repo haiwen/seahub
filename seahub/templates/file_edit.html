@@ -36,7 +36,7 @@
 {% endif %}
 <style type="text/css">
 #main {
-    width:100%; 
+    width:100%;
 }
 #header,
 #footer {
@@ -285,10 +285,10 @@ var mdEditor = editormd('md-editor', {
     toc: false, // Table of contents
     pageBreak: false, // disable parse page break [========]
     atLink: false, // for @link
-    previewCodeHighlight: false, 
+    previewCodeHighlight: false,
     showTrailingSpace: false,
     matchWordHighlight: false,
-    
+
     toolbarIcons: function () {
         // custom toolbar
         return [
@@ -301,7 +301,7 @@ var mdEditor = editormd('md-editor', {
         ];
     },
     lang: {
-        // custom title of toolbar icons 
+        // custom title of toolbar icons
         toolbar: {
             bold: "{% trans "Bold" %}",
             italic: "{% trans "Italic" %}",
@@ -327,8 +327,8 @@ var mdEditor = editormd('md-editor', {
             cancel: "{% trans "Cancel" %}",
             close: "{% trans "Close" %}"
         },
-        dialog: { 
-            link: { 
+        dialog: {
+            link: {
                 title: "{% trans "Link" %}",
                 url: "URL",
                 urlTitle: "{% trans "Title" %}",
@@ -412,16 +412,14 @@ $('#repo-decrypt-form').submit(function() {
         err.html("{% trans "Password is required." %}");
     } else {
         $.ajax({
-            url: '{% url 'repo_set_password' %}',
+            url: '{% url 'api-v2.1-repo-set-password' repo.id %}',
             type: 'POST',
             dataType: 'json',
             cache: 'false',
             beforeSend: prepareCSRFToken,
             data: {
-                repo_id: '{{repo.id}}',
-                password: pwd,
-                username: '{{request.user.username}}'
-            },  
+                password: pwd
+            },
             success: function(data) {
                 if (data['success']) {
                     $.modal.close();
@@ -431,19 +429,19 @@ $('#repo-decrypt-form').submit(function() {
                     {% if op == 'decrypt' %}
                     location.reload(true);
                     {% endif %}
-                }   
-            },  
+                }
+            },
             error: function(jqXHR, textStatus, errorThrown) {
-                var err_str = ''; 
+                var err_str = '';
                 if (jqXHR.responseText) {
-                    err_str = $.parseJSON(jqXHR.responseText).error;
+                    err_str = $.parseJSON(jqXHR.responseText).error_msg;
                 } else {
                     err_str = "{% trans "Failed. Please check the network." %}";
-                }   
-                err.html(err_str); 
+                }
+                err.html(err_str);
                 pwd_input.val('');
-            }   
-        }); 
+            }
+        });
     }
     return false;
 });
