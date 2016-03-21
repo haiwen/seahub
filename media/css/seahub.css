@@ -1085,7 +1085,6 @@ textarea:-moz-placeholder {/* for FF */
 .article p {
     margin:0.8em 0;
 }
-#md-edit-help ul,
 .article ul {
     list-style-type:disc;
     padding-left:2em;
@@ -1408,8 +1407,7 @@ textarea:-moz-placeholder {/* for FF */
 #notice-popup a {
     font-weight:normal;
 }
-#notice-popup .close,
-#discuss-to-group .close {
+#notice-popup .close {
     position:absolute;
     top:.5em;
     right:10px;
@@ -1482,15 +1480,13 @@ textarea:-moz-placeholder {/* for FF */
     white-space:nowrap;
     z-index:10; /* for shared dir grid view */
 }
-#lang-context-selector a,
-#to-group a {
+#lang-context-selector a {
     color:#000;
     display:block;
     padding:1px 5px;
     font-weight:normal;
 }
-#lang-context-selector a:hover,
-#to-group a:hover {
+#lang-context-selector a:hover {
     background:#eee;
     text-decoration:none;
 }
@@ -1619,22 +1615,6 @@ textarea:-moz-placeholder {/* for FF */
     margin:3px 0 0;
 }
 /*myhome*/
-.home-profile .pic {
-    margin-left:9px;
-}
-.home-profile .txt {
-    width:135px;
-}
-.home-profile .a {
-    font-weight:normal;
-    color:#999;
-    font-size:12px;
-    display:inline-block;
-    margin-top:5px;
-}
-.home-profile .a:hover {
-    color:#333;
-}
 #quota-bar {
     display:block;
     height:1em;
@@ -1673,16 +1653,14 @@ textarea:-moz-placeholder {/* for FF */
 #repo-create-form .checkbox-label { /* for "Encrypt" */
     margin:10px 0 0;
 }
-.activity-group-hd,
-.event-group-hd {
+.activity-group-hd {
     padding: 8px;
     color: #444;
     font-size:16px;
     border-bottom: 1px solid #e5e5e5;
     margin:0;
 }
-.activity-group-bd,
-.event-group-bd {
+.activity-group-bd {
     list-style-type: none;
     font-size:15px;
     line-height:21px;
@@ -1740,8 +1718,7 @@ textarea:-moz-placeholder {/* for FF */
     margin-top: -20px;
 }
 /* avatar */
-.avatar-op .avatar,
-.home-profile .avatar {
+.avatar-op .avatar {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 }
@@ -1929,15 +1906,7 @@ textarea:-moz-placeholder {/* for FF */
     display:inline;
     margin-right:5px;
 }
-.displayed-op .dir-download,
-.displayed-op .file-download {
-    margin-right:5px;
-}
-.displayed-op .op:hover {
-    text-decoration:none;
-}
-.audit-item .audit-select-hidden,
-.repo-file-list .hidden-op {
+.audit-item .audit-select-hidden {
     position:absolute;
     background:#fff;
     padding:6px 1px;
@@ -1945,13 +1914,9 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:5px;
     z-index:10;
 }
-.audit-select-hidden li a,
-.hidden-op a {
+.audit-select-hidden li a {
     display:block;
     padding:0 12px;
-}
-.hidden-op a:hover {
-    background: #eee;
 }
 .file-choose-form {
     width:500px;
@@ -2018,18 +1983,6 @@ textarea:-moz-placeholder {/* for FF */
 #repo-latest-commit .time {
     color:#666;
     margin-left:5px;
-}
-#dirents-op {
-    position:fixed;
-}
-#dirents-op .op-icon-btn {
-    display:block;
-    margin-bottom:6px;
-}
-#dirents-op .op-icon-btn .icon-trash {
-    display:inline-block;
-    width:14px;
-    text-align:center;
 }
 .lsch,
 .lsch-encrypted,
@@ -2287,12 +2240,6 @@ textarea:-moz-placeholder {/* for FF */
 #repo-transfer-form .op-target {
     max-width:200px;
 }
-/* group-join-form */
-/* group-join-form */
-#id_group_join_msg {
-    width:260px;
-    height:80px;
-}
 /* group, org */
 .user-list {
     margin-top:30px;
@@ -2322,29 +2269,11 @@ textarea:-moz-placeholder {/* for FF */
 .member .name {
     vertical-align:middle;
 }
-.grp-profile {
-    margin-top:2px;
-}
-.grp-profile .name {
-    font-size:16px;
-    font-weight:bold;
-    margin:0 6px;
-}
-.grp-profile .avatar,
-.grp-profile .name {
-    vertical-align:middle;
-}
-#grp-member-add {
-    margin-top:2px;
-}
 
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
 
 /* group message and replies */
-#grp-repos-commits td {
-    padding:6px 3px;
-}
 .msg-panel {
     width:640px;
     margin-top:10px;
@@ -2599,7 +2528,6 @@ textarea:-moz-placeholder {/* for FF */
     background-position:0 -207px;
 }
 #user-avatar-input,
-#grp-avatar-input,
 #upload-file-form .files-add input {
     cursor:pointer;
     position: absolute;
@@ -2608,8 +2536,7 @@ textarea:-moz-placeholder {/* for FF */
     opacity: 0;
     filter: alpha(opacity=0);
 }
-#user-avatar-input,
-#grp-avatar-input {
+#user-avatar-input {
     right:0;
 }
 #upload-file-form .MultiFile-label {
@@ -2798,17 +2725,8 @@ textarea:-moz-placeholder {/* for FF */
 #file-edit-cancel {
     vertical-align:middle; /* for ie 7 */
 }
-#sf {
-    width:624px;
-    /*font-size:15px;*/
-    font-size:medium;
-    background:#fff;
-}
-#sf, #md-view {
+#md-view {
     padding:40px 96px;
-}
-#md-edit-help {
-    width:550px;
 }
 /* for repo, file_view page. */
 #side-toolbar {
@@ -2850,87 +2768,6 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
     border:1px solid #ddd;
     border-radius:2px;
-}
-#to-group,
-#discuss-to-group {
-    width:400px;
-    padding:0 15px;
-    position:fixed;
-    right:0;
-    border-radius:5px 0 0 5px;
-    background:#fff;
-    border:1px solid #cbcbcb;
-    box-shadow: 0 2px 4px rgba(0,0,0,.2);
-    -moz-box-shadow: -1px 1px 1px rgba(0,0,0,.2);
-    -webkit-box-shadow: 0 2px 4px rgba(0,0,0,.2);
-}
-#discuss-to-group {
-    padding-bottom:10px;
-}
-#discussions-to-grp {
-    height:auto;
-    overflow:auto;
-    position:relative;/*for ie7*/
-}
-#discussions-to-grp .msg {
-    width:380px;
-}
-#discussions-to-grp .msg-main {
-    width:282px;/*for ie7*/
-}
-#discussions-to-grp .reply-input {
-    width:270px;
-}
-#to-group,
-#discuss-to-group {
-    z-index:12; /* to be on top of 'fixed-hd' in repo.html*/
-}
-/*to-group*/
-#to-group {
-    width:auto;
-    min-width:250px;
-    padding:0 12px 10px;
-    right:78px;
-}
-#to-group .outer-caret {
-    position:absolute;
-    top: 15px;
-    right: -15px;
-}
-#to-group .outer-caret,
-#to-group .inner-caret {
-    border-color:transparent #cbcbcb;
-    border-right-width:0;
-}
-#to-group .inner-caret {
-    border-left-color:#fff;
-    top:-15px;
-    left:-16px;
-}
-#to-group ul {
-    padding-left: 20px;
-    list-style-type: disc;
-}
-#to-group a {
-    padding:1px 3px;
-}
-/*discuss to group*/
-#discuss-to-group-form .checkbox-label {
-    display:inline-block;
-    white-space:nowrap;
-    padding-right:3px;
-    margin-right:10px;
-    margin-top:0;
-}
-#discuss-to-group-form .input {
-    padding:5px;
-    width:388px;
-    height:5em;
-    resize:none;
-    vertical-align:top;
-}
-#discuss-to-group-form .attachment {
-    margin-left:5px;
 }
 /* text file diff */
 .file-modification-hd .modifier,
@@ -2985,29 +2822,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .diff-chg {
     color: #c3f;
-}
-.pubinfo-item {
-    display:inline-block;
-    min-width:66px;
-}
-.pubinfo-item {
-    *display:inline;
-}
-.ru .pubinfo-item {
-    min-width:64px;
-}
-.de .pubinfo-item {
-    min-width:63px;
-}
-.pubinfo-item .amount {
-    font-size:28px;
-    line-height:1;
-    font-weight:bold;
-    color:#222;
-}
-.pubinfo-item .obj {
-    font-size:11px;
-    color:#999;
 }
 .video-container {
     margin: auto;
@@ -3295,6 +3109,8 @@ textarea:-moz-placeholder {/* for FF */
     color:#f93;
     text-decoration:underline;
 }
+
+/* client list */
 .client-list .lib-num {
     cursor:pointer;
 }
@@ -3320,14 +3136,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #set-quota-form {
     min-width:255px;
-}
-/* lib setting */
-.lib-setting .input,
-.lib-setting .textarea {
-    width:320px;
-}
-.lib-setting .form {
-    margin-bottom:30px;
 }
 
 /* org reg */
@@ -3628,10 +3436,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 #user-profile .nickname {
     font-size: 18px;
-}
-#user-profile .intro {
-    color: #888;
-    padding-top: 0;
 }
 #user-profile .info {
     border-top: 1px solid #eee;

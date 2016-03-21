@@ -207,7 +207,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op dirent-hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -218,7 +218,7 @@
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
             <% } %>
@@ -286,7 +286,7 @@
             </div>
             <% if (dirent.perm == 'rw') { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
-            <ul class="hidden-op dirent-hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -308,7 +308,7 @@
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op hide">
+            <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
             <% } %>
