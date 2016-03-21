@@ -39,7 +39,7 @@ class RepoSetPassword(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             elif e.msg == 'Incorrect password':
                 error_msg = _(u'Wrong password')
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
             elif e.msg == 'Internal server error':
                 error_msg = _(u'Internal server error')
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)

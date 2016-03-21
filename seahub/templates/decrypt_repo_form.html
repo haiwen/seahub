@@ -5,14 +5,11 @@
 <div class="wide-panel">
     <h2>{{repo.name}}</h2>
     <p class="access-notice">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
-    <form action="" method="post" id="repo-decrypt-form">{% csrf_token %}
+    <form action="" method="post" id="repo-decrypt-form">
         <label>{% trans "Password: " %}</label>
         <input type="password" name="password" autofocus />
         <input type="submit" value="{% trans "Submit" %}" />
         <p class="error hide"></p>
-        {% for error in form.errors.values %}
-        {{ error|escape }}
-        {% endfor %}
 
         {% if not force_server_crypto %}
         {% url 'edit_profile' as profile_edit_url %}
@@ -24,32 +21,38 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('#repo-decrypt-form').submit(function() {
-    var form = $(this),
-        form_id = $(this).attr('id');
-        password = $('[name="password"]', form).val(),
-        err = $('.error',form),
-        repo_id = "{{ repo.id }}",
-        username = "{{ request.user.username }}",
-        redirect_url = "{{ next }}";
+    var $form = $(this),
+        password = $.trim($('[name="password"]', $form).val()),
+        $error = $('.error', $form);
 
-    if (!$.trim(password)) {
-        err.html("{% trans "Please enter the password." %}").removeClass('hide');
-        return false;
+    if (!password) {
+        $error.html("{% trans "Please enter the password." %}").removeClass('hide');
+         return false;
     }
 
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
     $.ajax({
-        type: "POST",
         url: "{% url 'api-v2.1-repo-set-password' repo.id %}",
+        type: "POST",
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
-        data: {password: password},
-        success: function(data) {
-            location.href = redirect_url;
+        data: {
+            password: password
         },
-        error: function(jqXHR, textStatus, errorThrown) {
-            var error_msg = $.parseJSON(jqXHR.responseText).error_msg;
-            apply_form_error(form_id, error_msg);
+        success: function() {
+            location.href = "{{ next|escapejs }}";
+        },
+        error: function(xhr) {
+            var error;
+            if (xhr.responseText) {
+                error = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                error = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error).removeClass('hide');
+            enable($submitBtn);
         }
     });
 

@@ -299,7 +299,10 @@ define([
                     Common.ajaxPost({
                         form: form,
                         form_id: form.attr('id'),
-                        post_url: Common.getUrl({'name':'api_v2.1_repo_set_password', repo_id: _this.dir.repo_id}),
+                        post_url: Common.getUrl({
+                            'name': 'api_v2.1_repo_set_password',
+                            'repo_id': _this.dir.repo_id
+                        }),
                         post_data: {
                             password: passwd
                         },
