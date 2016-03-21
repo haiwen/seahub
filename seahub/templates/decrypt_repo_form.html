@@ -5,16 +5,11 @@
 <div class="wide-panel">
     <h2>{{repo.name}}</h2>
     <p class="access-notice">{% trans "This library is encrypted. Please input the password if you want to browse it online. And the password will be kept on the server for only 1 hour." %}</p>
-    <form action="{% url 'repo' repo.id %}?next={{ next }}" method="post" id="repo-decrypt-form">{% csrf_token %}
+    <form action="" method="post" id="repo-decrypt-form">
         <label>{% trans "Password: " %}</label>
-        <input type="hidden" name="repo_id" value="{{ repo.id }}" />
-        <input type="hidden" name="username" value="{{ request.user.username }}" />
         <input type="password" name="password" autofocus />
         <input type="submit" value="{% trans "Submit" %}" />
         <p class="error hide"></p>
-        {% for error in form.errors.values %}
-        {{ error|escape }}
-        {% endfor %}
 
         {% if not force_server_crypto %}
         {% url 'edit_profile' as profile_edit_url %}
@@ -26,13 +21,42 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('#repo-decrypt-form').submit(function() {
-    var form = $(this),
-        pwd = $('[name="password"]', form).val(),
-        err = $('.error',form);
-    if (!$.trim(pwd)) {
-        err.html("{% trans "Please enter the password." %}").removeClass('hide');
-        return false;
+    var $form = $(this),
+        password = $.trim($('[name="password"]', $form).val()),
+        $error = $('.error', $form);
+
+    if (!password) {
+        $error.html("{% trans "Please enter the password." %}").removeClass('hide');
+         return false;
     }
+
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
+    $.ajax({
+        url: "{% url 'api-v2.1-repo-set-password' repo.id %}",
+        type: "POST",
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            password: password
+        },
+        success: function() {
+            location.href = "{{ next|escapejs }}";
+        },
+        error: function(xhr) {
+            var error;
+            if (xhr.responseText) {
+                error = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                error = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(error).removeClass('hide');
+            enable($submitBtn);
+        }
+    });
+
+    return false;
 });
 </script>
 {% endblock %}

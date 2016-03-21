@@ -42,7 +42,6 @@ from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, PrivateFileDirShare, \
     UploadLinkShare
-from seahub.forms import RepoPassowrdForm
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_fileserver_root, gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
@@ -215,7 +214,7 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         uploadlinks = UploadLinkShare.objects.filter(repo_id=repo.id).filter(username=username)
 
 
-        view_dir_base = reverse("view_common_lib_dir", args=[repo.id, '/'])
+        view_dir_base = reverse("view_common_lib_dir", args=[repo.id, ''])
         dl_dir_base = reverse('repo_download_dir', args=[repo.id])
         file_history_base = reverse('file_revisions', args=[repo.id])
         for dirent in dirs:
@@ -652,7 +651,7 @@ def repo_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '/']))
+            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
 
     try:
         current_page = int(request.GET.get('page', '1'))
@@ -722,7 +721,7 @@ def repo_revert_history(request, repo_id):
             return render_error(request, e.msg)
 
         if not password_set:
-            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '/']))
+            return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
 
     commit_id = request.GET.get('commit_id', '')
     if not commit_id:
@@ -964,7 +963,7 @@ def repo_set_access_property(request, repo_id):
     ap = request.GET.get('ap', '')
     seafserv_threaded_rpc.repo_set_access_property(repo_id, ap)
 
-    return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '/']))
+    return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
 
 @login_required
 def file_upload_progress_page(request):
@@ -1111,7 +1110,7 @@ def repo_revert_file(request, repo_id):
         return HttpResponseRedirect(next)
 
     if ret == 1:
-        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        root_url = reverse('view_common_lib_dir', args=[repo_id, ''])
         msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
         messages.success(request, msg, extra_tags='safe')
     else:
@@ -1150,7 +1149,7 @@ def repo_revert_dir(request, repo_id):
         return HttpResponseRedirect(next)
 
     if ret == 1:
-        root_url = reverse('view_common_lib_dir', args=[repo_id, '/'])
+        root_url = reverse('view_common_lib_dir', args=[repo_id, ''])
         msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
         messages.success(request, msg, extra_tags='safe')
     else:
@@ -1199,17 +1198,6 @@ def list_inner_pub_repos(request):
         return seaserv.list_inner_pub_repos(username)
 
     return []
-
-@login_required_ajax
-def repo_set_password(request):
-    content_type = 'application/json; charset=utf-8'
-
-    form = RepoPassowrdForm(request.POST)
-    if form.is_valid():
-        return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-    else:
-        return HttpResponse(json.dumps({'error': str(form.errors.values()[0])}),
-                status=400, content_type=content_type)
 
 def i18n(request):
     """

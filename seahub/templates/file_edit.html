@@ -36,7 +36,7 @@
 {% endif %}
 <style type="text/css">
 #main {
-    width:100%; 
+    width:100%;
 }
 #header,
 #footer {
@@ -125,14 +125,13 @@
     </div>
 
     {% if not err and repo.encrypted %}
-    <form id="repo-decrypt-form" class="hide">
+    <form id="repo-decrypt-form" class="hide" action="" method="post">
         <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label>{% trans 'Password：' %}</label><br />
         <input type="password" name="password" class="input" />
         <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
-        <p class="error"></p>
+        <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans 'Submit' %}" />
-        <button class="simplemodal-close">{% trans 'Cancel' %}</button>
     </form>
     {% endif %}
 
@@ -285,10 +284,10 @@ var mdEditor = editormd('md-editor', {
     toc: false, // Table of contents
     pageBreak: false, // disable parse page break [========]
     atLink: false, // for @link
-    previewCodeHighlight: false, 
+    previewCodeHighlight: false,
     showTrailingSpace: false,
     matchWordHighlight: false,
-    
+
     toolbarIcons: function () {
         // custom toolbar
         return [
@@ -301,7 +300,7 @@ var mdEditor = editormd('md-editor', {
         ];
     },
     lang: {
-        // custom title of toolbar icons 
+        // custom title of toolbar icons
         toolbar: {
             bold: "{% trans "Bold" %}",
             italic: "{% trans "Italic" %}",
@@ -327,8 +326,8 @@ var mdEditor = editormd('md-editor', {
             cancel: "{% trans "Cancel" %}",
             close: "{% trans "Close" %}"
         },
-        dialog: { 
-            link: { 
+        dialog: {
+            link: {
                 title: "{% trans "Link" %}",
                 url: "URL",
                 urlTitle: "{% trans "Title" %}",
@@ -405,46 +404,49 @@ $('#simplemodal-container').css({'height':'auto'});
 {% endif %}
 
 $('#repo-decrypt-form').submit(function() {
-    var pwd_input = $(this).find('input[name="password"]');
-    var pwd = $.trim(pwd_input.val());
-    var err = $(this).find('.error');
+    var $form = $(this);
+    var $pwd_input = $('input[name="password"]', $form);
+    var pwd = $.trim($pwd_input.val());
+    var $error = $('.error', $form);
+
     if (!pwd) {
-        err.html("{% trans "Password is required." %}");
-    } else {
-        $.ajax({
-            url: '{% url 'repo_set_password' %}',
-            type: 'POST',
-            dataType: 'json',
-            cache: 'false',
-            beforeSend: prepareCSRFToken,
-            data: {
-                repo_id: '{{repo.id}}',
-                password: pwd,
-                username: '{{request.user.username}}'
-            },  
-            success: function(data) {
-                if (data['success']) {
-                    $.modal.close();
-                    {% if file_content != None %}
-                    editSubmit();
-                    {% endif %}
-                    {% if op == 'decrypt' %}
-                    location.reload(true);
-                    {% endif %}
-                }   
-            },  
-            error: function(jqXHR, textStatus, errorThrown) {
-                var err_str = ''; 
-                if (jqXHR.responseText) {
-                    err_str = $.parseJSON(jqXHR.responseText).error;
-                } else {
-                    err_str = "{% trans "Failed. Please check the network." %}";
-                }   
-                err.html(err_str); 
-                pwd_input.val('');
-            }   
-        }); 
+        $error.html("{% trans "Password is required." %}").removeClass('hide');
+        return false;
     }
+
+    var $submitBtn = $('[type="submit"]', $form);
+    disable($submitBtn);
+    $.ajax({
+        url: '{% url 'api-v2.1-repo-set-password' repo.id %}',
+        type: 'POST',
+        dataType: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            password: pwd
+        },
+        success: function(data) {
+            if (data['success']) {
+                $.modal.close();
+                {% if file_content != None %}
+                editSubmit();
+                {% endif %}
+                {% if op == 'decrypt' %}
+                location.reload(true);
+                {% endif %}
+            }
+        },
+        error: function(xhr) {
+            var err = '';
+            if (xhr.responseText) {
+                err = $.parseJSON(xhr.responseText).error_msg;
+            } else {
+                err = "{% trans "Failed. Please check the network." %}";
+            }
+            $error.html(err).removeClass('hide');
+            enable($submitBtn);
+        }
+    });
     return false;
 });
 

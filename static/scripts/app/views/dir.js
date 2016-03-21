@@ -299,11 +299,12 @@ define([
                     Common.ajaxPost({
                         form: form,
                         form_id: form.attr('id'),
-                        post_url: Common.getUrl({'name':'repo_set_password'}),
+                        post_url: Common.getUrl({
+                            'name': 'api_v2.1_repo_set_password',
+                            'repo_id': _this.dir.repo_id
+                        }),
                         post_data: {
-                            repo_id: _this.dir.repo_id,
-                            password: passwd,
-                            username: app.pageOptions.username
+                            password: passwd
                         },
                         after_op_success: function() {
                             decrypt_success = true;

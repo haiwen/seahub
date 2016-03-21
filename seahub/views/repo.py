@@ -144,13 +144,13 @@ def repo_history_view(request, repo_id):
         and not is_password_set(repo.id, username):
         return render_to_response('decrypt_repo_form.html', {
                 'repo': repo,
-                'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '/']),
+                'next': get_next_url_from_request(request) or reverse("view_common_lib_dir", args=[repo_id, '']),
                 'force_server_crypto': FORCE_SERVER_CRYPTO,
                 }, context_instance=RequestContext(request))
 
     commit_id = request.GET.get('commit_id', None)
     if commit_id is None:
-        return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '/']))
+        return HttpResponseRedirect(reverse("view_common_lib_dir", args=[repo_id, '']))
     current_commit = get_commit(repo.id, repo.version, commit_id)
     if not current_commit:
         current_commit = get_commit(repo.id, repo.version, repo.head_cmmt_id)

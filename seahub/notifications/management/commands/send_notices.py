@@ -124,7 +124,7 @@ class Command(BaseCommand):
         if repo is None:
             notice.delete()
 
-        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, '/'])
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])

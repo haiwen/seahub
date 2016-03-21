@@ -97,7 +97,7 @@ define([
                 case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
                 case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
                 case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
-                case 'repo_set_password': return siteRoot + 'repo/set_password/';
+                case 'api_v2.1_repo_set_password': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/set-password/';
                 case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
                 case 'get_history_changes': return siteRoot + 'ajax/repo/' + options.repo_id + '/history/changes/';
                 case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
@@ -386,7 +386,7 @@ define([
                 after_op_error = function(xhr, textStatus, errorThrown) {
                     var err;
                     if (xhr.responseText) {
-                        err = $.parseJSON(xhr.responseText).error;
+                        err = $.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg;
                     } else {
                         err = gettext("Failed. Please check the network.");
                     }
