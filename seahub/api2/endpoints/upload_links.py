@@ -132,7 +132,7 @@ class UploadLinks(APIView):
 
         password = request.data.get('password', None)
         if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            error_msg = _('Password is too short.')
+            error_msg = _('Password is too short')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         user_perm = check_folder_permission(request, repo_id, '/')

@@ -57,7 +57,7 @@ $('#add-inst-form').submit(function() {
         name = $.trim(form.find('[name="name"]').val());
 
     if (!name) {
-        apply_form_error(form_id, "{% trans "Name cannot be blank" %}");
+        apply_form_error(form_id, "{% trans "Name can not be blank" %}");
         return false;
     }
     

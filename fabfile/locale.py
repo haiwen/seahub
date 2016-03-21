@@ -5,17 +5,17 @@ from fabric.api import local, task
 from fabric.colors import red, green
 
 @task
-def make(default=True):
+def make(default=True, lang='en'):
     """Update source language.
     """
-    local('django-admin.py makemessages -l en -e py,html -i "thirdpart*" -i "docs*"')
+    local('django-admin.py makemessages -l %s -e py,html -i "thirdpart*" -i "docs*"' % lang)
 
     # some version of makemessages will produce "%%" in the string, replace that
     # to "%".
-    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%s', '%s')
-    _inplace_change('locale/en/LC_MESSAGES/django.po', '%%(', '%(')
+    _inplace_change('locale/%s/LC_MESSAGES/django.po' % lang, '%%s', '%s')
+    _inplace_change('locale/%s/LC_MESSAGES/django.po' % lang, '%%(', '%(')
 
-    local('django-admin.py makemessages -l en -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" --verbosity 2')
+    local('django-admin.py makemessages -l %s -d djangojs  -i "thirdpart" -i "node_modules" -i "media" -i "static/scripts/dist" -i "static/scripts/lib" -i "tests" -i "tools" -i "tagging" -i "static/scripts/i18n" --verbosity 2' % lang)
 
 @task
 def push():

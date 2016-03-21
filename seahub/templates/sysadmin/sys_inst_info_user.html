@@ -36,7 +36,7 @@
         {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
         </td>
         <td>
-          <a href="#" class="js-toggle-admin op vh" data-url="{% url 'sys_inst_toggle_admin' inst.pk user.email %}" data-target="{{ user.email }}">{% if user.inst_admin %}{% trans "Revoke InstAdmin" %}{% else %}{% trans "Set InstAdmin" %}{% endif %}</a>
+          <a href="#" class="js-toggle-admin op vh" data-url="{% url 'sys_inst_toggle_admin' inst.pk user.email %}" data-target="{{ user.email }}">{% if user.inst_admin %}{% trans "Revoke Admin" %}{% else %}{% trans "Set Admin" %}{% endif %}</a>
         </td>
     </tr>
     {% endfor %}
@@ -52,8 +52,8 @@
 <script type="text/javascript">
 
 addConfirmTo($('.js-toggle-admin'), {
-    'title':"{% trans "Toggle Admin" %}",
-    'con':"{% trans "Sure ?" %}",
+    'title': "Toggle Admin",
+    'con': "Sure ?",
     'post': true
 });
 
