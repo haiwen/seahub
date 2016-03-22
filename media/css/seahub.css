@@ -133,6 +133,8 @@
 .sf2-icon-grid-view:before { content:"\e025"; }
 .sf2-icon-list-view:before { content:"\e026"; }
 .sf2-icon-plus:before { content: "\e027"; }
+.sf2-icon-copy:before { content: "\e028"; }
+.sf2-icon-move:before { content: "\e029"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -3242,30 +3244,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* multi dirents operation */
 #multi-dirents-op {
-    padding: 0 10px;
+    margin-left:5px;
 }
-#multi-dirents-op button {
-    margin-left: -5px;
-}
-#multi-dirents-op button:focus {
-    outline: 0; /* removing blue border after click for chrome */
-}
-#multi-dirents-op span {
-    width: 16px;
-    height: 16px;
-    background-image: url('../img/multi-dirents-op.png');
-    background-repeat: no-repeat;
-    display: inline-block;
-    margin-top:1px;
-}
-#multi-dirents-op .mv-dirents {
-    background-position: -5px -5px;
-}
-#multi-dirents-op .cp-dirents {
-    background-position: -31px -5px;
-}
-#multi-dirents-op .del-dirents {
-    background-position: -57px -5px;
+#multi-dirents-op .op-btn {
+    margin:0;
 }
 #dir-private-share .label {
     margin:6px 0 8px;

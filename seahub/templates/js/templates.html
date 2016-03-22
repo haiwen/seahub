@@ -94,9 +94,9 @@
 <script type="text/template" id="dir-op-bar-tmpl">
     <% if (user_perm == 'rw') { %>
     <div id="multi-dirents-op" class="hide">
-        <button id="mv-dirents" title="{% trans 'Move' %}" class="op-btn"><span class="mv-dirents"></span></button>
-        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
-        <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn"><span class="del-dirents"></span></button>
+        <button id="mv-dirents" title="{% trans 'Move' %}" class="op-btn sf2-icon-move op-icon"></button>
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
+        <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn sf2-icon-delete op-icon"></button>
     </div>
     <div id="upload-file" class="op-btn upload-file-btn">
         <span>{% trans "Upload" %}</span>
@@ -120,7 +120,7 @@
 
     <% if (!encrypted && user_perm == 'r') { %>
     <div id="multi-dirents-op" class="hide">
-        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn"><span class="cp-dirents"></span></button>
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
     </div>
     <% } %>
 
