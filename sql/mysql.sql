@@ -18,7 +18,7 @@
 CREATE TABLE `api2_token` (
   `key` varchar(40) NOT NULL,
   `user` varchar(255) NOT NULL,
-  `created` datetime(6) NOT NULL,
+  `created` datetime NOT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `user` (`user`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -47,7 +47,7 @@ CREATE TABLE `api2_tokenv2` (
   `device_name` varchar(40) NOT NULL,
   `platform_version` varchar(16) NOT NULL,
   `client_version` varchar(16) NOT NULL,
-  `last_accessed` datetime(6) NOT NULL,
+  `last_accessed` datetime NOT NULL,
   `last_login_ip` char(39) DEFAULT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `user` (`user`,`platform`,`device_id`)
@@ -74,7 +74,7 @@ CREATE TABLE `avatar_avatar` (
   `emailuser` varchar(255) NOT NULL,
   `primary` tinyint(1) NOT NULL,
   `avatar` varchar(1024) NOT NULL,
-  `date_uploaded` datetime(6) NOT NULL,
+  `date_uploaded` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -98,7 +98,7 @@ CREATE TABLE `avatar_groupavatar` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `group_id` varchar(255) NOT NULL,
   `avatar` varchar(1024) NOT NULL,
-  `date_uploaded` datetime(6) NOT NULL,
+  `date_uploaded` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -121,7 +121,7 @@ UNLOCK TABLES;
 CREATE TABLE `base_clientlogintoken` (
   `token` varchar(32) NOT NULL,
   `username` varchar(255) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`token`),
   KEY `base_clientlogintoken_14c4b06b` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -145,7 +145,7 @@ UNLOCK TABLES;
 CREATE TABLE `base_commandslastcheck` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `command_type` varchar(100) NOT NULL,
-  `last_check` datetime(6) NOT NULL,
+  `last_check` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -248,7 +248,7 @@ CREATE TABLE `base_innerpubmsg` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `from_email` varchar(254) NOT NULL,
   `message` varchar(500) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -273,7 +273,7 @@ CREATE TABLE `base_innerpubmsgreply` (
   `reply_to_id` int(11) NOT NULL,
   `from_email` varchar(254) NOT NULL,
   `message` varchar(150) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `base_innerpu_reply_to_id_27731e1a4586de01_fk_base_innerpubmsg_id` (`reply_to_id`),
   CONSTRAINT `base_innerpu_reply_to_id_27731e1a4586de01_fk_base_innerpubmsg_id` FOREIGN KEY (`reply_to_id`) REFERENCES `base_innerpubmsg` (`id`)
@@ -322,7 +322,7 @@ UNLOCK TABLES;
 CREATE TABLE `base_userlastlogin` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
-  `last_login` datetime(6) NOT NULL,
+  `last_login` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `base_userlastlogin_14c4b06b` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -376,7 +376,7 @@ CREATE TABLE `captcha_captchastore` (
   `challenge` varchar(32) NOT NULL,
   `response` varchar(32) NOT NULL,
   `hashkey` varchar(40) NOT NULL,
-  `expiration` datetime(6) NOT NULL,
+  `expiration` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `hashkey` (`hashkey`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -476,7 +476,7 @@ CREATE TABLE `django_migrations` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `app` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `applied` datetime(6) NOT NULL,
+  `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -500,7 +500,7 @@ UNLOCK TABLES;
 CREATE TABLE `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
-  `expire_date` datetime(6) NOT NULL,
+  `expire_date` datetime NOT NULL,
   PRIMARY KEY (`session_key`),
   KEY `django_session_de54fa62` (`expire_date`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -526,7 +526,7 @@ CREATE TABLE `group_groupmessage` (
   `group_id` int(11) NOT NULL,
   `from_email` varchar(255) NOT NULL,
   `message` varchar(2048) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_groupmessage_0e939a4f` (`group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -580,7 +580,7 @@ CREATE TABLE `group_messagereply` (
   `reply_to_id` int(11) NOT NULL,
   `from_email` varchar(255) NOT NULL,
   `message` varchar(2048) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `group_mess_reply_to_id_23113ea180894951_fk_group_groupmessage_id` (`reply_to_id`),
   CONSTRAINT `group_mess_reply_to_id_23113ea180894951_fk_group_groupmessage_id` FOREIGN KEY (`reply_to_id`) REFERENCES `group_groupmessage` (`id`)
@@ -628,7 +628,7 @@ UNLOCK TABLES;
 CREATE TABLE `institutions_institution` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL,
-  `create_time` datetime(6) NOT NULL,
+  `create_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -678,10 +678,10 @@ CREATE TABLE `message_usermessage` (
   `message` varchar(512) NOT NULL,
   `from_email` varchar(255) NOT NULL,
   `to_email` varchar(255) NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   `ifread` tinyint(1) NOT NULL,
-  `sender_deleted_at` datetime(6) DEFAULT NULL,
-  `recipient_deleted_at` datetime(6) DEFAULT NULL,
+  `sender_deleted_at` datetime DEFAULT NULL,
+  `recipient_deleted_at` datetime DEFAULT NULL,
   PRIMARY KEY (`message_id`),
   KEY `message_usermessage_f50bd8c4` (`from_email`),
   KEY `message_usermessage_acc047cf` (`to_email`)
@@ -732,7 +732,7 @@ UNLOCK TABLES;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermsglastcheck` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `check_time` datetime(6) NOT NULL,
+  `check_time` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -780,7 +780,7 @@ CREATE TABLE `notifications_usernotification` (
   `to_user` varchar(255) NOT NULL,
   `msg_type` varchar(30) NOT NULL,
   `detail` longtext NOT NULL,
-  `timestamp` datetime(6) NOT NULL,
+  `timestamp` datetime NOT NULL,
   `seen` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `notifications_usernotification_86899d6f` (`to_user`),
@@ -913,9 +913,9 @@ CREATE TABLE `post_office_email` (
   `html_message` longtext NOT NULL,
   `status` smallint(5) unsigned DEFAULT NULL,
   `priority` smallint(5) unsigned DEFAULT NULL,
-  `created` datetime(6) NOT NULL,
-  `last_updated` datetime(6) NOT NULL,
-  `scheduled_time` datetime(6) DEFAULT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
+  `scheduled_time` datetime DEFAULT NULL,
   `headers` longtext,
   `context` longtext,
   `template_id` int(11),
@@ -952,8 +952,8 @@ CREATE TABLE `post_office_emailtemplate` (
   `subject` varchar(255) NOT NULL,
   `content` longtext NOT NULL,
   `html_content` longtext NOT NULL,
-  `created` datetime(6) NOT NULL,
-  `last_updated` datetime(6) NOT NULL,
+  `created` datetime NOT NULL,
+  `last_updated` datetime NOT NULL,
   `default_template_id` int(11) DEFAULT NULL,
   `language` varchar(12) NOT NULL,
   PRIMARY KEY (`id`),
@@ -980,7 +980,7 @@ UNLOCK TABLES;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_log` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `date` datetime(6) NOT NULL,
+  `date` datetime NOT NULL,
   `status` smallint(5) unsigned NOT NULL,
   `exception_type` varchar(255) NOT NULL,
   `message` longtext NOT NULL,
@@ -1118,11 +1118,11 @@ CREATE TABLE `share_fileshare` (
   `repo_id` varchar(36) NOT NULL,
   `path` longtext NOT NULL,
   `token` varchar(10) NOT NULL,
-  `ctime` datetime(6) NOT NULL,
+  `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
   `s_type` varchar(2) NOT NULL,
   `password` varchar(128) DEFAULT NULL,
-  `expire_date` datetime(6) DEFAULT NULL,
+  `expire_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_fileshare_14c4b06b` (`username`),
@@ -1210,10 +1210,10 @@ CREATE TABLE `share_uploadlinkshare` (
   `repo_id` varchar(36) NOT NULL,
   `path` longtext NOT NULL,
   `token` varchar(10) NOT NULL,
-  `ctime` datetime(6) NOT NULL,
+  `ctime` datetime NOT NULL,
   `view_cnt` int(11) NOT NULL,
   `password` varchar(128) DEFAULT NULL,
-  `expire_date` datetime(6) DEFAULT NULL,
+  `expire_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`),
   KEY `share_uploadlinkshare_14c4b06b` (`username`),
@@ -1239,7 +1239,7 @@ UNLOCK TABLES;
 CREATE TABLE `sysadmin_extra_userloginlog` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) NOT NULL,
-  `login_date` datetime(6) NOT NULL,
+  `login_date` datetime NOT NULL,
   `login_ip` varchar(128) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `sysadmin_extra_userloginlog_14c4b06b` (`username`),
