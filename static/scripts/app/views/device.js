@@ -55,34 +55,6 @@ define([
             return this;
         },
 
-        _hidePopover: function(e) {
-            var view = e.data.view;
-            var target = e.target || event.srcElement;
-            if (!$('.js-toggle-repos, .device-libs-popover').is(target)) {
-               $('.device-libs-popover').addClass('hide');
-                $('.dir-icon').removeClass('icon-caret-up').addClass('icon-caret-down');
-                view.rmHighlight();
-                $(document).off('click', view._hidePopover);
-            }
-        },
-
-        toggleSyncedRepos: function(e) {
-            var $icon= this.$('.dir-icon'),
-                $popover = this.$('.device-libs-popover');
-
-            if ($popover.is(':hidden')) {
-                $icon.removeClass('icon-caret-down').addClass('icon-caret-up');
-                $popover.removeClass('hide');
-                $(document).on('click', { view: this }, this._hidePopover);
-            } else {
-                $icon.removeClass('icon-caret-up').addClass('icon-caret-down');
-                $popover.addClass('hide');
-                $(document).off('click', this._hidePopover);
-            }
-
-            return false;
-        },
-
         unlinkDevice: function() {
             var _this = this,
                 device_name = this.model.get('device_name');

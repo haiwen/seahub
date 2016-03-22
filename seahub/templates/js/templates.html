@@ -1377,21 +1377,19 @@
     <td><%- device_name %></td>
     <td><%- last_login_ip %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
-    <td class="popover-container js-dropdown">
+    <td class="dropdown js-dropdown">
         <% if (synced_repos.length > 0) { %>
-        <span class="js-toggle-repos js-dropdown-toggle cspt"><%- synced_repos_length %> <span class="dir-icon icon-caret-down"></span></span>
+        <span class="js-dropdown-toggle cspt"><%- synced_repos_length %> <span class="icon-caret-down"></span></span>
+        <div class="device-libs-dropdown-menu dropdown-menu js-dropdown-content hide">
+            <ul>
+                <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
+                <li><a href="#common/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
+                <% } %>
+            </ul>
+        </div>
         <% } else { %>
         <span class="cspt">0</span>
         <% } %>
-        <div class="lib-list device-libs-popover popover js-dropdown-content hide">
-            <div class="popover-con">
-            <ul>
-                <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
-                <li><a class="device-libs-item" href="#common/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
-                <% } %>
-            </ul>
-            </div>
-        </div>
     </td>
     <td>
         <div>
