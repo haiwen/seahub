@@ -103,10 +103,15 @@ define([
             var $dirents_op = dirView.$('#multi-dirents-op');
             var toggle_all_checkbox = dirView.$('th .checkbox');
             var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;
+
+            var $curDirOps = dirView.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
+
             if (checked_num > 0) {
                 $dirents_op.css({'display':'inline'});
+                $curDirOps.hide();
             } else {
                 $dirents_op.hide();
+                $curDirOps.show();
             }
             if (checked_num == dirView.$('tr:gt(0)').length) {
                 toggle_all_checkbox.addClass('checkbox-checked');

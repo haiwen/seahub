@@ -731,25 +731,29 @@ define([
             },
 
             select: function () {
-                var el = this.$('th .checkbox');
-                el.toggleClass('checkbox-checked');
+                var $el = this.$('th .checkbox');
+                $el.toggleClass('checkbox-checked');
 
                 var dir = this.dir;
                 var all_dirent_checkbox = this.$('.checkbox');
                 var $dirents_op = this.$('#multi-dirents-op');
 
-                if (el.hasClass('checkbox-checked')) {
+                var $curDirOps = this.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
+
+                if ($el.hasClass('checkbox-checked')) {
                     all_dirent_checkbox.addClass('checkbox-checked');
                     dir.each(function(model) {
                         model.set({'selected': true}, {silent: true});
                     });
                     $dirents_op.css({'display':'inline'});
+                    $curDirOps.hide();
                 } else {
                     all_dirent_checkbox.removeClass('checkbox-checked');
                     dir.each(function(model) {
                         model.set({'selected': false}, {silent: true});
                     });
                     $dirents_op.hide();
+                    $curDirOps.show();
                 }
             },
 
