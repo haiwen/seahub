@@ -20,13 +20,6 @@ define([
         },
 
         initialize: function() {
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                if (!$('.js-toggle-repos, .device-libs-popover').is(target)) {
-                    $('.device-libs-popover').addClass('hide');
-                    $('.dir-icon').removeClass('icon-caret-up').addClass('icon-caret-down');
-                }
-            });
         },
 
         render: function () {
@@ -59,30 +52,49 @@ define([
         },
 
         highlight: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
+            if ($('.device-libs-popover:visible').length) {
+                return;
+            }
+            this.$el.addClass('hl').find('.op-icon').removeClass('vh');
         },
 
         rmHighlight: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
+            if ($('.device-libs-popover:visible').length) {
+                return;
+            }
+            this.$el.removeClass('hl').find('.op-icon').addClass('vh');
+        },
+
+        _hidePopover: function(e) {
+            var view = e.data.view;
+            var target = e.target || event.srcElement;
+            if (!$('.js-toggle-repos, .device-libs-popover').is(target)) {
+                $('.device-libs-popover').addClass('hide');
+                $('.dir-icon').removeClass('icon-caret-up').addClass('icon-caret-down');
+                view.rmHighlight();
+                $(document).off('click', view._hidePopover);
+            }
         },
 
         toggleSyncedRepos: function(e) {
-            var $current_icon= $(e.currentTarget).children('.dir-icon'),
-                $current_popover = $(e.currentTarget).next('.device-libs-popover');
-
-            $('.device-libs-popover').not($current_popover).addClass('hide');
-            $('.dir-icon').not($current_icon).removeClass('icon-caret-up').addClass('icon-caret-down');
-
-            $current_popover.toggleClass('hide');
-            if ($current_icon.hasClass('icon-caret-up')) {
-                $current_icon.removeClass('icon-caret-up').addClass('icon-caret-down');
-            } else {
-                $current_icon.removeClass('icon-caret-down').addClass('icon-caret-up');
+            if (this.model.get('synced_repos') == 0) {
+                return false;
             }
 
-            return false
+            var $icon= this.$('.dir-icon'),
+                $popover = this.$('.device-libs-popover');
+
+            if ($popover.is(':hidden')) {
+                $icon.removeClass('icon-caret-up').addClass('icon-caret-down');
+                $popover.removeClass('hide');
+                $(document).on('click', { view: this }, this._hidePopover);
+            } else {
+                $icon.removeClass('icon-caret-down').addClass('icon-caret-up');
+                $popover.addClass('hide');
+                $(document).off('click', this._hidePopover);
+            }
+
+            return false;
         },
 
         unlinkDevice: function() {
