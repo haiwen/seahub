@@ -107,7 +107,7 @@ define([
             var $curDirOps = dirView.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
 
             if (checked_num > 0) {
-                $dirents_op.css({'display':'inline'});
+                $dirents_op.css({'display':'inline-block'});
                 $curDirOps.hide();
             } else {
                 $dirents_op.hide();

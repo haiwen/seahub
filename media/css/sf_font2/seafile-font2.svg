@@ -47,4 +47,6 @@
 <glyph glyph-name="grid-view" unicode="&#57381;" d="M28 228l200 0 0-171-200 0z m256 0l200 0 0-171-200 0z m-256 227l200 0 0-171-200 0z m256 0l200 0 0-171-200 0z"/>
 <glyph glyph-name="list-view" unicode="&#57382;" d="M28 114l456 0 0-57-456 0z m0 114l456 0 0-57-456 0z m0 113l456 0 0-57-456 0z m0 114l456 0 0-57-456 0z"/>
 <glyph glyph-name="add" unicode="&#57383;" d="M288 288l0 192-64 0 0-192-192 0 0-64 192 0 0-192 64 0 0 192 192 0 0 64z"/>
+<glyph glyph-name="copy241" unicode="&#57384;" d="M160 382l273 0 0-333-273 0z m-79 83l0-333 53 0 0 278 218 0 0 55z"/>
+<glyph glyph-name="move241" unicode="&#57385;" d="M256 386l0 51-203 0 0-362 406 0 0 311z m55-226l0 53-181 0 0 52 184 0 0 53 76-77z"/>
 </font></defs></svg>

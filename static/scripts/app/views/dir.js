@@ -745,7 +745,7 @@ define([
                     dir.each(function(model) {
                         model.set({'selected': true}, {silent: true});
                     });
-                    $dirents_op.css({'display':'inline'});
+                    $dirents_op.css({'display':'inline-block'});
                     $curDirOps.hide();
                 } else {
                     all_dirent_checkbox.removeClass('checkbox-checked');
