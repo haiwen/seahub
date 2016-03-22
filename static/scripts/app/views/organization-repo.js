@@ -2,16 +2,18 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, HLItemView) {
     'use strict';
 
-    var OrganizationRepoView = Backbone.View.extend({
+    var OrganizationRepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#organization-repo-tmpl').html()),
 
         initialize: function() {
+            HLItemView.prototype.initialize.call(this);
         },
 
         render: function() {
@@ -27,17 +29,7 @@ define([
         },
 
         events: {
-            'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight',
             'click .cancel-share': 'removeShare'
-        },
-
-        highlight: function() {
-            this.$el.addClass('hl').find('.op-icon').removeClass('vh');
-        },
-
-        rmHighlight: function() {
-            this.$el.removeClass('hl').find('.op-icon').addClass('vh');
         },
 
         removeShare: function() {

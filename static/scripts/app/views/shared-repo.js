@@ -2,22 +2,22 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, HLItemView) {
     'use strict';
 
-    var SharedRepoView = Backbone.View.extend({
+    var SharedRepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#shared-repo-tmpl').html()),
 
         events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
             'click .unshare-btn': 'removeShare'
         },
 
         initialize: function() {
+            HLItemView.prototype.initialize.call(this);
         },
 
         removeShare: function(e) {
@@ -56,17 +56,8 @@ define([
             });
             this.$el.html(this.template(obj));
             return this;
-        },
-
-        showAction: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
-        },
-
-        hideAction: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
         }
+
     });
 
     return SharedRepoView;

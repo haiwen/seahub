@@ -7,12 +7,14 @@ define([
     'app/views/dialogs/repo-change-password',
     'app/views/dialogs/repo-history-settings',
     'app/views/dialogs/repo-share-link-admin',
-    'app/views/dialogs/repo-folder-perm-admin'
+    'app/views/dialogs/repo-folder-perm-admin',
+    'app/views/widgets/hl-item-view'
 ], function($, _, Backbone, Common, ShareView, RepoChangePasswordDialog,
-    HistorySettingsDialog, RepoShareLinkAdminDialog, RepoFolderPermAdminDialog) {
+    HistorySettingsDialog, RepoShareLinkAdminDialog, RepoFolderPermAdminDialog,
+    HLItemView) {
     'use strict';
 
-    var RepoView = Backbone.View.extend({
+    var RepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#repo-tmpl').html()),
@@ -21,8 +23,6 @@ define([
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
         events: {
-            'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight',
             'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share',
             'click .js-toggle-popup': 'togglePopup',
@@ -35,6 +35,8 @@ define([
         },
 
         initialize: function() {
+            HLItemView.prototype.initialize.call(this);
+
             this.listenTo(this.model, "change", this.render);
         },
 
@@ -48,23 +50,6 @@ define([
             });
             this.$el.html(this.template(obj));
             return this;
-        },
-
-        // disable 'hover' when 'repo-del-confirm' popup is shown
-        highlight: function() {
-            if ($('#my-own-repos .repo-del-confirm').length == 0
-                && !$('.hidden-op:visible').length
-                && !$('#repo-rename-form').length) {
-                this.$el.addClass('hl').find('.op-icon').removeClass('vh');
-            }
-        },
-
-        rmHighlight: function() {
-            if ($('#my-own-repos .repo-del-confirm').length == 0
-                && !$('.hidden-op:visible').length
-                && !$('#repo-rename-form').length) {
-                this.$el.removeClass('hl').find('.op-icon').addClass('vh');
-            }
         },
 
         del: function() {
@@ -83,9 +68,12 @@ define([
                 'width': 180
             });
 
+            app.ui.freezeItemHightlight = true;
+
             var _this = this;
             $('.no', confirm_popup).click(function() {
                 confirm_popup.addClass('hide').remove(); // `addClass('hide')`: to rm cursor
+                app.ui.freezeItemHightlight = false;
                 _this.rmHighlight();
             });
             $('.yes', confirm_popup).click(function() {
@@ -95,10 +83,12 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function(data) {
+                        app.ui.freezeItemHightlight = false;
                         _this.remove();
                         Common.feedback(gettext("Delete succeeded."), 'success');
                     },
                     error: function(xhr) {
+                        app.ui.freezeItemHightlight = false;
                         confirm_popup.addClass('hide').remove();
                         _this.rmHighlight();
 
@@ -164,8 +154,10 @@ define([
             $name_span.hide();
 
             this.togglePopup();
+            app.ui.freezeItemHightlight = true;
 
             var cancelRename = function() {
+                app.ui.freezeItemHightlight = false;
                 form.remove();
                 $op_td.show();
                 $name_span.show();
@@ -195,6 +187,7 @@ define([
                     repo_id: _this.model.get('id')
                 }) + '?op=rename';
                 var after_op_success = function(data) {
+                    app.ui.freezeItemHightlight = false;
                     _this.model.set({ 'name': new_name }); // it will trigger 'change' event
                 };
                 var after_op_error = function(xhr) {

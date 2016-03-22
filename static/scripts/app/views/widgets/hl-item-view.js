@@ -20,7 +20,9 @@ define([
         },
 
         highlight: function() {
-            if (app.ui.currentDropdown) {
+            // if there are dropdown items or freezeItemHightlight is set, don't highlight
+            console.log("highlight");
+            if (app.ui.currentDropdown || app.ui.freezeItemHightlight) {
                 return;
             }
             app.ui.currentHighlightedItem = this;
@@ -28,7 +30,7 @@ define([
         },
 
         rmHighlight: function() {
-            if (app.ui.currentDropdown) {
+            if (app.ui.currentDropdown || app.ui.freezeItemHightlight) {
                 return;
             }
             app.ui.currentHighlightedItem = null;
