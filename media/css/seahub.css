@@ -1202,9 +1202,11 @@ textarea:-moz-placeholder {/* for FF */
 /**** dropdown menu ******/
 .dropdown {
     position:relative;
+    display:inline;
 }
 .dropdown-menu {
     position:absolute;
+    left:0px;
     background:#fff;
     padding:6px 1px;
     border:1px solid rgba(34,36,38,.15);

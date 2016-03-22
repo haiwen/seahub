@@ -8,10 +8,11 @@ define([
     'app/views/dialogs/repo-history-settings',
     'app/views/dialogs/repo-share-link-admin',
     'app/views/dialogs/repo-folder-perm-admin',
-    'app/views/widgets/hl-item-view'
+    'app/views/widgets/hl-item-view',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, ShareView, RepoChangePasswordDialog,
     HistorySettingsDialog, RepoShareLinkAdminDialog, RepoFolderPermAdminDialog,
-    HLItemView) {
+    HLItemView, DropdownView) {
     'use strict';
 
     var RepoView = HLItemView.extend({
@@ -25,7 +26,6 @@ define([
         events: {
             'click .repo-delete-btn': 'del',
             'click .repo-share-btn': 'share',
-            'click .js-toggle-popup': 'togglePopup',
             'click .js-repo-rename': 'rename',
             'click .js-repo-transfer': 'transfer',
             'click .js-repo-change-password': 'changePassword',
@@ -49,6 +49,9 @@ define([
                 'icon_title': this.model.getIconTitle()
             });
             this.$el.html(this.template(obj));
+            this.dropdown = new DropdownView({
+                el: this.$('.js-dropdown')
+            });
             return this;
         },
 
@@ -119,21 +122,7 @@ define([
         },
 
         togglePopup: function() {
-            var $icon = this.$('.js-toggle-popup'),
-                $popup = this.$('.hidden-op');
-
-            if ($popup.hasClass('hide')) { // the popup is not shown
-                $popup.css({'left': $icon.position().left});
-                if ($icon.offset().top + $popup.height() <= $('#main').offset().top + $('#main').height()) {
-                    // below the icon
-                    $popup.css('top', $icon.position().top + $icon.outerHeight(true) + 3);
-                } else {
-                    $popup.css('bottom', $icon.parent().outerHeight() - $icon.position().top + 3);
-                }
-                $popup.removeClass('hide');
-            } else {
-                $popup.addClass('hide');
-            }
+            this.dropdown.hide();
         },
 
         rename: function() {

@@ -41,21 +41,23 @@
         <div class="op-container">
             <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
-            <span class="sf2-icon-caret-down more-op-icon op-icon vh js-toggle-popup" title="{% trans "More operations" %}"></span>
-            <ul class="hidden-op repo-hidden-op hide dropdown-menu">
-                <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
-                <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
-                <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
-                <% if (encrypted && enc_version == 2) { %>
-                <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
-                <% } %>
-                <% if (!encrypted) { %>
-                <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
-                <% } %>
-                <% if (app.pageOptions.folder_perm_enabled) { %>
-                <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
-                <% } %>
-            </ul>
+            <div class="dropdown js-dropdown">
+                <span class="sf2-icon-caret-down more-op-icon op-icon vh js-dropdown-toggle" title="{% trans "More operations" %}"></span>
+                <ul class="hidden-op repo-hidden-op hide dropdown-menu js-dropdown-content">
+                    <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
+                    <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
+                    <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
+                    <% if (encrypted && enc_version == 2) { %>
+                    <li><a class="op js-repo-change-password" href="#">{% trans "Change Password" %}</a></li>
+                    <% } %>
+                    <% if (!encrypted) { %>
+                    <li><a class="op js-popup-share-link-admin" href="#">{% trans "Share Links" %}</a></li>
+                    <% } %>
+                    <% if (app.pageOptions.folder_perm_enabled) { %>
+                    <li><a class="op js-popup-folder-perm-admin" href="#">{% trans "Folder Permission" %}</a></li>
+                    <% } %>
+                </ul>
+            </div>
         </div>
     </td>
     <td><%= size_formatted %></td>
