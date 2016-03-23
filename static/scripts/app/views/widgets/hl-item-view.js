@@ -21,7 +21,6 @@ define([
 
         highlight: function() {
             // if there are dropdown items or freezeItemHightlight is set, don't highlight
-            console.log("highlight");
             if (app.ui.currentDropdown || app.ui.freezeItemHightlight) {
                 return;
             }
