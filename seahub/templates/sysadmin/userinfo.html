@@ -171,7 +171,7 @@
                     <td>{{ link.filename }}</td>
                     <td>{{ link.file_size|filesizeformat}}</td>
                     {% else %}
-                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>{{ link.filename }}</td>
                     <td>{{ link.dir_size|filesizeformat}}</td>
                     {% endif %}
@@ -181,7 +181,7 @@
                         <a class="op vh rm-link" href="#" data-url="{% url 'sys_publink_remove' %}" data-token="{{ link.token }}">{% trans "Remove"%}</a>
                     </td>
                 {% else %}
-                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                    <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                     <td>{{ link.dir_name }}</td>
                     <td>--</td>
                     <td>{% trans "Upload" %}</td>

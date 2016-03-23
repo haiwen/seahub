@@ -29,7 +29,7 @@
                 <td class="alc"><img src="{{ MEDIA_URL }}img/file/{{ fs.filename|file_icon_filter }}" alt="{% trans "File"%}" /></td>
                 <td><a href="{% url 'view_lib_file' fs.repo.id fs.path %}">{{ fs.filename }}</a></td>
                 {% else %}
-                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'view_common_lib_dir' fs.repo.id fs.path|strip_slash %}">{{ fs.filename }}</a></td>
                 {% endif %}
                 <td><a href="{% url 'view_common_lib_dir' fs.repo.id '' %}">{{ fs.repo.name }}</a></td>
@@ -70,7 +70,7 @@
             </tr>
             {% for link in uploadlinks %}
             <tr>
-                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" /></td>
+                <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td><a href="{% url 'view_common_lib_dir' link.repo.id link.path|strip_slash %}">{{ link.dir_name }}</a></td>
                 <td><a href="{% url 'view_common_lib_dir' link.repo.id '' %}">{{ link.repo.name }}</a></td>
                 <td>{{ link.view_cnt }}</td>
@@ -162,7 +162,7 @@ $('.by-name, .by-time').click(function() {
 
     // define 'sort by' functions
     var by_name_up = function (a, b) {
-        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name
         var b_name_code = b.name.charCodeAt(0);
         if ((a_name_code >= 19968 && a_name_code <= 40869) &&
             (b_name_code >= 19968 && b_name_code <= 40869)) {
@@ -179,7 +179,7 @@ $('.by-name, .by-time').click(function() {
         }
     };
     var by_name_down = function (a, b) {
-        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name 
+        var a_name_code = a.name.charCodeAt(0); // get the first character code from a.name
         var b_name_code = b.name.charCodeAt(0);
         if ((a_name_code >= 19968 && a_name_code <= 40869) &&
             (b_name_code >= 19968 && b_name_code <= 40869)) {
