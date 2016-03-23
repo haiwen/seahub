@@ -65,7 +65,7 @@
                             {% endif %}
                         {% endif %}
                     {% else %}
-                    <img src="{{ MEDIA_URL }}img/folder-icon-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
+                    <img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" height="20" class="vam" />
                     <a href="{% url 'view_common_lib_dir' ma.repo_id ma.path|urlencode|strip_slash %}" target="_blank" class="vam">{{ ma.name }}</a>
                     {% endif %}
                     {% endif %}
