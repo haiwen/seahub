@@ -13,10 +13,10 @@
 
         <table class="commit-list">
             <tr>
-                <th width="40%">{% trans "Description"%}</th>
-                <th width="19%">{% trans "Time" %}</th>
-                <th width="22%">{% trans "Modifier"%}</th>
-                <th width="19%">{% trans "Operations" %}</th>
+                <th width="52%">{% trans "Description"%}</th>
+                <th width="15%">{% trans "Time" %}</th>
+                <th width="15%">{% trans "Modifier"%}</th>
+                <th width="18%">{% trans "Operations" %}</th>
             </tr>
 
             {% for commit in commits %}
@@ -32,7 +32,6 @@
                 <td>
                 {% if commit.creator_name %}
                     {% if not commit.second_parent_id %}
-                    {% avatar commit.creator_name 16 %}
                     <a href="{% url 'user_profile' commit.creator_name %}" class="vam">{{ commit.creator_name|email2nickname }}</a>
                     {% else %}
                     {% trans "None"%}
@@ -76,7 +75,7 @@
             <a href="?per_page=50" class="per-page">50</a>
             {% endif %}
             {% if per_page == 100 %}
-            <span> 100 </span> 
+            <span> 100 </span>
             {% else %}
             <a href="?per_page=100" class="per-page">100</a>
             {% endif %}
