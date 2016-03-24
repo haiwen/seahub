@@ -10,17 +10,14 @@ define([
 
     var DevicesView = Backbone.View.extend({
 
-        el: $('#devices'),
+        id: 'devices',
+
+        template: _.template($('#devices-tmpl').html()),
 
         initialize: function() {
-            this.$table = this.$('table');
-            this.$tableBody = this.$('tbody');
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-
             this.devices = new DevicesCollection();
             this.listenTo(this.devices, 'reset', this.reset);
-
+            this.render();
         },
 
         addOne: function(device) {
@@ -41,15 +38,23 @@ define([
             }
         },
 
-        hide: function() {
-            this.$el.hide();
+        render: function() {
+            this.$el.html(this.template());
+            $("#right-panel").html(this.$el);
+
+            this.$table = this.$('table');
+            this.$tableBody = this.$('tbody');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
         },
 
         show: function() {
-            this.$el.show();
-            this.$table.hide();
-            this.$loadingTip.show();
+            $("#right-panel").html(this.$el);
             this.devices.fetch({reset: true});
+        },
+
+        hide: function() {
+            this.$el.detach();
         }
 
     });

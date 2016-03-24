@@ -17,11 +17,14 @@ define([
             this.listenTo(this.collection, 'reset', this.reset);
 
             this.$loadingTip = this.$('.loading-tip');
-            this.$listContainer = $('#group-member-list');   
+            this.$listContainer = $('#group-member-list');
             this.$error = this.$('.error');
 
             var _this = this;
             $(window).resize(function() {
+                if (!$('#group-members:visible').length) {
+                    return;
+                }
                 _this.setConMaxHeight();
             });
             $(document).click(function(e) {
@@ -34,7 +37,7 @@ define([
                     !$popup.find('*').is(target) &&
                     !$popup_switch.is(target)) {
                     _this.hide();
-                }   
+                }
             });
         },
 
@@ -68,7 +71,7 @@ define([
                 reset: true,
                 data: {'avatar_size': 64},
                 success: function(collection, response, opts) {
-                },  
+                },
                 error: function(collection, response, opts) {
                     _this.$loadingTip.hide();
                     var err_msg;
