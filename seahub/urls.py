@@ -322,9 +322,12 @@ if getattr(settings, 'MULTI_TENANCY', False):
     )
 
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
-    urlpatterns += patterns('',
+    urlpatterns += patterns(
+        '',
         url(r'^shib-login/', shib_login, name="shib_login"),
+        url(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
     )
+
 
 if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
     urlpatterns += patterns(
