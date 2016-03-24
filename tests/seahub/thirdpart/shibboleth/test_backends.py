@@ -32,16 +32,11 @@ SAMPLE_HEADERS = {
 }
 
 settings.SHIBBOLETH_ATTRIBUTE_MAP = {
-   "Shib-Identity-Provider": (True, "idp"),
-   "Shibboleth-mail": (True, "email"),
-   "Shibboleth-eppn": (True, "username"),
-   "Shibboleth-schoolStatus": (True, "status"),
-   "Shibboleth-affiliation": (True, "affiliation"),
-   "Shib-Session-ID": (True, "session_id"),
-   "Shibboleth-givenName": (True, "first_name"),
-   "Shibboleth-sn": (True, "last_name"),
-   "Shibboleth-mail": (True, "email"),
-   "Shibboleth-schoolBarCode": (False, "barcode")
+    # "eppn": (True, "username"),
+    "givenname": (False, "givenname"),
+    "surname": (False, "surname"),
+    "emailaddress": (False, "contact_email"),
+    "organization": (False, "institution"),    
 }
 
 settings.AUTHENTICATION_BACKENDS += (

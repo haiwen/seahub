@@ -52,7 +52,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
             reload(backends)
 
             resp = self.middleware.process_request(self.request)
-            assert resp.status_code == 302
+            assert resp.url == 'shib-complete'
             assert len(Profile.objects.all()) == 0
 
         # now reload again, so it reverts to original settings
