@@ -13,27 +13,39 @@ define([
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        el: '#organization-repos',
+        id: 'organization-repos-tmpl',
 
+        template: _.template($('#organization-repos-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
+            this.repos = new PubRepoCollection();
+            this.listenTo(this.repos, 'add', this.addOne);
+            this.listenTo(this.repos, 'reset', this.reset);
+            this.render();
+        },
+
+        render: function() {
+            this.$el.html(this.template());
             this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
 
-            this.repos = new PubRepoCollection();
-            this.listenTo(this.repos, 'add', this.addOne);
-            this.listenTo(this.repos, 'reset', this.reset);
-
-            this.dirView = options.dirView;
-
             this.dropdown = new DropdownView({
                 el: this.$('.js-add-pub-lib-dropdown'),
                 right: '0px'
             });
+        },
+
+        show: function() {
+            $("#right-panel").html(this.$el);
+            this.showRepoList();
+        },
+
+        hide: function() {
+            this.$el.detach();
         },
 
         events: {
@@ -84,8 +96,6 @@ define([
         },
 
         showRepoList: function() {
-            this.dirView.hide();
-            this.$el.show();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
             var _this = this;
@@ -110,16 +120,6 @@ define([
                     $error.html(err_msg).show();
                 }
             });
-        },
-
-        hideRepoList: function() {
-            this.$el.hide();
-        },
-
-        showDir: function(repo_id, path) {
-            var path = path || '/';
-            this.hideRepoList();
-            this.dirView.showDir('org', repo_id, path);
         },
 
         sortByName: function() {
@@ -157,12 +157,6 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
-        },
-
-        hide: function() {
-            this.hideRepoList();
-            this.$emptyTip.hide();
-            this.dirView.hide();
         }
 
     });

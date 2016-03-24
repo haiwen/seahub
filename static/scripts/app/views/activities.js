@@ -10,19 +10,17 @@ define([
 
     var ActivitiesView = Backbone.View.extend({
 
-        el: $('#activities'),
+        id: 'activities',
+
+        template: _.template($('#activities-tmpl').html()),
 
         activityGroupHdTemplate: _.template($('#activity-group-hd-tmpl').html()),
         activityGroupBdTemplate: _.template($('#activity-group-bd-tmpl').html()),
 
         initialize: function () {
             this.activities = new ActivityCollection();
-
-            this.$activitiesBody = this.$('#activities-body');
-            this.$activitiesMore = this.$('#activities-more');
-            this.$loadingTip = this.$('.loading-tip');
-
             this.moreOffset = 0;
+            this.render();
         },
 
         events: {
@@ -37,12 +35,12 @@ define([
                 remove: false,
                 data: {'start': _this.moreOffset},
                 success: function() {
-                    _this.render();
+                    _this.renderActivities();
                 }
             });
         },
 
-        render: function () {
+        renderActivities: function () {
             var activitiesJson = this.activities.toJSON(),
                 len = activitiesJson.length,
                 more = activitiesJson[len-1]['more'],
@@ -79,12 +77,7 @@ define([
 
         },
 
-        hide: function () {
-            this.$el.hide();
-        },
-
-        show: function () {
-            this.$el.show();
+        showActivities: function() {
             this.$activitiesBody.hide();
             this.$activitiesMore.hide();
             this.$loadingTip.show();
@@ -94,9 +87,25 @@ define([
             this.activities.fetch({
                 data: {'start': 0},
                 success: function() {
-                    _this.render();
+                    _this.renderActivities();
                 }
             });
+        },
+
+        render: function() {
+            this.$el.html(this.template());
+            this.$activitiesBody = this.$('#activities-body');
+            this.$activitiesMore = this.$('#activities-more');
+            this.$loadingTip = this.$('.loading-tip');
+        },
+
+        show: function() {
+            $("#right-panel").html(this.$el);
+            this.showActivities();
+        },
+
+        hide: function () {
+            this.$el.detach();
         }
 
     });

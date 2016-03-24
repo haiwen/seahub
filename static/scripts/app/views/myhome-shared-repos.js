@@ -9,20 +9,16 @@ define([
     'use strict';
 
     var SharedReposView = Backbone.View.extend({
-        el: $('#repos-shared-to-me'),
+        id: 'repos-shared-to-me',
 
+        template: _.template($('#repos-shared-to-me-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
-            this.$table = this.$('table');
-            this.$tableHead = $('thead', this.$table);
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-
             this.repos = new RepoCollection({type: 'shared'});
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
+            this.render();
         },
 
         addOne: function(repo, collection, options) {
@@ -81,12 +77,23 @@ define([
             });
         },
 
+        render: function() {
+            this.$el.html(this.template());
+            this.$table = this.$('table');
+            this.$tableHead = this.$('thead');
+            this.$tableBody = this.$('tbody');
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
+            return this;
+        },
+
         show: function() {
+            $("#right-panel").html(this.$el);
             this.showSharedRepos();
         },
 
         hide: function() {
-            this.$el.hide();
+            this.$el.detach();
         },
 
         events: {
