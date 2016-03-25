@@ -137,6 +137,7 @@
 .sf2-icon-plus:before { content: "\e027"; }
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
+.sf2-icon-reply:before { content: "\e02a"; }
 
 /******* tags **********/
 html { background:#fff; }
