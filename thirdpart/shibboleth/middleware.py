@@ -1,5 +1,7 @@
 from django.contrib.auth.middleware import RemoteUserMiddleware
 from django.core.exceptions import ImproperlyConfigured
+from django.core.urlresolvers import reverse
+from django.http import HttpResponseRedirect
 
 from shibboleth.app_settings import SHIB_ATTRIBUTE_MAP, LOGOUT_SESSION_KEY, SHIB_USER_HEADER
 
@@ -64,6 +66,9 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         # to authenticate the user.
         user = auth.authenticate(remote_user=username, shib_meta=shib_meta)
         if user:
+            if not user.is_active:
+                return HttpResponseRedirect('shib-complete')
+
             # User is valid.  Set request.user and persist user in the session
             # by logging the user in.
             request.user = user

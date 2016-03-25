@@ -1,5 +1,6 @@
 # encoding: utf-8
 from django import forms
+from django.core.mail import send_mail
 from django.utils.encoding import smart_str
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
@@ -230,7 +231,6 @@ class User(object):
 
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
-        from django.core.mail import send_mail
         send_mail(subject, message, from_email, [self.email])
 
     def remove_repo_passwds(self):

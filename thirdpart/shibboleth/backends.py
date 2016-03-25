@@ -1,7 +1,9 @@
+from django.conf import settings
 from django.db import connection
 from django.contrib.auth.backends import RemoteUserBackend
 
 from seahub.base.accounts import User
+from registration.models import notify_admins_on_activate_request
 
 class ShibbolethRemoteUserBackend(RemoteUserBackend):
     """
@@ -17,6 +19,8 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
 
     # Create a User object if not already in the database?
     create_unknown_user = True
+    # Create active user by default.
+    activate_after_creation = getattr(settings, 'SHIB_ACTIVATE_AFTER_CREATION', True)
 
     def get_user(self, username):
         try:
@@ -36,17 +40,17 @@ class ShibbolethRemoteUserBackend(RemoteUserBackend):
         """
         if not remote_user:
             return
-        user = None
+
         username = self.clean_username(remote_user)
-        # Note that this could be accomplished in one try-except clause, but
-        # instead we use get_or_create when creating unknown users since it has
-        # built-in safeguards for multiple threads.
         try:
             user = User.objects.get(email=username)
         except User.DoesNotExist:
             if self.create_unknown_user:
-                user = User.objects.create_user(email=username, is_active=True)
+                user = User.objects.create_user(
+                    email=username, is_active=self.activate_after_creation)
+                if user and self.activate_after_creation is False:
+                    notify_admins_on_activate_request(user.email)
             else:
-                pass
+                user = None
 
         return user

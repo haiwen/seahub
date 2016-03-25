@@ -302,6 +302,29 @@ from constance import config
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
+def notify_admins_on_activate_request(reg_email):
+    ctx_dict = {
+        "site_name": settings.SITE_NAME,
+        "user_search_link": "%s%s?email=%s" % (
+            get_site_scheme_and_netloc(), reverse("user_search"),
+            urlquote(reg_email)),
+    }
+
+    subject = render_to_string('registration/activate_request_email_subject.txt',
+                               ctx_dict)
+    # Email subject *must not* contain newlines
+    subject = ''.join(subject.splitlines())
+
+    message = render_to_string('registration/activate_request_email.txt',
+                               ctx_dict)
+
+    admins = User.objects.get_superusers()
+    for admin in admins:
+        try:
+            admin.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        except Exception as e:
+            logger.error(e)
+
 @receiver(user_registered)
 def email_admin_on_registration(sender, **kwargs):
     """Send an email notification to admin when a newly registered user need
@@ -310,28 +333,7 @@ def email_admin_on_registration(sender, **kwargs):
     This email will be sent when both ``ACTIVATE_AFTER_REGISTRATION`` and
     ``REGISTRATION_SEND_MAIL`` are set to False.
     """
-
-    if config.ACTIVATE_AFTER_REGISTRATION is False and \
-            config.REGISTRATION_SEND_MAIL is False:
+    if bool(config.ACTIVATE_AFTER_REGISTRATION) is False and \
+            bool(config.REGISTRATION_SEND_MAIL) is False:
         reg_email = kwargs['user'].email
-
-        ctx_dict = {
-            "site_name": settings.SITE_NAME,
-            "user_search_link": "%s%s?email=%s" % (
-                get_site_scheme_and_netloc(), reverse("user_search"),
-                urlquote(reg_email)),
-            }
-        subject = render_to_string('registration/activate_request_email_subject.txt',
-                                   ctx_dict)
-        # Email subject *must not* contain newlines
-        subject = ''.join(subject.splitlines())
-        
-        message = render_to_string('registration/activate_request_email.txt',
-                                   ctx_dict)
-
-        admins = User.objects.get_superusers()
-        for admin in admins:
-            try:
-                admin.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
-            except Exception as e:
-                logger.error(e)
+        notify_admins_on_activate_request(reg_email)
