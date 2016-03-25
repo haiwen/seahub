@@ -49,7 +49,9 @@ define([
             this.settingsView = new GroupSettingsView({
                 groupView: this
             });
-            this.discussionsView = new GroupDiscussionsView();
+            this.discussionsView = new GroupDiscussionsView({
+                groupView: this
+            });
         },
 
         addOne: function(repo, collection, options) {

@@ -24,20 +24,33 @@ define([
         initialize: function(options) {
             this.listenTo(this.model, 'destroy', this.remove);
             this.parentView = options.parentView;
+            this.is_group_owner = options.is_group_owner;
+            this.is_group_admin = options.is_group_admin;
         },
 
         render: function() {
             var obj = this.model.attributes;
             var m = Moment(obj['created_at']);
 
+            var can_delete_msg = false;
+            if (this.is_group_owner ||
+                this.is_group_admin ||
+                this.model.get('user_email') == app.pageOptions.username) {
+                can_delete_msg = true;
+            }
+
             var user_profile_url = Common.getUrl({
                 'name': 'user_profile',
                 'username': encodeURIComponent(obj.user_email)
             });
             _.extend(obj, {
-                'content_marked': Marked(obj.content, { breaks: true }),
+                'content_marked': Marked(obj.content, {
+                    breaks: true,
+                    sanitize: true
+                }),
                 'time': m.format('LLLL'),
                 'time_from_now': Common.getRelativeTimeStr(m),
+                'can_delete_msg': can_delete_msg,
                 'user_profile_url': user_profile_url
             });
             this.$el.html(this.template(obj));
@@ -55,7 +68,7 @@ define([
         },
 
         reply: function() {
-            this.parentView.beginReply(this.model.get("user_name"));
+            this.parentView.replyTo(this.model.get("user_name"));
         },
 
         delMessage: function() {

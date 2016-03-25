@@ -9,7 +9,7 @@
  * tags ..................reset styles of tags
  *
  * Helper
- * common class .......... common class
+ * common class ..........common class
  *
  * Widget
  *
@@ -1226,28 +1226,19 @@ textarea:-moz-placeholder {/* for FF */
 }
 /**** discussions/comments ****/
 .msg {
-    padding:10px 0;
-}
-.msg-avatar {
-    float:left;
-    margin-left:10px;
+    padding:10px;
 }
 .msg-body {
-    margin-left:54px;
-}
-.msg-header {
-}
-.msg-ops {
-    float:right;
-    margin-right:10px;
+    margin-left:44px;
 }
 .msg-op {
-    cursor:pointer;
+    color:#aaa;
+    font-size:18px;
 }
 .msg-username {
-}
-.msg-content p:first-child {
-    margin-top:0px;
+    display:inline-block;
+    vertical-align:bottom;
+    max-width:30%;
 }
 .msg-time {
     font-size:11px;
@@ -1255,9 +1246,8 @@ textarea:-moz-placeholder {/* for FF */
     margin-left:5px;
 }
 .msg-form {
+    padding:10px;
     background:#f2f2f2;
-    position:relative;
-    padding-top:10px;
     border-top: 1px solid #c9c9c9;
 }
 .msg-input {
@@ -1268,7 +1258,6 @@ textarea:-moz-placeholder {/* for FF */
     color:#fff;
     background:#4abb49;
     border:1px solid #5cb25b;
-    margin:0px 0 8px;
 }
 .msg-form .submit:hover {
     background:#55ab22;

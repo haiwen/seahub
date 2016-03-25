@@ -12,13 +12,14 @@ define([
         el: '#group-discussions',
 
         initialize: function(options) {
+            this.groupView = options.groupView;
+
             this.collection = new GroupDiscussions();
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'reset', this.reset);
 
             this.$loadingTip = this.$('.loading-tip');
             this.$listContainer = this.$('#group-discussion-list');
-            this.$content = this.$('.popover-con');
             this.$emptyTip = this.$('.no-discussion-tip');
             this.$error = this.$('.error');
 
@@ -49,9 +50,11 @@ define([
         addOne: function(item, collection, options) {
             var view = new ItemView({
                 model: item,
+                is_group_owner: this.is_group_owner,
+                is_group_admin: this.is_group_admin,
                 parentView: this
             });
-            if (options.prepend == true) {
+            if (options.prepend) {
                 this.$listContainer.append(view.render().el);
             } else {
                 this.$listContainer.prepend(view.render().el);
@@ -65,9 +68,8 @@ define([
             if (this.collection.length) {
                 this.$emptyTip.hide();
                 this.collection.each(this.addOne, this);
-                this.$listContainer.removeClass('hide');
                 this.$listContainer.show();
-                this.$content.scrollTop(9999);
+                this.scrollConToBottom();
             } else {
                 this.$emptyTip.show();
                 this.$listContainer.hide();
@@ -79,10 +81,21 @@ define([
             this.$loadingTip.show();
 
             var _this = this;
+
+            // the user's role in this group
+            this.is_group_owner = false;
+            this.is_group_admin = false;
+            if (app.pageOptions.username == this.groupView.group.owner) {
+                this.is_group_owner = true;
+            } else if ($.inArray(app.pageOptions.username, this.groupView.group.admins) != -1) {
+                this.is_group_admin = true;
+            }
+
             this.collection.setGroupId(this.group_id);
             this.collection.fetch({
                 cache: false,
                 reset: true,
+                data: {'avatar_size': 64},
                 success: function(collection, response, opts) {
                 },
                 error: function(collection, response, opts) {
@@ -108,10 +121,9 @@ define([
                 'max-height': $(window).height() - this.$el.offset().top
                     - this.$('.popover-hd').outerHeight(true)
                     - this.$('.popover-footer').outerHeight(true)
-                    - 2
-                    - 10
-            }); // 2: top, bottom border width of $el,
-                // 10: leave some margin at the bottom
+                    - 2 // 2: top, bottom border width of $el,
+                    - 10 // 10: leave some margin at the bottom
+            });
         },
 
         show: function(options) {
@@ -127,8 +139,11 @@ define([
             app.router.navigate('group/' + this.group_id + '/');
         },
 
-        beginReply: function(to_user) {
-            this.$('[name="message"]').val("@" + to_user + " ");
+        replyTo: function(to_user) {
+            var str = "@" + to_user + " ";
+            var $input = this.$('[name="message"]').val(str);
+            Common.setCaretPosition($input[0], str.length);
+            $input.focus();
         },
 
         formSubmit: function() {
@@ -139,7 +154,10 @@ define([
                 return false;
             }
 
-            this.collection.create({ content: content }, {
+            this.collection.create({
+                content: content,
+                avatar_size: 64
+            }, {
                 wait: true,
                 validate: true,
                 prepend: true,
@@ -147,6 +165,8 @@ define([
                     _this.$('[name="message"]').val('');
                     if (_this.collection.length == 1) {
                         _this.collection.reset(_this.collection.models);
+                    } else {
+                        _this.scrollConToBottom();
                     }
                 },
                 error: function(collection, response, options) {
@@ -161,6 +181,12 @@ define([
             });
 
             return false;
+        },
+
+        // scroll '.popover-con' to the bottom
+        scrollConToBottom: function() {
+            var $el = this.$('.popover-con');
+            $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
         }
 
     });

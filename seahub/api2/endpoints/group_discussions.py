@@ -80,7 +80,7 @@ class GroupDiscussions(APIView):
 
     @api_check_group
     def post(self, request, group_id, format=None):
-        """Post a group discussions. Only group members can perform this op.
+        """Post a group discussion. Only group members can perform this op.
         """
         content = request.data.get('content', '')
         if not content:
@@ -93,19 +93,19 @@ class GroupDiscussions(APIView):
             avatar_size = AVATAR_DEFAULT_SIZE
 
         username = request.user.username
-        discuss = GroupMessage.objects.create(group_id=group_id,
+        msg = GroupMessage.objects.create(group_id=group_id,
                                               from_email=username,
                                               message=content)
         info = get_user_common_info(username, avatar_size)
 
-        isoformat_timestr = datetime_to_isoformat_timestr(discuss.timestamp)
+        isoformat_timestr = datetime_to_isoformat_timestr(msg.timestamp)
         return Response({
-            "id": discuss.pk,
+            "id": msg.pk,
             "group_id": group_id,
             "user_name": info["name"],
             "user_email": info["email"],
             "user_login_id": info["login_id"],
             "avatar_url": request.build_absolute_uri(info["avatar_url"]),
-            "content": discuss.message,
+            "content": msg.message,
             "created_at": isoformat_timestr
         }, status=201)

@@ -160,19 +160,15 @@
         <div class="popover-con">
             <span class="loading-icon loading-tip"></span>
             <ul id="group-discussion-list" class="hide"></ul>
-            <div class="no-discussion-tip" style="display:none;">
-                <p>{% blocktrans %}No discussion in this group yet.{% endblocktrans %}</p>
-            </div>
+            <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
             <p class="error hide"></p>
         </div>
         <div class="popover-footer">
-            <form id="group-message-form" action="" method="post" class="msg-form">{% csrf_token %}
-                <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="msg-avatar avatar-circle" />
+            <form action="" method="post" class="msg-form">
+                <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
                 <div class="msg-body">
-                    <textarea name="message" id="add-discussion" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                    <div class="ops">
-                        <button type="submit" class="submit">{% trans "Submit" %}</button>
-                    </div>
+                    <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                    <button type="submit" class="submit">{% trans "Submit" %}</button>
                 </div>
             </form>
         </div>

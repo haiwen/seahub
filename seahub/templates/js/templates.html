@@ -982,17 +982,19 @@
 </script>
 
 <script type="text/template" id="group-discussion-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="msg-avatar avatar-circle" />
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="msg-body">
-        <div class="msg-header">
-            <div class="msg-ops hide">
-                <span class="msg-op js-reply-msg">{% trans "Reply" %}</span>
-                <span class="msg-op js-del-msg">{% trans "Delete" %}</span>
+        <div class="ovhd">
+            <div class="msg-ops fright hide">
+                <span class="msg-op sf2-icon-delete op-icon js-reply-msg" title="{% trans "Reply" %}"></span>
+                <% if (can_delete_msg) { %>
+                <span class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}"></span>
+                <% } %>
             </div>
-            <a class="msg-username ellipsis" href="<%= user_profile_url %>"><%- user_name %></a>
+            <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
             <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
         </div>
-        <div class="msg-content" title=""><%= content_marked %></div>
+        <div class="msg-content"><%= content_marked %></div>
     </div>
 </script>
 

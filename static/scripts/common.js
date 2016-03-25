@@ -829,6 +829,17 @@ define([
                 }
             }
             return group_name;
+        },
+
+        setCaretPosition:function(input, pos) {
+            var range;
+            if (document.selection) {
+                range = input.createTextRange();
+                range.move("character", pos);
+                return range.select();
+            } else {
+                return input.setSelectionRange(pos, pos);
+            }
         }
 
     }
