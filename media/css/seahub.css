@@ -1267,6 +1267,11 @@ textarea:-moz-placeholder {/* for FF */
     text-align:center;
     margin:10px 0;
 }
+.load-more-discussion {
+    color:#eb8205;
+    cursor:pointer;
+    text-align:center;
+}
 /********** container ***********/
 #main, #footer {
     width:950px;

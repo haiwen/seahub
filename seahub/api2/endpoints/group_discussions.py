@@ -75,8 +75,11 @@ class GroupDiscussions(APIView):
                 "created_at": isoformat_timestr
             })
 
-        return HttpResponse(json.dumps(msgs), status=200,
-                            content_type=json_content_type)
+        return HttpResponse(json.dumps({
+            "msgs": msgs,
+            "current_page": page,
+            "page_num": paginator.num_pages,
+            }), status=200, content_type=json_content_type)
 
     @api_check_group
     def post(self, request, group_id, format=None):

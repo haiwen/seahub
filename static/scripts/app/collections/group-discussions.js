@@ -15,6 +15,13 @@ define([
 
         url: function() {
             return Common.getUrl({name: 'group_discussions', group_id: this.group_id});
+        },
+
+        parse: function(data) {
+            this.current_page = data.current_page;
+            this.page_num = data.page_num;
+
+            return data.msgs;
         }
 
     });

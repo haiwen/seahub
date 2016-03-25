@@ -22,6 +22,7 @@ define([
             this.$listContainer = this.$('#group-discussion-list');
             this.$emptyTip = this.$('.no-discussion-tip');
             this.$error = this.$('.error');
+            this.$loadMore = this.$('.js-load-more');
 
             var _this = this;
             $(window).resize(function() {
@@ -44,6 +45,7 @@ define([
 
         events: {
             'click .close': 'hide',
+            'click .js-load-more': 'loadMore',
             'submit form': 'formSubmit'
         },
 
@@ -70,9 +72,15 @@ define([
                 this.collection.each(this.addOne, this);
                 this.$listContainer.show();
                 this.scrollConToBottom();
+                if (this.collection.current_page < this.collection.page_num) {
+                    this.$loadMore.show();
+                } else {
+                    this.$loadMore.hide();
+                }
             } else {
                 this.$emptyTip.show();
                 this.$listContainer.hide();
+                this.$loadMore.hide();
             }
         },
 
@@ -144,6 +152,45 @@ define([
             var $input = this.$('[name="message"]').val(str);
             Common.setCaretPosition($input[0], str.length);
             $input.focus();
+        },
+
+        loadMore: function() {
+            var _this = this;
+
+            this.$loadMore.hide();
+            this.$loadingTip.show();
+
+            this.collection.fetch({
+                cache: false,
+                remove: false,
+                data: {
+                    'avatar_size': 64,
+                    'page': this.collection.current_page + 1
+                },
+                success: function(collection, response, opts) {
+                },
+                error: function(collection, response, opts) {
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    _this.$error.html(err_msg).show();
+                },
+                complete: function() {
+                    _this.$loadingTip.hide();
+                    if (_this.collection.current_page < _this.collection.page_num) {
+                        _this.$loadMore.show();
+                    } else {
+                        _this.$loadMore.hide();
+                    }
+                }
+            });
         },
 
         formSubmit: function() {
