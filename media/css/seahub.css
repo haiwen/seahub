@@ -776,12 +776,6 @@ textarea:-moz-placeholder {/* for FF */
 .checkbox-option {
     vertical-align:middle;
 }
-#simplemodal-container .checkbox-option {
-    font-weight:normal;
-}
-#simplemodal-container .checkbox-label {
-    margin:4px 0;
-}
 .checkbox-label {
     display:block;
 }
@@ -1033,6 +1027,12 @@ textarea:-moz-placeholder {/* for FF */
 }
 #simplemodal-container label {
     margin:8px 0 4px;
+}
+#simplemodal-container .checkbox-option {
+    font-weight:normal;
+}
+#simplemodal-container .checkbox-label {
+    margin:4px 0;
 }
 .simplemodal-close {
     margin-left:5px;

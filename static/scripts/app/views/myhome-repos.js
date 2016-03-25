@@ -10,8 +10,9 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        el: $('#my-own-repos'),
+        id: "my-own-repos",
 
+        template: _.template($('#my-own-repos-tmpl').html()),
         reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
 
         events: {
@@ -21,16 +22,11 @@ define([
         },
 
         initialize: function(options) {
-            this.$table = this.$('table');
-            this.$tableHead = $('thead', this.$table);
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-            this.$repoCreateBtn = this.$('.repo-create');
-
             this.repos = new RepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
+
+            this.render();
 
             // hide 'hidden-op' popup
             $(document).click(function(e) {
@@ -92,10 +88,8 @@ define([
         },
 
         showMyRepos: function() {
-            this.$el.show();
             this.$table.hide();
-            var $loadingTip = this.$loadingTip;
-            $loadingTip.show();
+            this.$loadingTip.show();
             var _this = this;
             this.repos.fetch({
                 cache: false, // for IE
@@ -103,7 +97,7 @@ define([
                 success: function (collection, response, opts) {
                 },
                 error: function (collection, response, opts) {
-                    $loadingTip.hide();
+                    _this.$loadingTip.hide();
                     var $error = _this.$('.error');
                     var err_msg;
                     if (response.responseText) {
@@ -120,12 +114,24 @@ define([
             });
         },
 
+        render: function() {
+            this.$el.html(this.template());
+            this.$table = this.$('table');
+            this.$tableHead = $('thead', this.$table);
+            this.$tableBody = $('tbody', this.$table);
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
+            this.$repoCreateBtn = this.$('.repo-create');
+            return this;
+        },
+
         show: function() {
+            $("#right-panel").html(this.$el);
             this.showMyRepos();
         },
 
         hide: function() {
-            this.$el.hide();
+            this.$el.detach();
         },
 
         createRepo: function() {

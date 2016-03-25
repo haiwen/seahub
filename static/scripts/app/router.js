@@ -4,13 +4,18 @@ define([
     'backbone',
     'common',
     'app/views/side-nav',
-    'app/views/myhome',
+    'app/views/myhome-repos',
+    'app/views/myhome-shared-repos',
     'app/views/groups',
     'app/views/group',
     'app/views/organization',
-    'app/views/dir'
-], function($, Backbone, Common, SideNavView, MyHomeView, GroupsView, GroupView,
-    OrgView, DirView) {
+    'app/views/dir',
+    'app/views/starred-file',
+    'app/views/devices',
+    'app/views/activities'
+], function($, Backbone, Common, SideNavView, MyReposView,
+    SharedReposView, GroupsView, GroupView,
+    OrgView, DirView, StarredFileView, DevicesView, ActivitiesView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -35,6 +40,8 @@ define([
         },
 
         initialize: function() {
+            $('#initial-loading-view').hide();
+
             Common.prepareApiCsrf();
             Common.initLocale();
             Common.initAccountPopup();
@@ -47,15 +54,16 @@ define([
 
             this.dirView = new DirView();
 
-            this.myHomeView = new MyHomeView({dirView: this.dirView});
-            this.groupView = new GroupView({
-                dirView: this.dirView
-            });
-            this.orgView = new OrgView({dirView: this.dirView});
-
+            this.myReposView = new MyReposView();
+            this.sharedReposView = new SharedReposView();
+            this.orgView = new OrgView();
+            this.groupView = new GroupView();
             this.groupsView = new GroupsView();
+            this.starredFileView = new StarredFileView();
+            this.devicesView = new DevicesView();
+            this.activitiesView = new ActivitiesView();
 
-            this.currentView = this.myHomeView;
+            this.currentView = this.myReposView;
 
             $('#info-bar .close').click(Common.closeTopNoticeBar);
             $('#top-browser-tip .close').click(function () {
@@ -71,43 +79,23 @@ define([
         },
 
         showRepos: function() {
-            this.switchCurrentView(this.myHomeView);
             if (app.pageOptions.can_add_repo) {
-                this.myHomeView.showMyRepos();
+                this.showMyRepos();
             } else {
-                this.myHomeView.showSharedRepos();
-                this.sideNavView.setCurTab('shared');
+                this.showSharedRepos();
             }
         },
 
         showMyRepos: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showMyRepos();
+            this.switchCurrentView(this.myReposView);
+            this.myReposView.show();
             this.sideNavView.setCurTab('mine');
         },
 
         showSharedRepos: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showSharedRepos();
+            this.switchCurrentView(this.sharedReposView);
+            this.sharedReposView.show();
             this.sideNavView.setCurTab('shared');
-        },
-
-        showStarredFile: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showStarredFile();
-            this.sideNavView.setCurTab('starred');
-        },
-
-        showDevices: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showDevices();
-            this.sideNavView.setCurTab('devices');
-        },
-
-        showActivities: function() {
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showActivities();
-            this.sideNavView.setCurTab('activities');
         },
 
         showMyRepoDir: function(repo_id, path) {
@@ -116,8 +104,8 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showDir('my-libs', repo_id, path);
+            this.switchCurrentView(this.dirView);
+            this.dirView.showDir('my-libs', repo_id, path);
             this.sideNavView.setCurTab('mine');
         },
 
@@ -127,8 +115,8 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showDir('common', repo_id, path);
+            this.switchCurrentView(this.dirView);
+            this.dirView.showDir('common', repo_id, path);
             this.sideNavView.setCurTab('mine');
         },
 
@@ -138,8 +126,8 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.myHomeView);
-            this.myHomeView.showDir('shared-libs', repo_id, path);
+            this.switchCurrentView(this.dirView);
+            this.dirView.showDir('shared-libs', repo_id, path);
             this.sideNavView.setCurTab('shared');
         },
 
@@ -154,7 +142,7 @@ define([
 
         showGroupRepos: function(group_id) {
             this.switchCurrentView(this.groupView);
-            this.groupView.showRepoList(group_id);
+            this.groupView.show(group_id);
             this.sideNavView.setCurTab('group', {
                 'cur_group_tab': '',
                 'cur_group_id': group_id
@@ -167,12 +155,20 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.groupView);
-            this.groupView.showDir(group_id, repo_id, path);
-            this.sideNavView.setCurTab('group', {
-                'cur_group_tab': '',
-                'cur_group_id': group_id
-            });
+            var group_name = Common.groupId2Name(group_id);
+            if (group_name) {
+                this.switchCurrentView(this.dirView);
+                this.dirView.showDir('group/' + group_id, repo_id, path,
+                    {'group_name': group_name});
+                this.sideNavView.setCurTab('group', {
+                    'cur_group_tab': '',
+                    'cur_group_id': group_id
+                });
+            } else {
+                // the group does not exist
+                Common.feedback('Group {group_id} not found'.replace('{group_id}', group_id), 'error');
+                app.router.navigate('', {trigger: true});
+            }
         },
 
         showGroupMembers: function(group_id) {
@@ -182,7 +178,7 @@ define([
 
         showOrgRepos: function() {
             this.switchCurrentView(this.orgView);
-            this.orgView.showRepoList();
+            this.orgView.show();
             this.sideNavView.setCurTab('org');
         },
 
@@ -192,9 +188,27 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.orgView);
-            this.orgView.showDir(repo_id, path);
+            this.switchCurrentView(this.dirView);
+            this.dirView.showDir('org', repo_id, path);
             this.sideNavView.setCurTab('org');
+        },
+
+        showStarredFile: function() {
+            this.switchCurrentView(this.starredFileView);
+            this.starredFileView.show();
+            this.sideNavView.setCurTab('starred');
+        },
+
+        showDevices: function() {
+            this.switchCurrentView(this.devicesView);
+            this.devicesView.show();
+            this.sideNavView.setCurTab('devices');
+        },
+
+        showActivities: function() {
+            this.switchCurrentView(this.activitiesView);
+            this.activitiesView.show();
+            this.sideNavView.setCurTab('activities');
         }
 
     });

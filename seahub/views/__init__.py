@@ -655,10 +655,10 @@ def repo_history(request, repo_id):
 
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '100'))
     except ValueError:
         current_page = 1
-        per_page = 25
+        per_page = 100
 
     commits_all = get_commits(repo_id, per_page * (current_page -1),
                               per_page + 1)

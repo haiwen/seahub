@@ -25,6 +25,9 @@ define([
 
             var _this = this;
             $(window).resize(function() {
+                if (!$('#group-settings:visible').length) {
+                    return;
+                }
                 _this.setConMaxHeight();
             });
             $(document).click(function(e) {
