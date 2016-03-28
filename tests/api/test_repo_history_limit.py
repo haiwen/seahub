@@ -15,6 +15,7 @@ class RepoTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo()
+        self.clear_cache()
 
     def test_can_get_history_limit(self):
         self.login_as(self.user)
