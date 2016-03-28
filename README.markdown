@@ -8,7 +8,7 @@ Seahub is the web frontend for Seafile.
 Preparation
 ==========
 
-* Build and deploy Seafile server from source. See <https://github.com/haiwen/seafile/wiki/Build-and-deploy-seafile-server-from-source>
+* Build and deploy Seafile server from source. See <http://manual.seafile.com/build_seafile/server.html>
 
 Getting it
 ==========
@@ -25,11 +25,13 @@ Install python libraries by pip:
 Configuration
 ==========
 
-Modify `CCNET_CONF_DIR`, `SEAFILE_CONF_DIR` and `PYTHONPATH` in `setenv.sh.template` to fit your path.
+Modify `CCNET_CONF_DIR`, `SEAFILE_CENTRAL_CONF_DIR`, `SEAFILE_CONF_DIR` and `PYTHONPATH` in `setenv.sh.template` to fit your path.
 
-`CCNET_CONF_DIR` is the directory contains `ccnet.conf`.
+`CCNET_CONF_DIR` is the directory, that contains the ccnet socket (and formerly ccnet.conf).
 
-`SEAFILE_CONF_DIR` is the directory contains `seafile.conf`.
+Since 5.0 `SEAFILE_CENTRAL_CONF_DIR` contains most config files.
+
+`SEAFILE_CONF_DIR` is the seafile-data directory (and formerly contained seafile.conf).
 
 Run and Verify
 ==========
