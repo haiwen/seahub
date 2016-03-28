@@ -1861,6 +1861,7 @@ class OwaFileView(APIView):
         send_file_access_msg(request, repo, path, 'api')
         return Response(wopi_dict)
 
+
 class DevicesView(APIView):
     """List user devices"""
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -1893,6 +1894,7 @@ class DevicesView(APIView):
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         return Response({'success': True})
+
 
 class FileView(APIView):
     """
@@ -2268,38 +2270,44 @@ class FileDetailView(APIView):
                             content_type=json_content_type)
 
 class FileRevert(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def put(self, request, repo_id, format=None):
-        path = request.data.get('p', '')
+        path = request.data.get('p', None)
+        commit_id = request.data.get('commit_id', None)
+
         if not path:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not commit_id:
+            error_msg = 'commit_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_file_id_by_commit_and_path(repo_id, commit_id, path):
+            error_msg = 'file %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_folder_permission(request, repo_id, '/') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-        is_locked, locked_by_me = check_file_lock(repo_id, path, username)
-        if (is_locked, locked_by_me) == (None, None):
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Check file lock error')
-
-        if is_locked and not locked_by_me:
-            return api_error(status.HTTP_403_FORBIDDEN, 'File is locked')
-
-        parent_dir = os.path.dirname(path)
-        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN,
-                   'You do not have permission to access this folder.')
-
-        path = unquote(path.encode('utf-8'))
-        commit_id = unquote(request.data.get('commit_id', '').encode('utf-8'))
         try:
-            ret = seafserv_threaded_rpc.revert_file(repo_id, commit_id,
-                                                    path, username)
+            seafile_api.revert_file(repo_id, commit_id, path, username)
         except SearpcError as e:
             logger.error(e)
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        return HttpResponse(json.dumps({"ret": ret}), status=200, content_type=json_content_type)
+        return Response({'success': True})
+
 
 class FileRevision(APIView):
     authentication_classes = (TokenAuthentication, )
@@ -2697,6 +2705,45 @@ class DirDownloadView(APIView):
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200,
                             content_type=json_content_type)
+
+class DirRevert(APIView):
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle, )
+
+    def put(self, request, repo_id):
+        path = request.data.get('p', None)
+        commit_id = request.data.get('commit_id', None)
+
+        if not path:
+            error_msg = 'path invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not commit_id:
+            error_msg = 'commit_id invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if not seafile_api.get_repo(repo_id):
+            error_msg = 'library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if not seafile_api.get_dir_id_by_commit_and_path(repo_id, commit_id, path):
+            error_msg = 'folder %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_folder_permission(request, repo_id, '/') != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        username = request.user.username
+        try:
+            seafile_api.revert_dir(repo_id, commit_id, path, username)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
 
 class DirShareView(APIView):
     authentication_classes = (TokenAuthentication, )

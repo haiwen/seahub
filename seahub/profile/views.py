@@ -36,9 +36,7 @@ def edit_profile(request):
         if form.is_valid():
             form.save(username=username)
             messages.success(request, _(u'Successfully edited profile.'))
-            # refresh nickname cache
-            refresh_cache(request.user.username)
-            
+
             return HttpResponseRedirect(reverse('edit_profile'))
         else:
             messages.error(request, _(u'Failed to edit profile'))

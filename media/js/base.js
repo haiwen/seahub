@@ -218,17 +218,6 @@ $('#logout').click(function() {
         }
     }
 });
-if ($.browser.mozilla || $.browser.msie) {
-    $('a').focus(function() {
-        $(this).blur();
-    });
-}
-if ($.browser.msie) {
-    $('button, input[type="checkbox"], input[type="radio"], input[type="submit"]').focus(function() {
-        $(this).blur();
-    });
-    $('.search-input').css({'line-height':$('.search-input').css('height')});
-}
 
 /*
  * add confirm to an operation, using a popup

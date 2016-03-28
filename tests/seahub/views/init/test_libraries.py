@@ -27,6 +27,8 @@ class LibrariesTest(BaseTestCase):
         assert UserOptions.objects.is_user_guide_enabled(username) is False
 
     def test_pub_repo_creation_config(self):
+        self.clear_cache()
+
         # user
         self.login_as(self.user)
 

@@ -31,7 +31,7 @@
         {% block info_bar_message %}
         {% if request.user.is_authenticated and request.cur_note %}
         <div id="info-bar">
-            <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
+            <p id="info-bar-info">{{ request.cur_note.message|urlize }}</p>
             <span class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></span>
         </div>
         {% endif %}

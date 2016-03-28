@@ -187,12 +187,18 @@ class UserOptionsManager(models.Manager):
         - `self`:
         - `username`:
         """
-        try:
-            user_option = super(UserOptionsManager, self).get(
-                email=username, option_key=KEY_DEFAULT_REPO)
-            return user_option.option_val
-        except UserOptions.DoesNotExist:
+        user_options = super(UserOptionsManager, self).filter(
+            email=username, option_key=KEY_DEFAULT_REPO)
+
+        if len(user_options) == 0:
             return None
+        elif len(user_options) == 1:
+            return user_options[0].option_val
+        else:
+            for o in user_options[1: len(user_options)]:
+                o.delete()
+
+            return user_options[0].option_val
 
     def passwd_change_required(self, username):
         """Check whether user need to change password.
@@ -211,10 +217,10 @@ class UserOptionsManager(models.Manager):
     def unset_force_passwd_change(self, username):
         return self.unset_user_option(username, KEY_FORCE_PASSWD_CHANGE)
 
+
 class UserOptions(models.Model):
     email = LowerCaseCharField(max_length=255, db_index=True)
     option_key = models.CharField(max_length=50)
     option_val = models.CharField(max_length=50)
 
     objects = UserOptionsManager()
-

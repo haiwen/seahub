@@ -16,6 +16,7 @@ class SharedRepoTest(BaseTestCase):
 
     def tearDown(self):
         self.remove_repo(self.repo_id)
+        self.clear_cache()
 
     def test_admin_can_share_repo_to_public(self):
         self.login_as(self.admin)

@@ -1,6 +1,7 @@
 import os
 from uuid import uuid4
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.conf import settings
 from django.http import SimpleCookie
@@ -161,3 +162,8 @@ class BaseTestCase(TestCase, Fixtures):
         if session_cookie:
             session.delete(session_key=session_cookie.value)
         self.client.cookies = SimpleCookie()
+
+    def clear_cache(self):
+        # clear cache between every test case to avoid config option cache
+        # issue which cause test failed
+        cache.clear()
