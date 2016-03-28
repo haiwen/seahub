@@ -138,7 +138,7 @@ define([
                 url: Common.getUrl({
                     name: 'lock_or_unlock_file',
                     repo_id: dir.repo_id
-                }),
+                }) + '?p=' + encodeURIComponent((filepath)),
                 type: 'PUT',
                 dataType: 'json',
                 data: {

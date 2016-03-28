@@ -158,7 +158,7 @@
 $.jstree._themes = '{{ MEDIA_URL }}js/themes/';
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
-        feedback($.parseJSON(xhr.responseText).error, 'error');
+        feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
     }    
