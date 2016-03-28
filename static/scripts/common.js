@@ -71,14 +71,14 @@ define([
                 case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
                 case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
                 case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
-                case 'del_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'rename_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
-                case 'rename_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
                 case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
                 case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
                 case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
-                case 'lock_or_unlock_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'lock_or_unlock_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
                 case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
                 case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';

@@ -151,20 +151,19 @@ $('#file-star').click(function() {
 {% if can_lock_unlock_file %}
 // lock/unlock file
 $('#lock-file, #unlock-file').click(function() {
-    var op = $(this).attr('id') == 'lock-file' ? 'lock' : 'unlock';
+    var op = $(this).attr('id') == 'lock-file' ? 'lock' : 'unlock',
+        path = '{{path|escapejs}}';
     $.ajax({
-        url: '{% url 'FileView' repo.id %}',
+        url: '{% url 'api-v2.1-file-view' repo.id %}' + '?p=' + encodeURIComponent(path),
         type: 'PUT',
         dataType: 'json',
         cache: 'false',
         beforeSend: prepareCSRFToken,
-        data: {'operation': op, 'p': '{{path|escapejs}}'},
+        data: {'operation': op},
         success: function() {
             $('#lock-file, #unlock-file, .file-locked-icon').toggleClass('hide');
         },
-        error: function () {
-            feedback("{% trans "Failed" %}", 'error');
-        }
+        error: ajaxErrorHandler
     });
 });
 {% endif %}

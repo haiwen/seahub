@@ -259,7 +259,7 @@ define([
                 var after_op_error = function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = $.parseJSON(xhr.responseText).error;
+                        err_msg = $.parseJSON(xhr.responseText).error_msg;
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
