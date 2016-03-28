@@ -86,7 +86,7 @@ define([
             }
         },
 
-        renderGroupTop: function() {
+        renderGroupTop: function(options) {
             var _this = this;
             var $groupTop = $('#group-top');
             $.ajax({
@@ -99,6 +99,11 @@ define([
                 success: function (data) {
                     _this.group = data;
                     $groupTop.html(_this.groupTopTemplate(data));
+                    if (options) {
+                        if (options.showDiscussions) {
+                            _this.showDiscussions();
+                        }
+                    }
                 },
                 error: function(xhr) {
                     var err_msg;
@@ -112,11 +117,11 @@ define([
             });
         },
 
-        showRepoList: function(group_id) {
+        showRepoList: function(group_id, options) {
             this.group_id = group_id;
             this.dirView.hide();
             this.$emptyTip.hide();
-            this.renderGroupTop();
+            this.renderGroupTop(options);
             this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;

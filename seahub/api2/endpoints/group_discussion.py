@@ -11,6 +11,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.group.models import GroupMessage
 from .utils import api_check_group
+from seahub.group.utils import is_group_admin_or_owner
 
 json_content_type = 'application/json; charset=utf-8'
 
@@ -22,7 +23,7 @@ class GroupDiscussion(APIView):
     @api_check_group
     def delete(self, request, group_id, discuss_id, format=None):
         """Remove a group discussion.
-        Only discussion creator or group admin can perform this op.
+        Only discussion creator or group owner/admin can perform this op.
         """
         username = request.user.username
         group_id = int(group_id)
@@ -33,8 +34,8 @@ class GroupDiscussion(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, 'Discussion id %s not found.' % discuss_id)
 
         # perm check
-        if not ccnet_api.check_group_staff(group_id, username) and \
-           discussion.from_email != username:
+        if not is_group_admin_or_owner(group_id, username) and \
+            discussion.from_email != username:
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         discussion.delete()
