@@ -92,6 +92,7 @@ urlpatterns = patterns(
     url(r'^#common/lib/(?P<repo_id>[-0-9a-f]{36})/(?P<path>.*)$', fake_view, name='view_common_lib_dir'),
     url(r'^#group/(?P<group_id>\d+)/$', fake_view, name='group_info'),
     url(r'^#group/(?P<group_id>\d+)/members/$', fake_view, name='group_members'),
+    url(r'^#group/(?P<group_id>\d+)/discussions/$', fake_view, name='group_discuss'),
     url(r'^#groups/', fake_view, name='group_list'),
     url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
 

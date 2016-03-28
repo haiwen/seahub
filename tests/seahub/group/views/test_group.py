@@ -55,7 +55,6 @@ class GroupDiscussTest(BaseTestCase):
     def test_can_render(self):
         resp = self.client.get(reverse('group_discuss', args=[self.group.id]))
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'group/group_discuss.html')
 
     def test_public_group_404(self):
         self.pub_grp = PublicGroup(group_id=self.group.id).save()

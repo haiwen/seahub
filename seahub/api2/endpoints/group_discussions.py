@@ -14,6 +14,7 @@ from seahub.api2.permissions import IsGroupMember
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, get_user_common_info
 from seahub.group.models import GroupMessage
+from seahub.group.signals import grpmsg_added 
 from seahub.utils.paginator import Paginator
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
@@ -99,6 +100,10 @@ class GroupDiscussions(APIView):
         msg = GroupMessage.objects.create(group_id=group_id,
                                               from_email=username,
                                               message=content)
+        # send signal
+        grpmsg_added.send(sender=GroupMessage, group_id=group_id,
+                from_email=username, message=content)
+
         info = get_user_common_info(username, avatar_size)
 
         isoformat_timestr = datetime_to_isoformat_timestr(msg.timestamp)
