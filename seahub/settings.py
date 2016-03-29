@@ -265,6 +265,9 @@ USER_PASSWORD_STRENGTH_LEVEL = 3
 # when True, check password strength level, STRONG(or above) is allowed
 USER_STRONG_PASSWORD_REQUIRED = False
 
+# Force user to change password when admin add/reset a user.
+FORCE_PASSWORD_CHANGE = True
+
 # Using server side crypto by default, otherwise, let user choose crypto method.
 FORCE_SERVER_CRYPTO = True
 
@@ -631,6 +634,7 @@ CONSTANCE_CONFIG = {
     'ENABLE_ENCRYPTED_LIBRARY': (ENABLE_ENCRYPTED_LIBRARY,''),
     'REPO_PASSWORD_MIN_LENGTH': (REPO_PASSWORD_MIN_LENGTH,''),
     'ENABLE_REPO_HISTORY_SETTING': (ENABLE_REPO_HISTORY_SETTING,''),
+    'FORCE_PASSWORD_CHANGE': (FORCE_PASSWORD_CHANGE, ''),
 
     'USER_STRONG_PASSWORD_REQUIRED': (USER_STRONG_PASSWORD_REQUIRED,''),
     'USER_PASSWORD_MIN_LENGTH': (USER_PASSWORD_MIN_LENGTH,''),
