@@ -59,12 +59,12 @@ define([
 
         highlight: function() {
             this.$el.addClass('hl');
-            this.$('.msg-ops').show();
+            this.$('.msg-ops').removeClass('vh');
         },
 
         rmHighlight: function() {
             this.$el.removeClass('hl');
-            this.$('.msg-ops').hide();
+            this.$('.msg-ops').addClass('vh');
         },
 
         reply: function() {

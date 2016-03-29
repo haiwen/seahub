@@ -71,12 +71,12 @@ define([
                 this.$emptyTip.hide();
                 this.collection.each(this.addOne, this);
                 this.$listContainer.show();
-                this.scrollConToBottom();
                 if (this.collection.current_page < this.collection.page_num) {
                     this.$loadMore.show();
                 } else {
                     this.$loadMore.hide();
                 }
+                this.scrollConToBottom();
             } else {
                 this.$emptyTip.show();
                 this.$listContainer.hide();
@@ -167,7 +167,14 @@ define([
                     'avatar_size': 64,
                     'page': this.collection.current_page + 1
                 },
-                success: function(collection, response, opts) {
+                success: function(collection, response, opts) { // this function will be excuted after 'addOne', i.e, after the newly fetched items are rendered.
+                    // sumHeight: sum height of the newly added items('.msg')
+                    var sumHeight = 0;
+                    _this.$('.msg:lt(' + response.msgs.length +')').each(function() {
+                        sumHeight += $(this).outerHeight(true);
+                    });
+                    // scroll
+                    _this.$('.popover-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
                 },
                 error: function(collection, response, opts) {
                     var err_msg;
