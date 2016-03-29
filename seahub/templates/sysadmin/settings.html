@@ -49,6 +49,10 @@
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
 
+    {% with type="checkbox" setting_display_name="force password change" help_tip="Force user to change password when account is newly added or reset by admin" setting_name="FORCE_PASSWORD_CHANGE" setting_val=config_dict.FORCE_PASSWORD_CHANGE %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+        
     {% with type="input" setting_display_name="password minimum length" help_tip="The least number of characters an account password should include." setting_name="USER_PASSWORD_MIN_LENGTH" setting_val=config_dict.USER_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}

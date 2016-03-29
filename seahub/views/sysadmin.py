@@ -1238,7 +1238,8 @@ def user_reset(request, email):
         user.save()
 
         clear_token(user.username)
-        UserOptions.objects.set_force_passwd_change(user.username)
+        if config.FORCE_PASSWORD_CHANGE:
+            UserOptions.objects.set_force_passwd_change(user.username)
 
         if IS_EMAIL_CONFIGURED:
             if SEND_EMAIL_ON_RESETTING_USER_PASSWD:
@@ -1311,7 +1312,8 @@ def user_add(request):
 
         if user:
             User.objects.update_role(email, role)
-            UserOptions.objects.set_force_passwd_change(email)
+            if config.FORCE_PASSWORD_CHANGE:
+                UserOptions.objects.set_force_passwd_change(email)
 
         if request.user.org:
             org_id = request.user.org.org_id
@@ -2160,7 +2162,7 @@ def sys_settings(request):
         'ENABLE_REPO_HISTORY_SETTING', 'USER_STRONG_PASSWORD_REQUIRED',
         'ENABLE_ENCRYPTED_LIBRARY', 'USER_PASSWORD_MIN_LENGTH',
         'USER_PASSWORD_STRENGTH_LEVEL', 'SHARE_LINK_PASSWORD_MIN_LENGTH',
-        'ENABLE_USER_CREATE_ORG_REPO'
+        'ENABLE_USER_CREATE_ORG_REPO', 'FORCE_PASSWORD_CHANGE'
     )
 
     STRING_WEB_SETTINGS = ('SERVICE_URL', 'FILE_SERVER_ROOT',)
