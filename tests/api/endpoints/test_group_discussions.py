@@ -18,7 +18,7 @@ class GroupDiscussionsTest(BaseTestCase):
         resp = self.client.get(self.endpoint)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 1
+        assert len(json_resp['msgs']) == 1
 
     def test_can_list_with_paginator(self):
         for i in range(10):
@@ -28,18 +28,18 @@ class GroupDiscussionsTest(BaseTestCase):
         resp = self.client.get(self.endpoint + '?page=1&per_page=5')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 5
-        assert json_resp[0]['content'] == 'msg 9'
+        assert len(json_resp['msgs']) == 5
+        assert json_resp['msgs'][0]['content'] == 'msg 9'
 
         resp = self.client.get(self.endpoint + '?page=2&per_page=5')
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 5
-        assert json_resp[-1]['content'] == 'msg 0'
+        assert len(json_resp['msgs']) == 5
+        assert json_resp['msgs'][-1]['content'] == 'msg 0'
 
         resp = self.client.get(self.endpoint + '?page=3&per_page=5')
         json_resp = json.loads(resp.content)
-        assert len(json_resp) == 5
-        assert json_resp[-1]['content'] == 'msg 0'
+        assert len(json_resp['msgs']) == 5
+        assert json_resp['msgs'][-1]['content'] == 'msg 0'
 
     def test_can_not_list_when_invalid_user(self):
         self.logout()
