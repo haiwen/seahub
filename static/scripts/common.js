@@ -42,6 +42,7 @@ require.config({
         jstree: 'lib/jstree.1.0',
         select2: 'lib/select2-3.5.2',
         moment: 'lib/moment-with-locales',
+        marked: 'lib/marked.min',
 
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
@@ -136,6 +137,8 @@ define([
                 case 'group_import_members': return siteRoot + 'ajax/group/' + options.group_id + '/members/import/';
                 case 'group_repos': return siteRoot + 'api2/groups/' + options.group_id + '/repos/';
                 case 'toggle_group_modules': return siteRoot + 'ajax/group/' + options.group_id + '/toggle-modules/';
+                case 'group_discussions': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/';
+                case 'group_discussion': return siteRoot + 'api2/groups/' + options.group_id + '/discussions/' + options.discussion_id + '/';
 
                 // Misc
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
@@ -473,6 +476,15 @@ define([
                 language_code = app.pageOptions.language_code;
             }
             Moment.locale(language_code);
+        },
+
+        getRelativeTimeStr: function(m) {
+            var now = new Date();
+            if (m - now > 0) {
+                return gettext("Just now");
+            } else {
+                return m.fromNow();
+            }
         },
 
         closePopup: function(e, popup, popup_switch) {
@@ -817,6 +829,17 @@ define([
                 }
             }
             return group_name;
+        },
+
+        setCaretPosition:function(input, pos) {
+            var range;
+            if (document.selection) {
+                range = input.createTextRange();
+                range.move("character", pos);
+                return range.select();
+            } else {
+                return input.setSelectionRange(pos, pos);
+            }
         }
 
     }

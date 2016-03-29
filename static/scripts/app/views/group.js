@@ -7,9 +7,10 @@ define([
     'app/views/group-repo',
     'app/views/add-group-repo',
     'app/views/group-members',
+    'app/views/group-discussions',
     'app/views/group-settings'
 ], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
-    AddGroupRepoView, GroupMembersView, GroupSettingsView) {
+    AddGroupRepoView, GroupMembersView, GroupDiscussionsView, GroupSettingsView) {
     'use strict';
 
     var GroupView = Backbone.View.extend({
@@ -22,6 +23,7 @@ define([
             'click #group-settings-icon': 'toggleSettingsPanel',
             'click #group-members-icon': 'toggleMembersPanel',
             'click #group-wiki-icon': 'showGroupWiki',
+            'click #group-discussions-icon': 'toggleDiscussionsPanel',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
             'click .by-time': 'sortByTime'
@@ -45,6 +47,9 @@ define([
 
             this.membersView = new GroupMembersView();
             this.settingsView = new GroupSettingsView({
+                groupView: this
+            });
+            this.discussionsView = new GroupDiscussionsView({
                 groupView: this
             });
         },
@@ -81,7 +86,7 @@ define([
             }
         },
 
-        renderGroupTop: function() {
+        renderGroupTop: function(options) {
             var _this = this;
             var $groupTop = $('#group-top');
             $.ajax({
@@ -94,6 +99,11 @@ define([
                 success: function (data) {
                     _this.group = data;
                     $groupTop.html(_this.groupTopTemplate(data));
+                    if (options) {
+                        if (options.showDiscussions) {
+                            _this.showDiscussions();
+                        }
+                    }
                 },
                 error: function(xhr) {
                     var err_msg;
@@ -107,11 +117,11 @@ define([
             });
         },
 
-        showRepoList: function(group_id) {
+        showRepoList: function(group_id, options) {
             this.group_id = group_id;
             this.dirView.hide();
             this.$emptyTip.hide();
-            this.renderGroupTop();
+            this.renderGroupTop(options);
             this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
@@ -236,6 +246,19 @@ define([
                 this.membersView.hide();
             } else {
                 this.showMembers();
+            }
+        },
+
+        showDiscussions: function() {
+            this.discussionsView.show({'group_id': this.group_id});
+        },
+
+        toggleDiscussionsPanel: function() {
+            var panel_id = this.discussionsView.el.id;
+            if ($('#' + panel_id + ':visible').length) { // the panel is shown
+                this.discussionsView.hide();
+            } else {
+                this.showDiscussions();
             }
         }
 

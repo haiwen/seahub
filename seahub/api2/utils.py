@@ -33,6 +33,10 @@ from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
 from seahub.utils.paginator import Paginator
 from seahub.utils.file_types import IMAGE
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
+from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
+    get_default_avatar_url
+from seahub.profile.models import Profile
 
 
 def api_error(code, msg):
@@ -654,3 +658,23 @@ def api_repo_group_folder_perm_check(func):
         return func(view, request, repo_id, *args, **kwargs)
 
     return _decorated
+
+def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
+    try:
+        avatar_url, is_default, date_uploaded = api_avatar_url(email, avatar_size)
+    except Exception as e:
+        logger.error(e)
+        avatar_url = get_default_avatar_url()
+
+    p = Profile.objects.get_profile_by_user(email)
+    if p:
+        login_id = p.login_id if p.login_id else ''
+    else:
+        login_id = ''
+
+    return {
+        "email": email,
+        "name": email2nickname(email),
+        "avatar_url": avatar_url,
+        "login_id": login_id
+    }

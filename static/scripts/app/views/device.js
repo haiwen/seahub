@@ -42,16 +42,9 @@ define([
                 data['synced_repos_length'] = 0;
             }
 
-            // convert to human readable time
-            var now = new Date(),
-                last_accessed = Moment(data['last_accessed']);
-
+            var last_accessed = Moment(data['last_accessed']);
             data['time'] = last_accessed.format('LLLL');
-            if (last_accessed - now > 0) {
-                data['time_from_now'] = gettext("Just now");
-            } else {
-                data['time_from_now'] = last_accessed.fromNow();
-            }
+            data['time_from_now'] = Common.getRelativeTimeStr(last_accessed);
 
             this.$el.html(this.template(data));
 

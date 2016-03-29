@@ -714,7 +714,7 @@
         <% } %>
         <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
         <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
-        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}"></span>
+        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></span>
     </div>
 </div>
 </script>
@@ -974,10 +974,27 @@
     <% } %>
 </script>
 <script type="text/template" id="group-member-tmpl">
-    <img src="<%= avatar_url %>" alt="" width="32" class="avatar fleft" />
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="txt">
         <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
+    </div>
+</script>
+
+<script type="text/template" id="group-discussion-tmpl">
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+    <div class="msg-body">
+        <div class="ovhd">
+            <div class="msg-ops fright vh">
+                <span class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}"></span>
+                <% if (can_delete_msg) { %>
+                <span class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}"></span>
+                <% } %>
+            </div>
+            <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
+            <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
+        </div>
+        <div class="msg-content"><%= content_marked %></div>
     </div>
 </script>
 

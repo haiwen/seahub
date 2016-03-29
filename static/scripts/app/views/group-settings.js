@@ -52,7 +52,7 @@ define([
             this.$listContainer.hide();
 
             // the user's role in this group
-            this.is_owner = false,
+            this.is_owner = false;
             this.is_admin = false;
 
             if (app.pageOptions.username == this.group.owner) {

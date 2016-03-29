@@ -21,9 +21,10 @@ define([
             'shared-libs/': 'showSharedRepos',
             'shared-libs/lib/:repo_id(/*path)': 'showSharedRepoDir',
             'groups/': 'showGroups',
-            'group/:group_id/': 'showGroupRepos',
+            'group/:group_id/': 'showGroup',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
             'group/:group_id/members/': 'showGroupMembers',
+            'group/:group_id/discussions/': 'showGroupDiscussions',
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
             'common/lib/:repo_id(/*path)': 'showCommonDir',
@@ -152,9 +153,9 @@ define([
             });
         },
 
-        showGroupRepos: function(group_id) {
+        showGroup: function(group_id, options) {
             this.switchCurrentView(this.groupView);
-            this.groupView.showRepoList(group_id);
+            this.groupView.showRepoList(group_id, options);
             this.sideNavView.setCurTab('group', {
                 'cur_group_tab': '',
                 'cur_group_id': group_id
@@ -176,8 +177,12 @@ define([
         },
 
         showGroupMembers: function(group_id) {
-            this.showGroupRepos(group_id);
+            this.showGroup(group_id);
             this.groupView.showMembers();
+        },
+
+        showGroupDiscussions: function(group_id) {
+            this.showGroup(group_id, {showDiscussions: true});
         },
 
         showOrgRepos: function() {

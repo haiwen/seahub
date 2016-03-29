@@ -9,7 +9,9 @@
  * tags ..................reset styles of tags
  *
  * Helper
- * common class .......... common class
+ * common class ..........common class
+ *
+ * Widget
  *
  * (TODO: complete this TOC)
  *
@@ -135,6 +137,7 @@
 .sf2-icon-plus:before { content: "\e027"; }
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
+.sf2-icon-reply:before { content: "\e02a"; }
 
 /******* tags **********/
 html { background:#fff; }
@@ -504,6 +507,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 .avatar {
     border-radius:3px;
+}
+.avatar-circle {
+    border-radius:1000px;
 }
 .empty-tips {
     padding: 30px 40px;
@@ -1194,9 +1200,6 @@ textarea:-moz-placeholder {/* for FF */
 .user-item {
     margin:5px 0;
 }
-.user-item .avatar {
-    border-radius:1000px;
-}
 .user-item .txt {
     margin-left:40px;
 }
@@ -1224,6 +1227,53 @@ textarea:-moz-placeholder {/* for FF */
     background:#feaa7c;
     text-decoration:none;
     color:#fff;
+}
+/**** discussions/comments ****/
+.msg {
+    padding:10px;
+}
+.msg-body {
+    margin-left:44px;
+}
+.msg-op {
+    color:#aaa;
+    font-size:18px;
+}
+.msg-username {
+    display:inline-block;
+    vertical-align:bottom;
+    max-width:30%;
+}
+.msg-time {
+    font-size:11px;
+    color:#999;
+    margin-left:5px;
+}
+.msg-form {
+    padding:10px;
+    background:#f2f2f2;
+    border-top: 1px solid #c9c9c9;
+}
+.msg-input {
+    width:350px;
+    padding:3px 5px;
+}
+.msg-form .submit {
+    color:#fff;
+    background:#4abb49;
+    border:1px solid #5cb25b;
+}
+.msg-form .submit:hover {
+    background:#55ab22;
+}
+.no-discussion-tip {
+    text-align:center;
+    margin:10px 0;
+}
+.load-more-discussion {
+    color:#eb8205;
+    cursor:pointer;
+    text-align:center;
 }
 /********** container ***********/
 #main, #footer {
@@ -2274,250 +2324,8 @@ textarea:-moz-placeholder {/* for FF */
 .member .name {
     vertical-align:middle;
 }
-
 /* notification admin */
 .cur-note { color: red; font-size: 75%; }
-
-/* group message and replies */
-.msg-panel {
-    width:640px;
-    margin-top:10px;
-}
-.msg-form .avatar,
-.msg .avatar {
-    border-radius:1000px;
-}
-#personal-msg-panel {
-    margin-top:22px;
-}
-.msg-num {
-    font-size:12px;
-    color:#333;
-}
-.msg-form {
-    padding:10px;
-    background:#f2f2f2;
-    border-radius:3px;
-    margin:0 0 22px 64px;
-    position:relative;
-}
-#send-msg-form {
-    padding:0;
-    background:transparent;
-    margin:0;
-}
-.msg-form .avatar {
-    position:absolute;
-    left:-64px;
-    top:-1px;
-}
-#send-msg-form .avatar {
-    border-radius:3px;
-    position:static;
-}
-.msg-form .ops {
-    text-align:right;
-    margin-top:6px;
-}
-.msg-form .add-file {
-    margin:9px 10px 0 3px;
-}
-#selected-files .item {
-    text-align:left;
-    padding:2px 3px;
-}
-#selected-files .rm {
-    margin-right:3px;
-}
-#selected-files .rm,
-.msg-form .add-file {
-    cursor:pointer;
-    opacity:0.8;
-}
-#selected-files .rm:hover,
-.msg-form .add-file:hover {
-    opacity:1;
-}
-.msg-input {
-    width:544px;
-    padding:3px 5px;
-    height:25px;
-    vertical-align:top;
-}
-.personal-msg-panel .msg-input {
-    width:480px;
-}
-.say {
-    position:absolute;
-    width:10px;
-    height:21px;
-    background:transparent url('../img/say.png') no-repeat scroll left top;
-    left:-10px;
-    top:20px;
-}
-.msg {
-    word-wrap: break-word;
-    padding:1px 0; /* to fix 'top border missing' when only 1 discussion & no scrollbar in chrome */
-    margin:15px 0 20px;
-}
-.msg .txt {
-    margin-left:64px;
-}
-.personal-msg-panel .msg-form,
-.personal-msg-panel .msg .txt {
-    margin-right:64px;
-}
-.msg a {
-    font-weight: normal;
-}
-.msg-main {
-    position:relative;
-    padding:16px;
-    background:#fff;
-    border:1px solid #ccc;
-    border-top-left-radius:3px;
-    border-top-right-radius:3px;
-}
-.personal-msg-panel .msg-main {
-    border-radius:3px;
-}
-.msg-main .say {
-    background-image:url('../img/say_white.png');
-}
-.msg-received .say {
-    background-image:url('../img/say_white_reverse.png');
-    left:auto;
-    right:-10px;
-}
-.msg-attachment {
-    padding-top:10px;
-    border-top:1px solid #e9e9e9;
-    margin-top:12px;
-}
-.msg-attachment .img-cont {
-    display:block;
-    text-align:center;
-    line-height:0;
-    background:#fcfcfc;
-    padding:5px 0;
-}
-.msg-attachment .img {
-    width:auto;
-    height:auto;
-    max-width:100%;
-    max-height:300px;
-}
-.msg-hd .author {
-    font-weight:bold;
-}
-.msg .time {
-    font-size:11px;
-    color:#999;
-    margin-left:5px;
-}
-.msg .op {
-    font-size:11px;
-    color:#999;
-    cursor:pointer;
-    margin-left:5px;
-}
-.msg-hd .group,
-.discussion-to-grp .time {
-    color: #808080;
-}
-.msg-hd .group {
-    margin-left:30px;
-}
-.msg-con {
-    margin-bottom:0;
-}
-.msg-op {
-    color:#444;
-    padding:10px 16px;
-    background:#f8f8f8;
-    border:1px solid #d5d5d5;
-    border-top:0;
-    border-bottom-left-radius:3px;
-    border-bottom-right-radius:3px;
-}
-.replies-op {
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:10px;
-    position:relative;
-}
-.unfold-replies,
-.fold-replies {
-    padding-right:14px;
-    background:transparent scroll no-repeat right center;
-}
-.unfold-replies {
-    background-image:url('../img/unfold.png');
-}
-.fold-replies {
-    background-image:url('../img/fold.png');
-}
-.unfold-replies-nobg {
-    background-image:none;
-}
-.replies-loading-icon {
-    position:absolute;
-    top:0;
-    width:12px;
-    height:12px;
-    display:none;
-}
-.msg .at {
-    color:#808;
-}
-.reply {
-    line-height:1.2;
-    margin-bottom:15px;
-}
-.reply .txt {
-    margin-left:38px;
-}
-.reply-con {
-    font-size:12px;
-    line-height:1.3;
-    margin:4px 0 0;
-}
-.reply-input {
-    width:530px;
-    padding:5px;
-    height:20px;
-    vertical-align:top;
-}
-.msg-form .submit,
-.msg-form .cancel,
-.reply-submit,
-.reply-cancel {
-    padding:5px 15px;
-    background:#fff;
-    margin-top:6px;
-}
-.msg-form .submit {
-    color:#fff;
-    background:#4abb49;
-    border:1px solid #5cb25b;
-}
-.msg-form .submit:hover {
-    background:#55ab22;
-}
-.msg-form .cancel {
-    margin-left:6px;
-}
-#msg-upward {
-    position:fixed;
-    font-weight:normal;
-}
-#msg-upward:hover {
-    text-decoration:none;
-}
-#msgs-more {
-    width:576px;
-    margin-left:64px;
-}
 /*file upload*/
 .files-add {
     position: relative;
@@ -3599,6 +3407,18 @@ img.thumbnail {
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
+}
+#group-discussions {
+    width:440px;
+    position:absolute;
+    top:77px;
+    right:0;
+}
+#group-discussions .outer-caret {
+    right:30px;
+}
+#group-discussions .popover-con {
+    padding:0 0;
 }
 /****** grid view *****/
 /* view mode */
