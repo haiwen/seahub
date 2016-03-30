@@ -94,18 +94,6 @@ class Command(BaseCommand):
         notice.grp_msg = message
         return notice
 
-    def format_grpmsg_reply(self, notice):
-        d = notice.grpmsg_reply_detail_to_dict()
-        message = d.get('reply_msg')
-        grpmsg_topic = d.get('grpmsg_topic')
-
-        notice.group_msg_reply_url = reverse('msg_reply_new')
-        notice.notice_from = escape(email2nickname(d['reply_from']))
-        notice.avatar_src = self.get_avatar_src(d['reply_from'])
-        notice.grp_reply_msg = message
-        notice.grpmsg_topic = grpmsg_topic
-        return notice
-
     def format_repo_share_msg(self, notice):
         d = json.loads(notice.detail)
 
@@ -228,9 +216,6 @@ class Command(BaseCommand):
 
                 elif notice.is_group_msg():
                     notice = self.format_group_message(notice)
-
-                elif notice.is_grpmsg_reply():
-                    notice = self.format_grpmsg_reply(notice)
 
                 elif notice.is_repo_share_msg():
                     notice = self.format_repo_share_msg(notice)

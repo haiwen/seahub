@@ -49,7 +49,7 @@ from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_commit_desc, translate_seahub_time, translate_commit_desc_escape
 from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
-from seahub.group.signals import grpmsg_added, grpmsg_reply_added
+from seahub.group.signals import grpmsg_added
 from seahub.group.views import group_check, remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \

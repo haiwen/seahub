@@ -40,7 +40,6 @@ class NotificationForm(ModelForm):
 MSG_TYPE_GROUP_MSG = 'group_msg'
 MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
-MSG_TYPE_GRPMSG_REPLY = 'grpmsg_reply'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_USER_MESSAGE = 'user_message'
@@ -57,10 +56,6 @@ def repo_share_msg_to_json(share_from, repo_id):
 def group_msg_to_json(group_id, msg_from, message):
     return json.dumps({'group_id': group_id, 'msg_from': msg_from,
                        'message': message})
-
-def grpmsg_reply_to_json(msg_id, reply_from, grpmsg_topic, reply_msg):
-    return json.dumps({'msg_id': msg_id, 'reply_from': reply_from,
-                       'grpmsg_topic': grpmsg_topic, 'reply_msg': reply_msg})
 
 def user_msg_to_json(message, msg_from):
     return json.dumps({'message': message, 'msg_from': msg_from})
@@ -165,27 +160,6 @@ class UserNotificationManager(models.Manager):
             except UserNotification.InvalidDetailError:
                 continue
 
-    def seen_group_msg_reply_notice(self, to_user, msg_id=None):
-        """Mark all group message replies of a user as seen.
-
-        Arguments:
-        - `self`:
-        - `to_user`:
-        - `msg_id`:
-        """
-        if not msg_id:
-            super(UserNotificationManager, self).filter(
-                to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY,
-                seen=False).update(seen=True)
-        else:
-            notifs = super(UserNotificationManager, self).filter(
-                to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY,
-                seen=False)
-            for n in notifs:
-                d = n.grpmsg_reply_detail_to_dict()
-                if msg_id == d['msg_id']:
-                    n.seen = True
-                    n.save()
 
     def seen_user_msg_notices(self, to_user, from_user):
         """Mark priv message notices of a user as seen.
@@ -206,42 +180,6 @@ class UserNotificationManager(models.Manager):
             to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG,
             detail=str(group_id)).delete()
         
-    def add_group_msg_reply_notice(self, to_user, detail):
-        """Added group message reply notice for user.
-        
-        Arguments:
-        - `self`:
-        - `to_user`:
-        - `msg_id`:
-        """
-        return self._add_user_notification(to_user,
-                                           MSG_TYPE_GRPMSG_REPLY, detail)
-
-    def get_group_msg_reply_notices(self, to_user, seen=None):
-        """Get all group message replies of a user.
-        
-        Arguments:
-        - `self`:
-        - `to_user`:
-        - `msg_id`:
-        """
-        qs = super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY)
-        if seen is not None:
-            qs = qs.filter(seen=seen)
-        return qs
-
-    def remove_group_msg_reply_notice(self, to_user):
-        """Mark all group message replies of a user as seen.
-        
-        Arguments:
-        - `self`:
-        - `to_user`:
-        - `msg_id`:
-        """
-        super(UserNotificationManager, self).filter(
-            to_user=to_user, msg_type=MSG_TYPE_GRPMSG_REPLY).delete()
-
     def add_group_join_request_notice(self, to_user, detail):
         """
         
@@ -339,14 +277,6 @@ class UserNotification(models.Model):
         """
         return self.msg_type == MSG_TYPE_GROUP_MSG
 
-    def is_grpmsg_reply(self):
-        """Check whether is a group message reply notification.
-        
-        Arguments:
-        - `self`:
-        """
-        return self.msg_type == MSG_TYPE_GRPMSG_REPLY
-        
     def is_file_uploaded_msg(self):
         """
         
@@ -419,40 +349,6 @@ class UserNotification(models.Model):
                     return {'group_id': group_id, 'msg_from': msg_from}
             else:
                 raise self.InvalidDetailError, 'Wrong detail format of group message'
-
-    def grpmsg_reply_detail_to_dict(self):
-        """Parse group message reply detail, returns dict contains
-        ``msg_id``, ``reply_from`` and ``reply_msg``.
-
-        NOTE: ``reply_from`` and ``reply_msg`` may be ``None``.
-        
-        Arguments:
-        - `self`:
-
-        Raises ``InvalidDetailError`` if detail field can not be parsed.
-        """
-        assert self.is_grpmsg_reply()
-
-        try:
-            detail = json.loads(self.detail)
-        except ValueError:
-            raise self.InvalidDetailError, 'Wrong detail format of group message reply'
-        else:
-            if isinstance(detail, int): # Compatible with existing records
-                msg_id = detail
-                reply_from = None
-                reply_msg = None
-                return {'msg_id': msg_id, 'reply_from': reply_from,
-                        'reply_msg': reply_msg}
-            elif isinstance(detail, dict):
-                msg_id = detail['msg_id']
-                reply_from = detail['reply_from']
-                reply_msg = detail.get('reply_msg')
-                grpmsg_topic = detail.get('grpmsg_topic')
-                return {'msg_id': msg_id, 'reply_from': reply_from,
-                        'grpmsg_topic': grpmsg_topic, 'reply_msg': reply_msg}
-            else:
-                raise self.InvalidDetailError, 'Wrong detail format of group message reply'
 
     def user_message_detail_to_dict(self):
         """Parse user message detail, returns dict contains ``message`` and
@@ -629,64 +525,6 @@ class UserNotification(models.Model):
         else:
             return None
 
-    def format_grpmsg_reply_title(self):
-        """
-        
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.grpmsg_reply_detail_to_dict()
-        except self.InvalidDetailError as e:
-            return _(u"Internal error")
-
-        reply_from = d.get('reply_from')
-
-        if reply_from is None:
-            msg = _(u"One <a href='%(href)s'>group discussion</a> has a new reply.") % {
-                'href': reverse('msg_reply_new'),
-                }
-        else:
-            msg = _(u"%(user)s replied the <a href='%(href)s'>group discussion</a>.") % {
-                'user': escape(email2nickname(reply_from)),
-                'href': reverse('msg_reply_new'),
-                }
-        return msg
-
-    def format_grpmsg_reply_topic(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.grpmsg_reply_detail_to_dict()
-        except self.InvalidDetailError:
-            return _(u"Internal error")
-
-        grpmsg_topic = d.get('grpmsg_topic')
-        if grpmsg_topic is not None:
-            return grpmsg_topic
-        else:
-            return None
-
-    def format_grpmsg_reply_detail(self):
-        """
-
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = self.grpmsg_reply_detail_to_dict()
-        except self.InvalidDetailError:
-            return _(u"Internal error")
-
-        reply_msg = d.get('reply_msg')
-        if reply_msg is not None:
-            return reply_msg
-        else:
-            return None
-
     def format_group_join_request(self):
         """
         
@@ -751,8 +589,7 @@ from django.dispatch import receiver
 
 from seahub.signals import upload_file_successful
 from seahub.group.models import GroupMessage, MessageReply
-from seahub.group.signals import grpmsg_added, grpmsg_reply_added, \
-    group_join_request, add_user_to_group
+from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.message.models import UserMessage
 from seahub.message.signals import user_message_sent
@@ -827,36 +664,6 @@ def grpmsg_added_cb(sender, **kwargs):
 
     detail = group_msg_to_json(group_id, from_email, message)
     UserNotification.objects.bulk_add_group_msg_notices(notify_members, detail)
-
-@receiver(grpmsg_reply_added)
-def grpmsg_reply_added_cb(sender, **kwargs):
-    msg_id = kwargs['msg_id']
-    reply_from_email = kwargs['from_email']
-    reply_msg = kwargs['reply_msg']
-    grpmsg_topic = kwargs['grpmsg_topic']
-    try:
-        group_msg = GroupMessage.objects.get(id=msg_id)
-    except GroupMessage.DoesNotExist:
-        group_msg = None
-
-    if group_msg is None:
-        return
-
-    msg_replies = MessageReply.objects.filter(reply_to=group_msg)
-    # notify all people replied this group message
-    notice_users = set([ x.from_email for x in msg_replies \
-                             if x.from_email != reply_from_email])
-
-    if group_msg.from_email != reply_from_email:
-        # also notify the person who posts the group message
-        notice_users.add(group_msg.from_email)
-
-    detail = grpmsg_reply_to_json(msg_id, reply_from_email,
-                                  grpmsg_topic, reply_msg)
-
-    for user in notice_users:
-        UserNotification.objects.add_group_msg_reply_notice(to_user=user,
-                                                            detail=detail)
 
 @receiver(group_join_request)
 def group_join_request_cb(sender, **kwargs):
