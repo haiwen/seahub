@@ -33,7 +33,7 @@ from decorators import group_staff_required
 from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
 from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
     GroupAddForm, GroupJoinMsgForm, WikiCreateForm, BatchAddMembersForm
-from signals import grpmsg_reply_added, group_join_request
+from signals import group_join_request
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.models import FileDiscuss

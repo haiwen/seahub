@@ -68,16 +68,6 @@ class Command(BaseCommand):
         else:
             return ''
 
-    def format_priv_file_share_msg(self, notice):
-        d = json.loads(notice.detail)
-        priv_share_token = d['priv_share_token']
-        notice.priv_shared_file_url = reverse('view_priv_shared_file',
-                                              args=[priv_share_token])
-        notice.notice_from = escape(email2nickname(d['share_from']))
-        notice.priv_shared_file_name = d['file_name']
-        notice.avatar_src = self.get_avatar_src(d['share_from'])
-        return notice
-
     def format_user_message(self, notice):
         d = notice.user_message_detail_to_dict()
         msg_from = d['msg_from']
@@ -102,18 +92,6 @@ class Command(BaseCommand):
         notice.group_name = group.group_name
         notice.avatar_src = self.get_avatar_src(d['msg_from'])
         notice.grp_msg = message
-        return notice
-
-    def format_grpmsg_reply(self, notice):
-        d = notice.grpmsg_reply_detail_to_dict()
-        message = d.get('reply_msg')
-        grpmsg_topic = d.get('grpmsg_topic')
-
-        notice.group_msg_reply_url = reverse('msg_reply_new')
-        notice.notice_from = escape(email2nickname(d['reply_from']))
-        notice.avatar_src = self.get_avatar_src(d['reply_from'])
-        notice.grp_reply_msg = message
-        notice.grpmsg_topic = grpmsg_topic
         return notice
 
     def format_repo_share_msg(self, notice):
@@ -233,17 +211,11 @@ class Command(BaseCommand):
                 if notice.to_user != to_user:
                     continue
 
-                if notice.is_priv_file_share_msg():
-                    notice = self.format_priv_file_share_msg(notice)
-
                 elif notice.is_user_message():
                     notice = self.format_user_message(notice)
 
                 elif notice.is_group_msg():
                     notice = self.format_group_message(notice)
-
-                elif notice.is_grpmsg_reply():
-                    notice = self.format_grpmsg_reply(notice)
 
                 elif notice.is_repo_share_msg():
                     notice = self.format_repo_share_msg(notice)

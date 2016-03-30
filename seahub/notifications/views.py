@@ -152,17 +152,10 @@ def add_notice_from_info(notices):
             else:
                 notice.default_avatar_url = default_avatar_url
 
-        elif notice.is_grpmsg_reply():
-            d = notice.grpmsg_reply_detail_to_dict()
-            if d.get('reply_from') is not None:
-                notice.msg_from = d.get('reply_from')
-            else:
-                notice.default_avatar_url = default_avatar_url
-
         elif notice.is_file_uploaded_msg():
             notice.default_avatar_url = default_avatar_url
 
-        elif notice.is_repo_share_msg() or notice.is_priv_file_share_msg():
+        elif notice.is_repo_share_msg():
             try:
                 d = json.loads(notice.detail)
                 notice.msg_from = d['share_from']

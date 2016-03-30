@@ -6,14 +6,12 @@ from django.views.generic import TemplateView
 from seahub.views import *
 from seahub.views.file import view_repo_file, view_history_file, view_trash_file,\
     view_snapshot_file, file_edit, view_shared_file, view_file_via_shared_dir,\
-    text_diff, view_priv_shared_file, view_raw_file, view_raw_shared_file, \
+    text_diff, view_raw_file, view_raw_shared_file, \
     download_file, view_lib_file, file_access
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
 from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
-from share.views import gen_private_file_share, rm_private_file_share, \
-    save_private_file_share
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
@@ -96,11 +94,7 @@ urlpatterns = patterns(
     url(r'^#groups/', fake_view, name='group_list'),
     url(r'^#group/(?P<group_id>\d+)/settings/$', fake_view, name='group_manage'),
 
-    ### share file/dir, upload link ###
-#    url(r'^repo/(?P<repo_id>[-0-9a-f]{36})/privshare/$', gen_private_file_share, name='gen_private_file_share'),
-#    url(r'^s/f/(?P<token>[a-f0-9]{10})/$', view_priv_shared_file, name="view_priv_shared_file"),
-#    url(r'^s/f/(?P<token>[a-f0-9]{10})/rm/$', rm_private_file_share, name="rm_private_file_share"),
-#    url(r'^s/f/(?P<token>[a-f0-9]{10})/save/$', save_private_file_share, name='save_private_file_share'),
+    ### share/upload link ###
     url(r'^f/(?P<token>[a-f0-9]{10})/$', view_shared_file, name='view_shared_file'),
     url(r'^f/(?P<token>[a-f0-9]{10})/raw/(?P<obj_id>[0-9a-f]{40})/(?P<file_name>.*)', view_raw_shared_file, name='view_raw_shared_file'),
     url(r'^d/(?P<token>[a-f0-9]{10})/$', view_shared_dir, name='view_shared_dir'),

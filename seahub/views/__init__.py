@@ -40,8 +40,7 @@ from seahub.base.models import UserStarredFiles, ClientLoginToken
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
-from seahub.share.models import FileShare, PrivateFileDirShare, \
-    UploadLinkShare
+from seahub.share.models import FileShare, UploadLinkShare
 from seahub.utils import render_permission_error, render_error, list_to_string, \
     get_fileserver_root, gen_shared_upload_link, is_org_context, \
     gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \

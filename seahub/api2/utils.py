@@ -92,8 +92,6 @@ def get_groups(email):
             if gid not in grpmsgs:
                 continue
             grpmsgs[gid] = grpmsgs[gid] + 1
-        elif n.is_grpmsg_reply():
-            replynum = replynum + 1
 
     for g in joined_groups:
         msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
@@ -120,19 +118,6 @@ def get_msg_group_id(msg_id):
 
     return msg.group_id
 
-def get_msg_group_id_and_last_reply(msg_id):
-    lastreply = None
-    try:
-        msg = GroupMessage.objects.get(id=msg_id)
-    except GroupMessage.DoesNotExist:
-        return None, None
-
-    replies = MessageReply.objects.filter(reply_to=msg).order_by('-timestamp')[:1]
-    if len(replies) >= 1:
-        lastreply = replies[0].message
-
-    return msg.group_id, lastreply
-
 def get_group_and_contacts(email):
     group_json = []
     contacts_json = []
@@ -153,18 +138,6 @@ def get_group_and_contacts(email):
             except UserNotification.InvalidDetailError:
                 continue
             gmsgnums[gid] = gmsgnums.get(gid, 0) + 1
-        elif n.is_grpmsg_reply():
-            d = n.grpmsg_reply_detail_to_dict()
-            msg_id = d['msg_id']
-            if replies.get(msg_id, None):
-                replies[msg_id] = replies[msg_id] + 1
-            else:
-                replies[msg_id] = 1
-                d['mtime'] = get_timestamp(n.timestamp)
-                d['name'] = email2nickname(d['reply_from'])
-                d['group_id'],  d['lastmsg'] = get_msg_group_id_and_last_reply(msg_id)
-                replies_json.append(d)
-            replynum = replynum + 1
         elif n.is_user_message():
             msg_from = n.user_message_detail_to_dict()['msg_from']
             if msg_from not in contacts:

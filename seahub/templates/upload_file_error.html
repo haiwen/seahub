@@ -5,7 +5,7 @@
 <div class="narrow-panel">
     <h3>{% trans "Upload file" %} {% if filename %} {{ filename }} {% endif %} {% trans "to" %}
             {% for name, link in zipped %}
-            <a href="{% url 'view_common_lib_dir' repo.id link|urlencode|strip_slash %}">{{ name }}</a> /
+            <a href="{% url 'view_common_lib_dir' repo.id link|strip_slash %}">{{ name }}</a> /
             {% endfor %}
         {% trans "error: " %}
     </h3>
