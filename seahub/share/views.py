@@ -35,6 +35,7 @@ from seahub.utils import render_permission_error, string2list, render_error, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
     send_perm_audit_msg, get_origin_repo_info
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
+from seahub.profile.models import Profile
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -748,6 +749,8 @@ def send_shared_link(request):
 
         to_email_list = string2list(email)
         send_success, send_failed = [], []
+        # use contact_email, if present
+        username = Profile.objects.get_contact_email_by_user(request.user.username)
         for to_email in to_email_list:
             if not is_valid_email(to_email):
                 send_failed.append(to_email)
@@ -768,12 +771,12 @@ def send_shared_link(request):
                 c['extra_msg'] = extra_msg
 
             if REPLACE_FROM_EMAIL:
-                from_email = request.user.username
+                from_email = username
             else:
                 from_email = None  # use default from email
 
             if ADD_REPLY_TO_HEADER:
-                reply_to = request.user.username
+                reply_to = username
             else:
                 reply_to = None
 
@@ -869,6 +872,8 @@ def send_shared_upload_link(request):
 
         to_email_list = string2list(email)
         send_success, send_failed = [], []
+        # use contact_email, if present
+        username = Profile.objects.get_contact_email_by_user(request.user.username)
         for to_email in to_email_list:
             if not is_valid_email(to_email):
                 send_failed.append(to_email)
@@ -887,12 +892,12 @@ def send_shared_upload_link(request):
                 c['extra_msg'] = extra_msg
 
             if REPLACE_FROM_EMAIL:
-                from_email = request.user.username
+                from_email = username
             else:
                 from_email = None  # use default from email
 
             if ADD_REPLY_TO_HEADER:
-                reply_to = request.user.username
+                reply_to = username
             else:
                 reply_to = None
 
