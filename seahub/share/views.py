@@ -751,7 +751,7 @@ def send_shared_link(request):
         to_email_list = string2list(email)
         send_success, send_failed = [], []
         for to_email in to_email_list:
-            if not is_valid_username(to_email):
+            if not is_valid_email(to_email):
                 send_failed.append(to_email)
                 continue
 
@@ -979,7 +979,7 @@ def send_shared_upload_link(request):
         to_email_list = string2list(email)
         send_success, send_failed = [], []
         for to_email in to_email_list:
-            if not is_valid_username(to_email):
+            if not is_valid_email(to_email):
                 send_failed.append(to_email)
                 continue
             # Add email to contacts.
