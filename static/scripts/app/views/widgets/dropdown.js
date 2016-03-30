@@ -39,21 +39,6 @@ define([
             this.$el.on('click', '.js-dropdown-toggle', _.bind(this.toggleDropdown, this));
         },
 
-        _hideDropdown: function(e) {
-            var view = e.data.view;
-            var target = e.target || event.srcElement;
-            if (!view.$(view.popupClass).is(target)
-                && !view.$(view.popupClass).find('*').is(target)
-                && !view.$(view.toggleClass).is(target)) {
-                $(view.popupClass).addClass('hide');
-                view.rmHighlight();
-                $(document).off('click', view._hidePopup);
-                if (view.onPopupHide) {
-                    view.onPopupHide();
-                }
-            }
-        },
-
         hide: function() {
             app.ui.currentDropdown = null;
             this.$('.js-dropdown-content').addClass('hide');
