@@ -6,13 +6,11 @@ from dateutil.relativedelta import relativedelta
 from constance import config
 
 from django.core.urlresolvers import reverse
-from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
-from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.utils import timezone
 from django.utils.html import escape
@@ -29,17 +27,15 @@ from seahub.share.models import FileShare, PrivateFileDirShare, \
     UploadLinkShare, OrgFileShare
 from seahub.share.signals import share_repo_to_user_successful
 from seahub.auth.decorators import login_required, login_required_ajax
-from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check, require_POST
-from seahub.contacts.models import Contact
 from seahub.contacts.signals import mail_sended
 from seahub.signals import share_file_to_user_successful
 from seahub.views import is_registered_user, check_folder_permission
 from seahub.utils import render_permission_error, string2list, render_error, \
-    gen_token, gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
+    gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
-    is_valid_username, send_html_email, is_org_context, normalize_file_path, \
-    normalize_dir_path, send_perm_audit_msg, get_origin_repo_info
+    is_valid_username, is_valid_email, send_html_email, is_org_context, \
+    send_perm_audit_msg, get_origin_repo_info
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 
 # Get an instance of a logger
@@ -799,7 +795,7 @@ def send_shared_link(request):
                                     reply_to=reply_to)
 
                 send_success.append(to_email)
-            except Exception, e:
+            except Exception:
                 send_failed.append(to_email)
 
         if len(send_success) > 0:
@@ -1016,7 +1012,7 @@ def send_shared_upload_link(request):
                                 reply_to=reply_to)
 
                 send_success.append(to_email)
-            except Exception, e:
+            except Exception:
                 send_failed.append(to_email)
 
         if len(send_success) > 0:
