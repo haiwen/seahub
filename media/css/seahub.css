@@ -165,16 +165,28 @@ ol { padding-left:2em; }
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; }
 dd { margin-bottom:.8em; color:#222; }
-a { color:#eb8205; text-decoration:none; font-weight:bold; outline:none; }
+a {
+    color:#eb8205;
+    text-decoration:none;
+    font-weight:bold;
+}
 a.normal {font-weight: normal;}
-a:hover { color: #ff9933; text-decoration: underline; }
+a:focus, a:hover {
+    color: #ff9933;
+    text-decoration: underline;
+}
+a:focus {
+  outline: thin dotted;
+  outline: 5px auto -webkit-focus-ring-color;
+  outline-offset: -2px;
+}
 img { border:none; }
 textarea {
     overflow: auto; /* rm default vertical scrollbar in ie */
     resize: vertical; /* for drag */
     outline:0;
 }
-textarea, input { border: 1px solid #ddd; }
+textarea, input { border: 1px solid #ccc; }
 input { height:22px; margin:3px 0; outline:0; }
 input, button { display:inline-block;/*for ie*/ }
 input[type=submit],
@@ -220,6 +232,10 @@ input[type=radio] {
     height:auto;
     border:0;/*for ie*/
 }
+input:focus {
+  border-color: #66afe9;
+  outline: none;
+}
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {/*for input type="number" in chrome: to hide up/download arrow*/
     -webkit-appearance: none;
@@ -229,6 +245,25 @@ input::-moz-focus-inner,
 button::-moz-focus-inner {/*Remove button padding in FF*/
     border: 0;
     padding: 0;
+}
+input[type=submit],
+input.submit,
+button.submit {
+    margin-top:8px;
+}
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover,
+button:hover,
+.btn-link:hover,
+.fileinput-button:hover {
+    cursor:pointer;
+    background:#fff;
+}
+input[type="file"] {
+    border:none;
+    height:24px;
+    line-height:24px;
 }
 ::-webkit-scrollbar {
     height: 9px;
@@ -259,25 +294,6 @@ button::-moz-focus-inner {/*Remove button padding in FF*/
     border-radius: 5px;
     display: block;
 }
-input[type=submit],
-input.submit,
-button.submit {
-    margin-top:8px;
-}
-input[type=submit]:hover,
-input[type=reset]:hover,
-input[type=button]:hover,
-button:hover,
-.btn-link:hover,
-.fileinput-button:hover {
-    cursor:pointer;
-    background:#fff;
-}
-input[type="file"] {
-    border:none;
-    height:24px;
-    line-height:24px;
-}
 label {
     display: inline-block;
     margin:4px 0px;
@@ -303,9 +319,6 @@ td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
 p { margin:0.5em 0; }
-:focus {/* to overwrite user agent stylesheet */
-    outline:none;
-}
 
 /********** common class ***********/
 .hl { background-color: #f8f8f8; }/*highlight*/
@@ -869,8 +882,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .new-narrow-panel .input {
     font-size:14px;
-    border-color:#c7c7c7;
-    box-shadow:inset 0 1px 1px #f1f1f1;
     margin:5px 0 20px;
 }
 /**** wide panel ****/ /* e.g. repo decrypt page */
