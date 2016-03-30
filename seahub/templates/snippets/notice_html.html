@@ -40,9 +40,6 @@
     {% elif notice.is_repo_share_msg %}
         <p class="brief">{{ notice.format_repo_share_msg|safe }}</p>
 
-    {% elif notice.is_priv_file_share_msg %}
-        <p class="brief">{{ notice.format_priv_file_share_msg|safe }}</p>
-
     {% elif notice.is_group_join_request %}
         <p class="brief">{{ notice.format_group_join_request|safe }}</p>
 

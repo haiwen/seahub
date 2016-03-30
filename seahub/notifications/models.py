@@ -43,7 +43,6 @@ MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_GRPMSG_REPLY = 'grpmsg_reply'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
-MSG_TYPE_PRIV_FILE_SHARE = 'priv_file_share'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
@@ -54,10 +53,6 @@ def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
 
 def repo_share_msg_to_json(share_from, repo_id):
     return json.dumps({'share_from': share_from, 'repo_id': repo_id})
-
-def priv_file_share_msg_to_json(share_from, file_name, priv_share_token):
-    return json.dumps({'share_from': share_from, 'file_name': file_name,
-                       'priv_share_token': priv_share_token})
 
 def group_msg_to_json(group_id, msg_from, message):
     return json.dumps({'group_id': group_id, 'msg_from': msg_from,
@@ -293,17 +288,6 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(to_user,
                                            MSG_TYPE_REPO_SHARE, detail)
 
-    def add_priv_file_share_msg(self, to_user, detail):
-        """Notify ``to_user`` that others shared a file to him/her.
-        
-        Arguments:
-        - `self`:
-        - `to_user`:
-        - `detail`:
-        """
-        return self._add_user_notification(to_user,
-                                           MSG_TYPE_PRIV_FILE_SHARE, detail)
-
     def add_user_message(self, to_user, detail):
         """Notify ``to_user`` that others sent a message to him/her.
         
@@ -378,14 +362,6 @@ class UserNotification(models.Model):
         - `self`:
         """
         return self.msg_type == MSG_TYPE_REPO_SHARE
-
-    def is_priv_file_share_msg(self):
-        """
-        
-        Arguments:
-        - `self`:
-        """
-        return self.msg_type == MSG_TYPE_PRIV_FILE_SHARE
 
     def is_user_message(self):
         """
@@ -568,29 +544,7 @@ class UserNotification(models.Model):
             'repo_name': escape(repo.name),
             }
         return msg
-        
-    def format_priv_file_share_msg(self):
-        """
-        
-        Arguments:
-        - `self`:
-        """
-        try:
-            d = json.loads(self.detail)
-        except Exception as e:
-            logger.error(e)
-            return _(u"Internal error")
 
-        share_from = email2nickname(d['share_from'])
-        file_name = d['file_name']
-        priv_share_token = d['priv_share_token']
-
-        msg = _(u"%(user)s has shared a file named <a href='%(href)s'>%(file_name)s</a> to you.") % {
-            'user': escape(share_from),
-            'href': reverse('view_priv_shared_file', args=[priv_share_token]),
-            'file_name': escape(file_name),
-            }
-        return msg
     def format_user_message_title(self):
         """
 
@@ -795,7 +749,7 @@ class UserNotification(models.Model):
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 
-from seahub.signals import share_file_to_user_successful, upload_file_successful
+from seahub.signals import upload_file_successful
 from seahub.group.models import GroupMessage, MessageReply
 from seahub.group.signals import grpmsg_added, grpmsg_reply_added, \
     group_join_request, add_user_to_group
@@ -849,18 +803,6 @@ def add_share_repo_msg_cb(sender, **kwargs):
 
     detail = repo_share_msg_to_json(from_user, repo.id)
     UserNotification.objects.add_repo_share_msg(to_user, detail)
-
-@receiver(share_file_to_user_successful)
-def add_share_file_msg_cb(sender, **kwargs):
-    """Notify user when others share files to him/her.
-    """
-    priv_share = kwargs.get('priv_share_obj', None)
-    file_name = os.path.basename(priv_share.path)
-
-    assert priv_share is not None, 'Argument error'
-
-    detail = priv_file_share_msg_to_json(priv_share.from_user, file_name, priv_share.token)
-    UserNotification.objects.add_priv_file_share_msg(priv_share.to_user, detail)
 
 @receiver(user_message_sent)
 def add_user_message_cb(sender, **kwargs):

@@ -46,23 +46,6 @@ def get_repo_size(repo_id):
 def is_password_set(repo_id, username):
     return seafile_api.is_password_set(repo_id, username)
 
-# def check_dir_access_permission(username, repo_id, path):
-#     """Check user has permission to view the directory.
-#     1. check whether this directory is private shared.
-#     2. if failed, check whether the parent of this directory is private shared.
-#     """
-
-#     pfs = PrivateFileDirShare.objects.get_private_share_in_dir(username,
-#                                                                repo_id, path)
-#     if pfs is None:
-#         dirs = PrivateFileDirShare.objects.list_private_share_in_dirs_by_user_and_repo(username, repo_id)
-#         for e in dirs:
-#             if path.startswith(e.path):
-#                 return e.permission
-#         return None
-#     else:
-#         return pfs.permission
-
 def get_path_from_request(request):
     path = request.GET.get('p', '/')
     if path[-1] != '/':

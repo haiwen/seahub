@@ -46,8 +46,7 @@ from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.contacts.models import Contact
-from seahub.share.models import FileShare, PrivateFileDirShare, \
-    check_share_link_common
+from seahub.share.models import FileShare, check_share_link_common
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import show_delete_days, render_error, is_org_context, \
@@ -700,14 +699,12 @@ def view_snapshot_file(request, repo_id):
                               context_instance=RequestContext(request), )
 
 def _download_file_from_share_link(request, fileshare):
-    """Download shared file or private shared file.
+    """Download shared file.
     `path` need to be provided by frontend, if missing, use `fileshare.path`
     """
     next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
 
     username = request.user.username
-    if isinstance(fileshare, PrivateFileDirShare):
-        fileshare.username = fileshare.from_user
     shared_by = fileshare.username
     repo = get_repo(fileshare.repo_id)
     if not repo:
@@ -1497,89 +1494,6 @@ def office_convert_get_page(request, repo_id, commit_id, path, filename, cluster
         content_type = mimetypes.guess_type(filename)[0] or 'text/html'
     resp['Content-Type'] = content_type
     return resp
-
-###### private file/dir shares
-@login_required
-def view_priv_shared_file(request, token):
-    """View private shared file.
-    """
-    try:
-        pfs = PrivateFileDirShare.objects.get_priv_file_dir_share_by_token(token)
-    except PrivateFileDirShare.DoesNotExist:
-        raise Http404
-
-    repo_id = pfs.repo_id
-    repo = get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    username = request.user.username
-    if username != pfs.from_user and username != pfs.to_user:
-        raise Http404           # permission check
-
-    if request.GET.get('dl', '') == '1':
-        # download private shared file
-        return _download_file_from_share_link(request, pfs)
-
-    path = normalize_file_path(pfs.path)
-    obj_id = seafile_api.get_file_id_by_path(repo.id, path)
-    if not obj_id:
-        raise Http404
-
-    filename = os.path.basename(path)
-    filetype, fileext = get_file_type_and_ext(filename)
-    if filetype == VIDEO or filetype == AUDIO:
-        access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                               'view', username,
-                                                               use_onetime=False)
-    else:
-        access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
-                                                               'view', username)
-
-    raw_path = gen_file_get_url(access_token, filename)
-    inner_path = gen_inner_file_get_url(access_token, filename)
-
-    # get file content
-    ret_dict = {'err': '', 'file_content': '', 'encoding': '', 'file_enc': '',
-                'file_encoding_list': [], 'filetype': filetype}
-    fsize = get_file_size(repo.store_id, repo.version, obj_id)
-    exceeds_limit, err_msg = file_size_exceeds_preview_limit(fsize, filetype)
-    if exceeds_limit:
-        ret_dict['err'] = err_msg
-    else:
-        """Choose different approach when dealing with different type of file."""
-
-        if is_textual_file(file_type=filetype):
-            handle_textual_file(request, filetype, inner_path, ret_dict)
-        elif filetype == DOCUMENT:
-            handle_document(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == SPREADSHEET:
-            handle_spreadsheet(inner_path, obj_id, fileext, ret_dict)
-        elif filetype == PDF:
-            handle_pdf(inner_path, obj_id, fileext, ret_dict)
-
-    accessible_repos = get_unencry_rw_repos_by_user(request)
-    save_to_link = reverse('save_private_file_share', args=[pfs.token])
-
-    return render_to_response('shared_file_view.html', {
-            'repo': repo,
-            'obj_id': obj_id,
-            'path': path,
-            'file_name': filename,
-            'file_size': fsize,
-            'access_token': access_token,
-            'fileext': fileext,
-            'raw_path': raw_path,
-            'shared_by': pfs.from_user,
-            'err': ret_dict['err'],
-            'file_content': ret_dict['file_content'],
-            'encoding': ret_dict['encoding'],
-            'file_encoding_list':ret_dict['file_encoding_list'],
-            'filetype': ret_dict['filetype'],
-            'use_pdfjs':USE_PDFJS,
-            'accessible_repos': accessible_repos,
-            'save_to_link': save_to_link,
-            }, context_instance=RequestContext(request))
 
 @login_required
 def file_access(request, repo_id):

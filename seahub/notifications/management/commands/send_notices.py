@@ -68,16 +68,6 @@ class Command(BaseCommand):
         else:
             return ''
 
-    def format_priv_file_share_msg(self, notice):
-        d = json.loads(notice.detail)
-        priv_share_token = d['priv_share_token']
-        notice.priv_shared_file_url = reverse('view_priv_shared_file',
-                                              args=[priv_share_token])
-        notice.notice_from = escape(email2nickname(d['share_from']))
-        notice.priv_shared_file_name = d['file_name']
-        notice.avatar_src = self.get_avatar_src(d['share_from'])
-        return notice
-
     def format_user_message(self, notice):
         d = notice.user_message_detail_to_dict()
         msg_from = d['msg_from']
@@ -232,9 +222,6 @@ class Command(BaseCommand):
 
                 if notice.to_user != to_user:
                     continue
-
-                if notice.is_priv_file_share_msg():
-                    notice = self.format_priv_file_share_msg(notice)
 
                 elif notice.is_user_message():
                     notice = self.format_user_message(notice)

@@ -283,21 +283,6 @@ class FilesApiTest(ApiTestBase):
             self.assertRegexpMatches(res.text,
                 r'"http(.*)/files/[^/]+/%s"' % quote(dpath[1:]))
 
-    def test_share_dir(self):
-        with self.get_tmp_repo() as repo:
-            dpath, _ = self.create_dir(repo)
-            query = '?p=%s' % quote(dpath)
-            share_dir_url = urljoin(repo.dir_url, 'share/') + query
-            with self.get_tmp_user() as user:
-                data = {
-                    'emails': user.user_name,
-                    's_type': 'd',
-                    'path': '/',
-                    'perm': 'r'
-                }
-                res = self.post(share_dir_url, data=data)
-                self.assertEqual(res.text, u'{}')
-
     @pytest.mark.xfail
     def test_create_dir_with_parents(self):
         with self.get_tmp_repo() as repo:

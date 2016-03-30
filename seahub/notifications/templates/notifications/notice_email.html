@@ -43,9 +43,6 @@ You've got {{num}} new notices on {{ site_name }}:
                 {% elif notice.is_repo_share_msg %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user=notice.notice_from lib_url=notice.repo_url lib_name=notice.repo_name%}{{user}} has shared a library named <a href="{{url_base}}{{lib_url}}">{{lib_name}}</a> to you.{% endblocktrans %}</p>
 
-                {% elif notice.is_priv_file_share_msg %}
-                    <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with user=notice.notice_from file_url=notice.priv_shared_file_url file_name=notice.priv_shared_file_name %}{{user}} has shared a file named <a href="{{url_base}}{{file_url}}">{{file_name}}</a> to you.{% endblocktrans %}</p>
-
                 {% elif notice.is_user_message %}
                     <p style="line-height:1.5; margin:.2em 10px .2em 0;">{% blocktrans with msg_url=notice.user_msg_url user=notice.notice_from %}You have received a <a href="{{ url_base }}{{msg_url}}">new message</a> from {{user}}.{% endblocktrans %}</p>
                     {% if notice.user_msg %}
