@@ -6,9 +6,10 @@ define([
     'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/create-pub-repo',
-    'app/views/add-pub-repo'
+    'app/views/add-pub-repo',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    CreatePubRepoView, AddPubRepoView) {
+    CreatePubRepoView, AddPubRepoView, DropdownView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
@@ -29,26 +30,9 @@ define([
 
             this.dirView = options.dirView;
 
-            // show/hide 'add lib' menu
-            var $add_lib = $('#add-pub-lib'),
-                $add_lib_menu = $('#add-pub-lib-menu');
-            $add_lib.click(function() {
-                $add_lib_menu.toggleClass('hide');
-                $add_lib_menu.css({
-                    'top': $add_lib.position().top + $add_lib.outerHeight(),
-                    'right': 10 // align right with $add_lib
-                });
-            });
-            $('.item', $add_lib_menu).hover(
-                function() {
-                    $(this).css({'background':'#f3f3f3'});
-                },
-                function() {
-                    $(this).css({'background':'transparent'});
-                }
-            );
-            $(document).click(function(e) {
-                Common.closePopup(e, $add_lib_menu, $add_lib);
+            this.dropdown = new DropdownView({
+                el: this.$('.js-add-pub-lib-dropdown'),
+                right: '0px'
             });
         },
 
@@ -61,10 +45,14 @@ define([
 
         createRepo: function() {
             new CreatePubRepoView(this.repos);
+            this.dropdown.hide();
+            return false;
         },
 
         addRepo: function() {
             new AddPubRepoView(this.repos);
+            this.dropdown.hide();
+            return false;
         },
 
         addOne: function(repo, collection, options) {

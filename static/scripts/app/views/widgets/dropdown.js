@@ -35,8 +35,14 @@ define([
         toggleClass: '.js-dropdown-toggle',
         popupClass: '.js-dropdown-content',
 
+        defaultOptions: {
+            'left': '0px'
+        },
+
         initialize: function(options) {
             this.$el.on('click', '.js-dropdown-toggle', _.bind(this.toggleDropdown, this));
+            this.options = {};
+            _.extend(this.options, this.defaultOptions, options);
         },
 
         hide: function() {
@@ -45,7 +51,13 @@ define([
         },
 
         show: function() {
+            var $menu = this.$('.js-dropdown-content');
             app.ui.currentDropdown = this;
+            if (this.options.right) {
+                $menu.css('right', this.options.right);
+            } else {
+                $menu.css('left', this.options.left);
+            }
             this.$('.js-dropdown-content').removeClass('hide');
         },
 

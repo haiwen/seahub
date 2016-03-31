@@ -1229,9 +1229,9 @@ textarea:-moz-placeholder {/* for FF */
 }
 .dropdown-menu {
     position:absolute;
-    left:0px;
     background:#fff;
     padding:6px 1px;
+    margin:2px 0 0;
     border:1px solid rgba(34,36,38,.15);
     border-radius:3px;
     box-shadow:0 2px 3px 0 rgba(34,36,38,.15);
@@ -1414,9 +1414,6 @@ textarea:-moz-placeholder {/* for FF */
     height:29px;
     background:#fff;
     line-height:17px;
-}
-#add-pub-lib {
-   outline:none;
 }
 /* info-bar */
 #info-bar {
@@ -3534,6 +3531,5 @@ img.thumbnail {
 }
 /* devices */
 .device-libs-dropdown-menu {
-    left:-60px;
     min-width:200px;
 }
