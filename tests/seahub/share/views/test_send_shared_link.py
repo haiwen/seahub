@@ -6,7 +6,7 @@ from django.test import override_settings
 from seahub.test_utils import BaseTestCase
 
 
-class SendSharedUploadLinkTest(BaseTestCase):
+class SendSharedLinkTest(BaseTestCase):
     def setUp(self):
         mail.outbox = []
 
@@ -15,9 +15,11 @@ class SendSharedUploadLinkTest(BaseTestCase):
     def test_can_send(self):
         self.login_as(self.user)
 
-        resp = self.client.post(reverse('send_shared_upload_link'), {
+        resp = self.client.post(reverse('send_shared_link'), {
             'email': self.user.email,
-            'shared_upload_link': 'http://xxx',
+            'file_shared_link': 'http://xxx',
+            'file_shared_name': 'xxx',
+            'file_shared_type': 'd',
             'extra_msg': ''
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
@@ -33,9 +35,11 @@ class SendSharedUploadLinkTest(BaseTestCase):
     def test_can_send_from_replyto_rewrite(self):
         self.login_as(self.user)
 
-        resp = self.client.post(reverse('send_shared_upload_link'), {
+        resp = self.client.post(reverse('send_shared_link'), {
             'email': self.user.email,
-            'shared_upload_link': 'http://xxx',
+            'file_shared_link': 'http://xxx',
+            'file_shared_name': 'xxx',
+            'file_shared_type': 'd',
             'extra_msg': ''
         }, HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
