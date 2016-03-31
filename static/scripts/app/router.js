@@ -41,9 +41,7 @@ define([
             Common.initNoticePopup();
 
             this.sideNavView = new SideNavView();
-            app.ui = {
-                sideNavView: this.sideNavView
-            };
+            app.ui.sideNavView = this.sideNavView;
 
             this.dirView = new DirView();
 

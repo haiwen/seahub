@@ -41,7 +41,7 @@
         <div class="op-container">
             <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
-            <div class="dropdown js-dropdown">
+            <div class="dropdown dropdown-inline js-dropdown">
                 <span class="sf2-icon-caret-down more-op-icon op-icon vh js-dropdown-toggle" title="{% trans "More operations" %}"></span>
                 <ul class="hidden-op repo-hidden-op hide dropdown-menu js-dropdown-content">
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
@@ -1379,8 +1379,9 @@
     <td><%- device_name %></td>
     <td><%- last_login_ip %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
-    <td class="dropdown js-dropdown">
+    <td>
         <% if (synced_repos.length > 0) { %>
+        <div class="dropdown js-dropdown">
         <span class="js-dropdown-toggle cspt"><%- synced_repos_length %> <span class="icon-caret-down"></span></span>
         <div class="device-libs-dropdown-menu dropdown-menu js-dropdown-content hide">
             <ul>
@@ -1390,7 +1391,7 @@
             </ul>
         </div>
         <% } else { %>
-        <span class="cspt">0</span>
+        0
         <% } %>
     </td>
     <td>
