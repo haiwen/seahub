@@ -1276,7 +1276,7 @@ class RepoOwner(APIView):
 
         # transfer repo
         if org_id:
-            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
+            seafile_api.set_org_repo_owner(org_id, repo_id, new_owner)
         else:
             if ccnet_api.get_orgs_by_user(new_owner):
                 # can not transfer library to organization user %s.
