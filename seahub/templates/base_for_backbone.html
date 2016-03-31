@@ -2,11 +2,13 @@
 {% load compress %}
 {% load seahub_tags avatar_tags group_avatar_tags %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<title>{% block sub_title %}{% endblock %}{{ site_title }}</title>
+<title>{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
