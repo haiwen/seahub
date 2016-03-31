@@ -41,9 +41,9 @@
         <div class="op-container">
             <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
             <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
-            <div class="dropdown dropdown-inline js-dropdown">
-                <span class="sf2-icon-caret-down more-op-icon op-icon vh js-dropdown-toggle" title="{% trans "More operations" %}"></span>
-                <ul class="hidden-op repo-hidden-op hide dropdown-menu js-dropdown-content">
+            <div class="dropdown dropdown-inline">
+                <span class="sf2-icon-caret-down more-op-icon op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></span>
+                <ul class="hidden-op repo-hidden-op hide dropdown-menu">
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
@@ -1398,9 +1398,9 @@
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
     <td>
         <% if (synced_repos.length > 0) { %>
-        <div class="dropdown js-dropdown">
-            <a href="#" class="normal black js-dropdown-toggle"><%- synced_repos_length %> <span class="icon-caret-down"></span></a>
-            <ul class="device-libs-dropdown-menu dropdown-menu js-dropdown-content hide">
+        <div class="dropdown">
+            <a href="#" class="normal black dropdown-toggle"><%- synced_repos_length %> <span class="icon-caret-down"></span></a>
+            <ul class="device-libs-dropdown-menu dropdown-menu hide">
                 <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
                 <li><a href="#common/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
                 <% } %>

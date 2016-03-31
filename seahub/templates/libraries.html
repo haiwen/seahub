@@ -182,9 +182,9 @@
     <div class="hd">
         <h3 class="fleft">{% trans "Organization" %}</h3>
         {% if can_add_pub_repo %}
-        <div class="fright dropdown js-dropdown js-add-pub-lib-dropdown">
-            <button class="js-dropdown-toggle"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
-            <ul class="add-pub-lib-dropdown-menu dropdown-menu js-dropdown-content hide">
+        <div class="fright dropdown dropdown js-add-pub-lib-dropdown">
+            <button class="dropdown-toggle"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+            <ul class="add-pub-lib-dropdown-menu dropdown-menu dropdown-content hide">
                 <li><a class="op js-repo-rename share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
                 <li><a class="op js-repo-rename create-new" href="#">{% trans "Create a new library" %}</a></li>
             </ul>

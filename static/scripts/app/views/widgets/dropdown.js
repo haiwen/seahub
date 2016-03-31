@@ -19,8 +19,8 @@ define([
             return true;
         }
 
-        if (!view.$('.js-dropdown-content').is(target)
-            && !view.$('.js-dropdown-content').find('*').is(target))
+        if (!view.$('.dropdown-menu').is(target)
+            && !view.$('.dropdown-menu').find('*').is(target))
         {
             view.hide();
             if (app.ui.currentHighlightedItem) {
@@ -32,33 +32,30 @@ define([
 
     var DropdownView = Backbone.View.extend({
 
-        toggleClass: '.js-dropdown-toggle',
-        popupClass: '.js-dropdown-content',
-
         defaultOptions: {
             'left': '0px'
         },
 
         initialize: function(options) {
-            this.$el.on('click', '.js-dropdown-toggle', _.bind(this.toggleDropdown, this));
+            this.$el.on('click', '.dropdown-toggle', _.bind(this.toggleDropdown, this));
             this.options = {};
             _.extend(this.options, this.defaultOptions, options);
         },
 
         hide: function() {
             app.ui.currentDropdown = null;
-            this.$('.js-dropdown-content').addClass('hide');
+            this.$('.dropdown-menu').addClass('hide');
         },
 
         show: function() {
-            var $menu = this.$('.js-dropdown-content');
+            var $menu = this.$('.dropdown-menu');
             app.ui.currentDropdown = this;
             if (this.options.right) {
                 $menu.css('right', this.options.right);
             } else {
                 $menu.css('left', this.options.left);
             }
-            this.$('.js-dropdown-content').removeClass('hide');
+            this.$('.dropdown-menu').removeClass('hide');
         },
 
         toggleDropdown: function() {
@@ -66,7 +63,7 @@ define([
                 app.ui.currentDropdown.hide();
             }
 
-            if (this.$('.js-dropdown-content').is(':hidden')) {
+            if (this.$('.dropdown-menu').is(':hidden')) {
                 this.show();
             } else {
                 this.hide();

@@ -42,7 +42,7 @@ define([
             this.$el.html(this.template(data));
 
             new DropdownView({
-                el: this.$('.js-dropdown'),
+                el: this.$('.dropdown'),
                 left: '-60px'
             });
 

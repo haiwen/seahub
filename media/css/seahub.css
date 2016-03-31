@@ -1227,6 +1227,10 @@ textarea:-moz-placeholder {/* for FF */
 .dropdown-inline {
     display:inline-block;
 }
+button.dropdown-toggle:focus {
+    background-color:#ddd !important;
+    outline:none;
+}
 .dropdown-menu {
     position:absolute;
     background:#fff;

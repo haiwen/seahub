@@ -50,7 +50,7 @@ define([
             });
             this.$el.html(this.template(obj));
             this.dropdown = new DropdownView({
-                el: this.$('.js-dropdown')
+                el: this.$('.dropdown')
             });
             return this;
         },
