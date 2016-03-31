@@ -2,22 +2,23 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, HLItemView) {
     'use strict';
 
-    var GroupRepoView = Backbone.View.extend({
+    var GroupRepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#group-repo-tmpl').html()),
 
         events: {
-            'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight',
             'click .cancel-share': 'unshare'
         },
 
         initialize: function(options) {
+            HLItemView.prototype.initialize.call(this);
+            
             this.group_id = options.group_id;
             this.is_staff = options.is_staff;
 
@@ -46,14 +47,6 @@ define([
             });
             this.$el.html(this.template(obj));
             return this;
-        },
-
-        highlight: function() {
-            this.$el.addClass('hl').find('.op-icon').removeClass('vh');
-        },
-
-        rmHighlight: function() {
-            this.$el.removeClass('hl').find('.op-icon').addClass('vh');
         },
 
         unshare: function() {

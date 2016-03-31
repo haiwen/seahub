@@ -287,6 +287,11 @@ app["pageOptions"] = {
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
 };
+app.ui = {
+    currentDropdown: null,
+    currentHighlightedItem: null,
+    freezeItemHightlight: false
+};
 </script>
 {% if debug %}
 <script data-main="{% static "scripts/main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>

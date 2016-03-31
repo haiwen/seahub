@@ -2,22 +2,22 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, HLItemView) {
     'use strict';
 
-    var StarredFileView = Backbone.View.extend({
+    var StarredFileView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#starred-file-item-tmpl').html()),
 
         events: {
-            'mouseenter': 'showAction',
-            'mouseleave': 'hideAction',
             'click .unstar': 'removeShare'
         },
 
         initialize: function() {
+            HLItemView.prototype.initialize.call(this);
         },
 
         render: function () {
@@ -48,16 +48,6 @@ define([
                     Common.ajaxErrorHandler(xhr);
                 }
             });
-        },
-
-        showAction: function() {
-            this.$el.addClass('hl');
-            this.$el.find('.op-icon').removeClass('vh');
-        },
-
-        hideAction: function() {
-            this.$el.removeClass('hl');
-            this.$el.find('.op-icon').addClass('vh');
         }
 
     });
