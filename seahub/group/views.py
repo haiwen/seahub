@@ -404,7 +404,11 @@ def group_wiki(request, group, page_name="home"):
             logger.error(e)
             latest_contributor, last_modified = None, 0
 
-        repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
+        if is_registered_user(username):
+            repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
+        else:
+            # when anonymous user visit public group wiki, set permission as 'r'
+            repo_perm = 'r'
 
         wiki_index_exists = True
         index_pagename = 'index'
@@ -447,7 +451,12 @@ def group_wiki_pages(request, group):
     except WikiDoesNotExist:
         return render_error(request, _('Wiki does not exists.'))
 
-    repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
+    if is_registered_user(username):
+        repo_perm = seafile_api.check_permission_by_path(repo.id, '/', username)
+    else:
+        # when anonymous user visit public group wiki, set permission as 'r'
+        repo_perm = 'r'
+
     mods_available = get_available_mods_by_group(group.id)
     mods_enabled = get_enabled_mods_by_group(group.id)
 
