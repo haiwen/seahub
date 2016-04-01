@@ -1243,17 +1243,17 @@ a.popover-item {
     margin:0;
 }
 /**** dropdown menu ******/
-.dropdown {
+.sf-dropdown {
     position:relative;
 }
-.dropdown-inline {
+.sf-dropdown-inline {
     display:inline-block;
 }
-button.dropdown-toggle:focus {
+button.sf-dropdown-toggle:focus {
     background-color:#ddd !important;
     outline:none;
 }
-.dropdown-menu {
+.sf-dropdown-menu {
     position:absolute;
     background:#fff;
     padding:6px 1px;
@@ -1263,8 +1263,8 @@ button.dropdown-toggle:focus {
     box-shadow:0 2px 3px 0 rgba(34,36,38,.15);
     z-index:10;
 }
-.dropdown-menu li a,
-.dropdown-menu a {
+.sf-dropdown-menu li a,
+.sf-dropdown-menu a {
     display:block;
     padding:4px 12px;
     min-width:110px;
@@ -1272,7 +1272,7 @@ button.dropdown-toggle:focus {
     color:#444;
     font-weight:normal;
 }
-.dropdown-menu a:hover {
+.sf-dropdown-menu a:hover {
     background:#feaa7c;
     text-decoration:none;
     color:#fff;
