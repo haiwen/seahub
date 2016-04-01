@@ -4,47 +4,30 @@ define([
     'backbone',
     'common',
     'app/collections/group-discussions',
-    'app/views/group-discussion'
-], function($, _, Backbone, Common, GroupDiscussions, ItemView) {
+    'app/views/group-discussion',
+    'app/views/widgets/popover'
+], function($, _, Backbone, Common, GroupDiscussions, ItemView, PopoverView) {
     'use strict';
 
-    var View = Backbone.View.extend({
-        el: '#group-discussions',
+    var View = PopoverView.extend({
+        id: 'group-discussions',
+        className: 'popover',
+
+        template:  _.template($('#group-discussions-tmpl').html()),
 
         initialize: function(options) {
+            PopoverView.prototype.initialize.call(this);
+
             this.groupView = options.groupView;
 
             this.collection = new GroupDiscussions();
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'reset', this.reset);
 
-            this.$loadingTip = this.$('.loading-tip');
-            this.$listContainer = this.$('#group-discussion-list');
-            this.$emptyTip = this.$('.no-discussion-tip');
-            this.$error = this.$('.error');
-            this.$loadMore = this.$('.js-load-more');
-
-            var _this = this;
-            $(window).resize(function() {
-                _this.setConMaxHeight();
-            });
-
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var $popup = _this.$el,
-                    $popup_switch = $('#group-discussions-icon');
-
-                if ($('#group-discussions:visible').length &&
-                    !$popup.is(target) &&
-                    !$popup.find('*').is(target) &&
-                    !$popup_switch.is(target)) {
-                    _this.hide();
-                }
-            });
+            this.render();
         },
 
         events: {
-            'click .close': 'hide',
             'click .js-load-more': 'loadMore',
             'submit form': 'formSubmit'
         },
@@ -85,6 +68,16 @@ define([
         },
 
         render: function() {
+            this.$el.html(this.template());
+
+            this.$loadingTip = this.$('.loading-tip');
+            this.$listContainer = this.$('#group-discussion-list');
+            this.$emptyTip = this.$('.no-discussion-tip');
+            this.$error = this.$('.error');
+            this.$loadMore = this.$('.js-load-more');
+        },
+
+        showContent: function() {
             this.$listContainer.hide();
             this.$loadingTip.show();
 
@@ -99,7 +92,7 @@ define([
                 this.is_group_admin = true;
             }
 
-            this.collection.setGroupId(this.group_id);
+            this.collection.setGroupId(this.groupView.group.id);
             this.collection.fetch({
                 cache: false,
                 reset: true,
@@ -121,6 +114,9 @@ define([
                     _this.$error.html(err_msg).show();
                 }
             });
+
+            $("#group").append(this.$el);
+            app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
         // set max-height for '.popover-con'
@@ -134,17 +130,9 @@ define([
             });
         },
 
-        show: function(options) {
-            this.group_id = options.group_id;
-            this.$el.show();
-            this.setConMaxHeight();
-            this.render();
-            app.router.navigate('group/' + this.group_id + '/discussions/');
-        },
-
         hide: function() {
-            this.$el.hide();
-            app.router.navigate('group/' + this.group_id + '/');
+            PopoverView.prototype.hide.call(this);
+            app.router.navigate('group/' + this.groupView.group.id + '/');
         },
 
         replyTo: function(to_user) {

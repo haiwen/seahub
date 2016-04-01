@@ -28,7 +28,6 @@ define([
             'groups/': 'showGroups',
             'group/:group_id/': 'showGroup',
             'group/:group_id/lib/:repo_id(/*path)': 'showGroupRepoDir',
-            'group/:group_id/members/': 'showGroupMembers',
             'group/:group_id/discussions/': 'showGroupDiscussions',
             'org/': 'showOrgRepos',
             'org/lib/:repo_id(/*path)': 'showOrgRepoDir',
@@ -168,11 +167,6 @@ define([
                 Common.feedback('Group {group_id} not found'.replace('{group_id}', group_id), 'error');
                 app.router.navigate('', {trigger: true});
             }
-        },
-
-        showGroupMembers: function(group_id) {
-            this.showGroup(group_id);
-            this.groupView.showMembers();
         },
 
         showGroupDiscussions: function(group_id) {

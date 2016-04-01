@@ -37,13 +37,9 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.membersView = new GroupMembersView();
-            this.settingsView = new GroupSettingsView({
-                groupView: this
-            });
-            this.discussionsView = new GroupDiscussionsView({
-                groupView: this
-            });
+            this.settingsView = new GroupSettingsView({ groupView: this });
+            this.membersView = new GroupMembersView({ groupView: this });
+            this.discussionsView = new GroupDiscussionsView({ groupView: this });
             this.render();
         },
 
@@ -114,7 +110,6 @@ define([
             this.group_id = group_id;
             this.$emptyTip.hide();
             this.renderGroupTop(options);
-            this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -210,49 +205,24 @@ define([
             repos.comparator = null;
         },
 
-        showSettings: function() {
-            this.settingsView.show({
-                'group': this.group
-            });
-        },
-
         toggleSettingsPanel: function() {
-            var panel_id = this.settingsView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.settingsView.hide();
-            } else {
-                this.showSettings();
-            }
+            return this.settingsView.toggle();
         },
 
         showGroupWiki: function() {
             location.href = '/group/' + this.group.id + '/wiki/';
         },
 
-        showMembers: function() {
-            this.membersView.show({'group_id': this.group_id});
-        },
-
         toggleMembersPanel: function() {
-            var panel_id = this.membersView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.membersView.hide();
-            } else {
-                this.showMembers();
-            }
+            return this.membersView.toggle();
         },
 
         showDiscussions: function() {
-            this.discussionsView.show({'group_id': this.group_id});
+            return this.discussionsView.show();
         },
 
         toggleDiscussionsPanel: function() {
-            var panel_id = this.discussionsView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.discussionsView.hide();
-            } else {
-                this.showDiscussions();
-            }
+            return this.discussionsView.toggle();
         }
 
     });

@@ -4,45 +4,28 @@ define([
     'backbone',
     'common',
     'app/collections/group-members',
-    'app/views/group-member'
-], function($, _, Backbone, Common, GroupMembers, ItemView) {
+    'app/views/group-member',
+    'app/views/widgets/popover'
+], function($, _, Backbone, Common, GroupMembers, ItemView, PopoverView) {
     'use strict';
 
-    var View = Backbone.View.extend({
-        el: '#group-members',
+    var View = PopoverView.extend({
+        id: 'group-members',
+        className: 'popover',
+
+        template:  _.template($('#group-members-tmpl').html()),
 
         initialize: function(options) {
+            PopoverView.prototype.initialize.call(this);
+            this.groupView = options.groupView;
             this.collection = new GroupMembers();
             this.listenTo(this.collection, 'add', this.addOne);
             this.listenTo(this.collection, 'reset', this.reset);
-
-            this.$loadingTip = this.$('.loading-tip');
-            this.$listContainer = $('#group-member-list');
-            this.$error = this.$('.error');
-
-            var _this = this;
-            $(window).resize(function() {
-                if (!$('#group-members:visible').length) {
-                    return;
-                }
-                _this.setConMaxHeight();
-            });
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var $popup = _this.$el,
-                    $popup_switch = $('#group-members-icon');
-
-                if ($('#group-members:visible').length &&
-                    !$popup.is(target) &&
-                    !$popup.find('*').is(target) &&
-                    !$popup_switch.is(target)) {
-                    _this.hide();
-                }
-            });
+            this.render();
         },
 
         events: {
-            'click .close': 'hide'
+
         },
 
         addOne: function(item, collection, options) {
@@ -61,11 +44,18 @@ define([
         },
 
         render: function() {
+            this.$el.html(this.template());
+            this.$loadingTip = this.$('.loading-tip');
+            this.$listContainer = this.$('#group-member-list');
+            this.$error = this.$('.error');
+        },
+
+        showContent: function() {
             this.$listContainer.hide();
             this.$loadingTip.show();
 
             var _this = this;
-            this.collection.setGroupId(this.group_id);
+            this.collection.setGroupId(this.groupView.group.id);
             this.collection.fetch({
                 cache: false,
                 reset: true,
@@ -87,24 +77,7 @@ define([
                     _this.$error.html(err_msg).show();
                 }
             });
-        },
-
-        // set max-height for '.popover-con'
-        setConMaxHeight: function() {
-            this.$('.popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
-        },
-
-        show: function(options) {
-            this.group_id = options.group_id;
-            this.$el.show();
-            this.setConMaxHeight();
-            this.render();
-            app.router.navigate('group/' + this.group_id + '/members/');
-        },
-
-        hide: function() {
-            this.$el.hide();
-            app.router.navigate('group/' + this.group_id + '/');
+            $("#group").append(this.$el);
         }
 
     });

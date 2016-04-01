@@ -112,30 +112,6 @@
         <p class="error error-tip hide"></p>
     </div>
 
-    <div id="group-members" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Members" %}</h3>
-        </div>
-        <div class="popover-con">
-            <span class="loading-icon loading-tip"></span>
-            <ul id="group-member-list" class="hide"></ul>
-            <p class="error hide"></p>
-        </div>
-    </div>
-
-    <div id="group-settings" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Settings" %}</h3>
-        </div>
-        <div class="popover-con">
-            <div id="group-setting-con" class="hide"></div>
-        </div>
-    </div>
-
     <div id="group-discussions" class="popover hide">
         <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
         <div class="popover-hd ovhd">
@@ -158,6 +134,53 @@
                 </div>
             </form>
         </div>
+    </div>
+</script>
+
+<script type="text/template" id="group-settings-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Settings" %}</h3>
+    </div>
+    <div class="popover-con">
+    </div>
+</script>
+
+<script type="text/template" id="group-members-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Members" %}</h3>
+    </div>
+    <div class="popover-con">
+        <span class="loading-icon loading-tip"></span>
+        <ul id="group-member-list" class="hide"></ul>
+        <p class="error hide"></p>
+    </div>
+</script>
+
+<script type="text/template" id="group-discussions-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Discussions" %}</h3>
+    </div>
+    <div class="popover-con">
+        <span class="loading-icon loading-tip"></span>
+        <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
+        <ul id="group-discussion-list" class="hide"></ul>
+        <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
+        <p class="error hide"></p>
+    </div>
+    <div class="popover-footer">
+        <form action="" method="post" class="msg-form">
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <div class="msg-body">
+                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                <button type="submit" class="submit">{% trans "Submit" %}</button>
+            </div>
+        </form>
     </div>
 </script>
 
@@ -263,6 +286,7 @@ app["pageOptions"] = {
 };
 app.ui = {
     currentDropdown: null,
+    currentPopover: null,
     currentHighlightedItem: null,
     freezeItemHightlight: false
 };
