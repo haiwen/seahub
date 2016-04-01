@@ -145,7 +145,6 @@
 .sf2-icon-reply:before { content: "\e02a"; }
 
 /******* tags **********/
-html { background:#fff; }
 body,
 h1,h2,h3,h4,h5,h6,
 ul,ol,li,dl,dt,dd,
@@ -165,6 +164,7 @@ h2 { font-size:1.5em; color:#222;}
 h3 { font-size:16px; color:#322; font-weight:normal; margin:0.95em 0 0.4em; }
 h4 { font-size:1.1em; color:#222; font-weight:normal; margin:0.5em 0 0.2em; }
 h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
+h1, h2, h3, h4 { line-height: 1.5; }
 ul { list-style:none; }
 ol { padding-left:2em; }
 dl { margin:1.5em 0; }
@@ -177,13 +177,7 @@ a {
 }
 a.normal {font-weight: normal;}
 a:focus, a:hover {
-    color: #ff9933;
-    text-decoration: underline;
-}
-a:focus {
-    outline: thin dotted;
-    outline: 5px auto -webkit-focus-ring-color;
-    outline-offset: -2px;
+    color: #eb8205;
 }
 a.black {
     color:#322;
@@ -287,35 +281,6 @@ input[type="file"] {
     height:24px;
     line-height:24px;
 }
-::-webkit-scrollbar {
-    height: 9px;
-    width: 9px;
-}
-::-webkit-scrollbar-button {
-    display: block;
-    height: 4px;
-}
-::-webkit-scrollbar-track-piece {
-    background: #e9e9eb;
-}
-::-webkit-scrollbar-track-piece:vertical:start {
-    border-radius:5px 5px 0 0;
-}
-::-webkit-scrollbar-track-piece:vertical:end {
-    border-radius:0 0 5px 5px;
-}
-::-webkit-scrollbar-track-piece:horizontal:start {
-    border-radius:5px 0 0 5px;
-}
-::-webkit-scrollbar-track-piece:horizontal:end {
-    border-radius:0 5px 5px 0;
-}
-::-webkit-scrollbar-thumb:vertical,
-::-webkit-scrollbar-thumb:horizontal {
-    background: #ccc;
-    border-radius: 5px;
-    display: block;
-}
 label {
     display: inline-block;
     margin:4px 0px;
@@ -329,8 +294,6 @@ pre {
     word-wrap: break-word;
 }
 table {
-    border-spacing: 0;
-    border-collapse: collapse;
     width:100%;
     table-layout:fixed;
     margin:8px 0 40px;
@@ -3373,7 +3336,7 @@ img.thumbnail {
 .list-view-icon-btn {
     display:inline-block;
     padding:0 6px;
-    height:27px;
+    height:29px;
     background:#fff;
     border:1px solid #ccc;
     font-size:18px;
