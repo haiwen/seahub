@@ -1032,6 +1032,8 @@ textarea:-moz-placeholder {/* for FF */
     background-color:#fcfcfc;
     border-radius:4px;
     -moz-border-radius:4px;
+    box-sizing:content-box;
+    -webkit-box-sizing:content-box;
 }
 #simplemodal-container a {
     font-weight:normal;
@@ -1375,14 +1377,14 @@ button.sf-dropdown-toggle:focus {
     border-radius:2px;
 }
 #dir-view .repo-op {
-    height:30px;
+    height:48px;
     position: relative; /* for '#upload-menu' */
 }
 #right-panel .hd,
 .tabnav,
 .wiki-top {
     padding-bottom:0;
-    height:39px;
+    height:48px;
 }
 #organization-repos .hd {
     position:relative;
