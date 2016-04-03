@@ -146,9 +146,8 @@
 
 /******* tags **********/
 body,
-h1,h2,h3,h4,h5,h6,
 ul,ol,li,dl,dt,dd,
-p,pre,blockquote,
+pre,blockquote,
 form,input,textarea,select,button,img {
     padding:0;
     margin:0;
@@ -159,10 +158,10 @@ body, input, textarea, button, select {
     word-wrap:break-word; /* for en */
 }
 input, button, select { line-height:19px;/*for ff*/ }
-h1 { font-size:1.9em; margin:1.1em 0 0.5em; }
+h1 { font-size:1.9em; }
 h2 { font-size:1.5em; color:#222;}
-h3 { font-size:16px; color:#322; font-weight:normal; margin:0.95em 0 0.4em; }
-h4 { font-size:1.1em; color:#222; font-weight:normal; margin:0.5em 0 0.2em; }
+h3 { font-size:16px; color:#322; font-weight:normal;  }
+h4 { font-size:1.1em; color:#222; font-weight:normal; }
 h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
 h1, h2, h3, h4 { line-height: 1.5; }
 ul { list-style:none; }
@@ -303,7 +302,6 @@ th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
-p { margin:0.5em 0; }
 
 /********** common class ***********/
 .hl { background-color: #f8f8f8; }/*highlight*/
@@ -685,13 +683,6 @@ textarea:-moz-placeholder {/* for FF */
     line-height:24px;
     padding:0;
 }
-#group-nav .sharp {
-    display:inline-block;
-    width:42px;
-    margin-right:5px;
-    text-align:right;
-    color:#aaa;
-}
 .side-tabnav-tabs .tab a:hover {
     background-color:#feefb8;
     text-decoration:none;
@@ -705,6 +696,13 @@ textarea:-moz-placeholder {/* for FF */
     font-size:24px;
     line-height:1;
     color:#999;
+}
+#group-nav .sharp {
+    display:inline-block;
+    width:42px;
+    margin-right:5px;
+    text-align:right;
+    color:#aaa;
 }
 #group-nav .toggle-icon {
     color:#999;
