@@ -40,7 +40,7 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header" role="banner">
+        <div id="header" role="banner" class="navbar navbar-fixed-top">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
                 <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
@@ -94,16 +94,16 @@
             </div>
         </div>
 
-        <div id="main" class="clear">
-            <div id="left-panel">
-                <div class="side-tabnav" id="side-nav" role="navigation" ></div>
-            </div>
-            <div id="right-panel" role="main">
-                {% block right_panel %}{% endblock %}
-            </div>
-            <div id="main-panel" class="clear w100 ovhd">
-                <div id="initial-loading-view">
-                    <span class="loading-icon loading-tip"></span>
+        <div id="main" class="clear container-fluid">
+            <div class="row">
+                <div class="side-tabnav col-md-3" id="side-nav" role="navigation"></div>
+                <div id="right-panel" class="col-md-9 col-md-offset-3">
+                    {% block right_panel %}{% endblock %}
+                </div>
+                <div id="main-panel" class="clear w100 ovhd">
+                    <div id="initial-loading-view">
+                        <span class="loading-icon loading-tip"></span>
+                    </div>
                 </div>
             </div>
 
@@ -127,7 +127,6 @@
             </div>
         </div>
 
-        {% include 'footer.html' %}
         {% include 'js/templates.html' %}
 </div><!-- wrapper -->
 

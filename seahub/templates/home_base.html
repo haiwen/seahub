@@ -3,7 +3,6 @@
 {% block cur_myhome %}cur{% endblock %}
 
 {% block left_panel %}
-<div class="side-tabnav">
     <h3 class="hd">{% trans "Files" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
@@ -61,7 +60,6 @@
         {% endif %}
         <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
     </ul>
-</div>
 {% endblock %}
 
 {% block main_panel %}

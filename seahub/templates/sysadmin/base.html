@@ -2,7 +2,6 @@
 {% load i18n %}
 
 {% block left_panel %}
-<div class="side-tabnav">
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <li class="tab {% block cur_info %}{% endblock %}">
@@ -55,5 +54,4 @@
         </li>
         {% endif %}
     </ul>
-</div>
 {% endblock %}

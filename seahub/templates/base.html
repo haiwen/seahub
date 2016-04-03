@@ -28,7 +28,7 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header">
+        <div id="header" class="navbar navbar-fixed-top">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
                 <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
@@ -99,32 +99,34 @@
             </div>
         </div>
 
-        <div id="main" class="clear">
-            <div id="title-panel" class="w100 ovhd">
-                {% block title_panel %}{% endblock %}
-            </div>
-            <div id="left-panel">
-                {% block left_panel %}{% endblock %}
-            </div>
-            <div id="right-panel">
-                {% block right_panel %}{% endblock %}
-            </div>
-            <div id="main-panel" class="clear w100 ovhd">
-                {% if messages %}
-                <ul class="messages hide">
-                    {% for message in messages %}
-                    <li class="{{ message.tags }}">
-                        {% if 'safe' in message.tags %}
-                            {{ message|safe }}
-                        {% else %}
-                            {{ message }}
-                        {% endif %}
-                    </li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
+        <div id="main" class="clear container-fluid">
+            <div class="row">
+                <div id="title-panel" class="w100 ovhd">
+                    {% block title_panel %}{% endblock %}
+                </div>
+                <div id="side-nav" class="side-tabnav col-md-3" >
+                    {% block left_panel %}{% endblock %}
+                </div>
+                <div id="right-panel" class="col-md-9 col-md-offset-3">
+                    {% block right_panel %}{% endblock %}
+                </div>
+                <div id="main-panel" class="clear w100 ovhd">
+                    {% if messages %}
+                    <ul class="messages hide">
+                        {% for message in messages %}
+                        <li class="{{ message.tags }}">
+                            {% if 'safe' in message.tags %}
+                                {{ message|safe }}
+                            {% else %}
+                                {{ message }}
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
 
-                {% block main_panel %} {% endblock %}
+                    {% block main_panel %} {% endblock %}
+                </div>
             </div>
             <div id="confirm-popup" class="hide">
                 <div id="confirm-con"></div>
@@ -133,7 +135,6 @@
             </div>
         </div>
 
-        {% include 'footer.html' %}
 </div><!-- wrapper -->
 
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js"></script>

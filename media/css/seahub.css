@@ -644,6 +644,19 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom:1px solid #ddd;
     margin-bottom:1em;
 }
+/* Hide for mobile, show later */
+@media (min-width: 768px) {
+    .side-tabnav {
+        position:fixed;
+        top:52px;
+        bottom:0;
+        z-index:1000;
+        padding:20px;
+        overflow-x:hidden;
+        overflow-y:auto;
+        border-right:1px solid #eee;
+    }
+}
 .side-tabnav .hd {
     margin-bottom:0.5em;
 }
@@ -1288,38 +1301,30 @@ button.sf-dropdown-toggle:focus {
     text-align:center;
 }
 /********** container ***********/
-#main, #footer {
-    width:950px;
-}
-#main {
-    margin:0 auto;
+#wrapper {
+    padding-top: 53px;
 }
 #header {
-    padding-top:16px;
-    background:#f4f4f7 url('../img/nav.png') center top repeat-x;
+    background:#f4f4f7;
     width:100%;
     font-size: 14px;
-    margin-bottom:40px;
+    border-bottom: 1px solid #e8e8e8;
+    padding-bottom:4px;
+    z-index:1000; /* fix for: modal dialog z-index is 1001 */
 }
 #header-inner {
-    height:48px;
-    width:950px;
     margin:0 auto;
 }
 #main {
     min-height: 400px;
     _height: 400px;
 }
+#right-panel {
+    padding-top:16px;
+    margin-bottom:20px;
+}
 #title-panel h2 {
     margin-bottom:0.45em;
-}
-#left-panel {
-    float:left;
-    width:200px;
-}
-#right-panel {
-    float:right;
-    width:710px;
 }
 #right-panel h3:first-child,
 #left-panel h3:first-child {
