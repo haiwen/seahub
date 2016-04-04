@@ -71,45 +71,6 @@ define([
                     }
                 });
 
-                // hide 'hidden-op' popup
-                $(document).click(function(e) {
-                    var target =  e.target || event.srcElement;
-                    var $popup = $('.dirent-hidden-op:visible');
-                    if ($popup.length > 0 &&  // There is a visible popup
-                        !$('.more-op-icon', $popup.closest('tr')).is(target) &&
-                        !$popup.is(target) &&
-                        !$popup.find('*').is(target)) {
-                        $popup.addClass('hide');
-                        var $tr = $popup.closest('tr');
-                        if (!$tr.find('*').is(target)) {
-                            $tr.removeClass('hl').find('.repo-file-op').addClass('vh');
-                            $('.repo-file-list tr:gt(0)').each(function() {
-                                if ($(this).find('*').is(target)) {
-                                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
-                                }
-                            });
-                        }
-                    }
-                });
-
-                // hide 'rename form'
-                $(document).click(function(e) {
-                    var target =  e.target || event.srcElement;
-                    var $form = $('#rename-form');
-                    if ($form.length && !$form.find('*').is(target)) {
-                        var $tr = $form.closest('tr'); // get $tr before $form removed in `.cancel click()`
-                        $('.cancel', $form).click();
-                        if (!$tr.find('*').is(target)) {
-                            $tr.removeClass('hl').find('.repo-file-op').addClass('vh');
-                            $('.repo-file-list tr:gt(0)').each(function() {
-                                if ($(this).find('*').is(target)) {
-                                    $(this).addClass('hl').find('.repo-file-op').removeClass('vh');
-                                }
-                            });
-                        }
-                    }
-                });
-
                 // for 'grid view': click to hide the contextmenu of '.grid-item'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
