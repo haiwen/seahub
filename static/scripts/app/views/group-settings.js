@@ -3,84 +3,57 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/group-manage-members'
-], function($, _, Backbone, Common, ManageMembersView) {
+    'app/views/group-manage-members',
+    'app/views/widgets/popover'
+], function($, _, Backbone, Common, ManageMembersView, PopoverView) {
     'use strict';
 
-    var View = Backbone.View.extend({
-        el: '#group-settings',
+    var View = PopoverView.extend({
+        id: 'group-settings',
+        className: 'popover',
 
-        template: _.template($('#group-settings-tmpl').html()),
+        template:  _.template($('#group-settings-tmpl').html()),
+        contentTemplate: _.template($('#group-settings-content-tmpl').html()),
         renameTemplate: _.template($('#group-rename-form-tmpl').html()),
         transferTemplate: _.template($('#group-transfer-form-tmpl').html()),
         importMembersTemplate: _.template($('#group-import-members-form-tmpl').html()),
 
         initialize: function(options) {
+            PopoverView.prototype.initialize.call(this);
+
             this.groupView = options.groupView;
-
-            // group basic info
-            this.group = {};
-
-            this.$listContainer = $('#group-setting-con');
-
-            var _this = this;
-            $(window).resize(function() {
-                _this.setConMaxHeight();
-            });
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var $popup = _this.$el,
-                    $popup_switch = $('#group-settings-icon');
-
-                if ($('#group-settings:visible').length &&
-                    !$popup.is(target) &&
-                    !$popup.find('*').is(target) &&
-                    !$popup_switch.is(target)) {
-                    _this.hide();
-                }
-            });
+            this.render();
         },
 
         events: {
-            'click .close': 'hide',
             'mouseenter .group-setting-item': 'highlightItem',
             'mouseleave .group-setting-item': 'rmHighlightItem',
             'click .group-setting-item': 'manageGroup'
         },
 
         render: function() {
-            this.$listContainer.hide();
+            this.$el.html(this.template());
+        },
+
+        showContent: function() {
+            this.$listContainer = this.$('.popover-con');
 
             // the user's role in this group
             this.is_owner = false;
             this.is_admin = false;
 
-            if (app.pageOptions.username == this.group.owner) {
+            if (app.pageOptions.username == this.groupView.group.owner) {
                 this.is_owner = true;
-            } else if ($.inArray(app.pageOptions.username, this.group.admins) != -1) {
+            } else if ($.inArray(app.pageOptions.username, this.groupView.group.admins) != -1) {
                 this.is_admin = true;
             }
-            this.$listContainer.html(this.template({
+            this.$listContainer.html(this.contentTemplate({
                 'is_owner': this.is_owner,
                 'is_admin': this.is_admin,
-                'wiki_enabled': this.group.wiki_enabled
-            })).show();
-        },
+                'wiki_enabled': this.groupView.group.wiki_enabled
+            }));
 
-        // set max-height for '.popover-con'
-        setConMaxHeight: function() {
-            this.$('.popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
-        },
-
-        show: function(options) {
-            this.group = options.group;
-            this.$el.show();
-            this.render();
-            this.setConMaxHeight();
-        },
-
-        hide: function() {
-            this.$el.hide();
+            $("#group").append(this.$el);
         },
 
         highlightItem: function(e) {
@@ -118,6 +91,7 @@ define([
                     this.leave();
                     break;
             }
+            this.hide();
         },
 
         rename: function() {
@@ -137,7 +111,7 @@ define([
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group',
-                        'group_id': _this.group.id
+                        'group_id': _this.groupView.group.id
                     }),
                     type: 'put',
                     dataType: 'json',
@@ -194,7 +168,7 @@ define([
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group',
-                        'group_id': _this.group.id
+                        'group_id': _this.groupView.group.id
                     }),
                     type: 'put',
                     dataType: 'json',
@@ -234,7 +208,7 @@ define([
             $.ajax({
                 url: Common.getUrl({
                     'name': 'group',
-                    'group_id': _this.group.id
+                    'group_id': _this.groupView.group.id
                 }),
                 type: 'put',
                 dataType: 'json',
@@ -282,7 +256,7 @@ define([
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group_import_members',
-                        'group_id': _this.group.id
+                        'group_id': _this.groupView.group.id
                     }),
                     type: 'post',
                     dataType: 'json',
@@ -320,8 +294,8 @@ define([
 
         manageMembers: function() {
             new ManageMembersView({
-                'group_id': this.group.id,
-                'group_name': this.group.name,
+                'group_id': this.groupView.group.id,
+                'group_name': this.groupView.group.name,
                 'is_owner': this.is_owner
             });
         },
@@ -334,7 +308,7 @@ define([
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group',
-                        'group_id': _this.group.id
+                        'group_id': _this.groupView.group.id
                     }),
                     type: 'delete',
                     dataType: 'json',
@@ -368,7 +342,7 @@ define([
                 $.ajax({
                     url: Common.getUrl({
                         'name': 'group_member',
-                        'group_id': _this.group.id,
+                        'group_id': _this.groupView.group.id,
                         'email': encodeURIComponent(app.pageOptions.username),
                     }),
                     type: 'delete',

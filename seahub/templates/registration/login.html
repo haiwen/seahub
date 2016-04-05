@@ -8,10 +8,10 @@
 <h2 class="hd">{% trans "Log In" %}</h2>
 <form action="" method="post" class="con">{% csrf_token %}
     <label for="login">{% trans "Email or Username" %}</label>
-        <input type="text" name="login" value="" class="input" />
+        <input type="text" name="login" id="login" value="" class="input" />
 	<label for="password">{% trans "Password" %}</label>
 	<a href="{{ SITE_ROOT }}accounts/password/reset/">{% trans "(forgot password)" %}</a>
-	<input type="password" name="password" value="" class="input" autocomplete="off" />
+	<input type="password" name="password" id="password" value="" class="input" autocomplete="off" />
     {% if form.captcha %}
     <label>{% trans "CAPTCHA" %}</label><br />
     {{ form.captcha }}
@@ -66,7 +66,7 @@ $('#refresh-captcha').click(function() {
         dataType:'json',
         cache:false,
         success: function(data) {
-            $('.captcha').attr('src', data['image_url']); 
+            $('.captcha').attr('src', data['image_url']);
             $('#id_captcha_0').val(data['key']);
         },
         error: function() {

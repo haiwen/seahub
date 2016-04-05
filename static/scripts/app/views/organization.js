@@ -6,50 +6,46 @@ define([
     'app/collections/pub-repos',
     'app/views/organization-repo',
     'app/views/create-pub-repo',
-    'app/views/add-pub-repo'
+    'app/views/add-pub-repo',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, PubRepoCollection, OrganizationRepoView,
-    CreatePubRepoView, AddPubRepoView) {
+    CreatePubRepoView, AddPubRepoView, DropdownView) {
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        el: '#organization-repos',
+        id: 'organization-repos-tmpl',
 
+        template: _.template($('#organization-repos-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
         initialize: function(options) {
+            this.repos = new PubRepoCollection();
+            this.listenTo(this.repos, 'add', this.addOne);
+            this.listenTo(this.repos, 'reset', this.reset);
+            this.render();
+        },
+
+        render: function() {
+            this.$el.html(this.template());
             this.$table = this.$('table');
             this.$tableHead = $('thead', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
 
-            this.repos = new PubRepoCollection();
-            this.listenTo(this.repos, 'add', this.addOne);
-            this.listenTo(this.repos, 'reset', this.reset);
-
-            this.dirView = options.dirView;
-
-            // show/hide 'add lib' menu
-            var $add_lib = $('#add-pub-lib'),
-                $add_lib_menu = $('#add-pub-lib-menu');
-            $add_lib.click(function() {
-                $add_lib_menu.toggleClass('hide');
-                $add_lib_menu.css({
-                    'top': $add_lib.position().top + $add_lib.outerHeight(),
-                    'right': 10 // align right with $add_lib
-                });
+            this.dropdown = new DropdownView({
+                el: this.$('.js-add-pub-lib-dropdown'),
+                right: '0px'
             });
-            $('.item', $add_lib_menu).hover(
-                function() {
-                    $(this).css({'background':'#f3f3f3'});
-                },
-                function() {
-                    $(this).css({'background':'transparent'});
-                }
-            );
-            $(document).click(function(e) {
-                Common.closePopup(e, $add_lib_menu, $add_lib);
-            });
+        },
+
+        show: function() {
+            $("#right-panel").html(this.$el);
+            this.showRepoList();
+        },
+
+        hide: function() {
+            this.$el.detach();
         },
 
         events: {
@@ -61,10 +57,14 @@ define([
 
         createRepo: function() {
             new CreatePubRepoView(this.repos);
+            this.dropdown.hide();
+            return false;
         },
 
         addRepo: function() {
             new AddPubRepoView(this.repos);
+            this.dropdown.hide();
+            return false;
         },
 
         addOne: function(repo, collection, options) {
@@ -96,8 +96,6 @@ define([
         },
 
         showRepoList: function() {
-            this.dirView.hide();
-            this.$el.show();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
             var _this = this;
@@ -122,16 +120,6 @@ define([
                     $error.html(err_msg).show();
                 }
             });
-        },
-
-        hideRepoList: function() {
-            this.$el.hide();
-        },
-
-        showDir: function(repo_id, path) {
-            var path = path || '/';
-            this.hideRepoList();
-            this.dirView.showDir('org', repo_id, path);
         },
 
         sortByName: function() {
@@ -169,12 +157,6 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
-        },
-
-        hide: function() {
-            this.hideRepoList();
-            this.$emptyTip.hide();
-            this.dirView.hide();
         }
 
     });

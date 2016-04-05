@@ -14,8 +14,9 @@ define([
     'use strict';
 
     var GroupView = Backbone.View.extend({
-        el: '#group',
+        id: 'group',
 
+        template: _.template($('#group-tmpl').html()),
         groupTopTemplate: _.template($('#group-top-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),
 
@@ -30,28 +31,16 @@ define([
         },
 
         initialize: function(options) {
-            this.$tabs = this.$el;
-            this.$table = this.$('table');
-            this.$tableHead = this.$('thead');
-            this.$tableBody = this.$('tbody');
-            this.$loadingTip = this.$('#group-repos .loading-tip');
-            this.$emptyTip = this.$('#group-repos .empty-tips');
-
             this.group = {}; // will be fetched when rendering the top bar
 
             this.repos = new GroupRepos();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            this.dirView = options.dirView;
-
-            this.membersView = new GroupMembersView();
-            this.settingsView = new GroupSettingsView({
-                groupView: this
-            });
-            this.discussionsView = new GroupDiscussionsView({
-                groupView: this
-            });
+            this.settingsView = new GroupSettingsView({ groupView: this });
+            this.membersView = new GroupMembersView({ groupView: this });
+            this.discussionsView = new GroupDiscussionsView({ groupView: this });
+            this.render();
         },
 
         addOne: function(repo, collection, options) {
@@ -119,10 +108,8 @@ define([
 
         showRepoList: function(group_id, options) {
             this.group_id = group_id;
-            this.dirView.hide();
             this.$emptyTip.hide();
             this.renderGroupTop(options);
-            this.$tabs.show();
             this.$table.hide();
             var $loadingTip = this.$loadingTip;
             $loadingTip.show();
@@ -152,22 +139,29 @@ define([
             });
         },
 
-        hideRepoList: function() {
-            this.$tabs.hide();
+        render: function() {
+            this.$el.html(this.template());
+            this.$table = this.$('table');
+            this.$tableHead = this.$('thead');
+            this.$tableBody = this.$('tbody');
+            this.$loadingTip = this.$('#group-repos .loading-tip');
+            this.$emptyTip = this.$('#group-repos .empty-tips');
+            this.attached = false;
         },
 
-        showDir: function(group_id, repo_id, path) {
-            this.group_id = group_id;
-            this.hideRepoList();
-
-            var group_name = Common.groupId2Name(group_id);
-            if (group_name) {
-                this.dirView.showDir('group/' + this.group_id, repo_id, path, {'group_name': group_name});
-            } else {
-                // the group does not exist
-                Common.feedback('Group {group_id} not found'.replace('{group_id}', group_id), 'error');
-                app.router.navigate('my-libs/', {trigger: true});
+        show: function(group_id, options) {
+            if (!this.attached) {
+                // if the user swith bettern different groups,
+                // the group view is already attached.
+                $("#right-panel").html(this.$el);
+                this.attached = true;
             }
+            this.showRepoList(group_id, options);
+        },
+
+        hide: function() {
+            this.attached = false;
+            this.$el.detach();
         },
 
         createRepo: function() {
@@ -211,55 +205,24 @@ define([
             repos.comparator = null;
         },
 
-        hide: function() {
-            this.hideRepoList();
-            this.dirView.hide();
-            this.$emptyTip.hide();
-        },
-
-        showSettings: function() {
-            this.settingsView.show({
-                'group': this.group
-            });
-        },
-
         toggleSettingsPanel: function() {
-            var panel_id = this.settingsView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.settingsView.hide();
-            } else {
-                this.showSettings();
-            }
+            return this.settingsView.toggle();
         },
 
         showGroupWiki: function() {
             location.href = '/group/' + this.group.id + '/wiki/';
         },
 
-        showMembers: function() {
-            this.membersView.show({'group_id': this.group_id});
-        },
-
         toggleMembersPanel: function() {
-            var panel_id = this.membersView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.membersView.hide();
-            } else {
-                this.showMembers();
-            }
+            return this.membersView.toggle();
         },
 
         showDiscussions: function() {
-            this.discussionsView.show({'group_id': this.group_id});
+            return this.discussionsView.show();
         },
 
         toggleDiscussionsPanel: function() {
-            var panel_id = this.discussionsView.el.id;
-            if ($('#' + panel_id + ':visible').length) { // the panel is shown
-                this.discussionsView.hide();
-            } else {
-                this.showDiscussions();
-            }
+            return this.discussionsView.toggle();
         }
 
     });

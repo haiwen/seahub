@@ -9,17 +9,16 @@ define([
     'use strict';
 
     var GroupsView = Backbone.View.extend({
-        el: '#groups',
+        id: 'groups',
+
+        template: _.template($('#groups-tmpl').html()),
 
         initialize: function(options) {
             this.groups = new Groups();
             this.listenTo(this.groups, 'add', this.addOne);
             this.listenTo(this.groups, 'reset', this.reset);
 
-            this.$loadingTip = this.$('.loading-tip');
-            this.$groupList = $('#group-list');   
-            this.$emptyTip = this.$('.empty-tips');
-            this.$error = this.$('.error');
+            this.render();
         },
 
         events: {
@@ -52,6 +51,14 @@ define([
         },
 
         render: function() {
+            this.$el.html(this.template());
+            this.$loadingTip = this.$('.loading-tip');
+            this.$groupList = this.$('#group-list');
+            this.$emptyTip = this.$('.empty-tips');
+            this.$error = this.$('.error');
+        },
+
+        showGroups: function() {
             this.$groupList.hide();
             this.$emptyTip.hide();
             this.$loadingTip.show();
@@ -62,7 +69,7 @@ define([
                 data: {'with_repos': 1}, // list repos of every group
                 reset: true,
                 success: function (collection, response, opts) {
-                },  
+                },
                 error: function (collection, response, opts) {
                     _this.$loadingTip.hide();
                     var err_msg;
@@ -81,12 +88,12 @@ define([
         },
 
         show: function() {
-            this.$el.show();
-            this.render();
+            $("#right-panel").html(this.$el);
+            this.showGroups();
         },
 
         hide: function() {
-            this.$el.hide();
+            this.$el.detach();
         },
 
         addGroup: function () {
@@ -101,17 +108,17 @@ define([
                 if (!group_name) {
                     return false;
                 }
-                Common.disableButton($('[type="submit"]', $form)); 
+                Common.disableButton($('[type="submit"]', $form));
                 groups.create({'name': group_name, 'repos':[]}, {
                     wait: true,
                     validate: true,
-                    prepend: true,  // show newly created group at the top 
+                    prepend: true,  // show newly created group at the top
                     success: function() {
                         if (groups.length == 1) {
                             _this.reset();
                         }
                         app.ui.sideNavView.updateGroups();
-                    },  
+                    },
                     error: function(collection, response, options) {
                         var err_msg;
                         if (response.responseText) {
@@ -120,11 +127,11 @@ define([
                             err_msg = gettext('Please check the network.');
                         }
                         Common.feedback(err_msg, 'error', Common.ERROR_TIMEOUT);
-                    },  
+                    },
                     complete: function() {
                         Common.closeModal();
-                    }   
-                }); 
+                    }
+                });
 
                 return false;
             });

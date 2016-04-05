@@ -161,7 +161,7 @@ function ajaxErrorHandler(xhr, textStatus, errorThrown) {
         feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
     } else {
         feedback("{% trans "Failed. Please check the network." %}", 'error');
-    }    
+    }
 }
 {% if request.user.is_authenticated %}
 {% if request.cur_note %}
@@ -206,7 +206,7 @@ $('#info-bar .close').click(function() {
     lang_context.click(function() {
         lang_selector.toggleClass('hide');
         return false;
-    }).focus(function() { $(this).blur(); });
+    });
 
     $(document).click(function(e) {
         var element = e.target || e.srcElement;

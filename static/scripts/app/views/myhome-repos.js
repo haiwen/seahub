@@ -10,8 +10,9 @@ define([
     'use strict';
 
     var ReposView = Backbone.View.extend({
-        el: $('#my-own-repos'),
+        id: "my-own-repos",
 
+        template: _.template($('#my-own-repos-tmpl').html()),
         reposHdTemplate: _.template($('#my-repos-hd-tmpl').html()),
 
         events: {
@@ -21,41 +22,11 @@ define([
         },
 
         initialize: function(options) {
-            this.$table = this.$('table');
-            this.$tableHead = $('thead', this.$table);
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-            this.$repoCreateBtn = this.$('.repo-create');
-
             this.repos = new RepoCollection();
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
 
-            // hide 'hidden-op' popup
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var $popup = $('.repo-hidden-op:visible');
-                if ($popup.length > 0 &&  // There is a visible repo op popup
-                    !$('.more-op-icon', $popup.closest('tr')).is(target) &&
-                    !$popup.is(target) &&
-                    !$popup.find('*').is(target)) {
-                    // when the popup and op-icon is not target
-                    // hide the popup and remove the highlight if the current repo
-                    // is not the target
-                    $popup.addClass('hide');
-                    var $tr = $popup.closest('tr');
-                    if (!$tr.find('*').is(target)) {
-                        $tr.removeClass('hl').find('.op-icon').addClass('vh');
-                        $('.my-own-repos-table tr:gt(0)').each(function() {
-                            if ($(this).find('*').is(target)) {
-                                $(this).addClass('hl').find('.op-icon').removeClass('vh');
-                            }
-                        });
-                    }
-                }
-            });
-
+            this.render();
         },
 
         addOne: function(repo, collection, options) {
@@ -92,10 +63,8 @@ define([
         },
 
         showMyRepos: function() {
-            this.$el.show();
             this.$table.hide();
-            var $loadingTip = this.$loadingTip;
-            $loadingTip.show();
+            this.$loadingTip.show();
             var _this = this;
             this.repos.fetch({
                 cache: false, // for IE
@@ -103,7 +72,7 @@ define([
                 success: function (collection, response, opts) {
                 },
                 error: function (collection, response, opts) {
-                    $loadingTip.hide();
+                    _this.$loadingTip.hide();
                     var $error = _this.$('.error');
                     var err_msg;
                     if (response.responseText) {
@@ -120,12 +89,24 @@ define([
             });
         },
 
+        render: function() {
+            this.$el.html(this.template());
+            this.$table = this.$('table');
+            this.$tableHead = $('thead', this.$table);
+            this.$tableBody = $('tbody', this.$table);
+            this.$loadingTip = this.$('.loading-tip');
+            this.$emptyTip = this.$('.empty-tips');
+            this.$repoCreateBtn = this.$('.repo-create');
+            return this;
+        },
+
         show: function() {
+            $("#right-panel").html(this.$el);
             this.showMyRepos();
         },
 
         hide: function() {
-            this.$el.hide();
+            this.$el.detach();
         },
 
         createRepo: function() {

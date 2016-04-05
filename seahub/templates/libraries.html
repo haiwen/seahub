@@ -4,190 +4,52 @@
 
 {% block sub_title %}{% trans "Libraries" %} - {% endblock %}
 
-{% block main_panel %}
-<div id="initial-loading-view">
-    <span class="loading-icon loading-tip"></span>
-</div>
-{% endblock %}
-
-{% block left_panel %}
-<div class="side-tabnav hide" id="side-nav"></div>
-{% endblock %}
-
 {% block right_panel %}
-    {% if user.permissions.can_add_repo %}
-    <div id="my-own-repos" class="hide">
-        <div class="hd ovhd">
-            <h3 class="fleft">{% trans "Mine" %}</h3>
-            <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
-        </div>
-        <table class="my-own-repos-table hide">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-        <div class="empty-tips hide">
-            <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
-            <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
-        </div>
-        <span class="loading-icon loading-tip"></span>
-        <p class="error error-tip hide"></p>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/template" id="my-own-repos-tmpl">
+    <div class="hd ovhd">
+        <h3 class="fleft">{% trans "Mine" %}</h3>
+        <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     </div>
-    {% endif %}
-
-    <div id="repos-shared-to-me" class="hide">
-        <h3 class="hd">{% trans "Shared" %}</h3>
-        <table class="hide">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-        <div class="empty-tips hide">
-            <h2 class="alc">{% trans "No library is shared to you" %}</h2>
-        </div>
-        <span class="loading-icon loading-tip"></span>
-        <p class="error error-tip hide"></p>
-    </div>
-
-
-<div id="starred-file" class="hide">
-    <h3 class="hd">{% trans "Starred" %}</h3>
-    <table class="hide">
-        <thead>
-            <tr>
-                <th width="5%"></th>
-                <th width="40%">{% trans "File Name" %}</th>
-                <th width="32%">{% trans "Library" %}</th>
-                <th width="18%">{% trans "Last Update" %}</th>
-                <th width="5%"></th>
-            </tr>
-        </thead>
+    <table class="my-own-repos-table hide">
+        <thead></thead>
         <tbody></tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
-        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+        <h2 class="alc">{% trans "You have not created any libraries" %}</h2>
+        <p>{% trans "You can create a library to organize your files. For example, you can create one for each of your projects. Each library can be synchronized and shared separately." %}</p>
     </div>
-</div>
-
-<div id="activities" class="hide">
-    <div id="activities-body" class="hide"></div>
     <span class="loading-icon loading-tip"></span>
-    <button id="activities-more" class="hide">{% trans 'More' %}</button>
-</div>
+    <p class="error error-tip hide"></p>
+</script>
 
-<div id="devices" class="hide">
-    <h3 class="hd">{% trans "Devices" %}</h3>
+<script type="text/template" id="repos-shared-to-me-tmpl">
+    <h3 class="hd">{% trans "Shared" %}</h3>
     <table class="hide">
-        <thead>
-            <tr>
-                <th width="13%">{% trans "Platform" %}</th>
-                <th width="25%">{% trans "Device Name" %}</th>
-                <th width="20%">{% trans "IP" %}</th>
-                <th width="17%">{% trans "Last Access" %}</th>
-                <th width="15%">{% trans "# Libraries" %}</th>
-                <th width="10%"></th>
-            </tr>
-        </thead>
+        <thead></thead>
         <tbody></tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "You do not have connected devices" %}</h2>
-        <p>{% trans "Your clients (Desktop/Android/iOS) will be listed here." %}</p>
+        <h2 class="alc">{% trans "No library is shared to you" %}</h2>
     </div>
-</div>
+    <span class="loading-icon loading-tip"></span>
+    <p class="error error-tip hide"></p>
+</script>
 
-<div id="guide-for-new" class="hide">
-    <span class="icon-lightbulb fleft"></span>
-    <div class="txt">
-        <h3>{% trans "Welcome to Seafile!" %}</h3>
-        {% if user.permissions.can_add_repo %}
-        <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. We have created a personal library for you. You can create more libraries later." %}</p>
-        {% else %}
-        <p>{% trans "Seafile organizes files into libraries. Each library can be synced and shared separately. Howerver, since you are a guest user now, you can not create libraries." %}</p>
-        {% endif %}
-        <button class="simplemodal-close" style="margin:8px 0 0 0;">{% trans "Close" %}</button>
-    </div>
-</div>
-
-<div id="group" class="hide">
-    <div id="group-top"></div>
-
-    <div id="group-repos">
-        <table class="hide">
-            <thead></thead>
-            <tbody></tbody>
-        </table>
-        <div class="empty-tips" style="margin-bottom:150px; display:none;">
-            <h2 class="alc">{% trans "No library is shared to this group" %}</h2>
-            <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
-            <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
-        </div>
-        <span class="loading-icon loading-tip"></span>
-        <p class="error error-tip hide"></p>
-    </div>
-
-    <div id="group-members" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Members" %}</h3>
-        </div>
-        <div class="popover-con">
-            <span class="loading-icon loading-tip"></span>
-            <ul id="group-member-list" class="hide"></ul>
-            <p class="error hide"></p>
-        </div>
-    </div>
-
-    <div id="group-settings" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Settings" %}</h3>
-        </div>
-        <div class="popover-con">
-            <div id="group-setting-con" class="hide"></div>
-        </div>
-    </div>
-
-    <div id="group-discussions" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Discussions" %}</h3>
-        </div>
-        <div class="popover-con">
-            <span class="loading-icon loading-tip"></span>
-            <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
-            <ul id="group-discussion-list" class="hide"></ul>
-            <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
-            <p class="error hide"></p>
-        </div>
-        <div class="popover-footer">
-            <form action="" method="post" class="msg-form">
-                <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
-                <div class="msg-body">
-                    <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                    <button type="submit" class="submit">{% trans "Submit" %}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-</div>
-
-
-<div id="organization-repos" class="hide">
+<script type="text/template" id="organization-repos-tmpl">
     <div class="hd">
         <h3 class="fleft">{% trans "Organization" %}</h3>
         {% if can_add_pub_repo %}
-        <button id="add-pub-lib" class="fright "><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+        <div class="fright dropdown js-add-pub-lib-dropdown">
+            <button class="dropdown-toggle"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+            <ul class="dropdown-menu hide">
+                <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
+                <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
+            </ul>
+        </div>
         {% endif %}
-        <ul id="add-pub-lib-menu" class="hide">
-            <li class="item share-existing">{% trans "Share existing libraries" %}</li>
-            <li class="item create-new">{% trans "Create a new library" %}</li>
-        </ul>
     </div>
 
     <table class="repo-list hide">
@@ -200,9 +62,9 @@
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
-</div>
+</script>
 
-<div id="groups" class="hide">
+<script type="text/template" id="groups-tmpl">
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "My Groups" %}</h3>
         {% if user.permissions.can_add_group %}
@@ -231,13 +93,124 @@
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>
     {% endif %}
-</div>
+</script>
+
+<script type="text/template" id="group-tmpl">
+    <div id="group-top"></div>
+
+    <div id="group-repos">
+        <table class="hide">
+            <thead></thead>
+            <tbody></tbody>
+        </table>
+        <div class="empty-tips" style="margin-bottom:150px; display:none;">
+            <h2 class="alc">{% trans "No library is shared to this group" %}</h2>
+            <p>{% blocktrans %}You can share libraries by clicking the "New Library" button above or the "Share" icon on your libraries list.{% endblocktrans %}</p>
+            <p>{% trans "Libraries shared as writable can be downloaded and synced by other group members. Read only libraries can only be downloaded, updates by others will not be uploaded." %}</p>
+        </div>
+        <span class="loading-icon loading-tip"></span>
+        <p class="error error-tip hide"></p>
+    </div>
+</script>
+
+<script type="text/template" id="group-settings-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Settings" %}</h3>
+    </div>
+    <div class="popover-con">
+    </div>
+</script>
+
+<script type="text/template" id="group-members-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Members" %}</h3>
+    </div>
+    <div class="popover-con">
+        <span class="loading-icon loading-tip"></span>
+        <ul id="group-member-list" class="hide"></ul>
+        <p class="error hide"></p>
+    </div>
+</script>
+
+<script type="text/template" id="group-discussions-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
+        <h3 class="popover-title">{% trans "Discussions" %}</h3>
+    </div>
+    <div class="popover-con">
+        <span class="loading-icon loading-tip"></span>
+        <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
+        <ul id="group-discussion-list" class="hide"></ul>
+        <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
+        <p class="error hide"></p>
+    </div>
+    <div class="popover-footer">
+        <form action="" method="post" class="msg-form">
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <div class="msg-body">
+                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                <button type="submit" class="submit">{% trans "Submit" %}</button>
+            </div>
+        </form>
+    </div>
+</script>
+
+<script type="text/template" id="starred-file-tmpl">
+    <h3 class="hd">{% trans "Starred" %}</h3>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="5%"></th>
+                <th width="40%">{% trans "File Name" %}</th>
+                <th width="32%">{% trans "Library" %}</th>
+                <th width="18%">{% trans "Last Update" %}</th>
+                <th width="5%"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You don't have any starred files yet" %}</h2>
+        <p>{% blocktrans %}You can star important files by clicking the "Star" button on file viewing page, and they will be listed here.{% endblocktrans %}</p>
+    </div>
+</script>
+
+<script type="text/template" id="activities-tmpl">
+    <div id="activities-body" class="hide"></div>
+    <span class="loading-icon loading-tip"></span>
+    <button id="activities-more" class="hide">{% trans 'More' %}</button>
+</script>
+
+<script type="text/template" id="devices-tmpl">
+    <h3 class="hd">{% trans "Devices" %}</h3>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="13%">{% trans "Platform" %}</th>
+                <th width="25%">{% trans "Device Name" %}</th>
+                <th width="20%">{% trans "IP" %}</th>
+                <th width="17%">{% trans "Last Access" %}</th>
+                <th width="15%">{% trans "# Libraries" %}</th>
+                <th width="10%"></th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You do not have connected devices" %}</h2>
+        <p>{% trans "Your clients (Desktop/Android/iOS) will be listed here." %}</p>
+    </div>
+</script>
 
 {% include "js/dir-view.html" %}
 
-{% endblock %}
-
-{% block extra_script %}
 {% include "js/lib-op-popups.html" %}
 <script type="text/javascript">
 app["pageOptions"] = {
@@ -289,6 +262,7 @@ app["pageOptions"] = {
 };
 app.ui = {
     currentDropdown: null,
+    currentPopover: null,
     currentHighlightedItem: null,
     freezeItemHightlight: false
 };
