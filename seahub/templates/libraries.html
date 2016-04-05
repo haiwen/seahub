@@ -42,11 +42,11 @@
     <div class="hd">
         <h3 class="fleft">{% trans "Organization" %}</h3>
         {% if can_add_pub_repo %}
-        <div class="fright dropdown dropdown js-add-pub-lib-dropdown">
+        <div class="fright dropdown js-add-pub-lib-dropdown">
             <button class="dropdown-toggle"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
-            <ul class="add-pub-lib-dropdown-menu dropdown-menu dropdown-content hide">
-                <li><a class="op js-repo-rename share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
-                <li><a class="op js-repo-rename create-new" href="#">{% trans "Create a new library" %}</a></li>
+            <ul class="dropdown-menu hide">
+                <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
+                <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
             </ul>
         </div>
         {% endif %}
@@ -110,30 +110,6 @@
         </div>
         <span class="loading-icon loading-tip"></span>
         <p class="error error-tip hide"></p>
-    </div>
-
-    <div id="group-discussions" class="popover hide">
-        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-        <div class="popover-hd ovhd">
-            <span class="popover-close close sf2-icon-x1 op-icon fright" title="{% trans "Close" %}"></span>
-            <h3 class="popover-title">{% trans "Discussions" %}</h3>
-        </div>
-        <div class="popover-con">
-            <span class="loading-icon loading-tip"></span>
-            <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
-            <ul id="group-discussion-list" class="hide"></ul>
-            <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
-            <p class="error hide"></p>
-        </div>
-        <div class="popover-footer">
-            <form action="" method="post" class="msg-form">
-                <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
-                <div class="msg-body">
-                    <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                    <button type="submit" class="submit">{% trans "Submit" %}</button>
-                </div>
-            </form>
-        </div>
     </div>
 </script>
 

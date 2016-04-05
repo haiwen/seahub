@@ -294,8 +294,8 @@ define([
 
         manageMembers: function() {
             new ManageMembersView({
-                'group_id': this.group.id,
-                'group_name': this.group.name,
+                'group_id': this.groupView.group.id,
+                'group_name': this.groupView.group.name,
                 'is_owner': this.is_owner
             });
         },
