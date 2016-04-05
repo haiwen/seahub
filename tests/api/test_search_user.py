@@ -111,3 +111,24 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['avatar_url'] is not None
         assert json_resp['users'][0]['name'] == 'Carl Smith'
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
+
+    def test_can_search_by_contact_email(self):
+        admin_email = self.admin.email
+        nickname = 'admin_test'
+
+        p = Profile.objects.add_or_update(admin_email, nickname=nickname)
+        p.contact_email = 'new_mail@test.com'
+        p.save()
+
+        refresh_cache(self.user.email)
+
+        resp = self.client.get(self.endpoint + '?q=' + 'new_mail')
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['users'] is not None
+        assert json_resp['users'][0]['email'] == admin_email
+        assert json_resp['users'][0]['avatar_url'] is not None
+        assert json_resp['users'][0]['name'] == nickname
+        assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
+
