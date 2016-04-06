@@ -12,6 +12,7 @@ from .endpoints.group_discussions import GroupDiscussions
 from .endpoints.group_discussion import GroupDiscussion
 from .endpoints.send_share_link_email import SendShareLinkView
 from .endpoints.send_upload_link_email import SendUploadLinkView
+from .endpoints.send_notify_file_conflict import SendNotifyFileConflict
 
 urlpatterns = patterns('',
     url(r'^ping/$', Ping.as_view()),
@@ -69,6 +70,7 @@ urlpatterns = patterns('',
     url(r'^default-repo/$', DefaultRepoView.as_view(), name='api2-defaultrepo'),
     url(r'^send-share-link/$', SendShareLinkView.as_view(), name='api2-send-share-link'),
     url(r'^send-upload-link/$', SendUploadLinkView.as_view(), name='api2-send-upload-link'),
+    url(r'^send-notify-file-conflict/$', SendNotifyFileConflict.as_view(), name='api2-send-notify-file-conflict'),
     url(r'^shared-links/$', SharedLinksView.as_view()),
     url(r'^shared-upload-links/$', SharedUploadLinksView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
