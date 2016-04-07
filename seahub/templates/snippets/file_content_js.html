@@ -92,7 +92,7 @@ window.onload = function () {
 {% endif %}
 
 {% if filetype == 'PDF' and use_pdfjs %}
-if (!($.browser.msie && parseInt($.browser.version) < 10)) {
+try {
     PDFJS.workerSrc = '{{MEDIA_URL}}js/pdf.worker.js';
     $('#file-view').html('<div id="pdf"><span class="loading-icon loading-tip"></span></div>');
     PDFJS.getDocument("{{ raw_path|escapejs }}").then(function(pdf) {
@@ -129,7 +129,7 @@ if (!($.browser.msie && parseInt($.browser.version) < 10)) {
         getPageAndRender(1);
     });
 
-} else {
+} catch(e) {
     $('#file-view').html('<div id="file-view-tip"><p>{% trans "You can use IE 10 or other browsers, for example, Firefox, to view it online." %}</p></div>');
 }
 {% endif %}
