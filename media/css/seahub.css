@@ -192,7 +192,6 @@ textarea {
 textarea, input { border: 1px solid #ccc; }
 input {
     margin:3px 0;
-    outline:0;
 }
 input, button { display:inline-block;/*for ie*/ }
 input[type=text],
@@ -212,9 +211,6 @@ select {
     background:linear-gradient(top, #fafafb, #eeeeee);
     border: 1px solid #c5c5c5;
     border-radius: 2px;
-}
-select {
-    outline:none;
 }
 .btn-link {
     display:inline-block;
@@ -237,9 +233,14 @@ input[type=radio] {
     border:0;/*for ie*/
 }
 input:focus,
+button:focus,
+select:focus,
 textarea:focus {
   border-color: #66afe9;
   outline: none;
+}
+input[type="checkbox"]:focus {
+    outline:#66afe9 auto 1px;
 }
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {/*for input type="number" in chrome: to hide up/download arrow*/
