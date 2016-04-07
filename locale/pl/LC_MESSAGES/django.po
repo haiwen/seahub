@@ -13,8 +13,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-21 12:21+0800\n"
-"PO-Revision-Date: 2016-03-21 04:21+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2016-03-23 17:25+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -26,13 +26,13 @@ msgstr ""
 #: seahub/api2/endpoints/group_members.py:279 seahub/views/ajax.py:2518
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "Użytkownik %s już jest członkiem grupy."
 
 #: seahub/api2/endpoints/group_members.py:288 seahub/api2/views.py:1276
 #: seahub/views/ajax.py:2527
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "Nie znaleziono użytkownika %s w organizacji."
 
 #: seahub/api2/endpoints/groups.py:148 seahub/api2/endpoints/groups.py:224
 #: seahub/group/forms.py:37
@@ -48,7 +48,7 @@ msgstr "Już istnieje grupa o takiej nazwie."
 #: seahub/api2/endpoints/groups.py:254
 #, python-format
 msgid "User %s is already group owner."
-msgstr ""
+msgstr "Użytkownik %s już jest właścicielem grupy."
 
 #: seahub/api2/endpoints/send_share_link_email.py:30
 #: seahub/api2/endpoints/send_upload_link_email.py:29
@@ -84,7 +84,7 @@ msgstr "Udostępniono Ci łącze przesyłania w %s"
 
 #: seahub/api2/endpoints/share_links.py:165
 msgid "Password is too short."
-msgstr ""
+msgstr "Hasło jest zbyt krótkie."
 
 #: seahub/api2/endpoints/upload_links.py:135 seahub/share/views.py:1074
 #: seahub/share/views.py:1157 seahub/templates/snippets/repo_create_js.html:50
@@ -770,34 +770,34 @@ msgstr "Tylko do odczytu"
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "%(size)d bajt"
+msgstr[1] "%(size)d bajty"
+msgstr[2] "%(size)d bajtów"
 
 #: seahub/base/templatetags/seahub_tags.py:497
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:499
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:501
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:503
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:505
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:77
 #: seahub/contacts/templates/contacts/contact_list.html:119
@@ -1955,7 +1955,7 @@ msgstr "Serwery Seafile nie przechowują haseł do zaszyfrowanych bibliotek. Aby
 
 #: seahub/institutions/templates/institutions/base.html:4
 msgid "Exit"
-msgstr ""
+msgstr "Wyjście"
 
 #: seahub/institutions/templates/institutions/base.html:11
 #: seahub/institutions/templates/institutions/useradmin.html:9
@@ -2284,7 +2284,7 @@ msgstr "Nie udało się wysłać wiadomości do %s, użytkownik nie istnieje."
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:42
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "Wykryto wirusa w %s"
 
 #: seahub/notifications/management/commands/send_notices.py:30
 #: seahub/notifications/management/commands/send_notices.py:274
@@ -2496,7 +2496,7 @@ msgstr "Cześć,"
 
 #: seahub/notifications/templates/notifications/notify_virus.html:12
 msgid "Virus is detected on regular scanning. Please check the report at:"
-msgstr ""
+msgstr "Podczas skanowania wykryto wirusa. Proszę sprawdzić raport: "
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:4
 #: seahub/notifications/templates/notifications/user_notification_list.html:9
@@ -3592,7 +3592,7 @@ msgstr "Wszystkie grupy"
 
 #: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:655
 msgid "Tools"
-msgstr ""
+msgstr "Narzędzia"
 
 #: seahub/templates/home_base.html:41 seahub/templates/home_base.html.py:71
 #: seahub/templates/js/templates.html:657
@@ -3824,7 +3824,7 @@ msgstr "Przekaż"
 
 #: seahub/templates/js/templates.html:48
 msgid "History Setting"
-msgstr ""
+msgstr "Ustawienia historii"
 
 #: seahub/templates/js/templates.html:50
 msgid "Change Password"
@@ -3832,7 +3832,7 @@ msgstr "Zmień hasło"
 
 #: seahub/templates/js/templates.html:53
 msgid "Share Links"
-msgstr ""
+msgstr "Łącza udostępniania"
 
 #: seahub/templates/js/templates.html:56
 msgid "Folder Permission"
@@ -4136,12 +4136,12 @@ msgstr "Żadna biblioteka nie jest współdzielona w tej grupie"
 #: seahub/templates/js/templates.html:991
 #: seahub/templates/js/templates.html:1007
 msgid "Add Wiki"
-msgstr ""
+msgstr "Dodaj Wiki"
 
 #: seahub/templates/js/templates.html:993
 #: seahub/templates/js/templates.html:1009
 msgid "Remove Wiki"
-msgstr ""
+msgstr "Usuń Wiki"
 
 #: seahub/templates/js/templates.html:997
 #: seahub/templates/js/templates.html:1013
@@ -4151,7 +4151,7 @@ msgstr "Importuj członków"
 #: seahub/templates/js/templates.html:998
 #: seahub/templates/js/templates.html:1014
 msgid "Manage Members"
-msgstr ""
+msgstr "Zarządzaj członkami"
 
 #: seahub/templates/js/templates.html:1001
 msgid "Dismiss"
@@ -4180,11 +4180,11 @@ msgstr "Format pliku: user@mail.com"
 #: seahub/templates/js/templates.html:1054
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 msgid "Add"
-msgstr ""
+msgstr "Dodaj"
 
 #: seahub/templates/js/templates.html:1134
 msgid "Setting library history is disabled by Admin"
-msgstr ""
+msgstr "Ustawienie historii biblioteki jest wyłączone przez administratora."
 
 #: seahub/templates/js/templates.html:1138
 msgid "Keep full history"
@@ -4460,7 +4460,7 @@ msgstr "Zmiana hasła"
 
 #: seahub/templates/registration/password_change_form.html:11
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Przed kontynuowaniem proszę zaktualizować swoje hasło."
 
 #: seahub/templates/registration/password_change_form.html:17
 msgid "Current Password"
@@ -5086,7 +5086,7 @@ msgstr "Organizacje"
 
 #: seahub/templates/sysadmin/base.html:30
 msgid "Institutions"
-msgstr ""
+msgstr "Instytucje"
 
 #: seahub/templates/sysadmin/base.html:41
 msgid "Traffic"
@@ -5124,7 +5124,7 @@ msgstr "Przenieś %(lib_name)s do:"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:18
 msgid "Search user or enter email and press Enter"
-msgstr ""
+msgstr "Wyszukaj użytkownika lub podaj adres email i naciśnij Enter."
 
 #: seahub/templates/sysadmin/repoadmin_js.html:19
 msgid "Please enter 1 or more character"
@@ -5237,11 +5237,11 @@ msgstr "Limity"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:9
 msgid "All Institutions"
-msgstr ""
+msgstr "Wszystkie instytucje"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:17
 msgid "Add institution"
-msgstr ""
+msgstr "Dodaj instytucję"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:60
 #: seahub/templates/sysadmin/sys_org_admin.html:78
@@ -5250,11 +5250,11 @@ msgstr "Nazwa nie może być pusta"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:66
 msgid "Delete Institution"
-msgstr ""
+msgstr "Usuń instytucję"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:16
 msgid "Back"
-msgstr ""
+msgstr "Wstecz"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:20
 #: seahub/templates/sysadmin/sys_org_info_base.html:20
@@ -5269,7 +5269,7 @@ msgstr "Odwołaj admina"
 
 #: seahub/templates/sysadmin/sys_inst_info_user.html:39
 msgid "Set Admin"
-msgstr ""
+msgstr "Ustaw jako administratora"
 
 #: seahub/templates/sysadmin/sys_inst_info_user.html:46
 #: seahub/templates/sysadmin/sys_org_info_user.html:57

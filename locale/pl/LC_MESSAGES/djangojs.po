@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# K.S. <adrespubliczny+transifex@gmail.com>, 2015
+# K.S. <adrespubliczny+transifex@gmail.com>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-21 12:21+0800\n"
-"PO-Revision-Date: 2016-03-21 03:55+0000\n"
-"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"PO-Revision-Date: 2016-03-23 17:49+0000\n"
+"Last-Translator: K.S. <adrespubliczny+transifex@gmail.com>\n"
 "Language-Team: Polish (http://www.transifex.com/haiwen/seahub/language/pl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -50,15 +50,15 @@ msgstr "Hasła nie są identyczne"
 
 #: static/scripts/app/models/repo.js:53
 msgid "Encrypted"
-msgstr ""
+msgstr "Zaszyfrowana"
 
 #: static/scripts/app/models/repo.js:55
 msgid "Read-Write"
-msgstr ""
+msgstr "Odczyt i zapis"
 
 #: static/scripts/app/models/repo.js:57
 msgid "Read-Only"
-msgstr ""
+msgstr "Tylko odczyt"
 
 #: static/scripts/app/views/details.js:47
 msgid "New files"
@@ -118,7 +118,7 @@ msgstr "Niepowodzenie. Proszę sprawdzić sieć."
 
 #: static/scripts/app/views/device.js:96
 msgid "Successfully unlink %(name)s."
-msgstr ""
+msgstr "Pomyślnie odłączono %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:50
 msgid "Move {placeholder} to:"
@@ -157,66 +157,66 @@ msgstr "Nieprawidłowa ścieżka docelowa"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:199
 msgid "Successfully moved %(name)s"
-msgstr ""
+msgstr "Pomyślnie przeniesiono %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-mvcp.js:202
 msgid "Successfully copied %(name)s"
-msgstr ""
+msgstr "Pomyślnie skopiowano %(name)s"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:27
 msgid "Rename Folder"
-msgstr ""
+msgstr "Zmień nazwę folderu"
 
 #: static/scripts/app/views/dialogs/dirent-rename.js:27
 msgid "Rename File"
-msgstr ""
+msgstr "Zmień nazwę pliku"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:26
 msgid "Change Password of Library {placeholder}"
-msgstr ""
+msgstr "Zmień hasło biblioteki {placeholder}"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:50
 msgid "Please enter the old password"
-msgstr ""
+msgstr "Proszę podać stare hasło"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:54
 msgid "Please enter a new password"
-msgstr ""
+msgstr "Proszę podać nowe hasło"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:58
 msgid "New password is too short"
-msgstr ""
+msgstr "Nowe hasło jest za krótkie"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:62
 msgid "Please enter the new password again"
-msgstr ""
+msgstr "Proszę ponownie wpisać nowe hasło"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:66
 msgid "New passwords don't match"
-msgstr ""
+msgstr "Hasła nie są identyczne"
 
 #: static/scripts/app/views/dialogs/repo-change-password.js:88
 msgid "Successfully changed library password."
-msgstr ""
+msgstr "Pomyślnie zmieniono hasło biblioteki"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:73
 msgid "{placeholder} Folder Permission"
-msgstr ""
+msgstr "Uprawnienia folderu {placeholder}"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:92
 #: static/scripts/app/views/group-settings.js:179
 #: static/scripts/app/views/repo.js:244
 msgid "Search user or enter email and press Enter"
-msgstr ""
+msgstr "Wyszukaj użytkownika lub podaj adres email i naciśnij Enter."
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:94
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:105
 msgid "You can only select 1 item"
-msgstr ""
+msgstr "Możesz wybrać tylko 1 element"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:103
 msgid "Select a group"
-msgstr ""
+msgstr "Wybierz grupę"
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:121
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:76
@@ -251,19 +251,19 @@ msgstr "Proszę sprawdzić sieć."
 
 #: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:186
 msgid "Please click and choose a directory."
-msgstr ""
+msgstr "Proszę kliknąć i wybrać katalog."
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:35
 msgid "{placeholder} History Setting"
-msgstr ""
+msgstr "Ustawienia historii {placeholder}"
 
 #: static/scripts/app/views/dialogs/repo-history-settings.js:133
 msgid "Successfully set library history."
-msgstr ""
+msgstr "Pomyślnie ustawiono historię biblioteki."
 
 #: static/scripts/app/views/dialogs/repo-share-link-admin.js:50
 msgid "{placeholder} Share Links"
-msgstr ""
+msgstr "Łącza {placeholder}"
 
 #: static/scripts/app/views/dir.js:71
 #: static/scripts/app/views/starred-file.js:29
@@ -528,7 +528,7 @@ msgstr "Niepowodzenie usuwania"
 
 #: static/scripts/app/views/group-manage-members.js:71
 msgid "{placeholder} Members"
-msgstr ""
+msgstr "Członkowie {placeholder}"
 
 #: static/scripts/app/views/group-repo.js:64
 #: static/scripts/app/views/organization-repo.js:59
@@ -538,31 +538,31 @@ msgstr "Pomyślnie zakończono udostępnianie {placeholder}"
 #: static/scripts/app/views/group-settings.js:180
 #: static/scripts/app/views/repo.js:245
 msgid "You cannot select any more choices"
-msgstr ""
+msgstr "Nie możesz wybrać więcej pozycji"
 
 #: static/scripts/app/views/group-settings.js:272
 msgid "Please choose a CSV file"
-msgstr ""
+msgstr "Proszę wybrać plik CSV"
 
 #: static/scripts/app/views/group-settings.js:303
 msgid "Successfully imported."
-msgstr ""
+msgstr "Zaimportowano pomyślnie."
 
 #: static/scripts/app/views/group-settings.js:331
 msgid "Dismiss Group"
-msgstr ""
+msgstr "Odwołaj grupę"
 
 #: static/scripts/app/views/group-settings.js:332
 msgid "Really want to dismiss this group?"
-msgstr ""
+msgstr "Czy na pewno chcesz odwołać tę grupę?"
 
 #: static/scripts/app/views/group-settings.js:365
 msgid "Quit Group"
-msgstr ""
+msgstr "Opuść grupę"
 
 #: static/scripts/app/views/group-settings.js:366
 msgid "Are you sure you want to quit this group?"
-msgstr ""
+msgstr "Czy na pewno chcesz opuścić tę grupę?"
 
 #: static/scripts/app/views/repo.js:74
 msgid "Really want to delete {lib_name}?"
@@ -574,11 +574,11 @@ msgstr "Usunięto pomyślnie."
 
 #: static/scripts/app/views/repo.js:234
 msgid "Transfer Library {library_name} To"
-msgstr ""
+msgstr "Przenieś bibliotekę {library_name} do"
 
 #: static/scripts/app/views/repo.js:273
 msgid "Successfully transferred the library."
-msgstr ""
+msgstr "Pomyślnie przeniesiono bibliotekę."
 
 #: static/scripts/app/views/share.js:57
 msgid "Share {placeholder}"
@@ -626,7 +626,7 @@ msgstr "Pomyślnie usunięto {placeholder} z ulubionych"
 
 #: static/scripts/common.js:671
 msgid "Search users or enter emails and press Enter"
-msgstr ""
+msgstr "Wyszukaj użytkowników lub podaj adresy email i naciśnij Enter."
 
 #: static/scripts/common.js:679
 msgid "Please enter 1 or more character"

@@ -8,7 +8,7 @@
 # Kvita <transifex@kvita.com.ua>, 2013-2014
 # Kvita <transifex@kvita.com.ua>, 2013-2014
 # Alexander Laskavtsev <laskavtsev@gmail.com>, 2014
-# Oleksandr Suvorov <say@say.od.ua>, 2016
+# Alexander Suvorov <say@say.od.ua>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"

@@ -8,7 +8,7 @@
 # Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>, 2015-2016
 # baiki <marco.baikhardt@toscano.ch>, 2014
 # Christian Hügel <christian.huegel@stonebyte.de>, 2014
-# Christian <info@yoursecurecloud.de>, 2015
+# Christian <info@yoursecurecloud.de>, 2015-2016
 # dbeuchler, 2014
 # dbeuchler, 2014
 # flexo3001 <mrckndt@gmail.com>, 2014
@@ -17,7 +17,7 @@
 # Florin Peter <github@florin-peter.de>, 2014
 # garyletshurry, 2013
 # Florin Peter <github@florin-peter.de>, 2014
-# Henri Wahl <h.wahl@ifw-dresden.de>, 2013,2015
+# Henri Wahl <h.wahl@ifw-dresden.de>, 2013,2015-2016
 # Christian <info@yoursecurecloud.de>, 2015
 # j0w <mail.jow@gmail.com>, 2014
 # Janek <janek@jbbr.net>, 2013-2014
@@ -56,8 +56,8 @@ msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2016-03-21 12:21+0800\n"
-"PO-Revision-Date: 2016-03-21 10:24+0000\n"
-"Last-Translator: Andreas Vollmer | HU Berlin <andreas.vollmer@cms.hu-berlin.de>\n"
+"PO-Revision-Date: 2016-03-23 20:59+0000\n"
+"Last-Translator: Christian <info@yoursecurecloud.de>\n"
 "Language-Team: German (http://www.transifex.com/haiwen/seahub/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -569,7 +569,7 @@ msgstr "Aktueller Avatar: "
 #: seahub/templates/wiki/personal_wiki.html:86
 #: seahub/templates/wiki/personal_wiki_pages.html:31
 msgid "Submit"
-msgstr "Absenden"
+msgstr "Speichern"
 
 #: seahub/avatar/templates/notification/avatar_friend_updated/notice.html:2
 #, python-format
@@ -1278,7 +1278,7 @@ msgstr "Name „%s“ ist nicht gültig"
 
 #: seahub/group/templates/group/add_member_email.html:8
 msgid "Hi, "
-msgstr "Hi,"
+msgstr "Guten Tag,"
 
 #: seahub/group/templates/group/add_member_email.html:11
 #, python-format
@@ -1967,7 +1967,7 @@ msgstr "Das Passwort wird nicht in der Seafile-Cloud gespeichert."
 msgid ""
 "So even the adminastrator of the servers cannot view your encrypted data "
 "without the password."
-msgstr "Nicht einmal die Administration des Servers kann Ihre verschlüsselten Daten einsehen, ohne das Passwort zu kennen."
+msgstr "Nicht einmal der Administrator des Servers kann Ihre verschlüsselten Dateien einsehen, ohne das Passwort zu kennen."
 
 #: seahub/help/templates/help/help_security.html:12
 msgid ""
@@ -5270,7 +5270,7 @@ msgstr "Upgrade auf die Pro Edition"
 
 #: seahub/templates/sysadmin/sys_info.html:23
 msgid "Limits"
-msgstr "Obergrenze"
+msgstr "Maximum"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:9
 msgid "All Institutions"
