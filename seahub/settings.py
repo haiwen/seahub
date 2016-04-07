@@ -644,5 +644,5 @@ CONSTANCE_CONFIG = {
 }
 
 # Reporting to email, file conflict
-IS_SEND_EMAIL_FILE_CONFLICT = True
+IS_SEND_EMAIL_FILE_CONFLICT = False
 

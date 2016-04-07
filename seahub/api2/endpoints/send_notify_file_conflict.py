@@ -58,8 +58,6 @@ class SendNotifyFileConflict(APIView):
 
         to_email = email
 
-        logger.warning('repo_id: %s repo_name: %s, path: %s', repo_id, repo_name, path)
-
         c = {
             'email': to_email,
             'file_name_conflict': path,
