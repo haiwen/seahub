@@ -371,9 +371,9 @@ SITE_TITLE = 'Private Seafile'
 SITE_NAME = 'Seafile'
 
 # Path to the Logo Imagefile (relative to the media path)
-LOGO_PATH = 'img/seafile_logo.png'
+LOGO_PATH = 'img/seafile-logo.png'
 # logo size. the unit is 'px'
-LOGO_WIDTH = 149
+LOGO_WIDTH = 128
 LOGO_HEIGHT = 32
 
 # css to modify the seafile css (e.g. css/my_site.css)
