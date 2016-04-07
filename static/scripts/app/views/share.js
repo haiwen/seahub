@@ -68,9 +68,7 @@ define([
         },
 
         events: {
-            'mouseenter .checkbox-label': 'highlightCheckbox',
-            'mouseleave .checkbox-label': 'rmHighlightCheckbox',
-            'click .checkbox-orig': 'clickCheckbox',
+            'click [type="checkbox"]': 'clickCheckbox',
 
             // download link
             'submit #generate-download-link-form': 'generateDownloadLink',
@@ -95,19 +93,10 @@ define([
             'click #add-dir-group-share-item .submit': 'dirGroupShare'
         },
 
-        highlightCheckbox: function (e) {
-            $(e.currentTarget).addClass('hl');
-        },
-
-        rmHighlightCheckbox: function (e) {
-            $(e.currentTarget).removeClass('hl');
-        },
-
         clickCheckbox: function(e) {
-            var el = e.currentTarget;
-            $(el).parent().toggleClass('checkbox-checked');
+            var $el = $(e.currentTarget);
             // for link options such as 'password', 'expire'
-            $(el).closest('.checkbox-label').next().toggleClass('hide');
+            $el.closest('.checkbox-label').next().toggleClass('hide');
         },
 
         downloadLinkPanelInit: function() {

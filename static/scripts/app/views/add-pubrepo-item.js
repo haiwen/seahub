@@ -25,9 +25,8 @@ define([
         },
 
         select: function () {
-            var checkbox = this.$('.checkbox');
-            checkbox.toggleClass('checkbox-checked');
-            if (checkbox.hasClass('checkbox-checked')) {
+            var $checkbox = this.$('[type=checkbox]');
+            if ($checkbox.prop('checked')) {
                 this.model.set({'selected':true}, {silent:true});
             } else {
                 this.model.set({'selected':false}, {silent:true});

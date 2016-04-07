@@ -29,8 +29,8 @@
     {% endif %}
 
     <label class="checkbox-label">
-        <span class="checkbox"><input type="checkbox" name="remember_me" class="checkbox-orig"/></span>
-        <span class="checkbox-option">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
+        <input type="checkbox" name="remember_me" class="vam" />
+        <span class="vam">{% blocktrans %}Remember me for {{remember_days}} days {% endblocktrans %}</span>
     </label>
 
     <input type="submit" value="{% trans "Log In" %}" class="submit" />

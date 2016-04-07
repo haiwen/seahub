@@ -73,14 +73,14 @@
       {% if mod == 'personal wiki' %}
       <li>
       <label class="checkbox-label">
-          <span class="checkbox {% if mod in request.user.mods_enabled %}checkbox-checked{% endif %}"><input type="checkbox" name="personal_wiki" class="checkbox-orig" {%if mod in request.user.mods_enabled%}checked{% endif%} /></span>
-          <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
+          <input type="checkbox" name="personal_wiki" class="vam" {%if mod in request.user.mods_enabled%}checked="checked"{% endif%} />
+          <span class="checkbox-option vam">{% trans "Personal Wiki" %}</span>
       </label>
       </li>
       {% endif %}
     {% endfor %}
     </ul>
-    <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit"/>
+    <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit" />
 </form>
 {% endif %}
 {% endblock %}

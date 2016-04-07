@@ -15,8 +15,8 @@
         <% if (enable_encrypted_library) { %>
         <div class="repo-create-encryption">
             <label class="checkbox-label">
-                <span class="checkbox"><input type="checkbox" name="encryption" id="encrypt-switch" class="checkbox-orig" /></span>
-                <span class="checkbox-option">{% trans "Encrypt" %}</span>
+                <input type="checkbox" name="encryption" id="encrypt-switch" class="vam" />
+                <span class="checkbox-option vam">{% trans "Encrypt" %}</span>
             </label>
             <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
             <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
@@ -171,7 +171,7 @@
 <script type="text/template" id="dirents-hd-tmpl">
     <tr>
         <th class="select">
-            <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+            <input type="checkbox" class="vam" />
         </th>
         <th class="star"></th>
         <th class="dirent-icon"></th>
@@ -186,9 +186,9 @@
     <% if (dirent.is_dir) { %>
     <td class="select">
         <% if (dirent.selected) { %>
-        <span class="checkbox checkbox-checked"><input type="checkbox" class="checkbox-orig" checked="checked" /></span>
+        <input type="checkbox" class="vam" checked="checked" />
         <% } else { %>
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <input type="checkbox" class="vam" />
         <% } %>
     </td>
     <td class="star"></td>
@@ -237,9 +237,9 @@
     <% } else { %>
     <td class="select">
         <% if (dirent.selected) { %>
-        <span class="checkbox checkbox-checked"><input type="checkbox" class="checkbox-orig" checked="checked" /></span>
+        <input type="checkbox" class="vam" checked="checked" />
         <% } else { %>
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <input type="checkbox" class="vam" />
         <% } %>
     </td>
     <td class="star alc">
@@ -438,8 +438,8 @@
             <div id="download-link-share" class="tabs-panel">
                 <form id="generate-download-link-form" action="" class="hide">
                     <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                        <input type="checkbox" name="use_passwd" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
                         <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
@@ -452,8 +452,8 @@
                         <input type="password" name="password_again" class="input" />
                     </div>
                     <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="set_expiration" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                        <input type="checkbox" name="set_expiration" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                     </label>
                     <div class="hide">
                         <label>{% trans "Days" %}</label><br />
@@ -493,8 +493,8 @@
                 <p class="tip">{% trans "You can share the generated link to others and then they can upload files to this directory via the link." %}</p>
                 <form id="generate-upload-link-form" action="" class="hide">
                     <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="use_passwd" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                        <input type="checkbox" name="use_passwd" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
                         <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
@@ -690,9 +690,9 @@
             <li>
             <label class="checkbox-label">
                 <% if (mods_enabled.indexOf(mods_available[i]) != -1) { %>
-                <span class="checkbox checkbox-checked"><input type="checkbox" name="personal_wiki" class="checkbox-orig" checked="checked" /></span>
+                <input type="checkbox" name="personal_wiki" class="vam" checked="checked" />
                 <% } else { %>
-                <span class="checkbox"><input type="checkbox" name="personal_wiki" class="checkbox-orig" /></span>
+                <input type="checkbox" name="personal_wiki" class="vam" />
                 <% } %>
                 <span class="checkbox-option">{% trans "Personal Wiki" %}</span>
             </label>
@@ -719,28 +719,6 @@
         <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></span>
     </div>
 </div>
-</script>
-<script type="text/template" id="group-mods-enable-form-tmpl">
-<form id="mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
-    <ul>
-        <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
-            <% if (mods_available[i] == 'group wiki') { %>
-            <li>
-            <label class="checkbox-label">
-                <% if (mods_enabled.indexOf(mods_available[i]) != -1) { %>
-                <span class="checkbox checkbox-checked"><input type="checkbox" name="group_wiki" class="checkbox-orig" checked="checked" /></span>
-                <% } else { %>
-                <span class="checkbox"><input type="checkbox" name="group_wiki" class="checkbox-orig" /></span>
-                <% } %>
-                <span class="checkbox-option">{% trans "Wiki" %}</span>
-            </label>
-            </li>
-            <% } %>
-        <% } %>
-    </ul>
-    <input type="submit" value="{% trans "Submit"%}" class="submit" />
-</form>
 </script>
 <script type="text/template" id="folder-perm-item-tmpl">
     <% if (for_user) { %>
@@ -883,7 +861,7 @@
 </script>
 <script type="text/template" id="add-pubrepo-item-tmpl">
     <td class="select">
-        <span class="checkbox"><input type="checkbox" class="checkbox-orig" /></span>
+        <input type="checkbox" class="vam" />
     </td>
     <td>
       <% if (encrypted) { %>

@@ -20,8 +20,8 @@
     <h5 class="web-setting-name">{{ setting_display_name }}</h5>
     <div class="web-setting-input">
         <label class="checkbox-label">
-            <span class="checkbox{% if setting_val %} checkbox-checked{% endif %}"><input class="checkbox-orig web-setting-checkbox" type="checkbox" name="{{ setting_name }}"{% if setting_val %} checked="checked"{% endif %} /></span>
-            <span class="checkbox-option">{{ help_tip }}</span>
+            <input class="web-setting-checkbox vam" type="checkbox" name="{{ setting_name }}"{% if setting_val %} checked="checked"{% endif %} />
+            <span class="vam">{{ help_tip }}</span>
         </label>
     </div>
 </form>

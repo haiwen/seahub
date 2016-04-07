@@ -11,8 +11,8 @@
             <div id="link-share" class="tabs-panel">
                 <div id="link-options">
                     <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="use-passwd" id="link-passwd-switch" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add password protection"%}</span>
+                        <input type="checkbox" name="use-passwd" id="link-passwd-switch" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div id="link-passwd" class="hide">
                         <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span><br />
@@ -21,8 +21,8 @@
                         <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
                     </div>
                     <label class="checkbox-label">
-                        <span class="checkbox"><input type="checkbox" name="set-expiration" id="link-expire-switch" class="checkbox-orig" /></span>
-                        <span class="checkbox-option">{% trans "Add auto expiration"%}</span>
+                        <input type="checkbox" name="set-expiration" id="link-expire-switch" class="vam" />
+                        <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                     </label>
                     <div id="link-expire" class="hide">
                         <label>{% trans "Days" %}</label><br />

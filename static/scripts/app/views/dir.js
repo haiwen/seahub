@@ -746,24 +746,23 @@ define([
             },
 
             select: function () {
-                var $el = this.$('th .checkbox');
-                $el.toggleClass('checkbox-checked');
+                var $el = this.$('th [type=checkbox]');
 
                 var dir = this.dir;
-                var all_dirent_checkbox = this.$('.checkbox');
+                var $all_dirent_checkbox = this.$('[type=checkbox]');
                 var $dirents_op = this.$('#multi-dirents-op');
 
                 var $curDirOps = this.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
 
-                if ($el.hasClass('checkbox-checked')) {
-                    all_dirent_checkbox.addClass('checkbox-checked');
+                if ($el.prop('checked')) {
+                    $all_dirent_checkbox.prop('checked', true);
                     dir.each(function(model) {
                         model.set({'selected': true}, {silent: true});
                     });
                     $dirents_op.css({'display':'inline-block'});
                     $curDirOps.hide();
                 } else {
-                    all_dirent_checkbox.removeClass('checkbox-checked');
+                    $all_dirent_checkbox.prop('checked', false);
                     dir.each(function(model) {
                         model.set({'selected': false}, {silent: true});
                     });
