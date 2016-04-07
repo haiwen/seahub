@@ -16,7 +16,7 @@ define([
         template: _.template($('#add-pubrepo-popup-tmpl').html()),
 
         initialize: function(pubRepos) {
-            this.$el.html(this.template()).modal({});
+            this.$el.html(this.template()).modal({focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$table = this.$('table');

@@ -1,7 +1,3 @@
-$('.checkbox-orig').click(function() {
-    $(this).parent().toggleClass('checkbox-checked');
-});
-
 $('#title-panel, #left-panel, #right-panel').each(function() { // for ie 7
     if ($(this).children().length == 0) {
         $(this).addClass('hide');
@@ -181,15 +177,6 @@ $('.search-form').submit(function() {
         return false;
     }
 });
-
-$(".checkbox-label").hover(
-	function() {
-		$(this).addClass('hl');
-	},
-	function() {
-		$(this).removeClass('hl');
-	}
-);
 
 $("tr:gt(0)", $('table')).hover(
     function() {

@@ -91,9 +91,8 @@ define([
         },
 
         select: function () {
-            var checkbox = this.$('.checkbox');
-            checkbox.toggleClass('checkbox-checked');
-            if (checkbox.hasClass('checkbox-checked')) {
+            var $checkbox = this.$('[type=checkbox]');
+            if ($checkbox.prop('checked')) {
                 this.model.set({'selected':true}, {silent:true}); // do not trigger the 'change' event.
             } else {
                 this.model.set({'selected':false}, {silent:true});
@@ -101,8 +100,13 @@ define([
 
             var dirView = this.dirView;
             var $dirents_op = dirView.$('#multi-dirents-op');
-            var toggle_all_checkbox = dirView.$('th .checkbox');
-            var checked_num = dirView.$('tr:gt(0) .checkbox-checked').length;
+            var $toggle_all_checkbox = dirView.$('th [type=checkbox]');
+            var checked_num = 0;
+            dirView.$('tr:gt(0) [type=checkbox]').each(function() {
+                if ($(this).prop('checked')) {
+                    checked_num += 1;
+                }
+            });
 
             var $curDirOps = dirView.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
 
@@ -114,9 +118,9 @@ define([
                 $curDirOps.show();
             }
             if (checked_num == dirView.$('tr:gt(0)').length) {
-                toggle_all_checkbox.addClass('checkbox-checked');
+                $toggle_all_checkbox.prop('checked', true);
             } else {
-                toggle_all_checkbox.removeClass('checkbox-checked');
+                $toggle_all_checkbox.prop('checked', false);
             }
         },
 

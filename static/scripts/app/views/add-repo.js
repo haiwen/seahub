@@ -83,13 +83,12 @@ define([
 
         togglePasswdInput: function(e) {
             var $checkbox = $('#encrypt-switch');
-            var pwd_input = this.$('input[type="password"]');
+            var $pwd_input = this.$('input[type="password"]');
 
-            $checkbox.parent().toggleClass('checkbox-checked');
             if ($checkbox.prop('checked')) {
-                pwd_input.attr('disabled', false).removeClass('input-disabled');
+                $pwd_input.attr('disabled', false).removeClass('input-disabled');
             } else {
-                pwd_input.attr('disabled', true).addClass('input-disabled');
+                $pwd_input.attr('disabled', true).addClass('input-disabled');
             }
         }
 

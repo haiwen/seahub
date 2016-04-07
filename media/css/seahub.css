@@ -190,12 +190,14 @@ textarea {
     outline:0;
 }
 textarea, input { border: 1px solid #ccc; }
-input { height:22px; margin:3px 0; outline:0; }
+input {
+    margin:3px 0;
+    outline:0;
+}
 input, button { display:inline-block;/*for ie*/ }
-input[type=submit],
-input[type=button],
-input.submit {
-    height:auto;
+input[type=text],
+input[type=password] {
+    height:22px;
 }
 button,
 input[type=submit],
@@ -232,10 +234,10 @@ select {
     text-decoration:none;
 }
 input[type=radio] {
-    height:auto;
     border:0;/*for ie*/
 }
-input:focus {
+input:focus,
+textarea:focus {
   border-color: #66afe9;
   outline: none;
 }
@@ -316,7 +318,7 @@ table {
     table-layout:fixed;
     margin:8px 0 40px;
 }
-caption {font-size:1.1em; font-weight:bold; margin-bottom:.6em;}
+caption { font-size:1.1em; font-weight:bold; margin-bottom:.6em; }
 th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
@@ -410,18 +412,12 @@ p { margin:0.5em 0; }
     display:block;
     margin:1em auto;
 }
-.icon-plus, .icon-minus, .icon-pencil,
-.repo-file-list .icon-star-empty,
-.repo-file-list .icon-star {
+.icon-plus, .icon-minus, .icon-pencil {
     font-size:16px;
     line-height:1;
-}
-.icon-plus, .icon-minus, .icon-pencil {
     color:#444;
     margin-left:3px;
 }
-.repo-file-list .icon-star-empty { color:#d0d0d0; }
-.repo-file-list .icon-star { color:#505050; }
 .op,
 .more {
     font-weight:normal;
@@ -480,27 +476,8 @@ input.btn-disabled:hover {/*for input*/
     cursor:default;
     background: #efefef;
 }
-.op-icon-btn {/* icon btn */
-    font-size:14px;
-    padding:4px 12px;
-    line-height:20px;
-    text-shadow:0 1px 1px rgba(255, 255, 255, 0.75);
-    background-color:#f5f5f5;background-image:-moz-linear-gradient(top, #ffffff, #e6e6e6);background-image:-webkit-linear-gradient(top, #ffffff, #e6e6e6);background-image:linear-gradient(to bottom, #ffffff, #e6e6e6);background-repeat:repeat-x;border:1px solid #cccccc;border-bottom-color:#b3b3b3;border-radius:4px;box-shadow:inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
-}
-.op-icon-btn:hover {
-    background-color: #E6E6E6;
-    background-position: 0 -15px; /* to rm background-image */
-}
-.op-list li,
-.checkbox,
-.checkbox-checked,
 .modalCloseImg {
     background:transparent url('../img/bg.png') no-repeat scroll 0 0;
-}
-.op-list li {
-    padding-left:23px;
-    line-height:23px;
-    background-position:0 3px;
 }
 .add {
     color:#909090;
@@ -775,32 +752,6 @@ textarea:-moz-placeholder {/* for FF */
     background:#fff;
 }
 /**** checkbox ****/
-.checkbox-orig {
-    width:14px;
-    height:14px;
-    font-size:0;
-    opacity:0;
-    filter: alpha(opacity=0);
-    cursor:pointer;
-    position:absolute;
-    margin:0;
-}
-.checkbox {
-    position:relative;
-    display:inline-block;
-    width:15px;
-    height:15px;
-    background-position: 0 -1135px;
-    margin-right:4px;
-}
-.checkbox-checked {
-    background-position: 0 -1153px;
-}
-.checkbox-label .avatar,
-.checkbox,
-.checkbox-option {
-    vertical-align:middle;
-}
 .checkbox-label {
     display:block;
 }
@@ -1933,6 +1884,12 @@ button.dropdown-toggle:focus {
 .repo-file-list .star {
     width:25px;
 }
+.repo-file-list .icon-star-empty { color:#d0d0d0; }
+.repo-file-list .icon-star { color:#505050; }
+.repo-file-list .icon-star-empty,
+.repo-file-list .icon-star {
+    font-size:16px;
+}
 .repo-file-list .dirent-icon {
     width:27px;
     text-align:center;
@@ -1949,10 +1906,6 @@ button.dropdown-toggle:focus {
 }
 .repo-file-list .dirent-op {
     width:200px;
-}
-.repo-file-list .checkbox-label,
-.repo-file-list .checkbox {
-    margin:0;
 }
 .repo-file-list th {
     padding-top:20px;
