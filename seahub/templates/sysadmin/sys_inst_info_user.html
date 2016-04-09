@@ -8,6 +8,7 @@
     </ul>
 </div>
 
+{% if users %}
 <table>
     <tr>
         <th width="25%">{% trans "Email" %}</th>
@@ -41,6 +42,10 @@
     </tr>
     {% endfor %}
 </table>
+{% include "snippets/admin_paginator.html" %}
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
 
 <div id="activate-msg" class="hide">
     <p>{% trans "Activating..., please wait" %}</p>

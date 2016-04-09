@@ -48,9 +48,23 @@ def info(request):
 def useradmin(request):
     """List users in the institution.
     """
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    offset = per_page * (current_page - 1)
     inst = request.user.institution
-    usernames = [x.user for x in Profile.objects.filter(institution=inst.name)]
-    users = [User.objects.get(x) for x in usernames]
+    usernames = [x.user for x in Profile.objects.filter(institution=inst.name)[offset:offset + per_page + 1]]
+    if len(usernames) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+    users = [User.objects.get(x) for x in usernames[:per_page]]
+
     last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
     for u in users:
         if u.username == request.user.username:
@@ -65,6 +79,11 @@ def useradmin(request):
     return render_to_response('institutions/useradmin.html', {
         'inst': inst,
         'users': users,
+        'current_page': current_page,
+        'prev_page': current_page - 1,
+        'next_page': current_page + 1,
+        'per_page': per_page,
+        'page_next': page_next,
     }, context_instance=RequestContext(request))
 
 @inst_admin_required

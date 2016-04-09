@@ -2272,8 +2272,7 @@ def sys_inst_admin(request):
         per_page = 100
 
     offset = per_page * (current_page - 1)
-    limit = per_page + 1
-    insts = Institution.objects.all()[offset:offset + limit]
+    insts = Institution.objects.all()[offset:offset + per_page + 1]
 
     if len(insts) == per_page + 1:
         page_next = True
@@ -2282,7 +2281,7 @@ def sys_inst_admin(request):
 
     return render_to_response(
         'sysadmin/sys_inst_admin.html', {
-            'insts': insts,
+            'insts': insts[:per_page],
             'current_page': current_page,
             'prev_page': current_page - 1,
             'next_page': current_page + 1,
@@ -2316,9 +2315,23 @@ def sys_inst_info_user(request, inst_id):
     except Institution.DoesNotExist:
         raise Http404
 
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '25'))
+    except ValueError:
+        current_page = 1
+        per_page = 25
+
+    offset = per_page * (current_page - 1)
     inst_admins = [x.user for x in InstitutionAdmin.objects.filter(institution=inst)]
-    usernames = [x.user for x in Profile.objects.filter(institution=inst.name)]
-    users = [User.objects.get(x) for x in usernames]
+    usernames = [x.user for x in Profile.objects.filter(institution=inst.name)[offset:offset + per_page + 1]]
+    if len(usernames) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+    users = [User.objects.get(x) for x in usernames[:per_page]]
+
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for u in users:
         _populate_user_quota_usage(u)
@@ -2340,6 +2353,11 @@ def sys_inst_info_user(request, inst_id):
         'inst': inst,
         'users': users,
         'users_count': users_count,
+        'current_page': current_page,
+        'prev_page': current_page - 1,
+        'next_page': current_page + 1,
+        'per_page': per_page,
+        'page_next': page_next,
     }, context_instance=RequestContext(request))
 
 @login_required

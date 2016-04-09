@@ -10,6 +10,7 @@
     </ul>
 </div>
 
+{% if users %}
 <table>
     <tr>
         <th width="36%">{% trans "Email" %}</th>
@@ -51,6 +52,11 @@
     </tr>
     {% endfor %}
 </table>
+
+{% include "snippets/admin_paginator.html" %}
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
 
 {% endblock %}
 
