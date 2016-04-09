@@ -1,8 +1,11 @@
 from django.template import Context, loader
 from post_office import mail
+from post_office.models import PRIORITY
 
 from seahub.utils import get_site_scheme_and_netloc
 from seahub.settings import SITE_NAME, MEDIA_URL, LOGO_PATH
+
+MAIL_PRIORITY = PRIORITY        # 'low medium high now'
 
 def send_html_email_with_dj_template(recipients, subject, dj_template,
                                      context={}, sender=None, template=None,
@@ -12,10 +15,10 @@ def send_html_email_with_dj_template(recipients, subject, dj_template,
 
     Arguments:
     - `recipients`:
+    - `subject`:
     - `sender`:
     - `template`:
     - `context`:
-    - `subject`:
 
     """
     base_context = {

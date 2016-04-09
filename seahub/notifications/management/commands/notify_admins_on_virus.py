@@ -8,7 +8,7 @@ import seaserv
 
 from seahub.profile.models import Profile
 import seahub.settings as settings
-from seahub.utils.mail import send_html_email_with_dj_template
+from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ class Command(BaseCommand):
             send_html_email_with_dj_template(
                 u.email, dj_template='notifications/notify_virus.html',
                 subject=_('Virus detected on %s') % settings.SITE_NAME,
-                backend='post_office'
+                priority=MAIL_PRIORITY.now
             )
 
             # restore current language

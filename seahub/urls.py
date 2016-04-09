@@ -299,11 +299,13 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
     from seahub_extra.sysadmin_extra.views import sys_login_admin, \
         sys_log_file_audit, sys_log_file_update, sys_log_perm_audit, \
         sys_login_admin_export_excel, sys_log_file_audit_export_excel, \
-        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel
+        sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
+        sys_log_email_audit
     urlpatterns += patterns('',
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
         url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
+        url(r'^sys/log/emailaudit/$', sys_log_email_audit, name='sys_log_email_audit'),
         url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
         url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
         url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
