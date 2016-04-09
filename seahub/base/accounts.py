@@ -382,7 +382,7 @@ class RegistrationBackend(object):
             site = RequestSite(request)
 
         from registration.models import RegistrationProfile
-        if config.ACTIVATE_AFTER_REGISTRATION is True:
+        if bool(config.ACTIVATE_AFTER_REGISTRATION) is True:
             # since user will be activated after registration,
             # so we will not use email sending, just create acitvated user
             new_user = RegistrationProfile.objects.create_active_user(username, email,
@@ -523,8 +523,8 @@ class RegistrationForm(forms.Form):
         if 'password1' in self.cleaned_data:
             pwd = self.cleaned_data['password1']
 
-            if config.USER_STRONG_PASSWORD_REQUIRED is True:
-                if is_user_password_strong(pwd) is True:
+            if bool(config.USER_STRONG_PASSWORD_REQUIRED) is True:
+                if bool(is_user_password_strong(pwd)) is True:
                     return pwd
                 else:
                     raise forms.ValidationError(

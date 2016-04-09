@@ -143,8 +143,8 @@ class SetPasswordForm(forms.Form):
         if 'new_password1' in self.cleaned_data:
             pwd = self.cleaned_data['new_password1']
 
-            if config.USER_STRONG_PASSWORD_REQUIRED is True:
-                if is_user_password_strong(pwd) is True:
+            if bool(config.USER_STRONG_PASSWORD_REQUIRED) is True:
+                if bool(is_user_password_strong(pwd)) is True:
                     return pwd
                 else:
                     raise forms.ValidationError(
