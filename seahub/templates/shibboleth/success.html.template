@@ -1,0 +1,20 @@
+<!-- This file is used to communicate with seafile zimlet on SSO login.  -->
+<!-- Please copy this file to <seafile-root>/seahub-data/custom/templates/shibboleth/success.html, create new path if missing. -->
+<!-- For security issue, please replace "*" in `parent.postMessage(msg, "*");` with your zimbra service origin, e.g. "https://zimbra-service.com" -->
+<html>
+    <head>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js?t=1398068110"></script>
+        <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
+    </head>
+    <body>
+        Login success
+    </body>
+
+    <script>
+     var msg = getCookie('seahub_auth');
+     if (msg) {
+         parent.postMessage(msg, "*");
+     }
+
+    </script>
+</html>

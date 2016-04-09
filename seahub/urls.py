@@ -318,6 +318,7 @@ if getattr(settings, 'MULTI_TENANCY', False):
 if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
     urlpatterns += patterns('',
         url(r'^shib-login/', shib_login, name="shib_login"),
+        url(r'^shib-success/', TemplateView.as_view(template_name="shibboleth/success.html"), name="shib_success"),
     )
 
 if getattr(settings, 'ENABLE_KRB5_LOGIN', False):
