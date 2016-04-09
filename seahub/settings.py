@@ -406,14 +406,14 @@ LOGGING = {
      },
     'handlers': {
         'default': {
-            'level':'WARN',
+            'level':'INFO',
             'class':'logging.handlers.RotatingFileHandler',
             'filename': os.path.join(LOG_DIR, 'seahub.log'),
             'maxBytes': 1024*1024*10, # 10 MB
             'formatter':'standard',
         },
         'request_handler': {
-                'level':'WARN',
+                'level':'INFo',
                 'class':'logging.handlers.RotatingFileHandler',
                 'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
                 'maxBytes': 1024*1024*10, # 10 MB
@@ -428,12 +428,12 @@ LOGGING = {
     'loggers': {
         '': {
             'handlers': ['default'],
-            'level': 'WARN',
+            'level': 'INFO',
             'propagate': True
         },
         'django.request': {
             'handlers': ['request_handler', 'mail_admins'],
-            'level': 'WARN',
+            'level': 'INFO',
             'propagate': False
         },
     }
