@@ -11,9 +11,10 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.utils import IS_EMAIL_CONFIGURED, is_valid_username, \
-    string2list, gen_shared_upload_link, send_html_email
+    is_valid_email, string2list, gen_shared_upload_link, send_html_email
 from seahub.share.models import UploadLinkShare
 from seahub.settings import REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER, SITE_NAME
+from seahub.profile.models import Profile
 
 logger = logging.getLogger(__name__)
 
@@ -59,10 +60,13 @@ class SendUploadLinkView(APIView):
         result['failed'] = []
         result['success'] = []
         to_email_list = string2list(email)
+        # use contact_email, if present
+        useremail = Profile.objects.get_contact_email_by_user(request.user.username)
         for to_email in to_email_list:
 
             failed_info = {}
-            if not is_valid_username(to_email):
+
+            if not is_valid_email(to_email):
                 failed_info['email'] = to_email
                 failed_info['error_msg'] = 'email invalid.'
                 result['failed'].append(failed_info)
@@ -76,12 +80,12 @@ class SendUploadLinkView(APIView):
             }
 
             if REPLACE_FROM_EMAIL:
-                from_email = username
+                from_email = useremail
             else:
                 from_email = None  # use default from email
 
             if ADD_REPLY_TO_HEADER:
-                reply_to = username
+                reply_to = useremail
             else:
                 reply_to = None
 
