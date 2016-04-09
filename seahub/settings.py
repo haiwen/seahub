@@ -413,7 +413,7 @@ LOGGING = {
             'formatter':'standard',
         },
         'request_handler': {
-                'level':'INFo',
+                'level':'INFO',
                 'class':'logging.handlers.RotatingFileHandler',
                 'filename': os.path.join(LOG_DIR, 'seahub_django_request.log'),
                 'maxBytes': 1024*1024*10, # 10 MB
