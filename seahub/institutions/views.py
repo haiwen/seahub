@@ -51,10 +51,10 @@ def useradmin(request):
     # Make sure page request is an int. If not, deliver first page.
     try:
         current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
+        per_page = int(request.GET.get('per_page', '100'))
     except ValueError:
         current_page = 1
-        per_page = 25
+        per_page = 100
 
     offset = per_page * (current_page - 1)
     inst = request.user.institution
