@@ -11,7 +11,7 @@
 <script type="text/template" id="my-own-repos-tmpl">
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Mine" %}</h3>
-        <button class="repo-create fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+        <button class="repo-create fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     </div>
     <table class="my-own-repos-table hide">
         <thead></thead>
@@ -43,7 +43,7 @@
         <h3 class="fleft">{% trans "Organization" %}</h3>
         {% if can_add_pub_repo %}
         <div class="fright dropdown js-add-pub-lib-dropdown">
-            <button class="dropdown-toggle"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+            <button class="dropdown-toggle"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
             <ul class="dropdown-menu hide">
                 <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
                 <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
@@ -68,7 +68,7 @@
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "My Groups" %}</h3>
         {% if user.permissions.can_add_group %}
-        <button id="add-group" class="fright"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
+        <button id="add-group" class="fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
         {% endif %}
     </div>
 
