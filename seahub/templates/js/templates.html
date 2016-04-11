@@ -30,7 +30,11 @@
 </script>
 <script type="text/template" id="repo-tmpl">
     <td>
-        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
+        <% if (encrypted) { %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="{% trans "encrypted library" %}" width="24" />
+        <% } else { %>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="{% trans "normal library" %}" width="24" />
+        <% } %>
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
@@ -843,9 +847,9 @@
 
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
-       <th width="4%"><!--icon--></th>
+       <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
        <th width="42%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
-       <th width="14%"><!--op--></th>
+       <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
        <th width="20%">{% trans "Size" %}</th>
        <th width="20%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
    </tr>
