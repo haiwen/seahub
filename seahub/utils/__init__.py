@@ -872,7 +872,7 @@ def mkstemp():
         return fd, path
 
 # File or directory operations
-FILE_OP = ('Added', 'Modified', 'Renamed', 'Moved',
+FILE_OP = ('Added or modified', 'Added', 'Modified', 'Renamed', 'Moved',
            'Added directory', 'Renamed directory', 'Moved directory')
 
 OPS = '|'.join(FILE_OP)
