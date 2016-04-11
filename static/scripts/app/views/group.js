@@ -210,7 +210,7 @@ define([
         },
 
         showGroupWiki: function() {
-            location.href = '/group/' + this.group.id + '/wiki/';
+            location.href = app.config.siteRoot + 'group/' + this.group.id + '/wiki/';
         },
 
         toggleMembersPanel: function() {
