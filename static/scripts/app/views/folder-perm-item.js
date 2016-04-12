@@ -44,6 +44,8 @@ define([
             $(e.currentTarget).closest('td')
                 .find('.perm').addClass('hide').end()
                 .find('.perm-toggle-select').removeClass('hide');
+
+            return false;
         },
 
         editPerm: function (e) {
@@ -130,6 +132,8 @@ define([
                     }
                 }
             });
+
+            return false;
         }
 
     });

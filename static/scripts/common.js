@@ -648,6 +648,8 @@ define([
                         }
                     });
                 }
+
+                return false;
             });
 
             $(document).click(function(e) {

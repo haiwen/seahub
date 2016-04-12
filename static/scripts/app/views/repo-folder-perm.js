@@ -51,6 +51,8 @@ define([
             var $td = $(e.currentTarget).closest('td');
             $('.cur-perm, .edit-icon', $td).hide();
             $('.perm-toggle-select', $td).show();
+
+            return false;
         },
 
         edit: function(e) {
@@ -134,6 +136,8 @@ define([
                     _this.data.$error.html(err_msg).show();
                 }
             });
+
+            return false;
         }
 
     });

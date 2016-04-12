@@ -86,6 +86,8 @@ define([
                     _this.data.$error.html(err_msg).show();
                 }
             });
+
+            return false;
         }
 
     });

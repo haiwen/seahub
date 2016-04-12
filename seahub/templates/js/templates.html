@@ -739,7 +739,7 @@
                 {% trans "Read-Only" %}
             <% } %>
             </span>
-            <span title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></span>
+            <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
         </div>
         <select class="perm-toggle-select hide w100">
             <% if (perm == 'rw') { %>
@@ -752,7 +752,7 @@
         </select>
     </td>
     <td>
-        <span class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></span>
+        <a href="#" class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></a>
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
@@ -1206,7 +1206,7 @@
     <td><%= formattedSize %></td>
     <td><%= view_count %></td>
     <td>
-        <span class="sf2-icon-delete op-icon vh rm-link" title="{% trans "Remove"%}"></span>
+        <a href="#" class="sf2-icon-delete op-icon vh rm-link" title="{% trans "Remove"%}"></a>
     </td>
 </script>
 
@@ -1336,14 +1336,14 @@
     <td>
         <% if (permission == 'rw') { %>
             <span class="cur-perm">{% trans "Read-Write" %}</span>
-            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <a href="#" title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></a>
             <select class="perm-toggle-select hide">
                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                 <option value="r">{% trans "Read-Only"%}</option>
             </select>
         <% } else { %>
             <span class="cur-perm">{% trans "Read-Only" %}</span>
-            <span title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></span>
+            <a href="#" title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></a>
             <select class="perm-toggle-select hide">
                 <option value="rw">{% trans "Read-Write" %}</option>
                 <option value="r" selected="selected">{% trans "Read-Only"%}</option>
@@ -1351,7 +1351,7 @@
         <% } %>
     </td>
     <td>
-        <span class="rm op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></span>
+        <a href="#" class="rm op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></a>
     </td>
 </script>
 
