@@ -24,6 +24,10 @@ from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
+from seahub.api2.endpoints.admin.login import Login
+from seahub.api2.endpoints.admin.file_audit import FileAudit
+from seahub.api2.endpoints.admin.file_update import FileUpdate
+from seahub.api2.endpoints.admin.perm_audit import PermAudit
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -302,13 +306,20 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
     urlpatterns += patterns('',
+        url(r'^api/v2.1/admin/login/$', Login.as_view(), name='api-v2.1-admin-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
+
+        url(r'^api/v2.1/admin/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-file-audit'),
         url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
         url(r'^sys/log/emailaudit/$', sys_log_email_audit, name='sys_log_email_audit'),
         url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
+
+        url(r'^api/v2.1/admin/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-file-update'),
         url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
         url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
+
+        url(r'^api/v2.1/admin/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-perm-audit'),
         url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
         url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
     )
