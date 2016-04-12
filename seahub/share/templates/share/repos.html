@@ -29,7 +29,7 @@
         <td>
             <div class="share-permission">
                 <span class="share-permission-cur-value">{{ repo.share_permission }}</span>
-                <span title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh"></span>
+                <a href="#" title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh"></a>
             </div>
             <select name="permission" class="share-permission-select hide">
                 <option value="{{ repo.props.permission }}" selected="selected">{{ repo.share_permission }}</option>
@@ -72,6 +72,8 @@ $('.share-permission-edit-icon').click(function() {
         perm_select = cur_perm.next();
     cur_perm.addClass('hide');
     perm_select.removeClass('hide'); // show 'share-permission-select'
+
+    return false;
 });
 $('.share-permission-select').change(function() {
     var select = $(this),

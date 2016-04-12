@@ -29,7 +29,7 @@ define([
                     if (_this.collection.length == 0) {
                         $('#repos-shared-to-me table').hide();
                         $('#repos-shared-to-me .empty-tips').show();
-                    };
+                    }
                 };
 
             $.ajax({
@@ -44,6 +44,8 @@ define([
                 dataType: 'json',
                 success: success_callback
             });
+
+            return false;
         },
 
         render: function() {

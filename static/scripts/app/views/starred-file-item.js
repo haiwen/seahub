@@ -48,6 +48,8 @@ define([
                     Common.ajaxErrorHandler(xhr);
                 }
             });
+
+            return false;
         }
 
     });

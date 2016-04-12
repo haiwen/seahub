@@ -147,6 +147,8 @@ define([
                     Common.ajaxErrorHandler(xhr);
                 }
             });
+
+            return false;
         },
 
         visitDir: function () { // todo
@@ -179,6 +181,8 @@ define([
             } else {
                 popup.addClass('hide');
             }
+
+            return false;
         },
 
         share: function() {

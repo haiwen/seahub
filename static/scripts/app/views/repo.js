@@ -105,6 +105,8 @@ define([
                     }
                 });
             });
+
+            return false;
         },
 
         share: function() {
@@ -119,6 +121,7 @@ define([
                 'obj_name': this.model.get('name')
             };
             new ShareView(options);
+            return false;
         },
 
         togglePopup: function() {

@@ -526,6 +526,8 @@ define([
                         }
                     });
                 }
+
+                return false;
             });
 
             var _this = this;
@@ -622,6 +624,7 @@ define([
                         }
                     });
                 }
+                return false;
             });
             $(window).resize(function() {
                 var popup = $('#notice-popup');
@@ -645,6 +648,8 @@ define([
                         }
                     });
                 }
+
+                return false;
             });
 
             $(document).click(function(e) {

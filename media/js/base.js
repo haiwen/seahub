@@ -99,6 +99,8 @@ $(function() {
                 }
             });
         }
+
+        return false;
     });
     $(window).resize(function() {
         var popup = $('#notice-popup');
@@ -123,6 +125,8 @@ $(function() {
                 }
             });
         }
+
+        return false;
     });
 
     $('#my-info').click(function() {
@@ -155,6 +159,8 @@ $(function() {
                 }
             });
         }
+
+        return false;
     });
 
 });
