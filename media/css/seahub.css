@@ -466,6 +466,9 @@ p { margin:0.5em 0; }
 .no-deco:hover {
     text-decoration:none;
 }
+.non-text-link:hover {
+    text-decoration:none;
+}
 .input-disabled {/* for type="password/text" etc*/
     background:#ebebe4;
 }
@@ -1890,6 +1893,10 @@ button.dropdown-toggle:focus {
 .repo-file-list .icon-star-empty,
 .repo-file-list .icon-star {
     font-size:16px;
+    cursor:pointer;
+    text-decoration:none;
+    line-height:19px;
+    vertical-align:middle;
 }
 .repo-file-list .dirent-icon {
     width:27px;
@@ -1926,11 +1933,6 @@ button.dropdown-toggle:focus {
     background:#fff;
     -webkit-box-shadow:0 2px 2px -1px #aaa;
     box-shadow:0 2px 2px -3px #aaa;
-}
-.file-star {
-    cursor:pointer;
-    line-height:19px;
-    vertical-align:middle;
 }
 .repo-file-list .repo-file-op {
     position:relative;
@@ -3414,6 +3416,7 @@ img.thumbnail {
     font-size:18px;
     color:#aaa;
     cursor:pointer;
+    border-radius:0;
 }
 .grid-view-icon-btn.active,
 .list-view-icon-btn.active {

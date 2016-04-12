@@ -44,8 +44,8 @@
                 <td>--</td>
                 {% endif %}
                 <td>
-                    <span class="sf2-icon-link view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}"></span>
-                    <span class="sf2-icon-delete rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}"></span>
+                    <a href="#" class="sf2-icon-link view-link op-icon vh" data-link="{{ fs.shared_link }}" title="{% trans "View"%}"></a>
+                    <a href="#" class="sf2-icon-delete rm-link op-icon vh" data-token="{{ fs.token }}" title="{% trans "Remove"%}"></a>
                 </td>
             </tr>
             {% endfor %}
@@ -75,8 +75,8 @@
                 <td><a href="{% url 'view_common_lib_dir' link.repo.id '' %}">{{ link.repo.name }}</a></td>
                 <td>{{ link.view_cnt }}</td>
                 <td>
-                    <span class="sf2-icon-link view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}"></span>
-                    <span class="sf2-icon-delete rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}"></span>
+                    <a href="#" class="sf2-icon-link view-link op-icon vh" data-link="{{ link.shared_link }}" title="{% trans "View"%}"></a>
+                    <a href="#" class="sf2-icon-delete rm-upload-link op-icon vh" data-token="{{ link.token }}" title="{% trans "Remove"%}"></a>
                 </td>
             </tr>
             {% endfor %}
@@ -104,6 +104,8 @@ $(".view-link").click(function() {
     .val(link).css('width', $('#shared-link').prev().width() + 2)
     .modal({focus:false});
     $('#shared-link').prev().remove();
+
+    return false;
 });
 
 // rm download/upload link
@@ -121,6 +123,8 @@ $('.rm-link, .rm-upload-link').click(function() {
         },
         error: ajaxErrorHandler
     });
+
+    return false;
 });
 
 $('#shared-link').click(function() {

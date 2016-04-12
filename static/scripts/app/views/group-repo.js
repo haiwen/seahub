@@ -67,6 +67,8 @@ define([
                     Common.feedback(err, 'error');
                 }
             });
+
+            return false;
         }
 
     });

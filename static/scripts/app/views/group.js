@@ -23,7 +23,6 @@ define([
         events: {
             'click #group-settings-icon': 'toggleSettingsPanel',
             'click #group-members-icon': 'toggleMembersPanel',
-            'click #group-wiki-icon': 'showGroupWiki',
             'click #group-discussions-icon': 'toggleDiscussionsPanel',
             'click .repo-create': 'createRepo',
             'click .by-name': 'sortByName',
@@ -207,10 +206,6 @@ define([
 
         toggleSettingsPanel: function() {
             return this.settingsView.toggle();
-        },
-
-        showGroupWiki: function() {
-            location.href = app.config.siteRoot + 'group/' + this.group.id + '/wiki/';
         },
 
         toggleMembersPanel: function() {

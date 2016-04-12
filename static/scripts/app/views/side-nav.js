@@ -47,7 +47,7 @@ define([
                     'mods_available': app.pageOptions.user_mods_available,
                     'mods_enabled': mods_enabled
                 }));
-            form.modal();
+            form.modal({focus:false});
             $('#simplemodal-container').css('height', 'auto');
 
             $('.checkbox-orig', form).click(function() {
@@ -84,6 +84,8 @@ define([
                 });
                 return false;
             });
+
+            return false;
         },
 
         setCurTab: function(cur_tab, options) {

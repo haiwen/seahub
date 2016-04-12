@@ -39,10 +39,10 @@
     <% } %>
     <td class="repo-op-td">
         <div class="op-container">
-            <span class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></span>
-            <span class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></span>
+            <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}"></a>
+            <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}"></a>
             <div class="dropdown dropdown-inline">
-                <span class="sf2-icon-caret-down more-op-icon op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></span>
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></a>
                 <ul class="hidden-op repo-hidden-op hide dropdown-menu">
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
@@ -69,9 +69,9 @@
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-    <% if (is_staff || share_from_me) { %>
-    <span class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
-    <% } %>
+        <% if (is_staff || share_from_me) { %>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></a>
+        <% } %>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -85,9 +85,9 @@
     </td>
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-    <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
-    <span class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></span>
-    <% } %>
+        <% if (app.pageOptions.is_staff || owner == app.pageOptions.username) { %>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></a>
+        <% } %>
     </td>
     <td><%- size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -106,14 +106,14 @@
     </div>
     <% if (enable_upload_folder) { %>
     <ul id="upload-menu" class="hide">
-      <li class="item">
+        <li class="item">
         <span>{% trans "Upload Files" %}</span>
         <input type="file" name="file" multiple />
-      </li>
-      <li class="item">
+        </li>
+        <li class="item">
         <span>{% trans "Upload Folder" %}</span>
         <input type="file" name="file" multiple directory webkitdirectory />
-      </li>
+        </li>
     </ul>
     <% } %>
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
@@ -131,7 +131,7 @@
     <% } %>
 
     <div class="switch-mode vam">
-        <span class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view"></span><span class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view"></span>
+        <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view"></button>
     </div>
 
     <% if (path == '/') { %>
@@ -201,14 +201,14 @@
             <div class="displayed-op">
                 <a class="op-icon download sf2-icon-download sf2-x" href="<%= download_url %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
+                <a href="#" class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <span class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></span>
+                <a href="#" class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <a href="#" class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></a>
             <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -219,7 +219,7 @@
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
-            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <a href="#" class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></a>
             <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
@@ -244,9 +244,9 @@
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
-        <span title="{% trans "starred" %}" class="icon-star file-star"></span>
+        <a href="#" title="{% trans "starred" %}" class="icon-star file-star"></a>
         <% } else { %>
-        <span title="{% trans "unstarred" %}" class="icon-star-empty file-star"></span>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star"></a>
         <% } %>
     </td>
     <td class="dirent-icon">
@@ -280,14 +280,14 @@
             <div class="displayed-op">
                 <a class="op-icon download sf2-icon-download sf2-x" href="<%= download_url %>" title="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <span class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></span>
+                <a href="#" class="op-icon share sf2-icon-share sf2-x" title="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                    <span class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></span>
+                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x" title="{% trans "Delete" %}"></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></span>
+            <a href="#" class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More Operations"%}"></a>
             <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                 <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -309,7 +309,7 @@
                 <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path)); %>">{% trans "Open via Client" %}</a></li>
             </ul>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
-            <span class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></span>
+            <a class="more-op-icon sf2-icon-caret-down op-icon" title="{% trans "More operations" %}"></a>
             <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                 <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
             </ul>
@@ -589,7 +589,7 @@
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
-        <span class="sf2-icon-delete sf2-x unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></span>
+        <a href="#" class="sf2-icon-delete sf2-x unshare-btn op-icon vh" title="{% trans "Leave Share" %}"></a>
     </td>
     <td><%= size_formatted %></td>
     <td><%= mtime_relative %></td>
@@ -655,7 +655,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -712,11 +712,11 @@
 
     <div class="fright">
         <% if (wiki_enabled) { %>
-        <span class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></span>
+            <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
         <% } %>
-        <span class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></span>
-        <span class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></span>
-        <span class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></span>
+        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></a>
+        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></a>
+        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></a>
     </div>
 </div>
 </script>
@@ -822,7 +822,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <span class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></span>
+        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></a>
     </td>
 </script>
 

@@ -11,7 +11,7 @@
 {% block main_panel %}
     <div id="view-hd">
         <h2>{{ filename }}
-            <span id="file-star" class="{% if is_starred %}icon-star{% else %}icon-star-empty{% endif %} cspt"></span>
+            <a id="file-star" class="non-text-link {% if is_starred %}icon-star{% else %}icon-star-empty{% endif %}" href="#"></a>
             {% if is_pro %}
             <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" />
             {% endif %}
@@ -145,7 +145,9 @@ $('#file-star').click(function() {
             op_icon.toggleClass('icon-star-empty icon-star');
         },
         error: ajaxErrorHandler
-   });
+    });
+
+    return false;
 });
 
 {% if can_lock_unlock_file %}
