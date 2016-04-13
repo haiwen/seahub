@@ -670,8 +670,8 @@
         {% endif %}
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
-                <li class="tab"><a href="{% url 'personal_wiki' %}">
-                    <span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a>
+                <li class="tab">
+                    <a href="{% url 'personal_wiki' %}"><span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a>
                 </li>
             <% } %>
         <% } %>
