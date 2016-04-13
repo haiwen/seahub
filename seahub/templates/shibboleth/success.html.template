@@ -1,0 +1,45 @@
+<!-- This file is used to communicate with seafile zimlet on SSO login.  -->
+<!-- Please copy this file to <seafile-root>/seahub-data/custom/templates/shibboleth/success.html, create new path if missing. -->
+<!-- For security issue, please replace "*" in `parent.postMessage(msg, "*");` with your zimbra service origin, e.g. "https://zimbra-service.com" -->
+<html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    </head>
+    <body>
+        Login success
+    </body>
+
+    <script>
+    if (!String.prototype.trim) {
+        (function() {
+            // Make sure we trim BOM and NBSP
+            var rtrim = /^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g;
+            String.prototype.trim = function() {
+                return this.replace(rtrim, '');
+            };
+        })();
+    }
+
+     function getCookie(name) {
+         var cookieValue = null;
+         if (document.cookie && document.cookie != '') {
+             var cookies = document.cookie.split(';');
+             for (var i = 0; i < cookies.length; i++) {
+                 var cookie = cookies[i].trim();
+                 // Does this cookie string begin with the name we want?
+                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                     break;
+                 }
+             }
+         }
+         return cookieValue;
+     }
+
+     var msg = getCookie('seahub_auth');
+     if (msg) {
+         parent.postMessage(msg, "*");
+     }
+
+    </script>
+</html>

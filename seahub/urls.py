@@ -334,6 +334,7 @@ if getattr(settings, 'ENABLE_SHIB_LOGIN', False):
         '',
         url(r'^shib-login/', shib_login, name="shib_login"),
         url(r'^shib-complete/', TemplateView.as_view(template_name='shibboleth/complete.html'), name="shib_complete"),
+        url(r'^shib-success/', TemplateView.as_view(template_name="shibboleth/success.html"), name="shib_success"),
     )
 
 
