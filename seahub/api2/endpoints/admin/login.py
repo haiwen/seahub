@@ -8,8 +8,8 @@ from rest_framework import status
 
 from .utils import check_time_period_valid
 from seahub.base.templatetags.seahub_tags import email2nickname
-from seahub_extra.sysadmin_extra.models import UserLoginLog
 from seahub.utils.timeutils import datetime_to_isoformat_timestr
+from seahub.utils import is_pro_version
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
@@ -24,6 +24,10 @@ class Login(APIView):
 
     def get(self, request):
 
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         # check the date format, should be like '2015-10-10'
         start = request.GET.get('start', None)
         end = request.GET.get('end', None)
@@ -37,6 +41,7 @@ class Login(APIView):
         end = end + ' 23:59:59'
 
         result = []
+        from seahub_extra.sysadmin_extra.models import UserLoginLog
         logs = UserLoginLog.objects.filter(login_date__range=(start, end))
         for log in logs:
             result.append({
