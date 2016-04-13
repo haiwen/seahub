@@ -27,6 +27,16 @@ define([
         return true;
     });
 
+    $(document).keydown(function(e) {
+        // ESCAPE key pressed
+        if (e.keyCode == 27) {
+            var view = app.ui.currentPopover;
+            if (view) {
+                view.hide();
+            }
+        }
+    });
+
     $(window).resize(function() {
         var view = app.ui.currentPopover;
         if (!view) {

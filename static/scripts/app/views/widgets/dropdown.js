@@ -30,6 +30,19 @@ define([
         return true;
     });
 
+    $(document).keydown(function(e) {
+        // ESCAPE key pressed
+        if (e.keyCode == 27) {
+            var view = app.ui.currentDropdown;
+            if (view) {
+                view.hide();
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
+            }
+        }
+    });
+
     var DropdownView = Backbone.View.extend({
 
         defaultOptions: {
