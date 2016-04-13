@@ -118,6 +118,9 @@
 {% block extra_script %}
 {% include 'snippets/avatar_upload_js.html' %}
 <script type="text/javascript">
+$('#right-panel').show();
+$('#side-nav').show();
+
 var cur_avatar = $('#user-avatar-change .avatar');
 $('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outerWidth() + 10});
 

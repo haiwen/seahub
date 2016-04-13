@@ -51,8 +51,6 @@
                     {% endif %}
                 </a>
 
-                {% block nav %}{% endblock %}
-
                 {% block header_right %}
                 {% if request.user.is_authenticated %}
                 <div class="fright">
@@ -94,7 +92,7 @@
             </div>
         </div>
 
-        <div id="main" class="clear container-fluid">
+        <div id="main" class="clear container-fluid top-padding">
             <div class="row">
                 <div class="side-tabnav col-md-3" id="side-nav" role="navigation"></div>
                 <div id="right-panel" class="col-md-9 col-md-offset-3">

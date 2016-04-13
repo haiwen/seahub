@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends "base_wide_page.html" %}
 
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
@@ -10,7 +10,7 @@
 </style>
 {% endblock %}
 
-{% block main_panel %}
+{% block wide_page_content %}
 <h2 class="repo-snapshot-hd">{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Snapshot{% endblocktrans %} <span class="commit-time">({{ current_commit.props.ctime|tsstr_sec }})</span></h2>
 
 <a href="{% url 'repo_history' repo.props.id %}" class="go-back" title="{% trans "Back to modification history"%}">

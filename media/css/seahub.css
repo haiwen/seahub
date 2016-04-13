@@ -650,7 +650,7 @@ textarea:-moz-placeholder {/* for FF */
         position:fixed;
         top:52px;
         bottom:0;
-        z-index:1000;
+        z-index:1;
         padding:20px;
         overflow-x:hidden;
         overflow-y:auto;
@@ -776,7 +776,7 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -moz-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    z-index:15; /* for repo.html: to show on top of fixed-hd */
+    z-index:999; /* for repo.html: to show on top of fixed-hd */
 }
 .messages .info {
     padding:5px;
@@ -1302,15 +1302,16 @@ button.sf-dropdown-toggle:focus {
 }
 /********** container ***********/
 #wrapper {
-    padding-top: 53px;
+
 }
 #header {
     background:#f4f4f7;
     width:100%;
+    height:53px;
     font-size: 14px;
     border-bottom: 1px solid #e8e8e8;
     padding-bottom:4px;
-    z-index:1000; /* fix for: modal dialog z-index is 1001 */
+    z-index:1; /* fix for: modal dialog z-index is 1001 */
 }
 #header-inner {
     margin:0 auto;
@@ -1318,6 +1319,12 @@ button.sf-dropdown-toggle:focus {
 #main {
     min-height: 400px;
     _height: 400px;
+}
+#main.top-padding {
+    padding-top:53px;
+}
+#wide-panel-noframe {
+    padding-top:16px;
 }
 #right-panel {
     padding-top:16px;

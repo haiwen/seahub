@@ -1,9 +1,9 @@
-{% extends "myhome_base.html" %}
+{% extends "base_wide_page.html" %}
 {% load avatar_tags i18n seahub_tags %}
 
 {% block sub_title %}{% trans "Notices" %} - {% endblock %}
 
-{% block title_panel %}
+{% block wide_page_content %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
         <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'user_notification_list' %}">{% trans "Notices" %}</a></li>
@@ -13,9 +13,7 @@
         <button id="clear">{% trans "Clear" %}</button>
     </div>
 </div>
-{% endblock %}
 
-{% block main_panel %}
 {% if notices %}
 <table id="notices-table">
     <tr>
@@ -89,8 +87,8 @@ $('#notices-more-btn').click(function() {
         error: function(jqXHR, textStatus, errorThrown) {
             $('#notices-loading').addClass('hide');
             if (!jqXHR.responseText && textStatus != 'abort') {
-                $('#notices-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');  
-            }   
+                $('#notices-error').html("{% trans "Failed. Please check the network." %}").removeClass('hide');
+            }
         }
     });
 });

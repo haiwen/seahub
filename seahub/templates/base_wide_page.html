@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_content %}
+<div id="wide-panel-noframe" class="row">
+  <div class="col-md-10 col-md-offset-1">
+      {% block wide_page_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends 'base.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
@@ -7,6 +7,8 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% endblock %}
+
+{% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_panel %}
     <div id="view-hd">

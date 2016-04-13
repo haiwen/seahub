@@ -1,10 +1,12 @@
-{% extends base_template %}
+{% extends 'base.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
 {% endblock %}
+
+{% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_panel %}
     <div id="view-hd">

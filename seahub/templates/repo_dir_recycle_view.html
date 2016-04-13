@@ -1,9 +1,9 @@
-{% extends base_template %}
+{% extends 'base_wide_page.html' %}
 
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
-{% block main_panel %}
+{% block wide_page_content %}
 <h2 class="repo-trash-hd">{% blocktrans %}<span class="op-target">{{repo_dir_name}}</span> Trash{% endblocktrans %}</h2>
 <div class="repo-file-list-topbar ovhd">
     <p class="path fleft">

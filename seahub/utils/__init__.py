@@ -472,42 +472,6 @@ def is_org_context(request):
     """
     return request.cloud_mode and request.user.org is not None
 
-# def check_and_get_org_by_repo(repo_id, user):
-#     """
-#     Check whether repo is org repo, get org info if it is, and set
-#     base template.
-#     """
-#     org_id = get_org_id_by_repo_id(repo_id)
-#     if org_id > 0:
-#         # this repo is org repo, get org info
-#         org = get_org_by_id(org_id)
-#         org._dict['is_staff'] = is_org_staff(org_id, user)
-#         org._dict['email'] = user
-#         base_template = 'org_base.html'
-#     else:
-#         org = None
-#         base_template = 'myhome_base.html'
-
-#     return org, base_template
-
-def check_and_get_org_by_group(group_id, user):
-    """
-    Check whether repo is org repo, get org info if it is, and set
-    base template.
-    """
-    org_id = seaserv.get_org_id_by_group(group_id)
-    if org_id > 0:
-        # this repo is org repo, get org info
-        org = seaserv.get_org_by_id(org_id)
-        org._dict['is_staff'] = seaserv.is_org_staff(org_id, user)
-        org._dict['email'] = user
-        base_template = 'org_base.html'
-    else:
-        org = None
-        base_template = 'myhome_base.html'
-
-    return org, base_template
-
 # events related
 if EVENTS_CONFIG_FILE:
     parsed_events_conf = ConfigParser.ConfigParser()

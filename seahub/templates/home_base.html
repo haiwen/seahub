@@ -1,86 +1,87 @@
-{% extends "myhome_base.html" %}
+{% extends "base.html" %}
 {% load i18n %}
-{% block cur_myhome %}cur{% endblock %}
 
-{% block left_panel %}
-    <h3 class="hd">{% trans "Files" %}</h3>
-    <ul class="side-tabnav-tabs">
-        {% if user.permissions.can_add_repo %}
-        <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
-        {% comment %}
-        {% if sub_lib_enabled %}
-        <li class="tab"><a href="#my-sub-libs/">{% trans "Sub-libraries" %}</a></li>
-        {% endif %}
-        {% endcomment %}
-        {% endif %}
-        <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
-        {% if user.permissions.can_view_org %}
-        <li class="tab"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
-        {% endif %}
+{% block main_content %}
+<div class="row">
+    <div id="side-nav" class="side-tabnav col-md-3" >
+        <h3 class="hd">{% trans "Files" %}</h3>
+        <ul class="side-tabnav-tabs">
+            {% if user.permissions.can_add_repo %}
+            <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+            {% endif %}
+            <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+            {% if user.permissions.can_view_org %}
+            <li class="tab"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
+            {% endif %}
 
-        <li class="tab" id="group-nav">
-            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
-            <ul class="grp-list hide">
-                <li>
-                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
-                </li>
-                {% for grp in grps %}
-                <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
-                </li>
-                {% endfor %}
-            </ul>
-        </li>
-    </ul>
+            <li class="tab" id="group-nav">
+                <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+                <ul class="grp-list hide">
+                    <li>
+                        <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                    </li>
+                    {% for grp in grps %}
+                    <li>
+                        <a class="ellipsis" href="{{SITE_ROOT}}#group/{{ grp.id }}/" title="{{ grp.group_name }}"><span class="sharp">#</span>{{ grp.group_name }}</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </li>
+        </ul>
 
-    <div class="hd w100 ovhd">
-        <h3 class="fleft">{% trans "Tools" %}</h3>
-        {% if user.permissions.can_add_repo %}
-        <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
-        {% endif %}
+        <div class="hd w100 ovhd">
+            <h3 class="fleft">{% trans "Tools" %}</h3>
+            {% if user.permissions.can_add_repo %}
+            <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
+            {% endif %}
+        </div>
+        <ul class="side-tabnav-tabs">
+            <li class="tab {% block cur_stars %}{% endblock %}"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
+            {% if events_enabled %}
+            <li class="tab {% block cur_activities %}{% endblock %}"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
+            {% endif %}
+            {% for mod in request.user.mods_enabled %}
+            {% if mod == 'personal wiki' %}
+            <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
+            {% endif %}
+            {% endfor %}
+            <li class="tab {% block cur_devices %}{% endblock %}"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+        </ul>
+
+        <h3 class="hd">{% trans "Share Admin" %}</h3>
+        <ul class="side-tabnav-tabs">
+            {% if user.permissions.can_add_repo %}
+            <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+            <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
+            {% endif %}
+            <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
+        </ul>
     </div>
-    <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_stars %}{% endblock %}"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
-        {% if events_enabled %}
-        <li class="tab {% block cur_activities %}{% endblock %}"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
-        {% endif %}
-        {% for mod in request.user.mods_enabled %}
-        {% if mod == 'personal wiki' %}
-        <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
-        {% endif %}
+
+    <div id="right-panel" class="col-md-9 col-md-offset-3">
+        {% block right_panel %}{% endblock %}
+    </div>
+
+    {% if user.permissions.can_add_repo %}
+    <form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
+        <h3>{% trans "Enable Modules"%}</h3>
+        <ul>
+        {% for mod in request.user.mods_available %}
+          {% if mod == 'personal wiki' %}
+          <li>
+          <label class="checkbox-label">
+              <input type="checkbox" name="personal_wiki" class="vam" {%if mod in request.user.mods_enabled%}checked="checked"{% endif%} />
+              <span class="checkbox-option vam">{% trans "Personal Wiki" %}</span>
+          </label>
+          </li>
+          {% endif %}
         {% endfor %}
-        <li class="tab {% block cur_devices %}{% endblock %}"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
-    </ul>
+        </ul>
+        <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit" />
+    </form>
+    {% endif %}
 
-    <h3 class="hd">{% trans "Share Admin" %}</h3>
-    <ul class="side-tabnav-tabs">
-        {% if user.permissions.can_add_repo %}
-        <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
-        {% endif %}
-        <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
-    </ul>
-{% endblock %}
-
-{% block main_panel %}
-{% if user.permissions.can_add_repo %}
-<form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
-    <ul>
-    {% for mod in request.user.mods_available %}
-      {% if mod == 'personal wiki' %}
-      <li>
-      <label class="checkbox-label">
-          <input type="checkbox" name="personal_wiki" class="vam" {%if mod in request.user.mods_enabled%}checked="checked"{% endif%} />
-          <span class="checkbox-option vam">{% trans "Personal Wiki" %}</span>
-      </label>
-      </li>
-      {% endif %}
-    {% endfor %}
-    </ul>
-    <input type="submit" id="mods-enable-submit" value="{% trans "Submit"%}" class="submit" />
-</form>
-{% endif %}
+</div>
 {% endblock %}
 
 {% block extra_script %}
