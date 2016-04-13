@@ -36,6 +36,9 @@ define([
             var view = app.ui.currentDropdown;
             if (view) {
                 view.hide();
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
             }
         }
     });
