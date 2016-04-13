@@ -30,7 +30,7 @@
 </script>
 <script type="text/template" id="repo-tmpl">
     <td>
-        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <% if (name) { %>
     <td><span class="repo-name-span"><a href="#my-libs/lib/<%= id %>"><%- name %></a></span></td>
@@ -65,7 +65,7 @@
 </script>
 <script type="text/template" id="group-repo-tmpl">
     <td>
-        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
@@ -81,7 +81,7 @@
 </script>
 <script type="text/template" id="organization-repo-tmpl">
     <td>
-        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><a href="#org/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
@@ -585,7 +585,7 @@
 </script>
 <script type="text/template" id="shared-repo-tmpl">
     <td>
-        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="" width="24" />
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><a href="#shared-libs/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
@@ -600,23 +600,24 @@
     <h3 class="hd">{% trans "Files" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
-        <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
-        {% comment %}
-        {% if sub_lib_enabled %}
-        <li class="tab<% if (cur_tab == 'sub-libs') { %> tab-cur<% } %>"><a href="#my-sub-libs/">{% trans "Sub-libraries" %}</a></li>
-        {% endif %}
-        {% endcomment %}
+        <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#my-libs/"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "Mine" %}</a>
+        </li>
         {% endif %}
 
-        <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+        <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#shared-libs/"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared" %}</a>
+        </li>
 
         {% if user.permissions.can_view_org %}
-        <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
+        <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" %}</a>
+        </li>
         {% endif %}
 
         <% if (cur_tab == 'group') { %>
         <li class="tab" id="group-nav">
-            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
+            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
                 <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
@@ -633,10 +634,10 @@
         <% } else { %>
         <li class="tab" id="group-nav">
             <% if (show_group_list) { %>
-            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
+            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
             <% } else { %>
-            <a href="#"><span class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
             <ul class="grp-list hide">
             <% } %>
                 <li>
@@ -659,25 +660,39 @@
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
-        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
+        <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#starred/"><span aria-hidden="true" class="sf2-icon-star"></span>{% trans "Starred" %}</a>
+        </li>
         {% if events_enabled %}
-        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
+        <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#activities/"><span aria-hidden="true" class="sf2-icon-clock"></span>{% trans "Activities" %}</a>
+        </li>
         {% endif %}
         <% for (var i = 0, len = mods_enabled.length; i < len; i++) { %>
             <% if (mods_enabled[i] == 'personal wiki') { %>
-                <li class="tab"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
+                <li class="tab">
+                    <a href="{% url 'personal_wiki' %}"><span aria-hidden="true" class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a>
+                </li>
             <% } %>
         <% } %>
-        <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+        <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}#devices/"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
+        </li>
     </ul>
 
     <h3 class="hd">{% trans "Share Admin" %}</h3>
     <ul class="side-tabnav-tabs">
         <% if (can_add_repo) { %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/folders/"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
+        <li class="tab">
+            <a href="{{ SITE_ROOT }}share/"><span aria-hidden="true" class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
+        </li>
+        <li class="tab">
+            <a href="{{ SITE_ROOT }}share/folders/"><span aria-hidden="true" class="sf2-icon-folder"></span>{% trans "Folders" %}</a>
+        </li>
         <% } %>
-        <li class="tab"><a href="{{ SITE_ROOT }}share/links/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
+        <li class="tab">
+            <a href="{{ SITE_ROOT }}share/links/"><span aria-hidden="true" class="sf2-icon-link"></span>{% trans "Links" %}</a>
+        </li>
     </ul>
 </script>
 
@@ -828,18 +843,18 @@
 
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
-       <th width="4%"><!--icon--></th>
+       <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
        <th width="42%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
-       <th width="14%"><!--op--></th>
+       <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
        <th width="20%">{% trans "Size" %}</th>
        <th width="20%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
    </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>
-        <th width="4%"><!--icon--></th>
+        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
         <th width="40%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
-        <th width="8%"><!--op--></th>
+        <th width="8%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
         <th width="14%">{% trans "Size" %}</th>
         <th width="18%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
         <th width="16%">{% trans "Shared By" %}</th>

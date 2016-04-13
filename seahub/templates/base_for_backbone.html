@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }}">
         <!--[if lt IE 10]>
         <p id="top-browser-tip">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span class="close">{% trans "Close" %}</span></p>
         <![endif]-->
@@ -37,7 +37,7 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header">
+        <div id="header" role="banner">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
                 <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
@@ -117,9 +117,9 @@
 
         <div id="main" class="clear">
             <div id="left-panel">
-                <div class="side-tabnav hide" id="side-nav"></div>
+                <div class="side-tabnav hide" id="side-nav" role="navigation" ></div>
             </div>
-            <div id="right-panel">
+            <div id="right-panel" role="main">
                 {% block right_panel %}{% endblock %}
             </div>
             <div id="main-panel" class="clear w100 ovhd">
