@@ -30,6 +30,16 @@ define([
         return true;
     });
 
+    $(document).keydown(function(e) {
+        // ESCAPE key pressed
+        if (e.keyCode == 27) {
+            var view = app.ui.currentDropdown;
+            if (view) {
+                view.hide();
+            }
+        }
+    });
+
     var DropdownView = Backbone.View.extend({
 
         defaultOptions: {
