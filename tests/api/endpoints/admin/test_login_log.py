@@ -5,8 +5,18 @@ import datetime
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 
-class AccountTest(BaseTestCase):
+try:
+    from seahub.settings import LOCAL_PRO_DEV_ENV
+except ImportError:
+    LOCAL_PRO_DEV_ENV = False
+
+class LoginLogTest(BaseTestCase):
+
     def test_get_login_log(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.admin)
 
         end_timestamp = time.time()
@@ -22,6 +32,10 @@ class AccountTest(BaseTestCase):
         assert json_resp[0]['email'] == self.admin.email
 
     def test_can_not_get_if_start_time_invalid(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.admin)
 
         end_timestamp = time.time()
@@ -35,6 +49,10 @@ class AccountTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_get_if_end_time_invalid(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.admin)
 
         end_timestamp = time.time()
@@ -48,6 +66,10 @@ class AccountTest(BaseTestCase):
         self.assertEqual(400, resp.status_code)
 
     def test_can_not_get_if_not_admin(self):
+
+        if not LOCAL_PRO_DEV_ENV:
+            return
+
         self.login_as(self.user)
 
         end_timestamp = time.time()
