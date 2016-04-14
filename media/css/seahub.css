@@ -455,6 +455,10 @@ p { margin:0.5em 0; }
 .sf2-icon-edit:hover {
     opacity:1;
 }
+a.op-icon:focus {
+    outline:none;
+    text-decoration:none;
+}
 .op-icon:hover {/** for <a> **/
     color:#888;
     text-decoration:none;
@@ -635,6 +639,7 @@ textarea:-moz-placeholder {/* for FF */
     color:#747476;
     font-size:14px;
     outline:none; /* to overwrite webkit ':focus' style */
+    text-decoration:none;
 }
 .left-right-tabs-nav a:hover {
     text-decoration:none;
