@@ -217,9 +217,15 @@ define([
 
             var after_op_success = function(data) {
                 app.ui.freezeItemHightlight = false;
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
             };
             var cancelRename = function() {
                 app.ui.freezeItemHightlight = false;
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
                 form.remove();
                 $op.show();
                 $name.show();
