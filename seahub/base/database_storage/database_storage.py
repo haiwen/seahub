@@ -166,21 +166,21 @@ class DatabaseStorage(Storage):
         encoded = base64.b64encode(binary)
         mtime = value_to_db_datetime(datetime.today())
 
-        cursor = connection.cursor()
+        with transaction.atomic(using='default'):
+            cursor = connection.cursor()
+            if self.exists(name):
+                query = 'UPDATE %(table)s SET %(data_column)s = %%s, ' + \
+                        '%(size_column)s = %%s, %(mtime_column)s = %%s ' + \
+                        'WHERE %(name_md5_column)s = %%s'
+                query %= self.__dict__
+                cursor.execute(query, [encoded, size, mtime, name])
+            else:
+                query = 'INSERT INTO %(table)s (%(name_column)s, ' + \
+                    '%(name_md5_column)s, %(data_column)s, %(size_column)s, '+ \
+                    '%(mtime_column)s) VALUES (%%s, %%s, %%s, %%s, %%s)'
+                query %= self.__dict__
+                cursor.execute(query, (name, name_md5, encoded, size, mtime))
 
-        if self.exists(name):
-            query = 'UPDATE %(table)s SET %(data_column)s = %%s, ' + \
-                    '%(size_column)s = %%s, %(mtime_column)s = %%s ' + \
-                    'WHERE %(name_md5_column)s = %%s'
-            query %= self.__dict__
-            cursor.execute(query, [encoded, size, mtime, name])
-        else:
-            query = 'INSERT INTO %(table)s (%(name_column)s, ' + \
-                '%(name_md5_column)s, %(data_column)s, %(size_column)s, '+ \
-                '%(mtime_column)s) VALUES (%%s, %%s, %%s, %%s, %%s)'
-            query %= self.__dict__
-            cursor.execute(query, (name, name_md5, encoded, size, mtime))
-        transaction.commit_unless_managed(using='default')
         return name
 
     def exists(self, name):
