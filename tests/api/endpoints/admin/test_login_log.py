@@ -25,7 +25,7 @@ class LoginLogTest(BaseTestCase):
         end_time_str = datetime.datetime.fromtimestamp(end_timestamp).strftime('%Y-%m-%d')
 
         para_str = '?start=%s&end=%s' % (start_time_str, end_time_str)
-        url = reverse('api-v2.1-admin-login') + para_str
+        url = reverse('api-v2.1-admin-logs-login') + para_str
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
 
@@ -44,7 +44,7 @@ class LoginLogTest(BaseTestCase):
         end_time_str = datetime.datetime.fromtimestamp(end_timestamp).strftime('%Y-%m-%d')
 
         para_str = '?star=%s&end=%s' % (start_time_str, end_time_str)
-        url = reverse('api-v2.1-admin-login') + para_str
+        url = reverse('api-v2.1-admin-logs-login') + para_str
         resp = self.client.get(url)
         self.assertEqual(400, resp.status_code)
 
@@ -61,7 +61,7 @@ class LoginLogTest(BaseTestCase):
         end_time_str = datetime.datetime.fromtimestamp(end_timestamp).strftime('%Y-%m-%d')
 
         para_str = '?start=%s&en=%s' % (start_time_str, end_time_str)
-        url = reverse('api-v2.1-admin-login') + para_str
+        url = reverse('api-v2.1-admin-logs-login') + para_str
         resp = self.client.get(url)
         self.assertEqual(400, resp.status_code)
 
@@ -78,6 +78,6 @@ class LoginLogTest(BaseTestCase):
         end_time_str = datetime.datetime.fromtimestamp(end_timestamp).strftime('%Y-%m-%d')
 
         para_str = '?start=%s&end=%s' % (start_time_str, end_time_str)
-        url = reverse('api-v2.1-admin-login') + para_str
+        url = reverse('api-v2.1-admin-logs-login') + para_str
         resp = self.client.get(url)
         self.assertEqual(403, resp.status_code)

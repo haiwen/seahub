@@ -306,20 +306,20 @@ if getattr(settings, 'ENABLE_SYSADMIN_EXTRA', False):
         sys_log_file_update_export_excel, sys_log_perm_audit_export_excel, \
         sys_log_email_audit
     urlpatterns += patterns('',
-        url(r'^api/v2.1/admin/login/$', Login.as_view(), name='api-v2.1-admin-login'),
+        url(r'^api/v2.1/admin/logs/login/$', Login.as_view(), name='api-v2.1-admin-logs-login'),
         url(r'^sys/loginadmin/$', sys_login_admin, name='sys_login_admin'),
         url(r'^sys/loginadmin/export-excel/$', sys_login_admin_export_excel, name='sys_login_admin_export_excel'),
 
-        url(r'^api/v2.1/admin/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-file-audit'),
+        url(r'^api/v2.1/admin/logs/file-audit/$', FileAudit.as_view(), name='api-v2.1-admin-logs-file-audit'),
         url(r'^sys/log/fileaudit/$', sys_log_file_audit, name='sys_log_file_audit'),
         url(r'^sys/log/emailaudit/$', sys_log_email_audit, name='sys_log_email_audit'),
         url(r'^sys/log/fileaudit/export-excel/$', sys_log_file_audit_export_excel, name='sys_log_file_audit_export_excel'),
 
-        url(r'^api/v2.1/admin/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-file-update'),
+        url(r'^api/v2.1/admin/logs/file-update/$', FileUpdate.as_view(), name='api-v2.1-admin-logs-file-update'),
         url(r'^sys/log/fileupdate/$', sys_log_file_update, name='sys_log_file_update'),
         url(r'^sys/log/fileupdate/export-excel/$', sys_log_file_update_export_excel, name='sys_log_file_update_export_excel'),
 
-        url(r'^api/v2.1/admin/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-perm-audit'),
+        url(r'^api/v2.1/admin/logs/perm-audit/$', PermAudit.as_view(), name='api-v2.1-admin-logs-perm-audit'),
         url(r'^sys/log/permaudit/$', sys_log_perm_audit, name='sys_log_perm_audit'),
         url(r'^sys/log/permaudit/export-excel/$', sys_log_perm_audit_export_excel, name='sys_log_perm_audit_export_excel'),
     )
