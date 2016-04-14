@@ -71,6 +71,24 @@ define([
                     }
                 });
 
+                // hide 'rename form'
+                $(document).click(function(e) {
+                    var target =  e.target || event.srcElement;
+                    var $form = $('#rename-form');
+                    if ($form.length && !$form.find('*').is(target)) {
+                        var $tr = $form.closest('tr'); // get $tr before $form removed in `.cancel click()`
+                        $('.cancel', $form).click();
+                        if (!$tr.find('*').is(target)) {
+                            $tr.removeClass('hl').find('.op-icon').addClass('vh');
+                            $('.repo-file-list tr:gt(0)').each(function() {
+                                if ($(this).find('*').is(target)) {
+                                    $(this).addClass('hl').find('.op-icon').removeClass('vh');
+                                }
+                            });
+                        }
+                    }
+                });
+
                 // for 'grid view': click to hide the contextmenu of '.grid-item'
                 $(document).click(function(e) {
                     var target =  e.target || event.srcElement;
