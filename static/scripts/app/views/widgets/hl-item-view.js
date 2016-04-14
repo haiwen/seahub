@@ -23,7 +23,6 @@ define([
         focus: function() {
             // if there are dropdown items or freezeItemHightlight is set, don't highlight
             if (app.ui.currentDropdown || app.ui.freezeItemHightlight) {
-                console.log("app.ui.currentDropdown ");
                 return true;
             }
 
