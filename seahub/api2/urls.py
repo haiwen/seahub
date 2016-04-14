@@ -72,7 +72,7 @@ urlpatterns = patterns('',
     url(r'^shared-links/$', SharedLinksView.as_view()),
     url(r'^shared-upload-links/$', SharedUploadLinksView.as_view()),
     url(r'^virtual-repos/$', VirtualRepos.as_view()),
-    url(r'^repo-tokens/$', RepoTokensView.as_view()),
+    url(r'^repo-tokens/$', RepoTokensView.as_view(), name='api2-repo-tokens'),
 
     url(r'^organization/$', OrganizationView.as_view()),
 
