@@ -6,21 +6,23 @@ define([
     'file-tree',
     'app/views/share',
     'app/views/dialogs/dirent-mvcp',
-    'app/views/folder-perm'
+    'app/views/folder-perm',
+    'app/views/widgets/hl-item-view',
+    'app/views/widgets/dropdown'
 ], function($, _, Backbone, Common, FileTree, ShareView, DirentMvcpDialog,
-    FolderPermView) {
+    FolderPermView, HLItemView, DropdownView) {
     'use strict';
 
-    app = app || {};
-    app.globalState = app.globalState || {};
-
-    var DirentView = Backbone.View.extend({
+    var DirentView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#dirent-tmpl').html()),
+        fileTemplate: _.template($('#dirent-file-tmpl').html()),
+        dirTemplate: _.template($('#dirent-dir-tmpl').html()),
         renameTemplate: _.template($("#rename-form-template").html()),
 
         initialize: function(options) {
+            HLItemView.prototype.initialize.call(this);
+
             this.dirView = options.dirView;
             this.dir = this.dirView.dir;
 
@@ -34,8 +36,14 @@ define([
             var is_pro = app.pageOptions.is_pro;
             var file_audit_enabled = app.pageOptions.file_audit_enabled;
             var file_icon_size = Common.isHiDPI() ? 48 : 24;
+            var template;
+            if (this.model.get('is_dir')) {
+                template = this.dirTemplate;
+            } else {
+                template = this.fileTemplate;
+            }
 
-            this.$el.html(this.template({
+            this.$el.html(template({
                 dirent: this.model.attributes,
                 dirent_path: dirent_path,
                 encoded_path: Common.encodePath(dirent_path),
@@ -51,17 +59,17 @@ define([
                 repo_encrypted: dir.encrypted
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
+            this.dropdown = new DropdownView({
+                el: this.$('.dropdown')
+            });
 
             return this;
         },
 
         events: {
-            'mouseenter': 'highlight',
-            'mouseleave': 'rmHighlight',
             'click .select': 'select',
             'click .file-star': 'starFile',
             'click .dir-link': 'visitDir',
-            'click .more-op-icon': 'togglePopup',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
             'click .rename': 'rename',
@@ -74,20 +82,7 @@ define([
         },
 
         _hideMenu: function() {
-            this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
-            this.$('.hidden-op').addClass('hide');
-        },
-
-        highlight: function() {
-            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
-                this.$el.addClass('hl').find('.repo-file-op').removeClass('vh');
-            }
-        },
-
-        rmHighlight: function() {
-            if (!$('.hidden-op:visible').length && !$('#rename-form').length) {
-                this.$el.removeClass('hl').find('.repo-file-op').addClass('vh');
-            }
+            this.dropdown.hide();
         },
 
         select: function () {
@@ -165,26 +160,6 @@ define([
             return false;
         },
 
-        togglePopup: function() {
-            var icon = this.$('.more-op-icon'),
-                popup = this.$('.hidden-op');
-
-            if (popup.hasClass('hide')) { // the popup is not shown
-                popup.css({'left': icon.position().left});
-                if (icon.offset().top + popup.height() <= $('#main').offset().top + $('#main').height()) {
-                    // below the icon
-                    popup.css('top', icon.position().top + icon.outerHeight(true) + 3);
-                } else {
-                    popup.css('bottom', icon.parent().outerHeight() - icon.position().top + 3);
-                }
-                popup.removeClass('hide');
-            } else {
-                popup.addClass('hide');
-            }
-
-            return false;
-        },
-
         share: function() {
             var dir = this.dir,
                 obj_name = this.model.get('obj_name'),
@@ -237,9 +212,20 @@ define([
             $op.hide();
             $name.hide();
 
-            this.$('.hidden-op').addClass('hide');
+            this._hideMenu();
+            app.ui.freezeItemHightlight = true;
 
+            var after_op_success = function(data) {
+                app.ui.freezeItemHightlight = false;
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
+            };
             var cancelRename = function() {
+                app.ui.freezeItemHightlight = false;
+                if (app.ui.currentHighlightedItem) {
+                    app.ui.currentHighlightedItem.rmHighlight();
+                }
                 form.remove();
                 $op.show();
                 $name.show();
@@ -276,6 +262,7 @@ define([
                 };
                 _this.model.rename({
                     newname: new_name,
+                    success: after_op_success,
                     error: after_op_error
                 });
                 return false;
@@ -291,6 +278,7 @@ define([
                 'op_type': op_type
             };
 
+            this._hideMenu();
             new DirentMvcpDialog(options);
             return false;
         },
@@ -301,12 +289,14 @@ define([
                 'dir_path': this.dir.path,
                 'repo_id': this.dir.repo_id
             };
+            this._hideMenu();
             new FolderPermView(options);
             return false;
         },
 
         lockFile: function() {
             var _this = this;
+            this._hideMenu();
             this.model.lockFile({
                 success: function() {
                     _this.$el.removeClass('hl');
@@ -320,6 +310,7 @@ define([
 
         unlockFile: function() {
             var _this = this;
+            this._hideMenu();
             this.model.unlockFile({
                 success: function() {
                     _this.$el.removeClass('hl');
