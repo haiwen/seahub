@@ -176,9 +176,9 @@
         <th class="star"></th>
         <th class="dirent-icon"></th>
         <th class="by-name cspt"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></th>
-        <th class="dirent-op"></th>
+        <th class="dirent-op"><span class="sr-only">{% trans "Actions" %}</span></th>
         <th class="dirent-size">{% trans "Size"%}</th>
-        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide"></span></th>
+        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide" aria-hidden="true"></span></th>
     </tr>
 </script>
 
@@ -247,9 +247,9 @@
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
-        <a href="#" title="{% trans "starred" %}" class="icon-star file-star"></a>
+        <a href="#" title="{% trans "starred" %}" class="icon-star file-star" aria-label="{% trans "starred" %}"></a>
         <% } else { %>
-        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star"></a>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star" aria-label="{% trans "unstarred" %}"></a>
         <% } %>
     </td>
     <td class="dirent-icon">
@@ -281,17 +281,17 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}"></a>
+                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}"></a>
+                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}"></a>
+                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
             <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More Operations"%}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
