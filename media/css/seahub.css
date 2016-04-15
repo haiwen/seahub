@@ -448,6 +448,10 @@ p { margin:0.5em 0; }
 .op-icon.sf2-x:hover {
     color:#f89a68;
 }
+.op-icon.sf2-x:hover,
+.op-icon.sf2-x:focus {
+    text-decoration: underline;
+}
 .sf2-icon-edit {
     font-size:16px;
     opacity:0.7;
