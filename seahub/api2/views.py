@@ -4092,25 +4092,30 @@ class ThumbnailView(APIView):
 _REPO_ID_PATTERN = re.compile(r'[-0-9a-f]{36}')
 
 class RepoTokensView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication,)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     @json_response
     def get(self, request, format=None):
-        repos = request.GET.get('repos', None)
-        if not repos:
+        repos_id_str = request.GET.get('repos', None)
+        if not repos_id_str:
             return api_error(status.HTTP_400_BAD_REQUEST, "You must specify libaries ids")
 
-        repos = [repo for repo in repos.split(',') if repo]
-        if any([not _REPO_ID_PATTERN.match(repo) for repo in repos]):
+        repos_id = [repo_id for repo_id in repos_id_str.split(',') if repo_id]
+        if any([not _REPO_ID_PATTERN.match(repo_id) for repo_id in repos_id]):
             return api_error(status.HTTP_400_BAD_REQUEST, "Libraries ids are invalid")
 
         tokens = {}
-        for repo in repos:
+        for repo_id in repos_id:
+            repo = seafile_api.get_repo(repo_id)
+            if not repo:
+                continue
+
             if not check_folder_permission(request, repo.id, '/'):
                 continue
-            tokens[repo] = seafile_api.generate_repo_token(repo, request.user.username)
+
+            tokens[repo_id] = seafile_api.generate_repo_token(repo_id, request.user.username)
 
         return tokens
 
