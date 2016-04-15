@@ -645,6 +645,7 @@ define([
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);
                 this.dir.comparator = null;
+                return false;
             },
 
             sortByTime: function () {
@@ -663,6 +664,7 @@ define([
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);
                 this.dir.comparator = null;
+                return false;
             },
 
             sortDirents: function(sort_mode) {

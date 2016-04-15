@@ -183,6 +183,16 @@ a:focus {
 a.black {
     color:#322;
 }
+a.table-sort-op {
+    color:inherit;
+    font-weight:normal;
+}
+a.table-sort-op:hover,
+a.table-sort-op:focus {
+    outline:none;
+    font-weight:bold;
+    text-decoration:none;
+}
 img { border:none; }
 textarea {
     overflow: auto; /* rm default vertical scrollbar in ie */

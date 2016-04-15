@@ -139,6 +139,7 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
+            return false;
         },
 
         sortByTime: function() {
@@ -157,6 +158,7 @@ define([
             repos.each(this.addOne, this);
             el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
+            return false;
         }
 
     });

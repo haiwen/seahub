@@ -175,10 +175,10 @@
         </th>
         <th class="star"></th>
         <th class="dirent-icon"></th>
-        <th class="by-name cspt"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></th>
+        <th><a class="table-sort-op by-name cspt" href="#"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></a></th>
         <th class="dirent-op"><span class="sr-only">{% trans "Actions" %}</span></th>
         <th class="dirent-size">{% trans "Size"%}</th>
-        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide" aria-hidden="true"></span></th>
+        <th class="dirent-update"><a class="table-sort-op by-time cspt" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide" aria-hidden="true"></span></a></th>
     </tr>
 </script>
 
@@ -849,19 +849,19 @@
 <script type="text/template" id="my-repos-hd-tmpl">
    <tr>
        <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-       <th width="42%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
+       <th width="42%"><a class="table-sort-op by-name cspt" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
        <th width="14%"><span class="sr-only">{% trans "Actions" %}</span></th>
        <th width="20%">{% trans "Size" %}</th>
-       <th width="20%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
+       <th width="20%"><a class="table-sort-op by-time cspt" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
    </tr>
 </script>
 <script type="text/template" id="shared-repos-hd-tmpl">
     <tr>
         <th width="4%"><span class="sr-only">{% trans "Library Type" %}</span><!--icon--></th>
-        <th width="40%" class="by-name cspt">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></th>
+        <th width="40%"><a class="table-sort-op by-name cspt" href="#">{% trans "Name" %} <span class="sort-icon icon-caret-down hide"></span></a></th>
         <th width="8%"><span class="sr-only">{% trans "Actions" %}</span><!--op--></th>
         <th width="14%">{% trans "Size" %}</th>
-        <th width="18%" class="by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></th>
+        <th width="18%"><a class="table-sort-op by-time cspt" href="#">{% trans "Last Update" %} <span class="sort-icon icon-caret-up"></span></a></th>
         <th width="16%">{% trans "Shared By" %}</th>
     </tr>
 </script>
