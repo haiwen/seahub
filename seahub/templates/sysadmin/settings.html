@@ -73,6 +73,12 @@
     {% endwith %}
     </div>
 
+    {% if has_two_factor_auth %}
+    {% with type="checkbox" setting_display_name="enable two factor authentication" help_tip="Enable two factor authentication" setting_name="ENABLE_TWO_FACTOR_AUTH" setting_val=config_dict.ENABLE_TWO_FACTOR_AUTH %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+    {% endif %}
+
     <h4>Library</h4>
 
     <div>

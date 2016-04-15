@@ -28,6 +28,7 @@ from seahub.profile.models import Profile
 from seahub.utils import is_ldap_user
 from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
+from seahub.utils.two_factor_auth import two_factor_auth_enabled, handle_two_factor_auth
 
 from constance import config
 
@@ -43,13 +44,16 @@ def log_user_in(request, user, redirect_to):
     if not is_safe_url(url=redirect_to, host=request.get_host()):
         redirect_to = settings.LOGIN_REDIRECT_URL
 
-    # Okay, security checks complete. Log the user in.
-    auth_login(request, user)
-
     if request.session.test_cookie_worked():
         request.session.delete_test_cookie()
 
     _clear_login_failed_attempts(request)
+
+    if two_factor_auth_enabled(user):
+        return handle_two_factor_auth(request, user, redirect_to)
+
+    # Okay, security checks complete. Log the user in.
+    auth_login(request, user)
 
     return HttpResponseRedirect(redirect_to)
 
