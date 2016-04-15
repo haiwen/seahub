@@ -22,7 +22,7 @@ from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.contacts.models import Contact
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.utils import is_ldap_user
-from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
+from seahub.utils.two_factor_auth import has_two_factor_auth
 from seahub.views import get_owned_repo_list
 
 @login_required
@@ -75,8 +75,6 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
 
-    two_factor_auth_enabled = HAS_TWO_FACTOR_AUTH and config.ENABLE_TWO_FACTOR_AUTH
-
     return render_to_response('profile/set_profile.html', {
             'form': form,
             'server_crypto': server_crypto,
@@ -86,7 +84,7 @@ def edit_profile(request):
             'owned_repos': owned_repos,
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
-            'two_factor_auth_enabled': two_factor_auth_enabled,
+            'two_factor_auth_enabled': has_two_factor_auth(),
             }, context_instance=RequestContext(request))
 
 @login_required

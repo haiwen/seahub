@@ -4,7 +4,7 @@ from seahub.auth import authenticate
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.profile.models import Profile
-from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH, verify_two_factor_token
+from seahub.utils.two_factor_auth import has_two_factor_auth, verify_two_factor_token
 
 def all_none(values):
     for value in values:
@@ -82,7 +82,7 @@ class AuthTokenSerializer(serializers.Serializer):
         return token.key
 
     def _two_factor_auth(self, request, username):
-        if not HAS_TWO_FACTOR_AUTH:
+        if not has_two_factor_auth():
             return
         token = request.META.get('HTTP_X_SEAFILE_OTP', '')
         if not token:
