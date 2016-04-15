@@ -624,14 +624,14 @@
         <li class="tab" id="group-nav">
             <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
-                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
+                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                     <% if (cur_group_id == groups[i].id) { %>
                     <li class="tab-cur">
                     <% } else { %>
                     <li>
                     <% } %>
-                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
+                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>
@@ -646,11 +646,11 @@
             <ul class="grp-list hide">
             <% } %>
                 <li>
-                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                    <a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                 </li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                 <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>
@@ -661,7 +661,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></a>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -734,9 +734,9 @@
         <% if (wiki_enabled) { %>
             <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
         <% } %>
-        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></a>
-        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></a>
-        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></a>
+        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
+        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
+        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
     </div>
 </div>
 </script>

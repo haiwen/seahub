@@ -58,7 +58,7 @@
                 {% endif %}
 
                 <div id="msg-count" class="fleft">
-                    <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}">
+                    <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
                         <span class="sf2-icon-bell"></span>
                         <span class="num hide">0</span>
                     </a>
@@ -75,7 +75,7 @@
                 </div>
 
                 <div id="account" class="fright">
-                    <a id="my-info" href="#" class="no-deco">
+                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
                     <div id="user-info-popup" class="top-info-popup hide">
