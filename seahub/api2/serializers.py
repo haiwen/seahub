@@ -4,6 +4,7 @@ from seahub.auth import authenticate
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.profile.models import Profile
+from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH, verify_two_factor_token
 
 def all_none(values):
     for value in values:
@@ -31,6 +32,10 @@ class AuthTokenSerializer(serializers.Serializer):
     # These fields may be needed in the future
     client_version = serializers.CharField(required=False, default='')
     platform_version = serializers.CharField(required=False, default='')
+
+    def __init__(self, *a, **kw):
+        super(AuthTokenSerializer, self).__init__(*a, **kw)
+        self.two_factor_auth_failed = False
 
     def validate(self, attrs):
         login_id = attrs.get('username')
@@ -66,14 +71,28 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
-        # Now user is authenticated
+        self._two_factor_auth(self.context['request'], username)
 
+        # Now user is authenticated
         if v2:
             token = get_token_v2(self.context['request'], username, platform, device_id, device_name,
                                  client_version, platform_version)
         else:
             token = get_token_v1(username)
         return token.key
+
+    def _two_factor_auth(self, request, username):
+        if not HAS_TWO_FACTOR_AUTH:
+            return
+        token = request.META.get('HTTP_X_SEAFILE_OTP', '')
+        if not token:
+            self.two_factor_auth_failed = True
+            msg = 'Two factor auth token is missing.'
+            raise serializers.ValidationError(msg)
+        if not verify_two_factor_token(username, token):
+            self.two_factor_auth_failed = True
+            msg = 'Two factor auth token is invalid.'
+            raise serializers.ValidationError(msg)
 
 class AccountSerializer(serializers.Serializer):
     email = serializers.EmailField()
