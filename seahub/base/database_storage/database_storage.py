@@ -194,11 +194,11 @@ class DatabaseStorage(Storage):
 
     def delete(self, name):
         if self.exists(name):
-            name_md5 = hashlib.md5(name).hexdigest()
-            query = 'DELETE FROM %(table)s WHERE %(name_md5_column)s = %%s'
-            query %= self.__dict__
-            connection.cursor().execute(query, [name_md5])
-            transaction.commit_unless_managed(using='default')
+            with transaction.atomic(using='default'):
+                name_md5 = hashlib.md5(name).hexdigest()
+                query = 'DELETE FROM %(table)s WHERE %(name_md5_column)s = %%s'
+                query %= self.__dict__
+                connection.cursor().execute(query, [name_md5])
 
     def path(self, name):
         raise NotImplementedError('DatabaseStorage does not support path().')
