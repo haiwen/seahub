@@ -60,6 +60,7 @@ define([
         hide: function() {
             app.ui.currentPopover = null;
             this.$el.detach();
+            return false;
         },
 
         show: function() {

@@ -1190,12 +1190,23 @@ textarea:-moz-placeholder {/* for FF */
     margin:4px 0 0;
 }
 .popover-con {
-    padding:0 10px;
     overflow:auto;
+}
+a.popover-item {
+    color:#444;
+    font-weight:normal;
+    text-decoration:none;
+    display:block;
+    padding-left:10px;
+    padding-right:10px;
+    line-height:31px;
+    cursor:pointer;
+    margin:5px 0;
 }
 /**** user-item ****/ /* e.g. group member in 'group members' panel */
 .user-item {
     margin:5px 0;
+    padding-left:10px;
 }
 .user-item .txt {
     margin-left:40px;
@@ -3370,11 +3381,6 @@ img.thumbnail {
 }
 .group-setting-list {
     border-bottom:1px solid #e3e3e5;
-}
-.group-setting-item {
-    line-height:31px;
-    cursor:pointer;
-    margin:5px 0;
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
