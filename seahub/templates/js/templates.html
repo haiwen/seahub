@@ -1001,37 +1001,37 @@
 <script type="text/template" id="group-settings-content-tmpl">
 <% if (is_owner) { %>
     <ul class="group-setting-list">
-        <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
-        <li class="group-setting-item" data-op="transfer">{% trans "Transfer" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li class="group-setting-item" data-op="add-wiki">{% trans "Add Wiki" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li class="group-setting-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="group-setting-list">
-        <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
-        <li class="group-setting-item" data-op="manage-members">{% trans "Manage Members" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
     <ul class="last-group-setting-list">
-        <li class="group-setting-item" data-op="dismiss">{% trans "Dismiss" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="dismiss">{% trans "Dismiss" %}</a></li>
     </ul>
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
-        <li class="group-setting-item" data-op="rename">{% trans "Rename" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li class="group-setting-item" data-op="add-wiki">{% trans "Add Wiki" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li class="group-setting-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="last-group-setting-list">
-        <li class="group-setting-item" data-op="import-members">{% trans "Import Members" %}</li>
-        <li class="group-setting-item" data-op="manage-members">{% trans "Manage Members" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
 <% } else { %>
     <ul class="last-group-setting-list">
-        <li class="group-setting-item" data-op="leave">{% trans "Leave group" %}</li>
+        <li><a href="#" class="group-setting-item popover-item" data-op="leave">{% trans "Leave group" %}</a></li>
     </ul>
 <% } %>
 </script>

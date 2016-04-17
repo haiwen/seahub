@@ -92,6 +92,7 @@ define([
                     break;
             }
             this.hide();
+            return false;
         },
 
         rename: function() {
