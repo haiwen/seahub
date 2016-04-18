@@ -2098,7 +2098,7 @@ button.dropdown-toggle:focus {
 }
 #upload-menu .item {
     position:relative;
-    text-align:left;
+    white-space:nowrap;
     overflow:hidden; /* for 'hover', as long 'input' in it. */
 }
 .fixed-upload-file-dialog {

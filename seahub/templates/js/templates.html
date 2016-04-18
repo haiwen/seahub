@@ -105,16 +105,19 @@
         <input type="file" name="file" multiple />
     </div>
     <% if (enable_upload_folder) { %>
-    <ul id="upload-menu" class="hide">
-        <li class="item">
-        <span>{% trans "Upload Files" %}</span>
-        <input type="file" name="file" multiple />
-        </li>
-        <li class="item">
-        <span>{% trans "Upload Folder" %}</span>
-        <input type="file" name="file" multiple directory webkitdirectory />
-        </li>
-    </ul>
+    <div id="advanced-upload" class="dropdown dropdown-inline" style="display:none;">
+        <button class="dropdown-toggle op-btn">{% trans "Upload" %}</button>
+        <ul id="upload-menu" class="dropdown-menu hide">
+            <li class="item">
+            <span>{% trans "Upload Files" %}</span>
+            <input type="file" name="file" multiple />
+            </li>
+            <li class="item">
+            <span>{% trans "Upload Folder" %}</span>
+            <input type="file" name="file" multiple directory webkitdirectory />
+            </li>
+        </ul>
+    </div>
     <% } %>
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>

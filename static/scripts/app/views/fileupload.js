@@ -422,15 +422,6 @@ define([
                 window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, app.config.mediaUrl + 'cors/result.html?%s')
             );
 
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var closePopup = function(popup, popup_switch) {
-                    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
-                        popup.addClass('hide');
-                    }
-                };
-                closePopup(dirView.$('#upload-menu'), dirView.$('#upload-file'));
-            });
         },
 
         events: {
@@ -476,7 +467,9 @@ define([
 
             if (dir.user_perm && dir.user_perm == 'rw' &&
                 'webkitdirectory' in $('input[type="file"]', upload_btn)[0]) {
-                upload_btn.find('input').remove().end().addClass('cspt');
+                upload_btn.remove();
+                $('#advanced-upload').removeAttr('style'); // show it
+
                 $('.item', upload_menu).click(function() {
                     popup.fileupload(
                         'option',
@@ -492,13 +485,6 @@ define([
                         $(this).css({'background':'transparent'});
                     }
                 );
-                upload_btn.click(function () {
-                    upload_menu.toggleClass('hide');
-                    upload_menu.css({
-                        'left': upload_btn.position().left,
-                        'top': parseInt(dirView.$('.repo-op').css('padding-top')) + upload_btn.outerHeight(true)
-                    });
-                });
             }
         }
     });

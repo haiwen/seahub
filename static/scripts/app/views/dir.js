@@ -12,10 +12,11 @@ define([
     'app/views/dirent',
     'app/views/dirent-grid',
     'app/views/fileupload',
-    'app/views/share'
+    'app/views/share',
+    'app/views/widgets/dropdown'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
-        FileUploadView, ShareView) {
+        FileUploadView, ShareView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -205,6 +206,10 @@ define([
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
                 this.fileUploadView.setFileInput();
+                this.upload_dropdown = new DropdownView({
+                    el: this.$('#advanced-upload')
+                });
+
                 this.getImageThumbnail();
             },
 
