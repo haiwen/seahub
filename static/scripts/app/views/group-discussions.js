@@ -116,6 +116,7 @@ define([
             });
 
             $("#group").append(this.$el);
+            this.$(".msg-input").focus();
             app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
@@ -133,6 +134,7 @@ define([
         hide: function() {
             PopoverView.prototype.hide.call(this);
             app.router.navigate('group/' + this.groupView.group.id + '/');
+            return false;
         },
 
         replyTo: function(to_user) {

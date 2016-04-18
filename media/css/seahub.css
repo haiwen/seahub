@@ -16,6 +16,11 @@
  * (TODO: complete this TOC)
  *
  */
+/*
+ * z-index:
+ *    popover:  20
+ *
+ */
 
 /****** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
@@ -481,7 +486,8 @@ a.op-icon:focus {
     background:#dfdfdf;
 }
 .no-deco,
-.no-deco:hover {
+.no-deco:hover,
+.no-deco:focus {
     text-decoration:none;
 }
 .input-disabled {/* for type="password/text" etc*/
@@ -1162,6 +1168,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     box-shadow:0 0 4px #ccc;
     position:absolute;
+    z-index: 20;
 }
 .popover-hd {
     padding:5px 0 3px;
@@ -1178,12 +1185,23 @@ textarea:-moz-placeholder {/* for FF */
     margin:4px 0 0;
 }
 .popover-con {
-    padding:0 10px;
     overflow:auto;
+}
+a.popover-item {
+    color:#444;
+    font-weight:normal;
+    text-decoration:none;
+    display:block;
+    padding-left:10px;
+    padding-right:10px;
+    line-height:31px;
+    cursor:pointer;
+    margin:5px 0;
 }
 /**** user-item ****/ /* e.g. group member in 'group members' panel */
 .user-item {
     margin:5px 0;
+    padding-left:10px;
 }
 .user-item .txt {
     margin-left:40px;
@@ -1413,16 +1431,16 @@ button.dropdown-toggle:focus {
     text-decoration:underline;
 }
 /* top-bar */
-#msg-count {
+#notifications {
     position:relative;
     margin:10px 32px 0 25px;
 }
-#msg-count .sf2-icon-bell {
+#notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
     color:#999;
 }
-#msg-count .num {
+#notifications .num {
     position:absolute;
     color:#fff;
     font-size:12px;
@@ -1433,66 +1451,39 @@ button.dropdown-toggle:focus {
     top:0;
     left:15px;
 }
-#notice-popup {
-    position:absolute;
+#notice-popover {
     top:38px;
     right:-80px;
-    width:240px;
-    background:#fff;
-    border:1px solid #c9c9c9;
-    border-radius:3px;
-    box-shadow:0 0 1px #f3f3f3;
-    z-index:20;
 }
-#notice-popup .hd {
-    text-align:center;
-    padding:5px 0 3px;
-    border-bottom:1px solid #dfdfe1;
-    margin:0 10px;
+#notice-popover .outer-caret {
+    right:82px;
 }
-#notice-popup .con {
-    padding:0 10px;
-    overflow:auto;
-}
-#notice-popup a {
+#notice-popover a {
     font-weight:normal;
 }
-#notice-popup .close {
-    position:absolute;
-    top:.5em;
-    right:10px;
-    cursor:pointer;
-}
-#notice-popup .close {
-    font-size:16px;
-    color:#b9b9b9;
-    margin:0;
-}
-#notice-popup li {
-    padding:9px 0 3px;
+#notice-popover li {
+    padding:9px 10px 3px 8px;
     border-bottom:1px solid #dfdfe1;
 }
-#notice-popup .unread {
+#notice-popover li.unread {
     background:#f5f5f7;
     border-left:2px solid #feac74;
-    margin:0 -10px;
-    padding-left:8px;
-    padding-right:10px;
+    padding-left:6px;
 }
-#notice-popup .avatar {
+#notice-popover .avatar {
     border-radius:1000px;
     float:left;
 }
-#notice-popup .brief {
+#notice-popover .brief {
     margin-left:40px;
     margin-top:0;
 }
-#notice-popup .time {
+#notice-popover .time {
     color:#999;
     text-align:right;
     margin:0;
 }
-#notice-popup .all {
+#notice-popover .all {
     color:#a4a4a4;
 }
 #account {
@@ -1506,11 +1497,37 @@ button.dropdown-toggle:focus {
     cursor: pointer;
     color: #d6d6d6;
 }
-#user-info-popup .avatar {
+.account-popup .avatar {
     float:left;
 }
-#user-info-popup .txt {
+.account-popup .txt {
     margin-left:45px;
+}
+.account-popup {
+    text-align:left;
+    right:0;
+    top:48px;
+    font-size:13px;
+}
+.account-popup .outer-caret {
+    top:-10px;
+    left:200px;
+}
+.account-popup > .item:last-child {
+    border-bottom:none;
+}
+.account-popup .item {
+    display:block;
+    padding:8px 18px;
+    border-bottom:1px solid #ddd;
+}
+.account-popup a.item {
+    color:#333;
+    font-weight:normal;
+}
+.account-popup a.item:hover {
+    background:#fafafa;
+    text-decoration:none;
 }
 #account .manage {
     position:absolute;
@@ -1540,72 +1557,7 @@ button.dropdown-toggle:focus {
     background:#eee;
     text-decoration:none;
 }
-#send-msg-popup,
-.top-info-popup {
-    background:#fff;
-    border:1px solid #ddd;
-    box-shadow:0 0 5px #ccc;
-    position:absolute;
-    right:0;
-    z-index:100;/* for pages with jquery tabs*/
-}
-#send-msg-popup {
-    width:430px;
-    padding:18px;
-    top:38px;
-    right:10px;
-}
-.top-info-popup {
-    width:200px;
-    text-align:left;
-    top:48px;
-    font-size:13px;
-    border-radius:4px;
-}
-#user-info-popup {
-    width:220px;
-}
-#notice-popup .outer-caret {
-    left:143px;
-}
-#user-info-popup .outer-caret {
-    top:-10px;
-    left:181px;
-}
-.top-info-popup .item {
-    display:block;
-    padding:8px 18px;
-    border-top:1px solid #ddd;
-}
-.top-info-popup a.item {
-    color:#333;
-    font-weight:normal;
-}
-.top-info-popup a.item:hover {
-    background:#fafafa;
-    text-decoration:none;
-}
-#msg-file-share {
-    margin-top:8px;
-    position:relative;
-}
-#msg-file-share-btn {
-    color:#999;
-    background:#fff;
-    border-radius:0;
-}
-#msg-file-share .icon-remove {
-    position:absolute;
-    right:20px;
-    top:0;
-    cursor:pointer;
-    font-size:1.2em;
-    color:#888;
-}
-#msg-file-tree {
-    padding:4px 0;
-    border:1px solid #ddd;
-}
+
 .select2-container .avatar,
 .select2-results .select2-result-label .avatar {
     vertical-align:middle;
@@ -3395,11 +3347,6 @@ img.thumbnail {
 }
 .group-setting-list {
     border-bottom:1px solid #e3e3e5;
-}
-.group-setting-item {
-    line-height:31px;
-    cursor:pointer;
-    margin:5px 0;
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;
