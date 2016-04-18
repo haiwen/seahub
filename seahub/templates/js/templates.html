@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load avatar_tags i18n %}
 <script type="text/template" id="create-repo-tmpl">
     <form id="repo-create-form" action="" method="post">{% csrf_token %}
         <h3>{% trans "New Library"%}</h3>
@@ -1426,5 +1426,23 @@
         <ul class="hide notice-list"></ul>
         <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
         <p class="error alc hide"></p>
+    </div>
+</script>
+
+<script type="text/template" id="user-info-popup-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-con">
+        <div class="item ovhd">
+            {% avatar request.user 36 %}
+            <div class="txt">
+                <%- app.pageOptions.name %><br />
+                <%- app.pageOptions.username %>
+            </div>
+        </div>
+        <div class="loading-icon loading-tip"></div>
+        <p class="error alc hide"></p>
+        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
+        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
     </div>
 </script>

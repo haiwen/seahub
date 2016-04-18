@@ -1497,11 +1497,37 @@ button.dropdown-toggle:focus {
     cursor: pointer;
     color: #d6d6d6;
 }
-#user-info-popup .avatar {
+.account-popup .avatar {
     float:left;
 }
-#user-info-popup .txt {
+.account-popup .txt {
     margin-left:45px;
+}
+.account-popup {
+    text-align:left;
+    right:0;
+    top:48px;
+    font-size:13px;
+}
+.account-popup .outer-caret {
+    top:-10px;
+    left:200px;
+}
+.account-popup > .item:last-child {
+    border-bottom:none;
+}
+.account-popup .item {
+    display:block;
+    padding:8px 18px;
+    border-bottom:1px solid #ddd;
+}
+.account-popup a.item {
+    color:#333;
+    font-weight:normal;
+}
+.account-popup a.item:hover {
+    background:#fafafa;
+    text-decoration:none;
 }
 #account .manage {
     position:absolute;
@@ -1531,72 +1557,7 @@ button.dropdown-toggle:focus {
     background:#eee;
     text-decoration:none;
 }
-#send-msg-popup,
-.top-info-popup {
-    background:#fff;
-    border:1px solid #ddd;
-    box-shadow:0 0 5px #ccc;
-    position:absolute;
-    right:0;
-    z-index:100;/* for pages with jquery tabs*/
-}
-#send-msg-popup {
-    width:430px;
-    padding:18px;
-    top:38px;
-    right:10px;
-}
-.top-info-popup {
-    width:200px;
-    text-align:left;
-    top:48px;
-    font-size:13px;
-    border-radius:4px;
-}
-#user-info-popup {
-    width:220px;
-}
-#notice-popup .outer-caret {
-    left:143px;
-}
-#user-info-popup .outer-caret {
-    top:-10px;
-    left:181px;
-}
-.top-info-popup .item {
-    display:block;
-    padding:8px 18px;
-    border-top:1px solid #ddd;
-}
-.top-info-popup a.item {
-    color:#333;
-    font-weight:normal;
-}
-.top-info-popup a.item:hover {
-    background:#fafafa;
-    text-decoration:none;
-}
-#msg-file-share {
-    margin-top:8px;
-    position:relative;
-}
-#msg-file-share-btn {
-    color:#999;
-    background:#fff;
-    border-radius:0;
-}
-#msg-file-share .icon-remove {
-    position:absolute;
-    right:20px;
-    top:0;
-    cursor:pointer;
-    font-size:1.2em;
-    color:#888;
-}
-#msg-file-tree {
-    padding:4px 0;
-    border:1px solid #ddd;
-}
+
 .select2-container .avatar,
 .select2-results .select2-result-label .avatar {
     vertical-align:middle;
