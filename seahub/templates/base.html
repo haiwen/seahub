@@ -57,19 +57,21 @@
                     <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
-                    <div id="user-info-popup" class="top-info-popup hide">
+                    <div id="user-info-popup" class="account-popup popover hide">
                         <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <div class="item ovhd">
-                            {% avatar request.user 36 %}
-                            <div class="txt">
-                                {{ request.user.username|email2nickname }} <br />
-                                {{ request.user.username}}
+                        <div class="popover-con">
+                            <div class="item ovhd">
+                                {% avatar request.user 36 %}
+                                <div class="txt">
+                                    {{ request.user.username|email2nickname }} <br />
+                                    {{ request.user.username}}
+                                </div>
                             </div>
+                            <span class="loading-icon loading-tip"></span>
+                            <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
+                            <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+                            <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                         </div>
-                        <span class="loading-icon loading-tip"></span>
-                        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
-                        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                     </div>
                     {% if request.user.is_staff %}
                     <div class="manage">

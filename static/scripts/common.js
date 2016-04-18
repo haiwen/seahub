@@ -487,55 +487,6 @@ define([
             }
         },
 
-        closePopup: function(e, popup, popup_switch) {
-            var target = e.target || event.srcElement;
-            if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
-                popup.addClass('hide');
-            }
-        },
-
-        initAccountPopup: function() {
-            // TODO: need improving
-            $('#my-info').click(function() {
-                var popup = $('#user-info-popup');
-                popup.toggleClass('hide');
-                if (!popup.hasClass('hide')) {
-                    var loading_tip = $('.loading-tip', popup),
-                    space_traffic = $('#space-traffic');
-                    loading_tip.show();
-                    space_traffic.addClass('hide');
-                    $('.error', popup).addClass('hide');
-                    $.ajax({
-                        url: space_traffic.data('url'),
-                        dataType: 'json',
-                        cache: false,
-                        success: function(data) {
-                            loading_tip.hide();
-                            space_traffic.html(data['html']).removeClass('hide');
-                        },
-                        error: function (xhr, textStatus, errorThrown) {
-                            if (xhr.responseText) {
-                                var error = $.parseJSON(xhr.responseText).error;
-                                loading_tip.hide();
-                                if ($('.error', popup).length == 0) {
-                                    loading_tip.after('<p class="error alc">' + error + '</p>');
-                                } else {
-                                    $('.error', popup).removeClass('hide');
-                                }
-                            }
-                        }
-                    });
-                }
-
-                return false;
-            });
-
-            var _this = this;
-            $(document).click(function(e) {
-                _this.closePopup(e, $('#user-info-popup'), $('#my-info'));
-            });
-        },
-
         closeTopNoticeBar: function () {
             if (!app.pageOptions.cur_note) {
                 return false;
