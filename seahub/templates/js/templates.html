@@ -1417,3 +1417,17 @@
         </div>
     </td>
 </script>
+
+<script type="text/template" id="notice-popover-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="popover-title">{% trans "Notifications" %}</h3>
+    </div>
+    <div class="popover-con">
+        <span class="loading-icon loading-tip"></span>
+        <ul class="hide notice-list"></ul>
+        <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
+        <p class="error alc hide"></p>
+    </div>
+</script>
