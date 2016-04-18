@@ -446,46 +446,6 @@ define([
             var popup = this.$el;
             popup.addClass('hide');
             $('.files', popup).empty();
-        },
-
-        setFileInput: function () {
-            var dirView = this.dirView,
-                dir = dirView.dir;
-
-            var popup = this.$el;
-            if (dir.user_perm && dir.user_perm == 'rw') {
-                popup.fileupload(
-                    'option',
-                    'fileInput',
-                    dirView.$('#upload-file input'));
-            }
-            if (!app.pageOptions.enable_upload_folder) {
-                return;
-            }
-            var upload_btn = dirView.$('#upload-file'),
-                upload_menu = dirView.$('#upload-menu');
-
-            if (dir.user_perm && dir.user_perm == 'rw' &&
-                'webkitdirectory' in $('input[type="file"]', upload_btn)[0]) {
-                upload_btn.remove();
-                $('#advanced-upload').removeAttr('style'); // show it
-
-                $('.item', upload_menu).click(function() {
-                    popup.fileupload(
-                        'option',
-                        'fileInput',
-                        $('input[type="file"]', $(this))
-                    );
-                })
-                .hover(
-                    function() {
-                        $(this).css({'background':'#f3f3f3'});
-                    },
-                    function() {
-                        $(this).css({'background':'transparent'});
-                    }
-                );
-            }
         }
     });
 

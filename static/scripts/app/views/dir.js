@@ -205,12 +205,52 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.fileUploadView.setFileInput();
-                this.upload_dropdown = new DropdownView({
-                    el: this.$('#advanced-upload')
-                });
+                this.setFileInput();
 
                 this.getImageThumbnail();
+            },
+
+            // for fileupload
+            setFileInput: function () {
+                var dir = this.dir;
+
+                var $popup = this.fileUploadView.$el;
+                if (dir.user_perm && dir.user_perm == 'rw') {
+                    $popup.fileupload(
+                        'option',
+                        'fileInput',
+                        this.$('#upload-file input'));
+                }
+                if (!app.pageOptions.enable_upload_folder) {
+                    return;
+                }
+                var $upload_btn = this.$('#upload-file'),
+                    $advanced_upload = this.$('#advanced-upload'),
+                    $upload_menu = this.$('#upload-menu');
+
+                if (dir.user_perm && dir.user_perm == 'rw' &&
+                    'webkitdirectory' in $('input[type="file"]', $upload_btn)[0]) {
+                    $upload_btn.remove();
+                    $advanced_upload.removeAttr('style'); // show it
+                    this.upload_dropdown = new DropdownView({
+                        el: $advanced_upload
+                    });
+                    $('.item', $upload_menu).click(function() {
+                        $popup.fileupload(
+                            'option',
+                            'fileInput',
+                            $('input[type="file"]', $(this))
+                        );
+                    })
+                    .hover(
+                        function() {
+                            $(this).css({'background':'#f3f3f3'});
+                        },
+                        function() {
+                            $(this).css({'background':'transparent'});
+                        }
+                    );
+                }
             },
 
             getImageThumbnail: function() {
