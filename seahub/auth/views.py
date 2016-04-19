@@ -24,6 +24,7 @@ from seahub.auth.forms import PasswordResetForm, SetPasswordForm, PasswordChange
 from seahub.auth.tokens import default_token_generator
 from seahub.base.accounts import User
 from seahub.options.models import UserOptions
+from seahub.profile.models import Profile
 from seahub.utils import is_ldap_user
 from seahub.utils.http import is_safe_url
 from seahub.utils.ip import get_remote_ip
@@ -111,6 +112,16 @@ def _clear_login_failed_attempts(request):
     cache.delete(LOGIN_ATTEMPT_PREFIX + username)
     cache.delete(LOGIN_ATTEMPT_PREFIX + ip)
 
+def _handle_login_form_valid(request, user, redirect_to, remember_me):
+    if UserOptions.objects.passwd_change_required(
+            user.username):
+        redirect_to = reverse('auth_password_change')
+        request.session['force_passwd_change'] = True
+
+    # password is valid, log user in
+    request.session['remember_me'] = remember_me
+    return log_user_in(request, user, redirect_to)
+
 @csrf_protect
 @never_cache
 def login(request, template_name='registration/login.html',
@@ -131,49 +142,66 @@ def login(request, template_name='registration/login.html',
         remember_me = True if request.REQUEST.get('remember_me',
                                                   '') == 'on' else False
 
-        if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
-            # have captcha
-            form = CaptchaAuthenticationForm(data=request.POST)
-            if form.is_valid():
-                if UserOptions.objects.passwd_change_required(
-                        form.get_user().username):
-                    redirect_to = reverse('auth_password_change')
-                    request.session['force_passwd_change'] = True
+        if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
+            if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
+                # log user in if password is valid otherwise freeze account
+                form = authentication_form(data=request.POST)
+                if form.is_valid():
+                    return _handle_login_form_valid(request, form.get_user(),
+                                                    redirect_to, remember_me)
+                else:
+                    # freeze user account anyway
+                    login = request.REQUEST.get('login', '')
+                    email = Profile.objects.get_username_by_login_id(login)
+                    if email is None:
+                        email = login
 
-                # captcha & passwod is valid, log user in
-                request.session['remember_me'] = remember_me
-                return log_user_in(request, form.get_user(), redirect_to)
+                    try:
+                        user = User.objects.get(email)
+                        user.is_active = False
+                        user.save()
+                    except User.DoesNotExist:
+                        pass
             else:
-                # show page with captcha and increase failed login attempts
-                _incr_login_faied_attempts(username=username, ip=ip)
+                # log user in if password is valid otherwise show captcha
+                form = CaptchaAuthenticationForm(data=request.POST)
+                if form.is_valid():
+                    return _handle_login_form_valid(request, form.get_user(),
+                                                    redirect_to, remember_me)
+                else:
+                    # show page with captcha and increase failed login attempts
+                    _incr_login_faied_attempts(username=username, ip=ip)
         else:
+            # login failed attempts < limit
             form = authentication_form(data=request.POST)
             if form.is_valid():
-                if UserOptions.objects.passwd_change_required(
-                        form.get_user().username):
-                    redirect_to = reverse('auth_password_change')
-                    request.session['force_passwd_change'] = True
-
-                # password is valid, log user in
-                request.session['remember_me'] = remember_me
-                return log_user_in(request, form.get_user(), redirect_to)
+                return _handle_login_form_valid(request, form.get_user(),
+                                                redirect_to, remember_me)
             else:
+                # increase failed attempts
                 login = urlquote(request.REQUEST.get('login', '').strip())
                 failed_attempt = _incr_login_faied_attempts(username=login,
                                                             ip=ip)
 
-                if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
+                if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
                     logger.warn('Login attempt limit reached, email/username: %s, ip: %s, attemps: %d' %
                                 (login, ip, failed_attempt))
-                    form = CaptchaAuthenticationForm()
+
+                    if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
+                        form = authentication_form(data=request.POST)
+                    else:
+                        form = CaptchaAuthenticationForm()
                 else:
                     form = authentication_form(data=request.POST)
     else:
         ### GET
-        if failed_attempt >= settings.LOGIN_ATTEMPT_LIMIT:
+        if failed_attempt >= config.LOGIN_ATTEMPT_LIMIT:
             logger.warn('Login attempt limit reached, ip: %s, attempts: %d' %
                         (ip, failed_attempt))
-            form = CaptchaAuthenticationForm(request)
+            if bool(config.FREEZE_USER_ON_LOGIN_FAILED) is True:
+                form = authentication_form(data=request.POST)
+            else:
+                form = CaptchaAuthenticationForm()
         else:
             form = authentication_form(request)
 
