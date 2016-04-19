@@ -131,15 +131,15 @@
     <% } %>
 
     <div class="switch-mode vam">
-        <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view"></button>
+        <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
     </div>
 
     <% if (path == '/') { %>
         <div class="fright">
             <% if (user_perm == 'rw') { %>
-            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}"></a>
+            <a class="op-link sf2-icon-trash" href="<%= site_root %>repo/recycle/<%- repo_id %>/" title="{% trans 'Trash' %}" aria-label="{% trans "Trash" %}"></a>
             <% } %>
-            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}"></a>
+            <a class="op-link sf2-icon-history" href="<%= site_root %>repo/history/<%- repo_id %>/" title="{% trans 'History' %}" aria-label="{% trans "History" %}"></a>
         </div>
     <% } else { %>
         <% if (user_perm == 'rw') { %>
@@ -176,9 +176,9 @@
         <th class="star"></th>
         <th class="dirent-icon"></th>
         <th class="by-name cspt"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></th>
-        <th class="dirent-op"></th>
+        <th class="dirent-op"><span class="sr-only">{% trans "Actions" %}</span></th>
         <th class="dirent-size">{% trans "Size"%}</th>
-        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide"></span></th>
+        <th class="dirent-update by-time cspt">{% trans "Last Update" %} <span class="sort-icon icon-caret-down hide" aria-hidden="true"></span></th>
     </tr>
 </script>
 
@@ -198,17 +198,17 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}"></a>
+                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}"></a>
+                    <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}"></a>
+                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
             <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -221,7 +221,7 @@
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
@@ -247,9 +247,9 @@
     </td>
     <td class="star alc">
         <% if (dirent.starred) { %>
-        <a href="#" title="{% trans "starred" %}" class="icon-star file-star"></a>
+        <a href="#" title="{% trans "starred" %}" class="icon-star file-star" aria-label="{% trans "starred" %}"></a>
         <% } else { %>
-        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star"></a>
+        <a href="#" title="{% trans "unstarred" %}" class="icon-star-empty file-star" aria-label="{% trans "unstarred" %}"></a>
         <% } %>
     </td>
     <td class="dirent-icon">
@@ -281,17 +281,17 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}"></a>
+                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
-                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}"></a>
+                <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>
                 <% if (dirent.perm == 'rw') { %>
-                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}"></a>
+                    <a href="#" class="op-icon delete sf2-icon-delete sf2-x vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
             <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More Operations"%}"></a>
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
@@ -314,7 +314,7 @@
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
             <div class="dropdown dropdown-inline">
-                <a class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}"></a>
+                <a class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
                 <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
@@ -624,14 +624,14 @@
         <li class="tab" id="group-nav">
             <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span></a>
             <ul class="grp-list">
-                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a></li>
+                <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                     <% if (cur_group_id == groups[i].id) { %>
                     <li class="tab-cur">
                     <% } else { %>
                     <li>
                     <% } %>
-                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
+                <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>
@@ -646,11 +646,11 @@
             <ul class="grp-list hide">
             <% } %>
                 <li>
-                    <a href="{% url 'group_list' %}"><span class="sharp">#</span>{% trans "All Groups" %}</a>
+                    <a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a>
                 </li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
                 <li>
-                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp">#</span><%- groups[i].name %></a>
+                    <a class="ellipsis" href="{{SITE_ROOT}}#group/<%= groups[i].id %>/" title="<%- groups[i].name %>"><span class="sharp" aria-hidden="true">#</span><%- groups[i].name %></a>
                 </li>
                 <% } %>
             </ul>
@@ -661,7 +661,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></a>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -734,9 +734,9 @@
         <% if (wiki_enabled) { %>
             <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
         <% } %>
-        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon"></a>
-        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon"></a>
-        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon"></a>
+        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
+        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
+        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
     </div>
 </div>
 </script>
