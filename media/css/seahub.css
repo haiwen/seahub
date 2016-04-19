@@ -186,6 +186,7 @@ a.black {
 a.table-sort-op {
     color:inherit;
     font-weight:normal;
+    display:block;
 }
 a.table-sort-op:hover,
 a.table-sort-op:focus {
