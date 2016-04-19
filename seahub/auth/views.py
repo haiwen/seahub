@@ -158,8 +158,8 @@ def login(request, template_name='registration/login.html',
 
                     try:
                         user = User.objects.get(email)
-                        user.is_active = False
-                        user.save()
+                        if user.is_active:
+                            user.freeze_user(notify_admins=True)
                     except User.DoesNotExist:
                         pass
             else:
