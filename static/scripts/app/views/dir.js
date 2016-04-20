@@ -213,43 +213,36 @@ define([
             // for fileupload
             setFileInput: function () {
                 var dir = this.dir;
-
-                var $popup = this.fileUploadView.$el;
-                if (dir.user_perm && dir.user_perm == 'rw') {
-                    $popup.fileupload(
-                        'option',
-                        'fileInput',
-                        this.$('#upload-file input'));
-                }
-                if (!app.pageOptions.enable_upload_folder) {
+                if (!dir.user_perm || dir.user_perm != 'rw') {
                     return;
                 }
-                var $upload_btn = this.$('#upload-file'),
-                    $advanced_upload = this.$('#advanced-upload'),
-                    $upload_menu = this.$('#upload-menu');
 
-                if (dir.user_perm && dir.user_perm == 'rw' &&
-                    'webkitdirectory' in $('input[type="file"]', $upload_btn)[0]) {
-                    $upload_btn.remove();
-                    $advanced_upload.removeAttr('style'); // show it
-                    this.upload_dropdown = new DropdownView({
-                        el: $advanced_upload
-                    });
-                    $('.item', $upload_menu).click(function() {
+                var $popup = this.fileUploadView.$el;
+
+                if (app.pageOptions.enable_upload_folder) {
+                    if ('webkitdirectory' in $('#basic-upload-input')[0]) {
+                        // if enable_upload_folder and is chrome
+                        this.$("#basic-upload").remove();
+                        this.$("#advanced-upload").show();
+                        this.upload_dropdown = new DropdownView({
+                            el: this.$("#advanced-upload")
+                        });
                         $popup.fileupload(
                             'option',
                             'fileInput',
-                            $('input[type="file"]', $(this))
-                        );
-                    })
-                    .hover(
-                        function() {
-                            $(this).css({'background':'#f3f3f3'});
-                        },
-                        function() {
-                            $(this).css({'background':'transparent'});
-                        }
-                    );
+                            this.$('#advanced-upload input[type="file"]'));
+                    } else {
+                        this.$("#advanced-upload").remove();
+                        $popup.fileupload(
+                            'option',
+                            'fileInput',
+                            this.$('#basic-upload-input'));
+                    }
+                } else {
+                    $popup.fileupload(
+                        'option',
+                        'fileInput',
+                        this.$('#basic-upload-input'));
                 }
             },
 
@@ -474,7 +467,24 @@ define([
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click .by-name': 'sortByName',
-                'click .by-time': 'sortByTime'
+                'click .by-time': 'sortByTime',
+                'click .basic-upload-btn': 'uploadFile',
+                'click .advanced-upload-file': 'advancedUploadFile',
+                'click .advanced-upload-folder': 'advancedUploadFolder'
+            },
+
+            uploadFile: function() {
+                this.$('#basic-upload-input').trigger('click');
+            },
+
+            advancedUploadFile: function() {
+                this.$('#advanced-upload-file-input').trigger('click');
+                return false;
+            },
+
+            advancedUploadFolder: function() {
+                this.$('#advanced-upload-folder-input').trigger('click');
+                return false;
             },
 
             newDir: function() {

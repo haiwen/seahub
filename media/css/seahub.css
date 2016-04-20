@@ -347,6 +347,7 @@ p { margin:0.5em 0; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
+.inline-block { display: inline-block; }
 .cspt { cursor:pointer; }
 .pos-rel { position:relative; }
 .top-tip {
@@ -2071,36 +2072,6 @@ button.dropdown-toggle:focus {
     margin-top:8px;
 }
 /* file upload */
-.repo-op .upload-file-btn {
-    display: inline-block;
-    height: auto;
-    padding: 5px 6px;
-    border: 1px solid #c5c5c5;
-    border-radius: 2px;
-    position:relative;
-    overflow:hidden;
-}
-#upload-menu,
-#add-pub-lib-menu {
-    position:absolute;
-    z-index:12; /* make it on top of a checkbox */
-    border:1px solid #c5c5c5;
-    border-radius:2px;
-    box-shadow: 0 0 2px #c5c5c5;
-    background:#fff;
-}
-#upload-menu .item,
-#add-pub-lib-menu .item {
-    padding:0 10px;
-    height:27px;
-    line-height:27px;
-    cursor:pointer;
-}
-#upload-menu .item {
-    position:relative;
-    white-space:nowrap;
-    overflow:hidden; /* for 'hover', as long 'input' in it. */
-}
 .fixed-upload-file-dialog {
     width: 540px;
     position: fixed;
@@ -2147,9 +2118,7 @@ button.dropdown-toggle:focus {
     font-size:13px;
     color:#333;
 }
-.fileinput-button input,
-#upload-file input,
-#upload-menu input {
+.fileinput-button input {
     position: absolute;
     top: 0;
     right: 0;
