@@ -2104,6 +2104,7 @@ button.dropdown-toggle:focus {
     height:0.1px;
     opacity: 0;
     z-index:-1;
+    overflow:hidden;
 }
 #upload-menu .fileinput-label {
     display:block;
@@ -2118,6 +2119,7 @@ button.dropdown-toggle:focus {
 #upload-menu .fileinput-label:hover {
     background:#f3f3f3;
 }
+#upload-file input:focus + .fileinput-label,
 #upload-file .fileinput:focus + .fileinput-label {
     border-color:#66AFE9;
 }
