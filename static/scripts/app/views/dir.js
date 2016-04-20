@@ -241,15 +241,7 @@ define([
                             'fileInput',
                             $('input[type="file"]', $(this))
                         );
-                    })
-                    .hover(
-                        function() {
-                            $(this).css({'background':'#f3f3f3'});
-                        },
-                        function() {
-                            $(this).css({'background':'transparent'});
-                        }
-                    );
+                    });
                 }
             },
 

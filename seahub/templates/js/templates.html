@@ -109,12 +109,12 @@
         <button class="dropdown-toggle op-btn">{% trans "Upload" %}</button>
         <ul id="upload-menu" class="dropdown-menu hide">
             <li class="item">
-            <span>{% trans "Upload Files" %}</span>
-            <input type="file" name="file" multiple />
+            <input id="advanced-upload-file" class="fileinput" type="file" name="file" multiple />
+            <label for="advanced-upload-file" class="fileinput-label">{% trans "Upload Files" %}</label>
             </li>
             <li class="item">
-            <span>{% trans "Upload Folder" %}</span>
-            <input type="file" name="file" multiple directory webkitdirectory />
+            <input id="advanced-upload-folder" class="fileinput" type="file" name="file" multiple directory webkitdirectory />
+            <label for="advanced-upload-folder" class="fileinput-label">{% trans "Upload Folder" %}</label>
             </li>
         </ul>
     </div>
