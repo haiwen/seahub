@@ -1,4 +1,4 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load i18n avatar_tags seahub_tags %}
 {% load i18n staticfiles %}
 {% load url from future %}
@@ -6,63 +6,65 @@
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
 <link rel="stylesheet" type="text/css" href="{% static "css/select2.custom.css" %}" />
-<style type="text/css">
-#left-panel { position:relative; }
-</style>
 {% endblock %}
 
-{% block left_panel %}
-<a class="go-back" title="{% trans "Back to user list" %}"  href="{% url 'sys_useradmin' %}"><span class="icon-chevron-left"></span></a>
-<div class="side-info">
-    <h3 class="hd">{% trans "Profile" %}</h3>
-    {% avatar email 48 %}
-    <dl>
-        <dt>{% trans "Email" %}</dt>
-        <dd>{{ email }}</dd>
-
-        {% if org_name %}
-        <dt>{% trans "Organization" %}</dt>
-        <dd>{{ org_name }}</dd>
-        {%  endif %}
-
-        {% if profile %}
-        <dt>{% trans "Name" context "true name" %}</dt>
-        <dd>{{ profile.nickname }}</dd>
-        {% endif %}
-
-        {% if d_profile %}
-        <dt>{% trans "Department" %}</dt>
-        <dd>{{ d_profile.department }}</dd>
-
-        <dt>{% trans "Telephone" %}</dt>
-        <dd>{{ d_profile.telephone }}</dd>
-        {% endif %}
-    </dl>
-
-    <h3 class="hd">{% trans "Space Used" %}</h3>
-    <p>{% trans "Used" %}: {{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}</p>
-
-    <a href="#" id="set-quota">{% trans "Set Quota" %}</a>
-</div>
-<form id="set-quota-form" method="post" class="hide">{% csrf_token %}
-    <h3>{% trans "Set user storage limit" %}</h3>
-    <input type="hidden" name="email" value="{{ email }}" />
-    <input type="text" name="space_quota" /> MB
-    <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-</form>
-{% endblock %}
 
 {% block right_panel %}
+
+<p class="path">
+    <a class="path-link normal" href="{{ SITE_ROOT }}sys/useradmin/">Users</a> /
+    {{ email }}
+</p>
+
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
+            <li class="tab"><a href="#profile" class="a">{% trans "Profile" %}</a></li>
             <li class="tab"><a href="#owned" class="a">{% trans "Owned Libs" %}</a></li>
             <li class="tab"><a href="#shared" class="a">{% trans "Shared Libs" %}</a></li>
             <li class="tab"><a href="#shared-links" class="a">{% trans "Shared Links" %}</a></li>
             <li class="tab"><a href="#user-admin-groups" class="a">{% trans "Groups" %}</a></li>
         </ul>
+    </div>
+
+    <div id="profile">
+        <dl>
+            <dt>{% trans "Avatar" %}</dt>
+            <dd>{% avatar email 48 %}</dd>
+
+            <dt>{% trans "Email" %}</dt>
+            <dd>{{ email }}</dd>
+
+            {% if org_name %}
+            <dt>{% trans "Organization" %}</dt>
+            <dd>{{ org_name }}</dd>
+            {%  endif %}
+
+            {% if profile %}
+            <dt>{% trans "Name" context "true name" %}</dt>
+            <dd>{{ profile.nickname }}</dd>
+            {% endif %}
+
+            {% if d_profile %}
+            <dt>{% trans "Department" %}</dt>
+            <dd>{{ d_profile.department }}</dd>
+
+            <dt>{% trans "Telephone" %}</dt>
+            <dd>{{ d_profile.telephone }}</dd>
+            {% endif %}
+
+            <dt>{% trans "Space Used" %}</dt>
+            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}  <a href="#" class="btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
+        </dl>
+
+        <form id="set-quota-form" method="post" class="hide">{% csrf_token %}
+            <h3>{% trans "Set user storage limit" %}</h3>
+            <input type="hidden" name="email" value="{{ email }}" />
+            <input type="text" name="space_quota" /> MB
+            <p class="tip">{% trans "Tip: 0 means default limit" %}</p>
+            <p class="error hide"></p>
+            <input type="submit" value="{% trans "Submit" %}" class="submit" />
+        </form>
     </div>
 
     <div id="owned">

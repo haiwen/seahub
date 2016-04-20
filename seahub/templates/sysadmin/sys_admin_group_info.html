@@ -1,29 +1,15 @@
-{% extends "admin_base.html" %}
+{% extends "sysadmin/base.html" %}
 {% load i18n group_avatar_tags avatar_tags seahub_tags %}
 {% load url from future %}
 
-{% block extra_style %}
-<style type="text/css">
-#left-panel { position:relative; }
-</style>
-{% endblock %}
-
-{% block left_panel %}
-<a class="go-back" title="{% trans "back to group list" %}"  href="{% url 'sys_group_admin' %}"><span class="icon-chevron-left"></span></a>
-<div class="side-info">
-    <h3 class="hd">{% trans "Group Info" %}</h3>
-    {% grp_avatar group.id 48 %}
-    <dl>
-        <dt>{% trans "Name" %}</dt>
-        <dd>{{ group.group_name}}</dd>
-
-        <dt>{% trans "Creator" %}</dt>
-        <dd><a href="{% url 'user_info' group.creator_name %}">{{ group.creator_name }}</a></dd>
-    </dl>
-</div>
-{% endblock %}
 
 {% block right_panel %}
+
+<p class="path">
+    <a class="path-link normal" href="{{ SITE_ROOT }}sys/groupadmin/">Groups</a> /
+    {{ group.group_name }}
+</p>
+
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
