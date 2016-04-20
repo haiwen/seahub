@@ -1447,6 +1447,15 @@
         <p class="error alc hide"></p>
         <div id="space-traffic" class="hide"></div>
         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+        {% if request.user.is_staff %}
+        <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
+        {% endif %}
+        {% if request.user.org and request.user.org.is_staff %}
+        <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">"{% trans "Organization Admin" %}"</a>
+        {% endif %}
+        {% if request.user.inst_admin %}
+        <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
+        {% endif %}
         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
     </div>
 </script>

@@ -64,24 +64,20 @@
                             <span class="loading-icon loading-tip"></span>
                             <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
                             <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+                            {% block admin_link %}
+                            {% if request.user.is_staff %}
+                            <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
+                            {% endif %}
+                            {% if request.user.org and request.user.org.is_staff %}
+                            <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">"{% trans "Organization Admin" %}"</a>
+                            {% endif %}
+                            {% if request.user.inst_admin %}
+                            <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
+                            {% endif %}
+                            {% endblock %}
                             <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
                         </div>
                     </div>
-                    {% if request.user.is_staff %}
-                    <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.inst_admin %}
-                    <div class="manage">
-                        {% block inst_admin %}<a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
                 </div>
                 </div>
                 {% else %} {# for non-logged-in user #}
@@ -101,18 +97,12 @@
         <div id="main" class="clear container-fluid {% block main_css_class %}top-padding{% endblock %}">
             {% block main_content %}
             <div class="row">
-                <div id="side-nav" class="side-tabnav col-md-3 hide" >
-                    {% block left_panel %}{% endblock %}
-                </div>
-                <div id="right-panel" class="col-md-9 col-md-offset-3 hide">
-                    {% block right_panel %}{% endblock %}
-                </div>
                 <div id="main-panel" class="clear w100 ovhd">
-                    {% block main_panel %} {% endblock %}
+                    {% block main_panel %}{% endblock %}
                 </div>
             </div>
             {% endblock %}
-            
+
             {% if messages %}
             <ul class="messages hide">
                 {% for message in messages %}

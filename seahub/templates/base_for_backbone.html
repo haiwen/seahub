@@ -51,8 +51,6 @@
                     {% endif %}
                 </a>
 
-                {% block header_right %}
-                {% if request.user.is_authenticated %}
                 <div class="fright">
                 {% if has_file_search %}
                     {% include 'snippets/search_form.html' %}
@@ -69,32 +67,14 @@
                     <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
-                    {% if request.user.is_staff %}
-                    <div class="manage">
-                        {% block sys_admin %}<a href="{% url 'sysadmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.org and request.user.org.is_staff %}
-                    <div class="manage">
-                        {% block org_admin %}<a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-                    {% if request.user.inst_admin %}
-                    <div class="manage">
-                        {% block inst_admin %}<a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
-                    </div>
-                    {% endif %}
-
                 </div>
                 </div>
-                {% endif %}
-                {% endblock %}
             </div>
         </div>
 
         <div id="main" class="clear container-fluid top-padding">
             <div class="row">
-                <div class="side-tabnav col-md-3" id="side-nav" role="navigation"></div>
+                <div class="side-tabnav col-md-3 hide" id="side-nav" role="navigation"></div>
                 <div id="right-panel" class="col-md-9 col-md-offset-3">
                     {% block right_panel %}{% endblock %}
                 </div>
