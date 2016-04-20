@@ -743,11 +743,11 @@ def repo_revert_history(request, repo_id):
 def fpath_to_link(repo_id, path, is_dir=False):
     """Translate file path of a repo to its view link"""
     if is_dir:
-        href = reverse("view_common_lib_dir", args=[repo_id, urllib2.quote(path.encode('utf-8')).strip('/')])
+        href = reverse("view_common_lib_dir", args=[repo_id, path.encode('utf-8').strip('/')])
     else:
         if not path.startswith('/'):
             p = '/' + path
-        href = reverse("view_lib_file", args=[repo_id, urllib2.quote(p.encode('utf-8'))])
+        href = reverse("view_lib_file", args=[repo_id, p.encode('utf-8')])
 
     return '<a href="%s">%s</a>' % (href, escape(path))
 
@@ -1113,7 +1113,7 @@ def repo_revert_file(request, repo_id):
         msg = _(u'Successfully revert %(path)s to <a href="%(root)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "root": root_url}
         messages.success(request, msg, extra_tags='safe')
     else:
-        file_view_url = reverse('view_lib_file', args=[repo_id, urllib2.quote(path.encode('utf-8'))])
+        file_view_url = reverse('view_lib_file', args=[repo_id, path.encode('utf-8')])
         msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": file_view_url, "path": escape(path.lstrip('/'))}
         messages.success(request, msg, extra_tags='safe')
 
@@ -1152,7 +1152,7 @@ def repo_revert_dir(request, repo_id):
         msg = _(u'Successfully revert %(path)s to <a href="%(url)s">root directory.</a>') % {"path": escape(path.lstrip('/')), "url": root_url}
         messages.success(request, msg, extra_tags='safe')
     else:
-        dir_view_url = reverse('view_common_lib_dir', args=[repo_id, urllib2.quote(path.strip('/').encode('utf-8'))])
+        dir_view_url = reverse('view_common_lib_dir', args=[repo_id, path.strip('/').encode('utf-8')])
         msg = _(u'Successfully revert <a href="%(url)s">%(path)s</a>') % {"url": dir_view_url, "path": escape(path.lstrip('/'))}
         messages.success(request, msg, extra_tags='safe')
 
