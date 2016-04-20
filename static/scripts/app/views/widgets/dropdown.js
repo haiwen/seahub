@@ -51,6 +51,7 @@ define([
 
         initialize: function(options) {
             this.$el.on('click', '.dropdown-toggle', _.bind(this.toggleDropdown, this));
+            this.$el.on('keydown', _.bind(this.handleKeydown, this));
             this.options = {};
             _.extend(this.options, this.defaultOptions, options);
         },
@@ -83,6 +84,31 @@ define([
             }
 
             return false;
+        },
+
+        handleKeydown: function(event) {
+            if (!/(38|40)/.test(event.which)) {
+                return;
+            }
+            event.preventDefault();
+            event.stopPropagation();
+
+            var items = $.makeArray(this.$el.find('li a'));
+
+            if (!items.length) {
+                return;
+            }
+
+            var index = items.indexOf(event.target);
+            if (event.which === 38 && index > 0) { // up
+                index--;
+            }
+
+            if (event.which === 40 && index < items.length - 1) { // down
+                index++;
+            }
+
+            items[index].focus();
         }
 
     });
