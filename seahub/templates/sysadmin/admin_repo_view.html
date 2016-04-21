@@ -27,9 +27,9 @@
             </p>
             {% if is_default_repo %}
             <div class="repo-op fright">
-                <div id="upload-file" class="op-btn upload-file-btn">
-                    <span class="icon-upload-alt"></span><span>{% trans "Upload"%}</span>
-                    <input type="file" name="file" multiple />
+                <div id="upload-file" class="inline-block">
+                    <button class="op-btn"><span class="icon-upload-alt"></span><span>{% trans "Upload"%}</span></button>
+                    <input class="hide" type="file" name="file" multiple />
                 </div>
                 <button id="add-new-dir" class="op-btn"><span class="icon-plus-sign-alt"></span>{% trans "New Directory"%}</button>
             </div>
@@ -255,6 +255,10 @@ $(function() {
             window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, '{{ MEDIA_URL }}cors/result.html?%s')
         );
     });
+});
+
+$('#upload-file button').click(function() {
+    $('#upload-file input').click();
 });
 
 // fold/unfold the dialog
