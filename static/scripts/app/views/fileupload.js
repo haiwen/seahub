@@ -98,8 +98,7 @@ define([
                 // hide the upload menu
                 var menu = dirView.$('#upload-menu');
                 if (!menu.hasClass('hide')) {
-                    menu.find('.item').removeAttr('style')
-                        .end().addClass('hide');
+                    menu.addClass('hide');
                 }
 
                 var file = data.files[0];
@@ -422,15 +421,6 @@ define([
                 window.location.href.replace(/\/repo\/[-a-z0-9]{36}\/.*/, app.config.mediaUrl + 'cors/result.html?%s')
             );
 
-            $(document).click(function(e) {
-                var target = e.target || event.srcElement;
-                var closePopup = function(popup, popup_switch) {
-                    if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !popup_switch.find('*').is(target) ) {
-                        popup.addClass('hide');
-                    }
-                };
-                closePopup(dirView.$('#upload-menu'), dirView.$('#upload-file'));
-            });
         },
 
         events: {
@@ -455,51 +445,6 @@ define([
             var popup = this.$el;
             popup.addClass('hide');
             $('.files', popup).empty();
-        },
-
-        setFileInput: function () {
-            var dirView = this.dirView,
-                dir = dirView.dir;
-
-            var popup = this.$el;
-            if (dir.user_perm && dir.user_perm == 'rw') {
-                popup.fileupload(
-                    'option',
-                    'fileInput',
-                    dirView.$('#upload-file input'));
-            }
-            if (!app.pageOptions.enable_upload_folder) {
-                return;
-            }
-            var upload_btn = dirView.$('#upload-file'),
-                upload_menu = dirView.$('#upload-menu');
-
-            if (dir.user_perm && dir.user_perm == 'rw' &&
-                'webkitdirectory' in $('input[type="file"]', upload_btn)[0]) {
-                upload_btn.find('input').remove().end().addClass('cspt');
-                $('.item', upload_menu).click(function() {
-                    popup.fileupload(
-                        'option',
-                        'fileInput',
-                        $('input[type="file"]', $(this))
-                    );
-                })
-                .hover(
-                    function() {
-                        $(this).css({'background':'#f3f3f3'});
-                    },
-                    function() {
-                        $(this).css({'background':'transparent'});
-                    }
-                );
-                upload_btn.click(function () {
-                    upload_menu.toggleClass('hide');
-                    upload_menu.css({
-                        'left': upload_btn.position().left,
-                        'top': parseInt(dirView.$('.repo-op').css('padding-top')) + upload_btn.outerHeight(true)
-                    });
-                });
-            }
         }
     });
 

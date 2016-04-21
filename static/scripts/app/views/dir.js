@@ -12,10 +12,11 @@ define([
     'app/views/dirent',
     'app/views/dirent-grid',
     'app/views/fileupload',
-    'app/views/share'
+    'app/views/share',
+    'app/views/widgets/dropdown'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
-        FileUploadView, ShareView) {
+        FileUploadView, ShareView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -204,8 +205,45 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.fileUploadView.setFileInput();
+                this.setFileInput();
+
                 this.getImageThumbnail();
+            },
+
+            // for fileupload
+            setFileInput: function () {
+                var dir = this.dir;
+                if (!dir.user_perm || dir.user_perm != 'rw') {
+                    return;
+                }
+
+                var $popup = this.fileUploadView.$el;
+
+                if (app.pageOptions.enable_upload_folder) {
+                    if ('webkitdirectory' in $('#basic-upload-input')[0]) {
+                        // if enable_upload_folder and is chrome
+                        this.$("#basic-upload").remove();
+                        this.$("#advanced-upload").show();
+                        this.upload_dropdown = new DropdownView({
+                            el: this.$("#advanced-upload")
+                        });
+                        $popup.fileupload(
+                            'option',
+                            'fileInput',
+                            this.$('#advanced-upload input[type="file"]'));
+                    } else {
+                        this.$("#advanced-upload").remove();
+                        $popup.fileupload(
+                            'option',
+                            'fileInput',
+                            this.$('#basic-upload-input'));
+                    }
+                } else {
+                    $popup.fileupload(
+                        'option',
+                        'fileInput',
+                        this.$('#basic-upload-input'));
+                }
             },
 
             getImageThumbnail: function() {
@@ -429,7 +467,24 @@ define([
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
                 'click .by-name': 'sortByName',
-                'click .by-time': 'sortByTime'
+                'click .by-time': 'sortByTime',
+                'click .basic-upload-btn': 'uploadFile',
+                'click .advanced-upload-file': 'advancedUploadFile',
+                'click .advanced-upload-folder': 'advancedUploadFolder'
+            },
+
+            uploadFile: function() {
+                this.$('#basic-upload-input').trigger('click');
+            },
+
+            advancedUploadFile: function() {
+                this.$('#advanced-upload-file-input').trigger('click');
+                return false;
+            },
+
+            advancedUploadFolder: function() {
+                this.$('#advanced-upload-folder-input').trigger('click');
+                return false;
             },
 
             newDir: function() {
