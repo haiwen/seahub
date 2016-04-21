@@ -2687,29 +2687,25 @@ button.dropdown-toggle:focus {
 }
 
 /* search */
-.search-form,
-#search-form .input_and_submit {
-    padding-left:5px;
-    height:24px;
+.search-input {
+    margin:0;
     border:1px solid #ddd;
     border-radius:3px;
-    background:#fff;
-    position:relative;
 }
-#top-search-form {
-    margin-top:7px;
-}
-.search-input,
-.search-form .search-submit {
-    padding:0;
+.search-form .search-submit { /* the icon submit */
+    position:absolute;
+    right:1px;
+    top:1px;
+    width:30px;
     height:24px;
+    padding:0;
     border:0;
     margin:0;
-    vertical-align:top;
+    background:#fff;
 }
-.search-input {
-    width:155px;
-    outline:0;
+.search-form .icon-search {
+    font-size:16px;
+    color:#aaa;
 }
 .search-form .icon-caret-down {
     color:#bbb;
@@ -2720,15 +2716,15 @@ button.dropdown-toggle:focus {
     position:absolute;
     width:500px;
     padding:18px;
-    height:auto;
+    background:#fff;
+    border:1px solid #ddd;
+    border-radius:3px;
     box-shadow:0 0 10px #ddd;
     z-index:100;/* for pages with jquery tabs*/
 }
 #advanced-search-form .search-input {
     width:98%;
-    padding:0 3px;
-    border:1px solid #ddd;
-    border-radius:3px;
+    padding:1px 3px;
 }
 #advanced-search-form .submit {
     margin-bottom:0;
@@ -2756,27 +2752,24 @@ button.dropdown-toggle:focus {
     padding:0 3px;
     width:70%;
 }
-.search-form .search-submit {
-    width:30px;
-    background:#fff;
+#top-search-form {
+    position:relative;
+    margin-top:7px;
 }
-.search-form .icon-search {
-    font-size:16px;
-    color:#aaa;
+#top-search-form .search-input {
+    width:155px;
+    padding:1px 30px 1px 5px;
 }
 #search-form,
 #search-user-form,
-#search-repo-form{
+#search-repo-form {
     padding:7px 5px;
-    height:auto;
     background:#f7f7f8;
-    border:0;
     border-radius:2px;
 }
 #search-form .input_and_submit {
     display:inline-block;
-    width:426px;
-    *width:430px;
+    position:relative;
 }
 #search-form .advanced-search {
     color:#666;
@@ -2786,6 +2779,8 @@ button.dropdown-toggle:focus {
 }
 #search-form .search-input {
     width:392px;
+    height:24px;
+    padding:0 30px 0 5px;
 }
 #search-results {
     padding-top:15px;

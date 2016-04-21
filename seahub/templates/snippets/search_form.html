@@ -1,16 +1,16 @@
 {% load i18n %}
                 <form id="top-search-form" method="get" action="{% url 'search' %}" class="search-form fleft">
                     {% if search_repo_id %}
-                    <input class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
+                    <input type="text" class="search-input" name="q" placeholder="{% if search_wiki %}{% trans "Search files in this wiki" %}{% else %}{% trans "Search files in this library" %}{% endif %}" value="{{ keyword }}" />
                     <input type="hidden" name="search_repo" value="{{ search_repo_id }}" />
                     {% else %}
-                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <input type="text" class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     {% endif %}
                     <!--span class="icon-caret-down" title="{% trans "advanced" %}"></span--><button type="submit" class="search-submit"><span class="icon-search"></span></button>
                 </form>
 
                 <form id="advanced-search-form" method="get" action="{% url 'search' %}" class="search-form hide">
-                    <input class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
+                    <input type="text" class="search-input" name="q" placeholder="{% trans 'Search Files' %}" value="{{ keyword }}" />
                     <div class="search-scales">
                         <div class="search-repos">
                             {% if search_repo_id %}
