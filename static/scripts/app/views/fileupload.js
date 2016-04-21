@@ -98,8 +98,7 @@ define([
                 // hide the upload menu
                 var menu = dirView.$('#upload-menu');
                 if (!menu.hasClass('hide')) {
-                    menu.find('.item').removeAttr('style')
-                        .end().addClass('hide');
+                    menu.addClass('hide');
                 }
 
                 var file = data.files[0];
