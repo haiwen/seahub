@@ -611,7 +611,7 @@
         {% endif %}
 
         <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#shared-libs/"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared" %}</a>
+            <a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared" %}"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared" %}</a>
         </li>
 
         {% if user.permissions.can_view_org %}
