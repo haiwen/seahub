@@ -2688,7 +2688,6 @@ button.dropdown-toggle:focus {
 
 /* search */
 .search-input {
-    height:24px;
     margin:0;
     border:1px solid #ddd;
     border-radius:3px;
@@ -2725,7 +2724,7 @@ button.dropdown-toggle:focus {
 }
 #advanced-search-form .search-input {
     width:98%;
-    padding:0 3px;
+    padding:1px 3px;
 }
 #advanced-search-form .submit {
     margin-bottom:0;
@@ -2759,7 +2758,7 @@ button.dropdown-toggle:focus {
 }
 #top-search-form .search-input {
     width:155px;
-    padding: 0 30px 0 5px;
+    padding:1px 30px 1px 5px;
 }
 #search-form,
 #search-user-form,
@@ -2780,6 +2779,7 @@ button.dropdown-toggle:focus {
 }
 #search-form .search-input {
     width:392px;
+    height:24px;
     padding:0 30px 0 5px;
 }
 #search-results {
