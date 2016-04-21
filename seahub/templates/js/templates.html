@@ -100,21 +100,24 @@
         <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
         <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn sf2-icon-delete op-icon"></button>
     </div>
-    <div id="upload-file" class="op-btn upload-file-btn">
-        <span>{% trans "Upload" %}</span>
-        <input type="file" name="file" multiple />
+    <div id="upload-file">
+        <input id="upload-file-input" class="fileinput" type="file" name="file" multiple />
+        <label for="upload-file-input" class="op-btn upload-file-btn fileinput-label">{% trans "Upload" %}</label>
     </div>
     <% if (enable_upload_folder) { %>
-    <ul id="upload-menu" class="hide">
-        <li class="item">
-        <span>{% trans "Upload Files" %}</span>
-        <input type="file" name="file" multiple />
-        </li>
-        <li class="item">
-        <span>{% trans "Upload Folder" %}</span>
-        <input type="file" name="file" multiple directory webkitdirectory />
-        </li>
-    </ul>
+    <div id="advanced-upload" class="dropdown dropdown-inline" style="display:none;">
+        <button class="dropdown-toggle op-btn">{% trans "Upload" %}</button>
+        <ul id="upload-menu" class="dropdown-menu hide">
+            <li class="item">
+            <input id="advanced-upload-file" class="fileinput" type="file" name="file" multiple />
+            <label for="advanced-upload-file" class="fileinput-label">{% trans "Upload Files" %}</label>
+            </li>
+            <li class="item">
+            <input id="advanced-upload-folder" class="fileinput" type="file" name="file" multiple directory webkitdirectory />
+            <label for="advanced-upload-folder" class="fileinput-label">{% trans "Upload Folder" %}</label>
+            </li>
+        </ul>
+    </div>
     <% } %>
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>

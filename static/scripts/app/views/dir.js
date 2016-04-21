@@ -12,10 +12,11 @@ define([
     'app/views/dirent',
     'app/views/dirent-grid',
     'app/views/fileupload',
-    'app/views/share'
+    'app/views/share',
+    'app/views/widgets/dropdown'
     ], function($, progressbar, magnificPopup, simplemodal, _, Backbone, Common,
         FileTree, Cookies, DirentCollection, DirentView, DirentGridView,
-        FileUploadView, ShareView) {
+        FileUploadView, ShareView, DropdownView) {
         'use strict';
 
         var DirView = Backbone.View.extend({
@@ -204,8 +205,44 @@ define([
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
 
-                this.fileUploadView.setFileInput();
+                this.setFileInput();
+
                 this.getImageThumbnail();
+            },
+
+            // for fileupload
+            setFileInput: function () {
+                var dir = this.dir;
+
+                var $popup = this.fileUploadView.$el;
+                if (dir.user_perm && dir.user_perm == 'rw') {
+                    $popup.fileupload(
+                        'option',
+                        'fileInput',
+                        this.$('#upload-file input'));
+                }
+                if (!app.pageOptions.enable_upload_folder) {
+                    return;
+                }
+                var $upload_btn = this.$('#upload-file'),
+                    $advanced_upload = this.$('#advanced-upload'),
+                    $upload_menu = this.$('#upload-menu');
+
+                if (dir.user_perm && dir.user_perm == 'rw' &&
+                    'webkitdirectory' in $('input[type="file"]', $upload_btn)[0]) {
+                    $upload_btn.remove();
+                    $advanced_upload.removeAttr('style'); // show it
+                    this.upload_dropdown = new DropdownView({
+                        el: $advanced_upload
+                    });
+                    $('.item', $upload_menu).click(function() {
+                        $popup.fileupload(
+                            'option',
+                            'fileInput',
+                            $('input[type="file"]', $(this))
+                        );
+                    });
+                }
             },
 
             getImageThumbnail: function() {
