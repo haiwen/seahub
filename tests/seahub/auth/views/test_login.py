@@ -1,6 +1,8 @@
 from django.conf import settings
 from django.core.urlresolvers import reverse
 
+from constance import config
+
 from seahub.options.models import UserOptions
 from seahub.test_utils import BaseTestCase
 
@@ -58,4 +60,38 @@ class LoginTest(BaseTestCase):
         resp = self.client.get(reverse('auth_password_change'))
         self.assertEqual(200, resp.status_code)
         self.assertEqual(resp.context['force_passwd_change'], True)
-        
+
+
+class LoginCaptchaTest(BaseTestCase):
+    def setUp(self):
+        config.LOGIN_ATTEMPT_LIMIT = 1
+        config.FREEZE_USER_ON_LOGIN_FAILED = False
+
+    def tearDown(self):
+        self.clear_cache()
+
+    def _bad_passwd_login(self):
+        resp = self.client.post(
+            reverse('auth_login'), {'login': self.user.username,
+                                    'password': 'badpassword'}
+        )
+        return resp
+
+    def _login_page(self):
+        resp = self.client.get(reverse('auth_login'))
+        return resp
+
+    def test_can_show_captcha(self):
+        resp = self._bad_passwd_login()
+        print resp.context['form']
+
+        resp = self._bad_passwd_login()
+        print resp.context['form']
+
+        resp = self._bad_passwd_login()
+        print resp.context['form']
+
+        print '-------------'
+        resp = self._login_page()
+        print resp.context['form']
+
