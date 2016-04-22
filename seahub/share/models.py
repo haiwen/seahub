@@ -7,7 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.hashers import make_password, check_password
 
 from seahub.base.fields import LowerCaseCharField
-from seahub.utils import normalize_file_path, normalize_dir_path, gen_token
+from seahub.utils import normalize_file_path, normalize_dir_path, gen_token,\
+    get_service_url
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -178,6 +179,13 @@ class FileShare(models.Model):
 
     def is_owner(self, owner):
         return owner == self.username
+
+    def get_full_url(self):
+        service_url = get_service_url().rstrip('/')
+        if self.is_file_share_link():
+            return '%s/f/%s/' % (service_url, self.token)
+        else:
+            return '%s/d/%s/' % (service_url, self.token)
 
 class OrgFileShareManager(models.Manager):
     def set_org_file_share(self, org_id, file_share):

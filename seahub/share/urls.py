@@ -18,4 +18,5 @@ urlpatterns = patterns('',
     url(r'^ajax/get-download-link/$', ajax_get_download_link, name='ajax_get_download_link'),
     url(r'^ajax/get-upload-link/$', ajax_get_upload_link, name='ajax_get_upload_link'),
     url(r'^ajax/private-share-dir/$', ajax_private_share_dir, name='ajax_private_share_dir'),
+    url(r'^ajax/get-link-audit-code/$', ajax_get_link_audit_code, name='ajax_get_link_audit_code'),
 )

@@ -5,6 +5,7 @@ import json
 from dateutil.relativedelta import relativedelta
 from constance import config
 
+from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
@@ -33,7 +34,8 @@ from seahub.utils import render_permission_error, string2list, render_error, \
     gen_shared_link, gen_shared_upload_link, gen_dir_share_link, \
     gen_file_share_link, IS_EMAIL_CONFIGURED, check_filename_with_rename, \
     is_valid_username, is_valid_email, send_html_email, is_org_context, \
-    send_perm_audit_msg, get_origin_repo_info
+    send_perm_audit_msg, get_origin_repo_info, gen_token, normalize_cache_key
+from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
 from seahub.settings import SITE_ROOT, REPLACE_FROM_EMAIL, ADD_REPLY_TO_HEADER
 from seahub.profile.models import Profile
 
@@ -1187,3 +1189,55 @@ def ajax_private_share_dir(request):
         # for case: only share to users and the emails are not valid
         data = json.dumps({"error": _("Please check the email(s) you entered")})
         return HttpResponse(data, status=400, content_type=content_type)
+
+def ajax_get_link_audit_code(request):
+    """
+    Generate a token, and record that token with email in cache, expires in
+    one hour, send token to that email address.
+
+    User provide token and email at share link page, if the token and email
+    are valid, record that email in session.
+    """
+    content_type = 'application/json; charset=utf-8'
+
+    token = request.POST.get('token')
+    email = request.POST.get('email')
+    if not is_valid_email(email):
+        return HttpResponse(json.dumps({
+            'error': _('Email address is not valid')
+        }), status=400, content_type=content_type)
+
+    dfs = FileShare.objects.get_valid_file_link_by_token(token)
+    ufs = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+
+    fs = dfs if dfs else ufs
+    if fs is None:
+        return HttpResponse(json.dumps({
+            'error': _('Share link is not found')
+        }), status=400, content_type=content_type)
+
+    cache_key = normalize_cache_key(email, 'share_link_audit_')
+    timeout = 60 * 60           # one hour
+    code = cache.get(cache_key)    # get code from cache
+    if not code:        # or generate new code
+        code = gen_token(max_length=6)
+        cache.set(cache_key, code, timeout)
+
+    # send code to user via email
+    subject = _("Audit code for link: %s") % fs.get_full_url()
+    c = {
+        'code': code,
+    }
+    try:
+        send_html_email_with_dj_template(
+            email, dj_template='share/audit_code_email.html',
+            context=c, subject=subject, priority=MAIL_PRIORITY.now
+        )
+        return HttpResponse(json.dumps({'success': True}), status=200,
+                            content_type=content_type)
+    except Exception as e:
+        logger.error('Failed to send audit code via email to %s')
+        logger.error(e)
+        return HttpResponse(json.dumps({
+            "error": _("Failed to send audit code, please try again later.")
+        }), status=500, content_type=content_type)

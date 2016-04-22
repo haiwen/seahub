@@ -16,6 +16,7 @@ from seaserv import seafile_api
 
 from seahub.auth.decorators import login_required
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
+from seahub.share.decorators import share_link_audit
 from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
@@ -196,12 +197,9 @@ def _download_dir_from_share_link(request, fileshare, repo, real_path):
 
     return HttpResponseRedirect(gen_file_get_url(token, dirname))
 
-def view_shared_dir(request, token):
-    assert token is not None    # Checked by URLconf
-
-    fileshare = FileShare.objects.get_valid_dir_link_by_token(token)
-    if fileshare is None:
-        raise Http404
+@share_link_audit
+def view_shared_dir(request, fileshare):
+    token = fileshare.token
 
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
@@ -293,12 +291,9 @@ def view_shared_dir(request, token):
             'thumbnail_size': thumbnail_size,
             }, context_instance=RequestContext(request))
 
-def view_shared_upload_link(request, token):
-    assert token is not None    # Checked by URLconf
-
-    uploadlink = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
-    if uploadlink is None:
-        raise Http404
+@share_link_audit
+def view_shared_upload_link(request, uploadlink):
+    token = uploadlink.token
 
     password_check_passed, err_msg = check_share_link_common(request,
                                                              uploadlink,

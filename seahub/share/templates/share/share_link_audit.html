@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="wide-panel">
+    <p class="access-notice">{% trans "Please provide your email address if you want to continue." %}</p>
+
+    <form action="#" method="post" id="link-audit-form">{% csrf_token %}
+        <label>{% trans "Email: "%}</label>
+        <input type="text" name="email" value="{{email}}" />
+        <button id="code-btn">{% trans "Get code" %}</button><br/>
+
+        <lable>{% trans "Verify code:" %}</lable>
+        <input type="text" name="code" value="{{code}}" /><br/>
+
+        {% if err_msg %}
+        <p class="error">{{ err_msg }}</p>
+        {% endif %}
+
+        <input type="submit" value="{% trans "Submit" %}" />
+    </form>
+</div>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript">
+$('#code-btn').click(function() {
+    var email = $('input[name="email"]').val();
+    if (!email) {
+        return false;
+    }
+
+    var $this = $(this);
+    var originalText = this.innerHTML;  // Remember the original text content
+    var seconds = 60;
+    
+    $this.prop('disabled', true).addClass('btn-disabled');
+    $this.text(originalText + '(' + seconds + 's)');
+    // do a set interval, using an interval of 1000 milliseconds
+    //     and clear it after the number of seconds counts down to 0
+    var interval = setInterval(function() {
+        // decrement the seconds and update the text
+        seconds = seconds - 1;
+        $this.text( originalText + ' (' + seconds + 's)');
+        if (seconds === 0) {  // once seconds is 0...
+            $this.prop('disabled', false).removeClass('btn-disabled')
+                 .text(originalText);   //reset to original text
+            clearInterval(interval);  // clear interval
+        }
+    }, 1000);
+
+    $.ajax({
+        url: "{% url "ajax_get_link_audit_code" %}",
+        type: 'POST',
+        cache: 'false',
+        beforeSend: prepareCSRFToken,
+        data: {
+            token: "{{token}}",
+            email: email
+        },
+        success: function() {
+            alert('successfully sent code');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert($.parseJSON(jqXHR.responseText).error);
+        }
+    });
+
+    return false;
+});
+
+</script>
+{% endblock %}
