@@ -1567,7 +1567,6 @@ def get_groups_by_user(request):
 def get_group_repos(request, groups):
     """Get repos shared to groups.
     """
-    username = request.user.username
     group_repos = []
     if is_org_context(request):
         org_id = request.user.org.org_id
@@ -1575,10 +1574,7 @@ def get_group_repos(request, groups):
         for grp in groups:
             # Get group repos, and for each group repos...
             for r_id in seafile_api.get_org_group_repoids(org_id, grp.id):
-                # No need to list my own repo
                 repo_owner = seafile_api.get_org_repo_owner(r_id)
-                if repo_owner == username:
-                    continue
                 # Convert repo properties due to the different collumns in Repo
                 # and SharedRepo
                 r = get_repo(r_id)
@@ -1598,10 +1594,7 @@ def get_group_repos(request, groups):
         for grp in groups:
             # Get group repos, and for each group repos...
             for r_id in seafile_api.get_group_repoids(grp.id):
-                # No need to list my own repo
                 repo_owner = seafile_api.get_repo_owner(r_id)
-                if repo_owner == username:
-                    continue
                 # Convert repo properties due to the different collumns in Repo
                 # and SharedRepo
                 r = get_repo(r_id)
