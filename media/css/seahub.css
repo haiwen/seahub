@@ -830,6 +830,9 @@ textarea:-moz-placeholder {/* for FF */
     height:39px;
     overflow:hidden;
 }
+.header-bar h3 {
+    line-height: 30px;
+}
 /**** narrow-panel ****/
 .narrow-panel {
     width:320px;
