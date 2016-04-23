@@ -2,16 +2,18 @@
 {% load i18n %}
 
 {% block main_panel %}
-<div class="wide-panel">
-    <p class="access-notice">{% trans "Please provide your email address if you want to continue." %}</p>
+<div class="new-narrow-panel" role="main">
+    <h2 class="hd">{% trans "Email verification" %}</h2>
+    <p class="notice">{% trans "Please provide your email address to continue." %}</p>
 
-    <form action="#" method="post" id="link-audit-form">{% csrf_token %}
-        <label>{% trans "Email: "%}</label>
-        <input type="text" name="email" value="{{email}}" />
+    <form action="#" method="post" id="link-audit-form" class="con link-visit-verify">{% csrf_token %}
+        <label for="email">{% trans "Email" %}</label>
+        <input id="email" type="text" class="input" name="email" value="{{email}}" />
         <button id="code-btn">{% trans "Get code" %}</button><br/>
+        <p class="field-feedback"></p>
 
-        <lable>{% trans "Verify code:" %}</lable>
-        <input type="text" name="code" value="{{code}}" /><br/>
+        <lable for="code">{% trans "Verification code" %}</lable>
+        <input id="code" type="text" class="input" name="code" value="{{code}}" /><br/>
 
         {% if err_msg %}
         <p class="error">{{ err_msg }}</p>
@@ -32,7 +34,7 @@ $('#code-btn').click(function() {
     var $this = $(this);
     var originalText = this.innerHTML;  // Remember the original text content
     var seconds = 60;
-    
+
     $this.prop('disabled', true).addClass('btn-disabled');
     $this.text(originalText + '(' + seconds + 's)');
     // do a set interval, using an interval of 1000 milliseconds
@@ -58,10 +60,10 @@ $('#code-btn').click(function() {
             email: email
         },
         success: function() {
-            alert('successfully sent code');
+            $(".field-feedback").html('{% trans "Successfully sent verification code to this email." %}');
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            alert($.parseJSON(jqXHR.responseText).error);
+            $(".field-feedback").html($.parseJSON(jqXHR.responseText).error);
         }
     });
 
