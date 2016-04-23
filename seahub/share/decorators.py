@@ -39,8 +39,11 @@ def share_link_audit(func):
 
             cache_key = normalize_cache_key(email, 'share_link_audit_')
             if code == cache.get(cache_key):
+                # code is correct, add this email to session so that he will
+                # not be asked again during this session, and clear this code.
                 request.session['anonymous_email'] = email
                 request.user.email = request.session.get('anonymous_email')
+                cache.delete(cache_key)
                 return func(request, fileshare, *args, **kwargs)
             else:
                 return render_to_response('share/share_link_audit.html', {

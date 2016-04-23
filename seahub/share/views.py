@@ -1218,10 +1218,8 @@ def ajax_get_link_audit_code(request):
 
     cache_key = normalize_cache_key(email, 'share_link_audit_')
     timeout = 60 * 60           # one hour
-    code = cache.get(cache_key)    # get code from cache
-    if not code:        # or generate new code
-        code = gen_token(max_length=6)
-        cache.set(cache_key, code, timeout)
+    code = gen_token(max_length=6)
+    cache.set(cache_key, code, timeout)
 
     # send code to user via email
     subject = _("Audit code for link: %s") % fs.get_full_url()
