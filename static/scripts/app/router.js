@@ -12,10 +12,13 @@ define([
     'app/views/dir',
     'app/views/starred-file',
     'app/views/devices',
-    'app/views/activities'
+    'app/views/activities',
+    'app/views/notifications',
+    'app/views/account'
 ], function($, Backbone, Common, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView,
-    OrgView, DirView, StarredFileView, DevicesView, ActivitiesView) {
+    OrgView, DirView, StarredFileView, DevicesView, ActivitiesView,
+    NotificationsView, AccountView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -44,8 +47,6 @@ define([
 
             Common.prepareApiCsrf();
             Common.initLocale();
-            Common.initAccountPopup();
-            Common.initNoticePopup();
 
             this.sideNavView = new SideNavView();
             app.ui.sideNavView = this.sideNavView;
@@ -60,6 +61,9 @@ define([
             this.starredFileView = new StarredFileView();
             this.devicesView = new DevicesView();
             this.activitiesView = new ActivitiesView();
+
+            app.ui.notificationsView = this.notificationsView = new NotificationsView();
+            app.ui.accountView = this.accountView = new AccountView();
 
             this.currentView = this.myReposView;
 

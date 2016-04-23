@@ -57,41 +57,17 @@
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
 
-                <div id="msg-count" class="fleft">
+                <div id="notifications" class="fleft">
                     <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
                         <span class="sf2-icon-bell"></span>
                         <span class="num hide">0</span>
                     </a>
-                    <div id="notice-popup" class="hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <h3 class="hd">{% trans "Notifications" %}</h3>
-                        <div class="con">
-                            <span class="loading-icon loading-tip"></span>
-                            <ul class="hide" id="notice-list"></ul>
-                            <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
-                        </div>
-                        <a href="#" class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></a>
-                    </div>
                 </div>
 
                 <div id="account" class="fright">
                     <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
                     </a>
-                    <div id="user-info-popup" class="top-info-popup hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <div class="item ovhd">
-                            {% avatar request.user 36 %}
-                            <div class="txt">
-                                {{ request.user.username|email2nickname }} <br />
-                                {{ request.user.username}}
-                            </div>
-                        </div>
-                        <span class="loading-icon loading-tip"></span>
-                        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
-                        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
-                    </div>
                     {% if request.user.is_staff %}
                     <div class="manage">
                         {% block sys_admin %}<a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="a"><img src="{{ MEDIA_URL }}img/admin_in.png" alt="" /></a>{% endblock %}
