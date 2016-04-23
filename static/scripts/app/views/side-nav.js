@@ -2,8 +2,9 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'common'
-], function($, _, Backbone, Common) {
+    'common',
+    'js.cookie'
+], function($, _, Backbone, Common, Cookie) {
     'use strict';
 
     var sideNavView = Backbone.View.extend({
@@ -23,6 +24,11 @@ define([
             };
             this.render();
             this.$el.show();
+
+            this.group_expand = false; // the initial value is false
+            if (Cookie.get('group_expand') == 'true') {
+                this.toggleGroupList();
+            }
         },
 
         render: function() {
@@ -35,9 +41,16 @@ define([
             'click #enable-mods': 'enableMods'
         },
 
-        toggleGroupList: function () {
+        toggleGroupList: function() {
             $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
             $('#group-nav .grp-list').slideToggle();
+            if ($('#group-nav .toggle-icon').hasClass('icon-caret-down')) {
+                Cookie.set('group_expand', 'true');
+                this.group_expand = true;
+            } else {
+                Cookie.set('group_expand', 'false');
+                this.group_expand = false;
+            }
             return false;
         },
 
