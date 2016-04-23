@@ -162,6 +162,7 @@ def login(request, template_name='registration/login.html',
                             user.freeze_user(notify_admins=True)
                     except User.DoesNotExist:
                         pass
+                    form.errors['freeze_account'] = _('This account has been frozen due to too many failed login attempts.')
             else:
                 # log user in if password is valid otherwise show captcha
                 form = CaptchaAuthenticationForm(data=request.POST)
