@@ -42,7 +42,7 @@ define([
             this.$space.addClass('hide');
 
             $.ajax({
-                url: this.$space.data('url'),
+                url: Common.getUrl({'name': 'space_and_traffic'}),
                 dataType: 'json',
                 cache: false,
                 success: function(data) {
@@ -62,7 +62,6 @@ define([
             });
 
             this.$account.append(this.$el);
-            return false;
         }
 
     });

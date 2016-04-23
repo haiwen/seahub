@@ -46,12 +46,6 @@
                     {% include 'snippets/search_form.html' %}
                 {% endif %}
 
-                <div data-url="{% url 'unseen_notices_count' %}" id="notifications" class="fleft">
-                    <a href="#" class="no-deco" id="notice-icon" title="{% trans "Notifications" %}" aria-label="{% trans "Notifications" %}">
-                        <span class="sf2-icon-bell"></span>
-                        <span class="num hide">0</span>
-                    </a>
-                </div>
 
                 <div id="account" class="fright">
                     <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
