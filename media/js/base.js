@@ -58,8 +58,6 @@ $(document).click(function(e) {
         }
     };
     closePopup($('#user-info-popup'), $('#my-info'));
-    closePopup($('#top-nav-grp-info'), $('#top-nav-grp'));
-    closePopup($('#notice-popup'), $('#notice-icon'));
 });
 
 // search: disable submit when input nothing

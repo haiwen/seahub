@@ -47,8 +47,6 @@ define([
 
             Common.prepareApiCsrf();
             Common.initLocale();
-            //Common.initAccountPopup();
-            //Common.initNoticePopup();
 
             this.sideNavView = new SideNavView();
             app.ui.sideNavView = this.sideNavView;

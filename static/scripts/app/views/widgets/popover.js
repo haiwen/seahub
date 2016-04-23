@@ -20,8 +20,7 @@ define([
         }
 
         if (!view.$el.is(target)
-            && !view.$el.find('*').is(target))
-        {
+            && !view.$el.find('*').is(target)) {
             view.hide();
         }
         return true;

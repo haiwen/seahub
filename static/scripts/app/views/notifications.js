@@ -17,13 +17,17 @@ define([
             PopoverView.prototype.initialize.call(this);
 
             this.render();
+
             this.$loadingTip = this.$('.loading-tip');
             this.$error = this.$('.error');
             this.$noticeList = this.$('.notice-list');
 
             this.$notifications = $("#notifications");
+            this.$num = $('.num', this.$notifications);
             this.orig_doc_title = document.title;
+
             var _this = this;
+
             var reqUnreadNum = function() {
                 $.ajax({
                     url: Common.getUrl({name: 'get_unseen_notices_num'}),
@@ -31,13 +35,13 @@ define([
                     cache: false,
                     success: function(data) {
                         var count = data['count'],
-                            num = $('.num', _this.$notifications);
-                        num.html(count);
+                            $num = _this.$num;
+                        $num.html(count);
                         if (count > 0) {
-                            num.removeClass('hide');
+                            $num.removeClass('hide');
                             document.title = '(' + count + ')' + _this.orig_doc_title;
                         } else {
-                            num.addClass('hide');
+                            $num.addClass('hide');
                             document.title =  _this.orig_doc_title;
                         }
                     }
@@ -58,6 +62,35 @@ define([
             return this;
         },
 
+        events: {
+            'click .detail': 'viewDetail',
+            'click .unread a': 'visitUnread'
+        },
+
+        viewDetail: function(e) {
+            var $el = $(e.currentTarget);
+            location.href = $('.brief a', $el.parent()).attr('href');
+        },
+
+        visitUnread: function(e) {
+            var $el = $(e.currentTarget);
+            var notice_id = $el.closest('.unread').data('id');
+            var link_href = $el.attr('href');
+            $.ajax({
+                url: Common.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
+                type: 'POST',
+                dataType: 'json',
+                beforeSend: Common.prepareCSRFToken,
+                success: function(data) {
+                    location.href = link_href;
+                },
+                error: function() {
+                    location.href = link_href;
+                }
+            });
+            return false;
+        },
+
         // override hide function
         hide: function() {
             var _this = this;
@@ -72,7 +105,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function() {
-                        $('.num', _this.$notifications).html(0).addClass('hide');
+                        _this.$num.html(0).addClass('hide');
                         document.title = _this.orig_doc_title;
                     }
                 });
@@ -94,28 +127,6 @@ define([
                 success: function(data) {
                     _this.$loadingTip.hide();
                     _this.$noticeList.html(data['notice_html']).show();
-
-                    // set a notice to be read when <a> in it is clicked
-                    $('.unread a', _this.$noticeList).click(function() {
-                        var notice_id = $(this).parents('.unread').data('id');
-                        var link_href = $(this).attr('href');
-                        $.ajax({
-                            url: Common.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
-                            type: 'POST',
-                            dataType: 'json',
-                            beforeSend: Common.prepareCSRFToken,
-                            success: function(data) {
-                                location.href = link_href;
-                            },
-                            error: function() {
-                                location.href = link_href;
-                            }
-                        });
-                        return false;
-                    });
-                    $('.detail', _this.$noticeList).click(function() {
-                        location.href = $('.brief a', $(this).parent()).attr('href');
-                    });
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     _this.$loadingTip.hide();
@@ -130,7 +141,6 @@ define([
             });
 
             this.$notifications.append(this.$el);
-            return false;
         }
 
     });

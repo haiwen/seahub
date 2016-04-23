@@ -1185,23 +1185,22 @@ textarea:-moz-placeholder {/* for FF */
     margin:4px 0 0;
 }
 .popover-con {
+    padding:0 10px;
     overflow:auto;
 }
 a.popover-item {
+    display:block;
     color:#444;
     font-weight:normal;
-    text-decoration:none;
-    display:block;
-    padding-left:10px;
-    padding-right:10px;
     line-height:31px;
-    cursor:pointer;
-    margin:5px 0;
+    text-decoration:none;
+    padding:0 10px;
+    margin:5px -10px;
 }
 /**** user-item ****/ /* e.g. group member in 'group members' panel */
 .user-item {
-    margin:5px 0;
-    padding-left:10px;
+    padding:0 10px;
+    margin:5px -10px;
 }
 .user-item .txt {
     margin-left:40px;
@@ -1433,7 +1432,7 @@ button.dropdown-toggle:focus {
 /* top-bar */
 #notifications {
     position:relative;
-    margin:10px 32px 0 25px;
+    margin:10px 0 0 25px;
 }
 #notifications .sf2-icon-bell {
     font-size:24px;
@@ -1462,13 +1461,15 @@ button.dropdown-toggle:focus {
     font-weight:normal;
 }
 #notice-popover li {
-    padding:9px 10px 3px 8px;
+    padding:9px 0 3px;
     border-bottom:1px solid #dfdfe1;
 }
 #notice-popover li.unread {
     background:#f5f5f7;
+    padding-right:10px;
+    padding-left:8px;
     border-left:2px solid #feac74;
-    padding-left:6px;
+    margin:0 -10px;
 }
 #notice-popover .avatar {
     border-radius:1000px;
@@ -1482,12 +1483,14 @@ button.dropdown-toggle:focus {
     color:#999;
     text-align:right;
     margin:0;
+    clear:both;
 }
 #notice-popover .all {
     color:#a4a4a4;
 }
 #account {
     position:relative;
+    margin-left:32px;
 }
 #account .avatar {
     vertical-align:middle;
@@ -1504,7 +1507,6 @@ button.dropdown-toggle:focus {
     margin-left:45px;
 }
 .account-popup {
-    text-align:left;
     right:0;
     top:48px;
     font-size:13px;
@@ -1513,8 +1515,8 @@ button.dropdown-toggle:focus {
     top:-10px;
     left:200px;
 }
-.account-popup > .item:last-child {
-    border-bottom:none;
+.account-popup .popover-con {
+    padding:0;
 }
 .account-popup .item {
     display:block;
