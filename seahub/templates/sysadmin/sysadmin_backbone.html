@@ -80,6 +80,9 @@
             <div id="right-panel">
             </div>
             <div id="main-panel" class="clear w100 ovhd">
+                <div id="initial-loading-view">
+                    <span class="loading-icon loading-tip"></span>
+                </div>
             </div>
 
             <div id="confirm-popup" class="hide">
@@ -104,6 +107,7 @@ app["pageOptions"] = {
     csrfToken: "{{ csrf_token }}",
     email: "{{request.user.username}}",
     name: "{{request.user.username|email2nickname|escapejs}}",
+    language_code: "{{ LANGUAGE_CODE }}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},
     share_link_password_min_length: {{ share_link_password_min_length }},

@@ -10,6 +10,9 @@
     modules: [
         {
             name: "main"
+        },
+        {
+            name: "sysadmin-main"
         }
     ]
 })

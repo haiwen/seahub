@@ -9,21 +9,30 @@ define([
 
     var DashboardView = Backbone.View.extend({
 
-        tagName: 'div',
+        id: "admin-dashboard",
+
         template: _.template($("#sysinfo-tmpl").html()),
+        headerTemplate: _.template($("#sysinfo-header-tmpl").html()),
 
         initialize: function() {
             this.sysinfo = new SysInfo();
-        },
-
-        events: {
+            this.render();
         },
 
         render: function() {
+            this.$el.html(this.headerTemplate());
+            this.$loadingTip = this.$('.loading-tip');
+            this.$sysinfo = this.$('.sysinfo');
+        },
+
+        showSysinfo: function() {
+            this.$sysinfo.empty();
+            this.$loadingTip.show();
             var _this = this;
             this.sysinfo.fetch({
+                cache: false, // for IE
                 success: function(model, response, options) {
-                    _this._showContent();
+                    _this.reset();
                 },
                 error: function(model, response, options) {
                     var err_msg;
@@ -42,19 +51,17 @@ define([
         },
 
         hide: function() {
-
+            this.$el.detach();
         },
 
         show: function() {
-            this.render();
+            $("#right-panel").html(this.$el);
+            this.showSysinfo();
         },
 
-
-        _showContent: function() {
-            console.log(this.sysinfo.toJSON());
-            this.$el.html(this.template(this.sysinfo.toJSON()));
-            $("#right-panel").html(this.$el);
-            return this;
+        reset: function() {
+            this.$loadingTip.hide();
+            this.$sysinfo.html(this.template(this.sysinfo.toJSON()));
         }
 
     });
