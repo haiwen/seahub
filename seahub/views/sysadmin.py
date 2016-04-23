@@ -267,11 +267,7 @@ def sys_admin_repo_download_file(request, repo_id):
 @login_required
 @sys_staff_required
 def sys_admin_repo(request, repo_id):
-
-    next = request.META.get('HTTP_REFERER', None)
-    if not next:
-        next = reverse('sys_repo_admin')
-
+    next = reverse('sys_repo_admin')
     repo = seafile_api.get_repo(repo_id)
     if not repo:
         messages.error(request, _(u'Library does not exist'))

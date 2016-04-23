@@ -6,6 +6,7 @@ from django.db import models
 from seahub.base.fields import LowerCaseCharField
 
 DESKTOP_PLATFORMS = ('windows', 'linux', 'mac')
+MOBILE_PLATFORMS = ('ios', 'android')
 
 class Token(models.Model):
     """
@@ -28,10 +29,20 @@ class Token(models.Model):
         return self.key
 
 class TokenV2Manager(models.Manager):
+
+    def get_devices(self, platform, start, end):
+        if platform == 'desktop':
+            devices = super(TokenV2Manager, self).filter(platform__in=DESKTOP_PLATFORMS).order_by('-last_accessed')[start : end]
+        elif platform == 'mobile':
+            devices = super(TokenV2Manager, self).filter(platform__in=MOBILE_PLATFORMS).order_by('-last_accessed')[start : end]
+        else:
+            devices = super(TokenV2Manager, self).all().order_by('-last_accessed')[start : end]
+
+        return devices
+
     def get_user_devices(self, username):
         '''List user devices, most recently used first'''
         devices = super(TokenV2Manager, self).filter(user=username)
-        
         platform_priorities = {
             'windows': 0,
             'linux': 0,

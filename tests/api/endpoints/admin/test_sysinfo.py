@@ -3,7 +3,8 @@ import json
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 
-class AccountTest(BaseTestCase):
+class SysinfoTest(BaseTestCase):
+
     def setUp(self):
         self.login_as(self.admin)
 

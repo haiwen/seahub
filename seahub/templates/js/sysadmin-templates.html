@@ -3,8 +3,10 @@
 <script type="text/template" id="side-nav-tmpl">
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
-        <li class="tab <% if (cur_tab == 'shared') { %> tab-cur<% } %>">
+        <li class="tab <% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
+        </li>
+        <li class="tab <% if (cur_tab == 'devices') { %> tab-cur<% } %>"> <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
         <li class="tab">
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
@@ -23,6 +25,13 @@
             <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
         </li>
         {% endif %}
+
+        {% if multi_institution %}
+        <li class="tab">
+            <a href="{{ SITE_ROOT }}sys/instadmin/"><span class="sf2-icon-organization"></span>{% trans "Institutions" %}</a>
+        </li>
+        {% endif %}
+
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="sf2-icon-msgs"></span>{% trans "Notifications" %}</a>
         </li>
@@ -47,10 +56,16 @@
     </ul>
 </script>
 
-<script type="text/template" id="sysinfo-tmpl">
+<script type="text/template" id="sysinfo-header-tmpl">
     <div class="header-bar">
         <h3 class="">{% trans "Info" %}</h3>
     </div>
+    <div class="sysinfo">
+    </div>
+    <span class="loading-icon loading-tip"></span>
+</script>
+
+<script type="text/template" id="sysinfo-tmpl">
     <dl>
         <dt>{% trans "System Info" %}</dt>
         <dd><% if (is_pro) { %>
@@ -96,6 +111,105 @@
         <dt>{% trans "Organizations" %}</dt>
         <dd><%- org_count %></dd>
         <% } %>
-
     </dl>
+</script>
+
+<script type="text/template" id="admin-devices-tmpl">
+    <div class="hd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
+                <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'mobile') { %> ui-state-active <% } %>">
+                <a href="#mobile-devices/" class="a">{% trans "Mobile" %}</a>
+            </li>
+            <% if (is_pro) { %>
+            <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
+                <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
+            </li>
+            <% } %>
+        </ul>
+    </div>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="22%">{% trans "User" %}</th>
+                <th width="17%">{% trans "Platform" %} / {% trans "Version" %}</th>
+                <th width="22%">{% trans "Device Name" %}</th>
+                <th width="17%">{% trans "IP" %}</th>
+                <th width="17%">{% trans "Last Access" %}</th>
+                <th width="5%"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No connected devices" %}</h2>
+    </div>
+    <div id="paginator">
+        <a class="js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="js-next hide" href="#">{% trans "Next" %}</a>
+    </div>
+</script>
+
+<script type="text/template" id="admin-device-item-tmpl">
+    <td><%- user %></td>
+    <td><%- platform %> / <%- client_version %></td>
+    <td><%- device_name %></td>
+    <td><%- last_login_ip %></td>
+    <td><time title='<%- time %>'><%- time_from_now %></time></td>
+    <td>
+        <div>
+            <span class="unlink-device op-icon sf2-icon-delete vh" title="{% trans "Unlink" %}"></span>
+        </div>
+    </td>
+</script>
+
+<script type="text/template" id="admin-device-errors-tmpl">
+    <div class="hd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
+                <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'mobile') { %> ui-state-active <% } %>">
+                <a href="#mobile-devices/" class="a">{% trans "Mobile" %}</a>
+            </li>
+            <li class="tab <% if (cur_tab == 'errors') { %> ui-state-active <% } %>">
+                <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
+            </li>
+        </ul>
+    </div>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="15%">{% trans "User" %}</th>
+                <th width="17%">{% trans "Device" %} / {% trans "Version" %}</th>
+                <th width="18%">{% trans "IP" %}</th>
+                <th width="15%">{% trans "Library" %}</th>
+                <th width="17%">{% trans "Error" %}</th>
+                <th width="18%">{% trans "Time" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No sync errors" %}</h2>
+    </div>
+</script>
+
+<script type="text/template" id="admin-device-error-tmpl">
+    <td>
+        <a href="{{ SITE_ROOT }}useradmin/info/<%- email %>/"><%- email %></a>
+    </td>
+    <td><%- device_name %> / <%- client_version %></td>
+    <td><%- device_ip %>
+    <td>
+        <a href="{{ SITE_ROOT }}sys/seafadmin/repo/<%- repo_id %>/"><%- repo_name %></a>
+    </td>
+    <td><%- error_msg %></td>
+    <td><time title='<%- time %>'><%- time_from_now %></time></td>
 </script>
