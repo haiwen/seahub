@@ -18,6 +18,12 @@ require.config({
                 'jquery'
             ],
             exports: 'Backbone'
+        },
+        'backbone.paginator': {
+            deps: [
+                'backbone'
+            ],
+            exports: 'BackbonePaginator'
         }
     },
     paths: {
@@ -46,6 +52,7 @@ require.config({
 
         underscore: 'lib/underscore',
         backbone: 'lib/backbone',
+        'backbone.paginator': 'lib/backbone.paginator',
         text: 'lib/text'
     }
 });
@@ -154,6 +161,10 @@ define([
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
                 case 'space_and_traffic': return siteRoot + 'ajax/space_and_traffic/';
+                // sysadmin
+                case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
+                case 'admin-devices': return siteRoot + 'api/v2.1/admin/devices/';
+                case 'admin-device-errors': return siteRoot + 'api/v2.1/admin/device-errors/';
             }
         },
 

@@ -1026,11 +1026,11 @@ if HAS_OFFICE_CONVERTER:
 
     def cluster_delegate(delegate_func):
         '''usage:
-        
+
         @cluster_delegate(funcA)
         def func(*args):
             ...non-cluster logic goes here...
-        
+
         - In non-cluster mode, this decorator effectively does nothing.
         - In cluster mode, if this node is not the office convert node,
         funcA is called instead of the decorated function itself
@@ -1261,6 +1261,10 @@ def do_urlopen(url, data=None, headers=None):
     return ret
 
 def is_pro_version():
+    if seahub.settings.DEBUG:
+        if hasattr(seahub.settings, 'IS_PRO_VERSION') \
+            and seahub.settings.IS_PRO_VERSION:
+            return True
     if EVENTS_CONFIG_FILE:
         return True
     else:
