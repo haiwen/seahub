@@ -92,6 +92,7 @@ define([
                     break;
             }
             this.hide();
+            return false;
         },
 
         rename: function() {
@@ -103,7 +104,7 @@ define([
 
             $form.submit(function() {
                 var new_name = $.trim($('[name="new_name"]', $(this)).val());
-                if (!new_name || new_name == _this.group.name) {
+                if (!new_name || new_name == _this.groupView.group.name) {
                     return false;
                 }
                 var $submitBtn = $('[type="submit"]', $(this));

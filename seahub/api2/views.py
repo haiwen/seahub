@@ -2396,7 +2396,8 @@ class FileSharedLinkView(APIView):
                 is_dir = True
             else:
                 try:
-                    dirent = seafile_api.get_dirent_by_path(repo_id, path)
+                    real_path = repo.origin_path + path if repo.origin_path else path
+                    dirent = seafile_api.get_dirent_by_path(repo.store_id, real_path)
                 except SearpcError as e:
                     logger.error(e)
                     return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, "Internal error")

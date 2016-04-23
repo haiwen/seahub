@@ -1,0 +1,134 @@
+{% load staticfiles i18n %}
+{% load compress %}
+{% load seahub_tags avatar_tags group_avatar_tags %}
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>{{ site_title }}</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
+<!--[if IE]>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
+<![endif]-->
+
+{% compress css %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
+{% endcompress %}
+
+{% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
+</head>
+
+<body>
+    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+        <!--[if lt IE 10]>
+        <p id="top-browser-tip">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span class="close">{% trans "Close" %}</span></p>
+        <![endif]-->
+        {% block info_bar_message %}
+        {% if request.user.is_authenticated and request.cur_note %}
+        <div id="info-bar">
+            <p id="info-bar-info">{{ request.cur_note.message|urlize|url_target_blank }}</p>
+            <span class="close sf2-icon-x1 op-icon" title="{% trans "Close" %}"></span>
+        </div>
+        {% endif %}
+        {% endblock info_bar_message %}
+
+        <div id="header">
+            <div id="header-inner">
+                {% block notice_panel %}{% endblock %}
+                <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
+                    {% if seacloud_mode %}
+                    <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
+                    {% else %}
+                    <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
+                    {% endif %}
+                </a>
+
+                <div id="account" class="fright">
+                    <div id="my-info">
+                        {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
+                    </div>
+                    <div id="user-info-popup" class="top-info-popup hide">
+                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+                        <div class="item ovhd">
+                            {% avatar request.user 36 %}
+                            <div class="txt">
+                                {{ request.user.username|email2nickname }} <br />
+                                {{ request.user.username}}
+                            </div>
+                        </div>
+                        <span class="loading-icon loading-tip"></span>
+                        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
+                        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
+                    </div>
+                    <div class="manage">
+                        <a href="{{ SITE_ROOT }}" title="{% trans "Exit System Admin" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="main" class="clear">
+            <div id="title-panel" class="w100 ovhd">
+            </div>
+            <div id="left-panel">
+                <div class="side-tabnav hide" id="side-nav"></div>
+            </div>
+            <div id="right-panel">
+            </div>
+            <div id="main-panel" class="clear w100 ovhd">
+                <div id="initial-loading-view">
+                    <span class="loading-icon loading-tip"></span>
+                </div>
+            </div>
+
+            <div id="confirm-popup" class="hide">
+                <div id="confirm-con"></div>
+                <button id="confirm-yes" class="btn">{% trans "Yes"%}</button>
+                <button class="simplemodal-close btn">{% trans "No"%}</button>
+            </div>
+        </div>
+
+        {% include 'footer.html' %}
+        {% include 'js/sysadmin-templates.html' %}
+</div><!-- wrapper -->
+
+<script type="text/javascript">
+var app = {
+    config: {
+        mediaUrl: '{{ MEDIA_URL }}',
+        siteRoot: '{{ SITE_ROOT }}'
+    }
+};
+app["pageOptions"] = {
+    csrfToken: "{{ csrf_token }}",
+    email: "{{request.user.username}}",
+    name: "{{request.user.username|email2nickname|escapejs}}",
+    language_code: "{{ LANGUAGE_CODE }}",
+    events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
+    repo_password_min_length: {{ repo_password_min_length }},
+    share_link_password_min_length: {{ share_link_password_min_length }},
+    enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
+    enable_resumable_fileupload: {% if enable_resumable_fileupload %} true {% else %} false {% endif %},
+    thumbnail_default_size: {{ thumbnail_default_size }},
+    thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},
+    enable_encrypted_library: {% if enable_encrypted_library %} true {% else %} false {% endif %},
+    max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
+    folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
+    is_pro: {% if is_pro %} true {% else %} false {% endif %},
+    file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
+    cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
+};
+</script>
+<script src="{{ STATIC_URL }}scripts/i18n/{{ LANGUAGE_CODE }}/djangojs.js"></script>
+{% if debug %}
+<script data-main="{% static "scripts/sysadmin-main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% else %}
+<script data-main="{% static "scripts/dist/sysadmin-main.js" %}" src="{% static "scripts/lib/require.js" %}"></script>
+{% endif %}
+
+</body>
+</html>

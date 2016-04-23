@@ -16,6 +16,11 @@
  * (TODO: complete this TOC)
  *
  */
+/*
+ * z-index:
+ *    popover:  20
+ *
+ */
 
 /****** icon-xx ********/
 /* Font Awesome 3.2.1 by Dave Gandy - http://fortawesome.github.com/Font-Awesome */
@@ -358,6 +363,7 @@ p { margin:0.5em 0; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
+.inline-block { display: inline-block; }
 .cspt { cursor:pointer; }
 .pos-rel { position:relative; }
 .top-tip {
@@ -492,7 +498,8 @@ a.op-icon:focus {
     background:#dfdfdf;
 }
 .no-deco,
-.no-deco:hover {
+.no-deco:hover,
+.no-deco:focus {
     text-decoration:none;
 }
 .input-disabled {/* for type="password/text" etc*/
@@ -812,6 +819,16 @@ textarea:-moz-placeholder {/* for FF */
     background:#FDF;
     margin:0;
     color:#000;
+}
+/***** header  *****/
+.header-bar {
+    padding:9px 10px;
+    background:#f2f2f2;
+    margin-bottom:.5em;
+    border-radius:2px;
+    padding-bottom:0;
+    height:39px;
+    overflow:hidden;
 }
 /**** narrow-panel ****/
 .narrow-panel {
@@ -1173,6 +1190,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:3px;
     box-shadow:0 0 4px #ccc;
     position:absolute;
+    z-index: 20;
 }
 .popover-hd {
     padding:5px 0 3px;
@@ -1192,9 +1210,19 @@ textarea:-moz-placeholder {/* for FF */
     padding:0 10px;
     overflow:auto;
 }
+a.popover-item {
+    display:block;
+    color:#444;
+    font-weight:normal;
+    line-height:31px;
+    text-decoration:none;
+    padding:0 10px;
+    margin:5px -10px;
+}
 /**** user-item ****/ /* e.g. group member in 'group members' panel */
 .user-item {
-    margin:5px 0;
+    padding:0 10px;
+    margin:5px -10px;
 }
 .user-item .txt {
     margin-left:40px;
@@ -1424,16 +1452,16 @@ button.dropdown-toggle:focus {
     text-decoration:underline;
 }
 /* top-bar */
-#msg-count {
+#notifications {
     position:relative;
-    margin:10px 32px 0 25px;
+    margin:10px 0 0 25px;
 }
-#msg-count .sf2-icon-bell {
+#notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
     color:#999;
 }
-#msg-count .num {
+#notifications .num {
     position:absolute;
     color:#fff;
     font-size:12px;
@@ -1444,70 +1472,47 @@ button.dropdown-toggle:focus {
     top:0;
     left:15px;
 }
-#notice-popup {
-    position:absolute;
+#notice-popover {
     top:38px;
     right:-80px;
-    width:240px;
-    background:#fff;
-    border:1px solid #c9c9c9;
-    border-radius:3px;
-    box-shadow:0 0 1px #f3f3f3;
-    z-index:20;
 }
-#notice-popup .hd {
-    text-align:center;
-    padding:5px 0 3px;
-    border-bottom:1px solid #dfdfe1;
-    margin:0 10px;
+#notice-popover .outer-caret {
+    right:82px;
 }
-#notice-popup .con {
-    padding:0 10px;
-    overflow:auto;
-}
-#notice-popup a {
+#notice-popover a {
     font-weight:normal;
 }
-#notice-popup .close {
-    position:absolute;
-    top:.5em;
-    right:10px;
-    cursor:pointer;
-}
-#notice-popup .close {
-    font-size:16px;
-    color:#b9b9b9;
-    margin:0;
-}
-#notice-popup li {
+#notice-popover li {
     padding:9px 0 3px;
     border-bottom:1px solid #dfdfe1;
 }
-#notice-popup .unread {
+#notice-popover li.unread {
     background:#f5f5f7;
+    padding-right:10px;
+    padding-left:8px;
     border-left:2px solid #feac74;
     margin:0 -10px;
-    padding-left:8px;
-    padding-right:10px;
 }
-#notice-popup .avatar {
+#notice-popover .avatar {
     border-radius:1000px;
     float:left;
 }
-#notice-popup .brief {
+#notice-popover .brief {
     margin-left:40px;
     margin-top:0;
 }
-#notice-popup .time {
+#notice-popover .time {
     color:#999;
     text-align:right;
     margin:0;
+    clear:both;
 }
-#notice-popup .all {
+#notice-popover .all {
     color:#a4a4a4;
 }
 #account {
     position:relative;
+    margin-left:32px;
 }
 #account .avatar {
     vertical-align:middle;
@@ -1517,11 +1522,36 @@ button.dropdown-toggle:focus {
     cursor: pointer;
     color: #d6d6d6;
 }
-#user-info-popup .avatar {
+.account-popup .avatar {
     float:left;
 }
-#user-info-popup .txt {
+.account-popup .txt {
     margin-left:45px;
+}
+.account-popup {
+    right:0;
+    top:48px;
+    font-size:13px;
+}
+.account-popup .outer-caret {
+    top:-10px;
+    left:200px;
+}
+.account-popup .popover-con {
+    padding:0;
+}
+.account-popup .item {
+    display:block;
+    padding:8px 18px;
+    border-bottom:1px solid #ddd;
+}
+.account-popup a.item {
+    color:#333;
+    font-weight:normal;
+}
+.account-popup a.item:hover {
+    background:#fafafa;
+    text-decoration:none;
 }
 #account .manage {
     position:absolute;
@@ -1551,72 +1581,7 @@ button.dropdown-toggle:focus {
     background:#eee;
     text-decoration:none;
 }
-#send-msg-popup,
-.top-info-popup {
-    background:#fff;
-    border:1px solid #ddd;
-    box-shadow:0 0 5px #ccc;
-    position:absolute;
-    right:0;
-    z-index:100;/* for pages with jquery tabs*/
-}
-#send-msg-popup {
-    width:430px;
-    padding:18px;
-    top:38px;
-    right:10px;
-}
-.top-info-popup {
-    width:200px;
-    text-align:left;
-    top:48px;
-    font-size:13px;
-    border-radius:4px;
-}
-#user-info-popup {
-    width:220px;
-}
-#notice-popup .outer-caret {
-    left:143px;
-}
-#user-info-popup .outer-caret {
-    top:-10px;
-    left:181px;
-}
-.top-info-popup .item {
-    display:block;
-    padding:8px 18px;
-    border-top:1px solid #ddd;
-}
-.top-info-popup a.item {
-    color:#333;
-    font-weight:normal;
-}
-.top-info-popup a.item:hover {
-    background:#fafafa;
-    text-decoration:none;
-}
-#msg-file-share {
-    margin-top:8px;
-    position:relative;
-}
-#msg-file-share-btn {
-    color:#999;
-    background:#fff;
-    border-radius:0;
-}
-#msg-file-share .icon-remove {
-    position:absolute;
-    right:20px;
-    top:0;
-    cursor:pointer;
-    font-size:1.2em;
-    color:#888;
-}
-#msg-file-tree {
-    padding:4px 0;
-    border:1px solid #ddd;
-}
+
 .select2-container .avatar,
 .select2-results .select2-result-label .avatar {
     vertical-align:middle;
@@ -2086,36 +2051,6 @@ button.dropdown-toggle:focus {
     margin-top:8px;
 }
 /* file upload */
-.repo-op .upload-file-btn {
-    display: inline-block;
-    height: auto;
-    padding: 5px 6px;
-    border: 1px solid #c5c5c5;
-    border-radius: 2px;
-    position:relative;
-    overflow:hidden;
-}
-#upload-menu,
-#add-pub-lib-menu {
-    position:absolute;
-    z-index:12; /* make it on top of a checkbox */
-    border:1px solid #c5c5c5;
-    border-radius:2px;
-    box-shadow: 0 0 2px #c5c5c5;
-    background:#fff;
-}
-#upload-menu .item,
-#add-pub-lib-menu .item {
-    padding:0 10px;
-    height:27px;
-    line-height:27px;
-    cursor:pointer;
-}
-#upload-menu .item {
-    position:relative;
-    text-align:left;
-    overflow:hidden; /* for 'hover', as long 'input' in it. */
-}
 .fixed-upload-file-dialog {
     width: 540px;
     position: fixed;
@@ -2162,9 +2097,7 @@ button.dropdown-toggle:focus {
     font-size:13px;
     color:#333;
 }
-.fileinput-button input,
-#upload-file input,
-#upload-menu input {
+.fileinput-button input {
     position: absolute;
     top: 0;
     right: 0;
@@ -3401,11 +3334,6 @@ img.thumbnail {
 }
 .group-setting-list {
     border-bottom:1px solid #e3e3e5;
-}
-.group-setting-item {
-    line-height:31px;
-    cursor:pointer;
-    margin:5px 0;
 }
 #add-group-members-form .submit {
     margin:0 0 0 5px;

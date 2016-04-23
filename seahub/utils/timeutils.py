@@ -35,7 +35,11 @@ def utc_to_local(dt):
     return local
 
 def timestamp_to_isoformat_timestr(timestamp):
-    dt_obj = dt(timestamp)
+    try:
+        dt_obj = datetime.datetime.fromtimestamp(timestamp)
+    except ValueError:
+        dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
+
     dt_obj = dt_obj.replace(microsecond=0)
     pytz_obj = pytz.timezone(settings.TIME_ZONE)
     isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()

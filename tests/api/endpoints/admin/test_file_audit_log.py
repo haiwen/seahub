@@ -10,7 +10,7 @@ try:
 except ImportError:
     LOCAL_PRO_DEV_ENV = False
 
-class AccountTest(BaseTestCase):
+class FileAuditTest(BaseTestCase):
 
     @patch('seahub.views.file.is_pro_version')
     def test_can_not_get_if_start_time_invalid(self, mock_is_pro_version):
