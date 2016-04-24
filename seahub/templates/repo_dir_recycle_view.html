@@ -153,14 +153,30 @@ $('table').on("click", ".restore-file, .restore-dir", function() {
     return false;
 });
 
+var currentHighlightedItem = null;
+
 $('table').on("mouseenter", "tr", function() {
-    $(this).find('.restore-dir').removeClass('hide');
-    $(this).find('.restore-file').removeClass('hide');
+    $(this).find('.op').removeClass('vh');
+    currentHighlightedItem = $(this);
 });
 $('table').on("mouseleave", "tr", function() {
-    $(this).find('.restore-dir').addClass('hide');
-    $(this).find('.restore-file').addClass('hide');
+    $(this).find('.op').addClass('vh');
+    currentHighlightedItem = null;
 });
+$('table').on("focus", "tr *", function(event) {
+    $tr = $(event.target).parent().parent();
+    if (currentHighlightedItem) {
+        if (currentHighlightedItem == $tr) {
+            return true;
+        } else {
+            currentHighlightedItem.find('.op').addClass('vh');
+        }
+    }
+    $tr.find('.op').removeClass('vh');
+    currentHighlightedItem = $tr;
+    return false;
+});
+
 
 // has 'scan_stat' means have not scanned all commit
 // 'not dir_entries' means no trash returned

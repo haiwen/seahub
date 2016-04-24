@@ -85,5 +85,29 @@
 {% block extra_script %}
 <script type="text/javascript">
     {% include 'snippets/list_commit_detail.html' %}
+
+var currentHighlightedItem = null;
+
+$('table').on("mouseenter", "tr", function() {
+    $(this).find('.op').removeClass('vh');
+    currentHighlightedItem = $(this);
+});
+$('table').on("mouseleave", "tr", function() {
+    $(this).find('.op').addClass('vh');
+    currentHighlightedItem = null;
+});
+$('table').on("focus", "tr *", function(event) {
+    $tr = $(event.target).parent().parent();
+    if (currentHighlightedItem) {
+        if (currentHighlightedItem == $tr) {
+            return true;
+        } else {
+            currentHighlightedItem.find('.op').addClass('vh');
+        }
+    }
+    $tr.find('.op').removeClass('vh');
+    currentHighlightedItem = $tr;
+    return false;
+});
 </script>
 {% endblock %}
