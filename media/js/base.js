@@ -67,16 +67,18 @@ $('.search-form').submit(function() {
     }
 });
 
-$("tr:gt(0)", $('table')).hover(
-    function() {
-		$(this).addClass('hl');
-        $(this).find('.op-icon, .op').removeClass('vh');
-    },
-    function() {
-        $(this).find('.op-icon, .op').addClass('vh');
-		$(this).removeClass('hl');
-    }
-);
+$('table').on('mouseenter', 'tr:gt(0)', function() {
+    $(this).addClass('hl').find('.op-icon, .op').removeClass('vh');
+});
+$('table').on('mouseleave', 'tr:gt(0)', function() {
+    $(this).removeClass('hl').find('.op-icon, .op').addClass('vh');
+});
+$('table').on('focus', 'tr:gt(0) *', function(e) {
+    $('tr.hl').removeClass('hl').find('.op-icon, .op').addClass('vh');
+
+    var $tr = $(e.target).closest('tr');
+    $tr.addClass('hl').find('.op-icon, .op').removeClass('vh');
+});
 
 $('input, textarea').placeholder();
 
