@@ -1,12 +1,12 @@
 {% load avatar_tags i18n %}
 <script type="text/template" id="create-repo-tmpl">
     <form id="repo-create-form" action="" method="post">{% csrf_token %}
-        <h3>{% trans "New Library"%}</h3>
-        <label>{% trans "Name"%}</label><br/>
-        <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <h3 id="dialogTitle">{% trans "New Library"%}</h3>
+        <label for="repo-name">{% trans "Name"%}</label><br/>
+        <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <% if (showSharePerm) { %>
-        <label>{% trans "Share Permission" %}</label><br />
-        <select name="permission" class="perm">
+        <label for="share-permission">{% trans "Share Permission" %}</label><br />
+        <select id="share-permission" name="permission" class="perm">
             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
             <option value="r">{% trans "Read-Only" %}</option>
         </select>
