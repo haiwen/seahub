@@ -20,6 +20,7 @@ from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
+from seahub.views.file import send_file_access_msg
 
 from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
@@ -191,6 +192,7 @@ def _download_dir_from_share_link(request, fileshare, repo, real_path):
     try:
         seaserv.send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
                              (repo.id, shared_by, dir_id, total_size))
+        send_file_access_msg(request, repo, real_path, 'web')
     except Exception as e:
         logger.error('Error when sending dir-download message: %s' % str(e))
 

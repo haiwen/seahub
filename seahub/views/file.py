@@ -1223,6 +1223,7 @@ def view_raw_file(request, repo_id, file_path):
     if user_perm is None:
         raise Http404
 
+    send_file_access_msg(request, repo, file_path, 'web')
     return HttpResponseRedirect(raw_path)
 
 def send_file_access_msg(request, repo, path, access_from):
