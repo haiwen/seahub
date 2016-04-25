@@ -153,15 +153,6 @@ $('table').on("click", ".restore-file, .restore-dir", function() {
     return false;
 });
 
-$('table').on("mouseenter", "tr", function() {
-    $(this).find('.restore-dir').removeClass('hide');
-    $(this).find('.restore-file').removeClass('hide');
-});
-$('table').on("mouseleave", "tr", function() {
-    $(this).find('.restore-dir').addClass('hide');
-    $(this).find('.restore-file').addClass('hide');
-});
-
 // has 'scan_stat' means have not scanned all commit
 // 'not dir_entries' means no trash returned
 // so continue scan by send ajax
