@@ -18,16 +18,13 @@ import urlparse
 import datetime
 
 from django.core import signing
-from django.core.cache import cache
 from django.contrib.sites.models import RequestSite
 from django.contrib import messages
-from django.contrib.auth.hashers import check_password
 from django.core.urlresolvers import reverse
 from django.db.models import F
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseBadRequest, HttpResponseForbidden
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_POST
@@ -35,26 +32,22 @@ from django.template.defaultfilters import filesizeformat
 from django.views.decorators.csrf import csrf_exempt
 
 from seaserv import seafile_api
-from seaserv import get_repo, send_message, \
-    get_commits, check_permission,\
-    is_group_user, get_file_id_by_path, get_commit, get_file_size, \
-    get_org_groups_by_repo, seafserv_rpc, seafserv_threaded_rpc
+from seaserv import get_repo, send_message, get_commits, \
+    get_file_id_by_path, get_commit, get_file_size, \
+    seafserv_threaded_rpc
 from pysearpc import SearpcError
 
-from seahub.avatar.templatetags.avatar_tags import avatar
 from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
-from seahub.contacts.models import Contact
 from seahub.share.models import FileShare, check_share_link_common
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
-from seahub.utils import show_delete_days, render_error, is_org_context, \
+from seahub.utils import render_error, is_org_context, \
     get_file_type_and_ext, gen_file_get_url, gen_file_share_link, \
-    render_permission_error, is_pro_version, \
-    is_textual_file, mkstemp, EMPTY_SHA1, HtmlDiff, \
-    check_filename_with_rename, gen_inner_file_get_url, normalize_file_path, \
-    user_traffic_over_limit, do_md5, get_file_audit_events_by_path, \
+    render_permission_error, is_pro_version, is_textual_file, \
+    mkstemp, EMPTY_SHA1, HtmlDiff, gen_inner_file_get_url, \
+    user_traffic_over_limit, get_file_audit_events_by_path, \
     generate_file_audit_event_type, FILE_AUDIT_ENABLED
 from seahub.utils.ip import get_remote_ip
 from seahub.utils.timeutils import utc_to_local
@@ -67,23 +60,13 @@ from seahub.views import check_folder_permission, check_file_lock
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
-        query_office_convert_status, add_office_convert_task, office_convert_cluster_token,
+        query_office_convert_status, add_office_convert_task,
         prepare_converted_html, OFFICE_PREVIEW_MAX_SIZE, get_office_converted_page
     )
 
 import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
-    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL, SITE_ROOT
-
-try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
-except ImportError:
-    ENABLE_OFFICE_WEB_APP = False
-
-try:
-    from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
-except ImportError:
-    OFFICE_WEB_APP_FILE_EXTENSION = ()
+    FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 
 from seahub.views import get_unencry_rw_repos_by_user
 
@@ -418,16 +401,21 @@ def _file_view(request, repo_id, path):
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
             request, repo_id, obj_id, path)
 
-    # check if use wopi host page according to filetype
-    if not repo.encrypted and ENABLE_OFFICE_WEB_APP and \
-        fileext in OFFICE_WEB_APP_FILE_EXTENSION:
-        try:
-            from seahub_extra.wopi.utils import get_wopi_dict
-        except ImportError:
-            wopi_dict = None
-        else:
-            wopi_dict = get_wopi_dict(username, repo_id, path)
+    # check if use office web app to view/edit file
+    try:
+        from seahub_extra.wopi.utils import get_wopi_dict, \
+            check_can_view_file_by_OWA, check_can_edit_file_by_OWA
+    except ImportError:
+        pass
+    else:
+        action_name = None
+        if check_can_view_file_by_OWA(username, repo_id, path):
+            action_name = 'view'
 
+            if check_can_edit_file_by_OWA(username, repo_id, path):
+                action_name = 'edit'
+
+        wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
         if wopi_dict:
             send_file_access_msg(request, repo, path, 'web')
             return render_to_response('view_wopi_file.html', wopi_dict,
