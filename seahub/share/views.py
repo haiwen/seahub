@@ -1222,7 +1222,7 @@ def ajax_get_link_audit_code(request):
     cache.set(cache_key, code, timeout)
 
     # send code to user via email
-    subject = _("Audit code for link: %s") % fs.get_full_url()
+    subject = _("Verification code for visiting share links")
     c = {
         'code': code,
     }
@@ -1237,5 +1237,5 @@ def ajax_get_link_audit_code(request):
         logger.error('Failed to send audit code via email to %s')
         logger.error(e)
         return HttpResponse(json.dumps({
-            "error": _("Failed to send audit code, please try again later.")
+            "error": _("Failed to send a verification code, please try again later.")
         }), status=500, content_type=content_type)
