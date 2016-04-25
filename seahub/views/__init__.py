@@ -1269,8 +1269,9 @@ def repo_download_dir(request, repo_id):
         return render_error(request, _(u'Unable to download "%s"') % dirname )
 
     url = gen_file_get_url(token, dirname)
+    from seahub.views.file import send_file_access_msg
+    send_file_access_msg(request, repo, path, 'web')
     return redirect(url)
-
 
 def group_events_data(events):
     """
