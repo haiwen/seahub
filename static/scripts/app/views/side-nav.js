@@ -15,20 +15,20 @@ define([
 
         initialize: function() {
             this.default_cur_tab = 'mine';
+            this.group_expanded = false;
+            if (Cookie.get('group_expanded') &&
+                Cookie.get('group_expanded') == 'true') {
+                this.group_expanded = true;
+            }
             this.data = {
                 'cur_tab': this.default_cur_tab,
-                'show_group_list': false, // when cur_tab is not 'group'
+                'show_group_list': this.group_expanded, // when cur_tab is not 'group'
                 'groups': app.pageOptions.groups,
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
             this.$el.show();
-
-            this.group_expand = false; // the initial value is false
-            if (Cookie.get('group_expand') == 'true') {
-                this.toggleGroupList();
-            }
         },
 
         render: function() {
@@ -42,14 +42,15 @@ define([
         },
 
         toggleGroupList: function() {
-            $('#group-nav .toggle-icon').toggleClass('icon-caret-left icon-caret-down');
+            var $icon = $('#group-nav .toggle-icon');
+
+            $icon.toggleClass('icon-caret-left icon-caret-down');
             $('#group-nav .grp-list').slideToggle();
-            if ($('#group-nav .toggle-icon').hasClass('icon-caret-down')) {
-                Cookie.set('group_expand', 'true');
-                this.group_expand = true;
+
+            if ($icon.hasClass('icon-caret-down')) {
+                Cookie.set('group_expanded', 'true');
             } else {
-                Cookie.set('group_expand', 'false');
-                this.group_expand = false;
+                Cookie.set('group_expanded', 'false');
             }
             return false;
         },
