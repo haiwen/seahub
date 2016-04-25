@@ -40,6 +40,15 @@
     {% with type="input" setting_display_name="keep sign in" help_tip="Number of days that keep user sign in." setting_name="LOGIN_REMEMBER_DAYS" setting_val=config_dict.LOGIN_REMEMBER_DAYS %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
+
+    {% with type="input" setting_display_name="LOGIN_ATTEMPT_LIMIT" help_tip="The maximum number of failed login attempts before showing CAPTCHA." setting_name="LOGIN_ATTEMPT_LIMIT" setting_val=config_dict.LOGIN_ATTEMPT_LIMIT %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+
+    {% with type="checkbox" setting_display_name="FREEZE_USER_ON_LOGIN_FAILED" help_tip="Freeze user account when failed login attempts exceed limit." setting_name="FREEZE_USER_ON_LOGIN_FAILED" setting_val=config_dict.FREEZE_USER_ON_LOGIN_FAILED %}
+        {% include "snippets/web_settings_form.html" %}
+    {% endwith %}
+        
     </div>
 
     <h4>Password</h4>

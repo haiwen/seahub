@@ -1323,3 +1323,14 @@ def is_org_repo_creation_allowed(request):
         return True
     else:
         return config.ENABLE_USER_CREATE_ORG_REPO
+
+def get_system_admins():
+    db_users = seaserv.get_emailusers('DB', -1, -1)
+    ldpa_imported_users = seaserv.get_emailusers('LDAPImport', -1, -1)
+
+    admins = []
+    for user in db_users + ldpa_imported_users:
+        if user.is_staff:
+            admins.append(user)
+
+    return admins

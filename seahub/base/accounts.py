@@ -1,23 +1,23 @@
 # encoding: utf-8
 from django import forms
 from django.core.mail import send_mail
-from django.utils.encoding import smart_str
+from django.utils import translation
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 
-from seahub.auth.models import get_hexdigest
 from seahub.auth import login
 from registration import signals
-#from registration.forms import RegistrationForm
 import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
     seafile_api
 
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username, is_user_password_strong, \
-    clear_token
+    clear_token, get_system_admins
+from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -232,6 +232,30 @@ class User(object):
     def email_user(self, subject, message, from_email=None):
         "Sends an e-mail to this User."
         send_mail(subject, message, from_email, [self.email])
+
+    def freeze_user(self, notify_admins=False):
+        self.is_active = False
+        self.save()
+
+        if notify_admins:
+            admins = get_system_admins()
+            for u in admins:
+                # save current language
+                cur_language = translation.get_language()
+
+                # get and active user language
+                user_language = Profile.objects.get_user_language(u.email)
+                translation.activate(user_language)
+
+                send_html_email_with_dj_template(
+                    u.email, dj_template='sysadmin/user_freeze_email.html',
+                    subject=_('Account %s froze on %s.') % (self.email, settings.SITE_NAME),
+                    context={'user': self.email},
+                    priority=MAIL_PRIORITY.now
+                )
+
+                # restore current language
+                translation.activate(cur_language)
 
     def remove_repo_passwds(self):
         """
