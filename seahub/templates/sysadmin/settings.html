@@ -8,6 +8,8 @@
 
 <div class="seahub-web-settings">
 
+    <p class="tip">{% trans "Note: Settings via web interface are saved in database table (seahub-data/constance_config). They have a higher priority over the settings in config files." %}</p>
+
     <h4>URL</h4>
 
     <div>
@@ -61,7 +63,7 @@
     {% with type="checkbox" setting_display_name="force password change" help_tip="Force user to change password when account is newly added or reset by admin" setting_name="FORCE_PASSWORD_CHANGE" setting_val=config_dict.FORCE_PASSWORD_CHANGE %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
-        
+
     {% with type="input" setting_display_name="password minimum length" help_tip="The least number of characters an account password should include." setting_name="USER_PASSWORD_MIN_LENGTH" setting_val=config_dict.USER_PASSWORD_MIN_LENGTH %}
         {% include "snippets/web_settings_form.html" %}
     {% endwith %}
@@ -116,12 +118,12 @@ $('.web-setting-form .input').focus(function() {
         $otherFormSubmit.siblings('.cancel').click();
     }
 
-    var $form = $(this).closest('form'); 
+    var $form = $(this).closest('form');
     $('.submit, .cancel', $form).show();
 });
 
 $('.web-setting-form .cancel').click(function() {
-    var $form = $(this).closest('form'); 
+    var $form = $(this).closest('form');
     $('.error, .submit, .cancel', $form).hide();
     var $input = $('.input', $form);
     $input.val($input.attr('data-cur'));
