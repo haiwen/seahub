@@ -11,9 +11,14 @@
 {% block main_panel %}
     <div id="view-hd">
         <h2>{{ filename }}
-            <a id="file-star" class="no-deco {% if is_starred %}icon-star{% else %}icon-star-empty{% endif %}" href="#"></a>
+            {% if is_starred %}
+            <a id="file-star" class="no-deco icon-star" href="#" title="{% trans "starred" %}" aria-label="{% trans "starred" %}"></a>
+            {% else %}
+            <a id="file-star" class="no-deco icon-star-empty" href="#" title="{% trans "unstarred" %}" aria-label="{% trans "unstarred" %}"></a>
+            {% endif %}
+
             {% if is_pro %}
-            <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" />
+            <img class="file-locked-icon cspt vam {% if not file_locked %}hide{% endif %}" width="16" src="{{ MEDIA_URL }}img/file-locked-32.png" alt="{% trans "locked" %}" title="{% trans "locked" %}" aria-label="{% trans "locked" %}" />
             {% endif %}
         </h2>
     </div>
@@ -100,9 +105,6 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
 <script type="text/javascript">
-// rm 'header', so request for unread notices' num won't be sent
-$('#header').remove();
-
 // download
 $(function() {
     var dld_url = $('#download').attr('href');
@@ -239,7 +241,5 @@ $(window).load(function() {
     }
 });
 {% endif %}
-
-$('#main-panel').css('margin-bottom',0);
 </script>
 {% endblock %}

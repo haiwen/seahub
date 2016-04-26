@@ -2382,7 +2382,6 @@ button.dropdown-toggle:focus {
     text-align:right;
 }
 #file-enc {
-    border:1px solid #ddd;
     padding:0;
 }
 #file-view-tip {
