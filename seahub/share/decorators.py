@@ -26,7 +26,7 @@ def share_link_audit(func):
 
         # anonymous user
         if request.session.get('anonymous_email') is not None:
-            request.user.email = request.session.get('anonymous_email')
+            request.user.username = request.session.get('anonymous_email')
             return func(request, fileshare, *args, **kwargs)
 
         if request.method == 'GET':
@@ -42,7 +42,7 @@ def share_link_audit(func):
                 # code is correct, add this email to session so that he will
                 # not be asked again during this session, and clear this code.
                 request.session['anonymous_email'] = email
-                request.user.email = request.session.get('anonymous_email')
+                request.user.username = request.session.get('anonymous_email')
                 cache.delete(cache_key)
                 return func(request, fileshare, *args, **kwargs)
             else:

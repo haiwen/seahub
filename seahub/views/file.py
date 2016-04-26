@@ -1233,8 +1233,6 @@ def send_file_access_msg(request, repo, path, access_from):
     - `access_from`: web or api
     """
     username = request.user.username
-    if not username:
-        username = request.user.email
 
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
