@@ -24,17 +24,17 @@
         </p>
 
         <div class="fright">
-            <a href="?p={{ path|urlencode }}&mode=list" title="{% trans "List" %}" class="mode-link vam{% if mode == 'list' %} cur-mode-link{% endif %} list-mode-link">
+            <a href="?p={{ path|urlencode }}&mode=list" title="{% trans "List" %}" aria-label="{% trans "List" %}" class="mode-link vam{% if mode == 'list' %} cur-mode-link{% endif %} list-mode-link">
                 {% if mode == 'list' %}
-                    <img src="{{ MEDIA_URL }}img/list-white.png" alt="" width="20" />
+                    <img src="{{ MEDIA_URL }}img/list-white.png" alt="{% trans "List" %}" width="20" />
                 {% else %}
-                    <img src="{{ MEDIA_URL }}img/list.png" alt="" width="20" />
+                    <img src="{{ MEDIA_URL }}img/list.png" alt="{% trans "List" %}" width="20" />
                 {% endif %}
-            </a><a href="?p={{ path|urlencode }}&mode=grid" title="{% trans "Grid" %}" class="mode-link vam{% if mode == 'grid' %} cur-mode-link{% endif %}">
+            </a><a href="?p={{ path|urlencode }}&mode=grid" title="{% trans "Grid" %}" aria-label="{% trans "Grid" %}" class="mode-link vam{% if mode == 'grid' %} cur-mode-link{% endif %}">
                 {% if mode == 'grid' %}
-                    <img src="{{ MEDIA_URL }}img/grid-white.png" alt="" width="20" />
+                    <img src="{{ MEDIA_URL }}img/grid-white.png" alt="{% trans "Grid" %}" width="20" />
                 {% else %}
-                    <img src="{{ MEDIA_URL }}img/grid.png" alt="" width="20" />
+                    <img src="{{ MEDIA_URL }}img/grid.png" alt="{% trans "Grid" %}" width="20" />
                 {% endif %}
             </a>
             {% if not traffic_over_limit %}
@@ -65,8 +65,8 @@
                 <td>{{ dirent.last_modified|translate_seahub_time }}</td>
                 <td>
                     {% if not traffic_over_limit %}
-                    <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}">
-                        <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                    <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}" aria-label="{% trans 'Download' %}">
+                        <img src="{{MEDIA_URL}}img/download.png" alt="{% trans 'Download' %}" />
                     </a>
                     {% endif %}
                 </td>
@@ -97,8 +97,8 @@
                 <td>{{ dirent.last_modified|translate_seahub_time }}</td>
                 <td>
                     {% if not traffic_over_limit %}
-                    <a class="op-icon vh" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}">
-                        <img src="{{MEDIA_URL}}img/download.png" alt="" />
+                    <a class="op-icon vh" href="{% url "view_file_via_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans "Download"%}" aria-label="{% trans "Download"%}">
+                        <img src="{{MEDIA_URL}}img/download.png" alt="{% trans "Download"%}" />
                     </a>
                     {% endif %}
                 </td>
@@ -225,13 +225,11 @@ $(function() {
 
 $('.grid-item').hover(
     function () {
-        $('.img-link', $(this)).addClass('hl');
-        $('.text-link', $(this)).addClass('hl');
+        $('.img-link, .text-link', $(this)).addClass('hl');
         $('.op-icon', $(this)).removeClass('vh');
     },
     function () {
-        $('.img-link', $(this)).removeClass('hl');
-        $('.text-link', $(this)).removeClass('hl');
+        $('.img-link, .text-link', $(this)).removeClass('hl');
         $('.op-icon', $(this)).addClass('vh');
     }
 );
