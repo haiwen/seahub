@@ -104,7 +104,7 @@ $('#add-org-form').submit(function() {
         url: '{% url 'org_add' %}',
         type: 'POST',
         datatype: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: {
             'org_name': name,

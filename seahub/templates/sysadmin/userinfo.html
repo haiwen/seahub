@@ -275,7 +275,7 @@ $('#set-quota-form .submit').click(function() {
         url: '{% url 'user_set_quota' email %}',
         type: 'POST',
         dataType: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: data,
         success: function(data) {
