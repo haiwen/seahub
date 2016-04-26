@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
@@ -73,6 +73,13 @@ class GroupMembers(APIView):
         Add a group member.
         """
 
+        username = request.user.username
+
+        # only group owner/admin can add a group member
+        if not is_group_admin_or_owner(group_id, username):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         email = request.data.get('email', None)
         try:
             User.objects.get(email=email)
@@ -80,18 +87,18 @@ class GroupMembers(APIView):
             error_msg = 'User %s not found.' % email
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
         try:
-            # only group owner/admin can add a group member
-            if not is_group_admin_or_owner(group_id, username):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
             if is_group_member(group_id, email):
                 error_msg = _(u'User %s is already a group member.') % email
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-            seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, email)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                if not ccnet_api.org_user_exists(org_id, email):
+                    error_msg = _(u'User %s not found in organization.') % email
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            ccnet_api.group_add_member(group_id, username, email)
 
         except SearpcError as e:
             logger.error(e)
