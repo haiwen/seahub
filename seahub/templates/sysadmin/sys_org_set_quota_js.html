@@ -20,7 +20,7 @@ $('#set-quota-form .submit').click(function() {
         url: '{% url 'sys_org_set_quota' org.org_id %}',
         type: 'POST',
         dataType: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: {
             'quota': quota

@@ -172,7 +172,7 @@ $('#add-user-form').submit(function() {
         url: '{% url 'user_add' %}',
         type: 'POST',
         datatype: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: {
             'email': email,

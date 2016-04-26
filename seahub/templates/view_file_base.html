@@ -159,7 +159,7 @@ $('#lock-file, #unlock-file').click(function() {
         url: '{% url 'api-v2.1-file-view' repo.id %}' + '?p=' + encodeURIComponent(path),
         type: 'PUT',
         dataType: 'json',
-        cache: 'false',
+        cache: false,
         beforeSend: prepareCSRFToken,
         data: {'operation': op},
         success: function() {
