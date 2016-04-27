@@ -115,21 +115,21 @@
 
 <script type="text/template" id="group-settings-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="popover-title">{% trans "Settings" %}</h3>
+    <div class="sf-popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="sf-popover-title">{% trans "Settings" %}</h3>
     </div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
     </div>
 </script>
 
 <script type="text/template" id="group-members-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="popover-title">{% trans "Members" %}</h3>
+    <div class="sf-popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="sf-popover-title">{% trans "Members" %}</h3>
     </div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="loading-icon loading-tip"></div>
         <ul id="group-member-list" class="hide"></ul>
         <p class="error hide"></p>
@@ -138,18 +138,18 @@
 
 <script type="text/template" id="group-discussions-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="popover-title">{% trans "Discussions" %}</h3>
+    <div class="sf-popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="sf-popover-title">{% trans "Discussions" %}</h3>
     </div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="loading-icon loading-tip"></div>
         <p class="load-more-discussion hide js-load-more">{% trans "More..." %}</p>
         <ul id="group-discussion-list" class="hide"></ul>
         <p class="no-discussion-tip hide">{% trans "No discussion in this group yet." %}</p>
         <p class="error hide"></p>
     </div>
-    <div class="popover-footer">
+    <div class="sf-popover-footer">
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">

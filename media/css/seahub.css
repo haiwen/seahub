@@ -18,7 +18,7 @@
  */
 /*
  * z-index:
- *    popover:  20
+ *    sf-popover:  20
  *
  */
 
@@ -1167,11 +1167,11 @@ textarea:-moz-placeholder {/* for FF */
     color:#fff;
     text-decoration:none;
 }
-/**** popover ****/ /* e.g. top notice popup, group members popup */
-.popover-container {
+/**** sf-popover ****/ /* e.g. top notice popup, group members popup */
+.sf-popover-container {
     position:relative;
 }
-.popover {
+.sf-popover {
     width:240px;
     background:#fff;
     border:1px solid #c9c9c9;
@@ -1180,25 +1180,25 @@ textarea:-moz-placeholder {/* for FF */
     position:absolute;
     z-index: 20;
 }
-.popover-hd {
+.sf-popover-hd {
     padding:5px 0 3px;
     border-bottom:1px solid #dfdfe1;
     margin:0 10px;
 }
-.popover-title {
+.sf-popover-title {
     text-align:center;
     margin:0;
 }
-.popover-close {
+.sf-popover-close {
     font-size:16px;
     color:#b9b9b9;
     margin:4px 0 0;
 }
-.popover-con {
+.sf-popover-con {
     padding:0 10px;
     overflow:auto;
 }
-a.popover-item {
+a.sf-popover-item {
     display:block;
     color:#444;
     font-weight:normal;
@@ -1524,7 +1524,7 @@ button.sf-dropdown-toggle:focus {
     top:-10px;
     left:200px;
 }
-.account-popup .popover-con {
+.account-popup .sf-popover-con {
     padding:0;
 }
 .account-popup .item {
@@ -3333,7 +3333,7 @@ img.thumbnail {
 #group-discussions .outer-caret {
     right:30px;
 }
-#group-discussions .popover-con {
+#group-discussions .sf-popover-con {
     padding:0 0;
 }
 /****** grid view *****/

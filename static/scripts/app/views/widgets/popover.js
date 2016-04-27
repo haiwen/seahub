@@ -10,7 +10,7 @@ define([
      * Popover View.
     */
 
-    // There can be only one visible popover view
+    // There can be only one visible sf-popover view
     $(document).click(function(e) {
         var view = app.ui.currentPopover;
         var target = e.target || event.srcElement;
@@ -51,9 +51,9 @@ define([
             this.$el.on('click', '.close', _.bind(this.hide, this));
         },
 
-        // set max-height for '.popover-con'
+        // set max-height for '.sf-popover-con'
         setConMaxHeight: function() {
-            this.$('.popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
+            this.$('.sf-popover-con').css({'max-height': $(window).height() - this.$el.offset().top - this.$('.sf-popover-hd').outerHeight(true) - 2}); // 2: top, bottom border width of $el
         },
 
         hide: function() {

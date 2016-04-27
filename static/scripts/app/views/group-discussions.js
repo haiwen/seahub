@@ -11,7 +11,7 @@ define([
 
     var View = PopoverView.extend({
         id: 'group-discussions',
-        className: 'popover',
+        className: 'sf-popover',
 
         template:  _.template($('#group-discussions-tmpl').html()),
 
@@ -120,12 +120,12 @@ define([
             app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
-        // set max-height for '.popover-con'
+        // set max-height for '.sf-popover-con'
         setConMaxHeight: function() {
-            this.$('.popover-con').css({
+            this.$('.sf-popover-con').css({
                 'max-height': $(window).height() - this.$el.offset().top
-                    - this.$('.popover-hd').outerHeight(true)
-                    - this.$('.popover-footer').outerHeight(true)
+                    - this.$('.sf-popover-hd').outerHeight(true)
+                    - this.$('.sf-popover-footer').outerHeight(true)
                     - 2 // 2: top, bottom border width of $el,
                     - 10 // 10: leave some margin at the bottom
             });
@@ -164,7 +164,7 @@ define([
                         sumHeight += $(this).outerHeight(true);
                     });
                     // scroll
-                    _this.$('.popover-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
+                    _this.$('.sf-popover-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
                 },
                 error: function(collection, response, opts) {
                     var err_msg;
@@ -227,9 +227,9 @@ define([
             return false;
         },
 
-        // scroll '.popover-con' to the bottom
+        // scroll '.sf-popover-con' to the bottom
         scrollConToBottom: function() {
-            var $el = this.$('.popover-con');
+            var $el = this.$('.sf-popover-con');
             $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
         }
 

@@ -10,7 +10,7 @@ define([
 
     var View = PopoverView.extend({
         id: 'group-settings',
-        className: 'popover',
+        className: 'sf-popover',
 
         template:  _.template($('#group-settings-tmpl').html()),
         contentTemplate: _.template($('#group-settings-content-tmpl').html()),
@@ -36,7 +36,7 @@ define([
         },
 
         showContent: function() {
-            this.$listContainer = this.$('.popover-con');
+            this.$listContainer = this.$('.sf-popover-con');
 
             // the user's role in this group
             this.is_owner = false;

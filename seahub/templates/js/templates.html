@@ -1005,37 +1005,37 @@
 <script type="text/template" id="group-settings-content-tmpl">
 <% if (is_owner) { %>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="dismiss">{% trans "Dismiss" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="dismiss">{% trans "Dismiss" %}</a></li>
     </ul>
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
 <% } else { %>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="leave">{% trans "Leave group" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="leave">{% trans "Leave group" %}</a></li>
     </ul>
 <% } %>
 </script>
@@ -1421,11 +1421,11 @@
 
 <script type="text/template" id="notice-popover-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="popover-title">{% trans "Notifications" %}</h3>
+    <div class="sf-popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="sf-popover-title">{% trans "Notifications" %}</h3>
     </div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="loading-icon loading-tip"></div>
         <p class="error alc hide"></p>
         <ul class="hide notice-list"></ul>
@@ -1435,7 +1435,7 @@
 
 <script type="text/template" id="user-info-popup-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="item ovhd">
             {% avatar request.user 36 %}
             <div class="txt">
