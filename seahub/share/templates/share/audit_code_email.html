@@ -1,0 +1,16 @@
+{% extends 'email_base.html' %}
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}Your code is {{code}}, this code will be valid for one hour.{% endblocktrans%}
+</p>
+
+{% endautoescape %}
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_panel %}
+<div class="new-narrow-panel" role="main">
+    <h2 class="hd">{% trans "Email Verification" %}</h2>
+    <form action="" method="post" id="link-audit-form" class="con">{% csrf_token %}
+        <p class="tip">{% trans "Please provide your email address to continue." %}</p>
+        <label for="email">{% trans "Email" %}</label>
+        <input id="email" type="text" class="input email-input" name="email" value="{{email}}" />
+        <button type="button" id="get-code" class="get-code-btn">{% trans "Get code" %}</button><br />
+
+        <label for="code">{% trans "Verification code" %}</label><br />
+        <input id="code" type="text" class="input" name="code" value="{{code}}" />
+
+        {% if err_msg %}
+        <p class="error">{{ err_msg }}</p>
+        {% else %}
+        <p class="error hide"></p>
+        {% endif %}
+
+        <input type="submit" value="{% trans "Submit" %}" />
+    </form>
+</div>
+{% endblock %}
+{% block extra_script %}
+<script type="text/javascript">
+$('#get-code').click(function() {
+    var email = $.trim($('input[name="email"]').val());
+    if (!email) {
+        return false;
+    }
+
+    var $this = $(this);
+    var originalText = $this.text(); // Remember the original text content
+    var seconds = 60;
+
+    $this.prop('disabled', true).addClass('btn-disabled');
+    $this.text(originalText + '(' + seconds + 's)');
+    // do a set interval, using an interval of 1000 milliseconds
+    //     and clear it after the number of seconds counts down to 0
+    var interval = setInterval(function() {
+        // decrement the seconds and update the text
+        seconds = seconds - 1;
+        $this.text(originalText + ' (' + seconds + 's)');
+        if (seconds === 0) { // once seconds is 0...
+            $this.prop('disabled', false).removeClass('btn-disabled')
+                 .text(originalText); // reset to original text
+            clearInterval(interval); // clear interval
+        }
+    }, 1000);
+
+    $.ajax({
+        url: "{% url "ajax_get_link_audit_code" %}",
+        type: 'POST',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            token: "{{token}}",
+            email: email
+        },
+        success: function() {
+            feedback('{% trans "A verification code has been sent to the email." %}', 'success');
+        },
+        error: function(xhr) {
+            var err_msg = '';
+            if (xhr.responseText) {
+                err_msg = $.parseJSON(xhr.responseText).error;
+            } else {
+                err_msg = "{% trans "Failed. Please check the network." %}";
+            }
+            $('.error', $this.closest('form')).html(err_msg).removeClass('hide');
+        }
+    });
+});
+
+$('#link-audit-form').submit(function() {
+    var email = $.trim($('[name="email"]').val());
+    var code = $.trim($('[name="code"]').val());
+    if (!email || !code) {
+        return false;
+    }
+});
+</script>
+{% endblock %}

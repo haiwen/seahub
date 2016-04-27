@@ -253,6 +253,9 @@ REPO_PASSWORD_MIN_LENGTH = 8
 # mininum length for the password of a share link
 SHARE_LINK_PASSWORD_MIN_LENGTH = 8
 
+# enable or disable share link audit
+ENABLE_SHARE_LINK_AUDIT = False
+
 # mininum length for user's password
 USER_PASSWORD_MIN_LENGTH = 6
 

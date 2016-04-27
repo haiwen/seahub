@@ -41,6 +41,7 @@ from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 from seahub.auth.decorators import login_required
 from seahub.base.decorators import repo_passwd_set_required
 from seahub.share.models import FileShare, check_share_link_common
+from seahub.share.decorators import share_link_audit
 from seahub.wiki.utils import get_wiki_dirent
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing
 from seahub.utils import render_error, is_org_context, \
@@ -734,17 +735,14 @@ def _download_file_from_share_link(request, fileshare):
                                                        use_onetime=False)
     return HttpResponseRedirect(gen_file_get_url(dl_token, filename))
 
-def view_shared_file(request, token):
+@share_link_audit
+def view_shared_file(request, fileshare):
     """
     View file via shared link.
     Download share file if `dl` in request param.
     View raw share file if `raw` in request param.
     """
-    assert token is not None    # Checked by URLconf
-
-    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-    if fileshare is None:
-        raise Http404
+    token = fileshare.token
 
     password_check_passed, err_msg = check_share_link_common(request, fileshare)
     if not password_check_passed:
@@ -1224,6 +1222,7 @@ def send_file_access_msg(request, repo, path, access_from):
     - `access_from`: web or api
     """
     username = request.user.username
+
     ip = get_remote_ip(request)
     user_agent = request.META.get("HTTP_USER_AGENT")
 
