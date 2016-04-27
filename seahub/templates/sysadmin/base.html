@@ -1,61 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-<<<<<<< HEAD
-{% block left_panel %}
-    <h3 class="hd">{% trans "System Admin" %}</h3>
-    <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_info %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
-        </li>
-        <li class="tab {% block cur_devices %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
-        </li>
-        <li class="tab {% block cur_settings %}{% endblock %}">
-            <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
-        </li>
-        <li class="tab {% block cur_repo %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
-        </li>
-        <li class="tab {% block cur_users %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
-        </li>
-        <li class="tab {% block cur_groups %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/groupadmin/"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
-        </li>
-        {% if multi_tenancy %}
-        <li class="tab {% block cur_org %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/orgadmin/"><span class="sf2-icon-organization"></span>{% trans "Organizations" %}</a>
-        </li>
-        {% endif %}
-        {% if multi_institution %}
-        <li class="tab {% block cur_inst %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/instadmin/"><span class="sf2-icon-organization"></span>{% trans "Institutions" %}</a>
-        </li>
-        {% endif %}
-        <li class="tab {% block cur_notice %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/notificationadmin/"><span class="sf2-icon-msgs"></span>{% trans "Notifications" %}</a>
-        </li>
-        <li class="tab {% block cur_links %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/publinkadmin/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a>
-        </li>
-        {% if traffic_stats_enabled %}
-        <li class="tab {% block cur_traffic %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/trafficadmin/"><span class="sf2-icon-histogram"></span>{% trans "Traffic" %}</a>
-        </li>
-        {% endif %}
-        {% if sysadmin_extra_enabled %}
-        <li class="tab {% block cur_log %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/loginadmin/"><span class="sf2-icon-clock"></span>{% trans "Logs" %}</a>
-        </li>
-        {% endif %}
-        {% if events_enabled %}
-        <li class="tab {% block cur_virus_scan %}{% endblock %}">
-            <a href="{{ SITE_ROOT }}sys/virus_scan_records/"><span class="sf2-icon-security"></span>{% trans "Virus Scan" %}</a>
-        </li>
-        {% endif %}
-    </ul>
-=======
 {% block admin_link %}
     <a href="{{ SITE_ROOT }}" title="{% trans "Exit admin panel" %}" class="item">{% trans "Exit admin panel" %}</a>
 {% endblock %}
@@ -119,5 +64,4 @@
     </div>
 
 </div>
->>>>>>> rewrite templates for system admin
 {% endblock %}
