@@ -19,9 +19,9 @@ define([
 
         render: function() {
             var data = this.model.toJSON();
-            var last_accessed = Moment(data['last_accessed']);
-            data['time'] = last_accessed.format('LLLL');
-            data['time_from_now'] = Common.getRelativeTimeStr(last_accessed);
+            var error_time = Moment(data['error_time']);
+            data['time'] = error_time.format('LLLL');
+            data['time_from_now'] = Common.getRelativeTimeStr(error_time);
             this.$el.html(this.template(data));
             return this;
         }
