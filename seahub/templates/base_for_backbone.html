@@ -43,13 +43,15 @@
         <div id="header" role="banner" class="navbar navbar-fixed-top">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
-                <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
+                <a href="{{ SITE_ROOT }}" id="logo" class="hidden-sm-down fleft">
                     {% if seacloud_mode %}
                     <img src="{{ MEDIA_URL }}img/seacloud_logo.png?t=1398068110" title="Seacloud" alt="logo" width="186" height="31" />
                     {% else %}
                     <img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" />
                     {% endif %}
                 </a>
+
+                <button class="sf2-icon-list-view hidden-md-up" title="Side Nav Menu" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
 
                 <div class="fright">
                 {% if has_file_search %}

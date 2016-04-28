@@ -28,7 +28,14 @@ define([
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
-            this.$el.show();
+            if ($(window).width() >= 768) {
+                this.$el.show();
+            }
+            var _this = this;
+            $('#js-toggle-side-nav').click(function() {
+                _this.show();
+                return false;
+            });
         },
 
         render: function() {
@@ -38,7 +45,9 @@ define([
 
         events: {
             'click #group-nav a:first': 'toggleGroupList',
-            'click #enable-mods': 'enableMods'
+            'click #enable-mods': 'enableMods',
+            'click .js-close-side-nav': 'closeNav',
+            'click li > a': 'visitLink'
         },
 
         toggleGroupList: function() {
@@ -139,7 +148,26 @@ define([
                 error: function() {
                 }
             });
-        }
+        },
+
+        show: function() {
+            this.$el.show();
+        },
+
+        closeNav: function() {
+            this.$el.hide();
+            return false;
+        },
+
+        visitLink: function(event) {
+            if ($(window).width() < 768) {
+                if ($(event.target).attr('href') !== "#") {
+                    // except for groups toggle link
+                    this.$el.hide();
+                }
+            }
+            return true;
+        },
 
     });
 

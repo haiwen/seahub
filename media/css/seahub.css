@@ -657,6 +657,20 @@ textarea:-moz-placeholder {/* for FF */
         border-right:1px solid #eee;
     }
 }
+@media (max-width: 767px) {
+    .side-tabnav {
+        background: #f8f8f8;
+        width:300px;
+        position:fixed;
+        top:0;
+        bottom:0;
+        z-index:1;
+        padding:20px;
+        overflow-x:hidden;
+        overflow-y:auto;
+        border-right:1px solid #eee;
+    }
+}
 .side-tabnav .hd {
     margin-bottom:0.5em;
 }
