@@ -466,6 +466,7 @@ define([
                 'click #mv-dirents': 'mv',
                 'click #cp-dirents': 'cp',
                 'click #del-dirents': 'del',
+                'click #download-dirents': 'download',
                 'click .by-name': 'sortByName',
                 'click .by-time': 'sortByTime',
                 'click .basic-upload-btn': 'uploadFile',
@@ -797,6 +798,30 @@ define([
                     $dirents_op.hide();
                     $curDirOps.show();
                 }
+            },
+
+            download: function () {
+                var dirents = this.dir,
+                    selected_dirents = dirents.where({'selected':true}),
+                    selected_names = '';
+
+                $(selected_dirents).each(function() {
+                    selected_names += this.get('obj_name') + ',';
+                });
+
+                $.ajax({
+                    url: Common.getUrl({
+                        name: 'download_dirents',
+                        repo_id: dirents.repo_id
+                    }) + '?parent_dir=' + encodeURIComponent(dirents.path) + '&dirents=' + encodeURIComponent(selected_names),
+                    dataType: 'json',
+                    success: function(data) {
+                        location.href = data['url'];
+                    },
+                    error: function (xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                    }
+                });
             },
 
             del: function () {
