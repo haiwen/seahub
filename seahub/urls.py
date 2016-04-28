@@ -24,6 +24,7 @@ from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
+from seahub.api2.endpoints.dirents_download_link import DirentsDownloadLinkView
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
@@ -189,8 +190,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/share-link/(?P<token>[a-f0-9]{10})/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),
     url(r'^api/v2.1/upload-link/(?P<token>[a-f0-9]{10})/$', UploadLink.as_view(), name='api-v2.1-upload-link'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
-    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9-a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dirents/download-link/$', DirentsDownloadLinkView.as_view(), name='api-v2.1-dirents-download-link-view'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
