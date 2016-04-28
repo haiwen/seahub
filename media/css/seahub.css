@@ -167,7 +167,7 @@ h1, h2, h3, h4 { line-height: 1.5; }
 ul { list-style:none; }
 ol { padding-left:2em; }
 dl { margin:1.5em 0; }
-dt { color:#666; margin:24px 0 2px; }
+dt { color:#666; margin:24px 0 2px; font-weight: normal; }
 dd { margin-bottom:.8em; color:#222; }
 a {
     color:#eb8205;
