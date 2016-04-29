@@ -779,6 +779,15 @@ def view_shared_file(request, fileshare):
                                                            use_onetime=False)
     raw_path = gen_file_get_url(access_token, filename)
     if request.GET.get('raw', '') == '1':
+        # check whether owner's traffic over the limit
+        if user_traffic_over_limit(shared_by):
+            messages.error(request, _(u'Unable to view raw file, share link traffic is used up.'))
+            return HttpResponseRedirect(next)
+
+        send_file_access_msg(request, repo, path, 'share-link')
+        send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
+                     (repo_id, shared_by, obj_id, file_size))
+
         # view raw shared file, directly show/download file depends on
         # browsers
         return HttpResponseRedirect(raw_path)
