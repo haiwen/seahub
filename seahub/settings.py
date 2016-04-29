@@ -514,27 +514,6 @@ SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER = True # Whether to send email when a system 
 SEND_EMAIL_ON_RESETTING_USER_PASSWD = True # Whether to send email when a system staff resetting user's password.
 
 ##########################
-# Settings for seafevents #
-##########################
-
-def get_events_conf_file():
-    if not 'CCNET_CONF_DIR' in os.environ:
-        return
-
-    ccnet_dir = os.environ['CCNET_CONF_DIR']
-    seafile_ini = os.path.join(ccnet_dir, 'seafile.ini')
-    if not os.path.exists(seafile_ini):
-        return
-
-    with open(seafile_ini, 'r') as fp:
-        seafile_data_dir = fp.read().strip()
-        seafevents_conf = os.path.join(seafile_data_dir, 'seafevents.conf')
-        if os.path.exists(seafevents_conf):
-            globals()['EVENTS_CONFIG_FILE'] = seafevents_conf
-
-get_events_conf_file()
-
-##########################
 # Settings for Extra App #
 ##########################
 
