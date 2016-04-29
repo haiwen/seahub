@@ -115,7 +115,7 @@ define([
                 }
             });
 
-            $("#group").append(this.$el);
+            $("#group-discussions-icon").after(this.$el);
             this.$(".msg-input").focus();
             app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },

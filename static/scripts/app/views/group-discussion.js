@@ -17,6 +17,7 @@ define([
         events: {
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
+            'focus *': 'focusItem',
             'click .js-del-msg': 'delMessage',
             'click .js-reply-msg': 'reply'
         },
@@ -67,8 +68,17 @@ define([
             this.$('.msg-ops').addClass('vh');
         },
 
+        focusItem: function() {
+            $('.msg.hl', this.$el.parent())
+                .removeClass('hl')
+                .find('.msg-ops').addClass('vh');
+
+            this.highlight();
+        },
+
         reply: function() {
             this.parentView.replyTo(this.model.get("user_name"));
+            return false;
         },
 
         delMessage: function() {
@@ -86,6 +96,7 @@ define([
                     Common.feedback(err, 'error');
                 }
             });
+            return false;
         }
 
     });

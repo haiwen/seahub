@@ -53,7 +53,7 @@ define([
                 'wiki_enabled': this.groupView.group.wiki_enabled
             }));
 
-            $("#group").append(this.$el);
+            $("#group-settings-icon").after(this.$el);
         },
 
         highlightItem: function(e) {
@@ -99,7 +99,7 @@ define([
             var _this = this;
 
             var $form = $(this.renameTemplate());
-            $form.modal({focus:false});
+            $form.modal();
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $form.submit(function() {

@@ -18,7 +18,7 @@
         {% else %}
         <div class="hd ovhd">
             <h3 class="fleft">{% trans "Wiki Index" %}</h3>
-            <span id="edit-index" class="icon-pencil fright" title="{% trans "Edit" %}"></span>
+            <a id="edit-index" class="wiki-index-edit-icon op-icon icon-pencil fright" title="{% trans "Edit" %}" aria-label="{% trans "Edit" %}" href="#"></a>
         </div>
         <div id="wiki-index-con"></div>
         {% endif %}
@@ -220,9 +220,7 @@ $('#wiki-use-lib-form').submit(function() {
 {% if wiki_index_exists %}
 $('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
 {% with page_name='index' %}
-$('#edit-index').click(function() {
-    location.href = "{% url 'personal_wiki_page_edit' page_name %}";
-});
+$('#edit-index').attr('href', "{% url 'personal_wiki_page_edit' page_name %}");
 {% endwith %}
 {% else %}
 $('#create-index').click(function() {

@@ -546,6 +546,7 @@ define([
                     focus: false,
                     containerCss: {'padding':'20px 25px'}
                 });
+                file_name.focus();
                 $('#simplemodal-container').css({'height':'auto'});
 
                 $('.set-file-type', form).click(function() {
@@ -781,7 +782,7 @@ define([
                 var $all_dirent_checkbox = this.$('[type=checkbox]');
                 var $dirents_op = this.$('#multi-dirents-op');
 
-                var $curDirOps = this.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
+                var $curDirOps = this.$('#cur-dir-ops');
 
                 if ($el.prop('checked')) {
                     $all_dirent_checkbox.prop('checked', true);

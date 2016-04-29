@@ -70,7 +70,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
         <% if (is_staff || share_from_me) { %>
-            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></a>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
         <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -101,6 +101,15 @@
         <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn sf2-icon-delete op-icon"></button>
         <button id="download-dirents" title="{% trans 'Download' %}" class="op-btn sf2-icon-download op-icon"></button>
     </div>
+    <% } %>
+    <% if (!encrypted && user_perm == 'r') { %>
+    <div id="multi-dirents-op" class="hide">
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
+    </div>
+    <% } %>
+
+    <div id="cur-dir-ops" class="inline-block">
+    <% if (user_perm == 'rw') { %>
     <div id="basic-upload" class="inline-block">
         <button class="op-btn basic-upload-btn" >{% trans "Upload" %}</button>
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
@@ -124,15 +133,10 @@
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
 
-    <% if (!encrypted && user_perm == 'r') { %>
-    <div id="multi-dirents-op" class="hide">
-        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
-    </div>
-    <% } %>
-
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
+    </div><!-- div#cur-dir-ops ends here -->
 
     <div class="switch-mode vam">
         <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
@@ -409,20 +413,6 @@
     </ul>
 </script>
 
-<script type="text/template" id="group-change-item-tmpl">
-    <td>
-    <span class="icon-plus"></span>
-    </td>
-    <td><a href="#"><%= repo.name %></a></td>
-    <td>
-        <%= desc_human %>
-        <a class="lsch" >{% trans 'Details' %}</a>
-    </td>
-    <td><%= ctime_human %></td>
-    <td>
-        <%- creator_nickname %>
-    </td>
-</script>
 <script type="text/template" id="share-popup-tmpl">
     <h3 class="hd"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
@@ -665,7 +655,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon enable-mods-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -731,16 +721,16 @@
 <p class="path"><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a> / <%- name %></p>
 <div class="hd ovhd">
     {% if user.permissions.can_add_repo %}
-    <button class="repo-create fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+    <button class="repo-create btn-white fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     {% endif %}
 
     <div class="fright">
         <% if (wiki_enabled) { %>
-            <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
+            <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon group-top-op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
         <% } %>
-        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
-        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
-        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
+        <a href="#" class="sf2-icon-cog1 op-icon group-top-op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
+        <a href="#" class="sf2-icon-user2 op-icon group-top-op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
+        <a href="#" class="sf2-icon-msgs2 op-icon group-top-op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
     </div>
 </div>
 </script>
@@ -846,7 +836,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></a>
+        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
     </td>
 </script>
 
@@ -989,14 +979,14 @@
     <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="msg-body">
         <div class="ovhd">
-            <div class="msg-ops fright vh">
-                <span class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}"></span>
-                <% if (can_delete_msg) { %>
-                <span class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}"></span>
-                <% } %>
-            </div>
             <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
             <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
+            <div class="msg-ops fright vh">
+                <a class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}" aria-label="{% trans "Reply" %}" href="#"></a>
+                <% if (can_delete_msg) { %>
+                <a class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}" href="#"></a>
+                <% } %>
+            </div>
         </div>
         <div class="msg-content"><%= content_marked %></div>
     </div>
@@ -1154,16 +1144,25 @@
     <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
 
     <form action="" method="post">
+        <label class="radio-item">
         <input type="radio" name="history" value="full_history" class="vam" />
-        <span class="vam">{% trans "Keep full history" %}</span><br />
+        <span class="vam">{% trans "Keep full history" %}</span>
+        </label>
+        <br />
 
+        <label class="radio-item">
         <input type="radio" name="history" value="no_history" class="vam" />
-        <span class="vam">{% trans "Don't keep history" %}</span><br />
+        <span class="vam">{% trans "Don't keep history" %}</span>
+        </label>
+        <br />
 
+        <label class="radio-item">
         <input type="radio" name="history" value="partial_history" class="vam" />
         <span calss="vam">{% trans "Only keep a period of history:" %}
             <input type="text" name="days" size="4" disabled="disabled" class="input-disabled" value="<%= default_history_limit %>" /> {% trans "days" %}
-        </span><br />
+        </span>
+        </label>
+        <br />
 
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>

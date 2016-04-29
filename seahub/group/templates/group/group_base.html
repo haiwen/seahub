@@ -4,18 +4,10 @@
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
-{% block cur_group %}cur{% endblock %}
-
 {% block left_panel %}
 <div class="side-tabnav">
-    <div class="hd w100 ovhd">
-        <h3 class="fleft">
-            {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
-        </h3>
-    </div>
+    <h3 class="hd">
+        {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
+    </h3>
 </div>
-{% endblock %}
-
-{% block main_panel %}
-
 {% endblock %}

@@ -65,6 +65,7 @@ define([
                         _this.$days_input.prop('disabled', false).removeClass('input-disabled');
                         _this.$days_input.attr('value', data.keep_days);
                     }
+                    _this.$radios.filter(':checked').focus();
 
                     if (!app.pageOptions.enable_repo_history_setting) {
                         _this.$('.history-settings-notice').removeClass('hide');
