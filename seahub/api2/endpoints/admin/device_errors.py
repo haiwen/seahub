@@ -26,7 +26,7 @@ class AdminDeviceErrors(APIView):
 
     def get(self, request, format=None):
         if not is_pro_version():
-            error_msg = 'Permission denied.'
+            error_msg = 'Feature disabled.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         return_results = []
@@ -61,3 +61,17 @@ class AdminDeviceErrors(APIView):
             return_results.append(result)
 
         return Response(return_results)
+
+    def delete(self, request, format=None):
+        if not is_pro_version():
+            error_msg = 'Feature disabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            seafile_api.clear_repo_sync_errors()
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})
