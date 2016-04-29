@@ -17,7 +17,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.base.accounts import User
-from seahub.share.signals import share_repo_to_user_successful
+from seahub.share.signals import share_repo_to_user_successful, \
+    share_repo_to_group_successful
 from seahub.utils import (is_org_context, is_valid_username,
                           send_perm_audit_msg)
 
@@ -344,6 +345,9 @@ class DirSharedItemsEndpoint(APIView):
                     else:
                         seafile_api.set_group_repo(shared_repo.repo_id, gid,
                                                    username, permission)
+
+                    share_repo_to_group_successful.send(sender=None,
+                        from_user=username, group_id=gid, repo=shared_repo)
 
                     result['success'].append({
                         "share_type": "group",
