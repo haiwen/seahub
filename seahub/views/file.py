@@ -782,6 +782,7 @@ def view_shared_file(request, fileshare):
         # check whether owner's traffic over the limit
         if user_traffic_over_limit(shared_by):
             messages.error(request, _(u'Unable to view raw file, share link traffic is used up.'))
+            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
             return HttpResponseRedirect(next)
 
         send_file_access_msg(request, repo, path, 'share-link')
