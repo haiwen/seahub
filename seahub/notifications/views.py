@@ -163,6 +163,14 @@ def add_notice_from_info(notices):
                 logger.error(e)
                 notice.default_avatar_url = default_avatar_url
 
+        elif notice.is_repo_share_to_group_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['share_from']
+            except Exception as e:
+                logger.error(e)
+                notice.default_avatar_url = default_avatar_url
+
         elif notice.is_group_join_request():
             try:
                 d = json.loads(notice.detail)

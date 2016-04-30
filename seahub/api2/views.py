@@ -22,7 +22,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
 from django.db import IntegrityError
 from django.db.models import F, Q
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.template.defaultfilters import filesizeformat
@@ -40,31 +40,24 @@ from .utils import get_diff_details, \
     api_repo_user_folder_perm_check, api_repo_setting_permission_check, \
     api_repo_group_folder_perm_check
 
-from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
 from seahub.base.accounts import User
-from seahub.base.models import FileDiscuss, UserStarredFiles, DeviceToken
+from seahub.base.models import UserStarredFiles, DeviceToken
 from seahub.base.templatetags.seahub_tags import email2nickname, \
-    translate_commit_desc, translate_seahub_time, translate_commit_desc_escape
-from seahub.group.models import GroupMessage, MessageReply, MessageAttachment
-from seahub.group.signals import grpmsg_added
-from seahub.group.views import group_check, remove_group_common, \
+    translate_seahub_time, translate_commit_desc_escape
+from seahub.group.views import remove_group_common, \
     rename_group_with_new_name, is_group_staff
 from seahub.group.utils import BadGroupNameError, ConflictGroupNameError, \
     validate_group_name
 from seahub.thumbnail.utils import generate_thumbnail
-from seahub.message.models import UserMessage
 from seahub.notifications.models import UserNotification
 from seahub.options.models import UserOptions
 from seahub.contacts.models import Contact
 from seahub.profile.models import Profile, DetailedProfile
-from seahub.shortcuts import get_first_object_or_none
 from seahub.signals import (repo_created, repo_deleted)
 from seahub.share.models import FileShare, OrgFileShare, UploadLinkShare
-from seahub.share.signals import share_repo_to_user_successful
-from seahub.share.views import list_shared_repos
 from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     check_filename_with_rename, is_valid_username, EVENTS_ENABLED, \
     get_user_events, EMPTY_SHA1, get_ccnet_server_addr_port, is_pro_version, \
@@ -75,11 +68,11 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
 from seahub.utils.devices import get_user_devices, do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
-from seahub.utils.file_types import IMAGE, DOCUMENT
+from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
-from seahub.views import validate_owner, is_registered_user, check_file_lock, \
-    group_events_data, get_diff, create_default_library, get_owned_repo_list, \
+from seahub.views import is_registered_user, check_file_lock, \
+    group_events_data, get_diff, create_default_library, \
     list_inner_pub_repos, get_virtual_repos_by_owner, \
     check_folder_permission
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
@@ -93,7 +86,7 @@ if HAS_OFFICE_CONVERTER:
 import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, \
-    ENABLE_THUMBNAIL, ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
+    ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -119,15 +112,14 @@ except ImportError:
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
-from seaserv import seafserv_rpc, seafserv_threaded_rpc, \
+from seaserv import seafserv_threaded_rpc, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
-    list_personal_repos_by_owner, check_quota, \
-    list_share_repos, get_group_repos_by_owner, get_group_repoids, \
+    check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
     list_inner_pub_repos_by_owner, is_group_user, \
-    remove_share, unshare_group_repo, unset_inner_pub_repo, get_group, \
+    remove_share, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
-    ccnet_threaded_rpc, get_personal_groups, seafile_api, check_group_staff, \
+    ccnet_threaded_rpc, get_personal_groups, seafile_api, \
     create_org, ccnet_api
 
 from constance import config

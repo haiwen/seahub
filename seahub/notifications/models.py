@@ -5,14 +5,12 @@ import json
 import logging
 
 from django.db import models
-from django.db.models.signals import post_save
 from django.forms import ModelForm, Textarea
-from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
@@ -42,6 +40,7 @@ MSG_TYPE_GROUP_JOIN_REQUEST = 'group_join_request'
 MSG_TYPE_ADD_USER_TO_GROUP = 'add_user_to_group'
 MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
+MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
@@ -52,6 +51,9 @@ def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
 
 def repo_share_msg_to_json(share_from, repo_id):
     return json.dumps({'share_from': share_from, 'repo_id': repo_id})
+
+def repo_share_to_group_msg_to_json(share_from, repo_id, group_id):
+    return json.dumps({'share_from': share_from, 'repo_id': repo_id, 'group_id': group_id})
 
 def group_msg_to_json(group_id, msg_from, message):
     return json.dumps({'group_id': group_id, 'msg_from': msg_from,
@@ -72,7 +74,7 @@ def add_user_to_group_to_json(group_staff, group_id):
 class UserNotificationManager(models.Manager):
     def _add_user_notification(self, to_user, msg_type, detail):
         """Add generic user notification.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -85,11 +87,11 @@ class UserNotificationManager(models.Manager):
 
     def get_all_notifications(self, seen=None, time_since=None):
         """Get all notifications of all users.
-        
+
         Arguments:
         - `self`:
         - `seen`:
-        - `time_since`: 
+        - `time_since`:
         """
         qs = super(UserNotificationManager, self).all()
         if seen is not None:
@@ -97,10 +99,10 @@ class UserNotificationManager(models.Manager):
         if time_since is not None:
             qs = qs.filter(timestamp__gt=time_since)
         return qs
-        
+
     def get_user_notifications(self, username, seen=None):
         """Get all notifications(group_msg, grpmsg_reply, etc) of a user.
-        
+
         Arguments:
         - `self`:
         - `username`:
@@ -112,23 +114,23 @@ class UserNotificationManager(models.Manager):
 
     def remove_user_notifications(self, username):
         """Remove all user notifications.
-        
+
         Arguments:
         - `self`:
         - `username`:
         """
         self.get_user_notifications(username).delete()
-        
+
     def count_unseen_user_notifications(self, username):
         """
-        
+
         Arguments:
         - `self`:
         - `username`:
         """
         return super(UserNotificationManager, self).filter(
             to_user=username, seen=False).count()
-        
+
     def bulk_add_group_msg_notices(self, to_users, detail):
         """Efficiently add group message notices.
 
@@ -179,10 +181,10 @@ class UserNotificationManager(models.Manager):
         super(UserNotificationManager, self).filter(
             to_user=to_user, msg_type=MSG_TYPE_GROUP_MSG,
             detail=str(group_id)).delete()
-        
+
     def add_group_join_request_notice(self, to_user, detail):
         """
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -205,7 +207,7 @@ class UserNotificationManager(models.Manager):
 
     def add_file_uploaded_msg(self, to_user, detail):
         """
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -217,7 +219,7 @@ class UserNotificationManager(models.Manager):
 
     def add_repo_share_msg(self, to_user, detail):
         """Notify ``to_user`` that others shared a repo to him/her.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -226,9 +228,20 @@ class UserNotificationManager(models.Manager):
         return self._add_user_notification(to_user,
                                            MSG_TYPE_REPO_SHARE, detail)
 
+    def add_repo_share_to_group_msg(self, to_user, detail):
+        """Notify ``to_user`` that others shared a repo to group.
+
+        Arguments:
+        - `self`:
+        - `to_user`:
+        - `detail`:
+        """
+        return self._add_user_notification(to_user,
+                   MSG_TYPE_REPO_SHARE_TO_GROUP, detail)
+
     def add_user_message(self, to_user, detail):
         """Notify ``to_user`` that others sent a message to him/her.
-        
+
         Arguments:
         - `self`:
         - `to_user`:
@@ -236,7 +249,7 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user,
                                            MSG_TYPE_USER_MESSAGE, detail)
-        
+
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
     msg_type = models.CharField(db_index=True, max_length=30)
@@ -250,7 +263,7 @@ class UserNotification(models.Model):
 
     class Meta:
         ordering = ["-timestamp"]
-    
+
     def __unicode__(self):
         return '%s|%s|%s' % (self.to_user, self.msg_type, self.detail)
 
@@ -259,7 +272,7 @@ class UserNotification(models.Model):
 
         Use this in a template to mark an unseen notice differently the first
         time it is shown.
-        
+
         Arguments:
         - `self`:
         """
@@ -268,10 +281,10 @@ class UserNotification(models.Model):
             self.seen = True
             self.save()
         return seen
-        
+
     def is_group_msg(self):
         """Check whether is a group message notification.
-        
+
         Arguments:
         - `self`:
         """
@@ -279,7 +292,7 @@ class UserNotification(models.Model):
 
     def is_file_uploaded_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -287,15 +300,23 @@ class UserNotification(models.Model):
 
     def is_repo_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
         return self.msg_type == MSG_TYPE_REPO_SHARE
 
+    def is_repo_share_to_group_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        return self.msg_type == MSG_TYPE_REPO_SHARE_TO_GROUP
+
     def is_user_message(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -303,7 +324,7 @@ class UserNotification(models.Model):
 
     def is_group_join_request(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -322,7 +343,7 @@ class UserNotification(models.Model):
         ``msg_from``.
 
         NOTE: ``msg_from`` may be ``None``.
-        
+
         Arguments:
         - `self`:
 
@@ -374,7 +395,7 @@ class UserNotification(models.Model):
     ########## functions used in templates
     def format_file_uploaded_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -416,7 +437,7 @@ class UserNotification(models.Model):
 
     def format_repo_share_msg(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -439,6 +460,44 @@ class UserNotification(models.Model):
             'href': reverse('view_common_lib_dir', args=[repo.id, '']),
             'repo_name': escape(repo.name),
             }
+
+        return msg
+
+    def format_repo_share_to_group_msg(self):
+        """
+
+        Arguments:
+        - `self`:
+        """
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        share_from = email2nickname(d['share_from'])
+        repo_id = d['repo_id']
+        group_id = d['group_id']
+
+        try:
+            repo = seafile_api.get_repo(repo_id)
+            group = ccnet_api.get_group(group_id)
+        except Exception as e:
+            logger.error(e)
+            return None
+
+        if not repo or not group:
+            self.delete()
+            return None
+
+        msg = _(u"%(user)s has shared a library named <a href='%(repo_href)s'>%(repo_name)s</a> to group <a href='%(group_href)s'>%(group_name)s</a>.") %  {
+            'user': escape(share_from),
+            'repo_href': reverse('view_common_lib_dir', args=[repo.id, '']),
+            'repo_name': escape(repo.name),
+            'group_href': reverse('group_info', args=[group.id]),
+            'group_name': escape(group.group_name),
+            }
+
         return msg
 
     def format_user_message_title(self):
@@ -450,6 +509,7 @@ class UserNotification(models.Model):
         try:
             d = self.user_message_detail_to_dict()
         except self.InvalidDetailError as e:
+            logger.error(e)
             return _(u"Internal error")
 
         msg_from = d.get('msg_from')
@@ -470,6 +530,7 @@ class UserNotification(models.Model):
         try:
             d = self.user_message_detail_to_dict()
         except self.InvalidDetailError as e:
+            logger.error(e)
             return _(u"Internal error")
 
         message = d.get('message')
@@ -480,17 +541,18 @@ class UserNotification(models.Model):
 
     def format_group_message_title(self):
         """
-        
+
         Arguments:
         - `self`:
         """
         try:
             d = self.group_message_detail_to_dict()
         except self.InvalidDetailError as e:
+            logger.error(e)
             return _(u"Internal error")
 
         group_id = d.get('group_id')
-        group = seaserv.get_group(group_id)
+        group = ccnet_api.get_group(group_id)
         if group is None:
             self.delete()
             return None
@@ -517,6 +579,7 @@ class UserNotification(models.Model):
         try:
             d = self.group_message_detail_to_dict()
         except self.InvalidDetailError as e:
+            logger.error(e)
             return _(u"Internal error")
 
         message = d.get('message')
@@ -527,7 +590,7 @@ class UserNotification(models.Model):
 
     def format_group_join_request(self):
         """
-        
+
         Arguments:
         - `self`:
         """
@@ -541,7 +604,7 @@ class UserNotification(models.Model):
         group_id = d['group_id']
         join_request_msg = d['join_request_msg']
 
-        group = seaserv.get_group(group_id)
+        group = ccnet_api.get_group(group_id)
         if group is None:
             self.delete()
             return None
@@ -570,7 +633,7 @@ class UserNotification(models.Model):
         group_staff = d['group_staff']
         group_id = d['group_id']
 
-        group = seaserv.get_group(group_id)
+        group = ccnet_api.get_group(group_id)
         if group is None:
             self.delete()
             return None
@@ -588,10 +651,9 @@ from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 
 from seahub.signals import upload_file_successful
-from seahub.group.models import GroupMessage, MessageReply
 from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
-from seahub.share.signals import share_repo_to_user_successful
-from seahub.message.models import UserMessage
+from seahub.share.signals import share_repo_to_user_successful, \
+    share_repo_to_group_successful
 from seahub.message.signals import user_message_sent
 
 @receiver(upload_file_successful)
@@ -606,24 +668,6 @@ def add_upload_file_msg_cb(sender, **kwargs):
 
     filename = os.path.basename(file_path)
     folder_path = os.path.dirname(file_path)
-    folder_name = os.path.basename(folder_path)
-
-    detail = file_uploaded_msg_to_json(filename, repo_id, folder_path)
-    UserNotification.objects.add_file_uploaded_msg(owner, detail)
-
-@receiver(upload_file_successful)
-def add_upload_file_msg_cb(sender, **kwargs):
-    """Notify repo owner when others upload files to his/her folder from shared link.
-    """
-    repo_id = kwargs.get('repo_id', None)
-    file_path = kwargs.get('file_path', None)
-    owner = kwargs.get('owner', None)
-
-    assert repo_id and file_path and owner is not None, 'Arguments error'
-
-    filename = os.path.basename(file_path)
-    folder_path = os.path.dirname(file_path)
-    folder_name = os.path.basename(folder_path)
 
     detail = file_uploaded_msg_to_json(filename, repo_id, folder_path)
     UserNotification.objects.add_file_uploaded_msg(owner, detail)
@@ -635,11 +679,29 @@ def add_share_repo_msg_cb(sender, **kwargs):
     from_user = kwargs.get('from_user', None)
     to_user = kwargs.get('to_user', None)
     repo = kwargs.get('repo', None)
-    
+
     assert from_user and to_user and repo is not None, 'Arguments error'
 
     detail = repo_share_msg_to_json(from_user, repo.id)
     UserNotification.objects.add_repo_share_msg(to_user, detail)
+
+@receiver(share_repo_to_group_successful)
+def add_share_repo_to_group_msg_cb(sender, **kwargs):
+    """Notify group member when others share repos to group.
+    """
+    from_user = kwargs.get('from_user', None)
+    group_id = kwargs.get('group_id', None)
+    repo = kwargs.get('repo', None)
+
+    assert from_user and group_id and repo is not None, 'Arguments error'
+
+    members = ccnet_api.get_group_members(int(group_id))
+    for member in members:
+        to_user = member.user_name
+        if to_user == from_user:
+            continue
+        detail = repo_share_to_group_msg_to_json(from_user, repo.id, group_id)
+        UserNotification.objects.add_repo_share_to_group_msg(to_user, detail)
 
 @receiver(user_message_sent)
 def add_user_message_cb(sender, **kwargs):
