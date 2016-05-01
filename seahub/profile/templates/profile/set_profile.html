@@ -1,11 +1,13 @@
-{% extends "myhome_base.html" %}
+{% extends "base.html" %}
 {% load avatar_tags i18n %}
 {% load url from future %}
 
 {% block sub_title %}{% trans "Settings" %} - {% endblock %}
 
-{% block left_panel %}
-<div class="side-textnav">
+{% block main_content %}
+<div class="row">
+
+<div class="side-tabnav side-textnav col-md-3 hide" id="side-nav" role="navigation">
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
@@ -15,9 +17,9 @@
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
     </ul>
 </div>
-{% endblock %}
 
-{% block right_panel %}
+<div id="right-panel" class="col-md-9 col-md-offset-3">
+
 <h2>{% trans "Settings" %}</h2>
 
 <div id="user-basic-info" class="setting-item">
@@ -112,6 +114,9 @@
     <input type="submit" value="{% trans "Submit"%}" class="submit" />
     <button class="simplemodal-close">{% trans "Cancel"%}</button>
 </form>
+
+</div> <!-- right-panel -->
+</div> <!-- row -->
 
 {% endblock %}
 

@@ -205,7 +205,7 @@ input {
 input, button { display:inline-block;/*for ie*/ }
 input[type=text],
 input[type=password] {
-    height:22px;
+    height:26px;
 }
 button,
 input[type=submit],
@@ -1294,7 +1294,7 @@ button.sf-dropdown-toggle:focus {
     border-top: 1px solid #c9c9c9;
 }
 .msg-input {
-    width:350px;
+    width:362px;
     padding:3px 5px;
 }
 .msg-form .submit {
