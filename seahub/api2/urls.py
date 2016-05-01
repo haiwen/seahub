@@ -7,6 +7,9 @@ from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.account import Account
 from .endpoints.shared_upload_links import SharedUploadLinksView
 from .endpoints.be_shared_repo import BeSharedReposView
+from .endpoints.file_comment import FileCommentView
+from .endpoints.file_comments import FileCommentsView
+from .endpoints.file_comments_counts import FileCommentsCounts
 from .endpoints.search_user import SearchUser
 from .endpoints.group_discussions import GroupDiscussions
 from .endpoints.group_discussion import GroupDiscussion
@@ -49,6 +52,9 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/owa-file/$', OwaFileView.as_view(), name='api2-owa-file-view'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='FileView'),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/files/(?P<file_id>[0-9a-f]{40})/blks/(?P<block_id>[0-9a-f]{40})/download-link/$', FileBlockDownloadLinkView.as_view()),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/$', FileCommentsView.as_view(), name='api2-file-comments'),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/counts/$', FileCommentsCounts.as_view(), name='api2-file-comments-counts'),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/comments/(?P<pk>\d+)/$', FileCommentView.as_view(), name='api2-file-comment'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/history/$', FileHistory.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/revision/$', FileRevision.as_view()),

@@ -1,4 +1,6 @@
+import os
 import datetime
+import hashlib
 import logging
 import json
 from django.db import models, IntegrityError
@@ -10,6 +12,7 @@ from seaserv import seafile_api
 from seahub.auth.signals import user_logged_in
 from seahub.group.models import GroupMessage
 from seahub.utils import calc_file_path_hash, within_time_range
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 from fields import LowerCaseCharField
 
 
@@ -28,9 +31,87 @@ class FileDiscuss(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.path_hash:
-
             self.path_hash = calc_file_path_hash(self.path)
+
         super(FileDiscuss, self).save(*args, **kwargs)
+
+
+class FileCommentManager(models.Manager):
+    def add(self, repo_id, parent_path, item_name, author, comment):
+        c = self.model(repo_id=repo_id, parent_path=parent_path,
+                       item_name=item_name, author=author, comment=comment)
+        c.save(using=self._db)
+        return c
+
+    def add_by_file_path(self, repo_id, file_path, author, comment):
+        file_path = self.model.normalize_path(file_path)
+        parent_path = os.path.dirname(file_path)
+        item_name = os.path.basename(file_path)
+
+        return self.add(repo_id, parent_path, item_name, author, comment)
+
+    def get_by_file_path(self, repo_id, file_path):
+        parent_path = os.path.dirname(file_path)
+        item_name = os.path.basename(file_path)
+        repo_id_parent_path_md5 = self.model.md5_repo_id_parent_path(
+            repo_id, parent_path)
+
+        objs = super(FileCommentManager, self).filter(
+            repo_id_parent_path_md5=repo_id_parent_path_md5,
+            item_name=item_name)
+
+        return objs
+
+    def get_by_parent_path(self, repo_id, parent_path):
+        repo_id_parent_path_md5 = self.model.md5_repo_id_parent_path(
+            repo_id, parent_path)
+
+        objs = super(FileCommentManager, self).filter(
+            repo_id_parent_path_md5=repo_id_parent_path_md5)
+        return objs
+
+
+class FileComment(models.Model):
+    """
+    Model used to record file comments.
+    """
+    repo_id = models.CharField(max_length=36, db_index=True)
+    parent_path = models.TextField()
+    repo_id_parent_path_md5 = models.CharField(max_length=100, db_index=True)
+    item_name = models.TextField()
+    author = LowerCaseCharField(max_length=255, db_index=True)
+    comment = models.TextField()
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(default=timezone.now)
+    objects = FileCommentManager()
+
+    @classmethod
+    def md5_repo_id_parent_path(cls, repo_id, parent_path):
+        return hashlib.md5(repo_id + parent_path.rstrip('/')).hexdigest()
+
+    @classmethod
+    def normalize_path(self, path):
+        return path.rstrip('/') if path != '/' else '/'
+
+    def save(self, *args, **kwargs):
+        self.parent_path = self.normalize_path(self.parent_path)
+        if not self.repo_id_parent_path_md5:
+            self.repo_id_parent_path_md5 = self.md5_repo_id_parent_path(
+                self.repo_id, self.parent_path)
+
+        super(FileComment, self).save(*args, **kwargs)
+
+    def to_dict(self):
+        o = self
+        return {
+            'id': o.pk,
+            'repo_id': o.repo_id,
+            'parent_path': o.parent_path,
+            'item_name': o.item_name,
+            'author': o.author,
+            'comment': o.comment,
+            'created_at': datetime_to_isoformat_timestr(o.created_at),
+        }
 
 
 ########## starred files
@@ -206,7 +287,7 @@ class InnerPubMsgReply(models.Model):
     from_email = models.EmailField()
     message = models.CharField(max_length=150)
     timestamp = models.DateTimeField(default=datetime.datetime.now)
-
+##############################
 
 class DeviceToken(models.Model):
     """
