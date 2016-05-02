@@ -48,7 +48,7 @@ define([
     var PopoverView = Backbone.View.extend({
 
         initialize: function(options) {
-            this.$el.on('click', '.close', _.bind(this.hide, this));
+            this.$el.on('click', '.js-close', _.bind(this.hide, this));
         },
 
         // set max-height for '.sf-popover-con'

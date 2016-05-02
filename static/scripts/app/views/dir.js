@@ -104,7 +104,7 @@ define([
                 this.$dirent_grid = this.$('.grid-view');
                 this.$dirent_list_body = this.$('.repo-file-list tbody');
 
-                this.$path_bar = this.$('.path');
+                this.$path_bar = this.$('.path-bar');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
 

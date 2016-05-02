@@ -153,23 +153,23 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a> /
-        <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a> /
+        <li><a href="#groups/" class="path-link normal">{% trans "Groups" %}</a></li>
+        <li><a href="#<%= category %>/" class="path-link normal"><%- group_name %></a></li>
     <% } else if (context == 'org') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
+        <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a></li>
     <% } else if (context == 'common') { %>
-        <a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a> /
+        <li><a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a></li>
     <% } else { %>
-        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
+        <li><a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a></li>
     <% } %>
     <% if (path == '/') { %>
-    <%- repo_name %> /
+        <li><%- repo_name %></li>
     <% } else { %>
-        <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
-    <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
-    <% } %>
-    <%- path_list[i] + ' /' %>
+        <li><a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a></li>
+        <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
+        <li><a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
+        <% } %>
+        <li><%- path_list[i] %></li>
     <% } %>
 </script>
 <script type="text/template" id="dirents-hd-tmpl">
@@ -729,7 +729,10 @@
 </form>
 </script>
 <script type="text/template" id="group-top-tmpl">
-<p class="path"><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a> / <%- name %></p>
+<ol class="path-bar breadcrumb">
+    <li><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a></li>
+    <li><%- name %></li>
+</ol>
 <div class="hd ovhd">
     {% if user.permissions.can_add_repo %}
     <button class="repo-create fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
@@ -1423,7 +1426,7 @@
 <script type="text/template" id="notice-popover-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
     <div class="sf-popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close close sf2-icon-x1 op-icon fright"></a>
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fright"></a>
         <h3 class="sf-popover-title">{% trans "Notifications" %}</h3>
     </div>
     <div class="sf-popover-con">

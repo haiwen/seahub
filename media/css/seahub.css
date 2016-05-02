@@ -165,7 +165,6 @@ h4 { font-size:1.1em; color:#222; font-weight:normal; }
 h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
 h1, h2, h3, h4 { line-height: 1.5; }
 ul { list-style:none; }
-ol { padding-left:2em; }
 dl { margin:1.5em 0; }
 dt { color:#666; margin:24px 0 2px; font-weight: normal; }
 dd { margin-bottom:.8em; color:#222; }
@@ -302,7 +301,12 @@ th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
-
+/**** overwrite bootstrap css ****/
+.breadcrumb {
+    padding:0;
+    background-color:#fff;
+    border-radius:0;
+}
 /********** common class ***********/
 .hl { background-color: #f8f8f8; }/*highlight*/
 .fleft { float:left }
@@ -388,8 +392,8 @@ table img { vertical-align:middle; }
 }
 .loading-icon {
     display:inline-block;
-    width:22px;
-    height:22px;
+    width:26px;
+    height:26px;
     border:2px solid #eee;
     border-left-color:#aaa;
     border-radius:50%;
@@ -517,6 +521,15 @@ textarea:-moz-placeholder {/* for FF */
 }
 
 /*******ui widgets**************/
+/**** path ****/
+.path-bar {
+    font-size:1rem;
+    line-height:1.5;
+    margin:0; /* for merge with tabs */
+    background-color:#f2f2f2;
+    padding:0.6rem 0.75rem 0.25rem;
+    border-radius: 2px 2px 0 0;
+}
 /****paginator****/
 #paginator {
     text-align:center;
@@ -1862,12 +1875,6 @@ button.sf-dropdown-toggle:focus {
     line-height:25px;
     margin:0;
 }
-#group-top .path,
-#dir-view .path {
-    font-size:16px;
-    line-height:1.5;
-    margin:0 0 5px;
-}
 #dir-view .repo-op .op-btn {
     padding:5px 14px;
 }
@@ -1909,7 +1916,7 @@ button.sf-dropdown-toggle:focus {
     width:200px;
 }
 .repo-file-list th {
-    padding-top:20px;
+    padding-top:1rem;
 }
 #repo-file-list .fixed-hd {
     position:fixed;
@@ -3040,7 +3047,7 @@ button.sf-dropdown-toggle:focus {
 }
 .repo-folder-perm-folder-path {
     width:150px;
-    padding:3px 33px 3px 5px;
+    padding:1px 33px 1px 5px;
 }
 .repo-folder-perm-add-folder {
     position:absolute;
@@ -3316,18 +3323,13 @@ img.thumbnail {
 #group {
     position:relative;
 }
-#group-members {
+#group-members, #group-settings, #group-discussions {
     position:absolute;
-    top:77px;
+    top:90px;
     right:0;
 }
 #group-members .outer-caret {
     right:66px;
-}
-#group-settings {
-    position:absolute;
-    top:77px;
-    right:0;
 }
 #group-settings .outer-caret {
     right:106px;
@@ -3340,9 +3342,6 @@ img.thumbnail {
 }
 #group-discussions {
     width:440px;
-    position:absolute;
-    top:77px;
-    right:0;
 }
 #group-discussions .outer-caret {
     right:30px;
