@@ -17,7 +17,6 @@ from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpRespons
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils import timezone
-from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
 
 import seaserv
@@ -29,8 +28,7 @@ from seahub.base.accounts import User
 from seahub.base.models import UserLastLogin
 from seahub.base.decorators import sys_staff_required, require_POST
 from seahub.base.sudo_mode import update_sudo_mode_ts
-from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname, \
-    translate_seahub_time_str
+from seahub.base.templatetags.seahub_tags import tsstr_sec, email2nickname
 from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
@@ -74,10 +72,6 @@ logger = logging.getLogger(__name__)
 @login_required
 @sys_staff_required
 def sysadmin(request):
-    """
-    """
-    username = request.user.username
-
     max_upload_file_size = get_max_upload_file_size()
 
     folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
@@ -1771,7 +1765,16 @@ def sys_publink_admin(request):
 
     offset = per_page * (current_page -1)
     limit = per_page + 1
-    publinks = FileShare.objects.all()[offset:offset+limit]
+    sort_by = request.GET.get('sort_by', 'time_up')
+
+    if sort_by == 'time_down':
+        publinks = FileShare.objects.all().order_by('ctime')[offset:offset+limit]
+    elif sort_by == 'count_up':
+        publinks = FileShare.objects.all().order_by('-view_cnt')[offset:offset+limit]
+    elif sort_by == 'count_down':
+        publinks = FileShare.objects.all().order_by('view_cnt')[offset:offset+limit]
+    else:
+        publinks = FileShare.objects.all().order_by('-ctime')[offset:offset+limit]
 
     if len(publinks) == per_page + 1:
         page_next = True
@@ -1792,6 +1795,8 @@ def sys_publink_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
+            'per_page': per_page,
+            'sort_by': sort_by,
         },
         context_instance=RequestContext(request))
 
