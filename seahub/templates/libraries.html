@@ -86,9 +86,9 @@
 
     {% if user.permissions.can_add_group %}
     <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "New Group" %}</h3>
-        <label>{% trans "Group Name" %}</label><br />
-        <input name="group_name" value="" class="input" /><br />
+        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <label for="group-name">{% trans "Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>

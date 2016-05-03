@@ -18,10 +18,10 @@
                 <input type="checkbox" name="encryption" id="encrypt-switch" class="vam" />
                 <span class="checkbox-option vam">{% trans "Encrypt" %}</span>
             </label>
-            <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-            <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-            <label>{% trans "Password again" %}</label><br />
-            <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
+            <label for="passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+            <input type="password" name="passwd" disabled="disabled" class="input input-disabled" id="passwd" /><br />
+            <label for="passwd-again">{% trans "Password again" %}</label><br />
+            <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" id="passwd-again" />
         </div>
         <% } %>
         <p class="error hide"></p>
@@ -414,7 +414,7 @@
 </script>
 
 <script type="text/template" id="share-popup-tmpl">
-    <h3 class="hd"><%= title %></h3>
+    <h3 class="hd" id="dialogTitle"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <% if (!repo_encrypted) { %>
@@ -441,22 +441,22 @@
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
+                        <label for="passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
                         <div class="passwd-wrapper">
-                            <input type="password" name="password" class="passwd input" />
-                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
-                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                            <input type="password" name="password" class="passwd input" id="passwd" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt" role="button" tabindex="0" aria-label="{% trans "Show" %}"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt" role="button" tabindex="0" aria-label="{% trans "Generate a random password" %}"></span>
                         </div>
-                        <label>{% trans "Password again" %}</label><br />
-                        <input type="password" name="password_again" class="input" />
+                        <label for="passwd-again">{% trans "Password again" %}</label><br />
+                        <input type="password" name="password_again" class="input" id="passwd-again" />
                     </div>
                     <label class="checkbox-label">
                         <input type="checkbox" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Days" %}</label><br />
-                        <input type="text" name="expire_days" class="input" />
+                        <label for="expire-days">{% trans "Days" %}</label><br />
+                        <input type="text" name="expire_days" class="input" id="expire-days" />
                     </div>
                     <p class="error hide"></p>
                     <input type="submit" value="{% trans 'Generate'%}" />
@@ -473,10 +473,10 @@
                     <button id="send-download-link">{% trans 'Send' %}</button>
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
                     <form id="send-download-link-form" action="" class="hide">
-                        <label>{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
-                        <label>{% trans "Message (optional):"%}</label><br />
-                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <label for="email">{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="email" /><br />
+                        <label for="extra-msg">{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="extra-msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit" %}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-download-link" />
@@ -496,14 +496,14 @@
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
+                        <label for="u-passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
                         <div class="passwd-wrapper">
-                            <input type="password" name="password" class="passwd input" />
-                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
-                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                            <input type="password" name="password" class="passwd input" id="u-passwd" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt" role="button" tabindex="0" aria-label="{% trans "Show" %}"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt" role="button" tabindex="0" aria-label="{% trans "Generate a random password" %}"></span>
                         </div>
-                        <label>{% trans "Password again"%}</label><br />
-                        <input type="password" name="password_again" class="input" />
+                        <label for="u-passwd-again">{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" id="u-passwd-again" />
                     </div>
                     <p class="error hide"></p>
                     <input type="submit" value="{% trans 'Generate'%}" />
@@ -513,10 +513,10 @@
                     <button id="send-upload-link">{% trans 'Send' %}</button>
                     <button id="delete-upload-link">{% trans 'Delete' %}</button>
                     <form id="send-upload-link-form" action="" class="hide">
-                        <label>{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
-                        <label>{% trans "Message (optional):"%}</label><br />
-                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <label for="u-email">{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="u-email" /><br />
+                        <label for="u-extra-msg">{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="u-extra-msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit" %}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-upload-link" />
@@ -533,11 +533,14 @@
             <div id="dir-user-share" class="tabs-panel">
                     <% } %>
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-dir-user-share-item">
                         <td>
                             <input type="hidden" name="emails" class="w100" />
@@ -550,17 +553,21 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
 
             <div id="dir-group-share" class="tabs-panel hide">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-dir-group-share-item">
                         <td>
                             <select name="groups" class="w100" multiple="multiple"></select>
@@ -573,6 +580,7 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
@@ -697,7 +705,7 @@
 
 <script type="text/template" id="myhome-mods-enable-form-tmpl">
 <form id="myhome-mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
+    <h3 id="dialogTitle">{% trans "Enable Modules"%}</h3>
     <ul>
         <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
             <% if (mods_available[i] == 'personal wiki') { %>
@@ -770,7 +778,7 @@
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
-    <h3 class="hd"><%= title %></h3>
+    <h3 class="hd" id="dialogTitle"><%= title %></h3>
     <div id="folder-perm-tabs" class="left-right-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
@@ -779,11 +787,14 @@
         <div class="fright">
             <div id="user-folder-perm" class="tabs-panel">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-user-folder-perm">
                         <td>
                             <input type="hidden" name="email" class="w100" />
@@ -796,16 +807,20 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
             <div id="group-folder-perm" class="tabs-panel">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-group-folder-perm">
                         <td>
                             <select name="group" class="w100" multiple="multiple"></select>
@@ -818,6 +833,7 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
@@ -860,7 +876,7 @@
     </tr>
 </script>
 <script type="text/template" id="add-pubrepo-popup-tmpl">
-    <h3 class="hd">{% trans "Select libraries to share" %}</h3>
+    <h3 class="hd" id="dialogTitle">{% trans "Select libraries to share" %}</h3>
     <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <tr>
@@ -879,9 +895,9 @@
     </td>
     <td>
       <% if (encrypted) { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="{% trans "Encrypted" %}" />
       <% } else { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "Read-Write" %}" />
       <% } %>
     </td>
     <td><a href="#my-libs/lib/<%= id %>" target="_blank"><%- name %></a></td>
@@ -928,7 +944,7 @@
     </div>
 </script>
 <script type="text/template" id="details-popup-tmpl">
-    <h3>{% trans "Modification Details"%}</h3>
+    <h3 id="dialogTitle">{% trans "Modification Details"%}</h3>
     <p class="commit-time"></p>
     <span class="loading-icon loading-tip"></span>
 </script>
@@ -1032,7 +1048,7 @@
 
 <script type="text/template" id="group-rename-form-tmpl">
 <form method="post" action="">
-    <h3>{% trans "Rename Group To" %}</h3>
+    <h3 id="dialogTitle">{% trans "Rename Group To" %}</h3>
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1041,7 +1057,7 @@
 
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
-    <h3>{% trans "Transfer Group To" %}</h3>
+    <h3 id="dialogTitle">{% trans "Transfer Group To" %}</h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1049,7 +1065,7 @@
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">
-    <h3>{% trans "Import group members from a CSV file" %}</h3>
+    <h3 id="dialogTitle">{% trans "Import group members from a CSV file" %}</h3>
     <input type="file" name="file" />
     <p class="tip">{% trans "File format: user@mail.com" %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
@@ -1058,7 +1074,7 @@
 </script>
 
 <script type="text/template" id="group-manage-members-tmpl">
-<h3><%= title %></h3>
+<h3 id="dialogTitle"><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
     <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
@@ -1139,7 +1155,7 @@
 </script>
 
 <script type="text/template" id="history-settings-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
 
     <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
 
@@ -1172,7 +1188,7 @@
 </script>
 
 <script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
@@ -1235,7 +1251,7 @@
 
 <script type="text/template" id="repo-transfer-form-tmpl">
 <form method="post" action="" id="repo-transfer-form">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1243,7 +1259,7 @@
 </script>
 
 <script type="text/template" id="repo-folder-perm-admin-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <div id="repo-folder-perm" class="left-right-tabs js-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
@@ -1380,13 +1396,13 @@
 
 <script type="text/template" id="repo-change-password-form-tmpl">
     <form id="repo-change-passwd-form" action="" method="post">
-        <h3><%= title %></h3>
-        <label>{% trans "Old Password" %}</label><br />
-        <input type="password" name="old_passwd" class="input" /><br />
-        <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
-        <input type="password" name="new_passwd" class="input" /><br />
-        <label>{% trans "New Password Again" %}</label><br />
-        <input type="password" name="new_passwd_again" class="input" /><br />
+        <h3 id="dialogTitle"><%= title %></h3>
+        <label for="passwd">{% trans "Old Password" %}</label><br />
+        <input type="password" name="old_passwd" class="input" id="passwd" /><br />
+        <label for="new-passwd">{% trans "New Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+        <input type="password" name="new_passwd" class="input" id="new-passwd" /><br />
+        <label for="new-passwd-again">{% trans "New Password Again" %}</label><br />
+        <input type="password" name="new_passwd_again" class="input" id="new-passwd-again" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>

@@ -2,9 +2,9 @@
 
     <script type="text/template" id="add-new-dir-form-template">
     <form id="add-new-dir-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "New Directory" %}</h3>
-        <label>{% trans "Directory Name" %}</label><br />
-        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <h3 id="dialogTitle">{% trans "New Folder" %}</h3>
+        <label for="dir-name">{% trans "Name" %}</label><br />
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}" id="dir-name" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -13,7 +13,7 @@
 
     <script type="text/template" id="add-new-file-form-template">
     <form id="add-new-file-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "New File" %}</h3>
+        <h3 id="dialogTitle">{% trans "New File" %}</h3>
         <div id="featured-filetype">
             <label>{% trans "Featured File Type" %}</label><br />
             <button type="button" class="set-file-type" data-filetype="md" title="{% trans "Click to choose" %}">markdown</button> <span>{% trans "simple markup format." %}</span>
@@ -23,8 +23,8 @@
             <a href="http://www.seafile.com/en/help/markdown/" target="_blank">{% trans 'Details' %}</a>
             {% endif %}
         </div>
-        <label>{% trans "File Name" %}</label><br/>
-        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}"/><br />
+        <label for="file-name">{% trans "File Name" %}</label><br/>
+        <input type="text" name="name" value="" class="input" maxlength="{{max_file_name}}" id="file-name" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
         <button class="simplemodal-close">{% trans "Cancel" %}</button>
@@ -51,7 +51,7 @@
 
     <script type="text/template" id="mvcp-form-template">
     <form id="mv-form" action="" method="post" class="file-choose-form">{% csrf_token %}
-        <h3><%= form_title %></h3>
+        <h3 id="dialogTitle"><%= form_title %></h3>
         <div id="mv-dir-list" class="dir-tree-cont">
             <% if (show_cur_repo) { %>
             <h5 class="hd cspt"><span class="icon-caret-down"></span>{% trans "Current Library"%}</h5>
@@ -111,8 +111,8 @@
 
     <script type="text/template" id="repo-decrypt-form-template">
     <form id="repo-decrypt-form" action="" class="alc lib-decrypt-form">
-        <img src="{{MEDIA_URL}}img/lock.png" alt="" />
-        <p class="intro">{% trans "This library is password protected" %}</p>
+        <img src="{{MEDIA_URL}}img/lock.png" alt="" aria-hidden="true" />
+        <p class="intro" id="dialogTitle">{% trans "This library is password protected" %}</p>
         <p class="error hide"></p>
         <input type="password" name="password" class="input" placeholder="{% trans "Password" %}" /><br />
         <button type="submit" class="submit">{% trans "Submit" %}</button>
@@ -122,7 +122,7 @@
 
     <script type="text/template" id="fileupdate-confirm-template">
         <div>
-            <h3><%= title %></h3>
+            <h3 id="dialogTitle"><%= title %></h3>
             <p>{% trans "A file with the same name already exists in this folder." %}<br />{% trans "Replacing it will overwrite its content." %}</p>
             <p class="error hide"></p>
             <button class="yes btn">{% trans "Replace" %}</button>
