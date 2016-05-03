@@ -27,6 +27,11 @@ define([
                     if (options.error) {
                         options.error(xhr);
                     }
+                },
+                complete: function(xhr) {
+                    if (options.complete) {
+                        options.complete(xhr);
+                    }
                 }
             });
         },

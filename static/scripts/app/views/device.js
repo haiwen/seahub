@@ -15,7 +15,7 @@ define([
         template: _.template($('#device-item-tmpl').html()),
 
         events: {
-            'click .unlink-device': 'unlinkDevice'
+            'click .unlink-device': 'unlinkDeviceWithConfirm'
         },
 
         initialize: function() {
@@ -66,8 +66,34 @@ define([
                 }
             });
             return false;
-        }
+        },
 
+        unlinkDeviceWithConfirm: function() {
+            var _this = this,
+                device_name = this.model.get('device_name');
+            var title = gettext('Unlink device');
+            var content = gettext('Are you sure you want to unlink this device?');
+
+            var yesCallback = function () {
+                _this.model.unlink({
+                    success: function() {
+                        _this.remove();
+
+                        var msg = gettext("Successfully unlink %(name)s.")
+                            .replace('%(name)s', Common.HTMLescape(device_name));
+                        Common.feedback(msg, 'success');
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                    },
+                    complete: function() {
+                        $.modal.close();
+                    }
+                });
+                return false;
+            };
+            Common.showConfirm(title, content, yesCallback);
+        }
     });
 
     return DeviceView;
