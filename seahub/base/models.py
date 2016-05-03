@@ -87,7 +87,8 @@ class FileComment(models.Model):
 
     @classmethod
     def md5_repo_id_parent_path(cls, repo_id, parent_path):
-        return hashlib.md5(repo_id + parent_path.rstrip('/')).hexdigest()
+        parent_path = parent_path.rstrip('/') if parent_path != '/' else '/'
+        return hashlib.md5(repo_id + parent_path).hexdigest()
 
     @classmethod
     def normalize_path(self, path):

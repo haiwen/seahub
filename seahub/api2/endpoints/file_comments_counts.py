@@ -1,5 +1,6 @@
 import logging
 
+from django.db.models import Count
 from rest_framework import status
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -39,12 +40,13 @@ class FileCommentsCounts(APIView):
         if not obj_id:
             return api_error(status.HTTP_404_NOT_FOUND, 'Parent dir not found.')
 
-        d = {}
-        for o in FileComment.objects.get_by_parent_path(repo_id, path):
-            d[o.item_name] = d.get(o.item_name, 0) + 1
-
         ret = []
-        for k, v in d.iteritems():
-            ret.append({k: v})
-
+        qs = FileComment.objects.get_by_parent_path(repo_id, path).values(
+            'item_name').annotate(total=Count('item_name'))
+        for e in qs:
+            ret.append({e['item_name']: e['total']})
         return Response(ret)
+'''
+>>> print qs.query
+SELECT "base_filecomment"."item_name", COUNT("base_filecomment"."item_name") AS "total" FROM "base_filecomment" WHERE "base_filecomment"."repo_id_parent_path_md5" = c80beeeb8e48566a394d000f6c8492ac GROUP BY "base_filecomment"."item_name"
+'''
