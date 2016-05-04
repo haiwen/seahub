@@ -2516,7 +2516,7 @@ button.dropdown-toggle:focus {
 .user-perm-add-perm,
 .group-perm-add-perm,
 .perm-toggle-select,
-#folder-perm-tabs .perm-select,
+.folder-perm-select,
 .share-permission-select,
 .user-role-select,
 .user-status-select {
@@ -3056,7 +3056,7 @@ button.dropdown-toggle:focus {
     width:610px; /* for the table in it. */
 }
 #share-popup .share-permission-select,
-#folder-perm-tabs .perm-select {
+.folder-perm-select {
     height:30px;
 }
 #dir-user-share .submit,
