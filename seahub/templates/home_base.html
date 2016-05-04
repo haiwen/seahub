@@ -37,7 +37,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <span id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}"></span>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon enable-mods-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -67,7 +67,7 @@
 {% block main_panel %}
 {% if user.permissions.can_add_repo %}
 <form id="mods-enable-form" method="post" action="{% url 'toggle_modules' %}" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
+    <h3 id="dialogTitle">{% trans "Enable Modules"%}</h3>
     <ul>
     {% for mod in request.user.mods_available %}
       {% if mod == 'personal wiki' %}

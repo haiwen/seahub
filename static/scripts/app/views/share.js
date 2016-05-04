@@ -77,7 +77,9 @@ define([
             'click #cancel-share-download-link': 'cancelShareDownloadLink',
             'click #delete-download-link': 'deleteDownloadLink',
             'click #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
+            'keydown #generate-download-link-form .generate-random-password': 'generateRandomDownloadPassword',
             'click #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
+            'keydown #generate-download-link-form .show-or-hide-password': 'showOrHideDownloadPassword',
 
             // upload link
             'submit #generate-upload-link-form': 'generateUploadLink',
@@ -86,7 +88,9 @@ define([
             'click #cancel-share-upload-link': 'cancelShareUploadLink',
             'click #delete-upload-link': 'deleteUploadLink',
             'click #generate-upload-link-form .generate-random-password': 'generateRandomUploadPassword',
+            'keydown #generate-upload-link-form .generate-random-password': 'generateRandomUploadPassword',
             'click #generate-upload-link-form .show-or-hide-password': 'showOrHideUploadPassword',
+            'keydown #generate-upload-link-form .show-or-hide-password': 'showOrHideUploadPassword',
 
             // dir private share
             'click #add-dir-user-share-item .submit': 'dirUserShare',
@@ -131,7 +135,11 @@ define([
             });
         },
 
-        generateRandomPassword: function(form) {
+        generateRandomPassword: function(e, form) {
+            if (e.type == 'keydown' && e.which != 32) { // enable only Space key
+                return;
+            }
+
             var random_password_length = app.pageOptions.share_link_password_min_length;
             var random_password = '';
             var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz0123456789';
@@ -141,28 +149,35 @@ define([
             $('input[name=password], input[name=password_again]', form).attr('type', 'text').val(random_password);
             $('.show-or-hide-password', form)
             .attr('title', gettext('Hide'))
+            .attr('aria-label', gettext('Hide'))
             .removeClass('icon-eye').addClass('icon-eye-slash');
         },
 
-        generateRandomDownloadPassword: function() {
-            this.generateRandomPassword($('#generate-download-link-form'));
+        generateRandomDownloadPassword: function(e) {
+            this.generateRandomPassword(e, $('#generate-download-link-form'));
         },
 
-        showOrHidePassword: function(form) {
+        showOrHidePassword: function(e, form) {
+            if (e.type == 'keydown' && e.which != 32) { // enable only Space key
+                return;
+            }
+
             var icon = $('.show-or-hide-password', form),
                 passwd_input = $('input[name=password], input[name=password_again]', form);
             icon.toggleClass('icon-eye icon-eye-slash');
             if (icon.hasClass('icon-eye')) {
                 icon.attr('title', gettext('Show'));
+                icon.attr('aria-label', gettext('Show'));
                 passwd_input.attr('type', 'password');
             } else {
                 icon.attr('title', gettext('Hide'));
+                icon.attr('aria-label', gettext('Hide'));
                 passwd_input.attr('type', 'text');
             }
         },
 
-        showOrHideDownloadPassword: function() {
-            this.showOrHidePassword($('#generate-download-link-form'));
+        showOrHideDownloadPassword: function(e) {
+            this.showOrHidePassword(e, $('#generate-download-link-form'));
         },
 
         generateLink: function(options) {
@@ -401,15 +416,15 @@ define([
             });
         },
 
-        generateRandomUploadPassword: function() {
-            this.generateRandomPassword($('#generate-upload-link-form'));
+        generateRandomUploadPassword: function(e) {
+            this.generateRandomPassword(e, $('#generate-upload-link-form'));
         },
 
-        showOrHideUploadPassword: function() {
-            this.showOrHidePassword($('#generate-upload-link-form'));
+        showOrHideUploadPassword: function(e) {
+            this.showOrHidePassword(e, $('#generate-upload-link-form'));
         },
 
-        generateUploadLink: function(e) {
+        generateUploadLink: function() {
             this.generateLink({
                 link_type: 'upload',
                 form: this.$('#generate-upload-link-form'),

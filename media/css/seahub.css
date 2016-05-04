@@ -255,7 +255,8 @@ textarea:focus {
   border-color: #66afe9;
   outline: none;
 }
-input[type="checkbox"]:focus {
+input[type="checkbox"]:focus,
+input[type="radio"]:focus {
     outline:#66afe9 auto 1px;
 }
 input::-webkit-outer-spin-button,
@@ -348,6 +349,7 @@ p { margin:0.5em 0; }
 .fright { float:right }
 .clear { clear:both; }
 .show { display:block }
+.inline-block { display: inline-block; }
 .hide { display:none }
 .error { color:red; }
 .errorlist { color: red; }
@@ -363,7 +365,6 @@ p { margin:0.5em 0; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
 .alc { text-align: center;}
-.inline-block { display: inline-block; }
 .cspt { cursor:pointer; }
 .pos-rel { position:relative; }
 .top-tip {
@@ -439,12 +440,6 @@ p { margin:0.5em 0; }
 .loading-tip {
     display:block;
     margin:1em auto;
-}
-.icon-plus, .icon-minus, .icon-pencil {
-    font-size:16px;
-    line-height:1;
-    color:#444;
-    margin-left:3px;
 }
 .op,
 .more {
@@ -1062,9 +1057,11 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-container label {
     margin:8px 0 4px;
 }
+#simplemodal-container .radio-item,
 #simplemodal-container .checkbox-option {
     font-weight:normal;
 }
+#simplemodal-container .radio-item,
 #simplemodal-container .checkbox-label {
     margin:4px 0;
 }
@@ -1307,12 +1304,12 @@ button.dropdown-toggle:focus {
     width:350px;
     padding:3px 5px;
 }
-.msg-form .submit {
+.msg-submit {
     color:#fff;
     background:#4abb49;
     border:1px solid #5cb25b;
 }
-.msg-form .submit:hover {
+.msg-submit:hover {
     background:#55ab22;
 }
 .no-discussion-tip {
@@ -1387,7 +1384,7 @@ button.dropdown-toggle:focus {
 #organization-repos .hd {
     position:relative;
 }
-#group-top .op-icon {
+.group-top-op-icon {
     display:inline-block;
     font-size:22px;
     margin:4px 15px 0 0;
@@ -1433,7 +1430,7 @@ button.dropdown-toggle:focus {
     text-decoration:none;
     border-bottom-color: #eb8205;
 }
-#right-panel .hd button,
+.btn-white,
 .tabnav button,
 .repo-file-list-topbar .op-btn,
 .wiki-top .op-btn {
@@ -1857,13 +1854,9 @@ button.dropdown-toggle:focus {
 .repo-op .op-btn {
     vertical-align:middle;
 }
-#featured-filetype {
-    margin:5px 0;
-}
-#featured-filetype button {
+.set-file-type {
     padding: 2px;
     line-height: 1.2;
-    border: 1px solid #bbb;
     margin: 2px 0 5px;
 }
 .file-audit-list-topbar .path,
@@ -2523,7 +2516,7 @@ button.dropdown-toggle:focus {
 .user-perm-add-perm,
 .group-perm-add-perm,
 .perm-toggle-select,
-#folder-perm-tabs .perm-select,
+.folder-perm-select,
 .share-permission-select,
 .user-role-select,
 .user-status-select {
@@ -2813,23 +2806,10 @@ button.dropdown-toggle:focus {
 #search-user-form .submit {
     margin-left:3.5em;
 }
-#myhome-enable-mods,
-#enable-mods {
+.enable-mods-icon {
     margin:3px 0 0;
     color:#ccc;
     font-size:18px;
-}
-#edit-index {
-    color:#d7d7d7;
-    margin-top:3px;
-}
-#edit-index:hover {
-    color:#666;
-    cursor:pointer;
-}
-#add-msg .icon-pencil {
-    font-size:1em;
-    margin:0 3px 0 0;
 }
 .help-con {
 	padding:0 0 0 30px;
@@ -2848,23 +2828,28 @@ button.dropdown-toggle:focus {
 .wiki-index h3 {
     color:#333;
 }
+.wiki-index-edit-icon {
+    font-size:16px;
+    color:#d7d7d7;
+    margin:3px 0 0;
+}
 #wiki-index-con {
     padding-left:12px;
 }
 .grp-wiki-index #wiki-index-con {
     padding:0;
 }
-.wiki-index ul {
+#wiki-index-con ul {
     list-style-type: square;
     padding-left: 1.5em;
     margin-bottom:5px;
     color:#8c8c8c;
 }
-.wiki-index a {
+#wiki-index-con a {
     font-weight:normal;
     color:#8c8c8c;
 }
-.wiki-index a:hover {
+#wiki-index-con a:hover {
     color:#f93;
     text-decoration:underline;
 }
@@ -3071,7 +3056,7 @@ button.dropdown-toggle:focus {
     width:610px; /* for the table in it. */
 }
 #share-popup .share-permission-select,
-#folder-perm-tabs .perm-select {
+.folder-perm-select {
     height:30px;
 }
 #dir-user-share .submit,

@@ -77,7 +77,7 @@ define([
                     _this.$error.html(err_msg).show();
                 }
             });
-            $("#group").append(this.$el);
+            $("#group-members-icon").after(this.$el);
         }
 
     });

@@ -1,6 +1,6 @@
 {% load i18n %}
     <div id="file-share" class="hide">
-        <h3 class="hd">{% trans 'Share %(name)s' %}</h3>
+        <h3 class="hd" id="dialogTitle">{% trans 'Share %(name)s' %}</h3>
         <div id="file-share-tabs" class="left-right-tabs ovhd">
             <ul class="left-right-tabs-nav fleft">
                 <li class="tab"><a href="#link-share" class="a">{% trans "Download Link" %}</a></li>
@@ -15,18 +15,18 @@
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div id="link-passwd" class="hide">
-                        <label>{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span><br />
-                        <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-                        <label>{% trans "Password again"%}</label><br />
-                        <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
+                        <label for="passwd">{% trans "Password"%}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span><br />
+                        <input type="password" name="passwd" disabled="disabled" class="input input-disabled" id="passwd" /><br />
+                        <label for="passwd-again">{% trans "Password again"%}</label><br />
+                        <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" id="passwd-again" />
                     </div>
                     <label class="checkbox-label">
                         <input type="checkbox" name="set-expiration" id="link-expire-switch" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                     </label>
                     <div id="link-expire" class="hide">
-                        <label>{% trans "Days" %}</label><br />
-                        <input type="text" name="expire-days" disabled="disabled" class="input input-disabled" />
+                        <label for="expire-days">{% trans "Days" %}</label><br />
+                        <input type="text" id="expire-days" name="expire-days" disabled="disabled" class="input input-disabled" />
                     </div>
                     <p class="error hide"></p>
                 </div>
@@ -37,12 +37,12 @@
                     <button id="rm-shared-link">{% trans 'Delete' %}</button>
 
                     <form id="link-send-form" action="" method="post" class="hide">{% csrf_token %}
-                        <label>{% trans "Send to:"%}</label><br />
+                        <label for="link-send-input">{% trans "Send to:"%}</label><br />
                         <input type="text" class="input" id="link-send-input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
                         <input type="hidden" name="file_shared_link" value="{{ dir_shared_link }}" />
                         <input type="hidden" name="file_shared_name" value="" />
                         <input type="hidden" name="file_shared_type" value="" />
-                        <label>{% trans "Message (optional):"%}</label><br />
+                        <label for="download-extra-msg-text">{% trans "Message (optional):"%}</label><br />
                         <textarea class="textarea" name="extra_msg" id="download-extra-msg-text"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit"%}" class="submit" />

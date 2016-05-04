@@ -11,7 +11,7 @@
 <script type="text/template" id="my-own-repos-tmpl">
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "Mine" %}</h3>
-        <button class="repo-create fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+        <button class="repo-create btn-white fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     </div>
     <table class="my-own-repos-table hide">
         <thead></thead>
@@ -39,11 +39,11 @@
 </script>
 
 <script type="text/template" id="organization-repos-tmpl">
-    <div class="hd">
+    <div class="hd">{# no 'ovhd' as there is a .dropdown-menu in it #}
         <h3 class="fleft">{% trans "Organization" %}</h3>
         {% if can_add_pub_repo %}
         <div class="fright dropdown js-add-pub-lib-dropdown">
-            <button class="dropdown-toggle"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
+            <button class="btn-white dropdown-toggle"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
             <ul class="dropdown-menu hide">
                 <li><a class="op share-existing" href="#">{% trans "Share existing libraries" %}</a></li>
                 <li><a class="op create-new" href="#">{% trans "Create a new library" %}</a></li>
@@ -68,7 +68,7 @@
     <div class="hd ovhd">
         <h3 class="fleft">{% trans "My Groups" %}</h3>
         {% if user.permissions.can_add_group %}
-        <button id="add-group" class="fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
+        <button id="add-group" class="btn-white fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "New Group" %}</span></button>
         {% endif %}
     </div>
 
@@ -86,9 +86,9 @@
 
     {% if user.permissions.can_add_group %}
     <form id="group-add-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "New Group" %}</h3>
-        <label>{% trans "Group Name" %}</label><br />
-        <input name="group_name" value="" class="input" /><br />
+        <h3 id="dialogTitle">{% trans "New Group" %}</h3>
+        <label for="group-name">{% trans "Name" %}</label><br />
+        <input type="text" name="group_name" value="" class="input" id="group-name" /><br />
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans "Submit" %}" />
     </form>
@@ -154,7 +154,7 @@
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
                 <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
-                <button type="submit" class="submit">{% trans "Submit" %}</button>
+                <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
             </div>
         </form>
     </div>

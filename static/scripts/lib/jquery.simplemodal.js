@@ -86,6 +86,8 @@
 	browser.ie7 = browser.msie && /msie 7.0/.test(ua);
 	browser.boxModel = (document.compatMode === "CSS1Compat");
 
+	var focusedBeforeDialog;
+
 	/*
 	 * Create and display a modal dialog.
 	 *
@@ -323,6 +325,7 @@
 			// create the overlay
 			s.d.overlay = $('<div></div>')
 				.attr('id', s.o.overlayId)
+				.attr('tabIndex', -1)
 				.addClass('simplemodal-overlay')
 				.css($.extend(s.o.overlayCss, {
 					display: 'none',
@@ -337,7 +340,7 @@
 				.appendTo(s.o.appendTo);
 
 			// create the container
-			s.d.container = $('<div></div>')
+			s.d.container = $('<div role="dialog" aria-labelledby="dialogTitle" aria-describedby="dialogDiscription"></div>')
 				.attr('id', s.o.containerId)
 				.addClass('simplemodal-container')
 				.css($.extend(
@@ -350,8 +353,7 @@
 					: '')
 				.appendTo(s.o.appendTo);
 
-			s.d.wrap = $('<div></div>')
-				.attr('tabIndex', -1)
+			s.d.wrap = $('<div role="document"></div>')
 				.addClass('simplemodal-wrap')
 				.css({height: '100%', outline: 0, width: '100%'})
 				.appendTo(s.d.container);
@@ -649,6 +651,7 @@
 				s.d.data.show();
 			}
 
+			focusedBeforeDialog = document.activeElement;
 			s.o.focus && s.focus();
 
 			// bind default events
@@ -670,6 +673,8 @@
 			if (!s.d.data) {
 				return false;
 			}
+
+			focusedBeforeDialog && focusedBeforeDialog.focus();
 
 			// remove the default events
 			s.unbindEvents();
