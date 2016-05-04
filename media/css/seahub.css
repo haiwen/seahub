@@ -675,6 +675,7 @@ textarea:-moz-placeholder {/* for FF */
         background: #f8f8f8;
         width:300px;
         position:fixed;
+        left:-300px;
         top:0;
         bottom:0;
         z-index:1;
@@ -683,6 +684,11 @@ textarea:-moz-placeholder {/* for FF */
         overflow-y:auto;
         border-right:1px solid #eee;
     }
+}
+.side-tabnav {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
 }
 .side-tabnav .hd {
     margin-bottom:0.5em;

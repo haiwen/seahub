@@ -28,13 +28,16 @@ define([
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
-            if ($(window).width() >= 768) {
-                this.$el.show();
-            }
+            this.$el.show();
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
                 _this.show();
                 return false;
+            });
+            $(window).resize(function() {
+                if ($(window).width() >= 768) {
+                    _this.show();
+                }
             });
         },
 
@@ -151,11 +154,15 @@ define([
         },
 
         show: function() {
-            this.$el.show();
+            this.$el.css({ 'left':'0px' });
+        },
+
+        hide: function() {
+            this.$el.css({ 'left':'-300px' });
         },
 
         closeNav: function() {
-            this.$el.hide();
+            this.hide();
             return false;
         },
 
@@ -163,7 +170,7 @@ define([
             if ($(window).width() < 768) {
                 if ($(event.target).attr('href') !== "#") {
                     // except for groups toggle link
-                    this.$el.hide();
+                    this.hide();
                 }
             }
             return true;
