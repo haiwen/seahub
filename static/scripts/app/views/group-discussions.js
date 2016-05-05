@@ -4,20 +4,17 @@ define([
     'backbone',
     'common',
     'app/collections/group-discussions',
-    'app/views/group-discussion',
-    'app/views/widgets/popover'
-], function($, _, Backbone, Common, GroupDiscussions, ItemView, PopoverView) {
+    'app/views/group-discussion'
+], function($, _, Backbone, Common, GroupDiscussions, ItemView) {
     'use strict';
 
-    var View = PopoverView.extend({
+    var View = Backbone.View.extend({
         id: 'group-discussions',
-        className: 'sf-popover',
+        className: 'right-side-panel',
 
         template:  _.template($('#group-discussions-tmpl').html()),
 
         initialize: function(options) {
-            PopoverView.prototype.initialize.call(this);
-
             this.groupView = options.groupView;
 
             this.collection = new GroupDiscussions();
@@ -25,9 +22,25 @@ define([
             this.listenTo(this.collection, 'reset', this.reset);
 
             this.render();
+            $("#main").append(this.$el);
+
+            app.ui.groupDiscussions = this;
+
+            var _this = this;
+            $(document).keydown(function(e) {
+                // ESCAPE key pressed
+                if (e.keyCode == 27) {
+                    _this.hide();
+                }
+            });
+
+            $(window).resize(function() {
+                _this.setConMaxHeight();
+            });
         },
 
         events: {
+            'click .js-close': 'close',
             'click .js-load-more': 'loadMore',
             'submit form': 'formSubmit'
         },
@@ -115,26 +128,39 @@ define([
                 }
             });
 
-            $("#group").append(this.$el);
+
             this.$(".msg-input").focus();
             app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },
 
         // set max-height for '.sf-popover-con'
         setConMaxHeight: function() {
-            this.$('.sf-popover-con').css({
-                'max-height': $(window).height() - this.$el.offset().top
-                    - this.$('.sf-popover-hd').outerHeight(true)
-                    - this.$('.sf-popover-footer').outerHeight(true)
-                    - 2 // 2: top, bottom border width of $el,
-                    - 10 // 10: leave some margin at the bottom
+            this.$('.group-discussions-con').css({
+                'height': $(window).height() - this.$el.offset().top
+                    - this.$('.group-discussions-hd').outerHeight(true)
+                    - this.$('.group-discussions-footer').outerHeight(true)
             });
         },
 
         hide: function() {
-            PopoverView.prototype.hide.call(this);
+            $(".right-side-panel").css({'right': '-400px'});
+        },
+
+        close: function() {
             app.router.navigate('group/' + this.groupView.group.id + '/');
+            this.hide();
             return false;
+        },
+
+        toggle: function() {
+            this.show();
+            return false;
+        },
+
+        show: function() {
+            this.showContent();
+            $(".right-side-panel").css({'right': '0px'});
+            this.setConMaxHeight();
         },
 
         replyTo: function(to_user) {
@@ -164,7 +190,7 @@ define([
                         sumHeight += $(this).outerHeight(true);
                     });
                     // scroll
-                    _this.$('.sf-popover-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
+                    _this.$('.group-discussions-con').scrollTop(sumHeight - 50); // 50: keep at least 50px gap from the top
                 },
                 error: function(collection, response, opts) {
                     var err_msg;
@@ -227,9 +253,9 @@ define([
             return false;
         },
 
-        // scroll '.sf-popover-con' to the bottom
+        // scroll to the bottom
         scrollConToBottom: function() {
-            var $el = this.$('.sf-popover-con');
+            var $el = this.$('.group-discussions-con');
             $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
         }
 

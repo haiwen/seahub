@@ -800,6 +800,34 @@ textarea:-moz-placeholder {/* for FF */
 .checkbox-label {
     display:block;
 }
+/**** right side panel ****/
+.right-side-panel {
+    background:#f8f8f8;
+    width:400px;
+    position:fixed;
+    right:-400px;
+    top:0;
+    bottom:0;
+    z-index:1;
+    overflow-x:hidden;
+    border-left:1px solid #c9c9c9;
+    box-shadow:0 0 4px #ccc;
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+}
+.right-side-panel-hd {
+    padding:10px;
+    border-bottom: 1px solid #c9c9c9;
+}
+.right-side-panel-footer {
+    position:absolute;
+    bottom:0;
+}
+.right-side-panel-con {
+    overflow-y: auto;
+    background: #fff;
+}
 /**** messages ****/
 .messages {
     position:fixed;
@@ -1288,7 +1316,7 @@ button.sf-dropdown-toggle:focus {
 }
 /**** discussions/comments ****/
 .msg {
-    padding:10px;
+    padding:5px 10px;
 }
 .msg-body {
     margin-left:44px;
@@ -1313,8 +1341,9 @@ button.sf-dropdown-toggle:focus {
     border-top: 1px solid #c9c9c9;
 }
 .msg-input {
-    width:362px;
+    width:336px;
     padding:3px 5px;
+    height:60px;
 }
 .msg-form .submit {
     color:#fff;
@@ -1330,6 +1359,7 @@ button.sf-dropdown-toggle:focus {
 }
 .load-more-discussion {
     color:#eb8205;
+    margin-top:1rem;
     cursor:pointer;
     text-align:center;
 }
@@ -3329,7 +3359,7 @@ img.thumbnail {
 #group {
     position:relative;
 }
-#group-members, #group-settings, #group-discussions {
+#group-members, #group-settings {
     position:absolute;
     top:90px;
     right:0;
@@ -3346,14 +3376,8 @@ img.thumbnail {
 #add-group-members-form .submit {
     margin:0 0 0 5px;
 }
-#group-discussions {
-    width:440px;
-}
-#group-discussions .outer-caret {
-    right:30px;
-}
-#group-discussions .sf-popover-con {
-    padding:0 0;
+.group-discussions-con .msg:first-child {
+    margin-top:0.5rem;
 }
 /****** grid view *****/
 /* view mode */
