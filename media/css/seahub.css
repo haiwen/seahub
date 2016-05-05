@@ -683,6 +683,7 @@ textarea:-moz-placeholder {/* for FF */
         overflow-x:hidden;
         overflow-y:auto;
         border-right:1px solid #eee;
+        box-shadow:0 0 4px #ccc;
     }
 }
 .side-tabnav {
@@ -742,6 +743,15 @@ textarea:-moz-placeholder {/* for FF */
     font-size:24px;
     line-height:1;
     color:#999;
+}
+.side-nav-toggle {
+    background:#fff;
+    font-size:1rem;
+    padding:6px 8px;
+    color:#666;
+}
+.side-nav-toggle:hover {
+    background:#ddd;
 }
 #group-nav .sharp {
     display:inline-block;
