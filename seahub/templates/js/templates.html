@@ -160,7 +160,7 @@
         <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a> /
         <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a> /
     <% } else if (context == 'org') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a> /
     <% } else if (context == 'common') { %>
         <a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a> /
     <% } else { %>
@@ -618,7 +618,7 @@
 
         {% if user.permissions.can_view_org %}
         <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" %}</a>
+            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a>
         </li>
         {% endif %}
 
