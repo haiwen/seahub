@@ -33,7 +33,6 @@ define([
             if (item.get('email') === this.groupView.group.owner) {
                 is_owner = true;
             }
-            console.log(this.groupView.group.owner + " " + is_owner);
             var view = new ItemView({
                 is_owner: is_owner,
                 model: item
