@@ -160,7 +160,7 @@ define([
                 if (!email) {
                     return false;
                 }
-                if (email == _this.group.owner) {
+                if (email == _this.groupView.group.owner) {
                     return false;
                 }
 
