@@ -160,7 +160,7 @@ define([
                 if (!email) {
                     return false;
                 }
-                if (email == _this.group.owner) {
+                if (email == _this.groupView.group.owner) {
                     return false;
                 }
 
@@ -179,6 +179,7 @@ define([
                     },
                     success: function() {
                         // after the transfer, the former owner becomes a common admin of the group.
+                        Common.feedback(gettext("Successfully transferred the group. You are now a normal member of the group."), 'success');
                         $.modal.close();
                     },
                     error: function(xhr) {

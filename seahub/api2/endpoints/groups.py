@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
 
 from seahub.api2.utils import api_error
@@ -256,12 +256,13 @@ class Group(APIView):
 
                 # transfer a group
                 if not is_group_member(group_id, new_owner):
-                    seaserv.ccnet_threaded_rpc.group_add_member(group_id, username, new_owner)
+                    ccnet_api.group_add_member(group_id, username, new_owner)
 
                 if not is_group_admin(group_id, new_owner):
-                    seaserv.ccnet_threaded_rpc.group_set_admin(group_id, new_owner)
+                    ccnet_api.group_set_admin(group_id, new_owner)
 
-                seaserv.ccnet_threaded_rpc.set_group_creator(group_id, new_owner)
+                ccnet_api.set_group_creator(group_id, new_owner)
+                ccnet_api.group_unset_admin(group_id, username)
 
             except SearpcError as e:
                 logger.error(e)
