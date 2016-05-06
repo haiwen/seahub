@@ -29,7 +29,13 @@ define([
         },
 
         addOne: function(item, collection, options) {
+            var is_owner = false;
+            if (item.get('email') === this.groupView.group.owner) {
+                is_owner = true;
+            }
+            console.log(this.groupView.group.owner + " " + is_owner);
             var view = new ItemView({
+                is_owner: is_owner,
                 model: item
             });
             this.$listContainer.append(view.render().el);

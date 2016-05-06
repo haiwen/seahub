@@ -18,11 +18,16 @@ define([
             'click': 'visitMemberProfile'
         },
 
-        initialize: function() {
+        initialize: function(options) {
+            this.is_owner = options.is_owner;
         },
 
         render: function() {
-            this.$el.html(this.template(this.model.attributes));
+            var obj = {
+                is_owner: this.is_owner,
+            };
+            $.extend(obj, this.model.attributes);
+            this.$el.html(this.template(obj));
             return this;
         },
 

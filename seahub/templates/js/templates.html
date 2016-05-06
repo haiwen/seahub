@@ -986,7 +986,13 @@
 <script type="text/template" id="group-member-tmpl">
     <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="txt">
-        <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
+        <p class="txt-item ellipsis" title="<%- name %>"><%- name %>
+            <% if (is_owner) { %>
+                <span class="group-admin-txt">{% trans "owner" %}</span>
+            <% } else if (is_admin) { %>
+                <span class="group-admin-txt">{% trans "admin" %}</span>
+            <% } %>
+        </p>
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>

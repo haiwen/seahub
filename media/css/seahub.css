@@ -3346,6 +3346,10 @@ img.thumbnail {
 #group-discussions .popover-con {
     padding:0 0;
 }
+.group-admin-txt {
+    font-size:12px;
+    color:#888;
+}
 /****** grid view *****/
 /* view mode */
 .switch-mode {
