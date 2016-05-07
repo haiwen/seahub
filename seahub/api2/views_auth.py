@@ -1,9 +1,9 @@
 from rest_framework import status
-from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
 from seaserv import seafile_api
 from seahub import settings
+from seahub.api2.base import APIView
 from seahub.api2.throttling import AnonRateThrottle, UserRateThrottle
 from seahub.api2.utils import json_response, api_error
 from seahub.api2.authentication import TokenAuthentication

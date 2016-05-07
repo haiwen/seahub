@@ -16,7 +16,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.reverse import reverse
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from django.contrib.auth.hashers import check_password
 from django.contrib.sites.models import RequestSite
@@ -40,6 +39,7 @@ from .utils import get_diff_details, \
     api_repo_user_folder_perm_check, api_repo_setting_permission_check, \
     api_repo_group_folder_perm_check
 
+from seahub.api2.base import APIView
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -1914,6 +1914,7 @@ class DevicesView(APIView):
 
         platform = request.data.get('platform', '')
         device_id = request.data.get('device_id', '')
+        remote_wipe = request.data.get('wipe_device', '')
 
         if not platform:
             error_msg = 'platform invalid.'
@@ -1924,7 +1925,10 @@ class DevicesView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            do_unlink_device(request.user.username, platform, device_id)
+            do_unlink_device(request.user.username,
+                             platform,
+                             device_id,
+                             remote_wipe=remote_wipe)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
@@ -4534,3 +4538,20 @@ class RepoGroupFolderPerm(APIView):
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+class RemoteWipeReportView(APIView):
+    throttle_classes = (UserRateThrottle,)
+
+    @json_response
+    def post(self, request):
+        from seahub.api2.models import WipedDevice
+        token = request.POST.get('token', '')
+        if not token or len(token) != 40:
+            return api_error(status.HTTP_400_BAD_REQUEST, "device token is missing")
+        try:
+            entry = WipedDevice.objects.get(key=token)
+            entry.delete()
+        except WipedDevice.DoesNotExist:
+            return api_error(status.HTTP_400_BAD_REQUEST, "invalid device token")
+
+        return {}

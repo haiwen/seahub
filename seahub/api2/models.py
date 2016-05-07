@@ -1,7 +1,8 @@
 import uuid
 import hmac
+import datetime
 from hashlib import sha1
-from django.db import models
+from django.db import models, transaction
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -96,11 +97,19 @@ class TokenV2Manager(models.Manager):
                         last_login_ip=last_login_ip)
         token.save()
         return token
-        
+
 
     def delete_device_token(self, username, platform, device_id):
         super(TokenV2Manager, self).filter(user=username, platform=platform, device_id=device_id).delete()
 
+    def mark_device_to_be_remote_wiped(self, username, platform, device_id):
+        token = self._get_token_by_user_device(username, platform, device_id)
+        if not token:
+            return
+        with transaction.atomic():
+            wiped_device = WipedDevice(key=token.key)
+            wiped_device.save()
+            token.delete()
 
 class TokenV2(models.Model):
     """
@@ -162,3 +171,8 @@ class TokenV2(models.Model):
                     platform_version=self.platform_version,
                     last_accessed=self.last_accessed,
                     last_login_ip=self.last_login_ip)
+
+class WipedDevice(models.Model):
+    key = models.CharField(max_length=40, primary_key=True)
+
+    wiped_at = models.DateTimeField(auto_now=True)

@@ -11,6 +11,9 @@ define([
                 'platform': this.get('platform'),
                 'device_id': this.get('device_id')
             };
+            if (options.wipe_device) {
+                data['wipe_device'] = 'true';
+            }
 
             $.ajax({
                 url: Common.getUrl({name: 'devices'}),

@@ -7,7 +7,7 @@ from rest_framework.exceptions import APIException
 import seaserv
 from seahub.base.accounts import User
 from seahub.constants import GUEST_USER
-from seahub.api2.models import Token, TokenV2
+from seahub.api2.models import Token, TokenV2, WipedDevice
 from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
 try:
@@ -28,6 +28,8 @@ class AuthenticationFailed(APIException):
     def __init__(self, detail=None):
         self.detail = detail or self.default_detail
 
+class DeviceRemoteWipedException(AuthenticationFailed):
+    pass
 
 class TokenAuthentication(BaseAuthentication):
     """
@@ -98,7 +100,15 @@ class TokenAuthentication(BaseAuthentication):
         try:
             token = TokenV2.objects.get(key=key)
         except TokenV2.DoesNotExist:
-            return None         # Continue authentication in token v1
+            try:
+                token = WipedDevice.objects.get(key=key)
+            except WipedDevice.DoesNotExist:
+                pass
+            else:
+                raise DeviceRemoteWipedException('Device set to be remote wiped')
+
+            # Continue authentication in token v1
+            return None
 
         try:
             user = User.objects.get(email=token.user)
