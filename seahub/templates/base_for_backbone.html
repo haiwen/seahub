@@ -75,15 +75,15 @@
         </div>
 
         <div id="main" class="clear container-fluid top-padding">
-            <div class="row">
-                <div class="side-tabnav col-md-3 hide" id="side-nav" role="navigation"></div>
+            <div class="row main-content hide">
+                <div class="side-tabnav col-md-3" id="side-nav" role="navigation"></div>
                 <div id="right-panel" class="col-md-9 col-md-offset-3">
                     {% block right_panel %}{% endblock %}
                 </div>
-                <div id="main-panel" class="clear w100 ovhd">
-                    <div id="initial-loading-view">
-                        <span class="loading-icon loading-tip"></span>
-                    </div>
+            </div>
+            <div class="row initial-loading">
+                <div id="initial-loading-view" class="clear w100 ovhd">
+                    <span class="loading-icon loading-tip"></span>
                 </div>
             </div>
 
@@ -108,7 +108,7 @@
         </div>
 
         {% include 'js/templates.html' %}
-</div><!-- wrapper -->
+    </div><!-- wrapper -->
 
 <script type="text/javascript">
 var app = {

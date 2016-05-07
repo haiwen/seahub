@@ -606,6 +606,7 @@
 </script>
 
 <script type="text/template" id="side-nav-tmpl">
+    <div class="side-nav-con">
     <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
     <h3 class="hd">{% trans "Files" %}</h3>
     <ul class="side-tabnav-tabs">
@@ -704,6 +705,10 @@
             <a href="{{ SITE_ROOT }}share/links/"><span aria-hidden="true" class="sf2-icon-link"></span>{% trans "Links" %}</a>
         </li>
     </ul>
+    </div>
+    <div class="side-nav-footer ovhd" role="contentinfo">
+        {% include 'nav_footer.html' %}
+    </div>
 </script>
 
 <script type="text/template" id="myhome-mods-enable-form-tmpl">

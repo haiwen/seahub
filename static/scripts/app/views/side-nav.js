@@ -28,7 +28,6 @@ define([
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
-            this.$el.show();
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
                 _this.show();

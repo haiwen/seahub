@@ -43,7 +43,8 @@ define([
         },
 
         initialize: function() {
-            $('#initial-loading-view').hide();
+            $('.initial-loading').hide();
+            $('.main-content').show();
 
             Common.prepareApiCsrf();
             Common.initLocale();
