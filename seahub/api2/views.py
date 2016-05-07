@@ -3425,9 +3425,12 @@ class EventsView(APIView):
                 time_diff = local - epoch
                 d['time'] = time_diff.seconds + (time_diff.days * 24 * 3600)
 
+            size = request.GET.get('size', 36)
+            url, is_default, date_uploaded = api_avatar_url(d['author'], size)
             d['nick'] = email2nickname(d['author'])
             d['name'] = email2nickname(d['author'])
-            d['avatar'] = avatar(d['author'], 36)
+            d['avatar'] = avatar(d['author'], size)
+            d['avatar_url'] = request.build_absolute_uri(url)
             d['time_relative'] = translate_seahub_time(utc_to_local(e.timestamp))
             d['date'] = utc_to_local(e.timestamp).strftime("%Y-%m-%d")
 
