@@ -727,9 +727,6 @@ textarea:-moz-placeholder {/* for FF */
         box-shadow:0 0 4px #ccc;
     }
 }
-.side-tabnav:hover {
-    overflow-y:auto;
-}
 .side-tabnav {
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
@@ -738,8 +735,12 @@ textarea:-moz-placeholder {/* for FF */
     flex-direction: column;
 }
 .side-nav-con {
-    overflow-y:auto;
+    overflow:hidden;
     padding:20px;
+    flex-grow: 1;
+}
+.side-nav-con:hover {
+    overflow-y:auto;
 }
 .side-nav-footer {
     padding: 12px 20px 16px;
@@ -749,6 +750,7 @@ textarea:-moz-placeholder {/* for FF */
 .side-nav-footer a {
     color:#333;
     font-weight: normal;
+    margin-right:0.25rem;
 }
 .side-tabnav .hd {
     margin-bottom:0.5em;
@@ -3555,4 +3557,8 @@ img.thumbnail {
 }
 #link-audit-form .get-code-btn {
     margin-bottom:20px;
+}
+/* about dialog */
+.about-content {
+    width: 300px;
 }

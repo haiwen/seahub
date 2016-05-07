@@ -49,7 +49,8 @@ define([
             'click #group-nav a:first': 'toggleGroupList',
             'click #enable-mods': 'enableMods',
             'click .js-close-side-nav': 'closeNav',
-            'click li > a': 'visitLink'
+            'click li > a': 'visitLink',
+            'click .js-about': 'showAbout'
         },
 
         toggleGroupList: function() {
@@ -174,6 +175,12 @@ define([
             }
             return true;
         },
+
+        showAbout: function() {
+            var $about = this.$('.about-content');
+            $about.modal();
+            return false;
+        }
 
     });
 
