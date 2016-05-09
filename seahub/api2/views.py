@@ -3965,11 +3965,6 @@ class RepoHistoryChange(APIView):
         if not check_folder_permission(request, repo_id, '/'):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-            return HttpResponse(json.dumps({"err": 'Library is encrypted'}),
-                                status=400,
-                                content_type=json_content_type)
-
         commit_id = request.GET.get('commit_id', '')
         if not commit_id:
             return HttpResponse(json.dumps({"err": 'Invalid argument'}),
