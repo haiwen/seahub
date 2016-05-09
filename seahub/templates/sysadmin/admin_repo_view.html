@@ -114,17 +114,17 @@
         <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
         <div class="ops">
             <img src="{{MEDIA_URL}}img/minus.png" alt="" class="fold-switch cspt" />
-            <img src="{{MEDIA_URL}}img/close.png" alt="close" title="{% trans "close" %}" class="close cspt hide" />
+            <img src="{{MEDIA_URL}}img/close.png" alt="" title="{% trans "close" %}" class="sf-close cspt hide" />
         </div>
         <div class="con">
-            <div class="row fileupload-buttonbar">
+            <div class="fileupload-buttonbar">
                 <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
             </div>
             <p class="saving-tip alc clear hide">
                 <span class="loading-icon vam"></span>
                 <span class="vam">{% trans "Saving..." %}</span>
             </p>
-            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+            <table class="fileupload-table"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </div>
     </div>
     {% endif %}
@@ -156,7 +156,7 @@ $(function() {
         var fu_status = $('.status', popup),
             total_progress = $('.total-progress', popup),
             cancel_all_btn = $('.fileupload-buttonbar .cancel', popup),
-            close_icon = $('.close', popup),
+            close_icon = $('.sf-close', popup),
             saving_tip = $('.saving-tip', popup);
 
         var fu_status_ = {
@@ -265,7 +265,7 @@ $('#upload-file button').click(function() {
 $('#upload-file-dialog .fold-switch').click(function() {
     var popup = $('#upload-file-dialog');
     var full_ht = parseInt(popup.data('height'));
-    var main_con = $('.fileupload-buttonbar, .table', popup);
+    var main_con = $('.fileupload-buttonbar, table', popup);
     if (popup.height() == full_ht) {
         popup.height($('.hd', popup).outerHeight(true));
         main_con.addClass('hide');
@@ -275,7 +275,7 @@ $('#upload-file-dialog .fold-switch').click(function() {
     }
 });
 
-$('#upload-file-dialog .close').click(function() {
+$('#upload-file-dialog .sf-close').click(function() {
     $('#upload-file-dialog').addClass('hide');
     $('#upload-file-dialog .files').empty();
 });

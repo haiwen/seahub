@@ -1,4 +1,12 @@
 /**
+ * depends on bootstrap
+ *
+ * html { box-sizing: border-box; }
+ * body { background: #fff; }
+ * p { margin-top:0; margin-bottom:1rem; }
+ *
+ **/
+/**
  * CONTENTS
  *
  * Font Icons
@@ -158,15 +166,17 @@ body, input, textarea, button, select {
     word-wrap:break-word; /* for en */
 }
 input, button, select { line-height:19px;/*for ff*/ }
+h1, h2, h3, h4, h5, h6 {
+    line-height:1.5; /* overwrite bootstrap */
+}
 h1 { font-size:1.9em; }
-h2 { font-size:1.5em; color:#222;}
+h2 { font-size:1.5em; color:#222; font-weight:bold; }
 h3 { font-size:16px; color:#322; font-weight:normal;  }
 h4 { font-size:1.1em; color:#222; font-weight:normal; }
-h5, h6 { font-size:1em; margin:0.4em 0 0.15em; }
-h1, h2, h3, h4 { line-height: 1.5; }
+h5, h6 { font-size:1em; }
 ul { list-style:none; }
 dl { margin:1.5em 0; }
-dt { color:#666; margin:24px 0 2px; font-weight: normal; }
+dt { color:#666; margin:24px 0 2px; font-weight:normal; }
 dd { margin-bottom:.8em; color:#222; }
 a {
     color:#eb8205;
@@ -204,7 +214,8 @@ input {
 input, button { display:inline-block;/*for ie*/ }
 input[type=text],
 input[type=password] {
-    height:26px;
+    box-sizing:content-box;
+    height:22px;
 }
 button,
 input[type=submit],
@@ -301,6 +312,36 @@ th { text-align:left; font-weight:normal; color:#9c9c9c; }
 td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
 td { color: #333; font-size:14px; }
 table img { vertical-align:middle; }
+/* custom scrollbar */
+::-webkit-scrollbar {
+    height: 9px;
+    width: 9px;
+}
+::-webkit-scrollbar-button {
+    display: block;
+    height: 4px;
+}
+::-webkit-scrollbar-track-piece {
+    background: #e9e9eb;
+}
+::-webkit-scrollbar-track-piece:vertical:start {
+    border-radius:5px 5px 0 0;
+}
+::-webkit-scrollbar-track-piece:vertical:end {
+    border-radius:0 0 5px 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:start {
+    border-radius:5px 0 0 5px;
+}
+::-webkit-scrollbar-track-piece:horizontal:end {
+    border-radius:0 5px 5px 0;
+}
+::-webkit-scrollbar-thumb:vertical,
+::-webkit-scrollbar-thumb:horizontal {
+    background: #ccc;
+    border-radius: 5px;
+    display: block;
+}
 /**** overwrite bootstrap css ****/
 .breadcrumb {
     padding:0;
@@ -1121,9 +1162,6 @@ textarea:-moz-placeholder {/* for FF */
 #confirm-popup {
     min-width:255px;
 }
-#confirm-popup .btn {
-    margin-top:.8em;
-}
 /**** ui-autocomplete *****/
 .ui-autocomplete {
     padding:2px;
@@ -1142,7 +1180,11 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:4px;
     zoom:1;
 }
-.ui-menu .ui-menu-item a.ui-state-hover { border-color:#fbcb09; background: #fdf5ce; color: #c77405; }
+.ui-menu .ui-menu-item a.ui-state-hover { 
+    border-color:#fbcb09;
+    background: #fdf5ce;
+    color: #c77405;
+}
 /**** article ****/
 .article {
     padding:40px 200px 40px 60px;
@@ -1170,10 +1212,10 @@ textarea:-moz-placeholder {/* for FF */
 }
 .article ul {
     list-style-type:disc;
-    padding-left:2em;
 }
 .article ul,
 .article ol {
+    padding-left:2em;
     margin:0.5em 0;
 }
 .article code {
@@ -1258,7 +1300,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .sf-popover-title {
     text-align:center;
-    margin:0;
 }
 .sf-popover-close {
     font-size:16px;
@@ -1559,7 +1600,6 @@ button.sf-dropdown-toggle:focus {
 }
 #notice-popover .brief {
     margin-left:40px;
-    margin-top:0;
 }
 #notice-popover .time {
     color:#999;
@@ -1567,7 +1607,10 @@ button.sf-dropdown-toggle:focus {
     margin:0;
     clear:both;
 }
-#notice-popover .all {
+#notice-popover .view-all {
+    display:block;
+    padding:7px 0;
+    text-align:center;
     color:#a4a4a4;
 }
 #account {
@@ -2134,7 +2177,7 @@ button.sf-dropdown-toggle:focus {
     color: #b8b8b8;
     margin:0;
 }
-.fixed-upload-file-dialog .close,
+.fixed-upload-file-dialog .sf-close,
 .fileupload-buttonbar .cancel {
     *margin-left:5px;
 }
@@ -2161,11 +2204,11 @@ button.sf-dropdown-toggle:focus {
     filter: alpha(opacity=0);
     cursor: pointer;
 }
-.table {
+.fileupload-table {
     margin-bottom:0;
 }
-.table .name,
-.table .error {
+.fileupload-table .name,
+.fileupload-table .error {
     padding-left:7px;
     margin:0;
 }
