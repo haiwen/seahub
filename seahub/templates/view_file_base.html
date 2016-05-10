@@ -68,7 +68,7 @@
             {% endif %}
 
             {% if file_perm == 'rw' %}
-            <a class="btn-link" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</a>
+            <a class="sf-btn-link" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</a>
             {% endif %}
 
             {% if request.user.is_authenticated and can_edit_file %}
@@ -76,7 +76,7 @@
                 {% endblock %}
             {% endif %}
 
-            <a class="btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
+            <a class="sf-btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
         </div>
 
         <div id="file-view">
@@ -110,7 +110,7 @@
 // download
 $(function() {
     var dld_url = $('#download').attr('href');
-    $('#file-view-tip').append('<a href="' + dld_url + '" class="btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
+    $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
 
 // share link

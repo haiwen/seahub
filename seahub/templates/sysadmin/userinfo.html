@@ -54,7 +54,7 @@
             {% endif %}
 
             <dt>{% trans "Space Used" %}</dt>
-            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}  <a href="#" class="btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
+            <dd>{{ space_usage|seahub_filesizeformat }} {% if space_quota > 0 %} / {{ space_quota|seahub_filesizeformat }} {% endif %}  <a href="#" class="sf-btn-link" style="margin-left:20px;" id="set-quota">{% trans "Set Quota" %}</a></dd>
         </dl>
 
         <form id="set-quota-form" method="post" class="hide">{% csrf_token %}

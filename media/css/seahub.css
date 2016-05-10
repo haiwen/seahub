@@ -221,7 +221,7 @@ button,
 input[type=submit],
 input[type=button],
 input.submit,
-.btn-link,
+.sf-btn-link,
 .fileinput-button,
 select {
     padding:5px 6px;
@@ -231,7 +231,7 @@ select {
     border: 1px solid #c5c5c5;
     border-radius: 2px;
 }
-.btn-link {
+.sf-btn-link {
     display:inline-block;
     color:#333;
     line-height:19px;
@@ -244,7 +244,7 @@ select {
     padding:6px 20px;
     border-radius:3px;
 }
-.btn-link:hover {
+.sf-btn-link:hover {
     color:#333;
     text-decoration:none;
 }
@@ -280,7 +280,7 @@ input[type=submit]:hover,
 input[type=reset]:hover,
 input[type=button]:hover,
 button:hover,
-.btn-link:hover,
+.sf-btn-link:hover,
 .fileinput-button:hover {
     cursor:pointer;
     background:#fff;
@@ -2467,7 +2467,7 @@ button.sf-dropdown-toggle:focus {
     border:1px solid #ccc;
 }
 #file-op button,
-#file-op .btn-link {
+#file-op .sf-btn-link {
     padding:2px 8px;
 }
 #file-enc-cont {
