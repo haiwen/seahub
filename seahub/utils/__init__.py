@@ -131,7 +131,7 @@ def render_permission_error(request, msg=None, extra_ctx=None):
         for k in extra_ctx:
             ctx[k] = extra_ctx[k]
 
-    return render_to_response('permission_error.html', ctx,
+    return render_to_response('error.html', ctx,
                               context_instance=RequestContext(request))
 
 def render_error(request, msg=None, extra_ctx=None):

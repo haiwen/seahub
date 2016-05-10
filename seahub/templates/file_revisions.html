@@ -1,10 +1,10 @@
-{% extends base_template %}
+{% extends 'base_wide_page.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
-{% block main_panel %}
+{% block wide_page_content %}
 <h2>{% blocktrans %}<span class="op-target">{{ u_filename }}</span> Version History{% endblocktrans %}</h2>
 <p class="tip">{% trans "Tip: a new version will be generated after each modification, and you can restore the file to a previous version." %}</p>
         <div class="commit-list-topbar ovhd">

@@ -41,7 +41,7 @@ class ViewLibFileTest(BaseTestCase):
 
         resp = self.client.get(url)
         self.assertEqual(200, resp.status_code)
-        self.assertTemplateUsed(resp, 'permission_error.html')
+        self.assertTemplateUsed(resp, 'error.html')
 
     def test_invalid_file_extension(self):
         self.login_as(self.user)

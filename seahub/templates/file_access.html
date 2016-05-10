@@ -1,10 +1,10 @@
-{% extends base_template %}
+{% extends 'base_wide_page.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block sub_title %}{% trans "Access Log" %} - {% endblock %}
 
-{% block main_panel %}
+{% block wide_page_content %}
 <h2 class="file-access-hd"><span class="op-target">{{ filename }}</span> {% trans "Access Log" %}</h2>
         <div class="file-audit-list-topbar">
             <p class="path">

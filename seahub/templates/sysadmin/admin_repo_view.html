@@ -1,19 +1,10 @@
-{% extends "myhome_base.html" %}
+{% extends "sysadmin/base.html" %}
 
 {% load seahub_tags avatar_tags i18n upload_tags %}
 
 {% block sub_title %}{{repo.name}} - {% endblock %}
-{% block extra_style %}
-<style type="text/css">
-#footer { display:none; }
-</style>
-{% endblock %}
 
-{% block main_panel %}
-    <div id="repo-top">
-        <h2 class="hd">{{repo.props.name}}</h2>
-    </div>
-
+{% block right_panel %}
     <div id="repo-file-list">
         <div class="repo-file-list-topbar">
             <p class="path fleft">

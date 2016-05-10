@@ -1,4 +1,4 @@
-{% extends base_template %}
+{% extends 'base.html' %}
 {% load seahub_tags i18n %}
 {% load url from future %}
 {% block sub_title %}{{u_filename}} - {% endblock %}
@@ -83,6 +83,8 @@
 }
 </style>
 {% endblock %}
+
+{% block main_css_class %}{% endblock %}
 
 {% block main_panel %}
     <div id="path-op" class="ovhd">

@@ -4,10 +4,11 @@
 {% block main_content %}
 <div class="row">
     <div id="side-nav" class="side-tabnav col-md-3" >
+        {% block left_panel %}
         <h3 class="hd">{% trans "Files" %}</h3>
         <ul class="side-tabnav-tabs">
             {% if user.permissions.can_add_repo %}
-            <li class="tab {% block cur_my_lib %}{% endblock %}"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
             {% endif %}
             <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
             {% if user.permissions.can_view_org %}
@@ -36,16 +37,16 @@
             {% endif %}
         </div>
         <ul class="side-tabnav-tabs">
-            <li class="tab {% block cur_stars %}{% endblock %}"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
             {% if events_enabled %}
-            <li class="tab {% block cur_activities %}{% endblock %}"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
             {% endif %}
             {% for mod in request.user.mods_enabled %}
             {% if mod == 'personal wiki' %}
             <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
             {% endif %}
             {% endfor %}
-            <li class="tab {% block cur_devices %}{% endblock %}"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
         </ul>
 
         <h3 class="hd">{% trans "Share Admin" %}</h3>
@@ -56,6 +57,8 @@
             {% endif %}
             <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
         </ul>
+
+        {% endblock %}
     </div>
 
     <div id="right-panel" class="col-md-9 col-md-offset-3">
