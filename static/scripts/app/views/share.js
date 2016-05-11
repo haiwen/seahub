@@ -331,12 +331,10 @@ define([
 
             var after_op_success = function(data) {
                 $.modal.close();
-                var msg = gettext("Successfully sent to {placeholder}")
-                    .replace('{placeholder}', Common.HTMLescape(data['send_success'].join(', ')));
+                var msg = gettext("Successfully sent to {placeholder}").replace('{placeholder}', data['send_success'].join(', '));
                 Common.feedback(msg, 'success');
                 if (data['send_failed'].length > 0) {
-                    msg += '<br />' + gettext("Failed to send to {placeholder}")
-                        .replace('{placeholder}', Common.HTMLescape(data['send_failed'].join(', ')));
+                    msg += '<br />' + gettext("Failed to send to {placeholder}").replace('{placeholder}', data['send_failed'].join(', '));
                     Common.feedback(msg, 'info');
                 }
             };
