@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-05-06 17:04+0800\n"
+"POT-Creation-Date: 2016-05-11 10:28+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -991,7 +991,7 @@ msgstr ""
 #: seahub/templates/sysadmin/useradmin_js.html:4
 #: seahub/templates/sysadmin/userinfo.html:297
 #, python-format
-msgid "Are you sure you want to delete %s ?"
+msgid "Are you sure you want to delete %%s ?"
 msgstr ""
 
 #: seahub/contacts/templates/contacts/contact_list.html:123
@@ -2271,7 +2271,8 @@ msgstr ""
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href=\"%(url_base)s%(lib_url)s\">"
-"%(lib_name)s</a> to <a href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+"%(lib_name)s</a> to group <a href=\"%(url_base)s%(group_url)s\">"
+"%(group_name)s</a>."
 msgstr ""
 
 #: seahub/notifications/templates/notifications/notice_email.html:39
@@ -4778,7 +4779,7 @@ msgstr ""
 
 #: seahub/templates/snippets/file_share_popup.html:3
 #, python-format
-msgid "Share %(name)s"
+msgid "Share %%(name)s"
 msgstr ""
 
 #: seahub/templates/snippets/list_commit_detail.html:23
@@ -4855,12 +4856,12 @@ msgstr ""
 
 #: seahub/templates/snippets/repo_del_popup.html:3
 #, python-format
-msgid "Really want to delete %(lib_name)s ?"
+msgid "Really want to delete %%(lib_name)s ?"
 msgstr ""
 
 #: seahub/templates/snippets/repo_share_form.html:3
 #, python-format
-msgid "Share %(lib_name)s"
+msgid "Share %%(lib_name)s"
 msgstr ""
 
 #: seahub/templates/snippets/repo_share_form.html:6
@@ -5093,7 +5094,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/repo_transfer_form.html:4
 #, python-format
-msgid "Transfer %(lib_name)s to:"
+msgid "Transfer %%(lib_name)s to:"
 msgstr ""
 
 #: seahub/templates/sysadmin/repoadmin_js.html:18
@@ -5292,7 +5293,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_admin.html:138
 #, python-format
-msgid "Are you sure you want to remove trial for %s ?"
+msgid "Are you sure you want to remove trial for %%s ?"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_info_base.html:16
@@ -5359,7 +5360,7 @@ msgstr ""
 #: seahub/templates/sysadmin/sys_org_info_user.html:71
 #: seahub/templates/sysadmin/useradmin_js.html:9
 #, python-format
-msgid "Are you sure you want to reset the password of %s ?"
+msgid "Are you sure you want to reset the password of %%s ?"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_org_search.html:9
@@ -5429,7 +5430,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:63
 #, python-format
-msgid "Are you sure you want to delete all %s's libraries?"
+msgid "Are you sure you want to delete all %%s's libraries?"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:69
@@ -5438,12 +5439,12 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:75
 #, python-format
-msgid "Are you sure you want to restore %s?"
+msgid "Are you sure you want to restore %%s?"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_repo_trash.html:80
 #, python-format
-msgid "Are you sure you want to delete %s completely?"
+msgid "Are you sure you want to delete %%s completely?"
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_trafficadmin.html:8
@@ -5544,7 +5545,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:83
 #, python-format
-msgid "A new server version %(v)s is available."
+msgid "A new server version %%(v)s is available."
 msgstr ""
 
 #: seahub/templates/sysadmin/sys_useradmin.html:126
@@ -5632,7 +5633,7 @@ msgstr ""
 
 #: seahub/templates/sysadmin/useradmin_js.html:14
 #, python-format
-msgid "Are you sure you want to revoke the admin permission of %s ?"
+msgid "Are you sure you want to revoke the admin permission of %%s ?"
 msgstr ""
 
 #: seahub/templates/sysadmin/userinfo.html:48
