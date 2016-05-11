@@ -1204,6 +1204,7 @@ define([
                     'position': 'fixed',
                     'top': 0,
                     'left': path_bar.offset().left,
+                    'background-color': $('#header').css('background-color'),
                     'z-index': 12 // make 'op_bar' shown on top of the checkboxes
                 };
                 if ($(window).scrollTop() >= op_bar_top) {
