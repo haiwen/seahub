@@ -217,6 +217,9 @@ input[type=password] {
     box-sizing:content-box;
     height:22px;
 }
+select {
+    box-sizing:border-box;
+}
 button,
 input[type=submit],
 input[type=button],
@@ -2221,6 +2224,10 @@ button.sf-dropdown-toggle:focus {
 .fixed-upload-file-dialog .fileupload-buttonbar .cancel {
     color:#909090;
 }
+.template-upload .btn {
+    font-size:1em;
+    padding:0;
+}
 .ui-progressbar,
 .progress {
     background-color: #F7F7F7;
@@ -2583,6 +2590,7 @@ button.sf-dropdown-toggle:focus {
     right:0;
 }
 .side-toolbar .item {
+    box-sizing:content-box;
     width:59px;
     height:40px;
     padding-top:18px;
@@ -3162,8 +3170,9 @@ button.sf-dropdown-toggle:focus {
 #dir-user-share .submit,
 #dir-group-share .submit,
 #folder-perm-tabs .submit {
-    margin-top:2px;
+    box-sizing:border-box;
     height:30px;
+    margin:0;
 }
 .select2-result-label .text {
     display:inline-block;

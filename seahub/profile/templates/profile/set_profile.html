@@ -7,7 +7,7 @@
 {% block main_content %}
 <div class="row">
 
-<div class="side-tabnav side-textnav col-md-3 hide" id="side-nav" role="navigation">
+<div class="side-tabnav side-textnav col-md-3" id="side-nav" role="navigation">
     <ul class="side-textnav-tabs">
         <li class="tab"><a href="#user-basic-info">{% trans "Profile" %}</a></li>
         <li class="tab"><a href="#lang-setting">{% trans "Language" %}</a></li>
@@ -123,9 +123,6 @@
 {% block extra_script %}
 {% include 'snippets/avatar_upload_js.html' %}
 <script type="text/javascript">
-$('#right-panel').show();
-$('#side-nav').show();
-
 var cur_avatar = $('#user-avatar-change .avatar');
 $('#user-avatar-form').css({'left':cur_avatar.position().left + cur_avatar.outerWidth() + 10});
 
@@ -158,6 +155,7 @@ $('#default-lib').click(function() {
     var form = $('#default-lib-form'),
         file_tree = new FileTree();
     form.modal({appendTo:'#main', autoResize:true, focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
 });
 $('#default-lib-form').submit(function() {
