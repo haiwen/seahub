@@ -709,8 +709,7 @@ textarea:-moz-placeholder {/* for FF */
         bottom:0;
         z-index:1;
         padding:20px;
-        overflow-x:hidden;
-        overflow-y:auto;
+        overflow:hidden;
         border-right:1px solid #eee;
     }
 }
@@ -724,11 +723,13 @@ textarea:-moz-placeholder {/* for FF */
         bottom:0;
         z-index:1;
         padding:20px;
-        overflow-x:hidden;
-        overflow-y:auto;
+        overflow:hidden;
         border-right:1px solid #eee;
         box-shadow:0 0 4px #ccc;
     }
+}
+.side-tabnav:hover {
+    overflow-y:auto;
 }
 .side-tabnav {
     -webkit-transition: all 0.3s ease;
