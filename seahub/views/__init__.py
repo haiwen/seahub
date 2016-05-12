@@ -559,66 +559,6 @@ def can_access_repo_setting(request, repo_id, username):
 
     return (True, repo)
 
-def upload_error_msg (code):
-    err_msg = _(u'Internal Server Error')
-    if (code == 0):
-        err_msg = _(u'Filename contains invalid character')
-    elif (code == 1):
-        err_msg = _(u'Duplicated filename')
-    elif (code == 2):
-        err_msg = _(u'File does not exist')
-    elif (code == 3):
-        err_msg = _(u'File size surpasses the limit')
-    elif (code == 4):
-        err_msg = _(u'The space of owner is used up, upload failed')
-    elif (code == 5):
-        err_msg = _(u'An error occurs during file transfer')
-    return err_msg
-
-def upload_file_error(request, repo_id):
-    if request.method == 'GET':
-        repo = get_repo(repo_id)
-        if not repo:
-            raise Http404
-        parent_dir = request.GET.get('p')
-        filename = request.GET.get('fn', '')
-        err = request.GET.get('err')
-        if not parent_dir or not err:
-            return render_error(request, _(u'Invalid url'))
-
-        zipped = gen_path_link (parent_dir, repo.name)
-
-        code = int(err)
-        err_msg = upload_error_msg(code)
-
-        return render_to_response('upload_file_error.html', {
-                'repo': repo,
-                'zipped': zipped,
-                'filename': filename,
-                'err_msg': err_msg,
-                }, context_instance=RequestContext(request))
-
-def update_file_error(request, repo_id):
-    if request.method == 'GET':
-        repo = get_repo(repo_id)
-        if not repo:
-            raise Http404
-        target_file = request.GET.get('p')
-        err = request.GET.get('err')
-        if not target_file or not err:
-            return render_error(request, _(u'Invalid url'))
-
-        zipped = gen_path_link (target_file, repo.name)
-
-        code = int(err)
-        err_msg = upload_error_msg(code)
-
-        return render_to_response('update_file_error.html', {
-                'repo': repo,
-                'zipped': zipped,
-                'err_msg': err_msg,
-                }, context_instance=RequestContext(request))
-
 @login_required
 def repo_history(request, repo_id):
     """

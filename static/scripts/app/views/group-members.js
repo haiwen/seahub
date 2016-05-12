@@ -11,7 +11,7 @@ define([
 
     var View = PopoverView.extend({
         id: 'group-members',
-        className: 'popover',
+        className: 'sf-popover',
 
         template:  _.template($('#group-members-tmpl').html()),
 

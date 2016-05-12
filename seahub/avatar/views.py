@@ -14,15 +14,14 @@ from seahub.avatar.settings import AVATAR_MAX_AVATARS_PER_USER, AVATAR_DEFAULT_S
 from seahub.avatar.signals import avatar_updated
 from seahub.avatar.util import get_primary_avatar, get_default_avatar_url, \
     invalidate_cache, invalidate_group_cache
-from seahub.utils import render_error, render_permission_error, \
-    check_and_get_org_by_group
+from seahub.utils import render_error, render_permission_error
 
 from seahub.auth.decorators import login_required
 from seaserv import ccnet_threaded_rpc, check_group_staff
 
 def _get_next(request):
     """
-    The part that's the least straightforward about views in this module is how they 
+    The part that's the least straightforward about views in this module is how they
     determine their redirects after they have finished computation.
 
     In short, they will try and determine the next place to go in the following order:
@@ -43,14 +42,14 @@ def _get_next(request):
 def _get_avatars(user):
     # Default set. Needs to be sliced, but that's it. Keep the natural order.
     avatars = Avatar.objects.filter(emailuser=user.email)
-    
+
     # Current avatar
     primary_avatar = avatars.order_by('-primary')[:1]
     if primary_avatar:
         avatar = primary_avatar[0]
     else:
         avatar = None
-    
+
     if AVATAR_MAX_AVATARS_PER_USER == 1:
         avatars = primary_avatar
     else:
@@ -91,55 +90,13 @@ def add(request, extra_context=None, next_override=None,
     #         extra_context,
     #         context_instance = RequestContext(
     #             request,
-    #             { 'avatar': avatar, 
-    #               'avatars': avatars, 
+    #             { 'avatar': avatar,
+    #               'avatars': avatars,
     #               'upload_avatar_form': upload_avatar_form,
     #               'next': next_override or _get_next(request), }
     #         )
     #     )
 
-@login_required
-def group_add(request, gid):
-    group_id_int = int(gid)     # Checked by URL Conf
-
-    if not check_group_staff(group_id_int, request.user.username):
-        raise Http404
-
-    group = ccnet_threaded_rpc.get_group(group_id_int)
-    if not group:
-        return HttpResponseRedirect(reverse('group_list', args=[]))
-
-    # change navigator when user in diffent context
-    org, base_template = check_and_get_org_by_group(group_id_int,
-                                                    request.user.username)
-    
-    form = GroupAvatarForm(request.POST or None, request.FILES or None)
-
-    if request.method == 'POST' and 'avatar' in request.FILES:
-        if form.is_valid():
-            image_file = request.FILES['avatar']
-            avatar = GroupAvatar()
-            avatar.group_id = gid
-            avatar.avatar.save(image_file.name, image_file)
-            avatar.save()
-            # invalidate group avatar cache
-            invalidate_group_cache(gid)
-
-            messages.success(request, _("Successfully uploaded a new group avatar."))
-        else:
-            messages.error(request, form.errors['avatar'])
-
-        return HttpResponseRedirect(_get_next(request))
-    else:
-        # Only allow post request to change group avatar.
-         raise Http404   
-
-    # return render_to_response('avatar/set_avatar.html', {
-    #         'group' : group,
-    #         'form' : form,
-    #         'org': org,
-    #         'base_template': base_template,
-    #         }, context_instance=RequestContext(request))
 
 @login_required
 def change(request, extra_context=None, next_override=None,
@@ -172,7 +129,7 @@ def change(request, extra_context=None, next_override=None,
         extra_context,
         context_instance = RequestContext(
             request,
-            { 'avatar': avatar, 
+            { 'avatar': avatar,
               'avatars': avatars,
               'upload_avatar_form': upload_avatar_form,
               'primary_avatar_form': primary_avatar_form,
@@ -200,11 +157,11 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
                         break
 
             # NOTE: `Avatar.objects.filter(id__in=ids).delete()` will NOT work
-            # correctly. Sinct delete() on QuerySet will not call delete 
+            # correctly. Sinct delete() on QuerySet will not call delete
             # method on avatar object.
             for a in Avatar.objects.filter(id__in=ids):
                 a.delete()
-            
+
             messages.success(request, _("Successfully deleted the requested avatars."))
             return HttpResponseRedirect(next_override or _get_next(request))
     return render_to_response(
@@ -212,13 +169,13 @@ def delete(request, extra_context=None, next_override=None, *args, **kwargs):
         extra_context,
         context_instance = RequestContext(
             request,
-            { 'avatar': avatar, 
+            { 'avatar': avatar,
               'avatars': avatars,
               'delete_avatar_form': delete_avatar_form,
               'next': next_override or _get_next(request), }
         )
     )
-    
+
 def render_primary(request, extra_context={}, user=None, size=AVATAR_DEFAULT_SIZE, *args, **kwargs):
     size = int(size)
     avatar = get_primary_avatar(user, size=size)
@@ -232,4 +189,3 @@ def render_primary(request, extra_context={}, user=None, size=AVATAR_DEFAULT_SIZ
     else:
         url = get_default_avatar_url()
         return HttpResponseRedirect(url)
-    

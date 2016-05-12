@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load avatar_tags i18n %}
 
 <script type="text/template" id="side-nav-tmpl">
     <h3 class="hd">{% trans "System Admin" %}</h3>
@@ -6,7 +6,8 @@
         <li class="tab <% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
         </li>
-        <li class="tab <% if (cur_tab == 'devices') { %> tab-cur<% } %>"> <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
+        <li class="tab <% if (cur_tab == 'devices') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
         <li class="tab">
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
@@ -212,4 +213,23 @@
     </td>
     <td><%- error_msg %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="user-info-popup-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="sf-popover-con">
+        <div class="item ovhd">
+            {% avatar request.user 36 %}
+            <div class="txt">
+                <%- app.pageOptions.name %><br />
+                <%- app.pageOptions.username %>
+            </div>
+        </div>
+        <div class="loading-icon loading-tip"></div>
+        <p class="error alc hide"></p>
+        <div id="space-traffic" class="hide"></div>
+        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+        <a href="{{ SITE_ROOT }}" title="{% trans "Exit admin panel" %}" class="item">{% trans "Exit admin panel" %}</a>
+        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
+    </div>
 </script>

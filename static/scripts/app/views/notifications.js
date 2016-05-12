@@ -9,7 +9,7 @@ define([
 
     var View = PopoverView.extend({
         id: 'notice-popover',
-        className: 'popover',
+        className: 'sf-popover',
 
         template:  _.template($('#notice-popover-tmpl').html()),
 

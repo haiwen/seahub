@@ -19,8 +19,8 @@ define([
             return true;
         }
 
-        if (!view.$('.dropdown-menu').is(target)
-            && !view.$('.dropdown-menu').find('*').is(target))
+        if (!view.$('.sf-dropdown-menu').is(target)
+            && !view.$('.sf-dropdown-menu').find('*').is(target))
         {
             view.hide();
             if (app.ui.currentHighlightedItem) {
@@ -50,7 +50,7 @@ define([
         },
 
         initialize: function(options) {
-            this.$el.on('click', '.dropdown-toggle', _.bind(this.toggleDropdown, this));
+            this.$el.on('click', '.sf-dropdown-toggle', _.bind(this.toggleDropdown, this));
             this.$el.on('keydown', _.bind(this.handleKeydown, this));
             this.options = {};
             _.extend(this.options, this.defaultOptions, options);
@@ -58,18 +58,18 @@ define([
 
         hide: function() {
             app.ui.currentDropdown = null;
-            this.$('.dropdown-menu').addClass('hide');
+            this.$('.sf-dropdown-menu').addClass('hide');
         },
 
         show: function() {
-            var $menu = this.$('.dropdown-menu');
+            var $menu = this.$('.sf-dropdown-menu');
             app.ui.currentDropdown = this;
             if (this.options.right) {
                 $menu.css('right', this.options.right);
             } else {
                 $menu.css('left', this.options.left);
             }
-            this.$('.dropdown-menu').removeClass('hide');
+            this.$('.sf-dropdown-menu').removeClass('hide');
         },
 
         toggleDropdown: function() {
@@ -77,7 +77,7 @@ define([
                 app.ui.currentDropdown.hide();
             }
 
-            if (this.$('.dropdown-menu').is(':hidden')) {
+            if (this.$('.sf-dropdown-menu').is(':hidden')) {
                 this.show();
             } else {
                 this.hide();

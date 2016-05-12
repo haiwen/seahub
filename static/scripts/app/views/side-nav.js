@@ -29,6 +29,16 @@ define([
             };
             this.render();
             this.$el.show();
+            var _this = this;
+            $('#js-toggle-side-nav').click(function() {
+                _this.show();
+                return false;
+            });
+            $(window).resize(function() {
+                if ($(window).width() >= 768) {
+                    _this.show();
+                }
+            });
         },
 
         render: function() {
@@ -38,7 +48,9 @@ define([
 
         events: {
             'click #group-nav a:first': 'toggleGroupList',
-            'click #enable-mods': 'enableMods'
+            'click #enable-mods': 'enableMods',
+            'click .js-close-side-nav': 'closeNav',
+            'click li > a': 'visitLink'
         },
 
         toggleGroupList: function() {
@@ -139,7 +151,30 @@ define([
                 error: function() {
                 }
             });
-        }
+        },
+
+        show: function() {
+            this.$el.css({ 'left':'0px' });
+        },
+
+        hide: function() {
+            this.$el.css({ 'left':'-300px' });
+        },
+
+        closeNav: function() {
+            this.hide();
+            return false;
+        },
+
+        visitLink: function(event) {
+            if ($(window).width() < 768) {
+                if ($(event.target).attr('href') !== "#") {
+                    // except for groups toggle link
+                    this.hide();
+                }
+            }
+            return true;
+        },
 
     });
 

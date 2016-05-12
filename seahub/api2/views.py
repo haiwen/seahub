@@ -3809,110 +3809,6 @@ class GroupAvatarView(APIView):
             "mtime": get_timestamp(date_uploaded)}
         return Response(ret)
 
-# Html related code
-def html_events(request):
-    if not EVENTS_ENABLED:
-        events = None
-        return render_to_response('api2/events.html', {
-            "events":events,
-            }, context_instance=RequestContext(request))
-
-    email = request.user.username
-    start = 0
-    events_count = 15
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        events, events_more_offset = get_org_user_events(org_id, email,
-                                                         start, events_count)
-    else:
-        events, events_more_offset = get_user_events(email, start,
-                                                     events_count)
-
-    events_more = True if len(events) == events_count else False
-    event_groups = group_events_data(events)
-    prepare_events(event_groups)
-
-    return render_to_response('api2/events.html', {
-            "events": events,
-            "events_more_offset": events_more_offset,
-            "events_more": events_more,
-            "event_groups": event_groups,
-            "events_count": events_count,
-            }, context_instance=RequestContext(request))
-
-def ajax_events(request):
-    events_count = 15
-    username = request.user.username
-    start = int(request.GET.get('start', 0))
-
-    events, start = get_user_events(username, start, events_count)
-    events_more = True if len(events) == events_count else False
-
-    event_groups = group_events_data(events)
-
-    prepare_events(event_groups)
-    ctx = {'event_groups': event_groups}
-    html = render_to_string("api2/events_body.html", ctx)
-
-    return HttpResponse(json.dumps({'html':html, 'events_more':events_more,
-                                    'new_start': start}),
-                            content_type=json_content_type)
-
-
-def html_repo_history_changes(request, repo_id):
-    changes = {}
-
-    repo = get_repo(repo_id)
-    if not repo:
-        return HttpResponse(json.dumps({"err": 'Library does not exist'}), status=400, content_type=json_content_type)
-
-    if not check_folder_permission(request, repo_id, '/'):
-        return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
-
-    if repo.encrypted and not is_passwd_set(repo_id, request.user.username):
-        return HttpResponse(json.dumps({"err": 'Library is encrypted'}), status=400, content_type=json_content_type)
-
-    commit_id = request.GET.get('commit_id', '')
-    if not commit_id:
-        return HttpResponse(json.dumps({"err": 'Invalid argument'}), status=400, content_type=json_content_type)
-
-    changes = get_diff(repo_id, '', commit_id)
-
-    c = get_commit(repo_id, repo.version, commit_id)
-    if c.parent_id is None:
-        # A commit is a first commit only if its parent id is None.
-        changes['cmt_desc'] = repo.desc
-    elif c.second_parent_id is None:
-        # Normal commit only has one parent.
-        if c.desc.startswith('Changed library'):
-            changes['cmt_desc'] = 'Changed library name or description'
-    else:
-        # A commit is a merge only if it has two parents.
-        changes['cmt_desc'] = 'No conflict in the merge.'
-    for k in changes:
-        changes[k] = [f.replace ('a href="/', 'a class="normal" href="api://') for f in changes[k] ]
-
-    html = render_to_string('api2/event_details.html', {'changes': changes})
-    return HttpResponse(json.dumps({"html": html}), content_type=json_content_type)
-
-
-class AjaxEvents(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        return ajax_events(request)
-
-class EventsHtml(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        return html_events(request)
-
 class RepoHistoryChange(APIView):
     authentication_classes = (TokenAuthentication, )
     permission_classes = (IsAuthenticated,)
@@ -3944,13 +3840,6 @@ class RepoHistoryChange(APIView):
         return HttpResponse(json.dumps(details),
                             content_type=json_content_type)
 
-class RepoHistoryChangeHtml(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, repo_id, format=None):
-        return html_repo_history_changes(request, repo_id)
 
 # based on views/file.py::office_convert_query_status
 class OfficeConvertQueryStatus(APIView):

@@ -1,21 +1,23 @@
-{% extends base_template %}
+{% extends 'base.html' %}
 
 {% load seahub_tags avatar_tags group_avatar_tags i18n %}
 
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
-{% block cur_group %}cur{% endblock %}
+{% block main_content %}
 
+<div class="side-tabnav col-md-3">
 {% block left_panel %}
-<div class="side-tabnav">
     <div class="hd w100 ovhd">
-        <h3 class="fleft">
+        <h3>
             {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
         </h3>
     </div>
-</div>
 {% endblock %}
+</div>
 
-{% block main_panel %}
+<div id="right-panel" class="col-md-9 col-md-offset-3">
+{% block right_panel %}{% endblock %}
+</div>
 
 {% endblock %}

@@ -39,7 +39,7 @@ define([
             var $fu_status = $('.status', popup),
                 $total_progress = $('.total-progress', popup),
                 cancel_all_btn = $('.fileupload-buttonbar .cancel', popup),
-                close_icon = $('.close', popup),
+                close_icon = $('.sf-close', popup),
                 saving_tip = $('.saving-tip', popup);
 
             var fu_status = {
@@ -425,13 +425,13 @@ define([
 
         events: {
             'click .fold-switch': 'foldAndUnfoldPopup',
-            'click .close': 'closePopup'
+            'click .sf-close': 'closePopup'
         },
 
         foldAndUnfoldPopup : function () {
             var popup = this.$el;
             var full_ht = parseInt(this.popup_height);
-            var main_con = $('.fileupload-buttonbar, .table', popup);
+            var main_con = $('.fileupload-buttonbar, table', popup);
             if (popup.height() == full_ht) {
                 popup.height($('.hd', popup).outerHeight(true));
                 main_con.addClass('hide');

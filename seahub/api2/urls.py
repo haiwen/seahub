@@ -96,10 +96,6 @@ urlpatterns = patterns('',
     url(r'^groups/(?P<group_id>\d+)/discussions/$', GroupDiscussions.as_view(), name="api2-group-discussions"),
     url(r'^groups/(?P<group_id>\d+)/discussions/(?P<discuss_id>\d+)/$', GroupDiscussion.as_view(), name="api2-group-discussion"),
 
-    url(r'^html/events/$', EventsHtml.as_view()),
-    url(r'^html/more_events/$', AjaxEvents.as_view(), name="more_events"),
-    url(r'^html/repo_history_changes/(?P<repo_id>[-0-9a-f]{36})/$', RepoHistoryChangeHtml.as_view(), name='api_repo_history_changes'),
-
     # Deprecated
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/delete/$', OpDeleteView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/fileops/copy/$', OpCopyView.as_view()),

@@ -11,7 +11,7 @@
     <p class="error">{% trans "The owner of this library has run out of space." %}</p>
     {% else %}
     <form id="upload-file-form" enctype="multipart/form-data" method="post" action="">{% csrf_token %}
-        <div class="row fileupload-buttonbar">
+        <div class="fileupload-buttonbar">
             <div>
                 <span class="fileinput-button vam" id="add-file">
                     <span class="icon-plus"></span>
@@ -47,7 +47,7 @@
             </div>
             <p class="saving-tip alc hide"><img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" style="margin-right:5px;" class="vam" />{% trans "Saving..." %}</p>
         </div>
-        <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+        <table class="fileupload-table"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
     </form>
     {% endif %}
 </div>

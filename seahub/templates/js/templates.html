@@ -41,9 +41,9 @@
         <div class="op-container">
             <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
             <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
-            <div class="dropdown dropdown-inline">
-                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More operations" %}"></a>
-                <ul class="hidden-op repo-hidden-op hide dropdown-menu">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="sf2-icon-caret-down more-op-icon op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More operations" %}"></a>
+                <ul class="hidden-op repo-hidden-op hide sf-dropdown-menu">
                     <li><a class="op js-repo-rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op js-repo-transfer" href="#">{% trans "Transfer" %}</a></li>
                     <li><a class="op js-popup-history-setting" href="#">{% trans "History Setting" %}</a></li>
@@ -106,9 +106,9 @@
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
     </div>
     <% if (enable_upload_folder) { %>
-    <div id="advanced-upload" class="dropdown dropdown-inline">
-        <button class="dropdown-toggle op-btn">{% trans "Upload" %}</button>
-        <ul id="upload-menu" class="dropdown-menu hide">
+    <div id="advanced-upload" class="sf-dropdown sf-dropdown-inline">
+        <button class="sf-dropdown-toggle op-btn">{% trans "Upload" %}</button>
+        <ul id="upload-menu" class="sf-dropdown-menu hide">
             <li>
                 <a class="op advanced-upload-file" href="#">{% trans "Upload Files" %}</a>
                 <input id="advanced-upload-file-input" class="hide" type="file" name="file" multiple />
@@ -153,23 +153,23 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a> /
-        <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a> /
+        <li><a href="#groups/" class="path-link normal">{% trans "Groups" %}</a></li>
+        <li><a href="#<%= category %>/" class="path-link normal"><%- group_name %></a></li>
     <% } else if (context == 'org') { %>
-        <a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a> /
+        <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a></li>
     <% } else if (context == 'common') { %>
-        <a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a> /
+        <li><a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a></li>
     <% } else { %>
-        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %><% if (category == 'my-sub-libs') { %>{% trans "Sub-libraries" %}<% } %></a> /
+        <li><a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a></li>
     <% } %>
     <% if (path == '/') { %>
-    <%- repo_name %> /
+        <li><%- repo_name %></li>
     <% } else { %>
-        <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a> /
-    <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a> /
-    <% } %>
-    <%- path_list[i] + ' /' %>
+        <li><a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a></li>
+        <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
+        <li><a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
+        <% } %>
+        <li><%- path_list[i] %></li>
     <% } %>
 </script>
 <script type="text/template" id="dirents-hd-tmpl">
@@ -211,9 +211,9 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
-                <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -224,9 +224,9 @@
                 </ul>
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
-            <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
-                <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
             </div>
@@ -294,9 +294,9 @@
                 <% } %>
             </div>
             <% if (dirent.perm == 'rw') { %>
-            <div class="dropdown dropdown-inline">
-                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
-                <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a href="#" class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More Operations"%}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
@@ -317,9 +317,9 @@
                 </ul>
             </div>
             <% } else if (dirent.perm == 'r' && !repo_encrypted) { %>
-            <div class="dropdown dropdown-inline">
-                <a class="more-op-icon sf2-icon-caret-down op-icon vh dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
-                <ul class="hidden-op dirent-hidden-op hide dropdown-menu">
+            <div class="sf-dropdown sf-dropdown-inline">
+                <a class="more-op-icon sf2-icon-caret-down op-icon vh sf-dropdown-toggle" title="{% trans "More operations" %}" aria-label="{% trans "More Operations" %}"></a>
+                <ul class="hidden-op dirent-hidden-op hide sf-dropdown-menu">
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
                 </ul>
             </div>
@@ -365,7 +365,7 @@
 </script>
 
 <script type="text/template" id="grid-view-file-op-tmpl">
-    <ul class="grid-item-op dropdown-menu">
+    <ul class="grid-item-op sf-dropdown-menu">
         <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
         <% if (!repo_encrypted && can_generate_shared_link) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
@@ -391,7 +391,7 @@
 </script>
 
 <script type="text/template" id="grid-view-dir-op-tmpl">
-    <ul class="grid-item-op dropdown-menu">
+    <ul class="grid-item-op sf-dropdown-menu">
         <li><a class="op download" href="<%= download_url %>">{% trans "Download" %}</a></li>
         <% if (!repo_encrypted && can_generate_shared_link) { %>
         <li><a class="op share" href="#">{% trans "Share" %}</a></li>
@@ -606,6 +606,7 @@
 </script>
 
 <script type="text/template" id="side-nav-tmpl">
+    <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf2-icon-x1 sf-popover-close op-icon hidden-md-up js-close-side-nav fright"></a>
     <h3 class="hd">{% trans "Files" %}</h3>
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
@@ -728,7 +729,10 @@
 </form>
 </script>
 <script type="text/template" id="group-top-tmpl">
-<p class="path"><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a> / <%- name %></p>
+<ol class="path-bar breadcrumb">
+    <li><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a></li>
+    <li><%- name %></li>
+</ol>
 <div class="hd ovhd">
     {% if user.permissions.can_add_repo %}
     <button class="repo-create fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
@@ -1005,37 +1009,37 @@
 <script type="text/template" id="group-settings-content-tmpl">
 <% if (is_owner) { %>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="transfer">{% trans "Transfer" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="dismiss">{% trans "Dismiss" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="dismiss">{% trans "Dismiss" %}</a></li>
     </ul>
 <% } else if (is_admin) { %>
     <ul class="group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="rename">{% trans "Rename" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="rename">{% trans "Rename" %}</a></li>
         <% if (!wiki_enabled) { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="add-wiki">{% trans "Add Wiki" %}</a></li>
         <% } else { %>
-        <li><a href="#" class="group-setting-item popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="remove-wiki">{% trans "Remove Wiki" %}</a></li>
         <% } %>
     </ul>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
-        <li><a href="#" class="group-setting-item popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="import-members">{% trans "Import Members" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="manage-members">{% trans "Manage Members" %}</a></li>
     </ul>
 <% } else { %>
     <ul class="last-group-setting-list">
-        <li><a href="#" class="group-setting-item popover-item" data-op="leave">{% trans "Leave group" %}</a></li>
+        <li><a href="#" class="group-setting-item sf-popover-item" data-op="leave">{% trans "Leave group" %}</a></li>
     </ul>
 <% } %>
 </script>
@@ -1400,9 +1404,9 @@
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
     <td>
         <% if (synced_repos.length > 0) { %>
-        <div class="dropdown">
-            <a href="#" class="normal black dropdown-toggle"><%- synced_repos_length %> <span class="icon-caret-down"></span></a>
-            <ul class="device-libs-dropdown-menu dropdown-menu hide">
+        <div class="sf-dropdown">
+            <a href="#" class="normal black sf-dropdown-toggle"><%- synced_repos_length %> <span class="icon-caret-down"></span></a>
+            <ul class="device-libs-dropdown-menu sf-dropdown-menu hide">
                 <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
                 <li><a href="#common/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
                 <% } %>
@@ -1421,21 +1425,21 @@
 
 <script type="text/template" id="notice-popover-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-hd ovhd">
-        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="popover-close close sf2-icon-x1 op-icon fright"></a>
-        <h3 class="popover-title">{% trans "Notifications" %}</h3>
+    <div class="sf-popover-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fright"></a>
+        <h3 class="sf-popover-title">{% trans "Notifications" %}</h3>
     </div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="loading-icon loading-tip"></div>
         <p class="error alc hide"></p>
         <ul class="hide notice-list"></ul>
-        <p class="alc"><a href="{% url 'user_notification_list' %}" class="all">{% trans "See All Notifications" %}</a></p>
+        <a href="{% url 'user_notification_list' %}" class="view-all">{% trans "See All Notifications" %}</a>
     </div>
 </script>
 
 <script type="text/template" id="user-info-popup-tmpl">
     <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-    <div class="popover-con">
+    <div class="sf-popover-con">
         <div class="item ovhd">
             {% avatar request.user 36 %}
             <div class="txt">
@@ -1447,6 +1451,15 @@
         <p class="error alc hide"></p>
         <div id="space-traffic" class="hide"></div>
         <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+        {% if request.user.is_staff %}
+        <a href="{% url 'sysadmin' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
+        {% endif %}
+        {% if request.user.org and request.user.org.is_staff %}
+        <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">"{% trans "Organization Admin" %}"</a>
+        {% endif %}
+        {% if request.user.inst_admin %}
+        <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
+        {% endif %}
         <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
     </div>
 </script>

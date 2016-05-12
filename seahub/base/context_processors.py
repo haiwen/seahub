@@ -49,7 +49,7 @@ def base(request):
     try:
         base_template = request.base_template
     except AttributeError:
-        base_template = 'myhome_base.html'
+        base_template = 'base.html'
 
     try:
         grps = request.user.joined_groups

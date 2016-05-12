@@ -1,15 +1,15 @@
-{% extends base_template %}
+{% extends "base_wide_page.html" %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block sub_title %}{% trans "History" %} - {% endblock %}
 
-{% block main_panel %}
-<h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
+{% block wide_page_content %}
+      <h2>{% blocktrans with repo_name=repo.props.name %}<span class="op-target">{{repo_name}}</span> Modification History{% endblocktrans %}</h2>
 
-{% if user_perm == 'rw' %}
-<p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after the modification."%}</p>
-{% endif %}
+      {% if user_perm == 'rw' %}
+      <p class="tip">{% trans "Tip: a snapshot will be generated after modification, which records the library state after the modification."%}</p>
+      {% endif %}
 
         <table class="commit-list">
             <tr>

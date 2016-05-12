@@ -60,7 +60,7 @@ define([
             }));
             this.$('.file-locked-icon').attr('title', gettext("locked by {placeholder}").replace('{placeholder}', this.model.get('lock_owner_name')));
             this.dropdown = new DropdownView({
-                el: this.$('.dropdown')
+                el: this.$('.sf-dropdown')
             });
 
             return this;

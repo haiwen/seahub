@@ -94,17 +94,17 @@
         <h3 class="hd"><span class="status">{% trans "File Upload" %}</span> <span class="total-progress hide"></span></h3>
         <div class="ops">
             <span class="fold-switch sf2-icon-minus op-icon"></span>
-            <span class="close sf2-icon-x1 op-icon hide" title="{% trans "Close" %}"></span>
+            <span class="sf-close sf2-icon-x1 op-icon hide" title="{% trans "Close" %}"></span>
         </div>
         <div class="con">
-            <div class="row fileupload-buttonbar">
+            <div class="fileupload-buttonbar">
                 <button type="button" class="cancel cspt fright">{% trans "Cancel All" %}</button>
             </div>
             <p class="saving-tip alc clear hide">
                 <span class="loading-icon vam"></span>
                 <span class="vam">{% trans "Saving..." %}</span>
             </p>
-            <table class="table table-striped"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+            <table class="fileupload-table"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
         </div>
     </div>
     <!--/script-->
@@ -125,9 +125,9 @@
             <h3><%= title %></h3>
             <p>{% trans "A file with the same name already exists in this folder." %}<br />{% trans "Replacing it will overwrite its content." %}</p>
             <p class="error hide"></p>
-            <button class="yes btn">{% trans "Replace" %}</button>
-            <button class="no btn" style="margin-left:5px;">{% trans "Don't replace" %}</button>
-            <button class="simplemodal-close btn">{% trans "Cancel" %}</button>
+            <button class="yes">{% trans "Replace" %}</button>
+            <button class="no" style="margin-left:5px;">{% trans "Don't replace" %}</button>
+            <button class="simplemodal-close">{% trans "Cancel" %}</button>
         </div>
     </script>
 

@@ -1,10 +1,12 @@
-{% extends base_template %}
+{% extends 'base.html' %}
 {% load seahub_tags avatar_tags i18n %}
 {% load url from future %}
 
 {% block extra_style %}
 {% include 'snippets/file_view_style.html' %}
 {% endblock %}
+
+{% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
 {% block main_panel %}
     <div id="view-hd">
@@ -27,7 +29,7 @@
               {% endblock %}
             </p>
 
-            <a class="btn-link" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
+            <a class="sf-btn-link" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>
@@ -38,7 +40,7 @@
 <script type="text/javascript">
 $(function() {
     var dld_url = $('#download').attr('href');
-    $('#file-view-tip').append('<a href="' + dld_url + '" class="btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
+    $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
 
 {% if filetype == 'PDF' and use_pdfjs %}

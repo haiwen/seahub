@@ -2,17 +2,19 @@
 {% load compress %}
 {% load seahub_tags avatar_tags group_avatar_tags %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="{{ LANGUAGE_CODE }}">
 <head>
 <title>{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
 <!--[if IE]>
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
 <![endif]-->
 
 {% compress css %}
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 <link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
@@ -22,7 +24,7 @@
 </head>
 
 <body>
-    <div id="wrapper" class="{{ LANGUAGE_CODE }}">
+    <div id="wrapper" role="application" class="{{ LANGUAGE_CODE }}">
         <!--[if lt IE 10]>
         <p id="top-browser-tip">{% trans "We no longer support this version of IE. Please upgrade it to version 10 or above." %} <span class="close">{% trans "Close" %}</span></p>
         <![endif]-->
@@ -35,7 +37,7 @@
         {% endif %}
         {% endblock info_bar_message %}
 
-        <div id="header">
+        <div id="header" role="banner" class="navbar navbar-fixed-top">
             <div id="header-inner">
                 {% block notice_panel %}{% endblock %}
                 <a href="{{ SITE_ROOT }}" id="logo" class="fleft">
@@ -47,52 +49,33 @@
                 </a>
 
                 <div id="account" class="fright">
-                    <div id="my-info">
+                    <a id="my-info" href="#" class="no-deco" aria-label="{% trans "View profile and more" %}">
                         {% avatar request.user 36 %} <span class="icon-caret-down vam"></span>
-                    </div>
-                    <div id="user-info-popup" class="top-info-popup hide">
-                        <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
-                        <div class="item ovhd">
-                            {% avatar request.user 36 %}
-                            <div class="txt">
-                                {{ request.user.username|email2nickname }} <br />
-                                {{ request.user.username}}
-                            </div>
-                        </div>
-                        <span class="loading-icon loading-tip"></span>
-                        <div id="space-traffic" class="hide" data-url="{% url 'space_and_traffic' %}"></div>
-                        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
-                        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
-                    </div>
-                    <div class="manage">
-                        <a href="{{ SITE_ROOT }}" title="{% trans "Exit System Admin" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
 
-        <div id="main" class="clear">
-            <div id="title-panel" class="w100 ovhd">
-            </div>
-            <div id="left-panel">
-                <div class="side-tabnav hide" id="side-nav"></div>
-            </div>
-            <div id="right-panel">
-            </div>
-            <div id="main-panel" class="clear w100 ovhd">
-                <div id="initial-loading-view">
-                    <span class="loading-icon loading-tip"></span>
+        <div id="main" class="clear container-fluid top-padding">
+            <div class="row">
+                <div class="side-tabnav col-md-3 hide" id="side-nav" role="navigation"></div>
+                <div id="right-panel" class="col-md-9 col-md-offset-3">
+                    {% block right_panel %}{% endblock %}
+                </div>
+                <div id="main-panel" class="clear w100 ovhd">
+                    <div id="initial-loading-view">
+                        <span class="loading-icon loading-tip"></span>
+                    </div>
                 </div>
             </div>
 
             <div id="confirm-popup" class="hide">
                 <div id="confirm-con"></div>
-                <button id="confirm-yes" class="btn">{% trans "Yes"%}</button>
-                <button class="simplemodal-close btn">{% trans "No"%}</button>
+                <button id="confirm-yes">{% trans "Yes"%}</button>
+                <button class="simplemodal-close">{% trans "No"%}</button>
             </div>
         </div>
 
-        {% include 'footer.html' %}
         {% include 'js/sysadmin-templates.html' %}
 </div><!-- wrapper -->
 

@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_wide_page.html' %}
 
 {% load seahub_tags i18n staticfiles %}
 {% load url from future %}
@@ -7,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
 {% endblock %}
 
-{% block main_panel %}
+{% block wide_page_content %}
     <h2>{{ dir_name }}</h2>
     <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
 

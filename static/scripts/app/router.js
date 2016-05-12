@@ -78,6 +78,9 @@ define([
                 this.currentView.hide();
                 this.currentView = newView;
             }
+            if (app.ui.groupDiscussions) {
+                app.ui.groupDiscussions.hide();
+            }
         },
 
         showRepos: function() {
