@@ -1,7 +1,7 @@
 {% load i18n %}
 <a href="{{SITE_ROOT}}help/" target="_blank">{% trans "Help" %}</a>
 <a href="#" class="js-about">{% trans "About" %}</a>
-<a href="{% url 'download_client' %}" class="fright"><span aria-hidden="true" class="sf2-icon-monitor"></span> Clients</a>
+<a href="{% url 'download_client' %}" class="fright"><span aria-hidden="true" class="sf2-icon-monitor vam"></span> <span class="vam">{% trans "Clients" %}</span></a>
 
 <div class="about-content hide">
     <h3>{% trans "About" %}</h3>

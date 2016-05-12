@@ -703,18 +703,18 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* Hide for mobile, show later */
 @media (min-width: 768px) {
-    .side-tabnav {
+    .side-nav {
         position:fixed;
         top:52px;
         bottom:0;
         z-index:1;
-        padding:0;
+        padding:20px;
         overflow:hidden;
         border-right:1px solid #eee;
     }
 }
 @media (max-width: 767px) {
-    .side-tabnav {
+    .side-nav {
         background: #f8f8f8;
         width:300px;
         position:fixed;
@@ -722,22 +722,29 @@ textarea:-moz-placeholder {/* for FF */
         top:0;
         bottom:0;
         z-index:1;
+        padding:20px;
         overflow:hidden;
         border-right:1px solid #eee;
         box-shadow:0 0 4px #ccc;
     }
 }
-.side-tabnav {
+.side-nav:hover {
+    overflow-y:auto;
+}
+.side-nav {
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
+}
+.home-side-nav {
+    display:flex;
+    flex-direction:column;
+    padding:0;
 }
 .side-nav-con {
     overflow:hidden;
     padding:20px;
-    flex-grow: 1;
+    flex-grow:1;
 }
 .side-nav-con:hover {
     overflow-y:auto;
