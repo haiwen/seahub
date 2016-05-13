@@ -8,6 +8,10 @@
 {% endblock %}
 
 {% block wide_page_content %}
+    {% if traffic_over_limit %}
+    <p class="strip-tip">{% trans "File download is disabled: the share link traffic of owner is used up." %}</p>
+    {% endif %}
+
     <h2>{{ dir_name }}</h2>
     <p>{% trans "Shared by: " %}{{ username|email2nickname }}</p>
 
@@ -158,13 +162,6 @@
 {% block extra_script %}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.magnific-popup.js" %}"></script>
 <script type="text/javascript">
-$(function() {
-    {% if traffic_over_limit %}
-    var tip = "{% trans "File download is disabled: the share link traffic of owner is used up." %}";
-    $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
-    {% endif %}
-});
-
 var magnificOptions = {
     type: 'image',
     tClose: "{% trans "Close (Esc)" %}", // Alt text on close button

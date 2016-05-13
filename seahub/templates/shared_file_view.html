@@ -6,13 +6,15 @@
 <style type="text/css">
     #header {
         display:block;
-        margin-bottom:12px;
     }
 </style>
 {% endblock %}
 
 
 {% block main_panel %}
+    {% if traffic_over_limit %}
+        <p class="strip-tip">{% trans "File download is disabled: the share link traffic of owner is used up." %}</p>
+    {% endif %}
     <div id="shared-file-view-hd" class="ovhd">
         <div class="fleft">
             <h2 class="ellipsis no-bold" title="{{ file_name }}">{{ file_name }}</h2>
@@ -35,11 +37,11 @@
         <div class="fright">
             {% if request.user.is_authenticated and request.user.username != shared_by %}
               {% if save_to_link %}
-              <button data="{{save_to_link}}" id="save" class="btn">{% trans "Save to..."%}</button>
+              <button data="{{save_to_link}}" id="save" class="shared-file-op-btn">{% trans "Save to..."%}</button>
               {% endif %}
             {% endif %}
             {% if not traffic_over_limit %}
-              <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
+              <a href="{% if from_shared_dir %}?p={{path|urlencode}}&dl=1{% else %}?dl=1{% endif %}" class="obv-btn shared-file-op-btn">{% trans "Download" %} ({{file_size|filesizeformat}})</a>
             {% endif %}
         </div>
     </div>
@@ -73,11 +75,6 @@ $(function() {
     var dld_btn = $('.obv-btn').clone();
     dld_btn.html("{% trans "Download" %}").attr('class', 'sf-btn-link big-btn-link');
     $('#file-view-tip').append(dld_btn);
-
-    {% if traffic_over_limit %}
-    var tip = "{% trans "File download is disabled: the share link traffic of owner is used up." %}";
-    $('#title-panel').html('<p class="alc" style="background:#fddaa4;color:#1f0600;padding:3px 0;margin:0 0 15px;">' + tip + '</p>').removeClass('hide');
-    {% endif %}
 });
 $(function () {
     $('#view-hd .ellipsis').css({'max-width': $('#view-hd').width() - $('#view-hd .fright').outerWidth(true) - 10});

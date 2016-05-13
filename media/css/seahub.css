@@ -368,6 +368,12 @@ table img { vertical-align:middle; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
+.strip-tip {
+    padding:3px 0;
+    background:#fddaa4;
+    color:#1f0600;
+    text-align:center;
+}
 .outstanding-tip { color:red; }
 .label { color:#333; font-size:12px; font-style:normal; }
 .italic { font-style:italic; }
@@ -375,12 +381,6 @@ table img { vertical-align:middle; }
 .inline-block { display: inline-block; }
 .cspt { cursor:pointer; }
 .pos-rel { position:relative; }
-.top-tip {
-    background:#fddaa4;
-    color:#1f0600;
-    text-align:center;
-    margin:0 0 15px;
-}
 .sr-only {
     position: absolute;
     width: 1px;
@@ -3282,8 +3282,7 @@ button.sf-dropdown-toggle:focus {
 #shared-file-view-hd .share-by {
     margin:0;
 }
-#shared-file-view-hd .btn,
-#shared-file-view-hd .obv-btn {
+.shared-file-op-btn {
     padding:7px;
     margin-top:11px;
 }
