@@ -8,6 +8,7 @@
 {% block main_content %}
 <div class="row">
     <div id="side-nav" class="side-tabnav col-md-3">
+        {% block left_panel %}
         <h3 class="hd">{% trans "System Admin" %}</h3>
         <ul class="side-tabnav-tabs">
             <li class="tab">
@@ -60,6 +61,7 @@
             </li>
             {% endif %}
         </ul>
+        {% endblock %}
     </div>
 
     <div id="right-panel" class="col-md-9 col-md-offset-3">
