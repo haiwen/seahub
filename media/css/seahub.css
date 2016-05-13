@@ -703,7 +703,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /* Hide for mobile, show later */
 @media (min-width: 768px) {
-    .side-tabnav {
+    .side-nav {
         position:fixed;
         top:52px;
         bottom:0;
@@ -714,7 +714,7 @@ textarea:-moz-placeholder {/* for FF */
     }
 }
 @media (max-width: 767px) {
-    .side-tabnav {
+    .side-nav {
         background: #f8f8f8;
         width:300px;
         position:fixed;
@@ -728,13 +728,36 @@ textarea:-moz-placeholder {/* for FF */
         box-shadow:0 0 4px #ccc;
     }
 }
-.side-tabnav:hover {
+.side-nav:hover {
     overflow-y:auto;
 }
-.side-tabnav {
+.side-nav {
     -webkit-transition: all 0.3s ease;
     -moz-transition: all 0.3s ease;
     transition: all 0.3s ease;
+}
+.home-side-nav {
+    display:flex;
+    flex-direction:column;
+    padding:0;
+}
+.side-nav-con {
+    overflow:hidden;
+    padding:20px;
+    flex-grow:1;
+}
+.side-nav-con:hover {
+    overflow-y:auto;
+}
+.side-nav-footer {
+    padding: 12px 20px 16px;
+    background: #f8f8f8;
+    border-top:1px solid #eee;
+}
+.side-nav-footer a {
+    color:#333;
+    font-weight: normal;
+    margin-right:0.25rem;
 }
 .side-tabnav .hd {
     margin-bottom:0.5em;
@@ -1184,7 +1207,7 @@ textarea:-moz-placeholder {/* for FF */
     border-radius:4px;
     zoom:1;
 }
-.ui-menu .ui-menu-item a.ui-state-hover { 
+.ui-menu .ui-menu-item a.ui-state-hover {
     border-color:#fbcb09;
     background: #fdf5ce;
     color: #c77405;
@@ -2926,9 +2949,9 @@ button.sf-dropdown-toggle:focus {
     margin:0 3px 0 0;
 }
 .help-con {
-	padding:0 0 0 30px;
+	padding:20px;
 }
-#right-panel .help-con .hd {
+#right-panel.help-con .hd {
     font-weight:normal;
     margin-bottom:15px;
 }
@@ -3541,4 +3564,8 @@ img.thumbnail {
 }
 #link-audit-form .get-code-btn {
     margin-bottom:20px;
+}
+/* about dialog */
+.about-content {
+    width: 300px;
 }

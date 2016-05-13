@@ -28,7 +28,6 @@ define([
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
             this.render();
-            this.$el.show();
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
                 _this.show();
@@ -50,7 +49,8 @@ define([
             'click #group-nav a:first': 'toggleGroupList',
             'click #enable-mods': 'enableMods',
             'click .js-close-side-nav': 'closeNav',
-            'click li > a': 'visitLink'
+            'click li > a': 'visitLink',
+            'click .js-about': 'showAbout'
         },
 
         toggleGroupList: function() {
@@ -175,6 +175,12 @@ define([
             }
             return true;
         },
+
+        showAbout: function() {
+            var $about = this.$('.about-content');
+            $about.modal();
+            return false;
+        }
 
     });
 
