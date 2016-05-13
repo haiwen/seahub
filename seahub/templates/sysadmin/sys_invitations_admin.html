@@ -1,0 +1,42 @@
+{% extends "sysadmin/base.html" %}
+{% load i18n seahub_tags %}
+
+{% block cur_invitations %}tab-cur{% endblock %}
+
+{% block right_panel %}
+<h3 class="hd">{% trans "All Invitations" %}</h3>
+
+{% if invitations %}
+<table>
+    <tr>
+        <th width="25%">{% trans "Inviter" %}</th>
+        <th width="25%">{% trans "Accepter" %}</th>
+        <th width="10%">{% trans "Type" %}</th>
+        <th width="20%">{% trans "Invited at" %}</th>
+        <th width="20%">{% trans "Accepted at" %}</th>
+    </tr>
+    {% for invitation in invitations %}
+    <tr>
+        <td><a href="{% url 'user_info' invitation.inviter %}">{{ invitation.inviter }}</a></td>
+        <td><a href="{% url 'user_info' invitation.accepter %}">{{ invitation.accepter }}</a></td>
+        <td>{{ invitation.invite_type }}</td>
+        <td>{{ invitation.invite_time|translate_seahub_time }} </td>
+        {% if invitation.accept_time %}
+        <td>{{ invitation.accept_time|translate_seahub_time }}</td>
+        {% else %}
+        <td>--</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+</table>
+
+{% include "snippets/admin_paginator.html" %}
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+</script>
+{% endblock %}

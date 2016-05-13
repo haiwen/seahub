@@ -34,6 +34,7 @@ from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
@@ -2196,3 +2197,36 @@ def sys_inst_toggle_admin(request, inst_id, email):
 
     messages.success(request, _('Success'))
     return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def sys_invitation_admin(request):
+    """List all invitations .
+    """
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    offset = per_page * (current_page - 1)
+    limit = per_page + 1
+    invitations = Invitation.objects.all()[offset:offset + limit]
+
+    if len(invitations) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response(
+        'sysadmin/sys_invitations_admin.html', {
+            'invitations': invitations,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        },
+        context_instance=RequestContext(request))

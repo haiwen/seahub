@@ -200,6 +200,7 @@ INSTALLED_APPS = (
     'seahub.base',
     'seahub.contacts',
     'seahub.institutions',
+    'seahub.invitations',
     'seahub.wiki',
     'seahub.group',
     'seahub.message',
