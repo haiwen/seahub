@@ -1,0 +1,19 @@
+{% extends 'email_base.html' %}
+
+{% load i18n %}
+
+{% block email_con %}
+
+{% autoescape off %}
+
+<p style="color:#121214;font-size:14px;">{% trans "Hi," %}</p>
+
+<p style="font-size:14px;color:#434144;">
+{% blocktrans %}{{ inviter }} invites you to join {{ site_name }}. Please click the link below:{% endblocktrans %}
+</p>
+
+<a href="{{ url_base }}{% url 'invitations:token_view' token %}" target="_blank">{{ url_base }}{% url 'invitations:token_view' token %}</a>
+
+{% endautoescape %}
+
+{% endblock %}

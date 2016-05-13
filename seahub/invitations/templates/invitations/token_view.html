@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% block sub_title %}{% trans "Create Account" %}{% endblock %}
+
+{% block extra_style %}
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
+{% endblock %}
+
+{% block main_panel %}
+<div class="new-narrow-panel">
+  <h2 class="hd">{% trans "Set your password" %}</h2>
+  <form action="" method="post" class="con">{% csrf_token %}
+    <label for="id_email">{% trans "Email address" %} {{ iv.accepter }}</label><br/>
+
+    <label for="id_new_password1">{% trans "Password" %}</label>
+    <input type="password" name="password" id="password" value="" class="input" autocomplete="off" />
+
+    <p class="error hide"></p>
+    <input type="submit" value="{% trans "Submit" %}" class="submit" />
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
+<script type="text/javascript">
+$('[type="password"]').addClass('input');
+
+</script>
+{% endblock %}

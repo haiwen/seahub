@@ -53,3 +53,10 @@ class IsGroupMember(BasePermission):
         group_id = int(view.kwargs.get('group_id', ''))
         username = request.user.username if request.user else ''
         return True if ccnet_api.is_group_user(group_id, username) else False
+
+
+class CanInviteGuest(BasePermission):
+    """Check user has permission to invite a guest.
+    """
+    def has_permission(self, request, *args, **kwargs):
+        return request.user.permissions.can_invite_guest()
