@@ -1703,9 +1703,15 @@ def get_file_upload_url_ul(request, token):
         return HttpResponse(json.dumps({"error": _("Bad repo id in upload link.")}),
                             status=403, content_type=content_type)
 
-    acc_token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        'upload', '',
-                                                        use_onetime=False)
+    username = request.user.username or request.session.get('anonymous_email') or ''
+    try:
+        acc_token = seafile_api.get_fileserver_access_token(repo_id,
+                json.dumps({'anonymous_user': username}), 'upload', '', use_onetime=False)
+    except SearpcError as e:
+        logger.error(e)
+        return HttpResponse(json.dumps({"error": _("Internal Server Error")}),
+                            status=500, content_type=content_type)
+
     url = gen_file_upload_url(acc_token, 'upload-aj')
     return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
