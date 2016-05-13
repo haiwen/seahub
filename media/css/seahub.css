@@ -2949,9 +2949,9 @@ button.sf-dropdown-toggle:focus {
     margin:0 3px 0 0;
 }
 .help-con {
-	padding:0 0 0 30px;
+	padding:20px;
 }
-#right-panel .help-con .hd {
+#right-panel.help-con .hd {
     font-weight:normal;
     margin-bottom:15px;
 }
