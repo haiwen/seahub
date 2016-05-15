@@ -158,9 +158,9 @@
     <% } else if (context == 'org') { %>
         <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a></li>
     <% } else if (context == 'common') { %>
-        <li><a href="#my-libs/" class="path-link normal">{% trans "Mine" %}</a></li>
+        <li><a href="#my-libs/" class="path-link normal">{% trans "My Libraries" %}</a></li>
     <% } else { %>
-        <li><a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "Mine" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared" %}<% } %></a></li>
+        <li><a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "My Libraries" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared to me" %}<% } %></a></li>
     <% } %>
     <% if (path == '/') { %>
         <li><%- repo_name %></li>
@@ -612,12 +612,12 @@
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#my-libs/"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "Mine" %}</a>
+            <a href="{{ SITE_ROOT }}#my-libs/" title="{% trans "My Libraries" %}"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "My Libraries" %}</a>
         </li>
         {% endif %}
 
         <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared" %}"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared" %}</a>
+            <a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared to me" %}"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared to me" %}</a>
         </li>
 
         {% if user.permissions.can_view_org %}
@@ -672,7 +672,7 @@
     </div>
     <ul class="side-tabnav-tabs">
         <li class="tab<% if (cur_tab == 'starred') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#starred/"><span aria-hidden="true" class="sf2-icon-star"></span>{% trans "Starred" %}</a>
+            <a href="{{ SITE_ROOT }}#starred/"><span aria-hidden="true" class="sf2-icon-star"></span>{% trans "Favorites" %}</a>
         </li>
         {% if events_enabled %}
         <li class="tab<% if (cur_tab == 'activities') { %> tab-cur<% } %>">
@@ -687,7 +687,7 @@
             <% } %>
         <% } %>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#devices/"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
+            <a href="{{ SITE_ROOT }}#devices/"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
         </li>
     </ul>
 
