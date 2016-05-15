@@ -1931,23 +1931,15 @@ button.sf-dropdown-toggle:focus {
     position:absolute;
     top:5px;
 }
-#grp-avatar-form {
-    position:relative;
-    margin-left:10px;
-}
 /*repo page*/
 #repo-top {
     padding-bottom:15px;
 }
-#repo-top .hd,
-#repo-basic-info {
+#repo-top .hd {
     display:inline-block;
 }
 #repo-top .hd {
     margin-right:15px;
-}
-#repo-basic-info .link-icon {
-    margin:0 5px 0 15px;
 }
 .split {
     border-left:2px solid #888;
