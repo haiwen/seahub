@@ -20,6 +20,12 @@
  * common class ..........common class
  *
  * Widget
+ * (...)  
+ * discussions/comments
+ * custom select2
+ *
+ * Container
+ * Container ......... common container styles
  *
  * (TODO: complete this TOC)
  *
@@ -307,7 +313,6 @@ pre {
 }
 table {
     width:100%;
-    table-layout:fixed;
     margin:8px 0 40px;
 }
 caption { font-size:1.1em; font-weight:bold; margin-bottom:.6em; }
@@ -1441,7 +1446,43 @@ button.sf-dropdown-toggle:focus {
     cursor:pointer;
     text-align:center;
 }
-/********** container ***********/
+/**** custom select2 ****/
+.select2-container-multi .select2-choices {
+    border-color: #ddd;
+    border-radius: 2px;
+    background-image: none; /* rm the shadow */
+}
+.select2-container-multi .select2-choices .select2-search-field {
+    float:none;
+}
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding:2px 2px 2px 5px;
+    font-family:inherit;
+    font-size:13px;
+}
+.select2-container-multi .select2-choices .select2-search-choice {
+    border:none;
+    border-radius:0;
+    background:#eee;
+}
+.select2-container .avatar,
+.select2-results .select2-result-label .avatar {
+    vertical-align:middle;
+    margin-right:3px;
+}
+.select2-result-label .text {
+    display:inline-block;
+    width:calc(100% - 42px);
+}
+.select2-results .select2-result-label .avatar {
+    margin-right:10px;
+}
+.select2-result-label .avatar,
+.select2-result-label .text {
+    vertical-align:middle;
+}
+
+/********** Container ***********/
 #wrapper {
 
 }
@@ -1712,11 +1753,6 @@ button.sf-dropdown-toggle:focus {
     text-decoration:none;
 }
 
-.select2-container .avatar,
-.select2-results .select2-result-label .avatar {
-    vertical-align:middle;
-    margin-right:3px;
-}
 /* header */
 #notice-con {
     color:red;
@@ -1995,14 +2031,7 @@ button.sf-dropdown-toggle:focus {
     padding:5px 14px;
 }
 .repo-file-list {
-    table-layout:auto;
     margin:0;
-}
-.repo-file-list .select {
-    width:15px;
-}
-.repo-file-list .star {
-    width:25px;
 }
 .repo-file-list .icon-star-empty { color:#d0d0d0; }
 .repo-file-list .icon-star { color:#505050; }
@@ -2015,21 +2044,16 @@ button.sf-dropdown-toggle:focus {
     vertical-align:middle;
 }
 .repo-file-list .dirent-icon {
-    width:27px;
     text-align:center;
 }
 .repo-file-list .dirent-name {
     display:inline-block;
-    width:400px;
+    word-break:break-all;
 }
-.repo-file-list .dirent-size {
-    width:114px;
-}
-.repo-file-list .dirent-update {
-    width:133px;
-}
-.repo-file-list .dirent-op {
-    width:200px;
+.repo-file-list .file-locked-icon {
+    position:absolute;
+    right:0;
+    bottom:0;
 }
 .repo-file-list th {
     padding-top:1rem;
@@ -3197,17 +3221,6 @@ button.sf-dropdown-toggle:focus {
     box-sizing:border-box;
     height:30px;
     margin:0;
-}
-.select2-result-label .text {
-    display:inline-block;
-    width:calc(100% - 42px);
-}
-.select2-results .select2-result-label .avatar {
-    margin-right:10px;
-}
-.select2-result-label .avatar,
-.select2-result-label .text {
-    vertical-align:middle;
 }
 #add-group-members-form {
     margin-bottom:4px;

@@ -30,11 +30,11 @@
 
         <table class="repo-file-list">
             <tr>
-                <th class="dirent-icon"></th>
-                <th><span class="dirent-name">{% trans "Name"%}</span></th>
-                <th class="dirent-size">{% trans "Size"%}</th>
-                <th class="dirent-update">{% trans "Last Update" %}</th>
-                <th class="dirent-op">{% trans "Operations"%}</th>
+                <th class="dirent-icon" width="5%"></th>
+                <th width="50%"><span class="dirent-name">{% trans "Name"%}</span></th>
+                <th width="15%" class="dirent-size">{% trans "Size"%}</th>
+                <th width="15%" class="dirent-update">{% trans "Last Update" %}</th>
+                <th width="15%" class="dirent-op">{% trans "Operations"%}</th>
             </tr>
             {% for dirent in dir_list %}
             <tr class="dir-item">
