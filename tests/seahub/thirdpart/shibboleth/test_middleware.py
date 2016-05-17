@@ -35,6 +35,9 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         self.request.META['givenname'] = 'test_gname'
         self.request.META['surname'] = 'test_sname'
 
+        # default settings
+        assert getattr(settings, 'SHIB_ACTIVATE_AFTER_CREATION', True) is True
+
     def test_can_process(self):
         assert len(Profile.objects.all()) == 0
 
@@ -52,7 +55,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
             reload(backends)
 
             resp = self.middleware.process_request(self.request)
-            assert resp.url == 'shib-complete'
+            assert resp.url == '/shib-complete/'
             assert len(Profile.objects.all()) == 0
 
         # now reload again, so it reverts to original settings
