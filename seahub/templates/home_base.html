@@ -8,9 +8,9 @@
         <h3 class="hd">{% trans "Files" %}</h3>
         <ul class="side-tabnav-tabs">
             {% if user.permissions.can_add_repo %}
-            <li class="tab"><a href="{{ SITE_ROOT }}#my-libs/"><span class="sf2-icon-user"></span>{% trans "Mine" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#my-libs/" class="ellipsis" title="{% trans "My Libraries" %}"><span class="sf2-icon-user"></span>{% trans "My Libraries" %}</a></li>
             {% endif %}
-            <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/"><span class="sf2-icon-share"></span>{% trans "Shared" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared to me" %}"><span class="sf2-icon-share"></span>{% trans "Shared to me" %}</a></li>
             {% if user.permissions.can_view_org %}
             <li class="tab"><a href="{{ SITE_ROOT }}#org/"><span class="sf2-icon-organization"></span>{% trans "Organization" %}</a></li>
             {% endif %}
@@ -37,7 +37,7 @@
             {% endif %}
         </div>
         <ul class="side-tabnav-tabs">
-            <li class="tab"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Starred" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#starred/"><span class="sf2-icon-star"></span>{% trans "Favorites" %}</a></li>
             {% if events_enabled %}
             <li class="tab"><a href="{{ SITE_ROOT }}#activities/"><span class="sf2-icon-clock"></span>{% trans "Activities" %}</a></li>
             {% endif %}
@@ -46,7 +46,7 @@
             <li class="tab {% block cur_personal_wiki %}{% endblock %}"><a href="{% url 'personal_wiki' %}"><span class="sf2-icon-wiki"></span>{% trans "Personal Wiki" %}</a></li>
             {% endif %}
             {% endfor %}
-            <li class="tab"><a href="{{ SITE_ROOT }}#devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}#devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a></li>
         </ul>
 
         <h3 class="hd">{% trans "Share Admin" %}</h3>
