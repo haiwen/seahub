@@ -1,3 +1,6 @@
+import os
+import pytest
+
 from django.conf import settings
 from django.test import RequestFactory
 
@@ -5,6 +8,8 @@ from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 from shibboleth import backends
 from shibboleth.middleware import ShibbolethRemoteUserMiddleware
+
+TRAVIS = 'TRAVIS' in os.environ
 
 settings.AUTHENTICATION_BACKENDS += (
     'shibboleth.backends.ShibbolethRemoteUserBackend',
@@ -45,6 +50,7 @@ class ShibbolethRemoteUserMiddlewareTest(BaseTestCase):
         assert len(Profile.objects.all()) == 1
         assert self.request.shib_login is True
 
+    @pytest.mark.skipif(TRAVIS, reason="TODO: this test can only be run seperately due to the url module init in django, we may need to reload url conf: https://gist.github.com/anentropic/9ac47f6518c88fa8d2b0")
     def test_process_inactive_user(self):
         """Inactive user is created, and no profile is created.
         """
