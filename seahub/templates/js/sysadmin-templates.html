@@ -1,4 +1,4 @@
-{% load i18n %}
+{% load avatar_tags i18n %}
 
 <script type="text/template" id="side-nav-tmpl">
     <h3 class="hd">{% trans "System Admin" %}</h3>
@@ -213,4 +213,22 @@
     </td>
     <td><%- error_msg %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
+</script>
+
+<script type="text/template" id="user-info-popup-tmpl">
+    <div class="outer-caret up-outer-caret"><div class="inner-caret"></div></div>
+    <div class="popover-con">
+        <div class="item ovhd">
+            {% avatar request.user 36 %}
+            <div class="txt">
+                <%- app.pageOptions.name %><br />
+                <%- app.pageOptions.email %>
+            </div>
+        </div>
+        <div class="loading-icon loading-tip"></div>
+        <p class="error alc hide"></p>
+        <div id="space-traffic" class="hide"></div>
+        <a class="item" href="{{ SITE_ROOT }}profile/">{% trans "Settings" %}</a>
+        <a href="{{ SITE_ROOT }}accounts/logout/" class="item" id="logout">{% trans "Log out" %}</a>
+    </div>
 </script>
