@@ -563,6 +563,11 @@ textarea:-moz-placeholder {/* for FF */
     overflow:hidden;
     text-overflow:ellipsis;
 }
+.split {
+    border-left:2px solid #888;
+    padding-left:1em;
+    margin-left:1em;
+}
 
 /*******ui widgets**************/
 /**** path ****/
@@ -1931,21 +1936,6 @@ button.sf-dropdown-toggle:focus {
     position:absolute;
     top:5px;
 }
-/*repo page*/
-#repo-top {
-    padding-bottom:15px;
-}
-#repo-top .hd {
-    display:inline-block;
-}
-#repo-top .hd {
-    margin-right:15px;
-}
-.split {
-    border-left:2px solid #888;
-    padding-left:1em;
-    margin-left:1em;
-}
 #repo-file-list {
     margin-bottom:100px;
 }
@@ -2112,13 +2102,6 @@ button.sf-dropdown-toggle:focus {
 .inline-rename-form .cancel {
     font-size:16px;
     line-height:1;
-}
-.repo-top-op-btn {
-    font-size:14px;
-}
-.repo-top-op-btn [class^="icon-"] {
-    color:#444;
-    margin-right:2px;
 }
 #repo-latest-commit .avatar {
     vertical-align:middle;

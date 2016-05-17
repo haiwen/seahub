@@ -612,7 +612,7 @@
     <ul class="side-tabnav-tabs">
         {% if user.permissions.can_add_repo %}
         <li class="tab<% if (cur_tab == 'mine') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#my-libs/" title="{% trans "My Libraries" %}"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "My Libraries" %}</a>
+            <a href="{{ SITE_ROOT }}#my-libs/" class="ellipsis" title="{% trans "My Libraries" %}"><span aria-hidden="true" class="sf2-icon-user"></span>{% trans "My Libraries" %}</a>
         </li>
         {% endif %}
 
@@ -687,7 +687,7 @@
             <% } %>
         <% } %>
         <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#devices/"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
+            <a href="{{ SITE_ROOT }}#devices/" class="ellipsis" title="{% trans "Linked Devices" %}"><span aria-hidden="true" class="sf2-icon-monitor"></span>{% trans "Linked Devices" %}</a>
         </li>
     </ul>
 
