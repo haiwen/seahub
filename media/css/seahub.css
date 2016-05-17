@@ -747,21 +747,15 @@ textarea:-moz-placeholder {/* for FF */
     transition: all 0.3s ease;
 }
 .home-side-nav {
-    display:flex;
-    flex-direction:column;
-    padding:0;
-}
-.side-nav-con {
-    overflow:hidden;
-    padding:20px;
-    flex-grow:1;
-}
-.side-nav-con:hover {
-    overflow-y:auto;
+    bottom:50px;
 }
 .side-nav-footer {
-    padding: 12px 20px 16px;
-    background: #f8f8f8;
+    position:fixed;
+    left:0;
+    bottom:0;
+    width:25%;
+    padding:12px 20px 16px;
+    background:#f8f8f8;
     border-top:1px solid #eee;
 }
 .side-nav-footer a {
