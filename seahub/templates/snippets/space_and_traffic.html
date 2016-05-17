@@ -16,7 +16,7 @@
 </div>
 
 {% if SHOW_TRAFFIC and TRAFFIC_STATS_ENABLED %}
-<a class="item" href="http://www.seafile.com/{% if LANGUAGE_CODE != 'zh-cn' %}en/{% endif %}help/traffic/" target="_blank" id="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</a>
+<div class="item" id="traffic-stat">{% trans "Traffic this month:" %} {{ traffic_stat|filesizeformat }}</div>
 {% endif %}
 
 {% if ENABLE_PAYMENT %}
