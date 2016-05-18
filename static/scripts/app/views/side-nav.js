@@ -115,12 +115,25 @@ define([
         },
 
         setCurTab: function(cur_tab, options) {
+            if (this.$curTab) {
+                this.$('.tab-cur').removeClass('tab-cur');
+                this.$curTab.addClass('tab-cur');
+                return;
+            }
+
             this.data.cur_tab = cur_tab || this.default_cur_tab;
             if (options) {
                 $.extend(this.data, options);
             }
             this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
             this.render();
+
+            var curTabTop = this.$('.tab-cur').offset().top;
+            var visibleHeight = $(window).height() - this.$('.side-nav-footer').outerHeight(true);
+            if (curTabTop > visibleHeight) {
+                this.$('.side-nav-con').css({'overflow':'auto'}).scrollTop(curTabTop - visibleHeight + this.$('.tab-cur').outerHeight(true) + 10).removeAttr('style');
+            }
+
         },
 
         updateGroups: function() {
@@ -166,9 +179,13 @@ define([
             return false;
         },
 
-        visitLink: function(event) {
+        visitLink: function(e) {
+            if ($(e.target).attr('href') !== "#") {
+                this.$curTab = $(e.target).parent();
+            }
+
             if ($(window).width() < 768) {
-                if ($(event.target).attr('href') !== "#") {
+                if ($(e.target).attr('href') !== "#") {
                     // except for groups toggle link
                     this.hide();
                 }
