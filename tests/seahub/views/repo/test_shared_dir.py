@@ -38,6 +38,13 @@ class SharedDirTest(TestCase, Fixtures):
         self.assertEqual(302, resp.status_code)
         assert '8082/files/' in resp.get('location')
 
+    def test_view_raw_file_via_shared_dir(self):
+        resp = self.client.get(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.file + '&raw=1'
+        )
+
+        assert '8082' in resp['location']
+
 class EncryptSharedDirTest(TestCase, Fixtures):
     def setUp(self):
         share_file_info = {
@@ -123,6 +130,24 @@ class EncryptSharedDirTest(TestCase, Fixtures):
         self.assertTemplateNotUsed(resp, 'share_access_validation.html')
         self.assertTemplateUsed(resp, 'shared_file_view.html')
         self.assertContains(resp, '%s</h2>' % self.filename)
+
+    def test_view_raw_file_via_shared_dir(self):
+        resp = self.client.post(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file, {
+                'password': '12345678'
+            }
+        )
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateNotUsed(resp, 'share_access_validation.html')
+        self.assertTemplateUsed(resp, 'shared_file_view.html')
+        self.assertContains(resp, '%s</h2>' % self.filename)
+
+        resp = self.client.get(
+            reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.sub_file + '&raw=1'
+        )
+
+        assert '8082' in resp['location']
 
     def test_view_file_via_shared_dir_without_password(self):
         resp = self.client.get(

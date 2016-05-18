@@ -11,9 +11,10 @@ def share_link_audit(func):
     def _decorated(request, token, *args, **kwargs):
         assert token is not None    # Checked by URLconf
 
-        fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-        if fileshare is None:
-            fileshare = UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+        fileshare = FileShare.objects.get_valid_file_link_by_token(token) or \
+                    FileShare.objects.get_valid_dir_link_by_token(token) or \
+                    UploadLinkShare.objects.get_valid_upload_link_by_token(token)
+
         if fileshare is None:
             raise Http404
 
