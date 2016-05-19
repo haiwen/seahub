@@ -27,7 +27,6 @@ define([
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
-            this.render();
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
                 _this.show();
@@ -115,23 +114,27 @@ define([
         },
 
         setCurTab: function(cur_tab, options) {
-            if (this.$curTab) {
-                this.$('.tab-cur').removeClass('tab-cur');
-                this.$curTab.addClass('tab-cur');
-                return;
-            }
-
             this.data.cur_tab = cur_tab || this.default_cur_tab;
             if (options) {
                 $.extend(this.data, options);
             }
             this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
-            this.render();
 
-            var curTabTop = this.$('.tab-cur').offset().top;
-            var visibleHeight = $(window).height() - this.$('.side-nav-footer').outerHeight(true);
-            if (curTabTop > visibleHeight) {
-                this.$('.side-nav-con').css({'overflow':'auto'}).scrollTop(curTabTop - visibleHeight + this.$('.tab-cur').outerHeight(true) + 10).removeAttr('style');
+            if (this.$clickedTab) {
+                // The user click a link and this.$clickedTab is set by visitLink()
+                this.$('.tab-cur').removeClass('tab-cur');
+                this.$clickedTab.addClass('tab-cur');
+                this.$clickedTab = null;
+                return;
+            } else {
+                // the first time the side nav is rendered or the side nav is re-rendered
+                // when dismiss a group, leave a group
+                this.render();
+                var curTabTop = this.$('.tab-cur').offset().top;
+                var visibleHeight = $(window).height() - this.$('.side-nav-footer').outerHeight(true);
+                if (curTabTop > visibleHeight) {
+                    this.$('.side-nav-con').css({'overflow':'auto'}).scrollTop(curTabTop - visibleHeight + this.$('.tab-cur').outerHeight(true) + 10).removeAttr('style');
+                }
             }
 
         },
@@ -181,7 +184,7 @@ define([
 
         visitLink: function(e) {
             if ($(e.target).attr('href') !== "#") {
-                this.$curTab = $(e.target).parent();
+                this.$clickedTab = $(e.target).parent();
             }
 
             if ($(window).width() < 768) {
