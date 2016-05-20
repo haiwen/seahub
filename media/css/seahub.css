@@ -3559,5 +3559,7 @@ img.thumbnail {
 }
 /* about dialog */
 .about-content {
-    width: 300px;
+    width: 280px;
+    padding-top: 20px;
+    text-align: center;
 }
