@@ -34,6 +34,7 @@ from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
     clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
@@ -45,6 +46,8 @@ from seahub.utils.licenseparse import parse_license
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
+from seahub.utils.user_permissions import (get_basic_user_roles,
+                                           get_user_role)
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.views import get_system_default_repo_id, gen_path_link
@@ -267,10 +270,8 @@ def sys_user_admin(request):
         _populate_user_quota_usage(user)
 
         # check user's role
-        if user.role == GUEST_USER:
-            user.is_guest = True
-        else:
-            user.is_guest = False
+        user.is_guest = True if get_user_role(user) == GUEST_USER else False
+        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
 
         # populate user last login time
         user.last_login = None
@@ -288,6 +289,8 @@ def sys_user_admin(request):
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
+    extra_user_roles = [x for x in get_available_roles()
+                        if x not in get_basic_user_roles()]
 
     return render_to_response(
         'sysadmin/sys_useradmin.html', {
@@ -305,6 +308,7 @@ def sys_user_admin(request):
             'is_pro': is_pro_version(),
             'pro_server': pro_server,
             'enable_user_plan': enable_user_plan,
+            'extra_user_roles': extra_user_roles,
         }, context_instance=RequestContext(request))
 
 @login_required

@@ -6,10 +6,10 @@ from rest_framework.exceptions import APIException
 
 import seaserv
 from seahub.base.accounts import User
-from seahub.constants import GUEST_USER
 from seahub.api2.models import Token, TokenV2
 from seahub.api2.utils import get_client_ip
 from seahub.utils import within_time_range
+from seahub.utils.user_permissions import populate_user_permissions
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -65,16 +65,6 @@ class TokenAuthentication(BaseAuthentication):
 
         return self.authenticate_v1(request, key)
 
-    def _populate_user_permissions(self, user):
-        """Disable some operations if ``user`` is a guest.
-        """
-        if user.role == GUEST_USER:
-            user.permissions.can_add_repo = lambda: False
-            user.permissions.can_add_group = lambda: False
-            user.permissions.can_view_org = lambda: False
-            user.permissions.can_use_global_address_book = lambda: False
-            user.permissions.can_generate_shared_link = lambda: False
-
     def authenticate_v1(self, request, key):
         try:
             token = Token.objects.get(key=key)
@@ -91,7 +81,7 @@ class TokenAuthentication(BaseAuthentication):
             if orgs:
                 user.org = orgs[0]
 
-        self._populate_user_permissions(user)
+        populate_user_permissions(user)
 
         if user.is_active:
             return (user, token)
@@ -116,7 +106,7 @@ class TokenAuthentication(BaseAuthentication):
             if orgs:
                 user.org = orgs[0]
 
-        self._populate_user_permissions(user)
+        populate_user_permissions(user)
 
         if user.is_active:
             need_save = False

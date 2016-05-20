@@ -503,6 +503,30 @@ ENABLE_GLOBAL_ADDRESSBOOK = True
 #####################
 ENABLE_FOLDER_PERM = False
 
+####################
+# Role permissions #
+####################
+# default permissions:
+# 'default': {
+#     'can_add_repo': True,
+#     'can_add_group': True,
+#     'can_view_org': True,
+#     'can_user_global_address_book': True,
+#     'can_generate_shared_link': True,
+#     'can_invite_guest': False,
+# }
+from seahub.constants import GUEST_USER
+ENABLED_ROLE_PERMISSIONS = {
+    GUEST_USER: {
+        'can_add_repo': False,
+        'can_add_group': False,
+        'can_view_org': False,
+        'can_use_global_address_book': False,
+        'can_generate_shared_link': False,
+        'can_invite_guest': False,
+    },
+}
+
 #####################
 # Sudo Mode #
 #####################
