@@ -20,7 +20,7 @@
  * common class ..........common class
  *
  * Widget
- * (...)  
+ * (...)
  * discussions/comments
  * custom select2
  *
@@ -581,7 +581,7 @@ textarea:-moz-placeholder {/* for FF */
     line-height:1.5;
     margin:0; /* for merge with tabs */
     background-color:#f2f2f2;
-    padding:0.6rem 0.75rem 0.25rem;
+    padding:0.6rem 0.75rem 0;
     border-radius: 2px 2px 0 0;
 }
 /****paginator****/
@@ -766,7 +766,7 @@ textarea:-moz-placeholder {/* for FF */
     border-top:1px solid #eee;
 }
 .side-nav-footer a {
-    color:#333;
+    color:#666;
     font-weight: normal;
     margin-right:0.25rem;
 }
@@ -803,6 +803,9 @@ textarea:-moz-placeholder {/* for FF */
     padding:4px 4px 4px 0;
     color:#333;
     font-weight:normal;
+}
+.side-tabnav-tabs .tab a:focus {
+    text-decoration:none;
 }
 .side-tabnav-tabs .tab .grp-list a {
     font-size:14px;
