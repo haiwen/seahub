@@ -60,8 +60,10 @@ define([
 
             if ($icon.hasClass('icon-caret-down')) {
                 Cookie.set('group_expanded', 'true');
+                this.data.show_group_list = true;
             } else {
                 Cookie.set('group_expanded', 'false');
+                this.data.show_group_list = false;
             }
             return false;
         },
@@ -118,14 +120,12 @@ define([
             if (options) {
                 $.extend(this.data, options);
             }
-            this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
 
             if (this.$clickedTab) {
                 // The user click a link and this.$clickedTab is set by visitLink()
                 this.$('.tab-cur').removeClass('tab-cur');
                 this.$clickedTab.addClass('tab-cur');
                 this.$clickedTab = null;
-                return;
             } else {
                 // the first time the side nav is rendered or the side nav is re-rendered
                 // when dismiss a group, leave a group
