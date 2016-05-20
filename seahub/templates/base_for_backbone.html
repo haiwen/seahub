@@ -7,16 +7,16 @@
 <title>{{ site_title }}</title>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <meta name="keywords" content="{% trans "File Collaboration Team Organization" %}" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta http-equiv="x-ua-compatible" content="ie=edge">
 <link rel="icon" type="image/x-icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
 <!--[if IE]>
-<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
+<link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110" />
 <![endif]-->
 
 {% compress css %}
-<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
-<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "css/select2-3.5.2.css" %}" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 <link rel="stylesheet" type="text/css" href="{% static "css/magnific-popup.css" %}" />
 {% endcompress %}
@@ -50,7 +50,7 @@
                     {% endif %}
                 </a>
 
-                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="Side Nav Menu" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
+                <button class="sf2-icon-list-view side-nav-toggle hidden-md-up" title="{% trans "Side Nav Menu" %}" id="js-toggle-side-nav" aria-label="{% trans "Side Nav Menu" %}"></button>
 
                 <div class="fright">
                 {% if has_file_search %}

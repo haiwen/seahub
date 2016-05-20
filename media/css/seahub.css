@@ -223,7 +223,7 @@ input[type=password] {
     box-sizing:content-box;
     height:22px;
 }
-select {
+select, button {
     box-sizing:border-box;
 }
 button,
@@ -1154,10 +1154,10 @@ textarea:-moz-placeholder {/* for FF */
 #simplemodal-container {
     padding: 20px;
     background-color:#fcfcfc;
-    border-radius:4px;
     -moz-border-radius:4px;
-    box-sizing:content-box;
+    border-radius:4px;
     -webkit-box-sizing:content-box;
+    box-sizing:content-box;
 }
 #simplemodal-container a {
     font-weight:normal;

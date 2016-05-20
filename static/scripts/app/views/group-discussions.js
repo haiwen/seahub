@@ -143,7 +143,7 @@ define([
         },
 
         hide: function() {
-            $(".right-side-panel").css({'right': '-400px'});
+            this.$el.css({'right': '-400px'});
         },
 
         close: function() {
@@ -159,7 +159,7 @@ define([
 
         show: function() {
             this.showContent();
-            $(".right-side-panel").css({'right': '0px'});
+            this.$el.css({'right': '0px'});
             this.setConMaxHeight();
         },
 
