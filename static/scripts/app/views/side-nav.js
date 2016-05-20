@@ -27,7 +27,6 @@ define([
                 'mods_enabled': app.pageOptions.user_mods_enabled,
                 'can_add_repo': app.pageOptions.can_add_repo,
             };
-            this.render();
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
                 _this.show();
@@ -61,8 +60,10 @@ define([
 
             if ($icon.hasClass('icon-caret-down')) {
                 Cookie.set('group_expanded', 'true');
+                this.data.show_group_list = true;
             } else {
                 Cookie.set('group_expanded', 'false');
+                this.data.show_group_list = false;
             }
             return false;
         },
@@ -119,8 +120,23 @@ define([
             if (options) {
                 $.extend(this.data, options);
             }
-            this.data.show_group_list = $('#group-nav .grp-list:visible').length ? true : false;
-            this.render();
+
+            if (this.$clickedTab) {
+                // The user click a link and this.$clickedTab is set by visitLink()
+                this.$('.tab-cur').removeClass('tab-cur');
+                this.$clickedTab.addClass('tab-cur');
+                this.$clickedTab = null;
+            } else {
+                // the first time the side nav is rendered or the side nav is re-rendered
+                // when dismiss a group, leave a group
+                this.render();
+                var curTabTop = this.$('.tab-cur').offset().top;
+                var visibleHeight = $(window).height() - this.$('.side-nav-footer').outerHeight(true);
+                if (curTabTop > visibleHeight) {
+                    this.$('.side-nav-con').css({'overflow':'auto'}).scrollTop(curTabTop - visibleHeight + this.$('.tab-cur').outerHeight(true) + 10).removeAttr('style');
+                }
+            }
+
         },
 
         updateGroups: function() {
@@ -166,9 +182,13 @@ define([
             return false;
         },
 
-        visitLink: function(event) {
+        visitLink: function(e) {
+            if ($(e.target).attr('href') !== "#") {
+                this.$clickedTab = $(e.target).parent();
+            }
+
             if ($(window).width() < 768) {
-                if ($(event.target).attr('href') !== "#") {
+                if ($(e.target).attr('href') !== "#") {
                     // except for groups toggle link
                     this.hide();
                 }

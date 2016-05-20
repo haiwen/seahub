@@ -747,14 +747,15 @@ textarea:-moz-placeholder {/* for FF */
     transition: all 0.3s ease;
 }
 .home-side-nav {
-    display:flex;
-    flex-direction:column;
     padding:0;
+}
+.home-side-nav:hover {
+    overflow:hidden;
 }
 .side-nav-con {
     overflow:hidden;
     padding:20px;
-    flex-grow:1;
+    height:calc(100% - 50px);
 }
 .side-nav-con:hover {
     overflow-y:auto;
