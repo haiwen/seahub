@@ -87,6 +87,9 @@ import seahub.settings as settings
 from seahub.settings import THUMBNAIL_EXTENSION, THUMBNAIL_ROOT, \
     ENABLE_GLOBAL_ADDRESSBOOK, FILE_LOCK_EXPIRATION_DAYS, \
     ENABLE_THUMBNAIL, ENABLE_FOLDER_PERM
+
+from seahub.utils.wopi import get_wopi_dict
+
 try:
     from seahub.settings import CLOUD_MODE
 except ImportError:
@@ -100,15 +103,25 @@ try:
 except ImportError:
     ORG_MEMBER_QUOTA_DEFAULT = None
 
-try:
-    from seahub.settings import ENABLE_OFFICE_WEB_APP
-except ImportError:
-    ENABLE_OFFICE_WEB_APP = False
+# settings for view file by OWA
+ENABLE_OFFICE_WEB_APP = getattr(settings, 'ENABLE_OFFICE_WEB_APP', False)
 
-try:
-    from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
-except ImportError:
+# settings for edit file by OWA
+if ENABLE_OFFICE_WEB_APP:
+    ENABLE_OFFICE_WEB_APP_EDIT = getattr(settings, 'ENABLE_OFFICE_WEB_APP_EDIT', False)
+    OFFICE_WEB_APP_EDIT_FILE_EXTENSION = getattr(settings, 'OFFICE_WEB_APP_EDIT_FILE_EXTENSION', ())
+    OFFICE_WEB_APP_FILE_EXTENSION = getattr(settings, 'OFFICE_WEB_APP_FILE_EXTENSION', ())
+else:
+    ENABLE_OFFICE_WEB_APP_EDIT = False
+    OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ()
     OFFICE_WEB_APP_FILE_EXTENSION = ()
+
+# settings for edit file by LibreOFFICE
+ENABLE_LibreOFFICE = getattr(settings, 'ENABLE_LibreOFFICE', False)
+if ENABLE_LibreOFFICE:
+    LibreOFFICE_EDIT_FILE_EXTENSION = getattr(settings, 'LibreOFFICE_EDIT_FILE_EXTENSION', ())
+else:
+    LibreOFFICE_EDIT_FILE_EXTENSION = ()
 
 from pysearpc import SearpcError, SearpcObjEncoder
 import seaserv
@@ -1829,14 +1842,15 @@ class StarredFileView(APIView):
         unstar_file(request.user.username, repo_id, path)
         return Response('success', status=status.HTTP_200_OK)
 
+
 class OwaFileView(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
-        """ Get action url and access token when view file through Office Web App
+        """ Get action url and access token when view/edit file through Office Web App
         """
 
         # check args
@@ -1861,7 +1875,6 @@ class OwaFileView(APIView):
             error_msg = 'File %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # check permission
         if not is_pro_version():
             error_msg = 'Office Web App feature only supported in professional edition.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -1874,20 +1887,99 @@ class OwaFileView(APIView):
             error_msg = 'Library encrypted.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not ENABLE_OFFICE_WEB_APP:
-            error_msg = 'Office Web App feature not enabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        action = request.GET.get('action', 'view')
+        if action not in ('view', 'edit'):
+            error_msg = 'action invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         filename = os.path.basename(path)
         filetype, fileext = get_file_type_and_ext(filename)
-        if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
+
+        if action == 'view':
+            if not ENABLE_OFFICE_WEB_APP:
+                error_msg = 'view file through Office Web App feature not enabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if fileext not in OFFICE_WEB_APP_FILE_EXTENSION:
+                error_msg = '%s %s not supported.' % (action, path)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        if action == 'edit':
+            if not ENABLE_OFFICE_WEB_APP_EDIT:
+                error_msg = 'edit file through Office Web App feature not enabled.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            if fileext not in OFFICE_WEB_APP_EDIT_FILE_EXTENSION:
+                error_msg = '%s %s not supported.' % (action, path)
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # get wopi dict
+        username = request.user.username
+        wopi_dict = get_wopi_dict(username, repo_id, path, action)
+
+        # send stats message
+        send_file_access_msg(request, repo, path, 'api')
+        return Response(wopi_dict)
+
+
+class LibreOfficeFileView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def get(self, request, repo_id, format=None):
+        """ Get action url and access token when view file through LibreOFFICE
+        """
+
+        # check args
+        repo = get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        path = request.GET.get('path', None)
+        if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        try:
+            file_id = seafile_api.get_file_id_by_path(repo_id, path)
+        except SearpcError as e:
+            logger.error(e)
+            error_msg = 'Internal Server Error'
+            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if not file_id:
+            error_msg = 'File %s not found.' % path
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        if check_folder_permission(request, repo_id, path) is None:
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if repo.encrypted:
+            error_msg = 'Library encrypted.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        if not ENABLE_LibreOFFICE:
+            error_msg = 'LibreOFFICE feature not enabled.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        action = request.GET.get('action', 'edit')
+        if action != 'edit':
+            error_msg = 'action invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        filename = os.path.basename(path)
+        filetype, fileext = get_file_type_and_ext(filename)
+        if fileext not in LibreOFFICE_EDIT_FILE_EXTENSION:
+            error_msg = '%s %s not supported.' % (action, path)
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         # get wopi dict
-        from seahub_extra.wopi.utils import get_wopi_dict
         username = request.user.username
-        wopi_dict = get_wopi_dict(username, repo_id, path)
+        wopi_dict = get_wopi_dict(username, repo_id, path, action)
 
         # send stats message
         send_file_access_msg(request, repo, path, 'api')

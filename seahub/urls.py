@@ -25,6 +25,8 @@ from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
 from seahub.api2.endpoints.repo_set_password import RepoSetPassword
 from seahub.api2.endpoints.dirents_download_link import DirentsDownloadLinkView
+from seahub.api2.endpoints.wopi import WOPIFilesView, WOPIFileContentsView
+
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
 from seahub.api2.endpoints.admin.file_update import FileUpdate
@@ -197,6 +199,8 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/sysinfo/$', SysInfo.as_view(), name='api-v2.1-sysinfo'),
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
+    url(r'^api/v2.1/wopi/files/(?P<file_id>[-0-9-a-f]{40})$', WOPIFilesView.as_view(), name='api-v2.1-wopi-files'),
+    url(r'^api/v2.1/wopi/files/(?P<file_id>[-0-9-a-f]{40})/contents$', WOPIFileContentsView.as_view(), name='api-v2.1-wopi-file-contents'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
