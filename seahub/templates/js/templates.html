@@ -1,12 +1,12 @@
 {% load avatar_tags i18n %}
 <script type="text/template" id="create-repo-tmpl">
     <form id="repo-create-form" action="" method="post">{% csrf_token %}
-        <h3>{% trans "New Library"%}</h3>
-        <label>{% trans "Name"%}</label><br/>
-        <input type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <h3 id="dialogTitle">{% trans "New Library"%}</h3>
+        <label for="repo-name">{% trans "Name"%}</label><br/>
+        <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <% if (showSharePerm) { %>
-        <label>{% trans "Share Permission" %}</label><br />
-        <select name="permission" class="perm">
+        <label for="share-permission">{% trans "Share Permission" %}</label><br />
+        <select id="share-permission" name="permission" class="perm">
             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
             <option value="r">{% trans "Read-Only" %}</option>
         </select>
@@ -18,10 +18,10 @@
                 <input type="checkbox" name="encryption" id="encrypt-switch" class="vam" />
                 <span class="checkbox-option vam">{% trans "Encrypt" %}</span>
             </label>
-            <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
-            <input type="password" name="passwd" disabled="disabled" class="input input-disabled" /><br />
-            <label>{% trans "Password again" %}</label><br />
-            <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" />
+            <label for="passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+            <input type="password" name="passwd" disabled="disabled" class="input input-disabled" id="passwd" /><br />
+            <label for="passwd-again">{% trans "Password again" %}</label><br />
+            <input type="password" name="passwd_again" disabled="disabled" class="input input-disabled" id="passwd-again" />
         </div>
         <% } %>
         <p class="error hide"></p>
@@ -70,7 +70,7 @@
     <td><a href="#group/<%= group_id %>/lib/<%= id %>"><%- name %></a></td>
     <td class="alc">
         <% if (is_staff || share_from_me) { %>
-            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}"></a>
+            <a href="#" class="sf2-icon-delete sf2-x cancel-share op-icon vh" title="{% trans "Unshare" %}" aria-label="{% trans "Unshare" %}"></a>
         <% } %>
     </td>
     <td><%= size_formatted %></td>
@@ -101,6 +101,15 @@
         <button id="del-dirents" title="{% trans 'Delete' %}" class="op-btn sf2-icon-delete op-icon"></button>
         <button id="download-dirents" title="{% trans 'Download' %}" class="op-btn sf2-icon-download op-icon"></button>
     </div>
+    <% } %>
+    <% if (!encrypted && user_perm == 'r') { %>
+    <div id="multi-dirents-op" class="hide">
+        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
+    </div>
+    <% } %>
+
+    <div id="cur-dir-ops" class="inline-block">
+    <% if (user_perm == 'rw') { %>
     <div id="basic-upload" class="inline-block">
         <button class="op-btn basic-upload-btn" >{% trans "Upload" %}</button>
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
@@ -124,15 +133,10 @@
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
     <% } %>
 
-    <% if (!encrypted && user_perm == 'r') { %>
-    <div id="multi-dirents-op" class="hide">
-        <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
-    </div>
-    <% } %>
-
     <% if (!encrypted && can_generate_shared_link) { %>
     <button class="op-btn" id="share-cur-dir">{% trans "Share" %}</button>
     <% } %>
+    </div><!-- div#cur-dir-ops ends here -->
 
     <div class="switch-mode vam">
         <button class="list-view-icon-btn sf2-icon-list-view <% if (mode == 'list') { %>active<% } %>" title="{% trans "List" %}" id="js-switch-list-view" aria-label="{% trans "list view" %}"></button><button class="grid-view-icon-btn sf2-icon-grid-view <% if (mode == 'grid') { %>active<% } %>" title="{% trans "Grid" %}" id="js-switch-grid-view" aria-label="{% trans "grid view" %}"></button>
@@ -156,7 +160,7 @@
         <li><a href="#groups/" class="path-link normal">{% trans "Groups" %}</a></li>
         <li><a href="#<%= category %>/" class="path-link normal"><%- group_name %></a></li>
     <% } else if (context == 'org') { %>
-        <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" %}</a></li>
+        <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a></li>
     <% } else if (context == 'common') { %>
         <li><a href="#my-libs/" class="path-link normal">{% trans "My Libraries" %}</a></li>
     <% } else { %>
@@ -409,22 +413,8 @@
     </ul>
 </script>
 
-<script type="text/template" id="group-change-item-tmpl">
-    <td>
-    <span class="icon-plus"></span>
-    </td>
-    <td><a href="#"><%= repo.name %></a></td>
-    <td>
-        <%= desc_human %>
-        <a class="lsch" >{% trans 'Details' %}</a>
-    </td>
-    <td><%= ctime_human %></td>
-    <td>
-        <%- creator_nickname %>
-    </td>
-</script>
 <script type="text/template" id="share-popup-tmpl">
-    <h3 class="hd"><%= title %></h3>
+    <h3 class="hd" id="dialogTitle"><%= title %></h3>
     <div id="share-tabs" class="left-right-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <% if (!repo_encrypted) { %>
@@ -451,22 +441,22 @@
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
+                        <label for="passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
                         <div class="passwd-wrapper">
-                            <input type="password" name="password" class="passwd input" />
-                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
-                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                            <input type="password" name="password" class="passwd input" id="passwd" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt" role="button" tabindex="0" aria-label="{% trans "Show" %}"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt" role="button" tabindex="0" aria-label="{% trans "Generate a random password" %}"></span>
                         </div>
-                        <label>{% trans "Password again" %}</label><br />
-                        <input type="password" name="password_again" class="input" />
+                        <label for="passwd-again">{% trans "Password again" %}</label><br />
+                        <input type="password" name="password_again" class="input" id="passwd-again" />
                     </div>
                     <label class="checkbox-label">
                         <input type="checkbox" name="set_expiration" class="vam" />
                         <span class="checkbox-option vam">{% trans "Add auto expiration"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Days" %}</label><br />
-                        <input type="text" name="expire_days" class="input" />
+                        <label for="expire-days">{% trans "Days" %}</label><br />
+                        <input type="text" name="expire_days" class="input" id="expire-days" />
                     </div>
                     <p class="error hide"></p>
                     <input type="submit" value="{% trans 'Generate'%}" />
@@ -483,10 +473,10 @@
                     <button id="send-download-link">{% trans 'Send' %}</button>
                     <button id="delete-download-link">{% trans 'Delete' %}</button>
                     <form id="send-download-link-form" action="" class="hide">
-                        <label>{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
-                        <label>{% trans "Message (optional):"%}</label><br />
-                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <label for="email">{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="email" /><br />
+                        <label for="extra-msg">{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="extra-msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit" %}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-download-link" />
@@ -506,14 +496,14 @@
                         <span class="checkbox-option vam">{% trans "Add password protection"%}</span>
                     </label>
                     <div class="hide">
-                        <label>{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
+                        <label for="u-passwd">{% trans "Password" %}</label><span class="tip">{% blocktrans %}(at least {{share_link_password_min_length}} characters){% endblocktrans %}</span>
                         <div class="passwd-wrapper">
-                            <input type="password" name="password" class="passwd input" />
-                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt"></span>
-                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt"></span>
+                            <input type="password" name="password" class="passwd input" id="u-passwd" />
+                            <span title="{% trans "Show" %}" class="icon-eye show-or-hide-password cspt" role="button" tabindex="0" aria-label="{% trans "Show" %}"></span>
+                            <span title="{% trans "Generate a random password" %}" class="icon-magic generate-random-password cspt" role="button" tabindex="0" aria-label="{% trans "Generate a random password" %}"></span>
                         </div>
-                        <label>{% trans "Password again"%}</label><br />
-                        <input type="password" name="password_again" class="input" />
+                        <label for="u-passwd-again">{% trans "Password again"%}</label><br />
+                        <input type="password" name="password_again" class="input" id="u-passwd-again" />
                     </div>
                     <p class="error hide"></p>
                     <input type="submit" value="{% trans 'Generate'%}" />
@@ -523,10 +513,10 @@
                     <button id="send-upload-link">{% trans 'Send' %}</button>
                     <button id="delete-upload-link">{% trans 'Delete' %}</button>
                     <form id="send-upload-link-form" action="" class="hide">
-                        <label>{% trans "Send to:"%}</label><br />
-                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" /><br />
-                        <label>{% trans "Message (optional):"%}</label><br />
-                        <textarea class="textarea" name="extra_msg"></textarea><br />
+                        <label for="u-email">{% trans "Send to:"%}</label><br />
+                        <input type="text" class="input" name="email" placeholder="{% trans "Emails, Seperated by ','"%}" id="u-email" /><br />
+                        <label for="u-extra-msg">{% trans "Message (optional):"%}</label><br />
+                        <textarea class="textarea" name="extra_msg" id="u-extra-msg"></textarea><br />
                         <p class="error hide"></p>
                         <input type="submit" value="{% trans "Submit" %}" class="submit" />
                         <input type="button" value="{% trans "Cancel"%}" class="cancel" id="cancel-share-upload-link" />
@@ -543,11 +533,14 @@
             <div id="dir-user-share" class="tabs-panel">
                     <% } %>
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-dir-user-share-item">
                         <td>
                             <input type="hidden" name="emails" class="w100" />
@@ -560,17 +553,21 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
 
             <div id="dir-group-share" class="tabs-panel hide">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-dir-group-share-item">
                         <td>
                             <select name="groups" class="w100" multiple="multiple"></select>
@@ -583,6 +580,7 @@
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
@@ -622,7 +620,7 @@
 
         {% if user.permissions.can_view_org %}
         <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" %}</a>
+            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a>
         </li>
         {% endif %}
 
@@ -667,7 +665,7 @@
     <div class="hd w100 ovhd">
         <h3 class="fleft">{% trans "Tools" %}</h3>
         {% if user.permissions.can_add_repo %}
-        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
+        <a href="#" id="enable-mods" class="sf2-icon-cog2 op-icon enable-mods-icon fright" title="{% trans "Enable Modules" %}" aria-label="{% trans "Enable Modules" %}"></a>
         {% endif %}
     </div>
     <ul class="side-tabnav-tabs">
@@ -713,7 +711,7 @@
 
 <script type="text/template" id="myhome-mods-enable-form-tmpl">
 <form id="myhome-mods-enable-form" method="post" action="" class="hide">{% csrf_token%}
-    <h3>{% trans "Enable Modules"%}</h3>
+    <h3 id="dialogTitle">{% trans "Enable Modules"%}</h3>
     <ul>
         <% for (var i = 0, len = mods_available.length; i < len; i++) { %>
             <% if (mods_available[i] == 'personal wiki') { %>
@@ -740,16 +738,16 @@
 </ol>
 <div class="hd ovhd">
     {% if user.permissions.can_add_repo %}
-    <button class="repo-create fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
+    <button class="repo-create btn-white fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
     {% endif %}
 
     <div class="fright">
         <% if (wiki_enabled) { %>
-            <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
+            <a href="{{SITE_ROOT}}group/<%= id %>/wiki/" class="sf2-icon-wiki2 op-icon group-top-op-icon" title="{% trans "Wiki" %}" id="group-wiki-icon"></a>
         <% } %>
-        <a href="#" class="sf2-icon-cog1 op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
-        <a href="#" class="sf2-icon-user2 op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
-        <a href="#" class="sf2-icon-msgs2 op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
+        <a href="#" class="sf2-icon-cog1 op-icon group-top-op-icon" title="{% trans "Settings" %}" id="group-settings-icon" aria-label="{% trans "Settings" %}"></a>
+        <a href="#" class="sf2-icon-user2 op-icon group-top-op-icon" title="{% trans "Members" %}" id="group-members-icon" aria-label="{% trans "Members" %}"></a>
+        <a href="#" class="sf2-icon-msgs2 op-icon group-top-op-icon" title="{% trans "Discussion" %}" id="group-discussions-icon" aria-label="{% trans "Discussion" %}"></a>
     </div>
 </div>
 </script>
@@ -789,7 +787,7 @@
     </td>
 </script>
 <script type="text/template" id="folder-perm-popup-tmpl">
-    <h3 class="hd"><%= title %></h3>
+    <h3 class="hd" id="dialogTitle"><%= title %></h3>
     <div id="folder-perm-tabs" class="left-right-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
@@ -798,45 +796,53 @@
         <div class="fright">
             <div id="user-folder-perm" class="tabs-panel">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "User" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-user-folder-perm">
                         <td>
                             <input type="hidden" name="email" class="w100" />
                         </td>
                         <td>
-                            <select name="permission" class="perm-select w100">
+                            <select name="permission" class="folder-perm-select w100">
                                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                                 <option value="r">{% trans "Read-Only" %}</option>
                             </select>
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
             <div id="group-folder-perm" class="tabs-panel">
                 <table>
+                    <thead>
                     <tr>
                         <th width="55%">{% trans "Group" %}</th>
                         <th width="30%">{% trans "Permission" %}</th>
                         <th width="15%"></th>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr id="add-group-folder-perm">
                         <td>
                             <select name="group" class="w100" multiple="multiple"></select>
                         </td>
                         <td>
-                            <select name="permission" class="perm-select w100">
+                            <select name="permission" class="folder-perm-select w100">
                                 <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
                                 <option value="r">{% trans "Read-Only" %}</option>
                             </select>
                         </td>
                         <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
                     </tr>
+                    </tbody>
                 </table>
                 <p class="error hide"></p>
             </div>
@@ -855,7 +861,7 @@
     <td><%- repo_name %></td>
     <td><%= mtime_relative %></td>
     <td>
-        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}"></a>
+        <a href="#" class="sf2-icon-delete unstar op-icon vh" title="{% trans "Unstar" %}" aria-label="{% trans "Unstar" %}"></a>
     </td>
 </script>
 
@@ -879,7 +885,7 @@
     </tr>
 </script>
 <script type="text/template" id="add-pubrepo-popup-tmpl">
-    <h3 class="hd">{% trans "Select libraries to share" %}</h3>
+    <h3 class="hd" id="dialogTitle">{% trans "Select libraries to share" %}</h3>
     <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <tr>
@@ -898,9 +904,9 @@
     </td>
     <td>
       <% if (encrypted) { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="" />
+      <img src="{{ MEDIA_URL }}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted" %}" alt="{% trans "Encrypted" %}" />
       <% } else { %>
-      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="" />
+      <img src="{{ MEDIA_URL }}img/sync-folder-20.png" title="{% trans "Read-Write" %}" alt="{% trans "Read-Write" %}" />
       <% } %>
     </td>
     <td><a href="#my-libs/lib/<%= id %>" target="_blank"><%- name %></a></td>
@@ -947,7 +953,7 @@
     </div>
 </script>
 <script type="text/template" id="details-popup-tmpl">
-    <h3>{% trans "Modification Details"%}</h3>
+    <h3 id="dialogTitle">{% trans "Modification Details"%}</h3>
     <p class="commit-time"></p>
     <span class="loading-icon loading-tip"></span>
 </script>
@@ -989,7 +995,13 @@
 <script type="text/template" id="group-member-tmpl">
     <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="txt">
-        <p class="txt-item ellipsis" title="<%- name %>"><%- name %></p>
+        <p class="txt-item ellipsis" title="<%- name %>"><%- name %>
+            <% if (is_owner) { %>
+                <span class="group-admin-txt">{% trans "owner" %}</span>
+            <% } else if (is_admin) { %>
+                <span class="group-admin-txt">{% trans "admin" %}</span>
+            <% } %>
+        </p>
         <p class="txt-item ellipsis" title="<%- contact_email %>"><%- contact_email %></p>
     </div>
 </script>
@@ -998,14 +1010,14 @@
     <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
     <div class="msg-body">
         <div class="ovhd">
-            <div class="msg-ops fright vh">
-                <span class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}"></span>
-                <% if (can_delete_msg) { %>
-                <span class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}"></span>
-                <% } %>
-            </div>
             <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
             <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
+            <div class="msg-ops fright vh">
+                <a class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}" aria-label="{% trans "Reply" %}" href="#"></a>
+                <% if (can_delete_msg) { %>
+                <a class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}" href="#"></a>
+                <% } %>
+            </div>
         </div>
         <div class="msg-content"><%= content_marked %></div>
     </div>
@@ -1051,7 +1063,7 @@
 
 <script type="text/template" id="group-rename-form-tmpl">
 <form method="post" action="">
-    <h3>{% trans "Rename Group To" %}</h3>
+    <h3 id="dialogTitle">{% trans "Rename Group To" %}</h3>
     <input type="text" name="new_name" value="" class="input" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1060,7 +1072,7 @@
 
 <script type="text/template" id="group-transfer-form-tmpl">
 <form method="post" action="">
-    <h3>{% trans "Transfer Group To" %}</h3>
+    <h3 id="dialogTitle">{% trans "Transfer Group To" %}</h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1068,7 +1080,7 @@
 </script>
 <script type="text/template" id="group-import-members-form-tmpl">
 <form enctype="multipart/form-data" method="post" action="">
-    <h3>{% trans "Import group members from a CSV file" %}</h3>
+    <h3 id="dialogTitle">{% trans "Import group members from a CSV file" %}</h3>
     <input type="file" name="file" />
     <p class="tip">{% trans "File format: user@mail.com" %}</p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
@@ -1077,7 +1089,7 @@
 </script>
 
 <script type="text/template" id="group-manage-members-tmpl">
-<h3><%= title %></h3>
+<h3 id="dialogTitle"><%= title %></h3>
 <form method="post" action="" id="add-group-members-form">
     <input type="hidden" name="user_name" />
     <input type="submit" value="{% trans "Add" %}" class="submit" />
@@ -1158,21 +1170,30 @@
 </script>
 
 <script type="text/template" id="history-settings-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
 
     <p class="history-settings-notice outstanding-tip hide">{% trans "Setting library history is disabled by Admin" %}</p>
 
     <form action="" method="post">
+        <label class="radio-item">
         <input type="radio" name="history" value="full_history" class="vam" />
-        <span class="vam">{% trans "Keep full history" %}</span><br />
+        <span class="vam">{% trans "Keep full history" %}</span>
+        </label>
+        <br />
 
+        <label class="radio-item">
         <input type="radio" name="history" value="no_history" class="vam" />
-        <span class="vam">{% trans "Don't keep history" %}</span><br />
+        <span class="vam">{% trans "Don't keep history" %}</span>
+        </label>
+        <br />
 
+        <label class="radio-item">
         <input type="radio" name="history" value="partial_history" class="vam" />
         <span calss="vam">{% trans "Only keep a period of history:" %}
             <input type="text" name="days" size="4" disabled="disabled" class="input-disabled" value="<%= default_history_limit %>" /> {% trans "days" %}
-        </span><br />
+        </span>
+        </label>
+        <br />
 
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
     </form>
@@ -1182,7 +1203,7 @@
 </script>
 
 <script type="text/template" id="repo-shared-links-admin-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <div id="repo-shared-links" class="left-right-tabs js-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#js-download-links" class="a">{% trans "Download Links" %}</a></li>
@@ -1245,7 +1266,7 @@
 
 <script type="text/template" id="repo-transfer-form-tmpl">
 <form method="post" action="" id="repo-transfer-form">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <input type="hidden" name="email" /><br />
     <p class="error hide"></p>
     <input type="submit" value="{% trans "Submit" %}" />
@@ -1253,7 +1274,7 @@
 </script>
 
 <script type="text/template" id="repo-folder-perm-admin-dialog-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <div id="repo-folder-perm" class="left-right-tabs js-tabs ovhd">
         <ul class="left-right-tabs-nav fleft">
             <li class="tab"><a href="#js-repo-user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
@@ -1390,13 +1411,13 @@
 
 <script type="text/template" id="repo-change-password-form-tmpl">
     <form id="repo-change-passwd-form" action="" method="post">
-        <h3><%= title %></h3>
-        <label>{% trans "Old Password" %}</label><br />
-        <input type="password" name="old_passwd" class="input" /><br />
-        <label>{% blocktrans %}New Password(at least {{repo_password_min_length}} characters){% endblocktrans %}</label><br />
-        <input type="password" name="new_passwd" class="input" /><br />
-        <label>{% trans "New Password Again" %}</label><br />
-        <input type="password" name="new_passwd_again" class="input" /><br />
+        <h3 id="dialogTitle"><%= title %></h3>
+        <label for="passwd">{% trans "Old Password" %}</label><br />
+        <input type="password" name="old_passwd" class="input" id="passwd" /><br />
+        <label for="new-passwd">{% trans "New Password" %}</label><span class="tip">{% blocktrans %}(at least {{repo_password_min_length}} characters){% endblocktrans %}</span><br />
+        <input type="password" name="new_passwd" class="input" id="new-passwd" /><br />
+        <label for="new-passwd-again">{% trans "New Password Again" %}</label><br />
+        <input type="password" name="new_passwd_again" class="input" id="new-passwd-again" /><br />
         <p class="error hide"></p>
         <button type="submit" class="submit">{% trans "Submit" %}</button>
     </form>

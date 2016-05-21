@@ -19,7 +19,7 @@
         <div class="hd ovhd">
             <h3 class="fleft">{% trans "Wiki Index" %}</h3>
             {% if repo_perm == 'rw' %}
-            <span id="edit-index" class="icon-pencil fright" title="{% trans "Edit" %}"></span>
+            <a id="edit-index" class="wiki-index-edit-icon op-icon icon-pencil fright" title="{% trans "Edit" %}" aria    -label="{% trans "Edit" %}" href="#"></a>
             {% endif %}
         </div>
         <div id="wiki-index-con"></div>
@@ -42,17 +42,17 @@
         {% endif %}
     </div>
     <form id="wiki-create-form" action="" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "Create Wiki"%}</h3>
-        <label>{% trans "Name"%}</label><br/>
-        <input type="text" name="repo_name" value="{{group.group_name}}-wiki" maxlength="{{max_file_name}}" class="input" /><br />
-        <label>{% trans "Description"%}</label><br/>
-        <textarea name="repo_desc" class="textarea">{% trans 'Wiki Pages' %}</textarea><br/>
+        <h3 id="dialogTitle">{% trans "Create Wiki"%}</h3>
+        <label for="wiki-name">{% trans "Name"%}</label><br/>
+        <input type="text" name="repo_name" value="{{group.group_name}}-wiki" maxlength="{{max_file_name}}" class="input" id="wiki-name" /><br />
+        <label for="wiki-desc">{% trans "Description"%}</label><br/>
+        <textarea name="repo_desc" class="textarea" id="wiki-desc">{% trans 'Wiki Pages' %}</textarea><br/>
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>
 
     <form id="wiki-use-lib-form" action="{% url 'group_wiki_use_lib' group.id %}" method="post" class="file-choose-form hide">{% csrf_token %}
-        <h3>{% trans "Choose a library as wiki:" %}</h3>
+        <h3 id="dialogTitle">{% trans "Choose a library as wiki:" %}</h3>
         <div class="dir-tree-cont">
           <div id="repos-dirs"></div>
         </div>
@@ -87,8 +87,8 @@
     </div>
 
     <form id="page-create-form" action="{% url 'group_wiki_page_new' group.id %}" method="post" class="hide">{% csrf_token %}
-        <h3>{% trans "New Page"%}</h3>
-        <label>{% trans "Name"%}</label><br/>
+        <h3 id="dialogTitle">{% trans "New Page"%}</h3>
+        <label for="page-name">{% trans "Name"%}</label><br/>
         <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <p class="error hide"></p>
         <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
@@ -227,11 +227,9 @@ $('#wiki-use-lib-form').submit(function() {
 {% if wiki_index_exists %}
 $('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
     {% if repo_perm == 'rw' %}
-    $('#edit-index').click(function() {
         {% with page_name='index' %}
-        location.href = "{% url 'group_wiki_page_edit' group.id page_name %}";
+    $('#edit-index').attr('href', "{% url 'group_wiki_page_edit' group.id page_name %}");
         {% endwith %}
-    });
     {% endif %}
 {% else %}
     {% if repo_perm == 'rw' %}

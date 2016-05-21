@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: seahub\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-04-20 10:12+0800\n"
-"PO-Revision-Date: 2016-04-20 02:15+0000\n"
+"POT-Creation-Date: 2016-05-06 17:04+0800\n"
+"PO-Revision-Date: 2016-05-06 09:05+0000\n"
 "Last-Translator: zheng xie <xiez1989@gmail.com>\n"
 "Language-Team: Icelandic (http://www.transifex.com/haiwen/seahub/language/is/)\n"
 "MIME-Version: 1.0\n"
@@ -20,17 +20,18 @@ msgstr ""
 "Language: is\n"
 "Plural-Forms: nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);\n"
 
-#: seahub/api2/endpoints/group_members.py:91
-#: seahub/api2/endpoints/group_members.py:279 seahub/views/ajax.py:2518
+#: seahub/api2/endpoints/group_members.py:92
+#: seahub/api2/endpoints/group_members.py:286 seahub/views/ajax.py:2511
 #, python-format
 msgid "User %s is already a group member."
-msgstr ""
+msgstr "Notandi %s er þegar meðlimur hóps."
 
-#: seahub/api2/endpoints/group_members.py:288 seahub/api2/views.py:1274
-#: seahub/views/ajax.py:2527
+#: seahub/api2/endpoints/group_members.py:98
+#: seahub/api2/endpoints/group_members.py:295 seahub/api2/views.py:1266
+#: seahub/views/ajax.py:2520
 #, python-format
 msgid "User %s not found in organization."
-msgstr ""
+msgstr "Notandi %s finnst ekki í samfélaginu."
 
 #: seahub/api2/endpoints/groups.py:148 seahub/api2/endpoints/groups.py:224
 #: seahub/group/forms.py:37
@@ -46,7 +47,7 @@ msgstr "Það er þegar til hópur með þetta nafn."
 #: seahub/api2/endpoints/groups.py:254
 #, python-format
 msgid "User %s is already group owner."
-msgstr ""
+msgstr "Notandi %s er þegar eigandi hóps."
 
 #: seahub/api2/endpoints/repo_set_password.py:41
 msgid "Wrong password"
@@ -54,8 +55,8 @@ msgstr "Rangt lykilorð"
 
 #: seahub/api2/endpoints/repo_set_password.py:44 seahub/views/__init__.py:537
 #: seahub/views/ajax.py:705 seahub/views/ajax.py:739 seahub/views/ajax.py:782
-#: seahub/views/ajax.py:825 seahub/views/ajax.py:2432
-#: seahub/views/sysadmin.py:2203
+#: seahub/views/ajax.py:825 seahub/views/ajax.py:2425
+#: seahub/views/sysadmin.py:2231
 msgid "Internal server error"
 msgstr "Kerfisvilla"
 
@@ -65,50 +66,51 @@ msgstr "Villa í dulkóðuðu safni"
 
 #: seahub/api2/endpoints/send_share_link_email.py:31
 #: seahub/api2/endpoints/send_upload_link_email.py:30
-#: seahub/share/views.py:737
+#: seahub/share/views.py:739
 msgid ""
 "Sending shared link failed. Email service is not properly configured, please"
 " contact administrator."
 msgstr "Tókst ekki að senda tengilinn.  Tölvupóstþjónustan er ekki alveg rétt stillt, vinsamlegast hafðu samband við kerfisstjóra."
 
-#: seahub/api2/endpoints/send_share_link_email.py:98 seahub/share/views.py:785
+#: seahub/api2/endpoints/send_share_link_email.py:98 seahub/share/views.py:787
 msgid "file"
 msgstr "skrá"
 
-#: seahub/api2/endpoints/send_share_link_email.py:99 seahub/share/views.py:786
+#: seahub/api2/endpoints/send_share_link_email.py:99 seahub/share/views.py:788
 #, python-format
 msgid "A file is shared to you on %s"
 msgstr "Skrá er deilt með þér á %s"
 
 #: seahub/api2/endpoints/send_share_link_email.py:101
-#: seahub/share/views.py:792
+#: seahub/share/views.py:794
 msgid "directory"
 msgstr "mappa"
 
 #: seahub/api2/endpoints/send_share_link_email.py:102
-#: seahub/share/views.py:793
+#: seahub/share/views.py:795
 #, python-format
 msgid "A directory is shared to you on %s"
 msgstr "Skáarsafni hefur verið deilt með þér á %s"
 
 #: seahub/api2/endpoints/send_upload_link_email.py:93
-#: seahub/share/views.py:905
+#: seahub/share/views.py:907
 #, python-format
 msgid "An upload link is shared to you on %s"
 msgstr "Upphleðsluslóð er deilt með þér á %s"
 
 #: seahub/api2/endpoints/share_links.py:165
 msgid "Password is too short."
-msgstr ""
+msgstr "Lykilorð er of stutt."
 
-#: seahub/api2/endpoints/upload_links.py:135 seahub/share/views.py:966
-#: seahub/share/views.py:1049 seahub/templates/snippets/repo_create_js.html:50
+#: seahub/api2/endpoints/upload_links.py:135 seahub/share/views.py:968
+#: seahub/share/views.py:1051 seahub/templates/snippets/repo_create_js.html:50
 #: seahub/templates/snippets/shared_link_js.html:155
 msgid "Password is too short"
 msgstr "Lykilorðið er of stutt"
 
 #: seahub/api2/templates/api2/base.html:8 seahub/templates/base.html:9
 #: seahub/templates/base_for_backbone.html:9
+#: seahub/templates/sysadmin/sysadmin_backbone.html:9
 msgid "File Collaboration Team Organization"
 msgstr "Skrá Samvinna Teymi Samfélag"
 
@@ -144,7 +146,7 @@ msgid "No activity now or the function is not supported."
 msgstr "Engin virkni núna í gangi eða að þessi virkni er ekki studd enn sem komið er."
 
 #: seahub/api2/templates/api2/events_body.html:17
-#: seahub/templates/js/templates.html:926
+#: seahub/templates/js/templates.html:936
 msgid "Created library"
 msgstr "Bjó til safn"
 
@@ -159,7 +161,8 @@ msgstr "Eyddi safni %(library_name)s"
 #: seahub/message/templates/message/all_msg_list.html:202
 #: seahub/message/templates/message/user_msg_list.html:169
 #: seahub/notifications/templates/notifications/user_notification_list.html:92
-#: seahub/templates/base.html:163 seahub/templates/decrypt_repo_form.html:47
+#: seahub/share/templates/share/share_link_audit.html:70
+#: seahub/templates/base.html:149 seahub/templates/decrypt_repo_form.html:47
 #: seahub/templates/file_edit.html:444
 #: seahub/templates/repo_dir_recycle_view.html:121
 #: seahub/templates/repo_dir_recycle_view.html:149
@@ -167,8 +170,8 @@ msgstr "Eyddi safni %(library_name)s"
 #: seahub/templates/snippets/office_convert_js.html:96
 #: seahub/templates/snippets/shared_link_js.html:125
 #: seahub/templates/snippets/spreadsheet_convert_js.html:39
-#: seahub/templates/sysadmin/admin_repo_view.html:330
-#: seahub/templates/sysadmin/settings.html:192
+#: seahub/templates/sysadmin/admin_repo_view.html:334
+#: seahub/templates/sysadmin/settings.html:203
 #: seahub/templates/sysadmin/sys_org_admin.html:126
 #: seahub/templates/sysadmin/sys_org_set_quota_js.html:35
 #: seahub/templates/sysadmin/sys_useradmin.html:194
@@ -184,7 +187,7 @@ msgstr "Vinsamlegast athugaðu nettenginguna"
 
 #: seahub/api2/templates/api2/user_msg_body.html:20
 #: seahub/share/templates/share/links.html:29
-#: seahub/templates/js/templates.html:1222
+#: seahub/templates/js/templates.html:1247
 #: seahub/templates/repo_history_view.html:73
 #: seahub/templates/snippets/repo_dir_trash_tr.html:21
 #: seahub/templates/sysadmin/admin_repo_view.html:75
@@ -210,13 +213,16 @@ msgstr "Mikilvægar dagsetningar"
 #: seahub/auth/admin.py:32
 #: seahub/institutions/templates/institutions/info.html:23
 #: seahub/institutions/templates/institutions/user_info.html:46
-#: seahub/templates/home_base.html:24 seahub/templates/js/templates.html:152
-#: seahub/templates/js/templates.html:625
-#: seahub/templates/js/templates.html:642
-#: seahub/templates/js/templates.html:645
-#: seahub/templates/js/templates.html:727
+#: seahub/templates/home_base.html:24
+#: seahub/templates/js/sysadmin-templates.html:21
+#: seahub/templates/js/sysadmin-templates.html:107
+#: seahub/templates/js/templates.html:160
+#: seahub/templates/js/templates.html:627
+#: seahub/templates/js/templates.html:644
+#: seahub/templates/js/templates.html:647
+#: seahub/templates/js/templates.html:729
 #: seahub/templates/snippets/repo_share_form.html:7
-#: seahub/templates/sysadmin/base.html:21
+#: seahub/templates/sysadmin/base.html:24
 #: seahub/templates/sysadmin/sys_info.html:40
 #: seahub/templates/sysadmin/sys_org_info_group.html:9
 #: seahub/templates/sysadmin/sys_org_info_library.html:9
@@ -244,10 +250,11 @@ msgid "Email or Username"
 msgstr "Netfang eða Notendanafn"
 
 #: seahub/auth/forms.py:23 seahub/auth/forms.py:195
-#: seahub/base/accounts.py:502 seahub/templates/js/lib-op-popups.html:117
+#: seahub/base/accounts.py:529 seahub/templates/file_edit.html:130
+#: seahub/templates/js/lib-op-popups.html:117
 #: seahub/templates/js/templates.html:21
-#: seahub/templates/js/templates.html:450
-#: seahub/templates/js/templates.html:505
+#: seahub/templates/js/templates.html:444
+#: seahub/templates/js/templates.html:499
 #: seahub/templates/registration/login.html:12
 #: seahub/templates/registration/registration_form.html:24
 #: seahub/templates/snippets/file_share_popup.html:18
@@ -307,7 +314,7 @@ msgid "New password confirmation"
 msgstr "Staðfesting nýs lykilorðs"
 
 #: seahub/auth/forms.py:164 seahub/auth/forms.py:207
-#: seahub/base/accounts.py:549
+#: seahub/base/accounts.py:576
 msgid "The two password fields didn't match."
 msgstr "Lykilorðin stemma ekki"
 
@@ -319,7 +326,7 @@ msgstr "Gamla lykilorðið"
 msgid "Your old password was entered incorrectly. Please enter it again."
 msgstr "Þú slóst gamla lykilorðið ekki rétt inn.  Vinsamlegast sláðu það inn aftur."
 
-#: seahub/auth/forms.py:196 seahub/base/accounts.py:504
+#: seahub/auth/forms.py:196 seahub/base/accounts.py:531
 msgid "Password (again)"
 msgstr "Lykilorðið (aftur)"
 
@@ -328,15 +335,19 @@ msgstr "Lykilorðið (aftur)"
 msgid "Enter a valid e-mail address."
 msgstr "Sláðu inn löglegt netfang"
 
-#: seahub/auth/views.py:264
+#: seahub/auth/views.py:165
+msgid "This account has been frozen due to too many failed login attempts."
+msgstr ""
+
+#: seahub/auth/views.py:293
 msgid "Logged out"
 msgstr "Útskráður"
 
-#: seahub/auth/views.py:312
+#: seahub/auth/views.py:341
 msgid "Failed to send email, please contact administrator."
 msgstr "Tókst ekki að senda tölvupóst, vinsamlegast hafðu samband við kerfisstjóra."
 
-#: seahub/auth/views.py:373
+#: seahub/auth/views.py:402
 msgid "Can not update password, please contact LDAP admin."
 msgstr "Get ekki uppfært lykilorðið, vinsamlegast hafðu samband við LDAP kerfisstjóra."
 
@@ -423,6 +434,7 @@ msgstr "Núverandi smámynd:"
 #: seahub/options/templates/options/set_user_options.html:14
 #: seahub/profile/templates/profile/set_profile.html:68
 #: seahub/profile/templates/profile/set_profile.html:112
+#: seahub/share/templates/share/share_link_audit.html:22
 #: seahub/templates/decrypt_repo_form.html:11
 #: seahub/templates/file_edit.html:101 seahub/templates/file_edit.html:134
 #: seahub/templates/file_edit.html:325 seahub/templates/home_base.html:84
@@ -434,24 +446,24 @@ msgstr "Núverandi smámynd:"
 #: seahub/templates/js/lib-op-popups.html:118
 #: seahub/templates/js/lib-op-popups.html:145
 #: seahub/templates/js/templates.html:28
-#: seahub/templates/js/templates.html:487
-#: seahub/templates/js/templates.html:527
-#: seahub/templates/js/templates.html:557
-#: seahub/templates/js/templates.html:580
-#: seahub/templates/js/templates.html:723
-#: seahub/templates/js/templates.html:803
-#: seahub/templates/js/templates.html:825
-#: seahub/templates/js/templates.html:880
-#: seahub/templates/js/templates.html:1044
-#: seahub/templates/js/templates.html:1053
-#: seahub/templates/js/templates.html:1061
-#: seahub/templates/js/templates.html:1164
-#: seahub/templates/js/templates.html:1238
-#: seahub/templates/js/templates.html:1278
-#: seahub/templates/js/templates.html:1291
-#: seahub/templates/js/templates.html:1324
-#: seahub/templates/js/templates.html:1337
-#: seahub/templates/js/templates.html:1388 seahub/templates/libraries.html:93
+#: seahub/templates/js/templates.html:481
+#: seahub/templates/js/templates.html:521
+#: seahub/templates/js/templates.html:554
+#: seahub/templates/js/templates.html:581
+#: seahub/templates/js/templates.html:725
+#: seahub/templates/js/templates.html:808
+#: seahub/templates/js/templates.html:834
+#: seahub/templates/js/templates.html:890
+#: seahub/templates/js/templates.html:1060
+#: seahub/templates/js/templates.html:1069
+#: seahub/templates/js/templates.html:1077
+#: seahub/templates/js/templates.html:1189
+#: seahub/templates/js/templates.html:1263
+#: seahub/templates/js/templates.html:1303
+#: seahub/templates/js/templates.html:1316
+#: seahub/templates/js/templates.html:1349
+#: seahub/templates/js/templates.html:1362
+#: seahub/templates/js/templates.html:1413 seahub/templates/libraries.html:93
 #: seahub/templates/libraries.html:157
 #: seahub/templates/registration/password_change_form.html:25
 #: seahub/templates/registration/password_reset_confirm.html:19
@@ -512,43 +524,48 @@ msgstr "Tókst að uppfæra smámyndina þína."
 msgid "Successfully deleted the requested avatars."
 msgstr "Tókst að eyða þeim smámyndum sem beðið var um."
 
-#: seahub/base/accounts.py:493
+#: seahub/base/accounts.py:252
+#, python-format
+msgid "Account %(account)s froze on %(site)s."
+msgstr ""
+
+#: seahub/base/accounts.py:520
 msgid "Email address"
 msgstr "Netfang"
 
-#: seahub/base/accounts.py:498
+#: seahub/base/accounts.py:525
 msgid "Username"
 msgstr "Notandanafn"
 
-#: seahub/base/accounts.py:499
+#: seahub/base/accounts.py:526
 msgid "This value must be of length 40"
 msgstr "Þetta gildi verður að vera nákvæmlega 40 stafir"
 
-#: seahub/base/accounts.py:509
+#: seahub/base/accounts.py:536
 msgid "Enter a valid email address."
 msgstr "Sláðu inn gilt netfang."
 
-#: seahub/base/accounts.py:515
+#: seahub/base/accounts.py:542
 msgid "A user with this email already"
 msgstr "Það er þegar notandi með þetta netfang"
 
-#: seahub/base/accounts.py:519
+#: seahub/base/accounts.py:546
 msgid "Invalid user id."
 msgstr "Ekki rétt notandaauðkenni"
 
-#: seahub/base/accounts.py:570
+#: seahub/base/accounts.py:597
 msgid "name"
 msgstr "nafn"
 
-#: seahub/base/accounts.py:573
+#: seahub/base/accounts.py:600
 msgid "department"
 msgstr "deild"
 
-#: seahub/base/accounts.py:576
+#: seahub/base/accounts.py:603
 msgid "telephone"
 msgstr "sími"
 
-#: seahub/base/accounts.py:579
+#: seahub/base/accounts.py:606
 msgid "note"
 msgstr "athugasemd"
 
@@ -617,7 +634,7 @@ msgid "Recovered deleted directory"
 msgstr "Endurheimti eyddri möppu"
 
 #: seahub/base/templatetags/seahub_tags.py:174
-#: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:1768
+#: seahub/base/templatetags/seahub_tags.py:243 seahub/views/ajax.py:1761
 msgid "Changed library name or description"
 msgstr "Breytti nafni á safni eða lýsingu"
 
@@ -665,22 +682,22 @@ msgstr[1] "fyrir %(seconds)d sekúndum síðan"
 #: seahub/share/templates/share/list_priv_shared_folders.html:35
 #: seahub/share/templates/share/repos.html:23
 #: seahub/share/templates/share/repos.html:25
-#: seahub/share/templates/share/repos.html:39 seahub/share/views.py:468
-#: seahub/share/views.py:565 seahub/templates/js/templates.html:10
-#: seahub/templates/js/templates.html:553
-#: seahub/templates/js/templates.html:576
-#: seahub/templates/js/templates.html:757
-#: seahub/templates/js/templates.html:766
-#: seahub/templates/js/templates.html:769
-#: seahub/templates/js/templates.html:799
-#: seahub/templates/js/templates.html:821
-#: seahub/templates/js/templates.html:890
-#: seahub/templates/js/templates.html:897
-#: seahub/templates/js/templates.html:1273
-#: seahub/templates/js/templates.html:1319
-#: seahub/templates/js/templates.html:1358
-#: seahub/templates/js/templates.html:1361
-#: seahub/templates/js/templates.html:1368
+#: seahub/share/templates/share/repos.html:39 seahub/share/views.py:470
+#: seahub/share/views.py:567 seahub/templates/js/templates.html:10
+#: seahub/templates/js/templates.html:550
+#: seahub/templates/js/templates.html:577
+#: seahub/templates/js/templates.html:759
+#: seahub/templates/js/templates.html:768
+#: seahub/templates/js/templates.html:771
+#: seahub/templates/js/templates.html:804
+#: seahub/templates/js/templates.html:830
+#: seahub/templates/js/templates.html:900
+#: seahub/templates/js/templates.html:907
+#: seahub/templates/js/templates.html:1298
+#: seahub/templates/js/templates.html:1344
+#: seahub/templates/js/templates.html:1383
+#: seahub/templates/js/templates.html:1386
+#: seahub/templates/js/templates.html:1393
 #: seahub/templates/snippets/repo_share_form.html:25
 #: seahub/templates/sysadmin/repoadmin_table.html:17
 #: seahub/templates/sysadmin/sys_admin_group_info.html:53
@@ -693,21 +710,21 @@ msgstr "Lesa-Skrifa"
 
 #: seahub/base/templatetags/seahub_tags.py:459
 #: seahub/share/templates/share/list_priv_shared_folders.html:33
-#: seahub/share/templates/share/repos.html:37 seahub/share/views.py:470
-#: seahub/share/views.py:567 seahub/templates/js/templates.html:11
-#: seahub/templates/js/templates.html:554
-#: seahub/templates/js/templates.html:577
-#: seahub/templates/js/templates.html:759
-#: seahub/templates/js/templates.html:767
-#: seahub/templates/js/templates.html:770
-#: seahub/templates/js/templates.html:800
-#: seahub/templates/js/templates.html:822
-#: seahub/templates/js/templates.html:898
-#: seahub/templates/js/templates.html:1274
-#: seahub/templates/js/templates.html:1320
-#: seahub/templates/js/templates.html:1362
-#: seahub/templates/js/templates.html:1365
-#: seahub/templates/js/templates.html:1369
+#: seahub/share/templates/share/repos.html:37 seahub/share/views.py:472
+#: seahub/share/views.py:569 seahub/templates/js/templates.html:11
+#: seahub/templates/js/templates.html:551
+#: seahub/templates/js/templates.html:578
+#: seahub/templates/js/templates.html:761
+#: seahub/templates/js/templates.html:769
+#: seahub/templates/js/templates.html:772
+#: seahub/templates/js/templates.html:805
+#: seahub/templates/js/templates.html:831
+#: seahub/templates/js/templates.html:908
+#: seahub/templates/js/templates.html:1299
+#: seahub/templates/js/templates.html:1345
+#: seahub/templates/js/templates.html:1387
+#: seahub/templates/js/templates.html:1390
+#: seahub/templates/js/templates.html:1394
 #: seahub/templates/snippets/repo_share_form.html:26
 #: seahub/templates/sysadmin/sys_admin_group_info.html:51
 #: seahub/templates/sysadmin/userinfo.html:133
@@ -719,33 +736,33 @@ msgstr "Aðeins-Lesa"
 #, python-format
 msgid "%(size)d byte"
 msgid_plural "%(size)d bytes"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(size)d bæti"
+msgstr[1] "%(size)d bæti"
 
 #: seahub/base/templatetags/seahub_tags.py:497
 #, python-format
 msgid "%s KB"
-msgstr ""
+msgstr "%s KB"
 
 #: seahub/base/templatetags/seahub_tags.py:499
 #, python-format
 msgid "%s MB"
-msgstr ""
+msgstr "%s MB"
 
 #: seahub/base/templatetags/seahub_tags.py:501
 #, python-format
 msgid "%s GB"
-msgstr ""
+msgstr "%s GB"
 
 #: seahub/base/templatetags/seahub_tags.py:503
 #, python-format
 msgid "%s TB"
-msgstr ""
+msgstr "%s TB"
 
 #: seahub/base/templatetags/seahub_tags.py:505
 #, python-format
 msgid "%s PB"
-msgstr ""
+msgstr "%s PB"
 
 #: seahub/contacts/models.py:77
 #: seahub/contacts/templates/contacts/contact_list.html:119
@@ -779,15 +796,16 @@ msgstr "Netfang"
 #: seahub/share/templates/share/links.html:66
 #: seahub/share/templates/share/list_priv_shared_folders.html:15
 #: seahub/share/templates/share/repos.html:15
-#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:178
-#: seahub/templates/js/templates.html:852
-#: seahub/templates/js/templates.html:861
-#: seahub/templates/js/templates.html:875
-#: seahub/templates/js/templates.html:964
-#: seahub/templates/js/templates.html:1078
-#: seahub/templates/js/templates.html:1086
-#: seahub/templates/js/templates.html:1185
-#: seahub/templates/js/templates.html:1202
+#: seahub/templates/js/lib-op-popups.html:6
+#: seahub/templates/js/templates.html:5 seahub/templates/js/templates.html:186
+#: seahub/templates/js/templates.html:862
+#: seahub/templates/js/templates.html:871
+#: seahub/templates/js/templates.html:885
+#: seahub/templates/js/templates.html:974
+#: seahub/templates/js/templates.html:1094
+#: seahub/templates/js/templates.html:1102
+#: seahub/templates/js/templates.html:1210
+#: seahub/templates/js/templates.html:1227 seahub/templates/libraries.html:90
 #: seahub/templates/registration/registration_form.html:18
 #: seahub/templates/repo_dir_recycle_view.html:33
 #: seahub/templates/repo_history_view.html:57
@@ -815,7 +833,7 @@ msgstr "Netfang"
 #: seahub/templates/wiki/personal_wiki.html:41
 #: seahub/templates/wiki/personal_wiki.html:83
 #: seahub/templates/wiki/personal_wiki_pages.html:28
-#: seahub/views/sysadmin.py:1402
+#: seahub/views/sysadmin.py:1418
 msgid "Name"
 msgstr "Nafn"
 
@@ -860,11 +878,11 @@ msgstr "Aðgerðir"
 #: seahub/group/templates/group/group_wiki.html:22
 #: seahub/share/templates/share/list_priv_shared_folders.html:28
 #: seahub/share/templates/share/repos.html:32
-#: seahub/templates/js/templates.html:762
-#: seahub/templates/js/templates.html:1115
-#: seahub/templates/js/templates.html:1122
-#: seahub/templates/js/templates.html:1359
-#: seahub/templates/js/templates.html:1366
+#: seahub/templates/js/templates.html:764
+#: seahub/templates/js/templates.html:1131
+#: seahub/templates/js/templates.html:1138
+#: seahub/templates/js/templates.html:1384
+#: seahub/templates/js/templates.html:1391
 #: seahub/templates/sysadmin/sys_org_info_user.html:33
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:44
 #: seahub/templates/sysadmin/useradmin_table.html:36
@@ -885,21 +903,21 @@ msgstr "Breyta"
 #: seahub/profile/templates/profile/set_profile.html:101
 #: seahub/templates/js/templates.html:43
 #: seahub/templates/js/templates.html:101
-#: seahub/templates/js/templates.html:206
-#: seahub/templates/js/templates.html:289
-#: seahub/templates/js/templates.html:370
-#: seahub/templates/js/templates.html:396
-#: seahub/templates/js/templates.html:480
-#: seahub/templates/js/templates.html:520
-#: seahub/templates/js/templates.html:775
-#: seahub/templates/js/templates.html:991
-#: seahub/templates/js/templates.html:1136
-#: seahub/templates/js/templates.html:1141
-#: seahub/templates/js/templates.html:1374
+#: seahub/templates/js/templates.html:214
+#: seahub/templates/js/templates.html:297
+#: seahub/templates/js/templates.html:378
+#: seahub/templates/js/templates.html:404
+#: seahub/templates/js/templates.html:474
+#: seahub/templates/js/templates.html:514
+#: seahub/templates/js/templates.html:777
+#: seahub/templates/js/templates.html:1009
+#: seahub/templates/js/templates.html:1152
+#: seahub/templates/js/templates.html:1157
+#: seahub/templates/js/templates.html:1399
 #: seahub/templates/snippets/file_share_popup.html:37
 #: seahub/templates/sysadmin/admin_repo_view.html:63
 #: seahub/templates/sysadmin/admin_repo_view.html:88
-#: seahub/templates/sysadmin/admin_repo_view.html:294
+#: seahub/templates/sysadmin/admin_repo_view.html:298
 #: seahub/templates/sysadmin/org_admin_table.html:25
 #: seahub/templates/sysadmin/repoadmin_table.html:35
 #: seahub/templates/sysadmin/sys_admin_group_info.html:65
@@ -931,8 +949,9 @@ msgstr "Bættu félögum þínum við svo þú getir deilt með einföldum hætt
 #: seahub/contacts/templates/contacts/contact_list.html:53
 #: seahub/institutions/templates/institutions/user_info.html:19
 #: seahub/institutions/templates/institutions/useradmin.html:16
-#: seahub/templates/js/templates.html:1079
-#: seahub/templates/js/templates.html:1087
+#: seahub/share/templates/share/share_link_audit.html:9
+#: seahub/templates/js/templates.html:1095
+#: seahub/templates/js/templates.html:1103
 #: seahub/templates/registration/registration_form.html:22
 #: seahub/templates/sysadmin/sys_inst_info_user.html:14
 #: seahub/templates/sysadmin/sys_org_info_user.html:16
@@ -942,8 +961,8 @@ msgstr "Bættu félögum þínum við svo þú getir deilt með einföldum hætt
 #: seahub/templates/sysadmin/user_search.html:10
 #: seahub/templates/sysadmin/useradmin_table.html:5
 #: seahub/templates/sysadmin/useradmin_table.html:9
-#: seahub/templates/sysadmin/userinfo.html:20 seahub/views/sysadmin.py:629
-#: seahub/views/sysadmin.py:632
+#: seahub/templates/sysadmin/userinfo.html:20 seahub/views/sysadmin.py:645
+#: seahub/views/sysadmin.py:648
 msgid "Email"
 msgstr "Netfang"
 
@@ -1041,17 +1060,17 @@ msgstr "Lýsingin er of löng (hámark er 100 stafir)"
 msgid "Name %s is not valid"
 msgstr "Ekki má nota nafnið %s"
 
-#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:680
-#: seahub/share/views.py:708 seahub/views/ajax.py:399 seahub/views/ajax.py:486
+#: seahub/forms.py:78 seahub/message/views.py:177 seahub/share/views.py:682
+#: seahub/share/views.py:710 seahub/views/ajax.py:399 seahub/views/ajax.py:486
 #: seahub/views/ajax.py:647 seahub/views/ajax.py:864 seahub/views/ajax.py:1006
 #: seahub/views/ajax.py:1035 seahub/views/ajax.py:1196
 #: seahub/views/ajax.py:1280 seahub/views/ajax.py:1284
-#: seahub/views/ajax.py:1288 seahub/views/ajax.py:1631
-#: seahub/views/ajax.py:1655 seahub/views/ajax.py:1755
-#: seahub/views/ajax.py:1975 seahub/views/ajax.py:2032
-#: seahub/views/ajax.py:2173 seahub/views/ajax.py:2389
-#: seahub/views/file.py:1516 seahub/views/sysadmin.py:1787
-#: seahub/views/sysadmin.py:1805
+#: seahub/views/ajax.py:1288 seahub/views/ajax.py:1624
+#: seahub/views/ajax.py:1648 seahub/views/ajax.py:1748
+#: seahub/views/ajax.py:1968 seahub/views/ajax.py:2025
+#: seahub/views/ajax.py:2166 seahub/views/ajax.py:2382
+#: seahub/views/file.py:1514 seahub/views/sysadmin.py:1814
+#: seahub/views/sysadmin.py:1832
 msgid "Argument missing"
 msgstr "Vantar frumgildi"
 
@@ -1113,7 +1132,7 @@ msgid "Permission error: only group staff can add member"
 msgstr "Leyfisvilla: aðeins stjórnendur hóps geta bætt við félögum"
 
 #: seahub/group/error_msg.py:16 seahub/group/error_msg.py:22
-#: seahub/share/views.py:269
+#: seahub/share/views.py:271
 msgid "Group does not exist"
 msgstr "Hópur er ekki til"
 
@@ -1263,16 +1282,16 @@ msgstr "Smelltu og veldu safn."
 #: seahub/templates/js/lib-op-popups.html:86
 #: seahub/templates/js/lib-op-popups.html:130
 #: seahub/templates/js/lib-op-popups.html:146
-#: seahub/templates/js/templates.html:488
-#: seahub/templates/js/templates.html:528
-#: seahub/templates/js/templates.html:1292
-#: seahub/templates/js/templates.html:1338
+#: seahub/templates/js/templates.html:482
+#: seahub/templates/js/templates.html:522
+#: seahub/templates/js/templates.html:1317
+#: seahub/templates/js/templates.html:1363
 #: seahub/templates/repo_dir_recycle_view.html:63
 #: seahub/templates/shared_file_view.html:63
 #: seahub/templates/snippets/file_share_popup.html:49
 #: seahub/templates/snippets/web_settings_form.html:13
 #: seahub/templates/sysadmin/admin_repo_view.html:110
-#: seahub/templates/sysadmin/admin_repo_view.html:293
+#: seahub/templates/sysadmin/admin_repo_view.html:297
 #: seahub/templates/sysadmin/repo_transfer_form.html:9
 #: seahub/templates/view_shared_upload_link.html:85
 #: seahub/templates/wiki/personal_wiki.html:57
@@ -1349,21 +1368,21 @@ msgstr "Nafn er áskilið"
 msgid "Description is required."
 msgstr "Lýsing er áskilin"
 
-#: seahub/group/views.py:148 seahub/share/views.py:282
-#: seahub/share/views.py:298 seahub/share/views.py:308
-#: seahub/share/views.py:690 seahub/share/views.py:718
-#: seahub/share/views.py:830 seahub/share/views.py:997
+#: seahub/group/views.py:148 seahub/share/views.py:284
+#: seahub/share/views.py:300 seahub/share/views.py:310
+#: seahub/share/views.py:692 seahub/share/views.py:720
+#: seahub/share/views.py:832 seahub/share/views.py:999
 #: seahub/views/__init__.py:529 seahub/views/__init__.py:703
 #: seahub/views/__init__.py:1092 seahub/views/__init__.py:1140
 #: seahub/views/ajax.py:187 seahub/views/ajax.py:406 seahub/views/ajax.py:504
 #: seahub/views/ajax.py:511 seahub/views/ajax.py:561 seahub/views/ajax.py:568
 #: seahub/views/ajax.py:665 seahub/views/ajax.py:690 seahub/views/ajax.py:726
 #: seahub/views/ajax.py:768 seahub/views/ajax.py:803 seahub/views/ajax.py:883
-#: seahub/views/ajax.py:1667 seahub/views/ajax.py:1735
-#: seahub/views/ajax.py:2019 seahub/views/ajax.py:2045
-#: seahub/views/ajax.py:2161 seahub/views/ajax.py:2187
-#: seahub/views/file.py:1044 seahub/views/file.py:1525
-#: seahub/views/repo.py:117
+#: seahub/views/ajax.py:1660 seahub/views/ajax.py:1728
+#: seahub/views/ajax.py:2012 seahub/views/ajax.py:2038
+#: seahub/views/ajax.py:2154 seahub/views/ajax.py:2180
+#: seahub/views/file.py:1040 seahub/views/file.py:1523
+#: seahub/views/repo.py:119
 msgid "Permission denied"
 msgstr "Aðgangi hafnað"
 
@@ -1712,15 +1731,18 @@ msgstr "Seafile þjónar geyma ekki lykilorðin á dulkóðuðum söfnum.  Til a
 
 #: seahub/institutions/templates/institutions/base.html:4
 msgid "Exit"
-msgstr ""
+msgstr "Hætta"
 
 #: seahub/institutions/templates/institutions/base.html:11
 #: seahub/institutions/templates/institutions/useradmin.html:9
-#: seahub/templates/sysadmin/base.html:18
+#: seahub/templates/js/sysadmin-templates.html:18
+#: seahub/templates/sysadmin/base.html:21
 msgid "Users"
 msgstr "Notendur"
 
 #: seahub/institutions/templates/institutions/info.html:7
+#: seahub/templates/js/sysadmin-templates.html:7
+#: seahub/templates/js/sysadmin-templates.html:61
 #: seahub/templates/sysadmin/base.html:9
 #: seahub/templates/sysadmin/sys_info.html:7
 msgid "Info"
@@ -1728,9 +1750,11 @@ msgstr "Upplýsingar"
 
 #: seahub/institutions/templates/institutions/info.html:13
 #: seahub/share/templates/share/repos.html:10
-#: seahub/templates/home_base.html:60 seahub/templates/js/templates.html:692
-#: seahub/templates/libraries.html:5 seahub/templates/pub_base.html:12
-#: seahub/templates/sysadmin/base.html:15
+#: seahub/templates/home_base.html:60
+#: seahub/templates/js/sysadmin-templates.html:15
+#: seahub/templates/js/sysadmin-templates.html:82
+#: seahub/templates/js/templates.html:694 seahub/templates/libraries.html:5
+#: seahub/templates/pub_base.html:12 seahub/templates/sysadmin/base.html:18
 #: seahub/templates/sysadmin/sys_admin_group_info.html:30
 #: seahub/templates/sysadmin/sys_info.html:19
 #: seahub/templates/sysadmin/sys_org_info_group.html:10
@@ -1741,12 +1765,16 @@ msgid "Libraries"
 msgstr "Söfn"
 
 #: seahub/institutions/templates/institutions/info.html:16
+#: seahub/templates/js/sysadmin-templates.html:86
+#: seahub/templates/js/sysadmin-templates.html:99
 #: seahub/templates/sysadmin/sys_info.html:23
 #: seahub/templates/sysadmin/sys_info.html:32
 msgid "Active Users"
 msgstr "Virkir Notendur"
 
 #: seahub/institutions/templates/institutions/info.html:16
+#: seahub/templates/js/sysadmin-templates.html:86
+#: seahub/templates/js/sysadmin-templates.html:99
 #: seahub/templates/sysadmin/sys_info.html:23
 #: seahub/templates/sysadmin/sys_info.html:32
 msgid "Total Users"
@@ -1806,12 +1834,12 @@ msgstr "Eigin Söfn"
 
 #: seahub/institutions/templates/institutions/user_info.html:56
 #: seahub/templates/file_revisions.html:44
-#: seahub/templates/js/templates.html:180
-#: seahub/templates/js/templates.html:854
-#: seahub/templates/js/templates.html:863
-#: seahub/templates/js/templates.html:966
-#: seahub/templates/js/templates.html:1187
-#: seahub/templates/js/templates.html:1204
+#: seahub/templates/js/templates.html:188
+#: seahub/templates/js/templates.html:864
+#: seahub/templates/js/templates.html:873
+#: seahub/templates/js/templates.html:976
+#: seahub/templates/js/templates.html:1212
+#: seahub/templates/js/templates.html:1229
 #: seahub/templates/repo_dir_recycle_view.html:35
 #: seahub/templates/repo_history_view.html:58
 #: seahub/templates/sysadmin/admin_repo_view.html:44
@@ -1824,11 +1852,11 @@ msgid "Size"
 msgstr "Stærð"
 
 #: seahub/institutions/templates/institutions/user_info.html:57
-#: seahub/templates/js/templates.html:181
-#: seahub/templates/js/templates.html:855
-#: seahub/templates/js/templates.html:864
-#: seahub/templates/js/templates.html:876
-#: seahub/templates/js/templates.html:967 seahub/templates/libraries.html:171
+#: seahub/templates/js/templates.html:189
+#: seahub/templates/js/templates.html:865
+#: seahub/templates/js/templates.html:874
+#: seahub/templates/js/templates.html:886
+#: seahub/templates/js/templates.html:977 seahub/templates/libraries.html:171
 #: seahub/templates/starred.html:15
 #: seahub/templates/sysadmin/admin_repo_view.html:45
 #: seahub/templates/sysadmin/userinfo.html:75
@@ -1838,7 +1866,7 @@ msgid "Last Update"
 msgstr "Síðasta Uppfærsla"
 
 #: seahub/institutions/templates/institutions/user_info.html:64
-#: seahub/templates/js/templates.html:888
+#: seahub/templates/js/templates.html:898
 #: seahub/templates/sysadmin/repoadmin_table.html:14
 #: seahub/templates/sysadmin/sys_admin_group_info.html:49
 #: seahub/templates/sysadmin/sys_org_info_library.html:27
@@ -1866,10 +1894,10 @@ msgid "This user has not created any libraries"
 msgstr "Þessi notandi hefur ekki búið til nein söfn"
 
 #: seahub/institutions/templates/institutions/user_info.html:102
-#: seahub/templates/js/templates.html:1080
+#: seahub/templates/js/templates.html:1096
 #: seahub/templates/sysadmin/sys_useradmin.html:36
 #: seahub/templates/sysadmin/useradmin_table.html:7
-#: seahub/templates/sysadmin/userinfo.html:208 seahub/views/sysadmin.py:629
+#: seahub/templates/sysadmin/userinfo.html:208 seahub/views/sysadmin.py:645
 msgid "Role"
 msgstr "Hlutverk"
 
@@ -1878,8 +1906,8 @@ msgstr "Hlutverk"
 #: seahub/templates/sysadmin/sys_inst_admin.html:28
 #: seahub/templates/sysadmin/sys_org_info_group.html:20
 #: seahub/templates/sysadmin/sys_publink_admin.html:14
-#: seahub/templates/sysadmin/userinfo.html:209 seahub/views/sysadmin.py:629
-#: seahub/views/sysadmin.py:632 seahub/views/sysadmin.py:1402
+#: seahub/templates/sysadmin/userinfo.html:209 seahub/views/sysadmin.py:645
+#: seahub/views/sysadmin.py:648 seahub/views/sysadmin.py:1418
 msgid "Create At"
 msgstr "Stofna Á"
 
@@ -1894,7 +1922,7 @@ msgstr "Þessi notandi hefur ekki búið til eða gengið til liðs við neina h
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:27
 #: seahub/templates/sysadmin/useradmin_table.html:6
 #: seahub/templates/sysadmin/useradmin_table.html:10
-#: seahub/views/sysadmin.py:629 seahub/views/sysadmin.py:632
+#: seahub/views/sysadmin.py:645 seahub/views/sysadmin.py:648
 msgid "Status"
 msgstr "Staða"
 
@@ -1914,7 +1942,7 @@ msgstr "Búa til á / Síðasta Innskráning"
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:47
 #: seahub/templates/sysadmin/useradmin_table.html:32
 #: seahub/templates/sysadmin/useradmin_table.html:39
-#: seahub/views/sysadmin.py:646
+#: seahub/views/sysadmin.py:662
 msgid "Active"
 msgstr "Virkt"
 
@@ -1926,7 +1954,7 @@ msgstr "Virkt"
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:48
 #: seahub/templates/sysadmin/useradmin_table.html:34
 #: seahub/templates/sysadmin/useradmin_table.html:40
-#: seahub/views/sysadmin.py:648
+#: seahub/views/sysadmin.py:664
 msgid "Inactive"
 msgstr "Óvirkt"
 
@@ -1935,7 +1963,7 @@ msgstr "Óvirkt"
 #: seahub/templates/sysadmin/sys_group_admin.html:42
 #: seahub/templates/sysadmin/sys_inst_admin.html:44
 #: seahub/templates/sysadmin/sys_inst_info_user.html:47
-#: seahub/templates/sysadmin/sys_publink_admin.html:33
+#: seahub/templates/sysadmin/sys_publink_admin.html:59
 msgid "Empty"
 msgstr "Tómt"
 
@@ -1953,33 +1981,32 @@ msgstr "Eyða Notanda"
 #: seahub/templates/sysadmin/sys_repo_search.html:17
 #: seahub/templates/sysadmin/sys_repo_trash.html:29
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:12
-#: seahub/views/sysadmin.py:935
+#: seahub/views/sysadmin.py:951
 msgid "Owner"
 msgstr "Eigandi"
 
-#: seahub/institutions/views.py:120 seahub/templates/base.html:91
-#: seahub/templates/base.html.py:96
-#: seahub/templates/base_for_backbone.html:102
-#: seahub/templates/base_for_backbone.html:107
-#: seahub/templates/js/templates.html:1114
-#: seahub/templates/js/templates.html:1118
-#: seahub/templates/js/templates.html:1125 seahub/views/sysadmin.py:630
-#: seahub/views/sysadmin.py:633 seahub/views/sysadmin.py:937
+#: seahub/institutions/views.py:120 seahub/templates/base.html:77
+#: seahub/templates/base.html.py:82 seahub/templates/base_for_backbone.html:78
+#: seahub/templates/base_for_backbone.html:83
+#: seahub/templates/js/templates.html:1130
+#: seahub/templates/js/templates.html:1134
+#: seahub/templates/js/templates.html:1141 seahub/views/sysadmin.py:646
+#: seahub/views/sysadmin.py:649 seahub/views/sysadmin.py:953
 msgid "Admin"
 msgstr "Stjórna"
 
-#: seahub/institutions/views.py:122 seahub/templates/js/templates.html:1117
-#: seahub/templates/js/templates.html:1121
-#: seahub/templates/js/templates.html:1124 seahub/views/sysadmin.py:939
+#: seahub/institutions/views.py:122 seahub/templates/js/templates.html:1133
+#: seahub/templates/js/templates.html:1137
+#: seahub/templates/js/templates.html:1140 seahub/views/sysadmin.py:955
 msgid "Member"
 msgstr "Félagi"
 
-#: seahub/institutions/views.py:148 seahub/views/sysadmin.py:1039
+#: seahub/institutions/views.py:148 seahub/views/sysadmin.py:1055
 #, python-format
 msgid "Successfully deleted %s"
 msgstr "Tókst að eyða %s"
 
-#: seahub/institutions/views.py:150 seahub/views/sysadmin.py:1041
+#: seahub/institutions/views.py:150 seahub/views/sysadmin.py:1057
 msgid "Failed to delete: the user does not exist"
 msgstr "Tókst ekki að eyða: notandinn er ekki til"
 
@@ -2003,6 +2030,7 @@ msgstr "Skilaboð"
 #: seahub/notifications/templates/notifications/notice_email.html:20
 #: seahub/notifications/templates/notifications/user_notification_list.html:24
 #: seahub/templates/file_revisions.html:42
+#: seahub/templates/js/sysadmin-templates.html:193
 #: seahub/templates/repo_history.html:17
 msgid "Time"
 msgstr "Tími"
@@ -2049,16 +2077,22 @@ msgid "Send a message..."
 msgstr "Senda skilaboð..."
 
 #: seahub/message/templates/message/user_msg_list.html:72
-#: seahub/templates/file_access.html:56 seahub/templates/repo_history.html:58
+#: seahub/templates/file_access.html:56
+#: seahub/templates/js/sysadmin-templates.html:152
+#: seahub/templates/repo_history.html:58
 #: seahub/templates/snippets/admin_paginator.html:3
+#: seahub/templates/sysadmin/sys_publink_admin.html:33
 #: seahub/templates/sysadmin/sys_trafficadmin.html:30
 #: seahub/templates/sysadmin/useradmin_paginator.html:4
 msgid "Previous"
 msgstr "Fyrri"
 
 #: seahub/message/templates/message/user_msg_list.html:82
-#: seahub/templates/file_access.html:59 seahub/templates/repo_history.html:61
+#: seahub/templates/file_access.html:59
+#: seahub/templates/js/sysadmin-templates.html:153
+#: seahub/templates/repo_history.html:61
 #: seahub/templates/snippets/admin_paginator.html:6
+#: seahub/templates/sysadmin/sys_publink_admin.html:36
 #: seahub/templates/sysadmin/sys_trafficadmin.html:33
 #: seahub/templates/sysadmin/useradmin_paginator.html:7
 msgid "Next"
@@ -2075,18 +2109,20 @@ msgstr "Viltu virkilega eyða þessari umræðu"
 
 #: seahub/message/templates/message/user_msg_list.html:184
 #: seahub/message/templates/message/user_msg_list.html:220
-#: seahub/templates/base.html:144 seahub/templates/base_for_backbone.html:133
+#: seahub/templates/base.html:130 seahub/templates/base_for_backbone.html:109
 #: seahub/templates/js/lib-op-popups.html:137
 #: seahub/templates/snippets/repo_del_popup.html:4
-#: seahub/views/sysadmin.py:654 seahub/views/sysadmin.py:655
+#: seahub/templates/sysadmin/sysadmin_backbone.html:90
+#: seahub/views/sysadmin.py:670 seahub/views/sysadmin.py:671
 msgid "Yes"
 msgstr "Já"
 
 #: seahub/message/templates/message/user_msg_list.html:184
 #: seahub/message/templates/message/user_msg_list.html:220
-#: seahub/templates/base.html:145 seahub/templates/base_for_backbone.html:134
+#: seahub/templates/base.html:131 seahub/templates/base_for_backbone.html:110
 #: seahub/templates/js/lib-op-popups.html:138
 #: seahub/templates/snippets/repo_del_popup.html:5
+#: seahub/templates/sysadmin/sysadmin_backbone.html:91
 msgid "No"
 msgstr "Nei"
 
@@ -2125,60 +2161,69 @@ msgstr "Tókst ekki að senda skilaboð til %s, notandi fannst ekki."
 #: seahub/notifications/management/commands/notify_admins_on_virus.py:42
 #, python-format
 msgid "Virus detected on %s"
-msgstr ""
+msgstr "Veira fannst á %s"
 
 #: seahub/notifications/management/commands/send_notices.py:30
-#: seahub/notifications/management/commands/send_notices.py:246
+#: seahub/notifications/management/commands/send_notices.py:274
 #, python-format
 msgid "New notice on %s"
 msgstr "Ný athugasemd á %s"
 
-#: seahub/notifications/models.py:385 seahub/notifications/models.py:427
-#: seahub/notifications/models.py:453 seahub/notifications/models.py:473
-#: seahub/notifications/models.py:490 seahub/notifications/models.py:520
-#: seahub/notifications/models.py:538 seahub/notifications/models.py:568
-#: seahub/utils/__init__.py:143 seahub/utils/__init__.py:1134
+#: seahub/notifications/models.py:406 seahub/notifications/models.py:448
+#: seahub/notifications/models.py:476 seahub/notifications/models.py:513
+#: seahub/notifications/models.py:534 seahub/notifications/models.py:552
+#: seahub/notifications/models.py:583 seahub/notifications/models.py:601
+#: seahub/notifications/models.py:631 seahub/utils/__init__.py:143
+#: seahub/utils/__init__.py:1134
 msgid "Internal error"
 msgstr "kerfisvilla"
 
-#: seahub/notifications/models.py:404
+#: seahub/notifications/models.py:425
 #, python-format
 msgid ""
 "A file named <a href='%(file_link)s'>%(file_name)s</a> is uploaded to <a "
 "href='%(link)s'>%(name)s</a>"
 msgstr "Skrá með nafninu <a href='%(file_link)s'>%(file_name)s</a> er hlaðið upp á þjóninn <a href='%(link)s'>%(name)s</a>"
 
-#: seahub/notifications/models.py:411
+#: seahub/notifications/models.py:432
 #, python-format
 msgid ""
 "A file named <strong>%(file_name)s</strong> is uploaded to <strong>Deleted "
 "Library</strong>"
 msgstr "Skrá með nafninu <strong>%(file_name)s</strong> er hlaðið upp í  <strong>safni sem hefur verið eytt</strong>"
 
-#: seahub/notifications/models.py:437
+#: seahub/notifications/models.py:458
 #, python-format
 msgid ""
 "%(user)s has shared a library named <a href='%(href)s'>%(repo_name)s</a> to "
 "you."
 msgstr "%(user)s hefur deilt safni með þér sem heitir <a href='%(href)s'>%(repo_name)s</a>."
 
-#: seahub/notifications/models.py:458
+#: seahub/notifications/models.py:493
+#, python-format
+msgid ""
+"%(user)s has shared a library named <a "
+"href='%(repo_href)s'>%(repo_name)s</a> to group <a "
+"href='%(group_href)s'>%(group_name)s</a>."
+msgstr ""
+
+#: seahub/notifications/models.py:518
 #, python-format
 msgid "You have received a <a href='%(href)s'>new message</a> from %(user)s."
 msgstr "Þú hefur fengið <a href='%(href)s'>ný skilaboð</a> frá %(user)s."
 
-#: seahub/notifications/models.py:501
+#: seahub/notifications/models.py:563
 #, python-format
 msgid "<a href='%(href)s'>%(group_name)s</a> has a new discussion."
 msgstr "<a href='%(href)s'>%(group_name)s</a> á nýja umræðu."
 
-#: seahub/notifications/models.py:505
+#: seahub/notifications/models.py:567
 #, python-format
 msgid ""
 "%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>."
 msgstr "%(user)s skrifaði nýja umræðu í <a href='%(href)s'>%(group_name)s</a>."
 
-#: seahub/notifications/models.py:549
+#: seahub/notifications/models.py:612
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(username)s</a> has asked to join group <a "
@@ -2186,7 +2231,7 @@ msgid ""
 "%(join_request_msg)s"
 msgstr "Notandinn <a href='%(user_profile)s'>%(username)s</a> óskar eftir því að ganga í hópinn <a href='%(href)s'>%(group_name)s</a>, staðfestingarskilaboð: %(join_request_msg)s"
 
-#: seahub/notifications/models.py:578
+#: seahub/notifications/models.py:641
 #, python-format
 msgid ""
 "User <a href='%(user_profile)s'>%(group_staff)s</a> has added you to group "
@@ -2226,11 +2271,19 @@ msgstr "%(user)s deildi safni með þér sem heitir <a href=\"%(url_base)s%(lib_
 #: seahub/notifications/templates/notifications/notice_email.html:36
 #, python-format
 msgid ""
+"%(user)s has shared a library named <a "
+"href=\"%(url_base)s%(lib_url)s\">%(lib_name)s</a> to <a "
+"href=\"%(url_base)s%(group_url)s\">%(group_name)s</a>."
+msgstr ""
+
+#: seahub/notifications/templates/notifications/notice_email.html:39
+#, python-format
+msgid ""
 "You have received a <a href=\"%(url_base)s%(msg_url)s\">new message</a> from"
 " %(user)s."
 msgstr "Þér hefur borist <a href=\"%(url_base)s%(msg_url)s\">nýtt skeyti</a> frá %(user)s."
 
-#: seahub/notifications/templates/notifications/notice_email.html:42
+#: seahub/notifications/templates/notifications/notice_email.html:45
 #, python-format
 msgid ""
 "A file named <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> is "
@@ -2238,7 +2291,7 @@ msgid ""
 "href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 msgstr "Skránni <a href=\"%(url_base)s%(file_url)s\">%(file_name)s</a> er hlaðið upp í möppuna þína <a href=\"%(url_base)s%(folder_url)s\">%(folder_name)s</a>."
 
-#: seahub/notifications/templates/notifications/notice_email.html:45
+#: seahub/notifications/templates/notifications/notice_email.html:48
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has asked to join "
@@ -2246,14 +2299,14 @@ msgid ""
 "message: %(msg)s"
 msgstr "Notandinn <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> hefur óskað eftir aðgangi í grúppuna <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>, staðfestingarskilaboð: %(msg)s"
 
-#: seahub/notifications/templates/notifications/notice_email.html:48
+#: seahub/notifications/templates/notifications/notice_email.html:51
 #, python-format
 msgid ""
 "User <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> has added you to "
 "group <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 msgstr "Notandinn <a href=\"%(url_base)s%(user_url)s\">%(user)s</a> hefur bætt þér í hópinn <a href=\"%(url_base)s%(grp_url)s\">%(grp_name)s</a>"
 
-#: seahub/notifications/templates/notifications/notice_email.html:58
+#: seahub/notifications/templates/notifications/notice_email.html:61
 msgid "Go check out at the following page:"
 msgstr "Endilega athugaðu eftirfarandi síðu:"
 
@@ -2283,6 +2336,7 @@ msgid "Delete Notification"
 msgstr "Eyða Athugasemd"
 
 #: seahub/notifications/templates/notifications/notify_virus.html:9
+#: seahub/share/templates/share/audit_code_email.html:8
 #: seahub/templates/registration/activation_email.html:9
 #: seahub/templates/registration/password_reset_email.html:9
 #: seahub/templates/shared_link_email.html:9
@@ -2290,13 +2344,14 @@ msgstr "Eyða Athugasemd"
 #: seahub/templates/sysadmin/user_activation_email.html:9
 #: seahub/templates/sysadmin/user_add_email.html:9
 #: seahub/templates/sysadmin/user_batch_add_email.html:9
+#: seahub/templates/sysadmin/user_freeze_email.html:9
 #: seahub/templates/sysadmin/user_reset_email.html:9
 msgid "Hi,"
 msgstr "Hæ,"
 
 #: seahub/notifications/templates/notifications/notify_virus.html:12
 msgid "Virus is detected on regular scanning. Please check the report at:"
-msgstr ""
+msgstr "Veira fannst við reglulega yfirferð. Vinsamlegast kíktu á skýrsluna:"
 
 #: seahub/notifications/templates/notifications/user_notification_list.html:4
 #: seahub/notifications/templates/notifications/user_notification_list.html:9
@@ -2358,14 +2413,17 @@ msgstr "Stillingar Persónuupplýsinga"
 
 #: seahub/profile/templates/profile/set_profile.html:5
 #: seahub/profile/templates/profile/set_profile.html:21
-#: seahub/templates/base.html:81 seahub/templates/base_for_backbone.html:92
-#: seahub/templates/js/templates.html:737 seahub/templates/libraries.html:120
-#: seahub/templates/sysadmin/base.html:12
+#: seahub/templates/base.html:66
+#: seahub/templates/js/sysadmin-templates.html:12
+#: seahub/templates/js/templates.html:739
+#: seahub/templates/js/templates.html:1470 seahub/templates/libraries.html:120
+#: seahub/templates/sysadmin/base.html:15
 #: seahub/templates/sysadmin/settings.html:7
 #: seahub/templates/sysadmin/sys_org_info_group.html:11
 #: seahub/templates/sysadmin/sys_org_info_library.html:11
 #: seahub/templates/sysadmin/sys_org_info_setting.html:11
 #: seahub/templates/sysadmin/sys_org_info_user.html:10
+#: seahub/templates/sysadmin/sysadmin_backbone.html:64
 msgid "Settings"
 msgstr "Stillingar"
 
@@ -2599,40 +2657,46 @@ msgstr "繁體中文"
 msgid "Email is not longer than 512 characters"
 msgstr "Netfang er ekki lengra en 512 stafir"
 
-#: seahub/share/models.py:69
+#: seahub/share/models.py:70
 msgid "Password can't be empty"
 msgstr "Lykilorð er má ekki vanta"
 
-#: seahub/share/models.py:76
+#: seahub/share/models.py:77
 msgid "Please enter a correct password."
 msgstr "Vinsamlegast sláðu inn rétt lykilorð."
+
+#: seahub/share/templates/share/audit_code_email.html:11
+#, python-format
+msgid "Your code is %(code)s, this code will be valid for one hour."
+msgstr ""
 
 #: seahub/share/templates/share/links.html:5
 msgid "Links - Share"
 msgstr "Tenglar - Deilt"
 
 #: seahub/share/templates/share/links.html:12
-#: seahub/templates/js/templates.html:1175
+#: seahub/templates/js/templates.html:1200
 msgid "Download Links"
 msgstr "Niðurhalstenglar"
 
 #: seahub/share/templates/share/links.html:13
-#: seahub/templates/js/templates.html:1176
+#: seahub/templates/js/templates.html:1201
 msgid "Upload Links"
 msgstr "Upphleðslutenglar"
 
 #: seahub/share/templates/share/links.html:21
 #: seahub/share/templates/share/links.html:67
-#: seahub/templates/file_edit.html:129 seahub/templates/libraries.html:170
-#: seahub/templates/starred.html:14
+#: seahub/templates/file_edit.html:129
+#: seahub/templates/js/sysadmin-templates.html:191
+#: seahub/templates/libraries.html:170 seahub/templates/starred.html:14
 #: seahub/templates/sysadmin/sys_virus_scan_records.html:11
 msgid "Library"
 msgstr "Safn"
 
 #: seahub/share/templates/share/links.html:22
 #: seahub/share/templates/share/links.html:68
-#: seahub/templates/js/templates.html:1188
-#: seahub/templates/js/templates.html:1205
+#: seahub/templates/js/templates.html:1213
+#: seahub/templates/js/templates.html:1230
 #: seahub/templates/sysadmin/userinfo.html:163
 msgid "Visits"
 msgstr "Heimsóknir"
@@ -2643,7 +2707,7 @@ msgstr "Gildislok"
 
 #: seahub/share/templates/share/links.html:32
 #: seahub/share/templates/share/links.html:73
-#: seahub/templates/js/templates.html:1219
+#: seahub/templates/js/templates.html:1244
 #: seahub/templates/sysadmin/admin_repo_view.html:50
 #: seahub/templates/sysadmin/userinfo.html:174
 #: seahub/templates/sysadmin/userinfo.html:184
@@ -2659,7 +2723,7 @@ msgstr "Skoða"
 
 #: seahub/share/templates/share/links.html:48
 #: seahub/share/templates/share/links.html:79
-#: seahub/templates/js/templates.html:1229
+#: seahub/templates/js/templates.html:1254
 #: seahub/templates/sysadmin/sys_inst_admin.html:36
 #: seahub/templates/sysadmin/sys_publink_admin.html:25
 #: seahub/templates/sysadmin/userinfo.html:181
@@ -2692,7 +2756,7 @@ msgid "Folders - Share"
 msgstr "Möppur - Deilt"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:10
-#: seahub/templates/home_base.html:61 seahub/templates/js/templates.html:695
+#: seahub/templates/home_base.html:61 seahub/templates/js/templates.html:697
 msgid "Folders"
 msgstr "Möppur"
 
@@ -2703,15 +2767,15 @@ msgstr "Deila með"
 
 #: seahub/share/templates/share/list_priv_shared_folders.html:17
 #: seahub/share/templates/share/repos.html:17
-#: seahub/templates/js/templates.html:217
-#: seahub/templates/js/templates.html:401
-#: seahub/templates/js/templates.html:544
-#: seahub/templates/js/templates.html:567
-#: seahub/templates/js/templates.html:790
-#: seahub/templates/js/templates.html:812
-#: seahub/templates/js/templates.html:877
-#: seahub/templates/js/templates.html:1258
-#: seahub/templates/js/templates.html:1302
+#: seahub/templates/js/templates.html:225
+#: seahub/templates/js/templates.html:409
+#: seahub/templates/js/templates.html:539
+#: seahub/templates/js/templates.html:566
+#: seahub/templates/js/templates.html:793
+#: seahub/templates/js/templates.html:819
+#: seahub/templates/js/templates.html:887
+#: seahub/templates/js/templates.html:1283
+#: seahub/templates/js/templates.html:1327
 msgid "Permission"
 msgstr "Leyfi"
 
@@ -2777,175 +2841,211 @@ msgid ""
 "groups you are in."
 msgstr "Þú getur deilt söfnum til félaga þinna með því að smella á deili smámyndina við hvert safn á heimasvæðinu þínu eða búa til nýtt safn í hópi sem þú ert félagi í."
 
-#: seahub/share/views.py:81
+#: seahub/share/templates/share/share_link_audit.html:6
+msgid "Email Verification"
+msgstr ""
+
+#: seahub/share/templates/share/share_link_audit.html:8
+msgid "Please provide your email address to continue."
+msgstr ""
+
+#: seahub/share/templates/share/share_link_audit.html:11
+msgid "Get code"
+msgstr ""
+
+#: seahub/share/templates/share/share_link_audit.html:13
+msgid "Verification code"
+msgstr ""
+
+#: seahub/share/templates/share/share_link_audit.html:63
+msgid "A verification code has been sent to the email."
+msgstr ""
+
+#: seahub/share/views.py:83
 msgid "Failed to share to all members, please try again later."
 msgstr "Tókst ekki að deila með öllum félögum, vinsamlegast reynið aftur síðar."
 
-#: seahub/share/views.py:83
+#: seahub/share/views.py:85
 #, python-format
 msgid ""
 "Shared to all members successfully, go check it at <a "
 "href=\"%s\">Shares</a>."
 msgstr "Tókst að deila til allra félaga, athugaðu það í  <a href=\"%s\">Deilingum</a>."
 
-#: seahub/share/views.py:180 seahub/share/views.py:1150
+#: seahub/share/views.py:182 seahub/share/views.py:1152
 msgid "Only the owner of the library has permission to share it."
 msgstr "Aðeins eigandi safnsins hefur leyfi til að deila því."
 
-#: seahub/share/views.py:239 seahub/share/views.py:333
-#: seahub/share/views.py:598 seahub/views/__init__.py:694
+#: seahub/share/views.py:241 seahub/share/views.py:335
+#: seahub/share/views.py:600 seahub/views/__init__.py:694
 #: seahub/views/__init__.py:735 seahub/views/__init__.py:1021
-#: seahub/views/__init__.py:1233 seahub/views/ajax.py:1637
-#: seahub/views/ajax.py:1661 seahub/views/ajax.py:2036
-#: seahub/views/ajax.py:2178 seahub/views/file.py:1511
-#: seahub/views/sysadmin.py:216 seahub/views/sysadmin.py:251
-#: seahub/views/sysadmin.py:1875
+#: seahub/views/__init__.py:1233 seahub/views/ajax.py:1630
+#: seahub/views/ajax.py:1654 seahub/views/ajax.py:2029
+#: seahub/views/ajax.py:2171 seahub/views/file.py:1509
+#: seahub/views/sysadmin.py:236 seahub/views/sysadmin.py:267
+#: seahub/views/sysadmin.py:1902
 msgid "Library does not exist"
 msgstr "Safn er ekki til"
 
-#: seahub/share/views.py:248 seahub/share/views.py:263
-#: seahub/share/views.py:311
+#: seahub/share/views.py:250 seahub/share/views.py:265
+#: seahub/share/views.py:313
 msgid "Invalid argument"
 msgstr "Ógilt gildi"
 
-#: seahub/share/views.py:328 seahub/share/views.py:348
+#: seahub/share/views.py:330 seahub/share/views.py:350
 #: seahub/views/__init__.py:896
 msgid "Argument is not valid"
 msgstr "Óleyfileg breyta"
 
-#: seahub/share/views.py:351 seahub/share/views.py:372
+#: seahub/share/views.py:353 seahub/share/views.py:374
 msgid "Failed to remove share"
 msgstr "Tókst ekki að taka deilingu af"
 
-#: seahub/share/views.py:364
+#: seahub/share/views.py:366
 msgid "group id is not valid"
 msgstr "hópauðkenni er ekki gilt"
 
-#: seahub/share/views.py:368
+#: seahub/share/views.py:370
 msgid "Failed to unshare: the group doesn't exist."
 msgstr "Tókst ekki að taka deilingu af: hópurinn er ekki til."
 
-#: seahub/share/views.py:382
+#: seahub/share/views.py:384
 msgid "Successfully removed share"
 msgstr "Tókst að taka deilingu af"
 
-#: seahub/share/views.py:449
+#: seahub/share/views.py:451
 msgid "all members"
 msgstr "Allir félagar"
 
-#: seahub/share/views.py:686 seahub/share/views.py:714
+#: seahub/share/views.py:688 seahub/share/views.py:716
 msgid "The link doesn't exist"
 msgstr "Tengillinn er ekki til"
 
-#: seahub/share/views.py:806 seahub/share/views.py:918
+#: seahub/share/views.py:808 seahub/share/views.py:920
 msgid "Internal server error, or please check the email(s) you entered"
 msgstr "Kerfisvilla, en vinsamlegast athugaðu netfangið/netföngin sem þú slóst inn"
 
-#: seahub/share/views.py:826
+#: seahub/share/views.py:828
 msgid "Please choose a directory."
 msgstr "Veldu skáarsafn."
 
-#: seahub/share/views.py:848
+#: seahub/share/views.py:850
 msgid "Successfully saved."
 msgstr "Tókst að vista."
 
-#: seahub/share/views.py:862
+#: seahub/share/views.py:864
 msgid ""
 "Sending shared upload link failed. Email service is not properly configured,"
 " please contact administrator."
 msgstr "Mistókst að senda tengil til að deila.  Póstþjónustan er ekki rétt stillt, vinsamlegast hafðu samband við kerfisstjóra."
 
-#: seahub/share/views.py:951 seahub/share/views.py:1033
+#: seahub/share/views.py:953 seahub/share/views.py:1035
 msgid "You do not have permission to generate shared link"
 msgstr "Þú hefur ekki leifi til að búa til deilihlekk"
 
-#: seahub/share/views.py:961 seahub/share/views.py:1044
+#: seahub/share/views.py:963 seahub/share/views.py:1046
 #: seahub/views/__init__.py:733 seahub/views/__init__.py:1084
 #: seahub/views/__init__.py:1133 seahub/views/ajax.py:1061
-#: seahub/views/ajax.py:1081 seahub/views/file.py:1065
+#: seahub/views/ajax.py:1081 seahub/views/file.py:1061
 msgid "Invalid arguments"
 msgstr "Ógild gildi"
 
-#: seahub/share/views.py:1097 seahub/thumbnail/views.py:39
+#: seahub/share/views.py:1099 seahub/thumbnail/views.py:39
 #: seahub/thumbnail/views.py:142 seahub/views/ajax.py:251
 #: seahub/views/ajax.py:392 seahub/views/ajax.py:479 seahub/views/ajax.py:543
 #: seahub/views/ajax.py:593 seahub/views/ajax.py:637 seahub/views/ajax.py:852
-#: seahub/views/ajax.py:1117 seahub/views/ajax.py:1726
-#: seahub/views/ajax.py:2383
+#: seahub/views/ajax.py:1117 seahub/views/ajax.py:1719
+#: seahub/views/ajax.py:2376
 msgid "Library does not exist."
 msgstr "Safn er ekki til"
 
-#: seahub/share/views.py:1101
+#: seahub/share/views.py:1103
 msgid "Directory does not exist."
 msgstr "Mappan er ekki til."
 
-#: seahub/share/views.py:1188
+#: seahub/share/views.py:1190
 msgid "Please check the email(s) you entered"
 msgstr "Vinsamlegast athugaðu netfangið/netföngin sem þú slóst inn"
+
+#: seahub/share/views.py:1207
+msgid "Email address is not valid"
+msgstr ""
+
+#: seahub/share/views.py:1216
+msgid "Share link is not found"
+msgstr ""
+
+#: seahub/share/views.py:1225
+msgid "Verification code for visiting share links"
+msgstr ""
+
+#: seahub/share/views.py:1240
+msgid "Failed to send a verification code, please try again later."
+msgstr ""
 
 #: seahub/templates/404.html:6
 msgid "Sorry, but the requested page could not be found."
 msgstr "Afsakið, en síðan sem þú baðst um fannst ekki."
 
 #: seahub/templates/admin_base.html:4
+#: seahub/templates/sysadmin/sysadmin_backbone.html:68
 msgid "Exit System Admin"
 msgstr "Hætta Kerfisstjórnun"
 
-#: seahub/templates/base.html:25 seahub/templates/base.html.py:62
-#: seahub/templates/base_for_backbone.html:29
+#: seahub/templates/base.html:25 seahub/templates/base_for_backbone.html:29
 #: seahub/templates/base_for_backbone.html:35
-#: seahub/templates/base_for_backbone.html:73
-#: seahub/templates/base_for_backbone.html:146
+#: seahub/templates/base_for_backbone.html:122
 #: seahub/templates/file_edit.html:327
 #: seahub/templates/js/lib-op-popups.html:97
-#: seahub/templates/libraries.html:119 seahub/templates/libraries.html:129
-#: seahub/templates/libraries.html:142
+#: seahub/templates/js/templates.html:1446 seahub/templates/libraries.html:119
+#: seahub/templates/libraries.html:129 seahub/templates/libraries.html:142
+#: seahub/templates/sysadmin/sysadmin_backbone.html:27
+#: seahub/templates/sysadmin/sysadmin_backbone.html:33
 msgid "Close"
 msgstr "Loka"
 
-#: seahub/templates/base.html:50 seahub/templates/base.html.py:56
-#: seahub/templates/base_for_backbone.html:61
-#: seahub/templates/base_for_backbone.html:67
-#: seahub/templates/sysadmin/base.html:34
-msgid "Notifications"
-msgstr "Athugasemdir"
-
-#: seahub/templates/base.html:60 seahub/templates/base_for_backbone.html:71
-msgid "See All Notifications"
-msgstr "Sjá Allar Athugasemdir"
-
-#: seahub/templates/base.html:67 seahub/templates/base_for_backbone.html:78
+#: seahub/templates/base.html:51 seahub/templates/base_for_backbone.html:68
 msgid "View profile and more"
-msgstr ""
+msgstr "Skoða persónuuplýsingar og fleira"
 
-#: seahub/templates/base.html:82 seahub/templates/base_for_backbone.html:93
-#: seahub/templates/finish_payment.html:6
+#: seahub/templates/base.html:67 seahub/templates/finish_payment.html:6
+#: seahub/templates/js/templates.html:1471
+#: seahub/templates/sysadmin/sysadmin_backbone.html:65
 msgid "Log out"
 msgstr "Útskrá"
 
-#: seahub/templates/base.html:86 seahub/templates/base_for_backbone.html:97
+#: seahub/templates/base.html:72 seahub/templates/base_for_backbone.html:73
+#: seahub/templates/js/sysadmin-templates.html:4
 #: seahub/templates/sysadmin/base.html:6
 msgid "System Admin"
 msgstr "Kerfisstjórnun"
 
 #: seahub/templates/base_for_backbone.html:29
+#: seahub/templates/sysadmin/sysadmin_backbone.html:27
 msgid ""
 "We no longer support this version of IE. Please upgrade it to version 10 or "
 "above."
 msgstr "Við styðjum ekki lengur þessa útgáfu af IE. Vinsamlegast uppfærðu vafrann í útgáfu 10 eða hærra."
 
-#: seahub/templates/base_for_backbone.html:140
+#: seahub/templates/base_for_backbone.html:61
+#: seahub/templates/js/sysadmin-templates.html:36
+#: seahub/templates/js/templates.html:1447
+#: seahub/templates/sysadmin/base.html:37
+msgid "Notifications"
+msgstr "Athugasemdir"
+
+#: seahub/templates/base_for_backbone.html:116
 msgid "Welcome to Seafile!"
 msgstr "Velkomin í Seafile"
 
-#: seahub/templates/base_for_backbone.html:142
+#: seahub/templates/base_for_backbone.html:118
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. We have created a personal library for you. You can "
 "create more libraries later."
 msgstr "Seafile flokkar skrár í söfn.  Hverju safni fyrir sig er hægt að deila og samstilla við önnur tæki.  Við höfum búið til eitt safn fyrir þig.  Þú getur búið til önnur söfn síðar."
 
-#: seahub/templates/base_for_backbone.html:144
+#: seahub/templates/base_for_backbone.html:120
 msgid ""
 "Seafile organizes files into libraries. Each library can be synced and "
 "shared separately. Howerver, since you are a guest user now, you can not "
@@ -2953,7 +3053,7 @@ msgid ""
 msgstr "Seafile flokkar skrár í söfn.  Hverju safni er samstillt og deilt óháð öðrum söfnum. Hinsvegar, þar sem að þú ert gestanotandi núna, þá getur þú ekki búið til söfn."
 
 #: seahub/templates/choose_register.html:13
-#: seahub/templates/registration/login.html:38
+#: seahub/templates/registration/login.html:40
 #: seahub/templates/registration/registration_form.html:11
 msgid "Signup"
 msgstr "Skráðu þig"
@@ -2983,28 +3083,31 @@ msgid "Please enter the password."
 msgstr "Vinsamlegast sláðu inn lykilorð."
 
 #: seahub/templates/download.html:4 seahub/templates/file_revisions.html:76
-#: seahub/templates/js/templates.html:201
-#: seahub/templates/js/templates.html:284
-#: seahub/templates/js/templates.html:365
-#: seahub/templates/js/templates.html:391
+#: seahub/templates/js/templates.html:102
+#: seahub/templates/js/templates.html:209
+#: seahub/templates/js/templates.html:292
+#: seahub/templates/js/templates.html:373
+#: seahub/templates/js/templates.html:399
 #: seahub/templates/repo_history_view.html:78
 #: seahub/templates/shared_file_view.html:41
 #: seahub/templates/shared_file_view.html:73
 #: seahub/templates/sysadmin/admin_repo_view.html:92
 #: seahub/templates/sysadmin/userinfo.html:178
-#: seahub/templates/view_file_base.html:72
-#: seahub/templates/view_file_base.html:109
+#: seahub/templates/view_file_base.html:77
+#: seahub/templates/view_file_base.html:111
 #: seahub/templates/view_history_file.html:30
 #: seahub/templates/view_history_file.html:41
 #: seahub/templates/view_shared_dir.html:68
+#: seahub/templates/view_shared_dir.html:69
 #: seahub/templates/view_shared_dir.html:100
+#: seahub/templates/view_shared_dir.html:101
 #: seahub/templates/view_shared_dir.html:118
 #: seahub/templates/view_shared_dir.html:148
 msgid "Download"
 msgstr "Niðurhala"
 
 #: seahub/templates/file_access.html:5 seahub/templates/file_access.html:8
-#: seahub/templates/js/templates.html:302
+#: seahub/templates/js/templates.html:310
 msgid "Access Log"
 msgstr "Aðgangsskrá"
 
@@ -3013,9 +3116,12 @@ msgstr "Aðgangsskrá"
 msgid "Current Path:"
 msgstr "Núverandi Slóð:"
 
-#: seahub/templates/file_access.html:25 seahub/templates/js/templates.html:543
-#: seahub/templates/js/templates.html:789
-#: seahub/templates/js/templates.html:1256
+#: seahub/templates/file_access.html:25
+#: seahub/templates/js/sysadmin-templates.html:136
+#: seahub/templates/js/sysadmin-templates.html:188
+#: seahub/templates/js/templates.html:538
+#: seahub/templates/js/templates.html:792
+#: seahub/templates/js/templates.html:1281
 #: seahub/templates/sysadmin/sys_trafficadmin.html:17
 msgid "User"
 msgstr "Notandi"
@@ -3025,11 +3131,16 @@ msgstr "Notandi"
 msgid "Type"
 msgstr "Gerð"
 
-#: seahub/templates/file_access.html:27 seahub/templates/libraries.html:197
+#: seahub/templates/file_access.html:27
+#: seahub/templates/js/sysadmin-templates.html:139
+#: seahub/templates/js/sysadmin-templates.html:190
+#: seahub/templates/libraries.html:197
 msgid "IP"
 msgstr "Auðkenni"
 
-#: seahub/templates/file_access.html:27 seahub/templates/libraries.html:196
+#: seahub/templates/file_access.html:27
+#: seahub/templates/js/sysadmin-templates.html:138
+#: seahub/templates/libraries.html:196
 msgid "Device Name"
 msgstr "Nafn Tækis"
 
@@ -3043,6 +3154,7 @@ msgstr "Óþekktur notandi"
 
 #: seahub/templates/file_access.html:64 seahub/templates/repo_history.html:66
 #: seahub/templates/snippets/admin_paginator.html:11
+#: seahub/templates/sysadmin/sys_publink_admin.html:41
 #: seahub/templates/sysadmin/sys_trafficadmin.html:38
 #: seahub/templates/sysadmin/useradmin_paginator.html:12
 msgid "Per page: "
@@ -3067,10 +3179,6 @@ msgstr "Uppkast vistað."
 #: seahub/templates/file_edit.html:129
 msgid "is encrypted"
 msgstr "er dulkóðað"
-
-#: seahub/templates/file_edit.html:130
-msgid "Password："
-msgstr "Lykilorð: "
 
 #: seahub/templates/file_edit.html:132
 msgid "The password will be kept in the server for only 1 hour."
@@ -3196,7 +3304,7 @@ msgstr "Dálkar"
 #: seahub/templates/sysadmin/sys_useradmin.html:38
 #: seahub/templates/sysadmin/useradmin_table.html:50
 #: seahub/templates/sysadmin/useradmin_table.html:55
-#: seahub/views/sysadmin.py:661
+#: seahub/views/sysadmin.py:677
 msgid "Default"
 msgstr "Sjálfgefið"
 
@@ -3221,10 +3329,10 @@ msgid "Password is required."
 msgstr "Lykilorð er áskilið."
 
 #: seahub/templates/file_revisions.html:5
-#: seahub/templates/js/templates.html:142
-#: seahub/templates/js/templates.html:299
-#: seahub/templates/js/templates.html:374 seahub/templates/repo_history.html:5
-#: seahub/templates/view_file_base.html:64
+#: seahub/templates/js/templates.html:150
+#: seahub/templates/js/templates.html:307
+#: seahub/templates/js/templates.html:382 seahub/templates/repo_history.html:5
+#: seahub/templates/view_file_base.html:69
 msgid "History"
 msgstr "Saga"
 
@@ -3320,85 +3428,90 @@ msgstr "Seafile"
 msgid "About Us"
 msgstr "Um Okkur"
 
-#: seahub/templates/home_base.html:7 seahub/templates/js/templates.html:605
+#: seahub/templates/home_base.html:7 seahub/templates/js/templates.html:607
 msgid "Files"
 msgstr "Skrár"
 
-#: seahub/templates/home_base.html:10 seahub/templates/js/templates.html:157
-#: seahub/templates/js/templates.html:159
-#: seahub/templates/js/templates.html:609 seahub/templates/libraries.html:13
+#: seahub/templates/home_base.html:10 seahub/templates/js/templates.html:165
+#: seahub/templates/js/templates.html:167
+#: seahub/templates/js/templates.html:611 seahub/templates/libraries.html:13
 msgid "Mine"
 msgstr "Mitt"
 
-#: seahub/templates/home_base.html:18 seahub/templates/js/templates.html:159
-#: seahub/templates/js/templates.html:614 seahub/templates/libraries.html:29
+#: seahub/templates/home_base.html:18 seahub/templates/js/templates.html:167
+#: seahub/templates/js/templates.html:616 seahub/templates/libraries.html:29
 msgid "Shared"
 msgstr "Deilt"
 
-#: seahub/templates/home_base.html:20 seahub/templates/js/templates.html:155
-#: seahub/templates/js/templates.html:619 seahub/templates/libraries.html:43
-#: seahub/templates/pub_base.html:5 seahub/templates/pub_base.html.py:10
-#: seahub/templates/sysadmin/userinfo.html:24
+#: seahub/templates/home_base.html:20 seahub/templates/js/templates.html:163
+#: seahub/templates/js/templates.html:621 seahub/templates/pub_base.html:10
+msgctxt ""
+"This is a label in navigation, meaning the public area for all registered "
+"users to share libraries."
 msgid "Organization"
-msgstr "Samfélagið"
+msgstr ""
 
-#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:627
-#: seahub/templates/js/templates.html:649
+#: seahub/templates/home_base.html:27 seahub/templates/js/templates.html:629
+#: seahub/templates/js/templates.html:651
 #: seahub/templates/sysadmin/sys_group_admin.html:8
 msgid "All Groups"
 msgstr "Allir Hópar"
 
-#: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:662
+#: seahub/templates/home_base.html:39 seahub/templates/js/templates.html:664
 msgid "Tools"
-msgstr ""
+msgstr "Tæki"
 
 #: seahub/templates/home_base.html:41 seahub/templates/home_base.html.py:71
-#: seahub/templates/js/templates.html:664
-#: seahub/templates/js/templates.html:706
+#: seahub/templates/js/templates.html:666
+#: seahub/templates/js/templates.html:708
 msgid "Enable Modules"
 msgstr "Virkja Viðbætur"
 
-#: seahub/templates/home_base.html:45 seahub/templates/js/templates.html:669
+#: seahub/templates/home_base.html:45 seahub/templates/js/templates.html:671
 #: seahub/templates/libraries.html:164 seahub/templates/starred.html:8
 msgid "Starred"
 msgstr "Stjörnumerkt"
 
-#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:673
+#: seahub/templates/home_base.html:47 seahub/templates/js/templates.html:675
 msgid "Activities"
 msgstr "Virkni"
 
 #: seahub/templates/home_base.html:51 seahub/templates/home_base.html.py:78
-#: seahub/templates/js/templates.html:679
-#: seahub/templates/js/templates.html:717
+#: seahub/templates/js/templates.html:681
+#: seahub/templates/js/templates.html:719
 #: seahub/templates/wiki/personal_wiki.html:6
 #: seahub/templates/wiki/personal_wiki_pages.html:6
 msgid "Personal Wiki"
 msgstr "Smáwiki"
 
-#: seahub/templates/home_base.html:54 seahub/templates/js/templates.html:684
-#: seahub/templates/libraries.html:191
+#: seahub/templates/home_base.html:54
+#: seahub/templates/js/sysadmin-templates.html:9
+#: seahub/templates/js/templates.html:686 seahub/templates/libraries.html:191
+#: seahub/templates/sysadmin/base.html:12
 msgid "Devices"
 msgstr "Tæki"
 
-#: seahub/templates/home_base.html:57 seahub/templates/js/templates.html:688
+#: seahub/templates/home_base.html:57 seahub/templates/js/templates.html:690
 msgid "Share Admin"
 msgstr "Stjórnun deilinga"
 
-#: seahub/templates/home_base.html:63 seahub/templates/js/templates.html:699
-#: seahub/templates/sysadmin/base.html:37
+#: seahub/templates/home_base.html:63
+#: seahub/templates/js/sysadmin-templates.html:39
+#: seahub/templates/js/templates.html:701
+#: seahub/templates/sysadmin/base.html:40
 msgid "Links"
 msgstr "Tenglar"
 
-#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:114
+#: seahub/templates/i18n.html:6 seahub/templates/js/templates.html:126
 msgid "Upload Folder"
 msgstr "Hlaða upp Möppu"
 
-#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:461
+#: seahub/templates/i18n.html:7 seahub/templates/js/templates.html:455
 #: seahub/templates/snippets/file_share_popup.html:25
 msgid "Add auto expiration"
 msgstr "Setja sjálfvirkan gildistíma"
 
-#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:464
+#: seahub/templates/i18n.html:8 seahub/templates/js/templates.html:458
 #: seahub/templates/snippets/file_share_popup.html:28
 msgid "Days"
 msgstr "Dagar"
@@ -3416,18 +3529,12 @@ msgid "Shared Libs"
 msgstr "Deild Söfn"
 
 #: seahub/templates/js/lib-op-popups.html:5
-#: seahub/templates/sysadmin/admin_repo_view.html:34
-#: seahub/templates/sysadmin/admin_repo_view.html:105
-msgid "New Directory"
+#: seahub/templates/js/templates.html:132
+msgid "New Folder"
 msgstr "Ný Mappa"
 
-#: seahub/templates/js/lib-op-popups.html:6
-#: seahub/templates/sysadmin/admin_repo_view.html:106
-msgid "Directory Name"
-msgstr "Nafn Möppu"
-
 #: seahub/templates/js/lib-op-popups.html:16
-#: seahub/templates/js/templates.html:120
+#: seahub/templates/js/templates.html:133
 msgid "New File"
 msgstr "Ný Skrá"
 
@@ -3445,8 +3552,7 @@ msgstr "Ívafsmál."
 
 #: seahub/templates/js/lib-op-popups.html:21
 #: seahub/templates/js/lib-op-popups.html:23
-#: seahub/templates/js/templates.html:415
-#: seahub/templates/js/templates.html:918
+#: seahub/templates/js/templates.html:928
 #: seahub/templates/repo_history.html:28
 msgid "Details"
 msgstr "Í hnotskurn"
@@ -3510,7 +3616,123 @@ msgstr "Skipta út"
 msgid "Don't replace"
 msgstr "Ekki skipta út"
 
-#: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:730
+#: seahub/templates/js/sysadmin-templates.html:25
+#: seahub/templates/js/sysadmin-templates.html:111
+#: seahub/templates/sysadmin/base.html:28
+#: seahub/templates/sysadmin/sys_info.html:44
+msgid "Organizations"
+msgstr "Samfélög"
+
+#: seahub/templates/js/sysadmin-templates.html:31
+#: seahub/templates/sysadmin/base.html:33
+msgid "Institutions"
+msgstr "Stofnanir"
+
+#: seahub/templates/js/sysadmin-templates.html:43
+#: seahub/templates/sysadmin/base.html:44
+msgid "Traffic"
+msgstr "Umferð"
+
+#: seahub/templates/js/sysadmin-templates.html:48
+#: seahub/templates/sysadmin/base.html:49
+msgid "Logs"
+msgstr "Kladdar"
+
+#: seahub/templates/js/sysadmin-templates.html:53
+#: seahub/templates/sysadmin/base.html:54
+msgid "Virus Scan"
+msgstr "Veiruskönnun"
+
+#: seahub/templates/js/sysadmin-templates.html:70
+#: seahub/templates/sysadmin/sys_info.html:10
+msgid "System Info"
+msgstr "Kerfisupplýsingar"
+
+#: seahub/templates/js/sysadmin-templates.html:72
+#: seahub/templates/sysadmin/sys_info.html:12
+msgid "Professional Edition"
+msgstr "Sérútgáfa"
+
+#: seahub/templates/js/sysadmin-templates.html:74
+#: seahub/templates/sysadmin/sys_info.html:12
+msgid "expires on"
+msgstr "rennur út þann"
+
+#: seahub/templates/js/sysadmin-templates.html:77
+#: seahub/templates/sysadmin/sys_info.html:14
+msgid "Community Edition"
+msgstr "Samfélagútgáfan"
+
+#: seahub/templates/js/sysadmin-templates.html:78
+#: seahub/templates/sysadmin/sys_info.html:15
+msgid "Upgrade to Pro Edition"
+msgstr "Uppfæra í Sérútgáfu"
+
+#: seahub/templates/js/sysadmin-templates.html:86
+#: seahub/templates/sysadmin/sys_info.html:23
+msgid "Limits"
+msgstr "Takmörk"
+
+#: seahub/templates/js/sysadmin-templates.html:121
+#: seahub/templates/js/sysadmin-templates.html:174
+msgid "Desktop"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:124
+#: seahub/templates/js/sysadmin-templates.html:177
+msgid "Mobile"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:128
+#: seahub/templates/js/sysadmin-templates.html:180
+msgid "Errors"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:137
+#: seahub/templates/libraries.html:195
+msgid "Platform"
+msgstr "Verkvangur"
+
+#: seahub/templates/js/sysadmin-templates.html:137
+#: seahub/templates/js/sysadmin-templates.html:189
+msgid "Version"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:140
+#: seahub/templates/libraries.html:198
+msgid "Last Access"
+msgstr "Seinast Skoðað"
+
+#: seahub/templates/js/sysadmin-templates.html:149
+msgid "No connected devices"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:165
+#: seahub/templates/js/templates.html:1438
+msgid "Unlink"
+msgstr "Aftengja"
+
+#: seahub/templates/js/sysadmin-templates.html:183
+#: seahub/templates/repo_dir_recycle_view.html:26
+#: seahub/templates/repo_dir_recycle_view.html:54
+msgid "Clean"
+msgstr "Hreinsa"
+
+#: seahub/templates/js/sysadmin-templates.html:189
+msgid "Device"
+msgstr ""
+
+#: seahub/templates/js/sysadmin-templates.html:192
+#: seahub/templates/sysadmin/admin_repo_view.html:293
+#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1014
+msgid "Error"
+msgstr "Villa"
+
+#: seahub/templates/js/sysadmin-templates.html:201
+msgid "No sync errors"
+msgstr ""
+
+#: seahub/templates/js/templates.html:4 seahub/templates/js/templates.html:732
 #: seahub/templates/libraries.html:14
 msgid "New Library"
 msgstr "Nýtt Safn"
@@ -3524,13 +3746,14 @@ msgid "Encrypt"
 msgstr "Dulkóða"
 
 #: seahub/templates/js/templates.html:21
+#: seahub/templates/js/templates.html:1408
 #, python-format
 msgid "(at least %(repo_password_min_length)s characters)"
 msgstr "(að minnsta kosti %(repo_password_min_length)s stafir)"
 
 #: seahub/templates/js/templates.html:23
-#: seahub/templates/js/templates.html:456
-#: seahub/templates/js/templates.html:511
+#: seahub/templates/js/templates.html:450
+#: seahub/templates/js/templates.html:505
 #: seahub/templates/snippets/file_share_popup.html:20
 msgid "Password again"
 msgstr "Lykilorð aftur"
@@ -3540,34 +3763,34 @@ msgid "Broken (please contact your administrator to fix this library)"
 msgstr "Bilað (vinsamlegast hafðu samband við kerfisstjórann þinn til að laga safnið)"
 
 #: seahub/templates/js/templates.html:42
-#: seahub/templates/js/templates.html:130
-#: seahub/templates/js/templates.html:203
-#: seahub/templates/js/templates.html:286
-#: seahub/templates/js/templates.html:367
-#: seahub/templates/js/templates.html:393
-#: seahub/templates/view_file_base.html:59
+#: seahub/templates/js/templates.html:137
+#: seahub/templates/js/templates.html:211
+#: seahub/templates/js/templates.html:294
+#: seahub/templates/js/templates.html:375
+#: seahub/templates/js/templates.html:401
+#: seahub/templates/view_file_base.html:64
 msgid "Share"
 msgstr "Deila"
 
 #: seahub/templates/js/templates.html:45
-#: seahub/templates/js/templates.html:211
-#: seahub/templates/js/templates.html:224
-#: seahub/templates/js/templates.html:317
+#: seahub/templates/js/templates.html:219
+#: seahub/templates/js/templates.html:232
+#: seahub/templates/js/templates.html:325
 msgid "More operations"
 msgstr "Fleiri aðgerðir"
 
 #: seahub/templates/js/templates.html:47
-#: seahub/templates/js/templates.html:213
-#: seahub/templates/js/templates.html:296
-#: seahub/templates/js/templates.html:371
-#: seahub/templates/js/templates.html:397
-#: seahub/templates/js/templates.html:1004
-#: seahub/templates/js/templates.html:1021
+#: seahub/templates/js/templates.html:221
+#: seahub/templates/js/templates.html:304
+#: seahub/templates/js/templates.html:379
+#: seahub/templates/js/templates.html:405
+#: seahub/templates/js/templates.html:1020
+#: seahub/templates/js/templates.html:1037
 msgid "Rename"
 msgstr "Skipta um nafn"
 
 #: seahub/templates/js/templates.html:48
-#: seahub/templates/js/templates.html:1005
+#: seahub/templates/js/templates.html:1021
 #: seahub/templates/sysadmin/repoadmin_table.html:36
 #: seahub/templates/sysadmin/userinfo.html:104
 msgid "Transfer"
@@ -3575,7 +3798,7 @@ msgstr "Flytja"
 
 #: seahub/templates/js/templates.html:49
 msgid "History Setting"
-msgstr ""
+msgstr "Sögustilling"
 
 #: seahub/templates/js/templates.html:51
 msgid "Change Password"
@@ -3583,65 +3806,66 @@ msgstr "Breyta Lykilorði."
 
 #: seahub/templates/js/templates.html:54
 msgid "Share Links"
-msgstr ""
+msgstr "Deilihlekkir"
 
 #: seahub/templates/js/templates.html:57
 msgid "Folder Permission"
 msgstr "Möppuheimild"
 
 #: seahub/templates/js/templates.html:99
-#: seahub/templates/js/templates.html:214
-#: seahub/templates/js/templates.html:297
-#: seahub/templates/js/templates.html:372
-#: seahub/templates/js/templates.html:398
+#: seahub/templates/js/templates.html:222
+#: seahub/templates/js/templates.html:305
+#: seahub/templates/js/templates.html:380
+#: seahub/templates/js/templates.html:406
 msgid "Move"
 msgstr "Færa"
 
 #: seahub/templates/js/templates.html:100
-#: seahub/templates/js/templates.html:125
-#: seahub/templates/js/templates.html:215
-#: seahub/templates/js/templates.html:226
-#: seahub/templates/js/templates.html:298
-#: seahub/templates/js/templates.html:319
-#: seahub/templates/js/templates.html:373
-#: seahub/templates/js/templates.html:399
+#: seahub/templates/js/templates.html:107
+#: seahub/templates/js/templates.html:223
+#: seahub/templates/js/templates.html:234
+#: seahub/templates/js/templates.html:306
+#: seahub/templates/js/templates.html:327
+#: seahub/templates/js/templates.html:381
+#: seahub/templates/js/templates.html:407
 msgid "Copy"
 msgstr "Afrita"
 
-#: seahub/templates/js/templates.html:104
+#: seahub/templates/js/templates.html:114
+#: seahub/templates/js/templates.html:119
 #: seahub/templates/sysadmin/admin_repo_view.html:31
 #: seahub/templates/sysadmin/userinfo.html:187
 msgid "Upload"
 msgstr "Hlaða upp"
 
-#: seahub/templates/js/templates.html:110
+#: seahub/templates/js/templates.html:122
 msgid "Upload Files"
 msgstr "Hlaða upp Skrá"
 
-#: seahub/templates/js/templates.html:119
-msgid "New Folder"
-msgstr "Ný Mappa"
-
-#: seahub/templates/js/templates.html:134
+#: seahub/templates/js/templates.html:142
 #: seahub/templates/view_shared_dir.html:27
+#: seahub/templates/view_shared_dir.html:29
+#: seahub/templates/view_shared_dir.html:31
 msgid "List"
 msgstr "Listi"
 
-#: seahub/templates/js/templates.html:134
+#: seahub/templates/js/templates.html:142
 msgid "list view"
-msgstr ""
+msgstr "listasnið"
 
-#: seahub/templates/js/templates.html:134
+#: seahub/templates/js/templates.html:142
 #: seahub/templates/view_shared_dir.html:33
+#: seahub/templates/view_shared_dir.html:35
+#: seahub/templates/view_shared_dir.html:37
 msgid "Grid"
 msgstr "Reitir"
 
-#: seahub/templates/js/templates.html:134
+#: seahub/templates/js/templates.html:142
 msgid "grid view"
-msgstr ""
+msgstr "reitasnið"
 
-#: seahub/templates/js/templates.html:140
-#: seahub/templates/js/templates.html:146
+#: seahub/templates/js/templates.html:148
+#: seahub/templates/js/templates.html:154
 #: seahub/templates/sysadmin/sys_list_system.html:10
 #: seahub/templates/sysadmin/sys_repo_admin.html:21
 #: seahub/templates/sysadmin/sys_repo_trash.html:16
@@ -3649,175 +3873,177 @@ msgstr ""
 msgid "Trash"
 msgstr "Ruslafata"
 
-#: seahub/templates/js/templates.html:159
+#: seahub/templates/js/templates.html:167
 msgid "Sub-libraries"
 msgstr "Undirsöfn"
 
-#: seahub/templates/js/templates.html:179
-#: seahub/templates/js/templates.html:853
-#: seahub/templates/js/templates.html:862
+#: seahub/templates/js/templates.html:187
+#: seahub/templates/js/templates.html:863
+#: seahub/templates/js/templates.html:872
 msgid "Actions"
-msgstr ""
+msgstr "Aðgerðir"
 
-#: seahub/templates/js/templates.html:211
-#: seahub/templates/js/templates.html:224
-#: seahub/templates/js/templates.html:294
-#: seahub/templates/js/templates.html:317
+#: seahub/templates/js/templates.html:219
+#: seahub/templates/js/templates.html:232
+#: seahub/templates/js/templates.html:302
+#: seahub/templates/js/templates.html:325
 msgid "More Operations"
 msgstr "Fleiri aðgerðir"
 
-#: seahub/templates/js/templates.html:219
-#: seahub/templates/js/templates.html:312
-#: seahub/templates/js/templates.html:384
-#: seahub/templates/js/templates.html:403
+#: seahub/templates/js/templates.html:227
+#: seahub/templates/js/templates.html:320
+#: seahub/templates/js/templates.html:392
+#: seahub/templates/js/templates.html:411
 msgid "Open via Client"
 msgstr "Opna með Biðlara"
 
-#: seahub/templates/js/templates.html:250
+#: seahub/templates/js/templates.html:258
+#: seahub/templates/view_file_base.html:15
 msgid "starred"
 msgstr "stjörnumerkt"
 
-#: seahub/templates/js/templates.html:252
+#: seahub/templates/js/templates.html:260
+#: seahub/templates/view_file_base.html:17
 msgid "unstarred"
 msgstr "Taka stjörnu af"
 
-#: seahub/templates/js/templates.html:268
-#: seahub/templates/js/templates.html:344
-#: seahub/templates/view_file_base.html:16
+#: seahub/templates/js/templates.html:276
+#: seahub/templates/js/templates.html:352
+#: seahub/templates/view_file_base.html:21
 msgid "locked"
 msgstr "læst"
 
-#: seahub/templates/js/templates.html:306
-#: seahub/templates/js/templates.html:378
-#: seahub/templates/view_file_base.html:50
-#: seahub/templates/view_file_base.html:52
+#: seahub/templates/js/templates.html:314
+#: seahub/templates/js/templates.html:386
+#: seahub/templates/view_file_base.html:55
+#: seahub/templates/view_file_base.html:57
 msgid "Unlock"
 msgstr "Aflæsa"
 
-#: seahub/templates/js/templates.html:309
-#: seahub/templates/js/templates.html:381
-#: seahub/templates/view_file_base.html:49
-#: seahub/templates/view_file_base.html:53
+#: seahub/templates/js/templates.html:317
+#: seahub/templates/js/templates.html:389
+#: seahub/templates/view_file_base.html:54
+#: seahub/templates/view_file_base.html:58
 msgid "Lock"
 msgstr "Læsa"
 
-#: seahub/templates/js/templates.html:330
+#: seahub/templates/js/templates.html:338
 msgid "Fetch failed"
 msgstr "Mistókst að sækja"
 
-#: seahub/templates/js/templates.html:427
+#: seahub/templates/js/templates.html:421
 #: seahub/templates/snippets/file_share_popup.html:6
 msgid "Download Link"
 msgstr "Niðurhalstengill"
 
-#: seahub/templates/js/templates.html:431
+#: seahub/templates/js/templates.html:425
 msgid "Upload Link"
 msgstr "Upphleðslutengill"
 
-#: seahub/templates/js/templates.html:434
+#: seahub/templates/js/templates.html:428
 msgid "Share to user"
 msgstr "Deila með notanda"
 
-#: seahub/templates/js/templates.html:435
+#: seahub/templates/js/templates.html:429
 msgid "Share to group"
 msgstr "Deila með hópi"
 
-#: seahub/templates/js/templates.html:447
-#: seahub/templates/js/templates.html:502
+#: seahub/templates/js/templates.html:441
+#: seahub/templates/js/templates.html:496
 #: seahub/templates/snippets/file_share_popup.html:15
 msgid "Add password protection"
 msgstr "Bæta við lykilorðavörn"
 
-#: seahub/templates/js/templates.html:450
-#: seahub/templates/js/templates.html:505
+#: seahub/templates/js/templates.html:444
+#: seahub/templates/js/templates.html:499
 #: seahub/templates/snippets/file_share_popup.html:18
 #, python-format
 msgid "(at least %(share_link_password_min_length)s characters)"
 msgstr "(að minsta kosti %(share_link_password_min_length)s stafi)"
 
-#: seahub/templates/js/templates.html:453
-#: seahub/templates/js/templates.html:508
+#: seahub/templates/js/templates.html:447
+#: seahub/templates/js/templates.html:502
 #: seahub/templates/sysadmin/sys_useradmin.html:45
 #: seahub/templates/sysadmin/sys_useradmin.html:123
 msgid "Show"
 msgstr "Sýna"
 
-#: seahub/templates/js/templates.html:454
-#: seahub/templates/js/templates.html:509
+#: seahub/templates/js/templates.html:448
+#: seahub/templates/js/templates.html:503
 #: seahub/templates/sysadmin/sys_useradmin.html:46
 msgid "Generate a random password"
 msgstr "Búa til slembilykilorð"
 
-#: seahub/templates/js/templates.html:468
-#: seahub/templates/js/templates.html:515
+#: seahub/templates/js/templates.html:462
+#: seahub/templates/js/templates.html:509
 #: seahub/templates/snippets/file_share_popup.html:33
 msgid "Generate"
 msgstr "Mynda"
 
-#: seahub/templates/js/templates.html:472
+#: seahub/templates/js/templates.html:466
 #: seahub/templates/snippets/file_share_popup.html:35
 msgid "Link: "
 msgstr "Tengill:"
 
-#: seahub/templates/js/templates.html:475
+#: seahub/templates/js/templates.html:469
 msgid "Direct Download Link: "
 msgstr "Niðurhalshlekkur:"
 
-#: seahub/templates/js/templates.html:479
-#: seahub/templates/js/templates.html:519
+#: seahub/templates/js/templates.html:473
+#: seahub/templates/js/templates.html:513
 #: seahub/templates/snippets/file_share_popup.html:36
 msgid "Send"
 msgstr "Senda"
 
-#: seahub/templates/js/templates.html:482
-#: seahub/templates/js/templates.html:522
+#: seahub/templates/js/templates.html:476
+#: seahub/templates/js/templates.html:516
 #: seahub/templates/snippets/file_share_popup.html:40
 msgid "Send to:"
 msgstr "Senda til:"
 
-#: seahub/templates/js/templates.html:483
-#: seahub/templates/js/templates.html:523
+#: seahub/templates/js/templates.html:477
+#: seahub/templates/js/templates.html:517
 #: seahub/templates/snippets/file_share_popup.html:41
 msgid "Emails, Seperated by ','"
 msgstr "Netföng aðskilin með ','"
 
-#: seahub/templates/js/templates.html:484
-#: seahub/templates/js/templates.html:524
+#: seahub/templates/js/templates.html:478
+#: seahub/templates/js/templates.html:518
 #: seahub/templates/snippets/file_share_popup.html:45
 msgid "Message (optional):"
 msgstr "Skilaboð (valfrjálst):"
 
-#: seahub/templates/js/templates.html:489
-#: seahub/templates/js/templates.html:529
+#: seahub/templates/js/templates.html:483
+#: seahub/templates/js/templates.html:523
 #: seahub/templates/snippets/file_share_popup.html:50
 msgid "Sending..."
 msgstr "Sendi..."
 
-#: seahub/templates/js/templates.html:498
+#: seahub/templates/js/templates.html:492
 msgid ""
 "You can share the generated link to others and then they can upload files to"
 " this directory via the link."
 msgstr "Þú getur deilt tenglinum með öðru fólki og það getur notað hann til að hlaða upp skrám í þessa möppu."
 
-#: seahub/templates/js/templates.html:518
+#: seahub/templates/js/templates.html:512
 msgid "Upload Link: "
 msgstr "Upphleðslutengill:"
 
-#: seahub/templates/js/templates.html:566
-#: seahub/templates/js/templates.html:811
-#: seahub/templates/js/templates.html:1300
+#: seahub/templates/js/templates.html:565
+#: seahub/templates/js/templates.html:818
+#: seahub/templates/js/templates.html:1325
 msgid "Group"
 msgstr "Hópur"
 
-#: seahub/templates/js/templates.html:597
+#: seahub/templates/js/templates.html:599
 msgid "Leave Share"
 msgstr "Yfirgefa Deilingu"
 
-#: seahub/templates/js/templates.html:735
+#: seahub/templates/js/templates.html:737
 msgid "Wiki"
 msgstr "Wiki"
 
-#: seahub/templates/js/templates.html:738 seahub/templates/libraries.html:130
+#: seahub/templates/js/templates.html:740 seahub/templates/libraries.html:130
 #: seahub/templates/pub_base.html:13
 #: seahub/templates/sysadmin/sys_admin_group_info.html:31
 #: seahub/templates/sysadmin/sys_inst_info_user.html:7
@@ -3828,182 +4054,191 @@ msgstr "Wiki"
 msgid "Members"
 msgstr "Félagar"
 
-#: seahub/templates/js/templates.html:739
+#: seahub/templates/js/templates.html:741
 msgid "Discussion"
 msgstr "Umræða"
 
-#: seahub/templates/js/templates.html:782
-#: seahub/templates/js/templates.html:1246
+#: seahub/templates/js/templates.html:784
+#: seahub/templates/js/templates.html:1271
 msgid "User Permission"
 msgstr "Notendaleyfi"
 
-#: seahub/templates/js/templates.html:783
-#: seahub/templates/js/templates.html:1247
+#: seahub/templates/js/templates.html:785
+#: seahub/templates/js/templates.html:1272
 msgid "Group Permission"
 msgstr "Réttindi Hóps"
 
-#: seahub/templates/js/templates.html:834 seahub/templates/starred.html:20
+#: seahub/templates/js/templates.html:844 seahub/templates/starred.html:20
 msgid "icon"
 msgstr "smámynd"
 
-#: seahub/templates/js/templates.html:845 seahub/templates/starred.html:27
+#: seahub/templates/js/templates.html:855 seahub/templates/starred.html:27
 msgid "Unstar"
 msgstr "Taka stjörnu af"
 
-#: seahub/templates/js/templates.html:851
-#: seahub/templates/js/templates.html:860
+#: seahub/templates/js/templates.html:861
+#: seahub/templates/js/templates.html:870
 msgid "Library Type"
-msgstr ""
+msgstr "Safnagerð"
 
-#: seahub/templates/js/templates.html:865
+#: seahub/templates/js/templates.html:875
 #: seahub/templates/sysadmin/sys_admin_group_info.html:42
 msgid "Shared By"
 msgstr "Deilt af"
 
-#: seahub/templates/js/templates.html:869
+#: seahub/templates/js/templates.html:879
 msgid "Select libraries to share"
 msgstr "Veldu safn til að deila"
 
-#: seahub/templates/js/templates.html:930
+#: seahub/templates/js/templates.html:940
 msgid "Deleted library"
 msgstr "Eytt safn"
 
-#: seahub/templates/js/templates.html:937
+#: seahub/templates/js/templates.html:947
 #: seahub/templates/snippets/list_commit_detail.html:10
 msgid "Modification Details"
 msgstr "Breytingarsmáatriði"
 
-#: seahub/templates/js/templates.html:951
+#: seahub/templates/js/templates.html:961
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this wiki"
 msgstr "Leita að skrám í þessu wiki"
 
-#: seahub/templates/js/templates.html:951
+#: seahub/templates/js/templates.html:961
 #: seahub/templates/snippets/search_form.html:4
 msgid "Search files in this library"
 msgstr "Leita að skrám í þessu safni"
 
-#: seahub/templates/js/templates.html:953
+#: seahub/templates/js/templates.html:963
 #: seahub/templates/snippets/search_form.html:7
 #: seahub/templates/snippets/search_form.html:13
 msgid "Search Files"
 msgstr "Leita að Skrám"
 
-#: seahub/templates/js/templates.html:955
+#: seahub/templates/js/templates.html:965
 #: seahub/templates/snippets/search_form.html:9
 msgid "advanced"
 msgstr "ítarefni"
 
-#: seahub/templates/js/templates.html:973 seahub/templates/libraries.html:107
+#: seahub/templates/js/templates.html:983 seahub/templates/libraries.html:107
 msgid "No library is shared to this group"
 msgstr "það er engu safni deilt með þessum hópi"
 
-#: seahub/templates/js/templates.html:989
+#: seahub/templates/js/templates.html:991
+msgid "owner"
+msgstr ""
+
+#: seahub/templates/js/templates.html:993
+#: seahub/templates/sysadmin/sys_admin_group_info.html:83
+msgid "admin"
+msgstr "kerfisstjóri"
+
+#: seahub/templates/js/templates.html:1007
 msgid "Reply"
 msgstr "Svara"
 
-#: seahub/templates/js/templates.html:1007
 #: seahub/templates/js/templates.html:1023
+#: seahub/templates/js/templates.html:1039
 msgid "Add Wiki"
-msgstr ""
+msgstr "Bæta við Wiki"
 
-#: seahub/templates/js/templates.html:1009
 #: seahub/templates/js/templates.html:1025
+#: seahub/templates/js/templates.html:1041
 msgid "Remove Wiki"
-msgstr ""
+msgstr "Fjarlægja Wiki"
 
-#: seahub/templates/js/templates.html:1013
 #: seahub/templates/js/templates.html:1029
+#: seahub/templates/js/templates.html:1045
 msgid "Import Members"
 msgstr "Flytja inn Meðlimi"
 
-#: seahub/templates/js/templates.html:1014
 #: seahub/templates/js/templates.html:1030
+#: seahub/templates/js/templates.html:1046
 msgid "Manage Members"
-msgstr ""
+msgstr "Stjórna Meðlimum"
 
-#: seahub/templates/js/templates.html:1017
+#: seahub/templates/js/templates.html:1033
 msgid "Dismiss"
 msgstr "Loka"
 
-#: seahub/templates/js/templates.html:1034
+#: seahub/templates/js/templates.html:1050
 msgid "Leave group"
 msgstr "Yfirgefa hóp"
 
-#: seahub/templates/js/templates.html:1041
+#: seahub/templates/js/templates.html:1057
 msgid "Rename Group To"
 msgstr "Endurnefna Hóp sem"
 
-#: seahub/templates/js/templates.html:1050
+#: seahub/templates/js/templates.html:1066
 msgid "Transfer Group To"
 msgstr "Færa Hóp til"
 
-#: seahub/templates/js/templates.html:1058
+#: seahub/templates/js/templates.html:1074
 msgid "Import group members from a CSV file"
 msgstr "Flytja meðlimi inn í hóp með CSV skrá"
 
-#: seahub/templates/js/templates.html:1060
+#: seahub/templates/js/templates.html:1076
 msgid "File format: user@mail.com"
 msgstr "Skráasnið: notandi@len.is"
 
-#: seahub/templates/js/templates.html:1070
+#: seahub/templates/js/templates.html:1086
 #: seahub/templates/sysadmin/sys_inst_admin.html:12
 msgid "Add"
-msgstr ""
+msgstr "Bæta við"
 
-#: seahub/templates/js/templates.html:1150
+#: seahub/templates/js/templates.html:1166
 msgid "Setting library history is disabled by Admin"
-msgstr ""
+msgstr "Að virkja safnasögu hefur verið gert óvirkt af kerfisstjóra"
 
-#: seahub/templates/js/templates.html:1154
+#: seahub/templates/js/templates.html:1171
 msgid "Keep full history"
 msgstr "Skrá alla söguna"
 
-#: seahub/templates/js/templates.html:1157
+#: seahub/templates/js/templates.html:1177
 msgid "Don't keep history"
 msgstr "Ekki skrá sögu"
 
-#: seahub/templates/js/templates.html:1160
+#: seahub/templates/js/templates.html:1183
 msgid "Only keep a period of history:"
 msgstr "Skrá sögu í ákveðinn tíma"
 
-#: seahub/templates/js/templates.html:1161
+#: seahub/templates/js/templates.html:1184
 msgid "days"
 msgstr "dagar"
 
-#: seahub/templates/js/templates.html:1186
-#: seahub/templates/js/templates.html:1203
+#: seahub/templates/js/templates.html:1211
+#: seahub/templates/js/templates.html:1228
 msgid "Created By"
 msgstr "Gert Af"
 
-#: seahub/templates/js/templates.html:1257
-#: seahub/templates/js/templates.html:1301
+#: seahub/templates/js/templates.html:1282
+#: seahub/templates/js/templates.html:1326
 msgid "Folder"
 msgstr "Mappa"
 
-#: seahub/templates/js/templates.html:1268
-#: seahub/templates/js/templates.html:1287
-#: seahub/templates/js/templates.html:1314
-#: seahub/templates/js/templates.html:1333
+#: seahub/templates/js/templates.html:1293
+#: seahub/templates/js/templates.html:1312
+#: seahub/templates/js/templates.html:1339
+#: seahub/templates/js/templates.html:1358
 msgid "Select a folder"
 msgstr "Veldu möppu"
 
-#: seahub/templates/js/templates.html:1381
+#: seahub/templates/js/templates.html:1406
 msgid "Old Password"
 msgstr "Gamla Lykilorðið"
 
-#: seahub/templates/js/templates.html:1383
-#, python-format
-msgid "New Password(at least %(repo_password_min_length)s characters)"
-msgstr "Nýtt Lykilorð (að minnsta kosti %(repo_password_min_length)s stafir)"
+#: seahub/templates/js/templates.html:1408
+#: seahub/templates/registration/password_change_form.html:19
+msgid "New Password"
+msgstr "Nýtt Lykilorð"
 
-#: seahub/templates/js/templates.html:1385
+#: seahub/templates/js/templates.html:1410
 msgid "New Password Again"
 msgstr "Endurtaktu Nýja Lykilorðið"
 
-#: seahub/templates/js/templates.html:1413
-msgid "Unlink"
-msgstr "Aftengja"
+#: seahub/templates/js/templates.html:1453
+msgid "See All Notifications"
+msgstr "Sjá Allar Athugasemdir"
 
 #: seahub/templates/libraries.html:21
 msgid "You have not created any libraries"
@@ -4019,6 +4254,11 @@ msgstr "Þú getur búið til safn til að skipuleggja skrárnar þínar.  Til d
 #: seahub/templates/libraries.html:35
 msgid "No library is shared to you"
 msgstr "Engu safni er deilt með þér"
+
+#: seahub/templates/libraries.html:43 seahub/templates/pub_base.html:5
+#: seahub/templates/sysadmin/userinfo.html:24
+msgid "Organization"
+msgstr "Samfélagið"
 
 #: seahub/templates/libraries.html:46
 msgid "Add Library"
@@ -4066,10 +4306,6 @@ msgid ""
 " on libraries. Groups you join will be listed here."
 msgstr "Hópur er staður þar sem þú og félagar þínir geta skilið eftir skilaboð og unnið saman í söfnum. Hér mun verða listi yfir þá hópa sem þú ert í."
 
-#: seahub/templates/libraries.html:90
-msgid "Group Name"
-msgstr "Nafn Hóps"
-
 #: seahub/templates/libraries.html:108
 msgid ""
 "You can share libraries by clicking the \"New Library\" button above or the "
@@ -4085,15 +4321,15 @@ msgstr "Notendur sem hafa aðgang að söfnum sem hefur verið deilt með skrifr
 
 #: seahub/templates/libraries.html:143
 msgid "Discussions"
-msgstr ""
+msgstr "Umræða"
 
 #: seahub/templates/libraries.html:147
 msgid "More..."
-msgstr ""
+msgstr "Meira..."
 
 #: seahub/templates/libraries.html:149
 msgid "No discussion in this group yet."
-msgstr ""
+msgstr "Engin umræða hefur átt sér stað í þessum hópi enn."
 
 #: seahub/templates/libraries.html:156
 msgid "Add a discussion..."
@@ -4108,14 +4344,6 @@ msgid ""
 "You can star important files by clicking the \"Star\" button on file viewing"
 " page, and they will be listed here."
 msgstr "Þú getur stjörnumerkt mikilvægar skrár með því að smella á \"Stjörnu\" takkann við hverja skrá á meðan þú ert að skoða síðuna og skráin verður listuð hér."
-
-#: seahub/templates/libraries.html:195
-msgid "Platform"
-msgstr "Verkvangur"
-
-#: seahub/templates/libraries.html:198
-msgid "Last Access"
-msgstr "Seinast Skoðað"
 
 #: seahub/templates/libraries.html:199
 msgid "# Libraries"
@@ -4146,7 +4374,7 @@ msgstr "Til að virkja reikninginn, vinsamlegast smelltu á eftirfarandi hlekk i
 
 #: seahub/templates/registration/login.html:4
 #: seahub/templates/registration/login.html:8
-#: seahub/templates/registration/login.html:36
+#: seahub/templates/registration/login.html:38
 #: seahub/templates/registration/password_reset_complete.html:8
 #: seahub/templates/sysadmin/user_activation_email.html:15
 #: seahub/templates/sysadmin/user_add_email.html:25
@@ -4166,33 +4394,33 @@ msgstr "Staðfestingarkóði"
 msgid "Not clear? Refresh it."
 msgstr "Óljós? Fáðu nýjann."
 
-#: seahub/templates/registration/login.html:25
+#: seahub/templates/registration/login.html:27
 msgid "Incorrect email or password"
 msgstr "Rangt netfang eða lykilorð"
 
-#: seahub/templates/registration/login.html:33
+#: seahub/templates/registration/login.html:35
 #, python-format
 msgid "Remember me for %(remember_days)s days "
 msgstr "Mundu mig í %(remember_days)s daga"
 
-#: seahub/templates/registration/login.html:42
+#: seahub/templates/registration/login.html:44
 #: seahub/templates/sysadmin/sudo_mode.html:20
 msgid "Shibboleth"
 msgstr "Shibboleth"
 
-#: seahub/templates/registration/login.html:46
+#: seahub/templates/registration/login.html:48
 msgid "Kerberos"
 msgstr "Kerberos auðkenning"
 
-#: seahub/templates/registration/login.html:73
+#: seahub/templates/registration/login.html:75
 msgid "Failed to refresh the CAPTCHA, please try again later."
 msgstr "Tókst ekki að gera nýjann staðfestingarkóða, vinsamlegast reyndu aftur síðar."
 
-#: seahub/templates/registration/login.html:80
+#: seahub/templates/registration/login.html:82
 msgid "Email or username cannot be blank"
 msgstr "Netfang eða notendanafn má ekki vanta"
 
-#: seahub/templates/registration/login.html:84
+#: seahub/templates/registration/login.html:86
 #: seahub/templates/registration/password_change_form.html:67
 #: seahub/templates/registration/registration_form.html:88
 #: seahub/templates/sysadmin/sudo_mode.html:34
@@ -4227,15 +4455,11 @@ msgstr "Lykilorðaumsýsla"
 
 #: seahub/templates/registration/password_change_form.html:11
 msgid "Please update your password before continue."
-msgstr ""
+msgstr "Vinsamlegast uppfærðu lykilorðið þitt áður en þú heldur áfram."
 
 #: seahub/templates/registration/password_change_form.html:17
 msgid "Current Password"
 msgstr "Núverandi Lykilorð"
-
-#: seahub/templates/registration/password_change_form.html:19
-msgid "New Password"
-msgstr "Nýtt Lykilorð"
 
 #: seahub/templates/registration/password_change_form.html:22
 #: seahub/templates/registration/registration_form.html:27
@@ -4373,11 +4597,6 @@ msgstr "Netfang má ekki vanta"
 msgid "<span class=\"op-target\">%(repo_dir_name)s</span> Trash"
 msgstr "<span class=\"op-target\">%(repo_dir_name)s</span> Rusl"
 
-#: seahub/templates/repo_dir_recycle_view.html:26
-#: seahub/templates/repo_dir_recycle_view.html:54
-msgid "Clean"
-msgstr "Hreinsa"
-
 #: seahub/templates/repo_dir_recycle_view.html:34
 msgid "Delete Time"
 msgstr "Eyða Tíma"
@@ -4399,12 +4618,12 @@ msgid "1 month ago"
 msgstr "fyrir einum mánuði"
 
 #: seahub/templates/repo_dir_recycle_view.html:143
-#: seahub/templates/sysadmin/settings.html:148
-#: seahub/templates/sysadmin/settings.html:186 seahub/views/sysadmin.py:377
-#: seahub/views/sysadmin.py:395 seahub/views/sysadmin.py:423
-#: seahub/views/sysadmin.py:1570 seahub/views/sysadmin.py:1627
-#: seahub/views/sysadmin.py:2262 seahub/views/sysadmin.py:2304
-#: seahub/views/sysadmin.py:2391
+#: seahub/templates/sysadmin/settings.html:159
+#: seahub/templates/sysadmin/settings.html:197 seahub/views/sysadmin.py:393
+#: seahub/views/sysadmin.py:411 seahub/views/sysadmin.py:439
+#: seahub/views/sysadmin.py:1586 seahub/views/sysadmin.py:1643
+#: seahub/views/sysadmin.py:2290 seahub/views/sysadmin.py:2332
+#: seahub/views/sysadmin.py:2419
 msgid "Success"
 msgstr "Tókst með ágætum"
 
@@ -4499,7 +4718,7 @@ msgstr "Þú getur farið á eftirfarandi síðu og hlaðið upp skránum þínu
 msgid ""
 "Your account is created successfully, please wait for administrator to "
 "activate your account."
-msgstr ""
+msgstr "Reikningurinn þinn hefur verið stofnaður, vinsamlegast bíðið eftir að kerfisstjóri hefur virkjað reikninginn þinn."
 
 #: seahub/templates/snippets/add_file_js.html:15
 msgid "You don't have any library at present"
@@ -4634,7 +4853,7 @@ msgid "Please enter password"
 msgstr "Vinsamlegast sláðu inn lykilorð"
 
 #: seahub/templates/snippets/repo_del_js.html:46
-#: seahub/templates/sysadmin/admin_repo_view.html:351
+#: seahub/templates/sysadmin/admin_repo_view.html:355
 msgid "Delete succeeded."
 msgstr "Eyðing tókst."
 
@@ -4775,6 +4994,15 @@ msgstr "Stjörnur"
 msgid "Successfully unstarred."
 msgstr "Tókst að taka stjörnu af"
 
+#: seahub/templates/sysadmin/admin_repo_view.html:34
+#: seahub/templates/sysadmin/admin_repo_view.html:105
+msgid "New Directory"
+msgstr "Ný Mappa"
+
+#: seahub/templates/sysadmin/admin_repo_view.html:106
+msgid "Directory Name"
+msgstr "Nafn Möppu"
+
 #: seahub/templates/sysadmin/admin_repo_view.html:117
 msgid "close"
 msgstr "loka"
@@ -4800,88 +5028,62 @@ msgstr "Skráarupphleðsla mistókst"
 msgid "Failed to get upload url"
 msgstr "Gerð upphleðsluhlekks mistókst"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:282
+#: seahub/templates/sysadmin/admin_repo_view.html:286
 #: seahub/templates/view_shared_upload_link.html:74
 msgid "File is too big"
 msgstr "Skrá er of stór"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:283
+#: seahub/templates/sysadmin/admin_repo_view.html:287
 #: seahub/templates/view_shared_upload_link.html:75
 msgid "File is too small"
 msgstr "Skrá er of lítil"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:284
+#: seahub/templates/sysadmin/admin_repo_view.html:288
 #: seahub/templates/view_shared_upload_link.html:76
 msgid "Filetype not allowed"
 msgstr "Skráargerð er ekki leyfð"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:285
+#: seahub/templates/sysadmin/admin_repo_view.html:289
 #: seahub/templates/view_shared_upload_link.html:77
 msgid "Max number of files exceeded"
 msgstr "Hámarksfjölda skráa hefur verið náð"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:286
+#: seahub/templates/sysadmin/admin_repo_view.html:290
 #: seahub/templates/view_shared_upload_link.html:78
 msgid "Uploaded bytes exceed file size"
 msgstr "Upphlaðin bæti eru yfir skráarstærð"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:287
+#: seahub/templates/sysadmin/admin_repo_view.html:291
 #: seahub/templates/view_shared_upload_link.html:79
 msgid "Empty file upload result"
 msgstr "Tómri skrá hlaðið upp"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:289
-#: seahub/templates/view_shared_upload_link.html:81 seahub/views/ajax.py:1014
-msgid "Error"
-msgstr "Villa"
-
-#: seahub/templates/sysadmin/admin_repo_view.html:290
+#: seahub/templates/sysadmin/admin_repo_view.html:294
 #: seahub/templates/view_shared_upload_link.html:82
 msgid "uploaded"
 msgstr "upphlaðin"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:291
+#: seahub/templates/sysadmin/admin_repo_view.html:295
 #: seahub/templates/view_shared_upload_link.html:83
 msgid "canceled"
 msgstr "hætt við"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:292
+#: seahub/templates/sysadmin/admin_repo_view.html:296
 #: seahub/templates/view_shared_upload_link.html:84
 msgid "Start"
 msgstr "Byrja"
 
-#: seahub/templates/sysadmin/admin_repo_view.html:310
-#: seahub/templates/sysadmin/settings.html:164
+#: seahub/templates/sysadmin/admin_repo_view.html:314
+#: seahub/templates/sysadmin/settings.html:175
 msgid "It is required."
 msgstr "þetta er áskilið."
-
-#: seahub/templates/sysadmin/base.html:25
-#: seahub/templates/sysadmin/sys_info.html:44
-msgid "Organizations"
-msgstr "Samfélög"
-
-#: seahub/templates/sysadmin/base.html:30
-msgid "Institutions"
-msgstr ""
-
-#: seahub/templates/sysadmin/base.html:41
-msgid "Traffic"
-msgstr "Umferð"
-
-#: seahub/templates/sysadmin/base.html:46
-msgid "Logs"
-msgstr "Kladdar"
-
-#: seahub/templates/sysadmin/base.html:51
-msgid "Virus Scan"
-msgstr "Veiruskönnun"
 
 #: seahub/templates/sysadmin/org_admin_table.html:5
 #: seahub/templates/sysadmin/sys_admin_group_info.html:20
 #: seahub/templates/sysadmin/sys_group_admin.html:18
 #: seahub/templates/sysadmin/sys_org_info_group.html:19
 #: seahub/templates/sysadmin/sys_org_search.html:11
-#: seahub/views/sysadmin.py:1402
+#: seahub/views/sysadmin.py:1418
 msgid "Creator"
 msgstr "Stofnandi"
 
@@ -4900,7 +5102,7 @@ msgstr "Flytja %(lib_name)s til:"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:18
 msgid "Search user or enter email and press Enter"
-msgstr ""
+msgstr "Leita eftir notanda eða netfangi og sláðu svo á Enter"
 
 #: seahub/templates/sysadmin/repoadmin_js.html:19
 msgid "Please enter 1 or more character"
@@ -4933,6 +5135,13 @@ msgstr "Eyða Safni"
 msgid "Files / Size"
 msgstr "Skrár / Stærð"
 
+#: seahub/templates/sysadmin/settings.html:11
+msgid ""
+"Note: Settings via web interface are saved in database table (seahub-"
+"db/constance_config). They have a higher priority over the settings in "
+"config files."
+msgstr ""
+
 #: seahub/templates/sysadmin/sudo_mode.html:8
 msgid "Confirm password to continue"
 msgstr "Staðfestu lykilorð til að halda áfram"
@@ -4963,10 +5172,6 @@ msgstr "Hópaupplýsingar"
 msgid "No library has shared to this group"
 msgstr "Engu safni hefur verið deilt með þessum hópi"
 
-#: seahub/templates/sysadmin/sys_admin_group_info.html:83
-msgid "admin"
-msgstr "kerfisstjóri"
-
 #: seahub/templates/sysadmin/sys_group_admin.html:10
 #: seahub/templates/sysadmin/sys_useradmin.html:27
 msgid "Export Excel"
@@ -4978,37 +5183,13 @@ msgstr "Flytja út í Excel skrá"
 msgid "Delete Group"
 msgstr "Eyða Hópi"
 
-#: seahub/templates/sysadmin/sys_info.html:10
-msgid "System Info"
-msgstr "Kerfisupplýsingar"
-
-#: seahub/templates/sysadmin/sys_info.html:12
-msgid "Professional Edition"
-msgstr "Sérútgáfa"
-
-#: seahub/templates/sysadmin/sys_info.html:12
-msgid "expires on"
-msgstr "rennur út þann"
-
-#: seahub/templates/sysadmin/sys_info.html:14
-msgid "Community Edition"
-msgstr "Samfélagútgáfan"
-
-#: seahub/templates/sysadmin/sys_info.html:15
-msgid "Upgrade to Pro Edition"
-msgstr "Uppfæra í Sérútgáfu"
-
-#: seahub/templates/sysadmin/sys_info.html:23
-msgid "Limits"
-msgstr "Takmörk"
-
 #: seahub/templates/sysadmin/sys_inst_admin.html:9
 msgid "All Institutions"
-msgstr ""
+msgstr "Allar Stofnanir"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:17
 msgid "Add institution"
-msgstr ""
+msgstr "Bæta við Stofnun"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:60
 #: seahub/templates/sysadmin/sys_org_admin.html:78
@@ -5017,11 +5198,11 @@ msgstr "Nafn má ekki vanta"
 
 #: seahub/templates/sysadmin/sys_inst_admin.html:66
 msgid "Delete Institution"
-msgstr ""
+msgstr "Eyða Stofnun"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:16
 msgid "Back"
-msgstr ""
+msgstr "Til Baka"
 
 #: seahub/templates/sysadmin/sys_inst_info_base.html:20
 #: seahub/templates/sysadmin/sys_org_info_base.html:20
@@ -5036,7 +5217,7 @@ msgstr "Taka kerfisstjóraréttindi af"
 
 #: seahub/templates/sysadmin/sys_inst_info_user.html:40
 msgid "Set Admin"
-msgstr ""
+msgstr "Gera að Kerfisstjóra"
 
 #: seahub/templates/sysadmin/sys_inst_info_user.html:51
 #: seahub/templates/sysadmin/sys_org_info_user.html:57
@@ -5165,12 +5346,12 @@ msgid "Max User Number"
 msgstr "Hámarks Notendafjöldi"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:52
-#: seahub/views/sysadmin.py:1621
+#: seahub/views/sysadmin.py:1637
 msgid "Input should be a number"
 msgstr "Gildið ætti að vera tala"
 
 #: seahub/templates/sysadmin/sys_org_info_setting.html:55
-#: seahub/views/sysadmin.py:1631
+#: seahub/views/sysadmin.py:1647
 msgid "Input number should be greater than 0"
 msgstr "Gildið ætti að vera tala stærri en 0"
 
@@ -5310,7 +5491,7 @@ msgstr "LDAP"
 #: seahub/templates/sysadmin/sys_useradmin_admins.html:17
 #: seahub/templates/sysadmin/sys_useradmin_ldap.html:17
 #: seahub/templates/sysadmin/sys_useradmin_paid.html:17
-#: seahub/views/sysadmin.py:630 seahub/views/sysadmin.py:633
+#: seahub/views/sysadmin.py:646 seahub/views/sysadmin.py:649
 msgid "LDAP(imported)"
 msgstr "LDAP(innflutt)"
 
@@ -5323,7 +5504,7 @@ msgid "Admins"
 msgstr "Kerfisstjórar"
 
 #: seahub/templates/sysadmin/sys_user_admin_ldap_imported.html:29
-#: seahub/views/sysadmin.py:630 seahub/views/sysadmin.py:633
+#: seahub/views/sysadmin.py:646 seahub/views/sysadmin.py:649
 msgid "Last Login"
 msgstr "Síðasta Innskráning"
 
@@ -5349,7 +5530,7 @@ msgstr "Þú getur einnig bætt við notanda sem gesti, sem mun ekki geta búið
 #: seahub/templates/sysadmin/sys_useradmin.html:39
 #: seahub/templates/sysadmin/useradmin_table.html:48
 #: seahub/templates/sysadmin/useradmin_table.html:56
-#: seahub/views/sysadmin.py:659
+#: seahub/views/sysadmin.py:675
 msgid "Guest"
 msgstr "Gestur"
 
@@ -5437,6 +5618,12 @@ msgstr "Netfang: %(email)s"
 msgid "Password: %(password)s"
 msgstr "Lykilorð: %(password)s"
 
+#: seahub/templates/sysadmin/user_freeze_email.html:12
+#, python-format
+msgid ""
+"Account %(user)s froze due to excessive failed logins. Please check at:"
+msgstr ""
+
 #: seahub/templates/sysadmin/user_reset_email.html:12
 #, python-format
 msgid ""
@@ -5514,24 +5701,24 @@ msgstr "til"
 msgid "Sorry, this user is not registered yet."
 msgstr "Afsakið, en þessi notandi er ekki enn skráður."
 
-#: seahub/templates/view_file_base.html:23
+#: seahub/templates/view_file_base.html:28
 #: seahub/templates/view_history_file.html:23
 #: seahub/templates/view_snapshot_file.html:13
 #: seahub/templates/view_trash_file.html:10
 msgid "Current Path: "
 msgstr "Núverandi Slóð:"
 
-#: seahub/templates/view_file_base.html:41
+#: seahub/templates/view_file_base.html:46
 #: seahub/templates/view_file_markdown.html:7
 #: seahub/templates/view_file_text.html:16
 msgid "updated this file"
 msgstr "uppfærði þessa skrá"
 
-#: seahub/templates/view_file_base.html:92
+#: seahub/templates/view_file_base.html:97
 msgid "Back to top"
 msgstr "Efst á síðu"
 
-#: seahub/templates/view_file_base.html:92
+#: seahub/templates/view_file_base.html:97
 msgid "top"
 msgstr "efst"
 
@@ -5627,8 +5814,8 @@ msgstr "Ógild gildi."
 #: seahub/views/ajax.py:263 seahub/views/ajax.py:1055
 #: seahub/views/ajax.py:1075 seahub/views/ajax.py:1124
 #: seahub/views/ajax.py:1454 seahub/views/ajax.py:1472
-#: seahub/views/ajax.py:2337 seahub/views/ajax.py:2357
-#: seahub/views/ajax.py:2400 seahub/views/ajax.py:2407
+#: seahub/views/ajax.py:2330 seahub/views/ajax.py:2350
+#: seahub/views/ajax.py:2393 seahub/views/ajax.py:2400
 msgid "Permission denied."
 msgstr "Aðgangur óheimill."
 
@@ -5657,8 +5844,8 @@ msgid "Duplicated filename"
 msgstr "Skráarnafn þegar til"
 
 #: seahub/views/__init__.py:569 seahub/views/ajax.py:1302
-#: seahub/views/file.py:379 seahub/views/file.py:776 seahub/views/file.py:947
-#: seahub/views/file.py:1520
+#: seahub/views/file.py:363 seahub/views/file.py:762 seahub/views/file.py:943
+#: seahub/views/file.py:1518
 msgid "File does not exist"
 msgstr "Skrá er ekki til"
 
@@ -5717,11 +5904,11 @@ msgstr "Tókst ekki að taka deilingu af \"%s\"."
 msgid "No revisions found"
 msgstr "Engar útgáfur fundust"
 
-#: seahub/views/__init__.py:1097 seahub/views/file.py:1048
+#: seahub/views/__init__.py:1097 seahub/views/file.py:1044
 msgid "Check file lock error"
 msgstr "Athuga villu skráarlæsingar"
 
-#: seahub/views/__init__.py:1101 seahub/views/file.py:1051
+#: seahub/views/__init__.py:1101 seahub/views/file.py:1047
 msgid "File is locked"
 msgstr "Skrá er læst"
 
@@ -5749,12 +5936,12 @@ msgstr "Tókst að kalla fram aftur %(path)s í <a href=\"%(url)s\">rótarmöppu
 msgid "\"%s\" does not exist."
 msgstr "\"%s\" er ekki til."
 
-#: seahub/views/__init__.py:1258 seahub/views/file.py:1033
-#: seahub/views/repo.py:181
+#: seahub/views/__init__.py:1258 seahub/views/file.py:1029
+#: seahub/views/repo.py:183
 msgid "Internal Error"
 msgstr "Kerfisvilla"
 
-#: seahub/views/__init__.py:1261 seahub/views/repo.py:184
+#: seahub/views/__init__.py:1261 seahub/views/repo.py:186
 #, python-format
 msgid "Unable to download directory \"%s\": size is too large."
 msgstr "Get ekki hlaðið niður möppu \"%s\": of stórt."
@@ -5764,11 +5951,11 @@ msgstr "Get ekki hlaðið niður möppu \"%s\": of stórt."
 msgid "Unable to download \"%s\""
 msgstr "Get ekki hlaðið niður \"%s\""
 
-#: seahub/views/__init__.py:1360
+#: seahub/views/__init__.py:1361
 msgid "Successfully enable \"Personal Wiki\"."
 msgstr "Virkja \"Eigið Wiki\"."
 
-#: seahub/views/__init__.py:1365
+#: seahub/views/__init__.py:1366
 msgid "Successfully disable \"Personal Wiki\"."
 msgstr "Slökkva á \"Eigin Wiki\""
 
@@ -5785,7 +5972,7 @@ msgid "The group doesn't exist"
 msgstr "Hópurinn er ekki til."
 
 #: seahub/views/ajax.py:269 seahub/views/ajax.py:1137
-#: seahub/views/ajax.py:1749
+#: seahub/views/ajax.py:1742
 msgid "Library is encrypted."
 msgstr "Safnið er dulkóðað"
 
@@ -5863,262 +6050,266 @@ msgstr "Tókst ekki að sækja hlutaskrá"
 msgid "Wrong repo id"
 msgstr "Rangt auðkenni safns"
 
-#: seahub/views/ajax.py:1417 seahub/views/ajax.py:2284
-#: seahub/views/sysadmin.py:380 seahub/views/sysadmin.py:398
-#: seahub/views/sysadmin.py:421
+#: seahub/views/ajax.py:1417 seahub/views/ajax.py:2277
+#: seahub/views/sysadmin.py:396 seahub/views/sysadmin.py:414
+#: seahub/views/sysadmin.py:437
 msgid "Failed"
 msgstr "Mistókst"
 
-#: seahub/views/ajax.py:1704
+#: seahub/views/ajax.py:1697
 msgid "Bad upload link token."
 msgstr "Slæmt tákn í upphleðsluhlekk"
 
-#: seahub/views/ajax.py:1710
+#: seahub/views/ajax.py:1703
 msgid "Bad repo id in upload link."
 msgstr "Slæmt tilvísunarnúmer í upphleðsluhlekk"
 
-#: seahub/views/ajax.py:1771
+#: seahub/views/ajax.py:1764
 msgid "No conflict in the merge."
 msgstr "Engir árekstrar í sameiningunni"
 
-#: seahub/views/ajax.py:1849
+#: seahub/views/ajax.py:1842
 msgid "Failed to edit library information."
 msgstr "Gat ekki breytt upplýsingum um safn"
 
-#: seahub/views/ajax.py:1858
+#: seahub/views/ajax.py:1851
 msgid "Failed to save settings on server"
 msgstr "Gat ekki vistað stillingar á þjóni"
 
-#: seahub/views/ajax.py:1861
+#: seahub/views/ajax.py:1854
 msgid "Settings saved."
 msgstr "Stillingar vistaðar."
 
-#: seahub/views/ajax.py:1892
+#: seahub/views/ajax.py:1885
 #, python-format
 msgid "Username %s is not valid."
 msgstr "Notandanafn %s er ekki leyfilegt."
 
-#: seahub/views/ajax.py:1899
+#: seahub/views/ajax.py:1892
 #, python-format
 msgid "User %s is not found."
 msgstr "Finn ekki notanda %s."
 
-#: seahub/views/ajax.py:1906
+#: seahub/views/ajax.py:1899
 #, python-format
 msgid "User %s is not in current organization."
 msgstr "Notandinn %s er ekki í samfélaginu"
 
-#: seahub/views/ajax.py:1916
+#: seahub/views/ajax.py:1909
 #, python-format
 msgid "Can not transfer library to organization user %s."
 msgstr "Get ekki flutt safn samfélagsnotandans %s."
 
-#: seahub/views/ajax.py:1945
+#: seahub/views/ajax.py:1938
 msgid "Faied to change password, you are not owner."
 msgstr "Mistókst að breyta lykilorði, þú ert ekki eigandi."
 
-#: seahub/views/ajax.py:2051 seahub/views/ajax.py:2193
+#: seahub/views/ajax.py:2044 seahub/views/ajax.py:2186
 msgid "Invalid folder permission, should be \"rw\" or \"r\""
 msgstr "Röng heimild á möppu, ætti að vera \"rw\" eða \"r\""
 
-#: seahub/views/ajax.py:2055 seahub/views/ajax.py:2197
+#: seahub/views/ajax.py:2048 seahub/views/ajax.py:2190
 msgid "Path should start with \"/\""
 msgstr "Slóð ætti að byrja á \"/\""
 
-#: seahub/views/ajax.py:2059 seahub/views/ajax.py:2201
+#: seahub/views/ajax.py:2052 seahub/views/ajax.py:2194
 msgid "Path should not end with \"/\""
 msgstr "Slóð ætti ekki að enda á \"/\""
 
-#: seahub/views/ajax.py:2063 seahub/views/ajax.py:2205
+#: seahub/views/ajax.py:2056 seahub/views/ajax.py:2198
 msgid "Invalid path"
 msgstr "Röng slóð"
 
-#: seahub/views/ajax.py:2071
+#: seahub/views/ajax.py:2064
 msgid "Invalid user, should be registered"
 msgstr "Rangur notandi, ætti að vera skráður"
 
-#: seahub/views/ajax.py:2083 seahub/views/ajax.py:2096
-#: seahub/views/ajax.py:2226 seahub/views/ajax.py:2239
+#: seahub/views/ajax.py:2076 seahub/views/ajax.py:2089
+#: seahub/views/ajax.py:2219 seahub/views/ajax.py:2232
 msgid "Operation failed"
 msgstr "Aðgerð mistókst"
 
-#: seahub/views/ajax.py:2086 seahub/views/ajax.py:2229
+#: seahub/views/ajax.py:2079 seahub/views/ajax.py:2222
 msgid "Wrong folder permission"
 msgstr "Röng heimild á möppu"
 
-#: seahub/views/ajax.py:2099 seahub/views/ajax.py:2242
+#: seahub/views/ajax.py:2092 seahub/views/ajax.py:2235
 msgid "Please add folder permission first"
 msgstr "Vinsamlegast bættu fyrst við möppuheimild"
 
-#: seahub/views/ajax.py:2146
+#: seahub/views/ajax.py:2139
 msgid "Please check the email(s) you entered and the contacts you selected"
 msgstr "Vinsamlegast athugaðu netfang/netföng sem þú slóst inn og tengiliðini sem þú valdir"
 
-#: seahub/views/ajax.py:2214
+#: seahub/views/ajax.py:2207
 msgid "Invalid group"
 msgstr "Rangur hópur"
 
-#: seahub/views/ajax.py:2299 seahub/views/ajax.py:2331
+#: seahub/views/ajax.py:2292 seahub/views/ajax.py:2324
 msgid "Group does not exist."
 msgstr "Hópur er ekki til"
 
-#: seahub/views/ajax.py:2468
+#: seahub/views/ajax.py:2461
 msgid "Failed, file is too large"
 msgstr "Mistókst, skrá er of stór"
 
-#: seahub/views/file.py:139
+#: seahub/views/file.py:123
 msgid "HTTPError: failed to open file online"
 msgstr "HTTP villa: tókst ekki að opna skrána"
 
-#: seahub/views/file.py:143
+#: seahub/views/file.py:127
 msgid "URLError: failed to open file online"
 msgstr "Veffangsvilla: tókst ekki að opna skrána"
 
-#: seahub/views/file.py:150
+#: seahub/views/file.py:134
 msgid "The encoding you chose is not proper."
 msgstr "Kóðunin sem þú valdir á ekki við."
 
-#: seahub/views/file.py:167 seahub/views/file.py:170
+#: seahub/views/file.py:151 seahub/views/file.py:154
 msgid "Unknown file encoding"
 msgstr "Óþekkt skráargerð"
 
-#: seahub/views/file.py:290 seahub/views/file.py:297
+#: seahub/views/file.py:274 seahub/views/file.py:281
 #, python-format
 msgid "File size surpasses %s, can not be opened online."
 msgstr "Skráarstærð yfir %s, ekki hægt að opna í vafra."
 
-#: seahub/views/file.py:313
+#: seahub/views/file.py:297
 msgid "The library is encrypted, can not open file online."
 msgstr "Þetta safn er dulkóðað, get ekki opnað skrár innan kerfis."
 
-#: seahub/views/file.py:391 seahub/views/file.py:658 seahub/views/file.py:673
-#: seahub/views/file.py:691
+#: seahub/views/file.py:375 seahub/views/file.py:647 seahub/views/file.py:662
+#: seahub/views/file.py:680
 msgid "Unable to view file"
 msgstr "Getur ekki skoðað skrá"
 
-#: seahub/views/file.py:465 seahub/views/file.py:633 seahub/views/file.py:818
+#: seahub/views/file.py:454 seahub/views/file.py:622 seahub/views/file.py:814
 msgid "Invalid file format."
 msgstr "Óleyfileg skráargerð."
 
-#: seahub/views/file.py:718 seahub/views/sysadmin.py:222
+#: seahub/views/file.py:707 seahub/views/sysadmin.py:242
 msgid "Unable to download file, invalid file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:727
+#: seahub/views/file.py:716
 msgid "Unable to download file, wrong file path"
 msgstr "Gat ekki niðurhalað skrá, röng skráarslóð"
 
-#: seahub/views/file.py:732
+#: seahub/views/file.py:721
 msgid "Unable to download file, share link traffic is used up."
 msgstr "Gat ekki niðurhalað skrá, deilihlekksumferð er uppurin."
 
-#: seahub/views/file.py:1055
+#: seahub/views/file.py:784
+msgid "Unable to view raw file, share link traffic is used up."
+msgstr ""
+
+#: seahub/views/file.py:1051
 msgid "The library does not exist."
 msgstr "Safnið er ekki til."
 
-#: seahub/views/file.py:1059
+#: seahub/views/file.py:1055
 msgid "The library is encrypted."
 msgstr "Safnið er dulkóðað"
 
-#: seahub/views/file.py:1133
+#: seahub/views/file.py:1129
 msgid "Unable to edit file"
 msgstr "Ekki hægt að breyta skrá"
 
-#: seahub/views/file.py:1139
+#: seahub/views/file.py:1135
 msgid "The file does not exist."
 msgstr "Skráin er ekki til."
 
-#: seahub/views/file.py:1168
+#: seahub/views/file.py:1164
 msgid "Edit online is not offered for this type of file."
 msgstr "Ekki er hægt að breyta skrá af þessari gerð í vafra"
 
-#: seahub/views/file.py:1275
+#: seahub/views/file.py:1273
 msgid "Unable to download file"
 msgstr "Get ekki halað niður skrá"
 
-#: seahub/views/repo.py:163
+#: seahub/views/repo.py:165
 msgid "Unable to access file: share link traffic is used up."
 msgstr "Get ekki nálgast skránna: kvótinn fyrir netumferð deildra hlekkja er uppurinn."
 
-#: seahub/views/repo.py:174
+#: seahub/views/repo.py:176
 msgid "Unable to download: folder not found."
 msgstr "Get ekki halað niður: mappa finnst ekki."
 
-#: seahub/views/sysadmin.py:226 seahub/views/sysadmin.py:234
-#: seahub/views/sysadmin.py:255 seahub/views/sysadmin.py:278
+#: seahub/views/sysadmin.py:246 seahub/views/sysadmin.py:254
+#: seahub/views/sysadmin.py:271 seahub/views/sysadmin.py:294
 msgid "Unable to view library"
 msgstr "Ekki hægt að skoða safn"
 
-#: seahub/views/sysadmin.py:264
+#: seahub/views/sysadmin.py:280
 msgid "Unable to view library, wrong folder path."
 msgstr "Get ekki skoðað safn, röng möppuslóð"
 
-#: seahub/views/sysadmin.py:338 seahub/views/sysadmin.py:415
+#: seahub/views/sysadmin.py:354 seahub/views/sysadmin.py:431
 msgid "Invalid username"
 msgstr "Rangt notendanafn"
 
-#: seahub/views/sysadmin.py:620 seahub/views/sysadmin.py:673
-#: seahub/views/sysadmin.py:1399 seahub/views/sysadmin.py:1411
+#: seahub/views/sysadmin.py:636 seahub/views/sysadmin.py:689
+#: seahub/views/sysadmin.py:1415 seahub/views/sysadmin.py:1427
 msgid "Failed to export Excel"
 msgstr "Mistókst að flytja út í Excel skrá"
 
-#: seahub/views/sysadmin.py:979
+#: seahub/views/sysadmin.py:995
 #, python-format
 msgid "Failed to set quota: maximum quota is %d MB"
 msgstr "Mistókst að gefa út kvóta: hámarks kvóti er %d MB"
 
-#: seahub/views/sysadmin.py:985 seahub/views/sysadmin.py:1011
+#: seahub/views/sysadmin.py:1001 seahub/views/sysadmin.py:1027
 msgid "Failed to set quota: internal server error"
 msgstr "Mistókst að setja kvóta: Kerfisvilla"
 
-#: seahub/views/sysadmin.py:1030
+#: seahub/views/sysadmin.py:1046
 msgid "Failed to delete: the user is an organization creator"
 msgstr "Mistókst að eyða: notandinn er stofnandi samfélagsins"
 
-#: seahub/views/sysadmin.py:1062
+#: seahub/views/sysadmin.py:1078
 #, python-format
 msgid "Successfully remove trial for: %s"
 msgstr "Tókst að eyða prufu fyrir: %s"
 
-#: seahub/views/sysadmin.py:1091
+#: seahub/views/sysadmin.py:1107
 #, python-format
 msgid "Successfully revoke the admin permission of %s"
 msgstr "Tókst að taka kerfisstjóraréttindi af %s"
 
-#: seahub/views/sysadmin.py:1093
+#: seahub/views/sysadmin.py:1109
 msgid "Failed to revoke admin: the user does not exist"
 msgstr "Mistókst að taka kerfisstjóraréttindin af: notandinn er ekki til"
 
-#: seahub/views/sysadmin.py:1140
+#: seahub/views/sysadmin.py:1156
 #, python-format
 msgid "Your account on %s is activated"
 msgstr "Reikningurinn þinn á %s hefur verið virkjaður"
 
-#: seahub/views/sysadmin.py:1223
+#: seahub/views/sysadmin.py:1239
 #, python-format
 msgid "Password has been reset on %s"
 msgstr "Lykilorðið hefur verið endursett á %s"
 
-#: seahub/views/sysadmin.py:1248
+#: seahub/views/sysadmin.py:1264
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, an email has been sent to "
 "%(user)s."
 msgstr "Tókst að breyta lykilorðinu í %(passwd)s, tölvupóstur hefur verið sendur til %(user)s."
 
-#: seahub/views/sysadmin.py:1253
+#: seahub/views/sysadmin.py:1269
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s, but failed to send email to "
 "%(user)s, please check your email configuration."
 msgstr "Tókst að endurstilla lykilorðið í  %(passwd)s, en mistókst að senda tölvupóst til %(user)s, vinsamlegast athugaðu netfangs stillinguna."
 
-#: seahub/views/sysadmin.py:1257
+#: seahub/views/sysadmin.py:1273
 #, python-format
 msgid "Successfully reset password to %(passwd)s for user %(user)s."
 msgstr "Tókst að endurstilla lykilorðið í %(passwd)s fyrir notandann %(user)s."
 
-#: seahub/views/sysadmin.py:1260
+#: seahub/views/sysadmin.py:1276
 #, python-format
 msgid ""
 "Successfully reset password to %(passwd)s for user %(user)s. But email "
@@ -6126,107 +6317,107 @@ msgid ""
 "configured."
 msgstr "Tókst að endurstilla lykilorðið í %(passwd)s fyrir notandann %(user)s. En tölvupóst er ekki hægt að senda því tölvupóststillingar eru ekki rétt stilltar."
 
-#: seahub/views/sysadmin.py:1263
+#: seahub/views/sysadmin.py:1279
 msgid "Failed to reset password: user does not exist"
 msgstr "Mistókst að endurstilla lykilorð: notandinn er ekki til"
 
-#: seahub/views/sysadmin.py:1279 seahub/views/sysadmin.py:2110
+#: seahub/views/sysadmin.py:1295 seahub/views/sysadmin.py:2137
 #, python-format
 msgid "You are invited to join %s"
 msgstr "Þér hefur verið boðið í %s"
 
-#: seahub/views/sysadmin.py:1310
+#: seahub/views/sysadmin.py:1326
 #, python-format
 msgid "Fail to add user %s."
 msgstr "Mistókst að bæta við notanda %s."
 
-#: seahub/views/sysadmin.py:1325 seahub/views/sysadmin.py:1338
+#: seahub/views/sysadmin.py:1341 seahub/views/sysadmin.py:1354
 #, python-format
 msgid "Successfully added user %s. An email notification has been sent."
 msgstr "Tókst að bæta við notandanum %s.  Tilkynning hefur verið send í tölvupósti."
 
-#: seahub/views/sysadmin.py:1328 seahub/views/sysadmin.py:1341
+#: seahub/views/sysadmin.py:1344 seahub/views/sysadmin.py:1357
 #, python-format
 msgid ""
 "Successfully added user %s. An error accurs when sending email notification,"
 " please check your email configuration."
 msgstr "Tókst að bæta við notandanum %s.  Villa kom upp þegar reynt var að senda tilkynningu þess efnis í tölvupósti, vinsamlegast athugaðu tölvupóststillingarnar."
 
-#: seahub/views/sysadmin.py:1330 seahub/views/sysadmin.py:1343
+#: seahub/views/sysadmin.py:1346 seahub/views/sysadmin.py:1359
 #, python-format
 msgid "Successfully added user %s."
 msgstr "Tókst að bæta við notandanum %s."
 
-#: seahub/views/sysadmin.py:1345
+#: seahub/views/sysadmin.py:1361
 #, python-format
 msgid ""
 "Successfully added user %s. But email notification can not be sent, because "
 "Email service is not properly configured."
 msgstr "Tókst að bæta við notandanum %s.  En ekki var hægt að senda tilkynningu um það í tölvupósti, því póstþjónustan er ekki rétt upp sett."
 
-#: seahub/views/sysadmin.py:1573
+#: seahub/views/sysadmin.py:1589
 msgid "Failed to rename organization"
 msgstr "Mistókst að endurnefna samfélag"
 
-#: seahub/views/sysadmin.py:1603 seahub/views/sysadmin.py:1934
-#: seahub/views/sysadmin.py:2030
+#: seahub/views/sysadmin.py:1619 seahub/views/sysadmin.py:1961
+#: seahub/views/sysadmin.py:2057
 msgid "Successfully deleted."
 msgstr "Giftursamlega eytt"
 
-#: seahub/views/sysadmin.py:1870
+#: seahub/views/sysadmin.py:1897
 msgid "Failed to transfer, invalid arguments."
 msgstr "Flutningurinn tókst ekki, eitthvað vitlaust slegið inn"
 
-#: seahub/views/sysadmin.py:1881
+#: seahub/views/sysadmin.py:1908
 #, python-format
 msgid "Failed to transfer, user %s not found"
 msgstr "Færslan tókst ekki, notandinn %s fannst ekki"
 
-#: seahub/views/sysadmin.py:1886
+#: seahub/views/sysadmin.py:1913
 msgid "Can not transfer organization library"
 msgstr "Gat ekki flutt safn samfélagsins"
 
-#: seahub/views/sysadmin.py:1890
+#: seahub/views/sysadmin.py:1917
 #, python-format
 msgid "Can not transfer library to organization user %s"
 msgstr "Gat ekki flutt safn til notandans %s í samfélaginu"
 
-#: seahub/views/sysadmin.py:1897
+#: seahub/views/sysadmin.py:1924
 msgid "Successfully transfered."
 msgstr "Tókst að flytja"
 
-#: seahub/views/sysadmin.py:1911
+#: seahub/views/sysadmin.py:1938
 msgid "System library can not be deleted."
 msgstr "Ekki er hægt að eyða kerfissafni."
 
-#: seahub/views/sysadmin.py:2033
+#: seahub/views/sysadmin.py:2060
 msgid "Failed to delete, please try again later."
 msgstr "Mistókst að eyða, vinsamlegast reyndu aftur síðar."
 
-#: seahub/views/sysadmin.py:2064
+#: seahub/views/sysadmin.py:2091
 #, python-format
 msgid "Successfully set %s as admin."
 msgstr "Tókst að gera %s að kerfisstjóra."
 
-#: seahub/views/sysadmin.py:2066
+#: seahub/views/sysadmin.py:2093
 #, python-format
 msgid "Failed to set %s as admin: user does not exist."
 msgstr "Mistókst að gera %s að kerfisstjóra: notandi er ekki til."
 
-#: seahub/views/sysadmin.py:2117
+#: seahub/views/sysadmin.py:2144
 msgid "Import succeeded"
 msgstr "Innflutningur tókst"
 
-#: seahub/views/sysadmin.py:2119
+#: seahub/views/sysadmin.py:2146
 msgid "Please select a csv file first."
 msgstr "Vinsamlegast veldu fyrst csv skrá."
 
-#: seahub/views/sysadmin.py:2178
+#: seahub/views/sysadmin.py:2206
 msgid "Invalid setting"
 msgstr "Röng stilling"
 
-#: seahub/views/sysadmin.py:2185 seahub/views/sysadmin.py:2189
-#: seahub/views/sysadmin.py:2194
+#: seahub/views/sysadmin.py:2213 seahub/views/sysadmin.py:2217
+#: seahub/views/sysadmin.py:2222
 msgid "Invalid value"
 msgstr "Rangt gildi"
 

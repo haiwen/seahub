@@ -116,7 +116,7 @@
 </script>
 
 <script type="text/template" id="admin-devices-tmpl">
-    <div class="hd">
+    <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
                 <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
@@ -169,7 +169,7 @@
 </script>
 
 <script type="text/template" id="admin-device-errors-tmpl">
-    <div class="hd">
+    <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
             <li class="tab <% if (cur_tab == 'desktop') { %> ui-state-active <% } %>">
                 <a href="#desktop-devices/" class="a">{% trans "Desktop" %}</a>
@@ -181,6 +181,7 @@
                 <a href="#device-errors/" class="a">{% trans "Errors" %}</a>
             </li>
         </ul>
+        <button id="clean-device-errors" class="fright hide"><span class="vam">{% trans "Clean" %}</span></button>
     </div>
     <table class="hide">
         <thead>
@@ -222,7 +223,7 @@
             {% avatar request.user 36 %}
             <div class="txt">
                 <%- app.pageOptions.name %><br />
-                <%- app.pageOptions.username %>
+                <%- app.pageOptions.email %>
             </div>
         </div>
         <div class="loading-icon loading-tip"></div>

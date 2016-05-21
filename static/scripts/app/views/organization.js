@@ -13,7 +13,7 @@ define([
     'use strict';
 
     var OrganizationView = Backbone.View.extend({
-        id: 'organization-repos-tmpl',
+        id: 'organization',
 
         template: _.template($('#organization-repos-tmpl').html()),
         reposHdTemplate: _.template($('#shared-repos-hd-tmpl').html()),

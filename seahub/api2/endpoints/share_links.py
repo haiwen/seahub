@@ -24,11 +24,27 @@ from seahub.utils import gen_shared_link, is_org_context
 logger = logging.getLogger(__name__)
 
 
+def get_share_link_info(fileshare):
+    data = {}
+    token = fileshare.token
+
+    data['repo_id'] = fileshare.repo_id
+    data['path'] = fileshare.path
+    data['ctime'] = fileshare.ctime
+    data['view_cnt'] = fileshare.view_cnt
+    data['link'] = gen_shared_link(token, fileshare.s_type)
+    data['token'] = token
+    data['expire_date'] = fileshare.expire_date
+    data['is_expired'] = fileshare.is_expired()
+    data['username'] = fileshare.username
+
+    return data
+
 class ShareLinks(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def _can_generate_shared_link(self, request):
 
@@ -45,22 +61,6 @@ class ShareLinks(APIView):
             return (dir_id, 'd')
 
         return (None, None)
-
-    def _get_share_link_info(self, fileshare):
-        data = {}
-        token = fileshare.token
-
-        data['repo_id'] = fileshare.repo_id
-        data['path'] = fileshare.path
-        data['ctime'] = fileshare.ctime
-        data['view_cnt'] = fileshare.view_cnt
-        data['link'] = gen_shared_link(token, fileshare.s_type)
-        data['token'] = token
-        data['expire_date'] = fileshare.expire_date
-        data['is_expired'] = fileshare.is_expired()
-        data['username'] = fileshare.username
-
-        return data
 
     def get(self, request):
         """ get share links.
@@ -112,7 +112,7 @@ class ShareLinks(APIView):
 
         result = []
         for fs in fileshares:
-            link_info = self._get_share_link_info(fs)
+            link_info = get_share_link_info(fs)
             result.append(link_info)
 
         if len(result) == 1:
@@ -194,7 +194,7 @@ class ShareLinks(APIView):
                     org_id = request.user.org.org_id
                     OrgFileShare.objects.set_org_file_share(org_id, fs)
 
-        link_info = self._get_share_link_info(fs)
+        link_info = get_share_link_info(fs)
         return Response(link_info)
 
 class ShareLink(APIView):
@@ -214,7 +214,7 @@ class ShareLink(APIView):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        link_info = self._get_share_link_info(fs)
+        link_info = get_share_link_info(fs)
         return Response(link_info)
 
     def delete(self, request, token):

@@ -63,9 +63,9 @@ define([
                 .replace('{lib_name}', '<span class="op-target">' + Common.HTMLescape(this.model.get('name')) + '</span>');
             var confirm_popup = $(this.repoDelConfirmTemplate({
                 content: confirm_msg
-            }))
-            .appendTo(op_container)
-            .css({
+            }));
+            del_icon.after(confirm_popup);
+            confirm_popup.css({
                 'left': del_icon.position().left,
                 'top': del_icon.position().top + del_icon.height() + 2,
                 'width': 180
@@ -144,6 +144,7 @@ define([
             }).append(form);
             $op_td.hide();
             $name_span.hide();
+            $('[name="newname"]', form).focus();
 
             this.togglePopup();
             app.ui.freezeItemHightlight = true;

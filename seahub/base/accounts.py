@@ -249,7 +249,10 @@ class User(object):
 
                 send_html_email_with_dj_template(
                     u.email, dj_template='sysadmin/user_freeze_email.html',
-                    subject=_('Account %s froze on %s.') % (self.email, settings.SITE_NAME),
+                    subject=_('Account %(account)s froze on %(site)s.') % {
+                        "account": self.email,
+                        "site": settings.SITE_NAME,
+                    },
                     context={'user': self.email},
                     priority=MAIL_PRIORITY.now
                 )

@@ -29,7 +29,12 @@ define([
         },
 
         addOne: function(item, collection, options) {
+            var is_owner = false;
+            if (item.get('email') === this.groupView.group.owner) {
+                is_owner = true;
+            }
             var view = new ItemView({
+                is_owner: is_owner,
                 model: item
             });
             this.$listContainer.append(view.render().el);
@@ -77,7 +82,7 @@ define([
                     _this.$error.html(err_msg).show();
                 }
             });
-            $("#group").append(this.$el);
+            $("#group-members-icon").after(this.$el);
         }
 
     });

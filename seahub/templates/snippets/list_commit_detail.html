@@ -7,7 +7,7 @@ function listCommitDetails(url, t) {
         dataType: 'json',
         cache: false,
         success: function(data) {
-            var heading = '<h3>' + "{% trans "Modification Details" %}" + '</h3>';
+            var heading = '<h3 id="dialogTitle">' + "{% trans "Modification Details" %}" + '</h3>';
             var time = '<p class="commit-time">' + t + '</p>';
             var con = '';
             function show(data_, hd) {

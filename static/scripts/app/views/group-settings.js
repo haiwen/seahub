@@ -53,7 +53,7 @@ define([
                 'wiki_enabled': this.groupView.group.wiki_enabled
             }));
 
-            $("#group").append(this.$el);
+            $("#group-settings-icon").after(this.$el);
         },
 
         highlightItem: function(e) {
@@ -99,7 +99,7 @@ define([
             var _this = this;
 
             var $form = $(this.renameTemplate());
-            $form.modal({focus:false});
+            $form.modal();
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             $form.submit(function() {
@@ -160,7 +160,7 @@ define([
                 if (!email) {
                     return false;
                 }
-                if (email == _this.group.owner) {
+                if (email == _this.groupView.group.owner) {
                     return false;
                 }
 
@@ -179,6 +179,7 @@ define([
                     },
                     success: function() {
                         // after the transfer, the former owner becomes a common admin of the group.
+                        Common.feedback(gettext("Successfully transferred the group. You are now a normal member of the group."), 'success');
                         $.modal.close();
                     },
                     error: function(xhr) {

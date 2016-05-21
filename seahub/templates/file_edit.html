@@ -125,7 +125,7 @@
 
     {% if not err and repo.encrypted %}
     <form id="repo-decrypt-form" class="hide" action="" method="post">
-        <h3>{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
+        <h3 id="dialogTitle">{% trans 'Library' %} <span class="op-target">{{repo.name}}</span> {% trans 'is encrypted' %}</h3>
         <label for="passwd">{% trans 'Password' %}</label><br />
         <input type="password" name="password" class="input" id="passwd" />
         <p class="tip">{% trans "The password will be kept in the server for only 1 hour." %}</p>
@@ -135,7 +135,7 @@
     {% endif %}
 
     <div id="load-draft" class="hide">
-        <h3>{% trans "Draft Available" %}</h3>
+        <h3 id="dialogTitle">{% trans "Draft Available" %}</h3>
         <p>{% trans "There's a saved draft for this file, would you like to load it?" %}</p>
         <button id="load-draft-btn">{% trans "Load" %}</button>
         <button class="simplemodal-close" id="discard-draft-btn">{% trans "Discard" %}</button>

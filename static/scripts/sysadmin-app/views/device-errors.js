@@ -21,12 +21,38 @@ define([
             this.render();
         },
 
+        events: {
+            'click #clean-device-errors': 'cleanDeviceErrors'
+        },
+
+        cleanDeviceErrors: function() {
+            var _this = this;
+            $.ajax({
+                url: Common.getUrl({name: 'admin-device-errors'}),
+                type: 'DELETE',
+                beforeSend: Common.prepareCSRFToken,
+                success: function() {
+                    _this.$table.hide();
+                    _this.$cleanBtn.hide();
+                    _this.$emptyTip.show();
+                    _this.deviceErrorsCollection.reset();
+                    var msg = gettext("Successfully clean all errors.");
+                    Common.feedback(msg, 'success');
+                },
+                error: function(xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+            return false;
+        },
+
         render: function() {
             this.$el.html(this.template({'cur_tab': 'errors'}));
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
+            this.$cleanBtn = this.$('#clean-device-errors');
         },
 
         hide: function() {
@@ -75,6 +101,7 @@ define([
             if (this.deviceErrorsCollection.length) {
                 this.deviceErrorsCollection.each(this.addOne, this);
                 this.$table.show();
+                this.$cleanBtn.show();
             } else {
                 this.$emptyTip.show();
             }

@@ -13,7 +13,7 @@ from django.utils import translation
 from django.utils.translation import ugettext as _
 
 import seaserv
-from seaserv import seafile_api
+from seaserv import seafile_api, ccnet_api
 from seahub.base.models import CommandsLastCheck
 from seahub.notifications.models import UserNotification
 from seahub.utils import send_html_email, get_service_url, \
@@ -83,9 +83,7 @@ class Command(BaseCommand):
         d = notice.group_message_detail_to_dict()
         group_id = d['group_id']
         message = d['message']
-        group = seaserv.get_group(int(group_id))
-        if group is None:
-            notice.delete()
+        group = ccnet_api.get_group(int(group_id))
 
         notice.group_url = reverse('group_discuss', args=[group.id])
         notice.notice_from = escape(email2nickname(d['msg_from']))
@@ -96,16 +94,31 @@ class Command(BaseCommand):
 
     def format_repo_share_msg(self, notice):
         d = json.loads(notice.detail)
-
         repo_id = d['repo_id']
         repo = seafile_api.get_repo(repo_id)
-        if repo is None:
-            notice.delete()
 
         notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
         notice.notice_from = escape(email2nickname(d['share_from']))
         notice.repo_name = repo.name
         notice.avatar_src = self.get_avatar_src(d['share_from'])
+
+        return notice
+
+    def format_repo_share_to_group_msg(self, notice):
+        d = json.loads(notice.detail)
+
+        repo_id = d['repo_id']
+        repo = seafile_api.get_repo(repo_id)
+        group_id = d['group_id']
+        group = ccnet_api.get_group(group_id)
+
+        notice.repo_url = reverse("view_common_lib_dir", args=[repo_id, ''])
+        notice.notice_from = escape(email2nickname(d['share_from']))
+        notice.repo_name = repo.name
+        notice.avatar_src = self.get_avatar_src(d['share_from'])
+        notice.group_url = reverse("group_info", args=[group.id])
+        notice.group_name = group.group_name
+
         return notice
 
     def format_file_uploaded_msg(self, notice):
@@ -132,9 +145,7 @@ class Command(BaseCommand):
         group_id = d['group_id']
         join_request_msg = d['join_request_msg']
 
-        group = seaserv.get_group(group_id)
-        if group is None:
-            notice.delete()
+        group = ccnet_api.get_group(group_id)
 
         notice.grpjoin_user_profile_url = reverse('user_profile',
                                                   args=[username])
@@ -150,9 +161,7 @@ class Command(BaseCommand):
         group_staff = d['group_staff']
         group_id = d['group_id']
 
-        group = seaserv.get_group(group_id)
-        if group is None:
-            notice.delete()
+        group = ccnet_api.get_group(group_id)
 
         notice.notice_from = group_staff
         notice.avatar_src = self.get_avatar_src(group_staff)
@@ -208,6 +217,22 @@ class Command(BaseCommand):
             for notice in unseen_notices:
                 logger.info('Processing unseen notice: [%s]' % (notice))
 
+                d = json.loads(notice.detail)
+
+                repo_id = d.get('repo_id', None)
+                group_id = d.get('group_id', None)
+                try:
+                    if repo_id and not seafile_api.get_repo(repo_id):
+                        notice.delete()
+                        continue
+
+                    if group_id and not ccnet_api.get_group(group_id):
+                        notice.delete()
+                        continue
+                except Exception as e:
+                    logger.error(e)
+                    continue
+
                 if notice.to_user != to_user:
                     continue
 
@@ -219,6 +244,9 @@ class Command(BaseCommand):
 
                 elif notice.is_repo_share_msg():
                     notice = self.format_repo_share_msg(notice)
+
+                elif notice.is_repo_share_to_group_msg():
+                    notice = self.format_repo_share_to_group_msg(notice)
 
                 elif notice.is_file_uploaded_msg():
                     notice = self.format_file_uploaded_msg(notice)

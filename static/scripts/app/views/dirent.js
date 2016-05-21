@@ -103,7 +103,7 @@ define([
                 }
             });
 
-            var $curDirOps = dirView.$('#upload-file, #add-new-dir, #add-new-file, #share-cur-dir');
+            var $curDirOps = dirView.$('#cur-dir-ops');
 
             if (checked_num > 0) {
                 $dirents_op.css({'display':'inline-block'});
@@ -211,6 +211,7 @@ define([
             }).append(form);
             $op.hide();
             $name.hide();
+            $('[name="newname"]', form).focus();
 
             this._hideMenu();
             app.ui.freezeItemHightlight = true;

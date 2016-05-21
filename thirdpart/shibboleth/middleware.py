@@ -67,7 +67,7 @@ class ShibbolethRemoteUserMiddleware(RemoteUserMiddleware):
         user = auth.authenticate(remote_user=username, shib_meta=shib_meta)
         if user:
             if not user.is_active:
-                return HttpResponseRedirect('shib-complete')
+                return HttpResponseRedirect(reverse('shib_complete'))
 
             # User is valid.  Set request.user and persist user in the session
             # by logging the user in.

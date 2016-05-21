@@ -779,6 +779,16 @@ def view_shared_file(request, fileshare):
                                                            use_onetime=False)
     raw_path = gen_file_get_url(access_token, filename)
     if request.GET.get('raw', '') == '1':
+        # check whether owner's traffic over the limit
+        if user_traffic_over_limit(shared_by):
+            messages.error(request, _(u'Unable to view raw file, share link traffic is used up.'))
+            next = request.META.get('HTTP_REFERER', settings.SITE_ROOT)
+            return HttpResponseRedirect(next)
+
+        send_file_access_msg(request, repo, path, 'share-link')
+        send_message('seahub.stats', 'file-download\t%s\t%s\t%s\t%s' %
+                     (repo_id, shared_by, obj_id, file_size))
+
         # view raw shared file, directly show/download file depends on
         # browsers
         return HttpResponseRedirect(raw_path)
@@ -886,14 +896,9 @@ def view_raw_shared_file(request, token, obj_id, file_name):
     outer_url = gen_file_get_url(token, filename)
     return HttpResponseRedirect(outer_url)
 
-def view_file_via_shared_dir(request, token):
-    assert token is not None    # Checked by URLconf
-
-    fileshare = FileShare.objects.get_valid_file_link_by_token(token)
-    if fileshare is None:
-        raise Http404
-
-
+@share_link_audit
+def view_file_via_shared_dir(request, fileshare):
+    token = fileshare.token
     req_path = request.GET.get('p', '').rstrip('/')
     if not req_path:
         return HttpResponseRedirect(reverse('view_shared_dir', args=[token]))
@@ -931,9 +936,19 @@ def view_file_via_shared_dir(request, token):
     obj_id = seafile_api.get_file_id_by_path(repo_id, real_path)
     if not obj_id:
         return render_error(request, _(u'File does not exist'))
-    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
 
     filename = os.path.basename(req_path)
+    if request.GET.get('raw', '0') == '1':
+        username = request.user.username
+        token = seafile_api.get_fileserver_access_token(repo_id,
+            obj_id, 'view', username, use_onetime=True)
+
+        raw_url = gen_file_get_url(token, filename)
+        # send stats message
+        send_file_access_msg(request, repo, real_path, 'share-link')
+        return HttpResponseRedirect(raw_url)
+
+    file_size = seafile_api.get_file_size(repo.store_id, repo.version, obj_id)
     filetype, fileext = get_file_type_and_ext(filename)
     access_token = seafile_api.get_fileserver_access_token(repo.id, obj_id,
                                                            'view', '', use_onetime=False)

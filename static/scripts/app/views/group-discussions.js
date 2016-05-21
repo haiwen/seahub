@@ -128,7 +128,6 @@ define([
                 }
             });
 
-
             this.$(".msg-input").focus();
             app.router.navigate('group/' + this.groupView.group.id + '/discussions/');
         },

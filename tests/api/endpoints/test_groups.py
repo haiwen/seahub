@@ -124,7 +124,10 @@ class GroupsTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         json_resp = json.loads(resp.content)
+
         assert json_resp['owner'] == new_creator
+        assert new_creator in json_resp['admins']
+        assert self.user.email not in json_resp['admins']
 
     def test_can_not_transfer_group_to_group_owner(self):
         new_creator = self.user.email

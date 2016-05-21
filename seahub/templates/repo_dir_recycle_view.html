@@ -51,7 +51,7 @@
 
 {% if enable_clean %}
 <form id="gc-form" class="hide" method="post" action="{% url "repo_online_gc" repo.id %}">{% csrf_token %}
-    <h3>{% trans "Clean" %}</h3>
+    <h3 id="dialogTitle">{% trans "Clean" %}</h3>
     <p>{% trans "Clear files in trash and history：" %}</p>
     <select name="day" class="w100" style="margin-bottom:5px;">
         <option value="3">{% trans "3 days ago" %}</option>

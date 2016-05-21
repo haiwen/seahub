@@ -6,7 +6,7 @@
 {% block right_panel %}
 <div class="hd ovhd">
     <h3 class="fleft">{% trans "All Notifications" %}</h3>
-    <button id="add-n" class="fright">{% trans "Add new notification" %}</button>
+    <button id="add-n" class="fright btn-white">{% trans "Add new notification" %}</button>
 </div>
 <form action="{% url 'notification_add' %}" method="post" class="hide" id="add-n-form">{% csrf_token %}
     <h3>{% trans "Add new notification" %}</h3>

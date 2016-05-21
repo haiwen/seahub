@@ -105,7 +105,7 @@
 </div>
 
 <form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
-    <h3>{% trans "Choose default library:" %}</h3>
+    <h3 id="dialogTitle">{% trans "Choose default library:" %}</h3>
     <div class="dir-tree-cont">
       <div id="repos-dirs"></div>
     </div>
@@ -133,7 +133,7 @@ $('#account-delete-btn').click(function () {
     var title = "{% trans "Delete Account" %}",
         con = "{% trans "Really want to delete your account?" %}";
 
-    $('#confirm-con').html('<h3>' + title + '</h3><p>' + con + '</p>');
+    $('#confirm-con').html('<h3 id="dialogTitle">' + title + '</h3><p>' + con + '</p>');
     $('#confirm-popup').modal({appendTo:'#main'});
     $('#simplemodal-container').css({'height':'auto'});
 
