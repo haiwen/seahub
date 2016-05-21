@@ -29,7 +29,7 @@ from seahub.group.views import is_group_staff
 from seahub.message.models import UserMessage, UserMsgAttachment
 from seahub.notifications.models import UserNotification
 from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
-    gen_file_get_url, is_org_context
+    gen_file_get_url, is_org_context, get_site_scheme_and_netloc
 from seahub.utils.paginator import Paginator
 from seahub.utils.file_types import IMAGE
 from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
@@ -650,4 +650,17 @@ def get_user_common_info(email, avatar_size=AVATAR_DEFAULT_SIZE):
         "name": email2nickname(email),
         "avatar_url": avatar_url,
         "login_id": login_id
+    }
+
+def user_to_dict(email, request=None, avatar_size=AVATAR_DEFAULT_SIZE):
+    d = get_user_common_info(email, avatar_size)
+    if request is None:
+        avatar_url = '%s%s' % (get_site_scheme_and_netloc(), d['avatar_url'])
+    else:
+        avatar_url = request.build_absolute_uri(d['avatar_url'])
+    return {
+        'user_name': d['name'],
+        'user_email': d['email'],
+        'user_login_id': d['login_id'],
+        'avatar_url': avatar_url,
     }

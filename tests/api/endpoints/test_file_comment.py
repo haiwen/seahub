@@ -25,6 +25,16 @@ class FileCommentTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert json_resp['parent_path'] == '/'
         assert json_resp['item_name'] == 'test.txt'
+        assert 'avatars' in json_resp['avatar_url']
+
+    def test_can_get_with_avatar_size(self):
+        resp = self.client.get(self.endpoint + '&avatar_size=20')
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert json_resp['parent_path'] == '/'
+        assert json_resp['item_name'] == 'test.txt'
+        assert 'avatars' in json_resp['avatar_url']
 
     def test_can_delete(self):
         assert len(FileComment.objects.all()) == 1

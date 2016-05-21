@@ -6,12 +6,12 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from seaserv import seafile_api
-from pysearpc import SearpcError
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.permissions import IsRepoAccessible
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
+from seahub.api2.utils import api_error, user_to_dict
+from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
 
 logger = logging.getLogger(__name__)
@@ -30,7 +30,17 @@ class FileCommentView(APIView):
         except FileComment.DoesNotExist:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Wrong comment id')
 
-        return Response(o.to_dict())
+        try:
+            avatar_size = int(request.GET.get('avatar_size',
+                                              AVATAR_DEFAULT_SIZE))
+        except ValueError:
+            avatar_size = AVATAR_DEFAULT_SIZE
+
+        comment = o.to_dict()
+        comment.update(user_to_dict(request.user.username, request=request,
+                                    avatar_size=avatar_size))
+
+        return Response(comment)
 
     def delete(self, request, repo_id, pk, format=None):
         """Delete a comment, only comment author or repo owner can perform

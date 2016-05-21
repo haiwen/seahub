@@ -109,7 +109,6 @@ class FileComment(models.Model):
             'repo_id': o.repo_id,
             'parent_path': o.parent_path,
             'item_name': o.item_name,
-            'author': o.author,
             'comment': o.comment,
             'created_at': datetime_to_isoformat_timestr(o.created_at),
         }
