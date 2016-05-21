@@ -560,6 +560,7 @@ class Repos(APIView):
                     "permission": 'rw',  # Always have read-write permission to owned repo
                     "virtual": r.is_virtual,
                     "root": r.root,
+                    "head_commit_id": r.head_cmmt_id,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
@@ -594,6 +595,7 @@ class Repos(APIView):
                     "permission": 'rw',
                     "virtual": r.is_virtual,
                     "root": r.root,
+                    "head_commit_id": r.head_cmmt_id,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
@@ -621,6 +623,7 @@ class Repos(APIView):
                     "permission": r.user_perm,
                     "share_type": r.share_type,
                     "root": r.root,
+                    "head_commit_id": r.head_cmmt_id,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
@@ -645,6 +648,7 @@ class Repos(APIView):
                     "encrypted": r.encrypted,
                     "permission": check_permission(r.id, email),
                     "root": r.root,
+                    "head_commit_id": r.head_cmmt_id,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
@@ -670,6 +674,7 @@ class Repos(APIView):
                     "share_from": r.user,
                     "share_type": r.share_type,
                     "root": r.root,
+                    "head_commit_id": r.head_cmmt_id,
                 }
                 if r.encrypted:
                     repo["enc_version"] = r.enc_version
