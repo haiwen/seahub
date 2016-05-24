@@ -29,7 +29,7 @@ define([
             var _this = this;
             $(document).keydown(function(e) {
                 // ESCAPE key pressed
-                if (e.keyCode == 27) {
+                if (e.which == 27) {
                     _this.hide();
                 }
             });
