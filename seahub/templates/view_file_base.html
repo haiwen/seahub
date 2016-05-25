@@ -372,6 +372,7 @@ var fileDiscussions = {
                         _this.addOne(item);
                     });
                     _this.$listContainer.show();
+                    _this.scrollConToBottom();
                 } else {
                     _this.$emptyTip.show(); 
                 }
@@ -417,6 +418,7 @@ var fileDiscussions = {
                     _this.$emptyTip.hide();
                     _this.$listContainer.show();  
                 }
+                _this.scrollConToBottom();
             },
             error: function(xhr) {
                 var err_msg;
@@ -437,7 +439,8 @@ var fileDiscussions = {
 
     addOne: function(obj) {
         var can_delete_msg = false;
-        if ('{{is_repo_owner}}' == 'True' ||  
+        var is_repo_owner = {% if is_repo_owner %}true{% else %}false{% endif %};
+        if (is_repo_owner ||
             obj.user_email == '{{request.user|escapejs}}') {
             can_delete_msg = true;
         }
@@ -466,6 +469,11 @@ var fileDiscussions = {
                 - $('.file-discussions-hd', this.$el).outerHeight(true)
                 - $('.file-discussions-footer', this.$el).outerHeight(true)
         });
+    },
+
+    scrollConToBottom: function() {
+        var $el = $('.file-discussions-con', this.$el);
+        $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
     },
 
     replyTo: function(to_user) {
