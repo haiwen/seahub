@@ -79,6 +79,8 @@
         {% include 'js/sysadmin-templates.html' %}
 </div><!-- wrapper -->
 
+{% include "js/dir-view.html" %}
+{% include "js/lib-op-popups.html" %}
 <script type="text/javascript">
 var app = {
     config: {
@@ -103,6 +105,7 @@ app["pageOptions"] = {
     max_upload_file_size: {% if max_upload_file_size %} {{ max_upload_file_size }} {% else %} '' {% endif %},
     folder_perm_enabled: {% if folder_perm_enabled %} true {% else %} false {% endif %},
     is_pro: {% if is_pro %} true {% else %} false {% endif %},
+    enable_sys_admin_view_repo: {% if enable_sys_admin_view_repo %} true {% else %} false {% endif %},
     file_audit_enabled: {% if file_audit_enabled %} true {% else %} false {% endif %},
     cur_note: {% if request.cur_note %} {'id': '{{ request.cur_note.id }}'} {% else %} null {% endif %}
 };

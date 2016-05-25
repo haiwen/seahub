@@ -4,26 +4,27 @@ define([
     'backbone',
     'common',
     'moment',
-    'sysadmin-app/views/device',
-    'sysadmin-app/collection/devices'
-], function($, _, Backbone, Common, Moment, Device, DeviceCollection) {
+    'sysadmin-app/views/library',
+    'sysadmin-app/collection/libraries'
+], function($, _, Backbone, Common, Moment, LibraryView, LibraryCollection) {
     'use strict';
 
-    var DevicesView = Backbone.View.extend({
+    var LibrariesView = Backbone.View.extend({
 
-        id: 'admin-devices',
+        id: 'admin-libraries',
 
-        template: _.template($("#devices-tmpl").html()),
+        template: _.template($("#libraries-tmpl").html()),
 
         initialize: function() {
-            this.deviceCollection = new DeviceCollection();
-            this.listenTo(this.deviceCollection, 'add', this.addOne);
-            this.listenTo(this.deviceCollection, 'reset', this.reset);
+            this.libraryCollection = new LibraryCollection();
+            this.listenTo(this.libraryCollection, 'add', this.addOne);
+            this.listenTo(this.libraryCollection, 'reset', this.reset);
             this.render();
         },
 
         render: function() {
-            this.$el.html(this.template({'cur_tab': 'desktop', 'is_pro': app.pageOptions.is_pro}));
+            var data = {'cur_tab': 'all',};
+            this.$el.html(this.template(data));
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
@@ -48,23 +49,22 @@ define([
 
         getNextPage: function() {
             this.initPage();
-            var current_page = this.deviceCollection.state.current_page;
-            if (this.deviceCollection.state.hasNextPage) {
-                this.deviceCollection.getPage(current_page + 1, {
-                    reset: true,
-                    data: {'platform': 'desktop'},
+            var current_page = this.libraryCollection.state.current_page;
+            if (this.libraryCollection.state.hasNextPage) {
+                this.libraryCollection.getPage(current_page + 1, {
+                    reset: true
                 });
             }
+
             return false;
         },
 
         getPreviousPage: function() {
             this.initPage();
-            var current_page = this.deviceCollection.state.current_page;
-            if (current_page > 1) {
-                this.deviceCollection.getPage(current_page - 1, {
-                    reset: true,
-                    data: {'platform': 'desktop'},
+            var current_page = this.libraryCollection.state.current_page;
+            if ( current_page > 1) {
+                this.libraryCollection.getPage(current_page - 1, {
+                    reset: true
                 });
             }
             return false;
@@ -81,16 +81,16 @@ define([
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showDesktopDevices();
+            this.showLibraries();
         },
 
-        showDesktopDevices: function() {
+        showLibraries: function() {
             this.initPage();
             var _this = this,
                 current_page = this.option.current_page || 1;
 
-            this.deviceCollection.fetch({
-                data: {'platform': 'desktop', 'page': current_page},
+            this.libraryCollection.fetch({
+                data: {'page': current_page},
                 cache: false, // for IE
                 reset: true,
                 error: function (collection, response, opts) {
@@ -110,43 +110,43 @@ define([
         },
 
         reset: function() {
-            var length = this.deviceCollection.length,
-                current_page = this.deviceCollection.state.current_page;
+            var length = this.libraryCollection.length,
+                current_page = this.libraryCollection.state.current_page;
 
             this.$loadingTip.hide();
 
             if (length > 0) {
-                this.deviceCollection.each(this.addOne, this);
+                this.libraryCollection.each(this.addOne, this);
                 this.$table.show();
                 this.renderPaginator();
             } else {
                 this.$emptyTip.show();
             }
 
-            app.router.navigate('desktop-devices/?page=' + current_page);
-        },
-
-        addOne: function(device) {
-            var view = new Device({model: device});
-            this.$tableBody.append(view.render().el);
+            app.router.navigate('libraries/?page=' + current_page);
         },
 
         renderPaginator: function() {
-            if (this.deviceCollection.state.hasNextPage) {
+            if (this.libraryCollection.state.hasNextPage) {
                 this.$jsNext.show();
             } else {
                 this.$jsNext.hide();
             }
 
-            var current_page = this.deviceCollection.state.current_page;
+            var current_page = this.libraryCollection.state.current_page;
             if (current_page > 1) {
                 this.$jsPrevious.show();
             } else {
                 this.$jsPrevious.hide();
             }
-        }
+        },
 
+        addOne: function(library) {
+            var view = new LibraryView({model: library});
+            this.$tableBody.append(view.render().el);
+        }
     });
 
-    return DevicesView;
+    return LibrariesView;
+
 });

@@ -5,19 +5,19 @@ define([
     'common',
     'sysadmin-app/views/device-error',
     'sysadmin-app/collection/device-errors'
-], function($, _, Backbone, Common, DeviceError, DeviceErrorsCollection) {
+], function($, _, Backbone, Common, DeviceError, DeviceErrorCollection) {
     'use strict';
 
     var DeviceErrorsView = Backbone.View.extend({
 
         id: 'admin-device-errors',
 
-        template: _.template($("#admin-device-errors-tmpl").html()),
+        template: _.template($("#device-errors-tmpl").html()),
 
         initialize: function() {
-            this.deviceErrorsCollection = new DeviceErrorsCollection();
-            this.listenTo(this.deviceErrorsCollection, 'add', this.addOne);
-            this.listenTo(this.deviceErrorsCollection, 'reset', this.reset);
+            this.deviceErrorCollection = new DeviceErrorCollection();
+            this.listenTo(this.deviceErrorCollection, 'add', this.addOne);
+            this.listenTo(this.deviceErrorCollection, 'reset', this.reset);
             this.render();
         },
 
@@ -35,7 +35,7 @@ define([
                     _this.$table.hide();
                     _this.$cleanBtn.hide();
                     _this.$emptyTip.show();
-                    _this.deviceErrorsCollection.reset();
+                    _this.deviceErrorCollection.reset();
                     var msg = gettext("Successfully clean all errors.");
                     Common.feedback(msg, 'success');
                 },
@@ -75,7 +75,7 @@ define([
             this.initPage();
 
             var _this = this;
-            this.deviceErrorsCollection.fetch({
+            this.deviceErrorCollection.fetch({
                 cache: false, // for IE
                 reset: true,
                 success: function (collection, response, opts) {
@@ -98,8 +98,8 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
-            if (this.deviceErrorsCollection.length) {
-                this.deviceErrorsCollection.each(this.addOne, this);
+            if (this.deviceErrorCollection.length) {
+                this.deviceErrorCollection.each(this.addOne, this);
                 this.$table.show();
                 this.$cleanBtn.show();
             } else {

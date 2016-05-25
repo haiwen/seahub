@@ -11,7 +11,7 @@ define([
     var DeviceErrorView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#admin-device-error-tmpl').html()),
+        template: _.template($('#device-error-item-tmpl').html()),
 
         initialize: function() {
             HLItemView.prototype.initialize.call(this);

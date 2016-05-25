@@ -8,10 +8,16 @@ define([
     'sysadmin-app/views/desktop-devices',
     'sysadmin-app/views/mobile-devices',
     'sysadmin-app/views/device-errors',
+    'sysadmin-app/views/libraries',
+    'sysadmin-app/views/library-dir',
+    'sysadmin-app/views/system-library',
+    'sysadmin-app/views/trash-libraries',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    AccountView) {
+    LibrariesView, LibraryDirView, SystemLibrariesView,
+    TrashLibrariesView, AccountView) {
+
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -21,6 +27,10 @@ define([
             'desktop-devices/': 'showDesktopDevices',
             'mobile-devices/': 'showMobileDevices',
             'device-errors/': 'showDeviceErrors',
+            'libraries/': 'showLibraries',
+            'libraries/:repo_id/dirents(/*path)': 'showLibraryDir',
+            'libraries/system/': 'showSystemLibrary',
+            'libraries/trash/': 'showTrashLibraries',
             // Default
             '*actions': 'showDashboard'
         },
@@ -40,6 +50,10 @@ define([
             this.desktopDevicesView = new DesktopDevicesView();
             this.mobileDevicesView = new MobileDevicesView();
             this.deviceErrorsView = new DeviceErrorsView();
+            this.librariesView = new LibrariesView();
+            this.systemLibrariesView = new SystemLibrariesView();
+            this.trashLibrariesView = new TrashLibrariesView();
+            this.libraryDirView = new LibraryDirView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -65,9 +79,9 @@ define([
             var url = window.location.href;
             var page = url.match(/.*?page=(\d+)/);
             if (page) {
-                current_page = page[1];
+                var current_page = page[1];
             } else {
-                current_page = null;
+                var current_page = null;
             }
             this.switchCurrentView(this.desktopDevicesView);
             this.sideNavView.setCurTab('devices');
@@ -91,6 +105,42 @@ define([
             this.switchCurrentView(this.deviceErrorsView);
             this.sideNavView.setCurTab('devices');
             this.deviceErrorsView.show();
+        },
+
+        showLibraries: function() {
+            var url = window.location.href;
+            var page = url.match(/.*?page=(\d+)/);
+            if (page) {
+                var current_page = page[1];
+            } else {
+                var current_page = null;
+            }
+            this.switchCurrentView(this.librariesView);
+            this.sideNavView.setCurTab('libraries');
+            this.librariesView.show({'current_page': current_page});
+        },
+
+        showLibraryDir: function(repo_id, path) {
+            if (path) {
+                path = '/' + path;
+            } else {
+                path = '/';
+            }
+            this.switchCurrentView(this.libraryDirView);
+            this.libraryDirView.show(repo_id, path);
+            this.sideNavView.setCurTab('libraries');
+        },
+
+        showSystemLibrary: function() {
+            this.switchCurrentView(this.systemLibrariesView);
+            this.sideNavView.setCurTab('libraries');
+            this.systemLibrariesView.show();
+        },
+
+        showTrashLibraries: function() {
+            this.switchCurrentView(this.trashLibrariesView);
+            this.sideNavView.setCurTab('libraries');
+            this.trashLibrariesView.show();
         }
 
     });

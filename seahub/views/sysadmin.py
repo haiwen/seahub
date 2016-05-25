@@ -78,6 +78,7 @@ def sysadmin(request):
     folder_perm_enabled = True if is_pro_version() and settings.ENABLE_FOLDER_PERM else False
 
     return render_to_response('sysadmin/sysadmin_backbone.html', {
+            'enable_sys_admin_view_repo': ENABLE_SYS_ADMIN_VIEW_REPO,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
