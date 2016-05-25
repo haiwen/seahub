@@ -79,7 +79,7 @@
 
             <a class="sf-btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
 
-            <button id="discuss" class="op-btn">{% trans "Discuss" %}</button>
+            <button id="discuss" class="op-btn">{% trans "Comment" %}</button>
             </div>
 
             <div id="file-discussions" class="right-side-panel"></div>
@@ -109,19 +109,19 @@
 <script type="text/template" id="discussion-panel-tmpl">
     <div class="right-side-panel-hd file-discussions-hd ovhd">
         <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
-        <h3 class="alc">{% trans "Discussions" %}</h3>
+        <h3 class="right-side-panel-title">{% trans "Comments" %}</h3>
     </div>
     <div class="right-side-panel-con file-discussions-con">
         <div class="loading-icon loading-tip"></div>
         <ul class="file-discussion-list hide"></ul>
-        <p class="no-discussion-tip hide">{% trans "No discussion yet." %}</p>
+        <p class="no-discussion-tip hide">{% trans "No comment yet." %}</p>
         <p class="error hide"></p>
     </div>
     <div class="right-side-panel-footer file-discussions-footer">
         <form action="" method="post" class="msg-form">
             <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
             <div class="msg-body">
-                <textarea name="message" placeholder="{% trans "Add a discussion..." %}" class="msg-input"></textarea>
+                <textarea name="message" placeholder="{% trans "Add a comment..." %}" class="msg-input"></textarea>
                 <p class="error hide"></p>
                 <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
             </div>

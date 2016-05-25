@@ -905,12 +905,16 @@ textarea:-moz-placeholder {/* for FF */
     padding:10px;
     border-bottom:1px solid #c9c9c9;
 }
-.right-side-panel-footer {
-    position:absolute;
-    bottom:0;
+.right-side-panel-title {
+    text-align:center;
+    margin:0;
 }
 .right-side-panel-con {
     overflow-y: auto;
+}
+.right-side-panel-footer {
+    position:absolute;
+    bottom:0;
 }
 /**** messages ****/
 .messages {
