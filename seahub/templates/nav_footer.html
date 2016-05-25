@@ -4,8 +4,7 @@
 <a href="{% url 'download_client' %}" class="fright"><span aria-hidden="true" class="sf2-icon-monitor vam"></span> <span class="vam">{% trans "Clients" %}</span></a>
 
 <div class="about-content hide">
-    <h3>{% trans "About" %}</h3>
-    <p>{% trans "Server Version: " %}{{ seafile_version }}</p>
-    <p>© 2016 {% trans "Seafile" %}</p>
+    <p><img src="{{ MEDIA_URL }}{{ logo_path }}" title="Seafile" alt="logo" width="{{logo_width}}" height="{{logo_height}}" /></p>
+    <p>{% trans "Server Version: " %}{{ seafile_version }}<br/> © 2016 {% trans "Seafile" %}</p>
     <p><a href="http://seafile.com/en/about/" target="_blank">{% trans "About Us" %}</a></p>
 </div>
