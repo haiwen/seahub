@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% load seahub_tags avatar_tags i18n %}
+{% load seahub_tags avatar_tags i18n staticfiles %}
 {% load url from future %}
 
 {% block sub_title %}{{filename}} - {% endblock %}
@@ -39,31 +39,32 @@
     </div>
 
     <div id="file">
-        <div id="file-op">
+        <div id="file-op" class="ovhd">
             <div class="commit fleft">
-                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor %}" class="name">{{ latest_contributor|email2nickname }}</a>
-                <span class="time">{{ last_modified|translate_seahub_time}}</span>
+                {% avatar latest_contributor 24 %} <a href="{% url 'user_profile' latest_contributor %}" class="name vam">{{ latest_contributor|email2nickname }}</a>
+                <span class="time vam">{{ last_modified|translate_seahub_time}}</span>
                 {% block update_detail %}
                 {% if last_commit_id %}
-                  <span>{% trans "updated this file"%}.</span>
+                  <span class="vam">{% trans "updated this file"%}.</span>
                 {% endif %}
                 {% endblock %}
 
             </div>
 
+            <div class="fright">
             {% if can_lock_unlock_file %}
                 {% if not file_locked %}
-                    <button id="lock-file">{% trans "Lock" %}</button>
-                    <button id="unlock-file" class="hide">{% trans "Unlock" %}</button>
+                    <button id="lock-file" class="op-btn">{% trans "Lock" %}</button>
+                    <button id="unlock-file" class="op-btn hide">{% trans "Unlock" %}</button>
                 {% elif locked_by_me %}
-                    <button id="unlock-file">{% trans "Unlock" %}</button>
-                    <button id="lock-file" class="hide">{% trans "Lock" %}</button>
+                    <button id="unlock-file" class="op-btn">{% trans "Unlock" %}</button>
+                    <button id="lock-file" class="op-btn hide">{% trans "Lock" %}</button>
                 {% endif %}
             {% endif %}
 
             {% if not repo.encrypted %}
             {% if request.user.permissions.can_generate_shared_link %}
-            <button id="share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
+            <button id="share" class="op-btn" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
             {% endif %}
             {% endif %}
 
@@ -77,6 +78,11 @@
             {% endif %}
 
             <a class="sf-btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
+
+            <button id="discuss" class="op-btn">{% trans "Comment" %}</button>
+            </div>
+
+            <div id="file-discussions" class="right-side-panel"></div>
         </div>
 
         <div id="file-view">
@@ -100,9 +106,53 @@
         </ul>
     </div>
 
+<script type="text/template" id="discussion-panel-tmpl">
+    <div class="right-side-panel-hd file-discussions-hd ovhd">
+        <a href="#" title="{% trans "Close" %}" aria-label="{% trans "Close" %}" class="sf-popover-close js-close sf2-icon-x1 op-icon fleft"></a>
+        <h3 class="right-side-panel-title">{% trans "Comments" %}</h3>
+    </div>
+    <div class="right-side-panel-con file-discussions-con">
+        <div class="loading-icon loading-tip"></div>
+        <ul class="file-discussion-list hide"></ul>
+        <p class="no-discussion-tip hide">{% trans "No comment yet." %}</p>
+        <p class="error hide"></p>
+    </div>
+    <div class="right-side-panel-footer file-discussions-footer">
+        <form action="" method="post" class="msg-form">
+            <img src="{% avatar_url request.user 64 %}" alt="" width="32" class="avatar-circle fleft" />
+            <div class="msg-body">
+                <textarea name="message" placeholder="{% trans "Add a comment..." %}" class="msg-input"></textarea>
+                <p class="error hide"></p>
+                <button type="submit" class="submit msg-submit">{% trans "Submit" %}</button>
+            </div>
+        </form>
+    </div>
+</script>
+<script type="text/template" id="discussion-tmpl">
+<li class="msg ovhd">
+    <img src="<%= avatar_url %>" alt="" width="32" class="avatar-circle fleft" />
+    <div class="msg-body">
+        <div class="ovhd">
+            <a class="msg-username ellipsis" title="<%- user_name %>" href="<%= user_profile_url %>"><%- user_name %></a>
+            <span class="msg-time" title="<%- time %>"><%- time_from_now %></span>
+            <div class="msg-ops fright vh">
+                <a class="msg-op sf2-icon-reply op-icon js-reply-msg" title="{% trans "Reply" %}" aria-label="{% trans "Reply" %}" href="#" data-username="<%- user_name %>"></a>
+                <% if (can_delete_msg) { %>
+                    <a class="msg-op sf2-icon-delete op-icon js-del-msg" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}" href="#" data-id="<%= id %>"></a>
+                <% } %>
+            </div>
+        </div>
+        <div class="msg-content"><%= content_marked %></div>
+    </div>
+</li>
+</script>
+
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{% static "scripts/lib/underscore.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/moment-with-locales.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/marked.min.js" %}"></script>
 {% if highlight_keyword %}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/findAndReplaceDOMText.js"></script>
 {% endif %}
@@ -243,5 +293,246 @@ $(window).load(function() {
     }
 });
 {% endif %}
+
+
+// file discussion
+var fileDiscussions = {
+
+    $el: $('#file-discussions'),
+    tmpl: _.template($('#discussion-panel-tmpl').html()), 
+
+    init: function() {
+        var _this = this;
+
+        // events
+        this.$el.on('click', '.js-close', function() {
+            _this.hide();
+            return false;
+        });
+        this.$el.on('mouseenter', '.msg', function() {
+            $(this).addClass('hl').find('.msg-ops').removeClass('vh');
+        });
+        this.$el.on('mouseleave', '.msg', function() {
+            $(this).removeClass('hl').find('.msg-ops').addClass('vh');
+        });
+        this.$el.on('click', '.js-reply-msg', function() {
+            _this.replyTo($(this).attr('data-username'));
+            return false;
+        });
+        this.$el.on('click', '.js-del-msg', function() {
+            _this.delOne({
+                id: $(this).attr('data-id'),
+                $el: $(this).closest('.msg') 
+            });
+            return false;
+        });
+        this.$el.on('submit', '.msg-form', function() {
+            _this.formSubmit();
+            return false;
+        });
+
+    },
+
+    render: function () {
+        this.$el.html($(this.tmpl()));
+
+        this.$listContainer = $('.file-discussion-list', this.$el);
+        this.$emptyTip = $('.no-discussion-tip', this.$el);
+        this.$loadingTip = $('.loading-tip', this.$el);
+        this.$conError = $('.file-discussions-con .error', this.$el);
+        this.$msgInput = $('[name="message"]', this.$el);
+    },
+
+    collectionUrl: '{% url "api2-file-comments" repo.id %}?p='
+        + e('{{path|escapejs}}') + '&avatar_size=64',
+
+    show: function() {
+        this.render();
+        this.$el.css({'right': 0});
+        this.setConHeight();
+        this.getContent();
+    },
+
+    hide: function() {
+        this.$el.css({'right': '-400px'});
+        this.$el.empty();
+    },
+
+    getContent: function() {
+        var _this = this;
+        $.ajax({
+            url: this.collectionUrl,
+            type: 'GET',
+            cache: false,
+            dataType: 'json',
+            success: function(data) {
+                var comments = data.comments;
+                if (comments.length > 0) {
+                    $(comments).each(function(index, item) {
+                        _this.addOne(item);
+                    });
+                    _this.$listContainer.show();
+                    _this.scrollConToBottom();
+                } else {
+                    _this.$emptyTip.show(); 
+                }
+            },
+            error: function(xhr) {
+                var err_msg;
+                if (xhr.responseText) {
+                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                } else {
+                    err_msg = "{% trans "Failed. Please check the network." %}";
+                }
+                _this.$conError.html(err_msg).show();
+            },
+            complete: function() {
+                _this.$loadingTip.hide();
+            }
+        });
+    },
+
+    formSubmit: function() {
+        var _this = this;
+        var $formError = $('.msg-form .error', this.$el);
+        var $submitBtn = $('[type="submit"]', this.$el)
+        var msg = $.trim(this.$msgInput.val());
+
+        if (!msg) {
+            return false;
+        }
+
+        $formError.hide();
+        disable($submitBtn);
+        $.ajax({
+            url: this.collectionUrl,
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            beforeSend: prepareCSRFToken,
+            data: {'comment': msg},
+            success: function(data) {
+                _this.$msgInput.val('');
+                _this.addOne(data);   
+                if (_this.$emptyTip.is(':visible')) {
+                    _this.$emptyTip.hide();
+                    _this.$listContainer.show();  
+                }
+                _this.scrollConToBottom();
+            },
+            error: function(xhr) {
+                var err_msg;
+                if (xhr.responseText) {
+                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                } else {
+                    err_msg = "{% trans "Failed. Please check the network." %}";
+                }
+                $formError.html(err_msg).show();
+            },
+            complete: function() {
+                enable($submitBtn);
+            }
+        });
+    },
+
+    itemTmpl: _.template($('#discussion-tmpl').html()), 
+
+    addOne: function(obj) {
+        var can_delete_msg = false;
+        var is_repo_owner = {% if is_repo_owner %}true{% else %}false{% endif %};
+        if (is_repo_owner ||
+            obj.user_email == '{{request.user|escapejs}}') {
+            can_delete_msg = true;
+        }
+
+        var user_profile_url = '{{SITE_ROOT}}profile/' + encodeURIComponent(obj.user_email) + '/';
+
+        var m = moment(obj.created_at);
+        var data = $.extend({}, obj, {
+            'content_marked': marked(obj.comment, {
+                breaks: true,
+                sanitize: true
+            }),
+            'time': m.format('LLLL'),
+            'time_from_now': this.util_getRelativeTimeStr(m),
+            'can_delete_msg': can_delete_msg,
+            'user_profile_url': user_profile_url
+        });
+
+        var $item = $(this.itemTmpl(data));
+        this.$listContainer.append($item);
+    },
+
+    setConHeight: function() {
+        $('.file-discussions-con', this.$el).css({
+            'max-height': $(window).height()
+                - $('.file-discussions-hd', this.$el).outerHeight(true)
+                - $('.file-discussions-footer', this.$el).outerHeight(true)
+        });
+    },
+
+    scrollConToBottom: function() {
+        var $el = $('.file-discussions-con', this.$el);
+        $el.scrollTop($el[0].scrollHeight - $el[0].clientHeight);
+    },
+
+    replyTo: function(to_user) {
+        var str = "@" + to_user + " ";
+        var $input = this.$msgInput.val(str);
+        setCaretPos($input[0], str.length);
+        $input.focus();
+    },
+
+    // delete a comment
+    delOne: function(item) { // item: {id:, $el:}
+        var _this = this;
+        $.ajax({
+            url: '{{SITE_ROOT}}api2/repos/{{repo.id}}/file/comments/' + item.id + '/',
+            type: 'delete',
+            cache: false,
+            beforeSend: prepareCSRFToken,
+            success: function() {
+                item.$el.remove();
+                if ($('.msg', _this.$el).length == 0) {
+                    _this.$emptyTip.show();
+                    _this.$listContainer.hide();
+                }
+            },
+            error: function(xhr) {
+                var err_msg;
+                if (xhr.responseText) {
+                    err_msg = $.parseJSON(xhr.responseText).error_msg;
+                } else {
+                    err_msg = "{% trans "Failed. Please check the network." %}";
+                }
+                feedback(err_msg, 'error');
+            }
+        });
+    },
+
+    util_getRelativeTimeStr: function(m) {
+        var now = new Date();
+        if (m - now > 0) {
+            return "{% trans "Just now" %}";
+        } else {
+            return m.fromNow();
+        }   
+    } 
+};
+// init
+fileDiscussions.init();
+
+$('#discuss').click(function() {
+    fileDiscussions.show();
+});
+$(document).keydown(function(e) {
+    // ESCAPE key pressed
+    if (e.which == 27) {
+        fileDiscussions.hide();
+    }   
+});
+$(window).resize(function() {
+    fileDiscussions.setConHeight();
+}); 
 </script>
 {% endblock %}

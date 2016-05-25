@@ -17,15 +17,9 @@
 #shared-file-view-hd {
     margin-top:4px;
 }
-#file-op {
-    padding:0;
-    border:0;
-}
-#file-op .avatar,
-#file-op .name,
-#file-op .time,
-#file-op span {
+#file-op .avatar {
     vertical-align:middle;
+    border-radius:1000px;
 }
 #file-op .time {
     color:#666;
@@ -33,9 +27,6 @@
 }
 #file-op .file-diff {
     font-size:100%;
-}
-#file-op .contributors {
-    margin-left:8px;
 }
 #file-view {
     padding:30px 0 15px;
@@ -72,9 +63,6 @@
 }
 .file-path {
     margin: 0 0 9px;
-}
-#file-op .avatar {
-    border-radius:1000px;
 }
 .history-file-path {
     margin:.5em 0 0;

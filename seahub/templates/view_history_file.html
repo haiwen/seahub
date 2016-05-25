@@ -19,7 +19,7 @@
     </div>
 
     <div id="file">
-        <div id="file-op">
+        <div id="file-op" class="ovhd">
             <p class="history-file-path fleft">
               {% block file_path %}
                 {% trans "Current Path: "%}
@@ -29,7 +29,7 @@
               {% endblock %}
             </p>
 
-            <a class="sf-btn-link" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
+            <a class="sf-btn-link fright" href="{% url 'download_file' repo.id obj_id%}?file_name={{ file_name|urlencode }}&p={{path|urlencode}}" id="download">{% trans "Download"%}</a>
         </div>
         {% include 'snippets/file_content_html.html' %}
     </div>

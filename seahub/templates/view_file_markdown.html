@@ -4,7 +4,7 @@
 
 {% block update_detail %}
 {% if last_commit_id %}
-  <span>{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
+  <span class="vam">{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
 {% endif %}
 {% endblock %}
 

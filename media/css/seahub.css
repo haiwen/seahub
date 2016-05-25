@@ -889,7 +889,7 @@ textarea:-moz-placeholder {/* for FF */
 }
 /**** right side panel ****/
 .right-side-panel {
-    background:#f8f8f8;
+    background: #fff;
     width:400px;
     position:fixed;
     right:-400px;
@@ -904,16 +904,20 @@ textarea:-moz-placeholder {/* for FF */
     transition: all 0.3s ease;
 }
 .right-side-panel-hd {
+    background:#f8f8f8;
     padding:10px;
-    border-bottom: 1px solid #c9c9c9;
+    border-bottom:1px solid #c9c9c9;
+}
+.right-side-panel-title {
+    text-align:center;
+    margin:0;
+}
+.right-side-panel-con {
+    overflow-y: auto;
 }
 .right-side-panel-footer {
     position:absolute;
     bottom:0;
-}
-.right-side-panel-con {
-    overflow-y: auto;
-    background: #fff;
 }
 /**** messages ****/
 .messages {
@@ -1982,7 +1986,6 @@ button.sf-dropdown-toggle:focus {
     text-align:right;
     margin-bottom:4px;
 }
-.file-op button,
 #file-op button,
 .repo-op .op-btn {
     *margin-left:5px;/* for ie 7*/
@@ -2443,10 +2446,6 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* file view online, file edit */
-.file-op {
-    color:#444;
-    text-align:right;
-}
 #shared-link,
 #shared-upload-link,
 #shared-link-text,
@@ -2464,22 +2463,6 @@ button.sf-dropdown-toggle:focus {
 #gen-upload-link-btn {
     margin-top: 0.5em;
 }
-.file-op {
-    margin-top:0.8em;
-}
-.file-op a {
-    font-weight:normal;
-    margin-left:2px;
-}
-.file-op button {
-    color:#444;
-}
-.file-op [class^='icon-'],
-.file-op [class^='sf-icon-'] {
-    font-size:1em;
-    margin-right:3px;
-    color:#666;
-}
 #text-diff-output {
     padding:3px;
     background:#dedede;
@@ -2487,13 +2470,7 @@ button.sf-dropdown-toggle:focus {
     -moz-border-radius:3px;
     margin-top:12px;
 }
-#file-op {
-    padding:8px 10px;
-    background:#fff;
-    text-align:right;
-    border:1px solid #ccc;
-}
-#file-op button,
+#file-op .op-btn,
 #file-op .sf-btn-link {
     padding:2px 8px;
 }
