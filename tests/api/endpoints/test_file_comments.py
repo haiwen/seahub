@@ -7,16 +7,19 @@ from seahub.test_utils import BaseTestCase
 
 class FileCommentsTest(BaseTestCase):
     def setUp(self):
+        self.tmp_user = self.create_user()
+
         self.login_as(self.user)
         self.endpoint = reverse('api2-file-comments', args=[self.repo.id]) + '?p=' + self.file
 
     def tearDown(self):
         self.remove_repo()
+        self.remove_user(self.tmp_user.email)
 
     def test_can_list(self):
         o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
                                                  file_path=self.file,
-                                                 author=self.user.username,
+                                                 author=self.tmp_user.username,
                                                  comment='test comment')
         resp = self.client.get(self.endpoint)
         self.assertEqual(200, resp.status_code)
@@ -24,12 +27,13 @@ class FileCommentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['comments']) == 1
         assert json_resp['comments'][0]['comment'] == o.comment
+        assert json_resp['comments'][0]['user_email'] == self.tmp_user.email
         assert 'avatars' in json_resp['comments'][0]['avatar_url']
 
     def test_can_list_with_avatar_size(self):
         o = FileComment.objects.add_by_file_path(repo_id=self.repo.id,
                                                  file_path=self.file,
-                                                 author=self.user.username,
+                                                 author=self.tmp_user.username,
                                                  comment='test comment')
         resp = self.client.get(self.endpoint + '&avatar_size=20')
         self.assertEqual(200, resp.status_code)
@@ -37,6 +41,7 @@ class FileCommentsTest(BaseTestCase):
         json_resp = json.loads(resp.content)
         assert len(json_resp['comments']) == 1
         assert json_resp['comments'][0]['comment'] == o.comment
+        assert json_resp['comments'][0]['user_email'] == self.tmp_user.email
         assert 'avatars' in json_resp['comments'][0]['avatar_url']
 
     def test_can_post(self):

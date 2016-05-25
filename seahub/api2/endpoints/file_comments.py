@@ -39,7 +39,7 @@ class FileCommentsView(APIView):
         comments = []
         for o in FileComment.objects.get_by_file_path(repo_id, path):
             comment = o.to_dict()
-            comment.update(user_to_dict(request.user.username, request=request,
+            comment.update(user_to_dict(o.author, request=request,
                                         avatar_size=avatar_size))
             comments.append(comment)
 

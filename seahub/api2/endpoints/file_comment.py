@@ -37,7 +37,7 @@ class FileCommentView(APIView):
             avatar_size = AVATAR_DEFAULT_SIZE
 
         comment = o.to_dict()
-        comment.update(user_to_dict(request.user.username, request=request,
+        comment.update(user_to_dict(o.author, request=request,
                                     avatar_size=avatar_size))
 
         return Response(comment)
