@@ -36,7 +36,6 @@ class SearchUser(APIView):
 
     def get(self, request, format=None):
 
-
         if not self._can_use_global_address_book(request):
             return api_error(status.HTTP_403_FORBIDDEN,
                              'Guest user can not use global address book.')
@@ -60,17 +59,17 @@ class SearchUser(APIView):
                 users_from_ccnet = filter(lambda u: q in u.email, users)
 
                 # when search profile, only search users in org
-                # 'nickname__contains' for search by nickname
-                # 'contact_email__contains' for search by contact email
+                # 'nickname__icontains' for search by nickname
+                # 'contact_email__icontains' for search by contact email
                 users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                          (Q(nickname__contains=q)) | \
-                                                           Q(contact_email__contains=q)).values('user')
+                                                          (Q(nickname__icontains=q)) | \
+                                                           Q(contact_email__icontains=q)).values('user')
             elif ENABLE_GLOBAL_ADDRESSBOOK:
                 users_from_ccnet = search_user_from_ccnet(q)
-                users_from_profile = Profile.objects.filter(Q(contact_email__contains=q) | \
-                        Q(nickname__contains=q)).values('user')
+                users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) | \
+                        Q(nickname__icontains=q)).values('user')
             else:
-                # TODO delete this ?
+                # in cloud mode, user will be added to Contact when share repo
                 users = []
                 contacts = Contact.objects.get_contacts_by_user(username)
                 for c in contacts:
@@ -85,15 +84,16 @@ class SearchUser(APIView):
 
                 users_from_ccnet = filter(lambda u: q in u.email, users)
                 # 'user__in' for only get profile of contacts
-                # 'nickname__contains' for search by nickname
-                # 'contact_email__contains' for search by contact
+                # 'nickname__icontains' for search by nickname
+                # 'contact_email__icontains' for search by contact
                 users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                          (Q(nickname__contains=q)) | \
-                                                           Q(contact_email__contains=q)).values('user')
+                                                          (Q(nickname__icontains=q)) | \
+                                                           Q(contact_email__icontains=q)).values('user')
+
         else:
             users_from_ccnet = search_user_from_ccnet(q)
-            users_from_profile = Profile.objects.filter(Q(contact_email__contains=q) | \
-                    Q(nickname__contains=q)).values('user')
+            users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) | \
+                    Q(nickname__icontains=q)).values('user')
 
         # remove inactive users and add to result
         for u in users_from_ccnet[:10]:
