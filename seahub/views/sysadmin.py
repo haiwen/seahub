@@ -11,6 +11,7 @@ import csv, chardet, StringIO
 import time
 from constance import config
 
+from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
@@ -2181,6 +2182,8 @@ def sys_sudo_mode(request):
 def sys_settings(request):
     """List and change seahub settings in admin panel.
     """
+    if not dj_settings.CONSTANCE_ENABLED:
+        raise Http404
 
     DIGIT_WEB_SETTINGS = (
         'DISABLE_SYNC_WITH_ANY_FOLDER', 'ENABLE_SIGNUP',

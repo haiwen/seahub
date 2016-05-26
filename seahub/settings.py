@@ -212,6 +212,8 @@ INSTALLED_APPS = (
     'seahub.password_session',
 )
 
+# Enabled or disable constance(web settings).
+CONSTANCE_ENABLED = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
