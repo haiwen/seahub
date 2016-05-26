@@ -109,8 +109,11 @@ def _clear_login_failed_attempts(request):
     """
     username = request.user.username
     ip = get_remote_ip(request)
-    cache.delete(LOGIN_ATTEMPT_PREFIX + username)
+    cache.delete(LOGIN_ATTEMPT_PREFIX + urlquote(username))
     cache.delete(LOGIN_ATTEMPT_PREFIX + ip)
+    p = Profile.objects.get_profile_by_user(username)
+    if p and p.login_id:
+        cache.delete(LOGIN_ATTEMPT_PREFIX + urlquote(p.login_id))
 
 def _handle_login_form_valid(request, user, redirect_to, remember_me):
     if UserOptions.objects.passwd_change_required(

@@ -145,8 +145,15 @@ class BaseTestCase(TestCase, Fixtures):
         self.remove_repo(self.repo.id)
 
     def login_as(self, user):
+        if isinstance(user, basestring):
+            login = user
+        elif isinstance(user, User):
+            login = user.username
+        else:
+            assert False
+
         return self.client.post(
-            reverse('auth_login'), {'login': user.username,
+            reverse('auth_login'), {'login': login,
                                     'password': self.user_password}
         )
 
