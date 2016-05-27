@@ -8,6 +8,6 @@ django-compressor==1.4
 django-post-office==2.0.3
 django-statici18n==1.1.2
 djangorestframework==3.3.1
-git+git://github.com/haiwen/django-constance.git@bde7f7cdfd0ed1631a6817fd4cd76f37bf54fe35#egg=django-constance[database]
+git+git://github.com/haiwen/django-constance.git@751f7f8b60651a2828e4a535a47fc05b907883da#egg=django-constance[database]
 openpyxl==2.3.0
 pytz==2015.7

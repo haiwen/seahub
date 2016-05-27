@@ -11,9 +11,11 @@
         <li class="tab {% block cur_devices %}{% endblock %}">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
+        {% if constance_enabled %}
         <li class="tab {% block cur_settings %}{% endblock %}">
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
         </li>
+        {% endif %}
         <li class="tab {% block cur_repo %}{% endblock %}">
             <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
