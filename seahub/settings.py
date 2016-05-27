@@ -213,7 +213,7 @@ INSTALLED_APPS = (
 )
 
 # Enabled or disable constance(web settings).
-CONSTANCE_ENABLED = True
+ENABLE_SETTINGS_VIA_WEB = True
 CONSTANCE_BACKEND = 'constance.backends.database.DatabaseBackend'
 CONSTANCE_DATABASE_CACHE_BACKEND = 'default'
 
@@ -624,8 +624,10 @@ if 'win32' in sys.platform:
     fp.write("%d\n" % os.getpid())
     fp.close()
 
+# Following settings are private, can not be overwrite.
 INNER_FILE_SERVER_ROOT = 'http://127.0.0.1:' + FILE_SERVER_PORT
 
+CONSTANCE_ENABLED = ENABLE_SETTINGS_VIA_WEB
 CONSTANCE_CONFIG = {
     'SERVICE_URL': (SERVICE_URL,''),
     'FILE_SERVER_ROOT': (FILE_SERVER_ROOT,''),

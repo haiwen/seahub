@@ -2182,7 +2182,7 @@ def sys_sudo_mode(request):
 def sys_settings(request):
     """List and change seahub settings in admin panel.
     """
-    if not dj_settings.CONSTANCE_ENABLED:
+    if not dj_settings.ENABLE_SETTINGS_VIA_WEB:
         raise Http404
 
     DIGIT_WEB_SETTINGS = (
