@@ -4545,13 +4545,16 @@ class RemoteWipeReportView(APIView):
     @json_response
     def post(self, request):
         from seahub.api2.models import WipedDevice
-        token = request.POST.get('token', '')
+        token = request.data.get('token', '')
         if not token or len(token) != 40:
-            return api_error(status.HTTP_400_BAD_REQUEST, "device token is missing")
+            error_msg = 'token invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         try:
             entry = WipedDevice.objects.get(key=token)
             entry.delete()
         except WipedDevice.DoesNotExist:
-            return api_error(status.HTTP_400_BAD_REQUEST, "invalid device token")
+            error_msg = 'token %s not found.' % token
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         return {}
