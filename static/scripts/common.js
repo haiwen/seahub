@@ -297,6 +297,7 @@ define([
             var $yesBtn = $('#confirm-yes');
 
             var html = this.confirm_with_extra_option_template({
+                'is_pro': app.pageOptions.is_pro,
                 'title': title,
                 'content': content,
                 'extraOption': extraOption
