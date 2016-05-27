@@ -51,15 +51,38 @@ define([
 
         unlinkDeviceWithConfirm: function() {
             var _this = this,
+                is_desktop_client = this.model.get('is_desktop_client'),
                 device_name = this.model.get('device_name');
-            var title = gettext('Unlink device');
-            var content = gettext('Are you sure you want to unlink this device?');
-            var extraOption = gettext('Delete files from this device the next time it comes online.');
 
-            var yesCallback = function (wipe_device) {
+            if (is_desktop_client) {
+                var title = gettext('Unlink device');
+                var content = gettext('Are you sure you want to unlink this device?');
+                var extraOption = gettext('Delete files from this device the next time it comes online.');
+
+                var yesCallback = function (wipe_device) {
+                    _this.model.unlink({
+                        wipe_device: wipe_device,
+
+                        success: function() {
+                            _this.remove();
+
+                            var msg = gettext("Successfully unlink %(name)s.")
+                                .replace('%(name)s', Common.HTMLescape(device_name));
+                            Common.feedback(msg, 'success');
+                        },
+                        error: function(xhr) {
+                            Common.ajaxErrorHandler(xhr);
+                        },
+                        complete: function() {
+                            $.modal.close();
+                        }
+                    });
+                    return false;
+                };
+                Common.showConfirmWithExtraOption(title, content, extraOption, yesCallback);
+            } else {
                 _this.model.unlink({
-                    wipe_device: wipe_device,
-
+                    wipe_device: true,
                     success: function() {
                         _this.remove();
 
@@ -69,14 +92,10 @@ define([
                     },
                     error: function(xhr) {
                         Common.ajaxErrorHandler(xhr);
-                    },
-                    complete: function() {
-                        $.modal.close();
                     }
                 });
                 return false;
-            };
-            Common.showConfirmWithExtraOption(title, content, extraOption, yesCallback);
+            }
         }
     });
 

@@ -21,7 +21,9 @@ def get_user_devices(username):
     peer_repos_map = get_user_synced_repo_infos(username)
 
     for device in devices:
+        device['is_desktop_client'] = False
         if device['platform'] in DESKTOP_PLATFORMS:
+            device['is_desktop_client'] = True
             peer_id = device['device_id']
             repos = peer_repos_map.get(peer_id, [])
             device['synced_repos'] = repos

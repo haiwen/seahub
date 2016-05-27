@@ -1491,12 +1491,14 @@
 </script>
 
 <script type="text/template" id="confirm-dialog-with-extra-option-tmpl">
-    <h3><%= title %></h3>
+    <h3 id="dialogTitle"><%= title %></h3>
     <p><%= content %></p>
     <% if (is_pro) { %>
-    <label class="checkbox-label">
-        <input type="checkbox" name="confirm-extra-option" id="confirm-extra-option" class="vam" />
-        <span class="checkbox-option vam"><%= extraOption %></span>
-    </label>
+    <p>
+        <label class="checkbox-label">
+            <input type="checkbox" name="confirm-extra-option" id="confirm-extra-option" class="vam" />
+            <span class="checkbox-option vam"><%= extraOption %></span>
+        </label>
+    </p>
     <% } %>
 </script>
