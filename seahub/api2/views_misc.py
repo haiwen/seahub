@@ -1,5 +1,4 @@
-from rest_framework.views import APIView
-
+from seahub.api2.base import APIView
 from seahub.api2.utils import json_response, is_seafile_pro
 from seahub import settings
 from seahub.utils import HAS_OFFICE_CONVERTER, HAS_FILE_SEARCH

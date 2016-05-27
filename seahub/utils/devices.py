@@ -68,7 +68,7 @@ def get_user_synced_repo_infos(username):
 
     return ret
 
-def do_unlink_device(username, platform, device_id):
+def do_unlink_device(username, platform, device_id, remote_wipe=False):
     if platform in DESKTOP_PLATFORMS:
         # For desktop client, we also remove the sync tokens
         msg = 'failed to delete_repo_tokens_by_peer_id'
@@ -80,4 +80,7 @@ def do_unlink_device(username, platform, device_id):
             logger.exception(msg)
             raise
 
-    TokenV2.objects.delete_device_token(username, platform, device_id)
+    if remote_wipe:
+        TokenV2.objects.mark_device_to_be_remote_wiped(username, platform, device_id)
+    else:
+        TokenV2.objects.delete_device_token(username, platform, device_id)

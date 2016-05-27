@@ -23,6 +23,7 @@ urlpatterns = patterns('',
     url(r'^server-info/$', ServerInfoView.as_view()),
     url(r'^logout-device/$', LogoutDeviceView.as_view()),
     url(r'^client-login/$', ClientLoginTokenView.as_view()),
+    url(r'^device-wiped/$', RemoteWipeReportView.as_view()),
 
     # RESTful API
     url(r'^accounts/$', Accounts.as_view(), name="accounts"),

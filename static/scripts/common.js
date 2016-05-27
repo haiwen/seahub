@@ -289,6 +289,29 @@ define([
             $yesBtn.click(yesCallback);
         },
 
+        confirm_with_extra_option_template: _.template($('#confirm-dialog-with-extra-option-tmpl').html()),
+
+        showConfirmWithExtraOption: function(title, content, extraOption, yesCallback) {
+            var $popup = $("#confirm-popup");
+            var $cont = $('#confirm-con');
+            var $yesBtn = $('#confirm-yes');
+
+            var html = this.confirm_with_extra_option_template({
+                'title': title,
+                'content': content,
+                'extraOption': extraOption
+            });
+
+            $cont.html(html);
+            $popup.modal({appendTo: '#main'});
+            $('#simplemodal-container').css({'height':'auto'});
+
+            $yesBtn.click(function() {
+                var extraOptionChecked = $('#confirm-extra-option:checked').val() === 'on';
+                yesCallback(extraOptionChecked);
+            });
+        },
+
         closeModal: function() {
             $.modal.close();
         },
