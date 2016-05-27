@@ -6,12 +6,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.template.defaultfilters import filesizeformat
+from django.utils.translation import ugettext as _
 
 from seaserv import ccnet_api, seafile_api, seafserv_threaded_rpc
 
-from seahub.views.ajax import get_related_users_by_org_repo, \
-    get_related_users_by_repo
-from seahub.signals import repo_deleted
 from seahub.views import get_system_default_repo_id
 from seahub.utils import is_org_context
 from seahub.base.accounts import User
@@ -35,6 +33,8 @@ def get_repo_info(repo):
 
 
 class AdminLibraries(APIView):
+    """ return all libraries
+    """
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
@@ -87,17 +87,8 @@ class AdminLibrary(APIView):
             return Response({'success': True})
 
         if get_system_default_repo_id() == repo_id:
-            error_msg = ('System library can not be deleted.')
+            error_msg = _('System library can not be deleted.')
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if is_org_context(request):
-            org_id = seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id)
-            usernames = get_related_users_by_org_repo(org_id, repo_id)
-            repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        else:
-            org_id = -1
-            usernames = get_related_users_by_repo(repo_id)
-            repo_owner = seafile_api.get_repo_owner(repo_id)
 
         try:
             seafile_api.remove_repo(repo_id)
@@ -106,13 +97,11 @@ class AdminLibrary(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        repo_deleted.send(sender=None, org_id=org_id, usernames=usernames,
-                          repo_owner=repo_owner, repo_id=repo_id,
-                          repo_name=repo.repo_name)
-
         return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
+        """ transfer a library
+        """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id

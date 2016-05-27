@@ -8,15 +8,15 @@ define([
     'sysadmin-app/views/desktop-devices',
     'sysadmin-app/views/mobile-devices',
     'sysadmin-app/views/device-errors',
-    'sysadmin-app/views/libraries',
-    'sysadmin-app/views/library-dir',
-    'sysadmin-app/views/system-library',
-    'sysadmin-app/views/trash-libraries',
+    'sysadmin-app/views/repos',
+    'sysadmin-app/views/dir',
+    'sysadmin-app/views/system-repo',
+    'sysadmin-app/views/trash-repos',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    LibrariesView, LibraryDirView, SystemLibrariesView,
-    TrashLibrariesView, AccountView) {
+    ReposView, DirView, SystemReposView,
+    TrashReposView, AccountView) {
 
     "use strict";
 
@@ -50,10 +50,10 @@ define([
             this.desktopDevicesView = new DesktopDevicesView();
             this.mobileDevicesView = new MobileDevicesView();
             this.deviceErrorsView = new DeviceErrorsView();
-            this.librariesView = new LibrariesView();
-            this.systemLibrariesView = new SystemLibrariesView();
-            this.trashLibrariesView = new TrashLibrariesView();
-            this.libraryDirView = new LibraryDirView();
+            this.reposView = new ReposView();
+            this.systemReposView = new SystemReposView();
+            this.trashReposView = new TrashReposView();
+            this.dirView = new DirView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -115,9 +115,9 @@ define([
             } else {
                 var current_page = null;
             }
-            this.switchCurrentView(this.librariesView);
+            this.switchCurrentView(this.reposView);
             this.sideNavView.setCurTab('libraries');
-            this.librariesView.show({'current_page': current_page});
+            this.reposView.show({'current_page': current_page});
         },
 
         showLibraryDir: function(repo_id, path) {
@@ -126,21 +126,21 @@ define([
             } else {
                 path = '/';
             }
-            this.switchCurrentView(this.libraryDirView);
-            this.libraryDirView.show(repo_id, path);
+            this.switchCurrentView(this.dirView);
+            this.dirView.show(repo_id, path);
             this.sideNavView.setCurTab('libraries');
         },
 
         showSystemLibrary: function() {
-            this.switchCurrentView(this.systemLibrariesView);
+            this.switchCurrentView(this.systemReposView);
             this.sideNavView.setCurTab('libraries');
-            this.systemLibrariesView.show();
+            this.systemReposView.show();
         },
 
         showTrashLibraries: function() {
-            this.switchCurrentView(this.trashLibrariesView);
+            this.switchCurrentView(this.trashReposView);
             this.sideNavView.setCurTab('libraries');
-            this.trashLibrariesView.show();
+            this.trashReposView.show();
         }
 
     });

@@ -25,6 +25,8 @@ class AdminTrashLibraries(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
+        """ get all deleted libraries
+        """
 
         repos_all = seafile_api.get_trash_repo_list(-1, -1)
         return_results = []
@@ -40,6 +42,9 @@ class AdminTrashLibraries(APIView):
         return Response(return_results)
 
     def delete(self, request, format=None):
+        """ clean all deleted libraries
+        """
+
         try:
             seafile_api.empty_repo_trash()
         except SearpcError as e:
@@ -56,6 +61,9 @@ class AdminTrashLibrary(APIView):
     permission_classes = (IsAdminUser,)
 
     def put(self, request, repo_id, format=None):
+        """ restore a deleted library
+        """
+
         try:
             seafile_api.restore_repo_from_trash(repo_id)
         except SearpcError as e:
@@ -66,6 +74,9 @@ class AdminTrashLibrary(APIView):
         return Response({'success': True})
 
     def delete(self, request, repo_id, format=None):
+        """ permanently delete a deleted library
+        """
+
         try:
             seafile_api.del_repo_from_trash(repo_id)
         except SearpcError as e:

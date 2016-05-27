@@ -8,7 +8,7 @@ define([
 ], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
-    var LibraryDirentView = HLItemView.extend({
+    var DirentView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#dirent-item-tmpl').html()),
@@ -76,5 +76,5 @@ define([
 
     });
 
-    return LibraryDirentView;
+    return DirentView;
 });

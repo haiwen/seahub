@@ -2,12 +2,12 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/models/library-dirent'
-], function(_, Backbone, Common, LibraryDirentModel) {
+    'sysadmin-app/models/dirent'
+], function(_, Backbone, Common, DirentModel) {
     'use strict';
 
-    var LibraryDirentCollection = Backbone.Collection.extend({
-        model: LibraryDirentModel,
+    var DirentCollection = Backbone.Collection.extend({
+        model: DirentModel,
         parse: function (data) {
             this.repo_name = data.repo_name;
             this.repo_id = data.repo_id;
@@ -20,5 +20,5 @@ define([
         }
     });
 
-    return LibraryDirentCollection;
+    return DirentCollection;
 });

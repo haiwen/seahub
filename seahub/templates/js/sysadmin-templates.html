@@ -3,10 +3,10 @@
 <script type="text/template" id="side-nav-tmpl">
     <h3 class="hd">{% trans "System Admin" %}</h3>
     <ul class="side-tabnav-tabs">
-        <li class="tab <% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
+        <li class="tab<% if (cur_tab == 'dashboard') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
         </li>
-        <li class="tab <% if (cur_tab == 'devices') { %> tab-cur<% } %>">
+        <li class="tab<% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
         {% if constance_enabled %}
@@ -14,7 +14,7 @@
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
         </li>
         {% endif %}
-        <li class="tab <% if (cur_tab == 'libraries') { %> tab-cur<% } %>">
+        <li class="tab<% if (cur_tab == 'libraries') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#libraries/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
         <li class="tab">
@@ -268,11 +268,11 @@
         <thead>
             <tr>
                 <th width="4%"><!--icon--></th>
-                <th width="27%">{% trans "Name" %}</th>
-                <th width="10%"></th>
-                <th width="17%">{% trans "Files / Size" %}</th>
-                <th width="21%">ID</th>
-                <th width="21%">{% trans "Owner" %}</th>
+                <th width="34%">{% trans "Name" %}</th>
+                <th width="13%">{% trans "Files / Size" %}</th>
+                <th width="19%">ID</th>
+                <th width="20%">{% trans "Owner" %}</th>
+                <th width="10%">{% trans "Operations" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -289,12 +289,9 @@
 </script>
 
 <script type="text/template" id="library-item-tmpl">
-    <% if (encrypted) { %>
-    <td><img src="{{MEDIA_URL}}img/sync-folder-encrypt-20.png" title="{% trans "Encrypted"%}" alt="{% trans "directory icon" %}" /></td>
-    <% } else { %>
-    <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
-    <% } %>
-
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
     <% if (name) { %>
         <% if (enable_sys_admin_view_repo && is_pro && !encrypted) { %>
         <td><a href="#libraries/<%- id %>/dirents/"><%- name %></a></td>
@@ -304,18 +301,18 @@
     <% } else { %>
     <td>--</td>
     <% } %>
-    <td>
-        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
-        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
-    </td>
     <td><%- file_count %> / <%- size_formatted %></td>
     <td style="font-size:11px;"><%- id %></td>
     <td>
         <% if (owner) { %>
-        <a href="{{ SITE_ROOT }}useradmin/info/<%- owner %>/"><%- owner %></a>
+        <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
         <% } else { %>
         --
         <% } %>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
     </td>
 </script>
 
@@ -389,9 +386,11 @@
 </script>
 
 <script type="text/template" id="trash-library-item-tmpl">
-    <td><img src="{{MEDIA_URL}}img/sync-folder-20.png?t=1387267140" title="{% trans "Read-Write"%}" alt="{% trans "directory icon" %}" /></td>
+    <td>
+        <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
+    </td>
     <td><%- name %></td>
-    <td><a href="{{ SITE_ROOT }}useradmin/info/<%- owner %>/"><%- owner %></a></td>
+    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>

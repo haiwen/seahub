@@ -5,7 +5,7 @@ define([
 ], function(_, Backbone, Common) {
     'use strict';
 
-    var LibraryDirentModel = Backbone.Model.extend({
+    var DirentModel = Backbone.Model.extend({
 
         // get the absolute path within the library
         getPath: function() {
@@ -50,5 +50,5 @@ define([
         }
     });
 
-    return LibraryDirentModel;
+    return DirentModel;
 });

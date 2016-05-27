@@ -1,7 +1,7 @@
 import os
 import stat
 import logging
-import time
+import posixpath
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -26,6 +26,22 @@ from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
 
+def get_dirent_info(dirent):
+
+    if stat.S_ISDIR(dirent.mode):
+        is_file = False
+    else:
+        is_file = True
+
+    result = {}
+    result['is_file'] = is_file
+    result['obj_name'] = dirent.obj_name
+    result['file_size'] = filesizeformat(dirent.size) if is_file else ''
+    result['last_update'] = timestamp_to_isoformat_timestr(dirent.mtime)
+
+    return result
+
+
 class AdminLibraryDirents(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
@@ -33,6 +49,9 @@ class AdminLibraryDirents(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, repo_id, format=None):
+        """ get all file/folder in a library
+        """
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -55,7 +74,6 @@ class AdminLibraryDirents(APIView):
             error_msg = 'Folder %s not found.' % parent_dir
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        # TODO org?
         if is_org_context(request):
             repo_owner = seafile_api.get_org_repo_owner(repo_id)
         else:
@@ -77,29 +95,15 @@ class AdminLibraryDirents(APIView):
         return_results['dirent_list'] = []
 
         for dirent in dirs:
-            result = {}
-            if stat.S_ISDIR(dirent.mode):
-                result['is_file'] = False
-                result['obj_name'] = dirent.obj_name
-                result['file_size'] = ''
-                result['last_update'] = timestamp_to_isoformat_timestr(dirent.mtime)
-            else:
-                if repo.version == 0:
-                    size = seafile_api.get_file_size(repo.store_id,
-                        repo.version, dirent.obj_id)
-                else:
-                    size = dirent.size
-
-                result['is_file'] = True
-                result['obj_name'] = dirent.obj_name
-                result['file_size'] = filesizeformat(size)
-                result['last_update'] = timestamp_to_isoformat_timestr(dirent.mtime)
-
-            return_results['dirent_list'].append(result)
+            dirent_info = get_dirent_info(dirent)
+            return_results['dirent_list'].append(dirent_info)
 
         return Response(return_results)
 
     def post(self, request, repo_id, format=None):
+        """ create file/folder in a library
+        """
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -137,13 +141,11 @@ class AdminLibraryDirents(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        result = {}
-        result['is_file'] = False
-        result['obj_name'] = obj_name
-        result['file_size'] = filesizeformat(0)
-        result['last_update'] = timestamp_to_isoformat_timestr(time.time())
+        dirent_path = posixpath.join(parent_dir, obj_name)
+        dirent = seafile_api.get_dirent_by_path(repo_id, dirent_path)
+        dirent_info = get_dirent_info(dirent)
 
-        return Response(result)
+        return Response(dirent_info)
 
 class AdminLibraryDirent(APIView):
 
@@ -152,6 +154,9 @@ class AdminLibraryDirent(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, repo_id):
+        """ get info of a single file/folder in a library
+        """
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
@@ -169,47 +174,39 @@ class AdminLibraryDirent(APIView):
         if path[0] != '/':
             path = '/' + path
 
-        file_id = None
-        dir_id = None
         try:
-            file_id = seafile_api.get_file_id_by_path(repo_id, path)
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+            dirent = seafile_api.get_dirent_by_path(repo_id, path)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if file_id:
-            is_file = True
-        elif dir_id:
-            is_file = False
-        else:
-            error_msg = 'path %s not found.' % path
+        if not dirent:
+            error_msg = 'file/folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        username = request.user.username
-        obj_name = os.path.basename(path.rstrip('/'))
+        if stat.S_ISDIR(dirent.mode):
+            is_file = False
+        else:
+            is_file = True
 
+        username = request.user.username
         if is_file and request.GET.get('dl', '0') == '1':
+
             token = seafile_api.get_fileserver_access_token(repo_id,
-                file_id, 'download', username, use_onetime=True)
-            dl_url = gen_file_get_url(token, obj_name)
+                dirent.obj_id, 'download', username, use_onetime=True)
+            dl_url = gen_file_get_url(token, dirent.obj_name)
             send_file_access_msg(request, repo, path, 'web')
             return Response({'download_url': dl_url})
 
-        size = seafile_api.get_file_size(repo.store_id,
-            repo.version, file_id or dir_id)
+        dirent_info = get_dirent_info(dirent)
 
-        result = {}
-        result['is_file'] = is_file
-        result['obj_name'] = obj_name
-        result['file_size'] = filesizeformat(size)
-# TODO
-#        result['last_update'] = timestamp_to_isoformat_timestr(dirent.mtime)
-
-        return Response(result)
+        return Response(dirent_info)
 
     def delete(self, request, repo_id):
+        """ delete a single file/folder in a library
+        """
+
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id

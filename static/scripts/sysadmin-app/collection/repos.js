@@ -2,12 +2,12 @@ define([
     'underscore',
     'backbone.paginator',
     'common',
-    'sysadmin-app/models/library'
-], function(_, BackbonePaginator, Common, LibraryModel) {
+    'sysadmin-app/models/repo'
+], function(_, BackbonePaginator, Common, RepoModel) {
     'use strict';
 
-    var LibraryCollection = Backbone.PageableCollection.extend({
-        model: LibraryModel,
+    var RepoCollection = Backbone.PageableCollection.extend({
+        model: RepoModel,
         state: {pageSize: 100},
         parseState: function(data) {
             return {hasNextPage: data[0].has_next_page, current_page: data[0].current_page};
@@ -20,5 +20,5 @@ define([
         }
     });
 
-    return LibraryCollection;
+    return RepoCollection;
 });

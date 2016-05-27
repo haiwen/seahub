@@ -5,7 +5,7 @@ define([
 ], function(_, Backbone, Common) {
     'use strict';
 
-    var TrashLibrary = Backbone.Model.extend({});
+    var SystemRepo = Backbone.Model.extend({});
 
-    return TrashLibrary;
+    return SystemRepo;
 });

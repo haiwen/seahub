@@ -3,19 +3,19 @@ define([
     'underscore',
     'backbone',
     'common',
-    'sysadmin-app/models/system-library'
-], function($, _, Backbone, Common, SystemLibrary) {
+    'sysadmin-app/models/system-repo'
+], function($, _, Backbone, Common, SystemRepo) {
     'use strict';
 
-    var SystemLibraryView = Backbone.View.extend({
+    var SystemRepoView = Backbone.View.extend({
 
-        id: "admin-system-library",
+        id: "system-library",
 
         template: _.template($("#system-library-tmpl").html()),
         itemTemplate: _.template($("#system-library-item-tmpl").html()),
 
         initialize: function() {
-            this.systemLibrary = new SystemLibrary();
+            this.systemRepo = new SystemRepo();
             this.render();
         },
 
@@ -37,7 +37,7 @@ define([
             this.initPage();
             var _this = this;
 
-            this.systemLibrary.fetch({
+            this.systemRepo.fetch({
                 url: Common.getUrl({name: 'admin-system-library'}),
                 cache: false, // for IE
                 reset: true,
@@ -71,11 +71,11 @@ define([
 
         reset: function() {
             this.$loadingTip.hide();
-            this.$tableBody.html(this.itemTemplate(this.systemLibrary.toJSON()));
+            this.$tableBody.html(this.itemTemplate(this.systemRepo.toJSON()));
             this.$table.show();
         }
 
     });
 
-    return SystemLibraryView;
+    return SystemRepoView;
 });

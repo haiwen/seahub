@@ -4,26 +4,26 @@ define([
     'backbone',
     'common',
     'moment',
-    'sysadmin-app/views/library',
-    'sysadmin-app/collection/libraries'
-], function($, _, Backbone, Common, Moment, LibraryView, LibraryCollection) {
+    'sysadmin-app/views/repo',
+    'sysadmin-app/collection/repos'
+], function($, _, Backbone, Common, Moment, RepoView, RepoCollection) {
     'use strict';
 
-    var LibrariesView = Backbone.View.extend({
+    var ReposView = Backbone.View.extend({
 
-        id: 'admin-libraries',
+        id: 'libraries',
 
         template: _.template($("#libraries-tmpl").html()),
 
         initialize: function() {
-            this.libraryCollection = new LibraryCollection();
-            this.listenTo(this.libraryCollection, 'add', this.addOne);
-            this.listenTo(this.libraryCollection, 'reset', this.reset);
+            this.repoCollection = new RepoCollection();
+            this.listenTo(this.repoCollection, 'add', this.addOne);
+            this.listenTo(this.repoCollection, 'reset', this.reset);
             this.render();
         },
 
         render: function() {
-            var data = {'cur_tab': 'all',};
+            var data = {'cur_tab': 'all'};
             this.$el.html(this.template(data));
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
@@ -49,9 +49,9 @@ define([
 
         getNextPage: function() {
             this.initPage();
-            var current_page = this.libraryCollection.state.current_page;
-            if (this.libraryCollection.state.hasNextPage) {
-                this.libraryCollection.getPage(current_page + 1, {
+            var current_page = this.repoCollection.state.current_page;
+            if (this.repoCollection.state.hasNextPage) {
+                this.repoCollection.getPage(current_page + 1, {
                     reset: true
                 });
             }
@@ -61,9 +61,9 @@ define([
 
         getPreviousPage: function() {
             this.initPage();
-            var current_page = this.libraryCollection.state.current_page;
+            var current_page = this.repoCollection.state.current_page;
             if ( current_page > 1) {
-                this.libraryCollection.getPage(current_page - 1, {
+                this.repoCollection.getPage(current_page - 1, {
                     reset: true
                 });
             }
@@ -89,7 +89,7 @@ define([
             var _this = this,
                 current_page = this.option.current_page || 1;
 
-            this.libraryCollection.fetch({
+            this.repoCollection.fetch({
                 data: {'page': current_page},
                 cache: false, // for IE
                 reset: true,
@@ -110,13 +110,13 @@ define([
         },
 
         reset: function() {
-            var length = this.libraryCollection.length,
-                current_page = this.libraryCollection.state.current_page;
+            var length = this.repoCollection.length,
+                current_page = this.repoCollection.state.current_page;
 
             this.$loadingTip.hide();
 
             if (length > 0) {
-                this.libraryCollection.each(this.addOne, this);
+                this.repoCollection.each(this.addOne, this);
                 this.$table.show();
                 this.renderPaginator();
             } else {
@@ -127,13 +127,13 @@ define([
         },
 
         renderPaginator: function() {
-            if (this.libraryCollection.state.hasNextPage) {
+            if (this.repoCollection.state.hasNextPage) {
                 this.$jsNext.show();
             } else {
                 this.$jsNext.hide();
             }
 
-            var current_page = this.libraryCollection.state.current_page;
+            var current_page = this.repoCollection.state.current_page;
             if (current_page > 1) {
                 this.$jsPrevious.show();
             } else {
@@ -142,11 +142,11 @@ define([
         },
 
         addOne: function(library) {
-            var view = new LibraryView({model: library});
+            var view = new RepoView({model: library});
             this.$tableBody.append(view.render().el);
         }
     });
 
-    return LibrariesView;
+    return ReposView;
 
 });

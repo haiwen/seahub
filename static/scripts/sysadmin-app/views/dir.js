@@ -5,8 +5,8 @@ define([
     'common',
     'moment',
     'app/views/fileupload',
-    'sysadmin-app/views/library-dirent',
-    'sysadmin-app/collection/library-dirents'
+    'sysadmin-app/views/dirent',
+    'sysadmin-app/collection/dirents'
 ], function($, _, Backbone, Common, Moment, FileUploadView,
     DirentView, DirentCollection) {
     'use strict';

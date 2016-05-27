@@ -4,22 +4,22 @@ define([
     'backbone',
     'common',
     'moment',
-    'sysadmin-app/views/trash-library',
-    'sysadmin-app/collection/trash-libraries'
-], function($, _, Backbone, Common, Moment, TrashLibraryView,
-    TrashLibraryCollection) {
+    'sysadmin-app/views/trash-repo',
+    'sysadmin-app/collection/trash-repos'
+], function($, _, Backbone, Common, Moment, TrashRepoView,
+    TrashRepoCollection) {
     'use strict';
 
-    var TrashLibrariesView = Backbone.View.extend({
+    var TrashReposView = Backbone.View.extend({
 
-        id: 'admin-trash-libraries',
+        id: 'trash-libraries',
 
         template: _.template($("#trash-libraries-tmpl").html()),
 
         initialize: function() {
-            this.trashLibraryCollection = new TrashLibraryCollection();
-            this.listenTo(this.trashLibraryCollection, 'add', this.addOne);
-            this.listenTo(this.trashLibraryCollection, 'reset', this.reset);
+            this.trashRepoCollection = new TrashRepoCollection();
+            this.listenTo(this.trashRepoCollection, 'add', this.addOne);
+            this.listenTo(this.trashRepoCollection, 'reset', this.reset);
         },
 
         render: function() {
@@ -75,7 +75,7 @@ define([
             this.initPage();
             var _this = this;
 
-            this.trashLibraryCollection.fetch({
+            this.trashRepoCollection.fetch({
                 data: {},
                 cache: false, // for IE
                 reset: true,
@@ -96,12 +96,12 @@ define([
         },
 
         reset: function() {
-            var length = this.trashLibraryCollection.length;
+            var length = this.trashRepoCollection.length;
 
             this.$loadingTip.hide();
 
             if (length > 0) {
-                this.trashLibraryCollection.each(this.addOne, this);
+                this.trashRepoCollection.each(this.addOne, this);
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
@@ -109,11 +109,11 @@ define([
         },
 
         addOne: function(library) {
-            var view = new TrashLibraryView({model: library});
+            var view = new TrashRepoView({model: library});
             this.$tableBody.append(view.render().el);
         }
     });
 
-    return TrashLibrariesView;
+    return TrashReposView;
 
 });

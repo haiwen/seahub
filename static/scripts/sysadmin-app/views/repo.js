@@ -11,7 +11,7 @@ define([
     Select2, HLItemView) {
     'use strict';
 
-    var LibraryView = HLItemView.extend({
+    var RepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#library-item-tmpl').html()),
@@ -107,8 +107,12 @@ define([
 
         render: function() {
             var data = this.model.toJSON(),
+                icon_size = Common.isHiDPI() ? 96 : 24,
+                icon_url = this.model.getIconUrl(icon_size),
                 last_accessed = Moment(data['last_accessed']);
 
+            data['icon_url'] = icon_url;
+            data['icon_title'] = this.model.getIconTitle();
             data['enable_sys_admin_view_repo'] = app.pageOptions.enable_sys_admin_view_repo;
             data['is_pro'] = app.pageOptions.is_pro;
             data['time'] = last_accessed.format('LLLL');
@@ -121,5 +125,5 @@ define([
 
     });
 
-    return LibraryView;
+    return RepoView;
 });

@@ -8,7 +8,7 @@ define([
 ], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
-    var LibraryView = HLItemView.extend({
+    var TrashRepoView = HLItemView.extend({
         tagName: 'tr',
 
         template: _.template($('#trash-library-item-tmpl').html()),
@@ -60,8 +60,12 @@ define([
 
         render: function() {
             var data = this.model.toJSON(),
+                icon_size = Common.isHiDPI() ? 96 : 24,
+                icon_url = this.model.getIconUrl(icon_size),
                 delete_time = Moment(data['delete_time']);
 
+            data['icon_url'] = icon_url;
+            data['icon_title'] = this.model.getIconTitle();
             data['time'] = delete_time.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(delete_time);
 
@@ -72,5 +76,5 @@ define([
 
     });
 
-    return LibraryView;
+    return TrashRepoView;
 });
