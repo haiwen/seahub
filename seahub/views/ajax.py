@@ -172,6 +172,8 @@ def get_dirents(request, repo_id):
 def get_unenc_group_repos(request, group_id):
     '''
     Get unenc repos in a group.
+
+    Used in selecting a library for a group wiki
     '''
     content_type = 'application/json; charset=utf-8'
 
