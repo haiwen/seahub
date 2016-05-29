@@ -510,19 +510,19 @@ define([
                         return false;
                     };
 
-                    var post_data = {'dirent_name': dirent_name},
+                    var post_data = { 'operation': 'mkdir' },
                         post_url = Common.getUrl({name: "new_dir", repo_id: dir.repo_id})
-                                   + '?parent_dir=' + encodeURIComponent(dir.path);
+                                   + '?p=' + encodeURIComponent(dir.path + '/' + dirent_name);
                     var after_op_success = function(data) {
                         $.modal.close();
 
                         var new_dirent = dir.add({
                             'is_dir': true,
-                            'obj_name': data['name'],
+                            'obj_name': dirent_name,
                             'perm': 'rw',
                             'last_modified': new Date().getTime() / 1000,
                             'last_update': gettext("Just now"),
-                            'p_dpath': data['p_dpath']
+                            'p_dpath': dir.path + '/' + dirent_name
                         }, {silent:true});
                         dirView.addNewDir(new_dirent);
                     };
@@ -574,15 +574,15 @@ define([
                         return false;
                     }
 
-                    var post_data = {'dirent_name': dirent_name},
+                    var post_data = { 'operation': 'create' },
                         post_url = Common.getUrl({name: "new_file", repo_id: dir.repo_id})
-                                   + '?parent_dir=' + encodeURIComponent(dir.path);
+                                   + '?p=' + encodeURIComponent(dir.path + '/' + dirent_name);
                     var after_op_success = function(data) {
                         $.modal.close();
                         var new_dirent = dir.add({
                             'is_file': true,
-                            'is_img': Common.imageCheck(data['name']),
-                            'obj_name': data['name'],
+                            'is_img': Common.imageCheck(dirent_name),
+                            'obj_name': dirent_name,
                             'file_size': Common.fileSizeFormat(0),
                             'obj_id': '0000000000000000000000000000000000000000',
                             'file_icon': 'file.png',
