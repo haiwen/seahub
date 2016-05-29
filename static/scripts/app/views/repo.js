@@ -62,10 +62,10 @@ define([
             var yesCallback = function() { 
                 $.ajax({
                     url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}),
-                    type: 'POST',
+                    type: 'DELETE',
                     cache: false,
-                    beforeSend: Common.prepareCSRFToken,
                     dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
                     success: function() {
                         _this.$el.remove();
                         Common.feedback(gettext("Successfully deleted."), 'success');

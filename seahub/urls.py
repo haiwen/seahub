@@ -124,7 +124,6 @@ urlpatterns = patterns(
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
 
     ### Ajax ###
-    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/remove/$', repo_remove),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/delete/$', delete_dirents, name='delete_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/move/$', mv_dirents, name='mv_dirents'),
