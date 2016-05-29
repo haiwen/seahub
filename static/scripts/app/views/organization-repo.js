@@ -37,13 +37,10 @@ define([
             var lib_name = this.model.get('name');
             $.ajax({
                 url: Common.getUrl({
-                    name: 'ajax_unset_inner_pub_repo',
+                    name: 'shared_repos',
                     repo_id: this.model.get('id')
-                }),
-                type: 'POST',
-                data: {
-                    'permission': this.model.get('permission')
-                },
+                }) + "?share_type=public",
+                type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
                 success: function () {

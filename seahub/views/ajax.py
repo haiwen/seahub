@@ -2013,69 +2013,6 @@ def toggle_personal_modules(request):
     return HttpResponse(json.dumps({ "success": True }),
             content_type=content_type)
 
-@login_required_ajax
-@require_POST
-def ajax_unset_inner_pub_repo(request, repo_id):
-    """
-    Unshare repos in organization.
-
-    """
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    repo = get_repo(repo_id)
-    if not repo:
-        result["error"] = _('Library does not exist.')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    perm = request.POST.get('permission', None)
-    if perm is None:
-        result["error"] = _(u'Argument missing')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    # permission check
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-        is_repo_owner = True if repo_owner == username else False
-        if not (request.user.org.is_staff or is_repo_owner):
-            result["error"] = _('Permission denied.')
-            return HttpResponse(json.dumps(result),
-                                status=403, content_type=content_type)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-        is_repo_owner = True if repo_owner == username else False
-        if not (request.user.is_staff or is_repo_owner):
-            result["error"] = _('Permission denied.')
-            return HttpResponse(json.dumps(result),
-                                status=403, content_type=content_type)
-
-    try:
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id,
-                                                                   repo.id)
-        else:
-            seaserv.unset_inner_pub_repo(repo.id)
-
-            origin_repo_id, origin_path = get_origin_repo_info(repo.id)
-            if origin_repo_id is not None:
-                perm_repo_id = origin_repo_id
-                perm_path = origin_path
-            else:
-                perm_repo_id = repo.id
-                perm_path =  '/'
-
-            send_perm_audit_msg('delete-repo-perm', username, 'all', \
-                                perm_repo_id, perm_path, perm)
-
-        return HttpResponse(json.dumps({"success": True}), content_type=content_type)
-    except SearpcError:
-        return HttpResponse(json.dumps({"error": _('Internal server error')}),
-                status=500, content_type=content_type)
 
 @login_required_ajax
 def ajax_group_members_import(request, group_id):

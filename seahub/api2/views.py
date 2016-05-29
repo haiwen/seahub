@@ -1033,58 +1033,6 @@ class DownloadRepo(APIView):
 
         return repo_download_info(request, repo_id)
 
-class RepoPublic(APIView):
-    authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
-
-    def post(self, request, repo_id, format=None):
-        """Set organization library.
-        """
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
-
-        if not is_org_repo_creation_allowed(request):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'Permission denied.')
-
-        if check_permission(repo_id, request.user.username) != 'rw':
-            return api_error(status.HTTP_403_FORBIDDEN,
-                    'You do not have permission to access this library.')
-
-        try:
-            seafile_api.add_inner_pub_repo(repo_id, "r")
-        except:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                    'Unable to make library public')
-
-        return HttpResponse(json.dumps({'success': True}), status=200,
-                            content_type=json_content_type)
-
-    def delete(self, request, repo_id, format=None):
-        """Unset organization library.
-        """
-        username = request.user.username
-
-        repo = get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
-
-        if not request.user.is_staff and \
-           not seafile_api.is_repo_owner(username, repo_id):
-            return api_error(status.HTTP_403_FORBIDDEN,
-                             'You do not have permission to unshare library.')
-
-        try:
-            seafile_api.remove_inner_pub_repo(repo_id)
-        except:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             'Unable to make library private')
-
-        return HttpResponse(json.dumps({'success': True}), status=200,
-                            content_type=json_content_type)
-
 
 class RepoOwner(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

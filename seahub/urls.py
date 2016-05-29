@@ -171,8 +171,6 @@ urlpatterns = patterns(
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
 
-    url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
-
 
     ### Apps ###
     (r'^api2/', include('seahub.api2.urls')),
