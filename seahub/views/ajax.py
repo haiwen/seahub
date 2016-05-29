@@ -2074,40 +2074,6 @@ def add_group_folder_perm(request, repo_id, group_ids, path, perm):
         data = json.dumps({"error": _("Failed")})
         return HttpResponse(data, status=400, content_type=content_type)
 
-@login_required_ajax
-def get_group_basic_info(request, group_id):
-    '''
-    Get group basic info for group side nav
-    '''
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    group_id_int = int(group_id) # Checked by URL Conf
-    group = get_group(group_id_int)
-    if not group:
-        result["error"] = _('Group does not exist.')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    group.is_staff = is_group_staff(group, request.user)
-    if PublicGroup.objects.filter(group_id=group.id):
-        group.is_pub = True
-    else:
-        group.is_pub = False
-
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
-
-    return HttpResponse(json.dumps({
-        "id": group.id,
-        "name": group.group_name,
-        "avatar": grp_avatar(group.id, 32),
-        "is_staff": group.is_staff,
-        "is_pub": group.is_pub,
-        "mods_available": mods_available,
-        "mods_enabled": mods_enabled,
-        }), content_type=content_type)
 
 @login_required_ajax
 def toggle_group_modules(request, group_id):
@@ -2225,6 +2191,9 @@ def ajax_unset_inner_pub_repo(request, repo_id):
 @login_required_ajax
 def ajax_group_members_import(request, group_id):
     """Import users to group.
+
+    Permission checking:
+    1. Only group admin can add import group members
     """
 
     result = {}
