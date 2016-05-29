@@ -133,7 +133,6 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/sub_repo/$', sub_repo, name='sub_repo'),
     url(r'^ajax/cp_progress/$', get_cp_progress, name='get_cp_progress'),
     url(r'^ajax/cancel_cp/$', cancel_cp, name='cancel_cp'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),

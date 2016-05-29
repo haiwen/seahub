@@ -103,7 +103,6 @@ define([
                 case 'repos': return siteRoot + 'api2/repos/';
                 case 'pub_repos': return siteRoot + 'api2/repos/public/';
                 case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
-                case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
                 case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
                 case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
                 case 'api_v2.1_repo_set_password': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/set-password/';
