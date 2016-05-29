@@ -964,45 +964,6 @@ def cancel_cp(request):
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
 
-@login_required_ajax
-def repo_star_file(request, repo_id):
-    content_type = 'application/json; charset=utf-8'
-
-    user_perm = check_folder_permission(request, repo_id, '/')
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    path = request.GET.get('file', '')
-    if not path:
-        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
-                            status=400, content_type=content_type)
-
-    is_dir = False
-    star_file(request.user.username, repo_id, path, is_dir)
-
-    return HttpResponse(json.dumps({'success':True}), content_type=content_type)
-
-@login_required_ajax
-def repo_unstar_file(request, repo_id):
-    content_type = 'application/json; charset=utf-8'
-
-    user_perm = check_folder_permission(request, repo_id, '/')
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    path = request.GET.get('file', '')
-    if not path:
-        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
-                            status=400, content_type=content_type)
-
-    unstar_file(request.user.username, repo_id, path)
-
-    return HttpResponse(json.dumps({'success':True}), content_type=content_type)
-
 ########## contacts related
 @login_required_ajax
 def get_contacts(request):

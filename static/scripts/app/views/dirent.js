@@ -122,25 +122,41 @@ define([
             var _this = this;
             var dir = this.dirView.dir;
             var starred = this.model.get('starred');
-            var options = { repo_id: dir.repo_id };
-            options.name = starred ? 'unstar_file' : 'star_file';
             var filePath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
-            var url = Common.getUrl(options) + '?file=' + encodeURIComponent(filePath);
-            $.ajax({
-                url: url,
-                dataType: 'json',
-                cache: false,
-                success: function () {
-                    if (starred) {
+            if (starred) {
+                $.ajax({
+                    url: Common.getUrl({ 'name':'starred_files' })
+                        + '?repo_id=' + dir.repo_id + '&p=' + encodeURIComponent(filePath),
+                    dataType: 'json',
+                    cache: false,
+                    type: 'DELETE',
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function() {
                         _this.model.set({'starred':false});
-                    } else {
-                        _this.model.set({'starred':true});
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
                     }
-                },
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
-                }
-            });
+                });
+            } else {
+                $.ajax({
+                    url: Common.getUrl({ 'name':'starred_files' }),
+                    dataType: 'json',
+                    cache: false,
+                    type: 'POST',
+                    beforeSend: Common.prepareCSRFToken,
+                    data: {
+                        'repo_id': dir.repo_id,
+                        'p': filePath,
+                    },
+                    success: function() {
+                        _this.model.set({'starred':true});
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                    }
+                });
+            }
 
             return false;
         },

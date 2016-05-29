@@ -76,8 +76,6 @@ define([
             switch (options.name) {
                 // File Operations
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
-                case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
-                case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
                 case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'download_dirents': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dirents/download-link/';
