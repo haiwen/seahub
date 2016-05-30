@@ -927,77 +927,119 @@ def ajax_get_upload_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if request.method == 'GET':
-        repo_id = request.GET.get('repo_id', '')
-        path = request.GET.get('p', '')
-        username = request.user.username
+        repo_id = request.GET.get('repo_id', None)
+        path = request.GET.get('p', None)
+
+        # augument check
+        if not repo_id:
+            data = json.dumps({'error': 'repo_id invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if not path:
+            data = json.dumps({'error': 'p invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        # resource check
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            data = json.dumps({'error': 'Internal Server Error'})
+            return HttpResponse(data, status=500, content_type=content_type)
+
+        if not repo:
+            data = json.dumps({'error': 'Library %s not found.' % repo_id})
+            return HttpResponse(data, status=404, content_type=content_type)
 
         if not path.endswith('/'):
             path = path + '/'
 
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            data = json.dumps({'error': 'Folder %s not found.' % path})
+            return HttpResponse(data, status=404, content_type=content_type)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            data = json.dumps({'error': 'Permission denied.'})
+            return HttpResponse(data, status=403, content_type=content_type)
+
+        # get upload link
+        username = request.user.username
         l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
             username=username).filter(path=path)
+
+        data = {}
         if len(l) > 0:
             token = l[0].token
-            data = {
-                    'upload_link': gen_shared_upload_link(token),
-                    'token': token,
-                   }
-        else:
-            data = {}
+            data['upload_link'] = gen_shared_upload_link(token)
+            data['token'] = token
 
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
-
-        if not request.user.permissions.can_generate_shared_link():
-            err = _('You do not have permission to generate shared link')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=403, content_type=content_type)
-
-        repo_id = request.POST.get('repo_id', '')
-        path = request.POST.get('p', '')
+        repo_id = request.POST.get('repo_id', None)
+        path = request.POST.get('p', None)
         use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
         passwd = request.POST.get('passwd') if use_passwd else None
 
-        if not (repo_id and path):
-            err = _('Invalid arguments')
-            data = json.dumps({'error': err})
+        # augument check
+        if not repo_id:
+            data = json.dumps({'error': 'repo_id invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if not path:
+            data = json.dumps({'error': 'p invalid.'})
             return HttpResponse(data, status=400, content_type=content_type)
 
         if passwd and len(passwd) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            err = _('Password is too short')
-            data = json.dumps({'error': err})
+            data = json.dumps({'error': _('Password is too short')})
             return HttpResponse(data, status=400, content_type=content_type)
 
-        if path[-1] != '/': # append '/' at end of path
-            path += '/'
+        # resource check
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            data = json.dumps({'error': 'Internal Server Error'})
+            return HttpResponse(data, status=500, content_type=content_type)
 
-        repo = seaserv.get_repo(repo_id)
         if not repo:
-            err = 'Library %s not found.' % repo_id
-            data = json.dumps({'error': err})
+            data = json.dumps({'error': 'Library %s not found.' % repo_id})
             return HttpResponse(data, status=404, content_type=content_type)
 
-        user_perm = check_folder_permission(request, repo_id, '/')
-        if user_perm == 'rw':
-            l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
-                username=request.user.username).filter(path=path)
-            if len(l) > 0:
-                upload_link = l[0]
-                token = upload_link.token
-            else:
-                username = request.user.username
-                uls = UploadLinkShare.objects.create_upload_link_share(
-                    username, repo_id, path, passwd)
-                token = uls.token
+        if not path.endswith('/'):
+            path = path + '/'
 
-            shared_upload_link = gen_shared_upload_link(token)
+        if not seafile_api.get_dir_id_by_path(repo_id, path):
+            data = json.dumps({'error': 'Folder %s not found.' % path})
+            return HttpResponse(data, status=404, content_type=content_type)
 
-            data = json.dumps({'token': token, 'upload_link': shared_upload_link})
-            return HttpResponse(data, content_type=content_type)
+        # permission check
+        # normal permission check & default/guest user permission check
+        if check_folder_permission(request, repo_id, path) != 'rw' or \
+            not request.user.permissions.can_generate_shared_link():
+            data = json.dumps({'error': 'Permission denied.'})
+            return HttpResponse(data, status=403, content_type=content_type)
+
+        # generate upload link
+        l = UploadLinkShare.objects.filter(repo_id=repo_id).filter(
+            username=request.user.username).filter(path=path)
+
+        if len(l) > 0:
+            # if already exist
+            upload_link = l[0]
+            token = upload_link.token
         else:
-            return HttpResponse(json.dumps({'error': _(u'Permission denied')}),
-                status=403, content_type=content_type)
+            # generate new
+            username = request.user.username
+            uls = UploadLinkShare.objects.create_upload_link_share(
+                username, repo_id, path, passwd)
+            token = uls.token
+
+        shared_upload_link = gen_shared_upload_link(token)
+        data = json.dumps({'token': token, 'upload_link': shared_upload_link})
+
+        return HttpResponse(data, content_type=content_type)
 
 @login_required_ajax
 def ajax_get_download_link(request):
@@ -1007,59 +1049,132 @@ def ajax_get_download_link(request):
     content_type = 'application/json; charset=utf-8'
 
     if request.method == 'GET':
-        repo_id = request.GET.get('repo_id', '')
-        share_type = request.GET.get('type', 'f')  # `f` or `d`
-        path = request.GET.get('p', '')
+        repo_id = request.GET.get('repo_id', None)
+        share_type = request.GET.get('type', 'f')
+        path = request.GET.get('p', None)
+
+        # augument check
+        if not repo_id:
+            data = json.dumps({'error': 'repo_id invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if not path:
+            data = json.dumps({'error': 'p invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if share_type not in ('f', 'd'):
+            data = json.dumps({'error': 'type invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        # resource check
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            data = json.dumps({'error': 'Internal Server Error'})
+            return HttpResponse(data, status=500, content_type=content_type)
+
+        if not repo:
+            data = json.dumps({'error': 'Library %s not found.' % repo_id})
+            return HttpResponse(data, status=404, content_type=content_type)
+
+        if share_type == 'f':
+            if not seafile_api.get_file_id_by_path(repo_id, path):
+                data = json.dumps({'error': 'File %s not found.' % path})
+                return HttpResponse(data, status=404, content_type=content_type)
+
+        if share_type == 'd':
+            if not path.endswith('/'):
+                path = path + '/'
+
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                data = json.dumps({'error': 'Folder %s not found.' % path})
+                return HttpResponse(data, status=404, content_type=content_type)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            data = json.dumps({'error': 'Permission denied.'})
+            return HttpResponse(data, status=403, content_type=content_type)
+
+        # get download link
         username = request.user.username
-
-        if share_type == 'd' and not path.endswith('/'):
-            path = path + '/'
-
         l = FileShare.objects.filter(repo_id=repo_id).filter(
             username=username).filter(path=path)
+
+        data = {}
         if len(l) > 0:
             token = l[0].token
-            data = {
-                    'download_link': gen_shared_link(token, l[0].s_type),
-                    'token': token,
-                    'is_expired': l[0].is_expired(),
-                   }
-        else:
-            data = {}
+            data['download_link'] = gen_shared_link(token, l[0].s_type)
+            data['token'] = token
+            data['is_expired'] = l[0].is_expired()
 
         return HttpResponse(json.dumps(data), content_type=content_type)
 
     elif request.method == 'POST':
-
-        if not request.user.permissions.can_generate_shared_link():
-            err = _('You do not have permission to generate shared link')
-            data = json.dumps({'error': err})
-            return HttpResponse(data, status=403, content_type=content_type)
-
-        repo_id = request.POST.get('repo_id', '')
-        share_type = request.POST.get('type', 'f')  # `f` or `d`
-        path = request.POST.get('p', '')
+        repo_id = request.POST.get('repo_id', None)
+        path = request.POST.get('p', None)
+        share_type = request.POST.get('type', 'f')
         use_passwd = True if int(request.POST.get('use_passwd', '0')) == 1 else False
         passwd = request.POST.get('passwd') if use_passwd else None
 
-        if not (repo_id and path):
-            err = _('Invalid arguments')
-            data = json.dumps({'error': err})
+        # augument check
+        if not repo_id:
+            data = json.dumps({'error': 'repo_id invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if not path:
+            data = json.dumps({'error': 'p invalid.'})
+            return HttpResponse(data, status=400, content_type=content_type)
+
+        if share_type not in ('f', 'd'):
+            data = json.dumps({'error': 'type invalid.'})
             return HttpResponse(data, status=400, content_type=content_type)
 
         if passwd and len(passwd) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            err = _('Password is too short')
-            data = json.dumps({'error': err})
+            data = json.dumps({'error': _('Password is too short')})
             return HttpResponse(data, status=400, content_type=content_type)
 
         try:
             expire_days = int(request.POST.get('expire_days', 0))
         except ValueError:
             expire_days = 0
+
         if expire_days <= 0:
             expire_date = None
         else:
             expire_date = timezone.now() + relativedelta(days=expire_days)
+
+        # resource check
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            data = json.dumps({'error': 'Internal Server Error'})
+            return HttpResponse(data, status=500, content_type=content_type)
+
+        if not repo:
+            data = json.dumps({'error': 'Library %s not found.' % repo_id})
+            return HttpResponse(data, status=404, content_type=content_type)
+
+        if share_type == 'f':
+            if not seafile_api.get_file_id_by_path(repo_id, path):
+                data = json.dumps({'error': 'File %s not found.' % path})
+                return HttpResponse(data, status=404, content_type=content_type)
+
+        if share_type == 'd':
+            if not path.endswith('/'):
+                path = path + '/'
+
+            if not seafile_api.get_dir_id_by_path(repo_id, path):
+                data = json.dumps({'error': 'Folder %s not found.' % path})
+                return HttpResponse(data, status=404, content_type=content_type)
+
+        # permission check
+        # normal permission check & default/guest user permission check
+        if check_folder_permission(request, repo_id, path) != 'rw' or \
+            not request.user.permissions.can_generate_shared_link():
+            data = json.dumps({'error': 'Permission denied.'})
+            return HttpResponse(data, status=403, content_type=content_type)
 
         username = request.user.username
         if share_type == 'f':

@@ -21,7 +21,22 @@ class PersonalWikiTest(BaseTestCase):
 
         resp = self.client.get(reverse('personal_wiki'))
         self.assertEqual(302, resp.status_code)
-        self.assertRedirects(resp, reverse('personal_wiki', args=['home']))
+
+    def test_invalid_permisison(self):
+        self.login_as(self.admin)
+
+        data = {'dst_repo': self.repo.id}
+        resp = self.client.post(reverse('personal_wiki_use_lib'), data)
+        assert 'Permission denied.' in str(resp.cookies)
+        self.assertEqual(302, resp.status_code)
+
+    def test_invalid_repo(self):
+        self.login_as(self.user)
+
+        data = {'dst_repo': self.repo.id[:30] + '123456'}
+        resp = self.client.post(reverse('personal_wiki_use_lib'), data)
+        assert 'Failed to set wiki library.' in str(resp.cookies)
+        self.assertEqual(302, resp.status_code)
 
     def test_home_page(self):
         self.login_as(self.user)

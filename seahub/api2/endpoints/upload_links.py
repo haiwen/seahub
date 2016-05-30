@@ -60,6 +60,11 @@ class UploadLinks(APIView):
                 error_msg = 'Library %s not found.' % repo_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            # repo level permission check
+            if not check_folder_permission(request, repo_id, '/'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         path = request.GET.get('path', None)
         if path:
             try:
@@ -72,6 +77,11 @@ class UploadLinks(APIView):
             if not dir_id:
                 error_msg = 'folder %s not found.' % path
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # folder permission check
+            if not check_folder_permission(request, repo_id, path):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
         upload_link_shares = UploadLinkShare.objects.filter(username=username)
