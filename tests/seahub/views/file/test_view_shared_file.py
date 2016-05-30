@@ -37,7 +37,7 @@ class ViewSharedFileTest(TestCase, Fixtures):
         self.assertTemplateUsed(resp, 'shared_file_view.html')
 
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = '<a href="?dl=1" class="obv-btn">'
+        dl_url_tag = 'href="?dl=1"'
         self.assertContains(resp, dl_url_tag)
 
     def test_can_download(self):
@@ -118,7 +118,7 @@ class ViewSharedFileTest(TestCase, Fixtures):
         self.assertEqual(200, resp.status_code)
         self.assertTemplateUsed(resp, 'shared_file_view.html')
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = '<a href="?dl=1" class="obv-btn">'
+        dl_url_tag = 'href="?dl=1"'
         self.assertContains(resp, dl_url_tag)
 
     def _assert_render_file_page_without_passwd(self, fs):
