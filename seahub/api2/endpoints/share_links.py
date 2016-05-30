@@ -20,6 +20,7 @@ from seahub.api2.throttling import UserRateThrottle
 
 from seahub.share.models import FileShare, OrgFileShare
 from seahub.utils import gen_shared_link, is_org_context
+from seahub.views import check_folder_permission
 
 logger = logging.getLogger(__name__)
 
@@ -78,6 +79,11 @@ class ShareLinks(APIView):
                 error_msg = 'Library %s not found.' % repo_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+            # repo level permission check
+            if not check_folder_permission(request, repo_id, '/'):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         path = request.GET.get('path', None)
         if path:
             try:
@@ -96,6 +102,11 @@ class ShareLinks(APIView):
                     error_msg = 'path %s not found.' % path
 
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # folder/path permission check
+            if not check_folder_permission(request, repo_id, path):
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
         fileshares = FileShare.objects.filter(username=username)
@@ -159,6 +170,11 @@ class ShareLinks(APIView):
                 error_msg = 'path %s not found.' % path
 
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         password = request.data.get('password', None)
         if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:

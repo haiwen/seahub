@@ -92,6 +92,20 @@ class UploadLinksTest(BaseTestCase):
         resp = self.client.post(self.url)
         self.assertEqual(403, resp.status_code)
 
+        self.logout()
+
+        # login with another user to test repo permission
+        self.login_as(self.admin)
+        mock_can_generate_shared_link.return_value = True
+
+        args = '?repo_id=%s' % self.repo_id
+        resp = self.client.get(self.url + args)
+        self.assertEqual(403, resp.status_code)
+
+        data = {'path': self.folder_path, 'repo_id': self.repo_id}
+        resp = self.client.post(self.url, data)
+        self.assertEqual(403, resp.status_code)
+
     @patch.object(UploadLink, '_can_generate_shared_link')
     def test_can_not_delete_link_with_invalid_permission(self, mock_can_generate_shared_link):
         token = self._add_upload_link()
