@@ -31,7 +31,7 @@ class ViewFileViaSharedDirTest(TestCase, Fixtures):
         self.assertTemplateUsed(resp, 'shared_file_view.html')
 
         self.assertContains(resp, os.path.basename(self.file))
-        dl_url_tag = '<a href="?p=%s&dl=1" class="obv-btn">' % self.file
+        dl_url_tag = 'href="?p=%s&dl=1"' % self.file
         self.assertContains(resp, dl_url_tag)
 
     def test_can_view_image_in_sub_dir(self):
