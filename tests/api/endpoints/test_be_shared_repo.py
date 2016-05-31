@@ -5,7 +5,7 @@ from seaserv import seafile_api
 
 from seahub.test_utils import BaseTestCase
 
-class BeSharedReposTest(BaseTestCase):
+class BeSharedRepoTest(BaseTestCase):
     def setUp(self):
         self.login_as(self.admin)
 

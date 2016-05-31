@@ -2698,7 +2698,7 @@ class SharedRepos(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
-class BeShared(APIView):
+class BeSharedRepos(APIView):
     """
     List repos that others/groups share to user.
     """

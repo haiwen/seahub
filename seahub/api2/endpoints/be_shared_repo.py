@@ -14,7 +14,7 @@ from seahub.utils import is_valid_username, is_org_context
 
 json_content_type = 'application/json; charset=utf-8'
 
-class BeSharedReposView(APIView):
+class BeSharedRepo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication )
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
