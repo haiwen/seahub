@@ -33,14 +33,10 @@ define([
                 };
 
             $.ajax({
-                url: Common.getUrl({name: 'ajax_repo_remove_share'}),
-                type: 'POST',
+                url: Common.getUrl({name: 'leave_share', repo_id: this.model.get('id')})
+                    + "?share_type=personal&from=" + encodeURIComponent(this.model.get('owner')),
+                type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
-                data: {
-                    'repo_id': this.model.get('id'),
-                    'from': this.model.get('owner'),
-                    'share_type': this.model.get('share_type')
-                },
                 dataType: 'json',
                 success: success_callback
             });
