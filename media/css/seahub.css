@@ -889,6 +889,12 @@ textarea:-moz-placeholder {/* for FF */
     margin-top:20px;
     color:#666;
 }
+.new-narrow-panel-tip {
+    margin-top: 20px;
+    text-align: center;
+    color:#666;
+    font-size: 13px;
+}
 /**** wide panel ****/ /* e.g. repo decrypt page */
 .wide-panel {
     width: 928px;
