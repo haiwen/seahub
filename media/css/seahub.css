@@ -884,11 +884,6 @@ textarea:-moz-placeholder {/* for FF */
     font-size:14px;
     margin:5px 0 20px;
 }
-.new-narrow-panel .notice {
-    text-align: center;
-    margin-top:20px;
-    color:#666;
-}
 /**** wide panel ****/ /* e.g. repo decrypt page */
 .wide-panel {
     width: 928px;
@@ -1010,10 +1005,6 @@ textarea:-moz-placeholder {/* for FF */
 }
 .op-confirm button {
     margin-right:8px;
-}
-/**** forms ****/
-.field-feedback {
-    color:#666;
 }
 /**** simplemodal ****/
 #basic-modal-content {
