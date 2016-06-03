@@ -239,6 +239,7 @@ app["pageOptions"] = {
     })(),
     username: "{{request.user.username}}",
     name: "{{request.user.username|email2nickname|escapejs}}",
+    contact_email: "{{ request.user.username|email2contact_email|escapejs }}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     can_add_repo: {% if user.permissions.can_add_repo %} true {% else %} false {% endif %},
     can_generate_shared_link: {% if user.permissions.can_generate_shared_link %} true {% else %} false {% endif %},
