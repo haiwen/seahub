@@ -187,6 +187,14 @@ def add_notice_from_info(notices):
                 logger.error(e)
                 notice.default_avatar_url = default_avatar_url
 
+        elif notice.is_file_comment_msg():
+            try:
+                d = json.loads(notice.detail)
+                notice.msg_from = d['author']
+            except Exception as e:
+                logger.error(e)
+                notice.default_avatar_url = default_avatar_url
+
         else:
             pass
 

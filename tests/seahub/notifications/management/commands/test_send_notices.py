@@ -1,7 +1,8 @@
 from django.core import mail
 from django.core.management import call_command
 
-from seahub.notifications.models import UserNotification, repo_share_msg_to_json
+from seahub.notifications.models import (
+    UserNotification, repo_share_msg_to_json, file_comment_msg_to_json)
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
@@ -29,3 +30,16 @@ class CommandTest(BaseTestCase):
         call_command('send_notices')
         self.assertEqual(len(mail.outbox), 1)
         assert mail.outbox[0].to[0] == 'contact@foo.com'
+
+    def test_send_file_comment_notice(self):
+        self.assertEqual(len(mail.outbox), 0)
+
+        detail = file_comment_msg_to_json(self.repo.id, '/foo',
+                                          self.user.username, 'test comment')
+        UserNotification.objects.add_file_comment_msg('a@a.com', detail)
+
+        call_command('send_notices')
+        self.assertEqual(len(mail.outbox), 1)
+        assert mail.outbox[0].to[0] == 'a@a.com'
+        assert 'new comment from user %s' % self.user.username in mail.outbox[0].body
+        assert '/foo' in mail.outbox[0].body

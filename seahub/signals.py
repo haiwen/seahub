@@ -4,3 +4,4 @@ import django.dispatch
 repo_created = django.dispatch.Signal(providing_args=["org_id", "creator", "repo_id", "repo_name"])
 repo_deleted = django.dispatch.Signal(providing_args=["org_id", "usernames", "repo_owner", "repo_id", "repo_name"])
 upload_file_successful = django.dispatch.Signal(providing_args=["repo_id", "file_path", "owner"])
+comment_file_successful = django.dispatch.Signal(providing_args=["repo", "file_path", "comment", "author", "notify_users"])

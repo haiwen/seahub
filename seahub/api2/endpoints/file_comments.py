@@ -14,6 +14,8 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error, user_to_dict
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.base.models import FileComment
+from seahub.utils.repo import get_repo_owner, get_repo_shared_users
+from seahub.signals import comment_file_successful
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +79,19 @@ class FileCommentsView(APIView):
         username = request.user.username
         o = FileComment.objects.add_by_file_path(
             repo_id=repo_id, file_path=path, author=username, comment=comment)
+        repo = seafile_api.get_repo(repo_id)
+        repo_owner = get_repo_owner(request, repo.id)
+        notify_users = get_repo_shared_users(repo.id, repo_owner)
+        notify_users.append(repo_owner)
+        notify_users = [x for x in notify_users if x != username]
+
+        comment_file_successful.send(sender=None,
+                                     repo=repo,
+                                     file_path=path,
+                                     comment=comment,
+                                     author=username,
+                                     notify_users=notify_users)
+
         comment = o.to_dict()
         comment.update(user_to_dict(request.user.username, request=request,
                                     avatar_size=avatar_size))

@@ -37,6 +37,9 @@
 
                 {% elif notice.is_group_join_request %}
                 <p class="brief">{{ notice.format_group_join_request|safe }}</p>
+                {% elif notice.is_file_comment_msg %}
+                <p class="brief">{{ notice.format_file_comment_msg|safe }}</p>
+                
                 {% endif %}
             </td>
             <td>{{ notice.timestamp|translate_seahub_time }}</td>
