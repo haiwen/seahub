@@ -1,8 +1,9 @@
 import uuid
 import hmac
 import datetime
+import time
 from hashlib import sha1
-from django.db import models, transaction
+from django.db import models
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -32,18 +33,19 @@ class Token(models.Model):
 class TokenV2Manager(models.Manager):
 
     def get_devices(self, platform, start, end):
+        devices = super(TokenV2Manager, self).filter(wiped_at=None)
         if platform == 'desktop':
-            devices = super(TokenV2Manager, self).filter(platform__in=DESKTOP_PLATFORMS).order_by('-last_accessed')[start : end]
+            devices = devices.filter(platform__in=DESKTOP_PLATFORMS).order_by('-last_accessed')[start : end]
         elif platform == 'mobile':
-            devices = super(TokenV2Manager, self).filter(platform__in=MOBILE_PLATFORMS).order_by('-last_accessed')[start : end]
+            devices = devices.filter(platform__in=MOBILE_PLATFORMS).order_by('-last_accessed')[start : end]
         else:
-            devices = super(TokenV2Manager, self).all().order_by('-last_accessed')[start : end]
+            devices = devices.order_by('-last_accessed')[start : end]
 
         return devices
 
     def get_user_devices(self, username):
         '''List user devices, most recently used first'''
-        devices = super(TokenV2Manager, self).filter(user=username)
+        devices = super(TokenV2Manager, self).filter(user=username).filter(wiped_at=None)
         platform_priorities = {
             'windows': 0,
             'linux': 0,
@@ -77,6 +79,10 @@ class TokenV2Manager(models.Manager):
                             client_version, platform_version, last_login_ip):
 
         token = self._get_token_by_user_device(username, platform, device_id)
+        if token and token.wiped_at:
+            token.delete()
+            token = None
+
         if token:
             if token.client_version != client_version or token.platform_version != platform_version \
                 or token.device_name != device_name:
@@ -106,10 +112,8 @@ class TokenV2Manager(models.Manager):
         token = self._get_token_by_user_device(username, platform, device_id)
         if not token:
             return
-        with transaction.atomic():
-            wiped_device = WipedDevice(key=token.key)
-            wiped_device.save()
-            token.delete()
+        token.wiped_at = int(time.time())
+        token.save()
 
 class TokenV2(models.Model):
     """
@@ -139,6 +143,8 @@ class TokenV2(models.Model):
     last_accessed = models.DateTimeField(auto_now=True)
 
     last_login_ip = models.GenericIPAddressField(null=True, default=None)
+
+    wiped_at = models.IntegerField(null=True)
 
     objects = TokenV2Manager()
 
@@ -170,9 +176,5 @@ class TokenV2(models.Model):
                     client_version=self.client_version,
                     platform_version=self.platform_version,
                     last_accessed=self.last_accessed,
-                    last_login_ip=self.last_login_ip)
-
-class WipedDevice(models.Model):
-    key = models.CharField(max_length=40, primary_key=True)
-
-    wiped_at = models.DateTimeField(auto_now=True)
+                    last_login_ip=self.last_login_ip,
+                    wiped_at=self.wiped_at)

@@ -40,6 +40,7 @@ from .utils import get_diff_details, \
     api_repo_group_folder_perm_check
 
 from seahub.api2.base import APIView
+from seahub.api2.models import TokenV2
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -4544,17 +4545,19 @@ class RemoteWipeReportView(APIView):
 
     @json_response
     def post(self, request):
-        from seahub.api2.models import WipedDevice
         token = request.data.get('token', '')
         if not token or len(token) != 40:
             error_msg = 'token invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         try:
-            entry = WipedDevice.objects.get(key=token)
-            entry.delete()
-        except WipedDevice.DoesNotExist:
+            entry = TokenV2.objects.get(key=token)
+        except TokenV2.DoesNotExist:
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        else:
+            if not entry.wiped_at:
+                return api_error(status.HTTP_400_BAD_REQUEST, "invalid device token")
+            entry.delete()
 
         return {}
