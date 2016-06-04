@@ -103,6 +103,9 @@ define([
                 this.$dirent_list = this.$('.repo-file-list');
                 this.$dirent_grid = this.$('.grid-view');
                 this.$dirent_list_body = this.$('.repo-file-list tbody');
+                this.$loading_tip = this.$('.loading-tip');
+                this.$error = this.$('.error');
+                this.$el_con = this.$('.repo-file-list-topbar, .js-dir-content');
 
                 this.$path_bar = this.$('.path');
                 // For compatible with css, we use .repo-op instead of .dir-op
@@ -341,6 +344,10 @@ define([
             },
 
             renderDir: function() {
+                this.$loading_tip.show();
+                this.$error.hide();
+                this.$el_con.show();
+
                 this.$dirent_grid.empty();
                 this.$dirent_list_body.empty();
 
@@ -351,8 +358,6 @@ define([
                     this.$dirent_list.hide();
                     this.$dirent_grid.show();
                 }
-
-                var loading_tip = this.$('.loading-tip').show();
 
                 var _this = this;
                 var thumbnail_size = app.pageOptions.thumbnail_default_size;
@@ -368,12 +373,12 @@ define([
                         'thumbnail_size': thumbnail_size
                     },
                     success: function() {
-                        loading_tip.hide();
+                        _this.$loading_tip.hide();
                     },
                     error: function(collection, response, opts) {
-                        loading_tip.hide();
-                        _this.$el_con = _this.$('.repo-file-list-topbar, .js-dir-content').hide();
-                        var $error = _this.$('.error');
+                        _this.$loading_tip.hide();
+                        _this.$el_con.hide();
+
                         var err_msg;
                         if (response.responseText) {
                             if (response.responseJSON.lib_need_decrypt) {
@@ -385,7 +390,7 @@ define([
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
-                        $error.html(err_msg).show();
+                        _this.$error.html(err_msg).show();
                     }
                 });
             },
