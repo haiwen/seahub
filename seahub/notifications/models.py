@@ -14,6 +14,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.repo import get_repo_shared_users
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -681,7 +682,7 @@ class UserNotification(models.Model):
         file_name = os.path.basename(file_path)
         msg = _("File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user %(author)s") % {
             'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
-            'file_name': file_name,
+            'file_name': escape(file_name),
             'author': escape(email2nickname(author)),
         }
         return msg
@@ -795,11 +796,14 @@ def add_user_to_group_cb(sender, **kwargs):
 @receiver(comment_file_successful)
 def comment_file_successful_cb(sender, **kwargs):
     repo = kwargs['repo']
+    repo_owner = kwargs['repo_owner']
     file_path = kwargs['file_path']
     comment = kwargs['comment']
     author = kwargs['author']
-    notify_users = kwargs['notify_users']
 
+    notify_users = get_repo_shared_users(repo.id, repo_owner)
+    notify_users.append(repo_owner)
+    notify_users = [x for x in notify_users if x != author]
     for u in notify_users:
         detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
         UserNotification.objects.add_file_comment_msg(u, detail)
