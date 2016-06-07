@@ -1,5 +1,6 @@
 from django.test import RequestFactory
 
+from seahub.auth.models import AnonymousUser
 from seahub.views import get_unencry_rw_repos_by_user
 from seahub.test_utils import BaseTestCase
 
@@ -19,3 +20,9 @@ class GetUnencRWReposByUserTest(BaseTestCase):
 
         unenc_repos = get_unencry_rw_repos_by_user(self.request)
         assert len(unenc_repos) > 0
+
+    def test_anonymous_user(self):
+        self.request.user = AnonymousUser()
+
+        unenc_repos = get_unencry_rw_repos_by_user(self.request)
+        assert len(unenc_repos) == 0
