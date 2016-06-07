@@ -262,9 +262,11 @@ def get_repo_dirents(request, repo, commit, path, offset=-1, limit=-1):
         return (file_list, dir_list, dirent_more)
 
 def get_unencry_rw_repos_by_user(request):
-    """Get all unencrypted repos the user can read and write.
+    """Get all unencrypted repos a logged-in user can read and write.
     """
     username = request.user.username
+    if not username:
+        return []
 
     def has_repo(repos, repo):
         for r in repos:
