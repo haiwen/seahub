@@ -18,6 +18,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.avatar.settings import AVATAR_DEFAULT_SIZE
 from seahub.utils import string2list, is_org_context
 from seahub.base.accounts import User
+from seahub.group.signals import add_user_to_group
 from seahub.group.utils import is_group_member, is_group_admin, \
     is_group_owner, is_group_admin_or_owner, get_group_member_info
 
@@ -72,7 +73,6 @@ class GroupMembers(APIView):
         """
         Add a group member.
         """
-
         username = request.user.username
 
         # only group owner/admin can add a group member
@@ -99,7 +99,10 @@ class GroupMembers(APIView):
                     return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
             ccnet_api.group_add_member(group_id, username, email)
-
+            add_user_to_group.send(sender=None,
+                                   group_staff=username,
+                                   group_id=group_id,
+                                   added_user=email)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
