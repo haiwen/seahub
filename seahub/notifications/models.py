@@ -14,6 +14,7 @@ from seaserv import seafile_api, ccnet_api
 
 from seahub.base.fields import LowerCaseCharField
 from seahub.base.templatetags.seahub_tags import email2nickname
+from seahub.utils.repo import get_repo_shared_users
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -42,6 +43,7 @@ MSG_TYPE_FILE_UPLOADED = 'file_uploaded'
 MSG_TYPE_REPO_SHARE = 'repo_share'
 MSG_TYPE_REPO_SHARE_TO_GROUP = 'repo_share_to_group'
 MSG_TYPE_USER_MESSAGE = 'user_message'
+MSG_TYPE_FILE_COMMENT = 'file_comment'
 
 def file_uploaded_msg_to_json(file_name, repo_id, uploaded_to):
     """Encode file uploaded message to json string.
@@ -69,6 +71,12 @@ def group_join_request_to_json(username, group_id, join_request_msg):
 def add_user_to_group_to_json(group_staff, group_id):
     return json.dumps({'group_staff': group_staff,
                        'group_id': group_id})
+
+def file_comment_msg_to_json(repo_id, file_path, author, comment):
+    return json.dumps({'repo_id': repo_id,
+                       'file_path': file_path,
+                       'author': author,
+                       'comment': comment})
 
 
 class UserNotificationManager(models.Manager):
@@ -162,7 +170,6 @@ class UserNotificationManager(models.Manager):
             except UserNotification.InvalidDetailError:
                 continue
 
-
     def seen_user_msg_notices(self, to_user, from_user):
         """Mark priv message notices of a user as seen.
         """
@@ -249,6 +256,11 @@ class UserNotificationManager(models.Manager):
         """
         return self._add_user_notification(to_user,
                                            MSG_TYPE_USER_MESSAGE, detail)
+
+    def add_file_comment_msg(self, to_user, detail):
+        """Notify ``to_user`` that others comment a file he can access.
+        """
+        return self._add_user_notification(to_user, MSG_TYPE_FILE_COMMENT, detail)
 
 class UserNotification(models.Model):
     to_user = LowerCaseCharField(db_index=True, max_length=255)
@@ -337,6 +349,9 @@ class UserNotification(models.Model):
         - `self`:
         """
         return self.msg_type == MSG_TYPE_ADD_USER_TO_GROUP
+
+    def is_file_comment_msg(self):
+        return self.msg_type == MSG_TYPE_FILE_COMMENT
 
     def group_message_detail_to_dict(self):
         """Parse group message detail, returns dict contains ``group_id`` and
@@ -646,11 +661,37 @@ class UserNotification(models.Model):
             }
         return msg
 
+    def format_file_comment_msg(self):
+        try:
+            d = json.loads(self.detail)
+        except Exception as e:
+            logger.error(e)
+            return _(u"Internal error")
+
+        repo_id = d['repo_id']
+        file_path = d['file_path']
+        author = d['author']
+        comment = d['comment']
+
+        repo = seafile_api.get_repo(repo_id)
+        if repo is None or not seafile_api.get_file_id_by_path(repo.id,
+                                                               file_path):
+            self.delete()
+            return None
+
+        file_name = os.path.basename(file_path)
+        msg = _("File <a href='%(file_url)s'>%(file_name)s</a> has a new comment from user %(author)s") % {
+            'file_url': reverse('view_lib_file', args=[repo_id, file_path]),
+            'file_name': escape(file_name),
+            'author': escape(email2nickname(author)),
+        }
+        return msg
+
 ########## handle signals
 from django.core.urlresolvers import reverse
 from django.dispatch import receiver
 
-from seahub.signals import upload_file_successful
+from seahub.signals import upload_file_successful, comment_file_successful
 from seahub.group.signals import grpmsg_added, group_join_request, add_user_to_group
 from seahub.share.signals import share_repo_to_user_successful, \
     share_repo_to_group_successful
@@ -751,3 +792,18 @@ def add_user_to_group_cb(sender, **kwargs):
 
     UserNotification.objects.set_add_user_to_group_notice(to_user=added_user,
                                                           detail=detail)
+
+@receiver(comment_file_successful)
+def comment_file_successful_cb(sender, **kwargs):
+    repo = kwargs['repo']
+    repo_owner = kwargs['repo_owner']
+    file_path = kwargs['file_path']
+    comment = kwargs['comment']
+    author = kwargs['author']
+
+    notify_users = get_repo_shared_users(repo.id, repo_owner)
+    notify_users.append(repo_owner)
+    notify_users = [x for x in notify_users if x != author]
+    for u in notify_users:
+        detail = file_comment_msg_to_json(repo.id, file_path, author, comment)
+        UserNotification.objects.add_file_comment_msg(u, detail)

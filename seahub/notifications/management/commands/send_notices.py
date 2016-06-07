@@ -171,6 +171,17 @@ class Command(BaseCommand):
         notice.group_name = group.group_name
         return notice
 
+    def format_file_comment_msg(self, notice):
+        d = json.loads(notice.detail)
+        repo_id = d['repo_id']
+        file_path = d['file_path']
+        author = d['author']
+
+        notice.file_url = reverse('view_lib_file', args=[repo_id, file_path])
+        notice.file_name = os.path.basename(file_path)
+        notice.author = author
+        return notice
+
     def get_user_language(self, username):
         return Profile.objects.get_user_language(username)
 
@@ -256,6 +267,9 @@ class Command(BaseCommand):
 
                 elif notice.is_add_user_to_group():
                     notice = self.format_add_user_to_group(notice)
+
+                elif notice.is_file_comment_msg():
+                    notice = self.format_file_comment_msg(notice)
 
                 notices.append(notice)
 

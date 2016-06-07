@@ -39,6 +39,9 @@
     {% elif notice.is_add_user_to_group %}
         <p class="brief">{{ notice.format_add_user_to_group|safe }}</p>
 
+    {% elif notice.is_file_comment_msg %}
+        <p class="brief">{{ notice.format_file_comment_msg|safe }}</p>
+        
     {% endif %}
 
         <p class="time">{{ notice.timestamp|translate_seahub_time }}</p>
