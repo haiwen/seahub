@@ -15,7 +15,7 @@
         </li>
         {% endif %}
         <li class="tab<% if (cur_tab == 'libraries') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}sysadmin/#libraries/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
+            <a href="{{ SITE_ROOT }}sysadmin/#all-libs/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
@@ -57,6 +57,18 @@
         </li>
         {% endif %}
     </ul>
+    <% if (cur_tab == 'libraries') { %>
+        <% if (option == 'all') { %>
+            <form action="{% url 'sys_repo_search' %}" method="get" class="side-search-form" id="libs-search-form">
+                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by name..." %}" />
+            </form>
+        <% } %>
+        <% if (option == 'trash') { %>
+            <form action="{% url 'sys_repo_trash' %}" method="get" class="side-search-form" id="trash-libs-search-form">
+                <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by owner..." %}" />
+            </form>
+        <% } %>
+    <% } %>
 </script>
 
 <script type="text/template" id="sysinfo-header-tmpl">
@@ -212,7 +224,7 @@
     <td><%- device_name %> / <%- client_version %></td>
     <td><%- device_ip %>
     <td>
-        <a href="{{ SITE_ROOT }}sys/seafadmin/repo/<%- repo_id %>/"><%- repo_name %></a>
+        <a href="{{ SITE_ROOT }}sysadmin/#libs/<%= repo_id %>/"><%- repo_name %></a>
     </td>
     <td><%- error_msg %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
@@ -250,43 +262,78 @@
     <% } %>
 </script>
 
-<script type="text/template" id="libraries-tmpl">
-    <div class="hd">
-        <ul class="tab-tabs-nav fleft">
-            <li class="tab <% if (cur_tab == 'all') { %> ui-state-active <% } %>">
-                <a href="#libraries/" class="a">{% trans "All" %}</a>
+<script type="text/template" id="libraries-tabnav-tmpl">
+    <div class="tabnav ovhd">
+        <ul class="tabnav-tabs fleft">
+            <li class="tabnav-tab<% if (cur_tab == 'all') { %> tabnav-tab-cur<% } %>">
+                <a href="#all-libs/">{% trans "All" %}</a>
             </li>
-            <li class="tab <% if (cur_tab == 'system') { %> ui-state-active <% } %>">
-                <a href="#libraries/system/" class="a">{% trans "System" %}</a>
+            <li class="tabnav-tab<% if (cur_tab == 'system') { %> tabnav-tab-cur<% } %>">
+                <a href="#system-lib/">{% trans "System" %}</a>
             </li>
-            <li class="tab <% if (cur_tab == 'trash') { %> ui-state-active <% } %>">
-                <a href="#libraries/trash/" class="a">{% trans "Trash" %}</a>
+            <li class="tabnav-tab<% if (cur_tab == 'trash') { %> tabnav-tab-cur<% } %>">
+                <a href="#trash-libs/">{% trans "Trash" %}</a>
             </li>
         </ul>
+        <% if (cur_tab == 'trash') { %>
+        <button class="js-clean fright hide">{% trans "Clean" %}</button>
+        <% } %>
     </div>
+</script>
+
+<script type="text/template" id="libraries-tmpl">
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
                 <th width="4%"><!--icon--></th>
                 <th width="34%">{% trans "Name" %}</th>
+                <th width="10%"><!--Operations--></th>
                 <th width="13%">{% trans "Files / Size" %}</th>
                 <th width="19%">ID</th>
                 <th width="20%">{% trans "Owner" %}</th>
-                <th width="10%">{% trans "Operations" %}</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
-    <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No libraries" %}</h2>
-    </div>
     <div id="paginator">
         <a class="js-previous hide" href="#">{% trans "Previous" %}</a>
         <a class="js-next hide" href="#">{% trans "Next" %}</a>
     </div>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No libraries" %}</h2>
+    </div>
 </script>
+<script type="text/template" id="search-libraries-tmpl">
+    <h3>{% trans "Search Library"%}</h3>
+    <form id="search-repo-form" method="get" action="">
+        <p class="tip">{% trans "Tip: you can search by keyword in name or owner or both." %}</p>
+        <label>{% trans "Name" %}</label><input type="text" name="name" class="input" value=""/><br />
+        <label>{% trans "Owner" %}</label><input type="text" name="owner" class="input" value=""/><br />
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
+    <h3>{% trans "Result"%}</h3>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="34%">{% trans "Name" %}</th>
+                <th width="10%"><!--Operations--></th>
+                <th width="13%">{% trans "Files / Size" %}</th>
+                <th width="19%">ID</th>
+                <th width="20%">{% trans "Owner" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No libraries" %}</h2>
+    </div>
+</script>
+
 
 <script type="text/template" id="library-item-tmpl">
     <td>
@@ -294,15 +341,19 @@
     </td>
     <% if (name) { %>
         <% if (enable_sys_admin_view_repo && is_pro && !encrypted) { %>
-        <td><a href="#libraries/<%- id %>/dirents/"><%- name %></a></td>
+        <td><a href="#libs/<%= id %>/"><%- name %></a></td>
         <% } else { %>
         <td><%- name %></td>
         <% } %>
     <% } else { %>
     <td>--</td>
     <% } %>
-    <td><%- file_count %> / <%- size_formatted %></td>
-    <td style="font-size:11px;"><%- id %></td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
+    </td>
+    <td><%= file_count %> / <%= size_formatted %></td>
+    <td style="font-size:11px;"><%= id %></td>
     <td>
         <% if (owner) { %>
         <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a>
@@ -310,26 +361,9 @@
         --
         <% } %>
     </td>
-    <td>
-        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
-        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
-    </td>
 </script>
 
 <script type="text/template" id="system-library-tmpl">
-    <div class="hd">
-        <ul class="tab-tabs-nav fleft">
-            <li class="tab <% if (cur_tab == 'all') { %> ui-state-active <% } %>">
-                <a href="#libraries/" class="a">{% trans "All" %}</a>
-            </li>
-            <li class="tab <% if (cur_tab == 'system') { %> ui-state-active <% } %>">
-                <a href="#libraries/system/" class="a">{% trans "System" %}</a>
-            </li>
-            <li class="tab <% if (cur_tab == 'trash') { %> ui-state-active <% } %>">
-                <a href="#libraries/trash/" class="a">{% trans "Trash" %}</a>
-            </li>
-        </ul>
-    </div>
     <table class="hide">
         <thead>
             <tr>
@@ -345,43 +379,29 @@
 </script>
 
 <script type="text/template" id="system-library-item-tmpl">
-    <td><a href="#libraries/<%- id %>/dirents/"><%- name %></a></td>
-    <td style="font-size:11px;"><%- id %></td>
-    <td><%- description %></td>
+    <td><a href="#libs/<%= id %>/"><%- name %></a></td>
+    <td style="font-size:11px;"><%= id %></td>
+    <td><%= description %></td>
 </script>
 
 <script type="text/template" id="trash-libraries-tmpl">
-    <div class="hd">
-        <ul class="tab-tabs-nav fleft">
-            <li class="tab <% if (cur_tab == 'all') { %> ui-state-active <% } %>">
-                <a href="#libraries/" class="a">{% trans "All" %}</a>
-            </li>
-            <li class="tab <% if (cur_tab == 'system') { %> ui-state-active <% } %>">
-                <a href="#libraries/system/" class="a">{% trans "System" %}</a>
-            </li>
-            <li class="tab <% if (cur_tab == 'trash') { %> ui-state-active <% } %>">
-                <a href="#libraries/trash/" class="a">{% trans "Trash" %}</a>
-            </li>
-        </ul>
-        <button id="clean-trash-libraries" class="fright"><span class="vam">{% trans "Clean" %}</span></button>
-    </div>
-    <p class="tip">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
+    <span class="loading-icon loading-tip"></span>
+    <p class="tip hide">{% trans "Tip: libraries deleted 30 days ago will be cleaned automatically."%}</p>
     <table class="hide">
         <thead>
             <tr>
-                <th width="4%"><!--icon--></th>
-                <th width="30%">{% trans "Name" %}</th>
-                <th width="30%">{% trans "Owner" %}</th>
+                <th width="5%"><!--icon--></th>
+                <th width="40%">{% trans "Name" %}</th>
+                <th width="10%"><!--Operations--></th>
+                <th width="25%">{% trans "Owner" %}</th>
                 <th width="20%">{% trans "Deleted Time" %}</th>
-                <th width="16%">{% trans "Operations" %}</th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No libraries" %}</h2>
+        <h2 class="alc">{% trans "No library deleted yet" %}</h2>
     </div>
 </script>
 
@@ -390,12 +410,12 @@
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><%- name %></td>
-    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
-    <td><time title='<%- time %>'><%- time_from_now %></time></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-reply sf2-x repo-restore-btn op-icon vh" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
     </td>
+    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
 </script>
 
 <script type="text/template" id="dir-view-tmpl">
@@ -407,11 +427,11 @@
         <table class="repo-file-list">
             <thead>
                 <tr>
-                    <th width="4%"><!--icon--></th>
-                    <th width="61%">{% trans "Name" %}</th>
+                    <th width="5%"><!--icon--></th>
+                    <th width="50%">{% trans "Name" %}</th>
                     <th width="10%"></th>
-                    <th width="10%">{% trans "Size" %}</th>
-                    <th width="15%">{% trans "Last Update" %}</th>
+                    <th width="15%">{% trans "Size" %}</th>
+                    <th width="20%">{% trans "Last Update" %}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -422,26 +442,28 @@
 </script>
 
 <script type="text/template" id="dir-path-bar-tmpl">
-    <li><a href="#libraries/" class="path-link normal">{% trans "Libraries" %}</a></li>
+    <% if (is_system_library) { %>
+    <li><a href="#system-lib/" class="path-link normal">{% trans "System" %}</a></li>
+    <% } else { %>
+    <li><a href="#all-libs/" class="path-link normal">{% trans "All" %}</a></li>
+    <% } %>
     <% if (path == '/') { %>
         <li><%- repo_name %></li>
     <% } else { %>
-        <li><a href="#libraries/<%= repo_id %>/dirents" class="path-link normal"><%- repo_name %></a></li>
+        <li><a href="#libs/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a></li>
         <% for (var i = 0, len = path_list.length - 1; i < len; i++) { %>
-        <li><a href="#libraries/<%= repo_id %>/dirents/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
+        <li><a href="#libs/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
         <% } %>
         <li><%- path_list[i] %></li>
     <% } %>
 </script>
 
 <script type="text/template" id="dir-op-bar-tmpl">
-    <% if (is_system_library) { %>
     <div id="basic-upload" class="inline-block">
         <button class="op-btn basic-upload-btn" >{% trans "Upload" %}</button>
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
     </div>
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
-    <% } %>
 </script>
 
 <script type="text/template" id="dirent-item-tmpl">
@@ -449,7 +471,7 @@
     <% if (is_file) { %>
     <td><%- obj_name %></td>
     <% } else { %>
-    <td><span><a href="<%- url %>"><%- obj_name %></a></span></td>
+    <td><a href="<%= url %>"><%- obj_name %></a></td>
     <% } %>
     <td>
         <% if (is_system_library) { %>
@@ -459,12 +481,12 @@
         <a href="#" class="sf2-icon-download sf2-x dirent-download-btn op-icon vh" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
         <% } %>
     </td>
-    <td><%- file_size %></td>
-    <td><time title="<%- time %>"><%- time_from_now %></time></td>
+    <td><%= file_size %></td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
 </script>
 
 <script type="text/template" id="library-transfer-form-tmpl">
-    <form method="" action="" id="library-transfer-form">
+    <form method="" action="" id="repo-transfer-form">
         <h3><%= title %></h3>
         <input type="hidden" name="email" /><br />
         <p class="error hide"></p>

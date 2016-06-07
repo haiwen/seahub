@@ -4,16 +4,16 @@ define([
     'backbone',
     'common',
     'sysadmin-app/views/repo',
-    'sysadmin-app/collection/repos'
+    'sysadmin-app/collection/search-repos'
 ], function($, _, Backbone, Common, RepoView, RepoCollection) {
     'use strict';
 
     var ReposView = Backbone.View.extend({
 
-        id: 'libraries',
+        id: 'search-libraries',
 
         tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
-        template: _.template($("#libraries-tmpl").html()),
+        template: _.template($("#search-libraries-tmpl").html()),
 
         initialize: function() {
             this.repoCollection = new RepoCollection();
@@ -27,17 +27,18 @@ define([
             this.$el.append($tabnav);
             this.$el.append(this.template());
 
+            this.$form = this.$('#search-repo-form');
+            this.$name = $('[name="name"]', this.$form);
+            this.$owner = $('[name="owner"]', this.$form);
+
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
-            this.$jsPrevious = this.$('.js-previous');
-            this.$jsNext = this.$('.js-next');
         },
 
         events: {
-            'click #paginator .js-next': 'getNextPage',
-            'click #paginator .js-previous': 'getPreviousPage'
+            'submit #search-repo-form': 'formSubmit'
         },
 
         initPage: function() {
@@ -45,31 +46,6 @@ define([
             this.$tableBody.empty();
             this.$loadingTip.show();
             this.$emptyTip.hide();
-            this.$jsNext.hide();
-            this.$jsPrevious.hide();
-        },
-
-        getNextPage: function() {
-            this.initPage();
-            var current_page = this.repoCollection.state.current_page;
-            if (this.repoCollection.state.has_next_page) {
-                this.repoCollection.getPage(current_page + 1, {
-                    reset: true
-                });
-            }
-
-            return false;
-        },
-
-        getPreviousPage: function() {
-            this.initPage();
-            var current_page = this.repoCollection.state.current_page;
-            if (current_page > 1) {
-                this.repoCollection.getPage(current_page - 1, {
-                    reset: true
-                });
-            }
-            return false;
         },
 
         hide: function() {
@@ -78,19 +54,18 @@ define([
         },
 
         show: function(option) {
-            this.option = option;
             if (!this.attached) {
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.getContent();
+            this.getContent(option);
         },
 
-        getContent: function() {
+        getContent: function(obj) {
             this.initPage();
             var _this = this;
             this.repoCollection.fetch({
-                data: {'page': this.option.page},
+                data: obj,
                 cache: false,
                 reset: true,
                 error: function(collection, response, opts) {
@@ -113,38 +88,36 @@ define([
         },
 
         reset: function() {
-            // update the url
-            var current_page = this.repoCollection.state.current_page;
-            app.router.navigate('all-libs/?page=' + current_page);
+            var name = this.repoCollection.search_name;
+            var owner = this.repoCollection.search_owner;
+            app.router.navigate('#search-libs/?name=' + encodeURIComponent(name) + '&owner=' + encodeURIComponent(owner));
+            this.$name.val(name);
+            this.$owner.val(owner);
 
             this.$loadingTip.hide();
             if (this.repoCollection.length > 0) {
                 this.repoCollection.each(this.addOne, this);
                 this.$table.show();
-                this.renderPaginator();
             } else {
                 this.$emptyTip.show();
-            }
-        },
-
-        renderPaginator: function() {
-            if (this.repoCollection.state.has_next_page) {
-                this.$jsNext.show();
-            } else {
-                this.$jsNext.hide();
-            }
-
-            var current_page = this.repoCollection.state.current_page;
-            if (current_page > 1) {
-                this.$jsPrevious.show();
-            } else {
-                this.$jsPrevious.hide();
             }
         },
 
         addOne: function(library) {
             var view = new RepoView({model: library});
             this.$tableBody.append(view.render().el);
+        },
+
+        formSubmit: function() {
+            var name = $.trim(this.$name.val());
+            var owner = $.trim(this.$owner.val());
+
+            if (!name && !owner) {
+                return false;
+            }
+
+            this.getContent({'name': name, 'owner': owner});
+            return false;
         }
     });
 

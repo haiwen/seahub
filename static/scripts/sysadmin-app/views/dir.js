@@ -3,11 +3,10 @@ define([
     'underscore',
     'backbone',
     'common',
-    'moment',
     'app/views/fileupload',
     'sysadmin-app/views/dirent',
     'sysadmin-app/collection/dirents'
-], function($, _, Backbone, Common, Moment, FileUploadView,
+], function($, _, Backbone, Common, FileUploadView,
     DirentView, DirentCollection) {
     'use strict';
 
@@ -17,30 +16,34 @@ define([
 
         template: _.template($('#dir-view-tmpl').html()),
         pathBarTemplate: _.template($('#dir-path-bar-tmpl').html()),
-        newDirTemplate: _.template($("#add-new-dir-form-template").html()),
         dir_op_bar_template: _.template($('#dir-op-bar-tmpl').html()),
+
+        newDirTemplate: _.template($("#add-new-dir-form-template").html()),
 
         initialize: function() {
             this.dir = new DirentCollection();
             this.listenTo(this.dir, 'add', this.addOne);
             this.listenTo(this.dir, 'reset', this.reset);
+
             this.fileUploadView = new FileUploadView({dirView: this});
+
             this.render();
         },
 
         render: function() {
             this.$el.html(this.template());
+
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
+            //this.$emptyTip = this.$('.empty-tips');
             this.$path_bar = this.$('.path-bar');
             this.$dir_op_bar = this.$('.repo-op');
         },
 
         events: {
             'click .basic-upload-btn': 'uploadFile',
-            'click #add-new-dir': 'newDir',
+            'click #add-new-dir': 'newDir'
         },
 
         uploadFile: function() {
@@ -49,9 +52,19 @@ define([
 
         addNewFile: function(new_dirent) {
             new_dirent.set('last_update', new Date().getTime());
-            var dirView = this;
-            var view = new DirentView({model: new_dirent, dirView: dirView});
-            dirView.$tableBody.prepend(view.render().el);
+            var view = new DirentView({model: new_dirent, dirView: this});
+            var new_file = view.render().el;
+            if ($('tr', this.$tableBody).length == 0) { 
+                this.$tableBody.append(new_file);
+            } else {
+                var dirs = this.dir.where({'is_file':false});
+                if (dirs.length == 0) { 
+                    this.$tableBody.prepend(new_file);
+                } else {
+                    // put the new file after the last dir
+                    $($('tr', this.$tableBody)[dirs.length - 1]).after(new_file);
+                }    
+            }    
         },
 
         newDir: function() {
@@ -120,7 +133,7 @@ define([
 
             this.$tableBody.empty();
             this.$loadingTip.show();
-            this.$emptyTip.hide();
+            //this.$emptyTip.hide();
         },
 
         renderPath: function() {
@@ -129,6 +142,7 @@ define([
             var obj = {
                 path: path,
                 repo_name: dir.repo_name,
+                is_system_library: dir.is_system_library
             };
 
             var path_list = path.substr(1).split('/');
@@ -145,11 +159,12 @@ define([
         },
 
         renderDirOpBar: function() {
-            var data = {
-                'is_system_library': this.dir.is_system_library,
-                'encrypted': this.dir.encrypted,
-            };
-            this.$dir_op_bar.html(this.dir_op_bar_template(data));
+            // only system lib has 'dir op'(upload file, add dir)
+            if (this.dir.is_system_library) {
+                this.$dir_op_bar.html(this.dir_op_bar_template()).show();
+            } else {
+                this.$dir_op_bar.empty().hide();
+            }
         },
 
         setFileInput: function () {
@@ -163,9 +178,8 @@ define([
         fetchLibraryDirents: function() {
             var dir = this.dir;
             dir.fetch({
-                url: Common.getUrl({name: 'admin-library-dirents', repo_id: dir.repo_id}) + '?parent_dir=' + Common.encodePath(dir.path),
-                data: {},
-                cache: false, // for IE
+                data: {'parent_dir': dir.path},
+                cache: false,
                 reset: true,
                 error: function (collection, response, opts) {
                     var err_msg;
@@ -193,7 +207,7 @@ define([
                 this.dir.each(this.addOne, this);
                 this.$table.show();
             } else {
-                this.$emptyTip.show();
+                //this.$emptyTip.show();
             }
         },
 

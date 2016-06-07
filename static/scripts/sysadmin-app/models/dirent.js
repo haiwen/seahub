@@ -18,18 +18,19 @@ define([
             var dirent_path = this.getPath();
 
             if (this.get('is_file')) {
-                return '#';
+                return '';
             } else {
-                return '#libraries/' + dir.repo_id + '/dirents' + Common.encodePath(dirent_path);
+                return '#libs/' + dir.repo_id + Common.encodePath(dirent_path);
             }
         },
 
+        // only for file
         getDownloadUrl: function() {
             var dir = this.collection;
             var dirent_path = this.getPath();
 
             return app.config.siteRoot + "api/v2.1/admin/libraries/" + dir.repo_id
-                + "/dirent/?path=" + Common.encodePath(dirent_path) + "&dl=1";
+                + "/dirent/?path=" + encodeURIComponent(dirent_path) + "&dl=1";
         },
 
         getDeleteUrl: function() {
@@ -37,7 +38,7 @@ define([
             var dirent_path = this.getPath();
 
             return app.config.siteRoot + "api/v2.1/admin/libraries/" + dir.repo_id
-                + "/dirent/?path=" + Common.encodePath(dirent_path);
+                + "/dirent/?path=" + encodeURIComponent(dirent_path);
         },
 
         getIconUrl: function(size) {

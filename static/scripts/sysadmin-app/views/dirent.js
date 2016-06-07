@@ -15,7 +15,7 @@ define([
 
         events: {
             'click .dirent-download-btn': 'downloadDirent',
-            'click .dirent-delete-btn': 'deleteDirent',
+            'click .dirent-delete-btn': 'deleteDirent'
         },
 
         initialize: function(options) {
@@ -24,12 +24,11 @@ define([
         },
 
         downloadDirent: function() {
-            var _this = this;
             $.ajax({
-                url: _this.model.getDownloadUrl(),
+                url: this.model.getDownloadUrl(),
                 dataType: 'json',
                 success: function(data) {
-                    location.href = data['download_url']
+                    location.href = data['download_url'];
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
@@ -41,7 +40,7 @@ define([
         deleteDirent: function() {
             var _this = this;
             $.ajax({
-                url: _this.model.getDeleteUrl(),
+                url: this.model.getDeleteUrl(),
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
@@ -64,10 +63,13 @@ define([
             data['time'] = last_update.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(last_update);
             data['icon_url'] = this.model.getIconUrl(file_icon_size);
-            data['download_url'] = this.model.getDownloadUrl(),
+            if (this.model.get('is_file')) {
+                data['download_url'] = this.model.getDownloadUrl();
+            } else {
+                data['url'] = this.model.getWebUrl();
+            }
             data['repo_id'] = this.dir.repo_id;
             data['is_system_library'] = this.dir.is_system_library;
-            data['url'] = this.model.getWebUrl(),
 
             this.$el.html(this.template(data));
 

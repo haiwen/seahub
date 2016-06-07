@@ -10,10 +10,10 @@ define([
         model: RepoModel,
         state: {pageSize: 100},
         parseState: function(data) {
-            return {hasNextPage: data[0].has_next_page, current_page: data[0].current_page};
+            return data.page_info; // {'has_next_page': has_next_page, 'current_page': current_page}   
         },
         parseRecords: function(data) {
-            return data[1];
+            return data.repos;
         },
         url: function () {
             return Common.getUrl({name: 'admin-libraries'});

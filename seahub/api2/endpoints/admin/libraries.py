@@ -20,6 +20,7 @@ from seahub.api2.utils import api_error
 logger = logging.getLogger(__name__)
 
 def get_repo_info(repo):
+
     result = {}
     result['id'] = repo.repo_id
     result['name'] = repo.repo_name
@@ -33,14 +34,57 @@ def get_repo_info(repo):
 
 
 class AdminLibraries(APIView):
-    """ return all libraries
-    """
-
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
+        """
+        List 'all' libraries (by name/owner/page)
+        """
+
+        ## search libraries (by name/owner)
+        repo_name = request.GET.get('name', '')
+        owner = request.GET.get('owner', '')
+        repos = []
+        if repo_name and owner :
+            # search by name and owner
+            owned_repos = seafile_api.get_owned_repo_list(owner)
+            for repo in owned_repos:
+                if not repo.name:
+                    continue
+                if repo_name in repo.name:
+                    repo_info = get_repo_info(repo)
+                    repos.append(repo_info)
+
+            return Response({
+                "name": repo_name, "owner": owner, "repos": repos})
+
+        elif repo_name:
+            # search by name(keyword in name)
+            repos_all = seafile_api.get_repo_list(-1, -1)
+            for repo in repos_all:
+                if not repo.name:
+                    continue
+                if repo_name in repo.name:
+                    repo_info = get_repo_info(repo)
+                    repos.append(repo_info)
+
+            return Response({
+                "name": repo_name, "owner": '', "repos": repos})
+
+        elif owner:
+            # search by owner
+            owned_repos = seafile_api.get_owned_repo_list(owner)
+            for repo in owned_repos:
+                repo_info = get_repo_info(repo)
+                repos.append(repo_info)
+
+            return Response({
+                "name": '', "owner": owner, "repos": repos})
+
+
+        ##  get libraries by page
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -73,7 +117,7 @@ class AdminLibraries(APIView):
             'has_next_page': has_next_page,
             'current_page': current_page
         }
-        return Response((page_info, return_results))
+        return Response({"page_info": page_info, "repos": return_results})
 
 class AdminLibrary(APIView):
 

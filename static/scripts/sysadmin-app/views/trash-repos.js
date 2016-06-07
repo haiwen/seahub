@@ -14,60 +14,87 @@ define([
 
         id: 'trash-libraries',
 
+        tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
         template: _.template($("#trash-libraries-tmpl").html()),
 
         initialize: function() {
             this.trashRepoCollection = new TrashRepoCollection();
             this.listenTo(this.trashRepoCollection, 'add', this.addOne);
             this.listenTo(this.trashRepoCollection, 'reset', this.reset);
+
+            this.render();
         },
 
         render: function() {
-            var data = {'cur_tab': 'trash',};
-            this.$el.html(this.template(data));
+            this.$el.html(this.tabNavTemplate({'cur_tab': 'trash'}) + this.template());
+
+            this.$tip = this.$('.tip');
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
+            this.$cleanBtn = this.$('.js-clean');
         },
 
         events: {
-            'click #clean-trash-libraries': 'cleanTrashLibraries',
+            'click .js-clean': 'cleanTrashLibraries'
         },
 
         cleanTrashLibraries: function() {
             var _this = this;
-            $.ajax({
-                url: Common.getUrl({'name':'admin-trash-libraries'}),
-                type: 'DELETE',
-                beforeSend: Common.prepareCSRFToken,
-                dataType: 'json',
-                success: function() {
-                    _this.$table.hide();
-                    _this.$emptyTip.show();
-                    Common.feedback(gettext("Success"), 'success');
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
-                }
-            })
+            var popupTitle, popupContent;
+            var owner = this.trashRepoCollection.search_owner;
+            if (owner) {
+                popupTitle = gettext("Delete Library By Owner");
+                popupContent = gettext("Are you sure you want to delete all %s's libraries?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + Common.HTMLescape(owner) + '</span>');
+            } else {
+                popupTitle = gettext("Clear Trash");
+                popupContent = gettext("Are you sure you want to clear trash?");
+            }
+            var yesCallback = function() {
+                $.ajax({
+                    url: Common.getUrl({'name':'admin-trash-libraries'}),
+                    type: 'DELETE',
+                    data: {'owner': _this.option.owner},
+                    beforeSend: Common.prepareCSRFToken,
+                    dataType: 'json',
+                    success: function() {
+                        _this.$tip.hide();
+                        _this.$table.hide();
+                        _this.$emptyTip.show();
+                        Common.feedback(gettext("Success"), 'success');
+                    },
+                    error: function(xhr, textStatus, errorThrown) {
+                        Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                    },
+                    complete: function() {
+                        $.modal.close();
+                    }
+                });
+            };
+            Common.showConfirm(popupTitle, popupContent, yesCallback);
         },
 
         initPage: function() {
+            this.$tip.hide();
             this.$table.hide();
             this.$tableBody.empty();
             this.$loadingTip.show();
             this.$emptyTip.hide();
+            this.$cleanBtn.hide();
         },
 
         hide: function() {
             this.$el.detach();
+            this.attached = false;
         },
 
         show: function(option) {
             this.option = option;
-            this.render();
-            $("#right-panel").html(this.$el);
+            if (!this.attached) {
+                this.attached = true;
+                $("#right-panel").html(this.$el);
+            }
             this.showTrashLibraries();
         },
 
@@ -76,8 +103,8 @@ define([
             var _this = this;
 
             this.trashRepoCollection.fetch({
-                data: {},
-                cache: false, // for IE
+                data: {'owner': this.option.owner},
+                cache: false,
                 reset: true,
                 error: function (collection, response, opts) {
                     var err_msg;
@@ -102,9 +129,12 @@ define([
 
             if (length > 0) {
                 this.trashRepoCollection.each(this.addOne, this);
+                this.$cleanBtn.show();
+                this.$tip.show();
                 this.$table.show();
             } else {
                 this.$emptyTip.show();
+                this.$cleanBtn.hide();
             }
         },
 

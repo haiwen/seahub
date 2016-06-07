@@ -11,6 +11,7 @@ define([
 
         id: "system-library",
 
+        tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
         template: _.template($("#system-library-tmpl").html()),
         itemTemplate: _.template($("#system-library-item-tmpl").html()),
 
@@ -20,8 +21,10 @@ define([
         },
 
         render: function() {
-            var data = {'cur_tab': 'system',};
-            this.$el.html(this.template(data));
+            var $tabnav = $(this.tabNavTemplate({'cur_tab': 'system'}));
+            this.$el.append($tabnav);
+            this.$el.append(this.template());
+
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');

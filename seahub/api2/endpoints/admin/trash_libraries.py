@@ -9,6 +9,7 @@ from rest_framework import status
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
+from seahub.utils import is_valid_username 
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.authentication import TokenAuthentication
@@ -25,28 +26,40 @@ class AdminTrashLibraries(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
-        """ get all deleted libraries
         """
+        List deleted repos (by owner)
+        """
+        search_owner = request.GET.get('owner', '')
+        if search_owner and is_valid_username(search_owner):
+            repos = seafile_api.get_trash_repos_by_owner(search_owner)
+            print 'by owner'
+        else:
+            repos = seafile_api.get_trash_repo_list(-1, -1)
+            search_owner = ''
+            print 'all'
 
-        repos_all = seafile_api.get_trash_repo_list(-1, -1)
-        return_results = []
-        for repo in repos_all:
+        return_repos = []
+        for repo in repos:
             result = {}
             result['name'] = repo.repo_name
             result['id'] = repo.repo_id
             result['owner'] = repo.owner_id
             result['delete_time'] = timestamp_to_isoformat_timestr(repo.del_time)
 
-            return_results.append(result)
+            return_repos.append(result)
 
-        return Response(return_results)
+        return Response({"search_owner": search_owner, "repos": return_repos})
 
     def delete(self, request, format=None):
-        """ clean all deleted libraries
+        """ clean all deleted libraries(by owner)
         """
 
+        search_owner = request.data.get('owner', '')
         try:
-            seafile_api.empty_repo_trash()
+            if search_owner and is_valid_username(search_owner):
+                seafile_api.empty_repo_trash_by_owner(search_owner)
+            else:
+                seafile_api.empty_repo_trash()
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
