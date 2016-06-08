@@ -1,0 +1,61 @@
+{% extends "sysadmin/sys_inst_info_base.html" %}
+{% load i18n seahub_tags %}
+
+{% block right_panel %}
+<h3>{% trans "Search User"%}</h3>
+
+<form id="search-user-form" method="get" action=".">
+  <label>{% trans "Email" %}</label><input type="text" name="q" class="input" value="{{q}}" /><br />
+  <input type="submit" value="{% trans "Submit" %}" class="submit" />
+</form>
+<h3>{% trans "Result"%}</h3>
+
+{% if users %}
+<table>
+    <tr>
+        <th width="25%">{% trans "Email" %}</th>
+        <th width="10%">{% trans "Status" %}</th>
+        <th width="20%">{% trans "Space Used" %}</th>
+        <th width="25%">{% trans "Create At / Last Login" %}</th>
+        <th width="20%">{% trans "Operations" %}</th>
+    </tr>
+
+    {% for user in users %}
+    <tr data-userid="{{user.email}}">
+        <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a></td>
+        <td>
+            <div class="user-status">
+              {% if user.is_active %}
+                <span class="user-status-cur-value">{% trans "Active" %}</span>
+              {% else %}
+                <span class="user-status-cur-value">{% trans "Inactive" %}</span>
+              {% endif %}
+            </div>
+        </td>
+        <td style="font-size:11px;">
+            <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
+        </td>
+        <td style="font-size:11px;">
+        {{ user.ctime|tsstr_sec }} / {% if user.last_login %}{{user.last_login|translate_seahub_time}} {% else %} -- {% endif %}
+        </td>
+        <td>
+          <a href="#" class="js-toggle-admin op vh" data-url="{% url 'sys_inst_toggle_admin' inst.pk user.email %}" data-target="{{ user.email }}">{% if user.inst_admin %}{% trans "Revoke Admin" %}{% else %}{% trans "Set Admin" %}{% endif %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>{% trans "No result" %}</p>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+addConfirmTo($('.js-toggle-admin'), {
+    'title': "Toggle Admin",
+    'con': "Sure ?",
+    'post': true
+});
+</script>
+{% endblock %}

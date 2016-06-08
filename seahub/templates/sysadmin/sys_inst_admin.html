@@ -30,7 +30,7 @@
     </tr>
     {% for inst in insts %}
     <tr>
-        <td><a href="{% url "sys_inst_info_user" inst.pk %}">{{ inst.name }}</a></td>
+        <td><a href="{% url "sys_inst_info_users" inst.pk %}">{{ inst.name }}</a></td>
         <td>{{ inst.create_time|translate_seahub_time }} </td>
         <td>
             <a class="op vh rm-link" data-target="{{ inst.name }}" data-url="{% url "sys_inst_remove" inst.pk %}" href="#">{% trans "Remove" %}</a>

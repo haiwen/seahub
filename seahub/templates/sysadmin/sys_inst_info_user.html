@@ -4,7 +4,8 @@
 {% block right_panel %}
 <div class="tabnav">
     <ul class="tabnav-tabs">
-        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_inst_info_user' inst.pk %}">{% trans "Members" %}</a></li>
+        <li class="tabnav-tab tabnav-tab-cur"><a href="{% url 'sys_inst_info_users' inst.pk %}">{% trans "Members" %}</a></li>
+        <li class="tabnav-tab"><a href="{% url 'sys_inst_info_admins' inst.pk %}">{% trans "Admins" %}</a></li>
     </ul>
 </div>
 
