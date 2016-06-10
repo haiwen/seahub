@@ -4410,7 +4410,7 @@ msgstr "E-mail ou senha incorreta"
 #: seahub/templates/registration/login.html:35
 #, python-format
 msgid "Remember me for %(remember_days)s days "
-msgstr "Lembre me por %(remember_days)s daias "
+msgstr "Lembre me por %(remember_days)s dias "
 
 #: seahub/templates/registration/login.html:44
 #: seahub/templates/sysadmin/sudo_mode.html:20
