@@ -1,3 +1,4 @@
+import stat
 import logging
 import json
 import posixpath
@@ -8,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from django.utils.translation import ugettext as _
+
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
@@ -16,6 +19,7 @@ from seahub.utils import string2list, get_fileserver_root
 from seahub.views import check_folder_permission
 from seahub.views.file import send_file_access_msg
 
+import seaserv
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
@@ -61,8 +65,22 @@ class DirentsDownloadLinkView(APIView):
 
         dirent_name_list = string2list(dirent_name_string)
         dirent_list = []
+        total_size = 0
         for dirent_name in dirent_name_list:
-            dirent_list.append(dirent_name.strip('/'))
+            dirent_name = dirent_name.strip('/')
+            dirent_list.append(dirent_name)
+
+            full_dirent_path = posixpath.join(parent_dir, dirent_name)
+            current_dirent = seafile_api.get_dirent_by_path(repo_id, full_dirent_path)
+            if stat.S_ISDIR(current_dirent.mode):
+                total_size += seafile_api.get_dir_size(repo.store_id,
+                    repo.version, current_dirent.obj_id)
+            else:
+                total_size += current_dirent.size
+
+        if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
+            error_msg = _('Total size exceeds limit.')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         fake_obj_id = {}
         fake_obj_id['file_list'] = dirent_list
