@@ -87,6 +87,37 @@ def useradmin(request):
     }, context_instance=RequestContext(request))
 
 @inst_admin_required
+def useradmin_search(request):
+    """Search users in the institution.
+    """
+    inst = request.user.institution
+
+    q = request.GET.get('q', '').lower()
+    if not q:
+        return HttpResponseRedirect(reverse('institutions:useradmin'))
+
+    profiles = Profile.objects.filter(institution=inst.name)
+    usernames = [x.user for x in profiles if q in x.user]
+    users = [User.objects.get(x) for x in usernames]
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.username for x in users])
+    for u in users:
+        if u.username == request.user.username:
+            u.is_self = True
+
+        _populate_user_quota_usage(u)
+
+        for e in last_logins:
+            if e.username == u.username:
+                u.last_login = e.last_login
+
+    return render_to_response('institutions/useradmin_search.html', {
+        'inst': inst,
+        'users': users,
+        'q': q,
+    }, context_instance=RequestContext(request))
+
+@inst_admin_required
 @inst_admin_can_manage_user
 def user_info(request, email):
     """Show user info, libraries and groups.
