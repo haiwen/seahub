@@ -1130,7 +1130,7 @@ textarea:-moz-placeholder {/* for FF */
 /**** op confirm popup ****/
 .op-confirm {
     position:absolute;
-    padding:0 15px 6px;
+    padding:12px 15px;
     background:#fff;
     border:1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0,0,0,.2);
