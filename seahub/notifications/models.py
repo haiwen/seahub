@@ -582,7 +582,8 @@ class UserNotification(models.Model):
             msg = _(u"%(user)s posted a new discussion in <a href='%(href)s'>%(group_name)s</a>.") % {
                 'href': reverse('group_discuss', args=[group.id]),
                 'user': escape(email2nickname(msg_from)),
-                'group_name': group.group_name}
+                'group_name': escape(group.group_name)
+            }
         return msg
 
     def format_group_message_detail(self):
@@ -628,7 +629,7 @@ class UserNotification(models.Model):
             'user_profile': reverse('user_profile', args=[username]),
             'username': username,
             'href': reverse('group_members', args=[group_id]),
-            'group_name': group.group_name,
+            'group_name': escape(group.group_name),
             'join_request_msg': escape(join_request_msg),
             }
         return msg
@@ -657,8 +658,7 @@ class UserNotification(models.Model):
             'user_profile': reverse('user_profile', args=[group_staff]),
             'group_staff': group_staff,
             'href': reverse('group_info', args=[group_id]),
-            'group_name': group.group_name,
-            }
+            'group_name': escape(group.group_name)}
         return msg
 
     def format_file_comment_msg(self):

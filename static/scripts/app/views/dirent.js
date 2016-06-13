@@ -69,7 +69,6 @@ define([
         events: {
             'click .select': 'select',
             'click .file-star': 'starFile',
-            'click .dir-link': 'visitDir',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
             'click .rename': 'rename',
@@ -143,20 +142,6 @@ define([
                 }
             });
 
-            return false;
-        },
-
-        visitDir: function () { // todo
-            // show 'loading'
-            this.$('.dirent-icon img').attr({
-                'src': app.config.mediaUrl + 'img/loading-icon.gif',
-                'alt':''
-            });
-            // empty all models
-            this.dirView.dir.reset();
-            // update url & dirents
-            var dir_url = this.$('.dir-link').attr("href");
-            app.router.navigate(dir_url, {trigger: true}); // offer an url fragment
             return false;
         },
 

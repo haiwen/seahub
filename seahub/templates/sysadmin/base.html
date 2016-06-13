@@ -12,14 +12,16 @@
         <h3 class="hd">{% trans "System Admin" %}</h3>
         <ul class="side-tabnav-tabs">
             <li class="tab">
-                <a href="{{ SITE_ROOT }}sysadmin/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
+                <a href="{{ SITE_ROOT }}sysadmin/#dashboard/"><span class="sf2-icon-wrench"></span>{% trans "Info" %}</a>
             </li>
             <li class="tab">
                 <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
             </li>
+            {% if constance_enabled %}
             <li class="tab {% block cur_settings %}{% endblock %}">
                 <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
             </li>
+            {% endif %}
             <li class="tab {% block cur_repo %}{% endblock %}">
                 <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
             </li>
@@ -67,6 +69,5 @@
     <div id="right-panel" class="col-md-9 col-md-offset-3">
         {% block right_panel %}{% endblock %}
     </div>
-
 </div>
 {% endblock %}

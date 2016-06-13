@@ -90,6 +90,7 @@ app["pageOptions"] = {
     csrfToken: "{{ csrf_token }}",
     email: "{{request.user.username}}",
     name: "{{request.user.username|email2nickname|escapejs}}",
+    contact_email: "{{request.user.username|email2contact_email|escapejs}}",
     language_code: "{{ LANGUAGE_CODE }}",
     events_enabled: {% if events_enabled %} true {% else %} false {% endif %},
     repo_password_min_length: {{ repo_password_min_length }},

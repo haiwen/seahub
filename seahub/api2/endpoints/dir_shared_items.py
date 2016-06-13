@@ -404,11 +404,6 @@ class DirSharedItemsEndpoint(APIView):
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
-            try:
-                User.objects.get(email=shared_to)
-            except User.DoesNotExist:
-                return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid user, should be registered')
-
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(
@@ -416,6 +411,7 @@ class DirSharedItemsEndpoint(APIView):
             else:
                 seaserv.remove_share(shared_repo.id, username, shared_to)
 
+            # if user not found, permission will be None
             permission = seafile_api.check_permission_by_path(repo.id, path,
                                                               shared_to)
             send_perm_audit_msg('delete-repo-perm', username, shared_to,

@@ -89,4 +89,5 @@ def base(request):
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         'search_repo_id': search_repo_id,
         'SITE_ROOT': SITE_ROOT,
+        'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         }

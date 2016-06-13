@@ -58,7 +58,7 @@
                                 {% avatar request.user 36 %}
                                 <div class="txt">
                                     {{ request.user.username|email2nickname }} <br />
-                                    {{ request.user.username}}
+                                    {{ request.user.username|email2contact_email}}
                                 </div>
                             </div>
                             <span class="loading-icon loading-tip"></span>

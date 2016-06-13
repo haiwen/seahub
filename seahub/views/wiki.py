@@ -37,6 +37,7 @@ from seahub.wiki import get_personal_wiki_page, get_personal_wiki_repo, \
 from seahub.wiki.forms import WikiCreateForm, WikiNewPageForm
 from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.utils import render_error
+from seahub.views import check_folder_permission
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -166,12 +167,17 @@ def personal_wiki_create(request):
 def personal_wiki_use_lib(request):
     if request.method != 'POST':
         raise Http404
+
     repo_id = request.POST.get('dst_repo', '')
     username = request.user.username
     next = reverse('personal_wiki', args=[])
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set wiki library.'))
+        return HttpResponseRedirect(next)
+
+    if check_folder_permission(request, repo_id, '/') != 'rw':
+        messages.error(request, _('Permission denied.'))
         return HttpResponseRedirect(next)
 
     PersonalWiki.objects.save_personal_wiki(username=username, repo_id=repo_id)

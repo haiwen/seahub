@@ -9,9 +9,11 @@
         <li class="tab <% if (cur_tab == 'devices') { %> tab-cur<% } %>">
             <a href="{{ SITE_ROOT }}sysadmin/#desktop-devices/"><span class="sf2-icon-monitor"></span>{% trans "Devices" %}</a>
         </li>
+        {% if constance_enabled %}
         <li class="tab">
             <a href="{% url "sys_settings" %}"><span class="sf2-icon-cog2"></span>{% trans "Settings" %}</a>
         </li>
+        {% endif %}
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/seafadmin/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
@@ -223,7 +225,7 @@
             {% avatar request.user 36 %}
             <div class="txt">
                 <%- app.pageOptions.name %><br />
-                <%- app.pageOptions.email %>
+                <%- app.pageOptions.contact_email %>
             </div>
         </div>
         <div class="loading-icon loading-tip"></div>

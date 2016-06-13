@@ -11,6 +11,7 @@ import csv, chardet, StringIO
 import time
 from constance import config
 
+from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, Http404, HttpResponseRedirect, HttpResponseNotAllowed
@@ -2181,6 +2182,8 @@ def sys_sudo_mode(request):
 def sys_settings(request):
     """List and change seahub settings in admin panel.
     """
+    if not dj_settings.ENABLE_SETTINGS_VIA_WEB:
+        raise Http404
 
     DIGIT_WEB_SETTINGS = (
         'DISABLE_SYNC_WITH_ANY_FOLDER', 'ENABLE_SIGNUP',
@@ -2336,7 +2339,7 @@ def sys_inst_remove(request, inst_id):
 @login_required
 @sys_staff_required
 def sys_inst_info_user(request, inst_id):
-    """List institution members.
+    """List institution members including admins.
     """
     try:
         inst = Institution.objects.get(pk=inst_id)
@@ -2375,7 +2378,7 @@ def sys_inst_info_user(request, inst_id):
             if last_login.username == u.email:
                 u.last_login = last_login.last_login
 
-    users_count = len(users)
+    users_count = Profile.objects.filter(institution=inst.name).count()
 
     return render_to_response('sysadmin/sys_inst_info_user.html', {
         'inst': inst,
@@ -2390,6 +2393,80 @@ def sys_inst_info_user(request, inst_id):
 
 @login_required
 @sys_staff_required
+def sys_inst_search_user(request, inst_id):
+    """Search institution members.
+    """
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    q = request.GET.get('q', '').lower()
+    if not q:
+        return HttpResponseRedirect(reverse('sys_inst_info_users', args=[inst_id]))
+
+    profiles = Profile.objects.filter(institution=inst.name)
+    usernames = [x.user for x in profiles if q in x.user]
+    users = [User.objects.get(x) for x in usernames]
+
+    inst_admins = [x.user for x in InstitutionAdmin.objects.filter(institution=inst)]
+    last_logins = UserLastLogin.objects.filter(username__in=[x for x in users])
+    for u in users:
+        _populate_user_quota_usage(u)
+
+        if u.username in inst_admins:
+            u.inst_admin = True
+        else:
+            u.inst_admin = False
+
+        # populate user last login time
+        u.last_login = None
+        for last_login in last_logins:
+            if last_login.username == u.email:
+                u.last_login = last_login.last_login
+
+    users_count = Profile.objects.filter(institution=inst.name).count()
+
+    return render_to_response('sysadmin/sys_inst_search_user.html', {
+        'q': q,
+        'inst': inst,
+        'users': users,
+        'users_count': users_count,
+    }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_inst_info_admins(request, inst_id):
+    """List institution admins.
+    """
+    try:
+        inst = Institution.objects.get(pk=inst_id)
+    except Institution.DoesNotExist:
+        raise Http404
+
+    inst_admins = [x.user for x in InstitutionAdmin.objects.filter(institution=inst)]
+    admins = [User.objects.get(x) for x in inst_admins]
+
+    last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in admins])
+    for u in admins:
+        _populate_user_quota_usage(u)
+
+        # populate user last login time
+        u.last_login = None
+        for last_login in last_logins:
+            if last_login.username == u.email:
+                u.last_login = last_login.last_login
+
+    users_count = Profile.objects.filter(institution=inst.name).count()
+
+    return render_to_response('sysadmin/sys_inst_info_admins.html', {
+        'inst': inst,
+        'admins': admins,
+        'users_count': users_count,
+    }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
 @require_POST
 def sys_inst_toggle_admin(request, inst_id, email):
     """Set or revoke an institution admin.
@@ -2399,13 +2476,19 @@ def sys_inst_toggle_admin(request, inst_id, email):
     except Institution.DoesNotExist:
         raise Http404
 
+    next = request.META.get('HTTP_REFERER', None)
+    if not next:
+        next = reverse('sys_inst_info_users', args=[inst.pk])
+
     try:
         u = User.objects.get(email=email)
     except User.DoesNotExist:
         assert False, 'TODO'
 
     if u.is_staff:
-        assert False
+        messages.error(
+            request, 'Can not assign institutional administration roles to global administrators')
+        return HttpResponseRedirect(next)
 
     res = InstitutionAdmin.objects.filter(institution=inst, user=email)
     if len(res) == 0:
@@ -2417,4 +2500,4 @@ def sys_inst_toggle_admin(request, inst_id, email):
         assert False
 
     messages.success(request, _('Success'))
-    return HttpResponseRedirect(reverse('sys_inst_info_user', args=[inst.pk]))
+    return HttpResponseRedirect(next)

@@ -54,7 +54,7 @@ from seahub.utils import render_error, render_permission_error, string2list, \
     calc_file_path_hash, is_valid_username, send_html_email, is_org_context
 from seahub.utils.file_types import IMAGE
 from seahub.utils.paginator import Paginator
-from seahub.views import is_registered_user
+from seahub.views import is_registered_user, check_folder_permission
 from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI, \
     enable_mod_for_group, disable_mod_for_group, get_available_mods_by_group, \
     get_wiki_enabled_group_list
@@ -531,6 +531,10 @@ def group_wiki_use_lib(request, group):
     repo = seafile_api.get_repo(repo_id)
     if repo is None:
         messages.error(request, _('Failed to set wiki library.'))
+        return HttpResponseRedirect(next)
+
+    if check_folder_permission(request, repo_id, '/') != 'rw':
+        messages.error(request, _('Permission denied.'))
         return HttpResponseRedirect(next)
 
     GroupWiki.objects.save_group_wiki(group_id=group.id, repo_id=repo_id)
