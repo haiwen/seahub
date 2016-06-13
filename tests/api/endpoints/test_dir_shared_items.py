@@ -221,7 +221,7 @@ class DirSharedItemsTest(BaseTestCase):
             self.folder,
             unregistered_user
         ))
-        self.assertEqual(400, resp.status_code)
+        self.assertEqual(200, resp.status_code)
 
     def test_can_unshare_repo_to_group(self):
         self._add_shared_items()
