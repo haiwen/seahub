@@ -1610,13 +1610,16 @@ button.sf-dropdown-toggle:focus {
     color: #1f0600;
     padding:1px 25px 1px 10px;
     background: #fddaa4;
-    position:relative;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
 }
 #info-bar .close {
     position:absolute;
     right:5px;
     top:5px;
-    color:#d6ba8f;
     font-size:16px;
     margin:0;
 }
