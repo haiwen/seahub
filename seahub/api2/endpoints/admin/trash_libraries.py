@@ -9,7 +9,7 @@ from rest_framework import status
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
-from seahub.utils import is_valid_username 
+from seahub.utils import is_valid_username
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seahub.api2.authentication import TokenAuthentication
@@ -26,15 +26,20 @@ class AdminTrashLibraries(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
-        """
-        List deleted repos (by owner)
+        """ List deleted repos (by owner)
+
+        Permission checking:
+        1. only admin can perform this action.
         """
         search_owner = request.GET.get('owner', '')
-        if search_owner and is_valid_username(search_owner):
+        if search_owner:
+            if not is_valid_username(search_owner):
+                error_msg = 'owner invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
             repos = seafile_api.get_trash_repos_by_owner(search_owner)
         else:
             repos = seafile_api.get_trash_repo_list(-1, -1)
-            search_owner = ''
 
         return_repos = []
         for repo in repos:
@@ -50,12 +55,19 @@ class AdminTrashLibraries(APIView):
 
     def delete(self, request, format=None):
         """ clean all deleted libraries(by owner)
+
+        Permission checking:
+        1. only admin can perform this action.
         """
 
-        search_owner = request.data.get('owner', '')
+        owner = request.data.get('owner', '')
         try:
-            if search_owner and is_valid_username(search_owner):
-                seafile_api.empty_repo_trash_by_owner(search_owner)
+            if owner:
+                if not is_valid_username(owner):
+                    error_msg = 'owner invalid.'
+                    return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+                seafile_api.empty_repo_trash_by_owner(owner)
             else:
                 seafile_api.empty_repo_trash()
         except SearpcError as e:
@@ -73,6 +85,9 @@ class AdminTrashLibrary(APIView):
 
     def put(self, request, repo_id, format=None):
         """ restore a deleted library
+
+        Permission checking:
+        1. only admin can perform this action.
         """
 
         try:
@@ -86,6 +101,9 @@ class AdminTrashLibrary(APIView):
 
     def delete(self, request, repo_id, format=None):
         """ permanently delete a deleted library
+
+        Permission checking:
+        1. only admin can perform this action.
         """
 
         try:

@@ -39,15 +39,17 @@ class AdminLibraries(APIView):
     permission_classes = (IsAdminUser,)
 
     def get(self, request, format=None):
-        """
-        List 'all' libraries (by name/owner/page)
+        """ List 'all' libraries (by name/owner/page)
+
+        Permission checking:
+        1. only admin can perform this action.
         """
 
-        ## search libraries (by name/owner)
+        # search libraries (by name/owner)
         repo_name = request.GET.get('name', '')
         owner = request.GET.get('owner', '')
         repos = []
-        if repo_name and owner :
+        if repo_name and owner:
             # search by name and owner
             owned_repos = seafile_api.get_owned_repo_list(owner)
             for repo in owned_repos:
@@ -57,8 +59,7 @@ class AdminLibraries(APIView):
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
 
-            return Response({
-                "name": repo_name, "owner": owner, "repos": repos})
+            return Response({"name": repo_name, "owner": owner, "repos": repos})
 
         elif repo_name:
             # search by name(keyword in name)
@@ -70,8 +71,7 @@ class AdminLibraries(APIView):
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
 
-            return Response({
-                "name": repo_name, "owner": '', "repos": repos})
+            return Response({"name": repo_name, "owner": '', "repos": repos})
 
         elif owner:
             # search by owner
@@ -80,11 +80,9 @@ class AdminLibraries(APIView):
                 repo_info = get_repo_info(repo)
                 repos.append(repo_info)
 
-            return Response({
-                "name": '', "owner": owner, "repos": repos})
+            return Response({"name": '', "owner": owner, "repos": repos})
 
-
-        ##  get libraries by page
+        # get libraries by page
         try:
             current_page = int(request.GET.get('page', '1'))
             per_page = int(request.GET.get('per_page', '100'))
@@ -117,6 +115,7 @@ class AdminLibraries(APIView):
             'has_next_page': has_next_page,
             'current_page': current_page
         }
+
         return Response({"page_info": page_info, "repos": return_results})
 
 class AdminLibrary(APIView):
@@ -126,6 +125,11 @@ class AdminLibrary(APIView):
     permission_classes = (IsAdminUser,)
 
     def delete(self, request, repo_id, format=None):
+        """ delete a library
+
+        Permission checking:
+        1. only admin can perform this action.
+        """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             return Response({'success': True})
@@ -145,6 +149,9 @@ class AdminLibrary(APIView):
 
     def put(self, request, repo_id, format=None):
         """ transfer a library
+
+        Permission checking:
+        1. only admin can perform this action.
         """
         repo = seafile_api.get_repo(repo_id)
         if not repo:
