@@ -288,10 +288,10 @@
             <tr>
                 <th width="4%"><!--icon--></th>
                 <th width="34%">{% trans "Name" %}</th>
-                <th width="10%"><!--Operations--></th>
                 <th width="13%">{% trans "Files / Size" %}</th>
                 <th width="19%">ID</th>
                 <th width="20%">{% trans "Owner" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
@@ -320,10 +320,10 @@
             <tr>
                 <th width="4%"><!--icon--></th>
                 <th width="34%">{% trans "Name" %}</th>
-                <th width="10%"><!--Operations--></th>
                 <th width="13%">{% trans "Files / Size" %}</th>
                 <th width="19%">ID</th>
                 <th width="20%">{% trans "Owner" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
@@ -348,10 +348,6 @@
     <% } else { %>
     <td>--</td>
     <% } %>
-    <td>
-        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
-        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
-    </td>
     <td><%= file_count %> / <%= size_formatted %></td>
     <td style="font-size:11px;"><%= id %></td>
     <td>
@@ -360,6 +356,10 @@
         <% } else { %>
         --
         <% } %>
+    </td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
     </td>
 </script>
 
@@ -392,9 +392,9 @@
             <tr>
                 <th width="5%"><!--icon--></th>
                 <th width="40%">{% trans "Name" %}</th>
-                <th width="10%"><!--Operations--></th>
                 <th width="25%">{% trans "Owner" %}</th>
                 <th width="20%">{% trans "Deleted Time" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
@@ -410,12 +410,12 @@
         <img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" />
     </td>
     <td><%- name %></td>
+    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-reply sf2-x repo-restore-btn op-icon vh" title="{% trans "Restore" %}" aria-label="{% trans "Restore" %}"></a>
     </td>
-    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
-    <td><time title="<%= time %>"><%= time_from_now %></time></td>
 </script>
 
 <script type="text/template" id="dir-view-tmpl">

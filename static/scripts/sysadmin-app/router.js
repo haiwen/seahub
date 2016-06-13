@@ -128,7 +128,7 @@ define([
             var owner = url_match ? url_match[2] : '';
 
             this.switchCurrentView(this.searchReposView);
-            this.sideNavView.setCurTab('libraries', {'option': 'all'});
+            this.sideNavView.setCurTab('libraries', {'option': 'search'});
             this.searchReposView.show({
                 'name': decodeURIComponent(repo_name),
                 'owner': decodeURIComponent(owner)

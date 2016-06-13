@@ -12,7 +12,6 @@ define([
 
         id: 'search-libraries',
 
-        tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
         template: _.template($("#search-libraries-tmpl").html()),
 
         initialize: function() {
@@ -23,8 +22,6 @@ define([
         },
 
         render: function() {
-            var $tabnav = $(this.tabNavTemplate({'cur_tab': 'all'}));
-            this.$el.append($tabnav);
             this.$el.append(this.template());
 
             this.$form = this.$('#search-repo-form');

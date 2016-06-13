@@ -32,11 +32,9 @@ class AdminTrashLibraries(APIView):
         search_owner = request.GET.get('owner', '')
         if search_owner and is_valid_username(search_owner):
             repos = seafile_api.get_trash_repos_by_owner(search_owner)
-            print 'by owner'
         else:
             repos = seafile_api.get_trash_repo_list(-1, -1)
             search_owner = ''
-            print 'all'
 
         return_repos = []
         for repo in repos:
