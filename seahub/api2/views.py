@@ -190,6 +190,7 @@ class ObtainAuthToken(APIView):
         if serializer.is_valid():
             key = serializer.validated_data
             return Response({'token': key})
+        headers = {}
         if serializer.two_factor_auth_failed:
             # Add a special response header so the client knows to ask the user
             # for the 2fa token.
