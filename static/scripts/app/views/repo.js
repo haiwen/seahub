@@ -19,7 +19,6 @@ define([
         tagName: 'tr',
 
         template: _.template($('#repo-tmpl').html()),
-        repoDelConfirmTemplate: _.template($('#repo-del-confirm-template').html()),
         renameTemplate: _.template($("#repo-rename-form-template").html()),
         transferTemplate: _.template($('#repo-transfer-form-tmpl').html()),
 
@@ -56,56 +55,31 @@ define([
         },
 
         del: function() {
-            var del_icon = this.$('.repo-delete-btn');
-            var op_container = this.$('.op-container').css({'position': 'relative'});
-
-            var confirm_msg = gettext("Really want to delete {lib_name}?")
-                .replace('{lib_name}', '<span class="op-target">' + Common.HTMLescape(this.model.get('name')) + '</span>');
-            var confirm_popup = $(this.repoDelConfirmTemplate({
-                content: confirm_msg
-            }));
-            del_icon.after(confirm_popup);
-            confirm_popup.css({
-                'left': del_icon.position().left,
-                'top': del_icon.position().top + del_icon.height() + 2,
-                'width': 180
-            });
-
-            app.ui.freezeItemHightlight = true;
-
             var _this = this;
-            $('.no', confirm_popup).click(function() {
-                confirm_popup.addClass('hide').remove(); // `addClass('hide')`: to rm cursor
-                app.ui.freezeItemHightlight = false;
-                _this.rmHighlight();
-            });
-            $('.yes', confirm_popup).click(function() {
+            var repo_name = this.model.get('name');
+            var popupTitle = gettext("Delete Library");
+            var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + Common.HTMLescape(repo_name) + '</span>');
+            var yesCallback = function() { 
                 $.ajax({
                     url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}),
                     type: 'POST',
-                    dataType: 'json',
+                    cache: false,
                     beforeSend: Common.prepareCSRFToken,
-                    success: function(data) {
-                        app.ui.freezeItemHightlight = false;
-                        _this.remove();
-                        Common.feedback(gettext("Delete succeeded."), 'success');
+                    dataType: 'json',
+                    success: function() {
+                        _this.$el.remove();
+                        Common.feedback(gettext("Successfully deleted."), 'success');
                     },
-                    error: function(xhr) {
-                        app.ui.freezeItemHightlight = false;
-                        confirm_popup.addClass('hide').remove();
-                        _this.rmHighlight();
-
-                        var err;
-                        if (xhr.responseText) {
-                            err = $.parseJSON(xhr.responseText).error;
-                        } else {
-                            err = gettext("Failed. Please check the network.");
-                        }
-                        Common.feedback(err, 'error');
+                    error: function(xhr, textStatus, errorThrown) {
+                        Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
+                    },
+                    complete: function() {
+                        $.modal.close();
                     }
                 });
-            });
-
+            };
+            Common.showConfirm(popupTitle, popupContent, yesCallback);
+            this.togglePopup();
             return false;
         },
 
