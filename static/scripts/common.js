@@ -166,6 +166,12 @@ define([
                 case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
                 case 'admin-devices': return siteRoot + 'api/v2.1/admin/devices/';
                 case 'admin-device-errors': return siteRoot + 'api/v2.1/admin/device-errors/';
+                case 'admin-libraries': return siteRoot + 'api/v2.1/admin/libraries/';
+                case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
+                case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
+                case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
+                case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
+                case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
             }
         },
 

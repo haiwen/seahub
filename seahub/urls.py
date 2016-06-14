@@ -32,6 +32,10 @@ from seahub.api2.endpoints.admin.perm_audit import PermAudit
 from seahub.api2.endpoints.admin.sysinfo import SysInfo
 from seahub.api2.endpoints.admin.devices import AdminDevices
 from seahub.api2.endpoints.admin.device_errors import AdminDeviceErrors
+from seahub.api2.endpoints.admin.libraries import AdminLibraries, AdminLibrary
+from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, AdminLibraryDirent
+from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary
+from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -196,6 +200,14 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/devices/$', AdminDevices.as_view(), name='api-v2.1-admin-devices'),
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
 
+    url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirent/$', AdminLibraryDirent.as_view(), name='api-v2.1-admin-library-dirent'),
+    url(r'^api/v2.1/admin/system-library/$', AdminSystemLibrary.as_view(), name='api-v2.1-admin-system-library'),
+    url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
+    url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
+
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
@@ -213,15 +225,11 @@ urlpatterns = patterns(
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
     url(r'^sys/info/$', sys_info, name='sys_info'),
     url(r'^sys/settings/$', sys_settings, name='sys_settings'),
-    url(r'^sys/seafadmin/$', sys_repo_admin, name='sys_repo_admin'),
-    url(r'^sys/seafadmin/repo/(?P<repo_id>[-0-9a-f]{36})/$', sys_admin_repo, name='sys_admin_repo'),
-    url(r'^sys/seafadmin/repo/(?P<repo_id>[-0-9a-f]{36})/download-file/$', sys_admin_repo_download_file, name='sys_admin_repo_download_file'),
-    url(r'^sys/seafadmin/system/$', sys_list_system, name='sys_list_system'),
-    url(r'^sys/seafadmin/repo-trash/$', sys_repo_trash, name='sys_repo_trash'),
-    url(r'^sys/seafadmin/repo-trash/clear/$', sys_repo_trash_clear, name="sys_repo_trash_clear"),
-    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/remove/$', sys_repo_trash_remove, name="sys_repo_trash_remove"),
-    url(r'^sys/seafadmin/repo-trash/(?P<repo_id>[-0-9a-f]{36})/restore/$', sys_repo_trash_restore, name="sys_repo_trash_restore"),
-    url(r'^sys/seafadmin/search/$', sys_repo_search, name='sys_repo_search'),
+    url(r'^sysadmin/#all-libs/$', fake_view, name='sys_repo_admin'),
+    url(r'^sysadmin/#libs/(?P<repo_id>[-0-9a-f]{36})/$', fake_view, name='sys_admin_repo'),
+    url(r'^sysadmin/#system-lib/$', fake_view, name='sys_list_system'),
+    url(r'^sysadmin/#trash-libs/$', fake_view, name='sys_repo_trash'),
+    url(r'^sysadmin/#search-libs/$', fake_view, name='sys_repo_search'),
     url(r'^sys/seafadmin/transfer/$', sys_repo_transfer, name='sys_repo_transfer'),
     url(r'^sys/seafadmin/delete/(?P<repo_id>[-0-9a-f]{36})/$', sys_repo_delete, name='sys_repo_delete'),
     url(r'^sys/useradmin/$', sys_user_admin, name='sys_useradmin'),

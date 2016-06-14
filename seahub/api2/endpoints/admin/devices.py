@@ -57,7 +57,11 @@ class AdminDevices(APIView):
             result['platform'] = device.platform
             return_results.append(result)
 
-        return Response(({'has_next_page': has_next_page}, return_results))
+        page_info = {
+            'has_next_page': has_next_page,
+            'current_page': current_page
+        }
+        return Response((page_info, return_results))
 
     def delete(self, request, format=None):
 

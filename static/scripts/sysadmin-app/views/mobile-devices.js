@@ -6,19 +6,20 @@ define([
     'moment',
     'sysadmin-app/views/device',
     'sysadmin-app/collection/devices'
-], function($, _, Backbone, Common, Moment, Device, DevicesCollection) {
+], function($, _, Backbone, Common, Moment, Device, DeviceCollection) {
     'use strict';
 
     var DevicesView = Backbone.View.extend({
 
         id: 'admin-devices',
 
-        template: _.template($("#admin-devices-tmpl").html()),
+        template: _.template($("#devices-tmpl").html()),
 
         initialize: function() {
-            this.deviceCollection = new DevicesCollection();
+            this.deviceCollection = new DeviceCollection();
             this.listenTo(this.deviceCollection, 'add', this.addOne);
             this.listenTo(this.deviceCollection, 'reset', this.reset);
+            this.render();
         },
 
         render: function() {
@@ -47,10 +48,10 @@ define([
 
         getNextPage: function() {
             this.initPage();
+            var current_page = this.deviceCollection.state.current_page;
             if (this.deviceCollection.state.hasNextPage) {
-                var _this = this;
-                this.deviceCollection.getNextPage({
-                    reset:true,
+                this.deviceCollection.getPage(current_page + 1, {
+                    reset: true,
                     data: {'platform': 'mobile'},
                 });
             }
@@ -60,10 +61,10 @@ define([
 
         getPreviousPage: function() {
             this.initPage();
-            if (this.deviceCollection.state.currentPage > 1) {
-                var _this = this;
-                this.deviceCollection.getPreviousPage({
-                    reset:true,
+            var current_page = this.deviceCollection.state.current_page;
+            if (current_page > 1) {
+                this.deviceCollection.getPage(current_page - 1, {
+                    reset: true,
                     data: {'platform': 'mobile'},
                 });
             }
@@ -72,19 +73,22 @@ define([
 
         hide: function() {
             this.$el.detach();
+            this.attached = false;
         },
 
         show: function(option) {
             this.option = option;
-            this.render();
-            $("#right-panel").html(this.$el);
+            if (!this.attached) {
+                this.attached = true;
+                $("#right-panel").html(this.$el);
+            }
             this.showMobileDevices();
         },
 
         showMobileDevices: function() {
             this.initPage();
             var _this = this,
-                current_page = this.option.current_page || this.deviceCollection.state.currentPage;
+                current_page = this.option.current_page || 1;
 
             this.deviceCollection.fetch({
                 data: {'platform': 'mobile', 'page': current_page},
@@ -108,18 +112,18 @@ define([
 
         reset: function() {
             var length = this.deviceCollection.length,
-                current_page = this.option.current_page || this.deviceCollection.state.currentPage;
+                current_page = this.deviceCollection.state.current_page;
 
             this.$loadingTip.hide();
 
             if (length > 0) {
                 this.deviceCollection.each(this.addOne, this);
                 this.$table.show();
+                this.renderPaginator();
             } else {
                 this.$emptyTip.show();
             }
 
-            this.renderPaginator();
             app.router.navigate('mobile-devices/?page=' + current_page);
         },
 
@@ -135,8 +139,8 @@ define([
                 this.$jsNext.hide();
             }
 
-            var current_page = this.option.current_page || this.deviceCollection.state.currentPage;
-            if (current_page > 1 && this.deviceCollection.length > 0) {
+            var current_page = this.deviceCollection.state.current_page;
+            if (current_page > 1) {
                 this.$jsPrevious.show();
             } else {
                 this.$jsPrevious.hide();

@@ -3,27 +3,30 @@ define([
     'underscore',
     'backbone',
     'common',
-    'moment',
-    'sysadmin-app/views/device',
-    'sysadmin-app/collection/devices'
-], function($, _, Backbone, Common, Moment, Device, DeviceCollection) {
+    'sysadmin-app/views/repo',
+    'sysadmin-app/collection/repos'
+], function($, _, Backbone, Common, RepoView, RepoCollection) {
     'use strict';
 
-    var DevicesView = Backbone.View.extend({
+    var ReposView = Backbone.View.extend({
 
-        id: 'admin-devices',
+        id: 'libraries',
 
-        template: _.template($("#devices-tmpl").html()),
+        tabNavTemplate: _.template($("#libraries-tabnav-tmpl").html()),
+        template: _.template($("#libraries-tmpl").html()),
 
         initialize: function() {
-            this.deviceCollection = new DeviceCollection();
-            this.listenTo(this.deviceCollection, 'add', this.addOne);
-            this.listenTo(this.deviceCollection, 'reset', this.reset);
+            this.repoCollection = new RepoCollection();
+            this.listenTo(this.repoCollection, 'add', this.addOne);
+            this.listenTo(this.repoCollection, 'reset', this.reset);
             this.render();
         },
 
         render: function() {
-            this.$el.html(this.template({'cur_tab': 'desktop', 'is_pro': app.pageOptions.is_pro}));
+            var $tabnav = $(this.tabNavTemplate({'cur_tab': 'all'}));
+            this.$el.append($tabnav);
+            this.$el.append(this.template());
+
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
@@ -48,23 +51,22 @@ define([
 
         getNextPage: function() {
             this.initPage();
-            var current_page = this.deviceCollection.state.current_page;
-            if (this.deviceCollection.state.hasNextPage) {
-                this.deviceCollection.getPage(current_page + 1, {
-                    reset: true,
-                    data: {'platform': 'desktop'},
+            var current_page = this.repoCollection.state.current_page;
+            if (this.repoCollection.state.has_next_page) {
+                this.repoCollection.getPage(current_page + 1, {
+                    reset: true
                 });
             }
+
             return false;
         },
 
         getPreviousPage: function() {
             this.initPage();
-            var current_page = this.deviceCollection.state.current_page;
+            var current_page = this.repoCollection.state.current_page;
             if (current_page > 1) {
-                this.deviceCollection.getPage(current_page - 1, {
-                    reset: true,
-                    data: {'platform': 'desktop'},
+                this.repoCollection.getPage(current_page - 1, {
+                    reset: true
                 });
             }
             return false;
@@ -81,19 +83,17 @@ define([
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showDesktopDevices();
+            this.getContent();
         },
 
-        showDesktopDevices: function() {
+        getContent: function() {
             this.initPage();
-            var _this = this,
-                current_page = this.option.current_page || 1;
-
-            this.deviceCollection.fetch({
-                data: {'platform': 'desktop', 'page': current_page},
-                cache: false, // for IE
+            var _this = this;
+            this.repoCollection.fetch({
+                data: {'page': this.option.page},
+                cache: false,
                 reset: true,
-                error: function (collection, response, opts) {
+                error: function(collection, response, opts) {
                     var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
@@ -105,48 +105,49 @@ define([
                         err_msg = gettext("Failed. Please check the network.");
                     }
                     Common.feedback(err_msg, 'error');
+                },
+                complete:function() {
+                    _this.$loadingTip.hide();
                 }
             });
         },
 
         reset: function() {
-            var length = this.deviceCollection.length,
-                current_page = this.deviceCollection.state.current_page;
+            // update the url
+            var current_page = this.repoCollection.state.current_page;
+            app.router.navigate('all-libs/?page=' + current_page);
 
             this.$loadingTip.hide();
-
-            if (length > 0) {
-                this.deviceCollection.each(this.addOne, this);
+            if (this.repoCollection.length > 0) {
+                this.repoCollection.each(this.addOne, this);
                 this.$table.show();
                 this.renderPaginator();
             } else {
                 this.$emptyTip.show();
             }
-
-            app.router.navigate('desktop-devices/?page=' + current_page);
-        },
-
-        addOne: function(device) {
-            var view = new Device({model: device});
-            this.$tableBody.append(view.render().el);
         },
 
         renderPaginator: function() {
-            if (this.deviceCollection.state.hasNextPage) {
+            if (this.repoCollection.state.has_next_page) {
                 this.$jsNext.show();
             } else {
                 this.$jsNext.hide();
             }
 
-            var current_page = this.deviceCollection.state.current_page;
+            var current_page = this.repoCollection.state.current_page;
             if (current_page > 1) {
                 this.$jsPrevious.show();
             } else {
                 this.$jsPrevious.hide();
             }
-        }
+        },
 
+        addOne: function(library) {
+            var view = new RepoView({model: library});
+            this.$tableBody.append(view.render().el);
+        }
     });
 
-    return DevicesView;
+    return ReposView;
+
 });

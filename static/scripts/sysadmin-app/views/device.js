@@ -11,7 +11,7 @@ define([
     var DeviceView = HLItemView.extend({
         tagName: 'tr',
 
-        template: _.template($('#admin-device-item-tmpl').html()),
+        template: _.template($('#device-item-tmpl').html()),
 
         events: {
             'click .unlink-device': 'unlinkDevice'

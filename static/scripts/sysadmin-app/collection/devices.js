@@ -1,17 +1,16 @@
 define([
     'underscore',
-    'backbone',
     'backbone.paginator',
     'common',
     'sysadmin-app/models/device'
-], function(_, Backbone, BackbonePaginator, Common, Device) {
+], function(_, BackbonePaginator, Common, DeviceModel) {
     'use strict';
 
     var DeviceCollection = Backbone.PageableCollection.extend({
-        model: Device,
-        state: {pageSize: 50,},
+        model: DeviceModel,
+        state: {pageSize: 50},
         parseState: function(data) {
-            return {hasNextPage: data[0].has_next_page};
+            return {hasNextPage: data[0].has_next_page, current_page: data[0].current_page};
         },
         url: function () {
             return Common.getUrl({name: 'admin-devices'});

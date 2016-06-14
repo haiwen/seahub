@@ -2350,6 +2350,7 @@ button.sf-dropdown-toggle:focus {
 #folder-perm-popup .op-target {
     max-width:540px;
 }
+#confirm-popup .op-target,
 #repo-transfer-form .op-target {
     max-width:200px;
 }
@@ -2358,7 +2359,7 @@ button.sf-dropdown-toggle:focus {
     margin-top:30px;
 }
 .user-list .user {
-    display:inline-block; /*to handle different height of items*/
+    display:inline-block; /* to handle different height of items */
     vertical-align:top;
     width:330px;
     margin:0 17px 30px 0;
