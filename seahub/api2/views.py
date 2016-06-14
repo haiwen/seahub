@@ -71,7 +71,8 @@ from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
 from seahub.utils.file_size import get_file_size_unit
-from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
+from seahub.utils.timeutils import utc_to_local, \
+    datetime_to_isoformat_timestr, timestamp_to_isoformat_timestr
 from seahub.views import is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, \
     list_inner_pub_repos, get_virtual_repos_by_owner, \
@@ -2021,15 +2022,13 @@ class FileView(APIView):
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to create file.')
 
-            parent_dir_utf8 = parent_dir.encode('utf-8')
             new_file_name = os.path.basename(path)
-            new_file_name_utf8 = check_filename_with_rename_utf8(repo_id,
-                                                                 parent_dir,
-                                                                 new_file_name)
+            new_file_name = check_filename_with_rename(repo_id,
+                    parent_dir, new_file_name)
 
             try:
-                seafile_api.post_empty_file(repo_id, parent_dir,
-                                            new_file_name_utf8, username)
+                seafile_api.post_empty_file(repo_id,
+                        parent_dir, new_file_name, username)
             except SearpcError, e:
                 return api_error(HTTP_520_OPERATION_FAILED,
                                  'Failed to create file.')
@@ -2037,10 +2036,21 @@ class FileView(APIView):
             if request.GET.get('reloaddir', '').lower() == 'true':
                 return reloaddir(request, repo, parent_dir)
             else:
-                resp = Response('success', status=status.HTTP_201_CREATED)
+                new_dirent_path = posixpath.join(parent_dir, new_file_name)
+                new_dirent = seafile_api.get_dirent_by_path(repo_id,
+                        new_dirent_path)
+                new_dirent_info = {
+                    'obj_id': new_dirent.obj_id,
+                    'obj_name': new_dirent.obj_name,
+                    'size': new_dirent.size,
+                    'mtime': timestamp_to_isoformat_timestr(new_dirent.mtime),
+                    'parent_dir': parent_dir,
+                    'type': 'file',
+                }
+                resp = Response(new_dirent_info, status=status.HTTP_201_CREATED)
                 uri = reverse('FileView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
-                    quote(new_file_name_utf8)
+                resp['Location'] = uri + '?p=' + quote(parent_dir) + \
+                        quote(new_file_name)
                 return resp
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
@@ -2456,7 +2466,6 @@ class DirView(APIView):
         username = request.user.username
         operation = request.POST.get('operation', '')
         parent_dir = os.path.dirname(path)
-        parent_dir_utf8 = parent_dir.encode('utf-8')
 
         if operation.lower() == 'mkdir':
             parent_dir = os.path.dirname(path)
@@ -2471,12 +2480,12 @@ class DirView(APIView):
                                      'Parent dir does not exist')
 
                 new_dir_name = os.path.basename(path)
-                new_dir_name_utf8 = check_filename_with_rename_utf8(repo_id,
-                                                                    parent_dir,
-                                                                    new_dir_name)
+                new_dir_name = check_filename_with_rename(repo_id,
+                        parent_dir, new_dir_name)
+
                 try:
                     seafile_api.post_dir(repo_id, parent_dir,
-                                         new_dir_name_utf8, username)
+                                         new_dir_name, username)
                 except SearpcError as e:
                     logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
@@ -2492,15 +2501,26 @@ class DirView(APIView):
                     logger.error(e)
                     return api_error(HTTP_520_OPERATION_FAILED,
                                      'Failed to make directory.')
-                new_dir_name_utf8 = os.path.basename(path).encode('utf-8')
+
+                new_dir_name = os.path.basename(path)
 
             if request.GET.get('reloaddir', '').lower() == 'true':
                 resp = reloaddir(request, repo, parent_dir)
             else:
-                resp = Response('success', status=status.HTTP_201_CREATED)
+                new_dirent_path = posixpath.join(parent_dir, new_dir_name)
+                new_dirent = seafile_api.get_dirent_by_path(repo_id,
+                        new_dirent_path)
+                new_dirent_info = {
+                    'obj_id': new_dirent.obj_id,
+                    'obj_name': new_dirent.obj_name,
+                    'mtime': timestamp_to_isoformat_timestr(new_dirent.mtime),
+                    'parent_dir': parent_dir,
+                    'type': 'dir',
+                }
+                resp = Response(new_dirent_info, status=status.HTTP_201_CREATED)
                 uri = reverse('DirView', args=[repo_id], request=request)
-                resp['Location'] = uri + '?p=' + quote(parent_dir_utf8) + \
-                    quote(new_dir_name_utf8)
+                resp['Location'] = uri + '?p=' + quote(parent_dir) + \
+                    quote(new_dir_name)
             return resp
         elif operation.lower() == 'rename':
             if check_folder_permission(request, repo.id, path) != 'rw':
