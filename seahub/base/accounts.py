@@ -1,4 +1,6 @@
 # encoding: utf-8
+import re
+
 from django import forms
 from django.core.mail import send_mail
 from django.utils import translation
@@ -530,9 +532,15 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_("Password (again)"))
 
+    @classmethod
+    def allow_register(self, email):
+        prog = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
+                          re.IGNORECASE)
+        return False if prog.match(email) is None else True
+
     def clean_email(self):
         email = self.cleaned_data['email']
-        if not is_valid_username(email):
+        if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))
 
         emailuser = ccnet_threaded_rpc.get_emailuser(email)
