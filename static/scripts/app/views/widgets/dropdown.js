@@ -58,16 +58,20 @@ define([
 
         hide: function() {
             app.ui.currentDropdown = null;
-            this.$('.sf-dropdown-menu').addClass('hide');
+            this.$('.sf-dropdown-menu').addClass('hide').removeAttr('style'); // `removeAttr('style')`: clear position info
         },
 
         show: function() {
+            var $toggle = this.$('.sf-dropdown-toggle');
             var $menu = this.$('.sf-dropdown-menu');
             app.ui.currentDropdown = this;
             if (this.options.right) {
                 $menu.css('right', this.options.right);
             } else {
                 $menu.css('left', this.options.left);
+            }
+            if ($toggle.offset().top + $toggle.outerHeight(true) + $menu.outerHeight(true) > $(window).scrollTop() + $(window).height()) {
+                $menu.css({'bottom': $toggle.outerHeight(true) + 4});
             }
             this.$('.sf-dropdown-menu').removeClass('hide');
         },
