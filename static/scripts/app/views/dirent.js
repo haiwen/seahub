@@ -125,11 +125,11 @@ define([
             var filePath = Common.pathJoin([dir.path, this.model.get('obj_name')]);
             if (starred) {
                 $.ajax({
-                    url: Common.getUrl({ 'name':'starred_files' })
+                    url: Common.getUrl({'name':'starred_files'})
                         + '?repo_id=' + dir.repo_id + '&p=' + encodeURIComponent(filePath),
-                    dataType: 'json',
-                    cache: false,
                     type: 'DELETE',
+                    cache: false,
+                    dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function() {
                         _this.model.set({'starred':false});
@@ -140,14 +140,14 @@ define([
                 });
             } else {
                 $.ajax({
-                    url: Common.getUrl({ 'name':'starred_files' }),
-                    dataType: 'json',
-                    cache: false,
+                    url: Common.getUrl({'name':'starred_files'}),
                     type: 'POST',
+                    cache: false,
+                    dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
                         'repo_id': dir.repo_id,
-                        'p': filePath,
+                        'p': filePath
                     },
                     success: function() {
                         _this.model.set({'starred':true});

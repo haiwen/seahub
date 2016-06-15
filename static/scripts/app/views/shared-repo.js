@@ -33,7 +33,7 @@ define([
                 };
 
             $.ajax({
-                url: Common.getUrl({name: 'leave_share', repo_id: this.model.get('id')})
+                url: Common.getUrl({name: 'beshared_repo', repo_id: this.model.get('id')})
                     + "?share_type=personal&from=" + encodeURIComponent(this.model.get('owner')),
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,

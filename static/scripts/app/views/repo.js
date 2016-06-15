@@ -61,7 +61,7 @@ define([
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + Common.HTMLescape(repo_name) + '</span>');
             var yesCallback = function() { 
                 $.ajax({
-                    url: Common.getUrl({'name':'repo_del', 'repo_id': _this.model.get('id')}),
+                    url: Common.getUrl({'name':'repo', 'repo_id': _this.model.get('id')}),
                     type: 'DELETE',
                     cache: false,
                     dataType: 'json',
