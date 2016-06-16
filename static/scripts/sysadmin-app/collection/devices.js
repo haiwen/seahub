@@ -10,13 +10,13 @@ define([
         model: DeviceModel,
         state: {pageSize: 50},
         parseState: function(data) {
-            return {hasNextPage: data[0].has_next_page, current_page: data[0].current_page};
+            return data.page_info; // {'has_next_page': has_next_page, 'current_page': current_page}
         },
         url: function () {
             return Common.getUrl({name: 'admin-devices'});
         },
         parseRecords: function(data) {
-            return data[1];
+            return data.devices;
         }
     });
 

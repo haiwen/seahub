@@ -61,7 +61,7 @@ class AdminDevices(APIView):
             'has_next_page': has_next_page,
             'current_page': current_page
         }
-        return Response((page_info, return_results))
+        return Response({"page_info": page_info, "devices": return_results})
 
     def delete(self, request, format=None):
 

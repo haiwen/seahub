@@ -49,10 +49,10 @@ define([
         getNextPage: function() {
             this.initPage();
             var current_page = this.deviceCollection.state.current_page;
-            if (this.deviceCollection.state.hasNextPage) {
+            if (this.deviceCollection.state.has_next_page) {
                 this.deviceCollection.getPage(current_page + 1, {
                     reset: true,
-                    data: {'platform': 'mobile'},
+                    data: {'platform': 'mobile'}
                 });
             }
 
@@ -65,7 +65,7 @@ define([
             if (current_page > 1) {
                 this.deviceCollection.getPage(current_page - 1, {
                     reset: true,
-                    data: {'platform': 'mobile'},
+                    data: {'platform': 'mobile'}
                 });
             }
             return false;
@@ -133,7 +133,7 @@ define([
         },
 
         renderPaginator: function() {
-            if (this.deviceCollection.state.hasNextPage) {
+            if (this.deviceCollection.state.has_next_page) {
                 this.$jsNext.show();
             } else {
                 this.$jsNext.hide();
