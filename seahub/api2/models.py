@@ -112,7 +112,7 @@ class TokenV2Manager(models.Manager):
         token = self._get_token_by_user_device(username, platform, device_id)
         if not token:
             return
-        token.wiped_at = int(time.time())
+        token.wiped_at = datetime.datetime.now()
         token.save()
 
 class TokenV2(models.Model):
@@ -144,7 +144,7 @@ class TokenV2(models.Model):
 
     last_login_ip = models.GenericIPAddressField(null=True, default=None)
 
-    wiped_at = models.IntegerField(null=True)
+    wiped_at = models.DateTimeField(null=True)
 
     objects = TokenV2Manager()
 
