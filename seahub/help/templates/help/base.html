@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block main_content %}
+<div class="row">
+    <div class="side-textnav col-md-3 side-nav">
+        <h3 class="hd">{% trans "Desktop Client and Syncing" %}</h3>
+        <ul class="side-textnav-tabs">
+            <li class="tab"><a href="{{ SITE_ROOT }}help/install/">{% trans "Install and sync Files" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_existing/">{% trans "Syncing existing folders" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/selective_sync/">{% trans "Selective sync sub-folders" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/unsync_resync/">{% trans "Unsync and resync libraries" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/sync_interval/">{% trans "Setting sync interval" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/desktop_proxy/">{% trans "Proxy settings" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/conflicts/">{% trans "File conflicts" %}</a></li>
+            <li class="tab"><a href="{{ SITE_ROOT }}help/ignore/">{% trans "Excluding files" %}</a></li>
+        </ul>
+        <h3 class="hd">{% trans "Security and Encryption" %}</h3>
+        <ul class="side-textnav-tabs">
+            <li class="tab"><a href="{{ SITE_ROOT }}help/encrypted_libraries/">{% trans "How to use encrypted libraries" %}</a></li>
+        </ul>
+    </div>
+
+    <div class="help-con article col-md-9 col-md-offset-3" id="right-panel">{% block help_con %}{% endblock %}</div>
+
+</div>
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('.side-nav li').each(function() {
+    var link_href = $('a', $(this)).attr('href');
+    if (link_href == location.pathname || link_href == location.pathname + 'install/') {
+        $(this).addClass('tab-cur');
+        if ($(this).offset().top > $(window).height()) {
+            $('.side-nav').scrollTop($(this).offset().top + $(this).outerHeight(true) - $(window).height());
+        }
+    }
+});
+
+$('.help-con img').css('max-width', $('.help-con').width() - 2);
+</script>
+{% endblock %}

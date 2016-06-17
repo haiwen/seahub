@@ -1,0 +1,39 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+
+<h3 class="hd">{% trans "Installing Seafile Client Program" %}</h3>
+
+<p>{% trans "After downloading Seafile client program, you have 3 steps left to get it up and running." %}</p>
+
+<h4>{% trans "1. Select a disk partition to store local Seafile data" %}</h4>
+<img src="{{ MEDIA_URL }}img/help/seafile-init-choose-folder.png" alt="{% trans "Selecting a folder to store Seafile data" %}" width="550" />
+
+<h4>{% trans "2. Add an account" %}</h4>
+<p>{% trans "Add an account on your private Seafile server or our public server." %}</p>
+
+<img src="{{ MEDIA_URL }}img/help/seafile-add-account.png" alt="" width="550" />
+
+<h4>{% trans "3. Sync a library" %}</h4>
+<ul>
+    <li>{% trans 'Click the "Sync this library" button to sync it with a local folder.' %}</li>
+    <li>{% trans "Then you add some files into the library. They will be automatically synced with cloud platform." %}</li>
+</ul>
+
+<img src="{{ MEDIA_URL }}img/help/seafile-sync-library.png" width="312" alt="" />
+
+<h4>{% trans "4. (Optional) Create a library" %}</h4>
+
+<p>{% trans "You can also create a library from a local folder." %}</p>
+
+<img src="{{ MEDIA_URL }}img/help/seafile-create-library.png" alt="" />
+
+<img src="{{ MEDIA_URL }}img/help/seafile-create-library-02.png" width="550" alt="" />
+
+<h4>{% trans "5. Browse files on the cloud" %}</h4>
+<p>{% trans 'In some occasions, you want to modify files on the cloud directly without syncing them. Seafile client comes with a "cloud file browser" to meet this need. Click an unsynced library will open the cloud file browser.' %}</p>
+
+<img src="{{ MEDIA_URL }}img/help/seafile-cloud-file-browser.png" alt="" />
+
+{% endblock %}
