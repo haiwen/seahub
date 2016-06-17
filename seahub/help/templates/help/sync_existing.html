@@ -1,0 +1,22 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+
+<h3 class="hd">{% trans "Syncing With an Existing Folder" %}</h3>
+
+<p>{% blocktrans %}Sometimes you already have a library on the Seafile server (shared by others, or uploaded from another computer). You can sync this library with an existing folder on your computer. The local folder must have the same name as the library. The files in the local folder will be merged with the files in the library. No file in the local folder or the library will be overwritten or lost. The merge will produce some <a href="{{SITE_ROOT}}help/conflicts/">conflict files</a> if file contents are different in the local folder and the library. {% endblocktrans %}</p>
+
+<p>{% blocktrans %}To sync a library with an existing folder, right click on the library in Seafile client's main window and click "Sync this library".{% endblocktrans %}</p>
+
+<img src="{{MEDIA_URL}}img/help/seafile-sync-library.png" width="350" alt="" />
+
+<p>{% trans 'In the pop-up dialog, click the "Sync with an existing folder" link.' %}</p>
+
+<img src="{{MEDIA_URL}}img/help/sync-with-an-existing-01.png" width="550" alt="" />
+
+<p>{% trans "Then choose an existing folder to sync with this library." %}</p>
+
+<img src="{{MEDIA_URL}}img/help/sync-with-an-existing-02.png" width="550" alt="" />
+
+{% endblock %}

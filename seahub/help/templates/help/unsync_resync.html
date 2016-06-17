@@ -1,0 +1,14 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+
+<h3 class="hd">{% trans "Unsync and Resync Library" %}</h3>
+
+<p>{% blocktrans %}When you no longer want to sync a local folder with a library, you can unsync it. After you unsync a library, changes to the local folder and files will not be uploaded, and changes in the library will not be downloaded. If you want to sync the library with the local folder again, you can use <a href="{{SITE_ROOT}}help/sync_existing/">sync with existing folder</a> feature.{% endblocktrans %}</p>
+
+<p>{% blocktrans %}Sometimes there are internal errors in the client which blocks syncing. In these cases, it's usually helpful to "resync" the library. Resync means unsync and then immediately sync the library with the same folder. You can find this action in the pop-up menu of the client's main window.{% endblocktrans %}</p>
+
+<img src="{{MEDIA_URL}}img/help/resync-a-library.png" alt="" />
+
+{% endblock %}

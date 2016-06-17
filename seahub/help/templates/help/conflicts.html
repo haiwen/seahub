@@ -1,0 +1,10 @@
+{% extends "help/base.html" %}
+{% load i18n %}
+
+{% block help_con %}
+<h3 class="hd">{% trans "File conflicts" %}</h3>
+
+<p>{% trans "Once you and your friends sync a shared file library onto your computers, you may add, delete or edit files in the library together. Every change you make to the library would be automatically synced to others' computers." %}</p>
+
+<p>{% blocktrans %}Sometimes you and your friends may edit the same file at the same time. Your changes may conflict with each other's. In this case, Seafile would keep the first version synced to the cloud unchanged, while rename the other version to a "conflict file". A conflict file's name ends with it's author's email address, plus the current time, e.g. test.txt (SFConflict name@example.com 2015-03-07-11-30-28).{% endblocktrans %}</p>
+{% endblock %}
