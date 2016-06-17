@@ -1833,7 +1833,8 @@ class FileView(APIView):
         if not path:
             return api_error(status.HTTP_400_BAD_REQUEST, 'Path is missing.')
 
-        if check_folder_permission(request, repo_id, path) is None:
+        parent_dir = os.path.dirname(path)
+        if check_folder_permission(request, repo_id, parent_dir) is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this file.')
 
@@ -1880,7 +1881,7 @@ class FileView(APIView):
         operation = request.POST.get('operation', '')
 
         if operation.lower() == 'rename':
-            if check_folder_permission(request, repo_id, path) != 'rw':
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to rename file.')
 
@@ -1916,7 +1917,7 @@ class FileView(APIView):
                 return resp
 
         elif operation.lower() == 'move':
-            if check_folder_permission(request, repo_id, path) != 'rw':
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to move file.')
 
@@ -1984,7 +1985,7 @@ class FileView(APIView):
                 return Response('success', status=status.HTTP_200_OK)
 
             # check src folder permission
-            if check_folder_permission(request, repo_id, path) is None:
+            if check_folder_permission(request, repo_id, src_dir) is None:
                 return api_error(status.HTTP_403_FORBIDDEN,
                                  'You do not have permission to copy file.')
 
@@ -2059,7 +2060,8 @@ class FileView(APIView):
 
         username = request.user.username
         # check file access permission
-        if check_folder_permission(request, repo_id, path) != 'rw':
+        parent_dir = os.path.dirname(path)
+        if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
         operation = request.data.get('operation', '')
