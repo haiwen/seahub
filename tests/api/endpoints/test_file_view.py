@@ -8,6 +8,7 @@ from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
+from seahub.utils import check_filename_with_rename
 
 from tests.common.utils import randstring
 
@@ -101,6 +102,21 @@ class FileViewTest(BaseTestCase):
         # check new file in repo
         assert new_name == self.get_lib_file_name(self.repo_id)
 
+    def test_can_create_same_name_file(self):
+        self.login_as(self.user)
+
+        file_name = os.path.basename(self.file_path.rstrip('/'))
+        new_name = check_filename_with_rename(self.repo_id, '/', file_name)
+        data = {'operation': 'create',}
+
+        # create file
+        resp = self.client.post(self.url + '?p=' + self.file_path, data)
+        self.assertEqual(200, resp.status_code)
+        json_resp = json.loads(resp.content)
+
+        # check new folder has been created
+        assert new_name == json_resp['obj_name']
+
     def test_create_file_with_invalid_repo_perm(self):
 
         # login as admin, then create file in user's repo
@@ -153,6 +169,29 @@ class FileViewTest(BaseTestCase):
 
         # check old file has been renamed to new_name
         assert new_name == self.get_lib_file_name(self.repo_id)
+
+    def test_can_rename_file_with_same_name(self):
+        self.login_as(self.user)
+
+        # check old file exist
+        assert self.file_name == self.get_lib_file_name(self.repo_id)
+
+        # create a new file
+        new_name = randstring(6)
+        data = {'operation': 'create',}
+        resp = self.client.post(self.url + '?p=/' + new_name, data)
+        self.assertEqual(200, resp.status_code)
+
+        # rename new file with the same of the old file
+        old_file_name = self.file_name
+        checked_name = check_filename_with_rename(self.repo_id,
+                '/', old_file_name)
+        data = {'operation': 'rename', 'newname': checked_name}
+        resp = self.client.post(self.url + '?p=/' + new_name, data)
+        self.assertEqual(200, resp.status_code)
+
+        json_resp = json.loads(resp.content)
+        assert checked_name == json_resp['obj_name']
 
     def test_rename_file_with_invalid_repo_perm(self):
 

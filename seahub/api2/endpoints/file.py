@@ -154,7 +154,8 @@ class FileView(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            file_info = self.get_file_info(username, repo_id, path)
+            new_file_path = posixpath.join(parent_dir, new_file_name)
+            file_info = self.get_file_info(username, repo_id, new_file_path)
             return Response(file_info)
 
         if operation == 'rename':
