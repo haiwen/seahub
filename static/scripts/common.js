@@ -76,18 +76,18 @@ define([
             switch (options.name) {
                 // File Operations
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
-                case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'download_dirents': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dirents/download-link/';
-                case 'rename_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
                 case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
                 case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
                 case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
                 case 'lock_or_unlock_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
-                case 'new_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
-                case 'new_file': return siteRoot + 'api2/repos/' + options.repo_id + '/file/';
+                case 'new_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
+                case 'new_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
                 case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
                 case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
