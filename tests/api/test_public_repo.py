@@ -11,8 +11,8 @@ class RepoPublicTest(BaseTestCase):
         self.repo_id = self.create_repo(name='test-admin-repo', desc='',
                                         username=self.admin.username,
                                         passwd=None)
-        self.url = '/api2/repos/%s/public/' % self.repo_id
-        self.user_repo_url = '/api2/repos/%s/public/' % self.repo.id
+        self.url = '/api2/shared-repos/%s/' % self.repo_id
+        self.user_repo_url = '/api2/shared-repos/%s/' % self.repo.id
 
         config.ENABLE_USER_CREATE_ORG_REPO = 1
 
@@ -24,28 +24,28 @@ class RepoPublicTest(BaseTestCase):
     def test_admin_can_set_pub_repo(self):
         self.login_as(self.admin)
 
-        resp = self.client.post(self.url)
+        resp = self.client.put(self.url+'?share_type=public&permission=rw')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] is True
+        assert 'success' in json_resp
 
     def test_admin_can_unset_pub_repo(self):
         seafile_api.add_inner_pub_repo(self.repo_id, "r")
 
         self.login_as(self.admin)
 
-        resp = self.client.delete(self.url)
+        resp = self.client.delete(self.url+'?share_type=public')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] is True
+        assert 'success' in json_resp
 
     def test_user_can_set_pub_repo(self):
         self.login_as(self.user)
 
-        resp = self.client.post(self.user_repo_url)
+        resp = self.client.put(self.user_repo_url+'?share_type=public&permission=rw')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] is True
+        assert 'success' in json_resp
 
     def test_admin_can_set_pub_repo_when_setting_disalbed(self):
         assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
@@ -54,10 +54,10 @@ class RepoPublicTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        resp = self.client.post(self.url)
+        resp = self.client.put(self.url+'?share_type=public&permission=rw')
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert json_resp['success'] is True
+        assert 'success' in json_resp
 
     def test_user_can_not_set_pub_repo_when_setting_disalbed(self):
         assert bool(config.ENABLE_USER_CREATE_ORG_REPO) is True
@@ -66,7 +66,5 @@ class RepoPublicTest(BaseTestCase):
 
         self.login_as(self.user)
 
-        resp = self.client.post(self.user_repo_url)
+        resp = self.client.put(self.user_repo_url+'?share_type=public&permission=rw')
         self.assertEqual(403, resp.status_code)
-        json_resp = json.loads(resp.content)
-        assert json_resp['error_msg'] == 'Permission denied.'

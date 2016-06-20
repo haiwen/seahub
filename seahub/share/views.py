@@ -42,7 +42,7 @@ from seahub.profile.models import Profile
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
 
-########## rpc wrapper    
+########## rpc wrapper
 def is_org_repo_owner(username, repo_id):
     owner = seaserv.seafserv_threaded_rpc.get_org_repo_owner(repo_id)
     return True if owner == username else False
@@ -226,93 +226,6 @@ def share_repo(request):
 
     return HttpResponseRedirect(next)
 
-@login_required_ajax
-@require_POST
-def ajax_repo_remove_share(request):
-    """
-    Remove repo shared to user/group/public
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    repo_id = request.POST.get('repo_id', None)
-    share_type = request.POST.get('share_type', None)
-
-    if not seafile_api.get_repo(repo_id):
-        return HttpResponse(json.dumps({'error': _(u'Library does not exist')}), status=400,
-                            content_type=content_type)
-
-    username = request.user.username
-
-    if share_type == 'personal':
-
-        from_email = request.POST.get('from', None)
-        if not is_valid_username(from_email):
-            return HttpResponse(json.dumps({'error': _(u'Invalid argument')}), status=400,
-                                content_type=content_type)
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            org_remove_share(org_id, repo_id, from_email, username)
-        else:
-            seaserv.remove_share(repo_id, from_email, username)
-        return HttpResponse(json.dumps({'success': True}), status=200,
-                            content_type=content_type)
-
-    elif share_type == 'group':
-
-        from_email = request.POST.get('from', None)
-        if not is_valid_username(from_email):
-            return HttpResponse(json.dumps({'error': _(u'Invalid argument')}), status=400,
-                                content_type=content_type)
-
-        group_id = request.POST.get('group_id', None)
-        group = seaserv.get_group(group_id)
-        if not group:
-            return HttpResponse(json.dumps({'error': _(u"Group does not exist")}), status=400,
-                                content_type=content_type)
-
-        if seaserv.check_group_staff(group_id, username) or \
-            seafile_api.is_repo_owner(username, repo_id):
-            if is_org_group(group_id):
-                org_id = get_org_id_by_group(group_id)
-                del_org_group_repo(repo_id, org_id, group_id)
-            else:
-                seafile_api.unset_group_repo(repo_id, group_id, from_email)
-            return HttpResponse(json.dumps({'success': True}), status=200,
-                                content_type=content_type)
-        else:
-            return HttpResponse(json.dumps({'error': _(u'Permission denied')}), status=400,
-                                content_type=content_type)
-
-    elif share_type == 'public':
-
-        if is_org_context(request):
-
-            org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
-            is_org_repo_owner = True if org_repo_owner == username else False
-            if request.user.org.is_staff or is_org_repo_owner:
-                org_id = request.user.org.org_id
-                seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id,
-                                                                       repo_id)
-                return HttpResponse(json.dumps({'success': True}), status=200,
-                                    content_type=content_type)
-            else:
-                return HttpResponse(json.dumps({'error': _(u'Permission denied')}), status=403,
-                                    content_type=content_type)
-
-        else:
-            if seafile_api.is_repo_owner(username, repo_id) or \
-                request.user.is_staff:
-                unset_inner_pub_repo(repo_id)
-                return HttpResponse(json.dumps({'success': True}), status=200,
-                                    content_type=content_type)
-            else:
-                return HttpResponse(json.dumps({'error': _(u'Permission denied')}), status=403,
-                                    content_type=content_type)
-    else:
-        return HttpResponse(json.dumps({'error': _(u'Invalid argument')}), status=400,
-                            content_type=content_type)
-
 @login_required
 @require_POST
 def repo_remove_share(request):
@@ -460,7 +373,7 @@ def list_shared_repos(request):
     """ List user repos shared to users/groups/public.
     """
     share_out_repos = list_share_out_repos(request)
-    
+
     out_repos = []
     for repo in share_out_repos:
         if repo.is_virtual:     # skip virtual repos
@@ -671,7 +584,7 @@ def share_permission_admin(request):
 
 ########## share link
 @login_required_ajax
-@require_POST 
+@require_POST
 def ajax_remove_shared_link(request):
     username = request.user.username
     content_type = 'application/json; charset=utf-8'
@@ -699,7 +612,7 @@ def ajax_remove_shared_link(request):
 
 
 @login_required_ajax
-@require_POST 
+@require_POST
 def ajax_remove_shared_upload_link(request):
     username = request.user.username
     content_type = 'application/json; charset=utf-8'

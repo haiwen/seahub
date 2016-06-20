@@ -172,6 +172,8 @@ def get_dirents(request, repo_id):
 def get_unenc_group_repos(request, group_id):
     '''
     Get unenc repos in a group.
+
+    Used in selecting a library for a group wiki
     '''
     content_type = 'application/json; charset=utf-8'
 
@@ -377,90 +379,6 @@ def list_lib_dir(request, repo_id):
 
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-def new_dirent_common(func):
-    """Decorator for common logic in creating directory and file.
-    """
-    def _decorated(request, repo_id, *args, **kwargs):
-        if request.method != 'POST':
-            raise Http404
-
-        result = {}
-        content_type = 'application/json; charset=utf-8'
-
-        repo = get_repo(repo_id)
-        if not repo:
-            result['error'] = _(u'Library does not exist.')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
-
-        # arguments checking
-        parent_dir = request.GET.get('parent_dir', None)
-        if not parent_dir:
-            result['error'] = _('Argument missing')
-            return HttpResponse(json.dumps(result), status=400,
-                                content_type=content_type)
-
-        # permission checking
-        username = request.user.username
-        if check_folder_permission(request, repo.id, parent_dir) != 'rw':
-            result['error'] = _('Permission denied')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
-        # form validation
-        form = RepoNewDirentForm(request.POST)
-        if form.is_valid():
-            dirent_name = form.cleaned_data["dirent_name"]
-        else:
-            result['error'] = str(form.errors.values()[0])
-            return HttpResponse(json.dumps(result), status=400,
-                            content_type=content_type)
-
-        # rename duplicate name
-        dirent_name = check_filename_with_rename(repo.id, parent_dir,
-                                                 dirent_name)
-        return func(repo.id, parent_dir, dirent_name, username)
-    return _decorated
-
-@login_required_ajax
-@new_dirent_common
-def new_dir(repo_id, parent_dir, dirent_name, username):
-    """
-    Create a new dir with ajax.
-    """
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    # create new dirent
-    try:
-        seafile_api.post_dir(repo_id, parent_dir, dirent_name, username)
-    except SearpcError, e:
-        result['error'] = str(e)
-        return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
-                        content_type=content_type)
-
-@login_required_ajax
-@new_dirent_common
-def new_file(repo_id, parent_dir, dirent_name, username):
-    """
-    Create a new file with ajax.
-    """
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    # create new dirent
-    try:
-        seafile_api.post_empty_file(repo_id, parent_dir, dirent_name, username)
-    except SearpcError, e:
-        result['error'] = str(e)
-        return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True, 'name': dirent_name}),
-                        content_type=content_type)
 
 @login_required_ajax
 def rename_dirent(request, repo_id):
@@ -1046,45 +964,6 @@ def cancel_cp(request):
         return HttpResponse(json.dumps(result), status=400,
                     content_type=content_type)
 
-@login_required_ajax
-def repo_star_file(request, repo_id):
-    content_type = 'application/json; charset=utf-8'
-
-    user_perm = check_folder_permission(request, repo_id, '/')
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    path = request.GET.get('file', '')
-    if not path:
-        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
-                            status=400, content_type=content_type)
-
-    is_dir = False
-    star_file(request.user.username, repo_id, path, is_dir)
-
-    return HttpResponse(json.dumps({'success':True}), content_type=content_type)
-
-@login_required_ajax
-def repo_unstar_file(request, repo_id):
-    content_type = 'application/json; charset=utf-8'
-
-    user_perm = check_folder_permission(request, repo_id, '/')
-    if user_perm is None:
-        err_msg = _(u'Permission denied.')
-        return HttpResponse(json.dumps({'error': err_msg}),
-                            status=403, content_type=content_type)
-
-    path = request.GET.get('file', '')
-    if not path:
-        return HttpResponse(json.dumps({'error': _(u'Invalid arguments')}),
-                            status=400, content_type=content_type)
-
-    unstar_file(request.user.username, repo_id, path)
-
-    return HttpResponse(json.dumps({'success':True}), content_type=content_type)
-
 ########## contacts related
 @login_required_ajax
 def get_contacts(request):
@@ -1158,83 +1037,6 @@ def get_current_commit(request, repo_id):
     return HttpResponse(json.dumps({'html': html}),
                         content_type=content_type)
 
-@login_required_ajax
-def sub_repo(request, repo_id):
-    '''
-    check if a dir has a corresponding sub_repo
-    if it does not have, create one
-    '''
-    username = request.user.username
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    if not request.user.permissions.can_add_repo():
-        result['error'] = _(u"You do not have permission to create library")
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
-    origin_repo = seafile_api.get_repo(repo_id)
-    if origin_repo is None:
-        result['error'] = _('Repo not found.')
-        return HttpResponse(json.dumps(result), status=400,
-                            content_type=content_type)
-
-    # perm check, only repo owner can create sub repo
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(origin_repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(origin_repo.id)
-
-    is_repo_owner = True if username == repo_owner else False
-    if not is_repo_owner:
-        result['error'] = _(u"You do not have permission to create library")
-        return HttpResponse(json.dumps(result), status=403,
-                            content_type=content_type)
-
-    path = request.GET.get('p')
-    if not path:
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400, content_type=content_type)
-    name = os.path.basename(path)
-
-    # check if the sub-lib exist
-    try:
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            sub_repo = seaserv.seafserv_threaded_rpc.get_org_virtual_repo(
-                org_id, repo_id, path, username)
-        else:
-            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
-    except SearpcError as e:
-        logger.error(e)
-        result['error'] = _('Failed to create sub library, please try again later.')
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-    if sub_repo:
-        result['sub_repo_id'] = sub_repo.id
-    else:
-        # create a sub-lib
-        try:
-            # use name as 'repo_name' & 'repo_desc' for sub_repo
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                sub_repo_id = seaserv.seafserv_threaded_rpc.create_org_virtual_repo(
-                    org_id, repo_id, path, name, name, username)
-            else:
-                sub_repo_id = seafile_api.create_virtual_repo(repo_id, path,
-                                                              name, name,
-                                                              username)
-            result['sub_repo_id'] = sub_repo_id
-            result['name'] = name
-            result['abbrev_origin_path'] = get_sub_repo_abbrev_origin_path(
-                origin_repo.name, path)
-
-        except SearpcError as e:
-            logger.error(e)
-            result['error'] = _('Failed to create sub library, please try again later.')
-            return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-    return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
 def download_enc_file(request, repo_id, file_id):
@@ -1423,54 +1225,6 @@ def set_notice_seen_by_id(request):
 
     return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
-@login_required_ajax
-@require_POST
-def repo_remove(request, repo_id):
-    ct = 'application/json; charset=utf-8'
-    result = {}
-
-    repo = get_repo(repo_id)
-    username = request.user.username
-    if is_org_context(request):
-        # Remove repo in org context, only (repo owner/org staff) can perform
-        # this operation.
-        org_id = request.user.org.org_id
-        is_org_staff = request.user.org.is_staff
-        org_repo_owner = seafile_api.get_org_repo_owner(repo_id)
-        if is_org_staff or org_repo_owner == username:
-            # Must get related useres before remove the repo
-            usernames = get_related_users_by_org_repo(org_id, repo_id)
-            seafile_api.remove_repo(repo_id)
-            if repo:            # send delete signal only repo is valid
-                repo_deleted.send(sender=None,
-                                  org_id=org_id,
-                                  usernames=usernames,
-                                  repo_owner=username,
-                                  repo_id=repo_id,
-                                  repo_name=repo.name)
-            result['success'] = True
-            return HttpResponse(json.dumps(result), content_type=ct)
-        else:
-            result['error'] = _(u'Permission denied.')
-            return HttpResponse(json.dumps(result), status=403, content_type=ct)
-    else:
-        # Remove repo in personal context, only (repo owner) can perform this
-        # operation.
-        if validate_owner(request, repo_id):
-            usernames = get_related_users_by_repo(repo_id)
-            seafile_api.remove_repo(repo_id)
-            if repo:            # send delete signal only repo is valid
-                repo_deleted.send(sender=None,
-                                  org_id=-1,
-                                  usernames=usernames,
-                                  repo_owner=username,
-                                  repo_id=repo_id,
-                                  repo_name=repo.name)
-            result['success'] = True
-            return HttpResponse(json.dumps(result), content_type=ct)
-        else:
-            result['error'] = _(u'Permission denied.')
-            return HttpResponse(json.dumps(result), status=403, content_type=ct)
 
 @login_required_ajax
 def space_and_traffic(request):
@@ -1805,119 +1559,6 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
         repo_id = None
 
     return repo_id
-
-@login_required_ajax
-def ajax_repo_change_basic_info(request, repo_id):
-    """Handle post request to change library basic info.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # no settings for virtual repo
-    if ENABLE_SUB_LIBRARY and repo.is_virtual:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        raise Http404
-
-    form = RepoSettingForm(request.POST)
-    if not form.is_valid():
-        return HttpResponse(json.dumps({
-                    'error': str(form.errors.values()[0])
-                    }), status=400, content_type=content_type)
-
-    repo_name = form.cleaned_data['repo_name']
-    days = form.cleaned_data['days']
-
-    # Edit library info (name, descryption).
-    if repo.name != repo_name:
-        if not edit_repo(repo_id, repo_name, '', username): # set desc as ''
-            err_msg = _(u'Failed to edit library information.')
-            return HttpResponse(json.dumps({'error': err_msg}),
-                                status=500, content_type=content_type)
-
-    # set library history
-    if days is not None and config.ENABLE_REPO_HISTORY_SETTING:
-        res = seafile_api.set_repo_history_limit(repo_id, days)
-        if res != 0:
-            return HttpResponse(json.dumps({
-                        'error': _(u'Failed to save settings on server')
-                        }), status=400, content_type=content_type)
-
-    messages.success(request, _(u'Settings saved.'))
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
-
-@login_required_ajax
-def ajax_repo_transfer_owner(request, repo_id):
-    """Handle post request to transfer library owner.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        raise Http404
-
-    # check POST arg
-    repo_owner = request.POST.get('repo_owner', '').lower()
-    if not is_valid_username(repo_owner):
-        return HttpResponse(json.dumps({
-                        'error': _('Username %s is not valid.') % repo_owner,
-                        }), status=400, content_type=content_type)
-
-    try:
-        User.objects.get(email=repo_owner)
-    except User.DoesNotExist:
-        return HttpResponse(json.dumps({
-                        'error': _('User %s is not found.') % repo_owner,
-                        }), status=400, content_type=content_type)
-
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        if not seaserv.ccnet_threaded_rpc.org_user_exists(org_id, repo_owner):
-            return HttpResponse(json.dumps({
-                        'error': _('User %s is not in current organization.') %
-                        repo_owner,}), status=400, content_type=content_type)
-
-    if repo_owner and repo_owner != username:
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            seafile_api.set_org_repo_owner(org_id, repo_id, repo_owner)
-        else:
-            if ccnet_threaded_rpc.get_orgs_by_user(repo_owner):
-                return HttpResponse(json.dumps({
-                       'error': _('Can not transfer library to organization user %s.') % repo_owner,
-                       }), status=400, content_type=content_type)
-            else:
-                seafile_api.set_repo_owner(repo_id, repo_owner)
-
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
 
 @login_required_ajax
 def ajax_repo_change_passwd(request, repo_id):
@@ -2283,40 +1924,6 @@ def add_group_folder_perm(request, repo_id, group_ids, path, perm):
         data = json.dumps({"error": _("Failed")})
         return HttpResponse(data, status=400, content_type=content_type)
 
-@login_required_ajax
-def get_group_basic_info(request, group_id):
-    '''
-    Get group basic info for group side nav
-    '''
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    group_id_int = int(group_id) # Checked by URL Conf
-    group = get_group(group_id_int)
-    if not group:
-        result["error"] = _('Group does not exist.')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    group.is_staff = is_group_staff(group, request.user)
-    if PublicGroup.objects.filter(group_id=group.id):
-        group.is_pub = True
-    else:
-        group.is_pub = False
-
-    mods_available = get_available_mods_by_group(group.id)
-    mods_enabled = get_enabled_mods_by_group(group.id)
-
-    return HttpResponse(json.dumps({
-        "id": group.id,
-        "name": group.group_name,
-        "avatar": grp_avatar(group.id, 32),
-        "is_staff": group.is_staff,
-        "is_pub": group.is_pub,
-        "mods_available": mods_available,
-        "mods_enabled": mods_enabled,
-        }), content_type=content_type)
 
 @login_required_ajax
 def toggle_group_modules(request, group_id):
@@ -2367,73 +1974,13 @@ def toggle_personal_modules(request):
     return HttpResponse(json.dumps({ "success": True }),
             content_type=content_type)
 
-@login_required_ajax
-@require_POST
-def ajax_unset_inner_pub_repo(request, repo_id):
-    """
-    Unshare repos in organization.
-
-    """
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    repo = get_repo(repo_id)
-    if not repo:
-        result["error"] = _('Library does not exist.')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    perm = request.POST.get('permission', None)
-    if perm is None:
-        result["error"] = _(u'Argument missing')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    # permission check
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-        is_repo_owner = True if repo_owner == username else False
-        if not (request.user.org.is_staff or is_repo_owner):
-            result["error"] = _('Permission denied.')
-            return HttpResponse(json.dumps(result),
-                                status=403, content_type=content_type)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-        is_repo_owner = True if repo_owner == username else False
-        if not (request.user.is_staff or is_repo_owner):
-            result["error"] = _('Permission denied.')
-            return HttpResponse(json.dumps(result),
-                                status=403, content_type=content_type)
-
-    try:
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id,
-                                                                   repo.id)
-        else:
-            seaserv.unset_inner_pub_repo(repo.id)
-
-            origin_repo_id, origin_path = get_origin_repo_info(repo.id)
-            if origin_repo_id is not None:
-                perm_repo_id = origin_repo_id
-                perm_path = origin_path
-            else:
-                perm_repo_id = repo.id
-                perm_path =  '/'
-
-            send_perm_audit_msg('delete-repo-perm', username, 'all', \
-                                perm_repo_id, perm_path, perm)
-
-        return HttpResponse(json.dumps({"success": True}), content_type=content_type)
-    except SearpcError:
-        return HttpResponse(json.dumps({"error": _('Internal server error')}),
-                status=500, content_type=content_type)
 
 @login_required_ajax
 def ajax_group_members_import(request, group_id):
     """Import users to group.
+
+    Permission checking:
+    1. Only group admin can add import group members
     """
 
     result = {}

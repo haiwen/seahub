@@ -124,26 +124,20 @@ urlpatterns = patterns(
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
 
     ### Ajax ###
-    (r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/remove/$', repo_remove),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/$', get_dirents, name="get_dirents"),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/delete/$', delete_dirents, name='delete_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/move/$', mv_dirents, name='mv_dirents'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dirents/copy/$', cp_dirents, name='cp_dirents'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/new/$', new_dir, name='new_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/rename/$', rename_dirent, name='rename_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/sub_repo/$', sub_repo, name='sub_repo'),
     url(r'^ajax/cp_progress/$', get_cp_progress, name='get_cp_progress'),
     url(r'^ajax/cancel_cp/$', cancel_cp, name='cancel_cp'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/new/$', new_file, name='new_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/mv/$', mv_file, name='mv_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/cp/$', cp_file, name='cp_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/star/$', repo_star_file, name='repo_star_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/unstar/$', repo_unstar_file, name='repo_unstar_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
@@ -151,7 +145,6 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-file-uploaded-bytes/$', get_file_uploaded_bytes, name='get_file_uploaded_bytes'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
-    url(r'^ajax/group/(?P<group_id>\d+)/basic-info/$', get_group_basic_info, name='get_group_basic_info'),
     url(r'^ajax/group/(?P<group_id>\d+)/toggle-modules/$', toggle_group_modules, name='toggle_group_modules'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
     url(r'^ajax/toggle-personal-modules/$', toggle_personal_modules, name='toggle_personal_modules'),
@@ -164,8 +157,6 @@ urlpatterns = patterns(
     url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),
     url(r'^ajax/set_notice_seen_by_id/$', set_notice_seen_by_id, name='set_notice_seen_by_id'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-basic-info/$', ajax_repo_change_basic_info, name='ajax_repo_change_basic_info'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/transfer-owner/$', ajax_repo_transfer_owner, name='ajax_repo_transfer_owner'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-folder-perm-by-path/$', get_folder_perm_by_path, name='get_folder_perm_by_path'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-user-folder-perm/$', set_user_folder_perm, name='set_user_folder_perm'),
@@ -177,8 +168,6 @@ urlpatterns = patterns(
 
     ## ajax lib
     url(r'^ajax/lib/(?P<repo_id>[-0-9a-f]{36})/dir/$', list_lib_dir, name="list_lib_dir"),
-
-    url(r'^ajax/unset-inner-pub-repo/(?P<repo_id>[-0-9a-f]{36})/$', ajax_unset_inner_pub_repo, name='ajax_unset_inner_pub_repo'),
 
 
     ### Apps ###

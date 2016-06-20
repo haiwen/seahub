@@ -6,7 +6,7 @@ from .views_auth import LogoutDeviceView, ClientLoginTokenView
 from .endpoints.dir_shared_items import DirSharedItemsEndpoint
 from .endpoints.account import Account
 from .endpoints.shared_upload_links import SharedUploadLinksView
-from .endpoints.be_shared_repo import BeSharedReposView
+from .endpoints.be_shared_repo import BeSharedRepo
 from .endpoints.file_comment import FileCommentView
 from .endpoints.file_comments import FileCommentsView
 from .endpoints.file_comments_counts import FileCommentsCounts
@@ -41,7 +41,6 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/history-limit/$', RepoHistoryLimit.as_view(), name="api2-repo-history-limit"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-info/$', DownloadRepo.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/owner/$', RepoOwner.as_view(), name="api2-repo-owner"),
-    url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/public/$', RepoPublic.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-shared-links/$', RepoDownloadSharedLinks.as_view(), name="api2-repo-download-shared-links"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/download-shared-links/(?P<token>[a-f0-9]{10})/$', RepoDownloadSharedLink.as_view(), name="api2-repo-download-shared-link"),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-shared-links/$', RepoUploadSharedLinks.as_view(), name="api2-repo-upload-shared-links"),
@@ -71,8 +70,8 @@ urlpatterns = patterns('',
     url(r'^devices/', DevicesView.as_view(), name='api2-devices'),
     url(r'^shared-repos/$', SharedRepos.as_view(), name='sharedrepos'),
     url(r'^shared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', SharedRepo.as_view(), name='sharedrepo'),
-    url(r'^beshared-repos/$', BeShared.as_view(), name='beshared'),
-    url(r'^beshared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', BeSharedReposView.as_view(), name='beshared-repos'),
+    url(r'^beshared-repos/$', BeSharedRepos.as_view(), name='beshared-repos'),
+    url(r'^beshared-repos/(?P<repo_id>[-0-9-a-f]{36})/$', BeSharedRepo.as_view(), name='beshared-repo'),
     url(r'^default-repo/$', DefaultRepoView.as_view(), name='api2-defaultrepo'),
     url(r'^send-share-link/$', SendShareLinkView.as_view(), name='api2-send-share-link'),
     url(r'^send-upload-link/$', SendUploadLinkView.as_view(), name='api2-send-upload-link'),

@@ -76,20 +76,18 @@ define([
             switch (options.name) {
                 // File Operations
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
-                case 'star_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/star/';
-                case 'unstar_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/unstar/';
-                case 'del_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'download_dirents': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dirents/download-link/';
-                case 'rename_dir': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/';
+                case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
                 case 'cp_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/cp/';
                 case 'mv_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/mv/';
                 case 'cp_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/cp/';
                 case 'lock_or_unlock_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
-                case 'new_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/new/';
-                case 'new_file': return siteRoot + 'ajax/repo/' + options.repo_id + '/file/new/';
+                case 'new_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
+                case 'new_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
                 case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
                 case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
@@ -102,17 +100,14 @@ define([
                 // Repos
                 case 'repos': return siteRoot + 'api2/repos/';
                 case 'pub_repos': return siteRoot + 'api2/repos/public/';
-                case 'repo_del': return siteRoot + 'ajax/repo/' + options.repo_id + '/remove/';
-                case 'sub_repo': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/sub_repo/';
                 case 'get_my_unenc_repos': return siteRoot + 'ajax/my-unenc-repos/';
                 case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
                 case 'api_v2.1_repo_set_password': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/set-password/';
                 case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
                 case 'get_history_changes': return siteRoot + 'ajax/repo/' + options.repo_id + '/history/changes/';
-                case 'ajax_repo_remove_share': return siteRoot + 'share/ajax/repo_remove_share/';
+                case 'beshared_repo': return siteRoot + 'api2/beshared-repos/' + options.repo_id + '/';
                 case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
                 case 'shared_repos': return siteRoot + 'api2/shared-repos/' + options.repo_id + '/';
-                case 'ajax_unset_inner_pub_repo': return siteRoot + 'ajax/unset-inner-pub-repo/' + options.repo_id + '/';
                 case 'repo': return siteRoot + 'api2/repos/' + options.repo_id + '/';
                 case 'repo_owner': return siteRoot + 'api2/repos/' + options.repo_id + '/owner/';
                 case 'repo_history_limit': return siteRoot + 'api2/repos/' + options.repo_id + '/history-limit/';

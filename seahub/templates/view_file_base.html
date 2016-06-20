@@ -184,22 +184,39 @@ $('#share').click(function() {
 // star file
 $('#file-star').click(function() {
     var op_icon = $(this), url_base;
+    url_base = '{% url "starredfiles" %}';
 
     if (op_icon.hasClass('icon-star-empty')) {
-        url_base = '{% url 'repo_star_file' repo.id %}';
+        // star the file
+        $.ajax({
+            url: url_base,
+            cache: false,
+            dataType: 'json',
+            type: 'POST',
+            beforeSend: prepareCSRFToken,
+            data: {
+                'repo_id': "{{ repo.id }}",
+                'p': "{{ path|escapejs }}"
+            },
+            success:function(data) {
+                op_icon.toggleClass('icon-star-empty icon-star');
+            },
+            error: ajaxErrorHandler
+        });
     } else {
-        url_base = '{% url 'repo_unstar_file' repo.id %}';
+        // unstar
+        $.ajax({
+            url: url_base + '?p=' + e("{{path|escapejs}}") + '&repo_id=' + "{{ repo.id }}",
+            cache: false,
+            dataType: 'json',
+            type: 'DELETE',
+            beforeSend: prepareCSRFToken,
+            success:function(data) {
+                op_icon.toggleClass('icon-star-empty icon-star');
+            },
+            error: ajaxErrorHandler
+        });
     }
-
-    $.ajax({
-        url: url_base + '?file=' + e("{{path|escapejs}}"),
-        cache: false,
-        dataType: 'json',
-        success:function(data) {
-            op_icon.toggleClass('icon-star-empty icon-star');
-        },
-        error: ajaxErrorHandler
-    });
 
     return false;
 });
@@ -299,7 +316,7 @@ $(window).load(function() {
 var fileDiscussions = {
 
     $el: $('#file-discussions'),
-    tmpl: _.template($('#discussion-panel-tmpl').html()), 
+    tmpl: _.template($('#discussion-panel-tmpl').html()),
 
     init: function() {
         var _this = this;
@@ -322,7 +339,7 @@ var fileDiscussions = {
         this.$el.on('click', '.js-del-msg', function() {
             _this.delOne({
                 id: $(this).attr('data-id'),
-                $el: $(this).closest('.msg') 
+                $el: $(this).closest('.msg')
             });
             return false;
         });
@@ -374,7 +391,7 @@ var fileDiscussions = {
                     _this.$listContainer.show();
                     _this.scrollConToBottom();
                 } else {
-                    _this.$emptyTip.show(); 
+                    _this.$emptyTip.show();
                 }
             },
             error: function(xhr) {
@@ -413,10 +430,10 @@ var fileDiscussions = {
             data: {'comment': msg},
             success: function(data) {
                 _this.$msgInput.val('');
-                _this.addOne(data);   
+                _this.addOne(data);
                 if (_this.$emptyTip.is(':visible')) {
                     _this.$emptyTip.hide();
-                    _this.$listContainer.show();  
+                    _this.$listContainer.show();
                 }
                 _this.scrollConToBottom();
             },
@@ -435,7 +452,7 @@ var fileDiscussions = {
         });
     },
 
-    itemTmpl: _.template($('#discussion-tmpl').html()), 
+    itemTmpl: _.template($('#discussion-tmpl').html()),
 
     addOne: function(obj) {
         var can_delete_msg = false;
@@ -516,8 +533,8 @@ var fileDiscussions = {
             return "{% trans "Just now" %}";
         } else {
             return m.fromNow();
-        }   
-    } 
+        }
+    }
 };
 // init
 fileDiscussions.init();
@@ -529,10 +546,10 @@ $(document).keydown(function(e) {
     // ESCAPE key pressed
     if (e.which == 27) {
         fileDiscussions.hide();
-    }   
+    }
 });
 $(window).resize(function() {
     fileDiscussions.setConHeight();
-}); 
+});
 </script>
 {% endblock %}
