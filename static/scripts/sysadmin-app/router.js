@@ -12,12 +12,13 @@ define([
     'sysadmin-app/views/search-repos',
     'sysadmin-app/views/system-repo',
     'sysadmin-app/views/trash-repos',
+    'sysadmin-app/views/search-trash-repos',
     'sysadmin-app/views/dir',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    ReposView, SearchReposView, SystemReposView, TrashReposView, DirView,
-    AccountView) {
+    ReposView, SearchReposView, SystemReposView, TrashReposView, 
+    SearchTrashReposView, DirView, AccountView) {
 
     "use strict";
 
@@ -32,6 +33,7 @@ define([
             'search-libs/': 'showSearchLibraries',
             'system-lib/': 'showSystemLibrary',
             'trash-libs/': 'showTrashLibraries',
+            'search-trash-libs/': 'showSearchTrashLibraries',
             'libs/:repo_id(/*path)': 'showLibraryDir',
             // Default
             '*actions': 'showDashboard'
@@ -57,6 +59,7 @@ define([
             this.searchReposView = new SearchReposView();
             this.systemReposView = new SystemReposView();
             this.trashReposView = new TrashReposView();
+            this.searchTrashReposView = new SearchTrashReposView();
             this.dirView = new DirView();
 
             app.ui.accountView = this.accountView = new AccountView();
@@ -152,14 +155,26 @@ define([
             this.systemReposView.show();
         },
 
+        // show trash libs by page
         showTrashLibraries: function() {
+            // url_match: null or an array
+            var url_match = location.href.match(/.*?page=(\d+)/);
+            var page = url_match ? url_match[1] : 1; // 1: default
+
+            this.switchCurrentView(this.trashReposView);
+            this.sideNavView.setCurTab('libraries', {'option': 'trash'});
+            this.trashReposView.show({'page': page});
+        },
+
+        // search trash libs by owner
+        showSearchTrashLibraries: function() {
             // url_match: null or an array
             var url_match = location.href.match(/.*?name=(.*)/); // search by owner
             var owner = url_match ? url_match[1] : '';
 
-            this.switchCurrentView(this.trashReposView);
+            this.switchCurrentView(this.searchTrashReposView);
             this.sideNavView.setCurTab('libraries', {'option': 'trash'});
-            this.trashReposView.show({'owner': decodeURIComponent(owner)});
+            this.searchTrashReposView.show({'owner': decodeURIComponent(owner)});
         }
 
     });

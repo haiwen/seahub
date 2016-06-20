@@ -64,7 +64,7 @@
             </form>
         <% } %>
         <% if (option == 'trash') { %>
-            <form action="{% url 'sys_repo_trash' %}" method="get" class="side-search-form" id="trash-libs-search-form">
+            <form action="{% url 'sys_trash_repo_search' %}" method="get" class="side-search-form" id="trash-libs-search-form">
                 <input type="text" name="name" class="input" value="" placeholder="{% trans "Search libraries by owner..." %}" />
             </form>
         <% } %>
@@ -164,8 +164,8 @@
         <h2 class="alc">{% trans "No connected devices" %}</h2>
     </div>
     <div id="paginator">
-        <a class="js-previous hide" href="#">{% trans "Previous" %}</a>
-        <a class="js-next hide" href="#">{% trans "Next" %}</a>
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
     </div>
 </script>
 
@@ -298,8 +298,8 @@
         </tbody>
     </table>
     <div id="paginator">
-        <a class="js-previous hide" href="#">{% trans "Previous" %}</a>
-        <a class="js-next hide" href="#">{% trans "Next" %}</a>
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
     </div>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No libraries" %}</h2>
@@ -400,6 +400,10 @@
         <tbody>
         </tbody>
     </table>
+    <div id="paginator">
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
+    </div>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "No library deleted yet" %}</h2>
     </div>

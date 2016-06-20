@@ -5,7 +5,7 @@ define([
     'common',
     'moment',
     'sysadmin-app/views/trash-repo',
-    'sysadmin-app/collection/trash-repos'
+    'sysadmin-app/collection/search-trash-repos'
 ], function($, _, Backbone, Common, Moment, TrashRepoView,
     TrashRepoCollection) {
     'use strict';
@@ -34,32 +34,28 @@ define([
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
             this.$cleanBtn = this.$('.js-clean');
-            this.$jsPrevious = this.$('.js-previous');
-            this.$jsNext = this.$('.js-next');
         },
 
         events: {
-            'click .js-clean': 'cleanTrashLibraries',
-            'click #paginator .js-next': 'getNextPage',
-            'click #paginator .js-previous': 'getPreviousPage'
+            'click .js-clean': 'cleanTrashLibraries'
         },
 
         cleanTrashLibraries: function() {
             var _this = this;
-            var popupTitle = gettext("Clear Trash");
-            var popupContent = gettext("Are you sure you want to clear trash?");
+            var owner = this.trashRepoCollection.search_owner;
+            var popupTitle = gettext("Delete Library By Owner");
+            var popupContent = gettext("Are you sure you want to delete all %s's libraries?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + Common.HTMLescape(owner) + '</span>');
             var yesCallback = function() {
                 $.ajax({
                     url: Common.getUrl({'name':'admin-trash-libraries'}),
                     type: 'DELETE',
+                    data: {'owner': owner},
                     beforeSend: Common.prepareCSRFToken,
                     dataType: 'json',
                     success: function() {
                         _this.$cleanBtn.hide();
                         _this.$tip.hide();
                         _this.$table.hide();
-                        _this.$jsNext.hide();
-                        _this.$jsPrevious.hide();
                         _this.$emptyTip.show();
                         Common.feedback(gettext("Success"), 'success');
                     },
@@ -74,29 +70,6 @@ define([
             Common.showConfirm(popupTitle, popupContent, yesCallback);
         },
 
-        getNextPage: function() {
-            this.initPage();
-            var current_page = this.trashRepoCollection.state.current_page;
-            if (this.trashRepoCollection.state.has_next_page) {
-                this.trashRepoCollection.getPage(current_page + 1, {
-                    reset: true
-                });
-            }
-
-            return false;
-        },
-
-        getPreviousPage: function() {
-            this.initPage();
-            var current_page = this.trashRepoCollection.state.current_page;
-            if (current_page > 1) {
-                this.trashRepoCollection.getPage(current_page - 1, {
-                    reset: true
-                });
-            }
-            return false;
-        },
-
         initPage: function() {
             this.$tip.hide();
             this.$table.hide();
@@ -104,8 +77,6 @@ define([
             this.$loadingTip.show();
             this.$emptyTip.hide();
             this.$cleanBtn.hide();
-            this.$jsNext.hide();
-            this.$jsPrevious.hide();
         },
 
         hide: function() {
@@ -127,7 +98,7 @@ define([
             var _this = this;
 
             this.trashRepoCollection.fetch({
-                data: {'page': this.option.page},
+                data: {'owner': this.option.owner},
                 cache: false,
                 reset: true,
                 error: function (collection, response, opts) {
@@ -142,40 +113,26 @@ define([
                         err_msg = gettext("Failed. Please check the network.");
                     }
                     Common.feedback(err_msg, 'error');
+                },
+                complete: function() {
+                    _this.$loadingTip.hide();
                 }
             });
         },
 
         reset: function() {
-            // update the url
-            var current_page = this.trashRepoCollection.state.current_page;
-            app.router.navigate('trash-libs/?page=' + current_page);
+            var length = this.trashRepoCollection.length;
 
             this.$loadingTip.hide();
-            if (this.trashRepoCollection.length > 0) {
+
+            if (length > 0) {
                 this.trashRepoCollection.each(this.addOne, this);
                 this.$cleanBtn.show();
                 this.$tip.show();
                 this.$table.show();
-                this.renderPaginator();
             } else {
                 this.$emptyTip.show();
                 this.$cleanBtn.hide();
-            }
-        },
-
-        renderPaginator: function() {
-            if (this.trashRepoCollection.state.has_next_page) {
-                this.$jsNext.show();
-            } else {
-                this.$jsNext.hide();
-            }
-
-            var current_page = this.trashRepoCollection.state.current_page;
-            if (current_page > 1) {
-                this.$jsPrevious.show();
-            } else {
-                this.$jsPrevious.hide();
             }
         },
 

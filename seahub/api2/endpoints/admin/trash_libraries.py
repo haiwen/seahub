@@ -18,6 +18,16 @@ from seahub.api2.utils import api_error
 
 logger = logging.getLogger(__name__)
 
+def get_trash_repo_info(repo):
+
+    result = {}
+    result['name'] = repo.repo_name
+    result['id'] = repo.repo_id
+    result['owner'] = repo.owner_id
+    result['delete_time'] = timestamp_to_isoformat_timestr(repo.del_time)
+
+    return result
+
 
 class AdminTrashLibraries(APIView):
 
@@ -31,6 +41,8 @@ class AdminTrashLibraries(APIView):
         Permission checking:
         1. only admin can perform this action.
         """
+
+        # list by owner
         search_owner = request.GET.get('owner', '')
         if search_owner:
             if not is_valid_username(search_owner):
@@ -38,20 +50,45 @@ class AdminTrashLibraries(APIView):
                 return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
             repos = seafile_api.get_trash_repos_by_owner(search_owner)
+
+            return_repos = []
+            for repo in repos:
+                result = get_trash_repo_info(repo)
+                return_repos.append(result)
+
+            return Response({"search_owner": search_owner, "repos": return_repos})
+
+        # list by page
+        try:
+            current_page = int(request.GET.get('page', '1'))
+            per_page = int(request.GET.get('per_page', '100'))
+        except ValueError:
+            current_page = 1
+            per_page = 100
+
+        start = (current_page - 1) * per_page
+        limit = per_page + 1
+
+        repos_all = seafile_api.get_trash_repo_list(start, limit)
+
+        if len(repos_all) > per_page:
+            repos_all = repos_all[:per_page]
+            has_next_page = True
         else:
-            repos = seafile_api.get_trash_repo_list(-1, -1)
+            has_next_page = False
 
-        return_repos = []
-        for repo in repos:
-            result = {}
-            result['name'] = repo.repo_name
-            result['id'] = repo.repo_id
-            result['owner'] = repo.owner_id
-            result['delete_time'] = timestamp_to_isoformat_timestr(repo.del_time)
+        return_results = []
+        for repo in repos_all:
+            repo_info = get_trash_repo_info(repo)
+            return_results.append(repo_info)
 
-            return_repos.append(result)
+        page_info = {
+            'has_next_page': has_next_page,
+            'current_page': current_page
+        }
 
-        return Response({"search_owner": search_owner, "repos": return_repos})
+        return Response({"page_info": page_info, "repos": return_results})
+
 
     def delete(self, request, format=None):
         """ clean all deleted libraries(by owner)
