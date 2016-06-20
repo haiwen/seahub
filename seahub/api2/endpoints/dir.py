@@ -1,5 +1,6 @@
 import os
 import logging
+import posixpath
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -10,11 +11,12 @@ from rest_framework import status
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
-from seahub.api2.views import reloaddir, get_dir_recursively, \
+from seahub.api2.views import get_dir_recursively, \
     get_dir_entrys_by_id
 
 from seahub.views import check_folder_permission
-from seahub.utils import check_filename_with_rename, is_pro_version
+from seahub.utils import check_filename_with_rename
+from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
 from seaserv import seafile_api
 from pysearpc import SearpcError
@@ -30,16 +32,36 @@ class DirView(APIView):
     permission_classes = (IsAuthenticated, )
     throttle_classes = (UserRateThrottle, )
 
+    def get_dir_info(self, repo_id, dir_path):
+
+        dir_obj = seafile_api.get_dirent_by_path(repo_id, dir_path)
+        dir_info = {
+            'type': 'dir',
+            'repo_id': repo_id,
+            'parent_dir': os.path.dirname(dir_path.rstrip('/')),
+            'obj_name': dir_obj.obj_name,
+            'obj_id': dir_obj.obj_id,
+            'mtime': timestamp_to_isoformat_timestr(dir_obj.mtime),
+        }
+
+        return dir_info
+
     def get(self, request, repo_id, format=None):
-        # list dir
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+        """ Get dir info.
+
+        Permission checking:
+        1. user with either 'r' or 'rw' permission.
+        """
 
         path = request.GET.get('p', '/')
         if path[-1] != '/':
             path = path + '/'
+
+        # recource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
@@ -52,7 +74,8 @@ class DirView(APIView):
             error_msg = 'Folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if check_folder_permission(request, repo_id, path) is None:
+        # permission check
+        if not check_folder_permission(request, repo_id, path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -86,11 +109,14 @@ class DirView(APIView):
             return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+        """ Create, rename dir.
 
-        path = request.GET.get('p', '')
+        Permission checking:
+        1. user with 'rw' permission.
+        """
+
+        # argument check
+        path = request.GET.get('p', None)
         if not path or path[0] != '/':
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
@@ -99,126 +125,135 @@ class DirView(APIView):
             error_msg = 'Can not make or rename root dir.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        if path[-1] == '/':
-            path = path[:-1]
-
-        username = request.user.username
-        parent_dir = os.path.dirname(path)
-        operation = request.POST.get('operation', '')
-        if operation.lower() == 'mkdir':
-            parent_dir = os.path.dirname(path)
-            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            create_parents = request.POST.get('create_parents', '').lower() in ('true', '1')
-            if not create_parents:
-                parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
-                if not parent_dir_id:
-                    error_msg = 'Folder %s not found.' % parent_dir
-                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-                new_dir_name = os.path.basename(path)
-                new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
-                try:
-                    seafile_api.post_dir(repo_id, parent_dir, new_dir_name, username)
-                except SearpcError as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-            else:
-                if not is_pro_version():
-                    error_msg = 'Feature not supported.'
-                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-                try:
-                    seafile_api.mkdir_with_parents(repo_id, '/', path[1:], username)
-                except SearpcError as e:
-                    logger.error(e)
-                    error_msg = 'Internal Server Error'
-                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-
-            if request.GET.get('reloaddir', '').lower() == 'true':
-                resp = reloaddir(request, repo, parent_dir)
-            else:
-                resp = Response({'success': True})
-
-            return resp
-
-        elif operation.lower() == 'rename':
-            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-            if not dir_id:
-                error_msg = 'Folder %s not found.' % path
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-            if check_folder_permission(request, repo.id, path) != 'rw':
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-            parent_dir = os.path.dirname(path)
-            old_dir_name = os.path.basename(path)
-            newname = request.POST.get('newname', '')
-            if not newname:
-                error_msg = 'newname invalid.'
-                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-            if newname == old_dir_name:
-                return Response({'success': True})
-
-            try:
-                # rename duplicate name
-                checked_newname = check_filename_with_rename(repo_id, parent_dir, newname)
-                # rename dir
-                seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
-                                        checked_newname, username)
-                return Response({'success': True})
-            except SearpcError, e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
-        else:
-            error_msg = "Operation not supported."
+        operation = request.data.get('operation', None)
+        if not operation:
+            error_msg = 'operation invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-    def delete(self, request, repo_id, format=None):
-        # delete dir or file
+        operation = operation.lower()
+        if operation not in ('mkdir', 'rename'):
+            error_msg = "operation can only be 'mkdir', 'rename'."
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
         repo = seafile_api.get_repo(repo_id)
         if not repo:
             error_msg = 'Library %s not found.' % repo_id
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        path = path.rstrip('/')
+        username = request.user.username
+        parent_dir = os.path.dirname(path)
+        if operation == 'mkdir':
+            # permission check
+            if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            # resource check
+            parent_dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+            if not parent_dir_id:
+                error_msg = 'Folder %s not found.' % parent_dir
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            new_dir_name = os.path.basename(path)
+            new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
+            try:
+                seafile_api.post_dir(repo_id, parent_dir, new_dir_name, username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            new_dir_path = posixpath.join(parent_dir, new_dir_name)
+            dir_info = self.get_dir_info(repo_id, new_dir_path)
+            resp = Response(dir_info)
+
+            return resp
+
+        if operation == 'rename':
+            # resource check
+            dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+            if not dir_id:
+                error_msg = 'Folder %s not found.' % path
+                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+            # permission check
+            if check_folder_permission(request, repo_id, path) != 'rw':
+                error_msg = 'Permission denied.'
+                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            old_dir_name = os.path.basename(path)
+            new_dir_name = request.data.get('newname', None)
+            if not new_dir_name:
+                error_msg = 'newname invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if new_dir_name == old_dir_name:
+                dir_info = self.get_dir_info(repo_id, path)
+                resp = Response(dir_info)
+                return resp
+
+            try:
+                # rename duplicate name
+                new_dir_name = check_filename_with_rename(repo_id, parent_dir, new_dir_name)
+                # rename dir
+                seafile_api.rename_file(repo_id, parent_dir, old_dir_name,
+                                        new_dir_name, username)
+
+                new_dir_path = posixpath.join(parent_dir, new_dir_name)
+                dir_info = self.get_dir_info(repo_id, new_dir_path)
+                resp = Response(dir_info)
+                return resp
+            except SearpcError, e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+    def delete(self, request, repo_id, format=None):
+        """ Delete dir.
+
+        Permission checking:
+        1. user with 'rw' permission.
+        """
+
+        # argument check
         path = request.GET.get('p', None)
         if not path:
             error_msg = 'p invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-        if not dir_id:
-            error_msg = 'Folder %s not found.' % path
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        if check_folder_permission(request, repo_id, path) != 'rw':
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         if path == '/':
             error_msg = 'Can not delete root path.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        # resource check
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+        if not dir_id:
+            return Response({'success': True})
+
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
+        if check_folder_permission(request, repo_id, path) != 'rw':
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
         if path[-1] == '/':
             path = path[:-1]
 
+        path = path.rstrip('/')
         username = request.user.username
         parent_dir = os.path.dirname(path)
-        file_name = os.path.basename(path)
+        dir_name = os.path.basename(path)
         try:
-            seafile_api.del_file(repo_id, parent_dir, file_name, username)
+            seafile_api.del_file(repo_id, parent_dir, dir_name, username)
         except SearpcError as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        if request.GET.get('reloaddir', '').lower() == 'true':
-            return reloaddir(request, repo, parent_dir)
-        else:
-            return Response({'success': True})
+        return Response({'success': True})
