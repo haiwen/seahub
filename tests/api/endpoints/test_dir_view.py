@@ -8,6 +8,7 @@ from seaserv import seafile_api
 from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
+from seahub.utils import check_filename_with_rename
 
 from tests.common.utils import randstring
 
@@ -100,6 +101,22 @@ class DirViewTest(BaseTestCase):
         # check new folder has been created
         assert new_name == self.get_lib_folder_name(self.repo_id)
 
+    def test_can_create_same_name_folder(self):
+        self.login_as(self.user)
+
+        folder_name = os.path.basename(self.folder_path.rstrip('/'))
+        new_name = check_filename_with_rename(self.repo_id, '/', folder_name)
+
+        # create file
+        data = {'operation': 'mkdir',}
+        resp = self.client.post(self.url + '?p=' + self.folder_path, data)
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+
+        # check new folder has been created
+        assert new_name == json_resp['obj_name']
+
     def test_create_folder_with_invalid_repo_perm(self):
 
         # login as admin, then create dir in user's repo
@@ -155,6 +172,31 @@ class DirViewTest(BaseTestCase):
 
         # check old file has been renamed to new_name
         assert new_name == self.get_lib_folder_name(self.repo_id)
+
+    def test_can_rename_folder_with_same_name(self):
+        self.login_as(self.user)
+
+        # check old folder exist
+        assert self.folder_name == self.get_lib_folder_name(self.repo_id)
+
+        # create a new folder
+        new_name = randstring(6)
+        data = {'operation': 'mkdir',}
+        resp = self.client.post(self.url + '?p=/' + new_name, data)
+        self.assertEqual(200, resp.status_code)
+
+        # rename new folder with the same name of old folder
+        old_folder_name = self.folder_name
+        checked_name = check_filename_with_rename(self.repo_id,
+                '/', old_folder_name)
+        data = {'operation': 'rename', 'newname': checked_name}
+        resp = self.client.post(self.url + '?p=/' + new_name, data)
+        self.assertEqual(200, resp.status_code)
+
+        # check old file has been renamed to new_name
+        json_resp = json.loads(resp.content)
+        print old_folder_name, new_name, checked_name
+        assert checked_name == json_resp['obj_name']
 
     def test_rename_folder_with_invalid_repo_perm(self):
 
