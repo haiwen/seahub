@@ -26,13 +26,14 @@
 </script>
 
 <script type="text/template" id="repos-shared-to-me-tmpl">
-    <h3 class="hd">{% trans "Shared to me" %}</h3>
+    <h3 class="hd">{% trans "Shared with me" %}</h3>
     <table class="hide">
         <thead></thead>
         <tbody></tbody>
     </table>
     <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No library is shared to you" %}</h2>
+        <h2 class="alc">{% trans "No library is shared to you personally" %}</h2>
+        <p>{% blocktrans %}No library is shared to you personally. You can find more shared libraries at "Shared with groups".{% endblocktrans %}</p>
     </div>
     <span class="loading-icon loading-tip"></span>
     <p class="error error-tip hide"></p>
@@ -40,7 +41,7 @@
 
 <script type="text/template" id="organization-repos-tmpl">
     <div class="hd">{# no 'ovhd' as there is a .dropdown-menu in it #}
-        <h3 class="fleft">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</h3>
+        <h3 class="fleft">{% trans "Shared with all" %}</h3>
         {% if can_add_pub_repo %}
         <div class="fright sf-dropdown js-add-pub-lib-dropdown">
             <button class="btn-white sf-dropdown-toggle"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Add Library"%}</span></button>
