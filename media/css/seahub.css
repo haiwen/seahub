@@ -169,7 +169,7 @@ form,input,textarea,select,button,img {
 body, input, textarea, button, select {
     font: 13px/1.5 Arial, Helvetica, sans-serif;
     color: #333;
-    word-wrap:break-word; /* for en */
+    word-break:break-all; /* for en */
 }
 input, button, select { line-height:19px;/*for ff*/ }
 h1, h2, h3, h4, h5, h6 {
@@ -316,10 +316,24 @@ table {
     width:100%;
     margin:8px 0 40px;
 }
-caption { font-size:1.1em; font-weight:bold; margin-bottom:.6em; }
-th { text-align:left; font-weight:normal; color:#9c9c9c; }
-td, th { padding:5px 3px; word-wrap:break-word; border-bottom:1px solid #eee; }
-td { color: #333; font-size:14px; }
+caption {
+    font-size:1.1em;
+    font-weight:bold;
+    margin-bottom:.6em;
+}
+th {
+    text-align:left;
+    font-weight:normal;
+    color:#9c9c9c;
+}
+th, td {
+    padding:5px 3px;
+    border-bottom:1px solid #eee;
+}
+td {
+    color: #333;
+    font-size:14px;
+}
 table img { vertical-align:middle; }
 /* custom scrollbar */
 ::-webkit-scrollbar {
@@ -998,6 +1012,11 @@ textarea:-moz-placeholder {/* for FF */
     box-shadow:0 3px 2px #f5f5f5;
     margin:5em auto;
 }
+@media (max-width: 387px) {
+    .new-narrow-panel {
+        width:100%;
+    }
+}
 .new-narrow-panel .hd {
     color:#fff;
     font-size:16px;
@@ -1006,7 +1025,9 @@ textarea:-moz-placeholder {/* for FF */
     border-bottom:1px solid #d5d5d5;
 }
 .new-narrow-panel .con {
-    padding:30px 60px 60px;
+    padding:30px 0 60px;
+    width:268px; 
+    margin:0 auto;
 }
 .new-narrow-panel .input {
     font-size:14px;
@@ -2021,7 +2042,6 @@ button.sf-dropdown-toggle:focus {
 }
 .repo-file-list .dirent-name {
     display:inline-block;
-    word-break:break-all;
 }
 .repo-file-list .file-locked-icon {
     position:absolute;

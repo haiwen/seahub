@@ -6,9 +6,10 @@
 {% include 'snippets/file_view_style.html' %}
 {% endblock %}
 
+{% block header_css_class %}hide{% endblock %}
 {% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
-{% block main_panel %}
+{% block main_content %}
     <div id="view-hd">
       {% block view_hd %}
         <h2>

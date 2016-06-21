@@ -1,10 +1,6 @@
-#header,
-#footer {
-    display:none;
-}
 #main {
-    width:100%;
     min-height:0;
+    padding:0;
 }
 #view-hd,
 #shared-file-view-hd,
@@ -33,6 +29,11 @@
     background:#f4f4f4;
     border:1px solid #ededed;
     margin-top:12px;
+}
+@media (max-width:950px) {
+    #file-view {
+        width:950px;
+    }
 }
 #md-view,
 .CodeMirror,
