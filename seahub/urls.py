@@ -20,6 +20,8 @@ from seahub.views.ajax import *
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
+from seahub.api2.endpoints.shared_folders import SharedFolders
+from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
 from seahub.api2.endpoints.upload_links import UploadLinks, UploadLink
 from seahub.api2.endpoints.file import FileView
 from seahub.api2.endpoints.dir import DirView
@@ -76,7 +78,6 @@ urlpatterns = patterns(
     url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),
 
     (r'^repo/upload_check/$', validate_filename),
-    url(r'^repo/unsetinnerpub/(?P<repo_id>[-0-9a-f]{36})/$', unsetinnerpub, name='unsetinnerpub'),
     url(r'^repo/download_dir/(?P<repo_id>[-0-9a-f]{36})/$', repo_download_dir, name='repo_download_dir'),
     url(r'^repo/file_revisions/(?P<repo_id>[-0-9a-f]{36})/$', file_revisions, name='file_revisions'),
     url(r'^repo/file-access/(?P<repo_id>[-0-9a-f]{36})/$', file_access, name='file_access'),
@@ -177,6 +178,9 @@ urlpatterns = patterns(
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
+    url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),
+    url(r'^api/v2.1/shared-repos/$', SharedRepos.as_view(), name='api-v2.1-shared-repos'),
+    url(r'^api/v2.1/shared-repos/(?P<repo_id>[-0-9a-f]{36})/$', SharedRepo.as_view(), name='api-v2.1-shared-repo'),
     url(r'^api/v2.1/share-links/$', ShareLinks.as_view(), name='api-v2.1-share-links'),
     url(r'^api/v2.1/share-links/(?P<token>[a-f0-9]{10})/$', ShareLink.as_view(), name='api-v2.1-share-link'),
     url(r'^api/v2.1/upload-links/$', UploadLinks.as_view(), name='api-v2.1-upload-links'),

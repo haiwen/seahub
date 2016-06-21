@@ -384,14 +384,16 @@ define([
         deleteDownloadLink: function() {
             var _this = this;
             $.ajax({
-                url: Common.getUrl({name: 'delete_shared_download_link'}),
-                type: 'POST',
-                data: { 't': this.download_link_token },
+                url: Common.getUrl({name: 'share_admin_share_link', 'token': _this.download_link_token}),
+                type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
                 success: function(data) {
                     _this.$('#generate-download-link-form').removeClass('hide');
                     _this.$('#download-link-operations').addClass('hide');
+                },
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
                 }
             });
         },
@@ -458,9 +460,8 @@ define([
         deleteUploadLink: function() {
             var _this = this;
             $.ajax({
-                url: Common.getUrl({name: 'delete_shared_upload_link'}),
-                type: 'POST',
-                data: { 't': this.upload_link_token },
+                url: Common.getUrl({name: 'share_admin_upload_link', 'token': _this.upload_link_token}),
+                type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
                 success: function(data) {

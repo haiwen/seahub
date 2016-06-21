@@ -1,3 +1,4 @@
+import os
 import logging
 from constance import config
 
@@ -19,6 +20,7 @@ from seahub.api2.throttling import UserRateThrottle
 from seahub.share.models import UploadLinkShare
 from seahub.utils import gen_shared_upload_link
 from seahub.views import check_folder_permission
+from seahub.utils.timeutils import datetime_to_isoformat_timestr
 
 logger = logging.getLogger(__name__)
 
@@ -36,9 +38,30 @@ class UploadLinks(APIView):
         data = {}
         token = uls.token
 
-        data['repo_id'] = uls.repo_id
-        data['path'] = uls.path
-        data['ctime'] = uls.ctime
+        repo_id = uls.repo_id
+        try:
+            repo = seafile_api.get_repo(repo_id)
+        except Exception as e:
+            logger.error(e)
+            repo = None
+
+        path = uls.path
+        if path:
+            obj_name = '/' if path == '/' else os.path.basename(path.rstrip('/'))
+        else:
+            obj_name = ''
+
+        if uls.ctime:
+            ctime = datetime_to_isoformat_timestr(uls.ctime)
+        else:
+            ctime = ''
+
+        data['repo_id'] = repo_id
+        data['repo_name'] = repo.repo_name if repo else ''
+        data['path'] = path
+        data['obj_name'] = obj_name
+        data['view_cnt'] = uls.view_cnt
+        data['ctime'] = ctime
         data['link'] = gen_shared_upload_link(token)
         data['token'] = token
         data['username'] = uls.username
@@ -46,12 +69,19 @@ class UploadLinks(APIView):
         return data
 
     def get(self, request):
-        """ get upload link.
+        """ Get all upload links of a user.
+
+        Permission checking:
+        1. default(NOT guest) user;
         """
 
         if not self._can_generate_shared_link(request):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        # get all upload links
+        username = request.user.username
+        upload_link_shares = UploadLinkShare.objects.filter(username=username)
 
         repo_id = request.GET.get('repo_id', None)
         if repo_id:
@@ -60,41 +90,27 @@ class UploadLinks(APIView):
                 error_msg = 'Library %s not found.' % repo_id
                 return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            # repo level permission check
-            if not check_folder_permission(request, repo_id, '/'):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            # filter share links by repo
+            upload_link_shares = filter(lambda ufs: ufs.repo_id==repo_id, upload_link_shares)
 
-        path = request.GET.get('path', None)
-        if path:
-            try:
-                dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
-            except SearpcError as e:
-                logger.error(e)
-                error_msg = 'Internal Server Error'
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+            path = request.GET.get('path', None)
+            if path:
+                try:
+                    dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
+                except SearpcError as e:
+                    logger.error(e)
+                    error_msg = 'Internal Server Error'
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-            if not dir_id:
-                error_msg = 'folder %s not found.' % path
-                return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+                if not dir_id:
+                    error_msg = 'folder %s not found.' % path
+                    return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-            # folder permission check
-            if not check_folder_permission(request, repo_id, path):
-                error_msg = 'Permission denied.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+                if path[-1] != '/':
+                    path = path + '/'
 
-        username = request.user.username
-        upload_link_shares = UploadLinkShare.objects.filter(username=username)
-
-        # filter result by args
-        if repo_id:
-            upload_link_shares = filter(lambda ufs: ufs.repo_id == repo_id, upload_link_shares)
-
-        if path:
-            if path[-1] != '/':
-                path = path + '/'
-
-            upload_link_shares = filter(lambda ufs: ufs.path == path, upload_link_shares)
+                # filter share links by path
+                upload_link_shares = filter(lambda ufs: ufs.path==path, upload_link_shares)
 
         result = []
         for uls in upload_link_shares:
@@ -103,31 +119,40 @@ class UploadLinks(APIView):
 
         if len(result) == 1:
             result = result[0]
+        else:
+            result.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
 
         return Response(result)
 
     def post(self, request):
-        """ create upload link.
+        """ Create upload link.
+
+        Permission checking:
+        1. default(NOT guest) user;
+        2. user with 'rw' permission;
         """
 
-        if not self._can_generate_shared_link(request):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
+        # argument check
         repo_id = request.data.get('repo_id', None)
         if not repo_id:
             error_msg = 'repo_id invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        repo = seafile_api.get_repo(repo_id)
-        if not repo:
-            error_msg = 'Library %s not found.' % repo_id
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
         path = request.data.get('path', None)
         if not path:
             error_msg = 'path invalid.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        password = request.data.get('password', None)
+        if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
+            error_msg = _('Password is too short')
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # resource check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         try:
             dir_id = seafile_api.get_dir_id_by_path(repo_id, path)
@@ -140,13 +165,12 @@ class UploadLinks(APIView):
             error_msg = 'folder %s not found.' % path
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        password = request.data.get('password', None)
-        if password and len(password) < config.SHARE_LINK_PASSWORD_MIN_LENGTH:
-            error_msg = _('Password is too short')
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+        # permission check
+        if not self._can_generate_shared_link(request):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        user_perm = check_folder_permission(request, repo_id, '/')
-        if user_perm != 'rw':
+        if check_folder_permission(request, repo_id, path) != 'rw':
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
@@ -170,20 +194,10 @@ class UploadLink(APIView):
         return request.user.permissions.can_generate_shared_link()
 
     def get(self, request, token):
-        """ get upload link info.
-        """
+        """ Get upload link info.
 
-        try:
-            uls = UploadLinkShare.objects.get(token=token)
-        except UploadLinkShare.DoesNotExist:
-            error_msg = 'token %s not found.' % token
-            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
-
-        link_info = self._get_upload_link_info(uls)
-        return Response(link_info)
-
-    def delete(self, request, token):
-        """ delete upload link.
+        Permission checking:
+        1. default(NOT guest) user;
         """
 
         if not self._can_generate_shared_link(request):
@@ -196,6 +210,26 @@ class UploadLink(APIView):
             error_msg = 'token %s not found.' % token
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        link_info = self._get_upload_link_info(uls)
+        return Response(link_info)
+
+    def delete(self, request, token):
+        """ Delete upload link.
+
+        Permission checking:
+        1. default(NOT guest) user;
+        2. link owner;
+        """
+
+        if not self._can_generate_shared_link(request):
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+        try:
+            uls = UploadLinkShare.objects.get(token=token)
+        except UploadLinkShare.DoesNotExist:
+            return Response({'success': True})
+
         username = request.user.username
         if not uls.is_owner(username):
             error_msg = 'Permission denied.'
@@ -203,8 +237,9 @@ class UploadLink(APIView):
 
         try:
             uls.delete()
-            return Response({'success': True})
         except Exception as e:
             logger.error(e)
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        return Response({'success': True})

@@ -39,7 +39,7 @@ class DevicesTest(BaseTestCase):
         resp = self.client.get(url)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[1]) == 2
+        assert len(json_resp['devices']) == 2
 
     def test_can_get_desktop(self):
         self.login_as(self.admin)
@@ -47,8 +47,8 @@ class DevicesTest(BaseTestCase):
         resp = self.client.get(url)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[1]) == 1
-        assert json_resp[1][0]['platform'] == 'linux'
+        assert len(json_resp['devices']) == 1
+        assert json_resp['devices'][0]['platform'] == 'linux'
 
     def test_can_get_mobile(self):
         self.login_as(self.admin)
@@ -56,8 +56,8 @@ class DevicesTest(BaseTestCase):
         resp = self.client.get(url)
 
         json_resp = json.loads(resp.content)
-        assert len(json_resp[1]) == 1
-        assert json_resp[1][0]['platform'] == 'ios'
+        assert len(json_resp['devices']) == 1
+        assert json_resp['devices'][0]['platform'] == 'ios'
 
     def test_can_not_get_if_not_admin(self):
         self.login_as(self.user)

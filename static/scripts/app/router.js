@@ -12,13 +12,18 @@ define([
     'app/views/dir',
     'app/views/starred-file',
     'app/views/devices',
+    'app/views/share-admin-repos',
+    'app/views/share-admin-folders',
+    'app/views/share-admin-share-links',
+    'app/views/share-admin-upload-links',
     'app/views/activities',
     'app/views/notifications',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, MyReposView,
-    SharedReposView, GroupsView, GroupView,
-    OrgView, DirView, StarredFileView, DevicesView, ActivitiesView,
-    NotificationsView, AccountView) {
+    SharedReposView, GroupsView, GroupView, OrgView, DirView,
+    StarredFileView, DevicesView, ShareAdminReposView,
+    ShareAdminFoldersView, ShareAdminShareLinksView,
+    ShareAdminUploadLinksView, ActivitiesView, NotificationsView, AccountView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -38,6 +43,10 @@ define([
             'starred/': 'showStarredFile',
             'activities/': 'showActivities',
             'devices/': 'showDevices',
+            'share-admin-libs/': 'showShareAdminRepos',
+            'share-admin-folders/': 'showShareAdminFolders',
+            'share-admin-share-links/': 'showShareAdminShareLinks',
+            'share-admin-upload-links/': 'showShareAdminUploadLinks',
             // Default
             '*actions': 'showRepos'
         },
@@ -62,6 +71,10 @@ define([
             this.starredFileView = new StarredFileView();
             this.devicesView = new DevicesView();
             this.activitiesView = new ActivitiesView();
+            this.shareAdminReposView = new ShareAdminReposView();
+            this.shareAdminFoldersView = new ShareAdminFoldersView();
+            this.shareAdminShareLinksView = new ShareAdminShareLinksView();
+            this.shareAdminUploadLinksView = new ShareAdminUploadLinksView();
 
             app.ui.notificationsView = this.notificationsView = new NotificationsView();
             app.ui.accountView = this.accountView = new AccountView();
@@ -208,6 +221,30 @@ define([
             this.switchCurrentView(this.devicesView);
             this.devicesView.show();
             this.sideNavView.setCurTab('devices');
+        },
+
+        showShareAdminRepos: function() {
+            this.switchCurrentView(this.shareAdminReposView);
+            this.shareAdminReposView.show();
+            this.sideNavView.setCurTab('share-admin-repos');
+        },
+
+        showShareAdminFolders: function() {
+            this.switchCurrentView(this.shareAdminFoldersView);
+            this.shareAdminFoldersView.show();
+            this.sideNavView.setCurTab('share-admin-folders');
+        },
+
+        showShareAdminShareLinks: function() {
+            this.switchCurrentView(this.shareAdminShareLinksView);
+            this.shareAdminShareLinksView.show();
+            this.sideNavView.setCurTab('share-admin-links');
+        },
+
+        showShareAdminUploadLinks: function() {
+            this.switchCurrentView(this.shareAdminUploadLinksView);
+            this.shareAdminUploadLinksView.show();
+            this.sideNavView.setCurTab('share-admin-links');
         },
 
         showActivities: function() {

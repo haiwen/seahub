@@ -1,24 +1,6 @@
 {% load i18n %}
 {% load url from future %}
 
-/*
-var share_list = [];
-$(function () {
-    $.ajax({
-        url:'{% url 'get_contacts' %}',
-        cache: false,
-        dataType: 'json',
-        success: function(data) {
-            var contact_list = data['contacts'], contact_email;
-            for (var i = 0, len = contact_list.length; i < len; i++) {
-                contact_email = contact_list[i].email;
-                share_list.push({value: contact_email, label: contact_email});
-            }
-        }
-    });
-});
-*/
-
 function showSharePopup(op, name, aj_data, type, cur_path) {
     var path = cur_path + name;
 
@@ -215,9 +197,8 @@ $('#rm-shared-link').click(function() {
         token = obj.attr('data-token');
 
     $.ajax({
-        url: '{% url 'ajax_remove_shared_link' %}',
-        type: 'POST',
-        data: {'t': token},
+        url: '{{ SITE_ROOT }}api/v2.1/share-links/' + token + '/',
+        type: 'DELETE',
         dataType: 'json',
         cache: false,
         beforeSend: prepareCSRFToken,
@@ -247,7 +228,7 @@ $('#link-passwd-switch').click(function () {
 $('#link-expire-switch').click(function () {
     var form = $('#link-options'),
         days_input = $('input[name="expire-days"]', form);
-    var link_expire = $('#link-expire'); 
+    var link_expire = $('#link-expire');
 
     if ($(this).prop('checked')) {
         link_expire.slideDown(100);
