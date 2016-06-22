@@ -3,14 +3,16 @@
 {% load url from future %}
 
 {% block sub_title %}{{filename}} - {% endblock %}
+{% block viewport %}{% endblock %}
 
 {% block extra_style %}
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/file_view_extra.css" />
 {% endblock %}
 
+{% block header_css_class %}hide{% endblock %}
 {% block main_css_class %}{% endblock %} {# remove the padding-top css #}
 
-{% block main_panel %}
+{% block main_content %}
     <div id="view-hd">
         <h2>{{ filename }}
             {% if is_starred %}
