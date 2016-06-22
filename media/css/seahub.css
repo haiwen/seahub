@@ -1551,7 +1551,6 @@ button.sf-dropdown-toggle:focus {
     border-radius:2px;
 }
 #dir-view .repo-op {
-    height:48px;
     position: relative; /* for '#upload-menu' */
 }
 #right-panel .hd,
@@ -1647,6 +1646,11 @@ button.sf-dropdown-toggle:focus {
     position:relative;
     margin:10px 0 0 25px;
 }
+@media (max-width: 390px) {
+    #notifications {
+        margin-left:5px;
+    }
+}
 #notifications .sf2-icon-bell {
     font-size:24px;
     line-height:1;
@@ -1706,6 +1710,11 @@ button.sf-dropdown-toggle:focus {
 #account {
     position:relative;
     margin-left:32px;
+}
+@media (max-width: 390px) {
+    #account {
+        margin-left:5px;
+    }
 }
 #account .avatar {
     vertical-align:middle;
@@ -2805,6 +2814,11 @@ button.sf-dropdown-toggle:focus {
 #top-search-form .search-input {
     width:155px;
     padding:1px 30px 1px 5px;
+}
+@media (max-width: 390px) {
+    #top-search-form .search-input {
+        width:130px;
+    }
 }
 #search-form,
 #search-user-form,
