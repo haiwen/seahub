@@ -73,7 +73,7 @@
         <dd><% if (is_pro) { %>
                 {% trans "Professional Edition" %}
                 <% if (with_license) { %>
-                    {% trans "expires on" %} <%- license.Expiration %>
+                    {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
             <% } else { %>
             {% trans "Community Edition" %}
@@ -92,7 +92,7 @@
             <%- users_count %>
             /
             <% if (with_license) { %>
-                <%- license.MaxUsers %>
+                <%- license_maxusers %>
             <% } else { %>
                 --
             <% } %>
