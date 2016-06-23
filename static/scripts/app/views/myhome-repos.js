@@ -58,6 +58,7 @@ define([
 
             if (app.pageOptions.guide_enabled) {
                 $('#guide-for-new').modal({appendTo: '#main', focus:false});
+                $('#simplemodal-container').css({'height':'auto'});
                 app.pageOptions.guide_enabled = false;
             }
         },
