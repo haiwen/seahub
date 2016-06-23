@@ -128,8 +128,7 @@ define([
                 'get_url': Common.getUrl({name: 'get_shared_download_link'}),
                 'data': {
                     'repo_id': this.repo_id,
-                    'p': this.dirent_path,
-                    'type': this.is_dir ? 'd' : 'f'
+                    'path': this.dirent_path
                 },
                 'after_op_success': after_op_success
             });
@@ -239,13 +238,8 @@ define([
 
             $.extend(post_data, {
                 'repo_id': this.repo_id,
-                'p': this.dirent_path
+                'path': this.dirent_path
             });
-            if (link_type == 'download') {
-                $.extend(post_data, {
-                    'type': this.is_dir? 'd' : 'f'
-                });
-            }
 
             var _this = this;
             var after_op_success = function(data) {
@@ -269,14 +263,14 @@ define([
                 }
 
                 if (link_type == 'download') {
-                    _this.$('#download-link').html(data["download_link"]); // TODO: add 'click & select' func
-                    _this.$('#direct-dl-link').html(data['download_link'] + '?raw=1');
-                    _this.download_link = data["download_link"]; // for 'link send'
+                    _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
+                    _this.$('#direct-dl-link').html(data['link'] + '?raw=1');
+                    _this.download_link = data["link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');
                 } else {
-                    _this.$('#upload-link').html(data["upload_link"]);
-                    _this.upload_link = data["upload_link"];
+                    _this.$('#upload-link').html(data["link"]);
+                    _this.upload_link = data["link"];
                     _this.upload_link_token = data["token"];
                     _this.$('#upload-link-operations').removeClass('hide');
                 }

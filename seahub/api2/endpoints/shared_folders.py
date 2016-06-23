@@ -38,8 +38,8 @@ class SharedFolders(APIView):
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 shared_repos += seafile_api.get_org_share_out_repo_list(org_id, username, -1, -1)
-                shared_repos += seafile_api.get_org_group_repos_by_owner(org_id, username)
-                shared_repos += seafile_api.list_org_inner_pub_repos_by_owner(org_id, username)
+                shared_repos += seaserv.seafserv_threaded_rpc.get_org_group_repos_by_owner(org_id, username)
+                shared_repos += seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(org_id, username)
             else:
                 shared_repos += seafile_api.get_share_out_repo_list(username, -1, -1)
                 shared_repos += seafile_api.get_group_repos_by_owner(username)

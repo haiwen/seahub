@@ -165,13 +165,13 @@ $('#gen-link-btn').click(function() {
     }
 
     $.ajax({
-            url: '{% url 'ajax_get_download_link' %}',
+            url: '{% url 'api-v2.1-share-links' %}',
             type: 'POST',
             dataType: 'json',
             beforeSend: prepareCSRFToken,
             data: $.extend(post_data, $(this).data('aj_data')),
             success: function(data) {
-                var link = data['download_link'];
+                var link = data['link'];
                 // hide gen-link button, and show link
                 gen_link_btn.addClass('hide');
 
