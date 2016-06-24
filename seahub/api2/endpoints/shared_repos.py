@@ -274,7 +274,8 @@ class SharedRepo(APIView):
             # hacky way to get group repo permission
             permission = ''
             if org_id:
-                for e in seafile_api.list_org_repo_shared_group(org_id, repo_id, username):
+                for e in seafile_api.list_org_repo_shared_group(
+                        org_id, username, repo_id):
                     if e.group_id == group_id:
                         permission = e.perm
                         break

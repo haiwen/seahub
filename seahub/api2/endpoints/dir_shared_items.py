@@ -429,9 +429,11 @@ class DirSharedItemsEndpoint(APIView):
             permission = ''
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                shared_groups = seafile_api.list_org_repo_shared_group(org_id, shared_repo.id, username)
+                shared_groups = seafile_api.list_org_repo_shared_group(
+                        org_id, username, shared_repo.id)
             else:
-                shared_groups = seafile_api.list_repo_shared_group(username, shared_repo.id)
+                shared_groups = seafile_api.list_repo_shared_group(
+                        username, shared_repo.id)
 
             for e in shared_groups:
                 if e.group_id == group_id:
