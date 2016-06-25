@@ -7,8 +7,6 @@ from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
 
-from seaserv import seafile_api
-
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
 except ImportError:
@@ -133,17 +131,18 @@ class ShareLinksTest(BaseTestCase):
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        # share user's repo to admin with 'r' permission
-        seafile_api.share_repo(self.repo_id, self.user.username,
-                self.admin.username, 'r')
+        self.set_user_folder_rw_permission_to_admin()
 
-        # set sub-folder permisson as 'rw' for admin
-        seafile_api.add_folder_user_perm(self.repo_id,
-                self.folder_path, 'rw', self.admin.username)
+        # login with admin to create share link for 'r' permission folder
+        self.login_as(self.admin)
+        data = {'path': self.file_path, 'repo_id': self.repo_id}
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
 
-        # admin can visit sub-folder with 'rw' permission
-        assert seafile_api.check_permission_by_path(self.repo_id,
-                self.folder_path, self.admin.username) == 'rw'
+    def test_create_link_with_rw_permission_folder_in_group(self):
+
+        self.share_repo_to_group_with_rw_permission()
+        self.add_admin_to_group()
 
         # login with admin to create share link for 'r' permission folder
         self.login_as(self.admin)
@@ -156,17 +155,18 @@ class ShareLinksTest(BaseTestCase):
         if not LOCAL_PRO_DEV_ENV:
             return
 
-        # share user's repo to admin with 'r' permission
-        seafile_api.share_repo(self.repo_id, self.user.username,
-                self.admin.username, 'r')
+        self.set_user_folder_r_permission_to_admin()
 
-        # set sub-folder permisson as 'rw' for admin
-        seafile_api.add_folder_user_perm(self.repo_id,
-                self.folder_path, 'rw', self.admin.username)
+        # login with admin to create share link for 'r' permission folder
+        self.login_as(self.admin)
+        data = {'path': self.file_path, 'repo_id': self.repo_id}
+        resp = self.client.post(self.url, data)
+        self.assertEqual(200, resp.status_code)
 
-        # admin can visit sub-folder with 'rw' permission
-        assert seafile_api.check_permission_by_path(self.repo_id,
-                self.folder_path, self.admin.username) == 'rw'
+    def test_create_link_with_r_permission_folder_in_group(self):
+
+        self.share_repo_to_group_with_r_permission()
+        self.add_admin_to_group()
 
         # login with admin to create share link for 'r' permission folder
         self.login_as(self.admin)

@@ -11,7 +11,7 @@ from django.utils.importlib import import_module
 from exam.decorators import fixture
 from exam.cases import Exam
 import seaserv
-from seaserv import seafile_api, ccnet_threaded_rpc
+from seaserv import seafile_api, ccnet_threaded_rpc, ccnet_api
 
 from seahub.base.accounts import User
 from seahub.utils import mkstemp
@@ -138,6 +138,48 @@ class Fixtures(Exam):
         if not group_id:
             group_id = self.group.id
         return ccnet_threaded_rpc.remove_group(group_id, self.user.username)
+
+    def set_user_folder_r_permission_to_admin(self):
+
+        # share user's repo to admin with 'rw' permission
+        seafile_api.share_repo(self.repo.id, self.user.username,
+                self.admin.username, 'rw')
+
+        # set user sub-folder 'r' permisson to admin
+        seafile_api.add_folder_user_perm(self.repo.id,
+                self.folder, 'r', self.admin.username)
+
+        # admin can visit user sub-folder with 'r' permission
+        assert seafile_api.check_permission_by_path(self.repo.id,
+                self.folder, self.admin.username) == 'r'
+
+    def set_user_folder_rw_permission_to_admin(self):
+
+        # share user's repo to admin with 'r' permission
+        seafile_api.share_repo(self.repo.id, self.user.username,
+                self.admin.username, 'r')
+
+        # set user sub-folder 'rw' permisson to admin
+        seafile_api.add_folder_user_perm(self.repo.id,
+                self.folder, 'rw', self.admin.username)
+
+        # admin can visit user sub-folder with 'rw' permission
+        assert seafile_api.check_permission_by_path(self.repo.id,
+                self.folder, self.admin.username) == 'rw'
+
+    def share_repo_to_group_with_r_permission(self):
+        seafile_api.set_group_repo(
+                self.repo.id, self.group.id, self.user.username, 'r')
+
+    def share_repo_to_group_with_rw_permission(self):
+        seafile_api.set_group_repo(
+                self.repo.id, self.group.id, self.user.username, 'rw')
+
+    def add_admin_to_group(self):
+        ccnet_api.group_add_member(
+                self.group.id, self.user.username, self.admin.username)
+
+        assert ccnet_api.is_group_user(self.group.id, self.admin.username)
 
 
 class BaseTestCase(TestCase, Fixtures):
