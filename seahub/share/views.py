@@ -1171,7 +1171,7 @@ def ajax_get_download_link(request):
 
         # permission check
         # normal permission check & default/guest user permission check
-        if check_folder_permission(request, repo_id, path) != 'rw' or \
+        if not check_folder_permission(request, repo_id, path) or \
             not request.user.permissions.can_generate_shared_link():
             data = json.dumps({'error': 'Permission denied.'})
             return HttpResponse(data, status=403, content_type=content_type)
