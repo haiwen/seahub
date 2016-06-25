@@ -17,6 +17,6 @@ class SysinfoTest(BaseTestCase):
         resp = self.client.get(url)
         json_resp = json.loads(resp.content)
 
-        assert len(json_resp) == 9
-        assert json_resp['is_pro'] == False
-        assert json_resp['multi_tenancy_enabled'] == False
+        assert len(json_resp) == 10
+        assert json_resp['is_pro'] is False
+        assert json_resp['multi_tenancy_enabled'] is False

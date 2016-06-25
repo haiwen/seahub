@@ -111,8 +111,8 @@ class SysInfo(APIView):
             'multi_tenancy_enabled': multi_tenancy_enabled,
             'is_pro': is_pro,
             'with_license': with_license,
-            'license_expiration': license_dict['Expiration'],
-            'license_maxusers': license_dict['MaxUsers'],
+            'license_expiration': getattr(license_dict, 'Expiration', ''),
+            'license_maxusers': getattr(license_dict, 'MaxUsers', ''),
         }
 
         return Response(info)
