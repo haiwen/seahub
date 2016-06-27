@@ -15,6 +15,9 @@
         <li class="tab"><a href="#default-lib">{% trans "Default Library" %}</a></li>
         {% endif %}
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
+        {% if two_factor_auth_enabled %}
+        <li class="tab"><a href="{% url 'two_factor:profile' %}">{% trans "Security" %}</a></li>
+        {% endif %}
     </ul>
 </div>
 

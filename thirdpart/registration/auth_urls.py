@@ -27,6 +27,7 @@ from django.conf import settings
 from django.conf.urls import patterns, url
 
 from seahub.auth import views as auth_views
+from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
 
 urlpatterns = patterns('',
                        url(r'^password/change/$',
@@ -72,3 +73,11 @@ else:
                                 {'template_name': 'registration/logout.html'},
                                 name='auth_logout'),
                             )
+
+    if HAS_TWO_FACTOR_AUTH:
+        from seahub_extra.two_factor.views.login import TwoFactorVerifyView
+        urlpatterns += patterns('',
+                                url(r'^login/two-factor-auth/$',
+                                    TwoFactorVerifyView.as_view(),
+                                    name='two_factor_auth'),
+                                )

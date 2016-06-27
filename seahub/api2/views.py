@@ -190,8 +190,17 @@ class ObtainAuthToken(APIView):
         if serializer.is_valid():
             key = serializer.validated_data
             return Response({'token': key})
+        headers = {}
+        if serializer.two_factor_auth_failed:
+            # Add a special response header so the client knows to ask the user
+            # for the 2fa token.
+            headers = {
+                'X-Seafile-OTP': 'required',
+            }
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST,
+                        headers=headers)
 
 ########## Accounts
 class Accounts(APIView):

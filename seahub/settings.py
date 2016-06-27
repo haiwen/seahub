@@ -533,6 +533,8 @@ ADD_REPLY_TO_HEADER = False
 
 CLOUD_DEMO_USER = 'demo@seafile.com'
 
+ENABLE_TWO_FACTOR_AUTH = False
+
 #####################
 # External settings #
 #####################
@@ -631,4 +633,5 @@ CONSTANCE_CONFIG = {
     'USER_PASSWORD_STRENGTH_LEVEL': (USER_PASSWORD_STRENGTH_LEVEL,''),
 
     'SHARE_LINK_PASSWORD_MIN_LENGTH': (SHARE_LINK_PASSWORD_MIN_LENGTH,''),
+    'ENABLE_TWO_FACTOR_AUTH': (ENABLE_TWO_FACTOR_AUTH,''),
 }

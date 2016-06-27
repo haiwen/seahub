@@ -10,6 +10,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.models import Token, TokenV2
 from seahub.base.models import ClientLoginToken
 from seahub.utils import gen_token
+from seahub.utils.two_factor_auth import has_two_factor_auth, two_factor_auth_enabled
 
 class LogoutDeviceView(APIView):
     """Removes the api token of a device that has already logged in. If the device
@@ -41,6 +42,8 @@ class ClientLoginTokenView(APIView):
 
     @json_response
     def post(self, request, format=None):
+        if has_two_factor_auth() and two_factor_auth_enabled(request.user.username):
+            return {}
         randstr = gen_token(max_length=32)
         token = ClientLoginToken(randstr, request.user.username)
         token.save()
