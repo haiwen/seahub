@@ -1,4 +1,5 @@
-{% load i18n%}<div id="paginator">
+{% load i18n%}
+<div id="paginator">
     {% if current_page != 1 %}
     <a href="?page={{ prev_page }}&per_page={{ per_page }}">{% trans "Previous" %}</a>
     {% endif %}

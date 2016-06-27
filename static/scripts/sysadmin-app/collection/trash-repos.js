@@ -1,20 +1,25 @@
 define([
     'underscore',
-    'backbone',
+    'backbone.paginator',
     'common',
     'sysadmin-app/models/trash-repo'
-], function(_, Backbone, Common, TrashRepoModel) {
+], function(_, BackbonePaginator, Common, TrashRepoModel) {
     'use strict';
 
-    var TrashRepoCollection = Backbone.Collection.extend({
+    var TrashRepoCollection = Backbone.PageableCollection.extend({
         model: TrashRepoModel,
 
         url: function () {
             return Common.getUrl({name: 'admin-trash-libraries'});
         },
 
-        parse: function(data) {
-            this.search_owner = data.search_owner;
+        state: {pageSize: 100},
+
+        parseState: function(data) {
+            return data.page_info; // {'has_next_page': has_next_page, 'current_page': current_pag
+        },
+
+        parseRecords: function(data) {
             return data.repos;
         }
 
