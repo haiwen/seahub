@@ -47,7 +47,7 @@ def log_user_in(request, user, redirect_to):
     if request.session.test_cookie_worked():
         request.session.delete_test_cookie()
 
-    _clear_login_failed_attempts(request)
+    _clear_login_failed_attempts(request, user)
 
     if two_factor_auth_enabled(user):
         return handle_two_factor_auth(request, user, redirect_to)
@@ -105,14 +105,15 @@ def _incr_login_failed_attempts(username=None, ip=None):
 
     return max(username_attempts, ip_attempts)
 
-def _clear_login_failed_attempts(request):
+def _clear_login_failed_attempts(request, user):
     """Clear login failed attempts records.
 
     Arguments:
     - `request`:
     """
-    username = request.user.username
+    username = user.username
     ip = get_remote_ip(request)
+
     cache.delete(LOGIN_ATTEMPT_PREFIX + urlquote(username))
     cache.delete(LOGIN_ATTEMPT_PREFIX + ip)
     p = Profile.objects.get_profile_by_user(username)
