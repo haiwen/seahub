@@ -6,14 +6,16 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
-
-from seahub.auth import login
-from registration import signals
 import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
     seafile_api
+from constance import config
+from registration import signals
 
+from seahub.auth import login
+from seahub.constants import DEFAULT_USER
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils import is_valid_username, is_user_password_strong, \
     clear_token, get_system_admins
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
@@ -26,8 +28,6 @@ try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
     MULTI_TENANCY = False
-
-from constance import config
 
 UNUSABLE_PASSWORD = '!' # This will never be a valid hash
 
@@ -102,22 +102,44 @@ class UserPermissions(object):
         self.user = user
 
     def can_add_repo(self):
-        return True
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_repo']
 
     def can_add_group(self):
-        return True
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_group']
 
     def can_generate_shared_link(self):
-        return True
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_shared_link']
 
     def can_use_global_address_book(self):
-        return True
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_use_global_address_book']
 
     def can_view_org(self):
         if MULTI_TENANCY:
             return True if self.user.org is not None else False
 
-        return False if CLOUD_MODE else True
+        if CLOUD_MODE:
+            return False
+
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_view_org']
+
+    def can_drag_drop_folder_to_sync(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_drag_drop_folder_to_sync']
+
+    def can_connect_with_android_clients(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_android_clients']
+
+    def can_connect_with_ios_clients(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_ios_clients']
+
+    def can_connect_with_desktop_clients(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_connect_with_desktop_clients']
+
+    def can_invite_guest(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_invite_guest']
+
+    def can_export_files_via_mobile_client(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_export_files_via_mobile_client']
+
 
 class User(object):
     is_staff = False

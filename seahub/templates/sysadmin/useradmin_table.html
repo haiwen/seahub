@@ -46,14 +46,19 @@
             <div class="user-role">
                 {% if user.is_guest %}
                     <span class="user-role-cur-value">{% trans "Guest" %}</span>
-                {% else %}
+                {% elif user.is_default %}
                     <span class="user-role-cur-value">{% trans "Default" %}</span>
+                {% else %}
+                    <span class="user-role-cur-value">{{user.role}}</span>
                 {% endif %}
                 <span title="{% trans "Edit"%}" class="user-role-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
             <select name="role" class="user-role-select hide">
-                <option value={{default_user}} {%if not user.is_guest %}selected="selected"{% endif %}>{% trans "Default" %}</option>
+                <option value={{default_user}} {%if user.is_default %}selected="selected"{% endif %}>{% trans "Default" %}</option>
                 <option value={{guest_user}} {%if user.is_guest %}selected="selected"{% endif %}>{% trans "Guest"%}</option>
+                {% for role in extra_user_roles %}
+                <option value={{role}} {%if user.role == role %}selected="selected"{% endif %}>{{ role }}</option>
+                {% endfor %}
             </select>
         {% else %}
         --
