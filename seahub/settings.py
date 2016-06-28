@@ -344,6 +344,8 @@ REST_FRAMEWORK = {
         'anon': '5/minute',
         'user': '300/minute',
     },
+    # https://github.com/tomchristie/django-rest-framework/issues/2891
+    'UNICODE_JSON': False,
 }
 
 # file and path
