@@ -32,15 +32,25 @@ class DirSharedItemsEndpoint(APIView):
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, IsRepoAccessible)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def list_user_shared_items(self, request, repo_id, path):
         username = request.user.username
-        if path == '/':
-            share_items = seafile_api.list_repo_shared_to(username, repo_id)
+
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            if path == '/':
+                share_items = seafile_api.list_org_repo_shared_to(org_id,
+                        username, repo_id)
+            else:
+                share_items = seafile_api.get_org_shared_users_for_subdir(org_id,
+                        repo_id, path, username)
         else:
-            share_items = seafile_api.get_shared_users_for_subdir(repo_id,
-                                                                  path, username)
+            if path == '/':
+                share_items = seafile_api.list_repo_shared_to(username, repo_id)
+            else:
+                share_items = seafile_api.get_shared_users_for_subdir(repo_id,
+                                                                      path, username)
         ret = []
         for item in share_items:
             ret.append({
@@ -55,11 +65,20 @@ class DirSharedItemsEndpoint(APIView):
 
     def list_group_shared_items(self, request, repo_id, path):
         username = request.user.username
-        if path == '/':
-            share_items = seafile_api.list_repo_shared_group_by_user(username, repo_id)
+        if is_org_context(request):
+            org_id = request.user.org.org_id
+            if path == '/':
+                share_items = seafile_api.list_org_repo_shared_group(org_id,
+                        username, repo_id)
+            else:
+                share_items = seafile_api.get_org_shared_groups_for_subdir(org_id,
+                        repo_id, path, username)
         else:
-            share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
-                                                                   path, username)
+            if path == '/':
+                share_items = seafile_api.list_repo_shared_group_by_user(username, repo_id)
+            else:
+                share_items = seafile_api.get_shared_groups_for_subdir(repo_id,
+                                                                       path, username)
         ret = []
         for item in share_items:
             ret.append({
