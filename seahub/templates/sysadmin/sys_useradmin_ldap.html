@@ -19,6 +19,7 @@
     </ul>
 </div>
 
+{% if users %}
 <table>
     <tr>
         <th width="40%">{% trans "Email" %}</th>
@@ -39,6 +40,13 @@
 </table>
 
 {% include "sysadmin/useradmin_paginator.html" %}
+
+{% else %}
+<div class="empty-tips">
+    <h2 class="alc">{% trans "No LDAP users" %}</h2>
+</div>
+{% endif %}
+
 {% endblock %}
 
 {% block extra_script %}
