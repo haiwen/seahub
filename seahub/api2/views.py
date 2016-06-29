@@ -1114,19 +1114,24 @@ class RepoOwner(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        # get users/groups repo already shared to
         if org_id:
+            # get repo shared to user/group list
             shared_users = seafile_api.list_org_repo_shared_to(org_id,
                     repo_owner, repo_id)
             shared_groups = seafile_api.list_org_repo_shared_group(org_id,
                     repo_owner, repo_id)
+
+            # get all pub repos
             pub_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(
                     org_id, repo_owner)
         else:
+            # get repo shared to user/group list
             shared_users = seafile_api.list_repo_shared_to(
                     repo_owner, repo_id)
             shared_groups = seafile_api.list_repo_shared_group_by_user(
                     repo_owner, repo_id)
+
+            # get all pub repos
             pub_repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
                     repo_owner)
 
@@ -1146,7 +1151,7 @@ class RepoOwner(APIView):
             error_msg = 'Internal Server Error'
             return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-        # reshare repo
+        # reshare repo to user
         for shared_user in shared_users:
             shared_username = shared_user.user
 
@@ -1160,6 +1165,7 @@ class RepoOwner(APIView):
                 seafile_api.share_repo(repo_id, new_owner,
                         shared_username, shared_user.perm)
 
+        # reshare repo to group
         for shared_group in shared_groups:
             shared_group_id = shared_group.group_id
 
@@ -1173,6 +1179,8 @@ class RepoOwner(APIView):
                 seafile_api.set_group_repo(repo_id, shared_group_id,
                         new_owner, shared_group.perm)
 
+        # check if current repo is pub-repo
+        # if YES, reshare current repo to public
         for pub_repo in pub_repos:
             if repo_id != pub_repo.id:
                 continue

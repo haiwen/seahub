@@ -1612,17 +1612,21 @@ def sys_repo_transfer(request):
         pass
 
     repo_owner = seafile_api.get_repo_owner(repo_id)
+
+    # get repo shared to user/group list
     shared_users = seafile_api.list_repo_shared_to(
             repo_owner, repo_id)
     shared_groups = seafile_api.list_repo_shared_group_by_user(
             repo_owner, repo_id)
+
+    # get all pub repos
     pub_repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
             repo_owner)
 
     # transfer repo
     seafile_api.set_repo_owner(repo_id, new_owner)
 
-    # reshare repo
+    # reshare repo to user
     for shared_user in shared_users:
         shared_username = shared_user.user
 
@@ -1632,6 +1636,7 @@ def sys_repo_transfer(request):
         seafile_api.share_repo(repo_id, new_owner,
                 shared_username, shared_user.perm)
 
+    # reshare repo to group
     for shared_group in shared_groups:
         shared_group_id = shared_group.group_id
 
@@ -1641,6 +1646,8 @@ def sys_repo_transfer(request):
         seafile_api.set_group_repo(repo_id, shared_group_id,
                 new_owner, shared_group.perm)
 
+    # check if current repo is pub-repo
+    # if YES, reshare current repo to public
     for pub_repo in pub_repos:
         if repo_id != pub_repo.id:
             continue
