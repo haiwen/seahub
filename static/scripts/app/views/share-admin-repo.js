@@ -62,7 +62,7 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.model.set({'share_permission': perm});
-                    Common.feedback(gettext("Success"), 'success');
+                    Common.feedback(gettext("Successfully modified permission"), 'success');
                 },
                 error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
@@ -92,7 +92,7 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.remove();
-                    Common.feedback(gettext("Success"), 'success');
+                    Common.feedback(gettext("Successfully deleted 1 item"), 'success');
                 },
                 error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
