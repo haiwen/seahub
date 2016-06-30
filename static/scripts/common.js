@@ -133,10 +133,8 @@ define([
                 case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
 
                 // Links
-                case 'get_shared_download_link': return siteRoot + 'api/v2.1/share-links/';
                 case 'send_shared_download_link': return siteRoot + 'share/link/send/';
                 case 'send_shared_upload_link': return siteRoot + 'share/upload_link/send/';
-                case 'get_share_upload_link': return siteRoot + 'api/v2.1/upload-links/';
 
                 // Group
                 case 'groups': return siteRoot + 'api/v2.1/groups/';
@@ -164,6 +162,7 @@ define([
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
                 case 'space_and_traffic': return siteRoot + 'ajax/space_and_traffic/';
+
                 // sysadmin
                 case 'sysinfo': return siteRoot + 'api/v2.1/admin/sysinfo/';
                 case 'admin-devices': return siteRoot + 'api/v2.1/admin/devices/';

@@ -11,19 +11,19 @@ define([
     'app/views/organization',
     'app/views/dir',
     'app/views/starred-file',
+    'app/views/activities',
     'app/views/devices',
     'app/views/share-admin-repos',
     'app/views/share-admin-folders',
     'app/views/share-admin-share-links',
     'app/views/share-admin-upload-links',
-    'app/views/activities',
     'app/views/notifications',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView, OrgView, DirView,
-    StarredFileView, DevicesView, ShareAdminReposView,
+    StarredFileView, ActivitiesView, DevicesView, ShareAdminReposView,
     ShareAdminFoldersView, ShareAdminShareLinksView,
-    ShareAdminUploadLinksView, ActivitiesView, NotificationsView, AccountView) {
+    ShareAdminUploadLinksView, NotificationsView, AccountView) {
     "use strict";
 
     var Router = Backbone.Router.extend({
@@ -217,6 +217,12 @@ define([
             this.sideNavView.setCurTab('starred');
         },
 
+        showActivities: function() {
+            this.switchCurrentView(this.activitiesView);
+            this.activitiesView.show();
+            this.sideNavView.setCurTab('activities');
+        },
+
         showDevices: function() {
             this.switchCurrentView(this.devicesView);
             this.devicesView.show();
@@ -245,12 +251,6 @@ define([
             this.switchCurrentView(this.shareAdminUploadLinksView);
             this.shareAdminUploadLinksView.show();
             this.sideNavView.setCurTab('share-admin-links');
-        },
-
-        showActivities: function() {
-            this.switchCurrentView(this.activitiesView);
-            this.activitiesView.show();
-            this.sideNavView.setCurTab('activities');
         }
 
     });

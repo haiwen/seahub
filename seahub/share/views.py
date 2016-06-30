@@ -41,14 +41,6 @@ def is_org_repo_owner(username, repo_id):
     owner = seaserv.seafserv_threaded_rpc.get_org_repo_owner(repo_id)
     return True if owner == username else False
 
-def get_org_group_repos_by_owner(org_id, username):
-    return seaserv.seafserv_threaded_rpc.get_org_group_repos_by_owner(org_id,
-                                                                      username)
-
-def list_org_inner_pub_repos_by_owner(org_id, username):
-    return seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(
-        org_id, username)
-
 def org_share_repo(org_id, repo_id, from_user, to_user, permission):
     return seaserv.seafserv_threaded_rpc.org_add_share(org_id, repo_id,
                                                        from_user, to_user,
@@ -121,74 +113,6 @@ def share_to_user(request, repo, to_user, permission):
                                            from_user=from_user,
                                            to_user=to_user, repo=repo)
         return True
-
-def get_share_out_repo_list(request):
-    """List repos that @user share to other users.
-
-    Returns:
-        A list of repos.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return seafile_api.get_org_share_out_repo_list(org_id, username,
-                                                       -1, -1)
-    else:
-        return seafile_api.get_share_out_repo_list(username, -1, -1)
-
-def get_group_repos_by_owner(request):
-    """List repos that @user share to groups.
-
-    Returns:
-        A list of repos.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return get_org_group_repos_by_owner(org_id, username)
-    else:
-        return seaserv.get_group_repos_by_owner(username)
-
-def list_inner_pub_repos_by_owner(request):
-    """List repos that @user share to organizatoin.
-
-    Returns:
-        A list of repos, or empty list if in cloud_mode.
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return list_org_inner_pub_repos_by_owner(org_id, username)
-    elif request.cloud_mode:
-        return []
-    else:
-        return seaserv.list_inner_pub_repos_by_owner(username)
-
-def list_share_out_repos(request):
-    shared_repos = []
-
-    # repos shared from this user
-    shared_repos += get_share_out_repo_list(request)
-
-    # repos shared to groups
-    group_repos = get_group_repos_by_owner(request)
-    for repo in group_repos:
-        group = ccnet_threaded_rpc.get_group(int(repo.group_id))
-        if not group:
-            repo.props.user = ''
-            continue
-        repo.props.user = group.props.group_name
-        repo.props.user_info = repo.group_id
-    shared_repos += group_repos
-
-    # inner pub repos
-    pub_repos = list_inner_pub_repos_by_owner(request)
-    for repo in pub_repos:
-        repo.props.user = _(u'all members')
-        repo.props.user_info = 'all'
-    shared_repos += pub_repos
-
-    return shared_repos
 
 ########## share link
 @login_required_ajax

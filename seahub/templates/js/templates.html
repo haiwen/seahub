@@ -693,14 +693,14 @@
     <ul class="side-tabnav-tabs">
         <% if (can_add_repo) { %>
         <li class="tab<% if (cur_tab == 'share-admin-repos') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#share-admin-libs/" class="ellipsis" title="{% trans "Shared Libraries" %}"><span aria-hidden="true" class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
+            <a href="{{ SITE_ROOT }}#share-admin-libs/"><span aria-hidden="true" class="sf2-icon-library"></span>{% trans "Libraries" %}</a>
         </li>
         <li class="tab<% if (cur_tab == 'share-admin-folders') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#share-admin-folders/" class="ellipsis" title="{% trans "Shared Folders" %}"><span aria-hidden="true" class="sf2-icon-folder"></span>{% trans "Folders" %}</a>
+            <a href="{{ SITE_ROOT }}#share-admin-folders/"><span aria-hidden="true" class="sf2-icon-folder"></span>{% trans "Folders" %}</a>
         </li>
         <% } %>
         <li class="tab<% if (cur_tab == 'share-admin-links') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#share-admin-share-links/" class="ellipsis" title="{% trans "Shared Links" %}"><span aria-hidden="true" class="sf2-icon-link"></span>{% trans "Links" %}</a>
+            <a href="{{ SITE_ROOT }}#share-admin-share-links/"><span aria-hidden="true" class="sf2-icon-link"></span>{% trans "Links" %}</a>
         </li>
     </ul>
     </div>
@@ -1504,7 +1504,8 @@
 </script>
 
 <script type="text/template" id="share-admin-repos-tmpl">
-    <h3 id="dialogTitle" class="hd">{% trans "Libraries" %}</h3>
+    <h3 class="hd">{% trans "Libraries" %}</h3>
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
@@ -1518,51 +1519,48 @@
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
-    <div class="empty-tips share-admin-repos-empty-tips hide">
+    <div class="empty-tips hide">
         <h2 class="alc">{% trans "You have not shared any library" %}</h2>
         <p>{% trans "You can share libraries to your friends and colleagues by clicking the share icon of your own libraries in your home page or creating a new library in groups you are in." %}</p>
     </div>
+    <p class="error error-tip hide"></p>
 </script>
 
-<script type="text/template" id="share-admin-repo-tmpl">
-    <td><img src="<%= icon_url %>" title="<%- icon_title %>" alt="<%- icon_title %>" width="24" /></td>
-    <td><a href="<%= repo_url %>"><%- repo_name %></a></td>
+<script type="text/template" id="share-admin-folder-tmpl">
+    <td><img src="<%= icon_url %>" title="<%= icon_title %>" alt="<%= icon_title %>" width="24" /></td>
+    <td><a href="<%= url %>"><%- name %></a></td>
     <% if (share_type == 'personal') { %>
     <td title="<%- user_email %>"><%- user_name %></td>
     <% } else if (share_type == 'group') { %>
     <td><%- group_name %></td>
-    <% } else if (share_type == 'public') { %>
+    <% } else if (share_type == 'public') { %> {# no 'public' type for 'folder' #}
     <td>{% trans "all members"%}</td>
     <% } %>
     <td>
         <% if (share_permission == 'rw') { %>
-        <div class="share-permission sf-dropdown sf-dropdown-inline">
-            <span class="share-permission-cur-value">{% trans "Read-Write"%}</span>
-            <a href="#" title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh sf-dropdown-toggle"></a>
-            <select name="permission" class="share-permission-select hide sf-dropdown-menu">
-                <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-                <option value="r">{% trans "Read-Only"%}</option>
+            <span class="cur-perm">{% trans "Read-Write" %}</span>
+            <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+            <select class="perm-select select-white hide">
+                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                <option value="r">{% trans "Read-Only" %}</option>
             </select>
-        </div>
         <% } else { %>
-        <div class="share-permission sf-dropdown sf-dropdown-inline">
-            <span class="share-permission-cur-value">{% trans "Read-Only"%}</span>
-            <a href="#" title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh sf-dropdown-toggle"></a>
-            <select name="permission" class="share-permission-select hide sf-dropdown-menu">
-                <option value="r" selected="selected">{% trans "Read-Only"%}</option>
-                <option value="rw">{% trans "Read-Write"%}</option>
+            <span class="cur-perm">{% trans "Read-Only" %}</span>
+            <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+            <select class="perm-select select-white hide">
+                <option value="rw">{% trans "Read-Write" %}</option>
+                <option value="r" selected="selected">{% trans "Read-Only" %}</option>
             </select>
-        </div>
         <% } %>
     </td>
     <td>
-        <a href="#" class="cancel-share op-icon sf2-icon-delete vh unshare" title="{% trans "Unshare"%}"></a>
+        <a href="#" class="unshare op-icon sf2-icon-delete vh" title="{% trans "Unshare" %}"></a>
     </td>
 </script>
 
 <script type="text/template" id="share-admin-folders-tmpl">
-    <h3 id="dialogTitle" class="hd">{% trans "Folders" %}</h3>
+    <h3 class="hd">{% trans "Folders" %}</h3>
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
@@ -1576,102 +1574,88 @@
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
-    <div class="empty-tips share-admin-folders-empty-tips hide">
+    <div class="empty-tips hide">
         <h2 class="alc">{% trans "You have not shared any folder" %}</h2>
         <p>{% trans "You can share a single folder with a registered user if you don't want to share a whole library." %}</p>
     </div>
+    <p class="error error-tip hide"></p>
 </script>
 
-<script type="text/template" id="share-admin-folder-tmpl">
-    <td><img src="<%= icon_url %>" width="24" /></td>
-    <td><a href="<%= folder_url %>"><%- folder_name %></a></td>
-    <% if (share_type == 'personal') { %>
-    <td title="<%- user_email %>"><%- user_name %></td>
-    <% } else if (share_type == 'group') { %>
-    <td><%- group_name %></td>
-    <% } %>
-    <td>
-        <% if (share_permission == 'rw') { %>
-        <div class="share-permission sf-dropdown sf-dropdown-inline">
-            <span class="share-permission-cur-value">{% trans "Read-Write"%}</span>
-            <a href="#" title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh sf-dropdown-toggle"></a>
-            <select name="permission" class="share-permission-select hide sf-dropdown-menu">
-                <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
-                <option value="r">{% trans "Read-Only"%}</option>
-            </select>
-        </div>
-        <% } else { %>
-        <div class="share-permission sf-dropdown sf-dropdown-inline">
-            <span class="share-permission-cur-value">{% trans "Read-Only"%}</span>
-            <a href="#" title="{% trans "Edit"%}" class="share-permission-edit-icon sf2-icon-edit op-icon vh sf-dropdown-toggle"></a>
-            <select name="permission" class="share-permission-select hide sf-dropdown-menu">
-                <option value="r" selected="selected">{% trans "Read-Only"%}</option>
-                <option value="rw">{% trans "Read-Write"%}</option>
-            </select>
-        </div>
-        <% } %>
-    </td>
-    <td>
-        <a href="#" class="cancel-share op-icon sf2-icon-delete vh unshare" title="{% trans "Unshare"%}"></a>
-    </td>
-</script>
-
-<script type="text/template" id="share-admin-links-tmpl">
+<script type="text/template" id="share-admin-download-links-tmpl">
     <div class="hd ovhd">
         <ul class="tab-tabs-nav fleft">
-            <li class="tab<% if (cur_tab == 'share-admin-share-links') { %> ui-state-active <% } %>">
+            <li class="tab ui-state-active">
                 <a href="#share-admin-share-links/" class="a">{% trans "Download Links" %}</a>
             </li>
-            <li class="tab<% if (cur_tab == 'share-admin-upload-links') { %> ui-state-active <% } %>">
+            <li class="tab">
                 <a href="#share-admin-upload-links/" class="a">{% trans "Upload Links" %}</a>
             </li>
         </ul>
     </div>
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
-            <% if (cur_tab == 'share-admin-share-links') { %>
                 <th width="4%"><!--icon--></th>
-                <th width="40%"><a class="table-sort-op by-name" href="#"><span class="dirent-name">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></span></a></th>
-                <th width="24%">{% trans "Library"%}</th>
-                <th width="10%">{% trans "Visits"%}</th>
+                <th width="40%"><a class="table-sort-op by-name" href="#">{% trans "Name"%} <span class="sort-icon icon-caret-up"></span></a></th>
+                <th width="25%">{% trans "Library" %}</th>
+                <th width="11%">{% trans "Visits" %}</th>
                 <th width="12%"><a class="table-sort-op by-time" href="#">{% trans "Expiration" %} <span class="sort-icon icon-caret-down hide" aria-hidden="true"></span></a></th>
-                <th width="10%"><!--Operations--></th>
-            <% } else if (cur_tab == 'share-admin-upload-links') { %>
-                <th width="4%"><!--icon--></th>
-                <th width="44%">{% trans "Name"%}</th>
-                <th width="25%">{% trans "Library"%}</th>
-                <th width="12%">{% trans "Visits"%}</th>
-                <th width="15%">{% trans "Operations"%}</th>
-            <% } %>
+                <th width="8%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
-    <% if (cur_tab == 'share-admin-share-links') { %>
-        <h2 class="alc">{% trans "You don't have any download link"%}</h2>
+        <h2 class="alc">{% trans "You don't have any download link" %}</h2>
         <p>{% trans "You can generate a download link for a folder or a file. People receive this link can view the folder or the file online." %}</p>
-    <% } else if (cur_tab == 'share-admin-upload-links') { %>
-        <h2 class="alc">{% trans "You don't have any upload link"%}</h2>
-        <p>{% trans "You can generate an upload link from any folder. People receive this link can upload files to this folder." %}</p>
-    <% } %>
     </div>
+    <p class="error error-tip hide"></p>
 </script>
 
-<script type="text/template" id="share-admin-share-link-item-tmpl">
-    <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
+<script type="text/template" id="share-admin-upload-links-tmpl">
+    <div class="hd ovhd">
+        <ul class="tab-tabs-nav fleft">
+            <li class="tab">
+                <a href="#share-admin-share-links/" class="a">{% trans "Download Links" %}</a>
+            </li>
+            <li class="tab ui-state-active">
+                <a href="#share-admin-upload-links/" class="a">{% trans "Upload Links" %}</a>
+            </li>
+        </ul>
+    </div>
+    <span class="loading-icon loading-tip"></span>
+    <table class="hide">
+        <thead>
+            <tr>
+                <th width="4%"><!--icon--></th>
+                <th width="44%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Library" %}</th>
+                <th width="12%">{% trans "Visits" %}</th>
+                <th width="10%"><!--Operations--></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "You don't have any upload link" %}</h2>
+        <p>{% trans "You can generate an upload link from any folder. People receive this link can upload files to this folder." %}</p>
+    </div>
+    <p class="error error-tip hide"></p>
+</script>
+
+<script type="text/template" id="share-admin-download-link-tmpl">
+    <td><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td><a href="<%= dirent_url %>"><%- obj_name %></a></td>
-    <td><a href="#common/lib/<%- repo_id %>"><%- repo_name %></a></td>
-    <td><%- view_cnt %></td>
+    <td><a href="#common/lib/<%= repo_id %>"><%- repo_name %></a></td>
+    <td><%= view_cnt %></td>
     <% if (expire_date) { %>
         <% if (is_expired) { %>
-        <td class='error'><%- time %></td>
+        <td class='error'><%= time %></td>
         <% } else { %>
-        <td><%- time %></td>
+        <td><%= time %></td>
         <% } %>
     <% } else { %>
     <td>--</td>
@@ -1682,11 +1666,11 @@
     </td>
 </script>
 
-<script type="text/template" id="share-admin-upload-link-item-tmpl">
-    <td class="dirent-icon"><img src="<%= icon_url %>" width="24" alt="" /></td>
+<script type="text/template" id="share-admin-upload-link-tmpl">
+    <td><img src="<%= icon_url %>" width="24" alt="" /></td>
     <td><a href="<%= dirent_url %>"><%- obj_name %></a></td>
-    <td><a href="#common/lib/<%- repo_id %>"><%- repo_name %></a></td>
-    <td><%- view_cnt %></td>
+    <td><a href="#common/lib/<%= repo_id %>"><%- repo_name %></a></td>
+    <td><%= view_cnt %></td>
     <td>
         <a href="#" class="sf2-icon-link view-link op-icon vh" title="{% trans "View"%}"></a>
         <a href="#" class="sf2-icon-delete rm-link op-icon vh" title="{% trans "Remove"%}"></a>
@@ -1694,5 +1678,8 @@
 </script>
 
 <script type="text/template" id="share-admin-link-popup-tmpl">
-    <span><%- link %></span>
+    <div>
+        <p><%= link %></p>
+        <input type="text" readonly="readonly" value="<%= link %>" id="shared-link" class="hide" />
+    </div>
 </script>

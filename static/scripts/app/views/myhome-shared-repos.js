@@ -104,19 +104,22 @@ define([
         sortByName: function() {
             $('.by-time .sort-icon', this.$table).hide();
             var repos = this.repos;
-            var el = $('.by-name .sort-icon', this.$table);
-            repos.comparator = function(a, b) { // a, b: model
-                var result = Common.compareTwoWord(a.get('name'), b.get('name'));
-                if (el.hasClass('icon-caret-up')) {
+            var $el = $('.by-name .sort-icon', this.$table);
+            if ($el.hasClass('icon-caret-up')) {
+                repos.comparator = function(a, b) { // a, b: model
+                    var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                     return -result;
-                } else {
+                };
+            } else {
+                repos.comparator = function(a, b) { // a, b: model
+                    var result = Common.compareTwoWord(a.get('name'), b.get('name'));
                     return result;
-                }
-            };
+                };
+            }
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down').show();
+            $el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
             return false;
         },
@@ -124,18 +127,20 @@ define([
         sortByTime: function() {
             $('.by-name .sort-icon', this.$table).hide();
             var repos = this.repos;
-            var el = $('.by-time .sort-icon', this.$table);
-            repos.comparator = function(a, b) { // a, b: model
-                if (el.hasClass('icon-caret-down')) {
+            var $el = $('.by-time .sort-icon', this.$table);
+            if ($el.hasClass('icon-caret-down')) {
+                repos.comparator = function(a, b) { // a, b: model
                     return a.get('mtime') < b.get('mtime') ? 1 : -1;
-                } else {
+                };
+            } else {
+                repos.comparator = function(a, b) { // a, b: model
                     return a.get('mtime') < b.get('mtime') ? -1 : 1;
-                }
-            };
+                };
+            }
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down').show();
+            $el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
             return false;
         }

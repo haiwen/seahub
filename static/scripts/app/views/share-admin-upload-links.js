@@ -12,9 +12,9 @@ define([
 
     var ShareAdminUploadLinksView = Backbone.View.extend({
 
-        id: 'share-admin-links',
+        id: 'share-admin-upload-links',
 
-        template: _.template($('#share-admin-links-tmpl').html()),
+        template: _.template($('#share-admin-upload-links-tmpl').html()),
 
         initialize: function() {
             this.links = new ShareAdminUploadLinkCollection();
@@ -24,7 +24,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template({'cur_tab': 'share-admin-upload-links'}));
+            this.$el.html(this.template());
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
@@ -41,16 +41,29 @@ define([
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showLinks();
+            this.showContent();
         },
 
-        showLinks: function() {
+        showContent: function() {
+            var _this = this;
             this.initPage();
             this.links.fetch({
                 cache: false,
                 reset: true,
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
+                error: function(collection, response, opts) {
+                    _this.$loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }   
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }   
+                    $error.html(err_msg).show();
                 }
             });
         },
@@ -60,6 +73,7 @@ define([
             this.$tableBody.empty();
             this.$loadingTip.show();
             this.$emptyTip.hide();
+            this.$('.error').hide();
         },
 
         reset: function() {

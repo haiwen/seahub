@@ -12,9 +12,9 @@ define([
 
     var ShareAdminShareLinksView = Backbone.View.extend({
 
-        id: 'share-admin-links',
+        id: 'share-admin-download-links',
 
-        template: _.template($('#share-admin-links-tmpl').html()),
+        template: _.template($('#share-admin-download-links-tmpl').html()),
 
         initialize: function() {
             this.links = new ShareAdminShareLinkCollection();
@@ -28,55 +28,90 @@ define([
             'click .by-time': 'sortByTime'
         },
 
+        // initialSort: dirs come first
+        initialSort: function(a, b) { // a, b: model
+            var a_is_dir = a.get('is_dir'),
+                b_is_dir = b.get('is_dir');
+            if (a_is_dir && !b_is_dir) {
+                return -1;
+            } else if (!a_is_dir && b_is_dir) {
+                return 1;
+            } else {
+                return 0;
+            }
+        },
+
         sortByName: function() {
-            $('.by-time .sort-icon').hide();
+            var _this = this;
             var links = this.links;
-            var el = $('.by-name .sort-icon', this.$table);
-
-            links.comparator = function(a, b) { // a, b: model
-                var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
-                if (el.hasClass('icon-caret-up')) {
-                    return -result;
-                } else {
-                    return result;
-                }
-            };
+            var $el = this.$sortByNameIcon;
+            this.$sortByTimeIcon.hide();
+            if ($el.hasClass('icon-caret-up')) {
+                links.comparator = function(a, b) { // a, b: model
+                    var initialResult = _this.initialSort(a, b);
+                    if (initialResult != 0) {
+                        return initialResult;
+                    } else {
+                        var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                        return -result;
+                    }
+                };
+            } else {
+                links.comparator = function(a, b) { // a, b: model
+                    var initialResult = _this.initialSort(a, b);
+                    if (initialResult != 0) {
+                        return initialResult;
+                    } else {
+                        var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                        return result;
+                    }
+                };
+            }
             links.sort();
-
-            links.comparator = function(item) {
-              return item.get('is_dir');
-            };
-            links.sort();
-
             this.$tableBody.empty();
             links.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down').show();
+            $el.toggleClass('icon-caret-up icon-caret-down').show();
             links.comparator = null;
             return false;
         },
 
         sortByTime: function() {
-            $('.by-name .sort-icon').hide();
+            var _this = this;
             var links = this.links;
-            var el = $('.by-time .sort-icon', this.$table);
-            links.comparator = function(a, b) { // a, b: model
-                if (el.hasClass('icon-caret-down')) {
-                    return a.get('expire_date_timestamp') < b.get('expire_date_timestamp') ? 1 : -1;
-                } else {
-                    return a.get('expire_date_timestamp') < b.get('expire_date_timestamp') ? -1 : 1;
-                }
-            };
+            var $el = this.$sortByTimeIcon;
+            this.$sortByNameIcon.hide();
+            if ($el.hasClass('icon-caret-down')) {
+                links.comparator = function(a, b) { // a, b: model
+                    var initialResult = _this.initialSort(a, b);
+                    if (initialResult != 0) {
+                        return initialResult;
+                    } else {
+                        return a.get('expire_date_timestamp') < b.get('expire_date_timestamp') ? 1 : -1;
+                    }
+                };
+            } else {
+                links.comparator = function(a, b) { // a, b: model
+                    var initialResult = _this.initialSort(a, b);
+                    if (initialResult != 0) {
+                        return initialResult;
+                    } else {
+                        return a.get('expire_date_timestamp') < b.get('expire_date_timestamp') ? -1 : 1;
+                    }
+                };
+            }
             links.sort();
             this.$tableBody.empty();
             links.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down').show();
+            $el.toggleClass('icon-caret-up icon-caret-down').show();
             links.comparator = null;
             return false;
         },
 
         render: function() {
-            this.$el.html(this.template({'cur_tab': 'share-admin-share-links'}));
+            this.$el.html(this.template());
             this.$table = this.$('table');
+            this.$sortByNameIcon = this.$('.by-name .sort-icon');
+            this.$sortByTimeIcon = this.$('.by-time .sort-icon');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
@@ -92,25 +127,41 @@ define([
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showLinks();
+            this.showContent();
         },
 
-        showLinks: function() {
+        showContent: function() {
+            var _this = this;
             this.initPage();
             this.links.fetch({
                 cache: false,
                 reset: true,
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
+                error: function(collection, response, opts) {
+                    _this.$loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }   
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }   
+                    $error.html(err_msg).show();
                 }
             });
         },
 
         initPage: function() {
             this.$table.hide();
+            this.$sortByNameIcon.attr('class', 'sort-icon icon-caret-up').show();
+            this.$sortByTimeIcon.attr('class', 'sort-icon icon-caret-down').hide();
             this.$tableBody.empty();
             this.$loadingTip.show();
             this.$emptyTip.hide();
+            this.$('.error').hide();
         },
 
         reset: function() {

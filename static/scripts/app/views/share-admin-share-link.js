@@ -12,7 +12,7 @@ define([
 
         tagName: 'tr',
 
-        template: _.template($('#share-admin-share-link-item-tmpl').html()),
+        template: _.template($('#share-admin-download-link-tmpl').html()),
         linkPopupTemplate: _.template($('#share-admin-link-popup-tmpl').html()),
 
         events: {
@@ -25,9 +25,18 @@ define([
         },
 
         viewLink: function() {
-            var popup = $(this.linkPopupTemplate({'link': this.model.get('link')}));
-            popup.modal({focus:false});
+            var $popup = $(this.linkPopupTemplate({'link': this.model.get('link')}));
+            $popup.modal({focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            var $p = $('p', $popup),
+                $input = $('input', $popup);
+            $input.css({'width': $p.width() + 2});
+            $p.hide();
+            $input.show();
+            $input.click(function() {
+                $(this).select();
+            });
             return false;
         },
 
@@ -35,14 +44,17 @@ define([
             var _this = this;
 
             $.ajax({
-                url: Common.getUrl({name: 'share_admin_share_link', 'token': _this.model.get('token')}),
+                url: Common.getUrl({
+                    'name': 'share_admin_share_link',
+                    'token': this.model.get('token')
+                }),
                 type: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.remove();
                     Common.feedback(gettext("Success"), 'success');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
                 }
             });
@@ -54,12 +66,11 @@ define([
             var data = this.model.toJSON();
             var icon_size = Common.isHiDPI() ? 96 : 24;
             var icon_url = this.model.getIconUrl(icon_size);
-            var expire_date = Moment(data['expire_date']);
 
-            data['time'] = expire_date.format('YYYY-MM-DD');
             _.extend(data, {
                 'icon_url': icon_url,
-                'dirent_url': this.model.getWebUrl()
+                'dirent_url': this.model.getWebUrl(),
+                'time': data['expire_date'] ? Moment(data['expire_date']).format('YYYY-MM-DD') : ''
             });
 
             this.$el.html(this.template(data));

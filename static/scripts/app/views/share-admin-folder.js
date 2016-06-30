@@ -3,9 +3,8 @@ define([
     'underscore',
     'backbone',
     'common',
-    'app/views/widgets/hl-item-view',
-    'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, HLItemView, DropdownView) {
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, HLItemView) {
     'use strict';
 
     var ShareAdminFolderView = HLItemView.extend({
@@ -15,44 +14,55 @@ define([
         template: _.template($('#share-admin-folder-tmpl').html()),
 
         events: {
-            'click .unshare': 'removeShare',
-            'change .share-permission-select': 'updatePermission'
+            'click .perm-edit-icon': 'showPermSelect',
+            'change .perm-select': 'updatePermission',
+            'click .unshare': 'removeShare'
         },
 
         initialize: function(option) {
-            this.listenTo(this.model, "change", this.render);
             HLItemView.prototype.initialize.call(this);
+            this.listenTo(this.model, "change", this.render);
+        },
+
+        showPermSelect: function() {
+            this.$el.closest('table')
+                .find('.perm-select').hide().end()
+                .find('.cur-perm, .perm-edit-icon').show();
+
+            this.$('.cur-perm, .perm-edit-icon').hide();
+            this.$('.perm-select').show();
+
+            return false;
         },
 
         updatePermission: function() {
             var _this = this;
             var share_type = this.model.get('share_type');
-            var perm = this.$('.share-permission-select').val();
+            var perm = this.$('.perm-select').val();
             var url = Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: this.model.get('repo_id')
-                }) + '?p=' + Common.encodePath(this.model.get('path'));
+                }) + '?p=' + encodeURIComponent(this.model.get('path'));
 
             if (share_type == 'personal') {
-                url += '&share_type=user&username=' + Common.encodePath(this.model.get('user_email'));
+                url += '&share_type=user&username=' + encodeURIComponent(this.model.get('user_email'));
             } else if (share_type == 'group') {
                 url += '&share_type=group&group_id=' + this.model.get('group_id');
             }
 
             $.ajax({
                 url: url,
-                dataType: 'json',
                 method: 'POST',
+                dataType: 'json',
                 beforeSend: Common.prepareCSRFToken,
                 data: {
                     'permission': perm
                 },
-                success: function () {
+                success: function() {
                     _this.model.set({'share_permission': perm});
-                    _this.render();
                     Common.feedback(gettext("Success"), 'success');
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
                 }
             });
@@ -95,15 +105,12 @@ define([
 
             _.extend(obj, {
                 'icon_url': icon_url,
-                'folder_url': this.model.getWebUrl()
+                'icon_title': this.model.getIconTitle(),
+                'url': this.model.getWebUrl(),
+                'name': this.model.get('folder_name')
             });
 
             this.$el.html(this.template(obj));
-
-            new DropdownView({
-                el: this.$('.sf-dropdown'),
-                left: '-70px'
-            });
 
             return this;
         }

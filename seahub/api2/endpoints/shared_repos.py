@@ -61,10 +61,6 @@ class SharedRepos(APIView):
             result['share_type'] = repo.share_type
             result['share_permission'] = repo.permission
 
-            result['user_name'] = ''
-            result['user_email'] = ''
-            result['group_id'] = ''
-            result['group_name'] = ''
             if repo.share_type == 'personal':
                 result['user_name'] = email2nickname(repo.user)
                 result['user_email'] = repo.user

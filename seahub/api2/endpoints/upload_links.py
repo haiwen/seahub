@@ -118,7 +118,7 @@ class UploadLinks(APIView):
             result.append(link_info)
 
         if len(result) == 1:
-            result = result[0]
+            result = result
         else:
             result.sort(lambda x, y: cmp(x['obj_name'], y['obj_name']))
 

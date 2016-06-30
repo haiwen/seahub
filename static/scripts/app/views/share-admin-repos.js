@@ -19,6 +19,16 @@ define([
             this.listenTo(this.repos, 'add', this.addOne);
             this.listenTo(this.repos, 'reset', this.reset);
             this.render();
+
+            var _this = this;
+            $(document).click(function(e) {
+                var target = e.target || event.srcElement;
+                var $select = _this.$('.perm-select:visible');
+                if ($select.length && !$select.is(target)) {
+                    $select.hide();
+                    $select.closest('tr').find('.cur-perm, .perm-edit-icon').show();
+                }
+            });
         },
 
         events: {
@@ -27,19 +37,22 @@ define([
 
         sortByName: function() {
             var repos = this.repos;
-            var el = $('.by-name .sort-icon', this.$table);
-            repos.comparator = function(a, b) { // a, b: model
-                var result = Common.compareTwoWord(a.get('repo_name'), b.get('repo_name'));
-                if (el.hasClass('icon-caret-up')) {
+            var $el = this.$sortIcon;
+            if ($el.hasClass('icon-caret-up')) {
+                repos.comparator = function(a, b) { // a, b: model
+                    var result = Common.compareTwoWord(a.get('repo_name'), b.get('repo_name'));
                     return -result;
-                } else {
+                };
+            } else {
+                repos.comparator = function(a, b) { // a, b: model
+                    var result = Common.compareTwoWord(a.get('repo_name'), b.get('repo_name'));
                     return result;
-                }
-            };
+                };
+            }
             repos.sort();
             this.$tableBody.empty();
             repos.each(this.addOne, this);
-            el.toggleClass('icon-caret-up icon-caret-down').show();
+            $el.toggleClass('icon-caret-up icon-caret-down').show();
             repos.comparator = null;
             return false;
         },
@@ -47,9 +60,11 @@ define([
         render: function() {
             this.$el.html(this.template());
             this.$table = this.$('table');
+            this.$sortIcon = $('.by-name .sort-icon', this.$table);
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
+
         },
 
         hide: function() {
@@ -62,25 +77,40 @@ define([
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showLibraries();
+            this.showContent();
         },
 
-        showLibraries: function() {
+        showContent: function() {
+            var _this = this;
             this.initPage();
             this.repos.fetch({
                 cache: false,
                 reset: true,
-                error: function (xhr) {
-                    Common.ajaxErrorHandler(xhr);
+                error: function(collection, response, opts) {
+                    _this.$loadingTip.hide();
+                    var $error = _this.$('.error');
+                    var err_msg;
+                    if (response.responseText) {
+                        if (response['status'] == 401 || response['status'] == 403) {
+                            err_msg = gettext("Permission error");
+                        } else {
+                            err_msg = gettext("Error");
+                        }
+                    } else {
+                        err_msg = gettext('Please check the network.');
+                    }
+                    $error.html(err_msg).show();
                 }
             });
         },
 
         initPage: function() {
             this.$table.hide();
+            this.$sortIcon.attr('class', 'sort-icon icon-caret-down').hide();
             this.$tableBody.empty();
             this.$loadingTip.show();
             this.$emptyTip.hide();
+            this.$('.error').hide();
         },
 
         reset: function() {

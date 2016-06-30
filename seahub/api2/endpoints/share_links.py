@@ -149,7 +149,7 @@ class ShareLinks(APIView):
             links_info.append(link_info)
 
         if len(links_info) == 1:
-            result = links_info[0]
+            result = links_info
         else:
             dir_list = filter(lambda x: x['is_dir'], links_info)
             file_list = filter(lambda x: not x['is_dir'], links_info)
