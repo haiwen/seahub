@@ -1,3 +1,4 @@
+
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
@@ -9,9 +10,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
---
--- Table structure for table `api2_token`
---
 
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -24,19 +22,8 @@ CREATE TABLE `api2_token` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `api2_token`
---
-
-LOCK TABLES `api2_token` WRITE;
 /*!40000 ALTER TABLE `api2_token` DISABLE KEYS */;
 /*!40000 ALTER TABLE `api2_token` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `api2_tokenv2`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api2_tokenv2` (
@@ -54,19 +41,8 @@ CREATE TABLE `api2_tokenv2` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `api2_tokenv2`
---
-
-LOCK TABLES `api2_tokenv2` WRITE;
 /*!40000 ALTER TABLE `api2_tokenv2` DISABLE KEYS */;
 /*!40000 ALTER TABLE `api2_tokenv2` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `avatar_avatar`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avatar_avatar` (
@@ -79,19 +55,8 @@ CREATE TABLE `avatar_avatar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `avatar_avatar`
---
-
-LOCK TABLES `avatar_avatar` WRITE;
 /*!40000 ALTER TABLE `avatar_avatar` DISABLE KEYS */;
 /*!40000 ALTER TABLE `avatar_avatar` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `avatar_groupavatar`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `avatar_groupavatar` (
@@ -103,19 +68,8 @@ CREATE TABLE `avatar_groupavatar` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `avatar_groupavatar`
---
-
-LOCK TABLES `avatar_groupavatar` WRITE;
 /*!40000 ALTER TABLE `avatar_groupavatar` DISABLE KEYS */;
 /*!40000 ALTER TABLE `avatar_groupavatar` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_clientlogintoken`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_clientlogintoken` (
@@ -127,19 +81,8 @@ CREATE TABLE `base_clientlogintoken` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_clientlogintoken`
---
-
-LOCK TABLES `base_clientlogintoken` WRITE;
 /*!40000 ALTER TABLE `base_clientlogintoken` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_clientlogintoken` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_commandslastcheck`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_commandslastcheck` (
@@ -150,19 +93,8 @@ CREATE TABLE `base_commandslastcheck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_commandslastcheck`
---
-
-LOCK TABLES `base_commandslastcheck` WRITE;
 /*!40000 ALTER TABLE `base_commandslastcheck` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_commandslastcheck` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_devicetoken`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_devicetoken` (
@@ -177,19 +109,8 @@ CREATE TABLE `base_devicetoken` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_devicetoken`
---
-
-LOCK TABLES `base_devicetoken` WRITE;
 /*!40000 ALTER TABLE `base_devicetoken` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_devicetoken` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_filediscuss`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_filediscuss` (
@@ -205,19 +126,8 @@ CREATE TABLE `base_filediscuss` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_filediscuss`
---
-
-LOCK TABLES `base_filediscuss` WRITE;
 /*!40000 ALTER TABLE `base_filediscuss` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_filediscuss` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_groupenabledmodule`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_groupenabledmodule` (
@@ -229,19 +139,8 @@ CREATE TABLE `base_groupenabledmodule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_groupenabledmodule`
---
-
-LOCK TABLES `base_groupenabledmodule` WRITE;
 /*!40000 ALTER TABLE `base_groupenabledmodule` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_groupenabledmodule` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_innerpubmsg`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_innerpubmsg` (
@@ -253,19 +152,8 @@ CREATE TABLE `base_innerpubmsg` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_innerpubmsg`
---
-
-LOCK TABLES `base_innerpubmsg` WRITE;
 /*!40000 ALTER TABLE `base_innerpubmsg` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_innerpubmsg` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_innerpubmsgreply`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_innerpubmsgreply` (
@@ -280,19 +168,8 @@ CREATE TABLE `base_innerpubmsgreply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_innerpubmsgreply`
---
-
-LOCK TABLES `base_innerpubmsgreply` WRITE;
 /*!40000 ALTER TABLE `base_innerpubmsgreply` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_innerpubmsgreply` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_userenabledmodule`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userenabledmodule` (
@@ -304,19 +181,8 @@ CREATE TABLE `base_userenabledmodule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_userenabledmodule`
---
-
-LOCK TABLES `base_userenabledmodule` WRITE;
 /*!40000 ALTER TABLE `base_userenabledmodule` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userenabledmodule` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_userlastlogin`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userlastlogin` (
@@ -328,19 +194,8 @@ CREATE TABLE `base_userlastlogin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_userlastlogin`
---
-
-LOCK TABLES `base_userlastlogin` WRITE;
 /*!40000 ALTER TABLE `base_userlastlogin` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userlastlogin` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `base_userstarredfiles`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_userstarredfiles` (
@@ -356,19 +211,8 @@ CREATE TABLE `base_userstarredfiles` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `base_userstarredfiles`
---
-
-LOCK TABLES `base_userstarredfiles` WRITE;
 /*!40000 ALTER TABLE `base_userstarredfiles` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_userstarredfiles` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `captcha_captchastore`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `captcha_captchastore` (
@@ -382,19 +226,8 @@ CREATE TABLE `captcha_captchastore` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `captcha_captchastore`
---
-
-LOCK TABLES `captcha_captchastore` WRITE;
 /*!40000 ALTER TABLE `captcha_captchastore` DISABLE KEYS */;
 /*!40000 ALTER TABLE `captcha_captchastore` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `constance_config`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `constance_config` (
@@ -406,19 +239,8 @@ CREATE TABLE `constance_config` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `constance_config`
---
-
-LOCK TABLES `constance_config` WRITE;
 /*!40000 ALTER TABLE `constance_config` DISABLE KEYS */;
 /*!40000 ALTER TABLE `constance_config` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `contacts_contact`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `contacts_contact` (
@@ -432,19 +254,8 @@ CREATE TABLE `contacts_contact` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `contacts_contact`
---
-
-LOCK TABLES `contacts_contact` WRITE;
 /*!40000 ALTER TABLE `contacts_contact` DISABLE KEYS */;
 /*!40000 ALTER TABLE `contacts_contact` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_content_type`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_content_type` (
@@ -456,20 +267,9 @@ CREATE TABLE `django_content_type` (
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `django_content_type`
---
-
-LOCK TABLES `django_content_type` WRITE;
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
 INSERT INTO `django_content_type` VALUES (10,'api2','token'),(11,'api2','tokenv2'),(12,'avatar','avatar'),(13,'avatar','groupavatar'),(15,'base','clientlogintoken'),(19,'base','commandslastcheck'),(18,'base','devicetoken'),(17,'base','filediscuss'),(14,'base','groupenabledmodule'),(20,'base','innerpubmsg'),(21,'base','innerpubmsgreply'),(16,'base','userenabledmodule'),(22,'base','userlastlogin'),(23,'base','userstarredfiles'),(4,'captcha','captchastore'),(24,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(30,'group','groupmessage'),(31,'group','messageattachment'),(32,'group','messagereply'),(29,'group','publicgroup'),(26,'institutions','institution'),(25,'institutions','institutionadmin'),(35,'message','usermessage'),(33,'message','usermsgattachment'),(34,'message','usermsglastcheck'),(36,'notifications','notification'),(37,'notifications','usernotification'),(38,'options','useroptions'),(47,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(40,'profile','detailedprofile'),(39,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(44,'share','anonymousshare'),(43,'share','fileshare'),(45,'share','orgfileshare'),(41,'share','privatefiledirshare'),(42,'share','uploadlinkshare'),(46,'sysadmin_extra','userloginlog'),(28,'wiki','groupwiki'),(27,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_migrations`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_migrations` (
@@ -481,20 +281,9 @@ CREATE TABLE `django_migrations` (
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `django_migrations`
---
-
-LOCK TABLES `django_migrations` WRITE;
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-03-19 16:11:16.130138'),(2,'contenttypes','0001_initial','2016-03-19 16:11:16.552740'),(3,'contenttypes','0002_remove_content_type_name','2016-03-19 16:11:16.937725'),(4,'database','0001_initial','2016-03-19 16:11:17.155813'),(5,'institutions','0001_initial','2016-03-19 16:11:17.784321'),(6,'post_office','0001_initial','2016-03-19 16:11:21.250718'),(7,'post_office','0002_add_i18n_and_backend_alias','2016-03-19 16:11:23.104720'),(8,'sessions','0001_initial','2016-03-19 16:11:23.598539');
+INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-06-30 10:21:46.470795'),(2,'contenttypes','0001_initial','2016-06-30 10:21:46.526404'),(3,'contenttypes','0002_remove_content_type_name','2016-06-30 10:21:46.742298'),(4,'database','0001_initial','2016-06-30 10:21:46.766493'),(5,'institutions','0001_initial','2016-06-30 10:21:46.839693'),(6,'post_office','0001_initial','2016-06-30 10:21:47.467643'),(7,'post_office','0002_add_i18n_and_backend_alias','2016-06-30 10:21:47.915981'),(8,'sessions','0001_initial','2016-06-30 10:21:48.100284');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `django_session`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `django_session` (
@@ -506,19 +295,8 @@ CREATE TABLE `django_session` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `django_session`
---
-
-LOCK TABLES `django_session` WRITE;
 /*!40000 ALTER TABLE `django_session` DISABLE KEYS */;
 /*!40000 ALTER TABLE `django_session` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `group_groupmessage`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_groupmessage` (
@@ -532,19 +310,8 @@ CREATE TABLE `group_groupmessage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `group_groupmessage`
---
-
-LOCK TABLES `group_groupmessage` WRITE;
 /*!40000 ALTER TABLE `group_groupmessage` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_groupmessage` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `group_messageattachment`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_messageattachment` (
@@ -560,19 +327,8 @@ CREATE TABLE `group_messageattachment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `group_messageattachment`
---
-
-LOCK TABLES `group_messageattachment` WRITE;
 /*!40000 ALTER TABLE `group_messageattachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_messageattachment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `group_messagereply`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_messagereply` (
@@ -587,19 +343,8 @@ CREATE TABLE `group_messagereply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `group_messagereply`
---
-
-LOCK TABLES `group_messagereply` WRITE;
 /*!40000 ALTER TABLE `group_messagereply` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_messagereply` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `group_publicgroup`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `group_publicgroup` (
@@ -610,19 +355,8 @@ CREATE TABLE `group_publicgroup` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `group_publicgroup`
---
-
-LOCK TABLES `group_publicgroup` WRITE;
 /*!40000 ALTER TABLE `group_publicgroup` DISABLE KEYS */;
 /*!40000 ALTER TABLE `group_publicgroup` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `institutions_institution`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `institutions_institution` (
@@ -633,19 +367,8 @@ CREATE TABLE `institutions_institution` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `institutions_institution`
---
-
-LOCK TABLES `institutions_institution` WRITE;
 /*!40000 ALTER TABLE `institutions_institution` DISABLE KEYS */;
 /*!40000 ALTER TABLE `institutions_institution` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `institutions_institutionadmin`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `institutions_institutionadmin` (
@@ -658,19 +381,8 @@ CREATE TABLE `institutions_institutionadmin` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `institutions_institutionadmin`
---
-
-LOCK TABLES `institutions_institutionadmin` WRITE;
 /*!40000 ALTER TABLE `institutions_institutionadmin` DISABLE KEYS */;
 /*!40000 ALTER TABLE `institutions_institutionadmin` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `message_usermessage`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermessage` (
@@ -688,19 +400,8 @@ CREATE TABLE `message_usermessage` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `message_usermessage`
---
-
-LOCK TABLES `message_usermessage` WRITE;
 /*!40000 ALTER TABLE `message_usermessage` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermessage` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `message_usermsgattachment`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermsgattachment` (
@@ -715,19 +416,8 @@ CREATE TABLE `message_usermsgattachment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `message_usermsgattachment`
---
-
-LOCK TABLES `message_usermsgattachment` WRITE;
 /*!40000 ALTER TABLE `message_usermsgattachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermsgattachment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `message_usermsglastcheck`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermsglastcheck` (
@@ -737,19 +427,8 @@ CREATE TABLE `message_usermsglastcheck` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `message_usermsglastcheck`
---
-
-LOCK TABLES `message_usermsglastcheck` WRITE;
 /*!40000 ALTER TABLE `message_usermsglastcheck` DISABLE KEYS */;
 /*!40000 ALTER TABLE `message_usermsglastcheck` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notifications_notification`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications_notification` (
@@ -760,19 +439,8 @@ CREATE TABLE `notifications_notification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `notifications_notification`
---
-
-LOCK TABLES `notifications_notification` WRITE;
 /*!40000 ALTER TABLE `notifications_notification` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notifications_notification` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `notifications_usernotification`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `notifications_usernotification` (
@@ -788,19 +456,8 @@ CREATE TABLE `notifications_usernotification` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `notifications_usernotification`
---
-
-LOCK TABLES `notifications_usernotification` WRITE;
 /*!40000 ALTER TABLE `notifications_usernotification` DISABLE KEYS */;
 /*!40000 ALTER TABLE `notifications_usernotification` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `options_useroptions`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `options_useroptions` (
@@ -813,19 +470,8 @@ CREATE TABLE `options_useroptions` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `options_useroptions`
---
-
-LOCK TABLES `options_useroptions` WRITE;
 /*!40000 ALTER TABLE `options_useroptions` DISABLE KEYS */;
 /*!40000 ALTER TABLE `options_useroptions` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `organizations_orgmemberquota`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `organizations_orgmemberquota` (
@@ -837,19 +483,8 @@ CREATE TABLE `organizations_orgmemberquota` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `organizations_orgmemberquota`
---
-
-LOCK TABLES `organizations_orgmemberquota` WRITE;
 /*!40000 ALTER TABLE `organizations_orgmemberquota` DISABLE KEYS */;
 /*!40000 ALTER TABLE `organizations_orgmemberquota` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `post_office_attachment`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_attachment` (
@@ -860,19 +495,8 @@ CREATE TABLE `post_office_attachment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `post_office_attachment`
---
-
-LOCK TABLES `post_office_attachment` WRITE;
 /*!40000 ALTER TABLE `post_office_attachment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `post_office_attachment` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `post_office_attachment_emails`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_attachment_emails` (
@@ -887,19 +511,8 @@ CREATE TABLE `post_office_attachment_emails` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `post_office_attachment_emails`
---
-
-LOCK TABLES `post_office_attachment_emails` WRITE;
 /*!40000 ALTER TABLE `post_office_attachment_emails` DISABLE KEYS */;
 /*!40000 ALTER TABLE `post_office_attachment_emails` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `post_office_email`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_email` (
@@ -930,19 +543,8 @@ CREATE TABLE `post_office_email` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `post_office_email`
---
-
-LOCK TABLES `post_office_email` WRITE;
 /*!40000 ALTER TABLE `post_office_email` DISABLE KEYS */;
 /*!40000 ALTER TABLE `post_office_email` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `post_office_emailtemplate`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_emailtemplate` (
@@ -963,19 +565,8 @@ CREATE TABLE `post_office_emailtemplate` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `post_office_emailtemplate`
---
-
-LOCK TABLES `post_office_emailtemplate` WRITE;
 /*!40000 ALTER TABLE `post_office_emailtemplate` DISABLE KEYS */;
 /*!40000 ALTER TABLE `post_office_emailtemplate` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `post_office_log`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `post_office_log` (
@@ -991,19 +582,8 @@ CREATE TABLE `post_office_log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `post_office_log`
---
-
-LOCK TABLES `post_office_log` WRITE;
 /*!40000 ALTER TABLE `post_office_log` DISABLE KEYS */;
 /*!40000 ALTER TABLE `post_office_log` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `profile_detailedprofile`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profile_detailedprofile` (
@@ -1016,19 +596,8 @@ CREATE TABLE `profile_detailedprofile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `profile_detailedprofile`
---
-
-LOCK TABLES `profile_detailedprofile` WRITE;
 /*!40000 ALTER TABLE `profile_detailedprofile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `profile_detailedprofile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `profile_profile`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `profile_profile` (
@@ -1048,19 +617,8 @@ CREATE TABLE `profile_profile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `profile_profile`
---
-
-LOCK TABLES `profile_profile` WRITE;
 /*!40000 ALTER TABLE `profile_profile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `profile_profile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `registration_registrationprofile`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `registration_registrationprofile` (
@@ -1071,19 +629,8 @@ CREATE TABLE `registration_registrationprofile` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `registration_registrationprofile`
---
-
-LOCK TABLES `registration_registrationprofile` WRITE;
 /*!40000 ALTER TABLE `registration_registrationprofile` DISABLE KEYS */;
 /*!40000 ALTER TABLE `registration_registrationprofile` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `share_anonymousshare`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_anonymousshare` (
@@ -1097,19 +644,8 @@ CREATE TABLE `share_anonymousshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `share_anonymousshare`
---
-
-LOCK TABLES `share_anonymousshare` WRITE;
 /*!40000 ALTER TABLE `share_anonymousshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_anonymousshare` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `share_fileshare`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_fileshare` (
@@ -1131,19 +667,8 @@ CREATE TABLE `share_fileshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `share_fileshare`
---
-
-LOCK TABLES `share_fileshare` WRITE;
 /*!40000 ALTER TABLE `share_fileshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_fileshare` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `share_orgfileshare`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_orgfileshare` (
@@ -1157,19 +682,8 @@ CREATE TABLE `share_orgfileshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `share_orgfileshare`
---
-
-LOCK TABLES `share_orgfileshare` WRITE;
 /*!40000 ALTER TABLE `share_orgfileshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_orgfileshare` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `share_privatefiledirshare`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_privatefiledirshare` (
@@ -1189,19 +703,8 @@ CREATE TABLE `share_privatefiledirshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `share_privatefiledirshare`
---
-
-LOCK TABLES `share_privatefiledirshare` WRITE;
 /*!40000 ALTER TABLE `share_privatefiledirshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_privatefiledirshare` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `share_uploadlinkshare`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `share_uploadlinkshare` (
@@ -1221,19 +724,8 @@ CREATE TABLE `share_uploadlinkshare` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `share_uploadlinkshare`
---
-
-LOCK TABLES `share_uploadlinkshare` WRITE;
 /*!40000 ALTER TABLE `share_uploadlinkshare` DISABLE KEYS */;
 /*!40000 ALTER TABLE `share_uploadlinkshare` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `sysadmin_extra_userloginlog`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `sysadmin_extra_userloginlog` (
@@ -1247,19 +739,8 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `sysadmin_extra_userloginlog`
---
-
-LOCK TABLES `sysadmin_extra_userloginlog` WRITE;
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wiki_groupwiki`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_groupwiki` (
@@ -1271,19 +752,8 @@ CREATE TABLE `wiki_groupwiki` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `wiki_groupwiki`
---
-
-LOCK TABLES `wiki_groupwiki` WRITE;
 /*!40000 ALTER TABLE `wiki_groupwiki` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wiki_groupwiki` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `wiki_personalwiki`
---
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_personalwiki` (
@@ -1295,14 +765,8 @@ CREATE TABLE `wiki_personalwiki` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
---
--- Dumping data for table `wiki_personalwiki`
---
-
-LOCK TABLES `wiki_personalwiki` WRITE;
 /*!40000 ALTER TABLE `wiki_personalwiki` DISABLE KEYS */;
 /*!40000 ALTER TABLE `wiki_personalwiki` ENABLE KEYS */;
-UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -1313,4 +777,3 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-03-19 16:17:38
