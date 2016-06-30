@@ -105,16 +105,18 @@ define([
 
         downloadLinkPanelInit: function() {
             var _this = this;
-            var after_op_success = function(data) {
+            var after_op_success = function(data) { // data is [] or [{...}] 
 
                 _this.$('.loading-tip').hide();
 
-                if (data['download_link']) {
-                    _this.download_link = data["download_link"]; // for 'link send'
-                    _this.download_link_token = data["token"]; // for 'link delete'
-                    _this.$('#download-link').html(data['download_link']);
-                    _this.$('#direct-dl-link').html(data['download_link']+'?raw=1');
-                    if (data['is_expired']) {
+                if (data.length == 1) {
+                    var link_data = data[0],
+                        link = link_data.link;
+                    _this.download_link = link; // for 'link send'
+                    _this.download_link_token = link_data.token; // for 'link delete'
+                    _this.$('#download-link').html(link);
+                    _this.$('#direct-dl-link').html(link + '?raw=1');
+                    if (link_data.is_expired) {
                         _this.$('#send-download-link').addClass('hide');
                         _this.$('#download-link, #direct-dl-link').append(' <span class="error">(' + gettext('Expired') + ')</span>');
                     }
@@ -125,11 +127,10 @@ define([
             };
             // check if downloadLink exists
             Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'get_shared_download_link'}),
+                'get_url': Common.getUrl({name: 'share_admin_share_links'}),
                 'data': {
                     'repo_id': this.repo_id,
-                    'p': this.dirent_path,
-                    'type': this.is_dir ? 'd' : 'f'
+                    'path': this.dirent_path
                 },
                 'after_op_success': after_op_success
             });
@@ -239,13 +240,8 @@ define([
 
             $.extend(post_data, {
                 'repo_id': this.repo_id,
-                'p': this.dirent_path
+                'path': this.dirent_path
             });
-            if (link_type == 'download') {
-                $.extend(post_data, {
-                    'type': this.is_dir? 'd' : 'f'
-                });
-            }
 
             var _this = this;
             var after_op_success = function(data) {
@@ -269,14 +265,14 @@ define([
                 }
 
                 if (link_type == 'download') {
-                    _this.$('#download-link').html(data["download_link"]); // TODO: add 'click & select' func
-                    _this.$('#direct-dl-link').html(data['download_link'] + '?raw=1');
-                    _this.download_link = data["download_link"]; // for 'link send'
+                    _this.$('#download-link').html(data["link"]); // TODO: add 'click & select' func
+                    _this.$('#direct-dl-link').html(data['link'] + '?raw=1');
+                    _this.download_link = data["link"]; // for 'link send'
                     _this.download_link_token = data["token"]; // for 'link delete'
                     _this.$('#download-link-operations').removeClass('hide');
                 } else {
-                    _this.$('#upload-link').html(data["upload_link"]);
-                    _this.upload_link = data["upload_link"];
+                    _this.$('#upload-link').html(data["link"]);
+                    _this.upload_link = data["link"];
                     _this.upload_link_token = data["token"];
                     _this.$('#upload-link-operations').removeClass('hide');
                 }
@@ -295,7 +291,7 @@ define([
             this.generateLink({
                 link_type: 'download',
                 form: this.$('#generate-download-link-form'),
-                post_url: Common.getUrl({name: 'get_shared_download_link'})
+                post_url: Common.getUrl({name: 'share_admin_share_links'})
             });
             return false;
         },
@@ -384,9 +380,12 @@ define([
         deleteDownloadLink: function() {
             var _this = this;
             $.ajax({
-                url: Common.getUrl({name: 'delete_shared_download_link'}),
-                type: 'POST',
-                data: { 't': this.download_link_token },
+                url: Common.getUrl({
+                    'name': 'share_admin_share_link',
+                    'token': this.download_link_token
+                }),
+                type: 'DELETE',
+                cache: false,
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
                 success: function(data) {
@@ -398,11 +397,13 @@ define([
 
         uploadLinkPanelInit: function() {
             var _this = this;
-            var after_op_success = function(data) {
-                if (data['upload_link']) {
-                    _this.upload_link_token = data["token"];
-                    _this.upload_link = data["upload_link"];
-                    _this.$('#upload-link').html(data["upload_link"]); // TODO
+            var after_op_success = function(data) { // data is [] or [{...}]
+                if (data.length == 1) {
+                    var link_data = data[0],
+                        link = link_data.link;
+                    _this.upload_link_token = link_data.token;
+                    _this.upload_link = link;
+                    _this.$('#upload-link').html(link);
                     _this.$('#upload-link-operations').removeClass('hide');
                 } else {
                     _this.$('#generate-upload-link-form').removeClass('hide');
@@ -410,8 +411,11 @@ define([
             };
             // check if upload link exists
             Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'get_share_upload_link'}), // TODO
-                'data': {'repo_id': this.repo_id, 'p': this.dirent_path},
+                'get_url': Common.getUrl({name: 'share_admin_upload_links'}),
+                'data': {
+                    'repo_id': this.repo_id,
+                    'path': this.dirent_path
+                },
                 'after_op_success': after_op_success
             });
         },
@@ -428,7 +432,7 @@ define([
             this.generateLink({
                 link_type: 'upload',
                 form: this.$('#generate-upload-link-form'),
-                post_url: Common.getUrl({name: 'get_share_upload_link'})
+                post_url: Common.getUrl({name: 'share_admin_upload_links'})
             });
             return false;
         },
@@ -458,9 +462,12 @@ define([
         deleteUploadLink: function() {
             var _this = this;
             $.ajax({
-                url: Common.getUrl({name: 'delete_shared_upload_link'}),
-                type: 'POST',
-                data: { 't': this.upload_link_token },
+                url: Common.getUrl({
+                    'name': 'share_admin_upload_link',
+                    'token': this.upload_link_token
+                }),
+                type: 'DELETE',
+                cache: false,
                 beforeSend: Common.prepareCSRFToken,
                 dataType: 'json',
                 success: function(data) {

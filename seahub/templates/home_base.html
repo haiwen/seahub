@@ -50,10 +50,10 @@
         <h3 class="hd">{% trans "Share Admin" %}</h3>
         <ul class="side-tabnav-tabs">
             {% if user.permissions.can_add_repo %}
-            <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{% url 'share_admin' %}"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
-            <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{% url 'list_priv_shared_folders' %}"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
+            <li class="tab {% block cur_share_libs %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-libs/"><span class="sf2-icon-library"></span>{% trans "Libraries" %}</a></li>
+            <li class="tab {% block cur_share_folders %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-folders/"><span class="sf2-icon-folder"></span>{% trans "Folders" %}</a></li>
             {% endif %}
-            <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{% url 'list_shared_links' %}"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
+            <li class="tab {% block cur_share_links %}{% endblock %}"><a href="{{ SITE_ROOT }}#share-admin-share-links/"><span class="sf2-icon-link"></span>{% trans "Links" %}</a></li>
         </ul>
 
         {% endblock %}

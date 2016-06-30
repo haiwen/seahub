@@ -2959,7 +2959,6 @@ class SharedLinksView(APIView):
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
-    # from seahub.share.view::list_shared_links
     def get(self, request, format=None):
         username = request.user.username
 

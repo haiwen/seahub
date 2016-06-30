@@ -170,15 +170,16 @@ $(function() {
 $('#share').click(function() {
     var op = $(this),
         name = "{{filename|escapejs}}",
-        path = "{{path|escapejs}}";
+        path = "{{path|escapejs}}",
         aj_data = {
             'repo_id': "{{ repo.id }}",
-            'p': path,
-            'type': 'f'
+            'path': path
         },
         type = 'f',
         cur_path = path.substr(0, path.length - name.length);
+
     showSharePopup(op, name, aj_data, type, cur_path);
+
     return false;
 });
 

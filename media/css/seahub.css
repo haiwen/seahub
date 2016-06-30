@@ -2632,6 +2632,7 @@ button.sf-dropdown-toggle:focus {
 .view-link-alert p {
     display: inline-block;
 }
+.select-white,
 .perm-add-perm,
 .user-perm-add-perm,
 .group-perm-add-perm,

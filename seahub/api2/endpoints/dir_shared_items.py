@@ -423,6 +423,10 @@ class DirSharedItemsEndpoint(APIView):
             if shared_to is None or not is_valid_username(shared_to):
                 return api_error(status.HTTP_400_BAD_REQUEST, 'Email %s invalid.' % shared_to)
 
+            # if user not found, permission will be None
+            permission = seafile_api.check_permission_by_path(
+                    shared_repo.id, '/', shared_to)
+
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 seaserv.seafserv_threaded_rpc.org_remove_share(
@@ -430,9 +434,6 @@ class DirSharedItemsEndpoint(APIView):
             else:
                 seaserv.remove_share(shared_repo.id, username, shared_to)
 
-            # if user not found, permission will be None
-            permission = seafile_api.check_permission_by_path(repo.id, path,
-                                                              shared_to)
             send_perm_audit_msg('delete-repo-perm', username, shared_to,
                                 repo_id, path, permission)
 
@@ -445,7 +446,15 @@ class DirSharedItemsEndpoint(APIView):
 
             # hacky way to get group repo permission
             permission = ''
-            for e in seafile_api.list_repo_shared_group_by_user(username, shared_repo.id):
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                shared_groups = seafile_api.list_org_repo_shared_group(
+                        org_id, username, shared_repo.id)
+            else:
+                shared_groups = seafile_api.list_repo_shared_group(
+                        username, shared_repo.id)
+
+            for e in shared_groups:
                 if e.group_id == group_id:
                     permission = e.perm
                     break
