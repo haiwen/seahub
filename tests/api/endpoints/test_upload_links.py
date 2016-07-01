@@ -41,13 +41,13 @@ class UploadLinksTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
 
-        assert json_resp['link'] is not None
-        assert json_resp['token'] is not None
+        assert json_resp[0]['link'] is not None
+        assert json_resp[0]['token'] is not None
 
-        assert token in json_resp['link']
-        assert 'u/d' in json_resp['link']
+        assert token in json_resp[0]['link']
+        assert 'u/d' in json_resp[0]['link']
 
-        assert token == json_resp['token']
+        assert token == json_resp[0]['token']
 
         self._remove_upload_link(token)
 
