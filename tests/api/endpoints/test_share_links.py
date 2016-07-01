@@ -48,14 +48,14 @@ class ShareLinksTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
 
-        assert json_resp['link'] is not None
-        assert json_resp['token'] is not None
-        assert json_resp['is_expired'] is not None
+        assert json_resp[0]['link'] is not None
+        assert json_resp[0]['token'] is not None
+        assert json_resp[0]['is_expired'] is not None
 
-        assert token in json_resp['link']
-        assert 'f' in json_resp['link']
+        assert token in json_resp[0]['link']
+        assert 'f' in json_resp[0]['link']
 
-        assert token == json_resp['token']
+        assert token == json_resp[0]['token']
 
         self._remove_share_link(token)
 
@@ -68,14 +68,14 @@ class ShareLinksTest(BaseTestCase):
 
         json_resp = json.loads(resp.content)
 
-        assert json_resp['link'] is not None
-        assert json_resp['token'] is not None
-        assert json_resp['is_expired'] is not None
+        assert json_resp[0]['link'] is not None
+        assert json_resp[0]['token'] is not None
+        assert json_resp[0]['is_expired'] is not None
 
-        assert token in json_resp['link']
-        assert 'd' in json_resp['link']
+        assert token in json_resp[0]['link']
+        assert 'd' in json_resp[0]['link']
 
-        assert token == json_resp['token']
+        assert token == json_resp[0]['token']
 
         self._remove_share_link(token)
 
