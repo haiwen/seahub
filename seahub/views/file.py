@@ -57,7 +57,8 @@ from seahub.utils.file_types import (IMAGE, PDF, DOCUMENT, SPREADSHEET, AUDIO,
 from seahub.utils.star import is_file_starred
 from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
-from seahub.views import check_folder_permission, check_file_lock
+from seahub.views import check_folder_permission, check_file_lock, \
+    get_unencry_rw_repos_by_user
 
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
@@ -69,7 +70,25 @@ import seahub.settings as settings
 from seahub.settings import FILE_ENCODING_LIST, FILE_PREVIEW_MAX_SIZE, \
     FILE_ENCODING_TRY_LIST, USE_PDFJS, MEDIA_URL
 
-from seahub.views import get_unencry_rw_repos_by_user
+try:
+    from seahub.settings import ENABLE_OFFICE_WEB_APP
+except ImportError:
+    ENABLE_OFFICE_WEB_APP = False
+
+try:
+    from seahub.settings import ENABLE_OFFICE_WEB_APP_EDIT
+except ImportError:
+    ENABLE_OFFICE_WEB_APP_EDIT = False
+
+try:
+    from seahub.settings import OFFICE_WEB_APP_FILE_EXTENSION
+except ImportError:
+    OFFICE_WEB_APP_FILE_EXTENSION = ()
+
+try:
+    from seahub.settings import OFFICE_WEB_APP_EDIT_FILE_EXTENSION
+except ImportError:
+    OFFICE_WEB_APP_EDIT_FILE_EXTENSION = ()
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -402,20 +421,22 @@ def _file_view(request, repo_id, path):
         raw_path, inner_path, user_perm = get_file_view_path_and_perm(
             request, repo_id, obj_id, path)
 
+    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+
     # check if use office web app to view/edit file
-    try:
-        from seahub_extra.wopi.utils import get_wopi_dict, \
-            check_can_view_file_by_OWA, check_can_edit_file_by_OWA
-    except ImportError:
-        pass
-    else:
+    if is_pro_version() and not repo.encrypted and ENABLE_OFFICE_WEB_APP:
         action_name = None
-        if check_can_view_file_by_OWA(username, repo_id, path):
+        # first check if can view file
+        if fileext in OFFICE_WEB_APP_FILE_EXTENSION:
             action_name = 'view'
 
-            if check_can_edit_file_by_OWA(username, repo_id, path):
-                action_name = 'edit'
+        # then check if can edit file
+        if ENABLE_OFFICE_WEB_APP_EDIT and file_perm == 'rw' and \
+                fileext in OFFICE_WEB_APP_EDIT_FILE_EXTENSION and \
+                ((not is_locked) or (is_locked and locked_by_me)):
+            action_name = 'edit'
 
+        from seahub_extra.wopi.utils import get_wopi_dict
         wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
         if wopi_dict:
             send_file_access_msg(request, repo, path, 'web')
@@ -519,8 +540,6 @@ def _file_view(request, repo_id, path):
     if request.user.org:
         org_id = request.user.org.org_id
     is_starred = is_file_starred(username, repo.id, path.encode('utf-8'), org_id)
-
-    is_locked, locked_by_me = check_file_lock(repo_id, path, username)
 
     can_edit_file = True
     if file_perm == 'r':
