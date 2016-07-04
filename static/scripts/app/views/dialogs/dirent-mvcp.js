@@ -197,10 +197,10 @@ define([
 
                 if (_this.op_type == 'mv') {
                     msg = gettext("Successfully moved %(name)s")
-                        .replace('%(name)s', Common.HTMLescape(obj_name));
+                        .replace('%(name)s', obj_name);
                 } else {
                     msg = gettext("Successfully copied %(name)s")
-                        .replace('%(name)s', Common.HTMLescape(obj_name));
+                        .replace('%(name)s', obj_name);
                 }
 
                 if (!data['task_id']) { // no progress

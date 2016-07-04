@@ -73,12 +73,15 @@ define([
 
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
+            var fileServerRoot = app.config.fileServerRoot;
             switch (options.name) {
                 // File Operations
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
-                case 'download_dirents': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dirents/download-link/';
+                case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
+                case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
+                case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
                 case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
@@ -327,9 +330,9 @@ define([
         feedback: function(con, type, time) {
             var time = time || 5000;
             if ($('.messages').length > 0) {
-                $('.messages').html('<li class="' + type + '">' + con + '</li>');
+                $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
             } else {
-                var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+                var html = '<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>';
                 $('#main').append(html);
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');

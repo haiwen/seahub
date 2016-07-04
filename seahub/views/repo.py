@@ -21,7 +21,6 @@ from seahub.share.models import FileShare, UploadLinkShare, \
     check_share_link_common
 from seahub.views import gen_path_link, get_repo_dirents, \
     check_folder_permission
-from seahub.views.file import send_file_access_msg
 
 from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
     gen_shared_upload_link, user_traffic_over_limit, render_error, \
@@ -29,7 +28,6 @@ from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
     THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
-from seahub.utils import gen_file_get_url
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 
@@ -158,47 +156,6 @@ def repo_history_view(request, repo_id):
             }, context_instance=RequestContext(request))
 
 ########## shared dir/uploadlink
-def _download_dir_from_share_link(request, fileshare, repo, real_path):
-    # check whether owner's traffic over the limit
-    if user_traffic_over_limit(fileshare.username):
-        return render_error(
-            request, _(u'Unable to access file: share link traffic is used up.'))
-
-    shared_by = fileshare.username
-    if real_path == '/':
-        dirname = repo.name
-    else:
-        dirname = os.path.basename(real_path.rstrip('/'))
-
-    dir_id = seafile_api.get_dir_id_by_path(repo.id, real_path)
-    if not dir_id:
-        return render_error(
-            request, _(u'Unable to download: folder not found.'))
-
-    try:
-        total_size = seaserv.seafserv_threaded_rpc.get_dir_size(
-            repo.store_id, repo.version, dir_id)
-    except Exception as e:
-        logger.error(str(e))
-        return render_error(request, _(u'Internal Error'))
-
-    if total_size > seaserv.MAX_DOWNLOAD_DIR_SIZE:
-        return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
-
-    token = seafile_api.get_fileserver_access_token(repo.id,
-                                                    dir_id,
-                                                    'download-dir',
-                                                    request.user.username)
-
-    try:
-        seaserv.send_message('seahub.stats', 'dir-download\t%s\t%s\t%s\t%s' %
-                             (repo.id, shared_by, dir_id, total_size))
-        send_file_access_msg(request, repo, real_path, 'web')
-    except Exception as e:
-        logger.error('Error when sending dir-download message: %s' % str(e))
-
-    return HttpResponseRedirect(gen_file_get_url(token, dirname))
-
 @share_link_audit
 def view_shared_dir(request, fileshare):
     token = fileshare.token
@@ -232,11 +189,6 @@ def view_shared_dir(request, fileshare):
     # Check path still exist, otherwise show error
     if not seafile_api.get_dir_id_by_path(repo.id, fileshare.path):
         return render_error(request, _('"%s" does not exist.') % fileshare.path)
-
-    # download shared dir
-    if request.GET.get('dl', '') == '1':
-        return _download_dir_from_share_link(request, fileshare, repo,
-                                             real_path)
 
     if fileshare.path == '/':
         # use repo name as dir name if share whole library

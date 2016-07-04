@@ -1298,3 +1298,12 @@ def get_system_admins():
             admins.append(user)
 
     return admins
+
+def is_windows_operating_system(request):
+    if not request.META.has_key('HTTP_USER_AGENT'):
+        return False
+
+    if 'windows' in request.META['HTTP_USER_AGENT'].lower():
+        return True
+    else:
+        return False
