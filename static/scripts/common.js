@@ -97,7 +97,6 @@ define([
                 case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
                 case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
                 case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
-                case 'get_file_download_url': return siteRoot + 'lib/' + options.repo_id + '/file' + options.file_path + '?dl=1';
                 case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 

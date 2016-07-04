@@ -42,7 +42,7 @@
                 {% endif %}
             </a>
             {% if not traffic_over_limit %}
-            <a href="#" class="obv-btn vam shared-dir-zip" data-name="{{ dirent.obj_name }}">{% trans "ZIP"%}</a>
+            <a href="#" class="obv-btn vam shared-dir-zip">{% trans "ZIP"%}</a>
             {% endif %}
         </div>
     </div>
@@ -60,7 +60,7 @@
 
         <tbody>
             {% for dirent in dir_list %}
-            <tr data-name="{{dirent.obj_name}}" >
+            <tr>
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td>
                     <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}" class="normal">{{ dirent.obj_name }}</a>
@@ -69,7 +69,7 @@
                 <td>{{ dirent.last_modified|translate_seahub_time }}</td>
                 <td>
                     {% if not traffic_over_limit %}
-                    <a class="op-icon vh download-dir" data-name="{{ dirent.obj_name }}" href="#" aria-label="{% trans 'Download' %}">
+                    <a class="op-icon vh download-dir" data-name="{{ dirent.obj_name }}" href="#" title="{% trans 'Download' %}" aria-label="{% trans 'Download' %}">
                         <img src="{{MEDIA_URL}}img/download.png" alt="{% trans 'Download' %}" />
                     </a>
                     {% endif %}
@@ -190,36 +190,34 @@ var share_link_token = '{{token}}';
 var file_server_root = '{{FILE_SERVER_ROOT}}';
 
 $('.shared-dir-zip, .download-dir').click(function (e) {
-    var cur_download_dir_path,
-        cur_download_dir_name,
-        zip_token;
+    var cur_download_dir_path;
+    var interval,
+        zip_token,
+        queryZipProgress;
+    var packagingTip = "{% trans "Packaging..." %}";
+    var $tip = $('<p></p>');
 
-    var target = e.target || event.srcElement;
-
-    if ($(target).hasClass("shared-dir-zip")) {
+    if ($(this).hasClass("shared-dir-zip")) {
         cur_download_dir_path = cur_path;
     } else {
-        cur_download_dir_name = $(target).closest('a').attr('data-name');
-        if (cur_path.lastIndexOf('/') != cur_path.length - 1) {
-            // cur_path NOT end with '/'
-            cur_download_dir_path = cur_path.substring(0, cur_path.lastIndexOf('/')) + '/' + cur_download_dir_name;
-        } else {
-            cur_download_dir_path = cur_path + cur_download_dir_name;
-        }
+        cur_download_dir_path = cur_path + $(this).attr('data-name');
     }
 
-    var queryZipProgress = function() {
+    queryZipProgress = function() {
         $.ajax({
             url: '{% url 'api-v2.1-query-zip-progress' %}' + '?token=' + zip_token,
             dataType: 'json',
             cache: false,
-            success: function (data) {
+            success: function(data) {
+                var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%';
+                $tip.html(packagingTip + ' ' + progress);
                 if (data['total'] == data['zipped']) {
+                    setTimeout(function() { $.modal.close(); }, 500);
                     clearInterval(interval);
                     location.href = file_server_root + 'zip/' + zip_token;
                 }
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 if (xhr.responseText) {
                     feedback($.parseJSON(xhr.responseText).error_msg, 'error');
                 } else {
@@ -232,14 +230,16 @@ $('.shared-dir-zip, .download-dir').click(function (e) {
 
     $.ajax({
         url: '{% url 'api-v2.1-share-link-zip-task' %}' + '?share_link_token=' + share_link_token + '&path=' + encodeURIComponent(cur_download_dir_path),
-        dataType: 'json',
         cache: false,
+        dataType: 'json',
         success: function(data) {
             zip_token = data['zip_token'];
+            $tip.html(packagingTip).modal();
+            $('#simplemodal-container').css({'width':'auto'});
             queryZipProgress();
             interval = setInterval(queryZipProgress, 1000);
         },
-        error: function (xhr) {
+        error: function(xhr) {
             if (xhr.responseText) {
                 feedback($.parseJSON(xhr.responseText).error_msg, 'error');
             } else {
@@ -247,6 +247,8 @@ $('.shared-dir-zip, .download-dir').click(function (e) {
             }
         }
     });
+
+    return false;
 });
 
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}

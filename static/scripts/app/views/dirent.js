@@ -124,18 +124,26 @@ define([
             var obj_name = this.model.get('obj_name');
             var interval;
             var zip_token;
+            var packagingTip = gettext("Packaging...");
+            var $tip = $('<p></p>');
             var queryZipProgress = function() {
                 $.ajax({
                     url: Common.getUrl({name: 'query_zip_progress'}) + '?token=' + zip_token,
                     dataType: 'json',
                     cache: false,
-                    success: function (data) {
+                    success: function(data) {
+                        var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%';
+                        $tip.html(packagingTip + ' ' + progress);
                         if (data['total'] == data['zipped']) {
+                            setTimeout(function() { $.modal.close(); }, 500);
                             clearInterval(interval);
-                            location.href = Common.getUrl({name: 'download_dir_zip_url', zip_token: zip_token});
+                            location.href = Common.getUrl({
+                                name: 'download_dir_zip_url',
+                                zip_token: zip_token
+                            });
                         }
                     },
-                    error: function (xhr) {
+                    error: function(xhr) {
                         Common.ajaxErrorHandler(xhr);
                         clearInterval(interval);
                     }
@@ -146,14 +154,20 @@ define([
                 url: Common.getUrl({
                     name: 'zip_task',
                     repo_id: dir.repo_id
-                }) + '?parent_dir=' + encodeURIComponent(dir.path) + '&dirents=' + encodeURIComponent(obj_name),
+                }),
+                data: {
+                    'parent_dir': dir.path,
+                    'dirents': obj_name 
+                },
                 dataType: 'json',
                 success: function(data) {
                     zip_token = data['zip_token'];
+                    $tip.html(packagingTip).modal();
+                    $('#simplemodal-container').css({'width':'auto'});
                     queryZipProgress();
                     interval = setInterval(queryZipProgress, 1000);
                 },
-                error: function (xhr) {
+                error: function(xhr) {
                     Common.ajaxErrorHandler(xhr);
                 }
             });
