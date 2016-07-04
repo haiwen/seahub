@@ -42,7 +42,7 @@
                 {% endif %}
             </a>
             {% if not traffic_over_limit %}
-            <a href="?p={{ path|urlencode }}&dl=1" class="obv-btn vam shared-dir-zip">{% trans "ZIP"%}</a>
+            <a href="#" class="obv-btn vam shared-dir-zip" data-name="{{ dirent.obj_name }}">{% trans "ZIP"%}</a>
             {% endif %}
         </div>
     </div>
@@ -60,7 +60,7 @@
 
         <tbody>
             {% for dirent in dir_list %}
-            <tr>
+            <tr data-name="{{dirent.obj_name}}" >
                 <td class="alc"><img src="{{ MEDIA_URL }}img/folder-24.png" alt="{% trans "Directory icon"%}" /></td>
                 <td>
                     <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}" class="normal">{{ dirent.obj_name }}</a>
@@ -69,7 +69,7 @@
                 <td>{{ dirent.last_modified|translate_seahub_time }}</td>
                 <td>
                     {% if not traffic_over_limit %}
-                    <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}" aria-label="{% trans 'Download' %}">
+                    <a class="op-icon vh download-dir" data-name="{{ dirent.obj_name }}" href="#" aria-label="{% trans 'Download' %}">
                         <img src="{{MEDIA_URL}}img/download.png" alt="{% trans 'Download' %}" />
                     </a>
                     {% endif %}
@@ -119,7 +119,7 @@
                 </a>
                 <a href="?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&mode={{mode}}" class="normal text-link ellipsis">{{ dirent.obj_name }}</a>
                 {% if not traffic_over_limit %}
-                <a class="op-icon vh" href="{% url "view_shared_dir" token %}?p={{ path|urlencode }}{{ dirent.obj_name|urlencode }}&dl=1" title="{% trans 'Download' %}">
+                <a class="op-icon vh download-dir" data-name="{{ dirent.obj_name }}" href="#" title="{% trans 'Download' %}">
                     <img src="{{MEDIA_URL}}img/download.png" alt="" />
                 </a>
                   {% endif %}
@@ -185,9 +185,73 @@ var magnificOptions = {
 $('.img-name-link').magnificPopup(magnificOptions);
 $('.img-img-link').magnificPopup(magnificOptions);
 
+var cur_path = '{{path|escapejs}}';
+var share_link_token = '{{token}}';
+var file_server_root = '{{FILE_SERVER_ROOT}}';
+
+$('.shared-dir-zip, .download-dir').click(function (e) {
+    var cur_download_dir_path,
+        cur_download_dir_name,
+        zip_token;
+
+    var target = e.target || event.srcElement;
+
+    if ($(target).hasClass("shared-dir-zip")) {
+        cur_download_dir_path = cur_path;
+    } else {
+        cur_download_dir_name = $(target).closest('a').attr('data-name');
+        if (cur_path.lastIndexOf('/') != cur_path.length - 1) {
+            // cur_path NOT end with '/'
+            cur_download_dir_path = cur_path.substring(0, cur_path.lastIndexOf('/')) + '/' + cur_download_dir_name;
+        } else {
+            cur_download_dir_path = cur_path + cur_download_dir_name;
+        }
+    }
+
+    var queryZipProgress = function() {
+        $.ajax({
+            url: '{% url 'api-v2.1-query-zip-progress' %}' + '?token=' + zip_token,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                if (data['total'] == data['zipped']) {
+                    clearInterval(interval);
+                    location.href = file_server_root + 'zip/' + zip_token;
+                }
+            },
+            error: function (xhr) {
+                if (xhr.responseText) {
+                    feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+                } else {
+                    feedback("{% trans "Failed. Please check the network." %}", 'error');
+                }
+                clearInterval(interval);
+            }
+        });
+    };
+
+    $.ajax({
+        url: '{% url 'api-v2.1-share-link-zip-task' %}' + '?share_link_token=' + share_link_token + '&path=' + encodeURIComponent(cur_download_dir_path),
+        dataType: 'json',
+        cache: false,
+        success: function(data) {
+            zip_token = data['zip_token'];
+            queryZipProgress();
+            interval = setInterval(queryZipProgress, 1000);
+        },
+        error: function (xhr) {
+            if (xhr.responseText) {
+                feedback($.parseJSON(xhr.responseText).error_msg, 'error');
+            } else {
+                feedback("{% trans "Failed. Please check the network." %}", 'error');
+            }
+        }
+    });
+});
+
 {% if not repo.encrypted and ENABLE_THUMBNAIL %}
 // get thumbnails for image files
-var cur_path = "{{path|escapejs}}";
+
 $(function() {
     var img_icons = $('.not-thumbnail');
     if (img_icons.length == 0) {

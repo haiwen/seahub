@@ -807,22 +807,53 @@ define([
             },
 
             download: function () {
-                var dirents = this.dir,
-                    selected_dirents = dirents.where({'selected':true}),
-                    selected_names = '';
+                var dirents = this.dir;
+                var parent_dir = dirents.path;
+                var selected_dirents = dirents.where({'selected':true});
+                var selected_names = [];
+                var interval;
+                var zip_token;
+                var queryZipProgress = function() {
+                    $.ajax({
+                        url: Common.getUrl({name: 'query_zip_progress'}) + '?token=' + zip_token,
+                        dataType: 'json',
+                        cache: false,
+                        success: function (data) {
+                            if (data['total'] == data['zipped']) {
+                                clearInterval(interval);
+                                location.href = Common.getUrl({name: 'download_dir_zip_url', zip_token: zip_token});
+                            }
+                        },
+                        error: function (xhr) {
+                            Common.ajaxErrorHandler(xhr);
+                            clearInterval(interval);
+                        }
+                    });
+                };
+
+                if (selected_dirents.length == 1 && selected_dirents[0].get('is_file')) {
+                    // only select one file
+                    var file_path = parent_dir + '/' + selected_dirents[0].get('obj_name');
+                    location.href = Common.getUrl({name: 'get_file_download_url', repo_id: dirents.repo_id, file_path: encodeURIComponent(file_path)});
+                    return false
+                }
 
                 $(selected_dirents).each(function() {
-                    selected_names += this.get('obj_name') + ',';
+                    selected_names.push(this.get('obj_name'));
                 });
 
                 $.ajax({
-                    url: Common.getUrl({
-                        name: 'download_dirents',
-                        repo_id: dirents.repo_id
-                    }) + '?parent_dir=' + encodeURIComponent(dirents.path) + '&dirents=' + encodeURIComponent(selected_names),
+                    url: Common.getUrl({name: 'zip_task', repo_id: dirents.repo_id}),
+                    data: {
+                        'parent_dir': parent_dir,
+                        'dirents': selected_names
+                    },
                     dataType: 'json',
+                    traditional: true,
                     success: function(data) {
-                        location.href = data['url'];
+                        zip_token = data['zip_token'];
+                        queryZipProgress();
+                        interval = setInterval(queryZipProgress, 1000);
                     },
                     error: function (xhr) {
                         Common.ajaxErrorHandler(xhr);
@@ -877,7 +908,7 @@ define([
                                 } else {
                                     msg_s = gettext("Successfully deleted %(name)s and %(amount)s other items.");
                                 }
-                                msg_s = msg_s.replace('%(name)s', Common.HTMLescape(data['deleted'][0])).replace('%(amount)s', del_len - 1);
+                                msg_s = msg_s.replace('%(name)s', data['deleted'][0]).replace('%(amount)s', del_len - 1);
                                 Common.feedback(msg_s, 'success');
                             }
                             if (not_del_len > 0) {
@@ -888,7 +919,7 @@ define([
                                 } else {
                                     msg_f = gettext("Failed to delete %(name)s and %(amount)s other items.");
                                 }
-                                msg_f = msg_f.replace('%(name)s', Common.HTMLescape(data['undeleted'][0])).replace('%(amount)s', not_del_len - 1);
+                                msg_f = msg_f.replace('%(name)s', data['undeleted'][0]).replace('%(amount)s', not_del_len - 1);
                                 Common.feedback(msg_f, 'error');
                             }
                             $.modal.close();
@@ -1033,7 +1064,7 @@ define([
                                         }
                                     }
 
-                                    msg_s = msg_s.replace('%(name)s', Common.HTMLescape(data['success'][0])).replace('%(amount)s', success_len - 1);
+                                    msg_s = msg_s.replace('%(name)s', data['success'][0]).replace('%(amount)s', success_len - 1);
                                     //msg_s += ' <a href="' + view_url + '">' + "View" + '</a>';
                                     Common.feedback(msg_s, 'success');
                                 }
@@ -1052,7 +1083,7 @@ define([
                                             msg_f = gettext("Internal error. Failed to copy %(name)s.");
                                         }
                                     }
-                                    msg_f = msg_f.replace('%(name)s', Common.HTMLescape(data['failed'][0])).replace('%(amount)s', data['failed'].length - 1);
+                                    msg_f = msg_f.replace('%(name)s', data['failed'][0]).replace('%(amount)s', data['failed'].length - 1);
                                     Common.feedback(msg_f, 'error');
                                 }
                             },

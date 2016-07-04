@@ -152,7 +152,7 @@ define([
             this.model.deleteFromServer({
                 success: function(data) {
                     var msg = gettext("Successfully deleted %(name)s")
-                        .replace('%(name)s', Common.HTMLescape(dirent_name));
+                        .replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
                 },
                 error: function(xhr) {

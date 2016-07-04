@@ -73,12 +73,15 @@ define([
 
         getUrl: function(options) {
             var siteRoot = app.config.siteRoot;
+            var fileServerRoot = app.config.fileServerRoot;
             switch (options.name) {
                 // File Operations
                 case 'list_lib_dir': return siteRoot + 'ajax/lib/' + options.repo_id + '/dir/';
                 case 'del_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'del_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
-                case 'download_dirents': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dirents/download-link/';
+                case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
+                case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
+                case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
                 case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
@@ -94,6 +97,7 @@ define([
                 case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
                 case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
                 case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
+                case 'get_file_download_url': return siteRoot + 'lib/' + options.repo_id + '/file' + options.file_path + '?dl=1';
                 case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
@@ -327,9 +331,9 @@ define([
         feedback: function(con, type, time) {
             var time = time || 5000;
             if ($('.messages').length > 0) {
-                $('.messages').html('<li class="' + type + '">' + con + '</li>');
+                $('.messages').html('<li class="' + type + '">' + this.HTMLescape(con) + '</li>');
             } else {
-                var html = '<ul class="messages"><li class="' + type + '">' + con + '</li></ul>';
+                var html = '<ul class="messages"><li class="' + type + '">' + this.HTMLescape(con) + '</li></ul>';
                 $('#main').append(html);
             }
             $('.messages').css({'left':($(window).width() - $('.messages').width())/2, 'top':10}).removeClass('hide');

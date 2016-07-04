@@ -105,6 +105,7 @@
     <% if (!encrypted && user_perm == 'r') { %>
     <div id="multi-dirents-op" class="hide">
         <button id="cp-dirents" title="{% trans 'Copy' %}" class="op-btn sf2-icon-copy op-icon"></button>
+        <button id="download-dirents" title="{% trans 'Download' %}" class="op-btn sf2-icon-download op-icon"></button>
     </div>
     <% } %>
 
@@ -206,7 +207,9 @@
     <td class="dirent-op">
         <div class="op-container">
             <div class="displayed-op">
-                <a class="op-icon download sf2-icon-download sf2-x vh" href="<%= download_url %>" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
+
+                <a class="op-icon download sf2-icon-download sf2-x vh download-dir" href="#" title="{% trans "Download" %}" aria-label="{% trans "Download" %}"></a>
+
                 <% if (!repo_encrypted && can_generate_shared_link) { %>
                     <a href="#" class="op-icon share sf2-icon-share sf2-x vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
                 <% } %>

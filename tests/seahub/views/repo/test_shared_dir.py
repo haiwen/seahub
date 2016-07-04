@@ -28,16 +28,6 @@ class SharedDirTest(TestCase, Fixtures):
 
         self.assertContains(resp, '<h2>%s</h2>' % self.repo.name)
 
-        zip_url = 'href="?p=/&dl=1"'
-        self.assertContains(resp, zip_url)
-
-    def test_can_download(self):
-        dl_url = reverse('view_shared_dir', args=[self.fs.token]) + \
-            '?p=/&dl=1'
-        resp = self.client.get(dl_url)
-        self.assertEqual(302, resp.status_code)
-        assert '8082/files/' in resp.get('location')
-
     def test_view_raw_file_via_shared_dir(self):
         resp = self.client.get(
             reverse('view_file_via_shared_dir', args=[self.fs.token]) + '?p=' + self.file + '&raw=1'

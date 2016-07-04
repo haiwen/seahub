@@ -69,6 +69,7 @@ define([
         events: {
             'click .select': 'select',
             'click .file-star': 'starFile',
+            'click .download-dir': 'downloadDir',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
             'click .rename': 'rename',
@@ -116,6 +117,48 @@ define([
             } else {
                 $toggle_all_checkbox.prop('checked', false);
             }
+        },
+
+        downloadDir: function() {
+            var dir = this.dirView.dir;
+            var obj_name = this.model.get('obj_name');
+            var interval;
+            var zip_token;
+            var queryZipProgress = function() {
+                $.ajax({
+                    url: Common.getUrl({name: 'query_zip_progress'}) + '?token=' + zip_token,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (data) {
+                        if (data['total'] == data['zipped']) {
+                            clearInterval(interval);
+                            location.href = Common.getUrl({name: 'download_dir_zip_url', zip_token: zip_token});
+                        }
+                    },
+                    error: function (xhr) {
+                        Common.ajaxErrorHandler(xhr);
+                        clearInterval(interval);
+                    }
+                });
+            };
+
+            $.ajax({
+                url: Common.getUrl({
+                    name: 'zip_task',
+                    repo_id: dir.repo_id
+                }) + '?parent_dir=' + encodeURIComponent(dir.path) + '&dirents=' + encodeURIComponent(obj_name),
+                dataType: 'json',
+                success: function(data) {
+                    zip_token = data['zip_token'];
+                    queryZipProgress();
+                    interval = setInterval(queryZipProgress, 1000);
+                },
+                error: function (xhr) {
+                    Common.ajaxErrorHandler(xhr);
+                }
+            });
+
+            return false;
         },
 
         starFile: function() {
@@ -185,7 +228,7 @@ define([
             this.model.deleteFromServer({
                 success: function(data) {
                     var msg = gettext("Successfully deleted %(name)s")
-                        .replace('%(name)s', Common.HTMLescape(dirent_name));
+                        .replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
                 },
                 error: function(xhr) {

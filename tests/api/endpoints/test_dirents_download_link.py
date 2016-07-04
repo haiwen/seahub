@@ -6,11 +6,6 @@ from django.core.urlresolvers import reverse
 
 from seahub.test_utils import BaseTestCase
 
-try:
-    from seahub.settings import LOCAL_PRO_DEV_ENV
-except ImportError:
-    LOCAL_PRO_DEV_ENV = False
-
 
 class DirentsDownloadLinkViewTest(BaseTestCase):
 

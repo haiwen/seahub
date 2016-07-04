@@ -45,7 +45,7 @@ define([
                 dataType: 'json',
                 success: function () {
                     el.remove();
-                    var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(lib_name) + '</span>');
+                    var msg = gettext('Successfully unshared 1 item.');
                     Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
                 error: function(xhr) {

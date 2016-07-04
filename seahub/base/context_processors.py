@@ -61,6 +61,9 @@ def base(request):
     repo_id_patt = r".*/([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})/.*"
     m = re.match(repo_id_patt, request.get_full_path())
     search_repo_id = m.group(1) if m is not None else None
+    file_server_root = config.FILE_SERVER_ROOT
+    if not file_server_root.endswith('/'):
+        file_server_root += '/'
 
     return {
         'seafile_version': SEAFILE_VERSION,
@@ -90,4 +93,5 @@ def base(request):
         'search_repo_id': search_repo_id,
         'SITE_ROOT': SITE_ROOT,
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
+        'FILE_SERVER_ROOT': file_server_root,
         }
