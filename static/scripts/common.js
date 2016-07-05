@@ -546,12 +546,12 @@ define([
                     dataType: 'json',
                     delay: 250,
                     cache: true,
-                    data: function (params) {
+                    data: function(params) {
                         return {
                             q: params
                         };
                     },
-                    results: function (data) {
+                    results: function(data) {
                         var user_list = [], users = data['users'];
 
                         for (var i = 0, len = users.length; i < len; i++) {
@@ -559,8 +559,9 @@ define([
                                 "id": users[i].email,
                                 // for search. both name & email can be searched.
                                 // use ' '(space) to separate name & email
-                                "text": users[i].name + ' ' + users[i].email,
+                                "text": users[i].name + ' ' + users[i].contact_email,
                                 "avatar_url": users[i].avatar_url,
+                                "contact_email": users[i].contact_email,
                                 "name": users[i].name
                             });
                         }
@@ -574,7 +575,7 @@ define([
                 // format items shown in the drop-down menu
                 formatResult: function(item) {
                     if (item.avatar_url) {
-                        return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar"><span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.id) + '</span>';
+                        return '<img src="' + item.avatar_url + '" width="32" height="32" class="avatar"><span class="text ellipsis">' + _this.HTMLescape(item.name) + '<br />' + _this.HTMLescape(item.contact_email) + '</span>';
                     } else {
                         return; // if no match, show nothing
                     }

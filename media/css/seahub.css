@@ -77,6 +77,7 @@
 .icon-eye:before                  { content: "\f06e"; }
 .icon-eye-slash:before            { content: "\f070"; }
 .icon-plus-square:before          { content: "\f0fe"; }
+.icon-envelope:before             { content: "\f0e0"; }
 .fa-1x {
     font-size: 1.3em;
 }
@@ -3145,18 +3146,18 @@ button.dropdown-toggle:focus {
 #user-profile .avatar {
     border-radius: 0;
 }
-#user-profile p {
+.user-profile-nickname {
     padding: 8px 15px;
     margin: 0;
-}
-#user-profile .nickname {
     font-size: 18px;
 }
-#user-profile .info {
+.user-profile-info {
+    padding: 8px 15px;
     border-top: 1px solid #eee;
 }
-#user-profile .info-detail {
-    padding-left: 6px;
+.user-profile-info-icon {
+    display:inline-block;
+    width:1.4em;
 }
 /* shared file view */
 #shared-file-view-hd .cur-path,
