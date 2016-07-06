@@ -31,7 +31,12 @@
               {% else %}
                 <span class="user-status-cur-value">{% trans "Inactive" %}</span>
               {% endif %}
+                <span title="{% trans "Edit"%}" class="user-status-edit-icon sf2-icon-edit op-icon vh"></span>
             </div>
+            <select name="permission" class="user-status-select hide">
+                <option value="1" {%if user.is_active %}selected="selected"{% endif %}>{% trans "Active" %}</option>
+                <option value="0" {%if not user.is_active %}selected="selected"{% endif %}>{% trans "Inactive"%}</option>
+            </select>
         </td>
         <td style="font-size:11px;">
             <p> {{ user.space_usage|seahub_filesizeformat }} {% if user.space_quota > 0 %} / {{ user.space_quota|seahub_filesizeformat }} {% endif %} </p>
@@ -58,6 +63,10 @@
 <p>{% trans "Empty" %}</p>
 {% endif %}
 
+<div id="activate-msg" class="hide">
+    <p>{% trans "Activating..., please wait" %}</p>
+</div>
+
 {% endblock %}
 
 {% block extra_script %}
@@ -68,5 +77,75 @@
      'post': true // post request
  });
 
+$('tr:gt(0)').hover(
+    function() {
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon').removeClass('vh');
+    },
+    function() {
+        $(this).find('.user-status-edit-icon, .user-role-edit-icon').addClass('vh');
+    }
+);
+$('.user-status-edit-icon, .user-role-edit-icon').click(function() {
+    $(this).parent().addClass('hide');
+    $(this).parent().next().removeClass('hide'); // show 'select'
+});
+$('.user-status-select, .user-role-select').change(function() {
+    var select = $(this),
+        select_val = select.val(),
+        uid = select.parents('tr').attr('data-userid'),
+        $select_prev = $(this).prev('.user-status, .user-role'), // .user-status, .user-role
+        url, data;
+
+    if (select.hasClass('user-status-select')) {
+        url = "{{ SITE_ROOT }}inst/useradmin/toggle_status/" + uid + "/";
+        data = {'s': select_val};
+    } else {
+        url = "{{ SITE_ROOT }}inst/useradmin/toggle_role/" + uid + "/";
+        data = {'r': select_val};
+    }
+
+    if (select_val == 1) {
+        // show activating popup
+        $('#activate-msg').modal();
+        $('#simplemodal-container').css({'height':'auto'});
+    }
+    $.ajax({
+        url: url,
+        type: 'POST',
+        dataType: 'json',
+        data: data,
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        success: function(data) {
+            if (data['email_sent']) {
+                feedback("{% trans "Edit succeeded, an email has been sent." %}", 'success');
+            } else if (data['email_sent'] === false) {
+                feedback("{% trans "Edit succeeded, but failed to send email, please check your email configuration." %}", 'success');
+            } else {
+                feedback("{% trans "Edit succeeded" %}", 'success');
+            }
+            $('.user-status-cur-value', $select_prev).html(select.children('option[value="' +select.val() + '"]').text());
+            select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        },
+        error: function() {
+            feedback("{% trans "Edit failed." %}", 'error');
+            select.addClass('hide');
+            $select_prev.removeClass('hide');
+            $.modal.close();
+        }
+    });
+});
+// select shows, but the user doesn't select a value, or doesn't change the permission, click other place to hide the select
+$(document).click(function(e) {
+    var target = e.target || event.srcElement;
+    // target can't be edit-icon
+    if (!$('.user-status-edit-icon, .user-status-select').is(target)) {
+        $('.user-status').removeClass('hide');
+        $('.user-status-select').addClass('hide');
+    }
+});
+ 
 </script>
 {% endblock %}
