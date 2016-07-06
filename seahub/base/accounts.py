@@ -13,7 +13,7 @@ from seahub.auth import login
 from registration import signals
 import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
-    seafile_api
+    seafile_api, ccnet_api
 
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username, is_user_password_strong, \
@@ -200,7 +200,9 @@ class User(object):
             seafile_api.remove_repo(r.id)
 
         clear_token(self.username)
-        ccnet_threaded_rpc.remove_emailuser(source, self.username)
+        # remove current user from joined groups
+        ccnet_api.remove_group_user(self.username)
+        ccnet_api.remove_emailuser(source, self.username)
         Profile.objects.delete_profile_by_user(self.username)
 
     def get_and_delete_messages(self):
