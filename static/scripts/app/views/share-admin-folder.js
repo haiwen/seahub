@@ -52,7 +52,7 @@ define([
 
             $.ajax({
                 url: url,
-                method: 'POST',
+                method: 'PUT',
                 dataType: 'json',
                 beforeSend: Common.prepareCSRFToken,
                 data: {
