@@ -63,12 +63,12 @@ define([
             var perm = $(e.currentTarget).val();
             $.ajax({
                 url: url,
-                dataType: 'json',
-                method: 'POST',
+                method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
                 data: {
                     'permission': perm
                 },
+                dataType: 'json',
                 success: function () {
                     item_data.perm = perm;
                     _this.render();
@@ -103,9 +103,9 @@ define([
             }
             $.ajax({
                 url: url,
-                dataType: 'json',
                 method: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
+                dataType: 'json',
                 success: function () {
                     _this.remove();
                 },

@@ -565,6 +565,7 @@ define([
             this.$('.loading-tip').hide();
         },
 
+        // 'share to user' form submit
         dirUserShare: function () {
             var $panel = $('#dir-user-share');
             var $form = this.$('#add-dir-user-share-item'); // pseudo form
@@ -589,8 +590,8 @@ define([
                     name: 'dir_shared_items',
                     repo_id: repo_id
                 }) + '?p=' + encodeURIComponent(path),
+                method: 'POST',
                 dataType: 'json',
-                method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
                 traditional: true,
                 data: {
@@ -642,7 +643,8 @@ define([
             });
         },
 
-        dirGroupShare: function () {
+        // 'share to group' form submit
+        dirGroupShare: function() {
             var $panel = $('#dir-group-share');
             var $form = this.$('#add-dir-group-share-item'); // pseudo form
 
@@ -667,8 +669,8 @@ define([
                     name: 'dir_shared_items',
                     repo_id: repo_id
                 }) + '?p=' + encodeURIComponent(path),
+                method: 'POST',
                 dataType: 'json',
-                method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
                 traditional: true,
                 data: {

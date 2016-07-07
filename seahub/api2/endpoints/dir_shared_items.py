@@ -156,12 +156,11 @@ class DirSharedItemsEndpoint(APIView):
         if not repo:
             return api_error(status.HTTP_404_NOT_FOUND, 'Library %s not found.' % repo_id)
 
-        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
-
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
+        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
         ret = []
         if shared_to_user:
             ret += self.list_user_shared_items(request, repo_id, path)
@@ -172,7 +171,7 @@ class DirSharedItemsEndpoint(APIView):
         return HttpResponse(json.dumps(ret), status=200,
                             content_type=json_content_type)
 
-    def post(self, request, repo_id, format=None):
+    def put(self, request, repo_id, format=None):
         """Update shared item permission.
         """
         username = request.user.username
@@ -182,20 +181,14 @@ class DirSharedItemsEndpoint(APIView):
 
         path = request.GET.get('p', '/')
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_400_BAD_REQUEST, 'Directory not found.')
+            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
-
         permission = request.data.get('permission', 'r')
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
-
-        path = request.GET.get('p', '/')
-        if seafile_api.get_dir_id_by_path(repo.id, path) is None:
-            return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
         if path == '/':
             shared_repo = repo
@@ -211,6 +204,7 @@ class DirSharedItemsEndpoint(APIView):
                 logger.error(e)
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
 
+        shared_to_user, shared_to_group = self.handle_shared_to_args(request)
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
@@ -256,7 +250,9 @@ class DirSharedItemsEndpoint(APIView):
         return HttpResponse(json.dumps({'success': True}), status=200,
                             content_type=json_content_type)
 
-    def put(self, request, repo_id, format=None):
+    def post(self, request, repo_id, format=None):
+        """Add new item.
+        """
         username = request.user.username
         repo = seafile_api.get_repo(repo_id)
         if not repo:
