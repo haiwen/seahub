@@ -3561,3 +3561,15 @@ img.thumbnail {
     padding-top: 20px;
     text-align: center;
 }
+/* two-factor-auth */
+.two-factor-auth-wizard-btns {
+    margin-top:8px;
+}
+.two-factor-auth-backup-token-list {
+    margin-bottom:1rem;
+}
+.two-factor-auth-disable-form label,
+.two-factor-auth-disable-form input {
+    vertical-align:middle;
+    margin-right:5px;
+}
