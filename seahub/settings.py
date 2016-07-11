@@ -558,6 +558,7 @@ ADD_REPLY_TO_HEADER = False
 CLOUD_DEMO_USER = 'demo@seafile.com'
 
 ENABLE_TWO_FACTOR_AUTH = False
+OTP_LOGIN_URL = '/profile/two_factor_authentication/setup/'
 
 #####################
 # External settings #

@@ -16,7 +16,7 @@
         {% endif %}
         <li class="tab"><a href="#del-account">{% trans "Delete Account" %}</a></li>
         {% if two_factor_auth_enabled %}
-        <li class="tab"><a href="{% url 'two_factor:profile' %}">{% trans "Security" %}</a></li>
+        <li class="tab"><a href="#two-factor-auth">{% trans "Two-Factor Authentication" %}</a></li>
         {% endif %}
     </ul>
 </div>
@@ -106,6 +106,39 @@
     <input type="submit" value="{% trans "Delete" %}" class="submit" />
 </form>
 </div>
+
+{% if two_factor_auth_enabled %}
+<div class="setting-item" id="two-factor-auth">
+    <h3>{% trans "Two-Factor Authentication" %}</h3>
+    {% if default_device %}
+    <p>{% trans "Status" %}:&nbsp{% trans "enabled" %}
+        <a class="btn btn-default" href="{% url 'two_factor:disable' %}">
+        {% trans "Disable Two-Factor Authentication" %}</a>
+    </p>
+    
+    <p>
+      {% blocktrans %}If you don't have any device with you, you can access
+        your account using backup tokens.{% endblocktrans %}
+      {% blocktrans count counter=backup_tokens %}
+        You have only one backup token remaining.
+      {% plural %}
+        You have {{ counter }} backup tokens remaining.
+      {% endblocktrans %}
+    </p>
+    <p><a href="{% url 'two_factor:backup_tokens' %}"
+          class="btn btn-info">{% trans "Show Codes" %}</a></p>
+
+    {% else %}
+
+    <p>{% blocktrans %}Two-factor authentication is not enabled for your
+      account. Enable two-factor authentication for enhanced account
+      security.{% endblocktrans %}</p>
+    <p><a href="{% url 'two_factor:setup' %}" class="btn btn-primary">
+      {% trans "Enable Two-Factor Authentication" %}</a>
+    </p>
+    {% endif %}
+</div>
+{% endif %}
 
 <form id="default-lib-form" action="{% url 'default_repo' %}" method="post" class="file-choose-form hide">{% csrf_token %}
     <h3 id="dialogTitle">{% trans "Choose default library:" %}</h3>
