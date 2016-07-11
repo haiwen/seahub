@@ -3573,3 +3573,12 @@ img.thumbnail {
     vertical-align:middle;
     margin-right:5px;
 }
+.input.two-factor-auth-login-token-input {
+    margin-bottom:15px;
+}
+.two-factor-auth-login-no-phone {
+    margin-top:3rem;
+}
+.two-factor-auth-login-no-phone-text {
+    margin-bottom:10px;
+}
