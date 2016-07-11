@@ -5,7 +5,6 @@ from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework import status
 
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -15,7 +14,6 @@ from seahub.utils.licenseparse import parse_license
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
-from seahub.api2.utils import api_error
 
 import seahub.settings
 try:
@@ -29,8 +27,13 @@ class SysInfo(APIView):
     """Show system info.
     """
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
+
+    def _get_license_dict(self):
+        license_file = os.path.join(seahub.settings.PROJECT_ROOT, '../../seafile-license.txt')
+        license_dict = parse_license(license_file)
+        return license_dict
 
     def get(self, request, format=None):
         # count repos
@@ -92,15 +95,20 @@ class SysInfo(APIView):
 
         is_pro = is_pro_version()
         if is_pro:
-            license_file = os.path.join(seahub.settings.PROJECT_ROOT, '../../seafile-license.txt')
-            license_dict = parse_license(license_file)
+            license_dict = self._get_license_dict()
         else:
             license_dict = {}
 
         if license_dict:
             with_license = True
+            try:
+                max_users = int(license_dict.get('MaxUsers', ''))
+            except ValueError as e:
+                logger.error(e)
+                max_users = 0
         else:
             with_license = False
+            max_users = 0
 
         info = {
             'users_count': active_users + inactive_users,
@@ -111,8 +119,8 @@ class SysInfo(APIView):
             'multi_tenancy_enabled': multi_tenancy_enabled,
             'is_pro': is_pro,
             'with_license': with_license,
-            'license_expiration': getattr(license_dict, 'Expiration', ''),
-            'license_maxusers': getattr(license_dict, 'MaxUsers', ''),
+            'license_expiration': license_dict.get('Expiration', ''),
+            'license_maxusers': max_users,
         }
 
         return Response(info)
