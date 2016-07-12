@@ -25,7 +25,8 @@ class InvitationManager(models.Manager):
         return i
 
     def get_by_inviter(self, inviter):
-        return super(InvitationManager, self).filter(inviter=inviter)
+        return super(InvitationManager,
+                self).filter(inviter=inviter).order_by('-invite_time')
 
 class Invitation(models.Model):
     INVITE_TYPE_CHOICES = (

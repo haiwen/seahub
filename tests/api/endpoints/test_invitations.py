@@ -26,10 +26,9 @@ class InvitationsTest(BaseTestCase):
         self.assertEqual(201, resp.status_code)
 
         json_resp = json.loads(resp.content)
-        assert json_resp['accepter_exists'] is False
-        assert json_resp['invitation']['inviter'] == self.username
-        assert json_resp['invitation']['accepter'] == 'some_random_user@1.com'
-        assert json_resp['invitation']['expire_time'] is not None
+        assert json_resp['inviter'] == self.username
+        assert json_resp['accepter'] == 'some_random_user@1.com'
+        assert json_resp['expire_time'] is not None
 
         assert len(Invitation.objects.all()) == 1
 
@@ -48,7 +47,7 @@ class InvitationsTest(BaseTestCase):
 
         self.assertEqual(len(Email.objects.all()), 1)
         self.assertRegexpMatches(Email.objects.all()[0].html_message,
-                                 json_resp['invitation']['token'])
+                                 json_resp['token'])
 
     @patch.object(UserPermissions, 'can_invite_guest')
     def test_can_list(self, mock_can_invite_guest):
@@ -60,4 +59,4 @@ class InvitationsTest(BaseTestCase):
         resp = self.client.get(self.endpoint)
         self.assertEqual(200, resp.status_code)
         json_resp = json.loads(resp.content)
-        assert len(json_resp['invitations']) == 2
+        assert len(json_resp) == 2

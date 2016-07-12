@@ -28,9 +28,7 @@ class InvitationsView(APIView):
         for e in Invitation.objects.get_by_inviter(username):
             invitations.append(e.to_dict())
 
-        return Response({
-            "invitations": invitations
-        })
+        return Response(invitations)
 
     def post(self, request, format=None):
         # Send a invitation.
@@ -60,7 +58,4 @@ class InvitationsView(APIView):
                                    accepter=accepter)
         i.send_to(email=accepter)
 
-        return Response({
-            "accepter_exists": user_exists,
-            "invitation": i.to_dict()
-        }, status=201)
+        return Response(i.to_dict(), status=201)
