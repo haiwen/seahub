@@ -8,19 +8,20 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
+from django.conf import settings
+
 import seaserv
 
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
 
-from seahub.utils import is_org_context
+from seahub.utils import is_valid_email, is_org_context
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname
 from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
-from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, ENABLE_SEARCH_FROM_LDAP_DIRECTLY
 
 
 class SearchUser(APIView):
@@ -50,7 +51,7 @@ class SearchUser(APIView):
         users_result = []
         username = request.user.username
 
-        if request.cloud_mode:
+        if settings.CLOUD_MODE:
             if is_org_context(request):
                 url_prefix = request.user.org.url_prefix
                 users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
@@ -61,13 +62,14 @@ class SearchUser(APIView):
                 # when search profile, only search users in org
                 # 'nickname__icontains' for search by nickname
                 # 'contact_email__icontains' for search by contact email
-                users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                          (Q(nickname__icontains=q)) | \
-                                                           Q(contact_email__icontains=q)).values('user')
-            elif ENABLE_GLOBAL_ADDRESSBOOK:
+                users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) &
+                        (Q(nickname__icontains=q)) | Q(contact_email__icontains=q)).values('user')
+
+            elif settings.ENABLE_GLOBAL_ADDRESSBOOK:
                 users_from_ccnet = search_user_from_ccnet(q)
-                users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) | \
+                users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) |
                         Q(nickname__icontains=q)).values('user')
+
             else:
                 # in cloud mode, user will be added to Contact when share repo
                 users = []
@@ -83,16 +85,18 @@ class SearchUser(APIView):
                     users.append(c)
 
                 users_from_ccnet = filter(lambda u: q in u.email, users)
+                if is_valid_email(q):
+                    users_from_ccnet += search_user_from_ccnet(q)
+
                 # 'user__in' for only get profile of contacts
                 # 'nickname__icontains' for search by nickname
                 # 'contact_email__icontains' for search by contact
-                users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) & \
-                                                          (Q(nickname__icontains=q)) | \
-                                                           Q(contact_email__icontains=q)).values('user')
+                users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) &
+                        (Q(nickname__icontains=q)) | Q(contact_email__icontains=q)).values('user')
 
         else:
             users_from_ccnet = search_user_from_ccnet(q)
-            users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) | \
+            users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) |
                     Q(nickname__icontains=q)).values('user')
 
         # remove inactive users and add to result
@@ -158,7 +162,7 @@ def search_user_from_ccnet(q):
         users.extend(ldap_imported_users)
 
     count = len(users)
-    if count < 10 and ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
+    if count < 10 and settings.ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
         all_ldap_users = seaserv.ccnet_threaded_rpc.search_ldapusers(q, 0, 10 - count)
         users.extend(all_ldap_users)
 
