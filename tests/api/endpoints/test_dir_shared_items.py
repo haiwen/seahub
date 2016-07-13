@@ -184,6 +184,23 @@ class DirSharedItemsTest(BaseTestCase):
         assert len(json_resp['failed']) == 1
         assert unregistered_user in json_resp['failed'][0]['email']
 
+    def test_share_with_invalid_ownership(self):
+
+        self.share_repo_to_user_and_group()
+
+        # admin can visit user sub-folder with 'rw' permission
+        assert seafile_api.check_permission_by_path(self.repo.id,
+                '/', self.admin.username) == 'rw'
+
+        self.login_as(self.admin)
+
+        resp = self.client.put(
+            '/api2/repos/%s/dir/shared_items/?p=/' % self.repo.id,
+            "share_type=user&username=%s" % self.admin.username,
+            'application/x-www-form-urlencoded',
+        )
+        self.assertEqual(403, resp.status_code)
+
     # test post request
     def test_can_modify_user_repo_share_perm(self):
         self.share_repo_to_user_and_group()
@@ -288,6 +305,24 @@ class DirSharedItemsTest(BaseTestCase):
         )
         self.assertEqual(400, resp.status_code)
 
+    def test_modify_with_invalid_ownership(self):
+
+        self.share_repo_to_user_and_group()
+
+        # admin can visit user sub-folder with 'rw' permission
+        assert seafile_api.check_permission_by_path(self.repo.id,
+                '/', self.admin.username) == 'rw'
+
+        self.login_as(self.admin)
+
+        resp = self.client.post('/api2/repos/%s/dir/shared_items/?p=/&share_type=user&username=%s' % (
+            self.repo.id,
+            self.admin.username), {
+                'permission': 'r'
+            }
+        )
+        self.assertEqual(403, resp.status_code)
+
     # test delete request
     def test_can_unshare_repo_to_user(self):
         self.share_repo_to_user_and_group()
@@ -383,3 +418,19 @@ class DirSharedItemsTest(BaseTestCase):
             unregistered_user
         ))
         self.assertEqual(200, resp.status_code)
+
+    def test_unshare_with_invalid_ownership(self):
+
+        self.share_repo_to_user_and_group()
+
+        # admin can visit user sub-folder with 'rw' permission
+        assert seafile_api.check_permission_by_path(self.repo.id,
+                '/', self.admin.username) == 'rw'
+
+        self.login_as(self.admin)
+
+        resp = self.client.delete('/api2/repos/%s/dir/shared_items/?p=/&share_type=user&username=%s' % (
+            self.repo.id,
+            self.admin.username
+        ))
+        self.assertEqual(403, resp.status_code)
