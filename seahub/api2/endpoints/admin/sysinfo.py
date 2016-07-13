@@ -121,6 +121,7 @@ class SysInfo(APIView):
             'with_license': with_license,
             'license_expiration': license_dict.get('Expiration', ''),
             'license_maxusers': max_users,
+            'license_to': license_dict.get('Name', ''),
         }
 
         return Response(info)

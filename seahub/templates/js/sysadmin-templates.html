@@ -73,6 +73,8 @@
         <dd><% if (is_pro) { %>
                 {% trans "Professional Edition" %}
                 <% if (with_license) { %>
+                    {% trans "licensed to" %} <%- license_to %>
+                    ,
                     {% trans "expires on" %} <%- license_expiration %>
                 <% } %>
             <% } else { %>
