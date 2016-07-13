@@ -72,7 +72,7 @@
                             <a href="{% url 'sys_useradmin' %}" title="{% trans "System Admin" %}" class="item">{% trans "System Admin" %}</a>
                             {% endif %}
                             {% if request.user.org and request.user.org.is_staff %}
-                            <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">"{% trans "Organization Admin" %}"</a>
+                            <a href="{% url 'org_user_admin'%}" title="{% trans "Admin" %}" class="item">{% trans "Organization Admin" %}</a>
                             {% endif %}
                             {% if request.user.inst_admin %}
                             <a href="{% url "institutions:useradmin" %}" title="{% trans "Admin" %}" class="item">{% trans "Admin" %}</a>
