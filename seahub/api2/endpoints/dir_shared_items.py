@@ -1,6 +1,5 @@
 import logging
 import json
-import os
 
 from django.http import HttpResponse
 from pysearpc import SearpcError
@@ -110,39 +109,6 @@ class DirSharedItemsEndpoint(APIView):
 
         return (shared_to_user, shared_to_group)
 
-    def get_sub_repo_by_path(self, request, repo, path):
-        if path == '/':
-            raise Exception("Invalid path")
-
-        # get or create sub repo
-        username = request.user.username
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            sub_repo = seaserv.seafserv_threaded_rpc.get_org_virtual_repo(
-                org_id, repo.id, path, username)
-        else:
-            sub_repo = seafile_api.get_virtual_repo(repo.id, path, username)
-
-        return sub_repo
-
-    def get_or_create_sub_repo_by_path(self, request, repo, path):
-        username = request.user.username
-        sub_repo = self.get_sub_repo_by_path(request, repo, path)
-        if not sub_repo:
-            name = os.path.basename(path)
-            # create a sub-lib,
-            # use name as 'repo_name' & 'repo_desc' for sub_repo
-            if is_org_context(request):
-                org_id = request.user.org.org_id
-                sub_repo_id = seaserv.seafserv_threaded_rpc.create_org_virtual_repo(
-                    org_id, repo.id, path, name, name, username)
-            else:
-                sub_repo_id = seafile_api.create_virtual_repo(repo.id, path,
-                                                              name, name, username)
-            sub_repo = seafile_api.get_repo(sub_repo_id)
-
-        return sub_repo
-
     def get_repo_owner(self, request, repo_id):
         if is_org_context(request):
             return seafile_api.get_org_repo_owner(repo_id)
@@ -197,20 +163,6 @@ class DirSharedItemsEndpoint(APIView):
         if seafile_api.get_dir_id_by_path(repo.id, path) is None:
             return api_error(status.HTTP_404_NOT_FOUND, 'Folder %s not found.' % path)
 
-        if path == '/':
-            shared_repo = repo
-        else:
-            try:
-                sub_repo = self.get_sub_repo_by_path(request, repo, path)
-                if sub_repo:
-                    shared_repo = sub_repo
-                else:
-                    # unlikely to happen
-                    return api_error(status.HTTP_404_NOT_FOUND, 'Failed to get sub repo')
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Internal Server Error')
-
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
@@ -223,11 +175,19 @@ class DirSharedItemsEndpoint(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                seaserv.seafserv_threaded_rpc.org_set_share_permission(
-                    org_id, shared_repo.id, username, shared_to, permission)
+                if path == '/':
+                    seafile_api.org_set_share_permission(
+                            org_id, repo_id, username, shared_to, permission)
+                else:
+                    seafile_api.org_update_share_subdir_perm_for_user(
+                            org_id, repo_id, path, username, shared_to, permission)
             else:
-                seafile_api.set_share_permission(shared_repo.id, username,
-                                                 shared_to, permission)
+                if path == '/':
+                    seafile_api.set_share_permission(
+                            repo_id, username, shared_to, permission)
+                else:
+                    seafile_api.update_share_subdir_perm_for_user(
+                            repo_id, path, username, shared_to, permission)
 
             send_perm_audit_msg('modify-repo-perm', username, shared_to,
                                 repo_id, path, permission)
@@ -244,11 +204,18 @@ class DirSharedItemsEndpoint(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                seaserv.seafserv_threaded_rpc.set_org_group_repo_permission(
-                    org_id, gid, shared_repo.id, permission)
+                if path == '/':
+                    seaserv.seafserv_threaded_rpc.set_org_group_repo_permission(
+                            org_id, gid, repo.id, permission)
+                else:
+                    seafile_api.org_update_share_subdir_perm_for_group(
+                            org_id, repo_id, path, username, gid, permission)
             else:
-                seafile_api.set_group_repo_permission(gid, shared_repo.id,
-                                                      permission)
+                if path == '/':
+                    seafile_api.set_group_repo_permission(gid, repo.id, permission)
+                else:
+                    seafile_api.update_share_subdir_perm_for_group(
+                            repo_id, path, username, gid, permission)
 
             send_perm_audit_msg('modify-repo-perm', username, gid,
                                 repo_id, path, permission)
@@ -269,15 +236,6 @@ class DirSharedItemsEndpoint(APIView):
         if username != self.get_repo_owner(request, repo_id):
             return api_error(status.HTTP_403_FORBIDDEN, 'Permission denied.')
 
-        if path != '/':
-            try:
-                sub_repo = self.get_or_create_sub_repo_by_path(request, repo, path)
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub repo.')
-        else:
-            sub_repo = None
-
         share_type = request.data.get('share_type')
         if share_type != 'user' and share_type != 'group':
             return api_error(status.HTTP_400_BAD_REQUEST, 'share_type invalid.')
@@ -286,7 +244,6 @@ class DirSharedItemsEndpoint(APIView):
         if permission not in ['r', 'rw']:
             return api_error(status.HTTP_400_BAD_REQUEST, 'permission invalid.')
 
-        shared_repo = repo if path == '/' else sub_repo
         result = {}
         result['failed'] = []
         result['success'] = []
@@ -313,18 +270,27 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
-                        seaserv.seafserv_threaded_rpc.org_add_share(
-                            org_id, shared_repo.id, username, to_user,
-                            permission)
+                        if path == '/':
+                            seaserv.seafserv_threaded_rpc.org_add_share(
+                                    org_id, repo_id, username, to_user,
+                                    permission)
+                        else:
+                            seafile_api.org_share_subdir_to_user(
+                                    org_id, repo_id, path, username, to_user,
+                                    permission)
                     else:
-                        seafile_api.share_repo(shared_repo.id, username,
-                                               to_user, permission)
+                        if path == '/':
+                            seafile_api.share_repo(
+                                    repo_id, username, to_user, permission)
+                        else:
+                            seafile_api.share_subdir_to_user(repo_id,
+                                    path, username, to_user, permission)
 
                     # send a signal when sharing repo successful
                     share_repo_to_user_successful.send(sender=None,
                                                        from_user=username,
                                                        to_user=to_user,
-                                                       repo=shared_repo)
+                                                       repo=repo)
                     result['success'].append({
                         "share_type": "user",
                         "user_info": {
@@ -358,15 +324,24 @@ class DirSharedItemsEndpoint(APIView):
                 try:
                     if is_org_context(request):
                         org_id = request.user.org.org_id
-                        seafile_api.add_org_group_repo(shared_repo.repo_id,
-                                                       org_id, gid, username,
-                                                       permission)
+                        if path == '/':
+                            seafile_api.add_org_group_repo(
+                                    repo_id, org_id, gid, username, permission)
+                        else:
+                            seafile_api.org_share_subdir_to_group(
+                                    org_id, repo_id, path, username, gid,
+                                    permission)
                     else:
-                        seafile_api.set_group_repo(shared_repo.repo_id, gid,
-                                                   username, permission)
+                        if path == '/':
+                            seafile_api.set_group_repo(
+                                    repo_id, gid, username, permission)
+                        else:
+                            seafile_api.share_subdir_to_group(
+                                    repo_id, path, username, gid, permission)
+
 
                     share_repo_to_group_successful.send(sender=None,
-                        from_user=username, group_id=gid, repo=shared_repo)
+                            from_user=username, group_id=gid, repo=repo)
 
                     result['success'].append({
                         "share_type": "group",
@@ -405,19 +380,6 @@ class DirSharedItemsEndpoint(APIView):
 
         shared_to_user, shared_to_group = self.handle_shared_to_args(request)
 
-        if path == '/':
-            shared_repo = repo
-        else:
-            try:
-                sub_repo = self.get_sub_repo_by_path(request, repo, path)
-                if sub_repo:
-                    shared_repo = sub_repo
-                else:
-                    return api_error(status.HTTP_404_NOT_FOUND, 'Sub-library not found.')
-            except SearpcError as e:
-                logger.error(e)
-                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, 'Failed to get sub-library.')
-
         if shared_to_user:
             shared_to = request.GET.get('username')
             if shared_to is None or not is_valid_username(shared_to):
@@ -425,14 +387,23 @@ class DirSharedItemsEndpoint(APIView):
 
             # if user not found, permission will be None
             permission = seafile_api.check_permission_by_path(
-                    shared_repo.id, '/', shared_to)
+                    repo_id, '/', shared_to)
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                seaserv.seafserv_threaded_rpc.org_remove_share(
-                    org_id, shared_repo.id, username, shared_to)
+                if path == '/':
+                    seaserv.seafserv_threaded_rpc.org_remove_share(
+                            org_id, repo_id, username, shared_to)
+                else:
+                    seafile_api.org_unshare_subdir_for_user(
+                            org_id, repo_id, path, username, shared_to)
+
             else:
-                seaserv.remove_share(shared_repo.id, username, shared_to)
+                if path == '/':
+                    seaserv.remove_share(repo_id, username, shared_to)
+                else:
+                    seafile_api.unshare_subdir_for_user(
+                            repo_id, path, username, shared_to)
 
             send_perm_audit_msg('delete-repo-perm', username, shared_to,
                                 repo_id, path, permission)
@@ -449,10 +420,10 @@ class DirSharedItemsEndpoint(APIView):
             if is_org_context(request):
                 org_id = request.user.org.org_id
                 shared_groups = seafile_api.list_org_repo_shared_group(
-                        org_id, username, shared_repo.id)
+                        org_id, username, repo_id)
             else:
                 shared_groups = seafile_api.list_repo_shared_group(
-                        username, shared_repo.id)
+                        username, repo_id)
 
             for e in shared_groups:
                 if e.group_id == group_id:
@@ -461,9 +432,17 @@ class DirSharedItemsEndpoint(APIView):
 
             if is_org_context(request):
                 org_id = request.user.org.org_id
-                seaserv.del_org_group_repo(shared_repo.id, org_id, group_id)
+                if path == '/':
+                    seaserv.del_org_group_repo(repo_id, org_id, group_id)
+                else:
+                    seafile_api.org_unshare_subdir_for_group(
+                            org_id, repo_id, path, username, group_id)
             else:
-                seafile_api.unset_group_repo(shared_repo.id, group_id, username)
+                if path == '/':
+                    seafile_api.unset_group_repo(repo_id, group_id, username)
+                else:
+                    seafile_api.unshare_subdir_for_group(
+                            repo_id, path, username, group_id)
 
             send_perm_audit_msg('delete-repo-perm', username, group_id,
                                 repo_id, path, permission)
