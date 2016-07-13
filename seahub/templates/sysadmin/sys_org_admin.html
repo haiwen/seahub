@@ -9,8 +9,8 @@
 {% endblock %}
 
 {% block right_panel %}
-<div class="tabnav">
-    <ul class="tabnav-tabs">
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
         <li class="tabnav-tab {% if all_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}">{% trans "All" %}</a></li>
         {% if enable_org_plan %}
         <li class="tabnav-tab {% if paid_page %}tabnav-tab-cur{% endif %}"><a href="{% url 'sys_org_admin' %}?filter=paid">Paid</a></li>
@@ -54,8 +54,8 @@
 {% block extra_script %}
 <script type="text/javascript">
 $('#add-btn').click(function() {
-        $('#add-org-form').modal();
-        $('#simplemodal-container').css({'width':'auto'});
+    $('#add-org-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
 addConfirmTo($('.remove-btn'), {
