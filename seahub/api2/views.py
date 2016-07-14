@@ -40,7 +40,7 @@ from .utils import get_diff_details, \
     api_repo_group_folder_perm_check
 
 from seahub.api2.base import APIView
-from seahub.api2.models import TokenV2
+from seahub.api2.models import TokenV2, DESKTOP_PLATFORMS
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url, avatar
 from seahub.avatar.templatetags.group_avatar_tags import api_grp_avatar_url, \
         grp_avatar
@@ -65,7 +65,7 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
     gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
-from seahub.utils.devices import get_user_devices, do_unlink_device
+from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
 from seahub.utils.file_types import DOCUMENT
@@ -1812,15 +1812,28 @@ class OwaFileView(APIView):
 
 
 class DevicesView(APIView):
-    """List user devices"""
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, format=None):
+        """ List user's devices.
+
+        Permission checking:
+        1. All authenticated users.
+        """
+
         username = request.user.username
-        user_devices = get_user_devices(username)
-        return Response(user_devices)
+        devices = TokenV2.objects.get_user_devices(username)
+
+        for device in devices:
+            device['is_desktop_client'] = False
+            if device['platform'] in DESKTOP_PLATFORMS:
+                device['is_desktop_client'] = True
+
+        device['last_accessed'] = datetime_to_isoformat_timestr(device['last_accessed'])
+
+        return Response(devices)
 
     def delete(self, request, format=None):
 

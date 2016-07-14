@@ -4,9 +4,8 @@ define([
     'backbone',
     'common',
     'moment',
-    'app/views/widgets/hl-item-view',
-    'app/views/widgets/dropdown'
-], function($, _, Backbone, Common, Moment, HLItemView, DropdownView) {
+    'app/views/widgets/hl-item-view'
+], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
     var DeviceView = HLItemView.extend({
@@ -25,26 +24,11 @@ define([
         render: function() {
             var data = this.model.toJSON();
 
-            if (typeof(data['synced_repos']) == 'undefined') {
-                data['synced_repos'] = new Array();
-            }
-
-            if (data['synced_repos']) {
-                data['synced_repos_length'] = data['synced_repos'].length;
-            } else {
-                data['synced_repos_length'] = 0;
-            }
-
             var last_accessed = Moment(data['last_accessed']);
             data['time'] = last_accessed.format('LLLL');
             data['time_from_now'] = Common.getRelativeTimeStr(last_accessed);
 
             this.$el.html(this.template(data));
-
-            new DropdownView({
-                el: this.$('.sf-dropdown'),
-                left: '-60px'
-            });
 
             return this;
         },

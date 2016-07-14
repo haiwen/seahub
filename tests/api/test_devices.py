@@ -26,6 +26,11 @@ class DevicesTest(BaseTestCase, Fixtures):
         assert json_resp[0]['platform'] == self.platform
         assert json_resp[0]['device_id'] == self.device_id
 
+    def test_can_not_list_if_not_authenticated(self):
+
+        resp = self.client.get(reverse('api2-devices'))
+        self.assertEqual(403, resp.status_code)
+
     def test_can_delete(self):
         self.login_as(self.user)
         data = 'platform=%s&device_id=%s' % (self.platform, self.device_id)
