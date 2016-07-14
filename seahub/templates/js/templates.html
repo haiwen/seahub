@@ -1432,20 +1432,6 @@
     <td><%- last_login_ip %></td>
     <td><time title='<%- time %>'><%- time_from_now %></time></td>
     <td>
-        <% if (synced_repos.length > 0) { %>
-        <div class="sf-dropdown">
-            <a href="#" class="normal black sf-dropdown-toggle"><%- synced_repos_length %> <span class="icon-caret-down"></span></a>
-            <ul class="device-libs-dropdown-menu sf-dropdown-menu hide">
-                <% for (var i = 0, len = synced_repos_length; i < len; i++) { %>
-                <li><a href="#common/lib/<%- synced_repos[i].repo_id %>"><%- synced_repos[i].repo_name %></a></li>
-                <% } %>
-            </ul>
-        </div>
-        <% } else { %>
-        0
-        <% } %>
-    </td>
-    <td>
         <div>
             <span class="unlink-device op-icon sf2-icon-delete vh" title="{% trans "Unlink" %}"></span>
         </div>
