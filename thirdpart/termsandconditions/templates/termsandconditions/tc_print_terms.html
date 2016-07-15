@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block headtitle %}Print Terms and Conditions{% endblock %}
+
+{% block body_class %}{% endblock %}
+
+{% block head %}
+    <script>
+        window.print();
+    </script>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+    <h1>{{ terms.name|safe }}</h1>
+    <h3>Version {{ terms.version_number|safe }}</h3>
+
+    <div>
+        {{ terms.text|safe }}
+    </div>
+{% endblock %}
+
+{% block footer %}{% endblock %}
