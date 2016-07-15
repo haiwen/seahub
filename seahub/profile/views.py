@@ -75,7 +75,7 @@ def edit_profile(request):
     owned_repos = get_owned_repo_list(request)
     owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
 
-    return render_to_response('profile/set_profile.html', {
+    resp_dict = {
             'form': form,
             'server_crypto': server_crypto,
             "sub_lib_enabled": sub_lib_enabled,
@@ -85,7 +85,23 @@ def edit_profile(request):
             'is_pro': is_pro_version(),
             'is_ldap_user': is_ldap_user(request.user),
             'two_factor_auth_enabled': has_two_factor_auth(),
-            }, context_instance=RequestContext(request))
+    }
+
+    if has_two_factor_auth:
+        from seahub_extra.two_factor.models import StaticDevice
+        from seahub_extra.two_factor.utils import default_device
+
+        try:
+            backup_tokens = StaticDevice.objects.get(
+                user=request.user.username).token_set.count()
+        except StaticDevice.DoesNotExist:
+            backup_tokens = 0
+
+        resp_dict['default_device'] = default_device(request.user)
+        resp_dict['backup_tokens'] = backup_tokens
+
+    return render_to_response('profile/set_profile.html', resp_dict,
+                              context_instance=RequestContext(request))
 
 @login_required
 def user_profile(request, username):

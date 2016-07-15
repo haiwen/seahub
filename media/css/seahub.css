@@ -391,6 +391,7 @@ table img { vertical-align:middle; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
+.txt-before-btn { margin-bottom:10px; } /* e.g. settings page */
 .strip-tip {
     padding:3px 0;
     background:#fddaa4;
@@ -3561,4 +3562,17 @@ img.thumbnail {
     width: 280px;
     padding-top: 20px;
     text-align: center;
+}
+/* two-factor-auth */
+.two-factor-auth-wizard-btns {
+    margin-top:8px;
+}
+.two-factor-auth-backup-token-list {
+    margin-bottom:1rem;
+}
+.input.two-factor-auth-login-token-input {
+    margin-bottom:15px;
+}
+.two-factor-auth-login-no-phone {
+    margin-top:3rem;
 }
