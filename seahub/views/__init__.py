@@ -4,19 +4,16 @@ import os
 import stat
 import json
 import mimetypes
-import urllib2
 import logging
-from math import ceil
 import posixpath
 
 from django.core.cache import cache
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import HttpResponse, HttpResponseBadRequest, Http404, \
+from django.http import HttpResponse, Http404, \
     HttpResponseRedirect
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
-from django.utils import timezone
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
@@ -24,44 +21,34 @@ from django.views.decorators.http import condition
 
 import seaserv
 from seaserv import get_repo, get_commits, is_valid_filename, \
-    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, check_permission, \
-    is_passwd_set, get_file_size, get_group, get_session_info, get_commit, \
-    MAX_DOWNLOAD_DIR_SIZE, send_message, ccnet_threaded_rpc, \
-    get_personal_groups_by_user, seafile_api
+    seafserv_threaded_rpc, seafserv_rpc, is_repo_owner, \
+    get_file_size, MAX_DOWNLOAD_DIR_SIZE, \
+    seafile_api
 from pysearpc import SearpcError
 
 from seahub.avatar.util import get_avatar_file_storage
-from seahub.auth.decorators import login_required, login_required_ajax
+from seahub.auth.decorators import login_required
 from seahub.auth import login as auth_login
 from seahub.auth import get_backends
 from seahub.base.accounts import User
 from seahub.base.decorators import user_mods_check, require_POST
-from seahub.base.models import UserStarredFiles, ClientLoginToken
-from seahub.contacts.models import Contact
+from seahub.base.models import ClientLoginToken
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.profile.models import Profile
 from seahub.share.models import FileShare, UploadLinkShare
-from seahub.utils import render_permission_error, render_error, list_to_string, \
+from seahub.utils import render_permission_error, render_error, \
     get_fileserver_root, gen_shared_upload_link, is_org_context, \
-    gen_dir_share_link, gen_file_share_link, get_repo_last_modify, \
-    calculate_repos_last_modify, get_file_type_and_ext, get_user_repos, \
-    EMPTY_SHA1, normalize_file_path, gen_file_upload_url, \
-    get_file_revision_id_size, get_ccnet_server_addr_port, \
-    gen_file_get_url, string2list, MAX_INT, IS_EMAIL_CONFIGURED, \
-    EVENTS_ENABLED, get_user_events, get_org_user_events, show_delete_days, \
-    TRAFFIC_STATS_ENABLED, get_user_traffic_stat, new_merge_with_no_conflict, \
-    user_traffic_over_limit, send_perm_audit_msg, get_origin_repo_info, \
-    get_max_upload_file_size, is_pro_version, FILE_AUDIT_ENABLED, \
+    gen_dir_share_link, gen_file_share_link, get_file_type_and_ext, \
+    get_user_repos, EMPTY_SHA1, gen_file_get_url, \
+    new_merge_with_no_conflict, get_max_upload_file_size, \
+    is_pro_version, FILE_AUDIT_ENABLED, \
     is_org_repo_creation_allowed
-from seahub.utils.paginator import get_page_range
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
     disable_mod_for_user
 import seahub.settings as settings
-from seahub.settings import FILE_PREVIEW_MAX_SIZE, INIT_PASSWD, USE_PDFJS, \
-    FILE_ENCODING_LIST, FILE_ENCODING_TRY_LIST, AVATAR_FILE_STORAGE, \
-    SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
+from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
 
 from constance import config
@@ -807,6 +794,12 @@ def libraries(request):
     folder_perm_enabled = True if is_pro_version() and ENABLE_FOLDER_PERM else False
     can_add_pub_repo = True if is_org_repo_creation_allowed(request) else False
 
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        joined_groups = seaserv.get_personal_groups_by_user(username)
+
     return render_to_response('libraries.html', {
             "allow_public_share": allow_public_share,
             "guide_enabled": guide_enabled,
@@ -823,6 +816,7 @@ def libraries(request):
             'is_pro': True if is_pro_version() else False,
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
+            'joined_groups': joined_groups,
             }, context_instance=RequestContext(request))
 
 @login_required

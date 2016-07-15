@@ -46,6 +46,13 @@ logger = logging.getLogger(__name__)
 @user_mods_check
 def personal_wiki(request, page_name="home"):
     username = request.user.username
+
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        joined_groups = seaserv.get_personal_groups_by_user(username)
+
     wiki_exists = True
     try:
         content, repo, dirent = get_personal_wiki_page(username, page_name)
@@ -56,6 +63,7 @@ def personal_wiki(request, page_name="home"):
         return render_to_response("wiki/personal_wiki.html", {
                 "wiki_exists": wiki_exists,
                 "owned_repos": owned_repos,
+                "grps": joined_groups,
                 }, context_instance=RequestContext(request))
     except WikiPageMissing:
         repo = get_personal_wiki_repo(username)
@@ -64,8 +72,6 @@ def personal_wiki(request, page_name="home"):
             return render_error(request, _("Failed to create wiki page. Please retry later."))
         return HttpResponseRedirect(reverse('personal_wiki', args=[page_name]))
     else:
-        url_prefix = reverse('personal_wiki', args=[])
-
         # fetch file modified time and modifier
         path = '/' + dirent.obj_name
         try:
@@ -98,6 +104,7 @@ def personal_wiki(request, page_name="home"):
             "search_wiki": True,
             "wiki_index_exists": wiki_index_exists,
             "index_content": index_content,
+            "grps": joined_groups,
             }, context_instance=RequestContext(request))
 
 @login_required

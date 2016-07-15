@@ -216,7 +216,7 @@ app["pageOptions"] = {
     csrfToken: "{{ csrf_token }}",
     groups: (function () {
         var groups = [];
-        {% for group in request.user.joined_groups %}
+        {% for group in joined_groups %}
         groups.push({'name': '{{group.group_name}}', 'id': '{{group.id}}'});
         {% endfor %}
         return groups;
