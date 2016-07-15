@@ -2,8 +2,7 @@ from django.conf.urls import patterns, url
 
 from views import group_wiki, group_wiki_create, \
     group_wiki_page_new, group_wiki_page_edit, group_wiki_pages, \
-    group_wiki_page_delete, group_wiki_use_lib, group_remove, \
-    group_add
+    group_wiki_page_delete, group_wiki_use_lib, group_remove
 
 urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/wiki/$', group_wiki, name='group_wiki'),
@@ -15,5 +14,4 @@ urlpatterns = patterns('',
     url(r'^(?P<group_id>\d+)/wiki_page_edit/(?P<page_name>[^/]+)$', group_wiki_page_edit, name='group_wiki_page_edit'),
     url(r'^(?P<group_id>\d+)/wiki_page_delete/(?P<page_name>[^/]+)$', group_wiki_page_delete, name='group_wiki_page_delete'),
     url(r'^(?P<group_id>\d+)/remove/$', group_remove, name='group_remove'),
-    url(r'^add/$', group_add, name='group_add'),
 )

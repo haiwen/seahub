@@ -46,10 +46,6 @@ def base(request):
         org = request.user.org
     except AttributeError:
         org = None
-    try:
-        base_template = request.base_template
-    except AttributeError:
-        base_template = 'base.html'
 
     try:
         grps = request.user.joined_groups
@@ -75,7 +71,6 @@ def base(request):
         'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
-        'base_template': base_template,
         'site_name': SITE_NAME,
         'enable_signup': config.ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
