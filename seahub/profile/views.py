@@ -87,7 +87,7 @@ def edit_profile(request):
             'two_factor_auth_enabled': has_two_factor_auth(),
     }
 
-    if has_two_factor_auth:
+    if has_two_factor_auth():
         from seahub_extra.two_factor.models import StaticDevice
         from seahub_extra.two_factor.utils import default_device
 
