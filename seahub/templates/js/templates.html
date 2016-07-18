@@ -618,18 +618,18 @@
         {% endif %}
 
         <li class="tab<% if (cur_tab == 'shared') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared to me" %}"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared to me" %}</a>
+            <a href="{{ SITE_ROOT }}#shared-libs/" class="ellipsis" title="{% trans "Shared with me" %}"><span aria-hidden="true" class="sf2-icon-share"></span>{% trans "Shared with me" %}</a>
         </li>
 
         {% if user.permissions.can_view_org %}
         <li class="tab<% if (cur_tab == 'org') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#org/"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a>
+            <a href="{{ SITE_ROOT }}#org/" class="ellipsis" title="{% trans "Shared with all" %}"><span aria-hidden="true" class="sf2-icon-organization"></span>{% trans "Shared with all" %}</a>
         </li>
         {% endif %}
 
         <% if (cur_tab == 'group') { %>
         <li class="tab" id="group-nav">
-            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span></a>
+            <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span aria-hidden="true" class="toggle-icon icon-caret-down fright"></span><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Shared with groups" %}</a>
             <ul class="grp-list">
                 <li<% if (cur_group_tab == 'groups') { %> class="tab-cur"<% }%>><a href="{% url 'group_list' %}"><span class="sharp" aria-hidden="true">#</span>{% trans "All Groups" %}</a></li>
                 <% for (var i = 0, len = groups.length; i < len; i++) { %>
@@ -646,10 +646,10 @@
         <% } else { %>
         <li class="tab" id="group-nav">
             <% if (show_group_list) { %>
-            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-down fright"></span></a>
+            <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span class="toggle-icon icon-caret-down fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Shared with groups" %}</a>
             <ul class="grp-list">
             <% } else { %>
-            <a href="#"><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Groups" %}<span class="toggle-icon icon-caret-left fright"></span></a>
+            <a href="#" class="ellipsis" title="{% trans "Shared with groups" %}"><span class="toggle-icon icon-caret-left fright" aria-hidden="true"></span><span aria-hidden="true" class="sf2-icon-group"></span>{% trans "Shared with groups" %}</a>
             <ul class="grp-list hide">
             <% } %>
                 <li>
