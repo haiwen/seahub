@@ -37,14 +37,6 @@ class BaseMiddleware(object):
         else:
             request.cloud_mode = False
 
-        if CLOUD_MODE and request.user.org is not None:
-            org_id = request.user.org.org_id
-            request.user.joined_groups = seaserv.get_org_groups_by_user(
-                org_id, username)
-        else:
-            request.user.joined_groups = seaserv.get_personal_groups_by_user(
-                username)
-
         return None
 
     def process_response(self, request, response):

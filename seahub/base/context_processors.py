@@ -46,16 +46,6 @@ def base(request):
         org = request.user.org
     except AttributeError:
         org = None
-    try:
-        base_template = request.base_template
-    except AttributeError:
-        base_template = 'base.html'
-
-    try:
-        grps = request.user.joined_groups
-        grps.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
-    except AttributeError:      # anonymous user
-        grps = None
 
     # extra repo id from request path, use in search
     repo_id_patt = r".*/([a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12})/.*"
@@ -75,7 +65,6 @@ def base(request):
         'seacloud_mode': SEACLOUD_MODE,
         'cloud_mode': request.cloud_mode,
         'org': org,
-        'base_template': base_template,
         'site_name': SITE_NAME,
         'enable_signup': config.ENABLE_SIGNUP,
         'max_file_name': MAX_FILE_NAME,
@@ -87,7 +76,6 @@ def base(request):
         'events_enabled': EVENTS_ENABLED,
         'traffic_stats_enabled': TRAFFIC_STATS_ENABLED,
         'sysadmin_extra_enabled': ENABLE_SYSADMIN_EXTRA,
-        'grps': grps,
         'multi_tenancy': MULTI_TENANCY,
         'multi_institution': getattr(dj_settings, 'MULTI_INSTITUTION', False),
         'search_repo_id': search_repo_id,

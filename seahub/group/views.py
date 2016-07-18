@@ -3,65 +3,41 @@ import logging
 import os
 import json
 import urllib2
-import csv
-import chardet
-import StringIO
 
 from django.conf import settings
-from django.core.paginator import EmptyPage, InvalidPage
 from django.core.urlresolvers import reverse
 from django.contrib import messages
 from django.http import HttpResponse, HttpResponseRedirect, Http404, \
     HttpResponseBadRequest
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.translation import ugettext as _
-from django.utils.translation import ungettext
 
 from seahub.auth.decorators import login_required, login_required_ajax
 import seaserv
-from seaserv import ccnet_threaded_rpc, seafserv_threaded_rpc, \
-    seafile_api, get_repo, get_group_repos, get_commits, \
-    is_group_user, get_group, get_group_members, create_repo, \
-    get_org_group_repos, check_permission, is_passwd_set, remove_repo, \
-    unshare_group_repo, get_file_id_by_path, post_empty_file, del_file
+from seaserv import ccnet_threaded_rpc, seafile_api, \
+    get_group_repos, is_group_user, get_group, create_repo, \
+    remove_repo, get_file_id_by_path, post_empty_file, del_file
 from pysearpc import SearpcError
 
-from decorators import group_staff_required
-from models import GroupMessage, MessageReply, MessageAttachment, PublicGroup
-from forms import MessageForm, MessageReplyForm, GroupRecommendForm, \
-    GroupAddForm, GroupJoinMsgForm, WikiCreateForm, BatchAddMembersForm
-from signals import group_join_request
+from models import PublicGroup
+from forms import MessageForm, GroupAddForm, WikiCreateForm
 from seahub.auth import REDIRECT_FIELD_NAME
 from seahub.base.decorators import sys_staff_required, require_POST
-from seahub.base.models import FileDiscuss
-from seahub.contacts.models import Contact
-from seahub.contacts.signals import mail_sended
-from seahub.group.signals import add_user_to_group
 from seahub.group.utils import validate_group_name, BadGroupNameError, \
     ConflictGroupNameError
-from seahub.notifications.models import UserNotification
-from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, convert_wiki_link,\
+from seahub.wiki import get_group_wiki_repo, get_group_wiki_page, \
     get_wiki_pages
 from seahub.wiki.models import WikiDoesNotExist, WikiPageMissing, GroupWiki
 from seahub.wiki.utils import clean_page_name, page_name_to_file_name
 from seahub.settings import SITE_ROOT, SITE_NAME
-from seahub.shortcuts import get_first_object_or_none
-from seahub.utils import render_error, render_permission_error, string2list, \
-    gen_file_get_url, get_file_type_and_ext, \
-    calc_file_path_hash, is_valid_username, send_html_email, is_org_context
-from seahub.utils.file_types import IMAGE
-from seahub.utils.paginator import Paginator
+from seahub.utils import render_error, send_html_email, is_org_context
 from seahub.views import is_registered_user, check_folder_permission
-from seahub.views.modules import get_enabled_mods_by_group, MOD_GROUP_WIKI, \
-    enable_mod_for_group, disable_mod_for_group, get_available_mods_by_group, \
-    get_wiki_enabled_group_list
+from seahub.views.modules import get_enabled_mods_by_group, \
+    get_available_mods_by_group
 
 from seahub.forms import SharedRepoCreateForm
-
-from constance import config
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
@@ -151,68 +127,6 @@ def group_check(func):
     return _decorated
 
 ########## views
-@login_required_ajax
-def group_add(request):
-    """Add a new group"""
-    if request.method != 'POST':
-        raise Http404
-
-    username = request.user.username
-    result = {}
-    content_type = 'application/json; charset=utf-8'
-
-    user_can_add_group = request.user.permissions.can_add_group()
-    if not user_can_add_group:
-            result['error'] = _(u'You do not have permission to create group.')
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
-    # check plan
-    num_of_groups = getattr(request.user, 'num_of_groups', -1)
-    if num_of_groups > 0:
-        current_groups = len(request.user.joined_groups)
-        if current_groups > num_of_groups:
-            result['error'] = _(u'You can only create %d groups.<a href="http://seafile.com/">Upgrade account.</a>') % num_of_groups
-            return HttpResponse(json.dumps(result), status=403,
-                                content_type=content_type)
-
-    form = GroupAddForm(request.POST)
-    if form.is_valid():
-        group_name = form.cleaned_data['group_name']
-
-        # Check whether group name is duplicated.
-        org_id = -1
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            checked_groups = seaserv.get_org_groups_by_user(org_id, username)
-        else:
-            if request.cloud_mode:
-                checked_groups = seaserv.get_personal_groups_by_user(username)
-            else:
-                checked_groups = get_all_groups(-1, -1)
-        for g in checked_groups:
-            if g.group_name == group_name:
-                result['error'] = _(u'There is already a group with that name.')
-                return HttpResponse(json.dumps(result), status=400,
-                                    content_type=content_type)
-
-        # Group name is valid, create that group.
-        try:
-            if org_id > 0:
-                create_org_group(org_id, group_name, username)
-            else:
-                create_group(group_name, username)
-
-            return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
-        except SearpcError, e:
-            result['error'] = _(e.msg)
-            return HttpResponse(json.dumps(result), status=500,
-                            content_type=content_type)
-    else:
-        return HttpResponseBadRequest(json.dumps(form.errors),
-                                      content_type=content_type)
-
 @login_required
 @sys_staff_required
 @require_POST

@@ -1,3 +1,5 @@
+import json
+
 from django.core.urlresolvers import reverse
 
 from constance import config
@@ -65,3 +67,12 @@ class LibrariesTest(BaseTestCase):
         resp = self.client.get(self.url)
         self.assertEqual(200, resp.status_code)
         assert resp.context['can_add_pub_repo'] is True
+
+    def test_get_user_joined_groups(self):
+        self.login_as(self.user)
+
+        resp = self.client.get(self.url)
+
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'libraries.html')
+        assert len(resp.context['joined_groups']) > 0

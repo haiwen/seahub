@@ -516,11 +516,6 @@ def _file_view(request, repo_id, path):
     else:
         file_shared_link = ''
 
-    for g in request.user.joined_groups:
-        g.avatar = grp_avatar(g.id, 20)
-
-    file_path_hash = hashlib.md5(urllib2.quote(path.encode('utf-8'))).hexdigest()[:12]
-
     # fetch file contributors and latest contributor
     try:
         # get real path for sub repo
