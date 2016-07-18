@@ -18,7 +18,7 @@ define([
         },
 
         events: {
-            'click .rm-invitation': 'removeInvitation',
+            'click .rm-invitation': 'removeInvitation'
         },
 
         removeInvitation: function() {
@@ -30,6 +30,7 @@ define([
                     'token': this.model.get('token')
                 }),
                 type: 'DELETE',
+                cache: false,
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.remove();

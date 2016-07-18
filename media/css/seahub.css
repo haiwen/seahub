@@ -158,6 +158,7 @@
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
 .sf2-icon-reply:before { content: "\e02a"; }
+.sf2-icon-invite:before { content: "\e02b"; }
 
 /******* tags **********/
 body,

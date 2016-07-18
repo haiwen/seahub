@@ -696,7 +696,7 @@
         </li>
         {% if user.permissions.can_invite_guest %}
         <li class="tab<% if (cur_tab == 'invitations') { %> tab-cur<% } %>">
-            <a href="{{ SITE_ROOT }}#invitations/"><span aria-hidden="true" class="sf2-icon-clock"></span>{% trans "Invite People" %}</a>
+            <a href="{{ SITE_ROOT }}#invitations/"><span aria-hidden="true" class="sf2-icon-invite"></span>{% trans "Invite People" %}</a>
         </li>
         {% endif %}
     </ul>
@@ -1688,20 +1688,20 @@
         <h3 class="fleft">{% trans "Invite People" %}</h3>
         <button id="invite-people" class="btn-white fright"><span aria-hidden="true" class="icon-plus-square add vam"></span><span class="vam">{% trans "Invite People" %}</span></button>
     </div>
+    <span class="loading-icon loading-tip"></span>
     <table class="hide">
         <thead>
             <tr>
                 <th width="35%">{% trans "Email" %}</th>
-                <th width="20%">{% trans "Invite at" %}</th>
+                <th width="20%">{% trans "Invite Time" %}</th>
                 <th width="20%">{% trans "Expiration" %}</th>
-                <th width="17%">{% trans "Accpted" %}</th>
-                <th width="8%"><!--Operations--></th>
+                <th width="18%">{% trans "Accepted" %}</th>
+                <th width="7%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
     <div class="empty-tips hide">
         <h2 class="alc">{% trans "You have not invited any people." %}</h2>
     </div>
@@ -1710,10 +1710,10 @@
 
 <script type="text/template" id="invitation-item-tmpl">
     <td><%- accepter %></td>
-    <td><time title='<%- invite_time_format %>'><%- invite_time_from_now %></time></td>
-    <td><time title='<%- expire_time_format %>'><%- expire_time_from_now %></time></td>
+    <td><time title='<%= invite_time_format %>'><%= invite_time_from_now %></time></td>
+    <td><time title='<%= expire_time_format %>'><%= expire_time_from_now %></time></td>
     <% if (accept_time) { %>
-    <td><span class="sf2-icon-tick tick-yes"></span></td>
+    <td><span class="sf2-icon-tick tick-green"></span></td>
     <td></td>
     <% } else { %>
     <td></td>
@@ -1723,10 +1723,11 @@
 
 <script type="text/template" id="invitation-form-tmpl">
     <form id="invitation-form" action="" method="post">{% csrf_token %}
-        <h3 id="dialogTitle">{% trans "Invite People"%}</h3>
-        <label for="accepter">{% trans "email"%}</label><br/>
-        <input type="text" name="accepter" value="" class="input" /><br />
+        <h3 id="dialogTitle">{% trans "Invite People" %}</h3>
+        <label for="accepter">{% trans "Email" %}</label><br/>
+        <input id="accepter" type="text" name="accepter" value="" class="input" /><br />
         <p class="error hide"></p>
-        <input type="submit" value="{% trans "Submit"%}" class="submit" />
+        <input type="submit" value="{% trans "Submit" %}" class="submit vam" />
+        <span class="loading-icon vam" style="margin-left:5px;display:none;"></span>
     </form>
 </script>

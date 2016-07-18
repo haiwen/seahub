@@ -1,31 +1,31 @@
 {% extends "base.html" %}
 
 {% load i18n %}
-{% block sub_title %}{% trans "Create Account" %}{% endblock %}
+{% block sub_title %}{% trans "Create Account" %} - {% endblock %}
 
-{% block extra_style %}
-<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/bootstrap.popover.min.css" />
-{% endblock %}
-
-{% block main_panel %}
+{% block main_content %}
 <div class="new-narrow-panel">
-  <h2 class="hd">{% trans "Set your password" %}</h2>
-  <form action="" method="post" class="con">{% csrf_token %}
-    <label for="id_email">{% trans "Email address" %} {{ iv.accepter }}</label><br/>
+    <h2 class="hd">{% trans "Set your password" %}</h2>
+    <form action="" method="post" class="con">{% csrf_token %}
+        <label>{% trans "Email" %} </label><br />
+        <input type="text" disabled="disabled" value="{{ iv.accepter }}" class="input input-disabled" /><br />
 
-    <label for="id_new_password1">{% trans "Password" %}</label>
-    <input type="password" name="password" id="password" value="" class="input" autocomplete="off" />
+        <label for="password">{% trans "Password" %}</label>
+        <input type="password" name="password" id="password" value="" class="input" autocomplete="off" />
 
-    <p class="error hide"></p>
-    <input type="submit" value="{% trans "Submit" %}" class="submit" />
-  </form>
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" class="submit" />
+    </form>
 </div>
 {% endblock %}
 
 {% block extra_script %}
-<script type="text/javascript" src="{{MEDIA_URL}}js/bootstrap.min.js"></script>
 <script type="text/javascript">
-$('[type="password"]').addClass('input');
-
+$('form').submit(function() {
+    if (!$.trim($('[name="password"]', $(this)).val())) {
+        $('.error').html("{% trans "It is required." %}").show();
+        return false;
+    }
+});
 </script>
 {% endblock %}

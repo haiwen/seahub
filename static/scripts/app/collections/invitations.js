@@ -8,7 +8,7 @@ define([
 
     var Invitations = Backbone.Collection.extend({
         model: Invitation,
-        url: function () {
+        url: function() {
             return Common.getUrl({name: 'invitations'});
         }
     });

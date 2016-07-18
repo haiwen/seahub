@@ -18,7 +18,11 @@
     {% for invitation in invitations %}
     <tr>
         <td><a href="{% url 'user_info' invitation.inviter %}">{{ invitation.inviter }}</a></td>
+        {% if invitation.accept_time %}
         <td><a href="{% url 'user_info' invitation.accepter %}">{{ invitation.accepter }}</a></td>
+        {% else %}
+        <td>{{ invitation.accepter }}</td>
+        {% endif %}
         <td>{{ invitation.invite_type }}</td>
         <td>{{ invitation.invite_time|translate_seahub_time }} </td>
         {% if invitation.accept_time %}
@@ -32,7 +36,9 @@
 
 {% include "snippets/admin_paginator.html" %}
 {% else %}
-<p>{% trans "Empty" %}</p>
+<div class="empty-tips">
+    <p>{% trans "There is no invitation yet." %}</p>
+</div>
 {% endif %}
 {% endblock %}
 

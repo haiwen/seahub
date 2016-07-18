@@ -1,1 +1,1 @@
-{% load i18n%}{% blocktrans %}{{ inviter }} invite you to join {{ site_name}}{% endblocktrans %}
+{% load i18n%}{% blocktrans %}{{ inviter }} invited you to join {{ site_name}}{% endblocktrans %}

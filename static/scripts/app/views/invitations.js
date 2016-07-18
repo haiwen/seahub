@@ -4,7 +4,7 @@ define([
     'backbone',
     'common',
     'app/views/invitation',
-    'app/collections/invitations',
+    'app/collections/invitations'
 ], function($, _, Backbone, Common, InvitedPeopleView,
     InvitedPeopleCollection) {
 
@@ -12,15 +12,25 @@ define([
 
     var InvitationsView = Backbone.View.extend({
 
-        id: 'invited_peoples',
+        id: 'invitations',
 
         template: _.template($('#invitations-tmpl').html()),
-        invitePeopleFormTemplate: _.template($('#invitation-form-tmpl').html()),
+        inviteFormTemplate: _.template($('#invitation-form-tmpl').html()),
 
         initialize: function() {
-            this.invitedPeoples = new InvitedPeopleCollection();
-            this.listenTo(this.invitedPeoples, 'reset', this.reset);
+            this.collection = new InvitedPeopleCollection();
+            this.listenTo(this.collection, 'add', this.addOne);
+            this.listenTo(this.collection, 'reset', this.reset);
             this.render();
+        },
+
+        render: function() {
+            this.$el.html(this.template());
+            this.$loadingTip = this.$('.loading-tip');
+            this.$table = this.$('table');
+            this.$tableBody = $('tbody', this.$table);
+            this.$emptyTip = this.$('.empty-tips');
+            this.$error = this.$('.error');
         },
 
         events: {
@@ -28,67 +38,79 @@ define([
         },
 
         invitePeople: function() {
-            var form = $(this.invitePeopleFormTemplate()),
-                form_id = form.attr('id'),
-                _this = this;
+            var _this = this;
+            var $form = $(this.inviteFormTemplate());
+            var form_id = $form.attr('id');
 
-            form.modal({appendTo:'#main'});
+            $form.modal({appendTo:'#main'});
             $('#simplemodal-container').css({'height':'auto'});
 
-            form.submit(function() {
-                var accepter = $.trim($('input[name="accepter"]', form).val());
-
+            $form.submit(function() {
+                var accepter = $.trim($('input[name="accepter"]', $form).val());
+                var $error = $('.error', $form);
+                var $submitBtn = $('[type="submit"]', $form);
+                var $loading = $('.loading-icon', $form);
                 if (!accepter) {
-                    Common.showFormError(form_id, gettext("It is required."));
+                    $error.html(gettext("It is required.")).show();
                     return false;
                 };
 
-                var post_data = {'type': 'guest', 'accepter': accepter},
-                    post_url = Common.getUrl({name: "invitations"});
-
-                var after_op_success = function(data) {
-                    $.modal.close();
-                    var new_people_invited = _this.invitedPeoples.add({
-                        'accepter': data['accepter'],
-                        'type': data['type'],
-                        'accept_time': '',
-                        'invite_time': data['invite_time'],
-                        'expire_time': data['expire_time']
-                    }, {silent:true});
-
-                    var view = new InvitedPeopleView({model: new_people_invited});
-                    _this.$tableBody.prepend(view.render().el);
-                };
-
-                Common.ajaxPost({
-                    'form': form,
-                    'post_url': post_url,
-                    'post_data': post_data,
-                    'after_op_success': after_op_success,
-                    'form_id': form_id
+                $error.hide();
+                Common.disableButton($submitBtn);
+                $loading.show();
+                _this.collection.create({
+                    'type': 'guest',
+                    'accepter': accepter
+                }, {
+                    wait: true,
+                    prepend: true,
+                    success: function() {
+                        if (_this.collection.length == 1) {
+                            _this.reset();
+                        }
+                        $.modal.close();
+                    },
+                    error: function(collection, response, options) {
+                        var err_msg;
+                        if (response.responseText) {
+                            err_msg = response.responseJSON.error_msg;
+                        } else {
+                            err_msg = gettext('Please check the network.');
+                        }
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
+                    },
+                    complete: function() {
+                        $loading.hide();
+                    }
                 });
 
                 return false;
             });
         },
 
-        addOne: function(invitedPeople) {
-            var view = new InvitedPeopleView({model: invitedPeople});
-            this.$tableBody.append(view.render().el);
+        addOne: function(item, collection, options) {
+            var view = new InvitedPeopleView({model: item});
+            if (options.prepend) {
+                this.$tableBody.prepend(view.render().el);
+            } else {
+                this.$tableBody.append(view.render().el);
+            }
         },
 
         initPage: function() {
+            this.$loadingTip.show();
             this.$table.hide();
             this.$tableBody.empty();
-            this.$loadingTip.show();
             this.$emptyTip.hide();
+            this.$error.hide();
         },
 
         reset: function() {
-            this.$tableBody.empty();
-            this.$loadingTip.hide();
-            this.invitedPeoples.each(this.addOne, this);
-            if (this.invitedPeoples.length) {
+            this.$error.hide();
+            if (this.collection.length) {
+                this.$tableBody.empty();
+                this.collection.each(this.addOne, this);
                 this.$emptyTip.hide();
                 this.$table.show();
             } else {
@@ -97,31 +119,22 @@ define([
             }
         },
 
-        render: function() {
-            this.$el.html(this.template());
-            this.$tip = this.$('.tip');
-            this.$table = this.$('table');
-            this.$tableBody = $('tbody', this.$table);
-            this.$loadingTip = this.$('.loading-tip');
-            this.$emptyTip = this.$('.empty-tips');
-        },
-
         show: function() {
             if (!this.attached) {
                 this.attached = true;
                 $("#right-panel").html(this.$el);
             }
-            this.showInvitedPeoples();
+            this.showContent();
         },
 
-        showInvitedPeoples: function() {
-            this.initPage();
+        showContent: function() {
             var _this = this;
 
-            this.invitedPeoples.fetch({
+            this.initPage();
+            this.collection.fetch({
                 cache: false,
                 reset: true,
-                error: function (collection, response, opts) {
+                error: function(collection, response, opts) {
                     var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
@@ -132,8 +145,10 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
-
-                    Common.feedback(err_msg, 'error');
+                    _this.$error.html(err_msg).show();
+                },
+                complete: function() {
+                    _this.$loadingTip.hide();
                 }
             });
         },
