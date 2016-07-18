@@ -158,3 +158,11 @@ class BatchAddUserForm(forms.Form):
     Form for importing users from CSV file.
     """
     file = forms.FileField()
+
+
+class TermsAndConditionsForm(forms.Form):
+    """Form to save T&C.
+    """
+    name = forms.CharField(error_messages={'required': _('Name is required')})
+    version_number = forms.DecimalField(required=True, error_messages={'invalid': _('Please enter a valid number')})
+    text = forms.CharField(error_messages={'required': _('Text is required')})

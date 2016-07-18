@@ -224,6 +224,7 @@ urlpatterns = patterns(
     (r'^thumbnail/', include('seahub.thumbnail.urls')),
     url(r'^inst/', include('seahub.institutions.urls', app_name='institutions', namespace='institutions')),
     url(r'^invite/', include('seahub.invitations.urls', app_name='invitations', namespace='invitations')),
+    url(r'^terms/', include('termsandconditions.urls')),
 
     ### system admin ###
     url(r'^sysadmin/$', sysadmin, name='sysadmin'),
@@ -279,9 +280,9 @@ urlpatterns = patterns(
     url(r'^useradmin/toggle_status/(?P<email>[^/]+)/$', user_toggle_status, name='user_toggle_status'),
     url(r'^useradmin/toggle_role/(?P<email>[^/]+)/$', user_toggle_role, name='user_toggle_role'),
     url(r'^useradmin/(?P<email>[^/]+)/set_quota/$', user_set_quota, name='user_set_quota'),
-
+    url(r'^sys/termsadmin/$', sys_terms_admin, name='sys_terms_admin'),
+    url(r'^sys/termsadmin/delete/(?P<pk>[^/]+)/$', sys_delete_terms, name='sys_delete_terms'),
     url(r'^useradmin/password/reset/(?P<email>[^/]+)/$', user_reset, name='user_reset'),
-
     url(r'^useradmin/batchmakeadmin/$', batch_user_make_admin, name='batch_user_make_admin'),
     url(r'^useradmin/batchadduser/$', batch_add_user, name='batch_add_user'),
 

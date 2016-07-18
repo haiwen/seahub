@@ -2,7 +2,7 @@
 
 # pylint: disable=E1120,R0901,R0904
 
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
 from .forms import UserTermsAndConditionsModelForm, EmailTermsForm
 from .models import TermsAndConditions, UserTermsAndConditions, DEFAULT_TERMS_SLUG
 from django.conf import settings
@@ -68,13 +68,16 @@ class AcceptTermsView(CreateView):
     def form_valid(self, form):
         """Override of CreateView method, assigns default values based on user situation"""
         if self.request.user.is_authenticated():
-            form.instance.user = self.request.user
+            form.instance.username = self.request.user.username
         else:  #Get user out of saved pipeline from django-socialauth
+            # no support for social auth right now.
+            assert False, 'TODO'
             if self.request.session.has_key('partial_pipeline'):
                 user_pk = self.request.session['partial_pipeline']['kwargs']['user']['pk']
                 form.instance.user = User.objects.get(id=user_pk)
             else:
                 return HttpResponseRedirect('/')
+
         store_ip_address = getattr(settings, 'TERMS_STORE_IP_ADDRESS', True)
         if store_ip_address:
             form.instance.ip_address = self.request.META['REMOTE_ADDR']

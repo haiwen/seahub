@@ -50,8 +50,8 @@ from seahub.utils.user_permissions import (get_basic_user_roles,
                                            get_user_role)
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
-from seahub.views import get_system_default_repo_id
-from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
+from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
+    TermsAndConditionsForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.signals import repo_deleted
@@ -71,6 +71,7 @@ try:
 except ImportError:
     MULTI_TENANCY = False
 from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
+from termsandconditions.models import TermsAndConditions
 
 logger = logging.getLogger(__name__)
 
@@ -2214,3 +2215,56 @@ def sys_invitation_admin(request):
             'page_next': page_next,
         },
         context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+def sys_terms_admin(request):
+    """List Terms and Conditions"""
+    if request.method == "POST":
+        content_type = 'application/json; charset=utf-8'
+
+        form = TermsAndConditionsForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            version_number = form.cleaned_data['version_number']
+            text = form.cleaned_data['text']
+            enabled = True if request.POST.get('status', '0') == '1' else False
+            if enabled:
+                date_active = timezone.now()
+            else:
+                date_active = None
+            pk = request.POST.get('pk', None)
+            if not pk:          # create
+                t_c = TermsAndConditions.objects.create(
+                    name=name, version_number=version_number, text=text,
+                    date_active=date_active)
+            else:               # update
+                t_c = TermsAndConditions.objects.get(pk=pk)
+                t_c.text = text
+                t_c.version_number = version_number
+                t_c.name = name
+                t_c.date_active = date_active
+                t_c.save()
+
+            return HttpResponse(json.dumps({'success': True}),
+                                content_type=content_type)
+        else:
+            return HttpResponse(json.dumps({
+                'error': str(form.errors.values()[0])
+            }), status=400, content_type=content_type)
+
+    tc_list = TermsAndConditions.objects.all().order_by('-date_created')
+
+    return render_to_response('sysadmin/sys_terms_admin.html', {
+        'object_list': tc_list,
+    }, context_instance=RequestContext(request))
+
+@login_required
+@sys_staff_required
+@require_POST
+def sys_delete_terms(request, pk):
+    TermsAndConditions.objects.filter(pk=pk).delete()
+    messages.success(request, _('Success'))
+
+    return HttpResponseRedirect(reverse('sys_terms_admin'))
+

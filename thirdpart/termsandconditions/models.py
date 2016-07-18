@@ -9,6 +9,8 @@ from django.http import Http404
 from django.utils import timezone
 import logging
 
+from seahub.base.fields import LowerCaseCharField
+
 LOGGER = logging.getLogger(name='termsandconditions')
 
 DEFAULT_TERMS_SLUG = getattr(settings, 'DEFAULT_TERMS_SLUG', 'site-terms')
@@ -16,7 +18,7 @@ DEFAULT_TERMS_SLUG = getattr(settings, 'DEFAULT_TERMS_SLUG', 'site-terms')
 
 class UserTermsAndConditions(models.Model):
     """Holds mapping between TermsAndConditions and Users"""
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="userterms")
+    username = LowerCaseCharField(max_length=255)
     terms = models.ForeignKey("TermsAndConditions", related_name="userterms")
     ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name='IP Address')
     date_accepted = models.DateTimeField(auto_now_add=True, verbose_name='Date Accepted')
@@ -26,7 +28,7 @@ class UserTermsAndConditions(models.Model):
         get_latest_by = 'date_accepted'
         verbose_name = 'User Terms and Conditions'
         verbose_name_plural = 'User Terms and Conditions'
-        unique_together = ('user', 'terms',)
+        unique_together = ('username', 'terms',)
 
 
 class TermsAndConditions(models.Model):
@@ -34,7 +36,7 @@ class TermsAndConditions(models.Model):
     Active one for a given slug is: date_active is not Null and is latest not in future"""
     slug = models.SlugField(default=DEFAULT_TERMS_SLUG)
     name = models.TextField(max_length=255)
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, through=UserTermsAndConditions, blank=True)
+    # users = models.ManyToManyField(settings.AUTH_USER_MODEL, through=UserTermsAndConditions, blank=True)
     version_number = models.DecimalField(default=1.0, decimal_places=2, max_digits=6)
     text = models.TextField(null=True, blank=True)
     info = models.TextField(null=True, blank=True, help_text="Provide users with some info about what's changed and why")
@@ -104,7 +106,7 @@ class TermsAndConditions(models.Model):
         """Checks to see if a specified user has agreed to the latest of a particular terms and conditions"""
 
         try:
-            UserTermsAndConditions.objects.get(user=user, terms=TermsAndConditions.get_active(slug))
+            UserTermsAndConditions.objects.get(username=user.username, terms=TermsAndConditions.get_active(slug))
             return True
         except UserTermsAndConditions.MultipleObjectsReturned:  # pragma: nocover
             return True

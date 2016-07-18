@@ -117,6 +117,7 @@ MIDDLEWARE_CLASSES = (
     'seahub.base.middleware.InfobarMiddleware',
     'seahub.password_session.middleware.CheckPasswordHash',
     'seahub.base.middleware.ForcePasswdChangeMiddleware',
+    'termsandconditions.middleware.TermsAndConditionsRedirectMiddleware',
 )
 
 SITE_ROOT_URLCONF = 'seahub.urls'
@@ -194,6 +195,7 @@ INSTALLED_APPS = (
     'constance',
     'constance.backends.database',
     'post_office',
+    'termsandconditions',
 
     'seahub.api2',
     'seahub.avatar',

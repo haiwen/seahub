@@ -1,0 +1,151 @@
+{% extends "sysadmin/base.html" %}
+{% load i18n seahub_tags %}
+
+{% block cur_links %}tab-tc{% endblock %}
+
+{% block right_panel %}
+<div class="tabnav ovhd">
+    <ul class="tabnav-tabs fleft">
+        <li class="tabnav-tab tabnav-tab-cur">
+            {% trans "Terms and Conditions" %}
+        </li>
+    </ul>
+    <button id="add-btn" class="fright">{% trans "Add" %}</button>
+</div>
+
+{% if object_list %}
+<table>
+    <tr>
+        <th width="15%">{% trans "Name" %}</th>
+        <th width="10%">{% trans "Version number" %}</th>
+        <th width="35%">{% trans "Text" %}</th>
+        <th width="15%">{% trans "Active date" %}</th>
+        <th width="15%">{% trans "Created date" %}</th>
+        <th width="10%">{% trans "Operations" %}</th>
+    </tr>
+    {% for tc in object_list %}
+    <tr>
+        <td>{{ tc.name }}</td>
+        <td>{{ tc.version_number }}</td>
+        <td><a href="#" class="js-text" data-msg="{{ tc.text|linebreaksbr }}">{{ tc.text|truncatechars:50 }}</a></td>
+        <td>
+            {% if tc.date_active %}
+            {{ tc.date_active|translate_seahub_time }}
+            {% else %}
+            --
+            {% endif %}
+        </td>
+        <td>{{ tc.date_created|translate_seahub_time }}</td>
+        <td><a href="#" class="js-update" data-pk="{{ tc.pk}}" data-name="{{ tc.name }}" data-version_number="{{ tc.version_number }}" data-text="{{ tc.text }}">{% trans "Update" %}</a>
+            <a href="#" class="remove-btn" data-url="{% url "sys_delete_terms" tc.pk %}" data-target="{{ tc.name }}">{% trans "Delete" %}</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% else %}
+<p>{% trans "Empty" %}</p>
+{% endif %}
+
+<form id="tc-form" action="" method="post" class="hide">{% csrf_token %}
+    <input type="hidden" name="pk" value="" />
+
+    <h3>{% trans "Add Terms and Condistions" %}</h3>
+    <label for="id_name">{% trans "Name" %}</label><br />
+    <input type="text" name="name" id="id_name" class="input" /><br />
+
+    <label for="id_version_number">{% trans "Version Number" %}</label><br />
+    <input type="text" name="version_number" id="id_version_number" class="input" /><br />
+
+    <label for="id_text">{% trans "Text" %}</label><br />
+    <textarea type="text" name="text" id="id_text" class="textarea"></textarea><br />
+
+    <label for="id_status">{% trans "Status" %}</label><br />
+    <input type="radio" name="status" value="1" checked>{% trans "Enabled" %}
+    <input type="radio" name="status" value="0">{% trans "Disabled" %}<br>
+    
+    <p class="error hide"></p>
+    <button type="submit" class="submit">{% trans "Submit" %}</button>
+</form>
+
+<div id="popup-msg" class="hide"></div>
+
+{% endblock %}
+
+{% block extra_script %}
+<script type="text/javascript">
+$('#add-btn').click(function() {
+    $('#tc-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('.js-update').click(function() {
+    var form = $('#tc-form');
+    form.children('[name="pk"]').val($(this).data('pk'));
+    form.children('[name="name"]').val($(this).data('name'));
+    form.children('[name="version_number"]').val($(this).data('version_number'));
+    form.children('[name="text"]').val($(this).data('text'));
+
+    $('#tc-form').modal();
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+});
+
+$('#tc-form').submit(function(){
+    var form = $(this),
+        form_id = form.attr('id'),
+        submit_btn = form.find('[type="submit"]'),
+        pk = form.children('[name="pk"]').val();
+        name = $.trim(form.children('[name="name"]').val()),
+        version_num = $.trim(form.children('[name="version_number"]').val()),
+        text = $.trim(form.children('[name="text"]').val()),
+        status = form.children('[name="status"]:checked').val();
+
+    disable(submit_btn);
+    $.ajax({
+        url: '{% url 'sys_terms_admin' %}',
+        type: 'POST',
+        datatype: 'json',
+        cache: false,
+        beforeSend: prepareCSRFToken,
+        data: {
+            'name': name,
+            'version_number': version_num,
+            'text': text,
+            'status': status,
+            'pk': pk
+        },
+        success: function(data) {
+            if (data['success']) {
+                location.reload(true);
+            }   
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseText) {
+                apply_form_error(form_id, $.parseJSON(jqXHR.responseText).error);
+            } else {
+                apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
+            }
+        }
+    }).complete(function() {
+        enable(submit_btn);
+    });
+
+    return false;
+});
+
+addConfirmTo($('.remove-btn'), {
+    'title': "Delete T&C",
+    'con':"{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true // post request
+});
+
+$('.js-text').click(function() {
+    $('#popup-msg').html($(this).data('msg'));
+    $('#popup-msg').modal();
+    $('#simplemodal-container').css({'height':'auto'});
+
+    return false;
+});
+ 
+</script>
+{% endblock %}

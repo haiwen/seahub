@@ -14,7 +14,7 @@ class UserTermsAndConditionsModelForm(forms.ModelForm):
     class Meta(object):
         """Configuration for this Modelform"""
         model = UserTermsAndConditions
-        exclude = ('date_accepted', 'ip_address', 'user')
+        exclude = ('date_accepted', 'ip_address', 'username')
         widgets = {'terms': forms.HiddenInput()}
 
 
