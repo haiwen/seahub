@@ -1,5 +1,5 @@
 This file describes the licenses and copyrights of all third party libraries
-used in seafile. The libraries are sorted in alphabetic order.
+used in Seafile. The libraries are sorted in alphabetic order.
 
 ======================================================================
 argparse (https://github.com/ThomasWaldmann/argparse)
