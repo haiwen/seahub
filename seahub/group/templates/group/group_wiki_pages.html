@@ -15,7 +15,7 @@
         {% endif %}
     </ul>
     {% if repo_perm == 'rw' %}
-    <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
+    <button id="page-create" class="btn-white">{% trans "New Page" %}</button>
     {% endif %}
 </div>
 
@@ -30,14 +30,21 @@
     <label for="page-name">{% trans "Name"%}</label><br/>
     <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
     <p class="error hide"></p>
-    <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit" />
+    <input type="submit" value="{% trans "Submit"%}" class="submit" />
 </form>
 {% endblock %}
 
 {% block extra_script %}{{block.super}}
 <script type="text/javascript">
 $('#page-create').click(function() {
-    $('#page-create-form').modal({appendTo: '#main', autoResize: true});
-})
+    $('#page-create-form').modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+});
+$('#page-create-form').submit(function() {
+    var page_name = $.trim($('[name="page_name"]', $(this)).val());
+    if (!page_name) {
+        return false;
+    }
+});
 </script>
 {% endblock %}

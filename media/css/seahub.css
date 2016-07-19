@@ -1614,8 +1614,7 @@ button.sf-dropdown-toggle:focus {
 }
 .btn-white,
 .tabnav button,
-.repo-file-list-topbar .op-btn,
-.wiki-top .op-btn {
+.repo-file-list-topbar .op-btn {
     height:29px;
     background:#fff;
     line-height:17px;
@@ -2719,7 +2718,7 @@ button.sf-dropdown-toggle:focus {
     text-align:right;
     height:auto;
 }
-.wiki-top .op-btn {
+.wiki-top .btn-white {
     margin-left:3px;
 }
 .wiki-nav .item {
@@ -2730,7 +2729,7 @@ button.sf-dropdown-toggle:focus {
     font-weight:normal;
 }
 #wiki-area {
-    padding: 0 0;
+    padding: 30px 0 0;
 }
 #wiki-last-modified {
     margin-top: 10px;

@@ -7,6 +7,7 @@
 
 {% block cur_personal_wiki %}tab-cur{% endblock %}
 
+{% comment %}
 {% block left_panel %}
     {{ block.super }}
     {% if wiki_exists %}
@@ -25,6 +26,7 @@
     </div>
     {% endif %}
 {% endblock %}
+{% endcomment %}
 
 {% block right_panel %}
     {% if not wiki_exists %}
@@ -49,7 +51,7 @@
     <form id="wiki-use-lib-form" action="{% url 'personal_wiki_use_lib' %}" method="post" class="file-choose-form hide">{% csrf_token %}
         <h3 id="dialogTitle">{% trans "Choose a library as wiki:" %}</h3>
         <div class="dir-tree-cont">
-          <div id="repos-dirs"></div>
+            <div id="repos-dirs"></div>
         </div>
         <input type="hidden" name="dst_repo" value="" />
         <p class="error hide">{% trans "Please click and choose a library."%}</p>
@@ -65,14 +67,14 @@
             <li class="item"><a href="{% url 'repo_history' repo_id %}" target="_blank" class="link">{% trans "Wiki History" %}</a></li>
         </ul>
 
-        <button id="page-create" class="op-btn">{% trans "New Page" %}</button>
-        <button id="page-delete" class="op-btn" data-url="{% url 'personal_wiki_page_delete' page %}">{% trans "Delete Page" %}</button>
-        <button id="page-edit" class="op-btn">{% trans "Edit Page" %}</button>
-        <button id="page-history" class="op-btn">{% trans "Page History" %}</button>
+        <button id="page-create" class="btn-white">{% trans "New Page" %}</button>
+        <button id="page-delete" class="btn-white" data-url="{% url 'personal_wiki_page_delete' page %}">{% trans "Delete Page" %}</button>
+        <a class="sf-btn-link btn-white" href="{% url 'personal_wiki_page_edit' page %}">{% trans "Edit Page" %}</a>
+        <a class="sf-btn-link btn-white" href="{% url 'file_revisions' repo_id %}?p={{path|urlencode}}" target="_blank">{% trans "Page History" %}</a>
     </div>
 
     <div id="wiki-area" class="article">
-        <h1>{{ page|capfirst }}</h1>
+        <h1 class="bold">{{ page|capfirst }}</h1>
         <div id="wiki-content"></div><!--content will be offered by js-->
         <p id="wiki-last-modified">{% blocktrans with modifier=latest_contributor|email2nickname modify_time=last_modified|translate_seahub_time %}Last modified by {{modifier}}, {{modify_time}}{% endblocktrans %}
         </p>
@@ -83,7 +85,7 @@
         <label for="page-name">{% trans "Name"%}</label><br/>
         <input id="page-name" type="text" name="page_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
         <p class="error hide"></p>
-        <input type="submit" id="page-create-submit" value="{% trans "Submit"%}" class="submit"/>
+        <input type="submit" value="{% trans "Submit"%}" class="submit" />
     </form>
     {% endif %}
 
@@ -116,36 +118,31 @@ $('#wiki-content')
 );  
 
 $('#page-create').click(function() {
-    $('#page-create-form').modal({appendTo: '#main', autoResize: true});
-})
-
-$('#page-edit').click(function() {
-    location.href = "{% url 'personal_wiki_page_edit' page %}";
-})
-
-$('#page-list').click(function () {
-    location.href = "{% url 'personal_wiki_pages' %}";
+    $('#page-create-form').modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
 });
-
-$('#page-history').click(function () {
-    window.open("{% url 'file_revisions' repo_id %}" + "?p=" + "{{path|urlencode}}");
+$('#page-create-form').submit(function() {
+    var page_name = $.trim($('[name="page_name"]', $(this)).val());
+    if (!page_name) {
+        return false;
+    }
 });
 
 addConfirmTo($('#page-delete'), {
     'title': "{% trans "Delete Page" %}",
     'con': "{% trans "Are you sure you want to delete this page?" %}"
 });
-$('a.wiki-page-missing').each(function(){
-    $(this).click(function() {
-        $('#page-name').val($(this).text());
-        $('#page-create-form').modal({appendTo: '#main', autoResize: true});
-        return false;
-    });
+$('a.wiki-page-missing').click(function() {
+    $('#page-create-form').modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
+    $('#page-name').val($(this).text());
+    return false;
 });
 
 {% else %}
 $('#wiki-create').click(function() {
-    $('#wiki-create-form').modal({appendTo: '#main', autoResize: true});
+    $('#wiki-create-form').modal({appendTo: '#main'});
+    $('#simplemodal-container').css({'height':'auto'});
     return false;
 });
 $('#wiki-create-form').submit(function () {
@@ -216,6 +213,7 @@ $('#wiki-use-lib-form').submit(function() {
 
 {% endif %}                     // END wiki_exists
 
+{% comment %}
 {% if wiki_exists %}
 {% if wiki_index_exists %}
 $('#wiki-index-con').html(marked('{{ index_content|escapejs }}'));
@@ -230,5 +228,6 @@ $('#create-index').click(function() {
 });
 {% endif %}
 {% endif %}
+{% endcomment %}
 </script>
 {% endblock %}
