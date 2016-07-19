@@ -5,10 +5,11 @@
 
 {% block right_panel %}
 
-<ol class="path-bar breadcrumb">
-    <li><a class="path-link normal" href="{{ SITE_ROOT }}sys/groupadmin/">Groups</a></li>
-    <li>{{ group.group_name }}</li>
-</ol>
+<p class="path-bar">
+    <a class="normal" href="{{ SITE_ROOT }}sys/groupadmin/">Groups</a>
+    <span class="path-split">/</span>
+    {{ group.group_name }}
+</p>
 
 <div id="tabs" class="tab-tabs">
     <div class="hd ovhd">

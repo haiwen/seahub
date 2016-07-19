@@ -424,7 +424,7 @@
 
 <script type="text/template" id="dir-view-tmpl">
     <div class="repo-file-list-topbar">
-        <ol class="path-bar breadcrumb"></ol>
+        <p class="path-bar"></p>
         <div class="repo-op"></div>
     </div>
     <div class="js-dir-content">
@@ -447,18 +447,21 @@
 
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (is_system_library) { %>
-    <li><a href="#system-lib/" class="path-link normal">{% trans "System" %}</a></li>
+    <a href="#system-lib/" class="path-link normal">{% trans "System" %}</a>
     <% } else { %>
-    <li><a href="#all-libs/" class="path-link normal">{% trans "All" %}</a></li>
+    <a href="#all-libs/" class="path-link normal">{% trans "All" %}</a>
     <% } %>
+    <span class="path-split">/</span>
     <% if (path == '/') { %>
-        <li><%- repo_name %></li>
+        <%- repo_name %>
     <% } else { %>
-        <li><a href="#libs/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a></li>
+        <a href="#libs/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a>
+        <span class="path-split">/</span>
         <% for (var i = 0, len = path_list.length - 1; i < len; i++) { %>
-        <li><a href="#libs/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
+        <a href="#libs/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a>
+        <span class="path-split">/</span>
         <% } %>
-        <li><%- path_list[i] %></li>
+        <%- path_list[i] %>
     <% } %>
 </script>
 

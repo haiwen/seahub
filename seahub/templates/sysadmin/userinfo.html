@@ -11,10 +11,11 @@
 
 {% block right_panel %}
 
-<ol class="path-bar breadcrumb">
-    <li><a class="path-link normal" href="{{ SITE_ROOT }}sys/useradmin/">Users</a></li>
-    <li>{{ email }}</li>
-</ol>
+<p class="path-bar">
+    <a class="normal" href="{{ SITE_ROOT }}sys/useradmin/">Users</a>
+    <span class="path-split">/</span>
+    {{ email }}
+</p>
 
 <div id="tabs" class="tab-tabs">
     <div class="hd header-bar ovhd">

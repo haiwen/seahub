@@ -158,23 +158,27 @@
 </script>
 <script type="text/template" id="dir-path-bar-tmpl">
     <% if (context == 'group') { %>
-        <li><a href="#groups/" class="path-link normal">{% trans "Groups" %}</a></li>
-        <li><a href="#<%= category %>/" class="path-link normal"><%- group_name %></a></li>
+        <a href="#groups/" class="path-link normal">{% trans "Groups" %}</a>
+        <span class="path-split">/</span>
+        <a href="#<%= category %>/" class="path-link normal"><%- group_name %></a>
     <% } else if (context == 'org') { %>
-        <li><a href="#<%= category %>/" class="path-link normal">{% trans "Organization" context "This is a label in navigation, meaning the public area for all registered users to share libraries." %}</a></li>
+        <a href="#<%= category %>/" class="path-link normal">{% trans "Shared with all" %}</a>
     <% } else if (context == 'common') { %>
-        <li><a href="#my-libs/" class="path-link normal">{% trans "My Libraries" %}</a></li>
+        <a href="#my-libs/" class="path-link normal">{% trans "My Libraries" %}</a>
     <% } else { %>
-        <li><a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "My Libraries" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared to me" %}<% } %></a></li>
+        <a href="#<%= category %>/" class="path-link normal"><% if (category == 'my-libs') { %>{% trans "My Libraries" %}<% } %><% if (category == 'shared-libs') { %>{% trans "Shared with me" %}<% } %></a>
     <% } %>
+    <span class="path-split">/</span>
     <% if (path == '/') { %>
-        <li><%- repo_name %></li>
+        <%- repo_name %>
     <% } else { %>
-        <li><a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a></li>
+        <a href="#<%= category %>/lib/<%= repo_id %>/" class="path-link normal"><%- repo_name %></a>
+        <span class="path-split">/</span>
         <% for (var i = 0,len = path_list.length - 1; i < len; i++) { %>
-        <li><a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a></li>
+        <a href="#<%= category %>/lib/<%= repo_id %>/<% print(path_list_encoded.slice(0, i+1).join('/')); %>" class="path-link normal"><%- path_list[i] %></a>
+        <span class="path-split">/</span>
         <% } %>
-        <li><%- path_list[i] %></li>
+        <%- path_list[i] %>
     <% } %>
 </script>
 <script type="text/template" id="dirents-hd-tmpl">
@@ -735,10 +739,11 @@
 </form>
 </script>
 <script type="text/template" id="group-top-tmpl">
-<ol class="path-bar breadcrumb">
-    <li><a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a></li>
-    <li><%- name %></li>
-</ol>
+<p class="path-bar">
+    <a href="{% url 'group_list' %}" class="normal">{% trans "Groups" %}</a>
+    <span class="path-split">/</span>
+    <%- name %>
+</p>
 <div class="hd ovhd">
     {% if user.permissions.can_add_repo %}
     <button class="repo-create btn-white fleft"><span class="icon-plus-square add vam"></span><span class="vam">{% trans "New Library" %}</span></button>
