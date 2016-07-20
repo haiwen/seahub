@@ -58,17 +58,21 @@ class AdminGroups(APIView):
         start = (current_page - 1) * per_page
         limit = per_page + 1
 
-        groups_all = ccnet_api.get_all_groups(start, limit)
+        groups = ccnet_api.get_all_groups(start, limit)
 
-        if len(groups_all) > per_page:
-            groups_all = groups_all[:per_page]
+        if len(groups) > per_page:
+            groups = groups[:per_page]
             has_next_page = True
         else:
             has_next_page = False
 
         return_results = []
 
-        for group in groups_all:
+        for group in groups:
+            if hasattr(ccnet_api, 'is_org_group') and \
+                    ccnet_api.is_org_group(group.id):
+                continue
+
             group_info = get_group_info(group.id)
             return_results.append(group_info)
 
