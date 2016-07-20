@@ -130,7 +130,7 @@ define([
                 data: {'page': this.option.page},
                 cache: false,
                 reset: true,
-                error: function (collection, response, opts) {
+                error: function(collection, response, opts) {
                     var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
