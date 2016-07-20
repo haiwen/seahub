@@ -73,7 +73,7 @@ define([
                     error: function(collection, response, options) {
                         var err_msg;
                         if (response.responseText) {
-                            err_msg = response.responseJSON.error_msg;
+                            err_msg = response.responseJSON.error_msg||response.responseJSON.detail;
                         } else {
                             err_msg = gettext('Please check the network.');
                         }

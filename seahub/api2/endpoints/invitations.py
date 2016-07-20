@@ -18,7 +18,7 @@ json_content_type = 'application/json; charset=utf-8'
 class InvitationsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated, CanInviteGuest)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, format=None):
         # List invitations sent by user.

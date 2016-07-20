@@ -349,7 +349,7 @@ define([
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
                 var parsed_resp = $.parseJSON(xhr.responseText);
-                this.feedback(parsed_resp.error||parsed_resp.error_msg, 'error');
+                this.feedback(parsed_resp.error||parsed_resp.error_msg||parsed_resp.detail, 'error');
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
             }

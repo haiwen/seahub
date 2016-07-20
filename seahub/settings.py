@@ -528,6 +528,8 @@ ENABLED_ROLE_PERMISSIONS = {
     },
 }
 
+ENABLE_GUEST_INVITATION = False
+
 #####################
 # Sudo Mode #
 #####################

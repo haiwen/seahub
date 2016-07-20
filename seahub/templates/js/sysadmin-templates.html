@@ -56,9 +56,11 @@
             <a href="{{ SITE_ROOT }}sys/virus_scan_records/"><span class="sf2-icon-security"></span>{% trans "Virus Scan" %}</a>
         </li>
         {% endif %}
+        {% if enable_guest_invitation %}
         <li class="tab">
         <a href="{{ SITE_ROOT }}sys/invitationadmin/"><span class="sf2-icon-invite"></span>{% trans "Invitations" %}</a>
         </li>
+        {% endif %}
     </ul>
     <% if (cur_tab == 'libraries') { %>
         <% if (option == 'all') { %>
