@@ -3,7 +3,9 @@ import hmac
 import datetime
 import time
 from hashlib import sha1
+
 from django.db import models
+from django.utils import timezone
 
 from seahub.base.fields import LowerCaseCharField
 
@@ -144,6 +146,7 @@ class TokenV2(models.Model):
 
     last_login_ip = models.GenericIPAddressField(null=True, default=None)
 
+    created_at = models.DateTimeField(default=timezone.now)
     wiped_at = models.DateTimeField(null=True)
 
     objects = TokenV2Manager()
