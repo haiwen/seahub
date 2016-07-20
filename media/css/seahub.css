@@ -158,6 +158,7 @@
 .sf2-icon-copy:before { content: "\e028"; }
 .sf2-icon-move:before { content: "\e029"; }
 .sf2-icon-reply:before { content: "\e02a"; }
+.sf2-icon-invite:before { content: "\e02b"; }
 
 /******* tags **********/
 body,
@@ -385,6 +386,7 @@ table img { vertical-align:middle; }
 .vh { visibility:hidden; }
 .vam { vertical-align:middle; }
 .tip { color:#808080; font-size:12px; }
+.tick-green { color:green; }
 .txt-before-btn { margin-bottom:10px; } /* e.g. settings page */
 .strip-tip {
     padding:3px 0;
@@ -3561,6 +3563,7 @@ img.thumbnail {
     padding-top: 20px;
     text-align: center;
 }
+
 /* two-factor-auth */
 .two-factor-auth-wizard-btns {
     margin-top:8px;

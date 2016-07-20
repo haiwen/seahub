@@ -13,6 +13,7 @@ define([
     'app/views/starred-file',
     'app/views/activities',
     'app/views/devices',
+    'app/views/invitations',
     'app/views/share-admin-repos',
     'app/views/share-admin-folders',
     'app/views/share-admin-share-links',
@@ -21,8 +22,8 @@ define([
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView, OrgView, DirView,
-    StarredFileView, ActivitiesView, DevicesView, ShareAdminReposView,
-    ShareAdminFoldersView, ShareAdminShareLinksView,
+    StarredFileView, ActivitiesView, DevicesView, InvitationsView,
+    ShareAdminReposView, ShareAdminFoldersView, ShareAdminShareLinksView,
     ShareAdminUploadLinksView, NotificationsView, AccountView) {
     "use strict";
 
@@ -43,6 +44,7 @@ define([
             'starred/': 'showStarredFile',
             'activities/': 'showActivities',
             'devices/': 'showDevices',
+            'invitations/': 'showInvitations',
             'share-admin-libs/': 'showShareAdminRepos',
             'share-admin-folders/': 'showShareAdminFolders',
             'share-admin-share-links/': 'showShareAdminShareLinks',
@@ -70,6 +72,7 @@ define([
             this.groupsView = new GroupsView();
             this.starredFileView = new StarredFileView();
             this.devicesView = new DevicesView();
+            this.invitationsView = new InvitationsView();
             this.activitiesView = new ActivitiesView();
             this.shareAdminReposView = new ShareAdminReposView();
             this.shareAdminFoldersView = new ShareAdminFoldersView();
@@ -227,6 +230,12 @@ define([
             this.switchCurrentView(this.devicesView);
             this.devicesView.show();
             this.sideNavView.setCurTab('devices');
+        },
+
+        showInvitations: function() {
+            this.switchCurrentView(this.invitationsView);
+            this.invitationsView.show();
+            this.sideNavView.setCurTab('invitations');
         },
 
         showShareAdminRepos: function() {

@@ -200,6 +200,7 @@ INSTALLED_APPS = (
     'seahub.base',
     'seahub.contacts',
     'seahub.institutions',
+    'seahub.invitations',
     'seahub.wiki',
     'seahub.group',
     'seahub.message',
@@ -526,6 +527,8 @@ ENABLED_ROLE_PERMISSIONS = {
         'can_invite_guest': False,
     },
 }
+
+ENABLE_GUEST_INVITATION = False
 
 #####################
 # Sudo Mode #

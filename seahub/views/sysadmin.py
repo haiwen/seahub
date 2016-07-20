@@ -6,7 +6,6 @@ import logging
 import json
 import re
 import datetime
-import stat
 import csv, chardet, StringIO
 import time
 from constance import config
@@ -34,12 +33,12 @@ from seahub.auth import authenticate
 from seahub.auth.decorators import login_required, login_required_ajax
 from seahub.constants import GUEST_USER, DEFAULT_USER
 from seahub.institutions.models import Institution, InstitutionAdmin
+from seahub.invitations.models import Invitation
 from seahub.role_permissions.utils import get_available_roles
 from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     is_pro_version, send_html_email, get_user_traffic_list, get_server_id, \
-    clear_token, gen_file_get_url, is_org_context, handle_virus_record, \
-    get_virus_record_by_id, get_virus_record, FILE_AUDIT_ENABLED, \
-    get_max_upload_file_size
+    clear_token, handle_virus_record, get_virus_record_by_id, \
+    get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.rpc import mute_seafile_api
 from seahub.utils.licenseparse import parse_license
@@ -50,7 +49,7 @@ from seahub.utils.user_permissions import (get_basic_user_roles,
                                            get_user_role)
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
-from seahub.views import get_system_default_repo_id, gen_path_link
+from seahub.views import get_system_default_repo_id
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm
 from seahub.options.models import UserOptions
 from seahub.profile.models import Profile, DetailedProfile
@@ -59,7 +58,7 @@ from seahub.share.models import FileShare, UploadLinkShare
 import seahub.settings as settings
 from seahub.settings import INIT_PASSWD, SITE_NAME, SITE_ROOT, \
     SEND_EMAIL_ON_ADDING_SYSTEM_MEMBER, SEND_EMAIL_ON_RESETTING_USER_PASSWD, \
-    ENABLE_SYS_ADMIN_VIEW_REPO
+    ENABLE_SYS_ADMIN_VIEW_REPO, ENABLE_GUEST_INVITATION
 try:
     from seahub.settings import ENABLE_TRIAL_ACCOUNT
 except:
@@ -2240,3 +2239,40 @@ def sys_inst_toggle_admin(request, inst_id, email):
 
     messages.success(request, _('Success'))
     return HttpResponseRedirect(next)
+
+@login_required
+@sys_staff_required
+def sys_invitation_admin(request):
+    """List all invitations .
+    """
+
+    if not ENABLE_GUEST_INVITATION:
+        raise Http404
+
+    # Make sure page request is an int. If not, deliver first page.
+    try:
+        current_page = int(request.GET.get('page', '1'))
+        per_page = int(request.GET.get('per_page', '100'))
+    except ValueError:
+        current_page = 1
+        per_page = 100
+
+    offset = per_page * (current_page - 1)
+    limit = per_page + 1
+    invitations = Invitation.objects.all().order_by('-invite_time')[offset:offset + limit]
+
+    if len(invitations) == per_page + 1:
+        page_next = True
+    else:
+        page_next = False
+
+    return render_to_response(
+        'sysadmin/sys_invitations_admin.html', {
+            'invitations': invitations,
+            'current_page': current_page,
+            'prev_page': current_page-1,
+            'next_page': current_page+1,
+            'per_page': per_page,
+            'page_next': page_next,
+        },
+        context_instance=RequestContext(request))

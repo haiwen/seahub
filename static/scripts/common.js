@@ -160,8 +160,10 @@ define([
                 case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
                 case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
                 case 'starred_files': return siteRoot + 'api2/starredfiles/';
-                case 'devices': return siteRoot + 'api2/devices/';
                 case 'events': return siteRoot + 'api2/events/';
+                case 'devices': return siteRoot + 'api2/devices/';
+                case 'invitations': return siteRoot + 'api/v2.1/invitations/';
+                case 'invitation': return siteRoot + 'api/v2.1/invitations/' + options.token + '/';
                 case 'search_user': return siteRoot + 'api2/search-user/';
                 case 'user_profile': return siteRoot + 'profile/' + options.username + '/';
                 case 'space_and_traffic': return siteRoot + 'ajax/space_and_traffic/';
@@ -347,7 +349,7 @@ define([
         ajaxErrorHandler: function(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
                 var parsed_resp = $.parseJSON(xhr.responseText);
-                this.feedback(parsed_resp.error||parsed_resp.error_msg, 'error');
+                this.feedback(parsed_resp.error||parsed_resp.error_msg||parsed_resp.detail, 'error');
             } else {
                 this.feedback(gettext("Failed. Please check the network."), 'error');
             }

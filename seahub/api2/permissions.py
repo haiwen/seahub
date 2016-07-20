@@ -4,6 +4,8 @@ Provides a set of pluggable permission policies.
 
 from rest_framework.permissions import BasePermission
 
+from django.conf import settings
+
 from seaserv import check_permission, is_repo_owner, ccnet_api
 
 SAFE_METHODS = ['GET', 'HEAD', 'OPTIONS']
@@ -53,3 +55,11 @@ class IsGroupMember(BasePermission):
         group_id = int(view.kwargs.get('group_id', ''))
         username = request.user.username if request.user else ''
         return True if ccnet_api.is_group_user(group_id, username) else False
+
+
+class CanInviteGuest(BasePermission):
+    """Check user has permission to invite a guest.
+    """
+    def has_permission(self, request, *args, **kwargs):
+        return settings.ENABLE_GUEST_INVITATION and \
+                request.user.permissions.can_invite_guest()
