@@ -105,10 +105,16 @@ define([
             var _this = this;
             $form.submit(function() {
                 var group_name = $.trim($('[name="group_name"]', $form).val());
+                var $error = $('.error', $form);
+                var $submitBtn = $('[type="submit"]', $form);
+
                 if (!group_name) {
+                    $error.html(gettext("It is required.")).show();
                     return false;
                 }
-                Common.disableButton($('[type="submit"]', $form));
+
+                $error.hide();
+                Common.disableButton($submitBtn);
                 groups.create({'name': group_name, 'repos':[]}, {
                     wait: true,
                     validate: true,
@@ -118,6 +124,7 @@ define([
                             _this.reset();
                         }
                         app.ui.sideNavView.updateGroups();
+                        Common.closeModal();
                     },
                     error: function(collection, response, options) {
                         var err_msg;
@@ -126,10 +133,8 @@ define([
                         } else {
                             err_msg = gettext('Please check the network.');
                         }
-                        Common.feedback(err_msg, 'error', Common.ERROR_TIMEOUT);
-                    },
-                    complete: function() {
-                        Common.closeModal();
+                        $error.html(err_msg).show();
+                        Common.enableButton($submitBtn);
                     }
                 });
 

@@ -44,12 +44,15 @@ define([
                             $num.addClass('hide');
                             document.title =  _this.orig_doc_title;
                         }
+                    },
+                    error: function() { // e.g. 401 UNAUTHORIZED
+                        clearInterval(reqInterval); // stop sending requests
                     }
                 });
             };
             reqUnreadNum();
             // request every 30s
-            setInterval(reqUnreadNum, 30*1000);
+            var reqInterval = setInterval(reqUnreadNum, 30*1000);
 
             $('#notice-icon').click(function() {
                 _this.toggle();
