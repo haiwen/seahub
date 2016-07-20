@@ -14,11 +14,12 @@ define([
     'sysadmin-app/views/trash-repos',
     'sysadmin-app/views/search-trash-repos',
     'sysadmin-app/views/dir',
+    'sysadmin-app/views/groups',
     'app/views/account'
 ], function($, Backbone, Common, SideNavView, DashboardView,
     DesktopDevicesView, MobileDevicesView, DeviceErrorsView,
-    ReposView, SearchReposView, SystemReposView, TrashReposView, 
-    SearchTrashReposView, DirView, AccountView) {
+    ReposView, SearchReposView, SystemReposView, TrashReposView,
+    SearchTrashReposView, DirView, GroupsView, AccountView) {
 
     "use strict";
 
@@ -35,6 +36,7 @@ define([
             'trash-libs/': 'showTrashLibraries',
             'search-trash-libs/': 'showSearchTrashLibraries',
             'libs/:repo_id(/*path)': 'showLibraryDir',
+            'groups/': 'showGroups',
             // Default
             '*actions': 'showDashboard'
         },
@@ -61,6 +63,8 @@ define([
             this.trashReposView = new TrashReposView();
             this.searchTrashReposView = new SearchTrashReposView();
             this.dirView = new DirView();
+
+            this.groupsView = new GroupsView();
 
             app.ui.accountView = this.accountView = new AccountView();
 
@@ -115,7 +119,7 @@ define([
         },
 
         showLibraries: function() {
-            // url_match: null or an array like ["http://127.0.0.1:8000/sysadmin/#libraries/?page=2", "2"] 
+            // url_match: null or an array like ["http://127.0.0.1:8000/sysadmin/#libraries/?page=2", "2"]
             var url_match = location.href.match(/.*?page=(\d+)/);
             var page = url_match ? url_match[1] : 1; // 1: default
 
@@ -175,6 +179,16 @@ define([
             this.switchCurrentView(this.searchTrashReposView);
             this.sideNavView.setCurTab('libraries', {'option': 'trash'});
             this.searchTrashReposView.show({'owner': decodeURIComponent(owner)});
+        },
+
+        showGroups: function() {
+            // url_match: null or an array like ["http://127.0.0.1:8000/sysadmin/#groups/?page=2", "2"]
+            var url_match = location.href.match(/.*?page=(\d+)/);
+            var page = url_match ? url_match[1] : 1; // 1: default
+
+            this.switchCurrentView(this.groupsView);
+            this.sideNavView.setCurTab('groups');
+            this.groupsView.show({'page': page});
         }
 
     });

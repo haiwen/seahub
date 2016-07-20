@@ -175,6 +175,8 @@ define([
                 case 'admin-libraries': return siteRoot + 'api/v2.1/admin/libraries/';
                 case 'admin-library': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/';
                 case 'admin-library-dirents': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/dirents/';
+                case 'admin-groups': return siteRoot + 'api/v2.1/admin/groups/';
+                case 'admin-group': return siteRoot + 'api/v2.1/admin/groups/' + options.group_id + '/';
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';

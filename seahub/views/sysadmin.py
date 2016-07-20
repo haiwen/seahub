@@ -1057,41 +1057,6 @@ def user_add(request):
 
 @login_required
 @sys_staff_required
-def sys_group_admin(request):
-    # Make sure page request is an int. If not, deliver first page.
-    try:
-        current_page = int(request.GET.get('page', '1'))
-        per_page = int(request.GET.get('per_page', '25'))
-    except ValueError:
-        current_page = 1
-        per_page = 25
-
-    groups_plus_one = ccnet_threaded_rpc.get_all_groups(per_page * (current_page -1),
-                                               per_page +1)
-
-    groups = groups_plus_one[:per_page]
-    for grp in groups:
-        org_id = ccnet_threaded_rpc.get_org_id_by_group(int(grp.id))
-        if org_id > 0:
-            grp.org_id = org_id
-            grp.org_name = ccnet_threaded_rpc.get_org_by_id(int(org_id)).org_name
-
-    if len(groups_plus_one) == per_page + 1:
-        page_next = True
-    else:
-        page_next = False
-
-    return render_to_response('sysadmin/sys_group_admin.html', {
-            'groups': groups,
-            'current_page': current_page,
-            'prev_page': current_page-1,
-            'next_page': current_page+1,
-            'per_page': per_page,
-            'page_next': page_next,
-            }, context_instance=RequestContext(request))
-
-@login_required
-@sys_staff_required
 def sys_group_admin_export_excel(request):
     """ Export all groups to excel
     """

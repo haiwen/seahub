@@ -20,8 +20,8 @@
         <li class="tab">
             <a href="{{ SITE_ROOT }}sys/useradmin/"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
         </li>
-        <li class="tab">
-            <a href="{{ SITE_ROOT }}sys/groupadmin/"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
+        <li class="tab<% if (cur_tab == 'groups') { %> tab-cur<% } %>">
+            <a href="{{ SITE_ROOT }}sysadmin/#groups/"><span class="sf2-icon-group"></span>{% trans "Groups" %}</a>
         </li>
         {% if multi_tenancy %}
         <li class="tab">
@@ -310,6 +310,7 @@
         <h2 class="alc">{% trans "No libraries" %}</h2>
     </div>
 </script>
+
 <script type="text/template" id="search-libraries-tmpl">
     <h3>{% trans "Search Library"%}</h3>
     <form id="search-repo-form" method="get" action="">
@@ -338,7 +339,6 @@
         <h2 class="alc">{% trans "No libraries" %}</h2>
     </div>
 </script>
-
 
 <script type="text/template" id="library-item-tmpl">
     <td>
@@ -499,6 +499,52 @@
 
 <script type="text/template" id="library-transfer-form-tmpl">
     <form method="" action="" id="repo-transfer-form">
+        <h3><%= title %></h3>
+        <input type="hidden" name="email" /><br />
+        <p class="error hide"></p>
+        <input type="submit" value="{% trans "Submit" %}" />
+    </form>
+</script>
+
+<script type="text/template" id="groups-tmpl">
+    <div class="hd">
+        <h3 class="fleft">{% trans "Groups" %}</h3>
+        <button class="js-export-excel fright">{% trans "Export Excel" %}</button>
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th width="30%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Creator" %}</th>
+                <th width="25%">{% trans "Create At" %}</th>
+                <th width="15%">{% trans "Operations" %}</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <span class="loading-icon loading-tip"></span>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No groups" %}</h2>
+    </div>
+    <div id="paginator">
+        <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
+        <a class="next js-next hide" href="#">{% trans "Next" %}</a>
+    </div>
+</script>
+
+<script type="text/template" id="group-item-tmpl">
+    <td><a href="/sys/groupadmin/<%- id %>/"><%- name %></a></td>
+    <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
+    <td><time title='<%- time %>'><%- time_from_now %></time></td>
+    <td>
+        <a href="#" class="sf2-icon-delete sf2-x group-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
+        <a href="#" class="sf2-icon-move sf2-x group-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
+    </td>
+</script>
+
+<script type="text/template" id="group-transfer-form-tmpl">
+    <form method="" action="" id="group-transfer-form">
         <h3><%= title %></h3>
         <input type="hidden" name="email" /><br />
         <p class="error hide"></p>
