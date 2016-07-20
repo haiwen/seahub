@@ -41,7 +41,8 @@
 {% include 'sysadmin/sys_org_set_quota_js.html' %}
 addConfirmTo($('.group-remove-btn'), {
     'title': "{% trans "Delete Group" %}",
-    'con': "{% trans "Are you sure you want to delete %s ?" %}"
+    'con': "{% trans "Are you sure you want to delete %s ?" %}",
+    'post': true
 });
 </script>
 {% endblock %}
