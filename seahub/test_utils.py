@@ -20,6 +20,8 @@ from seahub.utils import mkstemp
 class Fixtures(Exam):
     user_password = 'secret'
     admin_password = 'secret'
+    ip = '127.0.0.1'
+    ip_v6 = '2001:0db8:85a3:0000:0000:8a2e:0370:7334'
 
     @fixture
     def fake_request(self):
