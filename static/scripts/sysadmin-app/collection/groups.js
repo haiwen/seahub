@@ -15,7 +15,7 @@ define([
         parseRecords: function(data) {
             return data.groups;
         },
-        url: function () {
+        url: function() {
             return Common.getUrl({name: 'admin-groups'});
         }
     });

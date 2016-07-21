@@ -507,36 +507,37 @@
 </script>
 
 <script type="text/template" id="groups-tmpl">
-    <div class="hd">
+    <div class="hd ovhd">
         <h3 class="fleft">{% trans "Groups" %}</h3>
-        <button class="js-export-excel fright">{% trans "Export Excel" %}</button>
+        <a class="sf-btn-link btn-white js-export-excel fright hide" href="{% url "sys_group_admin_export_excel" %}">{% trans "Export Excel" %}</a>
     </div>
+    <span class="loading-icon loading-tip"></span>
     <table>
         <thead>
             <tr>
-                <th width="30%">{% trans "Name" %}</th>
-                <th width="30%">{% trans "Creator" %}</th>
-                <th width="25%">{% trans "Create At" %}</th>
-                <th width="15%">{% trans "Operations" %}</th>
+                <th width="35%">{% trans "Name" %}</th>
+                <th width="30%">{% trans "Owner" %}</th>
+                <th width="25%">{% trans "Created At" %}</th>
+                <th width="10%"><!--Operations--></th>
             </tr>
         </thead>
         <tbody>
         </tbody>
     </table>
-    <span class="loading-icon loading-tip"></span>
-    <div class="empty-tips hide">
-        <h2 class="alc">{% trans "No groups" %}</h2>
-    </div>
     <div id="paginator">
         <a class="prev js-previous hide" href="#">{% trans "Previous" %}</a>
         <a class="next js-next hide" href="#">{% trans "Next" %}</a>
     </div>
+    <div class="empty-tips hide">
+        <h2 class="alc">{% trans "No groups" %}</h2>
+    </div>
+    <p class="error error-tip hide"></p>
 </script>
 
 <script type="text/template" id="group-item-tmpl">
-    <td><a href="/sys/groupadmin/<%- id %>/"><%- name %></a></td>
+    <td><a href="{{ SITE_ROOT }}sys/groupadmin/<%= id %>/"><%- name %></a></td>
     <td><a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(owner)); %>/"><%- owner %></a></td>
-    <td><time title='<%- time %>'><%- time_from_now %></time></td>
+    <td><time title="<%= time %>"><%= time_from_now %></time></td>
     <td>
         <a href="#" class="sf2-icon-delete sf2-x group-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-move sf2-x group-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>

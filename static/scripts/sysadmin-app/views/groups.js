@@ -24,31 +24,30 @@ define([
         render: function() {
             this.$el.append(this.template());
 
+            this.$exportExcel = this.$('.js-export-excel');
             this.$table = this.$('table');
             this.$tableBody = $('tbody', this.$table);
             this.$loadingTip = this.$('.loading-tip');
             this.$emptyTip = this.$('.empty-tips');
             this.$jsPrevious = this.$('.js-previous');
             this.$jsNext = this.$('.js-next');
+            this.$error = this.$('.error');
         },
 
         events: {
-            'click .js-export-excel': 'exportExcel',
             'click #paginator .js-next': 'getNextPage',
             'click #paginator .js-previous': 'getPreviousPage'
         },
 
-        exportExcel: function() {
-            location.href = app.config.siteRoot + "sys/groupadmin/export-excel/";
-        },
-
         initPage: function() {
+            this.$loadingTip.show();
+            this.$exportExcel.hide();
             this.$table.hide();
             this.$tableBody.empty();
-            this.$loadingTip.show();
-            this.$emptyTip.hide();
             this.$jsNext.hide();
             this.$jsPrevious.hide();
+            this.$emptyTip.hide();
+            this.$error.hide();
         },
 
         getNextPage: function() {
@@ -106,7 +105,7 @@ define([
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
-                    Common.feedback(err_msg, 'error');
+                    _this.$error.html(err_msg).show();
                 },
                 complete:function() {
                     _this.$loadingTip.hide();
@@ -121,6 +120,7 @@ define([
 
             this.$loadingTip.hide();
             if (this.groupCollection.length > 0) {
+                this.$exportExcel.show();
                 this.groupCollection.each(this.addOne, this);
                 this.$table.show();
                 this.renderPaginator();

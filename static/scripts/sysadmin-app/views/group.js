@@ -4,10 +4,8 @@ define([
     'backbone',
     'common',
     'moment',
-    'simplemodal',
-    'select2',
     'app/views/widgets/hl-item-view'
-], function($, _, Backbone, Common, Moment, Simplemodal, Select2, HLItemView) {
+], function($, _, Backbone, Common, Moment, HLItemView) {
     'use strict';
 
     var GroupView = HLItemView.extend({
@@ -43,7 +41,7 @@ define([
                     dataType: 'json',
                     success: function() {
                         _this.$el.remove();
-                        Common.feedback(gettext("Successfully deleted."), 'success');
+                        Common.feedback(gettext("Successfully deleted 1 item."), 'success');
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         Common.ajaxErrorHandler(xhr, textStatus, errorThrown);
@@ -60,6 +58,8 @@ define([
         transferGroup: function() {
             var _this = this;
             var group_name = this.model.get('name');
+            var group_id = this.model.get('id');
+            var cur_owner = this.model.get('owner');
             var $form = $(this.transferTemplate({
                 title: gettext("Transfer Group {group_name} To").replace('{group_name}',
                            '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(group_name) + '">' + Common.HTMLescape(group_name) + '</span>')
@@ -77,25 +77,24 @@ define([
 
             $form.submit(function() {
                 var email = $.trim($('[name="email"]', $(this)).val());
+                var $submitBtn = $('[type="submit"]', $(this));
+
                 if (!email) {
                     return false;
                 }
-                if (email == _this.model.get('owner')) {
+                if (email == cur_owner) {
                     return false;
                 }
 
-                var url = Common.getUrl({'name': 'admin-group','group_id': _this.model.get('id')});
-                var $submitBtn = $('[type="submit"]', $(this));
                 Common.disableButton($submitBtn);
-
                 $.ajax({
-                    url: url,
+                    url: Common.getUrl({'name': 'admin-group', 'group_id': group_id}),
                     type: 'put',
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
                         'new_owner': email,
-                        'old_owner': _this.model.get('owner')
+                        'old_owner': cur_owner
                     },
                     success: function() {
                         $.modal.close();
