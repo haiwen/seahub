@@ -10,6 +10,7 @@ import csv, chardet, StringIO
 import time
 from constance import config
 
+from django.db.models import Q
 from django.conf import settings as dj_settings
 from django.core.urlresolvers import reverse
 from django.contrib import messages
@@ -1534,9 +1535,23 @@ def user_search(request):
     """
     email = request.GET.get('email', '')
 
-    users = ccnet_threaded_rpc.search_emailusers('DB', email, -1, -1)
-    ldap_users = ccnet_threaded_rpc.search_emailusers('LDAP', email, -1, -1)
+    # search user from ccnet db
+    users = ccnet_api.search_emailusers('DB', email, -1, -1)
+
+    # search user from ccnet ldap
+    ldap_users = ccnet_api.search_emailusers('LDAP', email, -1, -1)
     users.extend(ldap_users)
+
+    # search user from profile
+    users_from_profile = Profile.objects.filter((Q(nickname__icontains=email)) |
+            Q(contact_email__icontains=email))
+
+    for user in users_from_profile:
+        try:
+            user_obj = User.objects.get(email=user.user)
+        except User.DoesNotExist:
+            continue
+        users.append(user_obj)
 
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     if ENABLE_TRIAL_ACCOUNT:

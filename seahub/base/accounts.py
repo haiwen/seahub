@@ -1,4 +1,6 @@
 # encoding: utf-8
+import re
+
 from django import forms
 from django.core.mail import send_mail
 from django.utils import translation
@@ -8,7 +10,7 @@ from django.contrib.sites.models import RequestSite
 from django.contrib.sites.models import Site
 import seaserv
 from seaserv import ccnet_threaded_rpc, unset_repo_passwd, is_passwd_set, \
-    seafile_api
+    seafile_api, ccnet_api
 from constance import config
 from registration import signals
 
@@ -220,7 +222,9 @@ class User(object):
             seafile_api.remove_repo(r.id)
 
         clear_token(self.username)
-        ccnet_threaded_rpc.remove_emailuser(source, self.username)
+        # remove current user from joined groups
+        ccnet_api.remove_group_user(self.username)
+        ccnet_api.remove_emailuser(source, self.username)
         Profile.objects.delete_profile_by_user(self.username)
 
     def get_and_delete_messages(self):
@@ -552,9 +556,15 @@ class RegistrationForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict, render_value=False),
                                 label=_("Password (again)"))
 
+    @classmethod
+    def allow_register(self, email):
+        prog = re.compile(r"(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$)",
+                          re.IGNORECASE)
+        return False if prog.match(email) is None else True
+
     def clean_email(self):
         email = self.cleaned_data['email']
-        if not is_valid_username(email):
+        if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))
 
         emailuser = ccnet_threaded_rpc.get_emailuser(email)

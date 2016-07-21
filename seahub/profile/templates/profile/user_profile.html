@@ -3,25 +3,32 @@
 
 {% block main_panel %}
 <div id="user-profile">
-    {% if user %}
+{% if user %}
     {% avatar user.username 290 %}
-    {% else %}
-    {% avatar "" 290 %}
-    {% endif %}
-    <p title="{{ nickname }}" class="nickname ellipsis">{{ nickname }}</p>
-    {% if d_profile %}
+    <p title="{{ nickname }}" class="user-profile-nickname ellipsis">{{ nickname }}</p>
+    <ul>
+        {% if d_profile %}
         {% if d_profile.department %}
-        <p title="{{ d_profile.department }}" class="info ellipsis">
-            <span class="icon-building fa-1x vam"></span>
-            <span class="info-detail vam">{{ d_profile.department }}</span>
-        </p>
+        <li title="{{ d_profile.department }}" class="user-profile-info ellipsis">
+            <span class="user-profile-info-icon icon-building fa-1x vam"></span>
+            <span class="vam">{{ d_profile.department }}</span>
+        </li>
         {% endif %}
         {% if d_profile.telephone %}
-        <p title="{{ d_profile.telephone }}" class="info ellipsis">
-            <span class="icon-phone fa-1x vam"></span>
-            <span class="info-detail vam">{{ d_profile.telephone }}</span>
-        </p>
+        <li title="{{ d_profile.telephone }}" class="user-profile-info ellipsis">
+            <span class="user-profile-info-icon icon-phone fa-1x vam"></span>
+            <span class="vam">{{ d_profile.telephone }}</span>
+        </li>
         {% endif %}
-    {% endif %}
+        {% endif %}
+        <li title="{{ contact_email }}" class="user-profile-info ellipsis">
+            <span class="user-profile-info-icon icon-envelope fa-1x vam"></span>
+            <span class="vam">{{ contact_email }}</span>
+        </li>
+    </ul>
+
+{% else %}
+    {% avatar "" 290 %}
+{% endif %}
 </div>
 {% endblock %}

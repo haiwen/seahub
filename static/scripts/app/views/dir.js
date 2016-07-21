@@ -461,7 +461,6 @@ define([
 
             // Directory Operations
             events: {
-                'click .path-link': 'visitDir',
                 'click #add-new-dir': 'newDir',
                 'click #add-new-file': 'newFile',
                 'click #share-cur-dir': 'share',
@@ -903,6 +902,7 @@ define([
                                     dirents.remove(selected_dirents);
                                     _this.$('th .checkbox').removeClass('checkbox-checked');
                                     _this.$('#multi-dirents-op').hide();
+                                    _this.$('#cur-dir-ops').show();
                                 } else {
                                     $(selected_dirents).each(function() {
                                         if (data['deleted'].indexOf(this.get('obj_name')) != -1) {
@@ -1044,6 +1044,7 @@ define([
                                             dirents.remove(files);
                                             _this.$('th .checkbox').removeClass('checkbox-checked');
                                             _this.$('#multi-dirents-op').hide();
+                                            _this.$('#cur-dir-ops').show();
                                         } else {
                                             $(dirs).each(function() {
                                                 if (this.get('obj_name') in data['success']) {

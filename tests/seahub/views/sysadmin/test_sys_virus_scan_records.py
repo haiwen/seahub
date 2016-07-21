@@ -1,12 +1,12 @@
-import os
 from mock import patch
-import pytest
 
+from django.conf.urls import patterns, url
 from django.core.urlresolvers import reverse
 
+import seahub
 from seahub.test_utils import BaseTestCase
+from seahub.views.sysadmin import sys_virus_scan_records, sys_delete_virus_scan_records
 
-TRAVIS = 'TRAVIS' in os.environ
 
 class VirusScanRecord(object):
     def __init__(self, repo_id):
@@ -14,17 +14,28 @@ class VirusScanRecord(object):
 
 
 class SysVirusScanRecordsTest(BaseTestCase):
+    urls = 'seahub.urls'
 
-    # @patch('seahub.utils.EVENTS_ENABLED', True)
-    # @patch('seahub.utils.get_virus_record')
-    # def test_can_list_empty(self, mock_get_virus_record):
-    #     mock_get_virus_record.return_value = []
+    def setUp(self):
+        # http://stackoverflow.com/questions/4892210/django-urlresolver-adding-urls-at-runtime-for-testing
+        super(SysVirusScanRecordsTest, self).setUp()
 
-    #     self.login_as(self.admin)
+        self.original_urls = seahub.urls.urlpatterns
+        seahub.urls.urlpatterns += patterns(
+            '',
+            url(r'^sys/virus_scan_records/$', sys_virus_scan_records, name='sys_virus_scan_records'),
+            url(r'^sys/virus_scan_records/delete/(?P<vid>\d+)/$', sys_delete_virus_scan_records, name='sys_delete_virus_scan_records'),
+        )
 
-    #     resp = self.client.get(reverse('sys_virus_scan_records'))
-    #     self.assertEqual(200, resp.status_code)
-    #     self.assertTemplateUsed(resp, 'sysadmin/sys_virus_scan_records.html')
+    @patch('seahub.views.sysadmin.get_virus_record')
+    def test_can_list_empty(self, mock_get_virus_record):
+        mock_get_virus_record.return_value = []
+
+        self.login_as(self.admin)
+
+        resp = self.client.get(reverse('sys_virus_scan_records'))
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed(resp, 'sysadmin/sys_virus_scan_records.html')
 
     def _get_virus_record(self, start, limit):
         records = []
@@ -36,12 +47,8 @@ class SysVirusScanRecordsTest(BaseTestCase):
 
         return records
 
-    @pytest.mark.skipif(TRAVIS, reason="TODO: this test can only be run seperately due to the url module init in django, we may need to reload url conf: https://gist.github.com/anentropic/9ac47f6518c88fa8d2b0")
-    @patch('seahub.utils.EVENTS_ENABLED')
-    @patch('seahub.utils.get_virus_record')
-    def test_can_list_records_num_more_than_10(self, mock_get_virus_record,
-                                               mock_events_enabled):
-        mock_events_enabled = True
+    @patch('seahub.views.sysadmin.get_virus_record')
+    def test_can_list_records_num_more_than_10(self, mock_get_virus_record):
         mock_get_virus_record.side_effect = self._get_virus_record
 
         self.login_as(self.admin)

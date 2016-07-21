@@ -2716,67 +2716,94 @@ class DirRevert(APIView):
 
 
 class DirSubRepoView(APIView):
-    authentication_classes = (TokenAuthentication, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
     permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
+    throttle_classes = (UserRateThrottle,)
 
-    # from seahub.views.ajax.py::sub_repo
     def get(self, request, repo_id, format=None):
-        '''
-        check if a dir has a corresponding sub_repo
-        if it does not have, create one
-        '''
+        """ Create sub-repo for folder
 
-        result = {}
+        Permission checking:
+        1. user with `r` or `rw` permission.
+        2. password correct for encrypted repo.
+        """
 
-        path = request.GET.get('p')
-        name = request.GET.get('name')
-        password = request.GET.get('password', None)
+        # argument check
+        path = request.GET.get('p', None)
+        if not path:
+            error_msg = 'p invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
+        name = request.GET.get('name', None)
+        if not name:
+            error_msg = 'name invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+        # recourse check
         repo = get_repo(repo_id)
         if not repo:
-            result['error'] = 'Library not found.'
-            return HttpResponse(json.dumps(result), status=404, content_type=json_content_type)
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if not (path and name):
-            result['error'] = 'Argument missing'
-            return HttpResponse(json.dumps(result), status=400, content_type=json_content_type)
+        # permission check
+        if not check_folder_permission(request, repo_id, path) or \
+                not request.user.permissions.can_add_repo():
+            error_msg = 'Permission denied.'
+            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         username = request.user.username
-
-        # check if the sub-lib exist
-        try:
-            sub_repo = seafile_api.get_virtual_repo(repo_id, path, username)
-        except SearpcError, e:
-            result['error'] = e.msg
-            return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
-
-        if sub_repo:
-            result['sub_repo_id'] = sub_repo.id
-        else:
-            if not request.user.permissions.can_add_repo():
-                return api_error(status.HTTP_403_FORBIDDEN,
-                                 'You do not have permission to create library.')
-
-            # create a sub-lib
-            try:
-                # use name as 'repo_name' & 'repo_desc' for sub_repo
-                if repo.encrypted:
-                    if password:
-                        sub_repo_id = seafile_api.create_virtual_repo(repo_id,
-                                path, name, name, username, password)
+        password = request.GET.get('password', '')
+        if repo.encrypted:
+            # check password for encrypted repo
+            if not password:
+                error_msg = 'password invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+            else:
+                try:
+                    seafile_api.set_passwd(repo_id, username, password)
+                except SearpcError as e:
+                    if e.msg == 'Bad arguments':
+                        error_msg = 'Bad arguments'
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    elif e.msg == 'Incorrect password':
+                        error_msg = _(u'Wrong password')
+                        return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+                    elif e.msg == 'Internal server error':
+                        error_msg = _(u'Internal server error')
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
                     else:
-                        result['error'] = 'Password Required.'
-                        return HttpResponse(json.dumps(result), status=403, content_type=json_content_type)
+                        error_msg = _(u'Decrypt library error')
+                        return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            # create sub-lib for encrypted repo
+            try:
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    sub_repo_id = seafile_api.create_org_virtual_repo(
+                            org_id, repo_id, path, name, name, username, password)
                 else:
-                    sub_repo_id = seafile_api.create_virtual_repo(repo_id, path, name, name, username)
+                    sub_repo_id = seafile_api.create_virtual_repo(
+                            repo_id, path, name, name, username, password)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+        else:
+            # create sub-lib for common repo
+            try:
+                if is_org_context(request):
+                    org_id = request.user.org.org_id
+                    sub_repo_id = seafile_api.create_org_virtual_repo(
+                            org_id, repo_id, path, name, name, username)
+                else:
+                    sub_repo_id = seafile_api.create_virtual_repo(
+                            repo_id, path, name, name, username)
+            except SearpcError as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
-                result['sub_repo_id'] = sub_repo_id
-            except SearpcError, e:
-                result['error'] = e.msg
-                return HttpResponse(json.dumps(result), status=500, content_type=json_content_type)
-
-        return HttpResponse(json.dumps(result), content_type=json_content_type)
+        return Response({'sub_repo_id': sub_repo_id})
 
 ########## Sharing
 class SharedRepos(APIView):

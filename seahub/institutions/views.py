@@ -1,8 +1,9 @@
+import json
 import logging
 
 from django.core.urlresolvers import reverse
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.utils.translation import ugettext as _
@@ -10,13 +11,16 @@ import seaserv
 from seaserv import seafile_api
 from pysearpc import SearpcError
 
+from seahub.auth.decorators import login_required_ajax
 from seahub.base.accounts import User
 from seahub.base.decorators import require_POST
 from seahub.base.models import UserLastLogin
 from seahub.institutions.decorators import (inst_admin_required,
                                             inst_admin_can_manage_user)
 from seahub.profile.models import Profile, DetailedProfile
+from seahub.utils import is_valid_username, clear_token
 from seahub.utils.rpc import mute_seafile_api
+from seahub.views.sysadmin import email_user_on_activation
 
 logger = logging.getLogger(__name__)
 
@@ -181,3 +185,46 @@ def user_remove(request, email):
         messages.error(request, _(u'Failed to delete: the user does not exist'))
 
     return HttpResponseRedirect(next)
+
+@login_required_ajax
+@require_POST
+@inst_admin_required
+@inst_admin_can_manage_user
+def user_toggle_status(request, email):
+    content_type = 'application/json; charset=utf-8'
+
+    if not is_valid_username(email):
+        return HttpResponse(json.dumps({'success': False}), status=400,
+                            content_type=content_type)
+
+    try:
+        user_status = int(request.POST.get('s', 0))
+    except ValueError:
+        user_status = 0
+
+    try:
+        user = User.objects.get(email)
+        user.is_active = bool(user_status)
+        result_code = user.save()
+        if result_code == -1:
+            return HttpResponse(json.dumps({'success': False}), status=403,
+                                content_type=content_type)
+
+        if user.is_active is True:
+            try:
+                email_user_on_activation(user)
+                email_sent = True
+            except Exception as e:
+                logger.error(e)
+                email_sent = False
+
+            return HttpResponse(json.dumps({'success': True,
+                                            'email_sent': email_sent,
+                                            }), content_type=content_type)
+        else:
+            clear_token(user.email)
+        return HttpResponse(json.dumps({'success': True}),
+                            content_type=content_type)
+    except User.DoesNotExist:
+        return HttpResponse(json.dumps({'success': False}), status=500,
+                            content_type=content_type)

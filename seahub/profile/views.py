@@ -113,17 +113,20 @@ def user_profile(request, username):
     else:
         user = None
 
-    nickname = '' if user is None else email2nickname(user.username)
-
     if user is not None:
+        nickname = email2nickname(user.username)
+        contact_email = Profile.objects.get_contact_email_by_user(user.username)
         d_profile = DetailedProfile.objects.get_detailed_profile_by_user(
             user.username)
     else:
+        nickname = ''
+        contact_email = ''
         d_profile = None
 
     return render_to_response('profile/user_profile.html', {
             'user': user,
             'nickname': nickname,
+            'contact_email': contact_email,
             'd_profile': d_profile,
             }, context_instance=RequestContext(request))
 

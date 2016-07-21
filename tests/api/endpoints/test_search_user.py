@@ -1,6 +1,8 @@
 import json
+from mock import patch
 
 from django.core.urlresolvers import reverse
+from django.test import override_settings
 
 from seahub.profile.models import Profile
 from seahub.profile.utils import refresh_cache
@@ -11,6 +13,7 @@ class SearchUserTest(BaseTestCase):
         self.login_as(self.user)
         self.endpoint = reverse('search-user')
 
+    @override_settings(CLOUD_MODE = False)
     def test_can_search(self):
         email = self.admin.email
         nickname = 'admin_test'
@@ -29,6 +32,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['name'] == nickname
         assert json_resp['users'][0]['contact_email'] == contact_email
 
+    @override_settings(CLOUD_MODE = False)
     def test_search_myself(self):
         email = self.user.email
         nickname = 'user_test'
@@ -47,6 +51,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['name'] == nickname
         assert json_resp['users'][0]['contact_email'] == contact_email
 
+    @override_settings(CLOUD_MODE = False)
     def test_search_without_myself(self):
         email = self.user.email
         resp = self.client.get(self.endpoint + '?include_self=0&q=' + email)
@@ -55,6 +60,7 @@ class SearchUserTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert len(json_resp['users']) == 0
 
+    @override_settings(CLOUD_MODE = False)
     def test_search_unregistered_user(self):
         resp = self.client.get(self.endpoint + '?q=unregistered_user@seafile.com')
         json_resp = json.loads(resp.content)
@@ -62,6 +68,7 @@ class SearchUserTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
         assert len(json_resp['users']) == 0
 
+    @override_settings(CLOUD_MODE = False)
     def test_can_search_by_nickname(self):
         admin_email = self.admin.email
 
@@ -81,6 +88,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['name'] == 'Carl Smith'
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
+    @override_settings(CLOUD_MODE = False)
     def test_can_search_by_nickname_insensitive(self):
         admin_email = self.admin.email
 
@@ -112,6 +120,7 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['name'] == 'Carl Smith'
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
 
+    @override_settings(CLOUD_MODE = False)
     def test_can_search_by_contact_email(self):
         admin_email = self.admin.email
         nickname = 'admin_test'
@@ -131,4 +140,17 @@ class SearchUserTest(BaseTestCase):
         assert json_resp['users'][0]['avatar_url'] is not None
         assert json_resp['users'][0]['name'] == nickname
         assert json_resp['users'][0]['contact_email'] == 'new_mail@test.com'
+
+    @override_settings(CLOUD_MODE = True)
+    @override_settings(ENABLE_GLOBAL_ADDRESSBOOK = False)
+    @patch('seahub.api2.endpoints.search_user.is_org_context')
+    def test_search_full_email(self, mock_is_org_context):
+
+        mock_is_org_context.return_value = False
+
+        resp = self.client.get(self.endpoint + '?q=%s' % self.admin.username)
+        json_resp = json.loads(resp.content)
+
+        self.assertEqual(200, resp.status_code)
+        assert json_resp['users'][0]['email'] == self.admin.username
 
