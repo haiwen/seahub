@@ -8,8 +8,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.views import APIView
 from rest_framework import status
 
-from django.conf import settings
-
 import seaserv
 
 from seahub.api2.authentication import TokenAuthentication
@@ -23,6 +21,13 @@ from seahub.profile.models import Profile
 from seahub.contacts.models import Contact
 from seahub.avatar.templatetags.avatar_tags import api_avatar_url
 
+from seahub.settings import ENABLE_GLOBAL_ADDRESSBOOK, \
+    ENABLE_SEARCH_FROM_LDAP_DIRECTLY
+
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
 class SearchUser(APIView):
     """ Search user from contacts/all users
@@ -51,7 +56,7 @@ class SearchUser(APIView):
         users_result = []
         username = request.user.username
 
-        if settings.CLOUD_MODE:
+        if CLOUD_MODE:
             if is_org_context(request):
                 url_prefix = request.user.org.url_prefix
                 users = seaserv.get_org_users_by_url_prefix(url_prefix, -1, -1)
@@ -65,7 +70,7 @@ class SearchUser(APIView):
                 users_from_profile = Profile.objects.filter(Q(user__in=[u.email for u in users]) &
                         (Q(nickname__icontains=q)) | Q(contact_email__icontains=q)).values('user')
 
-            elif settings.ENABLE_GLOBAL_ADDRESSBOOK:
+            elif ENABLE_GLOBAL_ADDRESSBOOK:
                 users_from_ccnet = search_user_from_ccnet(q)
                 users_from_profile = Profile.objects.filter(Q(contact_email__icontains=q) |
                         Q(nickname__icontains=q)).values('user')
@@ -162,7 +167,7 @@ def search_user_from_ccnet(q):
         users.extend(ldap_imported_users)
 
     count = len(users)
-    if count < 10 and settings.ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
+    if count < 10 and ENABLE_SEARCH_FROM_LDAP_DIRECTLY:
         all_ldap_users = seaserv.ccnet_threaded_rpc.search_ldapusers(q, 0, 10 - count)
         users.extend(all_ldap_users)
 
