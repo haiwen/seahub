@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.contrib.auth import logout
 
 from .handlers import get_password_hash, PASSWORD_HASH_KEY

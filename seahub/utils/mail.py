@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.template import Context, loader
 from post_office import mail
 from post_office.models import PRIORITY

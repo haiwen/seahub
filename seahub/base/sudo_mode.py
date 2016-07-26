@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """Ask the admin to provide his password before visiting sysadmin-only pages.
 
 When an admin visist to the syadmin related pages, seahub would ask him to

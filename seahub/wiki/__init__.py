@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 
 from utils import get_personal_wiki_page, get_personal_wiki_repo, \

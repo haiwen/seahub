@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 """
 File related views, including view_file, edit_file, view_history_file,

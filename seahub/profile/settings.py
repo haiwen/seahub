@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
 
 NICKNAME_CACHE_TIMEOUT = getattr(settings, 'NICKNAME_CACHE_TIMEOUT', 14 * 24 * 60 * 60)

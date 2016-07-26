@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from seahub.api2.base import APIView
 from seahub.api2.utils import json_response, is_seafile_pro
 from seahub import settings

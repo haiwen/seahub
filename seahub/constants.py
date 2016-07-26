@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # Default user have common operations, like creating group and library.
 DEFAULT_USER = 'default'
 

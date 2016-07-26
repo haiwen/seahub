@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
 from django.core.cache import cache
 from django.core.files.storage import default_storage, get_storage_class

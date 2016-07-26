@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 from django.core.cache import cache
 from django.http import HttpResponseRedirect, Http404

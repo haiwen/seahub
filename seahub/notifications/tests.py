@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 

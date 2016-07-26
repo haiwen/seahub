@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import patterns, url, include
 from seahub.utils.two_factor_auth import HAS_TWO_FACTOR_AUTH
 

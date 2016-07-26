@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.contrib.sites.models import Site
 from django import forms
 from django.utils.translation import ugettext_lazy as _

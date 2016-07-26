@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: UTF-8
+# Copyright (c) 2012-2016 Seafile Ltd.
 
 import sys
 import os

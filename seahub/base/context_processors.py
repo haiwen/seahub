@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 A set of request processors that return dictionaries to be merged into a
 template context. Each function takes the request object as its only parameter

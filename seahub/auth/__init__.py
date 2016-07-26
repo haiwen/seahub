@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import datetime
 from warnings import warn
 from django.conf import settings

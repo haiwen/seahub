@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.utils.decorators import method_decorator
 from seahub.auth.decorators import login_required
 

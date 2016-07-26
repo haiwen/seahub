@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from signals import repo_created, repo_deleted
 from handlers import repo_created_cb, repo_deleted_cb
 
