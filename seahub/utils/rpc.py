@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 Proxy RPC calls to seafile_api, silence RPC errors, emulating Ruby's
 "method_missing".

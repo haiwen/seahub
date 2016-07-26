@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 try:
     from functools import update_wrapper, wraps
 except ImportError:

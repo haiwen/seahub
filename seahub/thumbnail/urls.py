@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import patterns, url, include
 
 from views import thumbnail_create, thumbnail_get, share_link_thumbnail_get, \

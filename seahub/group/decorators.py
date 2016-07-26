@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.http import Http404
 
 from seaserv import check_group_staff

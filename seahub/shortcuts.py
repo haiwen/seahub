@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+# Copyright (c) 2012-2016 Seafile Ltd.
 # encoding: utf-8
 
 def get_first_object_or_none(queryset):

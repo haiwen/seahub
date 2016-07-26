@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.paginator import Paginator as DefaultPaginator
 
 def get_page_range(current_page, num_pages):

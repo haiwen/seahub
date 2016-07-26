@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf import settings
 
 from seahub.institutions.models import InstitutionAdmin

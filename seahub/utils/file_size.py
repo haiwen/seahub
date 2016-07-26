@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 def get_file_size_unit(unit_type):
     """
     File size unit according to https://en.wikipedia.org/wiki/Kibibyte.

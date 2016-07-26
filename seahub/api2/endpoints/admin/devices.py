@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 
 from rest_framework.authentication import SessionAuthentication

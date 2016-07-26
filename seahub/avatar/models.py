@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from abc import abstractmethod
 import datetime
 import hashlib

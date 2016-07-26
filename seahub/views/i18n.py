@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.utils import timezone
 from django.views.decorators.http import last_modified
 from django.views.i18n import javascript_catalog

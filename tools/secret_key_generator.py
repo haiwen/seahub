@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
-"""Lifted from https://github.com/django/django/blob/master/django/core/management/commands/startproject.py#L30
-"""
+# Copyright (c) 2012-2016 Seafile Ltd.
+
 import hashlib
 import random
 import sys

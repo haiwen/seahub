@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 This file demonstrates two different styles of tests (one doctest and one
 unittest). These will both pass when you run "manage.py test".

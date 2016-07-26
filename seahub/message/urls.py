@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import patterns, url
 from django.views.generic.base import RedirectView
 

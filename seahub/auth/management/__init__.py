@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 Creates permissions for all installed apps that need permissions.
 """

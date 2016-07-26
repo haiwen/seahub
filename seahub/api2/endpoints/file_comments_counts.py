@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import logging
 
 from django.db.models import Count

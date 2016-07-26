@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.db import models
 
 from seahub.base.fields import LowerCaseCharField

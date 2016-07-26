@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 This file demonstrates writing tests using the unittest module. These will pass
 when you run "manage.py test".

@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 #
 # rooturl.py -- URL patterns for rooted sites.
 #

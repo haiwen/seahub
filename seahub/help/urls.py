@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import patterns, url, include
 from django.views.generic import TemplateView
 

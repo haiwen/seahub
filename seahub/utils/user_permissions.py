@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from seahub.constants import DEFAULT_USER, GUEST_USER
 from seahub.utils import is_pro_version
 

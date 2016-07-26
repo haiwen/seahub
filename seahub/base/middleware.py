@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import re
 
 from django.core.cache import cache

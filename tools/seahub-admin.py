@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
+# Copyright (c) 2012-2016 Seafile Ltd.
 
 import sqlite3
 import os

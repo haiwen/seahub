@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from .settings import ENABLED_ROLE_PERMISSIONS
 from seahub.constants import DEFAULT_USER
 

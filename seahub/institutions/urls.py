@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.conf.urls import patterns, url
 
 from .views import (info, useradmin, user_info, user_remove, useradmin_search,

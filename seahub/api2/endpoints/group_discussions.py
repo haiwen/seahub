@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import json
 
 from django.core.paginator import EmptyPage, InvalidPage

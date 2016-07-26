@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import settings
 
 if not hasattr(settings, 'EVENTS_CONFIG_FILE'):

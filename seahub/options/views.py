@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # -*- coding: utf-8 -*-
 from django.http import HttpResponse, HttpResponseBadRequest, \
     HttpResponseRedirect , Http404

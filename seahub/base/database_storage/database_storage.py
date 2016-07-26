@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 # DatabaseStorage for django.
 # 2011 (c) Mike Mueller <mike@subfocal.net>
 # 2009 (c) GameKeeper Gambling Ltd, Ivanov E.

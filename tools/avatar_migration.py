@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 #!/usr/bin/env python
 """
 Migrate seahub avatar files from file system to MySQL.

@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django import template
 from django.db import transaction
 from django.conf import settings

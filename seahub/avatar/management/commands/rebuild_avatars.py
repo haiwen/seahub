@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.management.base import NoArgsCommand
 
 from seahub.avatar.models import Avatar

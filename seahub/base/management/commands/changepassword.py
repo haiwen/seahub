@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 from django.core.management.base import BaseCommand, CommandError
 from seahub.base.accounts import User
 import getpass

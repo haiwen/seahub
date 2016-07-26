@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 """
 This file contains error messages from ccnet or seafile that will be translated.
 """

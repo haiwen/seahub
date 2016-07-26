@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 #coding: UTF-8
 
 from rest_framework.views import APIView as RestFrameworkAPIView

@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# Copyright (c) 2012-2016 Seafile Ltd.
 
 import os
 import sys

@@ -1,3 +1,4 @@
+# Copyright (c) 2012-2016 Seafile Ltd.
 import pytz
 import datetime
 from django.conf import settings
