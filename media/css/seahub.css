@@ -23,7 +23,6 @@
  * (...)
  * discussions/comments
  * custom select2
- * sf-panel
  *
  * Container
  * Container ......... common container styles
@@ -1507,12 +1506,6 @@ button.sf-dropdown-toggle:focus {
 .select2-result-label .avatar,
 .select2-result-label .text {
     vertical-align:middle;
-}
-/**** sf-panel ****/
-.sf-panel {
-    padding:10px;
-    border: 1px solid #e8e8e8;
-    border-radius:3px;
 }
 
 /********** Container ***********/
