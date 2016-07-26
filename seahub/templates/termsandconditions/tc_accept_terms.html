@@ -1,29 +1,18 @@
-{% extends "base.html" %}
+{% extends "base_wide_page.html" %}
 {% load i18n %}
 
-{% block main_panel %}
-<div class="wide-panel">
-    <section title="termsandconditions" data-role="content">
-        <h1>{{ form.initial.terms.name|safe }}</h1>
-        {{ form.errors }}
-        <div id="tc-terms-html">
-            {{ form.initial.terms.text|safe|linebreaksbr }}
-        </div>
-        <form action="{% url 'tc_accept_page' %}" method="post" id="tc-terms-form" data-ajax="false">{% csrf_token %}
-            {{ form.terms }}
-            {{ form.returnTo }}
-            <input type="submit" value="{% trans 'Accept' %}" />
-            <button class="cancel-btn">{% trans 'Cancel' %}</button>
-        </form>
-    </section>
+{% block wide_page_content %}
+<div class="sf-panel">
+    <h1>{{ form.initial.terms.name|safe }}</h1>
+    {{ form.errors }}
+    <div id="tc-terms-html">
+        {{ form.initial.terms.text|safe|linebreaksbr }}
+    </div>
+    <form action="{% url 'tc_accept_page' %}" method="post">{% csrf_token %}
+        {{ form.terms }}
+        {{ form.returnTo }}
+        <button type="submit" class="submit">{% trans "Accept" %}</button>
+        <a href="{% url 'auth_logout' %}" class="sf-btn-link">{% trans "Cancel" %}</a>
+    </form>
 </div>
-{% endblock %}
-
-{% block extra_script %}
-<script type="text/javascript">
-$('.cancel-btn').click(function() {
-    location.href = "{% url 'auth_logout' %}";
-    return false;
-});
-</script>
 {% endblock %}

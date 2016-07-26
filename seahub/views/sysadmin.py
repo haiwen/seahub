@@ -2264,7 +2264,7 @@ def sys_terms_admin(request):
 @require_POST
 def sys_delete_terms(request, pk):
     TermsAndConditions.objects.filter(pk=pk).delete()
-    messages.success(request, _('Success'))
+    messages.success(request, _('Successfully deleted 1 item'))
 
     return HttpResponseRedirect(reverse('sys_terms_admin'))
 

@@ -1,33 +1,33 @@
 {% extends "sysadmin/base.html" %}
 {% load i18n seahub_tags %}
 
-{% block cur_links %}tab-tc{% endblock %}
+{% block cur_tc %}tab-cur{% endblock %}
 
 {% block right_panel %}
-<div class="tabnav ovhd">
-    <ul class="tabnav-tabs fleft">
-        <li class="tabnav-tab tabnav-tab-cur">
-            {% trans "Terms and Conditions" %}
-        </li>
-    </ul>
-    <button id="add-btn" class="fright">{% trans "Add" %}</button>
+<div class="hd ovhd">
+    <h3 class="fleft">{% trans "Terms and Conditions" %}</h3>
+    <button id="add-btn" class="btn-white fright">{% trans "Add" %}</button>
 </div>
 
 {% if object_list %}
 <table>
+    <thead>
     <tr>
         <th width="15%">{% trans "Name" %}</th>
-        <th width="10%">{% trans "Version number" %}</th>
+        <th width="10%">{% trans "Version" %}</th>
         <th width="35%">{% trans "Text" %}</th>
-        <th width="15%">{% trans "Active date" %}</th>
-        <th width="15%">{% trans "Created date" %}</th>
-        <th width="10%">{% trans "Operations" %}</th>
+        <th width="15%">{% trans "Created" %}</th>
+        <th width="15%">{% trans "Activated" %}</th>
+        <th width="10%"><!--Operations--></th>
     </tr>
+    </thead>
+    <tbody>
     {% for tc in object_list %}
     <tr>
         <td>{{ tc.name }}</td>
         <td>{{ tc.version_number }}</td>
         <td><a href="#" class="js-text" data-msg="{{ tc.text|linebreaksbr }}">{{ tc.text|truncatechars:50 }}</a></td>
+        <td>{{ tc.date_created|translate_seahub_time }}</td>
         <td>
             {% if tc.date_active %}
             {{ tc.date_active|translate_seahub_time }}
@@ -35,12 +35,13 @@
             --
             {% endif %}
         </td>
-        <td>{{ tc.date_created|translate_seahub_time }}</td>
-        <td><a href="#" class="js-update" data-pk="{{ tc.pk}}" data-name="{{ tc.name }}" data-version_number="{{ tc.version_number }}" data-text="{{ tc.text }}">{% trans "Update" %}</a>
-            <a href="#" class="remove-btn" data-url="{% url "sys_delete_terms" tc.pk %}" data-target="{{ tc.name }}">{% trans "Delete" %}</a>
+        <td>
+            <a href="#" class="js-update op-icon sf2-icon-edit2 vh" data-pk="{{ tc.pk}}" data-name="{{ tc.name }}" data-version="{{ tc.version_number }}" data-text="{{ tc.text }}" data-activated="{% if tc.date_active %}1{% else %}0{% endif %}" title="{% trans "Update" %}"></a>
+            <a href="#" class="remove-btn op-icon sf2-icon-delete vh" data-url="{% url "sys_delete_terms" tc.pk %}" data-target="{{ tc.name }}" title="{% trans "Delete" %}"></a>
         </td>
     </tr>
     {% endfor %}
+    </tbody>
 </table>
 
 {% else %}
@@ -48,9 +49,9 @@
 {% endif %}
 
 <form id="tc-form" action="" method="post" class="hide">{% csrf_token %}
+    <h3>{% trans "Add Terms and Conditions" %}</h3>
     <input type="hidden" name="pk" value="" />
 
-    <h3>{% trans "Add Terms and Condistions" %}</h3>
     <label for="id_name">{% trans "Name" %}</label><br />
     <input type="text" name="name" id="id_name" class="input" /><br />
 
@@ -58,11 +59,13 @@
     <input type="text" name="version_number" id="id_version_number" class="input" /><br />
 
     <label for="id_text">{% trans "Text" %}</label><br />
-    <textarea type="text" name="text" id="id_text" class="textarea"></textarea><br />
+    <textarea name="text" id="id_text" class="textarea"></textarea><br />
 
-    <label for="id_status">{% trans "Status" %}</label><br />
-    <input type="radio" name="status" value="1" checked>{% trans "Enabled" %}
-    <input type="radio" name="status" value="0">{% trans "Disabled" %}<br>
+    <label for="id_status">{% trans "Activated" %}</label><br />
+    <input type="radio" name="status" value="1" checked="checked" class="vam">
+    <span class="vam">{% trans "On" %}</span><br />
+    <input type="radio" name="status" value="0" class="vam">
+    <span class="vam">{% trans "Off" %}</span><br />
     
     <p class="error hide"></p>
     <button type="submit" class="submit">{% trans "Submit" %}</button>
@@ -79,28 +82,17 @@ $('#add-btn').click(function() {
     $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 });
 
-$('.js-update').click(function() {
-    var form = $('#tc-form');
-    form.children('[name="pk"]').val($(this).data('pk'));
-    form.children('[name="name"]').val($(this).data('name'));
-    form.children('[name="version_number"]').val($(this).data('version_number'));
-    form.children('[name="text"]').val($(this).data('text'));
-
-    $('#tc-form').modal();
-    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
-});
-
 $('#tc-form').submit(function(){
-    var form = $(this),
-        form_id = form.attr('id'),
-        submit_btn = form.find('[type="submit"]'),
-        pk = form.children('[name="pk"]').val();
-        name = $.trim(form.children('[name="name"]').val()),
-        version_num = $.trim(form.children('[name="version_number"]').val()),
-        text = $.trim(form.children('[name="text"]').val()),
-        status = form.children('[name="status"]:checked').val();
+    var $form = $(this),
+        form_id = $form.attr('id'),
+        $submit_btn = $form.find('[type="submit"]'),
+        pk = $('[name="pk"]', $form).val(),
+        name = $.trim($('[name="name"]', $form).val()),
+        version = $.trim($('[name="version_number"]', $form).val()),
+        text = $.trim($('[name="text"]', $form).val()),
+        activated = $('[name="status"]:checked', $form).val();
 
-    disable(submit_btn);
+    disable($submit_btn);
     $.ajax({
         url: '{% url 'sys_terms_admin' %}',
         type: 'POST',
@@ -109,15 +101,13 @@ $('#tc-form').submit(function(){
         beforeSend: prepareCSRFToken,
         data: {
             'name': name,
-            'version_number': version_num,
+            'version_number': version,
             'text': text,
-            'status': status,
+            'status': activated,
             'pk': pk
         },
         success: function(data) {
-            if (data['success']) {
-                location.reload(true);
-            }   
+            location.reload(true);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseText) {
@@ -125,10 +115,24 @@ $('#tc-form').submit(function(){
             } else {
                 apply_form_error(form_id, "{% trans "Failed. Please check the network." %}");
             }
+            enable($submit_btn);
         }
-    }).complete(function() {
-        enable(submit_btn);
     });
+
+    return false;
+});
+
+$('.js-update').click(function() {
+    var $form = $('#tc-form');
+    $form.modal({focus: false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+    $('h3', $form).html("{% trans "Update Terms and Conditions" %}");
+    $('[name="pk"]', $form).val($(this).attr('data-pk'));
+    $('[name="name"]', $form).val($(this).attr('data-name'));
+    $('[name="version_number"]', $form).val($(this).attr('data-version'));
+    $('[name="text"]', $form).val($(this).attr('data-text'));
+    $('[name="status"][value="' + $(this).attr('data-activated') + '"]', $form).prop('checked', true);
 
     return false;
 });
@@ -140,8 +144,9 @@ addConfirmTo($('.remove-btn'), {
 });
 
 $('.js-text').click(function() {
-    $('#popup-msg').html($(this).data('msg'));
-    $('#popup-msg').modal();
+    $('#popup-msg').html($(this).attr('data-msg')).modal({
+        minWidth: 150
+    });
     $('#simplemodal-container').css({'height':'auto'});
 
     return false;
