@@ -53,25 +53,25 @@
 
             </div>
 
-            <div class="fright">
+            <div class="fright sf-btn-group">
             {% if can_lock_unlock_file %}
                 {% if not file_locked %}
-                    <button id="lock-file" class="op-btn">{% trans "Lock" %}</button>
-                    <button id="unlock-file" class="op-btn hide">{% trans "Unlock" %}</button>
+                    <button id="lock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-lock" title="{% trans "Lock" %}"></button>
+                    <button id="unlock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-unlock hide" title="{% trans "Unlock" %}"></button>
                 {% elif locked_by_me %}
-                    <button id="unlock-file" class="op-btn">{% trans "Unlock" %}</button>
-                    <button id="lock-file" class="op-btn hide">{% trans "Lock" %}</button>
+                    <button id="unlock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-unlock" title="{% trans "Unlock" %}"></button>
+                    <button id="lock-file" class="sf-btn-group-btn sf-btn-group-btn-first op-icon sf2-icon-lock hide" title="{% trans "Lock" %}"></button>
                 {% endif %}
             {% endif %}
 
             {% if not repo.encrypted %}
             {% if request.user.permissions.can_generate_shared_link %}
-            <button id="share" class="op-btn" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}">{% trans "Share" %}</button>
+            <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
             {% endif %}
             {% endif %}
 
             {% if file_perm == 'rw' %}
-            <a class="sf-btn-link" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}">{% trans "History" %}</a>
+            <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-clock" id="history" href="{% url 'file_revisions' repo.id %}?p={{ path|urlencode }}" title="{% trans "History" %}"></a>
             {% endif %}
 
             {% if request.user.is_authenticated and can_edit_file %}
@@ -79,9 +79,9 @@
                 {% endblock %}
             {% endif %}
 
-            <a class="sf-btn-link" href="?dl=1" id="download">{% trans "Download"%}</a>
+            <a class="sf-btn-group-btn sf-btn-link op-icon sf2-icon-download" href="?dl=1" id="download" title="{% trans "Download"%}"></a>
 
-            <button id="discuss" class="op-btn">{% trans "Comment" %}</button>
+            <button id="discuss" class="sf-btn-group-btn sf-btn-group-btn-last op-icon sf2-icon-msgs" title="{% trans "Comment" %}"></button>
             </div>
 
             <div id="file-discussions" class="right-side-panel"></div>
