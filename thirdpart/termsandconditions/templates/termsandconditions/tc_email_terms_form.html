@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block headtitle %}Email Terms and Conditions{% endblock %}
+
+{% block content %}
+    <section title="termsandconditions" data-role="content">
+        <h1>Email {{ form.initial.terms.name|safe }}</h1>
+        <form action="{% url 'tc_email_page' %}" method="post" id="tc-email-form"  data-ajax="false">
+            {% csrf_token %}
+            <label for="id_email_address">Email To:</label>{{ form.email_address }}
+            {{ form.terms }}
+            <input type="hidden" id="id_email_subject" name="email_subject" value="You Requested: {{ form.initial.terms }}">
+            <p><input type="submit" value="Send" data-role="button"></p>
+        </form>
+        </section>
+{% endblock %}
