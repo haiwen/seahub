@@ -20,6 +20,7 @@
  * common class ..........common class
  *
  * Widget
+ * (ui widgets)
  * (...)
  * discussions/comments
  * custom select2
@@ -160,6 +161,8 @@
 .sf2-icon-move:before { content: "\e029"; }
 .sf2-icon-reply:before { content: "\e02a"; }
 .sf2-icon-invite:before { content: "\e02b"; }
+.sf2-icon-lock:before { content: "\e02c"; }
+.sf2-icon-unlock:before { content: "\e02d"; }
 
 /******* tags **********/
 body,
@@ -595,6 +598,30 @@ textarea:-moz-placeholder {/* for FF */
     display:inline-block;
     padding:0 5px;
     color:#818a91;
+}
+/**** btn-group ****/
+.sf-btn-group {
+}
+.sf-btn-group-btn {
+    float:left;
+    padding: 5px 10px;
+    margin:0;
+    background:#fff;
+    border-radius:0;
+    border-right-width:0;
+}
+.sf-btn-group-btn-first {
+    border-top-left-radius:2px;
+    border-bottom-left-radius:2px;
+}
+.sf-btn-group-btn-last {
+    border-right-width:1px;
+    border-top-right-radius:2px;
+    border-bottom-right-radius:2px;
+}
+.sf2-icon-edit.sf-btn-group-btn {
+    font-size:20px;
+    opacity:1;
 }
 /****paginator****/
 #paginator {
@@ -2012,7 +2039,6 @@ button.sf-dropdown-toggle:focus {
     text-align:right;
     margin-bottom:4px;
 }
-#file-op button,
 .repo-op .op-btn {
     *margin-left:5px;/* for ie 7*/
 }
@@ -2495,10 +2521,6 @@ button.sf-dropdown-toggle:focus {
     border-radius:3px;
     -moz-border-radius:3px;
     margin-top:12px;
-}
-#file-op .op-btn,
-#file-op .sf-btn-link {
-    padding:2px 8px;
 }
 #file-enc-cont {
     width:950px;
