@@ -49,6 +49,7 @@ from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
 from seahub.utils.user_permissions import (get_basic_user_roles,
                                            get_user_role)
+from seahub.views import get_system_default_repo_id
 from seahub.views.ajax import (get_related_users_by_org_repo,
                                get_related_users_by_repo)
 from seahub.forms import SetUserQuotaForm, AddUserForm, BatchAddUserForm, \
@@ -1487,7 +1488,7 @@ def sys_repo_transfer(request):
 
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = reverse(sys_repo_admin)
+        next = reverse('sys_repo_admin')
 
     if not (repo_id and new_owner):
         messages.error(request, _(u'Failed to transfer, invalid arguments.'))
@@ -1572,7 +1573,7 @@ def sys_repo_delete(request, repo_id):
     """
     next = request.META.get('HTTP_REFERER', None)
     if not next:
-        next = reverse(sys_repo_admin)
+        next = reverse('sys_repo_admin')
 
     if get_system_default_repo_id() == repo_id:
         messages.error(request, _('System library can not be deleted.'))
