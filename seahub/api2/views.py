@@ -1828,11 +1828,10 @@ class DevicesView(APIView):
         devices = TokenV2.objects.get_user_devices(username)
 
         for device in devices:
+            device['last_accessed'] = datetime_to_isoformat_timestr(device['last_accessed'])
             device['is_desktop_client'] = False
             if device['platform'] in DESKTOP_PLATFORMS:
                 device['is_desktop_client'] = True
-
-        device['last_accessed'] = datetime_to_isoformat_timestr(device['last_accessed'])
 
         return Response(devices)
 
