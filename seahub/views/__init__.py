@@ -43,7 +43,7 @@ from seahub.utils import render_permission_error, render_error, \
     get_user_repos, EMPTY_SHA1, gen_file_get_url, \
     new_merge_with_no_conflict, get_max_upload_file_size, \
     is_pro_version, FILE_AUDIT_ENABLED, \
-    is_org_repo_creation_allowed
+    is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.star import get_dir_starred_files
 from seahub.utils.timeutils import utc_to_local
 from seahub.views.modules import MOD_PERSONAL_WIKI, enable_mod_for_user, \
@@ -1123,10 +1123,18 @@ def repo_download_dir(request, repo_id):
         if total_size > MAX_DOWNLOAD_DIR_SIZE:
             return render_error(request, _(u'Unable to download directory "%s": size is too large.') % dirname)
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        dir_id,
-                                                        'download-dir',
-                                                        request.user.username)
+        is_windows = 0
+        if is_windows_operating_system(request):
+            is_windows = 1
+
+        fake_obj_id = {
+            'obj_id': dir_id,
+            'dir_name': dirname,
+            'is_windows': is_windows
+        }
+
+        token = seafile_api.get_fileserver_access_token(
+                repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
     else:
         return render_error(request, _(u'Unable to download "%s"') % dirname )

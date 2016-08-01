@@ -65,7 +65,8 @@ from seahub.utils import gen_file_get_url, gen_token, gen_file_upload_url, \
     gen_block_get_url, get_file_type_and_ext, HAS_FILE_SEARCH, \
     gen_file_share_link, gen_dir_share_link, is_org_context, gen_shared_link, \
     get_org_user_events, calculate_repos_last_modify, send_perm_audit_msg, \
-    gen_shared_upload_link, convert_cmmt_desc_link, is_org_repo_creation_allowed
+    gen_shared_upload_link, convert_cmmt_desc_link, \
+    is_org_repo_creation_allowed, is_windows_operating_system
 from seahub.utils.devices import do_unlink_device
 from seahub.utils.repo import get_sub_repo_abbrev_origin_path
 from seahub.utils.star import star_file, unstar_file
@@ -1608,7 +1609,8 @@ class OpMoveView(APIView):
             try:
                 seafile_api.move_file(repo_id, parent_dir_utf8, file_name,
                                       dst_repo, dst_dir, new_filename,
-                                      username, 0, synchronous=1)
+                                      replace=False, username=username,
+                                      need_progress=0, synchronous=1)
             except SearpcError as e:
                 logger.error(e)
                 return api_error(HTTP_520_OPERATION_FAILED,
@@ -1999,7 +2001,8 @@ class FileView(APIView):
                 seafile_api.move_file(src_repo_id, src_dir_utf8,
                                       filename_utf8, dst_repo_id,
                                       dst_dir_utf8, new_filename_utf8,
-                                      username, 0, synchronous=1)
+                                      replace=False, username=username,
+                                      need_progress=0, synchronous=1)
             except SearpcError, e:
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
                                  "SearpcError:" + e.msg)
@@ -2666,10 +2669,18 @@ class DirDownloadView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Unable to download directory "%s": size is too large.' % dirname)
 
-        token = seafile_api.get_fileserver_access_token(repo_id,
-                                                        dir_id,
-                                                        'download-dir',
-                                                        request.user.username)
+        is_windows = 0
+        if is_windows_operating_system(request):
+            is_windows = 1
+
+        fake_obj_id = {
+            'obj_id': dir_id,
+            'dir_name': dirname,
+            'is_windows': is_windows
+        }
+
+        token = seafile_api.get_fileserver_access_token(
+                repo_id, json.dumps(fake_obj_id), 'download-dir', request.user.username)
 
         redirect_url = gen_file_get_url(token, dirname)
         return HttpResponse(json.dumps(redirect_url), status=200,
