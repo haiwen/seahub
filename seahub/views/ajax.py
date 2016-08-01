@@ -614,7 +614,7 @@ def mv_file(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     try:
         res = seafile_api.move_file(src_repo_id, src_path, obj_name,
                                     dst_repo_id, dst_path, new_obj_name,
-                                    username, need_progress=1)
+                                    replace=False, username=username, need_progress=1)
     except SearpcError as e:
         logger.error(e)
         res = None
@@ -692,8 +692,9 @@ def mv_dir(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_name):
     try:
         res = seafile_api.move_file(src_repo_id, src_path, obj_name,
                                     dst_repo_id, dst_path, new_obj_name,
-                                    username, need_progress=1)
-    except SearpcError, e:
+                                    replace=False, username=username, need_progress=1)
+    except SearpcError as e:
+        logger.error(e)
         res = None
 
     # res can be None or an object
@@ -853,7 +854,8 @@ def mv_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path,
         new_obj_name = check_filename_with_rename(dst_repo_id, dst_path, obj_name)
         try:
             res = seafile_api.move_file(src_repo_id, src_path, obj_name,
-                                  dst_repo_id, dst_path, new_obj_name, username, need_progress=1)
+                    dst_repo_id, dst_path, new_obj_name,
+                    replace=False, username=username, need_progress=1)
         except SearpcError as e:
             logger.error(e)
             res = None
