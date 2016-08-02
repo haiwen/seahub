@@ -828,7 +828,7 @@ define([
                         dataType: 'json',
                         cache: false,
                         success: function(data) {
-                            var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(2) + '%';
+                            var progress = data.total == 0 ? '100%' : (data.zipped/data.total*100).toFixed(0) + '%';
                             $tip.html(packagingTip + ' ' + progress);
                             if (data['total'] == data['zipped']) {
                                 setTimeout(function() { $.modal.close(); }, 500);
