@@ -84,4 +84,5 @@ def base(request):
         'constance_enabled': dj_settings.CONSTANCE_ENABLED,
         'FILE_SERVER_ROOT': file_server_root,
         'enable_guest_invitation': ENABLE_GUEST_INVITATION,
+        'enable_terms_and_conditions': dj_settings.ENABLE_TERMS_AND_CONDITIONS,
         }

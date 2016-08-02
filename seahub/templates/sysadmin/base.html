@@ -67,9 +67,11 @@
                 <a href="{{ SITE_ROOT }}sys/invitationadmin/"><span class="sf2-icon-invite"></span>{% trans "Invitations" %}</a>
             </li>
             {% endif %}
+            {% if enable_terms_and_conditions %}
             <li class="tab {% block cur_tc %}{% endblock %}">
                 <a href="{{ SITE_ROOT }}sys/termsadmin/"><span class="sf2-icon-wiki"></span>{% trans "Terms and Conditions" %}</a>
             </li>
+            {% endif %}
         </ul>
         {% endblock %}
     </div>

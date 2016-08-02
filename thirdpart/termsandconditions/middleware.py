@@ -19,6 +19,8 @@ class TermsAndConditionsRedirectMiddleware(object):
 
     def process_request(self, request):
         """Process each request to app to ensure terms have been accepted"""
+        if not settings.ENABLE_TERMS_AND_CONDITIONS:
+            return None
 
         LOGGER.debug('termsandconditions.middleware')
 
