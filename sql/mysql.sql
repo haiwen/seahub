@@ -285,11 +285,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (10,'api2','token'),(11,'api2','tokenv2'),(12,'avatar','avatar'),(13,'avatar','groupavatar'),(15,'base','clientlogintoken'),(20,'base','commandslastcheck'),(19,'base','devicetoken'),(17,'base','filecomment'),(18,'base','filediscuss'),(14,'base','groupenabledmodule'),(21,'base','innerpubmsg'),(22,'base','innerpubmsgreply'),(16,'base','userenabledmodule'),(23,'base','userlastlogin'),(24,'base','userstarredfiles'),(4,'captcha','captchastore'),(25,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(32,'group','groupmessage'),(33,'group','messageattachment'),(34,'group','messagereply'),(31,'group','publicgroup'),(27,'institutions','institution'),(26,'institutions','institutionadmin'),(28,'invitations','invitation'),(37,'message','usermessage'),(35,'message','usermsgattachment'),(36,'message','usermsglastcheck'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(49,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(46,'share','anonymousshare'),(45,'share','fileshare'),(47,'share','orgfileshare'),(43,'share','privatefiledirshare'),(44,'share','uploadlinkshare'),(48,'sysadmin_extra','userloginlog'),(50,'two_factor','phonedevice'),(53,'two_factor','staticdevice'),(51,'two_factor','statictoken'),(52,'two_factor','totpdevice'),(30,'wiki','groupwiki'),(29,'wiki','personalwiki');
+INSERT INTO `django_content_type` VALUES (12,'api2','token'),(13,'api2','tokenv2'),(14,'avatar','avatar'),(15,'avatar','groupavatar'),(17,'base','clientlogintoken'),(22,'base','commandslastcheck'),(21,'base','devicetoken'),(19,'base','filecomment'),(20,'base','filediscuss'),(16,'base','groupenabledmodule'),(23,'base','innerpubmsg'),(24,'base','innerpubmsgreply'),(18,'base','userenabledmodule'),(25,'base','userlastlogin'),(26,'base','userstarredfiles'),(4,'captcha','captchastore'),(27,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(34,'group','groupmessage'),(35,'group','messageattachment'),(36,'group','messagereply'),(33,'group','publicgroup'),(29,'institutions','institution'),(28,'institutions','institutionadmin'),(30,'invitations','invitation'),(39,'message','usermessage'),(37,'message','usermsgattachment'),(38,'message','usermsglastcheck'),(40,'notifications','notification'),(41,'notifications','usernotification'),(42,'options','useroptions'),(51,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(44,'profile','detailedprofile'),(43,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(48,'share','anonymousshare'),(47,'share','fileshare'),(49,'share','orgfileshare'),(45,'share','privatefiledirshare'),(46,'share','uploadlinkshare'),(50,'sysadmin_extra','userloginlog'),(10,'termsandconditions','termsandconditions'),(11,'termsandconditions','usertermsandconditions'),(52,'two_factor','phonedevice'),(55,'two_factor','staticdevice'),(53,'two_factor','statictoken'),(54,'two_factor','totpdevice'),(32,'wiki','groupwiki'),(31,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -299,11 +299,11 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-08-02 11:51:04.446846'),(2,'contenttypes','0001_initial','2016-08-02 11:51:04.495772'),(3,'contenttypes','0002_remove_content_type_name','2016-08-02 11:51:04.567653'),(4,'database','0001_initial','2016-08-02 11:51:04.594148'),(5,'institutions','0001_initial','2016-08-02 11:51:04.668845'),(6,'invitations','0001_initial','2016-08-02 11:51:04.706963'),(7,'invitations','0002_invitation_invite_type','2016-08-02 11:51:04.744318'),(8,'invitations','0003_auto_20160510_1703','2016-08-02 11:51:04.798795'),(9,'invitations','0004_auto_20160629_1610','2016-08-02 11:51:04.873490'),(10,'invitations','0005_auto_20160629_1614','2016-08-02 11:51:04.893303'),(11,'post_office','0001_initial','2016-08-02 11:51:05.226968'),(12,'post_office','0002_add_i18n_and_backend_alias','2016-08-02 11:51:05.776662'),(13,'sessions','0001_initial','2016-08-02 11:51:05.963249'),(14,'two_factor','0001_initial','2016-08-02 11:51:06.099467');
+INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-08-02 14:48:00.596152'),(2,'contenttypes','0001_initial','2016-08-02 14:48:00.797303'),(3,'contenttypes','0002_remove_content_type_name','2016-08-02 14:48:00.879450'),(4,'database','0001_initial','2016-08-02 14:48:00.902084'),(5,'institutions','0001_initial','2016-08-02 14:48:01.021340'),(6,'invitations','0001_initial','2016-08-02 14:48:01.068479'),(7,'invitations','0002_invitation_invite_type','2016-08-02 14:48:01.105755'),(8,'invitations','0003_auto_20160510_1703','2016-08-02 14:48:01.163442'),(9,'invitations','0004_auto_20160629_1610','2016-08-02 14:48:01.265499'),(10,'invitations','0005_auto_20160629_1614','2016-08-02 14:48:01.290426'),(11,'post_office','0001_initial','2016-08-02 14:48:01.727406'),(12,'post_office','0002_add_i18n_and_backend_alias','2016-08-02 14:48:02.927550'),(13,'sessions','0001_initial','2016-08-02 14:48:02.976884'),(14,'termsandconditions','0001_initial','2016-08-02 14:48:03.107817'),(15,'two_factor','0001_initial','2016-08-02 14:48:03.249115');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -781,6 +781,41 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
 
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `termsandconditions_termsandconditions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `slug` varchar(50) NOT NULL,
+  `name` longtext NOT NULL,
+  `version_number` decimal(6,2) NOT NULL,
+  `text` longtext,
+  `info` longtext,
+  `date_active` datetime DEFAULT NULL,
+  `date_created` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `termsandconditions_termsandconditions_2dbcba41` (`slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `termsandconditions_termsandconditions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `termsandconditions_termsandconditions` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `termsandconditions_usertermsandconditions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `ip_address` char(39) DEFAULT NULL,
+  `date_accepted` datetime NOT NULL,
+  `terms_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `termsandconditions_usertermsandcon_username_f4ab54cafa29322_uniq` (`username`,`terms_id`),
+  KEY `e4da106203f3f13ff96409b55de6f515` (`terms_id`),
+  CONSTRAINT `e4da106203f3f13ff96409b55de6f515` FOREIGN KEY (`terms_id`) REFERENCES `termsandconditions_termsandconditions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `termsandconditions_usertermsandconditions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `termsandconditions_usertermsandconditions` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `two_factor_phonedevice` (
