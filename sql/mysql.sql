@@ -9,8 +9,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
-
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `api2_token` (
@@ -36,6 +34,8 @@ CREATE TABLE `api2_tokenv2` (
   `client_version` varchar(16) NOT NULL,
   `last_accessed` datetime NOT NULL,
   `last_login_ip` char(39) DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `wiped_at` datetime DEFAULT NULL,
   PRIMARY KEY (`key`),
   UNIQUE KEY `user` (`user`,`platform`,`device_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -111,6 +111,27 @@ CREATE TABLE `base_devicetoken` (
 
 /*!40000 ALTER TABLE `base_devicetoken` DISABLE KEYS */;
 /*!40000 ALTER TABLE `base_devicetoken` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `base_filecomment` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `repo_id` varchar(36) NOT NULL,
+  `parent_path` longtext NOT NULL,
+  `repo_id_parent_path_md5` varchar(100) NOT NULL,
+  `item_name` longtext NOT NULL,
+  `author` varchar(255) NOT NULL,
+  `comment` longtext NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `base_filecomment_9a8c79bf` (`repo_id`),
+  KEY `base_filecomment_c5bf47d4` (`repo_id_parent_path_md5`),
+  KEY `base_filecomment_02bd92fa` (`author`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `base_filecomment` DISABLE KEYS */;
+/*!40000 ALTER TABLE `base_filecomment` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `base_filediscuss` (
@@ -264,11 +285,11 @@ CREATE TABLE `django_content_type` (
   `model` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `django_content_type_app_label_45f3b1d93ec8c61c_uniq` (`app_label`,`model`)
-) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_content_type` DISABLE KEYS */;
-INSERT INTO `django_content_type` VALUES (10,'api2','token'),(11,'api2','tokenv2'),(12,'avatar','avatar'),(13,'avatar','groupavatar'),(15,'base','clientlogintoken'),(19,'base','commandslastcheck'),(18,'base','devicetoken'),(17,'base','filediscuss'),(14,'base','groupenabledmodule'),(20,'base','innerpubmsg'),(21,'base','innerpubmsgreply'),(16,'base','userenabledmodule'),(22,'base','userlastlogin'),(23,'base','userstarredfiles'),(4,'captcha','captchastore'),(24,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(30,'group','groupmessage'),(31,'group','messageattachment'),(32,'group','messagereply'),(29,'group','publicgroup'),(26,'institutions','institution'),(25,'institutions','institutionadmin'),(35,'message','usermessage'),(33,'message','usermsgattachment'),(34,'message','usermsglastcheck'),(36,'notifications','notification'),(37,'notifications','usernotification'),(38,'options','useroptions'),(47,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(40,'profile','detailedprofile'),(39,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(44,'share','anonymousshare'),(43,'share','fileshare'),(45,'share','orgfileshare'),(41,'share','privatefiledirshare'),(42,'share','uploadlinkshare'),(46,'sysadmin_extra','userloginlog'),(28,'wiki','groupwiki'),(27,'wiki','personalwiki');
+INSERT INTO `django_content_type` VALUES (10,'api2','token'),(11,'api2','tokenv2'),(12,'avatar','avatar'),(13,'avatar','groupavatar'),(15,'base','clientlogintoken'),(20,'base','commandslastcheck'),(19,'base','devicetoken'),(17,'base','filecomment'),(18,'base','filediscuss'),(14,'base','groupenabledmodule'),(21,'base','innerpubmsg'),(22,'base','innerpubmsgreply'),(16,'base','userenabledmodule'),(23,'base','userlastlogin'),(24,'base','userstarredfiles'),(4,'captcha','captchastore'),(25,'contacts','contact'),(1,'contenttypes','contenttype'),(5,'database','constance'),(32,'group','groupmessage'),(33,'group','messageattachment'),(34,'group','messagereply'),(31,'group','publicgroup'),(27,'institutions','institution'),(26,'institutions','institutionadmin'),(28,'invitations','invitation'),(37,'message','usermessage'),(35,'message','usermsgattachment'),(36,'message','usermsglastcheck'),(38,'notifications','notification'),(39,'notifications','usernotification'),(40,'options','useroptions'),(49,'organizations','orgmemberquota'),(6,'post_office','attachment'),(8,'post_office','email'),(7,'post_office','emailtemplate'),(9,'post_office','log'),(42,'profile','detailedprofile'),(41,'profile','profile'),(3,'registration','registrationprofile'),(2,'sessions','session'),(46,'share','anonymousshare'),(45,'share','fileshare'),(47,'share','orgfileshare'),(43,'share','privatefiledirshare'),(44,'share','uploadlinkshare'),(48,'sysadmin_extra','userloginlog'),(50,'two_factor','phonedevice'),(53,'two_factor','staticdevice'),(51,'two_factor','statictoken'),(52,'two_factor','totpdevice'),(30,'wiki','groupwiki'),(29,'wiki','personalwiki');
 /*!40000 ALTER TABLE `django_content_type` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -278,11 +299,11 @@ CREATE TABLE `django_migrations` (
   `name` varchar(255) NOT NULL,
   `applied` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 /*!40000 ALTER TABLE `django_migrations` DISABLE KEYS */;
-INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-06-30 10:21:46.470795'),(2,'contenttypes','0001_initial','2016-06-30 10:21:46.526404'),(3,'contenttypes','0002_remove_content_type_name','2016-06-30 10:21:46.742298'),(4,'database','0001_initial','2016-06-30 10:21:46.766493'),(5,'institutions','0001_initial','2016-06-30 10:21:46.839693'),(6,'post_office','0001_initial','2016-06-30 10:21:47.467643'),(7,'post_office','0002_add_i18n_and_backend_alias','2016-06-30 10:21:47.915981'),(8,'sessions','0001_initial','2016-06-30 10:21:48.100284');
+INSERT INTO `django_migrations` VALUES (1,'captcha','0001_initial','2016-08-02 11:51:04.446846'),(2,'contenttypes','0001_initial','2016-08-02 11:51:04.495772'),(3,'contenttypes','0002_remove_content_type_name','2016-08-02 11:51:04.567653'),(4,'database','0001_initial','2016-08-02 11:51:04.594148'),(5,'institutions','0001_initial','2016-08-02 11:51:04.668845'),(6,'invitations','0001_initial','2016-08-02 11:51:04.706963'),(7,'invitations','0002_invitation_invite_type','2016-08-02 11:51:04.744318'),(8,'invitations','0003_auto_20160510_1703','2016-08-02 11:51:04.798795'),(9,'invitations','0004_auto_20160629_1610','2016-08-02 11:51:04.873490'),(10,'invitations','0005_auto_20160629_1614','2016-08-02 11:51:04.893303'),(11,'post_office','0001_initial','2016-08-02 11:51:05.226968'),(12,'post_office','0002_add_i18n_and_backend_alias','2016-08-02 11:51:05.776662'),(13,'sessions','0001_initial','2016-08-02 11:51:05.963249'),(14,'two_factor','0001_initial','2016-08-02 11:51:06.099467');
 /*!40000 ALTER TABLE `django_migrations` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -383,6 +404,25 @@ CREATE TABLE `institutions_institutionadmin` (
 
 /*!40000 ALTER TABLE `institutions_institutionadmin` DISABLE KEYS */;
 /*!40000 ALTER TABLE `institutions_institutionadmin` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invitations_invitation` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(40) NOT NULL,
+  `inviter` varchar(255) NOT NULL,
+  `accepter` varchar(255) NOT NULL,
+  `invite_time` datetime NOT NULL,
+  `accept_time` datetime DEFAULT NULL,
+  `invite_type` varchar(20) NOT NULL,
+  `expire_time` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `invitations_invitation_d5dd16f8` (`inviter`),
+  KEY `invitations_invitation_token_1961fbb98c05e5fd_uniq` (`token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `invitations_invitation` DISABLE KEYS */;
+/*!40000 ALTER TABLE `invitations_invitation` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `message_usermessage` (
@@ -741,6 +781,73 @@ CREATE TABLE `sysadmin_extra_userloginlog` (
 
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` DISABLE KEYS */;
 /*!40000 ALTER TABLE `sysadmin_extra_userloginlog` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `two_factor_phonedevice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` varchar(255) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `confirmed` tinyint(1) NOT NULL,
+  `number` varchar(40) NOT NULL,
+  `key` varchar(40) NOT NULL,
+  `method` varchar(4) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user` (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `two_factor_phonedevice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `two_factor_phonedevice` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `two_factor_staticdevice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` varchar(255) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `confirmed` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user` (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `two_factor_staticdevice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `two_factor_staticdevice` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `two_factor_statictoken` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(16) NOT NULL,
+  `device_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `two_fac_device_id_55a7b345293a7c6c_fk_two_factor_staticdevice_id` (`device_id`),
+  KEY `two_factor_statictoken_94a08da1` (`token`),
+  CONSTRAINT `two_fac_device_id_55a7b345293a7c6c_fk_two_factor_staticdevice_id` FOREIGN KEY (`device_id`) REFERENCES `two_factor_staticdevice` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `two_factor_statictoken` DISABLE KEYS */;
+/*!40000 ALTER TABLE `two_factor_statictoken` ENABLE KEYS */;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `two_factor_totpdevice` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user` varchar(255) NOT NULL,
+  `name` varchar(64) NOT NULL,
+  `confirmed` tinyint(1) NOT NULL,
+  `key` varchar(80) NOT NULL,
+  `step` smallint(5) unsigned NOT NULL,
+  `t0` bigint(20) NOT NULL,
+  `digits` smallint(5) unsigned NOT NULL,
+  `tolerance` smallint(5) unsigned NOT NULL,
+  `drift` smallint(6) NOT NULL,
+  `last_t` bigint(20) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `user` (`user`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+/*!40000 ALTER TABLE `two_factor_totpdevice` DISABLE KEYS */;
+/*!40000 ALTER TABLE `two_factor_totpdevice` ENABLE KEYS */;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `wiki_groupwiki` (
