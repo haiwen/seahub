@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-08-02 16:07+0800\n"
+"POT-Creation-Date: 2016-08-03 11:50+0800\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Email %s invalid."
 msgstr ""
 
-#: seahub/api2/endpoints/invitations.py:56
+#: seahub/api2/endpoints/invitations.py:56 seahub/base/accounts.py:575
 #, python-format
 msgid "User %s already exists."
 msgstr ""
@@ -383,10 +383,6 @@ msgstr ""
 
 #: seahub/base/accounts.py:569
 msgid "Enter a valid email address."
-msgstr ""
-
-#: seahub/base/accounts.py:575
-msgid "A user with this email already"
 msgstr ""
 
 #: seahub/base/accounts.py:579
@@ -738,8 +734,8 @@ msgstr ""
 #: seahub/message/templates/message/user_msg_list.html:52
 #: seahub/message/templates/message/user_msg_list.html:54
 #: seahub/notifications/templates/notifications/notification_list.html:33
-#: seahub/profile/templates/profile/set_profile.html:144
-#: seahub/profile/templates/profile/set_profile.html:146
+#: seahub/profile/templates/profile/set_profile.html:137
+#: seahub/profile/templates/profile/set_profile.html:139
 #: seahub/templates/js/sysadmin-templates.html:373
 #: seahub/templates/js/sysadmin-templates.html:432
 #: seahub/templates/js/sysadmin-templates.html:497
@@ -2650,8 +2646,8 @@ msgid "Two-Factor Authentication"
 msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:20
-#: seahub/profile/templates/profile/set_profile.html:142
-#: seahub/profile/templates/profile/set_profile.html:165
+#: seahub/profile/templates/profile/set_profile.html:135
+#: seahub/profile/templates/profile/set_profile.html:158
 msgid "Delete Account"
 msgstr ""
 
@@ -2737,43 +2733,36 @@ msgstr ""
 
 #: seahub/profile/templates/profile/set_profile.html:118
 msgid ""
-"If you don't have any device with you, you can access\n"
-"        your account using backup codes."
+"If you don't have any device with you, you can access your account using "
+"backup codes."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:120
+#: seahub/profile/templates/profile/set_profile.html:119
 #, python-format
-msgid ""
-"\n"
-"        You have only one backup code remaining.\n"
-"      "
-msgid_plural ""
-"\n"
-"        You have %(counter)s backup codes remaining.\n"
-"      "
+msgid "You have only one backup code remaining."
+msgid_plural "You have %(counter)s backup codes remaining."
 msgstr[0] ""
 msgstr[1] ""
 
-#: seahub/profile/templates/profile/set_profile.html:127
+#: seahub/profile/templates/profile/set_profile.html:122
 msgid "Show Codes"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:131
+#: seahub/profile/templates/profile/set_profile.html:126
 msgid ""
-"Two-factor authentication is not enabled for your\n"
-"      account. Enable two-factor authentication for enhanced account\n"
-"      security."
+"Two-factor authentication is not enabled for your account. Enable two-factor "
+"authentication for enhanced account security."
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:135
+#: seahub/profile/templates/profile/set_profile.html:128
 msgid "Enable Two-Factor Authentication"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:143
+#: seahub/profile/templates/profile/set_profile.html:136
 msgid "This operation will not be reverted. Please think twice!"
 msgstr ""
 
-#: seahub/profile/templates/profile/set_profile.html:166
+#: seahub/profile/templates/profile/set_profile.html:159
 msgid "Really want to delete your account?"
 msgstr ""
 
@@ -6168,10 +6157,6 @@ msgstr ""
 
 #: seahub/views/ajax.py:1527
 msgid "No conflict in the merge."
-msgstr ""
-
-#: seahub/views/ajax.py:1588
-msgid "Faied to change password, you are not owner."
 msgstr ""
 
 #: seahub/views/ajax.py:1694 seahub/views/ajax.py:1836

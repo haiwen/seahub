@@ -1585,8 +1585,8 @@ def ajax_repo_change_passwd(request, repo_id):
     is_owner = True if username == repo_owner else False
     if not is_owner:
         return HttpResponse(json.dumps({
-                    'error': _('Faied to change password, you are not owner.')}),
-                    status=400, content_type=content_type)
+                    'error': 'Permission denied'}),
+                    status=403, content_type=content_type)
 
     old_passwd = request.POST.get('old_passwd', '')
     new_passwd = request.POST.get('new_passwd', '')

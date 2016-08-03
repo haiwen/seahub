@@ -572,7 +572,7 @@ class RegistrationForm(forms.Form):
         if not emailuser:
             return self.cleaned_data['email']
         else:
-            raise forms.ValidationError(_("A user with this email already"))
+            raise forms.ValidationError(_("User %s already exists.") % email)
 
     def clean_userid(self):
         if self.cleaned_data['userid'] and len(self.cleaned_data['userid']) != 40:
