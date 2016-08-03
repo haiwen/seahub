@@ -20,6 +20,7 @@ from seahub.views.sysadmin import *
 from seahub.views.ajax import *
 from seahub.api2.endpoints.groups import Groups, Group
 from seahub.api2.endpoints.group_members import GroupMembers, GroupMembersBulk, GroupMember
+from seahub.api2.endpoints.search_group import SearchGroup
 from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
 from seahub.api2.endpoints.shared_folders import SharedFolders
 from seahub.api2.endpoints.shared_repos import SharedRepos, SharedRepo
@@ -46,6 +47,8 @@ from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, Adm
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
 from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
+from seahub.api2.endpoints.admin.library_user_shares import AdminLibraryUserShares, AdminLibraryUserShare
+from seahub.api2.endpoints.admin.library_group_shares import AdminLibraryGroupShares, AdminLibraryGroupShare
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -186,6 +189,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/$', GroupMembers.as_view(), name='api-v2.1-group-members'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/bulk/$', GroupMembersBulk.as_view(), name='api-v2.1-group-members-bulk'),
     url(r'^api/v2.1/groups/(?P<group_id>\d+)/members/(?P<email>[^/]+)/$', GroupMember.as_view(), name='api-v2.1-group-member'),
+    url(r'^api/v2.1/search-group/$', SearchGroup.as_view(), name='api-v2.1-search-group'),
     url(r'^api/v2.1/shared-folders/$', SharedFolders.as_view(), name='api-v2.1-shared-folders'),
     url(r'^api/v2.1/shared-repos/$', SharedRepos.as_view(), name='api-v2.1-shared-repos'),
     url(r'^api/v2.1/shared-repos/(?P<repo_id>[-0-9a-f]{36})/$', SharedRepo.as_view(), name='api-v2.1-shared-repo'),
@@ -205,7 +209,6 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
-
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
@@ -215,6 +218,10 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/system-library/$', AdminSystemLibrary.as_view(), name='api-v2.1-admin-system-library'),
     url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
     url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/user-shares/$', AdminLibraryUserShares.as_view(), name='api-v2.1-admin-library-user-shares'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/user-share/$', AdminLibraryUserShare.as_view(), name='api-v2.1-admin-library-user-share'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/group-shares/$', AdminLibraryGroupShares.as_view(), name='api-v2.1-admin-library-group-shares'),
+    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', AdminLibraryGroupShare.as_view(), name='api-v2.1-admin-library-group-share'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
