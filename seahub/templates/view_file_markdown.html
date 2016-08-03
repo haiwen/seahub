@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load url from future %}
 
+{% block extra_style %}{{block.super}}
+<link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_file_view.css" />
+{% endblock %}
+
 {% block update_detail %}
 {% if last_commit_id %}
   <span class="vam">{% trans "updated this file"%}, <a class="file-diff" href="{% url 'text_diff' repo.id %}?p={{path|urlencode}}&commit={{last_commit_id}}&file_enc={{file_enc}}">{% trans "Detail"%}</a>.</span>
