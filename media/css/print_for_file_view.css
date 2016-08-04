@@ -10,6 +10,7 @@ blockquote {
     border-color:#ccc;
 }
 
+/* file view */
 #view-hd,
 #view-path-op,
 #file-op,
@@ -23,7 +24,17 @@ blockquote {
     border:none;
     margin:0;
 }
+
+/* markdown */
 #md-view {
     border:none;
     min-height:0;
+}
+
+/* pdf, doc */
+.page-container {
+    border:none;
+}
+.pdf2html-toolbar {
+    display:none;
 }

@@ -5,6 +5,7 @@
 {% block extra_style %}{{ block.super }}
 {% if not err and not use_pdfjs %}
     {% include 'snippets/office_convert_style.html' %}
+    <link rel="stylesheet" type="text/css" media="print" href="{{ MEDIA_URL }}css/print_for_file_view.css" />
 {% endif %}
 {% endblock %}
 
