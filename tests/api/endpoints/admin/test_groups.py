@@ -37,7 +37,7 @@ class GroupTest(BaseTestCase):
         self.login_as(self.admin)
 
         url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&new_owner=%s' % (self.user_name, self.admin_name)
+        data = 'new_owner=%s' % self.admin_name
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(200, resp.status_code)
@@ -49,7 +49,7 @@ class GroupTest(BaseTestCase):
         self.login_as(self.user)
 
         url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&new_owner=%s' % (self.user_name, self.admin_name)
+        data = 'new_owner=%s' % self.admin_name
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
 
         self.assertEqual(403, resp.status_code)
@@ -58,33 +58,15 @@ class GroupTest(BaseTestCase):
 
         self.login_as(self.admin)
 
-        # invalid old owner
-        url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'invalid_old_owner=%s&new_owner=%s' % (self.user_name, self.admin_name)
-        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-
         # invalid new owner
         url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&invalid_new_owner=%s' % (self.user_name, self.admin_name)
-        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-
-        # new_owner is the same as old_owner
-        url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&new_owner=%s' % (self.user_name, self.user_name)
-        resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
-        self.assertEqual(400, resp.status_code)
-
-        # old_owner is not group owner.
-        url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&new_owner=%s' % (self.admin_name, self.admin_name)
+        data = 'invalid_new_owner=%s' % self.admin_name
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(400, resp.status_code)
 
         # new owner not exist
         url = reverse('api-v2.1-admin-group', args=[self.group_id])
-        data = 'old_owner=%s&new_owner=%s' % (self.user_name, 'invalid@user.com')
+        data = 'new_owner=invalid@email.com'
         resp = self.client.put(url, data, 'application/x-www-form-urlencoded')
         self.assertEqual(404, resp.status_code)
 

@@ -1,12 +1,12 @@
 import logging
 
-from django.utils.translation import ugettext as _
-
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+
+from django.utils.translation import ugettext as _
 
 from seaserv import seafile_api, ccnet_api
 from pysearpc import SearpcError
@@ -14,8 +14,7 @@ from pysearpc import SearpcError
 from seahub.base.accounts import User
 from seahub.utils import is_valid_username
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
-from seahub.group.utils import is_group_member, is_group_admin, \
-    is_group_owner
+from seahub.group.utils import is_group_member, is_group_admin
 
 from seahub.api2.utils import api_error
 from seahub.api2.throttling import UserRateThrottle
@@ -103,11 +102,6 @@ class AdminGroup(APIView):
             error_msg = 'new_owner %s invalid.' % new_owner
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
-        old_owner = request.data.get('old_owner', None)
-        if not old_owner or not is_valid_username(old_owner):
-            error_msg = 'old_owner %s invalid.' % old_owner
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
         # recourse check
         group_id = int(group_id) # Checked by URL Conf
         group = ccnet_api.get_group(group_id)
@@ -123,16 +117,8 @@ class AdminGroup(APIView):
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
+        old_owner = group.creator_name
         if new_owner == old_owner:
-            error_msg = 'new_owner %s is the same as old_owner %s.' % \
-                    (new_owner, old_owner)
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if not is_group_owner(group_id, old_owner):
-            error_msg = _(u'User %s is not group owner.') % old_owner
-            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
-
-        if is_group_owner(group_id, new_owner):
             error_msg = _(u'User %s is already group owner.') % new_owner
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
