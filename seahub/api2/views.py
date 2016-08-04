@@ -219,14 +219,17 @@ class Accounts(APIView):
         # reading scope user list
         scope = request.GET.get('scope', None)
 
+        accounts_ldapimport = []
         accounts_ldap = []
         accounts_db = []
         if scope:
             scope = scope.upper()
             if scope == 'LDAP':
-                accounts_ldap = seaserv.get_emailusers('LDAP', start, limit)
+                accounts_ldap = ccnet_api.get_emailusers('LDAP', start, limit)
+            elif scope == 'LDAPIMPORT':
+                accounts_ldapimport = ccnet_api.get_emailusers('LDAPImport', start, limit)
             elif scope == 'DB':
-                accounts_db = seaserv.get_emailusers('DB', start, limit)
+                accounts_db = ccnet_api.get_emailusers('DB', start, limit)
             else:
                 return api_error(status.HTTP_400_BAD_REQUEST, "%s is not a valid scope value" % scope)
         else:
@@ -238,6 +241,10 @@ class Accounts(APIView):
         accounts_json = []
         for account in accounts_ldap:
             accounts_json.append({'email': account.email, 'source' : 'LDAP'})
+
+        for account in accounts_ldapimport:
+            accounts_json.append({'email': account.email, 'source' : 'LDAPImport'})
+
         for account in accounts_db:
             accounts_json.append({'email': account.email, 'source' : 'DB'})
 
