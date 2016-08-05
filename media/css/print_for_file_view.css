@@ -1,0 +1,40 @@
+/*
+ * This file is for print.
+ * */
+
+blockquote {
+    border:none; /* overrides bootstrap */
+}
+.article blockquote {
+    color:#555;
+    border-color:#ccc;
+}
+
+/* file view */
+#view-hd,
+#view-path-op,
+#file-op,
+#file-enc-cont,
+#side-toolbar {
+    display:none;
+}
+#file-view {
+    padding:0;
+    background:none;
+    border:none;
+    margin:0;
+}
+
+/* markdown */
+#md-view {
+    border:none;
+    min-height:0;
+}
+
+/* pdf, doc */
+.page-container {
+    border:none;
+}
+.pdf2html-toolbar {
+    display:none;
+}
