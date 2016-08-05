@@ -1236,8 +1236,7 @@ define([
             onWindowScroll: function () {
                 // 'more'
                 if (this.dir.dirent_more &&
-                        $(window).scrollTop() + $(window).height() > $(document).height() - $('#footer').outerHeight(true)) {
-
+                        $(window).scrollTop() + $(window).height() == $(document).height()) { // scroll to the bottom
                     this.render_dirents_slice(this.dir.last_start, this.dir.limit);
                     this.getImageThumbnail();
                 }
