@@ -1,20 +1,29 @@
 {% extends "base.html" %}
 {% load i18n %}
 
-{% block inst_admin %}<a href="{{ SITE_ROOT }}" title="{% trans "Exit" %}"><img src="{{ MEDIA_URL }}img/admin_out.png" alt="" /></a>{% endblock %}
+{% block admin_link %}
+<a href="{{ SITE_ROOT }}" title="{% trans "Exit admin panel" %}" class="item">{% trans "Exit admin panel" %}</a>
+{% endblock %}
 
-{% block left_panel %}
-<div class="side-tabnav">
-    <h3 class="hd">{{ request.user.institution.name }}</h3>
-    <ul class="side-tabnav-tabs">
-        <li class="tab {% block cur_users %}{% endblock %}">
-            <a href="{% url "institutions:useradmin" %}"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
-        </li>
-    </ul>
+{% block main_content %}
+<div class="row">
+    <div class="side-nav side-tabnav col-md-3">
+        {% block left_panel %}
+        <h3 class="hd">{{ request.user.institution.name }}</h3>
+        <ul class="side-tabnav-tabs">
+            <li class="tab {% block cur_users %}{% endblock %}">
+                <a href="{% url "institutions:useradmin" %}"><span class="sf2-icon-user"></span>{% trans "Users" %}</a>
+            </li>
+        </ul>
 
-    <form action="{% url 'institutions:useradmin_search' %}" method="get" class="side-search-form">
-        <input type="text" name="q" class="input" value="{{q}}" placeholder="{% trans "Search users..." %}" />
-    </form>
-    
+        <form action="{% url 'institutions:useradmin_search' %}" method="get" class="side-search-form">
+            <input type="text" name="q" class="input" value="{{q}}" placeholder="{% trans "Search users..." %}" />
+        </form>
+        {% endblock %}
+    </div>
+
+    <div id="right-panel" class="col-md-9 col-md-offset-3">
+        {% block right_panel %}{% endblock %}
+    </div>
 </div>
 {% endblock %}
