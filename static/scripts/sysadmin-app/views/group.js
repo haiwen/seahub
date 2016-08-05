@@ -93,8 +93,7 @@ define([
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     data: {
-                        'new_owner': email,
-                        'old_owner': cur_owner
+                        'new_owner': email
                     },
                     success: function() {
                         $.modal.close();
