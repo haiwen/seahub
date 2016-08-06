@@ -9,7 +9,7 @@ define([
 
     var SharePopupView = Backbone.View.extend({
         tagName: 'div',
-        id: 'admin-library-share-popup',
+        id: 'share-popup',
         template: _.template($('#share-popup-tmpl').html()),
 
         initialize: function(options) {
@@ -40,22 +40,15 @@ define([
             this.$el.html(this.template({
                 title: gettext("Share {placeholder}")
                     .replace('{placeholder}', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(this.repo_name) + '">' + Common.HTMLescape(this.repo_name) + '</span>'),
-                repo_id: this.repo_id,
+                repo_id: this.repo_id
             }));
 
             return this;
         },
 
         events: {
-            'click [type="checkbox"]': 'clickCheckbox',
             'click #add-dir-user-share-item .submit': 'dirUserShare',
             'click #add-dir-group-share-item .submit': 'dirGroupShare'
-        },
-
-        clickCheckbox: function(e) {
-            var $el = $(e.currentTarget);
-            // for link options such as 'password', 'expire'
-            $el.closest('.checkbox-label').next().toggleClass('hide');
         },
 
         dirUserSharePanelInit: function() {

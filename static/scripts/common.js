@@ -693,13 +693,7 @@ define([
 
                 // format selected item shown in the input
                 formatSelection: function(item) {
-                    return _this.HTMLescape(item.name || item.id); // if no name, show the email, i.e., when directly input, show the email
-                },
-
-                createSearchChoice: function(term) {
-                    return {
-                        'id': $.trim(term)
-                    };
+                    return _this.HTMLescape(item.name);
                 },
 
                 escapeMarkup: function(m) { return m; }
