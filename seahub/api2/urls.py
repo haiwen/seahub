@@ -47,6 +47,7 @@ urlpatterns = patterns('',
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/upload-blks-link/$', UploadBlksLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/update-blks-link/$', UpdateBlksLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/owa-file/$', OwaFileView.as_view(), name='api2-owa-file-view'),
+    url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/libreoffice-file/$', LibreOfficeFileView.as_view(), name='api2-libreoffice-file-view'),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/$', FileView.as_view(), name='FileView'),
     url(r'^repos/(?P<repo_id>[-0-9a-f]{36})/files/(?P<file_id>[0-9a-f]{40})/blks/(?P<block_id>[0-9a-f]{40})/download-link/$', FileBlockDownloadLinkView.as_view()),
     url(r'^repos/(?P<repo_id>[-0-9-a-f]{36})/file/detail/$', FileDetailView.as_view()),
@@ -118,10 +119,4 @@ if HAS_OFFICE_CONVERTER:
     )
     urlpatterns += patterns('',
         url(r'^office-convert/generate/repos/(?P<repo_id>[-0-9-a-f]{36})/$', OfficeGenerateView.as_view()),
-    )
-
-from seahub import settings
-if getattr(settings, 'ENABLE_OFFICE_WEB_APP', False):
-    urlpatterns += patterns('',
-        (r'^wopi/', include('seahub_extra.wopi.urls')),
     )

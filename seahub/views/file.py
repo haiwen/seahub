@@ -59,6 +59,10 @@ from seahub.utils import HAS_OFFICE_CONVERTER, FILEEXT_TYPE_MAP
 from seahub.utils.http import json_response, int_param, BadRequestException, RequestForbbiddenException
 from seahub.views import check_folder_permission, check_file_lock
 
+from seahub.utils.wopi import get_wopi_dict, \
+    check_can_view_file_by_OWA, check_can_edit_file_by_OWA, \
+    check_can_edit_file_by_LibreOFFICE
+
 if HAS_OFFICE_CONVERTER:
     from seahub.utils import (
         query_office_convert_status, add_office_convert_task,
@@ -403,24 +407,19 @@ def _file_view(request, repo_id, path):
             request, repo_id, obj_id, path)
 
     # check if use office web app to view/edit file
-    try:
-        from seahub_extra.wopi.utils import get_wopi_dict, \
-            check_can_view_file_by_OWA, check_can_edit_file_by_OWA
-    except ImportError:
-        pass
-    else:
-        action_name = None
-        if check_can_view_file_by_OWA(username, repo_id, path):
-            action_name = 'view'
+    action_name = None
+    if check_can_view_file_by_OWA(username, repo_id, path):
+        action_name = 'view'
 
-            if check_can_edit_file_by_OWA(username, repo_id, path):
-                action_name = 'edit'
+    if check_can_edit_file_by_OWA(username, repo_id, path) or \
+        check_can_edit_file_by_LibreOFFICE(username, repo_id, path):
+        action_name = 'edit'
 
-        wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
-        if wopi_dict:
-            send_file_access_msg(request, repo, path, 'web')
-            return render_to_response('view_wopi_file.html', wopi_dict,
-                      context_instance=RequestContext(request))
+    wopi_dict = get_wopi_dict(username, repo_id, path, action_name)
+    if wopi_dict:
+        send_file_access_msg(request, repo, path, 'web')
+        return render_to_response('view_wopi_file.html', wopi_dict,
+                  context_instance=RequestContext(request))
 
     # check if the user is the owner or not, for 'private share'
     if is_org_context(request):
