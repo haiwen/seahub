@@ -1858,7 +1858,44 @@ def sys_repo_transfer(request):
     except SearpcError:    # XXX: ignore rpc not found error
         pass
 
+    repo_owner = seafile_api.get_repo_owner(repo_id)
+    shared_users = seafile_api.list_repo_shared_to(
+            repo_owner, repo_id)
+    shared_groups = seafile_api.list_repo_shared_group_by_user(
+            repo_owner, repo_id)
+    pub_repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
+            repo_owner)
+
+    # transfer repo
     seafile_api.set_repo_owner(repo_id, new_owner)
+
+    # reshare repo
+    for shared_user in shared_users:
+        shared_username = shared_user.user
+
+        if new_owner == shared_username:
+            continue
+
+        seafile_api.share_repo(repo_id, new_owner,
+                shared_username, shared_user.perm)
+
+    for shared_group in shared_groups:
+        shared_group_id = shared_group.group_id
+
+        if not ccnet_api.is_group_user(shared_group_id, new_owner):
+            continue
+
+        seafile_api.set_group_repo(repo_id, shared_group_id,
+                new_owner, shared_group.perm)
+
+    for pub_repo in pub_repos:
+        if repo_id != pub_repo.id:
+            continue
+
+        seaserv.seafserv_threaded_rpc.set_inner_pub_repo(
+                repo_id, pub_repo.permission)
+
+        break
 
     messages.success(request, _(u'Successfully transfered.'))
     return HttpResponseRedirect(next)
