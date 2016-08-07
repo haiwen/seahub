@@ -42,7 +42,7 @@ define([
                 beforeSend: Common.prepareCSRFToken,
                 success: function() {
                     _this.remove();
-                    Common.feedback(gettext("Successfully unstared {placeholder}").replace('{placeholder}', Common.HTMLescape(file_name)), 'success');
+                    Common.feedback(gettext("Successfully unstared {placeholder}").replace('{placeholder}', file_name), 'success');
                 },
                 error: function (xhr) {
                     Common.ajaxErrorHandler(xhr);

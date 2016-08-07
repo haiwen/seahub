@@ -54,7 +54,7 @@ define([
             this.model.destroy({
                 wait: true,
                 success: function() {
-                    var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + Common.HTMLescape(lib_name) + '</span>');
+                    var msg = gettext('Successfully unshared {placeholder}').replace('{placeholder}', '<span class="op-target">' + lib_name + '</span>');
                     Common.feedback(msg, 'success', Common.SUCCESS_TIMOUT);
                 },
                 error: function(model, response) {

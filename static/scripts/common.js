@@ -295,6 +295,7 @@ define([
 
         feedback: function(con, type, time) {
             var time = time || 5000;
+            var con = this.HTMLescape(con);
             if ($('.messages').length > 0) {
                 $('.messages').html('<li class="' + type + '">' + con + '</li>');
             } else {

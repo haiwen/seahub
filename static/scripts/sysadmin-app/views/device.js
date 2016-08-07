@@ -41,8 +41,7 @@ define([
                 success: function() {
                     _this.remove();
 
-                    var msg = gettext("Successfully unlink %(name)s.")
-                        .replace('%(name)s', Common.HTMLescape(device_name));
+                    var msg = gettext("Successfully unlink %(name)s.").replace('%(name)s', device_name);
                     Common.feedback(msg, 'success');
                 },
                 error: function(xhr) {

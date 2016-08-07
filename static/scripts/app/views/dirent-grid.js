@@ -151,8 +151,7 @@ define([
             var dirent_name = this.model.get('obj_name');
             this.model.deleteFromServer({
                 success: function(data) {
-                    var msg = gettext("Successfully deleted %(name)s")
-                        .replace('%(name)s', Common.HTMLescape(dirent_name));
+                    var msg = gettext("Successfully deleted %(name)s").replace('%(name)s', dirent_name);
                     Common.feedback(msg, 'success');
                 },
                 error: function(xhr) {
