@@ -520,8 +520,6 @@ def sys_user_admin(request):
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     platform = get_platform_name()
     server_id = get_server_id()
     pro_server = 1 if is_pro_version() else 0
@@ -534,7 +532,6 @@ def sys_user_admin(request):
             'next_page': current_page+1,
             'per_page': per_page,
             'page_next': page_next,
-            'have_ldap': have_ldap,
             'platform': platform,
             'server_id': server_id[:8],
             'default_user': DEFAULT_USER,
@@ -631,9 +628,10 @@ def sys_user_admin_ldap_imported(request):
     except ValueError:
         current_page = 1
         per_page = 25
-    users_plus_one = seaserv.get_emailusers('LDAPImport',
-                                            per_page * (current_page - 1),
-                                            per_page + 1)
+
+    users_plus_one = ccnet_api.get_emailusers('LDAPImport',
+            per_page * (current_page - 1), per_page + 1)
+
     if len(users_plus_one) == per_page + 1:
         page_next = True
     else:
@@ -748,13 +746,10 @@ def sys_user_admin_admins(request):
             if last_login.username == user.email:
                 user.last_login = last_login.last_login
 
-    have_ldap = True if len(seaserv.get_emailusers('LDAP', 0, 1)) > 0 else False
-
     return render_to_response(
         'sysadmin/sys_useradmin_admins.html', {
             'users': admin_users,
             'not_admin_users': not_admin_users,
-            'have_ldap': have_ldap,
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
