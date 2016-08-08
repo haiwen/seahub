@@ -3601,7 +3601,9 @@ img.thumbnail {
 .two-factor-auth-login-no-phone {
     margin-top:3rem;
 }
-#id_generator-token {/* token input */
+#id_generator-token,
+#id_sms-number,
+#id_validation-token {/* token input */
     width: 260px;
     padding: 2px 3px;
     border-radius: 2px;
