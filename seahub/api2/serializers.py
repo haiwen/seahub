@@ -72,7 +72,7 @@ class AuthTokenSerializer(serializers.Serializer):
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
 
-        self._two_factor_auth(self.context['request'], username)
+        self._two_factor_auth(self.context['request'], user)
 
         # Now user is authenticated
         if v2:
@@ -82,15 +82,15 @@ class AuthTokenSerializer(serializers.Serializer):
             token = get_token_v1(username)
         return token.key
 
-    def _two_factor_auth(self, request, username):
-        if not has_two_factor_auth() or not two_factor_auth_enabled(username):
+    def _two_factor_auth(self, request, user):
+        if not has_two_factor_auth() or not two_factor_auth_enabled(user):
             return
         token = request.META.get('HTTP_X_SEAFILE_OTP', '')
         if not token:
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is missing.'
             raise serializers.ValidationError(msg)
-        if not verify_two_factor_token(username, token):
+        if not verify_two_factor_token(user.username, token):
             self.two_factor_auth_failed = True
             msg = 'Two factor auth token is invalid.'
             raise serializers.ValidationError(msg)

@@ -43,7 +43,7 @@ class ClientLoginTokenView(APIView):
 
     @json_response
     def post(self, request, format=None):
-        if has_two_factor_auth() and two_factor_auth_enabled(request.user.username):
+        if has_two_factor_auth() and two_factor_auth_enabled(request.user):
             return {}
         randstr = gen_token(max_length=32)
         token = ClientLoginToken(randstr, request.user.username)
