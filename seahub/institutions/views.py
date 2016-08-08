@@ -21,7 +21,7 @@ from seahub.institutions.decorators import (inst_admin_required,
 from seahub.profile.models import Profile, DetailedProfile
 from seahub.utils import is_valid_username, clear_token
 from seahub.utils.rpc import mute_seafile_api
-from seahub.views.sysadmin import email_user_on_activation
+from seahub.views.sysadmin import email_user_on_activation, populate_user_info
 
 logger = logging.getLogger(__name__)
 
@@ -75,6 +75,7 @@ def useradmin(request):
         if u.username == request.user.username:
             u.is_self = True
 
+        populate_user_info(u)
         _populate_user_quota_usage(u)
 
         for e in last_logins:
@@ -110,6 +111,7 @@ def useradmin_search(request):
         if u.username == request.user.username:
             u.is_self = True
 
+        populate_user_info(u)
         _populate_user_quota_usage(u)
 
         for e in last_logins:

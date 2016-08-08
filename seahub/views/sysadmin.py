@@ -112,6 +112,17 @@ def can_view_sys_admin_repo(repo):
     else:
         return False
 
+def populate_user_info(user):
+    """Populate contact email and nickname to user.
+    """
+    user_profile = Profile.objects.get_profile_by_user(user.email)
+    if user_profile:
+        user.contact_email = user_profile.contact_email
+        user.name = user_profile.nickname
+    else:
+        user.contact_email = ''
+        user.name = ''
+
 def _populate_user_quota_usage(user):
     """Populate space/share quota to user.
 
@@ -190,17 +201,10 @@ def sys_user_admin(request):
     else:
         trial_users = []
     for user in users:
-        user_profile = Profile.objects.get_profile_by_user(user.email)
-        if user_profile:
-            user.contact_email = user_profile.contact_email
-            user.name = user_profile.nickname
-        else:
-            user.contact_email = ''
-            user.name = ''
-
         if user.email == request.user.email:
             user.is_self = True
 
+        populate_user_info(user)
         _populate_user_quota_usage(user)
 
         # check user's role
@@ -1458,15 +1462,8 @@ def user_search(request):
     else:
         trial_users = []
     for user in users:
+        populate_user_info(user)
         _populate_user_quota_usage(user)
-
-        user_profile = Profile.objects.get_profile_by_user(user.email)
-        if user_profile:
-            user.contact_email = user_profile.contact_email
-            user.name = user_profile.nickname
-        else:
-            user.contact_email = ''
-            user.name = ''
 
         # check user's role
         if user.role == GUEST_USER:
