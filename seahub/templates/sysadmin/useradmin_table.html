@@ -2,11 +2,11 @@
 <table>
     <tr>
         {% if is_pro %}
-        <th width="24%">{% trans "Email" %}</th>
+        <th width="24%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         <th width="12%">{% trans "Role" %}</th>
         {% else %}
-        <th width="36%">{% trans "Email" %}</th>
+        <th width="36%">{% trans "Email" %} / {% trans "Name" %} / {% trans "Contact Email" %}</th>
         <th width="12%">{% trans "Status" %}</th>
         {% endif %}
         <th width="16%">{% trans "Space Used" %}</th>
@@ -16,15 +16,18 @@
 
     {% for user in users %}
     <tr data-userid="{{user.email}}">
-        <td><a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
-        {% if not is_admin_page %}
-        {% if user.org %}
-        <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' user.org.org_id %}">({{user.org.org_name}})</a></p>
-        {% endif %}
-        {% if user.trial_info %}
-        <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ user.email }}" data-url="{% url 'remove_trial' user.email %}">X</a>)</p>
-        {% endif %}
-        {% endif %}
+        <td>
+            <a href="{% url 'user_info' user.email %}">{{ user.email }}</a>
+            {% if user.name %}<br />{{ user.name }}{% endif %}
+            {% if user.contact_email %}<br />{{ user.contact_email }}{% endif %}
+            {% if not is_admin_page %}
+            {% if user.org %}
+            <p style="font-size:11px;"><a href="{% url 'sys_org_info_user' user.org.org_id %}">({{user.org.org_name}})</a></p>
+            {% endif %}
+            {% if user.trial_info %}
+            <p style="font-size:11px;">(Trial &nbsp;<a href="#" class="unset-trial" data-target="{{ user.email }}" data-url="{% url 'remove_trial' user.email %}">X</a>)</p>
+            {% endif %}
+            {% endif %}
         </td>
         <td>
             <div class="user-status">

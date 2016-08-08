@@ -190,6 +190,14 @@ def sys_user_admin(request):
     else:
         trial_users = []
     for user in users:
+        user_profile = Profile.objects.get_profile_by_user(user.email)
+        if user_profile:
+            user.contact_email = user_profile.contact_email
+            user.name = user_profile.nickname
+        else:
+            user.contact_email = ''
+            user.name = ''
+
         if user.email == request.user.email:
             user.is_self = True
 
@@ -1451,6 +1459,14 @@ def user_search(request):
         trial_users = []
     for user in users:
         _populate_user_quota_usage(user)
+
+        user_profile = Profile.objects.get_profile_by_user(user.email)
+        if user_profile:
+            user.contact_email = user_profile.contact_email
+            user.name = user_profile.nickname
+        else:
+            user.contact_email = ''
+            user.name = ''
 
         # check user's role
         if user.role == GUEST_USER:
