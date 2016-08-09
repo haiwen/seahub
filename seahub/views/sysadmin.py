@@ -112,6 +112,17 @@ def can_view_sys_admin_repo(repo):
     else:
         return False
 
+def populate_user_info(user):
+    """Populate contact email and name to user.
+    """
+    user_profile = Profile.objects.get_profile_by_user(user.email)
+    if user_profile:
+        user.contact_email = user_profile.contact_email
+        user.name = user_profile.nickname
+    else:
+        user.contact_email = ''
+        user.name = ''
+
 def _populate_user_quota_usage(user):
     """Populate space/share quota to user.
 
@@ -193,6 +204,7 @@ def sys_user_admin(request):
         if user.email == request.user.email:
             user.is_self = True
 
+        populate_user_info(user)
         _populate_user_quota_usage(user)
 
         # check user's role
@@ -247,8 +259,8 @@ def sys_useradmin_export_excel(request):
         next = SITE_ROOT
 
     try:
-        users = seaserv.get_emailusers('DB', -1, -1) + \
-                seaserv.get_emailusers('LDAPImport', -1, -1)
+        users = ccnet_api.get_emailusers('DB', -1, -1) + \
+                ccnet_api.get_emailusers('LDAPImport', -1, -1)
     except Exception as e:
         logger.error(e)
         messages.error(request, _(u'Failed to export Excel'))
@@ -260,16 +272,21 @@ def sys_useradmin_export_excel(request):
         is_pro = False
 
     if is_pro:
-        head = [_("Email"), _("Status"), _("Role"), _("Create At"),
-                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
+                _("Role"), _("Create At"), _("Last Login"), _("Admin"),
+                _("LDAP(imported)"),]
     else:
-        head = [_("Email"), _("Status"), _("Create At"),
-                _("Last Login"), _("Admin"), _("LDAP(imported)"),]
+        head = [_("Email"), _("Name"), _("Contact Email"), _("Status"),
+                _("Create At"), _("Last Login"), _("Admin"), _("LDAP(imported)"),]
 
     data_list = []
 
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
     for user in users:
+
+        # populate name and contact email
+        populate_user_info(user)
+
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -294,11 +311,11 @@ def sys_useradmin_export_excel(request):
             else:
                 role = _('Default')
 
-            row = [user.email, status, role, create_at,
-                   last_login, is_admin, ldap_import]
+            row = [user.email, user.name, user.contact_email, status,
+                    role, create_at, last_login, is_admin, ldap_import]
         else:
-            row = [user.email, status, create_at, last_login,
-                   is_admin, ldap_import]
+            row = [user.email, user.name, user.contact_email, status,
+                    create_at, last_login, is_admin, ldap_import]
 
         data_list.append(row)
 
@@ -1450,6 +1467,7 @@ def user_search(request):
     else:
         trial_users = []
     for user in users:
+        populate_user_info(user)
         _populate_user_quota_usage(user)
 
         # check user's role
