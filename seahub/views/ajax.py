@@ -17,6 +17,7 @@ from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
 from django.contrib import messages
+from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
@@ -1461,9 +1462,16 @@ def get_file_upload_url_ul(request, token):
                             status=403, content_type=content_type)
 
     username = request.user.username or request.session.get('anonymous_email') or ''
+
+    args = [repo_id, json.dumps({'anonymous_user': username}), 'upload', '']
+    kwargs = {
+        'use_onetime': False,
+    }
+    if (is_pro_version() and dj_settings.ENABLE_UPLOAD_LINK_VIRUS_CHECK):
+        kwargs.update({'check_virus': True})
+
     try:
-        acc_token = seafile_api.get_fileserver_access_token(repo_id,
-                json.dumps({'anonymous_user': username}), 'upload', '', use_onetime=False)
+        acc_token = seafile_api.get_fileserver_access_token(*args, **kwargs)
     except SearpcError as e:
         logger.error(e)
         return HttpResponse(json.dumps({"error": _("Internal Server Error")}),
