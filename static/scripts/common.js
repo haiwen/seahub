@@ -673,9 +673,46 @@ define([
                 // both are english words
                 a_val = a_name.toLowerCase();
                 b_val = b_name.toLowerCase();
+                return this.compareStrWithNumbersIn(a_val, b_val);
             }
 
             return a_val >= b_val ? 1 : -1;
+        },
+
+        // compare two strings which may have digits in them
+        // and compare those digits as number instead of string
+        compareStrWithNumbersIn: function(a, b) {
+            var reParts = /\d+|\D+/g;
+            var reDigit = /\d/;
+            var aParts = a.match(reParts);
+            var bParts = b.match(reParts);
+            var isDigitPart;
+            var len = Math.min(aParts.length, bParts.length);
+            var aPart, bPart;
+
+            if (aParts && bParts &&
+                (isDigitPart = reDigit.test(aParts[0])) == reDigit.test(bParts[0])) {
+                // Loop through each substring part to compare the overall strings.
+                for (var i = 0; i < len; i++) {
+                    aPart = aParts[i];
+                    bPart = bParts[i];
+
+                    if (isDigitPart) {
+                        aPart = parseInt(aPart, 10);
+                        bPart = parseInt(bPart, 10);
+                    }
+
+                    if (aPart != bPart) {
+                        return aPart < bPart ? -1 : 1;
+                    }
+
+                    // Toggle the value of isDigitPart since the parts will alternate.
+                    isDigitPart = !isDigitPart;
+                }
+            }
+
+            // Use normal comparison.
+            return (a >= b) - (a <= b);
         },
 
         fileSizeFormat: function(bytes, precision) {
