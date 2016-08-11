@@ -77,7 +77,7 @@ $(function () {
     $('.js-file-info', $hd).css({'max-width': $hd.width() - $('.js-file-op', $hd).outerWidth(true) - 10});
 });
 
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' and use_pdfjs and not err %}
 {% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');

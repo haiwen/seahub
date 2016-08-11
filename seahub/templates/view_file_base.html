@@ -266,7 +266,7 @@ function setToolbarPos() {
 })();
 $(window).load(setToolbarPos).resize(setToolbarPos);
 
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' and use_pdfjs and not err %}
 {% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');

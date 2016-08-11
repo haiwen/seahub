@@ -46,7 +46,7 @@ $(function() {
     $('#file-view-tip').append('<a href="' + dld_url + '" class="sf-btn-link big-btn-link">' + "{% trans "Download" %}" + '</a>');
 });
 
-{% if filetype == 'PDF' and use_pdfjs %}
+{% if filetype == 'PDF' and use_pdfjs and not err %}
 {% else %}
 function setFileViewAreaHeight() {
     var file_view = $('#file-view');
