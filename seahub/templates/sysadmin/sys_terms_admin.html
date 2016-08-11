@@ -26,7 +26,7 @@
     <tr>
         <td>{{ tc.name }}</td>
         <td>{{ tc.version_number }}</td>
-        <td><a href="#" class="js-text" data-msg="{{ tc.text|linebreaksbr }}">{{ tc.text|truncatechars:50 }}</a></td>
+        <td><a href="#" class="js-text" data-msg="{{ tc.text }}">{{ tc.text|truncatechars:50 }}</a></td>
         <td>{{ tc.date_created|translate_seahub_time }}</td>
         <td>
             {% if tc.date_active %}
@@ -71,11 +71,12 @@
     <button type="submit" class="submit">{% trans "Submit" %}</button>
 </form>
 
-<div id="popup-msg" class="hide"></div>
+<div id="tc-preview" class="article hide"></div>
 
 {% endblock %}
 
 {% block extra_script %}
+<script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>
 <script type="text/javascript">
 $('#add-btn').click(function() {
     $('#tc-form').modal();
@@ -143,11 +144,23 @@ addConfirmTo($('.remove-btn'), {
     'post': true // post request
 });
 
+var renderer = new marked.Renderer();
+// remove 'id' attribute for headings
+renderer.heading = function (text, level) {
+    return '<h' + level + '>' + text + '</h' + level + '>';
+};
+marked.setOptions({
+    renderer: renderer,
+    breaks: true, // keep linebreak
+    smartLists: true,
+    sanitize: true // Ignore any HTML that has been input
+});
+
 $('.js-text').click(function() {
-    $('#popup-msg').html($(this).attr('data-msg')).modal({
-        minWidth: 150
-    });
-    $('#simplemodal-container').css({'height':'auto'});
+    $('#tc-preview')
+    .html(marked($(this).attr('data-msg')))
+    .css({'max-height': $(window).height() - 120}) // 120: the vertical paddings of #tc-preview & the popup
+    .modal();
 
     return false;
 });
