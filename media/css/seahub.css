@@ -3608,3 +3608,18 @@ img.thumbnail {
     padding: 2px 3px;
     border-radius: 2px;
 }
+
+/* terms & conditions */
+#tc-content {
+    padding-top:0;
+    padding-left:0;
+}
+.tc-accept-form {
+    padding-bottom:30px;
+}
+#tc-preview {
+    box-sizing:border-box;
+    padding:40px;
+    width:800px;
+    overflow:auto;
+}
