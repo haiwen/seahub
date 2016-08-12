@@ -15,8 +15,16 @@ define([
             this.dir = options.dir;
 
             this.render();
-            this.$el.modal({appendTo:'#main'});
+            this.$el.modal({appendTo:'#main', focus: false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            var $input = this.$('[name="newname"]');
+            var dot_index = this.dirent.get('obj_name').lastIndexOf('.');
+            if (!this.dirent.get('is_dir') && dot_index != -1) {
+                $input[0].setSelectionRange(0, dot_index);
+            } else {
+                $input.select();
+            }
 
             this.$error = this.$('.error');
             this.$form = this.$('form');

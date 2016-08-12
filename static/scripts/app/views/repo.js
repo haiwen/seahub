@@ -118,7 +118,7 @@ define([
             }).append(form);
             $op_td.hide();
             $name_span.hide();
-            $('[name="newname"]', form).focus();
+            $('[name="newname"]', form).select();
 
             this.togglePopup();
             app.ui.freezeItemHightlight = true;
