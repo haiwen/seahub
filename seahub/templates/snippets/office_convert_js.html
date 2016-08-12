@@ -63,6 +63,10 @@ OfficePreviewer.prototype.check_page_status = function() {
         cache: false,
         dataType: 'json',
         success: function(data) {
+            if (data.info.pages > data.info.final_pages) { // total pages > shown pages
+                feedback("{% trans "This file has more than 50 pages, and only the first 50 will be shown here." %}", 'info');
+            }
+
             var status = data['status'];
             switch (status) {
             case 'PROCESSING':
