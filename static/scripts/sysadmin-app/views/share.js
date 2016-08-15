@@ -18,7 +18,7 @@ define([
 
             this.render();
 
-            this.$el.modal();
+            this.$el.modal({focus:false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$("#share-tabs").tabs();
@@ -68,7 +68,7 @@ define([
                     'repo_id': repo_id,
                     'share_type': 'user'
                 },
-                'after_op_success': function (data) {
+                'after_op_success': function(data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -105,7 +105,7 @@ define([
                     'repo_id': repo_id,
                     'share_type': 'group'
                 },
-                'after_op_success': function (data) {
+                'after_op_success': function(data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
                             'repo_id': repo_id,
@@ -177,7 +177,7 @@ define([
                     if (data.failed.length > 0) {
                         var err_msg = '';
                         $(data.failed).each(function(index, item) {
-                            err_msg += Common.HTMLescape(item.user_email) + ': ' + item.error_msg + '<br />';
+                            err_msg += Common.HTMLescape(item.user_email) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
                         });
                         $error.html(err_msg).removeClass('hide');
                     }
@@ -185,9 +185,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
-                        err_msg = parsed_resp.error||parsed_resp.error_msg;
-                        err_msg = Common.HTMLescape(err_msg);
+                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -200,7 +198,6 @@ define([
         },
 
         dirGroupShare: function () {
-
             var $group_share_item= this.$('#add-dir-group-share-item');
 
             var $groups_input = $('[name="groups"]', $group_share_item),
@@ -253,7 +250,7 @@ define([
                     if (data.failed.length > 0) {
                         var err_msg = '';
                         $(data.failed).each(function(index, item) {
-                            err_msg += Common.HTMLescape(item.group_id) + ': ' + item.error_msg + '<br />';
+                            err_msg += Common.HTMLescape(item.group_id) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
                         });
                         $error.html(err_msg).removeClass('hide');
                     }
@@ -261,9 +258,7 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        var parsed_resp = $.parseJSON(xhr.responseText);
-                        err_msg = parsed_resp.error||parsed_resp.error_msg;
-                        err_msg = Common.HTMLescape(err_msg);
+                        err_msg = Common.HTMLescape($.parseJSON(xhr.responseText).error_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

@@ -83,7 +83,7 @@ define([
                     if (item_data.for_user) {
                         $('#dir-user-share .error').html(err_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
                     }
                 }
             });
@@ -119,7 +119,7 @@ define([
                     if (item_data.for_user) {
                         $('#dir-user-share .error').html(err_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
                     }
                 }
             });

@@ -632,7 +632,7 @@ define([
                         var parsed_resp = $.parseJSON(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
-                        err_msg = gettext("Failed. Please check the network.")
+                        err_msg = gettext("Failed. Please check the network.");
                     }
                     $error.html(err_msg).removeClass('hide');
                 },
@@ -710,7 +710,7 @@ define([
                         var parsed_resp = $.parseJSON(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
                     } else {
-                        err_msg = gettext("Failed. Please check the network.")
+                        err_msg = gettext("Failed. Please check the network.");
                     }
                     $error.html(err_msg).removeClass('hide');
                 },
