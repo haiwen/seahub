@@ -372,6 +372,9 @@
     <td>
         <a href="#" class="sf2-icon-delete sf2-x repo-delete-btn op-icon vh" title="{% trans "Delete" %}" aria-label="{% trans "Delete" %}"></a>
         <a href="#" class="sf2-icon-move sf2-x repo-transfer-btn op-icon vh" title="{% trans "Transfer" %}" aria-label="{% trans "Transfer" %}"></a>
+        <% if (!encrypted) { %>
+        <a href="#" class="sf2-icon-share sf2-x repo-share-btn op-icon vh" title="{% trans "Share" %}" aria-label="{% trans "Share" %}"></a>
+        <% } %>
     </td>
 </script>
 
@@ -558,4 +561,107 @@
         <p class="error hide"></p>
         <input type="submit" value="{% trans "Submit" %}" />
     </form>
+</script>
+
+<script type="text/template" id="folder-perm-item-tmpl">
+<% if (for_user) { %>
+<td>
+    <a href="{{ SITE_ROOT }}useradmin/info/<% print(encodeURIComponent(user_email)); %>/" target="_blank"><%- user_name %></a>
+</td>
+<% } else { %>
+<td>
+    <a href="{{ SITE_ROOT }}sys/groupadmin/<%= group_id %>/" target="_blank"><%- group_name %></a>
+</td>
+<% } %>
+<td>
+    <div class="perm">
+        <span>
+        <% if (permission == 'rw') { %>
+            {% trans "Read-Write" %}
+        <% } else { %>
+            {% trans "Read-Only" %}
+        <% } %>
+        </span>
+        <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
+    </div>
+    <select class="perm-toggle-select hide w100">
+        <% if (permission == 'rw') { %>
+            <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
+            <option value="r" >{% trans "Read-Only" %}</option>
+        <% } else { %>
+            <option value="rw" >{% trans "Read-Write" %}</option>
+            <option value="r" selected="selected" >{% trans "Read-Only" %}</option>
+        <% } %>
+    </select>
+</td>
+<td>
+    <a href="#" class="sf2-icon-delete delete-icon op-icon vh" title="{% trans "Delete" %}"></a>
+</td>
+</script>
+
+<script type="text/template" id="share-popup-tmpl">
+<h3 class="hd" id="dialogTitle"><%= title %></h3>
+<div id="share-tabs" class="left-right-tabs ovhd">
+    <ul class="left-right-tabs-nav fleft">
+        <li class="tab"><a href="#dir-user-share" class="a">{% trans "Share to user" %}</a></li>
+        <li class="tab"><a href="#dir-group-share" class="a">{% trans "Share to group" %}</a></li>
+    </ul>
+
+    <div class="fright">
+        <span class="loading-icon loading-tip"></span>
+        <div id="dir-user-share" class="tabs-panel">
+            <table>
+                <thead>
+                <tr>
+                    <th width="55%">{% trans "User" %}</th>
+                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="15%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="add-dir-user-share-item">
+                    <td>
+                        <input type="hidden" name="emails" class="w100" />
+                    </td>
+                    <td>
+                        <select name="permission" class="share-permission-select w100">
+                            <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                            <option value="r">{% trans "Read-Only" %}</option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="error hide"></p>
+        </div>
+
+        <div id="dir-group-share" class="tabs-panel hide">
+            <table>
+                <thead>
+                <tr>
+                    <th width="55%">{% trans "Group" %}</th>
+                    <th width="30%">{% trans "Permission" %}</th>
+                    <th width="15%"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr id="add-dir-group-share-item">
+                    <td>
+                        <input type="groups" name="groups" class="w100" />
+                    </td>
+                    <td>
+                        <select name="permission" class="share-permission-select w100">
+                            <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
+                            <option value="r">{% trans "Read-Only" %}</option>
+                        </select>
+                    </td>
+                    <td><input type="submit" value="{% trans "Submit" %}" class="submit" /></td>
+                </tr>
+                </tbody>
+            </table>
+            <p class="error hide"></p>
+        </div>
+    </div>
+</div>
 </script>

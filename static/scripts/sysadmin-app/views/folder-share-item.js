@@ -14,8 +14,6 @@ define([
         initialize: function(options) {
             this.item_data = options.item_data;
             this.repo_id = options.repo_id;
-            this.path = options.path;
-
             this.render();
         },
 
@@ -51,32 +49,42 @@ define([
         editPerm: function (e) {
             var _this = this;
             var item_data = this.item_data;
-            var url = Common.getUrl({
-                    name: 'dir_shared_items',
-                    repo_id: this.repo_id
-                }) + '?p=' + encodeURIComponent(this.path);
-            if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
-            } else {
-                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
-            }
             var perm = $(e.currentTarget).val();
+            var url = Common.getUrl({name: 'admin_shares'});
+            var data;
+
+            if (item_data.for_user) {
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'user',
+                    'permission': perm,
+                    'share_to': item_data.user_email
+                };
+            } else {
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'group',
+                    'permission': perm,
+                    'share_to': item_data.group_id
+                };
+            }
+
             $.ajax({
                 url: url,
                 dataType: 'json',
-                method: 'POST',
+                method: 'PUT',
                 beforeSend: Common.prepareCSRFToken,
-                data: {
-                    'permission': perm
-                },
-                success: function () {
-                    item_data.perm = perm;
+                data: data,
+                success: function (data) {
+                    item_data.permission = data.permission;
                     _this.render();
                 },
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Edit failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
@@ -92,27 +100,40 @@ define([
         del: function () {
             var _this = this;
             var item_data = this.item_data;
-            var url = Common.getUrl({
-                    name: 'dir_shared_items',
-                    repo_id: this.repo_id
-                }) + '?p=' + encodeURIComponent(this.path);
+            var url = Common.getUrl({name: 'admin_shares'});
+            var data;
+
             if (item_data.for_user) {
-                url += '&share_type=user&username=' + encodeURIComponent(item_data.user);
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'user',
+                    'permission': item_data.permission,
+                    'share_to': item_data.user_email
+                };
             } else {
-                url += '&share_type=group&group_id=' + encodeURIComponent(item_data.group_id);
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'group',
+                    'permission': item_data.permission,
+                    'share_to': item_data.group_id
+                };
             }
+
             $.ajax({
                 url: url,
                 dataType: 'json',
                 method: 'DELETE',
                 beforeSend: Common.prepareCSRFToken,
+                data: data,
                 success: function () {
                     _this.remove();
                 },
                 error: function (xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Delete failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }

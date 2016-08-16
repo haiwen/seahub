@@ -6,8 +6,12 @@ define([
     'moment',
     'simplemodal',
     'select2',
+    'jquery.ui.tabs',
+    'sysadmin-app/views/share',
     'app/views/widgets/hl-item-view'
-], function($, _, Backbone, Common, Moment, Simplemodal, Select2, HLItemView) {
+], function($, _, Backbone, Common, Moment, Simplemodal,
+    Select2, Tabs, ShareView, HLItemView) {
+
     'use strict';
 
     var RepoView = HLItemView.extend({
@@ -17,8 +21,18 @@ define([
         transferTemplate: _.template($('#library-transfer-form-tmpl').html()),
 
         events: {
+            'click .repo-share-btn': 'share',
             'click .repo-delete-btn': 'deleteLibrary',
             'click .repo-transfer-btn': 'transferLibrary'
+        },
+
+        share: function() {
+            var options = {
+                'repo_id': this.model.get('id'),
+                'repo_name': this.model.get('name')
+            };
+            new ShareView(options);
+            return false;
         },
 
         initialize: function() {
@@ -31,7 +45,7 @@ define([
             var repo_name = this.model.get('name');
             var popupTitle = gettext("Delete Library");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target" title="' + Common.HTMLescape(repo_name) + '">' + Common.HTMLescape(repo_name) + '</span>');
-            var yesCallback = function() { 
+            var yesCallback = function() {
                 $.ajax({
                     url: Common.getUrl({
                         'name':'admin-library',
