@@ -214,10 +214,7 @@ define([
                     Common.showFormError(form_id, gettext("Passwords don't match"));
                     return false;
                 }
-                post_data["use_passwd"] = 1;
-                post_data["passwd"] = passwd;
-            } else {
-                post_data["use_passwd"] = 0;
+                post_data["password"] = passwd;
             }
 
             if (set_expiration) { // for upload link, 'set_expiration' is undefined
