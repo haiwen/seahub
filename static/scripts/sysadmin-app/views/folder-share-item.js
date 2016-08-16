@@ -50,14 +50,23 @@ define([
             var _this = this;
             var item_data = this.item_data;
             var perm = $(e.currentTarget).val();
-            var url, data;
+            var url = Common.getUrl({name: 'admin_shares'});
+            var data;
 
             if (item_data.for_user) {
-                url = Common.getUrl({name: 'admin_library_user_share', repo_id: this.repo_id});
-                data = {'permission': perm, 'user_email': item_data.user_email};
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'user',
+                    'permission': perm,
+                    'share_to': item_data.user_email
+                };
             } else {
-                url = Common.getUrl({name: 'admin_library_group_share', repo_id: this.repo_id});
-                data = {'permission': perm, 'group_id': item_data.group_id};
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'group',
+                    'permission': perm,
+                    'share_to': item_data.group_id
+                };
             }
 
             $.ajax({
@@ -73,14 +82,16 @@ define([
                 error: function(xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Edit failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
                     if (item_data.for_user) {
                         $('#dir-user-share .error').html(err_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
                     }
                 }
             });
@@ -89,14 +100,23 @@ define([
         del: function () {
             var _this = this;
             var item_data = this.item_data;
-            var url, data;
+            var url = Common.getUrl({name: 'admin_shares'});
+            var data;
 
             if (item_data.for_user) {
-                url = Common.getUrl({name: 'admin_library_user_share', repo_id: this.repo_id});
-                data = {'permission': item_data.permission, 'user_email': item_data.user_email};
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'user',
+                    'permission': item_data.permission,
+                    'share_to': item_data.user_email
+                };
             } else {
-                url = Common.getUrl({name: 'admin_library_group_share', repo_id: this.repo_id});
-                data = {'permission': item_data.permission, 'group_id': item_data.group_id};
+                data = {
+                    'repo_id': _this.repo_id,
+                    'share_type': 'group',
+                    'permission': item_data.permission,
+                    'share_to': item_data.group_id
+                };
             }
 
             $.ajax({
@@ -111,14 +131,16 @@ define([
                 error: function (xhr) {
                     var err_msg;
                     if (xhr.responseText) {
-                        err_msg = gettext("Delete failed");
+                        var parsed_resp = $.parseJSON(xhr.responseText);
+                        err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
                         err_msg = gettext("Failed. Please check the network.");
                     }
                     if (item_data.for_user) {
                         $('#dir-user-share .error').html(err_msg).removeClass('hide');
                     } else {
-                        $('#dir-group-group .error').html(err_msg).removeClass('hide');
+                        $('#dir-group-share .error').html(err_msg).removeClass('hide');
                     }
                 }
             });

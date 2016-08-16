@@ -46,4 +46,6 @@ class SearchGroupTest(BaseTestCase):
         self.login_as(self.user)
 
         resp = self.client.get(self.endpoint + '?q=' + self.group_name)
-        self.assertEqual(403, resp.status_code)
+        json_resp = json.loads(resp.content)
+        self.assertEqual(200, resp.status_code)
+        assert len(json_resp) > 0

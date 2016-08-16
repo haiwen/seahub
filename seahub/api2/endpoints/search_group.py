@@ -8,6 +8,7 @@ from rest_framework import status
 
 from django.conf import settings
 
+import seaserv
 from seaserv import ccnet_api
 
 from seahub.api2.authentication import TokenAuthentication
@@ -17,6 +18,10 @@ from seahub.api2.utils import api_error
 from seahub.utils import is_org_context
 from seahub.utils.timeutils import timestamp_to_isoformat_timestr
 
+try:
+    from seahub.settings import CLOUD_MODE
+except ImportError:
+    CLOUD_MODE = False
 
 def get_group_info(group_id):
     group = ccnet_api.get_group(group_id)
@@ -58,13 +63,15 @@ class SearchGroup(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-        if not settings.ENABLE_GLOBAL_ADDRESSBOOK:
-            error_msg = 'Feature disabled.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
-        if is_org_context(request):
-            org_id = request.user.org.org_id
-            groups = ccnet_api.get_org_groups(org_id, -1, -1)
+        if CLOUD_MODE:
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                groups = ccnet_api.get_org_groups(org_id, -1, -1)
+            elif settings.ENABLE_GLOBAL_ADDRESSBOOK:
+                groups = ccnet_api.get_all_groups(-1, -1)
+            else:
+                username = request.user.username
+                groups = seaserv.get_personal_groups_by_user(username)
         else:
             groups = ccnet_api.get_all_groups(-1, -1)
 

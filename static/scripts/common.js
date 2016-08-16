@@ -181,10 +181,7 @@ define([
                 case 'admin-system-library': return siteRoot + 'api/v2.1/admin/system-library/';
                 case 'admin-trash-libraries': return siteRoot + 'api/v2.1/admin/trash-libraries/';
                 case 'admin-trash-library': return siteRoot + 'api/v2.1/admin/trash-libraries/' + options.repo_id + '/';
-                case 'admin_library_user_shares': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/user-shares/';
-                case 'admin_library_user_share': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/user-share/';
-                case 'admin_library_group_shares': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/group-shares/';
-                case 'admin_library_group_share': return siteRoot + 'api/v2.1/admin/libraries/' + options.repo_id + '/group-share/';
+                case 'admin_shares': return siteRoot + 'api/v2.1/admin/shares/';
             }
         },
 

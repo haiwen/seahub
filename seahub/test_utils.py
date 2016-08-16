@@ -142,6 +142,16 @@ class Fixtures(Exam):
             group_id = self.group.id
         return ccnet_threaded_rpc.remove_group(group_id, self.user.username)
 
+    def share_repo_to_admin_with_r_permission(self):
+        # share user's repo to admin with 'r' permission
+        seafile_api.share_repo(self.repo.id, self.user.username,
+                self.admin.username, 'r')
+
+    def share_repo_to_admin_with_rw_permission(self):
+        # share user's repo to admin with 'rw' permission
+        seafile_api.share_repo(self.repo.id, self.user.username,
+                self.admin.username, 'rw')
+
     def set_user_folder_r_permission_to_admin(self):
 
         # share user's repo to admin with 'rw' permission

@@ -63,7 +63,11 @@ define([
             }, Common.contactInputOptionsForSelect2()));
 
             Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'admin_library_user_shares', repo_id: repo_id}),
+                'get_url': Common.getUrl({name: 'admin_shares'}),
+                'data': {
+                    'repo_id': repo_id,
+                    'share_type': 'user'
+                },
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
@@ -96,7 +100,11 @@ define([
             }, Common.groupInputOptionsForSelect2()));
 
             Common.ajaxGet({
-                'get_url': Common.getUrl({name: 'admin_library_group_shares', repo_id: repo_id}),
+                'get_url': Common.getUrl({name: 'admin_shares'}),
+                'data': {
+                    'repo_id': repo_id,
+                    'share_type': 'group'
+                },
                 'after_op_success': function (data) {
                     $(data).each(function(index, item) {
                         var new_item = new FolderShareItemView({
@@ -136,13 +144,15 @@ define([
 
             Common.disableButton($submitBtn);
             $.ajax({
-                url: Common.getUrl({name: 'admin_library_user_shares', repo_id: repo_id}),
+                url: Common.getUrl({name: 'admin_shares'}),
                 dataType: 'json',
                 method: 'POST',
                 beforeSend: Common.prepareCSRFToken,
                 traditional: true,
                 data: {
-                    'email': emails.split(','),
+                    'repo_id': repo_id,
+                    'share_type': 'user',
+                    'share_to': emails.split(','),
                     'permission': perm
                 },
                 success: function(data) {
@@ -177,8 +187,9 @@ define([
                     if (xhr.responseText) {
                         var parsed_resp = $.parseJSON(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
-                        err_msg = gettext("Failed. Please check the network.")
+                        err_msg = gettext("Failed. Please check the network.");
                     }
                     $error.html(err_msg).removeClass('hide');
                 },
@@ -209,13 +220,15 @@ define([
             Common.disableButton($submitBtn);
 
             $.ajax({
-                url: Common.getUrl({name: 'admin_library_group_shares',repo_id: repo_id}),
+                url: Common.getUrl({name: 'admin_shares'}),
                 dataType: 'json',
                 method: 'POST',
                 beforeSend: Common.prepareCSRFToken,
                 traditional: true,
                 data: {
-                    'group_id': groups.split(','),
+                    'repo_id': repo_id,
+                    'share_type': 'group',
+                    'share_to': groups.split(','),
                     'permission': perm
                 },
                 success: function(data) {
@@ -250,8 +263,9 @@ define([
                     if (xhr.responseText) {
                         var parsed_resp = $.parseJSON(xhr.responseText);
                         err_msg = parsed_resp.error||parsed_resp.error_msg;
+                        err_msg = Common.HTMLescape(err_msg);
                     } else {
-                        err_msg = gettext("Failed. Please check the network.")
+                        err_msg = gettext("Failed. Please check the network.");
                     }
                     $error.html(err_msg).removeClass('hide');
                 },

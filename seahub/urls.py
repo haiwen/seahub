@@ -47,8 +47,7 @@ from seahub.api2.endpoints.admin.library_dirents import AdminLibraryDirents, Adm
 from seahub.api2.endpoints.admin.system_library import AdminSystemLibrary
 from seahub.api2.endpoints.admin.trash_libraries import AdminTrashLibraries, AdminTrashLibrary
 from seahub.api2.endpoints.admin.groups import AdminGroups, AdminGroup
-from seahub.api2.endpoints.admin.library_user_shares import AdminLibraryUserShares, AdminLibraryUserShare
-from seahub.api2.endpoints.admin.library_group_shares import AdminLibraryGroupShares, AdminLibraryGroupShare
+from seahub.api2.endpoints.admin.shares import AdminShares
 
 # Uncomment the next two lines to enable the admin:
 #from django.contrib import admin
@@ -218,10 +217,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/system-library/$', AdminSystemLibrary.as_view(), name='api-v2.1-admin-system-library'),
     url(r'^api/v2.1/admin/trash-libraries/$', AdminTrashLibraries.as_view(), name='api-v2.1-admin-trash-libraries'),
     url(r'^api/v2.1/admin/trash-libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminTrashLibrary.as_view(), name='api-v2.1-admin-trash-library'),
-    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/user-shares/$', AdminLibraryUserShares.as_view(), name='api-v2.1-admin-library-user-shares'),
-    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/user-share/$', AdminLibraryUserShare.as_view(), name='api-v2.1-admin-library-user-share'),
-    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/group-shares/$', AdminLibraryGroupShares.as_view(), name='api-v2.1-admin-library-group-shares'),
-    url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/group-share/$', AdminLibraryGroupShare.as_view(), name='api-v2.1-admin-library-group-share'),
+    url(r'^api/v2.1/admin/shares/$', AdminShares.as_view(), name='api-v2.1-admin-shares'),
 
     (r'^avatar/', include('seahub.avatar.urls')),
     (r'^notification/', include('seahub.notifications.urls')),
