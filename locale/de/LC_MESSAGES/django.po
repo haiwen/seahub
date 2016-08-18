@@ -1959,7 +1959,7 @@ msgstr "Erstellt am"
 #: seahub/institutions/templates/institutions/user_info.html:117
 #: seahub/templates/sysadmin/userinfo.html:223
 msgid "This user has not created or joined any groups"
-msgstr "Benutzer/in ist nicht Mitglied einer Gruppe und hat  keine erstellet"
+msgstr "Benutzer/in ist nicht Mitglied einer Gruppe und hat  keine erstellt"
 
 #: seahub/institutions/templates/institutions/useradmin.html:17
 #: seahub/templates/sysadmin/sys_inst_info_user.html:15
