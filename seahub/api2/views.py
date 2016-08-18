@@ -118,8 +118,7 @@ from seaserv import seafserv_threaded_rpc, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    list_inner_pub_repos_by_owner, is_group_user, \
-    remove_share, unset_inner_pub_repo, get_group, \
+    is_group_user, remove_share, unset_inner_pub_repo, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
     create_org, ccnet_api
@@ -1123,6 +1122,7 @@ class RepoOwner(APIView):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
+        pub_repos = []
         if org_id:
             # get repo shared to user/group list
             shared_users = seafile_api.list_org_repo_shared_to(org_id,
@@ -1130,7 +1130,7 @@ class RepoOwner(APIView):
             shared_groups = seafile_api.list_org_repo_shared_group(org_id,
                     repo_owner, repo_id)
 
-            # get all pub repos
+            # get all org pub repos
             pub_repos = seaserv.seafserv_threaded_rpc.list_org_inner_pub_repos_by_owner(
                     org_id, repo_owner)
         else:
@@ -1141,8 +1141,8 @@ class RepoOwner(APIView):
                     repo_owner, repo_id)
 
             # get all pub repos
-            pub_repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
-                    repo_owner)
+            if not request.cloud_mode:
+                pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
         # transfer repo
         try:
@@ -1195,8 +1195,8 @@ class RepoOwner(APIView):
                 continue
 
             if org_id:
-                seaserv.seafserv_threaded_rpc.set_org_inner_pub_repo(
-                        org_id, repo_id, pub_repo.permission)
+                seafile_api.set_org_inner_pub_repo(org_id, repo_id,
+                        pub_repo.permission)
             else:
                 seaserv.seafserv_threaded_rpc.set_inner_pub_repo(
                         repo_id, pub_repo.permission)
@@ -2495,6 +2495,7 @@ class DirView(APIView):
                                             content_type=json_content_type)
                     response["oid"] = dir_id
                     response["dir_perm"] = seafile_api.check_permission_by_path(repo_id, path, username)
+
                     return response
 
             return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
@@ -2839,7 +2840,7 @@ class SharedRepos(APIView):
         shared_repos += list_share_repos(username, 'from_email', -1, -1)
         shared_repos += get_group_repos_by_owner(username)
         if not CLOUD_MODE:
-            shared_repos += list_inner_pub_repos_by_owner(username)
+            shared_repos += seafile_api.list_inner_pub_repos_by_owner(username)
 
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)

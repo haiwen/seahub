@@ -101,8 +101,7 @@ class SharedReposTest(BaseTestCase):
 
         self.share_repo_to_public()
 
-        repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
-                self.user_name)
+        repos = seafile_api.list_inner_pub_repos_by_owner(self.user_name)
         assert repos[0].permission == 'rw'
 
         self.login_as(self.user)
@@ -113,8 +112,7 @@ class SharedReposTest(BaseTestCase):
 
         self.assertEqual(200, resp.status_code)
 
-        repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
-                self.user_name)
+        repos = seafile_api.list_inner_pub_repos_by_owner(self.user_name)
         assert repos[0].permission == 'r'
 
     def test_delete_user_share(self):
@@ -162,7 +160,7 @@ class SharedReposTest(BaseTestCase):
         self.share_repo_to_public()
 
         # repo in public
-        repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
+        repos = seafile_api.list_inner_pub_repos_by_owner(
                 self.user_name)
         assert repos[0].permission == 'rw'
 
@@ -175,7 +173,7 @@ class SharedReposTest(BaseTestCase):
         self.assertEqual(200, resp.status_code)
 
         # repo NOT in public
-        repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
+        repos = seafile_api.list_inner_pub_repos_by_owner(
                 self.user_name)
         assert len(repos) == 0
 
