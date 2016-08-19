@@ -1230,21 +1230,6 @@ def upload_file_done(request):
     return HttpResponse(json.dumps({'success': True}), content_type=ct)
 
 @login_required_ajax
-def unseen_notices_count(request):
-    """Count user's unseen notices.
-
-    Arguments:
-    - `request`:
-    """
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    count = UserNotification.objects.count_unseen_user_notifications(username)
-    result = {}
-    result['count'] = count
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-@login_required_ajax
 def get_popup_notices(request):
     """Get user's notifications.
 

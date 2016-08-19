@@ -30,11 +30,11 @@ define([
 
             var reqUnreadNum = function() {
                 $.ajax({
-                    url: Common.getUrl({name: 'get_unseen_notices_num'}),
+                    url: Common.getUrl({name: 'notifications'}),
                     dataType: 'json',
                     cache: false,
                     success: function(data) {
-                        var count = data['count'],
+                        var count = data['unseen_count'],
                             $num = _this.$num;
                         $num.html(count);
                         if (count > 0) {

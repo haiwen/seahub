@@ -34,6 +34,7 @@ from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
 from seahub.api2.endpoints.invitations import InvitationsView
 from seahub.api2.endpoints.invitation import InvitationView
+from seahub.api2.endpoints.notifications import NotificationsView
 
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
@@ -161,7 +162,6 @@ urlpatterns = patterns(
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
     url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
-    url(r'^ajax/unseen-notices-count/$', unseen_notices_count, name='unseen_notices_count'),
     url(r'^ajax/get_popup_notices/$', get_popup_notices, name='get_popup_notices'),
     url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),
     url(r'^ajax/set_notice_seen_by_id/$', set_notice_seen_by_id, name='set_notice_seen_by_id'),
@@ -206,6 +206,8 @@ urlpatterns = patterns(
     url(r'^api/v2.1/admin/device-errors/$', AdminDeviceErrors.as_view(), name='api-v2.1-admin-device-errors'),
     url(r'^api/v2.1/invitations/$', InvitationsView.as_view()),
     url(r'^api/v2.1/invitations/(?P<token>[a-f0-9]{32})/$', InvitationView.as_view()),
+    url(r'^api/v2.1/notifications/$', NotificationsView.as_view()),
+
     url(r'^api/v2.1/admin/libraries/$', AdminLibraries.as_view(), name='api-v2.1-admin-libraries'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/$', AdminLibrary.as_view(), name='api-v2.1-admin-library'),
     url(r'^api/v2.1/admin/libraries/(?P<repo_id>[-0-9a-f]{36})/dirents/$', AdminLibraryDirents.as_view(), name='api-v2.1-admin-library-dirents'),
