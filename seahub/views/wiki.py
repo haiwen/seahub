@@ -54,6 +54,9 @@ def personal_wiki(request, page_name="home"):
     else:
         joined_groups = seaserv.get_personal_groups_by_user(username)
 
+    if joined_groups:
+        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+
     wiki_exists = True
     try:
         content, repo, dirent = get_personal_wiki_page(username, page_name)
@@ -114,8 +117,19 @@ def personal_wiki_pages(request):
     """
     List personal wiki pages.
     """
+
+    username = request.user.username
+
+    if request.cloud_mode and request.user.org is not None:
+        org_id = request.user.org.org_id
+        joined_groups = seaserv.get_org_groups_by_user(org_id, username)
+    else:
+        joined_groups = seaserv.get_personal_groups_by_user(username)
+
+    if joined_groups:
+        joined_groups.sort(lambda x, y: cmp(x.group_name.lower(), y.group_name.lower()))
+
     try:
-        username = request.user.username
         repo = get_personal_wiki_repo(username)
         pages = get_wiki_pages(repo)
     except SearpcError:
@@ -128,6 +142,7 @@ def personal_wiki_pages(request):
             "repo_id": repo.id,
             "search_repo_id": repo.id,
             "search_wiki": True,
+            "grps": joined_groups,
             }, context_instance=RequestContext(request))
 
 
