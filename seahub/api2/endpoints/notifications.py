@@ -1,4 +1,6 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
+
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -8,6 +10,7 @@ from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.notifications.models import UserNotification
 
+logger = logging.getLogger(__name__)
 json_content_type = 'application/json; charset=utf-8'
 
 class NotificationsView(APIView):
@@ -50,5 +53,32 @@ class NotificationsView(APIView):
                 msg_from = d.get('msg_from')
                 from seahub.message.models import UserMessage
                 UserMessage.objects.update_unread_messages(msg_from, username)
+
+        return Response({'success': True})
+
+class NotificationView(APIView):
+
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
+
+    def put(self, request):
+        """ currently only used for mark a notification seen
+
+        Permission checking:
+        1. login user.
+        """
+
+        notice_id = request.data.get('notice_id')
+
+        try:
+            notice = UserNotification.objects.get(id=notice_id)
+        except UserNotification.DoesNotExist as e:
+            logger.error(e)
+            pass
+
+        if not notice.seen:
+            notice.seen = True
+            notice.save()
 
         return Response({'success': True})

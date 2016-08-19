@@ -1256,32 +1256,6 @@ def get_popup_notices(request):
                 }), content_type=content_type)
 
 @login_required_ajax
-@require_POST
-def set_notice_seen_by_id(request):
-    """
-
-    Arguments:
-    - `request`:
-    """
-    content_type = 'application/json; charset=utf-8'
-    notice_id = request.GET.get('notice_id')
-
-    try:
-        notice = UserNotification.objects.get(id=notice_id)
-    except UserNotification.DoesNotExist as e:
-        logger.error(e)
-        return HttpResponse(json.dumps({
-                    'error': _(u'Failed')
-                    }), status=400, content_type=content_type)
-
-    if not notice.seen:
-        notice.seen = True
-        notice.save()
-
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-
-
-@login_required_ajax
 def space_and_traffic(request):
     content_type = 'application/json; charset=utf-8'
     username = request.user.username

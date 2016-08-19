@@ -100,9 +100,10 @@ define([
             var notice_id = $el.closest('.unread').data('id');
             var link_href = $el.attr('href');
             $.ajax({
-                url: Common.getUrl({name: 'set_notice_seen_by_id'}) + '?notice_id=' + encodeURIComponent(notice_id),
-                type: 'POST',
+                url: Common.getUrl({name: 'notification'}),
+                type: 'PUT',
                 dataType: 'json',
+                data:{'notice_id': encodeURIComponent(notice_id)},
                 beforeSend: Common.prepareCSRFToken,
                 success: function(data) {
                     location.href = link_href;
