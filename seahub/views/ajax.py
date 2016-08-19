@@ -1083,28 +1083,6 @@ def cancel_cp(request):
 
 ########## contacts related
 @login_required_ajax
-def get_contacts(request):
-    content_type = 'application/json; charset=utf-8'
-
-    username = request.user.username
-    contacts = Contact.objects.get_contacts_by_user(username)
-    contact_list = []
-    from seahub.avatar.templatetags.avatar_tags import avatar
-    for c in contacts:
-        try:
-            user = User.objects.get(email=c.contact_email)
-            if user.is_active:
-                contact_list.append({
-                    "email": c.contact_email,
-                    "avatar": avatar(c.contact_email, 32),
-                    "name": email2nickname(c.contact_email),
-                    })
-        except User.DoesNotExist:
-            continue
-
-    return HttpResponse(json.dumps({"contacts":contact_list}), content_type=content_type)
-
-@login_required_ajax
 def get_current_commit(request, repo_id):
     content_type = 'application/json; charset=utf-8'
 

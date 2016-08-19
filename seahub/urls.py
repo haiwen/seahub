@@ -160,7 +160,6 @@ urlpatterns = patterns(
     url(r'^ajax/toggle-personal-modules/$', toggle_personal_modules, name='toggle_personal_modules'),
     url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
-    url(r'^ajax/contacts/$', get_contacts, name='get_contacts'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
     url(r'^ajax/get_popup_notices/$', get_popup_notices, name='get_popup_notices'),
     url(r'^ajax/set_notices_seen/$', set_notices_seen, name='set_notices_seen'),

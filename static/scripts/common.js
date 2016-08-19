@@ -156,7 +156,6 @@ define([
 
                 // Misc
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
-                case 'get_user_contacts': return siteRoot + 'ajax/contacts/';
                 case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
                 case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
                 case 'notifications': return siteRoot + 'api/v2.1/notifications/';
