@@ -123,8 +123,8 @@ define([
             if (this.$(".unread").length > 0) {
                 // set all unread notice to be read
                 $.ajax({
-                    url: Common.getUrl({name: 'set_notices_seen'}),
-                    type: 'POST',
+                    url: Common.getUrl({name: 'notifications'}),
+                    type: 'PUT',
                     dataType: 'json',
                     beforeSend: Common.prepareCSRFToken,
                     success: function() {

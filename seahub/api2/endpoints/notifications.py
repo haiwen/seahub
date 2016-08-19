@@ -17,6 +17,11 @@ class NotificationsView(APIView):
     throttle_classes = (UserRateThrottle,)
 
     def get(self, request):
+        """ currently only used for get unseen notifications count
+
+        Permission checking:
+        1. login user.
+        """
 
         username = request.user.username
         unseen_count = UserNotification.objects.count_unseen_user_notifications(username)
@@ -24,3 +29,26 @@ class NotificationsView(APIView):
         result['unseen_count'] = unseen_count
 
         return Response(result)
+
+    def put(self, request):
+        """ currently only used for mark all notifications seen
+
+        Permission checking:
+        1. login user.
+        """
+
+        username = request.user.username
+        unseen_notices = UserNotification.objects.get_user_notifications(username,
+                                                                         seen=False)
+        for notice in unseen_notices:
+            notice.seen = True
+            notice.save()
+
+            # TODO mark related user msg as read
+            if notice.is_user_message():
+                d = notice.user_message_detail_to_dict()
+                msg_from = d.get('msg_from')
+                from seahub.message.models import UserMessage
+                UserMessage.objects.update_unread_messages(msg_from, username)
+
+        return Response({'success': True})

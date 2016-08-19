@@ -157,9 +157,10 @@ define([
                 // Misc
                 case 'thumbnail_create': return siteRoot + 'thumbnail/' + options.repo_id + '/create/';
                 case 'get_popup_notices': return siteRoot + 'ajax/get_popup_notices/';
-                case 'set_notices_seen': return siteRoot + 'ajax/set_notices_seen/';
+
                 case 'notifications': return siteRoot + 'api/v2.1/notifications/';
                 case 'set_notice_seen_by_id': return siteRoot + 'ajax/set_notice_seen_by_id/';
+
                 case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
                 case 'starred_files': return siteRoot + 'api2/starredfiles/';
                 case 'events': return siteRoot + 'api2/events/';

@@ -43,8 +43,8 @@ $('#mark-all-read').click(function() {
     var unread_items = $('#notices-table .unread');
     if (unread_items.length > 0) {
         $.ajax({
-            url: '{% url 'set_notices_seen' %}',
-            type: 'POST',
+            url: "{% url 'api-v2.1-notifications' %}",
+            type: 'PUT',
             dataType: 'json',
             beforeSend: prepareCSRFToken,
             success: function() {

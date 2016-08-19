@@ -1257,31 +1257,6 @@ def get_popup_notices(request):
 
 @login_required_ajax
 @require_POST
-def set_notices_seen(request):
-    """Set user's notices seen:
-
-    Arguments:
-    - `request`:
-    """
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    unseen_notices = UserNotification.objects.get_user_notifications(username,
-                                                                     seen=False)
-    for notice in unseen_notices:
-        notice.seen = True
-        notice.save()
-
-        # mark related user msg as read
-        if notice.is_user_message():
-            d = notice.user_message_detail_to_dict()
-            msg_from = d.get('msg_from')
-            UserMessage.objects.update_unread_messages(msg_from, username)
-
-    return HttpResponse(json.dumps({'success': True}), content_type=content_type)
-
-@login_required_ajax
-@require_POST
 def set_notice_seen_by_id(request):
     """
 
