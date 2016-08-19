@@ -35,7 +35,7 @@ from .authentication import TokenAuthentication
 from .serializers import AuthTokenSerializer
 from .utils import get_diff_details, \
     api_error, get_file_size, prepare_starred_files, \
-    get_groups, get_group_and_contacts, prepare_events, \
+    get_groups, prepare_events, \
     api_group_check, get_timestamp, json_response, is_seafile_pro, \
     api_repo_user_folder_perm_check, api_repo_setting_permission_check, \
     api_repo_group_folder_perm_check
@@ -3406,23 +3406,6 @@ class SharedRepo(APIView):
                     'Share type can only be personal or group or public.')
 
         return Response('success', status=status.HTTP_200_OK)
-
-class GroupAndContacts(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        contacts, umsgnum, group_json, gmsgnum, replies, replynum = get_group_and_contacts(request.user.username)
-        res = {
-            "groups": group_json,
-            "contacts": contacts,
-            "newreplies":replies,
-            "replynum": replynum,
-            "umsgnum" : umsgnum,
-            "gmsgnum" : gmsgnum,
-            }
-        return Response(res)
 
 class EventsView(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)

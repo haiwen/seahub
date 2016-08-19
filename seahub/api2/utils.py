@@ -6,6 +6,7 @@ import os
 import time
 import json
 import re
+import logging
 
 from collections import defaultdict
 from functools import wraps
@@ -16,18 +17,16 @@ from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework import status, serializers
 import seaserv
-from seaserv import seafile_api, get_commits, server_repo_size, \
-    get_personal_groups_by_user, is_group_user, get_group, seafserv_threaded_rpc
+from seaserv import seafile_api, get_personal_groups_by_user, \
+        is_group_user, get_group, seafserv_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.base.templatetags.seahub_tags import email2nickname, \
     translate_seahub_time, file_icon_filter
-from seahub.contacts.models import Contact
 from seahub.group.models import GroupMessage, MessageReply, \
     MessageAttachment, PublicGroup
 from seahub.group.views import is_group_staff
-from seahub.message.models import UserMessage, UserMsgAttachment
 from seahub.notifications.models import UserNotification
 from seahub.utils import api_convert_desc_link, get_file_type_and_ext, \
     gen_file_get_url, is_org_context, get_site_scheme_and_netloc
@@ -39,6 +38,7 @@ from seahub.avatar.templatetags.avatar_tags import api_avatar_url, \
     get_default_avatar_url
 from seahub.profile.models import Profile
 
+logger = logging.getLogger(__name__)
 
 def api_error(code, msg):
     err_resp = {'error_msg': msg}
@@ -67,7 +67,8 @@ def prepare_starred_files(files):
                 file_id = seafile_api.get_file_id_by_path(f.repo.id, f.path)
                 sfile['oid'] = file_id
                 sfile['size'] = get_file_size(f.repo.store_id, f.repo.version, file_id)
-            except SearpcError, e:
+            except SearpcError as e:
+                logger.error(e)
                 pass
 
         array.append(sfile)
@@ -118,75 +119,6 @@ def get_msg_group_id(msg_id):
         return None
 
     return msg.group_id
-
-def get_group_and_contacts(email):
-    group_json = []
-    contacts_json = []
-    replies_json = []
-    gmsgnums = {}
-    umsgnums = {}
-    replies = {}
-    gmsgnum = umsgnum = replynum = 0
-
-    contacts = [c.contact_email for c in Contact.objects.filter(user_email=email)]
-    joined_groups = get_personal_groups_by_user(email)
-
-    notes = UserNotification.objects.get_user_notifications(email, seen=False)
-    for n in notes:
-        if n.is_group_msg():
-            try:
-                gid  = n.group_message_detail_to_dict().get('group_id')
-            except UserNotification.InvalidDetailError:
-                continue
-            gmsgnums[gid] = gmsgnums.get(gid, 0) + 1
-        elif n.is_user_message():
-            msg_from = n.user_message_detail_to_dict()['msg_from']
-            if msg_from not in contacts:
-                contacts.append(msg_from)
-            umsgnums[n.detail] = umsgnums.get(msg_from, 0) + 1
-
-    for r in replies_json:
-        r['msgnum'] = replies[r['msg_id']]
-
-    for g in joined_groups:
-        msg = GroupMessage.objects.filter(group_id=g.id).order_by('-timestamp')[:1]
-        mtime = 0
-        lastmsg = None
-        if len(msg) >= 1:
-            mtime = get_timestamp(msg[0].timestamp)
-            lastmsg = msg[0].message
-        group = {
-            "id":g.id,
-            "name":g.group_name,
-            "creator":g.creator_name,
-            "ctime":g.timestamp,
-            "mtime":mtime,
-            "lastmsg":lastmsg,
-            "msgnum":gmsgnums.get(g.id, 0),
-            }
-
-        gmsgnum = gmsgnum + gmsgnums.get(g.id, 0)
-        group_json.append(group)
-
-    for contact in contacts:
-        msg = UserMessage.objects.get_messages_between_users(
-            contact, email).order_by('-timestamp')[:1]
-        mtime = 0
-        lastmsg = None
-        if len(msg) >= 1:
-            mtime = get_timestamp(msg[0].timestamp)
-            lastmsg = msg[0].message
-        c = {
-            'email' : contact,
-            'name' : email2nickname(contact),
-            "mtime" : mtime,
-            "lastmsg":lastmsg,
-            "msgnum" : umsgnums.get(contact, 0),
-            }
-        umsgnum = umsgnum + umsgnums.get(contact, 0)
-        contacts_json.append(c)
-    contacts_json.sort(key=lambda x: x["mtime"], reverse=True)
-    return contacts_json, umsgnum, group_json, gmsgnum, replies_json, replynum
 
 def prepare_events(event_groups):
     for g in event_groups:
@@ -337,39 +269,6 @@ def get_group_message_json(group_id, msg_id, get_all_replies):
     if group_id and group_id != msg.group_id:
         return None
     return group_msg_to_json(msg, get_all_replies)
-
-def get_person_msgs(to_email, page, username):
-
-    # Show 15 group messages per page.
-    paginator = Paginator(UserMessage.objects.get_messages_between_users(username, to_email).order_by('-timestamp'), 15)
-
-    # If page request (9999) is out of range, return None
-    try:
-        person_msgs = paginator.page(page)
-    except (EmptyPage, InvalidPage):
-        return None
-
-    # Force evaluate queryset to fix some database error for mysql.
-    person_msgs.object_list = list(person_msgs.object_list)
-    attachments = UserMsgAttachment.objects.list_attachments_by_user_msgs(person_msgs.object_list)
-
-    for msg in person_msgs.object_list:
-        msg.attachments = []
-        for att in attachments:
-            if att.user_msg != msg:
-                continue
-
-            pfds = att.priv_file_dir_share
-            if pfds is None: # in case that this attachment is unshared.
-                continue
-
-            att.repo_id = pfds.repo_id
-            att.path = pfds.path
-            att.name = os.path.basename(pfds.path.rstrip('/'))
-            att.token = pfds.token
-            msg.attachments.append(att)
-
-    return person_msgs
 
 def get_email(id_or_email):
     try:

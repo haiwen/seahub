@@ -12,7 +12,6 @@ from seahub.views.file import view_repo_file, view_history_file, view_trash_file
 from seahub.views.repo import repo_history_view, view_shared_dir, \
     view_shared_upload_link
 from notifications.views import notification_list
-from message.views import user_msg_list, user_msg_remove, user_received_msg_remove
 from seahub.views.wiki import personal_wiki, personal_wiki_pages, \
     personal_wiki_create, personal_wiki_page_new, personal_wiki_page_edit, \
     personal_wiki_page_delete, personal_wiki_use_lib
@@ -126,9 +125,6 @@ urlpatterns = patterns(
    (r'^file_upload_progress_page/$', file_upload_progress_page),
     url(r'^i18n/$', i18n, name='i18n'),
     url(r'^convert_cmmt_desc_link/$', convert_cmmt_desc_link, name='convert_cmmt_desc_link'),
-    url(r'^user/(?P<id_or_email>[^/]+)/msgs/$', user_msg_list, name='user_msg_list'),
-    url(r'^user/(?P<msg_id>\d+)/msgdel/$', user_msg_remove, name='user_msg_remove'),
-    url(r'^user/(?P<msg_id>\d+)/remsgdel/$', user_received_msg_remove, name='user_received_msg_remove'),
     url(r'^modules/toggle/$', toggle_modules, name="toggle_modules"),
     url(r'^download_client_program/$', TemplateView.as_view(template_name="download.html"), name="download_client"),
     url(r'^choose_register/$', TemplateView.as_view(template_name="choose_register.html"), name="choose_register"),
@@ -220,7 +216,6 @@ urlpatterns = patterns(
     (r'^notification/', include('seahub.notifications.urls')),
     (r'^contacts/', include('seahub.contacts.urls')),
     (r'^group/', include('seahub.group.urls')),
-    (r'^message/', include('seahub.message.urls')),
     (r'^options/', include('seahub.options.urls')),
     (r'^profile/', include('seahub.profile.urls')),
     (r'^share/', include('seahub.share.urls')),

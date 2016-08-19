@@ -20,12 +20,6 @@
                 <p class="detail">{{ notice.format_group_message_detail }}</p>
                     {% endif %}
 
-                {% elif notice.is_user_message %}
-                <p class="brief">{{ notice.format_user_message_title|safe }}</p>
-                    {% if notice.format_user_message_detail %}
-                <p class="detail">{{ notice.format_user_message_detail }}</p>
-                    {% endif %}
-
                 {% elif notice.is_file_uploaded_msg %}
                 <p class="brief">{{ notice.format_file_uploaded_msg|safe }}</p>
 

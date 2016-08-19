@@ -34,7 +34,6 @@ from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
-from seahub.message.models import UserMessage
 from seahub.share.models import UploadLinkShare
 from seahub.group.models import PublicGroup
 from seahub.signals import upload_file_successful, repo_created, repo_deleted

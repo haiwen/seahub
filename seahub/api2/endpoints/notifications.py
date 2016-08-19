@@ -47,13 +47,6 @@ class NotificationsView(APIView):
             notice.seen = True
             notice.save()
 
-            # TODO mark related user msg as read
-            if notice.is_user_message():
-                d = notice.user_message_detail_to_dict()
-                msg_from = d.get('msg_from')
-                from seahub.message.models import UserMessage
-                UserMessage.objects.update_unread_messages(msg_from, username)
-
         return Response({'success': True})
 
 class NotificationView(APIView):
