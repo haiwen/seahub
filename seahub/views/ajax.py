@@ -196,22 +196,6 @@ def get_unenc_group_repos(request, group_id):
     return HttpResponse(json.dumps(repo_list), content_type=content_type)
 
 @login_required_ajax
-def get_my_unenc_repos(request):
-    """Get my owned and unencrypted repos.
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    repos = get_owned_repo_list(request)
-    repo_list = []
-    for repo in repos:
-        if repo.encrypted or repo.is_virtual:
-            continue
-        repo_list.append({"name": repo.name, "id": repo.id})
-
-    repo_list.sort(lambda x, y: cmp(x['name'].lower(), y['name'].lower()))
-    return HttpResponse(json.dumps(repo_list), content_type=content_type)
-
-@login_required_ajax
 def unenc_rw_repos(request):
     """Get a user's unencrypt repos that he/she can read-write.
 

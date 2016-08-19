@@ -158,7 +158,6 @@ urlpatterns = patterns(
     url(r'^ajax/group/(?P<group_id>\d+)/toggle-modules/$', toggle_group_modules, name='toggle_group_modules'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
     url(r'^ajax/toggle-personal-modules/$', toggle_personal_modules, name='toggle_personal_modules'),
-    url(r'^ajax/my-unenc-repos/$', get_my_unenc_repos, name='get_my_unenc_repos'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),
     url(r'^ajax/get_popup_notices/$', get_popup_notices, name='get_popup_notices'),

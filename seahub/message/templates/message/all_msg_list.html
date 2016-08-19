@@ -65,7 +65,7 @@
 {% block extra_script %}{{block.super}}
 <script type="text/javascript" src="{{ MEDIA_URL }}js/select2.min.js?t=1393578720"></script>
 <script type="text/javascript">
-$(function(){       
+$(function(){
     $('tr[data-href]').click(function() {
         location.href = $(this).data('href');
     });
@@ -132,12 +132,9 @@ $(document).click(function(e) {
 /*
     if (!popup.hasClass('hide') && !popup.is(target) && !popup.find('*').is(target) && !popup_switch.is(target) && !add_file_popup.is(target) && !add_file_popup.find('*').is(target)) {
         popup.addClass('hide');
-    }    
+    }
 */
 });
-
-var repos_get_url = '{% url 'get_my_unenc_repos' %}';
-{% include 'snippets/add_file_js.html' %}
 
 $('#send-msg-form .cancel').click(function() {
     $('#send-msg-popup').addClass('hide');
@@ -187,7 +184,7 @@ $('#send-msg-form').submit(function() {
                     }
                 });
                 if (!r) {
-                    $('tr:first').after(new_tr);             
+                    $('tr:first').after(new_tr);
                 }
                 new_tr.click(function() {
                     location.href = $(this).data('href');
@@ -200,7 +197,7 @@ $('#send-msg-form').submit(function() {
                 err_msg = $.parseJSON(xhr.responseText).error.join('<br />');
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
-            }    
+            }
             apply_form_error(form_id, err_msg);
         }
     });

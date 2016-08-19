@@ -31,7 +31,7 @@
             <img src="{{MEDIA_URL}}img/loading-icon.gif" alt="" class="loading-tip" />
         </div>
         <input type="submit" value="{% trans "Submit" %}" class="submit" />
-        <button class="simplemodal-close">{% trans "Cancel"%}</button> 
+        <button class="simplemodal-close">{% trans "Cancel"%}</button>
     </div>
     {% endif %}
 
@@ -41,13 +41,13 @@
         {% if msg.to_email == request.user.email %}
         <li class="msg msg-received w100" data-id="{{msg.message_id}}">
         <a href="{% url 'user_profile' msg.from_email %}" class="pic fright">{% avatar msg.from_email 48 %}</a>
-        {% else %}        
+        {% else %}
         <li class="msg msg-send w100" data-id="{{msg.message_id}}">
-        <a href="{% url 'user_profile' msg.from_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a> 
+        <a href="{% url 'user_profile' msg.from_email %}" class="pic fleft">{% avatar msg.from_email 48 %}</a>
         {% endif %}
         <div class="txt">
             <div class="msg-main">
-                <div class="msg-hd w100 ovhd">                    
+                <div class="msg-hd w100 ovhd">
                     {% if msg.from_email == request.user.username %}
                     <span class="msg-del op fright vh">{% trans "Delete" %}</span>
                     {% else %}
@@ -99,7 +99,7 @@ $(window).scroll(function() {
     var up_icon = $('#msg-upward');
     var msg_panel =  up_icon.parent();
     var msg_panel_offset = msg_panel.offset();
-    var msg_panel_bot = msg_panel_offset.top + msg_panel.height(); 
+    var msg_panel_bot = msg_panel_offset.top + msg_panel.height();
     var win_st = $(window).scrollTop();
     var win_h = $(window).height() + win_st;
 
@@ -127,15 +127,12 @@ $('.cancel', msg_form).click(function() {
     $('#message').val('').height(25);
 });
 
-var repos_get_url = '{% url 'get_my_unenc_repos' %}';
-{% include 'snippets/add_file_js.html' %} 
-
 $('#personal-message-form').submit(function() {
     var form = $(this),
         msg_input = $('[name="mass_msg"]', form),
         msg = $.trim(msg_input.val()),
         files_ct = $('#selected-files');
-    
+
     if (!msg) {
         return false;
     }
@@ -152,7 +149,7 @@ $('#personal-message-form').submit(function() {
         success: function(data) {
             var new_msg = $(data['html']);
             if ($('.msg-list').length == 0) { // the new discussion is the first discussion in this page
-                form.after('<ul class="msg-list"></ul>');    
+                form.after('<ul class="msg-list"></ul>');
             }
             $('.msg-list').prepend(new_msg);
             bind_del(new_msg);
@@ -160,14 +157,14 @@ $('#personal-message-form').submit(function() {
             msg_input.val('');
             files_ct.data('files','').html('').addClass('hide');
             enable(sb_btn);
-        },  
+        },
         error: function (xhr, textStatus, errorThrown) {
             var err_msg;
             if (xhr.responseText) {
                 err_msg = $.parseJSON(xhr.responseText).error[0];
             } else {
                 err_msg = "{% trans "Failed. Please check the network." %}";
-            }    
+            }
             apply_form_error(form.attr('id'), err_msg);
         }
     });
