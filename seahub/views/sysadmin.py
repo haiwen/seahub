@@ -1443,22 +1443,33 @@ def user_search(request):
     """
     email = request.GET.get('email', '')
 
+    user_emails = []
     # search user from ccnet db
-    users = ccnet_api.search_emailusers('DB', email, -1, -1)
+    users_from_ccnet = ccnet_api.search_emailusers('DB', email, -1, -1)
+    for user in users_from_ccnet:
+        user_emails.append(user.email)
 
     # search user from ccnet ldap
-    ldap_users = ccnet_api.search_emailusers('LDAP', email, -1, -1)
-    users.extend(ldap_users)
+    users_from_ldap = ccnet_api.search_emailusers('LDAP', email, -1, -1)
+    for user in users_from_ldap:
+        user_emails.append(user.email)
 
     # search user from profile
     users_from_profile = Profile.objects.filter((Q(nickname__icontains=email)) |
             Q(contact_email__icontains=email))
-
     for user in users_from_profile:
+        user_emails.append(user.user)
+
+    # remove duplicate emails
+    user_emails = {}.fromkeys(user_emails).keys()
+
+    users = []
+    for user_email in user_emails:
         try:
-            user_obj = User.objects.get(email=user.user)
+            user_obj = User.objects.get(email=user_email)
         except User.DoesNotExist:
             continue
+
         users.append(user_obj)
 
     last_logins = UserLastLogin.objects.filter(username__in=[x.email for x in users])
