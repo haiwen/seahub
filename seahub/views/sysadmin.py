@@ -1523,16 +1523,19 @@ def sys_repo_transfer(request):
         messages.error(request, _(u'Failed to transfer, user %s not found') % new_owner)
         return HttpResponseRedirect(next)
 
-    try:
-        if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
-            messages.error(request, _(u'Can not transfer organization library'))
-            return HttpResponseRedirect(next)
+    if MULTI_TENANCY:
+        try:
+            if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+                messages.error(request, _(u'Can not transfer organization library'))
+                return HttpResponseRedirect(next)
 
-        if ccnet_threaded_rpc.get_orgs_by_user(new_owner):
-            messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
+            if ccnet_api.get_orgs_by_user(new_owner):
+                messages.error(request, _(u'Can not transfer library to organization user %s') % new_owner)
+                return HttpResponseRedirect(next)
+        except Exception as e:
+            logger.error(e)
+            messages.error(request, 'Internal Server Error')
             return HttpResponseRedirect(next)
-    except SearpcError:    # XXX: ignore rpc not found error
-        pass
 
     repo_owner = seafile_api.get_repo_owner(repo_id)
 
@@ -1543,8 +1546,9 @@ def sys_repo_transfer(request):
             repo_owner, repo_id)
 
     # get all pub repos
-    pub_repos = seaserv.seafserv_threaded_rpc.list_inner_pub_repos_by_owner(
-            repo_owner)
+    pub_repos = []
+    if not request.cloud_mode:
+        pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
 
     # transfer repo
     seafile_api.set_repo_owner(repo_id, new_owner)
@@ -1575,8 +1579,7 @@ def sys_repo_transfer(request):
         if repo_id != pub_repo.id:
             continue
 
-        seaserv.seafserv_threaded_rpc.set_inner_pub_repo(
-                repo_id, pub_repo.permission)
+        seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
 
         break
 

@@ -12,11 +12,15 @@ from django.utils.translation import ugettext as _
 from seaserv import ccnet_api, seafile_api, seafserv_threaded_rpc
 
 from seahub.views import get_system_default_repo_id
-from seahub.utils import is_org_context
 from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
 
@@ -170,7 +174,7 @@ class AdminLibrary(APIView):
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        if is_org_context(request):
+        if MULTI_TENANCY:
             try:
                 if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
                     error_msg = 'Can not transfer organization library.'
@@ -184,7 +188,52 @@ class AdminLibrary(APIView):
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
+        repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        # get repo shared to user/group list
+        shared_users = seafile_api.list_repo_shared_to(
+                repo_owner, repo_id)
+        shared_groups = seafile_api.list_repo_shared_group_by_user(
+                repo_owner, repo_id)
+
+        # get all pub repos
+        pub_repos = []
+        if not request.cloud_mode:
+            pub_repos = seafile_api.list_inner_pub_repos_by_owner(repo_owner)
+
+        # transfer repo
         seafile_api.set_repo_owner(repo_id, new_owner)
+
+        # reshare repo to user
+        for shared_user in shared_users:
+            shared_username = shared_user.user
+
+            if new_owner == shared_username:
+                continue
+
+            seafile_api.share_repo(repo_id, new_owner,
+                    shared_username, shared_user.perm)
+
+        # reshare repo to group
+        for shared_group in shared_groups:
+            shared_group_id = shared_group.group_id
+
+            if not ccnet_api.is_group_user(shared_group_id, new_owner):
+                continue
+
+            seafile_api.set_group_repo(repo_id, shared_group_id,
+                    new_owner, shared_group.perm)
+
+        # check if current repo is pub-repo
+        # if YES, reshare current repo to public
+        for pub_repo in pub_repos:
+            if repo_id != pub_repo.id:
+                continue
+
+            seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
+
+            break
+
         repo = seafile_api.get_repo(repo_id)
         repo_info = get_repo_info(repo)
 
