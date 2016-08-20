@@ -9,7 +9,6 @@ from rest_framework import status
 from django.template.defaultfilters import filesizeformat
 from django.utils.translation import ugettext as _
 
-import seaserv
 from seaserv import ccnet_api, seafile_api, seafserv_threaded_rpc
 
 from seahub.views import get_system_default_repo_id
@@ -17,6 +16,11 @@ from seahub.base.accounts import User
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.utils import api_error
+
+try:
+    from seahub.settings import MULTI_TENANCY
+except ImportError:
+    MULTI_TENANCY = False
 
 logger = logging.getLogger(__name__)
 
@@ -170,18 +174,19 @@ class AdminLibrary(APIView):
             error_msg = 'User %s not found.' % new_owner
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
-        try:
-            if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
-                error_msg = 'Can not transfer organization library.'
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+        if MULTI_TENANCY:
+            try:
+                if seafserv_threaded_rpc.get_org_id_by_repo_id(repo_id) > 0:
+                    error_msg = 'Can not transfer organization library.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
-            if ccnet_api.get_orgs_by_user(new_owner):
-                error_msg = 'Can not transfer library to organization user %s' % new_owner
-                return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-        except Exception as e:
-            logger.error(e)
-            error_msg = 'Internal Server Error'
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+                if ccnet_api.get_orgs_by_user(new_owner):
+                    error_msg = 'Can not transfer library to organization user %s' % new_owner
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
 
         repo_owner = seafile_api.get_repo_owner(repo_id)
 
@@ -225,8 +230,7 @@ class AdminLibrary(APIView):
             if repo_id != pub_repo.id:
                 continue
 
-            seaserv.seafserv_threaded_rpc.set_inner_pub_repo(
-                    repo_id, pub_repo.permission)
+            seafile_api.add_inner_pub_repo(repo_id, pub_repo.permission)
 
             break
 
