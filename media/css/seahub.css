@@ -740,9 +740,15 @@ textarea:-moz-placeholder {/* for FF */
     background:#feac74;
     color:#fff;
 }
+.left-right-tabs-content {
+    width:550px;
+    padding:0 1.4em 1em;
+    min-height:150px;
+    max-height:250px;
+    overflow:auto;
+}
 .left-right-tabs .tabs-panel {
-    padding-top:0;
-    min-width:400px;
+    padding:0;
 }
 /**** side-tabnav ****/
 .side-textnav .hd,
@@ -2387,13 +2393,6 @@ button.sf-dropdown-toggle:focus {
     padding:2px;
 }
 /* file/dir share popup */
-#repo-folder-perm-popup,
-#repo-share-link-admin-dialog,
-#folder-perm-popup,
-#file-share,
-#share-popup {
-    min-height:200px;
-}
 #file-share .tip,
 #share-popup .tip {
     max-width:400px;
@@ -3175,15 +3174,7 @@ button.sf-dropdown-toggle:focus {
 }
 
 /* user & group folder perm */
-#share-popup .tabs-panel,
-#folder-perm-tabs .tabs-panel,
-#repo-shared-links .tabs-panel,
-#repo-folder-perm .tabs-panel {
-    width:550px;
-    max-height:250px;
-    overflow:auto;
-}
-#repo-folder-perm .tabs-panel {/* for the case that the scrollbar appears */
+#repo-folder-perm .left-right-tabs-content {/* for the case that the scrollbar appears */
     width:630px;
     padding-right:0;
 }
@@ -3192,12 +3183,15 @@ button.sf-dropdown-toggle:focus {
 }
 .repo-folder-perm-folder-path {
     width:150px;
-    padding:1px 33px 1px 5px;
+    padding:3px 33px 3px 5px;
+    border:1px solid #ddd;
+    border-radius:2px;
+    margin:0;
 }
 .repo-folder-perm-add-folder {
     position:absolute;
     right:0;
-    top:4px;
+    top:1px;
     width:29px;
     height:28px;
     line-height:28px;
@@ -3209,7 +3203,7 @@ button.sf-dropdown-toggle:focus {
     margin:0;
 }
 .repo-folder-perm-content {
-    width:610px; /* for the table in it. */
+    width:612px; /* for the table in it. */
 }
 #share-popup .share-permission-select,
 .folder-perm-select {

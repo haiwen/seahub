@@ -438,7 +438,7 @@
             <% } %>
         </ul>
 
-        <div class="fright">
+        <div class="left-right-tabs-content fright">
             <span class="loading-icon loading-tip"></span>
             <% if (!repo_encrypted && can_generate_share_link) { %>
             <div id="download-link-share" class="tabs-panel">
@@ -812,7 +812,7 @@
             <li class="tab"><a href="#user-folder-perm" class="a">{% trans "User Permission" %}</a></li>
             <li class="tab"><a href="#group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
-        <div class="fright">
+        <div class="left-right-tabs-content fright">
             <div id="user-folder-perm" class="tabs-panel">
                 <table>
                     <thead>
@@ -1233,7 +1233,7 @@
             <% } %>
         </ul>
 
-        <div class="fright">
+        <div class="left-right-tabs-content fright">
             <% if (can_generate_share_link) { %>
             <div id="js-download-links" class="tabs-panel">
                 <table>
@@ -1308,7 +1308,7 @@
             <li class="tab"><a href="#js-repo-group-folder-perm" class="a">{% trans "Group Permission" %}</a></li>
         </ul>
 
-        <div class="fright">
+        <div class="left-right-tabs-content fright">
             <div id="js-repo-user-folder-perm" class="tabs-panel">
                 <div class="js-folder-perm-content repo-folder-perm-content">
                 <table>
@@ -1330,7 +1330,7 @@
                                 </div>
                             </td>
                             <td>
-                                <select name="permission" class="w100">
+                                <select name="permission" class="folder-perm-select w100">
                                     <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
                                     <option value="r">{% trans "Read-Only"%}</option>
                                 </select>
@@ -1376,7 +1376,7 @@
                                 </div>
                             </td>
                             <td>
-                                <select name="permission" class="w100">
+                                <select name="permission" class="folder-perm-select w100">
                                     <option value="rw" selected="selected">{% trans "Read-Write"%}</option>
                                     <option value="r">{% trans "Read-Only"%}</option>
                                 </select>

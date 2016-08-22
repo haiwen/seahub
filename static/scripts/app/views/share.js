@@ -24,7 +24,7 @@ define([
 
             this.render();
 
-            this.$el.modal();
+            this.$el.modal({focus: false});
             $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
 
             this.$("#share-tabs").tabs();
