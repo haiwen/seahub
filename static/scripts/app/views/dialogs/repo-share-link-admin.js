@@ -35,18 +35,25 @@ define([
             uploadLinks.link_type = 'upload';
             this.$uploadLinksPanel = this.$('#js-upload-links');
 
-            this.renderLinksPanel({
-                links: downloadLinks,
-                $panel: this.$downloadLinksPanel
-            });
-            this.renderLinksPanel({
-                links: uploadLinks,
-                $panel: this.$uploadLinksPanel
-            });
+            if (app.pageOptions.can_generate_share_link) {
+                this.renderLinksPanel({
+                    links: downloadLinks,
+                    $panel: this.$downloadLinksPanel
+                });
+            }
+
+            if (app.pageOptions.can_generate_upload_link) {
+                this.renderLinksPanel({
+                    links: uploadLinks,
+                    $panel: this.$uploadLinksPanel
+                });
+            }
         },
 
         render: function() {
             this.$el.html(this.template({
+                can_generate_share_link: app.pageOptions.can_generate_share_link,
+                can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                 title: gettext("{placeholder} Share Links")
                     .replace('{placeholder}',
                     '<span class="op-target ellipsis ellipsis-op-target" title="'
@@ -71,6 +78,7 @@ define([
                 },
                 error: function(collection, response, opts) {
                     $loadingTip.hide();
+                    var err_msg;
                     if (response.responseText) {
                         if (response['status'] == 401 || response['status'] == 403) {
                             err_msg = gettext("Permission error");

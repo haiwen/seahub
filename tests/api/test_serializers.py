@@ -9,6 +9,9 @@ class AuthTokenSerializerTest(BaseTestCase):
         s = AuthTokenSerializer(data={
             'username': self.user.username,
             'password': self.user_password,
+            'platform': 'linux',
+            'device_id': '701143c1238e6736b61c20e73de82fc95989c413',
+            'device_name': 'test',
         }, context={'request': self.fake_request})
         assert s.is_valid() is True
 
@@ -19,5 +22,8 @@ class AuthTokenSerializerTest(BaseTestCase):
         s = AuthTokenSerializer(data={
             'username': self.user.username,
             'password': self.user_password,
+            'platform': 'linux',
+            'device_id': '701143c1238e6736b61c20e73de82fc95989c413',
+            'device_name': 'test',
         }, context={'request': self.fake_request})
         assert s.is_valid() is True

@@ -1482,10 +1482,10 @@ def user_search(request):
         _populate_user_quota_usage(user)
 
         # check user's role
-        if user.role == GUEST_USER:
-            user.is_guest = True
-        else:
-            user.is_guest = False
+        user.is_guest = True if get_user_role(user) == GUEST_USER else False
+        user.is_default = True if get_user_role(user) == DEFAULT_USER else False
+        extra_user_roles = [x for x in get_available_roles()
+                            if x not in get_basic_user_roles()]
 
         # populate user last login time
         user.last_login = None
@@ -1504,6 +1504,7 @@ def user_search(request):
             'default_user': DEFAULT_USER,
             'guest_user': GUEST_USER,
             'is_pro': is_pro_version(),
+            'extra_user_roles': extra_user_roles,
             }, context_instance=RequestContext(request))
 
 @login_required

@@ -110,8 +110,11 @@ class UserPermissions(object):
     def can_add_group(self):
         return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_add_group']
 
-    def can_generate_shared_link(self):
-        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_shared_link']
+    def can_generate_share_link(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_share_link']
+
+    def can_generate_upload_link(self):
+        return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_generate_upload_link']
 
     def can_use_global_address_book(self):
         return get_enabled_role_permissions_by_role(DEFAULT_USER)['can_use_global_address_book']

@@ -45,7 +45,9 @@ define([
             var icon_url = this.model.getIconUrl(icon_size);
             _.extend(obj, {
                 'icon_url': icon_url,
-                'icon_title': this.model.getIconTitle()
+                'icon_title': this.model.getIconTitle(),
+                'can_generate_share_link': app.pageOptions.can_generate_share_link,
+                'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             });
             this.$el.html(this.template(obj));
             this.dropdown = new DropdownView({
@@ -59,7 +61,7 @@ define([
             var repo_name = this.model.get('name');
             var popupTitle = gettext("Delete Library");
             var popupContent = gettext("Are you sure you want to delete %s ?").replace('%s', '<span class="op-target ellipsis ellipsis-op-target">' + Common.HTMLescape(repo_name) + '</span>');
-            var yesCallback = function() { 
+            var yesCallback = function() {
                 $.ajax({
                     url: Common.getUrl({'name':'repo', 'repo_id': _this.model.get('id')}),
                     type: 'DELETE',

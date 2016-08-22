@@ -5,7 +5,7 @@ from mock import patch
 from django.core.urlresolvers import reverse
 from seahub.test_utils import BaseTestCase
 from seahub.share.models import FileShare
-from seahub.api2.endpoints.share_links import ShareLinks, ShareLink
+from seahub.api2.permissions import CanGenerateShareLink
 
 try:
     from seahub.settings import LOCAL_PRO_DEV_ENV
@@ -79,10 +79,10 @@ class ShareLinksTest(BaseTestCase):
 
         self._remove_share_link(token)
 
-    @patch.object(ShareLinks, '_can_generate_shared_link')
-    def test_get_link_with_invalid_user_role_permission(self, mock_can_generate_shared_link):
+    @patch.object(CanGenerateShareLink, 'has_permission')
+    def test_get_link_with_invalid_user_role_permission(self, mock_has_permission):
         self.login_as(self.user)
-        mock_can_generate_shared_link.return_value = False
+        mock_has_permission.return_value = False
 
         resp = self.client.get(self.url)
         self.assertEqual(403, resp.status_code)
@@ -174,10 +174,10 @@ class ShareLinksTest(BaseTestCase):
         resp = self.client.post(self.url, data)
         self.assertEqual(200, resp.status_code)
 
-    @patch.object(ShareLinks, '_can_generate_shared_link')
-    def test_create_link_with_invalid_urer_role_permission(self, mock_can_generate_shared_link):
+    @patch.object(CanGenerateShareLink, 'has_permission')
+    def test_create_link_with_invalid_user_role_permission(self, mock_has_permission):
         self.login_as(self.user)
-        mock_can_generate_shared_link.return_value = False
+        mock_has_permission.return_value = False
 
         resp = self.client.post(self.url, {'path': self.folder_path, 'repo_id': self.repo_id})
         self.assertEqual(403, resp.status_code)
@@ -210,12 +210,12 @@ class ShareLinksTest(BaseTestCase):
         resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')
         self.assertEqual(403, resp.status_code)
 
-    @patch.object(ShareLink, '_can_generate_shared_link')
-    def test_delete_link_with_invalid_user_repo_permission(self, mock_can_generate_shared_link):
+    @patch.object(CanGenerateShareLink, 'has_permission')
+    def test_delete_link_with_invalid_user_repo_permission(self, mock_has_permission):
         token = self._add_file_share_link()
 
         self.login_as(self.user)
-        mock_can_generate_shared_link.return_value = False
+        mock_has_permission.return_value = False
 
         url = reverse('api-v2.1-share-link', args=[token])
         resp = self.client.delete(url, {}, 'application/x-www-form-urlencoded')

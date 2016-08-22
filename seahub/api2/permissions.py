@@ -26,7 +26,7 @@ class IsRepoWritable(BasePermission):
         if user and check_permission(repo_id, user) == 'rw':
             return True
         return False
-    
+
 class IsRepoAccessible(BasePermission):
     """
     Check whether user has Read or Write permission to a repo.
@@ -64,3 +64,15 @@ class CanInviteGuest(BasePermission):
     def has_permission(self, request, *args, **kwargs):
         return settings.ENABLE_GUEST_INVITATION and \
                 request.user.permissions.can_invite_guest()
+
+class CanGenerateShareLink(BasePermission):
+    """Check user has permission to generate share link.
+    """
+    def has_permission(self, request, *args, **kwargs):
+        return request.user.permissions.can_generate_share_link()
+
+class CanGenerateUploadLink(BasePermission):
+    """Check user has permission to generate upload link.
+    """
+    def has_permission(self, request, *args, **kwargs):
+        return request.user.permissions.can_generate_upload_link()

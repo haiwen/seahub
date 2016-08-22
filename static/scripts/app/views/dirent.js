@@ -53,7 +53,7 @@ define([
                 category: dir.category,
                 repo_id: dir.repo_id,
                 is_repo_owner: dir.is_repo_owner,
-                can_generate_shared_link: app.pageOptions.can_generate_shared_link,
+                can_generate_share_link: app.pageOptions.can_generate_share_link,
                 is_pro: is_pro,
                 file_audit_enabled: file_audit_enabled,
                 repo_encrypted: dir.encrypted
