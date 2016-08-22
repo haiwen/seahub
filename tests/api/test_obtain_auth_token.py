@@ -15,6 +15,9 @@ class ObtainAuthTokenTest(BaseTestCase):
         resp = self.client.post(TOKEN_URL, {
             'username': self.user.username,
             'password': self.user_password,
+            'platform': 'linux',
+            'device_id': '701143c1238e6736b61c20e73de82fc95989c413',
+            'device_name': 'test',
         })
 
         json_resp = json.loads(resp.content)
@@ -26,6 +29,9 @@ class ObtainAuthTokenTest(BaseTestCase):
         resp = self.client.post(TOKEN_URL, {
             'username': self.p.login_id,
             'password': self.user_password,
+            'platform': 'linux',
+            'device_id': '701143c1238e6736b61c20e73de82fc95989c413',
+            'device_name': 'test',
         })
 
         json_resp = json.loads(resp.content)

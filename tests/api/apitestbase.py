@@ -206,6 +206,9 @@ def get_auth_token(username, password):
     data = {
         'username': username,
         'password': password,
+        'platform': 'linux',
+        'device_id': '701143c1238e6736b61c20e73de82fc95989c413',
+        'device_name': 'test',
     }
     res = requests.post(TOKEN_URL, data=data)
     assert_equal(res.status_code, 200)

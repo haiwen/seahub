@@ -1,11 +1,17 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
+
 from rest_framework import serializers
 
 from seahub.auth import authenticate
-from seahub.api2.models import Token, TokenV2, DESKTOP_PLATFORMS
+from seahub.api2.models import DESKTOP_PLATFORMS
 from seahub.api2.utils import get_token_v1, get_token_v2
 from seahub.profile.models import Profile
-from seahub.utils.two_factor_auth import has_two_factor_auth, two_factor_auth_enabled, verify_two_factor_token
+from seahub.utils.two_factor_auth import has_two_factor_auth, \
+        two_factor_auth_enabled, verify_two_factor_token
+from seahub.utils.user_permissions import populate_user_permissions
+
+logger = logging.getLogger(__name__)
 
 def all_none(values):
     for value in values:
@@ -71,6 +77,20 @@ class AuthTokenSerializer(serializers.Serializer):
                 raise serializers.ValidationError('Unable to login with provided credentials.')
         else:
             raise serializers.ValidationError('Must include "username" and "password"')
+
+        populate_user_permissions(user)
+
+        if platform in DESKTOP_PLATFORMS:
+            if not user.permissions.can_connect_with_desktop_clients():
+                raise serializers.ValidationError('Not allowed to connect to desktop client.')
+        elif platform == 'android':
+            if not user.permissions.can_connect_with_android_clients():
+                raise serializers.ValidationError('Not allowed to connect to android client.')
+        elif platform == 'ios':
+            if not user.permissions.can_connect_with_ios_clients():
+                raise serializers.ValidationError('Not allowed to connect to ios client.')
+        else:
+            logger.info('%s: unrecognized device' % login_id)
 
         self._two_factor_auth(self.context['request'], user)
 

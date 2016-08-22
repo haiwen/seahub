@@ -19,6 +19,7 @@ from pysearpc import SearpcError
 from seahub.api2.utils import api_error
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
+from seahub.api2.permissions import CanGenerateShareLink
 
 from seahub.share.models import FileShare, OrgFileShare
 from seahub.utils import gen_shared_link, is_org_context
@@ -75,12 +76,8 @@ def get_share_link_info(fileshare):
 class ShareLinks(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, CanGenerateShareLink)
     throttle_classes = (UserRateThrottle,)
-
-    def _can_generate_shared_link(self, request):
-
-        return request.user.permissions.can_generate_shared_link()
 
     def _generate_obj_id_and_type_by_path(self, repo_id, path):
 
@@ -100,10 +97,6 @@ class ShareLinks(APIView):
         Permission checking:
         1. default(NOT guest) user;
         """
-
-        if not self._can_generate_shared_link(request):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         # get all share links
         username = request.user.username
@@ -219,10 +212,6 @@ class ShareLinks(APIView):
             return api_error(status.HTTP_404_NOT_FOUND, error_msg)
 
         # permission check
-        if not self._can_generate_shared_link(request):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
-
         if not check_folder_permission(request, repo_id, path):
             error_msg = 'Permission denied.'
             return api_error(status.HTTP_403_FORBIDDEN, error_msg)
@@ -250,12 +239,8 @@ class ShareLinks(APIView):
 class ShareLink(APIView):
 
     authentication_classes = (TokenAuthentication, SessionAuthentication)
-    permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated, CanGenerateShareLink)
     throttle_classes = (UserRateThrottle,)
-
-    def _can_generate_shared_link(self, request):
-
-        return request.user.permissions.can_generate_shared_link()
 
     def get(self, request, token):
         """ Get a special share link info.
@@ -263,10 +248,6 @@ class ShareLink(APIView):
         Permission checking:
         1. default(NOT guest) user;
         """
-
-        if not self._can_generate_shared_link(request):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             fs = FileShare.objects.get(token=token)
@@ -284,10 +265,6 @@ class ShareLink(APIView):
         1. default(NOT guest) user;
         2. link owner;
         """
-
-        if not self._can_generate_shared_link(request):
-            error_msg = 'Permission denied.'
-            return api_error(status.HTTP_403_FORBIDDEN, error_msg)
 
         try:
             fs = FileShare.objects.get(token=token)

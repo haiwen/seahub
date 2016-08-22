@@ -21,7 +21,8 @@ class UserPermissionsTest(BaseTestCase):
     def test_permissions(self):
         assert self.user.permissions.can_add_repo() is True
         assert self.user.permissions.can_add_group() is True
-        assert self.user.permissions.can_generate_shared_link() is True
+        assert self.user.permissions.can_generate_share_link() is True
+        assert self.user.permissions.can_generate_upload_link() is True
         assert self.user.permissions.can_use_global_address_book() is True
         assert self.user.permissions.can_view_org() is True
         assert self.user.permissions.can_drag_drop_folder_to_sync() is True

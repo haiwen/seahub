@@ -29,11 +29,11 @@ define([
 
             this.$("#share-tabs").tabs();
 
-            if (!this.repo_encrypted) {
+            if (!this.repo_encrypted && app.pageOptions.can_generate_share_link) {
                 this.downloadLinkPanelInit();
             }
             if (this.is_dir) {
-                if (this.user_perm == 'rw' && !this.repo_encrypted) {
+                if (this.user_perm == 'rw' && !this.repo_encrypted && app.pageOptions.can_generate_upload_link) {
                     this.uploadLinkPanelInit();
                 }
                 if (!this.is_virtual && this.is_repo_owner) {
@@ -61,6 +61,8 @@ define([
                 is_virtual: this.is_virtual,
                 user_perm: this.user_perm,
                 repo_id: this.repo_id,
+                can_generate_share_link: app.pageOptions.can_generate_share_link,
+                can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                 repo_encrypted: this.repo_encrypted
             }));
 

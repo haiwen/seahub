@@ -65,7 +65,7 @@
             {% endif %}
 
             {% if not repo.encrypted %}
-            {% if request.user.permissions.can_generate_shared_link %}
+            {% if request.user.permissions.can_generate_share_link %}
             <button id="share" class="sf-btn-group-btn op-icon sf2-icon-share" data-link="{{ file_shared_link }}" data-token="{{ fileshare.token }}" title="{% trans "Share" %}"></button>
             {% endif %}
             {% endif %}

@@ -14,7 +14,8 @@ DEFAULT_ENABLED_ROLE_PERMISSIONS = {
         'can_add_group': True,
         'can_view_org': True,
         'can_use_global_address_book': True,
-        'can_generate_shared_link': True,
+        'can_generate_share_link': True,
+        'can_generate_upload_link': True,
         'can_invite_guest': False,
         # followings are not implemented yet
         'can_drag_drop_folder_to_sync': True,

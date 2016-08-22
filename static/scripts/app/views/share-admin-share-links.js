@@ -108,7 +108,7 @@ define([
         },
 
         render: function() {
-            this.$el.html(this.template());
+            this.$el.html(this.template({'can_generate_upload_link': app.pageOptions.can_generate_upload_link}));
             this.$table = this.$('table');
             this.$sortByNameIcon = this.$('.by-name .sort-icon');
             this.$sortByTimeIcon = this.$('.by-time .sort-icon');
@@ -145,10 +145,10 @@ define([
                             err_msg = gettext("Permission error");
                         } else {
                             err_msg = gettext("Error");
-                        }   
+                        }
                     } else {
                         err_msg = gettext('Please check the network.');
-                    }   
+                    }
                     $error.html(err_msg).show();
                 }
             });

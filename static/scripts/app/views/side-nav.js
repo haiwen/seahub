@@ -25,7 +25,9 @@ define([
                 'show_group_list': this.group_expanded, // when cur_tab is not 'group'
                 'groups': app.pageOptions.groups,
                 'mods_enabled': app.pageOptions.user_mods_enabled,
-                'can_add_repo': app.pageOptions.can_add_repo
+                'can_add_repo': app.pageOptions.can_add_repo,
+                'can_generate_share_link': app.pageOptions.can_generate_share_link,
+                'can_generate_upload_link': app.pageOptions.can_generate_upload_link
             };
             var _this = this;
             $('#js-toggle-side-nav').click(function() {
