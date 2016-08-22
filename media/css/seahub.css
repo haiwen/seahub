@@ -19,16 +19,37 @@
  * Helper
  * common class ..........common class
  *
- * Widget
- * (ui widgets)
+ * UI Widgets(ui widgets)
+ * path
+ * btn-group
+ * paginator
+ * caret
+ * tabnav
+ * jquery tabs
+ * left-right-tabs
+ * side-tabnav
  * (...)
+ * messages
+ * narrow-panel
+ * new-narrow-panel
+ * text-panel
+ * tab-tabs
+ * tab-popup
+ * op-confirm ()
+ * simplemodal
+ * ui-autocomplete ()
+ * article
+ * obv-btn
+ * sf-popover
+ * user-item
+ * sf-dropdown
  * discussions/comments
  * custom select2
  *
  * Container
  * Container ......... common container styles
  *
- * (TODO: complete this TOC)
+ * Separate pages
  *
  */
 /*
@@ -624,7 +645,7 @@ textarea:-moz-placeholder {/* for FF */
     font-size:20px;
     opacity:1;
 }
-/****paginator****/
+/**** paginator ****/
 #paginator {
     text-align:center;
     margin:10px 0;
@@ -1044,7 +1065,7 @@ textarea:-moz-placeholder {/* for FF */
     font-size: 11px;
     margin: 2px 0 5px;
 }
-/**** new narrow panel  ****/
+/**** new-narrow-panel  ****/
 .new-narrow-panel {
     width:388px;
     border:1px solid #d5d5d5;
@@ -1125,7 +1146,7 @@ textarea:-moz-placeholder {/* for FF */
 .tab-tabs .ui-tabs-panel {
     padding:0;
 }
-/**** tab-popup ****/ /* e.g repo-share */
+/**** tab-popup ****/
 .tab-popup {
     min-width:400px;
     width:auto; /*for 'long' lang*/
@@ -1358,7 +1379,7 @@ textarea:-moz-placeholder {/* for FF */
     padding:6px 13px;
     border:1px solid #ccc;
 }
-/**** obvious btn ****/ /* e.g. download btn in shared file/dir */
+/**** obv-btn ****/ /* e.g. download btn in shared file/dir */
 .obv-btn {
     display:inline-block;
     color:#fff;
@@ -1421,7 +1442,7 @@ a.sf-popover-item {
 .user-item .txt-item {
     margin:0;
 }
-/**** dropdown menu ******/
+/**** sf-dropdown ******/
 .sf-dropdown {
     position:relative;
 }
@@ -1859,7 +1880,7 @@ button.sf-dropdown-toggle:focus {
     font-weight:normal;
 }
 
-/*** for separate pages ***/
+/*** separate pages ***/
 /* login */
 #lang {
     font-weight:normal;
@@ -2165,10 +2186,6 @@ button.sf-dropdown-toggle:focus {
 }
 .inline-rename-form .input {
     font-size:14px;
-}
-.web-setting-form .submit,
-.inline-rename-form .submit {
-    color:green;
 }
 .web-setting-form .cancel,
 .inline-rename-form .cancel {
