@@ -10,63 +10,51 @@ import chardet
 import StringIO
 
 from django.core.urlresolvers import reverse
-from django.http import HttpResponse, Http404, HttpResponseBadRequest
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.template.loader import render_to_string
 from django.utils.http import urlquote
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
-from django.contrib import messages
 from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
 from seaserv import seafile_api, is_passwd_set, ccnet_api, \
-    get_related_users_by_repo, get_related_users_by_org_repo, \
-    seafserv_threaded_rpc, ccnet_threaded_rpc, edit_repo
+    seafserv_threaded_rpc, ccnet_threaded_rpc
 from pysearpc import SearpcError
 
 from seahub.auth.decorators import login_required_ajax
 from seahub.base.decorators import require_POST
-from seahub.contacts.models import Contact
-from seahub.forms import RepoNewDirentForm, RepoRenameDirentForm, \
-    RepoCreateForm, SharedRepoCreateForm, RepoSettingForm
+from seahub.forms import RepoRenameDirentForm
 from seahub.options.models import UserOptions, CryptoOptionNotSetError
 from seahub.notifications.models import UserNotification
 from seahub.notifications.views import add_notice_from_info
 from seahub.share.models import UploadLinkShare
-from seahub.group.models import PublicGroup
-from seahub.signals import upload_file_successful, repo_created, repo_deleted
-from seahub.views import validate_owner, \
-    get_unencry_rw_repos_by_user, is_registered_user, \
+from seahub.signals import upload_file_successful
+from seahub.views import get_unencry_rw_repos_by_user, is_registered_user, \
     get_system_default_repo_id, get_diff, \
-    get_owned_repo_list, check_folder_permission, is_registered_user
-from seahub.views.modules import get_enabled_mods_by_group, \
-    get_available_mods_by_group, enable_mod_for_group, \
-    disable_mod_for_group, MOD_GROUP_WIKI, MOD_PERSONAL_WIKI, \
-    enable_mod_for_user, disable_mod_for_user
+    check_folder_permission
+from seahub.views.modules import enable_mod_for_group, \
+    disable_mod_for_group, MOD_GROUP_WIKI
 from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
 from seahub.settings import ENABLE_THUMBNAIL, THUMBNAIL_ROOT, \
-    THUMBNAIL_DEFAULT_SIZE, ENABLE_SUB_LIBRARY, \
-    ENABLE_FOLDER_PERM, SHOW_TRAFFIC, MEDIA_URL
-from constance import config
+    THUMBNAIL_DEFAULT_SIZE, ENABLE_FOLDER_PERM, SHOW_TRAFFIC, MEDIA_URL
 from seahub.utils import check_filename_with_rename, EMPTY_SHA1, \
     gen_block_get_url, TRAFFIC_STATS_ENABLED, get_user_traffic_stat,\
     new_merge_with_no_conflict, get_commit_before_new_merge, \
     get_repo_last_modify, gen_file_upload_url, is_org_context, \
-    get_org_user_events, get_user_events, get_file_type_and_ext, \
-    is_valid_username, send_perm_audit_msg, get_origin_repo_info, is_pro_version
-from seahub.utils.repo import get_sub_repo_abbrev_origin_path
-from seahub.utils.star import star_file, unstar_file, get_dir_starred_files
+    get_file_type_and_ext, is_valid_username, send_perm_audit_msg, \
+    is_pro_version
+from seahub.utils.star import get_dir_starred_files
 from seahub.base.accounts import User
 from seahub.thumbnail.utils import get_thumbnail_src
 from seahub.utils.file_types import IMAGE
 from seahub.base.templatetags.seahub_tags import translate_seahub_time, \
         file_icon_filter, email2nickname, tsstr_sec
-from seahub.avatar.templatetags.group_avatar_tags import grp_avatar
 
 # Get an instance of a logger
 logger = logging.getLogger(__name__)
