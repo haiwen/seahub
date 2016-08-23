@@ -152,7 +152,6 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-file-uploaded-bytes/$', get_file_uploaded_bytes, name='get_file_uploaded_bytes'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
-    url(r'^ajax/group/(?P<group_id>\d+)/toggle-modules/$', toggle_group_modules, name='toggle_group_modules'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
     url(r'^ajax/unenc-rw-repos/$', unenc_rw_repos, name='unenc_rw_repos'),
     url(r'^ajax/upload-file-done/$', upload_file_done, name='upload_file_done'),

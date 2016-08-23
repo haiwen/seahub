@@ -35,9 +35,6 @@ from seahub.signals import upload_file_successful
 from seahub.views import get_unencry_rw_repos_by_user, is_registered_user, \
     get_system_default_repo_id, get_diff, \
     check_folder_permission
-from seahub.views.modules import enable_mod_for_group, \
-    disable_mod_for_group, MOD_GROUP_WIKI
-from seahub.group.views import is_group_staff
 from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
@@ -1898,35 +1895,6 @@ def add_group_folder_perm(request, repo_id, group_ids, path, perm):
     else:
         data = json.dumps({"error": _("Failed")})
         return HttpResponse(data, status=400, content_type=content_type)
-
-
-@login_required_ajax
-def toggle_group_modules(request, group_id):
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    group_id_int = int(group_id) # Checked by URL Conf
-    group = get_group(group_id_int)
-    if not group:
-        result["error"] = _('Group does not exist.')
-        return HttpResponse(json.dumps(result),
-                            status=400, content_type=content_type)
-
-    group.is_staff = is_group_staff(group, request.user)
-    if not group.is_staff:
-        result["error"] = _('Permission denied.')
-        return HttpResponse(json.dumps(result),
-                            status=403, content_type=content_type)
-
-    group_wiki = request.POST.get('group_wiki', '')
-    if group_wiki == 'true':
-        enable_mod_for_group(group.id, MOD_GROUP_WIKI)
-    else:
-        disable_mod_for_group(group.id, MOD_GROUP_WIKI)
-
-    return HttpResponse(json.dumps({ "success": True }),
-            content_type=content_type)
 
 @login_required_ajax
 def ajax_group_members_import(request, group_id):
