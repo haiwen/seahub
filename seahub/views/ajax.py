@@ -999,30 +999,6 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     result = {'success': success, 'failed': failed, 'url': url}
     return HttpResponse(json.dumps(result), content_type=content_type)
 
-@login_required_ajax
-def cancel_cp(request):
-    '''
-        cancel file/dir mv/cp.
-    '''
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    task_id = request.GET.get('task_id')
-    if not task_id:
-        result['error'] = _('Argument missing')
-        return HttpResponse(json.dumps(result), status=400,
-                    content_type=content_type)
-
-    res = seafile_api.cancel_copy_task(task_id) # returns 0 or -1
-
-    if res == 0:
-        result['success'] = True
-        return HttpResponse(json.dumps(result), content_type=content_type)
-    else:
-        result['error'] = _('Cancel failed')
-        return HttpResponse(json.dumps(result), status=400,
-                    content_type=content_type)
-
 ########## contacts related
 @login_required_ajax
 def get_current_commit(request, repo_id):

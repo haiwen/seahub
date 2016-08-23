@@ -31,6 +31,7 @@ from seahub.api2.endpoints.dirents_download_link import DirentsDownloadLinkView
 from seahub.api2.endpoints.zip_task  import ZipTaskView
 from seahub.api2.endpoints.share_link_zip_task import ShareLinkZipTaskView
 from seahub.api2.endpoints.query_zip_progress import QueryZipProgressView
+from seahub.api2.endpoints.copy_move_task import CopyMoveTaskView
 from seahub.api2.endpoints.query_copy_move_progress import QueryCopyMoveProgressView
 from seahub.api2.endpoints.invitations import InvitationsView
 from seahub.api2.endpoints.invitation import InvitationView
@@ -140,7 +141,6 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/delete/$', delete_dirent, name='delete_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/mv/$', mv_dir, name='mv_dir'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/dir/cp/$', cp_dir, name='cp_dir'),
-    url(r'^ajax/cancel_cp/$', cancel_cp, name='cancel_cp'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/rename/$', rename_dirent, name='rename_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/delete/$', delete_dirent, name='delete_file'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/file/mv/$', mv_file, name='mv_file'),
@@ -191,6 +191,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),
     url(r'^api/v2.1/share-link-zip-task/$', ShareLinkZipTaskView.as_view(), name='api-v2.1-share-link-zip-task'),
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
+    url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),
     url(r'^api/v2.1/query-copy-move-progress/$', QueryCopyMoveProgressView.as_view(), name='api-v2.1-query-copy-move-progress'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dir/$', DirView.as_view(), name='api-v2.1-dir-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/set-password/$', RepoSetPassword.as_view(), name="api-v2.1-repo-set-password"),

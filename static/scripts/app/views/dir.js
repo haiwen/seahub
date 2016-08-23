@@ -1272,8 +1272,11 @@ define([
                             Common.disableButton(cancel_btn);
                             var task_id = $(this).data('task_id');
                             $.ajax({
-                                url: Common.getUrl({name:'cancel_cp'}) + '?task_id=' + encodeURIComponent(task_id),
+                                url: Common.getUrl({name: 'copy_move_task'}),
+                                type: 'DELETE',
                                 dataType: 'json',
+                                beforeSend: Common.prepareCSRFToken,
+                                data: {'task_id': encodeURIComponent(task_id)},
                                 success: function(data) {
                                     other_info.html(gettext("Canceled.")).removeClass('hide');
                                     cancel_btn.addClass('hide');
