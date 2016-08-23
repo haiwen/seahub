@@ -386,6 +386,7 @@ def repo_download_info(request, repo_id, gen_sync_token=True):
         'magic': magic,
         'random_key': random_key,
         'repo_version': repo_version,
+        'head_commit_id': repo.head_cmmt_id,
         }
     return Response(info_json)
 
