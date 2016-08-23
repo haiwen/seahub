@@ -93,7 +93,7 @@ define([
             }, 100);
             var req_progress = function() {
                 $.ajax({
-                    url: Common.getUrl({name: 'get_cp_progress'}) + '?task_id=' + encodeURIComponent(task_id),
+                    url: Common.getUrl({name: 'query_copy_move_progress'}) + '?task_id=' + encodeURIComponent(task_id),
                     dataType: 'json',
                     success: function(data) {
                         var bar = $('.ui-progressbar-value', $('#mv-progress'));

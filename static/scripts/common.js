@@ -84,6 +84,7 @@ define([
                 case 'download_dir_zip_url': return fileServerRoot + 'zip/' + options.zip_token;
                 case 'zip_task': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/zip-task/';
                 case 'query_zip_progress': return siteRoot + 'api/v2.1/query-zip-progress/';
+                case 'query_copy_move_progress': return siteRoot + 'api/v2.1/query-copy-move-progress/';
                 case 'rename_dir': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/dir/';
                 case 'rename_file': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file/';
                 case 'mv_dir': return siteRoot + 'ajax/repo/' + options.repo_id + '/dir/mv/';
@@ -96,7 +97,6 @@ define([
                 case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
                 case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
                 case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
-                case 'get_cp_progress': return siteRoot + 'ajax/cp_progress/';
                 case 'cancel_cp': return siteRoot + 'ajax/cancel_cp/';
                 case 'get_file_op_url': return siteRoot + 'ajax/repo/' + options.repo_id + '/file_op_url/';
                 case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';

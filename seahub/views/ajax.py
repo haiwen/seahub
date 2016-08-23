@@ -1000,35 +1000,6 @@ def cp_dirents(request, src_repo_id, src_path, dst_repo_id, dst_path, obj_file_n
     return HttpResponse(json.dumps(result), content_type=content_type)
 
 @login_required_ajax
-def get_cp_progress(request):
-    '''
-        Fetch progress of file/dir mv/cp.
-    '''
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    task_id = request.GET.get('task_id')
-    if not task_id:
-        result['error'] = _(u'Argument missing')
-        return HttpResponse(json.dumps(result), status=400,
-                    content_type=content_type)
-
-    res = seafile_api.get_copy_task(task_id)
-
-    # res can be None
-    if not res:
-        result['error'] = _(u'Error')
-        return HttpResponse(json.dumps(result), status=500, content_type=content_type)
-
-    result['done'] = res.done
-    result['total'] = res.total
-    result['canceled'] = res.canceled
-    result['failed'] = res.failed
-    result['successful'] = res.successful
-
-    return HttpResponse(json.dumps(result), content_type=content_type)
-
-@login_required_ajax
 def cancel_cp(request):
     '''
         cancel file/dir mv/cp.
