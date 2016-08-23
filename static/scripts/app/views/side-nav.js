@@ -93,19 +93,30 @@ define([
             var checkbox = $('[name="personal_wiki"]'),
                 original_checked = checkbox.prop('checked'),
                _this = this;
+
             form.submit(function() {
                 var cur_checked = checkbox.prop('checked');
                 if (cur_checked == original_checked) {
                     return false;
                 }
-                Common.ajaxPost({
-                    form: form,
-                    form_id: form.attr('id'),
-                    post_url: Common.getUrl({
-                        'name': 'toggle_personal_modules'
-                    }),
-                    post_data: {'personal_wiki': cur_checked },
-                    after_op_success: function () {
+
+                var submit_btn = form.children('[type="submit"]');
+                Common.disableButton(submit_btn);
+
+                var ajax_type = '';
+                if (cur_checked) {
+                    ajax_type = 'POST';
+                } else {
+                    ajax_type = 'DELETE';
+                }
+
+                $.ajax({
+                    url: Common.getUrl({'name': 'user_enabled_modules'}),
+                    type: ajax_type,
+                    cache: false,
+                    dataType: 'json',
+                    beforeSend: Common.prepareCSRFToken,
+                    success: function() {
                         if (cur_checked) {
                             mods_enabled.push('personal wiki');
                         } else {
@@ -116,12 +127,14 @@ define([
                         }
                         $.modal.close();
                         _this.render();
+                    },
+                    error: function(xhr) {
+                        Common.ajaxErrorHandler(xhr);
                     }
                 });
+
                 return false;
             });
-
-            return false;
         },
 
         setCurTab: function(cur_tab, options) {

@@ -159,8 +159,8 @@ define([
 
                 case 'notifications': return siteRoot + 'api/v2.1/notifications/';
                 case 'notification': return siteRoot + 'api/v2.1/notification/';
+                case 'user_enabled_modules': return siteRoot + 'api/v2.1/user-enabled-modules/';
 
-                case 'toggle_personal_modules': return siteRoot + 'ajax/toggle-personal-modules/';
                 case 'starred_files': return siteRoot + 'api2/starredfiles/';
                 case 'events': return siteRoot + 'api2/events/';
                 case 'devices': return siteRoot + 'api2/devices/';

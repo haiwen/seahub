@@ -1994,28 +1994,6 @@ def toggle_group_modules(request, group_id):
             content_type=content_type)
 
 @login_required_ajax
-def toggle_personal_modules(request):
-
-    content_type = 'application/json; charset=utf-8'
-    result = {}
-
-    if not request.user.permissions.can_add_repo:
-        result["error"] = _('Permission denied.')
-        return HttpResponse(json.dumps(result),
-                            status=403, content_type=content_type)
-
-    username = request.user.username
-    personal_wiki = request.POST.get('personal_wiki', '')
-    if personal_wiki == 'true':
-        enable_mod_for_user(username, MOD_PERSONAL_WIKI)
-    else:
-        disable_mod_for_user(username, MOD_PERSONAL_WIKI)
-
-    return HttpResponse(json.dumps({ "success": True }),
-            content_type=content_type)
-
-
-@login_required_ajax
 def ajax_group_members_import(request, group_id):
     """Import users to group.
 
