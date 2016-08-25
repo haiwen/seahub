@@ -96,6 +96,7 @@ define([
                     url: Common.getUrl({name: 'query_copy_move_progress'}) + '?task_id=' + encodeURIComponent(task_id),
                     dataType: 'json',
                     success: function(data) {
+                        console.log(data);
                         var bar = $('.ui-progressbar-value', $('#mv-progress'));
                         if (!data['failed'] && !data['canceled'] && !data['successful']) {
                             if (data['done'] == data['total']) {
@@ -182,17 +183,16 @@ define([
                 this.$error.html(gettext("Invalid destination path")).removeClass('hide');
                 return false;
             }
-            var options = { repo_id: repo_id };
-            if (obj_type == 'dir') {
-                options.name = this.op_type == 'mv' ? 'mv_dir' : 'cp_dir';
-            } else {
-                options.name = this.op_type == 'mv' ? 'mv_file' : 'cp_file';
-            }
-            var post_url = Common.getUrl(options) + '?path=' + encodeURIComponent(path)
-                + '&obj_name=' + encodeURIComponent(obj_name);
+
+            var post_url = Common.getUrl({'name': 'copy_move_task'});
             var post_data = {
-                'dst_repo': dst_repo,
-                'dst_path': dst_path
+                'src_repo_id': repo_id,
+                'src_parent_dir': path,
+                'src_dirent_name': obj_name,
+                'dst_repo_id': dst_repo,
+                'dst_parent_dir': dst_path,
+                'operation': this.op_type == 'mv' ? 'move' : 'copy',
+                'dirent_type': obj_type == 'dir' ? 'dir' : 'file'
             };
             var after_op_success = function(data) {
                 $.modal.close();
