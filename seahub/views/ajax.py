@@ -1238,43 +1238,6 @@ def _create_repo_common(request, repo_name, repo_desc, encryption,
     return repo_id
 
 @login_required_ajax
-def ajax_repo_change_passwd(request, repo_id):
-    """Handle ajax post request to change library password.
-    """
-    if request.method != 'POST':
-        raise Http404
-
-    content_type = 'application/json; charset=utf-8'
-    username = request.user.username
-
-    repo = seafile_api.get_repo(repo_id)
-    if not repo:
-        raise Http404
-
-    # check permission
-    if is_org_context(request):
-        repo_owner = seafile_api.get_org_repo_owner(repo.id)
-    else:
-        repo_owner = seafile_api.get_repo_owner(repo.id)
-    is_owner = True if username == repo_owner else False
-    if not is_owner:
-        return HttpResponse(json.dumps({
-                    'error': 'Permission denied'}),
-                    status=403, content_type=content_type)
-
-    old_passwd = request.POST.get('old_passwd', '')
-    new_passwd = request.POST.get('new_passwd', '')
-    try:
-        seafile_api.change_repo_passwd(repo_id, old_passwd, new_passwd, username)
-    except SearpcError, e:
-        return HttpResponse(json.dumps({
-                    'error': e.msg,
-                    }), status=400, content_type=content_type)
-
-    return HttpResponse(json.dumps({'success': True}),
-                        content_type=content_type)
-
-@login_required_ajax
 def ajax_group_members_import(request, group_id):
     """Import users to group.
 
