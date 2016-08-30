@@ -1208,9 +1208,9 @@ class FileBlockDownloadLinkView(APIView):
         return Response(url)
 
 class UploadLinkView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
         # recourse check
@@ -1235,13 +1235,22 @@ class UploadLinkView(APIView):
 
         token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'upload', request.user.username, use_onetime = False)
-        url = gen_file_upload_url(token, 'upload-api')
+
+        req_from = request.GET.get('from', 'api')
+        if req_from == 'api':
+            url = gen_file_upload_url(token, 'upload-api')
+        elif req_from == 'web':
+            url = gen_file_upload_url(token, 'upload-aj')
+        else:
+            error_msg = 'from invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         return Response(url)
 
 class UpdateLinkView(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated, )
-    throttle_classes = (UserRateThrottle, )
+    authentication_classes = (TokenAuthentication, SessionAuthentication)
+    permission_classes = (IsAuthenticated,)
+    throttle_classes = (UserRateThrottle,)
 
     def get(self, request, repo_id, format=None):
         # recourse check
@@ -1266,7 +1275,16 @@ class UpdateLinkView(APIView):
 
         token = seafile_api.get_fileserver_access_token(
             repo_id, 'dummy', 'update', request.user.username)
-        url = gen_file_upload_url(token, 'update-api')
+
+        req_from = request.GET.get('from', 'api')
+        if req_from == 'api':
+            url = gen_file_upload_url(token, 'update-api')
+        elif req_from == 'web':
+            url = gen_file_upload_url(token, 'update-aj')
+        else:
+            error_msg = 'from invalid.'
+            return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
         return Response(url)
 
 class UploadBlksLinkView(APIView):

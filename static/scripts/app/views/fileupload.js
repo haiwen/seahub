@@ -155,16 +155,16 @@ define([
                 var upload_file = function() {
                     $.ajax({
                         url: Common.getUrl({
-                            name: 'get_file_op_url',
+                            name: 'repo_upload_link',
                             repo_id: dirents.repo_id
                             }),
                         data: {
-                            'op_type': 'upload',
+                            'from': 'web',
                             'path': dirents.path
                         },
                         cache: false,
                         dataType: 'json',
-                        success: function(ret) {
+                        success: function(returned_url) {
                             if (enable_upload_folder && file.relative_path) { // 'add folder'
                                 var file_path = file.relative_path,
                                     r_path = file_path.substring(0, file_path.lastIndexOf('/') + 1),
@@ -173,7 +173,7 @@ define([
                                 popup.fileupload('option', {
                                     'formData': formData
                                 });
-                                data.url = ret['url'];
+                                data.url = returned_url;
                                 data.jqXHR = popup.fileupload('send', data);
 
                             } else {
@@ -194,13 +194,13 @@ define([
                                         dataType: 'json',
                                         success: function(file_uploaded_data) {
                                             popup.fileupload('option', 'uploadedBytes', file_uploaded_data.uploadedBytes);
-                                            data.url = ret['url'];
+                                            data.url = returned_url;
                                             data.jqXHR = popup.fileupload('send', data);
                                         }
                                     });
 
                                 } else {
-                                    data.url = ret['url'];
+                                    data.url = returned_url;
                                     data.jqXHR = popup.fileupload('send', data);
                                 }
                             }
@@ -219,23 +219,23 @@ define([
                 var update_file = function() {
                     $.ajax({
                         url: Common.getUrl({
-                            name: 'get_file_op_url',
+                            name: 'repo_update_link',
                             repo_id: dirents.repo_id
                             }),
                         data: {
-                            'op_type': 'update',
+                            'from': 'web',
                             'path': dirents.path
                         },
                         cache: false,
                         dataType: 'json',
-                        success: function(ret) {
+                        success: function(returned_url) {
                             var formData = popup.fileupload('option', 'formData');
                             formData.target_file = formData.parent_dir + file.name;
                             popup.fileupload('option', 'formData', formData);
 
                             file.to_update = true;
 
-                            data.url = ret['url'];
+                            data.url = returned_url;
                             data.jqXHR = popup.fileupload('send', data);
                         },
                         error: function() {

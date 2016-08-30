@@ -33,7 +33,7 @@ from seahub.notifications.views import add_notice_from_info
 from seahub.share.models import UploadLinkShare
 from seahub.signals import upload_file_successful
 from seahub.views import get_unencry_rw_repos_by_user, \
-    get_system_default_repo_id, get_diff, check_folder_permission
+    get_diff, check_folder_permission
 from seahub.group.utils import is_group_member, is_group_admin_or_owner, \
     get_group_member_info
 import seahub.settings as settings
@@ -1059,50 +1059,6 @@ def get_file_uploaded_bytes(request, repo_id):
     uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
     return HttpResponse(json.dumps({"uploadedBytes": uploadedBytes}),
             content_type=content_type)
-
-@login_required_ajax
-def get_file_op_url(request, repo_id):
-    """Get file upload/update url for AJAX.
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    op_type = request.GET.get('op_type') # value can be 'upload', 'update', 'upload-blks', 'update-blks'
-    path = request.GET.get('path')
-    if not (op_type and path):
-        err_msg = _(u'Argument missing')
-        return HttpResponse(json.dumps({"error": err_msg}), status=400,
-                            content_type=content_type)
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist')
-        return HttpResponse(json.dumps({"error": err_msg}), status=400,
-                            content_type=content_type)
-
-    # permission checking
-    if check_folder_permission(request, repo.id, path) != 'rw':
-        err_msg = _(u'Permission denied')
-        return HttpResponse(json.dumps({"error": err_msg}), status=403,
-                            content_type=content_type)
-
-    username = request.user.username
-    if op_type == 'upload':
-        if request.user.is_staff and get_system_default_repo_id() == repo.id:
-            # Set username to 'system' to let fileserver release permission
-            # check.
-            username = 'system'
-
-    if op_type.startswith('update'):
-        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        op_type, username)
-    else:
-        token = seafile_api.get_fileserver_access_token(repo_id, 'dummy',
-                                                        op_type, username,
-                                                        use_onetime=False)
-
-    url = gen_file_upload_url(token, op_type + '-aj')
-
-    return HttpResponse(json.dumps({"url": url}), content_type=content_type)
 
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
