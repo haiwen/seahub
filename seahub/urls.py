@@ -154,9 +154,6 @@ urlpatterns = patterns(
     url(r'^ajax/get_popup_notices/$', get_popup_notices, name='get_popup_notices'),
     url(r'^ajax/space_and_traffic/$', space_and_traffic, name='space_and_traffic'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/setting/change-passwd/$', ajax_repo_change_passwd, name='ajax_repo_change_passwd'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-folder-perm-by-path/$', get_folder_perm_by_path, name='get_folder_perm_by_path'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-user-folder-perm/$', set_user_folder_perm, name='set_user_folder_perm'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/set-group-folder-perm/$', set_group_folder_perm, name='set_group_folder_perm'),
 
     url(r'^ajax/(?P<repo_id>[-0-9a-f]{36})/repo-dir/recycle/more/$', ajax_repo_dir_recycle_more, name='ajax_repo_dir_recycle_more'),
 

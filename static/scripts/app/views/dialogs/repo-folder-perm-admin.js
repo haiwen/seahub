@@ -6,7 +6,7 @@ define([
     'file-tree',
     'app/collections/repo-user-folder-perm',
     'app/collections/repo-group-folder-perm',
-    'app/views/repo-folder-perm'
+    'app/views/repo-folder-perm-item'
 ], function($, _, Backbone, Common, FileTree, UserFolderPerm, GroupFolderPerm, ItemView) {
     'use strict';
 
@@ -98,9 +98,7 @@ define([
             if (collection.perm_type == 'user') {
                 $('[name="emails"]', $panel).select2($.extend(
                     Common.contactInputOptionsForSelect2(), {
-                        placeholder: gettext("Search user or enter email and press Enter"), // to override 'placeholder' returned by `Common.conta...`
-                        maximumSelectionSize: 1,
-                        formatSelectionTooBig: gettext("You can only select 1 item")
+                        placeholder: gettext("Search user or enter email and press Enter") // to override 'placeholder' returned by `Common.conta...`
                     }));
             } else {
                 var groups = app.pageOptions.groups || [];
@@ -143,12 +141,12 @@ define([
         addItem: function(model, collection, options) {
             var perm_type = collection.perm_type;
             var $panel = perm_type == 'user' ? this.$userPermPanel : this.$groupPermPanel;
+            var for_user = perm_type == 'user' ? true : false;
+            var encoded_path = Common.encodePath(model.get('folder_path'));
             var view = new ItemView({
-                model: model,
-                repo_id: this.repo_id,
-                perm_type: perm_type,
-                $error: $('.error', $panel)
+                data: $.extend(model.toJSON(), {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
             });
+
             if (options.prepend) {
                 $('[name="folder_path"]', $panel).closest('tr').after(view.render().el);
             } else {
@@ -161,8 +159,8 @@ define([
             'click .js-folder-select-submit': 'addFolder',
             'click .js-folder-select-cancel': 'cancelFolderSelect',
 
-            'click .js-user-perm-add-submit': 'addUserPerm',
-            'click .js-group-perm-add-submit': 'addGroupPerm'
+            'click .js-user-perm-add-submit': 'addPerm',
+            'click .js-group-perm-add-submit': 'addPerm'
         },
 
         showFolderSelectForm: function(e) {
@@ -219,93 +217,91 @@ define([
             }
         },
 
-        addUserPerm: function(e) {
-            var $panel = this.$userPermPanel;
-            var $error = $('.error', $panel);
-            var $email = $('[name="emails"]', $panel);
-            var $path = $('[name="folder_path"]', $panel);
-
-            var email = $email.val();
-            var path = $path.val();
-
-            if (!email || !path) {
-                return false;
-            }
-
-            var $perm = $('[name="permission"]', $panel);
-            var perm = $perm.val();
+        addPerm: function(e) {
             var $submit = $(e.currentTarget);
-            Common.disableButton($submit);
+            var $panel, $email_or_group, url, post_data, for_user;
 
-            this.userPerm.create({
-                'user_email': email,
-                'folder_path': path,
-                'permission': perm
-            }, {
-                wait: true,
-                prepend: true,
-                success: function() {
-                    $email.select2('val', '');
-                    $path.val('');
-                    $('[value="rw"]', $perm).attr('selected', 'selected');
-                    $('[value="r"]', $perm).removeAttr('selected');
-                    $error.addClass('hide');
-                },
-                error: function(collection, response, options) {
-                    var err_msg;
-                    if (response.responseText) {
-                        err_msg = response.responseJSON.error_msg;
-                    } else {
-                        err_msg = gettext('Please check the network.');
-                    }
-                    $error.html(err_msg).removeClass('hide');
-                },
-                complete: function() {
-                    Common.enableButton($submit);
+            if ($submit.hasClass('js-user-perm-add-submit')) {
+                for_user = true;
+                $panel = this.$userPermPanel;
+                url = Common.getUrl({name: 'repo_user_folder_perm', repo_id: this.repo_id});
+
+                var $email_or_group = $('[name="emails"]', $panel);
+                var email = $email_or_group.val();
+                if (!email) {
+                    return false;
                 }
-            });
-        },
 
-        addGroupPerm: function(e) {
-            var $panel = this.$groupPermPanel;
-            var $error = $('.error', $panel);
-            var $group = $('[name="groups"]', $panel);
+                post_data = {'user_email': email.split(',')};
+
+
+            } else {
+                for_user = false;
+                $panel = this.$groupPermPanel;
+                url = Common.getUrl({name: 'repo_group_folder_perm', repo_id: this.repo_id});
+
+                var $email_or_group = $('[name="groups"]', $panel);
+                var group_val = $email_or_group.val().join(',');
+                if (!group_val) {
+                    return false;
+                }
+
+                post_data = {'group_id': group_val.split(',')};
+            }
+
             var $path = $('[name="folder_path"]', $panel);
-
-            var group_val = $group.val(); // null or [group_id]
+            var $perm = $('[name="permission"]', $panel);
+            var perm = $perm.val();
             var path = $path.val();
 
-            if (!group_val || !path) {
+            if (!perm || !path) {
                 return false;
             }
 
-            var $perm = $('[name="permission"]', $panel);
-            var perm = $perm.val();
-            var $submit = $(e.currentTarget);
+            $.extend(post_data, {'folder_path': path, 'permission': perm});
+
+            var $error = $('.error', $panel);
             Common.disableButton($submit);
 
-            this.groupPerm.create({
-                'group_id': group_val[0],
-                'folder_path': path,
-                'permission': perm
-            }, {
-                wait: true,
-                prepend: true,
-                success: function() {
-                    $group.select2('val', '');
-                    $path.val('');
-                    $('[value="rw"]', $perm).attr('selected', 'selected');
-                    $('[value="r"]', $perm).removeAttr('selected');
-                    $error.addClass('hide');
-                },
-                error: function(collection, response, options) {
-                    var err_msg;
-                    if (response.responseText) {
-                        err_msg = response.responseJSON.error_msg;
-                    } else {
-                        err_msg = gettext('Please check the network.');
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                method: 'POST',
+                beforeSend: Common.prepareCSRFToken,
+                traditional: true,
+                data: post_data,
+                success: function(data) {
+                    if (data.success.length > 0) {
+                        $(data.success).each(function(index, item) {
+                            var encoded_path = Common.encodePath(item.folder_path);
+                            var perm_item = new ItemView({
+                                data: $.extend(item, {'for_user': for_user, 'show_folder_path': true, 'encoded_path': encoded_path})
+                            });
+                            $('[name="folder_path"]', $panel).closest('tr').after(perm_item.el);
+                        });
+
+                        $email_or_group.select2('val', '');
+                        $path.val('');
+                        $('[value="rw"]', $perm).attr('selected', 'selected');
+                        $('[value="r"]', $perm).removeAttr('selected');
+                        $error.addClass('hide');
                     }
-                    $error.html(err_msg).removeClass('hide');
+                    if (data.failed.length > 0) {
+                        var error_msg = '';
+                        $(data.failed).each(function(index, item) {
+                            error_msg += Common.HTMLescape(item.user_email || item.group_id) + ': ' + Common.HTMLescape(item.error_msg) + '<br />';
+                        });
+                        $error.html(error_msg).removeClass('hide');
+                    }
+                },
+                error: function(xhr) {
+                    var error_msg;
+                    if (xhr.responseText) {
+                        error_msg = $.parseJSON(xhr.responseText).error_msg;
+                    } else {
+                        error_msg = gettext("Failed. Please check the network.");
+                    }
+                    $error.html(error_msg).removeClass('hide');
                 },
                 complete: function() {
                     Common.enableButton($submit);

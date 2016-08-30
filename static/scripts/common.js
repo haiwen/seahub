@@ -103,7 +103,6 @@ define([
                 case 'pub_repos': return siteRoot + 'api2/repos/public/';
                 case 'unenc_rw_repos': return siteRoot + 'ajax/unenc-rw-repos/';
                 case 'api_v2.1_repo_set_password': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/set-password/';
-                case 'get_folder_perm_by_path': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-folder-perm-by-path/';
                 case 'get_history_changes': return siteRoot + 'ajax/repo/' + options.repo_id + '/history/changes/';
                 case 'beshared_repo': return siteRoot + 'api2/beshared-repos/' + options.repo_id + '/';
                 case 'dir_shared_items': return siteRoot + 'api2/repos/' + options.repo_id + '/dir/shared_items/';
@@ -127,10 +126,6 @@ define([
                 case 'share_admin_share_link': return siteRoot + 'api/v2.1/share-links/' + options.token + '/';
                 case 'share_admin_upload_links': return siteRoot + 'api/v2.1/upload-links/';
                 case 'share_admin_upload_link': return siteRoot + 'api/v2.1/upload-links/' + options.token + '/';
-
-                // Permission
-                case 'set_user_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-user-folder-perm/';
-                case 'set_group_folder_perm': return siteRoot + 'ajax/repo/' + options.repo_id + '/set-group-folder-perm/';
 
                 // Links
                 case 'send_shared_download_link': return siteRoot + 'share/link/send/';

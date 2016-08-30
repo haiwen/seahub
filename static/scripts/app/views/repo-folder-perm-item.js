@@ -12,15 +12,14 @@ define([
         template: _.template($('#folder-perm-item-tmpl').html()),
 
         initialize: function(options) {
-            this.item_data = options.item_data;
-            this.repo_id = options.repo_id;
-            this.path = options.path;
+            this.data = {};
+            $.extend(this.data, options.data);
 
             this.render();
         },
 
         render: function () {
-            this.$el.html(this.template(this.item_data));
+            this.$el.html(this.template(this.data));
             return this;
         },
 
@@ -51,29 +50,28 @@ define([
         editPerm: function (e) {
             var _this = this;
             var perm = $(e.currentTarget).val();
-            var post_data = {
-                'perm': perm,
-                'path': this.path,
-                'type': 'modify'
+            var data = {
+                'permission': perm,
+                'folder_path': this.data.folder_path
             };
-            var for_user = this.item_data.for_user;
+            var for_user = this.data.for_user;
             if (for_user) {
-                $.extend(post_data, {'user': this.item_data.user});
+                $.extend(data, {'user_email': this.data.user_email});
             } else {
-                $.extend(post_data, {'group_id': this.item_data.group_id});
+                $.extend(data, {'group_id': this.data.group_id});
             }
             $.ajax({
                 url: Common.getUrl({
-                    name: for_user ? 'set_user_folder_perm' : 'set_group_folder_perm',
-                    repo_id: this.repo_id
+                    name: for_user ? 'repo_user_folder_perm' : 'repo_group_folder_perm',
+                    repo_id: this.data.repo_id
                 }),
-                type: 'POST',
+                type: 'PUT',
                 dataType: 'json',
                 cache: false,
                 beforeSend: Common.prepareCSRFToken,
-                data: post_data,
+                data: data,
                 success: function() {
-                    _this.item_data.perm = perm;
+                    _this.data.permission = perm;
                     _this.render();
                 },
                 error: function(xhr) {
@@ -94,27 +92,26 @@ define([
 
         deletePerm: function () {
             var _this = this;
-            var post_data = {
-                'perm': this.item_data.perm,
-                'path': this.path,
-                'type': 'delete'
+            var data = {
+                'permission': this.data.permission,
+                'folder_path': this.data.folder_path
             };
-            var for_user = this.item_data.for_user;
+            var for_user = this.data.for_user;
             if (for_user) {
-                $.extend(post_data, {'user': this.item_data.user});
+                $.extend(data, {'user_email': this.data.user_email});
             } else {
-                $.extend(post_data, {'group_id': this.item_data.group_id});
+                $.extend(data, {'group_id': this.data.group_id});
             }
             $.ajax({
                 url: Common.getUrl({
-                    name: for_user ? 'set_user_folder_perm' : 'set_group_folder_perm',
-                    repo_id: this.repo_id
+                    name: for_user ? 'repo_user_folder_perm' : 'repo_group_folder_perm',
+                    repo_id: this.data.repo_id
                 }),
-                type: 'POST',
+                type: 'DELETE',
                 dataType: 'json',
                 cache: false,
                 beforeSend: Common.prepareCSRFToken,
-                data: post_data,
+                data: data,
                 success: function() {
                     _this.remove();
                 },

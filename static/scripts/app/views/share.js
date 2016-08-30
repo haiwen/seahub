@@ -525,14 +525,14 @@ define([
             var $panel = this.$('#dir-user-share');
             var $table = $('table', $panel);
             var $add_item = $('#add-dir-user-share-item');
-            var repo_id = this.repo_id, 
+            var repo_id = this.repo_id,
                 path = this.dirent_path;
 
             $.ajax({
                 url: Common.getUrl({
                     name: 'dir_shared_items',
                     repo_id: repo_id
-                }), 
+                }),
                 data: {
                     'p': path,
                     'share_type': 'user'
@@ -545,14 +545,14 @@ define([
                             'repo_id': repo_id,
                             'path': path,
                             'item_data': {
-                                "user": item.user_info.name,
+                                "user_email": item.user_info.name,
                                 "user_name": item.user_info.nickname,
-                                "perm": item.permission,
+                                "permission": item.permission,
                                 'for_user': true
                             }
-                        }); 
+                        });
                         $add_item.after(new_item.el);
-                    }); 
+                    });
                     $('[name="emails"]', $add_item).select2($.extend({
                         //width: '292px' // the container will copy class 'w100' from the original element to get width
                     },Common.contactInputOptionsForSelect2()));
@@ -574,7 +574,7 @@ define([
                 complete: function() {
                     $loadingTip.hide();
                 }
-            }); 
+            });
         },
 
         dirGroupSharePanelInit: function() {
@@ -604,7 +604,7 @@ define([
                             'item_data': {
                                 "group_id": item.group_info.id,
                                 "group_name": item.group_info.name,
-                                "perm": item.permission,
+                                "permission": item.permission,
                                 'for_user': false
                             }
                         });
@@ -653,12 +653,12 @@ define([
             }
 
             var $add_item = $('#add-dir-user-share-item');
-            var repo_id = this.repo_id, 
+            var repo_id = this.repo_id,
                 path = this.dirent_path;
             var $perm = $('[name="permission"]', $form);
             var perm = $perm.val();
-            var $error = $('.error', $panel); 
-            var $submitBtn = $('[type="submit"]', $form); 
+            var $error = $('.error', $panel);
+            var $submitBtn = $('[type="submit"]', $form);
 
             Common.disableButton($submitBtn);
             $.ajax({
@@ -682,9 +682,9 @@ define([
                                 'repo_id': repo_id,
                                 'path': path,
                                 'item_data': {
-                                    "user": item.user_info.name,
+                                    "user_email": item.user_info.name,
                                     "user_name": item.user_info.nickname,
-                                    "perm": item.permission,
+                                    "permission": item.permission,
                                     'for_user': true
                                 }
                             });
@@ -731,12 +731,12 @@ define([
             }
 
             var $add_item = $('#add-dir-group-share-item');
-            var repo_id = this.repo_id, 
+            var repo_id = this.repo_id,
                 path = this.dirent_path;
             var $perm = $('[name="permission"]', $form),
                 perm = $perm.val();
-            var $error = $('.error', $panel); 
-            var $submitBtn = $('[type="submit"]', $form); 
+            var $error = $('.error', $panel);
+            var $submitBtn = $('[type="submit"]', $form);
 
             Common.disableButton($submitBtn);
             $.ajax({
@@ -762,7 +762,7 @@ define([
                                 'item_data': {
                                     "group_id": item.group_info.id,
                                     "group_name": item.group_info.name,
-                                    "perm": item.permission,
+                                    "permission": item.permission,
                                     'for_user': false
                                 }
                             });

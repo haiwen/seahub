@@ -1045,18 +1045,19 @@
 </script>
 <script type="text/template" id="folder-perm-item-tmpl">
     <% if (for_user) { %>
-    <td>
-        <a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user)); %>/" target="_blank"><%- user_name %></a>
-    </td>
+    <td><a href="{{ SITE_ROOT }}profile/<% print(encodeURIComponent(user_email)); %>/" target="_blank"><%- user_name %></a></td>
     <% } else { %>
-    <td>
-        <a href="#group/<%= group_id %>/" target="_blank"><%- group_name %></a>
-    </td>
+    <td><a href="#group/<%= group_id %>/" target="_blank"><%- group_name %></a></td>
     <% } %>
+
+    <% if (show_folder_path) { %>
+    <td><a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- folder_name %></a></td>
+    <% } %>
+
     <td>
         <div class="perm">
             <span>
-            <% if (perm == 'rw') { %>
+            <% if (permission == 'rw') { %>
                 {% trans "Read-Write" %}
             <% } else { %>
                 {% trans "Read-Only" %}
@@ -1065,7 +1066,7 @@
             <a href="#" title="{% trans "Edit" %}" class="perm-edit-icon sf2-icon-edit op-icon vh"></a>
         </div>
         <select class="perm-toggle-select hide w100">
-            <% if (perm == 'rw') { %>
+            <% if (permission == 'rw') { %>
                 <option value="rw" selected="selected" >{% trans "Read-Write" %}</option>
                 <option value="r" >{% trans "Read-Only" %}</option>
             <% } else { %>
@@ -1745,39 +1746,6 @@
             </div>
         </div>
     </div>
-</script>
-
-<script type="text/template" id="repo-folder-perm-item-tmpl">
-    <td>
-        <% if (perm_type == 'user') { %>
-        <a href="{{SITE_ROOT}}profile/<% print(encodeURIComponent(user_email)); %>/"><%- user_name %></a>
-        <% } else { %>
-        <a href="#group/<%= group_id %>/"><%- group_name %></a>
-        <% } %>
-    </td>
-    <td>
-        <a href="#my-libs/lib/<%= repo_id %><%= encoded_path %>"><%- folder_name %></a>
-    </td>
-    <td>
-        <% if (permission == 'rw') { %>
-            <span class="cur-perm">{% trans "Read-Write" %}</span>
-            <a href="#" title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></a>
-            <select class="perm-toggle-select hide">
-                <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
-                <option value="r">{% trans "Read-Only"%}</option>
-            </select>
-        <% } else { %>
-            <span class="cur-perm">{% trans "Read-Only" %}</span>
-            <a href="#" title="{% trans "Edit" %}" class="edit-icon op-icon sf2-icon-edit vh"></a>
-            <select class="perm-toggle-select hide">
-                <option value="rw">{% trans "Read-Write" %}</option>
-                <option value="r" selected="selected">{% trans "Read-Only"%}</option>
-            </select>
-        <% } %>
-    </td>
-    <td>
-        <a href="#" class="rm op-icon sf2-icon-delete vh" title="{% trans "Delete" %}"></a>
-    </td>
 </script>
 
 <script type="text/template" id="repo-change-password-form-tmpl">
