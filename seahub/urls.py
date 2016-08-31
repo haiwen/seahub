@@ -37,6 +37,7 @@ from seahub.api2.endpoints.invitations import InvitationsView
 from seahub.api2.endpoints.invitation import InvitationView
 from seahub.api2.endpoints.notifications import NotificationsView, NotificationView
 from seahub.api2.endpoints.user_enabled_modules import UserEnabledModulesView
+from seahub.api2.endpoints.repo_file_uploaded_bytes import RepoFileUploadedBytesView
 
 from seahub.api2.endpoints.admin.login import Login
 from seahub.api2.endpoints.admin.file_audit import FileAudit
@@ -144,7 +145,6 @@ urlpatterns = patterns(
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/current_commit/$', get_current_commit, name='get_current_commit'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/history/changes/$', repo_history_changes, name='repo_history_changes'),
     url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/encrypted_file/(?P<file_id>[0-9a-f]{40})/download/$', download_enc_file, name='download_enc_file'),
-    url(r'^ajax/repo/(?P<repo_id>[-0-9a-f]{36})/get-file-uploaded-bytes/$', get_file_uploaded_bytes, name='get_file_uploaded_bytes'),
     url(r'^ajax/u/d/(?P<token>[-0-9a-f]{10})/upload/$', get_file_upload_url_ul, name='get_file_upload_url_ul'),
     url(r'^ajax/group/(?P<group_id>\d+)/repos/$', get_unenc_group_repos, name='get_group_repos'),
     url(r'^ajax/group/(?P<group_id>\d+)/members/import/$', ajax_group_members_import, name='ajax_group_members_import'),
@@ -179,6 +179,7 @@ urlpatterns = patterns(
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file/$', FileView.as_view(), name='api-v2.1-file-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/dirents/download-link/$', DirentsDownloadLinkView.as_view(), name='api-v2.1-dirents-download-link-view'),
     url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/zip-task/$', ZipTaskView.as_view(), name='api-v2.1-zip-task'),
+    url(r'^api/v2.1/repos/(?P<repo_id>[-0-9a-f]{36})/file-uploaded-bytes/$', RepoFileUploadedBytesView.as_view(), name='api-v2.1-repo-file-uploaded-bytes'),
     url(r'^api/v2.1/share-link-zip-task/$', ShareLinkZipTaskView.as_view(), name='api-v2.1-share-link-zip-task'),
     url(r'^api/v2.1/query-zip-progress/$', QueryZipProgressView.as_view(), name='api-v2.1-query-zip-progress'),
     url(r'^api/v2.1/copy-move-task/$', CopyMoveTaskView.as_view(), name='api-v2.1-copy-move-task'),

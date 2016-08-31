@@ -94,7 +94,6 @@ define([
                 case 'del_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/delete/';
                 case 'mv_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/move/';
                 case 'cp_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/copy/';
-                case 'get_file_uploaded_bytes': return siteRoot + 'ajax/repo/' + options.repo_id + '/get-file-uploaded-bytes/';
                 case 'get_dirents': return siteRoot + 'ajax/repo/' + options.repo_id + '/dirents/';
 
                 // Repos
@@ -117,6 +116,8 @@ define([
                 case 'repo_group_folder_perm': return siteRoot + 'api2/repos/' + options.repo_id + '/group-folder-perm/';
                 case 'repo_upload_link': return siteRoot + 'api2/repos/' + options.repo_id + '/upload-link/';
                 case 'repo_update_link': return siteRoot + 'api2/repos/' + options.repo_id + '/update-link/';
+
+                case 'repo_file_uploaded_bytes': return siteRoot + 'api/v2.1/repos/' + options.repo_id + '/file-uploaded-bytes/';
 
                 // Share admin
                 case 'share_admin_repos': return siteRoot + 'api/v2.1/shared-repos/';

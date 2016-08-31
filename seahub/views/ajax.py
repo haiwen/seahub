@@ -1035,31 +1035,6 @@ def get_group_repos(request, groups):
                 group_repos.append(r)
     return group_repos
 
-def get_file_uploaded_bytes(request, repo_id):
-    """
-    For resumable fileupload
-    """
-    content_type = 'application/json; charset=utf-8'
-
-    parent_dir = request.GET.get('parent_dir')
-    file_name = request.GET.get('file_name')
-
-    if not parent_dir or not file_name:
-        err_msg = _(u'Argument missing')
-        return HttpResponse(json.dumps({"error": err_msg}), status=400,
-                            content_type=content_type)
-
-    repo = get_repo(repo_id)
-    if not repo:
-        err_msg = _(u'Library does not exist')
-        return HttpResponse(json.dumps({"error": err_msg}), status=400,
-                            content_type=content_type)
-
-    file_path = os.path.join(parent_dir, file_name)
-    uploadedBytes = seafile_api.get_upload_tmp_file_offset(repo_id, file_path)
-    return HttpResponse(json.dumps({"uploadedBytes": uploadedBytes}),
-            content_type=content_type)
-
 def get_file_upload_url_ul(request, token):
     """Get file upload url in dir upload link.
 
