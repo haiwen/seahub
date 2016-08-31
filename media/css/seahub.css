@@ -2165,21 +2165,6 @@ button.sf-dropdown-toggle:focus {
     border:1px solid #eee;
     margin:5px 0 10px;
 }
-.jstree.file-tree-cont [root_node]  > a > .jstree-checkbox,
-.jstree.file-tree-cont [type="dir"]  > a > .jstree-checkbox {
-    display:none;
-}
-.jstree [root_node] > a > .jstree-icon,
-.jstree .jstree-open[root_node] > a > .jstree-icon {
-    background: transparent url('../img/lib-16.png') no-repeat scroll left center;
-}
-.jstree .jstree-leaf[type=file] a ins.jstree-icon {
-    background: transparent url('../img/file-icon-16.png') no-repeat scroll left center;
-    vertical-align:top;
-}
-.jstree-classic .jstree-leaf[type=dir] a ins.jstree-icon {
-    background:transparent url('../js/themes/classic/d.png') no-repeat scroll -56px -36px;
-}
 #mv-dir-list .icon-caret-down,
 #mv-dir-list .icon-caret-right {
     margin-right:15px;

@@ -121,9 +121,12 @@ def get_dirents(request, repo_id):
             ds = []
             for d in ele_path_dirents:
                 if stat.S_ISDIR(d.mode):
-                    ds.append(d.obj_name)
-            ds.sort(lambda x, y : cmp(x.lower(), y.lower()))
-            all_dirents.append(ds)
+                    ds.append({
+                        'name': d.obj_name,
+                        'parent_dir': ele_path 
+                    })
+            ds.sort(lambda x, y : cmp(x['name'].lower(), y['name'].lower()))
+            all_dirents.extend(ds)
         return HttpResponse(json.dumps(all_dirents), content_type=content_type)
 
     # get dirents in path
@@ -137,24 +140,8 @@ def get_dirents(request, repo_id):
     f_list = []
     for dirent in dirents:
         if stat.S_ISDIR(dirent.mode):
-            dirent.has_subdir = False
-
-            if dir_only:
-                dirent_path = posixpath.join(path, dirent.obj_name)
-                try:
-                    dirent_dirents = seafile_api.list_dir_by_path(repo_id, dirent_path.encode('utf-8'))
-                except SearpcError, e:
-                    dirent_dirents = []
-                for dirent_dirent in dirent_dirents:
-                    if stat.S_ISDIR(dirent_dirent.props.mode):
-                        dirent.has_subdir = True
-                        break
-
             subdir = {
-                'name': dirent.obj_name,
-                'id': dirent.obj_id,
-                'type': 'dir',
-                'has_subdir': dirent.has_subdir, # to decide node 'state' ('closed' or not) in jstree
+                'name': dirent.obj_name
             }
             d_list.append(subdir)
         else:

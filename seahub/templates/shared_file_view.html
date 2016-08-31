@@ -90,9 +90,9 @@ $(window).load(setFileViewAreaHeight).resize(setFileViewAreaHeight);
 
 {% if request.user.is_authenticated and request.user.username != shared_by %}
 $('#save').click(function() {
-    var form = $('#file-save-form'),
-        file_tree = new FileTree();
-    form.modal({appendTo:'#main', autoResize:true, focus:false});
+    var $form = $('#file-save-form');
+    $form.modal({appendTo:'#main', autoResize:true, focus:false});
+    $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
     $.ajax({
         url: '{% url 'unenc_rw_repos' %}',
         cache: false,
@@ -102,22 +102,22 @@ $('#save').click(function() {
             for (var i = 0, len = data.length; i < len; i++) {
                 repo = data[i];
                 all_repos.push({
-                    'data': repo.name,
-                    'attr': {'repo_id': repo.id, 'root_node': true},
-                    'state': 'closed'
+                    'text': HTMLescape(repo.name),
+                    'data': {'repo_id': repo.id, 'path': '/'},
+                    'children': true
                 });
             }
-            file_tree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), form, all_repos);
+            FileTree.renderDirTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, all_repos);
         }
     });
 });
 $('#file-save-form').submit(function() {
-    var form = $(this),
-        dst_repo = $('[name="dst_repo"]', form).val(),
-        dst_path = $('[name="dst_path"]', form).val();
+    var $form = $(this),
+        dst_repo = $('[name="dst_repo"]', $form).val(),
+        dst_path = $('[name="dst_path"]', $form).val();
 
     if (!$.trim(dst_repo) || !$.trim(dst_path)) {
-        $('.error', form).removeClass('hide');
+        $('.error', $form).removeClass('hide');
         return false;
     }
 });

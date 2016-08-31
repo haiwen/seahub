@@ -15,6 +15,7 @@
 <link rel="shortcut icon" href="{{ MEDIA_URL }}img/favicon.png?t=1398068110"/>
 <![endif]-->
 <link rel="stylesheet" type="text/css" href="{% static "css/bootstrap.min.css" %}"/>
+<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/jstree_default_theme/style.min.css" />
 <link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}css/seahub.css?t=1398068110" />
 {% block extra_style %}{% endblock %}
 {% if branding_css != '' %}<link rel="stylesheet" type="text/css" href="{{ MEDIA_URL }}{{ branding_css }}" />{% endif %}
@@ -131,10 +132,10 @@
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jquery-1.12.1.min.js" id="jquery"></script>{# 'id="jquery"' is for pdf file view with pdf2html #}
 <script type="text/javascript" src="{% static "scripts/lib/jquery.simplemodal.js" %}"></script>
 <script type="text/javascript" src="{% static "scripts/lib/jquery.ui.tabs.js" %}"></script>
+<script type="text/javascript" src="{% static "scripts/lib/jstree.min.js" %}"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/jq.min.js"></script>
 <script type="text/javascript" src="{{ MEDIA_URL }}js/base.js?t=1404370380"></script>
 <script type="text/javascript">
-$.jstree._themes = '{{ MEDIA_URL }}js/themes/';
 function ajaxErrorHandler(xhr, textStatus, errorThrown) {
     if (xhr.responseText) {
         feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
