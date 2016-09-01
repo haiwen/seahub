@@ -296,6 +296,8 @@ def file_size_exceeds_preview_limit(file_size, file_type):
             return True, err
         else:
             return False, ''
+    elif file_type in (VIDEO, AUDIO):
+            return False, ''
     else:
         if file_size > FILE_PREVIEW_MAX_SIZE:
             err = _(u'File size surpasses %s, can not be opened online.') % \
