@@ -4,7 +4,7 @@ import posixpath
 import urllib2
 import logging
 from StringIO import StringIO
-from PIL import Image
+from PIL import Image, ExifTags
 
 from seaserv import get_file_id_by_path, get_repo, get_file_size, \
     seafile_api
@@ -22,6 +22,48 @@ def get_thumbnail_src(repo_id, size, path):
 
 def get_share_link_thumbnail_src(token, size, path):
     return posixpath.join("thumbnail", token, str(size), path.lstrip('/'))
+
+def get_rotated_image(image):
+
+    # get image's exif info
+    exif = {}
+    if image._getexif():
+        exif = {
+            ExifTags.TAGS[k]: v
+            for k, v in image._getexif().items()
+            if k in ExifTags.TAGS
+        }
+
+    # get Orientation info from exif
+    if exif.has_key('Orientation'):
+        orientation = exif['Orientation']
+    else:
+        orientation = 1
+
+    # rotate image according to Orientation info
+    if orientation == 2:
+        # Vertical image
+        image = image.transpose(Image.FLIP_LEFT_RIGHT)
+    elif orientation == 3:
+        # Rotation 180
+        image = image.transpose(Image.ROTATE_180)
+    elif orientation == 4:
+        # Horizontal image
+        image = image.transpose(Image.FLIP_TOP_BOTTOM)
+    elif orientation == 5:
+        # Horizontal image + Rotation 90 CCW
+        image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_90)
+    elif orientation == 6:
+        # Rotation 270
+        image = image.transpose(Image.ROTATE_270)
+    elif orientation == 7:
+        # Horizontal image + Rotation 270
+        image = image.transpose(Image.FLIP_TOP_BOTTOM).transpose(Image.ROTATE_270)
+    elif orientation == 8:
+        # Rotation 90
+        image = image.transpose(Image.ROTATE_90)
+
+    return image
 
 def generate_thumbnail(request, repo_id, size, path):
     """ generate and save thumbnail if not exist
@@ -74,6 +116,8 @@ def generate_thumbnail(request, repo_id, size, path):
 
         if image.mode not in ["1", "L", "P", "RGB", "RGBA"]:
             image = image.convert("RGB")
+
+        image = get_rotated_image(image)
         image.thumbnail((size, size), Image.ANTIALIAS)
         image.save(thumbnail_file, THUMBNAIL_EXTENSION)
         return (True, 200)
