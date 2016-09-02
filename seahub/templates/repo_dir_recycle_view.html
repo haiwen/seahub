@@ -140,7 +140,7 @@ $('table').on("click", ".restore-file, .restore-dir", function() {
         data: {'commit_id': commit_id, 'p': path},
         success: function(data) {
             _this.closest('tr').remove();
-            feedback("{% trans "Success" %}", 'success');
+            feedback("{% trans "Successfully restored 1 item." %}", 'success');
         },
         error: function ajaxErrorHandler(xhr, textStatus, errorThrown) {
             if (xhr.responseText) {
