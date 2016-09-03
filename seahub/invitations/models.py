@@ -86,8 +86,7 @@ class Invitation(models.Model):
             'token': self.token,
         }
         subject = render_to_string('invitations/invitation_email_subject.txt',
-                                   context)
-
+                                   context).rstrip()
         send_html_email_with_dj_template(
             email, dj_template='invitations/invitation_email.html',
             context=context,

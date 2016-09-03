@@ -54,6 +54,7 @@ class InvitationsTest(BaseTestCase):
         self.assertEqual(len(Email.objects.all()), 1)
         self.assertRegexpMatches(Email.objects.all()[0].html_message,
                                  json_resp['token'])
+        assert Email.objects.all()[0].status == 0
 
     @patch.object(CanInviteGuest, 'has_permission')
     @patch.object(UserPermissions, 'can_invite_guest')
