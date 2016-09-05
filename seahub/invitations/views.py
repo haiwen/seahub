@@ -31,8 +31,7 @@ def token_view(request, token):
             # Create user, set that user as guest, and log user in.
             u = User.objects.create_user(email=i.accepter, password=passwd,
                                          is_active=True)
-            u.role = GUEST_USER
-            u.save()
+            User.objects.update_role(u.username, GUEST_USER)
 
             i.accept()          # Update invitaion accept time.
 
