@@ -27,19 +27,12 @@ def get_rotated_image(image):
 
     # get image's exif info
     exif = {}
-    if image._getexif():
-        exif = {
-            ExifTags.TAGS[k]: v
-            for k, v in image._getexif().items()
-            if k in ExifTags.TAGS
-        }
+    try:
+        exif = image._getexif()
+    except Exception:
+        return image
 
-    # get Orientation info from exif
-    if exif.has_key('Orientation'):
-        orientation = exif['Orientation']
-    else:
-        orientation = 1
-
+    orientation = exif.get(0x0112)
     # rotate image according to Orientation info
     if orientation == 2:
         # Vertical image
