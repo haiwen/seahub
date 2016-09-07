@@ -778,6 +778,69 @@ define([
             return (a >= b) - (a <= b);
         },
 
+        updateSortIconByMode: function(current_el) {
+            var sort_mode = app.pageOptions.sort_mode;
+
+            // first hide all icon
+            current_el.$('.by-name .sort-icon, .by-time .sort-icon').hide();
+
+            // show icon according sort mode
+            if (sort_mode == 'name_down') {
+                current_el.$('.by-name .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
+            } else if (sort_mode == 'name_up') {
+                current_el.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
+            } else if (sort_mode == 'time_down') {
+                current_el.$('.by-time .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
+            } else if (sort_mode == 'time_up') {
+                current_el.$('.by-time .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
+            } else {
+                // if no sort mode, show name up icon
+                current_el.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
+            }
+        },
+
+        sortCollection: function(current_collection) {
+            var sort_mode = app.pageOptions.sort_mode;
+            var _this = this;
+
+            // set collection comparator
+            current_collection.comparator = function(a, b) {
+                if (a.get('is_dir') && b.get('is_file')) {
+                    return -1;
+                }
+                if (a.get('is_file') && b.get('is_dir')) {
+                    return 1;
+                }
+
+                var a_name = a.get('name') || a.get('obj_name');
+                var b_name = b.get('name') || b.get('obj_name');
+
+                var a_time = a.get('mtime') || a.get('last_modified');
+                var b_time = b.get('mtime') || b.get('last_modified');
+
+                if (sort_mode == 'name_down' || sort_mode == 'name_up') {
+                    // if sort by name
+                    var result = _this.compareTwoWord(a_name, b_name);
+                    if (sort_mode == 'name_down') {
+                        return -result;
+                    } else {
+                        return result;
+                    }
+                } else {
+                    // if sort by time
+                    if (sort_mode == 'time_up') {
+                        return a_time < b_time ? -1 : 1;
+                    } else {
+                        return a_time < b_time ? 1 : -1;
+                    }
+                }
+            };
+
+            // sort collection
+            current_collection.sort();
+            return current_collection;
+        },
+
         fileSizeFormat: function(bytes, precision) {
             var kilobyte = 1024;
             var megabyte = kilobyte * 1024;
