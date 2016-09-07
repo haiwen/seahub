@@ -2997,7 +2997,7 @@ msgid ""
 msgstr "แบ่งปัน %(group)s สำเร็จ, โปรดตรวจสอบ <a href=\"%(share)s\">แบ่งปัน</a>."
 
 #: seahub/share/views.py:138
-msgid "You can not share libray to yourself."
+msgid "You can not share library to yourself."
 msgstr "คุณไม่สามารถแบ่งปันคลังแฟ้มข้อมูลให้ตัวเอง"
 
 #: seahub/share/views.py:146
