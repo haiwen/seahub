@@ -515,24 +515,8 @@ ENABLE_GLOBAL_ADDRESSBOOK = True
 ENABLE_FOLDER_PERM = False
 
 ####################
-# Role permissions #
+# Guest Invite     #
 ####################
-from seahub.constants import GUEST_USER
-ENABLED_ROLE_PERMISSIONS = {
-    GUEST_USER: {
-        'can_add_repo': False,
-        'can_add_group': False,
-        'can_view_org': False,
-        'can_use_global_address_book': False,
-        'can_generate_share_link': False,
-        'can_generate_upload_link': False,
-        'can_invite_guest': False,
-        'can_connect_with_android_clients': False,
-        'can_connect_with_ios_clients': False,
-        'can_connect_with_desktop_clients': False,
-    },
-}
-
 ENABLE_GUEST_INVITATION = False
 
 #####################
