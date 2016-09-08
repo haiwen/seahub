@@ -63,7 +63,8 @@ define([
     'text',                     // Workaround for r.js, otherwise text.js will not be included
     'pinyin-by-unicode',
     'moment',
-], function($, _, text, PinyinByUnicode, Moment) {
+    'js.cookie'
+], function($, _, text, PinyinByUnicode, Moment, Cookies) {
     return {
         INFO_TIMEOUT: 10000,     // 10 secs for info msg
         SUCCESS_TIMEOUT: 3000,   // 3 secs for success msg
@@ -778,67 +779,87 @@ define([
             return (a >= b) - (a <= b);
         },
 
-        updateSortIconByMode: function(current_el) {
-            var sort_mode = app.pageOptions.sort_mode;
-
-            // first hide all icon
-            current_el.$('.by-name .sort-icon, .by-time .sort-icon').hide();
-
-            // show icon according sort mode
-            if (sort_mode == 'name_down') {
-                current_el.$('.by-name .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
-            } else if (sort_mode == 'name_up') {
-                current_el.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
-            } else if (sort_mode == 'time_down') {
-                current_el.$('.by-time .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
-            } else if (sort_mode == 'time_up') {
-                current_el.$('.by-time .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
+        toggleSortByNameMode: function() {
+            if (app.pageOptions.sort_mode == 'name_up') {
+                Cookies.set('sort_mode', 'name_down');
+                app.pageOptions.sort_mode = 'name_down';
             } else {
-                // if no sort mode, show name up icon
-                current_el.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
+                Cookies.set('sort_mode', 'name_up');
+                app.pageOptions.sort_mode = 'name_up';
             }
         },
 
-        sortCollection: function(current_collection) {
+        toggleSortByTimeMode: function() {
+            if (app.pageOptions.sort_mode == 'time_down') {
+                Cookies.set('sort_mode', 'time_up');
+                app.pageOptions.sort_mode = 'time_up';
+            } else {
+                Cookies.set('sort_mode', 'time_down');
+                app.pageOptions.sort_mode = 'time_down';
+            }
+        },
+
+        updateSortIconByMode: function(options) {
             var sort_mode = app.pageOptions.sort_mode;
+
+            var context = options.context;
+            var $byNameIcon = $('.by-name .sort-icon', context),
+                $byTimeIcon = $('.by-time .sort-icon', context);
+
+            // hide icons
+            $byNameIcon.hide();
+            $byTimeIcon.hide();
+
+            // show icon according sort mode
+            switch(sort_mode) {
+                case 'name_down':
+                    $byNameIcon.removeClass('icon-caret-up').addClass('icon-caret-down').show();
+                    break;
+                case 'name_up':
+                    $byNameIcon.removeClass('icon-caret-down').addClass('icon-caret-up').show();
+                    break;
+                case 'time_down':
+                    $byTimeIcon.removeClass('icon-caret-up').addClass('icon-caret-down').show();
+                    break;
+                case 'time_up':
+                    $byTimeIcon.removeClass('icon-caret-down').addClass('icon-caret-up').show();
+                    break;
+                default:
+                    $byNameIcon.removeClass('icon-caret-down').addClass('icon-caret-up').show();
+                    break;
+            }
+        },
+
+        sortLibs: function(options) {
             var _this = this;
+            var sort_mode = app.pageOptions.sort_mode;
+            var libs = options.libs;
 
-            // set collection comparator
-            current_collection.comparator = function(a, b) {
-                if (a.get('is_dir') && b.get('is_file')) {
-                    return -1;
-                }
-                if (a.get('is_file') && b.get('is_dir')) {
-                    return 1;
-                }
-
-                var a_name = a.get('name') || a.get('obj_name');
-                var b_name = b.get('name') || b.get('obj_name');
-
-                var a_time = a.get('mtime') || a.get('last_modified');
-                var b_time = b.get('mtime') || b.get('last_modified');
-
-                if (sort_mode == 'name_down' || sort_mode == 'name_up') {
-                    // if sort by name
-                    var result = _this.compareTwoWord(a_name, b_name);
-                    if (sort_mode == 'name_down') {
-                        return -result;
-                    } else {
+            switch(sort_mode) {
+                case 'name_up':
+                    libs.comparator = function(a, b) {
+                        var result = _this.compareTwoWord(a.get('name'), b.get('name'));
                         return result;
-                    }
-                } else {
-                    // if sort by time
-                    if (sort_mode == 'time_up') {
-                        return a_time < b_time ? -1 : 1;
-                    } else {
-                        return a_time < b_time ? 1 : -1;
-                    }
-                }
-            };
-
-            // sort collection
-            current_collection.sort();
-            return current_collection;
+                    };
+                    break;
+                case 'name_down':
+                    libs.comparator = function(a, b) {
+                        var result = _this.compareTwoWord(a.get('name'), b.get('name'));
+                        return -result;
+                    };
+                    break;
+                case 'time_up':
+                    libs.comparator = function(a, b) {
+                        return a.get('mtime') < b.get('mtime') ? -1 : 1;
+                    };
+                    break;
+                case 'time_down':
+                    libs.comparator = function(a, b) {
+                        return a.get('mtime') < b.get('mtime') ? 1 : -1;
+                    };
+                    break;
+            }
+            libs.sort();
         },
 
         fileSizeFormat: function(bytes, precision) {

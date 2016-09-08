@@ -190,8 +190,9 @@ define([
                     this.renderDirentsHd();
                 }
 
-                Common.updateSortIconByMode(this);
-                this.dir = Common.sortCollection(this.dir);
+                // sort
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
@@ -678,18 +679,64 @@ define([
                 }
             },
 
-            sortByName: function() {
-                if (app.pageOptions.sort_mode == 'name_up') {
-                    // change sort mode
-                    Cookies.set('sort_mode', 'name_down');
-                    app.pageOptions.sort_mode = 'name_down';
-                } else {
-                    Cookies.set('sort_mode', 'name_up');
-                    app.pageOptions.sort_mode = 'name_up';
+            sortDirents: function() {
+                var sort_mode = app.pageOptions.sort_mode;
+                switch(sort_mode) {
+                    case 'name_up':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                            return result;
+                        };
+                        break;
+                    case 'name_down':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                            return -result;
+                        };
+                        break;
+                    case 'time_up':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
+                        };
+                        break;
+                    case 'time_down':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
+                        };
+                        break;
                 }
 
-                Common.updateSortIconByMode(this);
-                this.dir = Common.sortCollection(this.dir);
+                this.dir.sort();
+            },
+
+            sortByName: function() {
+                Common.toggleSortByNameMode();
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);
@@ -698,17 +745,9 @@ define([
             },
 
             sortByTime: function () {
-                if (app.pageOptions.sort_mode == 'time_down') {
-                    // change sort mode
-                    Cookies.set('sort_mode', 'time_up');
-                    app.pageOptions.sort_mode = 'time_up';
-                } else {
-                    Cookies.set('sort_mode', 'time_down');
-                    app.pageOptions.sort_mode = 'time_down';
-                }
-
-                Common.updateSortIconByMode(this);
-                this.dir = Common.sortCollection(this.dir);
+                Common.toggleSortByTimeMode();
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);

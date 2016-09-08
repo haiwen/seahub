@@ -3,14 +3,13 @@ define([
     'underscore',
     'backbone',
     'common',
-    'js.cookie',
     'app/collections/group-repos',
     'app/views/group-repo',
     'app/views/add-group-repo',
     'app/views/group-members',
     'app/views/group-discussions',
     'app/views/group-settings'
-], function($, _, Backbone, Common, Cookies, GroupRepos, GroupRepoView,
+], function($, _, Backbone, Common, GroupRepos, GroupRepoView,
     AddGroupRepoView, GroupMembersView, GroupDiscussionsView, GroupSettingsView) {
     'use strict';
 
@@ -67,7 +66,11 @@ define([
                 this.$emptyTip.hide();
                 this.renderReposHd();
                 this.$tableBody.empty();
-                this.repos = Common.sortCollection(this.repos);
+
+                // sort
+                Common.updateSortIconByMode({'context': this.$el});
+                Common.sortLibs({'libs': this.repos});
+
                 this.repos.each(this.addOne, this);
                 this.$table.show();
             } else {
@@ -75,7 +78,6 @@ define([
                 this.$table.hide();
             }
 
-            Common.updateSortIconByMode(this);
         },
 
         renderGroupTop: function(options) {
@@ -172,19 +174,9 @@ define([
         },
 
         sortByName: function() {
-
-
-            if (app.pageOptions.sort_mode == 'name_up') {
-                // change sort mode
-                Cookies.set('sort_mode', 'name_down');
-                app.pageOptions.sort_mode = 'name_down';
-            } else {
-                Cookies.set('sort_mode', 'name_up');
-                app.pageOptions.sort_mode = 'name_up';
-            }
-
-            Common.updateSortIconByMode(this);
-            this.repos = Common.sortCollection(this.repos);
+            Common.toggleSortByNameMode();
+            Common.updateSortIconByMode({'context': this.$el});
+            Common.sortLibs({'libs': this.repos});
 
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
@@ -194,17 +186,9 @@ define([
         },
 
         sortByTime: function() {
-            if (app.pageOptions.sort_mode == 'time_down') {
-                // change sort mode
-                Cookies.set('sort_mode', 'time_up');
-                app.pageOptions.sort_mode = 'time_up';
-            } else {
-                Cookies.set('sort_mode', 'time_down');
-                app.pageOptions.sort_mode = 'time_down';
-            }
-
-            Common.updateSortIconByMode(this);
-            this.repos = Common.sortCollection(this.repos);
+            Common.toggleSortByTimeMode();
+            Common.updateSortIconByMode({'context': this.$el});
+            Common.sortLibs({'libs': this.repos});
 
             this.$tableBody.empty();
             this.repos.each(this.addOne, this);
