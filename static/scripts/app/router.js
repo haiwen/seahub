@@ -3,6 +3,7 @@ define([
     'jquery',
     'backbone',
     'common',
+    'js.cookie',
     'app/views/side-nav',
     'app/views/myhome-repos',
     'app/views/myhome-shared-repos',
@@ -20,7 +21,7 @@ define([
     'app/views/share-admin-upload-links',
     'app/views/notifications',
     'app/views/account'
-], function($, Backbone, Common, SideNavView, MyReposView,
+], function($, Backbone, Common, Cookies, SideNavView, MyReposView,
     SharedReposView, GroupsView, GroupView, OrgView, DirView,
     StarredFileView, ActivitiesView, DevicesView, InvitationsView,
     ShareAdminReposView, ShareAdminFoldersView, ShareAdminShareLinksView,
@@ -81,6 +82,7 @@ define([
 
             app.ui.notificationsView = this.notificationsView = new NotificationsView();
             app.ui.accountView = this.accountView = new AccountView();
+            app.pageOptions.sort_mode = Cookies.get('sort_mode') || 'name_up';
 
             this.currentView = this.myReposView;
 

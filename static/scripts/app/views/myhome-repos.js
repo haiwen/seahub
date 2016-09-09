@@ -49,6 +49,11 @@ define([
                 this.$emptyTip.hide();
                 this.renderReposHd();
                 this.$tableBody.empty();
+
+                // sort
+                Common.updateSortIconByMode({'context': this.$el});
+                Common.sortLibs({'libs': this.repos});
+
                 this.repos.each(this.addOne, this);
                 this.$table.show();
             } else {
@@ -115,46 +120,26 @@ define([
         },
 
         sortByName: function() {
-            $('.by-time .sort-icon').hide();
-            var repos = this.repos;
-            var $el = $('.by-name .sort-icon', this.$table);
-            if ($el.hasClass('icon-caret-up')) {
-                repos.comparator = function(a, b) { // a, b: model
-                    var result = Common.compareTwoWord(a.get('name'), b.get('name'));
-                    return -result;
-                };
-            } else {
-                repos.comparator = function(a, b) { // a, b: model
-                    var result = Common.compareTwoWord(a.get('name'), b.get('name'));
-                    return result;
-                };
-            }
-            repos.sort();
+            Common.toggleSortByNameMode();
+            Common.updateSortIconByMode({'context': this.$el});
+            Common.sortLibs({'libs': this.repos});
+
             this.$tableBody.empty();
-            repos.each(this.addOne, this);
-            $el.toggleClass('icon-caret-up icon-caret-down').show();
-            repos.comparator = null;
+            this.repos.each(this.addOne, this);
+            this.repos.comparator = null;
+
             return false;
         },
 
         sortByTime: function() {
-            $('.by-name .sort-icon').hide();
-            var repos = this.repos;
-            var $el = $('.by-time .sort-icon', this.$table);
-            if ($el.hasClass('icon-caret-down')) {
-                repos.comparator = function(a, b) { // a, b: model
-                    return a.get('mtime') < b.get('mtime') ? 1 : -1;
-                };
-            } else {
-                repos.comparator = function(a, b) { // a, b: model
-                    return a.get('mtime') < b.get('mtime') ? -1 : 1;
-                };
-            }
-            repos.sort();
+            Common.toggleSortByTimeMode();
+            Common.updateSortIconByMode({'context': this.$el});
+            Common.sortLibs({'libs': this.repos});
+
             this.$tableBody.empty();
-            repos.each(this.addOne, this);
-            $el.toggleClass('icon-caret-up icon-caret-down').show();
-            repos.comparator = null;
+            this.repos.each(this.addOne, this);
+            this.repos.comparator = null;
+
             return false;
         }
 

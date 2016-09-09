@@ -42,17 +42,6 @@ define([
                     this.view_mode = 'list';
                 }
 
-                var sort_mode = Cookies.get('sort_mode');
-                if (sort_mode == 'time_up') {
-                    this.sort_mode = 'time_up';
-                } else if (sort_mode == 'time_down') {
-                    this.sort_mode = 'time_down';
-                } else if (sort_mode == 'name_down') {
-                    this.sort_mode = 'name_down';
-                } else {
-                    this.sort_mode = 'name_up';
-                }
-
                 this.contextOptions = {};
 
                 this.dir = new DirentCollection();
@@ -201,8 +190,9 @@ define([
                     this.renderDirentsHd();
                 }
 
-                this.updateSortIconByMode(this.sort_mode);
-                this.sortDirents(this.sort_mode);
+                // sort
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
@@ -689,18 +679,64 @@ define([
                 }
             },
 
-            sortByName: function() {
-                if (this.sort_mode == 'name_up') {
-                    // change sort mode
-                    Cookies.set('sort_mode', 'name_down');
-                    this.sort_mode = 'name_down';
-                } else {
-                    Cookies.set('sort_mode', 'name_up');
-                    this.sort_mode = 'name_up';
+            sortDirents: function() {
+                var sort_mode = app.pageOptions.sort_mode;
+                switch(sort_mode) {
+                    case 'name_up':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                            return result;
+                        };
+                        break;
+                    case 'name_down':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
+                            return -result;
+                        };
+                        break;
+                    case 'time_up':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
+                        };
+                        break;
+                    case 'time_down':
+                        this.dir.comparator = function(a, b) {
+                            if (a.get('is_dir') && b.get('is_file')) {
+                                return -1;
+                            }
+                            if (a.get('is_file') && b.get('is_dir')) {
+                                return 1;
+                            }
+                            return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
+                        };
+                        break;
                 }
 
-                this.updateSortIconByMode(this.sort_mode);
-                this.sortDirents(this.sort_mode);
+                this.dir.sort();
+            },
+
+            sortByName: function() {
+                Common.toggleSortByNameMode();
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);
@@ -709,73 +745,14 @@ define([
             },
 
             sortByTime: function () {
-                if (this.sort_mode == 'time_up') {
-                    // change sort mode
-                    Cookies.set('sort_mode', 'time_down');
-                    this.sort_mode = 'time_down';
-                } else {
-                    Cookies.set('sort_mode', 'time_up');
-                    this.sort_mode = 'time_up';
-                }
-
-                this.updateSortIconByMode(this.sort_mode);
-                this.sortDirents(this.sort_mode);
+                Common.toggleSortByTimeMode();
+                Common.updateSortIconByMode({'context': this.$el});
+                this.sortDirents();
 
                 this.$dirent_list_body.empty();
                 this.render_dirents_slice(0, this.dir.limit);
                 this.dir.comparator = null;
                 return false;
-            },
-
-            sortDirents: function(sort_mode) {
-                // set collection comparator
-                this.dir.comparator = function(a, b) {
-                    if (a.get('is_dir') && b.get('is_file')) {
-                        return -1;
-                    }
-                    if (a.get('is_file') && b.get('is_dir')) {
-                        return 1;
-                    }
-
-                    if (sort_mode == 'name_up' || sort_mode == 'name_down') {
-                        // if sort by name
-                        var result = Common.compareTwoWord(a.get('obj_name'), b.get('obj_name'));
-                        if (sort_mode == 'name_up') {
-                            return -result;
-                        } else {
-                            return result;
-                        }
-                    } else {
-                        // if sort by time
-                        if (sort_mode == 'time_up') {
-                            return a.get('last_modified') < b.get('last_modified') ? -1 : 1;
-                        } else {
-                            return a.get('last_modified') < b.get('last_modified') ? 1 : -1;
-                        }
-                    }
-                };
-
-                // sort collection
-                this.dir.sort();
-            },
-
-            updateSortIconByMode: function(sort_mode) {
-                // first hide all icon
-                this.$('.by-name .sort-icon, .by-time .sort-icon').hide();
-
-                // show icon according sort mode
-                if (sort_mode == 'name_up') {
-                    this.$('.by-name .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
-                } else if (sort_mode == 'name_down') {
-                    this.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
-                } else if (sort_mode == 'time_up') {
-                    this.$('.by-time .sort-icon').removeClass('icon-caret-up').addClass('icon-caret-down').show();
-                } else if (sort_mode == 'time_down') {
-                    this.$('.by-time .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
-                } else {
-                    // if no sort mode, show name up icon
-                    this.$('.by-name .sort-icon').removeClass('icon-caret-down').addClass('icon-caret-up').show();
-                }
             },
 
             select: function () {
