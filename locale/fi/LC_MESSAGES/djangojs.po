@@ -1,0 +1,829 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Sami Lahtinen <sami.lahtinen@tietovirta.fi>, 2016
+# Klaus Kuusela <kkuusela@gmail.com>, 2015
+# Sami Lahtinen <sami.lahtinen@tietovirta.fi>, 2016
+msgid ""
+msgstr ""
+"Project-Id-Version: seahub\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-08-20 17:59+0800\n"
+"PO-Revision-Date: 2016-08-20 10:06+0000\n"
+"Last-Translator: zheng xie <xiez1989@gmail.com>\n"
+"Language-Team: Finnish (http://www.transifex.com/haiwen/seahub/language/fi/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fi\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: static/scripts/app/models/dirent.js:113 static/scripts/app/views/dir.js:523
+#: static/scripts/app/views/dir.js:591
+#: static/scripts/app/views/fileupload.js:343
+#: static/scripts/app/views/fileupload.js:357
+#: static/scripts/app/views/fileupload.js:369
+#: static/scripts/app/views/fileupload.js:381 static/scripts/common.js:537
+msgid "Just now"
+msgstr "Juuri nyt"
+
+#: static/scripts/app/models/repo.js:32
+msgid "Name is required"
+msgstr "Nimi vaaditaan"
+
+#: static/scripts/app/models/repo.js:35 static/scripts/app/views/share.js:202
+msgid "Please enter password"
+msgstr "Ole hyvä ja syötä salasana"
+
+#: static/scripts/app/models/repo.js:36 static/scripts/app/views/share.js:210
+msgid "Please enter the password again"
+msgstr "Ole hyvä ja syötä salasana uudelleen"
+
+#: static/scripts/app/models/repo.js:38 static/scripts/app/views/share.js:206
+msgid "Password is too short"
+msgstr "Salasana on liian lyhyt"
+
+#: static/scripts/app/models/repo.js:40 static/scripts/app/views/share.js:214
+msgid "Passwords don't match"
+msgstr "Salasanat eivät täsmää"
+
+#: static/scripts/app/models/repo.js:53
+#: static/scripts/sysadmin-app/models/repo.js:17
+msgid "Encrypted library"
+msgstr "Salattu kirjasto"
+
+#: static/scripts/app/models/repo.js:55
+#: static/scripts/sysadmin-app/models/repo.js:19
+#: static/scripts/sysadmin-app/models/trash-repo.js:14
+msgid "Read-Write library"
+msgstr "Luku-kirjoitus kirjasto"
+
+#: static/scripts/app/models/repo.js:57
+msgid "Read-Only library"
+msgstr "Vain luku kirjasto"
+
+#: static/scripts/app/models/share-admin-folder.js:25
+#: static/scripts/app/models/share-admin-repo.js:22
+msgid "Read-Write"
+msgstr ""
+
+#: static/scripts/app/models/share-admin-folder.js:27
+#: static/scripts/app/models/share-admin-repo.js:24
+msgid "Read-Only"
+msgstr ""
+
+#: static/scripts/app/views/account.js:58
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:126
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:245
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:292
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:81
+#: static/scripts/app/views/dir.js:391
+#: static/scripts/app/views/group-discussions.js:125
+#: static/scripts/app/views/group-discussions.js:203
+#: static/scripts/app/views/group-discussions.js:246
+#: static/scripts/app/views/group-manage-members.js:117
+#: static/scripts/app/views/group-manage-members.js:146
+#: static/scripts/app/views/group-members.js:80
+#: static/scripts/app/views/group.js:101 static/scripts/app/views/group.js:134
+#: static/scripts/app/views/groups.js:83
+#: static/scripts/app/views/groups.js:134
+#: static/scripts/app/views/invitations.js:78
+#: static/scripts/app/views/myhome-repos.js:86
+#: static/scripts/app/views/myhome-shared-repos.js:73
+#: static/scripts/app/views/notifications.js:140
+#: static/scripts/app/views/organization.js:118
+#: static/scripts/app/views/repo-folder-perm.js:94
+#: static/scripts/app/views/repo-folder-perm.js:134
+#: static/scripts/app/views/repo-shared-link.js:84
+#: static/scripts/app/views/share-admin-folders.js:98
+#: static/scripts/app/views/share-admin-repos.js:100
+#: static/scripts/app/views/share-admin-share-links.js:150
+#: static/scripts/app/views/share-admin-upload-links.js:64
+msgid "Please check the network."
+msgstr "Ole hyvä ja tarkista verkko."
+
+#: static/scripts/app/views/details.js:47
+msgid "New files"
+msgstr "Uudet tiedostot"
+
+#: static/scripts/app/views/details.js:53
+msgid "Deleted files"
+msgstr "Poistetut tiedostot"
+
+#: static/scripts/app/views/details.js:59
+msgid "Renamed or Moved files"
+msgstr "Uudelleen nimetyt tai siirretyt tiedostot"
+
+#: static/scripts/app/views/details.js:65
+msgid "Modified files"
+msgstr "Muokatut tiedostot"
+
+#: static/scripts/app/views/details.js:71
+msgid "New directories"
+msgstr "Uudet hakemistot"
+
+#: static/scripts/app/views/details.js:77
+msgid "Deleted directories"
+msgstr "Poistetut hakemistot"
+
+#: static/scripts/app/views/details.js:94
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:130
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:156
+#: static/scripts/app/views/dialogs/dirent-rename.js:74
+#: static/scripts/app/views/dialogs/repo-change-password.js:95
+#: static/scripts/app/views/dialogs/repo-history-settings.js:82
+#: static/scripts/app/views/dialogs/repo-history-settings.js:141
+#: static/scripts/app/views/dir.js:1167 static/scripts/app/views/dir.js:1224
+#: static/scripts/app/views/dirent.js:323
+#: static/scripts/app/views/folder-perm-item.js:84
+#: static/scripts/app/views/folder-perm-item.js:126
+#: static/scripts/app/views/folder-perm.js:155
+#: static/scripts/app/views/folder-perm.js:207
+#: static/scripts/app/views/folder-share-item.js:81
+#: static/scripts/app/views/folder-share-item.js:117
+#: static/scripts/app/views/group-discussion.js:94
+#: static/scripts/app/views/group-manage-member.js:79
+#: static/scripts/app/views/group-manage-member.js:105
+#: static/scripts/app/views/group-manage-members.js:180
+#: static/scripts/app/views/group-repo.js:65
+#: static/scripts/app/views/group-settings.js:133
+#: static/scripts/app/views/group-settings.js:190
+#: static/scripts/app/views/group-settings.js:230
+#: static/scripts/app/views/group-settings.js:287
+#: static/scripts/app/views/group-settings.js:327
+#: static/scripts/app/views/group-settings.js:362
+#: static/scripts/app/views/invitations.js:146
+#: static/scripts/app/views/repo.js:165 static/scripts/app/views/repo.js:240
+#: static/scripts/app/views/share.js:343 static/scripts/app/views/share.js:632
+#: static/scripts/app/views/share.js:710 static/scripts/common.js:358
+#: static/scripts/common.js:447
+#: static/scripts/sysadmin-app/views/dashboard.js:46
+#: static/scripts/sysadmin-app/views/desktop-devices.js:105
+#: static/scripts/sysadmin-app/views/device-errors.js:92
+#: static/scripts/sysadmin-app/views/dir.js:193
+#: static/scripts/sysadmin-app/views/folder-share-item.js:89
+#: static/scripts/sysadmin-app/views/folder-share-item.js:138
+#: static/scripts/sysadmin-app/views/group.js:108
+#: static/scripts/sysadmin-app/views/groups.js:106
+#: static/scripts/sysadmin-app/views/mobile-devices.js:106
+#: static/scripts/sysadmin-app/views/repo.js:123
+#: static/scripts/sysadmin-app/views/repos.js:105
+#: static/scripts/sysadmin-app/views/search-repos.js:77
+#: static/scripts/sysadmin-app/views/search-trash-repos.js:113
+#: static/scripts/sysadmin-app/views/share.js:190
+#: static/scripts/sysadmin-app/views/share.js:263
+#: static/scripts/sysadmin-app/views/system-repo.js:59
+#: static/scripts/sysadmin-app/views/trash-repos.js:142
+msgid "Failed. Please check the network."
+msgstr "Epäonnistui. Ole hyvä ja tarkista verkkoyhteys."
+
+#: static/scripts/app/views/device.js:42
+msgid "Unlink device"
+msgstr ""
+
+#: static/scripts/app/views/device.js:43
+msgid "Are you sure you want to unlink this device?"
+msgstr ""
+
+#: static/scripts/app/views/device.js:44
+msgid "Delete files from this device the next time it comes online."
+msgstr ""
+
+#: static/scripts/app/views/device.js:53 static/scripts/app/views/device.js:73
+#: static/scripts/sysadmin-app/views/device.js:44
+msgid "Successfully unlink %(name)s."
+msgstr "Kohteen %(name)s linkki poistettu onnistuneesti"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:50
+msgid "Move {placeholder} to:"
+msgstr "Siirrä {placeholder} kohteeseen:"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:50
+msgid "Copy {placeholder} to:"
+msgstr "Kopioi {placeholder} kohteeseen:"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:89
+msgid "Moving %(name)s"
+msgstr "Siirretään %(name)s"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:89
+msgid "Copying %(name)s"
+msgstr "Kopioidaan %(name)s"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:105
+msgid "Saving..."
+msgstr "Tallennetaan..."
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:119
+msgid "Failed."
+msgstr "Epäonnistui."
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:119
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:147
+#: static/scripts/app/views/dir.js:1215
+msgid "Canceled."
+msgstr "Peruutettu."
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:179
+#: static/scripts/app/views/dir.js:1012
+msgid "Invalid destination path"
+msgstr "Virheellinen kohdepolku"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:199
+msgid "Successfully moved %(name)s"
+msgstr "Kohde %(name)s siirretty onnistuneesti"
+
+#: static/scripts/app/views/dialogs/dirent-mvcp.js:202
+msgid "Successfully copied %(name)s"
+msgstr "Kohde %(name)s kopioitu onnistuneesti"
+
+#: static/scripts/app/views/dialogs/dirent-rename.js:35
+msgid "Rename Folder"
+msgstr "Nimeä kansio uudelleen"
+
+#: static/scripts/app/views/dialogs/dirent-rename.js:35
+msgid "Rename File"
+msgstr "Nimeä tiedosto uudelleen"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:26
+msgid "Change Password of Library {placeholder}"
+msgstr "Vaihda kirjaston {placeholder} salasana"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:50
+msgid "Please enter the old password"
+msgstr "Ole hyvä ja anna vanha salasana"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:54
+msgid "Please enter a new password"
+msgstr "Ole hyvä ja anna uusi salasana"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:58
+msgid "New password is too short"
+msgstr "Uusi salasana on liian lyhyt"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:62
+msgid "Please enter the new password again"
+msgstr "Ole hyvä ja anna uusi salasana uudelleen"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:66
+msgid "New passwords don't match"
+msgstr "Uudet salasanat eivät täsmää"
+
+#: static/scripts/app/views/dialogs/repo-change-password.js:88
+msgid "Successfully changed library password."
+msgstr "Kirjaston salasana vaihdettu onnistuneesti."
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:73
+msgid "{placeholder} Folder Permission"
+msgstr "{placeholder} Kansion oikeus"
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:92
+#: static/scripts/app/views/group-settings.js:154
+#: static/scripts/app/views/repo.js:204
+#: static/scripts/sysadmin-app/views/group.js:74
+#: static/scripts/sysadmin-app/views/repo.js:88
+msgid "Search user or enter email and press Enter"
+msgstr "Etsi käyttäjä tai syötä sähköposti ja paina Enter"
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:94
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:105
+msgid "You can only select 1 item"
+msgstr "Voit valita vain yhden kohteen"
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:103
+msgid "Select a group"
+msgstr "Valitse ryhmä"
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:121
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:76
+#: static/scripts/app/views/group-discussions.js:120
+#: static/scripts/app/views/group-discussions.js:198
+#: static/scripts/app/views/group-manage-members.js:112
+#: static/scripts/app/views/group-members.js:75
+#: static/scripts/app/views/group.js:129 static/scripts/app/views/groups.js:78
+#: static/scripts/app/views/invitations.js:141
+#: static/scripts/app/views/myhome-repos.js:81
+#: static/scripts/app/views/myhome-shared-repos.js:68
+#: static/scripts/app/views/organization.js:113
+#: static/scripts/app/views/share-admin-folders.js:93
+#: static/scripts/app/views/share-admin-repos.js:95
+#: static/scripts/app/views/share-admin-share-links.js:145
+#: static/scripts/app/views/share-admin-upload-links.js:59
+#: static/scripts/sysadmin-app/views/dashboard.js:41
+#: static/scripts/sysadmin-app/views/desktop-devices.js:100
+#: static/scripts/sysadmin-app/views/device-errors.js:87
+#: static/scripts/sysadmin-app/views/dir.js:188
+#: static/scripts/sysadmin-app/views/groups.js:101
+#: static/scripts/sysadmin-app/views/mobile-devices.js:101
+#: static/scripts/sysadmin-app/views/repos.js:100
+#: static/scripts/sysadmin-app/views/search-repos.js:72
+#: static/scripts/sysadmin-app/views/search-trash-repos.js:108
+#: static/scripts/sysadmin-app/views/system-repo.js:54
+#: static/scripts/sysadmin-app/views/trash-repos.js:137
+msgid "Permission error"
+msgstr "Virhe oikeuksissa"
+
+#: static/scripts/app/views/dialogs/repo-folder-perm-admin.js:186
+msgid "Please click and choose a directory."
+msgstr "Ole hyvä ja valitse hakemisto."
+
+#: static/scripts/app/views/dialogs/repo-history-settings.js:35
+msgid "{placeholder} History Setting"
+msgstr "{placeholder} Historia-asetukset"
+
+#: static/scripts/app/views/dialogs/repo-history-settings.js:134
+msgid "Successfully set library history."
+msgstr "Kirjaston historia asetettu onnistuneesti."
+
+#: static/scripts/app/views/dialogs/repo-share-link-admin.js:50
+msgid "{placeholder} Share Links"
+msgstr "{placeholder} Jakolinkit"
+
+#: static/scripts/app/views/dir.js:117
+#: static/scripts/app/views/starred-file.js:60
+msgid "Close (Esc)"
+msgstr "Sulje (Esc)"
+
+#: static/scripts/app/views/dir.js:118
+#: static/scripts/app/views/starred-file.js:61
+msgid "Loading..."
+msgstr "Ladataan..."
+
+#: static/scripts/app/views/dir.js:121
+#: static/scripts/app/views/starred-file.js:64
+msgid "Previous (Left arrow key)"
+msgstr "Edellinen (Vasen nuolinäppäin)"
+
+#: static/scripts/app/views/dir.js:122
+#: static/scripts/app/views/starred-file.js:65
+msgid "Next (Right arrow key)"
+msgstr "Seuraava (Oikea nuolinäppäin)"
+
+#: static/scripts/app/views/dir.js:123
+#: static/scripts/app/views/starred-file.js:66
+msgid "%curr% of %total%"
+msgstr "%curr% kokonaismäärästä %total%"
+
+#: static/scripts/app/views/dir.js:126
+#: static/scripts/app/views/starred-file.js:75
+msgid "<a href=\"%url%\" target=\"_blank\">The image</a> could not be loaded."
+msgstr " href=\"%url%\" target=\"_blank\">Kuvaa</a> ei voitu ladata."
+
+#: static/scripts/app/views/dir.js:136 static/scripts/app/views/dir.js:148
+#: static/scripts/app/views/starred-file.js:72
+msgid "Open in New Tab"
+msgstr "Avaa uudessa välilehdessä"
+
+#: static/scripts/app/views/dir.js:323
+msgid "Password is required."
+msgstr "Salasana vaaditaan"
+
+#: static/scripts/app/views/dir.js:508 static/scripts/app/views/dir.js:566
+#: static/scripts/app/views/groups.js:112
+#: static/scripts/app/views/invitations.js:54
+#: static/scripts/sysadmin-app/views/dir.js:82
+msgid "It is required."
+msgstr "Vaaditaan"
+
+#: static/scripts/app/views/dir.js:572
+msgid "Only an extension there, please input a name."
+msgstr "Ainoastaan päätteet tähän, ole hyvä ja anna nimi."
+
+#: static/scripts/app/views/dir.js:823 static/scripts/app/views/dirent.js:127
+msgid "Packaging..."
+msgstr ""
+
+#: static/scripts/app/views/dir.js:877 static/scripts/app/views/dir.js:1017
+msgid "Processing..."
+msgstr "Käsitellään..."
+
+#: static/scripts/app/views/dir.js:914
+msgid "Successfully deleted %(name)s."
+msgstr "Poistettu onnistuneesti %(name)s"
+
+#: static/scripts/app/views/dir.js:916
+msgid "Successfully deleted %(name)s and 1 other item."
+msgstr "Poistettu onnistuneesti %(name)s ja 1 muu kohde."
+
+#: static/scripts/app/views/dir.js:918
+msgid "Successfully deleted %(name)s and %(amount)s other items."
+msgstr "Poistettu onnistuneesti %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:925
+msgid "Failed to delete %(name)s."
+msgstr "%(name)s poistaminen epäonnistui."
+
+#: static/scripts/app/views/dir.js:927
+msgid "Failed to delete %(name)s and 1 other item."
+msgstr "Epäonnistuttiin poistamaan %(name)s ja 1 muu kohde."
+
+#: static/scripts/app/views/dir.js:929
+msgid "Failed to delete %(name)s and %(amount)s other items."
+msgstr "Epäonnistuttiin poistamaan %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:942
+msgid "Delete Items"
+msgstr "Poista kohteita"
+
+#: static/scripts/app/views/dir.js:943
+msgid "Are you sure you want to delete these selected items?"
+msgstr "Oletko varma, että haluat poistaa nämä kohteet?"
+
+#: static/scripts/app/views/dir.js:957
+msgid "Move selected item(s) to:"
+msgstr "Siirrä valitut kohteet:"
+
+#: static/scripts/app/views/dir.js:957
+msgid "Copy selected item(s) to:"
+msgstr "Kopioi valitut kohteet:"
+
+#: static/scripts/app/views/dir.js:1061
+msgid "Successfully moved %(name)s."
+msgstr "%(name)s siirretty onnistuneesti."
+
+#: static/scripts/app/views/dir.js:1063
+msgid "Successfully moved %(name)s and 1 other item."
+msgstr "Siirrettiin onnistuneesti %(name)s ja 1 muu kohde."
+
+#: static/scripts/app/views/dir.js:1065
+msgid "Successfully moved %(name)s and %(amount)s other items."
+msgstr "Siirrettiin onnistuneesti %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:1069
+msgid "Successfully copied %(name)s."
+msgstr "%(name)s kopioitiin onnistuneesti."
+
+#: static/scripts/app/views/dir.js:1071
+msgid "Successfully copied %(name)s and 1 other item."
+msgstr "Kopioitiin onnistuneesti %(name)s ja 1 muu kohde."
+
+#: static/scripts/app/views/dir.js:1073
+msgid "Successfully copied %(name)s and %(amount)s other items."
+msgstr "Kopioitiin onnistuneesti %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:1085
+msgid "Internal error. Failed to move %(name)s and %(amount)s other item(s)."
+msgstr "Sisäinen virhe. Epäonnistuttiin siirtämään %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:1087
+msgid "Internal error. Failed to move %(name)s."
+msgstr "Sisäinen virhe. %(name)s siirtäminen epäonnistui."
+
+#: static/scripts/app/views/dir.js:1091
+msgid "Internal error. Failed to copy %(name)s and %(amount)s other item(s)."
+msgstr "Sisäinen virhe. Epäonnistuttiin kopioimaan %(name)s ja %(amount)s muuta kohdetta."
+
+#: static/scripts/app/views/dir.js:1093
+msgid "Internal error. Failed to copy %(name)s."
+msgstr "Sisäinen virhe. %(name)s kopiointi epäonnistui."
+
+#: static/scripts/app/views/dir.js:1133
+msgid "Moving file %(index)s of %(total)s"
+msgstr "Siirretään tiedostoa %(index)s kokonaismäärästä %(total)s"
+
+#: static/scripts/app/views/dir.js:1133
+msgid "Copying file %(index)s of %(total)s"
+msgstr "Kopioidaan tiedostoa %(index)s kokonaismäärästä %(total)s"
+
+#: static/scripts/app/views/dir.js:1155
+msgid "Failed to move %(name)s"
+msgstr "%(name)s siirtäminen epäonnistui"
+
+#: static/scripts/app/views/dir.js:1155
+msgid "Failed to copy %(name)s"
+msgstr "%(name)s kopiointi epäonnistui."
+
+#: static/scripts/app/views/dirent-grid.js:60
+#: static/scripts/app/views/dirent.js:61
+msgid "locked by {placeholder}"
+msgstr "lukittu {placeholder} toimesta"
+
+#: static/scripts/app/views/dirent-grid.js:154
+#: static/scripts/app/views/dirent.js:244
+msgid "Successfully deleted %(name)s"
+msgstr "%(name)s poistettu onnistuneesti"
+
+#: static/scripts/app/views/fileupload.js:10
+msgid "File is too big"
+msgstr "Tiedosto on liian suuri"
+
+#: static/scripts/app/views/fileupload.js:11
+msgid "File is too small"
+msgstr "Tiedosto on liian pieni"
+
+#: static/scripts/app/views/fileupload.js:12
+msgid "Filetype not allowed"
+msgstr "Tiedostotyyppi ei ole sallittu"
+
+#: static/scripts/app/views/fileupload.js:13
+msgid "Max number of files exceeded"
+msgstr "Tiedostojen maksimäärä on ylitetty"
+
+#: static/scripts/app/views/fileupload.js:14
+msgid "Uploaded bytes exceed file size"
+msgstr "Lähtetyt tavut ylittävät tiedoston koon"
+
+#: static/scripts/app/views/fileupload.js:15
+msgid "Empty file upload result"
+msgstr "Tiedoston lähetys oli tulokseton"
+
+#: static/scripts/app/views/fileupload.js:17
+#: static/scripts/app/views/group-discussions.js:122
+#: static/scripts/app/views/group-discussions.js:200
+#: static/scripts/app/views/group-manage-members.js:114
+#: static/scripts/app/views/group-manage-members.js:178
+#: static/scripts/app/views/group-members.js:77
+#: static/scripts/app/views/group.js:131 static/scripts/app/views/groups.js:80
+#: static/scripts/app/views/myhome-repos.js:83
+#: static/scripts/app/views/myhome-shared-repos.js:70
+#: static/scripts/app/views/organization.js:115
+#: static/scripts/app/views/share-admin-folders.js:95
+#: static/scripts/app/views/share-admin-repos.js:97
+#: static/scripts/app/views/share-admin-share-links.js:147
+#: static/scripts/app/views/share-admin-upload-links.js:61
+msgid "Error"
+msgstr "Virhe"
+
+#: static/scripts/app/views/fileupload.js:18
+msgid "uploaded"
+msgstr "lähetetty"
+
+#: static/scripts/app/views/fileupload.js:19
+msgid "canceled"
+msgstr "peruutettu"
+
+#: static/scripts/app/views/fileupload.js:20
+msgid "Start"
+msgstr "Aloita"
+
+#: static/scripts/app/views/fileupload.js:21
+msgid "Cancel"
+msgstr "Peruuta"
+
+#: static/scripts/app/views/fileupload.js:22
+msgid "Delete"
+msgstr "Poista"
+
+#: static/scripts/app/views/fileupload.js:46
+msgid "File Uploading..."
+msgstr "Tiedostoa lähetetään..."
+
+#: static/scripts/app/views/fileupload.js:47
+msgid "File Upload complete"
+msgstr "Tiedoston lähetys valmistui"
+
+#: static/scripts/app/views/fileupload.js:48
+msgid "File Upload canceled"
+msgstr "Tiedoston lähetys peruutettu"
+
+#: static/scripts/app/views/fileupload.js:49
+msgid "File Upload failed"
+msgstr "Tiedoston lähetys epäonnistui"
+
+#: static/scripts/app/views/fileupload.js:186
+msgid "Failed to get upload url"
+msgstr "Lähetyslinkin haku epäonnistui"
+
+#: static/scripts/app/views/fileupload.js:219
+msgid "Failed to get update url"
+msgstr "Päivityslinkin haku epäonnistui"
+
+#: static/scripts/app/views/fileupload.js:230
+msgid "Replace file {filename}?"
+msgstr "Korvaa tiedosto {filename}?"
+
+#: static/scripts/app/views/fileupload.js:256
+msgid "File is locked"
+msgstr "Tiedosto on lukittu"
+
+#: static/scripts/app/views/folder-perm.js:48
+msgid "Set {placeholder}'s permission"
+msgstr "Aseta oikeudet kohteelle {placeholder} "
+
+#: static/scripts/app/views/folder-perm.js:100
+#: static/scripts/app/views/share.js:527
+msgid "Select groups"
+msgstr "Valitse ryhmät"
+
+#: static/scripts/app/views/folder-share-item.js:79
+msgid "Edit failed"
+msgstr "Muokkaus epäonnistui"
+
+#: static/scripts/app/views/folder-share-item.js:115
+msgid "Delete failed"
+msgstr "Poisto epäonnistui"
+
+#: static/scripts/app/views/group-manage-members.js:71
+msgid "{placeholder} Members"
+msgstr "{placeholder} Jäsenet"
+
+#: static/scripts/app/views/group-repo.js:57
+#: static/scripts/app/views/organization-repo.js:48
+msgid "Successfully unshared 1 item."
+msgstr ""
+
+#: static/scripts/app/views/group-settings.js:155
+#: static/scripts/app/views/repo.js:205
+#: static/scripts/sysadmin-app/views/group.js:75
+#: static/scripts/sysadmin-app/views/repo.js:89
+msgid "You cannot select any more choices"
+msgstr "Et voi tehdä enempää valintoja"
+
+#: static/scripts/app/views/group-settings.js:182
+msgid ""
+"Successfully transferred the group. You are now a normal member of the "
+"group."
+msgstr "Ryhmän vaihto onnistui. Olet nyt ryhmän peruskäyttäjä."
+
+#: static/scripts/app/views/group-settings.js:248
+msgid "Please choose a CSV file"
+msgstr "Ole hyvä ja valitse CSV-tiedosto"
+
+#: static/scripts/app/views/group-settings.js:279
+msgid "Successfully imported."
+msgstr "Tuonti onnistui."
+
+#: static/scripts/app/views/group-settings.js:307
+msgid "Dismiss Group"
+msgstr "Poistu ryhmästä"
+
+#: static/scripts/app/views/group-settings.js:308
+msgid "Really want to dismiss this group?"
+msgstr "Haluatko varmasti poistua ryhmästä?"
+
+#: static/scripts/app/views/group-settings.js:341
+msgid "Quit Group"
+msgstr "Lopeta ryhmä"
+
+#: static/scripts/app/views/group-settings.js:342
+msgid "Are you sure you want to quit this group?"
+msgstr "Oletko varma, että haluat lopettaa tämän ryhmän?"
+
+#: static/scripts/app/views/invitation.js:37
+#: static/scripts/app/views/share-admin-folder.js:91
+#: static/scripts/app/views/share-admin-repo.js:95
+#: static/scripts/app/views/share-admin-share-link.js:55
+#: static/scripts/app/views/share-admin-upload-link.js:54
+msgid "Successfully deleted 1 item"
+msgstr ""
+
+#: static/scripts/app/views/repo.js:60
+#: static/scripts/sysadmin-app/views/repo.js:46
+#: static/scripts/sysadmin-app/views/trash-repo.js:28
+msgid "Delete Library"
+msgstr ""
+
+#: static/scripts/app/views/repo.js:61
+#: static/scripts/sysadmin-app/views/group.js:31
+#: static/scripts/sysadmin-app/views/repo.js:47
+#, javascript-format
+msgid "Are you sure you want to delete %s ?"
+msgstr ""
+
+#: static/scripts/app/views/repo.js:71
+#: static/scripts/sysadmin-app/views/repo.js:60
+msgid "Successfully deleted."
+msgstr ""
+
+#: static/scripts/app/views/repo.js:194
+#: static/scripts/sysadmin-app/views/repo.js:78
+msgid "Transfer Library {library_name} To"
+msgstr "Siirrä kirjasto {library_name} kohteeseen"
+
+#: static/scripts/app/views/repo.js:233
+#: static/scripts/sysadmin-app/views/repo.js:116
+msgid "Successfully transferred the library."
+msgstr "Kirjasto siirretty onnistuneesti."
+
+#: static/scripts/app/views/share-admin-folder.js:63
+#: static/scripts/app/views/share-admin-repo.js:65
+msgid "Successfully modified permission"
+msgstr ""
+
+#: static/scripts/app/views/share.js:57
+#: static/scripts/sysadmin-app/views/share.js:41
+msgid "Share {placeholder}"
+msgstr "Jaa {placeholder}"
+
+#: static/scripts/app/views/share.js:121
+msgid "Expired"
+msgstr "Vanhentunut"
+
+#: static/scripts/app/views/share.js:152 static/scripts/app/views/share.js:153
+#: static/scripts/app/views/share.js:174 static/scripts/app/views/share.js:175
+msgid "Hide"
+msgstr "Piiloita"
+
+#: static/scripts/app/views/share.js:170 static/scripts/app/views/share.js:171
+msgid "Show"
+msgstr "Näytä"
+
+#: static/scripts/app/views/share.js:224
+msgid "Please enter days."
+msgstr "Ole hyvä ja syötä päivät."
+
+#: static/scripts/app/views/share.js:228
+msgid "Please enter valid days"
+msgstr "Ole hyvä ja syötä validit päivät"
+
+#: static/scripts/app/views/share.js:310
+msgid "Please input at least an email."
+msgstr "Ole hyvä ja syötä ainakin sähköposti."
+
+#: static/scripts/app/views/share.js:327
+msgid "Successfully sent to {placeholder}"
+msgstr "Lähetetty onnistuneesti kohteeseen {placeholder}"
+
+#: static/scripts/app/views/share.js:331
+msgid "Failed to send to {placeholder}"
+msgstr "Lähettäminen kohteeseen {placeholder} epäonnistui"
+
+#: static/scripts/app/views/shared-repo.js:26
+#: static/scripts/sysadmin-app/views/dirent.js:49
+#: static/scripts/sysadmin-app/views/search-trash-repos.js:60
+#: static/scripts/sysadmin-app/views/trash-repo.js:41
+#: static/scripts/sysadmin-app/views/trash-repo.js:71
+#: static/scripts/sysadmin-app/views/trash-repos.js:64
+msgid "Success"
+msgstr "Onnistui"
+
+#: static/scripts/app/views/starred-file-item.js:45
+msgid "Successfully unstared {placeholder}"
+msgstr "Suosikki {placeholder} poistettu onnistuneesti"
+
+#: static/scripts/common.js:571
+msgid "Search users or enter emails and press Enter"
+msgstr "Etsi käyttäjiä tai syötä sähköpostit ja paina Enter"
+
+#: static/scripts/common.js:579 static/scripts/common.js:650
+msgid "Please enter 1 or more character"
+msgstr "Ole hyvä ja syötä 1 tai useampi merkki"
+
+#: static/scripts/common.js:580 static/scripts/common.js:651
+msgid "No matches"
+msgstr "Ei osumia"
+
+#: static/scripts/common.js:581 static/scripts/common.js:652
+msgid "Searching..."
+msgstr "Etsitään..."
+
+#: static/scripts/common.js:582 static/scripts/common.js:653
+msgid "Loading failed"
+msgstr "Lataus epäonnistui"
+
+#: static/scripts/common.js:642
+msgid "Search groups"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/device-errors.js:39
+msgid "Successfully clean all errors."
+msgstr "Kaikki virheet on poistettu onnistuneesti."
+
+#: static/scripts/sysadmin-app/views/group.js:30
+msgid "Delete Group"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group.js:44
+msgid "Successfully deleted 1 item."
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group.js:64
+msgid "Transfer Group {group_name} To"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/group.js:101
+msgid "Successfully transferred the group."
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/search-trash-repos.js:46
+msgid "Delete Library By Owner"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/search-trash-repos.js:47
+#, javascript-format
+msgid "Are you sure you want to delete all %s's libraries?"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/trash-repo.js:29
+#, javascript-format
+msgid "Are you sure you want to delete %s completely?"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/trash-repo.js:58
+msgid "Restore Library"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/trash-repo.js:59
+#, javascript-format
+msgid "Are you sure you want to restore %s?"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/trash-repos.js:49
+msgid "Clear Trash"
+msgstr ""
+
+#: static/scripts/sysadmin-app/views/trash-repos.js:50
+msgid "Are you sure you want to clear trash?"
+msgstr ""

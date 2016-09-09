@@ -146,6 +146,7 @@ LANGUAGES = (
     ('es', gettext_noop('Español')),
     ('es-ar', gettext_noop('Español de Argentina')),
     ('es-mx', gettext_noop('Español de México')),
+    ('fi', gettext_noop('Suomi')),
     ('fr', gettext_noop('français')),
     ('he', gettext_noop('עברית')),
     ('hu', gettext_noop('Magyar')),
