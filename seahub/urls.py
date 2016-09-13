@@ -82,9 +82,7 @@ urlpatterns = patterns(
     # url(r'^home/public/reply/(?P<msg_id>[\d]+)/$', innerpub_msg_reply, name='innerpub_msg_reply'),
     # url(r'^home/owner/(?P<owner_name>[^/]+)/$', ownerhome, name='ownerhome'),
 
-    # revert file/dir/repo
-    url(r'^repo/revert_file/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_file, name='repo_revert_file'),
-    url(r'^repo/revert_dir/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_dir, name='repo_revert_dir'),
+    # revert repo
     url(r'^repo/history/revert/(?P<repo_id>[-0-9a-f]{36})/$', repo_revert_history, name='repo_revert_history'),
 
     (r'^repo/upload_check/$', validate_filename),

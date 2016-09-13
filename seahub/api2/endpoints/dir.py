@@ -110,10 +110,12 @@ class DirView(APIView):
             return get_dir_entrys_by_id(request, repo, path, dir_id, request_type)
 
     def post(self, request, repo_id, format=None):
-        """ Create, rename dir.
+        """ Create, rename, revert dir.
 
         Permission checking:
-        1. user with 'rw' permission.
+        1. create: user with 'rw' permission for current dir's parent dir;
+        2. rename: user with 'rw' permission for current dir;
+        3. revert: user with 'rw' permission for current dir's parent dir;
         """
 
         # argument check
@@ -123,7 +125,7 @@ class DirView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         if path == '/':
-            error_msg = 'Can not make or rename root dir.'
+            error_msg = 'Can not operate root dir.'
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = request.data.get('operation', None)
@@ -132,8 +134,8 @@ class DirView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = operation.lower()
-        if operation not in ('mkdir', 'rename'):
-            error_msg = "operation can only be 'mkdir', 'rename'."
+        if operation not in ('mkdir', 'rename', 'revert'):
+            error_msg = "operation can only be 'mkdir', 'rename' or 'revert'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -210,6 +212,32 @@ class DirView(APIView):
                 logger.error(e)
                 error_msg = 'Internal Server Error'
                 return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+        if operation == 'revert':
+            commit_id = request.data.get('commit_id', None)
+            if not commit_id:
+                error_msg = 'commit_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if seafile_api.get_dir_id_by_path(repo_id, path):
+                # dir exists in repo
+                if check_folder_permission(request, repo_id, path) != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+            else:
+                # dir NOT exists in repo
+                if check_folder_permission(request, repo_id, '/') != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            try:
+                seafile_api.revert_dir(repo_id, commit_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
 
     def delete(self, request, repo_id, format=None):
         """ Delete dir.

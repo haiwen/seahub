@@ -70,7 +70,7 @@
                 <td>
                     {% if commit.id != repo.head_cmmt_id %}
                     {% if can_revert_file %}
-                    <a href="#" data-url="{% url "repo_revert_file" repo.id %}?commit={{ commit.id }}&p={{commit.path|urlencode}}" class="op vh restore-file">{% trans 'Restore' %}</a>
+                    <a href="#" class="op vh restore-file" data-commit_id="{{ commit.id }}" data-commit_path="{{ commit.path }}">{% trans 'Restore' %}</a>
                     {% endif %}
                     {% endif %}
                     <a href="{% url "download_file" repo.id commit.rev_file_id %}?p={{commit.path|urlencode}}" class="op vh">{% trans 'Download' %}</a>
@@ -86,6 +86,26 @@
 
 {% block extra_script %}
 <script type="text/javascript">
-addFormPost($('.restore-file'));
+$('.restore-file').click(function() {
+    var _this = $(this),
+        commit_id = _this.attr('data-commit_id'),
+        path = _this.attr('data-commit_path');
+
+    $.ajax({
+        url: "{% url 'api-v2.1-file-view' repo.id %}" + "?p=" + encodeURIComponent(path),
+        type: 'POST',
+        data: {'operation': 'revert', 'commit_id': commit_id},
+        cache: false,
+        dataType: 'json',
+        beforeSend: prepareCSRFToken,
+        success: function() {
+            _this.closest('tr').remove();
+            feedback("{% trans "Success" %}", 'success');
+        },
+        error: ajaxErrorHandler
+    });
+    return false;
+});
+
 </script>
 {% endblock %}
