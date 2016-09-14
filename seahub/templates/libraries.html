@@ -249,6 +249,7 @@ app["pageOptions"] = {
     guide_enabled: {% if guide_enabled %} true {% else %} false {% endif %},
     enable_upload_folder: {% if enable_upload_folder %} true {% else %} false {% endif %},
     enable_resumable_fileupload: {% if enable_resumable_fileupload %} true {% else %} false {% endif %},
+    max_number_of_files_for_fileupload: {{ max_number_of_files_for_fileupload }},
     enable_thumbnail: {% if enable_thumbnail %} true {% else %} false {% endif %},
     thumbnail_default_size: {{ thumbnail_default_size }},
     thumbnail_size_for_grid: {{ thumbnail_size_for_grid }},

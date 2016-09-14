@@ -28,7 +28,8 @@ from seahub.utils import gen_file_upload_url, gen_dir_share_link, \
     get_file_type_and_ext
 from seahub.settings import ENABLE_UPLOAD_FOLDER, \
     ENABLE_RESUMABLE_FILEUPLOAD, ENABLE_THUMBNAIL, \
-    THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID
+    THUMBNAIL_ROOT, THUMBNAIL_DEFAULT_SIZE, THUMBNAIL_SIZE_FOR_GRID, \
+    MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD
 from seahub.utils.file_types import IMAGE
 from seahub.thumbnail.utils import get_share_link_thumbnail_src
 
@@ -290,4 +291,5 @@ def view_shared_upload_link(request, uploadlink):
             'uploadlink': uploadlink,
             'enable_upload_folder': ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': ENABLE_RESUMABLE_FILEUPLOAD,
+            'max_number_of_files_for_fileupload': MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
             }, context_instance=RequestContext(request))
