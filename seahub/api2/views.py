@@ -619,11 +619,13 @@ class Repos(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         else:
+            library_template = request.data.get("library_template", None)
             repo_created.send(sender=None,
                               org_id=org_id,
                               creator=username,
                               repo_id=repo_id,
-                              repo_name=repo_name)
+                              repo_name=repo_name,
+                              library_template=library_template)
             resp = repo_download_info(request, repo_id,
                                       gen_sync_token=gen_sync_token)
 

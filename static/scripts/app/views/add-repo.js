@@ -31,7 +31,8 @@ define([
         templateData: function() {
             return {
                 showSharePerm: false,
-                enable_encrypted_library: app.pageOptions.enable_encrypted_library
+                enable_encrypted_library: app.pageOptions.enable_encrypted_library,
+                library_templates: app.pageOptions.library_templates
             };
         },
 
@@ -47,7 +48,8 @@ define([
                 encrypted: $('#encrypt-switch').prop('checked'),
                 passwd1: $('input[name=passwd]', this.$el).val(),
                 passwd2: $('input[name=passwd_again]', this.$el).val(),
-                passwd: $('input[name=passwd]', this.$el).val()
+                passwd: $('input[name=passwd]', this.$el).val(),
+                library_template: $('[name="library_template"]', this.$el).val()
             };
         },
 

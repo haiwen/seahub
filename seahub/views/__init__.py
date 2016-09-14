@@ -52,6 +52,8 @@ import seahub.settings as settings
 from seahub.settings import AVATAR_FILE_STORAGE, \
     ENABLE_SUB_LIBRARY, ENABLE_FOLDER_PERM
 
+LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
+
 from constance import config
 
 # Get an instance of a logger
@@ -821,6 +823,8 @@ def libraries(request):
             'file_audit_enabled': FILE_AUDIT_ENABLED,
             'can_add_pub_repo': can_add_pub_repo,
             'joined_groups': joined_groups,
+            'library_templates': LIBRARY_TEMPLATES.keys() if \
+                    isinstance(LIBRARY_TEMPLATES, dict) else []
             }, context_instance=RequestContext(request))
 
 @login_required

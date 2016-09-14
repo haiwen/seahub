@@ -1,5 +1,10 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+
+import logging
 import settings
+from seaserv import seafile_api
+from seahub.utils import is_pro_version
+logger = logging.getLogger(__name__)
 
 if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
     def repo_created_cb(sender, **kwargs):
@@ -7,7 +12,7 @@ if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
 
     def repo_deleted_cb(sender, **kwargs):
         pass
-else:        
+else:
 
     import seafevents
     from utils import SeafEventsSession
@@ -33,6 +38,22 @@ else:
         else:
             seafevents.save_user_events (session, etype, detail, users, None)
         session.close()
+
+        if is_pro_version():
+            LIBRARY_TEMPLATES = getattr(settings, 'LIBRARY_TEMPLATES', {})
+            library_template = kwargs['library_template']
+
+            dir_path_list = []
+            if isinstance(LIBRARY_TEMPLATES, dict) and \
+                LIBRARY_TEMPLATES.has_key(library_template):
+                dir_path_list = LIBRARY_TEMPLATES[library_template]
+
+            try:
+                for dir_path in dir_path_list:
+                    seafile_api.mkdir_with_parents(repo_id, '/',
+                            dir_path.strip('/'), creator)
+            except Exception as e:
+                logger.error(e)
 
     def repo_deleted_cb(sender, **kwargs):
         """When a repo is deleted, an event would be added to every user in all
