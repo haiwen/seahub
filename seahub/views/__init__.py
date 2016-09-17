@@ -810,6 +810,7 @@ def libraries(request):
             "sub_lib_enabled": sub_lib_enabled,
             'enable_upload_folder': settings.ENABLE_UPLOAD_FOLDER,
             'enable_resumable_fileupload': settings.ENABLE_RESUMABLE_FILEUPLOAD,
+            'max_number_of_files_for_fileupload': settings.MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD,
             'enable_thumbnail': settings.ENABLE_THUMBNAIL,
             'thumbnail_default_size': settings.THUMBNAIL_DEFAULT_SIZE,
             'thumbnail_size_for_grid': settings.THUMBNAIL_SIZE_FOR_GRID,

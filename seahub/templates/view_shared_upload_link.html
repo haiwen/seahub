@@ -104,7 +104,7 @@ form.fileupload({
     {% if max_upload_file_size %}
     maxFileSize: {{ max_upload_file_size }}, // in bytes
     {% endif %}
-    maxNumberOfFiles: 500,
+    maxNumberOfFiles: {{ max_number_of_files_for_fileupload }},
     sequentialUploads: true
 })
 .bind('fileuploadadd', function(e, data) {

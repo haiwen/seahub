@@ -68,7 +68,7 @@ define([
                     }
                 },
                 autoUpload:true,
-                maxNumberOfFiles: 500,
+                maxNumberOfFiles: app.pageOptions.max_number_of_files_for_fileupload,
                 sequentialUploads: true
             })
             .bind('fileuploadadd', function(e, data) {

@@ -251,6 +251,9 @@ ENABLE_UPLOAD_FOLDER = False
 # enable resumable fileupload or not
 ENABLE_RESUMABLE_FILEUPLOAD = False
 
+## maxNumberOfFiles for fileupload
+MAX_NUMBER_OF_FILES_FOR_FILEUPLOAD = 500
+
 # enable encrypt library
 ENABLE_ENCRYPTED_LIBRARY = True
 
