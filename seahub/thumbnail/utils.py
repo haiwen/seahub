@@ -26,13 +26,12 @@ def get_share_link_thumbnail_src(token, size, path):
 def get_rotated_image(image):
 
     # get image's exif info
-    exif = {}
     try:
-        exif = image._getexif()
+        exif = image._getexif() if image._getexif() else {}
     except Exception:
         return image
 
-    orientation = exif.get(0x0112)
+    orientation = exif.get(0x0112) if isinstance(exif, dict) else 1
     # rotate image according to Orientation info
     if orientation == 2:
         # Vertical image
