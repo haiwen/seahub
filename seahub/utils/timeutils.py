@@ -1,9 +1,12 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import logging
 import pytz
 import datetime
 from django.conf import settings
 from django.utils import six
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 def dt(value):
     """Convert 32/64 bits timestamp to datetime object.
@@ -37,17 +40,27 @@ def utc_to_local(dt):
 
 def timestamp_to_isoformat_timestr(timestamp):
     try:
-        dt_obj = datetime.datetime.fromtimestamp(timestamp)
-    except ValueError:
-        dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
+        min_ts = -(1 << 31)
+        max_ts = (1 << 31) - 1
+        if min_ts <= timestamp <= max_ts:
+            dt_obj = datetime.datetime.fromtimestamp(timestamp)
+        else:
+            dt_obj = datetime.datetime.fromtimestamp(timestamp/1000000)
 
-    dt_obj = dt_obj.replace(microsecond=0)
-    pytz_obj = pytz.timezone(settings.TIME_ZONE)
-    isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()
-    return isoformat_timestr
+        dt_obj = dt_obj.replace(microsecond=0)
+        pytz_obj = pytz.timezone(settings.TIME_ZONE)
+        isoformat_timestr = pytz_obj.localize(dt_obj).isoformat()
+        return isoformat_timestr
+    except Exception as e:
+        logger.error(e)
+        return ''
 
 def datetime_to_isoformat_timestr(datetime):
-    datetime = datetime.replace(microsecond=0)
-    pytz_obj = pytz.timezone(settings.TIME_ZONE)
-    isoformat_timestr = pytz_obj.localize(datetime).isoformat()
-    return isoformat_timestr
+    try:
+        datetime = datetime.replace(microsecond=0)
+        pytz_obj = pytz.timezone(settings.TIME_ZONE)
+        isoformat_timestr = pytz_obj.localize(datetime).isoformat()
+        return isoformat_timestr
+    except Exception as e:
+        logger.error(e)
+        return ''
