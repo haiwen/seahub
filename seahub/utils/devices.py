@@ -28,6 +28,10 @@ def do_unlink_device(username, platform, device_id, remote_wipe=False):
             raise
 
     if remote_wipe:
-        TokenV2.objects.mark_device_to_be_remote_wiped(username, platform, device_id)
+        try:
+            TokenV2.objects.mark_device_to_be_remote_wiped(username, platform, device_id)
+        except Exception as e:
+            logger.error(e)
+            TokenV2.objects.delete_device_token(username, platform, device_id)
     else:
         TokenV2.objects.delete_device_token(username, platform, device_id)
