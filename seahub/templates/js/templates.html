@@ -4,9 +4,19 @@
         <h3 id="dialogTitle">{% trans "New Library"%}</h3>
         <label for="repo-name">{% trans "Name"%}</label><br/>
         <input id="repo-name" type="text" name="repo_name" value="" maxlength="{{max_file_name}}" class="input" /><br />
+        <% if (app.pageOptions.is_pro && library_templates.length > 0) { %>
+        <label for="library-template">{% trans "Template"%}</label><br/>
+        <select name="library_template" id="library-template" class="select">
+            <option value="">{% trans "Select a template" %}</option>
+            <% for (var i = 0, len = library_templates.length; i < len; i++) { %>
+            <option value="<%- library_templates[i] %>"><%- library_templates[i] %></option>
+            <% } %>
+        </select>
+        <br/>
+        <% } %>
         <% if (showSharePerm) { %>
         <label for="share-permission">{% trans "Share Permission" %}</label><br />
-        <select id="share-permission" name="permission" class="perm">
+        <select id="share-permission" name="permission" class="select">
             <option value="rw" selected="selected">{% trans "Read-Write" %}</option>
             <option value="r">{% trans "Read-Only" %}</option>
         </select>

@@ -619,11 +619,13 @@ class Repos(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         else:
+            library_template = request.data.get("library_template", '')
             repo_created.send(sender=None,
                               org_id=org_id,
                               creator=username,
                               repo_id=repo_id,
-                              repo_name=repo_name)
+                              repo_name=repo_name,
+                              library_template=library_template)
             resp = repo_download_info(request, repo_id,
                                       gen_sync_token=gen_sync_token)
 
@@ -739,6 +741,7 @@ class PubRepos(APIView):
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
+        org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
@@ -752,6 +755,13 @@ class PubRepos(APIView):
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
 
+        library_template = request.data.get("library_template", '')
+        repo_created.send(sender=None,
+                          org_id=org_id,
+                          creator=username,
+                          repo_id=repo_id,
+                          repo_name=repo_name,
+                          library_template=library_template)
         pub_repo = {
             "id": repo.id,
             "name": repo.name,
@@ -3709,6 +3719,7 @@ class GroupRepos(APIView):
         if permission != 'r' and permission != 'rw':
             return api_error(status.HTTP_400_BAD_REQUEST, 'Invalid permission')
 
+        org_id = -1
         if is_org_context(request):
             org_id = request.user.org.org_id
             repo_id = seafile_api.create_org_repo(repo_name, repo_desc,
@@ -3722,6 +3733,13 @@ class GroupRepos(APIView):
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)
 
+        library_template = request.data.get("library_template", '')
+        repo_created.send(sender=None,
+                          org_id=org_id,
+                          creator=username,
+                          repo_id=repo_id,
+                          repo_name=repo_name,
+                          library_template=library_template)
         group_repo = {
             "id": repo.id,
             "name": repo.name,

@@ -222,6 +222,13 @@ app["pageOptions"] = {
         {% endfor %}
         return groups;
     })(),
+    library_templates: (function () {
+        var templates = [];
+        {% for template in library_templates %}
+        templates.push('{{ template|escapejs }}');
+        {% endfor %}
+        return templates;
+    })(),
     user_mods_available: (function () {
         var mods_available = [];
         {% for mod in request.user.mods_available %}
