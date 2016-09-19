@@ -225,7 +225,7 @@ app["pageOptions"] = {
     library_templates: (function () {
         var templates = [];
         {% for template in library_templates %}
-        templates.push('{{ template }}');
+        templates.push('{{ template|escapejs }}');
         {% endfor %}
         return templates;
     })(),

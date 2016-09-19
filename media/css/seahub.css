@@ -1929,7 +1929,7 @@ button.sf-dropdown-toggle:focus {
 #repo-create-form {
     padding:0 20px;
 }
-#repo-create-form .perm {
+#repo-create-form .select {
     width:268px;
     margin-bottom:5px;
 }
