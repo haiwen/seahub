@@ -619,7 +619,7 @@ class Repos(APIView):
             return api_error(HTTP_520_OPERATION_FAILED,
                              'Failed to create library.')
         else:
-            library_template = request.data.get("library_template", None)
+            library_template = request.data.get("library_template", '')
             repo_created.send(sender=None,
                               org_id=org_id,
                               creator=username,
@@ -755,7 +755,7 @@ class PubRepos(APIView):
             repo = seafile_api.get_repo(repo_id)
             seafile_api.add_inner_pub_repo(repo.id, permission)
 
-        library_template = request.data.get("library_template", None)
+        library_template = request.data.get("library_template", '')
         repo_created.send(sender=None,
                           org_id=org_id,
                           creator=username,
@@ -3733,7 +3733,7 @@ class GroupRepos(APIView):
             repo = seafile_api.get_repo(repo_id)
             seafile_api.set_group_repo(repo.id, group.id, username, permission)
 
-        library_template = request.data.get("library_template", None)
+        library_template = request.data.get("library_template", '')
         repo_created.send(sender=None,
                           org_id=org_id,
                           creator=username,
