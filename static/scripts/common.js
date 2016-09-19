@@ -31,14 +31,15 @@ require.config({
         'jquery.ui.core': 'lib/jquery.ui.core',
         'jquery.ui.widget': 'lib/jquery.ui.widget.1.11.1',
         'jquery.ui.progressbar': 'lib/jquery.ui.progressbar',
-
         'jquery.ui.tabs': 'lib/jquery.ui.tabs',
+
+        // for fileupload
         'tmpl': 'lib/tmpl.min',
-        'jquery.iframe-transport': 'lib/jquery.iframe-transport.1.4',
-        'jquery.fileupload': 'lib/jquery.fileupload.5.42.1',
-        'jquery.fileupload-process': 'lib/jquery.fileupload.file-processing.1.3.0',
-        'jquery.fileupload-validate': 'lib/jquery.fileupload.validation.1.1.2',
-        'jquery.fileupload-ui': 'lib/jquery.fileupload.ui.9.6.0',
+        'jquery.iframe-transport': 'lib/jquery.iframe-transport',
+        'jquery.fileupload': 'lib/jquery.fileupload',
+        'jquery.fileupload-process': 'lib/jquery.fileupload-process',
+        'jquery.fileupload-validate': 'lib/jquery.fileupload-validate',
+        'jquery.fileupload-ui': 'lib/jquery.fileupload-ui',
 
         'jquery.magnific-popup': 'lib/jquery.magnific-popup',
 

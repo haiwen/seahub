@@ -212,6 +212,15 @@ form.fileupload({
         $.get(uploaded_done_link);
     }
 })
+.bind('fileuploadfail', function(e, data) { // 'fail'
+    var file = data.files[0];
+    if (!file.error &&
+        data.jqXHR &&
+        data.jqXHR.responseJSON &&
+        data.jqXHR.responseJSON.error) {
+        file.error = data.jqXHR.responseJSON.error;
+    }
+})
 .bind('fileuploadcompleted fileuploadfailed', function() {
     if ($('.files .cancel', form).length == 0) {
         saving_tip.hide();
