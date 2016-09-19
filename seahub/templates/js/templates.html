@@ -111,6 +111,7 @@
 
     <div id="cur-dir-ops" class="inline-block">
     <% if (user_perm == 'rw') { %>
+    <% if (!no_quota) { %>
     <div id="basic-upload" class="inline-block">
         <button class="op-btn basic-upload-btn" >{% trans "Upload" %}</button>
         <input id="basic-upload-input" class="hide" type="file" name="file" multiple />
@@ -129,6 +130,9 @@
             </li>
         </ul>
     </div>
+    <% } %>
+    <% } else { %>
+    <button class="op-btn btn-disabled" disabled="disabled" title="{% trans "Out of quota" %}">{% trans "Upload" %}</button>
     <% } %>
     <button id="add-new-dir" class="op-btn">{% trans "New Folder" %}</button>
     <button id="add-new-file" class="op-btn">{% trans "New File" %}</button>
