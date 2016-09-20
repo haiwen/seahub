@@ -1,10 +1,13 @@
-{% extends "profile/profile_base.html" %}
+{% extends "base.html" %}
 {% load avatar_tags i18n seahub_tags %}
+
+{% block sub_title %}{% trans "Profile" %} - {% endblock %}
+{% block header_css_class %}{% endblock %}
 
 {% block main_panel %}
 <div id="user-profile">
 {% if user %}
-    {% avatar user.username 290 %}
+    {% avatar user.username 64 %}
     <p title="{{ nickname }}" class="user-profile-nickname ellipsis">{{ nickname }}</p>
     <ul>
         {% if d_profile %}
@@ -28,7 +31,7 @@
     </ul>
 
 {% else %}
-    {% avatar "" 290 %}
+    {% avatar "" 64 %}
 {% endif %}
 </div>
 {% endblock %}
