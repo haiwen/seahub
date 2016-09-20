@@ -3304,16 +3304,18 @@ button.sf-dropdown-toggle:focus {
     width: 290px;
     border: 1px solid #eee;
     border-radius: 5px;
-    overflow: hidden; /* for avatar */
-    margin: 0 auto;
+    margin: 50px auto 0;
 }
 #user-profile .avatar {
-    border-radius: 0;
+    display: block;
+    border-radius: 1000px;
+    margin: 8px auto;
 }
 .user-profile-nickname {
-    padding: 8px 15px;
+    padding: 0 15px 8px;
     margin: 0;
     font-size: 18px;
+    text-align: center;
 }
 .user-profile-info {
     padding: 8px 15px;
