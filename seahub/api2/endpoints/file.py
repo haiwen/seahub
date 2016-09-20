@@ -9,6 +9,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 
+from django.utils.translation import ugettext as _
+
 from seahub.api2.throttling import UserRateThrottle
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.utils import api_error
@@ -92,13 +94,14 @@ class FileView(APIView):
         return Response(file_info)
 
     def post(self, request, repo_id, format=None):
-        """ Create, rename, move, copy file
+        """ Create, rename, move, copy, revert file
 
         Permission checking:
         1. create: user with 'rw' permission for current parent dir;
         2. rename: user with 'rw' permission for current file;
         3. move  : user with 'rw' permission for current file, 'rw' permission for dst parent dir;
         4. copy  : user with 'r' permission for current file, 'rw' permission for dst parent dir;
+        4. revert: user with 'rw' permission for current file's parent dir;
         """
 
         # argument check
@@ -113,8 +116,8 @@ class FileView(APIView):
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         operation = operation.lower()
-        if operation not in ('create', 'rename', 'move', 'copy'):
-            error_msg = "operation can only be 'create', 'rename', 'move' or 'copy'."
+        if operation not in ('create', 'rename', 'move', 'copy', 'revert'):
+            error_msg = "operation can only be 'create', 'rename', 'move', 'copy' or 'revert'."
             return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
 
         # resource check
@@ -345,6 +348,42 @@ class FileView(APIView):
             dst_file_path = posixpath.join(dst_dir, new_file_name)
             dst_file_info = self.get_file_info(username, dst_repo_id, dst_file_path)
             return Response(dst_file_info)
+
+        if operation == 'revert':
+            commit_id = request.data.get('commit_id', None)
+            if not commit_id:
+                error_msg = 'commit_id invalid.'
+                return api_error(status.HTTP_400_BAD_REQUEST, error_msg)
+
+            if seafile_api.get_file_id_by_path(repo_id, path):
+                # file exists in repo
+                if check_folder_permission(request, repo_id, parent_dir) != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+                is_locked, locked_by_me = check_file_lock(repo_id, path, username)
+                if (is_locked, locked_by_me) == (None, None):
+                    error_msg = _("Check file lock error")
+                    return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+                if is_locked and not locked_by_me:
+                    error_msg = _("File is locked")
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            else:
+                # file NOT exists in repo
+                if check_folder_permission(request, repo_id, '/') != 'rw':
+                    error_msg = 'Permission denied.'
+                    return api_error(status.HTTP_403_FORBIDDEN, error_msg)
+
+            try:
+                seafile_api.revert_file(repo_id, commit_id, path, username)
+            except Exception as e:
+                logger.error(e)
+                error_msg = 'Internal Server Error'
+                return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR, error_msg)
+
+            return Response({'success': True})
 
     def put(self, request, repo_id, format=None):
         """ Currently only for lock and unlock file operation.

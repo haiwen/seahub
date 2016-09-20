@@ -235,6 +235,76 @@ class DirViewTest(BaseTestCase):
         resp = self.client.post(self.url + '?p=' + self.folder_path, data)
         self.assertEqual(403, resp.status_code)
 
+    def test_can_revert_folder(self):
+        self.login_as(self.user)
+
+        # first rename dir
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.folder_name,
+                new_name, self.user_name)
+        new_dir_path = '/' + new_name
+
+        # get commit list
+        commits = seafile_api.get_commit_list(self.repo_id, -1, -1)
+
+        # then revert dir
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_dir_path, data)
+
+        self.assertEqual(200, resp.status_code)
+
+    def test_revert_folder_with_invalid_user_permission(self):
+        # first rename dir
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.folder_name,
+                new_name, self.user_name)
+        new_dir_path = '/' + new_name
+
+        # get commit list
+        commits = seafile_api.get_commit_list(self.repo_id, -1, -1)
+
+        # then revert dir
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_dir_path, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_revert_folder_with_r_permission(self):
+        # first rename dir
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.folder_name,
+                new_name, self.user_name)
+        new_dir_path = '/' + new_name
+
+        # get commit list
+        commits = seafile_api.get_commit_list(self.repo_id, -1, -1)
+
+        self.share_repo_to_admin_with_r_permission()
+        self.login_as(self.admin)
+
+        # then revert dir
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_dir_path, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_revert_folder_without_commit_id(self):
+        self.login_as(self.user)
+
+        # then revert dir
+        data = {
+            'operation': 'revert',
+        }
+        resp = self.client.post(self.url + '?p=' + self.folder_path, data)
+        self.assertEqual(400, resp.status_code)
+
     # for test http DELETE request
     def test_can_delete_folder(self):
         self.login_as(self.user)

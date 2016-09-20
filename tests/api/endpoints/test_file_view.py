@@ -464,6 +464,76 @@ class FileViewTest(BaseTestCase):
         resp = self.client.post(url + '?p=/' + admin_file_name, data)
         self.assertEqual(403, resp.status_code)
 
+    def test_can_revert_file(self):
+        self.login_as(self.user)
+
+        # first rename file
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.file_name,
+                new_name, self.user_name)
+        new_file_path = '/' + new_name
+
+        # get file revisions
+        commits = seafile_api.get_file_revisions(
+                self.repo_id, new_file_path, -1, -1, 100)
+
+        # then revert file
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_file_path, data)
+
+        self.assertEqual(200, resp.status_code)
+
+    def test_revert_file_with_invalid_user_permission(self):
+        # first rename file
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.file_name,
+                new_name, self.user_name)
+        new_file_path = '/' + new_name
+
+        # get file revisions
+        commits = seafile_api.get_file_revisions(
+                self.repo_id, new_file_path, -1, -1, 100)
+
+        # then revert file
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_file_path, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_revert_file_with_r_permission(self):
+        # first rename file
+        new_name = randstring(6)
+        seafile_api.rename_file(self.repo_id, '/', self.file_name,
+                new_name, self.user_name)
+        new_file_path = '/' + new_name
+
+        # get file revisions
+        commits = seafile_api.get_file_revisions(
+                self.repo_id, new_file_path, -1, -1, 100)
+
+        self.share_repo_to_admin_with_r_permission()
+        self.login_as(self.admin)
+        # then revert file
+        data = {
+            'operation': 'revert',
+            'commit_id': commits[0].id
+        }
+        resp = self.client.post(self.url + '?p=' + new_file_path, data)
+        self.assertEqual(403, resp.status_code)
+
+    def test_revert_file_without_commit_id(self):
+        self.login_as(self.user)
+        data = {
+            'operation': 'revert',
+        }
+        resp = self.client.post(self.url + '?p=' + self.file_path, data)
+        self.assertEqual(400, resp.status_code)
+
     # for test http PUT request
     def test_can_lock_file(self):
 
