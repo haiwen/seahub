@@ -3,10 +3,9 @@
 import logging
 import settings
 from seaserv import seafile_api
-from seahub.utils import is_pro_version
 logger = logging.getLogger(__name__)
 
-if not is_pro_version():
+if not hasattr(settings, 'EVENTS_CONFIG_FILE'):
     def repo_created_cb(sender, **kwargs):
         pass
 
