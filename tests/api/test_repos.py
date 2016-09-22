@@ -9,7 +9,7 @@ import unittest
 from seaserv import seafile_api
 from tests.api.apitestbase import ApiTestBase
 from tests.api.urls import (
-    REPOS_URL, DEFAULT_REPO_URL, VIRTUAL_REPOS_URL, GET_REPO_TOKENS_URL
+    REPOS_URL, DEFAULT_REPO_URL, GET_REPO_TOKENS_URL
 )
 from tests.common.utils import apiurl, urljoin, randstring
 from tests.common.common import USERNAME, PASSWORD, SEAFILE_BASE_URL
@@ -121,41 +121,6 @@ class ReposApiTest(ApiTestBase):
             self.assertIsNotNone(info['repo_name'])
             self.assertIsNotNone(info['relay_id'])
             self.assertIsNotNone(info['email'])
-
-    def test_list_virtual_repos(self):
-        # TODO: we need to create at least on virtual repo first
-        vrepos = self.get(VIRTUAL_REPOS_URL).json()['virtual-repos']
-        for repo in vrepos:
-            self.assertIsNotNone(repo['virtual_perm'])
-            #self.assertIsNotNone(repo['store_id'])
-            self.assertIsNotNone(repo['worktree_invalid'])
-            self.assertIsNotNone(repo['encrypted'])
-            self.assertIsNotNone(repo['origin_repo_name'])
-            self.assertIsNotNone(repo['last_modify'])
-            self.assertIsNotNone(repo['no_local_history'])
-            #self.assertIsNotNone(repo['head_branch'])
-            self.assertIsNotNone(repo['last_sync_time'])
-            self.assertIsNotNone(repo['id'])
-            self.assertIsNotNone(repo['size'])
-            #self.assertIsNotNone(repo['share_permission'])
-            self.assertIsNotNone(repo['worktree_changed'])
-            self.assertIsNotNone(repo['worktree_checktime'])
-            self.assertIsNotNone(repo['origin_path'])
-            self.assertEqual(repo['is_virtual'], True)
-            self.assertIsNotNone(repo['origin_repo_id'])
-            self.assertIsNotNone(repo['version'])
-            #self.assertIsNotNone(repo['random_key'])
-            self.assertIsNotNone(repo['is_original_owner'])
-            #self.assertIsNotNone(repo['shared_email'])
-            self.assertIsNotNone(repo['enc_version'])
-            self.assertIsNotNone(repo['head_cmmt_id'])
-            #self.assertIsNotNone(repo['desc'])
-            self.assertIsNotNone(repo['index_corrupted'])
-            #self.assertIsNotNone(repo['magic'])
-            self.assertIsNotNone(repo['name'])
-            #self.assertIsNotNone(repo['worktree'])
-            self.assertIsNotNone(repo['auto_sync'])
-            #self.assertIsNotNone(repo['relay_id'])
 
     @pytest.mark.xfail
     def test_generate_repo_tokens(self):

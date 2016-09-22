@@ -129,8 +129,11 @@ def useradmin_search(request):
 def user_info(request, email):
     """Show user info, libraries and groups.
     """
+
     owned_repos = mute_seafile_api.get_owned_repo_list(email,
                                                        ret_corrupted=True)
+    owned_repos = filter(lambda r: not r.is_virtual, owned_repos)
+
     in_repos = mute_seafile_api.get_share_in_repo_list(email, -1, -1)
     space_usage = mute_seafile_api.get_user_self_usage(email)
     space_quota = mute_seafile_api.get_user_quota(email)

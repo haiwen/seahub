@@ -75,8 +75,7 @@ from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.timeutils import utc_to_local, datetime_to_isoformat_timestr
 from seahub.views import is_registered_user, check_file_lock, \
     group_events_data, get_diff, create_default_library, \
-    list_inner_pub_repos, get_virtual_repos_by_owner, \
-    check_folder_permission
+    list_inner_pub_repos, check_folder_permission
 from seahub.views.ajax import get_share_in_repo_list, get_groups_by_user, \
     get_group_repos
 from seahub.views.file import get_file_view_path_and_perm, send_file_access_msg
@@ -399,7 +398,6 @@ class Repos(APIView):
         # parse request params
         filter_by = {
             'mine': False,
-            'sub': False,
             'shared': False,
             'group': False,
             'org': False,
@@ -415,8 +413,6 @@ class Repos(APIView):
             filter_by[f] = True
 
         email = request.user.username
-        if not UserOptions.objects.is_sub_lib_enabled(email):
-            filter_by['sub'] = False
 
         repos_json = []
         if filter_by['mine']:
@@ -446,42 +442,6 @@ class Repos(APIView):
                     "size_formatted": filesizeformat(r.size),
                     "encrypted": r.encrypted,
                     "permission": 'rw',  # Always have read-write permission to owned repo
-                    "virtual": r.is_virtual,
-                    "root": r.root,
-                    "head_commit_id": r.head_cmmt_id,
-                    "version": r.version,
-                }
-                if r.encrypted:
-                    repo["enc_version"] = r.enc_version
-                    repo["magic"] = r.magic
-                    repo["random_key"] = r.random_key
-                repos_json.append(repo)
-
-        if filter_by['sub']:
-            # compose abbrev origin path for display
-            sub_repos = []
-            sub_repos = get_virtual_repos_by_owner(request)
-            for repo in sub_repos:
-                repo.abbrev_origin_path = get_sub_repo_abbrev_origin_path(
-                    repo.origin_repo_name, repo.origin_path)
-
-            sub_repos.sort(lambda x, y: cmp(y.last_modify, x.last_modify))
-            for r in sub_repos:
-                # print r._dict
-                repo = {
-                    "type": "repo",
-                    "id": r.id,
-                    "name": r.name,
-                    "origin_repo_id": r.origin_repo_id,
-                    "origin_path": r.origin_path,
-                    "abbrev_origin_path": r.abbrev_origin_path,
-                    "mtime": r.last_modify,
-                    "mtime_relative": translate_seahub_time(r.last_modify),
-                    "owner": email,
-                    "desc": r.desc,
-                    "size": r.size,
-                    "encrypted": r.encrypted,
-                    "permission": 'rw',
                     "virtual": r.is_virtual,
                     "root": r.root,
                     "head_commit_id": r.head_cmmt_id,
@@ -2898,24 +2858,6 @@ class BeSharedRepos(APIView):
         return HttpResponse(json.dumps(shared_repos, cls=SearpcObjEncoder),
                             status=200, content_type=json_content_type)
 
-
-class VirtualRepos(APIView):
-    authentication_classes = (TokenAuthentication, )
-    permission_classes = (IsAuthenticated,)
-    throttle_classes = (UserRateThrottle, )
-
-    def get(self, request, format=None):
-        result = {}
-
-        try:
-            virtual_repos = get_virtual_repos_by_owner(request)
-        except SearpcError, e:
-            return api_error(status.HTTP_500_INTERNAL_SERVER_ERROR,
-                             "error:" + e.msg)
-
-        result['virtual-repos'] = virtual_repos
-        return HttpResponse(json.dumps(result, cls=SearpcObjEncoder),
-                            content_type=json_content_type)
 
 class SharedFileView(APIView):
     # Anyone should be able to access a Shared File assuming they have the token
