@@ -761,20 +761,6 @@ def get_owned_repo_list(request):
     else:
         return seafile_api.get_owned_repo_list(username)
 
-def get_virtual_repos_by_owner(request):
-    """List virtual repos.
-
-    Arguments:
-    - `request`:
-    """
-    username = request.user.username
-    if is_org_context(request):
-        org_id = request.user.org.org_id
-        return seaserv.seafserv_threaded_rpc.get_org_virtual_repos_by_owner(
-            org_id, username)
-    else:
-        return seafile_api.get_virtual_repos_by_owner(username)
-
 @login_required
 @user_mods_check
 def libraries(request):

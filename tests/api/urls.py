@@ -10,7 +10,6 @@ AVATAR_BASE_URL = apiurl(u'/api2/avatars/')
 
 REPOS_URL = apiurl('/api2/repos/')
 DEFAULT_REPO_URL = apiurl('/api2/default-repo/')
-VIRTUAL_REPOS_URL = apiurl('/api2/virtual-repos/')
 GET_REPO_TOKENS_URL = apiurl('/api2/repo-tokens/')
 
 GROUPS_URL = apiurl(u'/api2/groups/')

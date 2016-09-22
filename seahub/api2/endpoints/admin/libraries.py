@@ -58,8 +58,9 @@ class AdminLibraries(APIView):
             # search by name and owner
             owned_repos = seafile_api.get_owned_repo_list(owner)
             for repo in owned_repos:
-                if not repo.name:
+                if not repo.name or repo.is_virtual:
                     continue
+
                 if repo_name in repo.name:
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
@@ -70,8 +71,9 @@ class AdminLibraries(APIView):
             # search by name(keyword in name)
             repos_all = seafile_api.get_repo_list(-1, -1)
             for repo in repos_all:
-                if not repo.name:
+                if not repo.name or repo.is_virtual:
                     continue
+
                 if repo_name in repo.name:
                     repo_info = get_repo_info(repo)
                     repos.append(repo_info)
@@ -82,6 +84,9 @@ class AdminLibraries(APIView):
             # search by owner
             owned_repos = seafile_api.get_owned_repo_list(owner)
             for repo in owned_repos:
+                if repo.is_virtual:
+                    continue
+
                 repo_info = get_repo_info(repo)
                 repos.append(repo_info)
 
