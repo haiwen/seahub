@@ -187,6 +187,14 @@
 .sf2-icon-unlock:before { content: "\e02d"; }
 
 /******* tags **********/
+html {
+    -moz-box-sizing: border-box; /* for Firefox with version lower than 29 */
+    box-sizing: border-box;
+}
+* {
+    -moz-box-sizing: inherit;
+    box-sizing: inherit;
+}
 body,
 ul,ol,li,dl,dt,dd,
 pre,blockquote,
@@ -248,10 +256,12 @@ input {
 input, button { display:inline-block;/*for ie*/ }
 input[type=text],
 input[type=password] {
+    -moz-box-sizing: content-box;
     box-sizing:content-box;
     height:22px;
 }
 select, button {
+    -moz-box-sizing: border-box;
     box-sizing:border-box;
 }
 button,
@@ -1229,6 +1239,7 @@ textarea:-moz-placeholder {/* for FF */
     -moz-border-radius:4px;
     border-radius:4px;
     -webkit-box-sizing:content-box;
+    -moz-box-sizing:content-box;
     box-sizing:content-box;
 }
 #simplemodal-container a {
@@ -2652,6 +2663,7 @@ button.sf-dropdown-toggle:focus {
     right:0;
 }
 .side-toolbar .item {
+    -moz-box-sizing:content-box;
     box-sizing:content-box;
     width:59px;
     height:40px;
@@ -3229,6 +3241,7 @@ button.sf-dropdown-toggle:focus {
 #dir-user-share .submit,
 #dir-group-share .submit,
 #folder-perm-tabs .submit {
+    -moz-box-sizing:border-box;
     box-sizing:border-box;
     height:30px;
     margin:0;
@@ -3631,6 +3644,7 @@ img.thumbnail {
     padding-bottom:30px;
 }
 #tc-preview {
+    -moz-box-sizing:border-box;
     box-sizing:border-box;
     padding:40px;
     width:800px;
