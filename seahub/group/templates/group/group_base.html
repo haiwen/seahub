@@ -5,19 +5,20 @@
 {% block sub_title %}{{group.group_name}} - {% endblock %}
 
 {% block main_content %}
-
-<div class="side-tabnav side-nav col-md-3">
-{% block left_panel %}
-    <div class="hd w100 ovhd">
-        <h3>
-            {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
-        </h3>
+<div class="row">
+    <div class="side-tabnav side-nav col-md-3">
+    {% block left_panel %}
+        <div class="hd w100 ovhd">
+            <h3>
+                {% grp_avatar group.props.id 32 %} <a title="{{ group.group_name }}" class="grp-name ellipsis vam" href="{% url 'group_info' group.id %}">{{ group.group_name }}</a>
+            </h3>
+        </div>
+    {% endblock %}
     </div>
-{% endblock %}
-</div>
 
-<div id="right-panel" class="col-md-9 col-md-offset-3">
-{% block right_panel %}{% endblock %}
+    <div id="right-panel" class="col-md-9 col-md-offset-3">
+    {% block right_panel %}{% endblock %}
+    </div>
 </div>
 
 {% endblock %}
