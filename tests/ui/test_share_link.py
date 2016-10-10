@@ -1,47 +1,72 @@
 import pytest
 
 from tests.common.utils import randstring
+from tests.common.common import BASE_URL
 
-def test_generate_normal_share_link(session):
-    """Create a normal share link and verifies unlogined user can access it.
+repo_name = 'test-repo-{}'.format(randstring(10))
 
-    :type session: tests.ui.sessions.SeafileSession
-    """
-    repo_name = 'test-repo-{}'.format(randstring(10))
-    session.create_repo(repo_name)
-    session.enter_repo(repo_name)
+download_link = ''
+encrypted_download_link = ''
+password = ''
 
-    file_name = 'test-file-{}'.format(randstring(10))
-    session.create_file(file_name)
+@pytest.mark.usefixtures("session", "anonymous_session")
+class TestShareLink:
 
-    share_link = session.share_file(file_name)
+    def test_generate_normal_share_link(self, session):
+        """Create a normal share link.
+        """
 
-    visitor = session.get_anonymous_session(share_link)
-    assert visitor.can_access_share_link(file_name)
+        global download_link
+        global repo_name
 
+        session.visit(BASE_URL)
 
-def test_generate_encrypted_share_link(session):
-    """Create an encrypted share link and verifies it can only be visited when
-    correct password is provided.
+        if not session.repo_exist(repo_name):
+            session.create_repo(repo_name)
 
-    :type session: tests.ui.sessions.SeafileSession
-    """
-    repo_name = 'test-repo-{}'.format(randstring(10))
-    session.create_repo(repo_name)
-    session.enter_repo(repo_name)
+        session.enter_repo(repo_name)
+        file_name = 'test-file-{}'.format(randstring(10))
+        session.create_file(file_name)
 
-    file_name = 'test-file-{}'.format(randstring(10))
-    session.create_file(file_name)
+        download_link = session.share_file(file_name)
+        assert session.can_visit_download_link(download_link)
 
-    password = randstring(10)
-    share_link = session.share_file(file_name, password)
+    def test_generate_encrypted_share_link(self, session):
+        """Create an encrypted share link.
+        """
 
-    visitor = session.get_anonymous_session(share_link)
-    assert visitor.is_asked_for_share_link_password()
+        global encrypted_download_link
+        global password
+        global repo_name
 
-    visitor.send_share_link_password('incorrectpassword')
-    assert visitor.is_displayed_passsword_error()
-    assert visitor.is_asked_for_share_link_password()
+        session.visit(BASE_URL)
 
-    visitor.send_share_link_password(password)
-    assert visitor.can_access_share_link(file_name)
+        if not session.repo_exist(repo_name):
+            session.create_repo(repo_name)
+
+        session.enter_repo(repo_name)
+        file_name = 'test-file-{}'.format(randstring(10))
+        session.create_file(file_name)
+
+        password = randstring(10)
+        encrypted_download_link = session.share_file(file_name, password)
+
+        assert session.can_visit_download_link(encrypted_download_link,
+                encrypted=True, password=password)
+
+    def test_visit_download_link(self, anonymous_session):
+        """Anonymous user visit download share link.
+        """
+
+        global download_link
+
+        assert anonymous_session.can_visit_download_link(download_link)
+
+    def test_anonymous_visit_encrypted_download_link(self, anonymous_session):
+        """Anonymous user visit encrypted download share link.
+        """
+
+        global encrypted_download_link
+
+        assert anonymous_session.can_visit_download_link(encrypted_download_link,
+                encrypted=True, password=password)

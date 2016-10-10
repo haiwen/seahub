@@ -1,4 +1,5 @@
 language: python
+sudo: required
 before_install:
   # build/init/start ccnet-server/seafile-server
   - git clone --depth=1 --branch=master git://github.com/haiwen/seafile-test-deploy /tmp/seafile-test-deploy
@@ -6,7 +7,7 @@ before_install:
   # install phantomjs
   - ./tests/install-deps.sh
 script:
-  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh test
+  - ./tests/seahubtests.sh init && ./tests/seahubtests.sh runserver && ./tests/seahubtests.sh testui
 env:
   - CCNET_CONF_DIR=/tmp/ccnet SEAFILE_CONF_DIR=/tmp/seafile-data
 install:

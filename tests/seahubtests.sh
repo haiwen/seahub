@@ -5,7 +5,9 @@
 : ${SEAHUB_TEST_PASSWORD="testtest"}
 : ${SEAHUB_TEST_ADMIN_USERNAME="admin@seafiletest.com"}
 : ${SEAHUB_TEST_ADMIN_PASSWORD="adminadmin"}
+: ${DJANGO_SETTINGS_MODULE="seahub.settings"}
 
+export DJANGO_SETTINGS_MODULE
 export SEAHUB_TEST_USERNAME
 export SEAHUB_TEST_PASSWORD
 export SEAHUB_TEST_ADMIN_USERNAME
@@ -57,7 +59,7 @@ function start_seahub() {
 
 function check_phantom_js() {
     if ! which phantomjs >/dev/null; then
-        echo "Please install phantojs first:"
+        echo "Please install phantomjs first:"
         echo
         echo "  On ubuntu: sudo apt-get install phantomjs"
         echo "  On MacOSX: Download the binary from http://phantomjs.org/download.html"

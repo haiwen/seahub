@@ -2,6 +2,9 @@ import os
 import urlparse
 
 BASE_URL = os.getenv('SEAHUB_TEST_BASE_URL', u'http://127.0.0.1:8000')
+MY_LIBS_URL = os.getenv('MY_LIBS_URL', u'/#my-libs/')
+GROUPS_URL = os.getenv('GROUPS_URL', u'/#groups/')
+
 USERNAME = os.getenv('SEAHUB_TEST_USERNAME', u'test@seafiletest.com')
 PASSWORD = os.getenv('SEAHUB_TEST_PASSWORD', u'testtest')
 ADMIN_USERNAME = os.getenv('SEAHUB_TEST_ADMIN_USERNAME', u'admin@seafiletest.com')
