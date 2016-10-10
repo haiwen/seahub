@@ -1683,9 +1683,14 @@ def set_user_folder_perm(request, repo_id):
         return HttpResponse(json.dumps({"error": _('Argument missing')}),
                             status=400, content_type=content_type)
 
-    if not seafile_api.get_repo(repo_id):
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
+
+    if repo.is_virtual:
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
 
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
@@ -1825,9 +1830,14 @@ def set_group_folder_perm(request, repo_id):
                             status=400, content_type=content_type)
 
     ## check params
-    if not seafile_api.get_repo(repo_id):
+    repo = seafile_api.get_repo(repo_id)
+    if not repo:
         return HttpResponse(json.dumps({"error": _('Library does not exist')}),
                             status=400, content_type=content_type)
+
+    if repo.is_virtual:
+        return HttpResponse(json.dumps({"error": _('Permission denied')}),
+                            status=403, content_type=content_type)
 
     if is_org_context(request):
         repo_owner = seafile_api.get_org_repo_owner(repo_id)
