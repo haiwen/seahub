@@ -44,6 +44,28 @@ define([
 
                 this.contextOptions = {};
 
+                // for image files
+                this.magnificPopupOptions = {
+                    type: 'image',
+                    tClose: gettext("Close (Esc)"), // Alt text on close button
+                    tLoading: gettext("Loading..."), // Text that is displayed during loading. Can contain %curr% and %total% keys
+                    gallery: {
+                        enabled: true,
+                        tPrev: gettext("Previous (Left arrow key)"), // Alt text on left arrow
+                        tNext: gettext("Next (Right arrow key)"), // Alt text on right arrow
+                        tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
+                    },
+                    image: {
+                        titleSrc: function(item) {
+                            var img_name = Common.HTMLescape(item.data.name);
+                            var img_link = '<a href="' + item.data.url + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
+                            return img_name + '<br />' + img_link;
+                        },
+                        tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
+                    }
+                };
+
+
                 this.dir = new DirentCollection();
                 this.listenTo(this.dir, 'add', this.addOne);
                 this.listenTo(this.dir, 'reset', this.reset);
@@ -99,47 +121,6 @@ define([
                 this.$path_bar = this.$('.path-bar');
                 // For compatible with css, we use .repo-op instead of .dir-op
                 this.$dir_op_bar = this.$('.repo-op');
-
-                // magnificPopup for image files
-                var magnificPopupOptions = {
-                    type: 'image',
-                    tClose: gettext("Close (Esc)"), // Alt text on close button
-                    tLoading: gettext("Loading..."), // Text that is displayed during loading. Can contain %curr% and %total% keys
-                    gallery: {
-                        enabled: true,
-                        tPrev: gettext("Previous (Left arrow key)"), // Alt text on left arrow
-                        tNext: gettext("Next (Right arrow key)"), // Alt text on right arrow
-                        tCounter: gettext("%curr% of %total%") // Markup for "1 of 7" counter
-                    },
-                    image: {
-                        tError: gettext('<a href="%url%" target="_blank">The image</a> could not be loaded.') // Error message when image could not be loaded
-                    }
-                };
-                // magnificPopup: for 'list view'
-                this.$dirent_list.magnificPopup($.extend({}, magnificPopupOptions, {
-                    delegate: '.img-name-link',
-                    image: {
-                        titleSrc: function(item) {
-                            var el = item.el;
-                            var img_name = el[0].innerHTML;
-                            var img_link = '<a href="' + el.attr('href') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
-                            return img_name + '<br />' + img_link;
-                        }
-                    }
-                }));
-                // magnificPopup: for 'grid view'
-                this.$dirent_grid.magnificPopup($.extend({}, magnificPopupOptions, {
-                    delegate: '.image-grid-item',
-                    image: {
-                        titleSrc: function(item) {
-                            var $el = $(item.el);
-                            var img_name = Common.HTMLescape($el.attr('data-name'));
-                            var img_link = '<a href="' + $el.attr('data-url') + '" target="_blank">' + gettext("Open in New Tab") + '</a>';
-                            return img_name + '<br />' + img_link;
-                        }
-                    }
-                }));
-
             },
 
             // public function
@@ -194,6 +175,8 @@ define([
                 Common.updateSortIconByMode({'context': this.$el});
                 this.sortDirents();
 
+                this.updateMagnificPopupOptions();
+
                 this.dir.last_start = 0;
                 this.dir.limit = 100;
                 this.render_dirents_slice(this.dir.last_start, this.dir.limit);
@@ -203,8 +186,26 @@ define([
                 this.getImageThumbnail();
             },
 
+            updateMagnificPopupOptions: function() {
+                var imgs = this.dir.where({is_img: true});
+                var items = [];
+                var repo_id = this.dir.repo_id,
+                    path = this.dir.path;
+                $(imgs).each(function(index, model) {
+                    var name = model.get('obj_name');
+                    var dirent_path = Common.pathJoin([path, name]);
+                    items.push({
+                        'name': name,
+                        'url': model.getWebUrl(),
+                        'src': app.config.siteRoot + 'repo/' + repo_id + '/raw' + Common.encodePath(dirent_path)
+                    });
+                });
+
+                this.magnificPopupOptions.items = items;
+            },
+
             // for fileupload
-            setFileInput: function () {
+            setFileInput: function() {
                 var dir = this.dir;
                 if (!dir.user_perm || dir.user_perm != 'rw') {
                     return;

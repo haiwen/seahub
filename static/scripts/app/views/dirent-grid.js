@@ -60,14 +60,10 @@ define([
 
             this.$el.attr('title', this.model.get('obj_name'));
 
-            // for magnificPopup
+            // for image files
             if (this.model.get('is_img')) {
-                this.$el.addClass('image-grid-item');
-                this.$el.attr({
-                    'data-mfp-src': app.pageOptions.site_root + 'repo/' + dir.repo_id + '/raw' + Common.encodePath(dirent_path),
-                    'data-url': this.model.getWebUrl(),
-                    'data-name': this.model.get('obj_name')
-                });
+                // use specific links such as .img-link, .text-link, in order to make 'open by index' work
+                this.$('.img-link, .text-link').magnificPopup(this.dirView.magnificPopupOptions);
             }
 
             return this;
@@ -77,6 +73,8 @@ define([
             'mouseenter': 'highlight',
             'mouseleave': 'rmHighlight',
             'click': 'closeMenu',
+            'click .img-link': 'viewImageWithPopup',
+            'click .text-link': 'viewImageWithPopup',
             'contextmenu': 'showPopupMenu'
         },
 
@@ -139,6 +137,13 @@ define([
             this.$('.set-folder-permission').on('click', _.bind(this.setFolderPerm, this));
 
             return false;
+        },
+
+        viewImageWithPopup: function() {
+            if (this.model.get('is_img')) {
+                var index = _.indexOf(this.dir.where({'is_img': true}), this.model);
+                $.magnificPopup.open(this.dirView.magnificPopupOptions, index); // open by index
+            }
         },
 
         closeMenu: function() {
