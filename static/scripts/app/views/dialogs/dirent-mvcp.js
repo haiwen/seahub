@@ -56,7 +56,7 @@ define([
                 form_title: title,
                 op_type: this.op_type,
                 obj_type: obj_type,
-                obj_name: this.dirent.get('obj_name'),
+                obj_name: obj_name,
                 show_cur_repo: this.show_cur_repo,
                 show_other_repos: !dir.encrypted
             }));
@@ -111,7 +111,7 @@ define([
                         } else if (data['successful']) {
                             $.modal.close();
                             if (op == 'mv') {
-                                dirent.remove();
+                                _this.dir.remove(_this.dirent);
                             }
                             Common.feedback(msg, 'success');
                         } else { // failed or canceled
