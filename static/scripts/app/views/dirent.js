@@ -64,12 +64,16 @@ define([
                 el: this.$('.sf-dropdown')
             });
 
+            // for image files
+            this.$('.img-name-link').magnificPopup(this.dirView.magnificPopupOptions);
+
             return this;
         },
 
         events: {
             'click .select': 'select',
             'click .file-star': 'starFile',
+            'click .img-name-link': 'viewImageWithPopup',
             'click .download-dir': 'downloadDir',
             'click .share': 'share',
             'click .delete': 'del', // 'delete' is a preserve word
@@ -217,6 +221,11 @@ define([
             }
 
             return false;
+        },
+
+        viewImageWithPopup: function() {
+            var index = $('.img-name-link', this.dirView.$dirent_list).index(this.$('.img-name-link'));
+            $.magnificPopup.open(this.dirView.magnificPopupOptions, index);
         },
 
         share: function() {

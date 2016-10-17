@@ -45,6 +45,7 @@
  * sf-dropdown
  * discussions/comments
  * custom select2
+ * custom magnificPopup
  *
  * Container
  * Container ......... common container styles
@@ -1560,6 +1561,18 @@ button.sf-dropdown-toggle:focus {
 .select2-result-label .avatar,
 .select2-result-label .text {
     vertical-align:middle;
+}
+/**** custom magnificPopup ****/
+.mfp-bottom-bar {
+    position:relative;
+}
+.mfp-title {
+    min-width:230px;
+    padding-right:60px;
+}
+.mfp-close:hover,
+.mfp-arrow:hover {
+    background:transparent;
 }
 
 /********** Container ***********/

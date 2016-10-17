@@ -297,7 +297,7 @@
     <td>
         <span class="dirent-name">
             <% if (dirent.is_img) { %>
-            <a class="normal img-name-link" href="<%= url %>" target="_blank" data-mfp-src="{{ SITE_ROOT }}repo/<%= repo_id %>/raw<%- encoded_path %>"><%- dirent.obj_name %></a>
+            <a class="normal img-name-link" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } else { %>
             <a class="normal" href="<%= url %>" target="_blank"><%- dirent.obj_name %></a>
             <% } %>
