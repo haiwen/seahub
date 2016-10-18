@@ -117,7 +117,7 @@ from seaserv import seafserv_threaded_rpc, \
     get_personal_groups_by_user, get_session_info, is_personal_repo, \
     get_repo, check_permission, get_commits, is_passwd_set,\
     check_quota, list_share_repos, get_group_repos_by_owner, get_group_repoids, \
-    is_group_user, remove_share, unset_inner_pub_repo, get_group, \
+    is_group_user, remove_share, get_group, \
     get_commit, get_file_id_by_path, MAX_DOWNLOAD_DIR_SIZE, edit_repo, \
     ccnet_threaded_rpc, get_personal_groups, seafile_api, \
     create_org, ccnet_api
@@ -3152,9 +3152,17 @@ class SharedRepo(APIView):
         Unshare a library.
         Repo owner and system admin can perform this operation.
         """
+        repo = get_repo(repo_id)
+        if not repo:
+            return api_error(status.HTTP_404_NOT_FOUND, 'Library not found.')
+
         username = request.user.username
-        if not request.user.is_staff and not seafile_api.is_repo_owner(
-                username, repo_id):
+        if is_org_context(request):
+            repo_owner = seafile_api.get_org_repo_owner(repo_id)
+        else:
+            repo_owner = seafile_api.get_repo_owner(repo_id)
+
+        if not request.user.is_staff and not username == repo_owner:
             return api_error(status.HTTP_403_FORBIDDEN,
                              'You do not have permission to unshare library.')
 
@@ -3188,7 +3196,11 @@ class SharedRepo(APIView):
 
             seafile_api.unset_group_repo(repo_id, int(group_id), username)
         elif share_type == 'public':
-            unset_inner_pub_repo(repo_id)
+            if is_org_context(request):
+                org_id = request.user.org.org_id
+                seaserv.seafserv_threaded_rpc.unset_org_inner_pub_repo(org_id, repo_id)
+            else:
+                seafile_api.remove_inner_pub_repo(repo_id)
         else:
             return api_error(status.HTTP_400_BAD_REQUEST,
                              'Share type can only be personal or group or public.')

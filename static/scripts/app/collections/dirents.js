@@ -23,7 +23,7 @@ define([
             this.encrypted = data.encrypted;
             this.is_repo_owner = data.is_repo_owner;
             this.is_virtual = data.is_virtual;
-
+            this.has_been_shared_out = data.has_been_shared_out;
             this.dirent_more = data.dirent_more;
             this.more_start = data.more_start;
             return data.dirent_list; // return the array
