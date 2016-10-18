@@ -238,7 +238,7 @@
                     <li><a class="op rename" href="#">{% trans "Rename" %}</a></li>
                     <li><a class="op mv" href="#">{% trans "Move" %}</a></li>
                     <li><a class="op cp" href="#">{% trans "Copy" %}</a></li>
-                    <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual) { %>
+                    <% if (app.pageOptions.folder_perm_enabled && is_repo_owner && !is_virtual && has_been_shared_out) { %>
                     <li><a class="op set-folder-permission" href="#">{% trans "Permission" %}</a></li>
                     <% } %>
                     <li><a class="op open-via-client" href="seafile://openfile?repo_id=<%- repo_id %>&path=<% print(encodeURIComponent(dirent_path + '/')); %>">{% trans "Open via Client" %}</a></li>
