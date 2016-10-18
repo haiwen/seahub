@@ -356,6 +356,7 @@ def sys_user_admin_ldap_imported(request):
         if user.email == request.user.email:
             user.is_self = True
 
+        populate_user_info(user)
         _populate_user_quota_usage(user)
 
         # populate user last login time
