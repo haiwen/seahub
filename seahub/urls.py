@@ -308,10 +308,9 @@ if settings.SERVE_STATIC:
         (r'^%s/(?P<path>.*)$' % (media_url), 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     )
 
-if getattr(settings, 'CLOUD_MODE', False):
-    urlpatterns += patterns('',
-        (r'^demo/', demo),
-    )
+urlpatterns += patterns(
+    '', (r'^demo/', demo),
+)
 
 from seahub.utils import HAS_FILE_SEARCH
 if HAS_FILE_SEARCH:
