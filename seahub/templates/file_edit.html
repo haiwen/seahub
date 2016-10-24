@@ -31,6 +31,7 @@
     height:auto;
     border-radius:4px;
     margin:0;
+    box-sizing: border-box;
 }
 </style>
 {% endif %}
@@ -132,6 +133,24 @@
         <p class="error hide"></p>
         <input type="submit" class="submit" value="{% trans 'Submit' %}" />
     </form>
+    {% endif %}
+
+
+    {% if not err and filetype == 'Markdown' %}
+    <form id="add-file-form" action="" method="post" class="file-choose-form hide">{% csrf_token %}
+        <h3>{% trans "Choose a file" %}</h3>
+        <div class="dir-tree-cont">
+            <div id="repos-dirs">
+                <span class="loading-icon loading-tip"></span>
+            </div>
+        </div>
+        <input type="hidden" name="dst_repo" value="" />
+        <input type="hidden" name="dst_path" value="" />
+        <p class="error hide">{% trans "Please choose a file." %}</p>
+        <button type="submit" class="submit">{% trans "Submit" %}</button>
+        <button class="simplemodal-close">{% trans "Cancel" %}</button>
+    </form>
+
     {% endif %}
 
     <div id="load-draft" class="hide">
@@ -293,10 +312,90 @@ var mdEditor = editormd('md-editor', {
             'bold', 'italic', '|',
             'h1', 'h2', 'h3', 'h4', '|',
             'list-ul', 'list-ol', 'hr', '|',
-            'link', 'image', 'table', '|',
+            'link', 'file', 'image', 'table', '|',
             'undo', 'redo','|',
             'watch', 'fullscreen'
         ];
+    },
+    toolbarIconsClass: {
+       'file': 'fa-file'
+    },
+    toolbarHandlers: {
+        'file': function(cm, icon, cursor, selection) {
+            var $form = $('#add-file-form');
+            $form.modal();
+            $('#simplemodal-container').css({'width':'auto', 'height':'auto'});
+
+            // fetch repos and render the tree
+            $.ajax({
+                url: '{% url 'api2-repos' %}',
+                cache: false,
+                dataType: 'json',
+                success: function(data) {
+                    var repos = [], repo_ids = [], repo;
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        repo = data[i];
+                        // remove encrypted & duplicate
+                        if (!repo.encrypted && repo_ids.indexOf(repo.id) == -1) {
+                            repo_ids.push(repo.id);
+                            repos.push({
+                                'text': HTMLescape(repo.name),
+                                'data': {'repo_id': repo.id, 'path': '/'},
+                                'children': true
+                            });
+                        }
+                    }
+                    repos.sort(function(a, b) {
+                        var a_name = a.text.toLowerCase();
+                        var b_name = b.text.toLowerCase();
+                        return a_name < b_name ? -1 : 1;
+                    });
+                    FileTree.renderTree($('#repos-dirs').data('site_root', '{{SITE_ROOT}}'), $form, repos);  // there is at least 1 repo
+                },
+                error: function(xhr) {
+                    if (xhr.responseText) {
+                        feedback($.parseJSON(xhr.responseText).error||$.parseJSON(xhr.responseText).error_msg, 'error');
+                    } else {
+                        feedback("{% trans "Please check the network." %}", 'error');
+                    }
+                }
+            });
+
+            $form.submit(function() {
+                var dst_repo = $('[name="dst_repo"]', $form).val(),
+                    dst_path = $('[name="dst_path"]', $form).val();
+
+                // no item is selected
+                if (!dst_repo || !dst_path) {
+                    $('.error', $form).removeClass('hide');
+                    return false;
+                }
+
+                // a dir is selected
+                if (dst_path.charAt(dst_path.length - 1) == '/') {
+                    $('.error', $form).removeClass('hide'); // only a file can be selected
+                    return false;
+                }
+
+                $.modal.close();
+
+                var path_arr = dst_path.split('/'),
+                    path_arr_ = [],
+                    name = path_arr[path_arr.length - 1],
+                    encodedPath;
+                for (var i = 0, len = path_arr.length; i < len; i++) {
+                    path_arr_.push(encodeURIComponent(path_arr[i]));
+                }
+                encodedPath = path_arr_.join('/');
+
+                var url = '{{SITE_ROOT}}lib/' +  dst_repo + '/file' + encodedPath;
+                // replace ... or directly insert
+                cm.replaceSelection('[' + name + '](' + url + ')');
+
+                return false;
+            });
+
+        }
     },
     lang: {
         // custom title of toolbar icons
@@ -311,6 +410,7 @@ var mdEditor = editormd('md-editor', {
             'list-ol': "{% trans "Ordered list" %}",
             hr: "{% trans "Horizontal rule" %}",
             link: "{% trans "Link" %}",
+            "file": "{% trans "File" %}",
             image: "{% trans "Image" %}",
             table: "{% trans "Table" %}",
             undo: "{% trans "Undo(Ctrl+Z)" %}",

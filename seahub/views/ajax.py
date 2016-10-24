@@ -141,15 +141,15 @@ def get_dirents(request, repo_id):
     for dirent in dirents:
         if stat.S_ISDIR(dirent.mode):
             subdir = {
-                'name': dirent.obj_name
+                'name': dirent.obj_name,
+                'type': 'dir'
             }
             d_list.append(subdir)
         else:
             if not dir_only:
                 f = {
-                    'id': dirent.obj_id,
                     'name': dirent.obj_name,
-                    'type': 'file',
+                    'type': 'file'
                     }
                 f_list.append(f)
 
