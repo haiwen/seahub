@@ -21,7 +21,7 @@ from django.conf import settings as dj_settings
 from django.template.defaultfilters import filesizeformat
 
 import seaserv
-from seaserv import seafile_api, is_passwd_set, \
+from seaserv import seafile_api, is_passwd_set, ccnet_api, \
     get_related_users_by_repo, get_related_users_by_org_repo, \
     seafserv_threaded_rpc, ccnet_threaded_rpc, edit_repo
 from pysearpc import SearpcError
@@ -1662,21 +1662,32 @@ def get_folder_perm_by_path(request, repo_id):
 
     user_result_perms = []
     for user_perm in user_perms:
+        user_email = user_perm.user
+        try:
+            User.objects.get(email=user_email)
+        except User.DoesNotExist:
+            continue
+
         if path == user_perm.path:
             user_result_perm = {
                 "perm": user_perm.permission,
-                "user": user_perm.user,
-                "user_name": email2nickname(user_perm.user),
+                "user": user_email,
+                "user_name": email2nickname(user_email),
             }
             user_result_perms.append(user_result_perm)
 
     group_result_perms = []
     for group_perm in group_perms:
+        group_id = group_perm.group_id
+        group = ccnet_api.get_group(group_id)
+        if not group:
+            continue
+
         if path == group_perm.path:
             group_result_perm = {
                 "perm": group_perm.permission,
-                "group_id": group_perm.group_id,
-                "group_name": get_group(group_perm.group_id).group_name,
+                "group_id": group_id,
+                "group_name": group.group_name,
             }
             group_result_perms.append(group_result_perm)
 
