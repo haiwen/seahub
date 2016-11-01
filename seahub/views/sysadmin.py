@@ -201,6 +201,7 @@ def sys_user_admin(request):
         trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
+
     for user in users:
         if user.email == request.user.email:
             user.is_self = True
@@ -1481,6 +1482,7 @@ def user_search(request):
         trial_users = TrialAccount.objects.filter(user_or_org__in=[x.email for x in users])
     else:
         trial_users = []
+
     for user in users:
         populate_user_info(user)
         _populate_user_quota_usage(user)
@@ -1488,9 +1490,6 @@ def user_search(request):
         # check user's role
         user.is_guest = True if get_user_role(user) == GUEST_USER else False
         user.is_default = True if get_user_role(user) == DEFAULT_USER else False
-        extra_user_roles = [x for x in get_available_roles()
-                            if x not in get_basic_user_roles()]
-
         # populate user last login time
         user.last_login = None
         for last_login in last_logins:
@@ -1501,6 +1500,9 @@ def user_search(request):
         for trial_user in trial_users:
             if trial_user.user_or_org == user.email:
                 user.trial_info = {'expire_date': trial_user.expire_date}
+
+    extra_user_roles = [x for x in get_available_roles()
+                        if x not in get_basic_user_roles()]
 
     return render_to_response('sysadmin/user_search.html', {
             'users': users,

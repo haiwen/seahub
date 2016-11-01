@@ -1,9 +1,11 @@
 from django.core.urlresolvers import reverse
 
+from tests.common.utils import randstring
+
 from seahub.profile.models import Profile
 from seahub.test_utils import BaseTestCase
 
-class UserResetTest(BaseTestCase):
+class UserSearchTest(BaseTestCase):
     def setUp(self):
         self.user_name = self.user.username
 
@@ -50,3 +52,12 @@ class UserResetTest(BaseTestCase):
                 '?email=%s' % self.user_name)
 
         self.assertEqual(404, resp.status_code)
+
+    def test_search_invalid_user(self):
+        self.login_as(self.admin)
+
+        invalid_user = randstring(20)
+        resp = self.client.get(reverse('user_search') + '?email=%s' % invalid_user)
+        self.assertEqual(200, resp.status_code)
+        self.assertTemplateUsed('sysadmin/user_search.html')
+        self.assertContains(resp, invalid_user)
