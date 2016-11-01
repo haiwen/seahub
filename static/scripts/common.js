@@ -836,14 +836,26 @@ define([
             var libs = options.libs;
 
             switch(sort_mode) {
-                case 'name_up':
+                case 'name_up': // name of a broken library is null
                     libs.comparator = function(a, b) {
+                        if (!a.get('name')) {
+                            return 1;
+                        }
+                        if (!b.get('name')) {
+                            return -1;
+                        }
                         var result = _this.compareTwoWord(a.get('name'), b.get('name'));
                         return result;
                     };
                     break;
                 case 'name_down':
                     libs.comparator = function(a, b) {
+                        if (!a.get('name')) {
+                            return -1;
+                        }
+                        if (!b.get('name')) {
+                            return 1;
+                        }
                         var result = _this.compareTwoWord(a.get('name'), b.get('name'));
                         return -result;
                     };
