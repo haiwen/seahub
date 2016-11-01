@@ -138,6 +138,7 @@ define([
                     $("#right-panel").html(this.$el);
                 }
                 this.dir.setPath(category, repo_id, path);
+                this.dir.dirent_more = false;
                 this.renderDir();
             },
 
