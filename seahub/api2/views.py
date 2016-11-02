@@ -1184,7 +1184,19 @@ class FileBlockDownloadLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, file_id, block_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) is None:
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this repo.')
@@ -1203,7 +1215,19 @@ class UploadLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
@@ -1222,7 +1246,19 @@ class UpdateLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
@@ -1241,7 +1277,19 @@ class UploadBlksLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
@@ -1269,9 +1317,20 @@ class UploadBlksLinkView(APIView):
 
         return blklist
 
-
     def post(self, request, repo_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
@@ -1303,7 +1362,19 @@ class UpdateBlksLinkView(APIView):
     throttle_classes = (UserRateThrottle, )
 
     def get(self, request, repo_id, format=None):
+        # recourse check
+        repo = seafile_api.get_repo(repo_id)
+        if not repo:
+            error_msg = 'Library %s not found.' % repo_id
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
         parent_dir = request.GET.get('p', '/')
+        dir_id = seafile_api.get_dir_id_by_path(repo_id, parent_dir)
+        if not dir_id:
+            error_msg = 'Folder %s not found.' % parent_dir
+            return api_error(status.HTTP_404_NOT_FOUND, error_msg)
+
+        # permission check
         if check_folder_permission(request, repo_id, parent_dir) != 'rw':
             return api_error(status.HTTP_403_FORBIDDEN,
                     'You do not have permission to access this folder.')
