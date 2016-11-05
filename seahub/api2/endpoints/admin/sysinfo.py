@@ -1,6 +1,5 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
 import logging
-import os
 
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAdminUser
@@ -16,7 +15,6 @@ from seahub.utils.licenseparse import parse_license
 from seahub.api2.authentication import TokenAuthentication
 from seahub.api2.throttling import UserRateThrottle
 
-import seahub.settings
 try:
     from seahub.settings import MULTI_TENANCY
 except ImportError:
@@ -30,11 +28,6 @@ class SysInfo(APIView):
     authentication_classes = (TokenAuthentication, SessionAuthentication)
     throttle_classes = (UserRateThrottle,)
     permission_classes = (IsAdminUser,)
-
-    def _get_license_dict(self):
-        license_file = os.path.join(seahub.settings.PROJECT_ROOT, '../../seafile-license.txt')
-        license_dict = parse_license(license_file)
-        return license_dict
 
     def get(self, request, format=None):
         # count repos
@@ -96,14 +89,14 @@ class SysInfo(APIView):
 
         is_pro = is_pro_version()
         if is_pro:
-            license_dict = self._get_license_dict()
+            license_dict = parse_license()
         else:
             license_dict = {}
 
         if license_dict:
             with_license = True
             try:
-                max_users = int(license_dict.get('MaxUsers', ''))
+                max_users = int(license_dict.get('MaxUsers', 0))
             except ValueError as e:
                 logger.error(e)
                 max_users = 0

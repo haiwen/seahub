@@ -191,6 +191,26 @@ class BatchAddUserTest(BaseTestCase):
         for e in self.new_users:
             assert User.objects.get(e) is not None
 
+    @patch('seahub.views.sysadmin.user_number_over_limit')
+    def test_can_not_batch_add_if_user_over_limit(self, mock_user_number_over_limit):
+
+        mock_user_number_over_limit.return_value = True
+
+        for e in self.new_users:
+            try:
+                r = User.objects.get(e)
+            except User.DoesNotExist:
+                r = None
+            assert r is None
+
+        with open(self.csv_file) as f:
+            resp = self.client.post(reverse('batch_add_user'), {
+                'file': f
+            })
+
+        self.assertEqual(302, resp.status_code)
+        assert 'users exceeds the limit' in parse_cookie(resp.cookies)['messages']
+
     def test_can_send_email(self):
         self.assertEqual(0, len(Email.objects.all()))
 

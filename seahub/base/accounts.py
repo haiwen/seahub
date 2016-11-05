@@ -22,6 +22,7 @@ from seahub.role_permissions.utils import get_enabled_role_permissions_by_role
 from seahub.utils import is_valid_username, is_user_password_strong, \
     clear_token, get_system_admins
 from seahub.utils.mail import send_html_email_with_dj_template, MAIL_PRIORITY
+from seahub.utils.licenseparse import user_number_over_limit
 
 try:
     from seahub.settings import CLOUD_MODE
@@ -567,6 +568,9 @@ class RegistrationForm(forms.Form):
         return False if prog.match(email) is None else True
 
     def clean_email(self):
+        if user_number_over_limit():
+            raise forms.ValidationError(_("The number of users exceeds the limit."))
+
         email = self.cleaned_data['email']
         if not self.allow_register(email):
             raise forms.ValidationError(_("Enter a valid email address."))

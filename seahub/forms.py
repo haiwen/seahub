@@ -4,11 +4,12 @@ from django.conf import settings
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from seaserv import seafserv_threaded_rpc, is_valid_filename
+from seaserv import is_valid_filename
 from pysearpc import SearpcError
 
 from seahub.base.accounts import User
 from seahub.constants import DEFAULT_USER, GUEST_USER
+from seahub.utils.licenseparse import user_number_over_limit
 
 class AddUserForm(forms.Form):
     """
@@ -21,6 +22,9 @@ class AddUserForm(forms.Form):
     password2 = forms.CharField(widget=forms.PasswordInput())
 
     def clean_email(self):
+        if user_number_over_limit():
+            raise forms.ValidationError(_("The number of users exceeds the limit."))
+
         email = self.cleaned_data['email']
         try:
             user = User.objects.get(email=email)
@@ -34,7 +38,7 @@ class AddUserForm(forms.Form):
         match. Note that an error here will end up in
         ``non_field_errors()`` because it doesn't apply to a single
         field.
-        
+
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:

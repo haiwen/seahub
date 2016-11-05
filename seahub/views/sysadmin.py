@@ -43,7 +43,7 @@ from seahub.utils import IS_EMAIL_CONFIGURED, string2list, is_valid_username, \
     get_virus_record, FILE_AUDIT_ENABLED, get_max_upload_file_size
 from seahub.utils.file_size import get_file_size_unit
 from seahub.utils.rpc import mute_seafile_api
-from seahub.utils.licenseparse import parse_license
+from seahub.utils.licenseparse import parse_license, user_number_over_limit
 from seahub.utils.sysinfo import get_platform_name
 from seahub.utils.mail import send_html_email_with_dj_template
 from seahub.utils.ms_excel import write_xls
@@ -1782,6 +1782,8 @@ def batch_add_user(request):
     if request.method != 'POST':
         raise Http404
 
+    next = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
+
     form = BatchAddUserForm(request.POST, request.FILES)
     if form.is_valid():
         content = request.FILES['file'].read()
@@ -1790,8 +1792,16 @@ def batch_add_user(request):
             content = content.decode(encoding, 'replace').encode('utf-8')
 
         filestream = StringIO.StringIO(content)
-        reader = csv.reader(filestream)
 
+        reader = csv.reader(filestream)
+        new_users_count = len(list(reader))
+        if user_number_over_limit(new_users = new_users_count):
+            messages.error(request, _(u'The number of users exceeds the limit.'))
+            return HttpResponseRedirect(next)
+
+        # return to the top of the file
+        filestream.seek(0)
+        reader = csv.reader(filestream)
         for row in reader:
             if not row:
                 continue
@@ -1825,7 +1835,6 @@ def batch_add_user(request):
     else:
         messages.error(request, _(u'Please select a csv file first.'))
 
-    next = request.META.get('HTTP_REFERER', reverse(sys_user_admin))
     return HttpResponseRedirect(next)
 
 @login_required
@@ -1937,8 +1946,7 @@ def sys_check_license(request):
     content_type = 'application/json; charset=utf-8'
     result = {}
 
-    license_file = os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
-    license_dict = parse_license(license_file)
+    license_dict = parse_license()
     if license_dict:
         try:
             expiration = license_dict['Expiration']

@@ -1,0 +1,11 @@
+#Seafile server licence
+
+Name = "Test"
+Licencetype = "User"
+LicenceKEY = "1474598078"
+ProductID = "Seafile server"
+Expiration = "2017-7-20"
+MaxUsers = "10"
+Mode = "subscription"
+
+Hash = "hash value"
