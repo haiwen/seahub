@@ -1,12 +1,21 @@
 # Copyright (c) 2012-2016 Seafile Ltd.
+import os
 import logging
+from django.conf import settings
+from seahub.utils import is_pro_version
+
+from seaserv import ccnet_api
+
 logger = logging.getLogger(__name__)
 
-def parse_license(file_path):
+def get_license_path():
+        return os.path.join(settings.PROJECT_ROOT, '../../seafile-license.txt')
+
+def parse_license():
     """Parse license file and return dict.
 
     Arguments:
-    - `file_path`:
+    - `license_path`:
 
     Returns:
     e.g.
@@ -23,8 +32,9 @@ def parse_license(file_path):
     """
     ret = {}
     lines = []
+    license_path = get_license_path()
     try:
-        with open(file_path) as f:
+        with open(license_path) as f:
             lines = f.readlines()
     except Exception as e:
         logger.warn(e)
@@ -36,3 +46,24 @@ def parse_license(file_path):
             ret[k.strip()] = v.strip().strip('"')
 
     return ret
+
+def user_number_over_limit(new_users = 0):
+    if is_pro_version():
+        try:
+            # get license user limit
+            license_dict = parse_license()
+            max_users = int(license_dict.get('MaxUsers', 0))
+
+            # get active user number
+            active_db_users = ccnet_api.count_emailusers('DB')
+            active_ldap_users = ccnet_api.count_emailusers('LDAP')
+            active_users = active_db_users + active_ldap_users
+
+            return active_users + new_users >= max_users
+        except Exception as e:
+            logger = logging.getLogger(__name__)
+            logger.error(e)
+            return False
+    else:
+        return False
+
