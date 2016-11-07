@@ -96,7 +96,7 @@ class SysInfo(APIView):
         if license_dict:
             with_license = True
             try:
-                max_users = int(license_dict.get('MaxUsers', 0))
+                max_users = int(license_dict.get('MaxUsers', 3))
             except ValueError as e:
                 logger.error(e)
                 max_users = 0

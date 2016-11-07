@@ -52,7 +52,7 @@ def user_number_over_limit(new_users = 0):
         try:
             # get license user limit
             license_dict = parse_license()
-            max_users = int(license_dict.get('MaxUsers', 0))
+            max_users = int(license_dict.get('MaxUsers', 3))
 
             # get active user number
             active_db_users = ccnet_api.count_emailusers('DB')
