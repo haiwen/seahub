@@ -102,7 +102,7 @@ PREVIEW_FILEEXT = {
     PDF: ('pdf',),
     OPENDOCUMENT: ('odt', 'fodt', 'odp', 'fodp'),
     MARKDOWN: ('markdown', 'md'),
-    VIDEO: ('mp4', 'ogv', 'webm', 'flv', 'wmv'),
+    VIDEO: ('mp4', 'ogv', 'webm', 'wmv', 'mov'),
     AUDIO: ('mp3', 'oga', 'ogg'),
     '3D': ('stl', 'obj'),
 }

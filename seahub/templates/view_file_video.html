@@ -2,16 +2,21 @@
 
 {% block extra_style %}{{block.super}}
 {% if not err%}
-<link rel="stylesheet" href="{{MEDIA_URL}}css/mediaelementplayer.css" />
+<link rel="stylesheet" href="{{MEDIA_URL}}css/video-js.min.css" />
 {% endif %}
 {% endblock %}
 
 {% block extra_script %}{{ block.super }}
 {% if not err%}
-<script src="{{MEDIA_URL}}js/mediaelement-and-player.min.js"></script>
+<script src="{{MEDIA_URL}}js/video.min.js"></script>
 <script type="text/javascript">
-  $('#file-view').html('<div class="video-container"><video src="{{raw_path}}" width="800" height="400"></video></div>');
-$('video').mediaelementplayer(/* Options */);
+$('#file-view').html('<div class="video-container"><video id="sf-video" src="{{raw_path}}" width="800" height="400" class="video-js vjs-default-skin"></video></div>');
+videojs.options.flash.swf = "{{MEDIA_URL}}js/video-js.swf";
+videojs('sf-video', {
+	'controls': true,
+	'autoplay': false,
+	'preload': 'auto'
+});
 </script>
 {% endif %}
 {% endblock %}
