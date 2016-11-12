@@ -4,8 +4,11 @@
 {% if filetype == 'PDF' and use_pdfjs %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/pdf.js"></script>
 {% endif %}
-{% if filetype == 'Video'  or filetype == 'Audio' %}
+{% if filetype == 'Audio' %}
 <script src="{{MEDIA_URL}}js/mediaelement-and-player.min.js"></script>
+{% endif %}
+{% if filetype == 'Video' %}
+<script src="{{MEDIA_URL}}js/video.min.js"></script>
 {% endif %}
 {% if filetype == 'Markdown' %}
 <script type="text/javascript" src="{{MEDIA_URL}}js/editormd/lib/marked.min.js"></script>

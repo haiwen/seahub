@@ -14,8 +14,12 @@
 </style>
 {% endif %}
 
-{% if filetype == 'Video'  or filetype == 'Audio' %}
+{% if filetype == 'Audio' %}
 <link rel="stylesheet" href="{{MEDIA_URL}}css/mediaelementplayer.css" />
+{% endif %}
+
+{% if filetype == 'Video' %}
+<link rel="stylesheet" href="{{MEDIA_URL}}css/video-js.min.css" />
 {% endif %}
 
 {% if filetype == 'Document' or filetype == 'PDF' and not use_pdfjs %}

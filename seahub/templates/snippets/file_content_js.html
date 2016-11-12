@@ -139,8 +139,13 @@ try {
 {% endif %}
 
 {% if filetype == 'Video' %}
-      $('#file-view').html('<div class="video-container"><video src="{{raw_path}}" width="800" height="400"></video></div>');
-$('video').mediaelementplayer(/* Options */);
+$('#file-view').html('<div class="video-container"><video id="sf-video" src="{{raw_path}}" width="800" height="400" class="video-js vjs-default-skin"></video></div>');
+videojs.options.flash.swf = "{{MEDIA_URL}}js/video-js.swf";
+videojs('sf-video', {
+    'controls': true,
+    'autoplay': false,
+    'preload': 'auto'
+});
 {% endif %}
 
 {% if filetype == 'Audio' %}
