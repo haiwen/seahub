@@ -52,6 +52,15 @@ class InfobarMiddleware(object):
         return ret
 
     def process_request(self, request):
+
+        # filter AJAX request out
+        if request.is_ajax():
+            return None
+
+        # filter API request out
+        if "api2/" in request.path or "api/v2.1/" in request.path:
+            return None
+
         topinfo_close = request.COOKIES.get('info_id', '')
 
         cur_note = cache.get('CUR_TOPINFO') if cache.get('CUR_TOPINFO') else \
