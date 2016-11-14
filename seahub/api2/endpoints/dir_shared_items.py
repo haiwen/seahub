@@ -276,22 +276,25 @@ class DirSharedItemsEndpoint(APIView):
                                     org_id, repo_id, username, to_user,
                                     permission)
                         else:
-                            seafile_api.org_share_subdir_to_user(
-                                    org_id, repo_id, path, username, to_user,
-                                    permission)
+                            sub_repo_id = seafile_api.org_share_subdir_to_user(org_id,
+                                    repo_id, path, username, to_user, permission)
                     else:
                         if path == '/':
                             seafile_api.share_repo(
                                     repo_id, username, to_user, permission)
                         else:
-                            seafile_api.share_subdir_to_user(repo_id,
-                                    path, username, to_user, permission)
+                            sub_repo_id = seafile_api.share_subdir_to_user(
+                                    repo_id, path, username, to_user, permission)
 
                     # send a signal when sharing repo successful
-                    share_repo_to_user_successful.send(sender=None,
-                                                       from_user=username,
-                                                       to_user=to_user,
-                                                       repo=repo)
+                    if path == '/':
+                        share_repo_to_user_successful.send(sender=None,
+                                from_user=username, to_user=to_user, repo=repo)
+                    else:
+                        sub_repo = seafile_api.get_repo(sub_repo_id)
+                        share_repo_to_user_successful.send(sender=None,
+                                from_user=username, to_user=to_user, repo=sub_repo)
+
                     result['success'].append({
                         "share_type": "user",
                         "user_info": {
@@ -329,20 +332,23 @@ class DirSharedItemsEndpoint(APIView):
                             seafile_api.add_org_group_repo(
                                     repo_id, org_id, gid, username, permission)
                         else:
-                            seafile_api.org_share_subdir_to_group(
-                                    org_id, repo_id, path, username, gid,
-                                    permission)
+                            sub_repo_id = seafile_api.org_share_subdir_to_group(org_id,
+                                    repo_id, path, username, gid, permission)
                     else:
                         if path == '/':
                             seafile_api.set_group_repo(
                                     repo_id, gid, username, permission)
                         else:
-                            seafile_api.share_subdir_to_group(
+                            sub_repo_id = seafile_api.share_subdir_to_group(
                                     repo_id, path, username, gid, permission)
 
-
-                    share_repo_to_group_successful.send(sender=None,
-                            from_user=username, group_id=gid, repo=repo)
+                    if path == '/':
+                        share_repo_to_group_successful.send(sender=None,
+                                from_user=username, group_id=gid, repo=repo)
+                    else:
+                        sub_repo = seafile_api.get_repo(sub_repo_id)
+                        share_repo_to_group_successful.send(sender=None,
+                                from_user=username, group_id=gid, repo=sub_repo)
 
                     result['success'].append({
                         "share_type": "group",
