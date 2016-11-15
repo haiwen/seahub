@@ -13,7 +13,8 @@
 <br />
 {% blocktrans %}To activate this account, please click the following link within the next {{ expiration_days }} days: {% endblocktrans %}
 <br />
-{{ url_base }}{% url 'registration_activate' activation_key %}
+<p>
+<a href="{{ url_base }}{% url 'registration_activate' activation_key %}">{% trans "Sign Up" %}</a>
 </p>
 
 {% endautoescape %}
