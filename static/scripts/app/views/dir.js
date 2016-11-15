@@ -431,6 +431,9 @@ define([
                     path: dir.path,
                     repo_id: dir.repo_id,
                     site_root: app.pageOptions.site_root,
+                    is_repo_owner: dir.is_repo_owner,
+                    can_generate_share_link: app.pageOptions.can_generate_share_link,
+                    can_generate_upload_link: app.pageOptions.can_generate_upload_link,
                     enable_upload_folder: app.pageOptions.enable_upload_folder
                 })));
             },
