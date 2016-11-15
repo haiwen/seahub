@@ -19,6 +19,8 @@ var OfficePreviewer = function(repo_id, path, token, commit_id) {
     this.scale_ratio = 1;
     this.static_prefix = '{{ SITE_ROOT}}office-convert/static/{{ repo.id }}/' + this.commit_id + '{{ path|urlencode }}/';
 
+    this.has_shown_tip = false;
+
     this.page_status_url = function(page) {
         var params = {
             repo_id: repo_id,
@@ -57,39 +59,44 @@ OfficePreviewer.prototype.check_page_status = function() {
         this.load_page(page);
         return;
     }
+
+    var _this = this;
     $.ajax({
         context: this,
         url: this.page_status_url(page),
         cache: false,
         dataType: 'json',
         success: function(data) {
-            if (data.info.pages > data.info.final_pages) { // total pages > shown pages
+            // show tip
+            if (data.info && !_this.has_shown_tip &&
+                data.info.pages > data.info.final_pages) { // total pages > shown pages
                 feedback("{% trans "This file has more than 50 pages, and only the first 50 will be shown here." %}", 'info');
+                _this.has_shown_tip = true;
             }
 
             var status = data['status'];
             switch (status) {
-            case 'PROCESSING':
-                setTimeout($.proxy(this.check_page_status, this), 2000);
-                break;
-            case 'ERROR':
-                if (page == 1) {
-                    var str = "{% trans "Document convertion failed." %}";
-                    $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
-                } else {
-                    $('.page-container:last').clone().css({'background':'#fff'}).html('<p class="error alc" style="margin-top:6em;">' + "{% trans "Failed to load this page." %}" + '</p>').appendTo($('#pages'));
-                    $('#file-view .loading-tip').hide();
-                }
-                break;
-            case 'DONE':
-                var info = data['info'];
-                if (info) {
-                  this.total_pages = info['final_pages'];
-                  this.server_processed_pages = info['processed_pages'];
-                  this.orig_page_width = info['page_width'];
-                  this.orig_page_height = info['page_height'];
-                }
-                this.load_page(page);
+                case 'PROCESSING':
+                    setTimeout($.proxy(this.check_page_status, this), 2000);
+                    break;
+                case 'ERROR':
+                    if (page == 1) {
+                        var str = "{% trans "Document convertion failed." %}";
+                        $('#file-view').html('<div id="file-view-tip"><p class="error">' + str + '</p></div>');
+                    } else {
+                        $('.page-container:last').clone().css({'background':'#fff'}).html('<p class="error alc" style="margin-top:6em;">' + "{% trans "Failed to load this page." %}" + '</p>').appendTo($('#pages'));
+                        $('#file-view .loading-tip').hide();
+                    }
+                    break;
+                case 'DONE':
+                    var info = data['info'];
+                    if (info) {
+                      this.total_pages = info['final_pages'];
+                      this.server_processed_pages = info['processed_pages'];
+                      this.orig_page_width = info['page_width'];
+                      this.orig_page_height = info['page_height'];
+                    }
+                    this.load_page(page);
             }
         },
         error: function(xhr, textStatus, errorThrown) {
